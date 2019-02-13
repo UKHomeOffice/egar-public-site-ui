@@ -1,0 +1,79 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Register
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+      <form action="/user/register" autocomplete="false" method="post" role="form">
+        <h1 class="govuk-heading-xl">Register an account</h1>
+
+         <div class="govuk-form-group {{ m.form_group_class('userFname', errors) }}">
+           <label class="govuk-label govuk-label--m" for="userFname">Given name</label>
+           {{ m.error_message('userFname', errors) }}
+           <input autocomplete="off" class="govuk-input"
+            data-val="true" data-val-required="The first name field is  required." id="userFname" name="userFname" style="width:100%" type="text" value="{{cookie.getUserFirstName()}}" >
+         </div>
+
+         <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }}">
+           <label class="govuk-label govuk-label--m" for="userLname">Surname</label>
+           {{ m.error_message('userLname', errors) }}
+           <input autocomplete="off" class="govuk-input"
+            data-val="true" data-val-required="The first name field is  required." id="userLname" name="userLname" style="width:100%" type="text" value="{{cookie.getUserLastName()}}" />
+         </div>
+
+         <div class="govuk-form-group {{ m.form_group_class('userId', errors) }}">
+           <label class="govuk-label govuk-label--m" for="userId">Email address</label>
+           {{ m.error_message('userId', errors) }}
+           <span class="govuk-hint">
+             You will use this to sign in to the eGAR service
+           </span>
+           <input autocomplete="off" class="govuk-input"
+            data-val="true" data-val-required="The e-mail address field is  required." id="userId" name="userId" style="width:100%" type="text" value="{{cookie.getUserEmail()}}" />
+         </div>
+
+         <div class="govuk-form-group {{ m.form_group_class('cUserId', errors) }}">
+           <label class="govuk-label govuk-label--m" for="cUserId">Confirm email address</label>
+           {{ m.error_message('cUserId', errors) }}
+           <input autocomplete="off" class="govuk-input"
+            data-val="true" data-val-required="The e-mail address field is  required." id="cUserId" name="cUserId" style="width:100%" type="text" value="{{req.body.cUserId}}" />
+         </div>
+
+        <h2 class="govuk-heading-s">Declaration</h2>
+        <p class="govuk-body">By creating this account, you agree:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>that the information you have provided is correct to the best of your knowledge</li>
+          <li>that you have read and accept our <a href="#.html">privacy policy</a></li>
+        </ul>
+        </p>
+
+    <div class="form-group">
+      <input id="login" class="govuk-button" type="submit" value="Agree and Submit" onclick="sendAnalytics(event, 'Register - submit', 'click')">
+    </div>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  </form>
+</div>
+</div>
+{% endblock %}
+

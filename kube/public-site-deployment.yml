@@ -1,0 +1,247 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: public-site
+  namespace: {{ .KUBE_NAMESPACE }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        name: public-site-svc
+        service: public-site-svc
+    spec:
+      imagePullSecrets:
+        - name: artifactory-secret
+      containers:
+        - name: public-site-proxy
+          image: quay.io/ukhomeofficedigital/egar-nginx-proxy:v3.4.2
+          imagePullPolicy: Always
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          ports:
+            - name: public-prxy-prt
+              containerPort: 10443
+          env:
+            - name: PROXY_SERVICE_HOST
+              value: "127.0.0.1"
+            - name: PROXY_SERVICE_PORT
+              value: "3000"
+            - name: NAXSI_USE_DEFAULT_RULES
+              value: "FALSE"
+            - name: ENABLE_UUID_PARAM
+              value: "FALSE"
+            - name: ADD_NGINX_SERVER_CFG
+              value: "add_header Strict-Transport-Security \"max-age=31536000; includeSubDomains\" always;"
+            - name: CLIENT_MAX_BODY_SIZE
+              value: '20'
+        - name: public-site-avp
+          image: quay.io/ukhomeofficedigital/docker-clamav-rest:1.0.0
+          imagePullPolicy: Always
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
+            requests:
+              memory: "2048Mi"
+              cpu: "2000m"
+          ports:
+            - name: public-avp-prt
+              containerPort: 8080
+          env:
+            - name: CLAMD_HOST
+              value: "localhost"
+        - name: public-site-av
+          image: quay.io/ukhomeofficedigital/clamav:v1.6.1
+          imagePullPolicy: Always
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
+            requests:
+              memory: "2048Mi"
+              cpu: "2000m"
+          ports:
+            - name: public-av-prt
+              containerPort: 3310
+        - name: public-site
+          image: quay.io/ukhomeofficedigital/egar-public-site-ui:{{ .DRONE_BUILD_NUMBER }}
+          imagePullPolicy: Always
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "4096Mi"
+              cpu: "4000m"
+            requests:
+              memory: "2048Mi"
+              cpu: "2000m"
+          env:
+            - name: KUBE_ARTIFACTORY_APP_SECRET
+              value: {{ .KUBE_ARTIFACTORY_APP_SECRET }}
+            - name: KUBE_NAMESPACE
+              value: {{ .KUBE_NAMESPACE }}
+            - name: KUBE_SERVER
+              value: {{ .KUBE_SERVER }}
+            - name: KUBE_TOKEN
+              value: {{ .KUBE_TOKEN }}
+            - name: LOG_LEVEL
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: LOG_LEVEL
+            - name: NODE_TLS_REJECT_UNAUTHORIZED
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NODE_TLS_REJECT_UNAUTHORIZED
+            - name: BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: BASE_URL
+            - name: API_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: API_BASE
+            - name: API_VERSION
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: API_VERSION
+            - name: CLAMAV_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: CLAMAV_BASE
+            - name: CLAMAV_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: CLAMAV_PORT
+            - name: NOTIFY_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_TOKEN_SECRET
+            - name: NOTIFY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_API_KEY
+            - name: NOTIFY_TOKEN_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_TOKEN_TEMPLATE_ID
+            - name: NOTIFY_INVITE_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_INVITE_TEMPLATE_ID
+            - name: NOTIFY_GAR_CANCEL_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_GAR_CANCEL_TEMPLATE_ID
+            - name: NOTIFY_GAR_SUBMISSION_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_GAR_SUBMISSION_TEMPLATE_ID
+            - name: NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID
+            - name: NOTIFY_MFA_TOKEN_LENGTH
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_MFA_TOKEN_LENGTH
+            - name: NOTIFY_MFA_TOKEN_TTL
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_MFA_TOKEN_TTL
+            - name: NOTIFY_MFA_TOKEN_MAX_ATTEMPTS
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_MFA_TOKEN_MAX_ATTEMPTS
+            - name: NOTIFY_MFA_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_MFA_TEMPLATE_ID
+            - name: PUBLIC_SITE_DBHOST
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: PUBLIC_SITE_DBHOST
+            - name: PUBLIC_SITE_DBPORT
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: PUBLIC_SITE_DBPORT
+            - name: PUBLIC_SITE_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: PUBLIC_SITE_DBNAME
+            - name: PUBLIC_SITE_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: PUBLIC_SITE_DBUSER
+            - name: PUBLIC_SITE_DBPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: PUBLIC_SITE_DBPASSWORD
+            - name: SESSION_PARSER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: SESSION_PARSER_SECRET
+            - name: SESSION_ENCODE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: SESSION_ENCODE_SECRET
+            - name: SESSION_TIMEOUT
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: SESSION_TIMEOUT
+            - name: COOKIE_SECURE_FLAG
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: COOKIE_SECURE_FLAG
+            - name: GA_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: GA_ID
+          ports:
+            - name: public-site-prt
+              containerPort: 3000

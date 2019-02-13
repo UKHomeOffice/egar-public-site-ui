@@ -1,0 +1,143 @@
+const indexPath = '/upload';
+const paths = {
+  index: indexPath,
+};
+
+const express = require('express');
+
+const app = express();
+const router = express.Router();
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+const bodyParser = require('body-parser');
+const csrf = require('csurf');
+const XLSX = require('xlsx');
+const stream = require('stream');
+const logger = require('../../../common/utils/logger');
+const garApi = require('../../../common/services/garApi');
+const CookieModel = require('../../../common/models/Cookie.class');
+
+const csrfProtection = csrf({ cookie: true });
+const parseForm = bodyParser.urlencoded({ extended: false })
+const transformers = require('../../../common/utils/transformers');
+const { ExcelParser } = require('../../../common/utils/excelParser');
+
+
+app.use(bodyParser.json());
+
+
+router.get('/uploadgar', (req, res) => {
+  res.json({ message: 'welcome to our upload module apis' });
+});
+
+router.post('/uploadgar', upload.single('file'), (req, res, data) => {
+  if (req.file) {
+    logger.debug(`In Gar File Upload Service. Uploaded File: ${req.file.filename}`);
+    const readStream = new stream.Readable();
+    readStream.push(req.file.buffer);
+    readStream.push(null);
+
+    const cookie = new CookieModel(req);
+    const fileExtension = req.file.originalname.split('.').pop();
+
+    if (fileExtension !== 'xls' && fileExtension !== 'xlsx' || (typeof fileExtension === 'undefined')) {
+      req.session.failureMsg = 'Incorrect file type';
+      req.session.failureIdentifier = 'file';
+      return res.redirect('garfile/garupload');
+    }
+
+    const workbook = XLSX.read(req.file.buffer, { cellDates: true });
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
+
+    const versionCell = worksheet['C1'];
+    const versionCellValue = (versionCell ? versionCell.v : undefined);
+    const versionCellValueFormatted = versionCellValue.trim();
+    if (versionCellValueFormatted !== 'GENERAL AVIATION REPORT (GAR) -  January 2015') {
+      req.session.failureMsg = 'Incorrect xls or xlsx file';
+      req.session.failureIdentifier = 'file';
+      return res.redirect('garfile/garupload');
+    }
+
+    const cellMap = {
+      arrivalPort: { location: 'B3' },
+      arrivalDate: { location: 'D3' },
+      arrivalTime: { location: 'F3', raw: true },
+      departurePort: { location: 'B4' },
+      departureDate: { location: 'D4' },
+      departureTime: { location: 'F4', raw: true },
+      registration: { location: 'B5', raw: true },
+      craftType: { location: 'D5', raw: true },
+      craftBase: { location: 'H5' },
+      freeCirculation: { location: 'L3', transform: transformers.upperCamelCase },
+      visitReason: { location: 'B6', transform: transformers.upperCamelCase },
+    };
+
+    const voyageParser = new ExcelParser(worksheet, cellMap);
+
+    const manifestMap = {
+      documentType: { location: 'A', transform: transformers.titleCase },
+      documentTypeOther: { location: 'B' },
+      issuingState: { location: 'C' },
+      documentNumber: { location: 'D', transform: transformers.numToString },
+      lastName: { location: 'E' },
+      firstName: { location: 'F' },
+      gender: { location: 'G' },
+      dateOfBirth: { location: 'H' },
+      placeOfBirth: { location: 'I' },
+      nationality: { location: 'J' },
+      documentExpiryDate: { location: 'K' },
+    };
+
+    const crewMapConfig = {
+      startRow: 9,
+      terminator: 'TOTAL CREW',
+    };
+
+    const passengerMapConfig = {
+      startRow: 20,
+      terminator: 'TOTAL PASSENGERS',
+    };
+
+    const crewParser = new ExcelParser(worksheet, manifestMap, crewMapConfig);
+    const crew = crewParser.rangeParse();
+    crew.map((person) => {
+      person.peopleType = 'Crew';
+      person.documentType = person.documentTypeOther ? 'Other' : person.documentType;
+    });
+
+    const passengerParser = new ExcelParser(worksheet, manifestMap, passengerMapConfig);
+    const passengers = passengerParser.rangeParse();
+    passengers.map((person) => {
+      person.peopleType = 'Passenger';
+      person.documentType = person.documentTypeOther ? 'Other' : person.documentType;
+    });
+
+    const crewUpdate = garApi.patch(req.body.garid, 'Draft', { people: crew });
+    const passengerUpdate = garApi.patch(req.body.garid, 'Draft', { people: passengers });
+    const voyageUpdate = garApi.patch(req.body.garid, 'Draft', voyageParser.parse());
+
+    Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
+      .then(() => {
+        res.redirect('/garfile/departure');
+      })
+      .catch((err) => {
+        logger.error('Failed to update API with GAR information');
+        logger.error(err);
+        req.session.failureMsg = 'Failed to read GAR';
+        req.session.failureIdentifier = 'file';
+        return res.redirect('garfile/garupload');
+      });
+  } else {
+    logger.debug('No file selected for upload');
+    req.session.failureMsg = 'Provide a file';
+    req.session.failureIdentifier = 'file';
+    res.redirect('/garfile/garupload?query=0');
+  }
+});
+
+module.exports = {
+  router,
+  paths,
+};

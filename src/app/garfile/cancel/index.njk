@@ -1,0 +1,42 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	Cancel GAR
+{% endblock %}
+
+{% block header %}
+  {% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">
+    Are you sure you want to cancel this GAR ?
+  </h1>
+  <p class="govuk-body-m">
+    You will need to ensure that a new GAR is submitted if this flight takes place.
+  </p>
+  <br>
+  <form action="/garfile/cancel" method="post">
+    <input class="govuk-button" type="submit" value="Cancel GAR">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  </form>
+  <p class="govuk-body-m">
+    <a href="/home">Exit without cancelling</a>
+  </p>
+{% endblock %}

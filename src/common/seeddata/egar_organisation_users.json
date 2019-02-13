@@ -1,0 +1,5 @@
+[
+	{ "id": "0", "fname": "John", "lname": "Smith" , "email": "john@hsomeorganisation.com", "role": "admin"  },
+	{ "id": "1", "fname": "Steve", "lname": "Graham" , "email": "Steve@hsomeorganisation.com","role": "user"  },
+	{ "id": "2", "fname": "Sarah", "lname": "Potter" , "email": "Sarah@hsomeorganisation.com", "role": "manager" }
+]

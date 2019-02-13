@@ -1,0 +1,65 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Invite user
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+	  <div class="govuk-grid-column-two-thirds">
+
+    <form action="/organisation/assignrole" autocomplete="false" class="form-group"
+      method="post" role="form" style="margin-top:20px">
+
+       <div class="form-group {{ m.form_group_class('invite', errors) }}">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h1 class="govuk-fieldset__heading">Invite a User</h1>
+            <span id="customs-hint" class="govuk-hint">Please select the role you would like the user to perform within your organisation.</span>
+          </legend>
+          {{ m.error_message('invite', errors) }}
+
+          <div class="govuk-radios">
+          {% for role in roles %}
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="option-{{role.id}}" type="radio" name="role" value="{{role.name}}">
+                <label class="govuk-label govuk-radios__label" for="option-{{role.id}}">{{role.name}}</label>
+                <p>{{role.description}}</p>
+            </div>
+          {% endfor %}
+          </div>
+
+        </fieldset>
+		   </div>
+
+         <div class="govuk-form-group">
+          <input id="createorg" class="govuk-button" type="submit" value="Submit"
+          onclick="sendAnalytics(event, 'Invite User - submit', 'click')">
+        </div>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+    </form>
+ </div>
+
+{% endblock %}

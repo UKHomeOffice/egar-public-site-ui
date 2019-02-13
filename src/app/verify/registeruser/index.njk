@@ -1,0 +1,43 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Verify Token
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		<p class="govuk-body-l">
+      You account has now been successfully verified. You can now log on and submit GAR files online.
+    </p>
+    <a class="govuk-button" href="/login" role="button">
+			Sign in
+		</a>
+		<p class="govuk-body-m">
+			If you are having difficulties using this service, please <a href="mailto:egarsupport@homeoffice.gov.uk">contact us</a>.
+		</p>
+	</div>
+</div>
+
+{% endblock %}

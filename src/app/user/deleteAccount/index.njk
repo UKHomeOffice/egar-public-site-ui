@@ -1,0 +1,47 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Delete Account
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+    <h1 class="govuk-heading-l">
+      Are you sure you want to delete your account ?
+    </h1>
+    <p class="govuk-body-m">
+     Deleting your account is permanent and you will no longer
+     be able to log in to the system using the registered email address. You will be able to re-register this
+     email address at a later date if you choose to.
+    </p>
+  <br>
+
+  <form action="/user/delete" method="post">
+    <input class="govuk-button" type="submit" value="Delete Account">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  </form>
+
+  <p class="govuk-body-m">
+    <a href="/user/details">Exit without deleting</a>
+  </p>
+</main>
+{% endblock %}

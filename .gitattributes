@@ -1,0 +1,60 @@
+# Common settings that generally should always be used
+# This will handle all files NOT found below
+* text=auto
+
+# Basic .gitattributes for a python repo.
+# Source files
+# ============
+*.pxd      text eol=lf
+*.py       text eol=lf
+*.py3      text eol=lf
+*.pyw      text eol=lf
+*.pyx      text eol=lf
+
+# Binary files
+# ============
+*.db       binary
+*.p        binary
+*.pkl      binary
+*.pyc      binary
+*.pyd      binary
+*.pyo      binary
+
+# Bash
+*.sh       text eol=lf
+
+# Documents
+*.doc      diff=astextplain
+*.DOC      diff=astextplain
+*.docx     diff=astextplain
+*.DOCX     diff=astextplain
+*.dot      diff=astextplain
+*.DOT      diff=astextplain
+*.pdf      diff=astextplain
+*.PDF      diff=astextplain
+*.rtf      diff=astextplain
+*.RTF      diff=astextplain
+*.md       text eol=lf
+*.adoc     text
+*.textile  text eol=lf
+*.mustache text eol=lf
+*.csv      text
+*.tab      text
+*.tsv      text
+*.sql      text eol=lf
+#
+# SVG treated as an asset (binary) by default. If you want to treat it as text,
+# comment-out the following line and uncomment the line after.
+*.svg      binary
+#*.svg text
+*.eps      binary
+
+# Graphics
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.tif      binary
+*.tiff     binary
+*.ico      binary
+

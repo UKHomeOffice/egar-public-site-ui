@@ -1,0 +1,31 @@
+{
+    "status": {
+        "name": "Draft"
+    },
+    "craftType": "EVA",
+    "craftBase": "TOK",
+    "registration": "EVA02",
+    "garId": "9bedad41-bcab-4dd5-a15b-1e29b82b875c",
+    "departureDate": "2020-12-12",
+    "departureTime": "11:11:00",
+    "departurePort": "a",
+    "departureLong": "",
+    "departureLat": "",
+    "arrivalTime": "11:12:00",
+    "arrivalDate": "2020-12-13",
+    "arrivalPort": "v",
+    "arrivalLat": "",
+    "arrivalLong": "",
+    "visitReason": "Short Term Visit",
+    "numberOfPeopleOnBoard": 1,
+    "freeCirculation": "",
+    "responsibleGivenName": "James",
+    "responsibleSurname": "Lizamore",
+    "responsibleAddressLine1": "3",
+    "responsibleAddressLine2": "Pullman",
+    "responsibleTown": "Godalming",
+    "responsiblePostcode": "GU7111",
+    "responsibleCounty": "Surr",
+    "responsibleContactNo": "1231231",
+    "prohibitedGoods": true
+}

@@ -1,0 +1,170 @@
+pipeline:
+
+  Build:
+    image: quay.io/ukhomeofficedigital/drone-docker
+    commands:
+      - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
+    when:
+      event: push
+
+  Unit tests:
+    image: quay.io/ukhomeofficedigital/drone-docker
+    commands:
+      - docker run -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} sh -c "cd test/ && npm test"
+    when:
+      event: push
+
+
+  SonarQube Scanner:
+    image: quay.io/ukhomeofficedigital/sonar-scanner:v3.0.3
+    when:
+      event: push
+
+
+  Push Image to Quay.io:
+    image: quay.io/ukhomeofficedigital/drone-docker
+    secrets:
+      - DOCKER_USERNAME
+      - DOCKER_PASSWORD
+    registry: quay.io
+    repo: quay.io/ukhomeofficedigital/egar-public-site-ui
+    tags:
+      - ${DRONE_BUILD_NUMBER}
+    when:
+      branch: [ master, hotfix/* ]
+      event: push
+
+
+  Deploy to SIT:
+    image: quay.io/ukhomeofficedigital/kd
+    environment:
+      - NODE_ENV=sit
+      - INSECURE_SKIP_TLS_VERIFY=true
+      - KUBE_NAMESPACE=egar-sit
+      - INGRESS_CLASS=nginx-internal
+    secrets:
+      - SIT_KUBE_ARTIFACTORY_APP_SECRET
+      - SIT_KUBE_SERVER
+      - SIT_KUBE_TOKEN
+      - SIT_BASE_URL
+    commands:
+      - export KUBE_ARTIFACTORY_APP_SECRET=$${SIT_KUBE_ARTIFACTORY_APP_SECRET}
+      - export KUBE_SERVER=$${SIT_KUBE_SERVER}
+      - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
+      - export BASE_URL=$${SIT_BASE_URL}
+      - kd --file kube/artifactory-secret.yml
+      - kd --file kube/public-site-network-policy.yml
+      - kd --file kube/public-site-deployment.yml
+      - kd --file kube/public-site-service.yml
+      - kd --file kube/public-site-ingress.yml
+    when:
+      branch: [ master, hotfix/* ]
+      event: push
+      environment:
+        exclude: [ production ]
+
+
+  End to End tests:
+    image: quay.io/ukhomeofficedigital/drone-docker
+    secrets:
+      - E2E_PROTOCOL
+      - E2E_BASE_URL
+      - E2E_SMTP_SERVER
+      - E2E_SMTP_PORT
+      - E2E_INDIVIDUAL_USER_USERNAME
+      - E2E_INDIVIDUAL_USER_PASSWORD
+    commands:
+      - docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER} -e PROTOCOL=$${E2E_PROTOCOL} -e BASE_URL=$${E2E_BASE_URL} -e E2E_SMTP_SERVER=$${E2E_SMTP_SERVER} -e E2E_SMTP_PORT=$${E2E_SMTP_PORT} -e E2E_INDIVIDUAL_USER_USERNAME=$${E2E_INDIVIDUAL_USER_USERNAME} -e E2E_INDIVIDUAL_USER_PASSWORD=$${E2E_INDIVIDUAL_USER_PASSWORD} quay.io/ukhomeofficedigital/egar-e2e-test:latest
+    when:
+      branch: [ master, hotfix/* ]
+      event: push
+      environment:
+        exclude: [ production ]
+
+
+  Deploy to Staging:
+    image: quay.io/ukhomeofficedigital/kd
+    environment:
+      - NODE_ENV=staging
+      - INSECURE_SKIP_TLS_VERIFY=true
+      - KUBE_NAMESPACE=egar-staging
+      - INGRESS_CLASS=nginx-external
+    secrets:
+      - DOCKER_REGISTRY_URL
+      - STAGING_KUBE_ARTIFACTORY_APP_SECRET
+      - STAGING_KUBE_SERVER
+      - STAGING_KUBE_TOKEN
+      - STAGING_BASE_URL
+    commands:
+      - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
+      - export KUBE_ARTIFACTORY_APP_SECRET=$${STAGING_KUBE_ARTIFACTORY_APP_SECRET}
+      - export KUBE_SERVER=$${STAGING_KUBE_SERVER}
+      - export KUBE_TOKEN=$${STAGING_KUBE_TOKEN}
+      - export BASE_URL=$${STAGING_BASE_URL}
+      - kd --file kube/artifactory-secret.yml
+      - kd --file kube/public-site-network-policy.yml
+      - kd --file kube/public-site-deployment.yml
+      - kd --file kube/public-site-service.yml
+      - kd --file kube/public-site-ingress.yml
+    when:
+      branch: [ master, hotfix/* ]
+      event: push
+      environment:
+        exclude: [ production ]
+
+
+  Mock Performance Tests:
+    image: docker:17.09.0-ce
+    commands:
+      - echo "TODO - Load/performance tests"
+    when:
+      branch: [ master, hotfix/* ]
+      event: push
+      environment:
+        exclude: [ production ]
+
+
+  Deploy to Production:
+    image: quay.io/ukhomeofficedigital/kd
+    environment:
+      - NODE_ENV=production
+      - INSECURE_SKIP_TLS_VERIFY=true
+      - KUBE_NAMESPACE=egar-production
+      - INGRESS_CLASS=nginx-external
+    secrets:
+      - DOCKER_REGISTRY_URL
+      - PRODUCTION_KUBE_ARTIFACTORY_APP_SECRET
+      - PRODUCTION_KUBE_SERVER
+      - PRODUCTION_KUBE_TOKEN
+      - PRODUCTION_BASE_URL
+    commands:
+      - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
+      - export KUBE_ARTIFACTORY_APP_SECRET=$${PRODUCTION_KUBE_ARTIFACTORY_APP_SECRET}
+      - export KUBE_SERVER=$${PRODUCTION_KUBE_SERVER}
+      - export KUBE_TOKEN=$${PRODUCTION_KUBE_TOKEN}
+      - export BASE_URL=$${PRODUCTION_BASE_URL}
+      - kd --file kube/artifactory-secret.yml
+      - kd --file kube/public-site-network-policy.yml
+      - kd --file kube/public-site-deployment.yml
+      - kd --file kube/public-site-service.yml
+      - kd --file kube/public-site-ingress.yml
+    when:
+      event: deployment
+      branch: [ master, hotfix/* ]
+      environment: production
+
+
+  Notify Slack on Failure:
+    image: plugins/slack
+    secrets:
+      - SLACK_WEBHOOK
+    channel: egar-notifications
+    username: Drone
+    template: >
+      *Deployment* {{repo.name}} FAILED*    Author: {{build.author}}    Duration: {{since job.started}}    Job: <{{build.link}}|#{{build.number}}>
+    when:
+      status: failure
+
+
+branches:
+  exclude: [ wip*, WIP* ]

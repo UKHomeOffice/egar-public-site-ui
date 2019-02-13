@@ -1,0 +1,99 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Save an Aircraft
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+        <form action="/user/savedcraft/add" autocomplete="false" class="form-group"
+      method="post" role="form" style="margin-top:20px">
+
+      <h1 class="govuk-heading-xl">
+        Save an Aircraft
+      </h1>
+
+      <p class="govuk-body-l">Please enter the following information. This information can be re-used when submitting a GAR.</p>
+
+      <div class="govuk-form-group {{ m.form_group_class('craftreg', errors) }}">
+
+          <label class="govuk-label" for="craftreg">Aircraft Registration</label>
+          {{ m.error_message('craftreg', errors) }}
+          <span class="govuk-hint">
+            Enter a new value
+          </span>
+          <span class="field-validation-valid error-message" data-valmsg-for="craftreg"
+            data-valmsg-replace="true" style="display:block">
+          </span>
+          <input  class="govuk-input"
+            id="craftreg" name="craftreg" style="width:100%" type="text"
+            value="" />
+      </div>
+
+      <div class="govuk-form-group {{ m.form_group_class('crafttype', errors) }}">
+            <label class="govuk-label" for="crafttype">Aircraft Type</label>
+          {{ m.error_message('crafttype', errors) }}
+          <span class="govuk-hint">
+            Enter a new value
+          </span>
+          <span class="field-validation-valid error-message" data-valmsg-for="crafttype"
+            data-valmsg-replace="true" style="display:block">
+          </span>
+          <input  class="govuk-input"
+            id="crafttype" name="crafttype" style="width:100%" type="text"
+            value="" />
+      </div>
+
+      <div class="govuk-form-group {{ m.form_group_class('craftbase', errors) }}">
+             <label class="govuk-label" for="craftbase">Aircraft Home Aerodrome / Usual Base</label>
+          {{ m.error_message('craftbase', errors) }}
+          <span class="govuk-hint">
+            Enter a new value
+          </span>
+          <span class="field-validation-valid error-message" data-valmsg-for="craftbase"
+            data-valmsg-replace="true" style="display:block">
+          </span>
+          <input  class="govuk-input"
+            id="craftbase" name="craftbase" style="width:100%" type="text"
+            value="" />
+      </div>
+
+          <div class="govuk-form-group">
+
+           <table class="govuk-table">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell "><a class="govuk-button" href="/user/details">Exit Without Saving</a></td>
+            <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and Exit"
+          onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
+          </tr>
+        </table>
+
+          </div>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+    </form>
+
+ </div>
+
+{% endblock %}

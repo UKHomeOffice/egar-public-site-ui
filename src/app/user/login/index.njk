@@ -1,0 +1,57 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Sign In
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		<form action="login" method="POST">
+			<h1 class="govuk-heading-xl">Sign in</h1>
+			<div class="govuk-form-group {{ m.form_group_class('Username', errors) }}">
+
+				<label class="govuk-label govuk-label--m" for="Username">
+					Email address
+				</label>
+
+				<span id="departurePort-hint" class="govuk-hint">
+					This is the email address you used when you created your account
+				</span>
+        {{ m.error_message('Username', errors) }}
+				<input class="govuk-input" id="Username" name="Username" type="text">
+			</div>
+
+			<h2 class="govuk-heading-s">Need to register an account?</h2>
+			<p class="govuk-body"><a href="/user/register">Create an account</a></p>
+
+			<button type="submit" class="govuk-button">
+				Agree and submit
+			</button>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+		</form>
+	</div>
+</div>
+
+{% endblock %}
