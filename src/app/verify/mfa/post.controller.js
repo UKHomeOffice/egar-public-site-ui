@@ -1,0 +1,57 @@
+const logger = require('../../../common/utils/logger');
+const ValidationRule = require('../../../common/models/ValidationRule.class');
+const validator = require('../../../common/utils/validator');
+const CookieModel = require('../../../common/models/Cookie.class');
+const tokenApi = require('../../../common/services/tokenApi');
+const userApi = require('../../../common/services/userManageApi');
+const settings = require('../../../common/config/index');
+
+module.exports = (req, res) => {
+  logger.debug('In verify / mfa post controller');
+
+  const token = req.body['mfa-authentication-code'];
+
+  const mfaCodeChain = [
+    new ValidationRule(validator.notEmpty, 'mfa-authentication-code', token, 'Enter your code'),
+  ];
+
+  const cookie = new CookieModel(req);
+
+  const mfaTokenLength = settings.MFA_TOKEN_LENGTH;
+
+  const errMsg = { message: 'There was a problem verifying your token. Try again' };
+  validator.validateChains([mfaCodeChain])
+    .then(() => {
+      tokenApi.validateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
+        .then((valid) => {
+          if (valid) {
+            tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
+              .then(() => {
+                userApi.getDetails(cookie.getUserEmail())
+                  .then((apiResponse) => {
+                    const parsedResponse = JSON.parse(apiResponse);
+                    cookie.setLoginInfo(parsedResponse);
+                    res.redirect('/home');
+                  })
+                  .catch((err) => {
+                    logger.error(err);
+                    res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
+                  });
+              })
+              .catch((err) => {
+                logger.error(err);
+                res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
+              });
+          }
+        })
+        .catch((err) => {
+          // Validation error
+          logger.info(err);
+          res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
+        });
+    }).catch((err) => {
+      // Validation error
+      logger.info(err);
+      res.render('app/verify/mfa/index', { cookie, errors: err, mfaTokenLength });
+    });
+};

@@ -1,0 +1,56 @@
+// govuk_frontend_toolkit dependencies
+// https://github.com/alphagov/govuk_frontend_toolkit#usage
+@import "_colours";
+@import "_conditionals";
+@import "_css3";
+@import "_grid_layout";
+@import "_shims";
+@import "_measurements";
+@import "_typography";
+@import "design-patterns/_buttons";
+
+@import "govuk-elements";
+@import "accessible-autocomplete.min";
+
+.scope-row {
+
+	hr {
+		margin-top:0px;
+	}
+}
+
+@media (min-width:641px) {
+    .scope-row .heading-small {
+        margin-top: 0.3em;
+    }
+}
+
+.header-row {
+	.heading-large {
+		margin-top:0em;
+	}
+}
+
+.calculated-group {
+	display:none;
+}
+
+.previous-question-title {
+	max-width:200px;
+}
+
+.link-right {
+	text-align:right;
+}
+
+.previous-question-body {
+	text-align:right;
+}
+
+.autocomplete__option p {
+	margin-bottom: 0em;
+}
+
+.autocomplete__option .organisation {
+	font-weight:700
+}

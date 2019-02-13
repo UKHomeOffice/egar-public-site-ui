@@ -1,0 +1,48 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block page_title %}
+	Error 404
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+
+	    	<h1 class="govuk-heading-l">
+				Sorry, something went wrong.
+			</h1>
+
+			<p class="govuk-body-l">
+			  Please <a href="/">go back</a> and try again.
+			</p>
+
+			<p class="govuk-body-m">
+			 If you are having difficulties using this service, please <a href="mailto:garsupport@homeoffice.gov.uk">contact us</a>.
+			</p>
+
+		</div>
+	</div>
+
+ </main>
+
+{% endblock %}

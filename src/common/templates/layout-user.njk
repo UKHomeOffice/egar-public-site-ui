@@ -1,0 +1,32 @@
+{% extends "common/templates/co-template-user.njk" %}
+
+{% set homepage_url = '/' %}
+
+{% set title_suffix = 'Submit a GAR' %}
+
+{% set logo_link_title = 'Go to the GOV.UK Homepage' %}
+
+{% block page_title %} {{title_suffix}} {% endblock %}
+
+{% block head %}
+  {% include "common/templates/includes/head.njk" %}
+{% endblock %}
+
+{% block cookie_message %}
+  {% include "common/templates/includes/cookies.njk" %}
+{% endblock %}
+
+{% block footer_support_links %}
+  {% include "common/templates/includes/footer-support-links.njk" %}
+{% endblock %}
+
+
+
+{% block body_end %}
+  {% include "common/templates/includes/scripts.njk" %}
+{% endblock %}
+
+{% block header_class %}
+  with-proposition
+{% endblock %}
+

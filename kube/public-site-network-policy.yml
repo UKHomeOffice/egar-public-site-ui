@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-public-site
+  namespace: {{ .KUBE_NAMESPACE }}
+spec:
+  podSelector:
+    matchLabels:
+      name: public-site-svc
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: ingress-internal
+      - podSelector:
+          matchLabels:
+            name: ingress
+      ports:
+      - protocol: TCP
+        port: 10443
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: ingress-external
+      - podSelector:
+          matchLabels:
+            name: ingress
+      ports:
+      - protocol: TCP
+        port: 10443

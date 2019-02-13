@@ -1,0 +1,59 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	Submit GAR | Success
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+      <div class="govuk-panel govuk-panel--confirmation">
+        <h1 class="govuk-panel__title">
+          GAR Submitted
+        </h1>
+        <div class="govuk-panel__body">
+          Your reference number is
+        <br><strong>{{cookie.getGarId()}}</strong>
+        </div>
+      </div>
+
+       <p class="govuk-body-m">
+         We have sent a confirmation email to {{cookie.getUserEmail()}}
+       </p>
+
+       <h2 class="govuk-heading-m">
+         What happens next
+       </h2>
+
+       <p class="govuk-body-m">
+         We've sent your GAR to Border Force.
+       </p>
+
+       <p class="govuk-body-m">
+         If you need to make any changes to this GAR you will need to submit another GAR
+         with the new information and cancel this one. This can be done on the <a href="/home">Manage GAR</a> Page.
+       </p>
+       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+     </div>
+
+ {% endblock %}

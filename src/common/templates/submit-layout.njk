@@ -1,0 +1,31 @@
+{% extends "common/templates/layout.njk" %}
+
+{% block content %}
+
+<main id="content" role="main">
+
+	{% include "common/templates/includes/phase.njk" %}
+  			
+	{% include "common/templates/includes/back.njk" %}
+
+	{% if errors %}
+		{% include "common/templates/includes/errors.njk" %}
+	{% endif %}
+
+	{% include "common/templates/includes/scope.njk" %}
+
+	<div class="grid-row header-row">
+		<div class="column-two-thirds">
+			{% block header %}{% endblock %}
+		</div>
+	</div>
+
+	<div class="grid-row">
+		<div class="column-two-thirds">
+			{% block question %}{% endblock %}
+		</div>
+	</div>
+
+ </main>
+
+ {% endblock %}

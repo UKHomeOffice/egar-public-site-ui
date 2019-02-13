@@ -1,0 +1,9 @@
+## Installation
+
+Set the mandatory environment variables e.g.
+
+```bash
+export NODE_ENV=development
+export BASE_URL=http://localhost:3000/app/index.html
+export FLAGPOLE_MAINTENANCE=false
+export LOG_LEVEL=info

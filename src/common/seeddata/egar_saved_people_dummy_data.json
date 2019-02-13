@@ -1,0 +1,6 @@
+[
+	{ "id": "0", "fname": "John",  "lname": "Smith",   "email": "JohnSmith@org.com"},
+	{ "id": "0", "fname": "Adam",  "lname": "Brown",   "email": "Adam@org.com "},
+	{ "id": "0", "fname": "Craig",  "lname": "Green",   "email": "Craig.Green@org.com" },
+	{ "id": "0", "fname": "Steve",  "lname": "Davies",   "email": "SDavies@org.com" }
+]

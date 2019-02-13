@@ -1,0 +1,8 @@
+[
+	{ "id": "0", "registration": "NS0012" ,"type": "Airbus-A321", "base": "Farnborough Airport"},
+	{ "id": "1", "registration": "DD765S" , "type": "McDonnell Douglas MD-11", "base": "London Biggin Hill Airport"},
+    { "id": "2", "registration": "PUJ234" , "type": "Embraer ERJ-135", "base": "Exeter Airport"},
+    { "id": "3", "registration": "MHA234" , "type": "Beechcraft Super King Air 200", "base": "London Oxford Airport"},
+    { "id": "4", "registration": "OV87Gh2" , "type": "Pilatus PC-12", "base": "RAF Northolt"},
+    { "id": "5", "registration": "B56T213" , "type": "Sukhoi Superjet 100", "base": "London Blackbushe Airport"}
+]

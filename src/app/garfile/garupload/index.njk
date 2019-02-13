@@ -1,0 +1,63 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	Create GAR | File upload
+{% endblock %}
+
+{% block header %}
+  {% include "common/templates/includes/header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    {% import "common/templates/includes/macros.njk" as m %}
+
+    {% if errors %}
+      {% include "common/templates/includes/errors.njk" %}
+    {% endif %}
+
+    <h1 class="govuk-heading-xl">Upload your GAR file</h1>
+    <form action="/uploadgar?_csrf={{ csrfToken }}" class="form-group" method="post" role="form" enctype="multipart/form-data">
+      <p class="govuk-body-m">Select the GAR file to be uploaded</p>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">Warning</span>
+            GAR files should be of the version and format of the template file found at
+            <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights">here</a>.
+              Files that are uploaded are automatically checked for validity and integrity before being accepted by the system. Once complete,
+              you will be shown a validation screen where you will be able to correct any validation errors before submitting.
+          </strong>
+      </div>
+
+      <div class="govuk-form-group {{ m.form_group_class('file', errors) }}">
+          <label class="govuk-label" for="file">
+              Select a file
+          </label>
+          {{ m.error_message("file", errors) }}
+          <input type="file" id="file" class="govuk-file-upload" name='file' accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+      </div>
+
+  <div>
+      <input type="hidden" id="user" name='user' value="{{cookie.getUserDbId()}}">
+      <input type="hidden" id="garid" name='garid' value="{{cookie.getGarId()}}">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </div>
+
+    <div class="form-group">
+      <input type="submit" class="govuk-button" value="Upload & Continue" name="submit_button">
+    </div>
+
+
+  </form>
+
+  </div>
+{% endblock %}

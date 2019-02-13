@@ -1,0 +1,115 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	Create GAR | Supporting Documents
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+	  <div class="govuk-grid-column-full">
+    <form action="/upload?_csrf={{csrfToken}}" class="form-group" method="post" role="form" enctype="multipart/form-data">
+    <span class="govuk-caption-xl">Section 7 of 8</span>
+    <h1 class="govuk-heading-xl">
+      Would you like to upload any supporting documentation to the GAR?
+    </h1>
+    <div class="form-group {{ m.form_group_class('supportingdocuments', errors) }}"></div>
+        <p class="govuk-body-l">You don’t have to provide any supporting documentation, but doing so may assist Border Force to process your flight more quickly.</p>
+
+        <div class="govuk-warning-text">
+          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+              <span class="govuk-warning-text__assistive">Warning</span>
+              Supporting documentation may include firearms certificates / licences, firearms serial numbers or remote clearance forms.
+            </strong>
+        </div>
+
+        <p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>The maximum size for the entire GAR submission can not exceed 8MB.</li>
+            <li>You can upload as many supporting documents as you wish within this size limit.</li>
+            <li>The following file types can be uploaded: PDF, JPG, JPEG, PNG, GIF</li>
+          </ul>
+        </p>
+
+        <div class="govuk-form-group {{ m.form_group_class('file', errors) }}">
+          <label class="govuk-label govuk-label--m" for="file">
+            <strong class="bold-medium">Upload a file</strong>
+          </label>
+          <br>
+          {{ m.error_message('file', errors) }}
+          <input class="govuk-file-upload" type="file" id="file" name='file'
+            accept="image/gif, image/jpeg, image/png, application/pdf">
+        </div>
+
+        <p class="govuk-body-m">
+          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Upload selected file</a>
+        </p>
+
+        <h2 class="govuk-heading-m">Uploaded documents</h2>
+        <p class="govuk-body-m">Here are the documents you have attached to this GAR.</p>
+
+        <div class="form-group">
+          <table class="govuk-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="col">File Name</th>
+                <th class="govuk-table__header" scope="col">File Size</th>
+                <th class="govuk-table__header" scope="col">Status</th>
+                {# <th class="govuk-table__header" scope="col">Action</th> #}
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            {% for file in supportingDoc.items %}
+                <tr class="govuk-table__row">
+                <td class="govuk-table__cell ">{{file.fileName}} </td>
+                <td class="govuk-table__cell ">{{file.size}} </td>
+                <td class="govuk-table__cell ">Done</td>
+                {# <td class="govuk-table__cell "><a href="">Delete</a></td> #}
+                </tr lass="govuk-table__cell ">
+            {%endfor%}
+                <tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+    <input type="hidden" id="user" name='user' value="{{cookie.getUserDbId()}}">
+      <input type="hidden" id="garid" name='garid' value="{{cookie.getGarId()}}">
+      <input type="hidden" id="cookie" name='cookie' value = "{{cookie.getUserRole()}}">
+    </div>
+
+	<div class="govuk-form-group">
+		<a href='/garfile/review' class="govuk-button">Save and Continue</a>
+    <p class="govuk-body-m">
+      <a href="/home">Save and Exit</a>
+    </p>
+    <p class="govuk-body-m">
+      <a href="/home">Exit without saving</a>
+    </p>
+	</div>
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+</form>
+
+</div>
+
+{% endblock %}

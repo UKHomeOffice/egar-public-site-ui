@@ -1,0 +1,96 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Edit Organisation Users
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+	  <div class="govuk-grid-column-two-thirds">
+
+    <form action="/organisation/users/edit" autocomplete="false" class="form-group"
+      method="post" role="form">
+
+      <h1 class="govuk-heading-xl">Edit an organisation user</h1>
+      <p class="govuk-body-l">Edit the user's details</p>
+
+      <div class="govuk-form-group {{ m.form_group_class('firstName', errors) }}">
+        <label class="govuk-label govuk-label--m" for="firstName">Given Name</label>
+          {{ m.error_message('firstName', errors) }}
+        <span class="govuk-hint">
+            Given Name(s)
+        </span>
+        <span class="field-validation-valid error-message" data-valmsg-for="firstName"
+          data-valmsg-replace="true" style="display:block">
+        </span>
+        <input class="govuk-input" id="firstName" name="firstName"  type="text" value="{{orgUser.firstName}}" />
+      </div>
+
+      <div class="govuk-form-group {{ m.form_group_class('lastName', errors) }}">
+        <label class="govuk-label govuk-label--m" for="lastName">Last Name</label>
+          {{ m.error_message('lastName', errors) }}
+        <span class="govuk-hint">
+          Surname
+        </span>
+        <span class="field-validation-valid error-message" data-valmsg-for="lastName"
+          data-valmsg-replace="true" style="display:block">
+        </span>
+        <input class="govuk-input" id="lastName" name="lastName"  type="text" value="{{orgUser.lastName}}" />
+      </div>
+
+      {# <div class="form-group {{ m.form_group_class('role', errors) }}">
+        <label class="role" for="role">Role</label>
+        <span class="form-hint">
+          Select the user's role
+        </span>
+        {{ m.error_message('role', errors) }}
+        <fieldset>
+          {% for role in roles %}
+            <div class="multiple-choice">
+            {% if role.name == orgUser.role.name %}
+              <input id={{role.name}} type="radio" name="role" value={{role.name}} checked>
+            {% else %}
+              <input id={{role.name}} type="radio" name="role" value={{role.name}}>
+            {% endif %}
+            <label for="{{role.id}}">{{role.name}}</label>
+            </div>
+          {% endfor %}
+        </fieldset>
+      </div> #}
+
+      <div class="form-group">
+        <table class="govuk-table">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell "><a class="govuk-button" href="/organisation/manage">Exit Without Saving</a></td>
+            <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and Exit"
+            onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
+          </tr>
+        </table>
+      </div>
+
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </form>
+
+</main>
+{% endblock %}

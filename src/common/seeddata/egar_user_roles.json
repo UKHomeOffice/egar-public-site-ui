@@ -1,0 +1,5 @@
+[
+	{ "id": "0", "name": "Admin" ,"description": "Full administration capabilities over the organisation, its saved entities and its  users. Full GAR submission and management capabilities."},
+	{ "id": "1", "name": "Manager" , "description": "Partial administration capabilities over the organisation, its saved entities and its users. Full GAR submission and management capabilities"},
+	{ "id": "2", "name": "User" , "description": "Basic GAR sumbission and management capabilities"}
+]

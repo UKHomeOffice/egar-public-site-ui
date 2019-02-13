@@ -1,0 +1,35 @@
+{
+    "items": [
+        {
+            "dateOfBirth": "2000-12-11",
+            "documentExpiryDate": "2055-12-11",
+            "documentNumber": "41231313131",
+            "documentType": "Stateless Person Document",
+            "firstName": "Rei",
+            "garPeopleId": "4e85cae5-8049-42c1-8525-ccfc6ef75a29",
+            "gender": "Female",
+            "issuingState": "TOK",
+            "lastName": "Ayanami",
+            "nationality": "German",
+            "peopleType": {
+                "name": "Crew"
+            },
+            "placeOfBirth": "TOK"
+        }
+    ],
+    "_meta": {
+        "page": 1,
+        "perPage": 10,
+        "totalPages": 1,
+        "totalItems": 1
+    },
+    "_links": {
+        "currentPage": "/v0.1.0/user/5b508d7b-0578-4d77-a7dd-8b2f2525ed82/gar/9bedad41-bcab-4dd5-a15b-1e29b82b875c/people?page=1&per_page=10",
+        "next": null,
+        "prev": null
+    },
+    "garId": "9bedad41-bcab-4dd5-a15b-1e29b82b875c",
+    "status": {
+        "name": "Draft"
+    }
+}

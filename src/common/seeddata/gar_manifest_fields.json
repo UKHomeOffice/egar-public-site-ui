@@ -1,0 +1,35 @@
+{
+    "garfields" : {
+        "craft" : {
+            "fields" : [
+                { "id": "0", "name": "Aircraft Registration" },
+                { "id": "1", "name": "Aircraft Type"},
+                { "id": "2", "name": "Home / Usual Base" },
+                { "id": "3", "name": "Is Aircraft in free circulation in the EU?" },
+                { "id": "4", "name": "Reason for Aircraft visit to EU?"}
+            ]
+        },
+        "manifest" : {
+        "fields" : [
+                { "id": "0", "name": "Type" },
+                { "id": "1", "name": "Given Name"},
+                { "id": "2", "name": "Surname" },
+                { "id": "3", "name": "Gender" },
+                { "id": "4", "name": "D.O.B"},
+                { "id": "5", "name": "Place of Birth" },
+                { "id": "6", "name": "Nationality" },
+                { "id": "7", "name": "Travel Doc Type"},
+                { "id": "8", "name": "Travel Doc Number" },
+                { "id": "9", "name": "Travel Doc Expiry" },
+                { "id": "10", "name": "Travel Doc Iss. State"}
+            ]
+        },
+        "supportingDocs" : {
+            "fields" : [
+                    { "id": "0", "name": "File Name" },
+                    { "id": "1", "name": "File Size"},
+                    { "id": "2", "name": "File Status" }
+                ]
+            }
+    }
+}

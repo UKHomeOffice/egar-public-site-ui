@@ -1,0 +1,170 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Manage Account
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+<form id="signform2" action="/user/details"  class="form-group"
+      method="post" role="form" style="margin-top:20px">
+    <div class="grid-row">
+
+  <div class="govuk-tabs" data-module="tabs">
+  <h2 class="govuk-tabs__title">
+    Contents
+  </h2>
+
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#AccountDetails">
+        Account Details
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#SavedCraft">
+        Saved Aircraft
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#SavedPeople">
+        Saved People
+      </a>
+    </li>
+  </ul>
+
+  <section class="govuk-tabs__panel" id="AccountDetails">
+    <h2 class="govuk-heading-l">Account Details</h2>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Attribute</th>
+          <th class="govuk-table__header" scope="col">Current Value</th>
+          <th class="govuk-table__header" scope="col">Action</th>
+        </tr>
+      </thead>
+
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+        <td class="govuk-table__cell ">First Name</td>
+        <td class="govuk-table__cell ">{{ cookie.getUserFirstName() }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+        <td class="govuk-table__cell ">Last Name</td>
+        <td class="govuk-table__cell ">{{ cookie.getUserLastName() }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+        <td class="govuk-table__cell ">Email</td>
+        <td class="govuk-table__cell ">{{ cookie.getUserEmail() }} </td>
+        </tr>
+        <tr>
+        <td></td>
+        <td></td>
+        <td class="govuk-table__cell "><a class="govuk-button" href='/user/manageuserdetail/'>Edit</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+     <h2 class="govuk-heading-m">Delete your Account</h1>
+
+     <p class="govuk-body-m">
+     You can delete your account at anytime. Deleting your account is permanent and you will no longer
+     be able to log in to the system using the registered email address. You will be able to re-register this
+     email address at a later date if you choose to.
+     </p>
+     <a class="govuk-button" href='/user/delete' role="button">Delete</a>
+
+  </section>
+
+  <section class="govuk-tabs__panel" id="SavedCraft">
+      <h2 class="govuk-heading-l">Saved Aircraft</h2>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Aircraft Registration</th>
+          <th class="govuk-table__header" scope="col">Aircraft Type</th>
+          <th class="govuk-table__header" scope="col">Aircraft Home Aerodrome/Usual Base</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for craft in savedCrafts.items %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell ">{{ craft.registration }} </td>
+            <td class="govuk-table__cell ">{{ craft.craftType }}</td>
+            <td class="govuk-table__cell ">{{ craft.craftBase }}</td>
+            <td class="govuk-table__cell "><button class="link btn-link" name="editCraft" value="{{craft.craftId}}">Edit</button></td>
+            <td class="govuk-table__cell "><button class="link btn-link" name="deleteCraft" value="{{craft.craftId}}">Delete</button></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <h2 class="govuk-heading-m">
+          Save an Aircraft
+      </h2>
+      <p class="govuk-body-m">
+        Save the details of an Aircraft that you regularly submit GARs for.
+      </p>
+        <a href='/user/savedcraft/add' class='govuk-button' >Save an Aircraft</a>
+  </section>
+
+  <section class="govuk-tabs__panel" id="SavedPeople">
+    <h2 class="govuk-heading-l">Saved People<h2>
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">First Name</th>
+          <th class="govuk-table__header" scope="col">Last Name</th>
+          <th class="govuk-table__header" scope="col">Person Type</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for person in savedPeople %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell ">{{ person.firstName }} </td>
+            <td class="govuk-table__cell ">{{ person.lastName }}</td>
+            <td class="govuk-table__cell ">{{ person.peopleType.name }}</td>
+            <td class="govuk-table__cell "><button class="link btn-link" name="editPerson" value="{{person.personId}}">Edit</button></td>
+            {# <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}">Delete</button></td> #}
+          </tr>
+          {% endfor %}
+        </tbody>
+        </table>
+        <h2 class="heading-medium">
+            Save a Person
+        </h2>
+        <p>
+        Save the details of a person
+        </p>
+        <a href='/user/savedpeople/add' class='govuk-button' >Save a Person</a>
+  </section>
+
+
+  </div>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+  </div>
+  </form>
+
+    {% from "common/templates/includes/tabs/macro.njk" import govukTabs %}
+    {% from "common/templates/includes/table/macro.njk" import govukTable %}
+
+{% endblock %}

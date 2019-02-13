@@ -1,0 +1,17 @@
+{% macro form_group_class(identifier, errors) %}
+	{% set class = '' %}
+	{% for error in errors %}
+		{% if error.identifier == identifier %}
+			{% set class = 'govuk-form-group govuk-form-group--error' %}
+		{% endif %}
+	{% endfor %}
+	{{class}}
+{% endmacro %}
+
+{% macro error_message(identifier, errors) %}
+	{% for error in errors %}
+		{% if error.identifier == identifier %}
+			<p class="govuk-error-message">{{error.message}}</p>
+		{% endif %}
+	{% endfor %}
+{% endmacro %}

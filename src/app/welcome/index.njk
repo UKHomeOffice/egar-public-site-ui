@@ -1,0 +1,133 @@
+{% extends "base-template.njk" %}
+
+{% block pageTitle %}
+Create GAR | Start
+{% endblock %}
+
+{% block head %}
+  {% include "head.njk" %}
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+{% include "phase.njk" %}
+<div class="govuk-breadcrumbs">
+	<ol class="govuk-breadcrumbs__list">
+		<li class="govuk-breadcrumbs__list-item">
+			<a class="govuk-breadcrumbs__link" href="/">Home</a>
+		</li>
+		<li class="govuk-breadcrumbs__list-item">
+			<a class="govuk-breadcrumbs__link" href="https://www.gov.uk/transport">Transport</a>
+		</li>
+		<li class="govuk-breadcrumbs__list-item">
+			<a class="govuk-breadcrumbs__link" href="https://www.gov.uk/transport/aviation">Aviation</a>
+		</li>
+		<li class="govuk-breadcrumbs__list-item">
+			<a class="govuk-breadcrumbs__link" href="https://www.gov.uk/transport/general-aviation">General aviation</a>
+		</li>
+	</ol>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+
+		<h1 class="govuk-heading-xl">
+		Submit a General Aviation Report (GAR)
+		</h1>
+
+		<p class="govuk-body-l">Use this service to:</p>
+
+		<ul class="govuk-list govuk-list--bullet">
+			<li>Submit a GAR</li>
+			<li>View or cancel a GAR and edit draft GARs</li>
+			<li>Add, remove or manage people on your flight</li>
+		</ul>
+
+		<a href="/login" role="button" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">Start
+			now</a>
+
+		<div class="govuk-tabs" data-module="tabs">
+			<h2 class="govuk-tabs__title">
+				Contents
+			</h2>
+
+			<ul class="govuk-tabs__list">
+				<li class="govuk-tabs__list-item">
+					<a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#more-information">
+						More information
+					</a>
+				</li>
+				<li class="govuk-tabs__list-item">
+					<a class="govuk-tabs__tab" href="#other-ways">
+						Other ways to submit a GAR
+					</a>
+				</li>
+			</ul>
+
+			<section class="govuk-tabs__panel" id="more-information">
+				<h2 class="govuk-heading-s">You’ll need the following:</h2>
+
+				<ul class="govuk-list govuk-list--bullet">
+					<li>Aircraft details (including registration number and base)</li>
+					<li>Arrival and departure details (date, location and scheduled times)</li>
+					<li>Name and telephone number of the person responsible for goods on board</li>
+					<li>Aircraft tax information (whether taxes have been paid and accounted for in the EU)</li>
+					<li>Captain, crew and passenger details (including travel document information and UK visiting address)</li>
+				</ul>
+			</section>
+
+			<section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="other-ways">
+				<h3 class="govuk-heading-s">By email</h3>
+				<p>Send the <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights"
+						target="_blank">General Aviation Report form</a>, to the <a href="mailto:ncu@hmrc.gsi.gov.uk">national
+						co-ordination unit (NCU)</a> to send to Border Force or the police.</p>
+
+				<p>You should title your email: ‘GAR, airfield registration, name of airfield, postcode of airfield (if
+					known)’. Please check the attached guidance in the Related Content section before completing and submitting
+					the GAR form.</p>
+
+				<h3 class="govuk-heading-s">By Phone - In an emergency only</h3>
+				<p>+44 (0) 845 723 1110</p>
+			</section>
+		</div>
+	</div>
+	<div class="govuk-grid-column-one-third">
+		<aside class="app-related-items" role="complementary">
+			<h2 class="govuk-heading-m" id="subsection-title">
+				Related content
+			</h2>
+			<nav role="navigation" aria-labelledby="subsection-title">
+				<ul class="govuk-list govuk-!-font-size-16">
+					<li>
+            <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/768803/GAR_Instructions_July_2018-3-1-19.pdf">
+              General aviation report guidance(GAR)
+            </a>
+					</li>
+					<li>
+            <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/380032/border_force_expectations_of_airfiield_operators.pdf">
+              Border Force expectations of airfield operators
+            </a>
+					</li>
+					<li>
+            <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/768803/GAR_Instructions_July_2018-3-1-19.pdf">
+              Check if you need to submit a GAR
+            </a>
+					</li>
+					<li>
+            <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/408958/6_478_Aviation_poster.pdf">
+              Emergency (GAR) telephone line
+            </a>
+					</li>
+				</ul>
+			</nav>
+		</aside>
+
+	</div>
+</div>
+{% endblock %}
+
