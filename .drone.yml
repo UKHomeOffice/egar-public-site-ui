@@ -1,47 +1,41 @@
 pipeline:
 
-  build:
-    image: docker:17.09.0-ce
-    environment:
-      - DOCKER_HOST=tcp://172.17.0.1:2375
+  Build:
+    image: quay.io/ukhomeofficedigital/drone-docker
     commands:
       - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
+    when:
+      event: push
 
-
-  unit-test:
-    image: docker:17.09.0-ce
-    pull: true
-    environment:
-      - DOCKER_HOST=tcp://172.17.0.1:2375
+  Unit tests:
+    image: quay.io/ukhomeofficedigital/drone-docker
     commands:
       - docker run -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} sh -c "cd test/ && npm test"
+    when:
+      event: push
 
 
-  sonar-scanner:
+  SonarQube Scanner:
     image: quay.io/ukhomeofficedigital/sonar-scanner:v3.0.3
+    when:
+      event: push
 
 
-  image_to_artifactory:
-    image: docker:17.09.0-ce
+  Push Image to Quay.io:
+    image: quay.io/ukhomeofficedigital/drone-docker
     secrets:
       - DOCKER_USERNAME
       - DOCKER_PASSWORD
-      - DOCKER_REGISTRY_URL
-    environment:
-      - DOCKER_HOST=tcp://172.17.0.1:2375
-    commands:
-      - export DOCKER_USERNAME=$${DOCKER_USERNAME}
-      - export DOCKER_PASSWORD=$${DOCKER_PASSWORD}
-      - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
-      - docker login -u="$${DOCKER_USERNAME}" -p="$${DOCKER_PASSWORD}" $${DOCKER_REGISTRY_URL}
-      - docker tag egar_ui-public-site:$${DRONE_BUILD_NUMBER} $${DOCKER_REGISTRY_URL}/egar/ui-public-site:$${DRONE_BUILD_NUMBER}
-      - docker push $${DOCKER_REGISTRY_URL}/egar/ui-public-site:$${DRONE_BUILD_NUMBER}
+    registry: quay.io
+    repo: quay.io/ukhomeofficedigital/egar-public-site-ui
+    tags:
+      - ${DRONE_BUILD_NUMBER}
     when:
-      branch:
-        include: [ master ]
+      branch: [ master, hotfix/* ]
+      event: push
 
 
-  sit_deployment:
+  Deploy to SIT:
     image: quay.io/ukhomeofficedigital/kd
     environment:
       - NODE_ENV=sit
@@ -49,13 +43,11 @@ pipeline:
       - KUBE_NAMESPACE=egar-sit
       - INGRESS_CLASS=nginx-internal
     secrets:
-      - DOCKER_REGISTRY_URL
       - SIT_KUBE_ARTIFACTORY_APP_SECRET
       - SIT_KUBE_SERVER
       - SIT_KUBE_TOKEN
       - SIT_BASE_URL
     commands:
-      - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
       - export KUBE_ARTIFACTORY_APP_SECRET=$${SIT_KUBE_ARTIFACTORY_APP_SECRET}
       - export KUBE_SERVER=$${SIT_KUBE_SERVER}
       - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
@@ -67,51 +59,30 @@ pipeline:
       - kd --file kube/public-site-ingress.yml
     when:
       branch: [ master, hotfix/* ]
+      event: push
       environment:
         exclude: [ production ]
 
 
-  e2e-tests:
-    image: docker:17.09.0-ce
+  End to End tests:
+    image: quay.io/ukhomeofficedigital/drone-docker
     secrets:
-      - DOCKER_USERNAME
-      - DOCKER_PASSWORD
-      - DOCKER_REGISTRY_URL
       - E2E_PROTOCOL
       - E2E_BASE_URL
       - E2E_SMTP_SERVER
       - E2E_SMTP_PORT
       - E2E_INDIVIDUAL_USER_USERNAME
       - E2E_INDIVIDUAL_USER_PASSWORD
-    environment:
-      - DOCKER_HOST=tcp://172.17.0.1:2375
     commands:
-      - export DOCKER_USERNAME=$${DOCKER_USERNAME}
-      - export DOCKER_PASSWORD=$${DOCKER_PASSWORD}
-      - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
-      - docker login -u="$${DOCKER_USERNAME}" -p="$${DOCKER_PASSWORD}" $${DOCKER_REGISTRY_URL}
-      - docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER} -e PROTOCOL=$${E2E_PROTOCOL} -e BASE_URL=$${E2E_BASE_URL} -e E2E_SMTP_SERVER=$${E2E_SMTP_SERVER} -e E2E_SMTP_PORT=$${E2E_SMTP_PORT} -e E2E_INDIVIDUAL_USER_USERNAME=$${E2E_INDIVIDUAL_USER_USERNAME} -e E2E_INDIVIDUAL_USER_PASSWORD=$${E2E_INDIVIDUAL_USER_PASSWORD} $${DOCKER_REGISTRY_URL}/egar/e2e-test:latest
+      - docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER} -e PROTOCOL=$${E2E_PROTOCOL} -e BASE_URL=$${E2E_BASE_URL} -e E2E_SMTP_SERVER=$${E2E_SMTP_SERVER} -e E2E_SMTP_PORT=$${E2E_SMTP_PORT} -e E2E_INDIVIDUAL_USER_USERNAME=$${E2E_INDIVIDUAL_USER_USERNAME} -e E2E_INDIVIDUAL_USER_PASSWORD=$${E2E_INDIVIDUAL_USER_PASSWORD} quay.io/ukhomeofficedigital/egar-e2e-test:latest
     when:
       branch: [ master, hotfix/* ]
+      event: push
       environment:
         exclude: [ production ]
 
 
-  cleanup:
-    image: docker:17.09.0-ce
-    detach: true
-    environment:
-      - DOCKER_HOST=tcp://172.17.0.1:2375
-    commands:
-      - docker stop  e2e-test_${DRONE_BUILD_NUMBER} || echo "Stopping E2E test container"
-      - docker rm -v e2e-test_${DRONE_BUILD_NUMBER} || echo "Removing E2E test container"
-    when:
-      branch: [ master, hotfix/* ]
-      environment:
-        exclude: [ production ]
-
-
-  staging_deployment:
+  Deploy to Staging:
     image: quay.io/ukhomeofficedigital/kd
     environment:
       - NODE_ENV=staging
@@ -137,21 +108,23 @@ pipeline:
       - kd --file kube/public-site-ingress.yml
     when:
       branch: [ master, hotfix/* ]
+      event: push
       environment:
         exclude: [ production ]
 
 
-  mock_performance_test:
+  Mock Performance Tests:
     image: docker:17.09.0-ce
     commands:
       - echo "TODO - Load/performance tests"
     when:
       branch: [ master, hotfix/* ]
+      event: push
       environment:
         exclude: [ production ]
 
 
-  production_deployment:
+  Deploy to Production:
     image: quay.io/ukhomeofficedigital/kd
     environment:
       - NODE_ENV=production
@@ -176,12 +149,12 @@ pipeline:
       - kd --file kube/public-site-service.yml
       - kd --file kube/public-site-ingress.yml
     when:
-      event: [ deployment ]
+      event: deployment
       branch: [ master, hotfix/* ]
       environment: production
 
 
-  notify_slack:
+  Notify Slack on Failure:
     image: plugins/slack
     secrets:
       - SLACK_WEBHOOK

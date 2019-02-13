@@ -81,7 +81,7 @@ spec:
             - name: public-av-prt
               containerPort: 3310
         - name: public-site
-          image: {{ .DOCKER_REGISTRY_URL }}/egar/ui-public-site:{{ .DRONE_BUILD_NUMBER }}
+          image: quay.io/ukhomeofficedigital/egar-public-site-ui:{{ .DRONE_BUILD_NUMBER }}
           imagePullPolicy: Always
           securityContext:
             runAsNonRoot: true
