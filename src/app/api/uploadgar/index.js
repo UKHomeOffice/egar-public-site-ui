@@ -96,7 +96,9 @@ router.post('/uploadgar', upload.single('file'), (req, res, data) => {
     };
 
     const passengerMapConfig = {
-      startRow: 20,
+      startIdentifier: 'PASSENGERS',
+      startColumn: 'A',
+      skipNum: 2,
       terminator: 'TOTAL PASSENGERS',
     };
 
