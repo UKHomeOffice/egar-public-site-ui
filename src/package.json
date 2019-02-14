@@ -16,6 +16,7 @@
     "clamav.js": "^0.12.0",
     "client-sessions": "^0.8.0",
     "compression": "^1.7.3",
+    "connect-pg-simple": "^5.0.0",
     "cookie-parser": "^1.4.3",
     "correlation-id": "^3.0.1",
     "csurf": "^1.9.0",

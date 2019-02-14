@@ -24,6 +24,11 @@ npm install
 node start
 ```
 
+## Session Table Setup 
+This project is using `node-connect-pg-simple` for session storage. 
+This requires the session table to be setup in the postgres instance which 
+can be done by applying [this](https://github.com/voxpelli/node-connect-pg-simple/blob/master/table.sql) sql script
+
 ## Testing
 
 ```

@@ -42,6 +42,7 @@ exports.PUBLIC_SITE_DBNAME = process.env.PUBLIC_SITE_DBNAME;
 exports.PUBLIC_SITE_DBUSER = process.env.PUBLIC_SITE_DBUSER;
 exports.PUBLIC_SITE_DBPASSWORD = process.env.PUBLIC_SITE_DBPASSWORD;
 exports.DATABASE_DIALECT = 'postgres';
+exports.PUBLIC_SITE_DB_CONNSTR = `postgres://${process.env.PUBLIC_SITE_DBUSER}:${process.env.PUBLIC_SITE_DBPASSWORD}@${process.env.PUBLIC_SITE_DBHOST}:${process.env.PUBLIC_SITE_DBPORT}/${process.env.PUBLIC_SITE_DBNAME}`;
 
 //TLS settings
 exports.NODE_TLS_REJECT_UNAUTHORIZED=1;
