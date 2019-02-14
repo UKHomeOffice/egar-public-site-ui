@@ -48,6 +48,12 @@ describe('ExcelParser', () => {
     expect(parser.rangeParse()[0]).to.have.keys(['cell1', 'cell2']);
   });
 
+  it('Should parse a configured cell-range by searching for start cell', () => {
+    const mapConfig = { cell1: { location: 'A' }, cell2: { location: 'B' } };
+    const parser = new ExcelParser(rangeWorkbook, mapConfig, { startIdentifier: 'A456', startColumn: 'A', skipNum: 1, terminator: 'STOP' });
+    expect(parser.rangeParse()).to.have.length(1);
+  });
+
   it('Should identify whether a row is empty or not', () => {
     expect(ExcelParser.isRowEmpty({ A1: undefined, B1: undefined })).to.be.true;
     expect(ExcelParser.isRowEmpty({ A1: 'A1', B1: undefined })).to.be.false;

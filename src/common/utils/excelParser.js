@@ -35,7 +35,7 @@ class ExcelParser {
    */
   rangeParse() {
     const rowArr = [];
-    let rowNum = this.rangeConfig.startRow;
+    let rowNum = this.rangeConfig.startRow || this.getRangeStartRow(this.rangeConfig.startIdentifier, this.rangeConfig.startColumn);
     let flag = true;
     while (flag) {
       const rowObj = {};
@@ -59,13 +59,27 @@ class ExcelParser {
     return rowArr;
   }
 
-  /**
+  /** d
    * Check to see if a given row is empty
    * @param {Object} rowObj Object representing sheet row
    * @returns {Bool} true if row is empty, else false
    */
   static isRowEmpty(rowObj) {
     return Object.keys(rowObj).every((key => rowObj[key] === undefined));
+  }
+
+  /**
+   * Using an identifier cell and a column, find the row number which proceeds this cell
+   * @param {String} identifier A string to identify the cell being searched for
+   * @param {String} column The column to search for the string in
+   * @returns {Integer} The row number proceeding the row containing the identifying cell
+   */
+  getRangeStartRow(identifier, column) {
+    for (let i = 1; i < 500; i += 1) {
+      const cellValue = this._getValue(`${column}${i}`);
+      if (cellValue === identifier) return i + this.rangeConfig.skipNum;
+    }
+    throw new Error('Identifying cell not found');
   }
 
   _getValue(cell, rawValue) {
