@@ -59,14 +59,16 @@ const APP_VIEWS = [
   'common/templates/includes',
 ];
 
-// create app sessions
-// session
 function initialisexpresssession(app) {
   app.use(cookieParser());
+  const pgSession = require('connect-pg-simple')(session);
   app.use(session({
     name: 'sess_id',
-    genid:function(req) {
-      return uuid()}, // use UUIDs for session IDs,
+    genid: function(req) {
+      return uuid()},
+    store: new pgSession({
+      conString: config.PUBLIC_SITE_DB_CONNSTR,
+    }),
     secret: config.SESSION_ENCODE_SECRET,
     resave: false,
     saveUninitialized: true,
