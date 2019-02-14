@@ -7,7 +7,7 @@ const token = require('../../../common/services/create-token');
 const userApi = require('../../../common/services/userManageApi');
 const emailService = require('../../../common/services/sendEmail');
 const settings = require('../../../common/config/index');
-
+const config = require('../../../common/config/index');
 
 module.exports = (req, res) => {
   logger.debug('In user / login post controller');
@@ -38,7 +38,20 @@ module.exports = (req, res) => {
           if (Object.prototype.hasOwnProperty.call(user, 'message')) {
             logger.info(`Invalid email entered: ${usrname}`);
             cookie.setUserVerified(false);
-            res.redirect('/login/authenticate');
+            if (user.message === 'No results found') {
+              emailService
+                .send(config.NOTIFY_NOT_REGISTERED_TEMPLATE_ID, usrname, {
+                  base_url: config.BASE_URL,
+                })
+                .then(() => {
+                  res.redirect('/login/authenticate');
+                })
+                .catch((err) => {
+                  logger.error('Govnotify failed to send an email');
+                  logger.error(err);
+                  res.redirect('/login/authenticate');
+                });
+            }
           } else {
             logger.debug('User found');
             logger.debug(`User state ${user.state.toLowerCase()}`);

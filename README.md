@@ -46,6 +46,7 @@ which will automatically pick up the config file.
 | NOTIFY_GAR_SUBMISSION_TEMPLATE_ID | Template id for GAR submission    | True     |
 | NOTIFY_MFA_TEMPLATE_ID            | Template id for sending MFA token | True     |
 | NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID | Template id for account deletion  | True     |
+| NOTIFY_NOT_REGISTERED_TEMPLATE_ID | Template id for user not registered  | True     |
 
 
 ## API Related Environment Variables
