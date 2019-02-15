@@ -242,6 +242,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: GA_ID
+            - name: NOTIFY_NOT_REGISTERED_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_NOT_REGISTERED_TEMPLATE_ID
           ports:
             - name: public-site-prt
               containerPort: 3000
