@@ -22,7 +22,7 @@ class ExcelParser {
     Object.keys(this.cellMap).forEach((key) => {
       let cellValue = this._getValue(this.cellMap[key].location, this.cellMap[key].raw);
       if (this.cellMap[key].transform) {
-        cellValue = this.cellMap[key].transform(cellValue);
+        this.cellMap[key].transform.every((transformFunc) => cellValue = transformFunc(cellValue));
       }
       parsedMap[key] = cellValue;
     });
@@ -45,7 +45,7 @@ class ExcelParser {
           flag = false;
         }
         if (this.cellMap[key].transform && flag) {
-          cellValue = this.cellMap[key].transform(cellValue);
+          this.cellMap[key].transform.every((transformFunc) => cellValue = transformFunc(cellValue));
         }
         if (cellValue !== undefined) {
           rowObj[key] = cellValue;

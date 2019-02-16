@@ -29,9 +29,18 @@ describe('ExcelParser', () => {
 
   it('Should successfully parse a worksheet and apply transformations', () => {
     const transformer = sinon.stub().resolves(123);
-    const parser = new ExcelParser(workbook, { cell1: { location: 'A1', transform: transformer } });
+    const parser = new ExcelParser(workbook, { cell1: { location: 'A1', transform: [transformer] } });
     expect(parser.parse()).to.have.keys(['cell1']);
     sinon.assert.calledOnce(transformer);
+  });
+
+  it('Should successfully parse a worksheet and apply multiple transformations', () => {
+    const transformer = sinon.stub().resolves(123);
+    const transformer2 = sinon.stub().resolves(234);
+    const parser = new ExcelParser(workbook, { cell1: { location: 'A1', transform: [transformer, transformer2] } });
+    expect(parser.parse()).to.have.keys(['cell1']);
+    sinon.assert.calledOnce(transformer);
+    sinon.assert.calledOnce(transformer2);
   });
 
   it('Should not parse a non configured range of cells', () => {

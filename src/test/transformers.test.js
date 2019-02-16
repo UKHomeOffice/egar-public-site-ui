@@ -55,4 +55,12 @@ describe('Transformers', () => {
     expect(transformer.strToBytes('441B')).to.equal(441);
     expect(transformer.strToBytes('2.1KB')).to.equal(2150.4);
   });
+
+  it('Should accept a valid document type', () => {
+    expect(transformer.docTypeOrUndefined('Passport')).to.equal('Passport');
+    expect(transformer.docTypeOrUndefined('IdentityCard')).to.equal('IdentityCard');
+    expect(transformer.docTypeOrUndefined('')).to.be.undefined;
+    expect(transformer.docTypeOrUndefined('P')).to.be.undefined;
+    expect(transformer.docTypeOrUndefined('passport')).to.be.undefined;
+  });
 });
