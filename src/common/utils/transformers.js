@@ -60,10 +60,19 @@ function strToBytes(strSize) {
   return numBytes;
 }
 
+/**
+ * Returns docType if valid, else undefined
+ * @param {String} docType
+ */
+function docTypeOrUndefined(docType) {
+  return ['IdentityCard', 'Passport'].includes(docType) ? docType : undefined;
+};
+
 module.exports = {
   transformPerson,
   titleCase,
   upperCamelCase,
   numToString,
   strToBytes,
+  docTypeOrUndefined,
 };

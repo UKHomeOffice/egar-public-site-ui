@@ -53,8 +53,9 @@ router.post('/uploadgar', upload.single('file'), (req, res, data) => {
 
     const versionCell = worksheet['C1'];
     const versionCellValue = (versionCell ? versionCell.v : undefined);
-    const versionCellValueFormatted = versionCellValue.trim();
-    if (versionCellValueFormatted !== 'GENERAL AVIATION REPORT (GAR) -  January 2015') {
+    if (versionCellValue === undefined
+        || versionCellValue.trim() !== 'GENERAL AVIATION REPORT (GAR) -  January 2015')
+    {
       req.session.failureMsg = 'Incorrect xls or xlsx file';
       req.session.failureIdentifier = 'file';
       return res.redirect('garfile/garupload');
@@ -70,17 +71,17 @@ router.post('/uploadgar', upload.single('file'), (req, res, data) => {
       registration: { location: 'B5', raw: true },
       craftType: { location: 'D5', raw: true },
       craftBase: { location: 'H5' },
-      freeCirculation: { location: 'L3', transform: transformers.upperCamelCase },
-      visitReason: { location: 'B6', transform: transformers.upperCamelCase },
+      freeCirculation: { location: 'L3', transform: [transformers.upperCamelCase] },
+      visitReason: { location: 'B6', transform: [transformers.upperCamelCase] },
     };
 
     const voyageParser = new ExcelParser(worksheet, cellMap);
 
     const manifestMap = {
-      documentType: { location: 'A', transform: transformers.titleCase },
+      documentType: { location: 'A', transform: [transformers.titleCase, transformers.docTypeOrUndefined] },
       documentTypeOther: { location: 'B' },
       issuingState: { location: 'C' },
-      documentNumber: { location: 'D', transform: transformers.numToString },
+      documentNumber: { location: 'D', transform: [transformers.numToString] },
       lastName: { location: 'E' },
       firstName: { location: 'F' },
       gender: { location: 'G' },
