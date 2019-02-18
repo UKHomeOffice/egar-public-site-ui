@@ -58,7 +58,7 @@ describe('Transformers', () => {
 
   it('Should accept a valid document type', () => {
     expect(transformer.docTypeOrUndefined('Passport')).to.equal('Passport');
-    expect(transformer.docTypeOrUndefined('IdentityCard')).to.equal('IdentityCard');
+    expect(transformer.docTypeOrUndefined('Identity Card')).to.equal('Identity Card');
     expect(transformer.docTypeOrUndefined('')).to.be.undefined;
     expect(transformer.docTypeOrUndefined('P')).to.be.undefined;
     expect(transformer.docTypeOrUndefined('passport')).to.be.undefined;
