@@ -1,6 +1,7 @@
 const personApi = require('../../../common/services/personApi');
+const logger = require('../../../common/utils/logger');
 
-function bulkAdd(ids, userId) {
+function getDetailsByIds(ids, userId) {
   return new Promise((resolve, reject) => {
     personApi.getPeople(userId, 'individual')
       .then((peopleResponse) => {
@@ -10,9 +11,10 @@ function bulkAdd(ids, userId) {
         resolve(people);
       })
       .catch((err) => {
+        logger.info(err);
         reject(err);
       });
   });
 }
 
-module.exports.bulkAdd = bulkAdd;
+module.exports.getDetailsByIds = getDetailsByIds;
