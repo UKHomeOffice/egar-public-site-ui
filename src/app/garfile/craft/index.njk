@@ -3,137 +3,127 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Arrival
+	Add Aircraft to GAR
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "common/templates/includes/header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   {% include "common/templates/includes/back.njk" %}
-
 {% endblock %}
 
 {% block content %}
 
-  {% import "common/templates/includes/macros.njk" as m %}
-
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
-
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-
-    <span class="govuk-caption-xl">Section 3 of 8</span>
-
-    <h1 class="govuk-heading-xl">
-        Aircraft Details
-    </h1>
-
-    <form action="/garfile/craft" autocomplete="false" class="form-group"
+		<form action="/garfile/craft" autocomplete="false" class="form-group"
       method="post" role="form">
+			<span class="govuk-caption-xl">Section 3 of 8</span>
+			<h1 class="govuk-heading-xl">Aircraft details</h1>
 
-    <h2 class="govuk-heading-l">Saved Aircraft </h2>
-    <details class="govuk-details">
-      <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
-        Add the details of an Aircraft you have saved previously
+			<h2 class="govuk-heading-l">Saved aircraft</h1>
+				<p class="govuk-body-l">Add the details of an aircraft you have saved previously</p>
+
+
+<table class="table-clickable govuk-table">
+  <thead class="govuk-table__head">
+	<tr class="govuk-table__row">
+	  <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
+	  <th class="govuk-table__header">Aircraft registration</th>
+	  <th class="govuk-table__header">Aircraft type</th>
+	  <th class="govuk-table__header">Home / Usual base</th>
+	</tr>
+  </thead>
+  <tbody class="govuk-table__body">
+  {% for craft in cookie.getSavedCraft().items %}
+	  <tr class="govuk-table__row">
+    <div class="govuk-radios">
+		<td class="govuk-table__cell">
+    <div class="govuk-radios govuk-radios--inline">
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="aircraft" name="addCraft" type="radio" value="{{craft.craftId}}">
+            <label class="govuk-label govuk-radios__label" for="aircraft"></label>
+        </div>
+    </div>
+		</td>
+		<td class="govuk-table__cell">{{ craft.registration }}</td>
+		<td class="govuk-table__cell">{{ craft.craftType }}</td>
+		<td class="govuk-table__cell">{{ craft.craftBase }}</td>
+	  </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="govuk-form-group">
+  <input id="newCraft" class="govuk-button" type="submit" name="buttonClicked" value="Add to GAR"
+  onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
+</div>
+
+<div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
+    <div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
+      <h2 class="govuk-heading-l">New Aircraft</h2>
+        <p class="govuk-body-m">Add the details of an Aircraft that you do not already have saved</p>
+        <label class="govuk-label" for="craftReg">
+          Aircraft Registration
+        </label>
+        {{ m.error_message('craftReg', errors) }}
+        <span class="govuk-hint">
+          For example, G-ABCD
         </span>
-      </summary>
-      <div class="govuk-details__text">
+        <span class="field-validation-valid error-message" data-valmsg-for="craftReg"
+          data-valmsg-replace="true" style="display:block">
+        </span>
+        <input class="govuk-input"
+          id="craftReg" name="craftReg" style="width:100%" type="text"
+          value="{{cookie.getGarCraft().registration}}" />
+  </div>
 
-        <div id="SavedCraft">
-            <table class="govuk-table">
-                <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="col">Aircraft Registration</th>
-                    <th class="govuk-table__header" scope="col">Aircraft Type</th>
-                    <th class="govuk-table__header" scope="col">Aircraft Home Aerodrome/Usual Base</th>
-                </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-              {% for craft in cookie.getSavedCraft().items %}
-              <tr class="govuk-table__row">
-                <td class="govuk-table__cell ">{{ craft.registration }} </td>
-                <td class="govuk-table__cell ">{{ craft.craftType }}</td>
-                <td class="govuk-table__cell ">{{ craft.craftBase }}</td>
-                <td class="govuk-table__cell "><button class="link btn-link" name="addCraft" value="{{craft.craftId}}">Add To Gar</button></td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+    <div class="govuk-form-group {{ m.form_group_class('craftType', errors) }}">
+      <label class="govuk-label" for="craftType">
+        Aircraft Type
+      </label>
+      {{ m.error_message('craftType', errors) }}
+      <span class="govuk-hint">
+        For example, Gulfstream
+      </span>
+      <span class="field-validation-valid error-message" data-valmsg-for="craftType"
+        data-valmsg-replace="true" style="display:block">
+      </span>
+      <input class="govuk-input"
+        id="craftType" name="craftType" style="width:100%" type="text"
+        value="{{cookie.getGarCraft().craftType}}" />
+    </div>
+
+    <div class="govuk-form-group {{ m.form_group_class('craftBase', errors) }}">
+    <label class="govuk-label" for="craftBase">
+      Home / Usual Base
+    </label>
+    {{ m.error_message('craftBase', errors) }}
+    <span class="govuk-hint">
+      IATA/ICAO/Coordinates (Decimal)
+    </span>
+    <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
+      data-valmsg-replace="true" style="display:block">
+    </span>
+    <input class="govuk-input"
+      id="craftBase" name="craftBase" style="width:100%" type="text"
+      value="{{cookie.getGarCraft().craftBase}}" />
+    </div>
+      <div class="govuk-form-group">
+        <input id="newCraft" class="govuk-button" type="submit" name="buttonClicked" value="Save and Continue"
+        onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
       </div>
-    </details>
-      <br>
+      <p class="govuk-body-m">
+        <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and Exit</a>
+      </p>
+      <p class="govuk-body-m">
+        <a href="/home" > Exit without saving </a>
+      </p>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+		</form>
+	</div>
+</div>
 
-      <div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
-          <div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
-            <h2 class="govuk-heading-l">New Aircraft</h2>
-              <p class="govuk-body-m">Add the details of an Aircraft that you do not already have saved</p>
-              <label class="govuk-label" for="craftReg">
-              {{ m.error_message('craftReg', errors) }}
-              <span class="govuk-hint">
-                For example, G-ABCD
-              </span>
-              <span class="field-validation-valid error-message" data-valmsg-for="craftReg"
-                data-valmsg-replace="true" style="display:block">
-              </span>
-              <input class="govuk-input"
-                id="craftReg" name="craftReg" style="width:100%" type="text"
-                value="{{cookie.getGarCraft().registration}}" />
-        </div>
-
-          <div class="govuk-form-group {{ m.form_group_class('craftType', errors) }}">
-            <label class="govuk-label" for="craftType">
-              Aircraft Type
-            </label>
-            {{ m.error_message('craftType', errors) }}
-            <span class="govuk-hint">
-              For example, Gulfstream
-            </span>
-            <span class="field-validation-valid error-message" data-valmsg-for="craftType"
-              data-valmsg-replace="true" style="display:block">
-            </span>
-            <input class="govuk-input"
-              id="craftType" name="craftType" style="width:100%" type="text"
-              value="{{cookie.getGarCraft().craftType}}" />
-          </div>
-
-          <div class="govuk-form-group {{ m.form_group_class('craftBase', errors) }}">
-          <label class="govuk-label" for="craftBase">
-            Home / Usual Base
-          </label>
-          {{ m.error_message('craftBase', errors) }}
-          <span class="govuk-hint">
-            IATA/ICAO/Coordinates (Decimal)
-          </span>
-          <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input class="govuk-input"
-            id="craftBase" name="craftBase" style="width:100%" type="text"
-            value="{{cookie.getGarCraft().craftBase}}" />
-          </div>
-
-        <div class="govuk-form-group">
-          <input id="newCraft" class="govuk-button" type="submit" name="buttonClicked" value="Save and Continue"
-          onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
-        </div>
-				<p class="govuk-body-m">
-				  <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and Exit</a>
-				</p>
-        <p class="govuk-body-m">
-          <a href="/home" > Exit without saving </a>
-        </p>
-         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    </form>
-
-  </div>
-  </div>
-  </div>
 {% endblock %}
