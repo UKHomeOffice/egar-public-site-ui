@@ -15,7 +15,7 @@ module.exports = (req, res) => {
     req.session.save(() => { res.redirect('/garfile/manifest/deleteperson'); });
   } else if (req.body.personId) {
     logger.debug('Found people to add to manifest');
-    manifestUtil.bulkAdd(req.body.personId, cookie.getUserDbId())
+    manifestUtil.getDetailsByIds(req.body.personId, cookie.getUserDbId())
       .then((selectedPeople) => {
         garApi.patch(cookie.getGarId(), 'Draft', { people: selectedPeople })
           .then(() => {
