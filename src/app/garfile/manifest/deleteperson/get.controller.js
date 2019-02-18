@@ -11,9 +11,11 @@ module.exports = (req, res) => {
   const deleteErr = { message: 'Failed to delete GAR person. Try again' };
 
   if (personId === undefined) {
+    logger.info('No id provided, redirecting to manifest page');
     return res.redirect('/garfile/manifest');
   }
 
+  logger.info(`Removing ${personId} from manifest`);
   garApi.deleteGarPerson(cookie.getGarId(), personId)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
