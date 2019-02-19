@@ -19,6 +19,9 @@
 
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
+	{% if errors %}
+		{% include "common/templates/includes/errors.njk" %}
+	{% endif %}
 		<form action="/garfile/craft" autocomplete="false" class="form-group"
       method="post" role="form">
 			<span class="govuk-caption-xl">Section 3 of 8</span>
@@ -62,9 +65,9 @@
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
-    <div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
       <h2 class="govuk-heading-l">New Aircraft</h2>
         <p class="govuk-body-m">Add the details of an Aircraft that you do not already have saved</p>
+				<div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
         <label class="govuk-label" for="craftReg">
           Aircraft Registration
         </label>
@@ -116,7 +119,7 @@
         onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
       </div>
       <p class="govuk-body-m">
-        <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and Exit</a>
+        <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
       </p>
       <p class="govuk-body-m">
         <a href="/home" > Exit without saving </a>
