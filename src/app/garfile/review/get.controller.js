@@ -38,7 +38,7 @@ module.exports = (req, res) => {
                   let msg = req.session.submiterrormessage;
                   delete req.session.submiterrormessage
                   res.render('app/garfile/review/index', {cookie,
-                    error:{message: msg},
+                    errors: msg,
                     showChangeLinks: true,
                     manifestFields, garfile,garpeople, supportingdocs});
                   }

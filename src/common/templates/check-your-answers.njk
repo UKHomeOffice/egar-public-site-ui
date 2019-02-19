@@ -179,7 +179,9 @@
       </div>
     </dl>
 
-    <table class="govuk-table">
+    <div class="govuk-form-group {{ m.form_group_class('manifestTable', errors) }}">
+    {{ m.error_message('manifestTable', errors) }}
+    <table class="govuk-table" id="manifestTable">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">Surname</th>
@@ -240,6 +242,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
 
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">

@@ -23,20 +23,26 @@ module.exports = (req, res) => {
       req.session.submiterrormessage = [];
 
       if (!manifest.validate()) {
-        req.session.submiterrormessage.push('Resolve manifest errors before submitting.');
+        const validationError = {message: 'Resolve manifest errors before submitting.', identifier: 'manifestTable'}
+        logger.info('manifest validation failed')
+        req.session.submiterrormessage.push(validationError);
       }
 
       if (!manifest.validateCaptainCrew()) {
-        req.session.submiterrormessage.push('There must be at least one Captain or Crew member on the voyage. Please add one.');
+        const captainCrewError = {message: 'There must be at least one Captain or Crew member on the voyage.', identifier: 'manifestTable'}
+        logger.info('captain / crew validation failed')
+        req.session.submiterrormessage.push(captainCrewError);
       }
 
       if (!manifest.validate() || !manifest.validateCaptainCrew()) {
-        return res.redirect('/garfile/review');
+        return req.session.save(() => {res.redirect('/garfile/review')});
       }
 
       if (parsedGar.status.name.toLowerCase() === 'submitted') {
-        req.session.submiterrormessage = 'This GAR has already been submitted';
-        return res.redirect('/garfile/review');
+        const submitError = {message: 'This GAR has already been submitted', identifier: ''}
+        req.session.submiterrormessage.push(submitError);
+        logger.info('gar already submitted')
+        return req.session.save(() => {res.redirect('/garfile/review')});
       }
 
       if (parsedGar.registration !== null
@@ -70,12 +76,13 @@ module.exports = (req, res) => {
           .catch((err) => {
             logger.error('Failed to submit GAR');
             logger.error(err);
-            res.render('app/garfile/submit/failure/index', { cookie, error: [{ message: 'GAR failed to submit' }] });
+            res.render('app/garfile/submit/failure/index', { cookie, errors: [{ message: 'GAR failed to submit' }] });
           });
       } else {
         logger.error('Failed to submit Incomplete GAR');
-        req.session.submiterrormessage.push('Resolve manifest errors before submitting.');
-        res.redirect('/garfile/review');
+        const resolveError = {message: 'Ensure the GAR is complete before submitting', identifier: ''}
+        req.session.submiterrormessage.push(resolveError);
+        return req.session.save(() => {res.redirect('/garfile/review')});
       }
     });
 };
