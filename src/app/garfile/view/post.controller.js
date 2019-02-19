@@ -34,13 +34,14 @@ module.exports = (req, res) => {
         manifestFields,
         garfile: parsedGar,
         garpeople: parsedPeople,
-        garDocs: supportingDocuments,
+        supportingdocs: supportingDocuments,
       };
       if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
         logger.info('Rendering submitted GAR review page');
         return res.render('app/garfile/view/submitted', renderContext);
       }
       logger.info('Rendering unsubmitted GAR review page');
+      renderContext.showChangeLinks = true;
       return res.render('app/garfile/view/unsubmitted', renderContext);
     })
     .catch((err) => {

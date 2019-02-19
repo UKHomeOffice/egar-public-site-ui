@@ -65,8 +65,8 @@ function strToBytes(strSize) {
  * @param {String} docType
  */
 function docTypeOrUndefined(docType) {
-  return ['IdentityCard', 'Passport'].includes(docType) ? docType : undefined;
-};
+  return ['Identity Card', 'Passport'].includes(docType) ? docType : undefined;
+}
 
 module.exports = {
   transformPerson,

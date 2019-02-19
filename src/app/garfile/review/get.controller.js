@@ -39,10 +39,15 @@ module.exports = (req, res) => {
                   delete req.session.submiterrormessage
                   res.render('app/garfile/review/index', {cookie,
                     error:{message: msg},
+                    showChangeLinks: true,
                     manifestFields, garfile,garpeople, supportingdocs});
                   }
                   else{
-                    res.render('app/garfile/review/index', {cookie, manifestFields, garfile,garpeople, supportingdocs});
+                    res.render('app/garfile/review/index', {cookie,
+                      showChangeLinks: true,
+                      manifestFields,
+                      garfile,garpeople,
+                      supportingdocs});
                   }
               }
             });
