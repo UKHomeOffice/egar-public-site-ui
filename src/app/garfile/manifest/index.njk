@@ -37,7 +37,14 @@
         <table class="table-clickable govuk-table">
           <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
+            <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
+              <div class="govuk-checkboxes__item">
+                <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
+                <label class="govuk-label govuk-checkboxes__label" for="radio-all">
+                  &nbsp;
+                </label>
+              </div>
+            </th>
             <th class="govuk-table__header">Surname</th>
             <th class="govuk-table__header">Given name</th>
             <th class="govuk-table__header">Type</th>
@@ -75,100 +82,7 @@
 				<h2 class="govuk-heading-l">Current manifest</h2>
 				<p class="govuk-body-l">People currently on the manifest of this GAR</p>
 
-
-<table class="table-clickable govuk-table">
-  <thead class="govuk-table__head">
-	<tr class="govuk-table__row">
-	  <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
-		<div class="govuk-checkboxes__item">
-		  <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
-		  <label class="govuk-label govuk-checkboxes__label" for="radio-all">
-			&nbsp;
-		  </label>
-		</div>
-	  </th>
-<!--	   <th class="govuk-table__header" style="width: 5%;">&nbsp;</th> -->
-	  <th class="govuk-table__header">Surname</th>
-	  <th class="govuk-table__header">Given name</th>
-	  <th class="govuk-table__header">Type</th>
-	</tr>
-  </thead>
-  <tbody class="govuk-table__body">
-	  <tr class="govuk-table__row">
-		<td class="govuk-table__cell multiple-choice--hod">
-		  <div class="govuk-checkboxes__item">
-			<input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="radio-1">
-			<label class="govuk-label govuk-checkboxes__label" for="radio-1">
-			  &nbsp;
-			</label>
-		  </div>
-		</td>
-		<td class="govuk-table__cell">Crouch</td>
-		<td class="govuk-table__cell">Adrian</td>
-		<td class="govuk-table__cell">Captain</td>
-	</tr>
-	<tr class="govuk-table__row">
-		<td class="govuk-table__cell multiple-choice--hod">
-		<div class="govuk-checkboxes__item">
-			<input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="radio-1">
-			<label class="govuk-label govuk-checkboxes__label" for="radio-1">
-			&nbsp;
-			</label>
-		</div>
-		</td>
-		<td class="govuk-table__cell">Jackson</td>
-		<td class="govuk-table__cell">Cyrille</td>
-		<td class="govuk-table__cell">Crew</td>
-	</tr>
-	<tr class="govuk-table__row">
-		<td class="govuk-table__cell multiple-choice--hod">
-		  <div class="govuk-checkboxes__item">
-			<input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="radio-1">
-			<label class="govuk-label govuk-checkboxes__label" for="radio-1">
-			  &nbsp;
-			</label>
-		  </div>
-		</td>
-		<td class="govuk-table__cell">Grover</td>
-		<td class="govuk-table__cell">Chris</td>
-		<td class="govuk-table__cell">Crew</td>
-	</tr>
-	<tr class="govuk-table__row">
-		<td class="govuk-table__cell multiple-choice--hod">
-		<div class="govuk-checkboxes__item">
-			<input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="radio-1">
-			<label class="govuk-label govuk-checkboxes__label" for="radio-1">
-			  &nbsp;
-			</label>
-		  </div>
-		</td>
-		<td class="govuk-table__cell">Lizaitis</td>
-		<td class="govuk-table__cell">Nicky</td>
-		<td class="govuk-table__cell">Passenger</td>
-	  </tr>
-	  <tr class="govuk-table__row">
-		<td class="govuk-table__cell multiple-choice--hod">
-		  <div class="govuk-checkboxes__item">
-			<input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="radio-1">
-			<label class="govuk-label govuk-checkboxes__label" for="radio-1">
-			  &nbsp;
-			</label>
-		  </div>
-		</td>
-		<td class="govuk-table__cell">Mosely</td>
-		<td class="govuk-table__cell">Alice</td>
-		<td class="govuk-table__cell">Passenger</td>
-	  </tr>
-  </tbody>
-</table>
-
-
-
-
-
-
-
-					<table class="govuk-table table-clickable">
+					<table class="govuk-table">
 						<thead class="govuk-table__head">
 							<tr class="govuk-table__row">
 								<th class="govuk-table__header" scope="col">Surname</th>
@@ -196,7 +110,6 @@
 								<td class="govuk-table__cell">{{person.peopleType.name}}</td>
                 <td class="govuk-table__cell">
                   <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
-                  <button class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">Delete</button>
                 </td>
 							</tr>
 							<tr class="govuk-table__row">
@@ -227,6 +140,11 @@
 																<td class="govuk-table__cell">Travel document expiry date</td>
 																<td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
 															</tr>
+                              <tr class="govuk-table__row">
+                                <td class="govuk-table__cell" colspan="7">
+                                  <button class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">Delete</button>
+                                </td>
+                              </tr>
 														</tbody>
 													</table>
 												</div>
