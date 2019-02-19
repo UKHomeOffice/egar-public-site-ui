@@ -19,7 +19,6 @@
 
 {% block content %}
 
-
   {% import "common/templates/includes/macros.njk" as m %}
 
   {% if errors %}
@@ -33,7 +32,7 @@
 			<div class="govuk-form-group {{ m.form_group_class('Username', errors) }}">
 
 				<label class="govuk-label govuk-label--m" for="Username">
-					Email address
+					Registered email address
 				</label>
 
 				<span id="departurePort-hint" class="govuk-hint">
@@ -42,14 +41,15 @@
         {{ m.error_message('Username', errors) }}
 				<input class="govuk-input" id="Username" name="Username" type="text">
 			</div>
-
-			<h2 class="govuk-heading-s">Need to register an account?</h2>
-			<p class="govuk-body"><a href="/user/register">Create an account</a></p>
-
+			
 			<button type="submit" class="govuk-button">
-				Agree and submit
+				Sign in
 			</button>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+			<h3 class="govuk-heading-m">Need to register an account?</h3>
+			<p class="govuk-body"><a href="/user/register">Create an account</a></p>
+		
+      <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 		</form>
 	</div>
 </div>
