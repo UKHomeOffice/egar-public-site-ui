@@ -24,15 +24,21 @@
     <span class="govuk-caption-xl">Section 8 of 8</span>
     <h1 class="govuk-heading-xl">Check all the information you provided before submitting your GAR</h1>
 
-	  {% if error %}
-	 	  <div class="govuk-error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
-			  <h2 class="govuk-error-summary__title" id="error-summary-heading">
-				  There's a problem
-			  </h2>
-        {% for err in error.message %}
-				  <span><p class="govuk-body-m">{{err}}</p></span><br>
-        {% endfor %}
-	      </div>
+		{% if errors %}
+  <div class="govuk-grid-column-full">
+	 	<div class="govuk-error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+			<h2 class="govuk-error-summary__title" id="error-summary-heading">
+				There's a problem
+			</h2>
+			<div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+      	{% for err in errors %}
+					<li><a href="#manifestTable">{{err.message}}</a></li>
+      	{% endfor %}
+				</ul>
+      </div>
+	   </div>
+	</div>
   	{% endif %}
 
     {% include "check-your-answers.njk" %}

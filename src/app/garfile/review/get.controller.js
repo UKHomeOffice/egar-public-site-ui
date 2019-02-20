@@ -34,11 +34,11 @@ module.exports = (req, res) => {
               }
               else{
                 const supportingdocs = JSON.parse(apiResponse);
-                if (req.session.submiterrormessage) {
+                if (req.session.submiterrormessage && req.session.submiterrormessage.length > 0) {
                   let msg = req.session.submiterrormessage;
                   delete req.session.submiterrormessage
                   res.render('app/garfile/review/index', {cookie,
-                    error:{message: msg},
+                    errors: msg,
                     showChangeLinks: true,
                     manifestFields, garfile,garpeople, supportingdocs});
                   }
