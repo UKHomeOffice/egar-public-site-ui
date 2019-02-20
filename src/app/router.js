@@ -47,9 +47,8 @@ const garCancel = require('./garfile/cancel');
 const garsubmitsucess = require('./garfile/submit/success');
 const garsubmitfailure = require('./garfile/submit/failure');
 
-
-// Additional dependencies
-// const additionaldetail = require('./garfile/additionaldetails')
+// Saved entities
+const people = require('./people');
 
 // Misc dependency
 const error = require('./error');
@@ -132,4 +131,5 @@ module.exports.bind = (app) => {
   app.use(verifyMfa.router);
   app.use(aircraft.router);
   app.use(userDetails.router);
+  app.use(people.router);
 };
