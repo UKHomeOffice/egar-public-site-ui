@@ -1,6 +1,6 @@
-const CookieModel = require('../../../../common/models/Cookie.class');
-const logger = require('../../../../common/utils/logger');
-const personApi = require('../../../../common/services/personApi');
+const CookieModel = require('../../../common/models/Cookie.class');
+const logger = require('../../../common/utils/logger');
+const personApi = require('../../../common/services/personApi');
 
 
 module.exports = (req, res) => {
@@ -19,15 +19,15 @@ module.exports = (req, res) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
         req.session.errMsg = errMsg;
-        return res.redirect('/organisation/manage/#SavedPeople');
+        return req.session.save(() => res.redirect('/people'));
       }
       req.session.successHeader = 'Success';
       req.session.successMsg = 'Person deleted';
-      return res.redirect('/organisation/manage/#SavedPeople');
+      return req.session.save(() => res.redirect('/people'));
     })
     .catch((err) => {
       logger.error(err);
       req.session.errMsg = errMsg;
-      res.redirect('/organisation/manage/#SavedPeople');
+      return req.session.save(() => res.redirect('/people'));
     });
 };

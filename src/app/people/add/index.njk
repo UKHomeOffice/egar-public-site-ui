@@ -1,0 +1,53 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Save Person Details
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+    <form action="/people/add" autocomplete="false" class="form-group" method="post" role="form">
+
+    <h1 class="govuk-heading-xl">
+      Save a Person
+    </h1>
+
+    <p class="govuk-body-l">Please enter the following information. This information can be re-used when submitting a GAR.</p>
+
+    {% include "person-details.njk" %}
+
+    <div class="govuk-form-group">
+    <table class="govuk-table">
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell "><a class="govuk-button" href="/people">Exit Without Saving</a></td>
+        <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and Exit" onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
+      </tr>
+    </table>
+    </div>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </form>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,11 +1,11 @@
-const logger = require('../../../../common/utils/logger');
-const validator = require('../../../../common/utils/validator');
+const logger = require('../../../common/utils/logger');
+const validator = require('../../../common/utils/validator');
 const validations = require('../validations');
-const CookieModel = require('../../../../common/models/Cookie.class');
-const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
-const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
-const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
-const personApi = require('../../../../common/services/personApi');
+const CookieModel = require('../../../common/models/Cookie.class');
+const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
+const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
+const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
+const personApi = require('../../../common/services/personApi');
 
 module.exports = (req, res) => {
 
@@ -46,21 +46,20 @@ module.exports = (req, res) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             // API returned error
-            res.render('app/organisation/savedpeople/add/index', { cookie, persontype, documenttype, genderchoice, errors: [parsedResponse] });
+            res.render('app/people/add/index', { cookie, persontype, documenttype, genderchoice, errors: [parsedResponse] });
           } else {
             // Successful
-            res.redirect('/organisation/manage');
+            res.redirect('/people');
           }
         })
         .catch((err) => {
           logger.error('There was a problem adding person to saved people');
           logger.error(err);
-          res.render('app/user/savedpeople/add/index', { cookie, persontype, documenttype, genderchoice, errors: [{message: 'There was a problem creating the person.'}] });
+          res.render('app/people/add/index', { cookie, persontype, documenttype, genderchoice, errors: [{ message: 'There was a problem creating the person.' }] });
         });
     })
     .catch((err) => {
-      logger.error('There was a problem adding person to saved people');
       logger.error(err);
-      res.render('app/organisation/savedpeople/add/index', { cookie, persontype, documenttype, genderchoice, errors: err, req });
+      res.render('app/people/add/index', { person: req.body, cookie, persontype, documenttype, genderchoice, errors: err, req });
     });
 };
