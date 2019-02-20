@@ -2,26 +2,49 @@ version: '3'
 
 services:
 
-  clamav_api:
-    image: quay.io/ukhomeofficedigital/docker-clamav-rest:1.0.0
+  database:
+    image: postgres:10.4
+    container_name: database
+    env_file:
+      - .env.dev
     ports:
-      - "8080:8080"
+      - "5432:5432"
+
+  api:
+    image: api
+    container_name: api
+    env_file:
+      - .env.dev
+    depends_on:
+      - database
+    ports:
+      - "5000:5000"
+
+  clamav:
+    image: quay.io/ukhomeofficedigital/clamav:v1.6.1
+    container_name: clamav
+    ports:
+      - "3310:3310"
+
+  clamav-api:
+    image: quay.io/ukhomeofficedigital/docker-clamav-rest:1.0.0
+    container_name: clamav-api
     environment:
       - CLAMD_HOST=clamav
     depends_on:
       - clamav
-
-  clamav:
-    image: quay.io/ukhomeofficedigital/clamav:v1.6.1
     ports:
-     - "3310:3310"
+      - "8080:8080"
 
-  db:
-    image: postgres:10.4
-    restart: always
+  node:
+    build: .
+    container_name: node
+    command: sh -c 'sleep 5 && node start'
     ports:
-     - "5431:5432"
-    environment:
-     - POSTGRES_PASSWORD=password
-     - POSTGRES_USER=john
-     - POSTGRES_DB=db
+      - "3000:3000"
+    env_file:
+      - .env.dev
+    depends_on:
+      - api
+      - database
+      - clamav-api
