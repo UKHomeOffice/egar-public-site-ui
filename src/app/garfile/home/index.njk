@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Home
+	Create GAR | Landing | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
@@ -34,7 +34,7 @@
                   Please select how you would like to create your GAR to proceed.
                 </span>
                 {{ m.error_message("garoption", errors) }}
-                  <div class="govuk-radios govuk-radios--inline" id="garoption">
+                  <div class="govuk-radios" id="garoption">
                   {% for gar in garoptions %}
                       <div class="govuk-radios__item">
                         {% if gar.option == req.body.garoption %}
