@@ -185,12 +185,12 @@ function validatePortCoords(portObj) {
 }
 
 function lattitude(value) {
-  const regex = /^-?([1-8]?[0-9]\.{1}\d{1,6}$|90\.{1}0{1,6}$)/;
+  const regex = /^-?([1-8]?[0-9]\.{1}\d{4}$|90\.{1}0{4}$)/;
   return regex.test(value);
 }
 
 function longitude(value) {
-  const regex = /^-?((([1]?[0-7][0-9]|[1-9]?[0-9])\.{1}\d{1,6}$)|[1]?[1-8][0]\.{1}0{1,6}$)/;
+  const regex = /^-?((([1]?[0-7][0-9]|[1-9]?[0-9])\.{1}\d{4}$)|[1]?[1-8][0]\.{1}0{4}$)/;
   return regex.test(value);
 }
 

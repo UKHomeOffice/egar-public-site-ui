@@ -21,7 +21,7 @@ module.exports = (req, res) => {
   const validationMsgs = ['Enter an departure port'];
 
   // Define port / date validation msgs
-  const portMsg = 'As you have entered a departure port code of \'ZZZZ\', you must provide longitude and latitude coordinates for the location.';
+  const portMsg = 'If you do not have the airport code, enter \'ZZZZ\' and enter the latitude and longitude to 4 decimal places below.';
   const portCodeMsg = 'The departure airport code must be a minimum of 3 letters and a maximum of 4 letters.';
   const futureDateMsg = 'Departure date must be today or in the future';
   const realDateMsg = 'Enter a real Departure date';
@@ -51,7 +51,7 @@ module.exports = (req, res) => {
     new ValidationRule(validator.validPort, 'departurePort', voyage.departurePort, portCodeMsg),
   ];
 
-  // Define blankport validations
+  // Define blank port validations
   const departurePortBlank = [new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, portMsg)];
 
   // Define latitude validations
@@ -70,15 +70,21 @@ module.exports = (req, res) => {
     [
       new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, timeMsg),
     ],
-    [
-      new ValidationRule(validator.notEmpty, validationIds, validationValues, validationMsgs),
-    ],
+    // [
+    //   new ValidationRule(validator.notEmpty, validationIds, validationValues, validationMsgs),
+    // ],
   ];
+
+  // Check if port is blank
+  if (voyage.departurePort.length === 0) {
+    validations.push(
+      departurePortBlank,
+    );
+  }
 
   // Check if port code is ZZZZ or blank as then need to validate lat/long
   if (departPortObj.portCode.toUpperCase() === 'ZZZZ' || voyage.departurePort.length === 0) {
     validations.push(
-      departurePortBlank,
       departureLatValidation,
       departureLongValidation,
     );

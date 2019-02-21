@@ -21,7 +21,7 @@ module.exports = (req, res) => {
   const validationMsgs = ['Enter an arrival port'];
 
   // Define port / date validation msgs
-  const portMsg = 'As you have entered an arrival port code of \'ZZZZ\', you must provide longitude and latitude coordinates for the location.';
+  const portMsg = 'If you do not have the airport code, enter \'ZZZZ\' and enter the latitude and longitude to 4 decimal places below.';
   const portCodeMsg = 'The arrival airport code must be a minimum of 3 letters and a maximum of 4 letters.';
   const futureDateMsg = 'Arrival date must be today or in the future';
   const realDateMsg = 'Enter a real Arrival date';
@@ -45,17 +45,20 @@ module.exports = (req, res) => {
     m: voyage.arrivalMinute,
   };
 
-  // Define port / date validations
+  // Define port validations
   const arrivalPortValidation = [
     new ValidationRule(validator.validatePortCoords, 'arrivalPort', arrivePortObj, portMsg),
     new ValidationRule(validator.validPort, 'arrivalPort', voyage.arrivalPort, portCodeMsg),
   ];
 
+  // Define blank port validations
+  const arrivalPortBlank = [new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, portMsg)];
+
   // Define latitude validations
   const arrivalLatValidation = [new ValidationRule(validator.lattitude, 'arrivalLat', voyage.arrivalLat, latitudeMsg)];
 
   // Define latitude validations
-  const arrivalLongValidation = [new ValidationRule(validator.longitude, 'arrivalLong', voyage.departureLong, longitudeMsg)];
+  const arrivalLongValidation = [new ValidationRule(validator.longitude, 'arrivalLong', voyage.arrivalLong, longitudeMsg)];
 
   const validations = [
     [
@@ -71,6 +74,13 @@ module.exports = (req, res) => {
       new ValidationRule(validator.notEmpty, validationIds, validationValues, validationMsgs),
     ],
   ];
+
+  // Check if port is blank
+  if (voyage.arrivalPort.length === 0) {
+    validations.push(
+      arrivalPortBlank,
+    );
+  }
 
   // Check if port code is ZZZZ or blank as then need to validate lat/long
   if (arrivePortObj.portCode.toUpperCase() === 'ZZZZ' || voyage.arrivalPort.length === 0) {
