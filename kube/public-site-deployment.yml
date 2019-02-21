@@ -5,7 +5,7 @@ metadata:
   name: public-site
   namespace: {{ .KUBE_NAMESPACE }}
 spec:
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 3
   template:
     metadata:
