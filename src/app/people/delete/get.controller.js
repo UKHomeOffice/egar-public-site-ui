@@ -5,13 +5,13 @@ const personApi = require('../../../common/services/personApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
-  logger.debug('In organisation / savedpeople delete get controller');
+  logger.debug('In people / delete get controller');
 
   const errMsg = { message: 'Failed to delete person. Try again' };
   const personId = req.session.deletePersonId;
 
   if (personId === undefined) {
-    return res.redirect('/organisation/manage');
+    return res.redirect('/people');
   }
 
   personApi.deletePerson(cookie.getUserDbId(), personId)
