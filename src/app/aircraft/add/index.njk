@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Edit an Aircraft
+	GAR | Save an Aircraft
 {% endblock %}
 
 {% block header %}
@@ -27,18 +27,17 @@
 
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-      <form action="/organisation/savedcraft/edit" autocomplete="false" class="form-group"
-      method="post" role="form">
+      <form action="/aircraft/add" autocomplete="false" class="form-group"
+      method="post" role="form" style="margin-top:20px">
 
       <h1 class="govuk-heading-xl">
-        Edit an Aircraft
+        Save an Aircraft
       </h1>
 
       <p class="govuk-body-l">Please enter the following information. This information can be re-used when submitting a GAR.</p>
 
+      <div class="govuk-form-group {{ m.form_group_class('craftreg', errors) }}">
 
-      <div class="govuk-form-group {{ m.form_group_class('savedcraft', errors) }}">
-        <div class="govuk-form-group {{ m.form_group_class('craftreg', errors) }}">
           <label class="govuk-label" for="craftreg">Aircraft Registration</label>
           {{ m.error_message('craftreg', errors) }}
           <span class="govuk-hint">
@@ -49,10 +48,10 @@
           </span>
           <input  class="govuk-input"
             id="craftreg" name="craftreg" style="width:100%" type="text"
-            value="{{cookie.getEditCraft().registration}}" />
-        </div>
+            value="" />
+      </div>
 
-        <div class="govuk-form-group {{ m.form_group_class('crafttype', errors) }}">
+      <div class="govuk-form-group {{ m.form_group_class('crafttype', errors) }}">
             <label class="govuk-label" for="crafttype">Aircraft Type</label>
           {{ m.error_message('crafttype', errors) }}
           <span class="govuk-hint">
@@ -61,12 +60,12 @@
           <span class="field-validation-valid error-message" data-valmsg-for="crafttype"
             data-valmsg-replace="true" style="display:block">
           </span>
-          <input class="govuk-input"
+          <input  class="govuk-input"
             id="crafttype" name="crafttype" style="width:100%" type="text"
-            value="{{cookie.getEditCraft().craftType}}" />
-        </div>
+            value="" />
+      </div>
 
-        <div class="govuk-form-group {{ m.form_group_class('craftbase', errors) }}">
+      <div class="govuk-form-group {{ m.form_group_class('craftbase', errors) }}">
              <label class="govuk-label" for="craftbase">Aircraft Home Aerodrome / Usual Base</label>
           {{ m.error_message('craftbase', errors) }}
           <span class="govuk-hint">
@@ -77,23 +76,21 @@
           </span>
           <input  class="govuk-input"
             id="craftbase" name="craftbase" style="width:100%" type="text"
-            value="{{cookie.getEditCraft().craftBase}}" />
-         <input type="hidden" id="craftId" name="craftId" value="{{cookie.getEditCraft().craftId}}">
-         </div>
-        </div>
+            value="" />
+      </div>
 
           <div class="govuk-form-group">
 
            <table class="govuk-table">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell "><a class="govuk-button" href="/organisation/manage">Exit Without Saving</a></td>
+            <td class="govuk-table__cell "><a class="govuk-button" href="/aircraft">Exit Without Saving</a></td>
             <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and Exit"
           onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
           </tr>
         </table>
 
           </div>
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
     </form>
 

@@ -14,13 +14,14 @@ const userregister = require('./user/register');
 const registermsg = require('./user/regmsg');
 
 // User dependencies
+const aircraft = require('./aircraft');
 const userDetails = require('./user/viewDetails');
 const manageUserDetails = require('./user/manageuserdetail');
 const logout = require('./register/logout');
 const detailschanged = require('./user/detailschanged');
-const usersavedcraftedit = require('./user/savedcraft/edit');
-const usersavedcraftadd = require('./user/savedcraft/add');
-const userSavedCraftDelete = require('./user/savedcraft/delete');
+const usersavedcraftedit = require('./aircraft/edit');
+const usersavedcraftadd = require('./aircraft/add');
+const userSavedCraftDelete = require('./aircraft/delete');
 const usersavedpeopleadd = require('./user/savedpeople/add');
 const usersavedpeopleedit = require('./user/savedpeople/edit');
 const userDelete = require('./user/deleteAccount');
@@ -67,9 +68,6 @@ const orgcreatesuccess = require('./organisation/createsuccess');
 const orginvitesuccess = require('./organisation/invitesuccess');
 const editorganisation = require('./organisation/editorganisation');
 const orgassignrole = require('./organisation/assignrole');
-const orgsavedcraftedit = require('./organisation/savedcraft/edit');
-const orgSavedCraftDelete = require('./organisation/savedcraft/delete');
-const orgsavedcraftadd = require('./organisation/savedcraft/add');
 const orgsavedpeopleedit = require('./organisation/savedpeople/edit');
 const orgsavedpeopleadd = require('./organisation/savedpeople/add');
 const orgEditUsers = require('./organisation/editusers');
@@ -92,7 +90,6 @@ module.exports.bind = (app) => {
   app.use(error.router);
   app.use(logout.router);
   app.use(postusersignin.router);
-  app.use(userDetails.router);
   app.use(createorganisation.router);
   app.use(mangeorganisation.router);
   app.use(manageUserDetails.router);
@@ -103,9 +100,6 @@ module.exports.bind = (app) => {
   app.use(editorganisation.router);
   app.use(orgassignrole.router);
   app.use(verifyInvite.router);
-  app.use(orgsavedcraftedit.router);
-  app.use(orgsavedcraftadd.router);
-  app.use(orgSavedCraftDelete.router);
   app.use(orgsavedpeopleedit.router);
   app.use(orgsavedpeopleadd.router);
   app.use(orgEditUsers.router);
@@ -136,4 +130,6 @@ module.exports.bind = (app) => {
   app.use(garsubmitfailure.router);
   app.use(garsubmitsucess.router);
   app.use(verifyMfa.router);
+  app.use(aircraft.router);
+  app.use(userDetails.router);
 };

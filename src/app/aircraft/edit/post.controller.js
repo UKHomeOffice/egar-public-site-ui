@@ -1,8 +1,8 @@
-const logger = require('../../../../common/utils/logger');
-const ValidationRule = require('../../../../common/models/ValidationRule.class');
-const validator = require('../../../../common/utils/validator');
-const CookieModel = require('../../../../common/models/Cookie.class');
-const craftApi = require('../../../../common/services/craftApi');
+const logger = require('../../../common/utils/logger');
+const ValidationRule = require('../../../common/models/ValidationRule.class');
+const validator = require('../../../common/utils/validator');
+const CookieModel = require('../../../common/models/Cookie.class');
+const craftApi = require('../../../common/services/craftApi');
 
 module.exports = (req, res) => {
   const orgname = req.body.Orgname;
@@ -41,10 +41,10 @@ module.exports = (req, res) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (parsedResponse.hasOwnProperty('message')) {
             // API returned failure
-            res.render('app/user/savedcraft/edit/index', { cookie, errors: [parsedResponse] });
+            res.render('app/aircraft/edit/index', { cookie, errors: [parsedResponse] });
           } else {
             // API returned successful
-            res.redirect('/user/details');
+            res.redirect('/aircraft');
             // res.render('app/user/viewDetails/index', { cookie });
           }
         });
@@ -52,6 +52,6 @@ module.exports = (req, res) => {
     .catch((err) => {
       logger.info('Edit SavedCraft postcontroller - There was a problem with editing the saved craft');
       logger.info(err);
-      res.render('app/user/savedcraft/edit/index', { cookie, errors: err });
+      res.render('app/aircraft/edit/index', { cookie, errors: err });
     });
 };
