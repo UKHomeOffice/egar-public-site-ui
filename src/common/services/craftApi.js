@@ -56,7 +56,7 @@ module.exports = {
         }
         logger.debug('Successfully called get craft details API endpoint');
         resolve(body);
-        
+
       });
     });
   },
@@ -140,14 +140,14 @@ module.exports = {
   /**
    * Delete an individual user's craft
    * @param {String} userId id of user trying to delete craft
-   * @param {String} craftId if of the craft to be deleted
+   * @param {String} craftId id of the craft to be deleted
    * @returns {Promise} resolves with API response
    */
   deleteCraft(requesterId, craftId) {
     return new Promise((resolve, reject) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.getCrafts(requesterId),
+        url: endpoints.deleteCraft(requesterId, craftId),
         body: JSON.stringify({
           requesterId,
           crafts: [

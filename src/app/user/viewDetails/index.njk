@@ -41,11 +41,6 @@
       </a>
     </li>
     <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="#SavedCraft">
-        Saved Aircraft
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
       <a class="govuk-tabs__tab" href="#SavedPeople">
         Saved People
       </a>
@@ -93,37 +88,6 @@
      </p>
      <a class="govuk-button" href='/user/delete' role="button">Delete</a>
 
-  </section>
-
-  <section class="govuk-tabs__panel" id="SavedCraft">
-      <h2 class="govuk-heading-l">Saved Aircraft</h2>
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">Aircraft Registration</th>
-          <th class="govuk-table__header" scope="col">Aircraft Type</th>
-          <th class="govuk-table__header" scope="col">Aircraft Home Aerodrome/Usual Base</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% for craft in savedCrafts.items %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell ">{{ craft.registration }} </td>
-            <td class="govuk-table__cell ">{{ craft.craftType }}</td>
-            <td class="govuk-table__cell ">{{ craft.craftBase }}</td>
-            <td class="govuk-table__cell "><button class="link btn-link" name="editCraft" value="{{craft.craftId}}">Edit</button></td>
-            <td class="govuk-table__cell "><button class="link btn-link" name="deleteCraft" value="{{craft.craftId}}">Delete</button></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <h2 class="govuk-heading-m">
-          Save an Aircraft
-      </h2>
-      <p class="govuk-body-m">
-        Save the details of an Aircraft that you regularly submit GARs for.
-      </p>
-        <a href='/user/savedcraft/add' class='govuk-button' >Save an Aircraft</a>
   </section>
 
   <section class="govuk-tabs__panel" id="SavedPeople">
