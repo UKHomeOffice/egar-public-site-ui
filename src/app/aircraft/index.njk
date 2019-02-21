@@ -21,12 +21,16 @@ Manage aircraft | Submit a General Aviation Report (GAR)
 
 {% import "common/templates/includes/macros.njk" as m %}
 
-{% if errors %}
-	{% include "common/templates/includes/errors.njk" %}
-{% endif %}
-
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-full">
+
+  {% if errors %}
+  	{% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+  {% if successMsg %}
+    {% include "common/templates/includes/success-action.njk" %}
+  {% endif %}
 
   {% if cookie.getUserRole() != 'User' %}
 
