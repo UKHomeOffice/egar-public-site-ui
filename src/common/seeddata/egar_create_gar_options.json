@@ -1,4 +1,9 @@
-[
-	{ "id": "0", "option": "Create a GAR online"},
-	{ "id": "1", "option": "Create a GAR from file"}
+[{
+    "id": "0",
+    "option": "Online"
+  },
+  {
+    "id": "1",
+    "option": "Upload file"
+  }
 ]
