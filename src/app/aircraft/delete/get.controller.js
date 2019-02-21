@@ -20,16 +20,16 @@ module.exports = (req, res) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
         req.session.errMsg = errMsg;
-        res.redirect('/aircraft/#SavedCraft');
+        return req.session.save(() => {res.redirect('/aircraft/#SavedCraft')});
       } else {
         req.session.successHeader = 'Success';
         req.session.successMsg = 'Craft deleted';
-        res.redirect('/aircraft/#SavedCraft');
+        return req.session.save(() => {res.redirect('/aircraft/#SavedCraft')});
       }
     })
     .catch((err) => {
       logger.error(err);
       req.session.errMsg = errMsg;
-      res.redirect('/aircraft/#SavedCraft');
+      return req.session.save(() => {res.redirect('/aircraft/#SavedCraft')});
     });
 };
