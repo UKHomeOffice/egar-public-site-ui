@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Departure
+	Create GAR | Departure | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
@@ -29,18 +29,18 @@
 	  <div class="govuk-grid-column-two-thirds">
       <form action="/garfile/departure" autocomplete="false" class="form-group" method="post" role="form">
 
-        <!–– Start departure date -->
+        <!-- Start departure date -->
           <div class="govuk-form-group" id="departureDate">
           <span class="govuk-caption-xl">Section 1 of 8</span>
           <h1 class="govuk-heading-xl">Departure details</h1>
-          <p class="govuk-body-l">Provide the departure details of the voyage</p>
+          <p class="govuk-body-l">Provide the departure details of the flight</p>
           <div class="{{ m.form_group_class('departureDate', errors) }}">
             <fieldset class="govuk-fieldset" aria-describedby="departureDate-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
               Departure date
             </legend>
             <span id="departureDate-hint" class="govuk-hint">
-              For example, 31 3 1980
+              For example 20 04 2019
             </span>
             {{ m.error_message('departureDate', errors) }}
             <div class="govuk-date-input" id="departure">
@@ -83,7 +83,7 @@
               Departure time (UTC)
             </legend>
             <span id="departureTime-hint" class="govuk-hint">
-                For example, 17 30
+                For example 17 30
             </span>
             {{ m.error_message('departureTime', errors) }}
 
@@ -116,7 +116,7 @@
 					Departure port
 				</label>
 				<span id="departurePort-hint" class="govuk-hint">
-					IATA or ICAO code, for example, FAB/EGLF or enter ‘ZZZZ’ if not known
+				The IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'
 				</span>
 
           {{ m.error_message('departurePort', errors) }}
@@ -126,9 +126,10 @@
 
 
         <div class="govuk-form-group">
-          <h2 class="govuk-heading-m">Departure coordinates</h2>
+          <label class="govuk-heading-m">Departure coordinates</label>
           <span id="departureCoordinates-hint" class="govuk-hint">
-            If port is ‘ZZZZ’, provide decimal coordinates to 6 places
+           You are only required to enter coordinates if your port does not have an IATA/ICAO code. 
+           Provide coordinates in decimal format to 4 decimal places.
           </span>
         </div>
 
@@ -138,7 +139,7 @@
             Latitude
           </label>
           <span id="departureLattitude-hint" class="govuk-hint">
-              For example, 51.507493
+              For example 51.4700
           </span>
 
           {{ m.error_message('departureLat', errors) }}
@@ -150,7 +151,7 @@
             Longitude
           </label>
           <span id="departureLongitude-hint" class="govuk-hint">
-              For example, 51.507493
+              For example -0.4542
           </span>
           {{ m.error_message('departureLong', errors) }}
           <input class="govuk-input" id="departureLong" name="departureLong" autocomplete="false" type="text" value="{{cookie.getGarDepartureVoyage().departureLong}}"/>
@@ -161,7 +162,7 @@
         <!-- start buttons -->
         <div class="column-two-thirds">
 
-          <input id="newVoyage" class="govuk-button" type="submit" name="buttonClicked" value="Save and Continue"
+          <input id="newVoyage" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
           onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
 						<p class="govuk-body-m">
