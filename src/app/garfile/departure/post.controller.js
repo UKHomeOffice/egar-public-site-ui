@@ -19,38 +19,75 @@ module.exports = (req, res) => {
   const validationIds = ['departurePort'];
   const validationValues = [voyage.departurePort];
   const validationMsgs = ['Enter an departure port'];
-  const validations = validator.genValidations(validator.notEmpty, validationIds, validationValues, validationMsgs);
 
   // Define port / date validation msgs
-  const portMsg = "If the Departure port is 'ZZZZ' then you must also provide decimal coordinates to 4 decimal places";
+  const portMsg = 'As you have entered a departure port code of \'ZZZZ\', you must provide longitude and latitude coordinates for the location.';
+  const portCodeMsg = 'The departure airport code must be a minimum of 3 letters and a maximum of 4 letters.';
   const futureDateMsg = 'Departure date must be today or in the future';
   const realDateMsg = 'Enter a real Departure date';
   const timeMsg = 'Enter a real Departure time';
+  const latitudeMsg = 'Value entered is incorrect. Please enter latitude to 4 decimal places.';
+  const longitudeMsg = 'Value entered is incorrect. Please enter longitude to 4 decimal places.';
 
   // Create validation input objs
-  const departPortObj = { portCode: voyage.departurePort, lat: voyage.departureLat, long: voyage.departureLong };
-  const departDateObj = { d: voyage.departureDay, m: voyage.departureMonth, y: voyage.departureYear };
-  const departureTimeObj = { h: voyage.departureHour, m: voyage.departureMinute };
+  const departPortObj = {
+    portCode: voyage.departurePort,
+    lat: voyage.departureLat,
+    long: voyage.departureLong,
+  };
+  const departDateObj = {
+    d: voyage.departureDay,
+    m: voyage.departureMonth,
+    y: voyage.departureYear,
+  };
+  const departureTimeObj = {
+    h: voyage.departureHour,
+    m: voyage.departureMinute,
+  };
 
   // Define port / date validations
   const departurePortValidation = [
     new ValidationRule(validator.validatePortCoords, 'departurePort', departPortObj, portMsg),
-    new ValidationRule(validator.validPort, 'departurePort', voyage.departurePort, "The departure airport code must be a minimum of 3 letters and a maximum of 4 letters.")
+    new ValidationRule(validator.validPort, 'departurePort', voyage.departurePort, portCodeMsg),
   ];
 
-  const departureDateValidation = [
-    new ValidationRule(validator.realDate, 'departureDate', departDateObj, realDateMsg),
-    new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, futureDateMsg),
+  // Define blankport validations
+  const departurePortBlank = [new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, portMsg)];
+
+  // Define latitude validations
+  const departureLatValidation = [new ValidationRule(validator.lattitude, 'departureLat', voyage.departureLat, latitudeMsg)];
+
+  // Define latitude validations
+  const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, longitudeMsg)];
+
+  const validations = [
+    [
+      new ValidationRule(validator.realDate, 'departureDate', departDateObj, realDateMsg),
+    ],
+    [
+      new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, futureDateMsg),
+    ],
+    [
+      new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, timeMsg),
+    ],
+    [
+      new ValidationRule(validator.notEmpty, validationIds, validationValues, validationMsgs),
+    ],
   ];
 
-  // Define time validations
-  const departureTimeValidation = [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, timeMsg)];
-
-  validations.push(
-    departurePortValidation,
-    departureDateValidation,
-    departureTimeValidation,
-  );
+  // Check if port code is ZZZZ or blank as then need to validate lat/long
+  if (departPortObj.portCode.toUpperCase() === 'ZZZZ' || voyage.departurePort.length === 0) {
+    validations.push(
+      departurePortBlank,
+      departureLatValidation,
+      departureLongValidation,
+    );
+  } else {
+    // if not just add port validation
+    validations.push(
+      departurePortValidation,
+    );
+  }
 
   validator.validateChains(validations)
     .then(() => {
@@ -60,21 +97,32 @@ module.exports = (req, res) => {
           if (parsedResponse.hasOwnProperty('message')) {
             // API returned error
             logger.debug(`Api returned: ${parsedResponse}`);
-            res.render('app/garfile/departure/index', { cookie, errors: [parsedResponse] });
+            res.render('app/garfile/departure/index', {
+              cookie,
+              errors: [parsedResponse],
+            });
           } else {
             // Successful
-            return buttonClicked === 'Save and Continue' ? res.redirect('/garfile/arrival') : res.redirect('/home');
+            return buttonClicked === 'Save and continue' ? res.redirect('/garfile/arrival') : res.redirect('/home');
           }
         })
         .catch((err) => {
           logger.error('Api failed to update GAR');
           logger.error(err);
-          res.render('app/garfile/departure/index', { cookie, errors: [{ message: 'Failed to add to GAR' }] });
+          res.render('app/garfile/departure/index', {
+            cookie,
+            errors: [{
+              message: 'Failed to add to GAR',
+            }],
+          });
         });
     })
     .catch((err) => {
       logger.info('Validation failed');
       logger.info(err);
-      res.render('app/garfile/departure/index', { cookie, errors: err });
+      res.render('app/garfile/departure/index', {
+        cookie,
+        errors: err,
+      });
     });
 };

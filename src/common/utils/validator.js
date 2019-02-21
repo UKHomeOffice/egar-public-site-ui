@@ -32,7 +32,10 @@ function daysInMonth(m, y) {
   switch (m - 1) {
     case 1:
       return (y % 4 === 0 && y % 100) || y % 400 === 0 ? 29 : 28;
-    case 8: case 3: case 5: case 10:
+    case 8:
+    case 3:
+    case 5:
+    case 10:
       return 30;
     default:
       return 31;
@@ -58,6 +61,7 @@ function validDay(d, m, y) {
   }
   return false;
 }
+
 function validMonth(m) {
   if (IsNumeric(m)) {
     return m >= 0 && m <= 12;
@@ -99,12 +103,12 @@ function validYear(y) {
 
 function realDate(dObj) {
   if (dObj === null || dObj === undefined) return false;
-  return (IsNumeric(dObj.d)
-          && IsNumeric(dObj.m)
-          && IsNumeric(dObj.y)
-          && validDay(dObj.d, dObj.m, dObj.y)
-          && validMonth(dObj.m))
-          && validYear(dObj.y);
+  return (IsNumeric(dObj.d) &&
+      IsNumeric(dObj.m) &&
+      IsNumeric(dObj.y) &&
+      validDay(dObj.d, dObj.m, dObj.y) &&
+      validMonth(dObj.m)) &&
+    validYear(dObj.y);
 }
 
 function passwordCheck(value) {
@@ -117,19 +121,20 @@ function passwordCheck(value) {
   return true;
 }
 
-function validFlag(value){
-  if(value){
+function validFlag(value) {
+  if (value) {
     return true;
   }
   return false;
 }
 
-function validPort(value){
-  if (value.length >= 3){
+function validPort(value) {
+  if (value.length >= 3) {
     return true;
   }
   return false;
 }
+
 function passwordValidCharacters(value) {
   // if ((/^(?=.*[a-zA-Z])(?=.*[0-9])/.test(value))) {
   if (/^[a-zA-Z0-9]+$/.test(value)) {
@@ -177,6 +182,16 @@ function validatePortCoords(portObj) {
     return ((portObj.lat !== '') && (portObj.long !== ''));
   }
   return true;
+}
+
+function lattitude(value) {
+  const regex = /^-?([1-8]?[0-9]\.{1}\d{1,6}$|90\.{1}0{1,6}$)/;
+  return regex.test(value);
+}
+
+function longitude(value) {
+  const regex = /^-?((([1]?[0-7][0-9]|[1-9]?[0-9])\.{1}\d{1,6}$)|[1]?[1-8][0]\.{1}0{1,6}$)/;
+  return regex.test(value);
 }
 
 function validateChains(chains) {
@@ -238,4 +253,6 @@ module.exports = {
   validTime,
   validFlag,
   validPort,
+  lattitude,
+  longitude,
 };
