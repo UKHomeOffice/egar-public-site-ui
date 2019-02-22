@@ -3,8 +3,8 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const userattributes = require('../../../common/seeddata/egar_user_account_details.json');
-const garoptions = require('../../../common/seeddata/egar_create_gar_options.json')
-const createGarApi = require('../../../common/services/createGarApi.js')
+const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
+const createGarApi = require('../../../common/services/createGarApi.js');
 
 
 module.exports = (req, res) => {
@@ -28,27 +28,39 @@ module.exports = (req, res) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (parsedResponse.hasOwnProperty('message')) {
             // API returned error
-            res.render('app/garfile/manifest/index', { errors: [parsedResponse], cookie });
+            res.render('app/garfile/manifest/index', {
+              errors: [parsedResponse],
+              cookie,
+            });
           } else {
-          cookie.setGarId(parsedResponse.garId);
-          cookie.setGarStatus(garStatus);
+            cookie.setGarId(parsedResponse.garId);
+            cookie.setGarStatus(garStatus);
           }
-          if (req.body.garoption === 'Create a GAR online') {
+          if (req.body.garoption === 'Online') {
             // Redirect to page 1 of gar form.
             res.redirect('/garfile/departure');
-          } else if (req.body.garoption === 'Create a GAR from file') {
+          } else if (req.body.garoption === 'Upload a file') {
             res.redirect('/garfile/garupload');
           }
         })
         .catch((err) => {
           logger.error('Failed to create GAR');
           logger.error(err);
-          res.render('app/garfile/home/index', { cookie, userattributes, garoptions });
+          res.render('app/garfile/home/index', {
+            cookie,
+            userattributes,
+            garoptions,
+          });
         });
     })
     .catch((err) => {
       logger.debug('Gar creation validation failed');
       logger.debug(err);
-      res.render('app/garfile/home/index', { cookie, userattributes, garoptions, errors: err });
+      res.render('app/garfile/home/index', {
+        cookie,
+        userattributes,
+        garoptions,
+        errors: err,
+      });
     });
 };
