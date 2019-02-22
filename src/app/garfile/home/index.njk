@@ -12,7 +12,7 @@
 
 {% block beforeContent %}
   {% include "phase.njk" %}
-  {% include "common/templates/includes/back.njk" %}
+  <a href="/home" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
@@ -29,7 +29,7 @@
                   <h1 class="govuk-fieldset__heading">How would you like to create a GAR?</h1>
                 </legend>
                 <span id="gar-type-choice" class="govuk-hint">
-                 You have the option to create a GAR using our online web form, or by uploading a pre-populated template file. 
+                 You have the option to create a GAR using our online web form, or by uploading a pre-populated template file.
                  Please select how you would like to create your GAR to proceed.
                 </span>
                 {{ m.error_message("garoption", errors) }}
