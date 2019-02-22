@@ -21,6 +21,11 @@ module.exports = (req, res) => {
       // TODO
       // Check response for error message.
       // if found, render error messages
+      logger.info('Attempting to verify user');
+      const parsedResponse = JSON.parse(response);
+      if (parsedResponse.message) {
+        logger.info(`API responded with: ${parsedResponse.message}`)
+      }
       res.render('app/verify/registeruser/index');
     });
 };
