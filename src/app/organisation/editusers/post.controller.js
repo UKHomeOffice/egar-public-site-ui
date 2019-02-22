@@ -24,13 +24,13 @@ module.exports = (req, res) => {
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             req.session.errMsg = 'Failed to update user details. Try again';
           }
-          res.redirect('/organisation/manage');
+          res.redirect('/organisation');
         })
         .catch((err) => {
           logger.error('Failed to update org user details');
           logger.error(err);
           req.session.errMsg = 'Failed to update user details. Try again';
-          res.redirect('/organisation/manage');
+          res.redirect('/organisation');
         });
     })
     .catch((err) => {

@@ -69,12 +69,12 @@ Manage organisation | Submit a General Aviation Report (GAR)
 				</tr>
 			</thead>
 			<tbody class="govuk-table__body">
-        {% for user in orgUsers %}
+        {% for user in orgUsers.items %}
 				<tr class="govuk-table__row">
-					<td class="govuk-table__cell"><button class="govuk-link btn-link" name="editOrgUser" value="{{ user.id }}">{{ user.surname }}</button></td>
-					<td class="govuk-table__cell" scope="row">{{ user.firstname }}</th>
+					<td class="govuk-table__cell"><button class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}">{{ user.lastName }}</button></td>
+					<td class="govuk-table__cell" scope="row">{{ user.firstName }}</th>
 					<td class="govuk-table__cell">{{ user.email }}</td>
-					<td class="govuk-table__cell">{{ user.role }}</td>
+					<td class="govuk-table__cell">{{ user.role.name }}</td>
 				</tr>
         {% endfor %}
 			</tbody>
