@@ -26,8 +26,8 @@ module.exports = (req, res) => {
   const futureDateMsg = 'Arrival date must be today or in the future';
   const realDateMsg = 'Enter a real Arrival date';
   const timeMsg = 'Enter a real Arrival time';
-  const latitudeMsg = 'Value entered is incorrect. Please enter latitude to 4 decimal places.';
-  const longitudeMsg = 'Value entered is incorrect. Please enter longitude to 4 decimal places.';
+  const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places.';
+  const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places.';
 
   // Create validation input objs
   const arrivePortObj = {
