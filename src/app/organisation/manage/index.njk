@@ -54,16 +54,6 @@
                   Organisation Users
                 </a>
               </li>
-              <li class="govuk-tabs__list-item">
-<<<<<<< HEAD
-                <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#SavedPeople">
-                  Saved People
-=======
-                <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#SavedCraft">
-                  Saved Aircraft
->>>>>>> Move saved people functionality to separate page
-                </a>
-              </li>
             </ul>
 
             <section class="govuk-tabs__panel" id="OrganisationDetails">
@@ -123,66 +113,6 @@
                   Invite users to your Organisation
               </h2>
               <a href='/organisation/inviteusers/' class='govuk-button'>Invite Users</a>
-              {% endif %}
-            </section>
-
-            <section class="govuk-tabs__panel" id="SavedPeople">
-              <h2 class="govuk-heading-l">Saved People</h2>
-              <table class="govuk-table">
-                <thead class="govuk-table__head">
-                  <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="col">First Name</th>
-                    <th class="govuk-table__header" scope="col">Last Name</th>
-                    <th class="govuk-table__header" scope="col">Type</th>
-                  </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                  {% for person in savedPeople %}
-                  <tr class="govuk-table__row">
-                    <td class="govuk-table__cell ">{{ person.firstName }} </td>
-                    <td class="govuk-table__cell ">{{ person.lastName }}</td>
-                    <td class="govuk-table__cell ">{{ person.peopleType.name }}</td>
-                    <td class="govuk-table__cell "><button class="link btn-link" name="editPerson" value="{{person.personId}}">Edit</button></td>
-                    {# <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}">Delete</button></td> #}
-            <section class="govuk-tabs__panel" id="SavedCraft">
-              <h2 class="govuk-heading-l">Saved Aircraft</h2>
-              <table class="govuk-table">
-                <thead class="govuk-table__head">
-                  <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="col">Aircraft Registration</th>
-                    <th class="govuk-table__header" scope="col">Aircraft Type</th>
-                    <th class="govuk-table__header" scope="col">Aircraft Home Aerodrome/Usual Base</th>
-                  </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                  {% for craft in savedCrafts.items %}
-                  <tr class="govuk-table__row">
-                    <td class="govuk-table__cell ">{{ craft.registration }} </td>
-                    <td class="govuk-table__cell ">{{ craft.craftType }}</td>
-                    <td class="govuk-table__cell ">{{ craft.craftBase }}</td>
-                    <td class="govuk-table__cell "><button class="link btn-link" name="editCraft" value="{{craft.craftId}}">Edit</button></td>
-                    <td class="govuk-table__cell "><button class="link btn-link" name="deleteCraft" value="{{craft.craftId}}">Delete</button></td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-              {% if cookie.getUserRole().toLowerCase() === 'admin' or cookie.getUserRole().toLowerCase() === 'manager' %}
-              <h2 class="govuk-heading-m">
-                  Save a Person Details
-              </h2>
-              <p class="govuk-body-m">
-                Save the details of Captain, Crew  or Passengers that you regularly submit GARs for.
-              </p>
-                <a href='/organisation/savedpeople/add' class='govuk-button' >Save a Person</a>
-              {% if cookie.getUserRole() === 'Admin' or cookie.getUserRole() === 'Manager' %}
-              <h2 class="govuk-heading-m">
-                  Save an Aircraft
-              </h2>
-              <p class="govuk-body-m">
-                Save the details of an Aircraft that you regularly submit GARs for.
-              </p>
-                <a href='/organisation/savedcraft/add' class='govuk-button' >Save an Aircraft</a>
-
               {% endif %}
             </section>
 

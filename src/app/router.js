@@ -19,17 +19,9 @@ const userDetails = require('./user/viewDetails');
 const manageUserDetails = require('./user/manageuserdetail');
 const logout = require('./register/logout');
 const detailschanged = require('./user/detailschanged');
-<<<<<<< HEAD
 const usersavedcraftedit = require('./aircraft/edit');
 const usersavedcraftadd = require('./aircraft/add');
 const userSavedCraftDelete = require('./aircraft/delete');
-const usersavedpeopleadd = require('./user/savedpeople/add');
-const usersavedpeopleedit = require('./user/savedpeople/edit');
-=======
-const usersavedcraftedit = require('./user/savedcraft/edit');
-const usersavedcraftadd = require('./user/savedcraft/add');
-const userSavedCraftDelete = require('./user/savedcraft/delete');
->>>>>>> Move saved people functionality to separate page
 const userDelete = require('./user/deleteAccount');
 
 // GAR dependencies
@@ -75,11 +67,6 @@ const orgcreatesuccess = require('./organisation/createsuccess');
 const orginvitesuccess = require('./organisation/invitesuccess');
 const editorganisation = require('./organisation/editorganisation');
 const orgassignrole = require('./organisation/assignrole');
-const orgsavedpeopleedit = require('./organisation/savedpeople/edit');
-const orgsavedpeopleadd = require('./organisation/savedpeople/add');
-const orgsavedcraftedit = require('./organisation/savedcraft/edit');
-const orgSavedCraftDelete = require('./organisation/savedcraft/delete');
-const orgsavedcraftadd = require('./organisation/savedcraft/add');
 const orgEditUsers = require('./organisation/editusers');
 
 // Export
@@ -108,11 +95,6 @@ module.exports.bind = (app) => {
   app.use(editorganisation.router);
   app.use(orgassignrole.router);
   app.use(verifyInvite.router);
-  app.use(orgsavedpeopleedit.router);
-  app.use(orgsavedpeopleadd.router);
-  app.use(orgsavedcraftedit.router);
-  app.use(orgsavedcraftadd.router);
-  app.use(orgSavedCraftDelete.router);
   app.use(orgEditUsers.router);
   app.use(usersavedcraftedit.router);
   app.use(userSavedCraftDelete.router);
