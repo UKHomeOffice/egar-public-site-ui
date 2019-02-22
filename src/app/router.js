@@ -60,6 +60,7 @@ const verifyInvite = require('./verify/organisationinvite');
 const verifyMfa = require('./verify/mfa');
 
 // organisation
+const organisation = require('./organisation');
 const createorganisation = require('./organisation/create');
 const mangeorganisation = require('./organisation/manage');
 const inviteuserorganisation = require('./organisation/inviteusers');
@@ -85,6 +86,7 @@ module.exports.bind = (app) => {
   app.use(error.router);
   app.use(logout.router);
   app.use(postusersignin.router);
+  app.use(organisation.router);
   app.use(createorganisation.router);
   app.use(mangeorganisation.router);
   app.use(manageUserDetails.router);
