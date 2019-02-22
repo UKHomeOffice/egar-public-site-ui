@@ -18,7 +18,9 @@ module.exports = (req, res) => {
     responsiblePostcode: req.body.responsiblePostcode,
   };
 
-  const { buttonClicked } = req.body;
+  const {
+    buttonClicked,
+  } = req.body;
 
   validator.validateChains(validations.validations(req))
     .then(() => {
@@ -27,22 +29,34 @@ module.exports = (req, res) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             // API returned error
-            res.render('app/garfile/responsibleperson/index', { errors: [parsedResponse], cookie });
+            res.render('app/garfile/responsibleperson/index', {
+              errors: [parsedResponse],
+              cookie,
+            });
           } else {
             // successful api response
             cookie.setGarResponsiblePerson(responsiblePerson);
-            return buttonClicked === 'Save and Continue' ? res.redirect('/garfile/customs') : res.redirect('/home');
+            return buttonClicked === 'Save and continue' ? res.redirect('/garfile/customs') : res.redirect('/home');
           }
         })
         .catch((err) => {
           logger.error('API failed to update GAR');
           logger.error(JSON.stringify(err));
-          res.render('app/garfile/responsibleperson/index', { cookie, errors: [{ message: 'Failed to add to GAR' }] });
+          res.render('app/garfile/responsibleperson/index', {
+            cookie,
+            errors: [{
+              message: 'Failed to add to GAR'
+            }],
+          });
         });
     })
     .catch((err) => {
       logger.info('Validation failed');
       cookie.setGarResponsiblePerson(responsiblePerson);
-      res.render('app/garfile/responsibleperson/index', { cookie, errors: err, req });
+      res.render('app/garfile/responsibleperson/index', {
+        cookie,
+        errors: err,
+        req,
+      });
     });
 };
