@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Responsible Person
+Create GAR | Responsible person | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
@@ -31,7 +31,8 @@
       method="post" role="form">
       <span class="govuk-caption-xl">Section 5 of 8</span>
       <h1 class="govuk-heading-xl">Responsible person details</h1>
-
+<p class="govuk-body-l">Provide the details of the person responsible for submitting the GAR for this flight. 
+           This may be the owner or an operator but by default this is usually the Captain.</p>
       <div class="govuk-form-group {{ m.form_group_class('responsiblePerson', errors) }}">
         <div class="govuk-form-group {{ m.form_group_class('responsibleGivenName', errors) }}">
           <label class="govuk-label govuk-label--m" for="responsibleGivenName">Given Name</label>
@@ -65,7 +66,7 @@
           <label class="govuk-label govuk-label--m" for="responsibleContactNo">Contact Telephone Number</label>
           {{ m.error_message('responsibleContactNo', errors) }}
           <span class="govuk-hint">
-            Enter a contact telephone number
+            Include dialling code and no spaces, for example, +441234567890.
           </span>
           <span class="field-validation-valid error-message" data-valmsg-for="responsibleContactNo"
             data-valmsg-replace="true" style="display:block">
@@ -148,7 +149,7 @@
 
     <div class="column-two-thirds">
       <div class="govuk-form-group">
-        <input id="newResponsiblePerson" class="govuk-button" type="submit" name="buttonClicked" value="Save and Continue"
+        <input id="newResponsiblePerson" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
         onclick="sendAnalytics(event, 'Add responsible person to GAR - submit', 'click')">
         <p class="govuk-body-m">
           <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and Exit</a>
