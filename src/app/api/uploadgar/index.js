@@ -121,7 +121,6 @@ router.post('/uploadgar', upload.single('file'), (req, res, data) => {
     createGarApi.createGar(cookie.getUserDbId())
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
-        console.log(parsedResponse);
         if (parsedResponse.message) {
           req.session.failureMsg = 'Failed to create GAR';
           return req.session.save(() => res.redirect('garfile/garupload'));
