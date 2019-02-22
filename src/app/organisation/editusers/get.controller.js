@@ -6,8 +6,7 @@ const roles = require('../../../common/seeddata/egar_user_roles');
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const userId = req.session.editUserId;
-  console.log(userId);
-
+  
   logger.debug('In organisation / editusers get controller');
 
   if (userId === undefined) {
