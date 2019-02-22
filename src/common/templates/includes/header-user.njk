@@ -51,6 +51,11 @@
               Log Out
             </a>
           </li>
+          <li class="govuk-header__navigation-item">
+            <a class="govuk-header__link" href="/aircraft">
+              Aircraft
+            </a>
+          </li>
         </ul>
       {% elseif cookie.getUserRole() == 'Admin' or cookie.getUserRole() == 'Manager' %}
         <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
@@ -77,6 +82,11 @@
           <li class="govuk-header__navigation-item">
             <a class="govuk-header__link" href="/user/logout">
               Log Out
+            </a>
+          </li>
+          <li class="govuk-header__navigation-item">
+            <a class="govuk-header__link" href="/aircraft">
+              Aircraft
             </a>
           </li>
         </ul>

@@ -1,6 +1,6 @@
-const CookieModel = require('../../../../common/models/Cookie.class');
-const logger = require('../../../../common/utils/logger');
-const craftApi = require('../../../../common/services/craftApi');
+const CookieModel = require('../../../common/models/Cookie.class');
+const logger = require('../../../common/utils/logger');
+const craftApi = require('../../../common/services/craftApi');
 
 
 module.exports = (req, res) => {
@@ -11,24 +11,25 @@ module.exports = (req, res) => {
   const craftId = req.session.deleteCraftId;
 
   if (craftId === undefined) {
-    return res.redirect('/user/details');
+    return res.redirect('/aircraft');
   }
 
-  craftApi.deleteCraft(cookie.getUserDbId(), craftId)
-    .then((apiResponse) => {
+  const craft = cookie.getUserRole() === 'Individual' ? craftApi.deleteCraft(cookie.getUserDbId(), craftId) : craftApi.deleteOrgCraft(cookie.getOrganisationId(), cookie.getUserDbId(), craftId);
+
+  craft.then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
         req.session.errMsg = errMsg;
-        res.redirect('/user/details/#SavedCraft');
+        return req.session.save(() => {res.redirect('/aircraft')});
       } else {
         req.session.successHeader = 'Success';
         req.session.successMsg = 'Craft deleted';
-        res.redirect('/user/details/#SavedCraft');
+        return req.session.save(() => {res.redirect('/aircraft')});
       }
     })
     .catch((err) => {
       logger.error(err);
       req.session.errMsg = errMsg;
-      res.redirect('/user/details/#SavedCraft');
+      return req.session.save(() => {res.redirect('/aircraft')});
     });
 };
