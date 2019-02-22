@@ -1,22 +1,20 @@
 // Npm dependencies
 const express = require('express');
 
-// Middleware
-const flagpole = require('../../../../common/middleware/flagpole');
-const usercheck = require('../../../../common/middleware/usercheck');
-
 // Local dependencies
 const getController = require('./get.controller');
+const postController = require('./post.controller');
 
 // Initialisation
 const router = new express.Router();
-const indexPath = '/organisation/savedpeople/delete';
+const indexPath = '/people';
 const paths = {
   index: indexPath,
 };
 
 // Routing
-router.get(paths.index, flagpole, usercheck, getController);
+router.get(paths.index, getController);
+router.post(paths.index, postController);
 
 // Export
 module.exports = {

@@ -61,6 +61,8 @@ module.exports = (req, res) => {
             userCreateApi.post(fname, lname, usrname, cookie.getInviteUserToken())
               .then((dbUser) => {
                 if (Object.prototype.hasOwnProperty.call(JSON.parse(dbUser), 'message')) {
+                  logger.info('Failed to register user in db');
+                  logger.info(`${JSON.parse(dbUser).message}`);
                   cookie.setUserEmail(null);
                   return res.redirect('/user/regmsg');
                 }

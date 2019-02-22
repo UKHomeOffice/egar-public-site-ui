@@ -2,15 +2,15 @@
 const express = require('express');
 
 // Middleware
-const flagpole = require('../../../../common/middleware/flagpole');
-const usercheck = require('../../../../common/middleware/usercheck');
+const flagpole = require('../../../common/middleware/flagpole');
+const usercheck = require('../../../common/middleware/usercheck');
 
 // Local dependencies
 const getController = require('./get.controller');
 
 // Initialisation
 const router = new express.Router();
-const indexPath = '/user/savedpeople/delete';
+const indexPath = '/people/delete';
 const paths = {
   index: indexPath,
 };

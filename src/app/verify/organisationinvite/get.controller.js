@@ -15,5 +15,6 @@ module.exports = (req, res) => {
   const token = req.query.query;
   const hashedToken = validateTokenService.generateHash(token);
   cookie.setInviteUserToken(hashedToken);
+  logger.info('Set hashedToken');
   res.render('app/verify/organisationinvite/index');
 };
