@@ -36,10 +36,10 @@ module.exports = (req, res) => {
             cookie.setGarId(parsedResponse.garId);
             cookie.setGarStatus(garStatus);
           }
-          if (req.body.garoption === 'Create a GAR online') {
+          if (req.body.garoption === 'Online') {
             // Redirect to page 1 of gar form.
             res.redirect('/garfile/departure');
-          } else if (req.body.garoption === 'Create a GAR from file') {
+          } else if (req.body.garoption === 'Upload a file') {
             res.redirect('/garfile/garupload');
           }
         })
