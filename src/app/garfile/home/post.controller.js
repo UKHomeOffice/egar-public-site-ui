@@ -23,6 +23,8 @@ module.exports = (req, res) => {
   // Validate chains
   validator.validateChains([garChain])
     .then(() => {
+      if (req.body.garoption === 'Upload a file') return res.redirect('/garfile/garupload');
+
       createGarApi.createGar(cookie.getUserDbId())
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
@@ -35,12 +37,7 @@ module.exports = (req, res) => {
           } else {
             cookie.setGarId(parsedResponse.garId);
             cookie.setGarStatus(garStatus);
-          }
-          if (req.body.garoption === 'Online') {
-            // Redirect to page 1 of gar form.
-            res.redirect('/garfile/departure');
-          } else if (req.body.garoption === 'Upload a file') {
-            res.redirect('/garfile/garupload');
+            return req.session.save(() => res.redirect('/garfile/departure'));
           }
         })
         .catch((err) => {

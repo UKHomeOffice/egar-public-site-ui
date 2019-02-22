@@ -16,6 +16,7 @@ const XLSX = require('xlsx');
 const stream = require('stream');
 const logger = require('../../../common/utils/logger');
 const garApi = require('../../../common/services/garApi');
+const createGarApi = require('../../../common/services/createGarApi.js');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const csrfProtection = csrf({ cookie: true });
@@ -117,20 +118,35 @@ router.post('/uploadgar', upload.single('file'), (req, res, data) => {
       person.documentType = person.documentTypeOther ? 'Other' : person.documentType;
     });
 
-    const crewUpdate = garApi.patch(req.body.garid, 'Draft', { people: crew });
-    const passengerUpdate = garApi.patch(req.body.garid, 'Draft', { people: passengers });
-    const voyageUpdate = garApi.patch(req.body.garid, 'Draft', voyageParser.parse());
+    createGarApi.createGar(cookie.getUserDbId())
+      .then((apiResponse) => {
+        const parsedResponse = JSON.parse(apiResponse);
+        console.log(parsedResponse);
+        if (parsedResponse.message) {
+          req.session.failureMsg = 'Failed to create GAR';
+          return req.session.save(() => res.redirect('garfile/garupload'));
+        }
+        logger.info('Created new GAR');
+        const { garId } = parsedResponse;
+        cookie.setGarId(garId);
+        cookie.setGarStatus('Draft');
 
-    Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
-      .then(() => {
-        res.redirect('/garfile/departure');
-      })
-      .catch((err) => {
-        logger.error('Failed to update API with GAR information');
-        logger.error(err);
-        req.session.failureMsg = 'Failed to read GAR';
-        req.session.failureIdentifier = 'file';
-        return res.redirect('garfile/garupload');
+        const crewUpdate = garApi.patch(garId, 'Draft', { people: crew });
+        const passengerUpdate = garApi.patch(garId, 'Draft', { people: passengers });
+        const voyageUpdate = garApi.patch(garId, 'Draft', voyageParser.parse());
+
+        Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
+          .then(() => {
+            logger.info('Updated GAR with excel data');
+            return req.session.save(() => res.redirect('/garfile/departure'));
+          })
+          .catch((err) => {
+            logger.error('Failed to update API with GAR information');
+            logger.error(err);
+            req.session.failureMsg = 'Failed to read GAR';
+            req.session.failureIdentifier = 'file';
+            return res.redirect('garfile/garupload');
+          });
       });
   } else {
     logger.debug('No file selected for upload');
