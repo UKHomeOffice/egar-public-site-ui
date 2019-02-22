@@ -180,6 +180,11 @@ const endpoints = {
     logger.debug(`Calling delete person details endpoint ${endpoint}`);
     return endpoint;
   },
+  deleteCraft(userId, craftId) {
+    const endpoint = new URL(`${API_VERSION}/user/${userId}/crafts/${craftId}`, BASE_URL).href;
+    logger.debug(`Calling delete craft details endpoint ${endpoint}`);
+    return endpoint;
+  },
   editOrgUser(orgId) {
     const endpoint = new URL(`${API_VERSION}/organisations/${orgId}/users`, BASE_URL).href;
     logger.debug(`Calling edit org user endpoint ${endpoint}`);

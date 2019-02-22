@@ -4,10 +4,10 @@
 const express = require('express')
 
 // Middleware
-const flagpole = require('../../../../common/middleware/flagpole')
-const usercheck = require('../../../../common/middleware/usercheck');
-const csrfcheck = require('../../../../common/middleware/csrfcheck');
-const parseForm = require('../../../../common/middleware/parseForm');
+const flagpole = require('../../../common/middleware/flagpole')
+const usercheck = require('../../../common/middleware/usercheck');
+const csrfcheck = require('../../../common/middleware/csrfcheck');
+const parseForm = require('../../../common/middleware/parseForm');
 
 // Local dependencies
 const getController = require('./get.controller')
@@ -15,9 +15,9 @@ const postController = require('./post.controller')
 
 // Initialisation
 const router = new express.Router()
-const indexPath = '/user/savedcraft/edit'
+const indexPath = '/aircraft/edit'
 const paths = {
-  index: indexPath 
+  index: indexPath
 }
 
 // Routing

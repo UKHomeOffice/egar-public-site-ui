@@ -64,7 +64,7 @@ describe('CraftService', () => {
       });
 
     nock(BASE_URL)
-      .delete(`/user/${userId}/crafts`, deleteCraft)
+      .delete(`/user/${userId}/crafts/${craftId}`, deleteCraft)
       .reply(200, {});
 
     nock(BASE_URL)

@@ -21,14 +21,15 @@
 
   {% import "common/templates/includes/macros.njk" as m %}
 
-  {% if errors %}
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+
+	{% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-      <form action="/organisation/savedcraft/edit" autocomplete="false" class="form-group"
-      method="post" role="form">
+      <form action="/aircraft/edit" autocomplete="false" class="form-group"
+      method="post" role="form" >
 
       <h1 class="govuk-heading-xl">
         Edit an Aircraft
@@ -36,57 +37,54 @@
 
       <p class="govuk-body-l">Please enter the following information. This information can be re-used when submitting a GAR.</p>
 
-
-      <div class="govuk-form-group {{ m.form_group_class('savedcraft', errors) }}">
-        <div class="govuk-form-group {{ m.form_group_class('craftreg', errors) }}">
-          <label class="govuk-label" for="craftreg">Aircraft Registration</label>
-          {{ m.error_message('craftreg', errors) }}
+      <div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
+          <label class="govuk-label" for="craftReg">Aircraft Registration</label>
+          {{ m.error_message('craftReg', errors) }}
           <span class="govuk-hint">
             Enter a new value
           </span>
-          <span class="field-validation-valid error-message" data-valmsg-for="craftreg"
+          <span class="field-validation-valid error-message" data-valmsg-for="craftReg"
             data-valmsg-replace="true" style="display:block">
           </span>
           <input  class="govuk-input"
-            id="craftreg" name="craftreg" style="width:100%" type="text"
+            id="craftReg" name="craftReg" style="width:100%" type="text"
             value="{{cookie.getEditCraft().registration}}" />
-        </div>
+      </div>
 
-        <div class="govuk-form-group {{ m.form_group_class('crafttype', errors) }}">
-            <label class="govuk-label" for="crafttype">Aircraft Type</label>
-          {{ m.error_message('crafttype', errors) }}
+      <div class="govuk-form-group {{ m.form_group_class('craftType', errors) }}">
+            <label class="govuk-label" for="craftType">Aircraft Type</label>
+          {{ m.error_message('craftType', errors) }}
           <span class="govuk-hint">
             Enter a new value
           </span>
-          <span class="field-validation-valid error-message" data-valmsg-for="crafttype"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input class="govuk-input"
-            id="crafttype" name="crafttype" style="width:100%" type="text"
-            value="{{cookie.getEditCraft().craftType}}" />
-        </div>
-
-        <div class="govuk-form-group {{ m.form_group_class('craftbase', errors) }}">
-             <label class="govuk-label" for="craftbase">Aircraft Home Aerodrome / Usual Base</label>
-          {{ m.error_message('craftbase', errors) }}
-          <span class="govuk-hint">
-            Enter a new value
-          </span>
-          <span class="field-validation-valid error-message" data-valmsg-for="craftbase"
+          <span class="field-validation-valid error-message" data-valmsg-for="craftType"
             data-valmsg-replace="true" style="display:block">
           </span>
           <input  class="govuk-input"
-            id="craftbase" name="craftbase" style="width:100%" type="text"
+            id="craftType" name="craftType" style="width:100%" type="text"
+            value="{{cookie.getEditCraft().craftType}}" />
+      </div>
+
+      <div class="govuk-form-group {{ m.form_group_class('craftBase', errors) }}">
+             <label class="govuk-label" for="craftBase">Aircraft Home Aerodrome / Usual Base</label>
+          {{ m.error_message('craftBase', errors) }}
+          <span class="govuk-hint">
+            Enter a new value
+          </span>
+          <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
+            data-valmsg-replace="true" style="display:block">
+          </span>
+          <input  class="govuk-input"
+            id="craftBase" name="craftBase" style="width:100%" type="text"
             value="{{cookie.getEditCraft().craftBase}}" />
          <input type="hidden" id="craftId" name="craftId" value="{{cookie.getEditCraft().craftId}}">
-         </div>
-        </div>
+      </div>
 
           <div class="govuk-form-group">
 
            <table class="govuk-table">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell "><a class="govuk-button" href="/organisation/manage">Exit Without Saving</a></td>
+            <td class="govuk-table__cell "><a class="govuk-button" href="/aircraft">Exit Without Saving</a></td>
             <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and Exit"
           onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
           </tr>
