@@ -33,20 +33,24 @@ const correlationHeader = require('./common/middleware/correlation-header');
 // Global constants
 const unconfiguredApp = express();
 const oneYear = 86400000 * 365;
-const publicCaching = { maxAge: oneYear };
+const publicCaching = {
+  maxAge: oneYear
+};
 const PORT = (process.env.PORT || 3000);
-const { NODE_ENV } = process.env;
+const {
+  NODE_ENV
+} = process.env;
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
 // const CSS_PATH2 = staticify.getVersionedPath('/stylesheets/govuk-frontend-2.1.0.min.css')
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
 const GA_ID = (process.env.GA_ID || '');
 const ua = require('universal-analytics');
-const  visitor = ua(GA_ID);
+const visitor = ua(GA_ID);
 const COOKIE_SECRET = (process.env.COOKIE_SECRET || '');
 const BASE_URL = (process.env.BASE_URL || '');
 const app = express;
 let secureFlag = false;
-if (process.env.COOKIE_SECURE_FLAG =="true"){
+if (process.env.COOKIE_SECURE_FLAG == "true") {
   secureFlag = true;
 }
 // Define app views
@@ -64,15 +68,20 @@ function initialisexpresssession(app) {
   const pgSession = require('connect-pg-simple')(session);
   app.use(session({
     name: 'sess_id',
-    genid: function(req) {
-      return uuid()},
+    genid: function (req) {
+      return uuid()
+    },
     store: new pgSession({
       conString: config.PUBLIC_SITE_DB_CONNSTR,
     }),
     secret: config.SESSION_ENCODE_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: secureFlag , httpOnly: true,  maxAge: 60 * 60 * 1000},
+    cookie: {
+      secure: secureFlag,
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000
+    },
   }));
   logger.info('Set express session');
   logger.info('Set csrf');
@@ -81,7 +90,9 @@ function initialisexpresssession(app) {
 
 function initialiseGlobalMiddleware(app) {
   logger.info('Initalising global middleware');
-  app.set('settings', { getVersionedPath: staticify.getVersionedPath });
+  app.set('settings', {
+    getVersionedPath: staticify.getVersionedPath
+  });
   app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'assets', 'images', 'favicon.ico')));
   app.use(compression());
   app.use(staticify.middleware);
@@ -93,19 +104,21 @@ function initialiseGlobalMiddleware(app) {
   }
   //app.use(csrf({cookie: true}));
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(csrf({cookie: {
-    httpOnly: true,
-    secure: true
-  }}));
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }));
+  // app.use(csrf({cookie: {
+  //   httpOnly: true,
+  //   secure: true
+  // }}));
 
   app.use((req, res, next) => {
     res.locals.asset_path = '/public/'; // eslint-disable-line camelcase
     noCache(res);
-    var token = req.csrfToken();
-    res.cookie('XSRF-TOKEN', token);
+    // var token = req.csrfToken();
+    // res.cookie('XSRF-TOKEN', token);
 
-    res.locals.csrfToken = token;
+    // res.locals.csrfToken = token;
     next();
   });
   logger.info('Set csrf Token')

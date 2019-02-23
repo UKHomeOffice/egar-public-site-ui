@@ -37,9 +37,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
         <div class="govuk-form-group {{ m.form_group_class('responsibleGivenName', errors) }}">
           <label class="govuk-label govuk-label--m" for="responsibleGivenName">Given Name</label>
           {{ m.error_message('responsibleGivenName', errors) }}
-          <span class="govuk-hint">
-            Enter a given name
-          </span>
+         
           <span class="field-validation-valid error-message" data-valmsg-for="responsibleGivenName"
             data-valmsg-replace="true" style="display:block">
           </span>
@@ -51,9 +49,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
         <div class="govuk-form-group {{ m.form_group_class('responsibleSurname', errors) }}">
           <label class="govuk-label govuk-label--m" for="responsibleSurname">Surname</label>
           {{ m.error_message('responsibleSurname', errors) }}
-          <span class="govuk-hint">
-            Enter a surname
-          </span>
+        
           <span class="field-validation-valid error-message" data-valmsg-for="responsibleSurname"
             data-valmsg-replace="true" style="display:block">
           </span>
@@ -76,12 +72,19 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
             value="{{cookie.getGarResponsiblePerson().responsibleContactNo}}" />
         </div>
 
+
+
+        <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+					Address
+				</legend>
+
         <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine1', errors) }}">
-          <label class="govuk-label govuk-label--m" for="responsibleAddressLine1">House/Building Number or Name</label>
+          <label class="govuk-label" for="responsibleAddressLine1">House number / building and street
+          <span class="govuk-visually-hidden">line 1 of 2</span>
+          </label>
          {{ m.error_message('responsibleAddressLine1', errors) }}
-         <span class="govuk-hint">
-          Enter House/Building Number or Name of the address
-         </span>
+       
          <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine1"
            data-valmsg-replace="true" style="display:block">
          </span>
@@ -91,11 +94,9 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine2', errors) }}">
-          <label class="govuk-label govuk-label--m" for="responsibleAddressLine2">Street</label>
+       
         {{ m.error_message('responsibleAddressLine2', errors) }}
-        <span class="govuk-hint">
-         Enter the Street of the address
-        </span>
+       
         <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine2"
           data-valmsg-replace="true" style="display:block">
         </span>
@@ -105,25 +106,24 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('responsibleTown', errors) }}">
-          <label class="govuk-label govuk-label--m" for="responsibleTown">Town</label>
+          <label class="govuk-label" for="responsibleTown">Town or city</label>  
+          
        {{ m.error_message('responsibleTown', errors) }}
-       <span class="govuk-hint">
-        Enter the town
-       </span>
+     
        <span class="field-validation-valid error-message" data-valmsg-for="responsibleTown"
          data-valmsg-replace="true" style="display:block">
        </span>
+       
        <input class="govuk-input"
          id="responsibleTown" name="responsibleTown" type="text"
          value="{{cookie.getGarResponsiblePerson().responsibleTown}}" />
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('responsibleCounty', errors) }}">
-         <label class="govuk-label govuk-label--m" for="responsibleCounty">County</label>
+         <label class="govuk-label" for="responsibleCounty">County</label>
+         
       {{ m.error_message('responsibleCounty', errors) }}
-      <span class="govuk-hint">
-       Enter the county
-      </span>
+     
       <span class="field-validation-valid error-message" data-valmsg-for="responsibleCounty"
         data-valmsg-replace="true" style="display:block">
       </span>
@@ -133,29 +133,30 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('responsiblePostcode', errors) }}">
-        <label class="govuk-label govuk-label--m" for="responsiblePostcode">Postcode</label>
-     {{ m.error_message('responsiblePostcode', errors) }}
-     <span class="govuk-hint">
-      Enter the postcode
-     </span>
+        <label class="govuk-label" for="responsiblePostcode">Postcode or ZIP</label>
+
+     {# {{ m.error_message('responsiblePostcode', errors) }}
+   
      <span class="field-validation-valid error-message" data-valmsg-for="responsiblePostcode"
        data-valmsg-replace="true" style="display:block">
-     </span>
+     </span> #}
+
      <input class="govuk-input"
        id="responsiblePostcode" name="responsiblePostcode" type="text"
        value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}" />
       </div>
     </div>
+</fieldset>
 
     <div class="column-two-thirds">
       <div class="govuk-form-group">
         <input id="newResponsiblePerson" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
         onclick="sendAnalytics(event, 'Add responsible person to GAR - submit', 'click')">
         <p class="govuk-body-m">
-          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and Exit</a>
+          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
         </p>
         <p class="govuk-body-m">
-          <a href="/home"> Exit without saving </a>
+          <a href="/home">Exit without saving</a>
         </p>
       </div>
     </div>
