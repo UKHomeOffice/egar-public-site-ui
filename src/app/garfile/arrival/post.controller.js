@@ -8,20 +8,17 @@ module.exports = (req, res) => {
   logger.debug('In garfile / arrival post controller');
 
   const cookie = new CookieModel(req);
-  const buttonClicked = req.body.buttonClicked;
+  const {
+    buttonClicked,
+  } = req.body;
 
   // Define voyage
   const voyage = req.body;
   delete voyage.buttonClicked;
   cookie.setGarArrivalVoyage(voyage);
 
-  // Define not empty validations
-  const validationIds = ['arrivalPort'];
-  const validationValues = [voyage.arrivalPort];
-  const validationMsgs = ['Enter an arrival port'];
-
   // Define port / date validation msgs
-  const portMsg = 'If you do not have the airport code, enter \'ZZZZ\' and enter the latitude and longitude to 4 decimal places below.';
+  const portMsg = 'As you have entered an arrival port code of "ZZZZ", you must provide longitude and latitude coordinates for the location.';
   const portCodeMsg = 'The arrival airport code must be a minimum of 3 letters and a maximum of 4 letters.';
   const futureDateMsg = 'Arrival date must be today or in the future';
   const realDateMsg = 'Enter a real Arrival date';
@@ -47,12 +44,14 @@ module.exports = (req, res) => {
 
   // Define port validations
   const arrivalPortValidation = [
-    new ValidationRule(validator.validatePortCoords, 'arrivalPort', arrivePortObj, portMsg),
-    new ValidationRule(validator.validPort, 'arrivalPort', voyage.arrivalPort, portCodeMsg),
+    new ValidationRule(validator.validatePortCoords, 'arrivalPort', arrivePortObj, portCodeMsg),
   ];
 
   // Define blank port validations
-  const arrivalPortBlank = [new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, portMsg)];
+  const arrivalPortBlank = [new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, portCodeMsg)];
+
+  // Define ZZZZ port validations
+  const arrivalPortZZZZ = [new ValidationRule(validator.validatePortCoords, 'arrivalPort', arrivePortObj, portMsg)];
 
   // Define latitude validations
   const arrivalLatValidation = [new ValidationRule(validator.lattitude, 'arrivalLat', voyage.arrivalLat, latitudeMsg)];
@@ -70,21 +69,19 @@ module.exports = (req, res) => {
     [
       new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, timeMsg),
     ],
-    [
-      new ValidationRule(validator.notEmpty, validationIds, validationValues, validationMsgs),
-    ],
   ];
 
-  // Check if port is blank
-  if (voyage.arrivalPort.length === 0) {
+  // Check if port is blank and not ZZZZ
+  if (voyage.arrivalPort.length === 0 && arrivePortObj.portCode.toUpperCase() !== 'ZZZZ') {
     validations.push(
       arrivalPortBlank,
     );
   }
 
-  // Check if port code is ZZZZ or blank as then need to validate lat/long
-  if (arrivePortObj.portCode.toUpperCase() === 'ZZZZ' || voyage.arrivalPort.length === 0) {
+  // Check if port code is ZZZZ as then need to validate lat/long
+  if (arrivePortObj.portCode.toUpperCase() === 'ZZZZ') {
     validations.push(
+      arrivalPortZZZZ,
       arrivalLatValidation,
       arrivalLongValidation,
     );
