@@ -45,7 +45,7 @@ module.exports = (req, res) => {
           res.render('app/garfile/responsibleperson/index', {
             cookie,
             errors: [{
-              message: 'Failed to add to GAR'
+              message: 'Failed to add to GAR',
             }],
           });
         });

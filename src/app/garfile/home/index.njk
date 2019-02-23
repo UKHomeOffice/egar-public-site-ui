@@ -37,9 +37,9 @@
                   {% for gar in garoptions %}
                       <div class="govuk-radios__item">
                         {% if gar.option == req.body.garoption %}
-                        		<input class="govuk-radios__input" id="option-{{gar.id}}" name="garoption" type="radio" value="{{gar.option}}" checked="checked">
+                        		<input class="govuk-radios__input" id="option-{{gar.id}}" name="garoption" type="radio" value="{{gar.id}}" checked="checked">
                         {% else %}
-                            <input class="govuk-radios__input" id="option-{{gar.id}}" name="garoption" type="radio" value="{{gar.option}}">
+                            <input class="govuk-radios__input" id="option-{{gar.id}}" name="garoption" type="radio" value="{{gar.id}}">
                         {% endif %}
                         <label class="govuk-label govuk-radios__label" for="option-{{gar.id}}">{{ gar.option}}</label>
                       </div>
