@@ -174,6 +174,33 @@ describe('Validator', () => {
     expect(validator.validatePortCoords(genPortObj('ZZZZ', '', ''))).to.be.false;
   });
 
+  it('Should validate a 3 char length ISO country code', () => {
+    expect(validator.validISOCountryLength('ZAF')).to.be.true;
+    expect(validator.validISOCountryLength('')).to.be.false;
+    expect(validator.validISOCountryLength(undefined)).to.be.false;
+    expect(validator.validISOCountryLength('AX')).to.be.false;
+  });
+
+  it('Should validate a freeCirculation value', () => {
+    expect(validator.validFreeCirculation('Yes')).to.be.true;
+    expect(validator.validFreeCirculation('Other')).to.be.false;
+    expect(validator.validFreeCirculation(undefined)).to.be.false;
+  });
+
+  it('Should validate a visitReason value', () => {
+    expect(validator.validVisitReason('Holiday')).to.be.false;
+    expect(validator.validVisitReason('Based')).to.be.true;
+    expect(validator.validVisitReason(undefined)).to.be.false;
+  });
+
+  it('Should validate a valid gender', () => {
+    expect(validator.validGender('Male')).to.be.true;
+    expect(validator.validGender('')).to.be.false;
+    expect(validator.validGender(undefined)).to.be.false;
+    expect(validator.validGender('Other')).to.be.false;
+    expect(validator.validGender('Unspecified')).to.be.true;
+  });
+
   it('Should validate a chain of rules', () => {
     const validationArr = validator.genValidations(validator.notEmpty, ['1', '2'], ['1', '2'], ['1', '2']);
     validator.validateChains(validationArr)
