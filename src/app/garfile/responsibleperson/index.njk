@@ -58,7 +58,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
             value="{{cookie.getGarResponsiblePerson().responsibleSurname}}" />
         </div>
 
-        <div class="govuk-form-group {{ m.form_group_class('responsibleContactNo', errors) }}">
+        <div class="govuk-form-group govuk-!-margin-bottom-6 {{ m.form_group_class('responsibleContactNo', errors) }}">
           <label class="govuk-label govuk-label--m" for="responsibleContactNo">Contact Telephone Number</label>
           {{ m.error_message('responsibleContactNo', errors) }}
           <span class="govuk-hint">
@@ -71,7 +71,6 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
             id="responsibleContactNo" name="responsibleContactNo" type="text"
             value="{{cookie.getGarResponsiblePerson().responsibleContactNo}}" />
         </div>
-
 
 
         <fieldset class="govuk-fieldset">
