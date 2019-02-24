@@ -142,7 +142,7 @@ router.post('/uploadgar', upload.single('file'), (req, res, data) => {
           .catch((err) => {
             logger.error('Failed to update API with GAR information');
             logger.error(err);
-            req.session.failureMsg = 'Failed to read GAR';
+            req.session.failureMsg = 'Failed to update GAR. Try again';
             req.session.failureIdentifier = 'file';
             return res.redirect('garfile/garupload');
           });
