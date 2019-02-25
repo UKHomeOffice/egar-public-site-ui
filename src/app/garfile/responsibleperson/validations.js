@@ -10,7 +10,7 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.notEmpty, 'responsibleSurname', req.body.responsibleSurname, 'Enter a surname for the responsible person'),
     ],
     [
-      new ValidationRule(validator.validIntlPhone, 'responsibleContactNo', req.body.responsibleContactNo, 'Enter a contact telephone number for the responsible person. Include \'+\' dialling code and no spaces'),
+      new ValidationRule(validator.validIntlPhone, 'responsibleContactNo', req.body.responsibleContactNo, 'Enter a contact telephone number for the responsible person. Numbers only and no spaces'),
     ],
     [
       new ValidationRule(validator.notEmpty, 'responsibleAddressLine1', req.body.responsibleAddressLine1, 'Enter address line 1 of the responsible person'),

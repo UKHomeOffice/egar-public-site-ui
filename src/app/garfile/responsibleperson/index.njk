@@ -62,7 +62,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
           <label class="govuk-label govuk-label--m" for="responsibleContactNo">Contact Telephone Number</label>
           {{ m.error_message('responsibleContactNo', errors) }}
           <span class="govuk-hint">
-            Include dialling code and no spaces, for example, +441234567890.
+            Numbers only no spaces, for example, 01865347920.
           </span>
           <span class="field-validation-valid error-message" data-valmsg-for="responsibleContactNo"
             data-valmsg-replace="true" style="display:block">
@@ -115,7 +115,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
          data-valmsg-replace="true" style="display:block">
        </span>
        
-       <input class="govuk-input"
+       <input class="govuk-input govuk-!-width-two-thirds"
          id="responsibleTown" name="responsibleTown" type="text"
          value="{{cookie.getGarResponsiblePerson().responsibleTown}}" />
         </div>
@@ -128,7 +128,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
       <span class="field-validation-valid error-message" data-valmsg-for="responsibleCounty"
         data-valmsg-replace="true" style="display:block">
       </span>
-      <input class="govuk-input"
+      <input class="govuk-input govuk-!-width-two-thirds"
         id="responsibleCounty" name="responsibleCounty" type="text"
         value="{{cookie.getGarResponsiblePerson().responsibleCounty}}" />
       </div>
@@ -142,7 +142,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
        data-valmsg-replace="true" style="display:block">
      </span> #}
 
-     <input class="govuk-input"
+     <input class="govuk-input govuk-input--width-10"
        id="responsiblePostcode" name="responsiblePostcode" type="text"
        value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}" />
       </div>

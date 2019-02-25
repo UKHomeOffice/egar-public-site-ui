@@ -196,7 +196,7 @@ function longitude(value) {
 
 // very basic expects + followed by min 5 and max 2 numbers
 function validIntlPhone(value) {
-  const regex = /^[+][0-9]{5,20}$/;
+  const regex = /^[0-9]{5,20}$/;
   return regex.test(value);
 }
 
