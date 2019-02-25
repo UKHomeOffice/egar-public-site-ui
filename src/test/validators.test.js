@@ -8,15 +8,26 @@ const validator = require('../common/utils/validator');
 const validationRules = require('../common/models/ValidationRule.class');
 
 function genPortObj(portCode, lat, long) {
-  return { portCode, lat, long };
+  return {
+    portCode,
+    lat,
+    long
+  };
 }
 
 function genDateObj(d, m, y) {
-  return { d, m, y };
+  return {
+    d,
+    m,
+    y
+  };
 }
 
 function genTimeObj(h, m) {
-  return { h, m };
+  return {
+    h,
+    m
+  };
 }
 
 describe('Validator', () => {
@@ -207,5 +218,42 @@ describe('Validator', () => {
     expect(validator.validIntlPhone('+1234')).to.be.false;
     expect(validator.validIntlPhone('+122334455667788991123')).to.be.false;
     expect(validator.validIntlPhone('+1234 5')).to.be.false;
+  // Latitude tests
+  it('Should return true for a valid lattitude - 4 dp', () => {
+    expect(validator.lattitude('51.9576')).to.be.true;
+    expect(validator.lattitude('1.9576')).to.be.true;
+    expect(validator.lattitude('-51.9576')).to.be.true;
+    expect(validator.lattitude('90.0000')).to.be.true;
+    expect(validator.lattitude('-90.0000')).to.be.true;
+  });
+
+  it('Should return false for an invalid lattitude - 4 dp', () => {
+    expect(validator.lattitude('51.95377')).to.be.false;
+    expect(validator.lattitude('51.953')).to.be.false;
+    expect(validator.lattitude('51.95')).to.be.false;
+    expect(validator.lattitude('51.9')).to.be.false;
+    expect(validator.lattitude('51')).to.be.false;
+    expect(validator.lattitude('90.0001')).to.be.false;
+    expect(validator.lattitude('-90.0001')).to.be.false;
+  });
+
+  // Longitude tests
+  it('Should return true for a valid longitude - 4 dp', () => {
+    expect(validator.longitude('-1.2456')).to.be.true;
+    expect(validator.longitude('1.9576')).to.be.true;
+    expect(validator.longitude('12.9576')).to.be.true;
+    expect(validator.longitude('180.0000')).to.be.true;
+    expect(validator.longitude('-180.0000')).to.be.true;
+  });
+
+  it('Should return false for an invalid longitude - 4 dp', () => {
+    expect(validator.longitude('-1.24563')).to.be.false;
+    expect(validator.longitude('-1.245')).to.be.false;
+    expect(validator.longitude('-1.24')).to.be.false;
+    expect(validator.longitude('-1.2')).to.be.false;
+    expect(validator.longitude('-1.')).to.be.false;
+    expect(validator.longitude('-1')).to.be.false;
+    expect(validator.longitude('181.0001')).to.be.false;
+    expect(validator.longitude('-180.0001')).to.be.false;
   });
 });

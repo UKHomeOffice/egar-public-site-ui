@@ -43,6 +43,7 @@ module.exports = (req, res) => {
             res.redirect('/garfile/departure');
           } else if (req.body.garoption === '1') {
             res.redirect('/garfile/garupload');
+            return req.session.save(() => res.redirect('/garfile/departure'));
           }
         })
         .catch((err) => {

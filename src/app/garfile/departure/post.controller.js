@@ -8,26 +8,23 @@ module.exports = (req, res) => {
   logger.debug('In garfile / arrival post controller');
 
   const cookie = new CookieModel(req);
-  const buttonClicked = req.body.buttonClicked;
+  const {
+    buttonClicked,
+  } = req.body;
 
   // Define voyage
   const voyage = req.body;
   delete voyage.buttonClicked;
   cookie.setGarDepartureVoyage(voyage);
 
-  // Define not empty validations
-  const validationIds = ['departurePort'];
-  const validationValues = [voyage.departurePort];
-  const validationMsgs = ['Enter an departure port'];
-
   // Define port / date validation msgs
-  const portMsg = 'If you do not have the airport code, enter \'ZZZZ\' and enter the latitude and longitude to 4 decimal places below.';
+  const portMsg = 'As you have entered an arrival port code of "ZZZZ", you must provide longitude and latitude coordinates for the location.';
   const portCodeMsg = 'The departure airport code must be a minimum of 3 letters and a maximum of 4 letters.';
   const futureDateMsg = 'Departure date must be today or in the future';
   const realDateMsg = 'Enter a real Departure date';
   const timeMsg = 'Enter a real Departure time';
-  const latitudeMsg = 'Value entered is incorrect. Please enter latitude to 4 decimal places.';
-  const longitudeMsg = 'Value entered is incorrect. Please enter longitude to 4 decimal places.';
+  const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places.';
+  const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places.';
 
   // Create validation input objs
   const departPortObj = {
@@ -45,14 +42,16 @@ module.exports = (req, res) => {
     m: voyage.departureMinute,
   };
 
-  // Define port / date validations
+  // Define port validations
   const departurePortValidation = [
-    new ValidationRule(validator.validatePortCoords, 'departurePort', departPortObj, portMsg),
     new ValidationRule(validator.validPort, 'departurePort', voyage.departurePort, portCodeMsg),
   ];
 
   // Define blank port validations
-  const departurePortBlank = [new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, portMsg)];
+  const departurePortBlank = [new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, portCodeMsg)];
+
+  // Define ZZZZ port validations
+  const departurePortZZZZ = [new ValidationRule(validator.validatePortCoords, 'departurePort', departPortObj, portMsg)];
 
   // Define latitude validations
   const departureLatValidation = [new ValidationRule(validator.lattitude, 'departureLat', voyage.departureLat, latitudeMsg)];
@@ -70,21 +69,19 @@ module.exports = (req, res) => {
     [
       new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, timeMsg),
     ],
-    // [
-    //   new ValidationRule(validator.notEmpty, validationIds, validationValues, validationMsgs),
-    // ],
   ];
 
-  // Check if port is blank
-  if (voyage.departurePort.length === 0) {
+  // Check if port is blank but not ZZZZ
+  if (voyage.departurePort.length === 0 && departPortObj.portCode.toUpperCase() !== 'ZZZZ') {
     validations.push(
       departurePortBlank,
     );
   }
 
-  // Check if port code is ZZZZ or blank as then need to validate lat/long
-  if (departPortObj.portCode.toUpperCase() === 'ZZZZ' || voyage.departurePort.length === 0) {
+  // Check if port code is ZZZZ then need to validate lat/long and display req zzzz message
+  if (departPortObj.portCode.toUpperCase() === 'ZZZZ') {
     validations.push(
+      departurePortZZZZ,
       departureLatValidation,
       departureLongValidation,
     );
