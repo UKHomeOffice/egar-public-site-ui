@@ -190,6 +190,11 @@ const endpoints = {
     logger.debug(`Calling edit org user endpoint ${endpoint}`);
     return endpoint;
   },
+  deleteGarSupportingDoc(garId, garSupportingDocId) {
+    const endpoint = new URL(`${API_VERSION}/gar/${garId}/supportingdocs/${garSupportingDocId}`, BASE_URL).href;
+    logger.debug(`Calling delete supporting document endpoint ${endpoint}`);
+    return endpoint;
+  },
 };
 
 module.exports = endpoints;

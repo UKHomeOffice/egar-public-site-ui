@@ -47,11 +47,25 @@ router.post('/upload', (req, res) => {
       return res.redirect('/garfile/supportingdocuments?query=limit');
     }
 
+    if (req.body.deleteDocId) {
+      logger.info('Found delete supporting document request');
+      return garApi.deleteGarSupportingDoc(req.body.garid, req.body.deleteDocId)
+        .then((apiResponse) => {
+          const parsedResponse = JSON.parse(apiResponse);
+          if (parsedResponse.message) {
+            return res.redirect('/garfile/supportingdocuments?query=deletefailed');
+          }
+          return res.redirect('/garfile/supportingdocuments');
+          // Redirect to supporting docs
+        })
+        .catch((deleteSupportingDocErr) => {
+          logger.error('Failed to delete supporting document');
+          logger.error(deleteSupportingDocErr);
+          return res.redirect('/garfile/supportingdocuments?query=deletefailed');
+        });
+    }
+
     if (!req.file) {
-      if (req.body.deleteDocId) {
-        logger.info('Found delete supporting document request');
-        return res.send(req.body.deleteDocId);
-      }
       logger.debug('No file selected for upload');
       return res.redirect('/garfile/supportingdocuments?query=0');
     }

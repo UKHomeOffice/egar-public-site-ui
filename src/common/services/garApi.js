@@ -135,21 +135,11 @@ module.exports = {
       });
   },
 
-  /**
-   * Updates the details of a person on a GAR
-   * @param {String} garId the id of the gar the supporting document is associated with
-   * @param {String} garSupportingDocId the id of the supporting document
-   * @param {String} personDetails the updated details of the person
-   * @returns {Promise} resolves with API response.
-   */
   deleteGarSupportingDoc(garId, garSupportingDocId) {
     return new Promise((resolve, reject) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.deleteGarSupportingDoc(garId),
-        body: JSON.stringify({
-          garSupportingDocId: garSupportingDocId,
-        }),
+        url: endpoints.deleteGarSupportingDoc(garId, garSupportingDocId),
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call delete gar supporting document endpoint');
