@@ -89,6 +89,11 @@ docker-compose up --build -d node
 To run unit tests you need to execute:
 ```
 docker-compose exec -t node sh -c "cd test/ && npm test"
+
+or
+
+docker exec -it node sh
+cd test && npm test
 ```
 
 To remove containers, effectively cleaning all data:
