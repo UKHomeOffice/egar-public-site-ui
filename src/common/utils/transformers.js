@@ -68,6 +68,17 @@ function docTypeOrUndefined(docType) {
   return ['Identity Card', 'Passport'].includes(docType) ? docType : undefined;
 }
 
+/**
+ * GAR excel sheet instructs users to use 'Unknown' as a gender type
+ * external systems expect 'Unspecified' to be used.
+ * Convert Unknown to Unspecified
+ * @param {String} aGender a given gender
+ * @returns {String}
+ */
+function unknownToUnspecified(aGender) {
+  return aGender === 'Unknown' ? 'Unspecified' : aGender;
+}
+
 module.exports = {
   transformPerson,
   titleCase,
@@ -75,4 +86,5 @@ module.exports = {
   numToString,
   strToBytes,
   docTypeOrUndefined,
+  unknownToUnspecified,
 };

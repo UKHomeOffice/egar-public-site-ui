@@ -8,9 +8,13 @@ module.exports = (req, res) => {
   const context = { cookie };
 
   if (req.session.failureMsg) {
-    const errorObj = [{}];
-    errorObj[0].message = req.session.failureMsg;
-    errorObj[0].identifier = req.session.failureIdentifier;
+    let errorObj = [{}];
+    if (Array.isArray(req.session.failureMsg)) {
+      errorObj = req.session.failureMsg;
+    } else {
+      errorObj[0].message = req.session.failureMsg;
+      errorObj[0].identifier = req.session.failureIdentifier;
+    }
     context.errors = errorObj;
     delete req.session.failureMsg;
     delete req.session.failureIdentifier;
