@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Home
+	Create GAR | Landing | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
@@ -12,7 +12,7 @@
 
 {% block beforeContent %}
   {% include "phase.njk" %}
-  {% include "common/templates/includes/back.njk" %}
+  <a href="/home" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
@@ -29,12 +29,11 @@
                   <h1 class="govuk-fieldset__heading">How would you like to create a GAR?</h1>
                 </legend>
                 <span id="gar-type-choice" class="govuk-hint">
-                  You have the option to create a GAR using our online web form,
-                  or by uploading a pre-populated template from file.
-                  Please select how you would like to create your GAR to proceed.
+                 You have the option to create a GAR using our online web form, or by uploading a pre-populated template file.
+                 Please select how you would like to create your GAR to proceed.
                 </span>
                 {{ m.error_message("garoption", errors) }}
-                  <div class="govuk-radios govuk-radios--inline" id="garoption">
+                  <div class="govuk-radios" id="garoption">
                   {% for gar in garoptions %}
                       <div class="govuk-radios__item">
                         {% if gar.option == req.body.garoption %}

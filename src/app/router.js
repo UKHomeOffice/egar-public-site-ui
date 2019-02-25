@@ -14,17 +14,15 @@ const userregister = require('./user/register');
 const registermsg = require('./user/regmsg');
 
 // User dependencies
+const aircraft = require('./aircraft');
 const userDetails = require('./user/viewDetails');
 const manageUserDetails = require('./user/manageuserdetail');
 const logout = require('./register/logout');
 const detailschanged = require('./user/detailschanged');
-const usersavedcraftedit = require('./user/savedcraft/edit');
-const usersavedcraftadd = require('./user/savedcraft/add');
-const userSavedCraftDelete = require('./user/savedcraft/delete');
-const usersavedpeopleadd = require('./user/savedpeople/add');
-const usersavedpeopleedit = require('./user/savedpeople/edit');
+const usersavedcraftedit = require('./aircraft/edit');
+const usersavedcraftadd = require('./aircraft/add');
+const userSavedCraftDelete = require('./aircraft/delete');
 const userDelete = require('./user/deleteAccount');
-// const userSavedPeopleDelete = require('./user/savedpeople/delete');
 
 // GAR dependencies
 const aircraftdetail = require('./garfile/craft');
@@ -46,9 +44,11 @@ const garCancel = require('./garfile/cancel');
 const garsubmitsucess = require('./garfile/submit/success');
 const garsubmitfailure = require('./garfile/submit/failure');
 
-
-// Additional dependencies
-// const additionaldetail = require('./garfile/additionaldetails')
+// Saved entities
+const people = require('./people');
+const peopleAdd = require('./people/add');
+const peopleEdit = require('./people/edit');
+const peopleDelete = require('./people/delete');
 
 // Misc dependency
 const error = require('./error');
@@ -67,14 +67,7 @@ const orgcreatesuccess = require('./organisation/createsuccess');
 const orginvitesuccess = require('./organisation/invitesuccess');
 const editorganisation = require('./organisation/editorganisation');
 const orgassignrole = require('./organisation/assignrole');
-const orgsavedcraftedit = require('./organisation/savedcraft/edit');
-const orgSavedCraftDelete = require('./organisation/savedcraft/delete');
-const orgsavedcraftadd = require('./organisation/savedcraft/add');
-const orgsavedpeopleedit = require('./organisation/savedpeople/edit');
-const orgsavedpeopleadd = require('./organisation/savedpeople/add');
 const orgEditUsers = require('./organisation/editusers');
-// const orgSavedPeopleDelete = require('./organisation/savedpeople/delete');
-
 
 // Export
 module.exports.bind = (app) => {
@@ -92,7 +85,6 @@ module.exports.bind = (app) => {
   app.use(error.router);
   app.use(logout.router);
   app.use(postusersignin.router);
-  app.use(userDetails.router);
   app.use(createorganisation.router);
   app.use(mangeorganisation.router);
   app.use(manageUserDetails.router);
@@ -103,20 +95,11 @@ module.exports.bind = (app) => {
   app.use(editorganisation.router);
   app.use(orgassignrole.router);
   app.use(verifyInvite.router);
-  app.use(orgsavedcraftedit.router);
-  app.use(orgsavedcraftadd.router);
-  app.use(orgSavedCraftDelete.router);
-  app.use(orgsavedpeopleedit.router);
-  app.use(orgsavedpeopleadd.router);
   app.use(orgEditUsers.router);
-  // app.use(orgSavedPeopleDelete.router);
   app.use(usersavedcraftedit.router);
   app.use(userSavedCraftDelete.router);
   app.use(usersavedcraftadd.router);
-  app.use(usersavedpeopleadd.router);
-  app.use(usersavedpeopleedit.router);
   app.use(userDelete.router);
-  // app.use(userSavedPeopleDelete.router);
   app.use(responsiblepersondetail.router);
   app.use(customsDetail.router);
   app.use(garhome.router);
@@ -136,4 +119,10 @@ module.exports.bind = (app) => {
   app.use(garsubmitfailure.router);
   app.use(garsubmitsucess.router);
   app.use(verifyMfa.router);
+  app.use(aircraft.router);
+  app.use(userDetails.router);
+  app.use(people.router);
+  app.use(peopleAdd.router);
+  app.use(peopleEdit.router);
+  app.use(peopleDelete.router);
 };
