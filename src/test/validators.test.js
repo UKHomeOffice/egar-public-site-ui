@@ -8,15 +8,26 @@ const validator = require('../common/utils/validator');
 const validationRules = require('../common/models/ValidationRule.class');
 
 function genPortObj(portCode, lat, long) {
-  return { portCode, lat, long };
+  return {
+    portCode,
+    lat,
+    long
+  };
 }
 
 function genDateObj(d, m, y) {
-  return { d, m, y };
+  return {
+    d,
+    m,
+    y
+  };
 }
 
 function genTimeObj(h, m) {
-  return { h, m };
+  return {
+    h,
+    m
+  };
 }
 
 describe('Validator', () => {
@@ -174,6 +185,33 @@ describe('Validator', () => {
     expect(validator.validatePortCoords(genPortObj('ZZZZ', '', ''))).to.be.false;
   });
 
+  it('Should validate a 3 char length ISO country code', () => {
+    expect(validator.validISOCountryLength('ZAF')).to.be.true;
+    expect(validator.validISOCountryLength('')).to.be.false;
+    expect(validator.validISOCountryLength(undefined)).to.be.false;
+    expect(validator.validISOCountryLength('AX')).to.be.false;
+  });
+
+  it('Should validate a freeCirculation value', () => {
+    expect(validator.validFreeCirculation('Yes')).to.be.true;
+    expect(validator.validFreeCirculation('Other')).to.be.false;
+    expect(validator.validFreeCirculation(undefined)).to.be.false;
+  });
+
+  it('Should validate a visitReason value', () => {
+    expect(validator.validVisitReason('Holiday')).to.be.false;
+    expect(validator.validVisitReason('Based')).to.be.true;
+    expect(validator.validVisitReason(undefined)).to.be.false;
+  });
+
+  it('Should validate a valid gender', () => {
+    expect(validator.validGender('Male')).to.be.true;
+    expect(validator.validGender('')).to.be.false;
+    expect(validator.validGender(undefined)).to.be.false;
+    expect(validator.validGender('Other')).to.be.false;
+    expect(validator.validGender('Unspecified')).to.be.true;
+  });
+
   it('Should validate a chain of rules', () => {
     const validationArr = validator.genValidations(validator.notEmpty, ['1', '2'], ['1', '2'], ['1', '2']);
     validator.validateChains(validationArr)
@@ -194,5 +232,44 @@ describe('Validator', () => {
       .catch(() => {
         expect(true).to.be.true;
       });
+  });
+
+  // Latitude tests
+  it('Should return true for a valid lattitude - 4 dp', () => {
+    expect(validator.lattitude('51.9576')).to.be.true;
+    expect(validator.lattitude('1.9576')).to.be.true;
+    expect(validator.lattitude('-51.9576')).to.be.true;
+    expect(validator.lattitude('90.0000')).to.be.true;
+    expect(validator.lattitude('-90.0000')).to.be.true;
+  });
+
+  it('Should return false for an invalid lattitude - 4 dp', () => {
+    expect(validator.lattitude('51.95377')).to.be.false;
+    expect(validator.lattitude('51.953')).to.be.false;
+    expect(validator.lattitude('51.95')).to.be.false;
+    expect(validator.lattitude('51.9')).to.be.false;
+    expect(validator.lattitude('51')).to.be.false;
+    expect(validator.lattitude('90.0001')).to.be.false;
+    expect(validator.lattitude('-90.0001')).to.be.false;
+  });
+
+  // Longitude tests
+  it('Should return true for a valid longitude - 4 dp', () => {
+    expect(validator.longitude('-1.2456')).to.be.true;
+    expect(validator.longitude('1.9576')).to.be.true;
+    expect(validator.longitude('12.9576')).to.be.true;
+    expect(validator.longitude('180.0000')).to.be.true;
+    expect(validator.longitude('-180.0000')).to.be.true;
+  });
+
+  it('Should return false for an invalid longitude - 4 dp', () => {
+    expect(validator.longitude('-1.24563')).to.be.false;
+    expect(validator.longitude('-1.245')).to.be.false;
+    expect(validator.longitude('-1.24')).to.be.false;
+    expect(validator.longitude('-1.2')).to.be.false;
+    expect(validator.longitude('-1.')).to.be.false;
+    expect(validator.longitude('-1')).to.be.false;
+    expect(validator.longitude('181.0001')).to.be.false;
+    expect(validator.longitude('-180.0001')).to.be.false;
   });
 });

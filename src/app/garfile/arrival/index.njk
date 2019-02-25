@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Arrival
+	Create GAR | Arrival | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
@@ -33,14 +33,14 @@
           <div class="govuk-form-group" id="arrivalDate">
           <span class="govuk-caption-xl">Section 2 of 8</span>
           <h1 class="govuk-heading-xl">Arrival details</h1>
-          <p class="govuk-body-l">Provide the arrival details of the voyage</p>
+          <p class="govuk-body-l">Provide the arrival details of the flight</p>
           <div class="{{ m.form_group_class('arrivalDate', errors) }}">
             <fieldset class="govuk-fieldset" aria-describedby="arrivalDate-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
               Arrival date
             </legend>
             <span id="arrivalDate-hint" class="govuk-hint">
-              For example, 31 3 1980
+              For example 20 04 2019
             </span>
             {{ m.error_message('arrivalDate', errors) }}
             <div class="govuk-date-input" id="arrival">
@@ -83,7 +83,7 @@
               Arrival time (UTC)
             </legend>
             <span id="arrivalTime-hint" class="govuk-hint">
-                For example, 17 30
+                For example 17 30
             </span>
             {{ m.error_message('arrivalTime', errors) }}
 
@@ -116,7 +116,7 @@
 					Arrival port
 				</label>
 				<span id="arrivalPort-hint" class="govuk-hint">
-					IATA or ICAO code, for example, FAB/EGLF or enter ‘ZZZZ’ if not known
+				The IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'
 				</span>
 
           {{ m.error_message('arrivalPort', errors) }}
@@ -126,9 +126,10 @@
 
 
         <div class="govuk-form-group">
-          <h2 class="govuk-heading-m">Arrival coordinates</h2>
+          <label class="govuk-heading-m">Arrival coordinates</label>
           <span id="arrivalCoordinates-hint" class="govuk-hint">
-            If port is ‘ZZZZ’, provide decimal coordinates to 6 places
+          You are only required to enter coordinates if your port does not have an IATA/ICAO code. 
+          Provide coordinates in decimal format to 4 decimal places.       
           </span>
         </div>
 
@@ -138,7 +139,7 @@
             Latitude
           </label>
           <span id="arrivalLattitude-hint" class="govuk-hint">
-              For example, 51.507493
+              For example 51.4700
           </span>
 
           {{ m.error_message('arrivalLat', errors) }}
@@ -150,7 +151,7 @@
             Longitude
           </label>
           <span id="arrivalLongitude-hint" class="govuk-hint">
-              For example, 51.507493
+                For example -0.4542
           </span>
           {{ m.error_message('arrivalLong', errors) }}
           <input class="govuk-input" id="arrivalLong" name="arrivalLong" autocomplete="false" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLong}}"/>
@@ -161,7 +162,7 @@
         <!-- start buttons -->
         <div class="column-two-thirds">
 
-                <input id="newVoyage" class="govuk-button" type="submit" name="buttonClicked" value="Save and Continue"
+                <input id="newVoyage" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
                 onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
 						<p class="govuk-body-m">
