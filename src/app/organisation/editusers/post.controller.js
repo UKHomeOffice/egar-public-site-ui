@@ -14,6 +14,7 @@ module.exports = (req, res) => {
     userId: req.session.editUserId,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
+    role: req.body.role,
   };
 
   validator.validateChains(validations.validations(req))
@@ -22,15 +23,15 @@ module.exports = (req, res) => {
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-            req.session.errMsg = 'Failed to update user details. Try again';
+            req.session.errMsg = { message: 'You do not have the permissions to edit this user or perform this action' };
           }
-          res.redirect('/organisation/manage');
+          return req.session.save(() => res.redirect('/organisation'));
         })
         .catch((err) => {
           logger.error('Failed to update org user details');
           logger.error(err);
           req.session.errMsg = 'Failed to update user details. Try again';
-          res.redirect('/organisation/manage');
+          return req.session.save(() => res.redirect('/organisation'));
         });
     })
     .catch((err) => {

@@ -59,30 +59,31 @@
         <input class="govuk-input" id="lastName" name="lastName"  type="text" value="{{orgUser.lastName}}" />
       </div>
 
-      {# <div class="form-group {{ m.form_group_class('role', errors) }}">
-        <label class="role" for="role">Role</label>
-        <span class="form-hint">
-          Select the user's role
-        </span>
+      <div class="govuk-form-group {{ m.form_group_class('role', errors) }}">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h1 class="govuk-fieldset__heading">Invite a User</h1>
+            <span id="customs-hint" class="govuk-hint">Select the user's role</span>
+          </legend>
         {{ m.error_message('role', errors) }}
-        <fieldset>
+          <div class="govuk-radios">
           {% for role in roles %}
-            <div class="multiple-choice">
+            <div class="govuk-radios__item">
             {% if role.name == orgUser.role.name %}
-              <input id={{role.name}} type="radio" name="role" value={{role.name}} checked>
+              <input class="govuk-radios__input" id="option-{{role.id}}" type="radio" name="role" value="{{role.name}}" checked>
             {% else %}
-              <input id={{role.name}} type="radio" name="role" value={{role.name}}>
+              <input class="govuk-radios__input" id="option-{{role.id}}" type="radio" name="role" value="{{role.name}}">
             {% endif %}
-            <label for="{{role.id}}">{{role.name}}</label>
+            <label class="govuk-label govuk-radios__label" for="option-{{role.id}}">{{role.name}}</label>
             </div>
           {% endfor %}
-        </fieldset>
-      </div> #}
+
+      </div>
 
       <div class="form-group">
         <table class="govuk-table">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell "><a class="govuk-button" href="/organisation/manage">Exit Without Saving</a></td>
+            <td class="govuk-table__cell "><a class="govuk-button" href="/organisation">Exit Without Saving</a></td>
             <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and Exit"
             onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
           </tr>
