@@ -33,7 +33,7 @@
     <h1 class="govuk-heading-xl">
       Would you like to upload any supporting documentation to the GAR?
     </h1>
-    <div class="form-group {{ m.form_group_class('supportingdocuments', errors) }}"></div>
+    <div class="govuk-form-group {{ m.form_group_class('supportingdocuments', errors) }}"></div>
         <p class="govuk-body-l">You don’t have to provide any supporting documentation, but doing so may assist Border Force to process your flight more quickly.</p>
 
         <div class="govuk-warning-text">
@@ -76,7 +76,7 @@
                 <th class="govuk-table__header" scope="col">File Name</th>
                 <th class="govuk-table__header" scope="col">File Size</th>
                 <th class="govuk-table__header" scope="col">Status</th>
-                {# <th class="govuk-table__header" scope="col">Action</th> #}
+                <th class="govuk-table__header" scope="col">Action</th>
                 </tr>
             </thead>
             <tbody class="govuk-table__body">
@@ -85,7 +85,7 @@
                 <td class="govuk-table__cell ">{{file.fileName}} </td>
                 <td class="govuk-table__cell ">{{file.size}} </td>
                 <td class="govuk-table__cell ">Done</td>
-                {# <td class="govuk-table__cell "><a href="">Delete</a></td> #}
+                <td class="govuk-table__cell "><button class="govuk-link btn-link" name="deleteDocId" value="{{ file.id }}">Delete</button></td>
                 </tr lass="govuk-table__cell ">
             {%endfor%}
                 <tr>

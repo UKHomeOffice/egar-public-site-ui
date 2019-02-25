@@ -48,6 +48,10 @@ router.post('/upload', (req, res) => {
     }
 
     if (!req.file) {
+      if (req.body.deleteDocId) {
+        logger.info('Found delete supporting document request');
+        return res.send(req.body.deleteDocId);
+      }
       logger.debug('No file selected for upload');
       return res.redirect('/garfile/supportingdocuments?query=0');
     }
