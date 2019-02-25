@@ -47,9 +47,6 @@ module.exports = (req, res) => {
     new ValidationRule(validator.validPort, 'departurePort', voyage.departurePort, portCodeMsg),
   ];
 
-  // Define blank port validations
-  const departurePortBlank = [new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, portCodeMsg)];
-
   // Define ZZZZ port validations
   const departurePortZZZZ = [new ValidationRule(validator.validatePortCoords, 'departurePort', departPortObj, portMsg)];
 
@@ -70,13 +67,6 @@ module.exports = (req, res) => {
       new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, timeMsg),
     ],
   ];
-
-  // Check if port is blank but not ZZZZ
-  if (voyage.departurePort.length === 0 && departPortObj.portCode.toUpperCase() !== 'ZZZZ') {
-    validations.push(
-      departurePortBlank,
-    );
-  }
 
   // Check if port code is ZZZZ then need to validate lat/long and display req zzzz message
   if (departPortObj.portCode.toUpperCase() === 'ZZZZ') {
