@@ -218,6 +218,8 @@ describe('Validator', () => {
     expect(validator.validIntlPhone('+1234')).to.be.false;
     expect(validator.validIntlPhone('+122334455667788991123')).to.be.false;
     expect(validator.validIntlPhone('+1234 5')).to.be.false;
+  });
+
   // Latitude tests
   it('Should return true for a valid lattitude - 4 dp', () => {
     expect(validator.lattitude('51.9576')).to.be.true;
