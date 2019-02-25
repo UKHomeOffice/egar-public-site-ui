@@ -1,0 +1,91 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	Manage people | Submit a General Aviation Report (GAR)
+{% endblock %}
+
+{% block header %}
+  {% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+  {% include "common/templates/includes/back.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-full">
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+  {% if successMsg %}
+    {% include "common/templates/includes/success-action.njk" %}
+  {% endif %}
+
+  {% if cookie.getUserRole() != 'User' %}
+	<h1 class="govuk-heading-xl">People</h1>
+		<p class="govuk-body-l">You can view, edit or delete people that you regularly add to GARs.</p>
+	</div>
+
+	<div class="govuk-grid-column-full">
+		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+	</div>
+
+	<div class="govuk-grid-column-full">
+		<h2 class="govuk-heading-l">Save a new person</h2>
+		<p class="govuk-body-l">Save the details of people that you regularly add to GARs.</p>
+		<a href="/people/add" role="button" draggable="false" class="govuk-button" id='save-person'>
+			Save a person
+		</a>
+	</div>
+
+	<div class="govuk-grid-column-full">
+		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+	</div>
+  {% endif %}
+	<div class="govuk-grid-column-full">
+		<h2 class="govuk-heading-l">Saved people</h2>
+    <form action="/people" method="post">
+      <table class="govuk-table">
+        <!-- <caption class="govuk-table__caption">Saved people</caption> -->
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Last name</th>
+            <th class="govuk-table__header" scope="col">First name</th>
+            <th class="govuk-table__header" scope="col">Type</th>
+            {% if cookie.getUserRole() != 'User' %}
+            <th class="govuk-table__header" scope="col">Action</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for person in people %}
+          <tr class="govuk-table__row">
+            {% if cookie.getUserRole() != 'User' %}
+            <td class="govuk-table__cell"><button class="link btn-link" title="Edit details for Adrian Crouch" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
+            {% else %}
+            <td class="govuk-table__cell">{{person.lastName}}</td>
+            {% endif %}
+            <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
+            <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+            {% if cookie.getUserRole() != 'User' %}
+            <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">Delete</button></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </form>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,5 +1,5 @@
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
+const validator = require('../../common/utils/validator');
+const ValidationRule = require('../../common/models/ValidationRule.class');
 
 module.exports.validations = (req) => {
   const dobObj = { d: req.body.dobDay, m: req.body.dobMonth, y: req.body.dobYear };
