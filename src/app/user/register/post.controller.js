@@ -71,7 +71,6 @@ module.exports = (req, res) => {
           })
           .catch((err) => {
             logger.error('Failed to check against whitelist');
-            console.log(err);
             logger.error(err);
             res.render('app/user/register/index', { cookie, errors: [regFailureError] });
           });
