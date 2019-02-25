@@ -218,6 +218,7 @@ describe('Validator', () => {
     expect(validator.validIntlPhone('+1234')).to.be.false;
     expect(validator.validIntlPhone('+122334455667788991123')).to.be.false;
     expect(validator.validIntlPhone('+1234 5')).to.be.false;
+    expect(validator.validIntlPhone('+1234x5')).to.be.false;
   });
 
   // Latitude tests
