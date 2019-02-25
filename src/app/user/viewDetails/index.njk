@@ -3,18 +3,15 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Manage Account
+	Manage account | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-  {% include "common/templates/includes/back.njk" %}
-
 {% endblock %}
 
 {% block content %}
@@ -25,73 +22,47 @@
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
-<form id="signform2" action="/user/details"  class="form-group"
-      method="post" role="form" >
-    <div class="grid-row">
-
-  <div class="govuk-tabs" data-module="tabs">
-  <h2 class="govuk-tabs__title">
-    Contents
-  </h2>
-
-  <ul class="govuk-tabs__list">
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#AccountDetails">
-        Account Details
-      </a>
-    </li>
-  </ul>
-
-  <section class="govuk-tabs__panel" id="AccountDetails">
-    <h2 class="govuk-heading-l">Account Details</h2>
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">Attribute</th>
-          <th class="govuk-table__header" scope="col">Current Value</th>
-          <th class="govuk-table__header" scope="col">Action</th>
-        </tr>
-      </thead>
-
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-        <td class="govuk-table__cell ">First Name</td>
-        <td class="govuk-table__cell ">{{ cookie.getUserFirstName() }}</td>
-        </tr>
-        <tr class="govuk-table__row">
-        <td class="govuk-table__cell ">Last Name</td>
-        <td class="govuk-table__cell ">{{ cookie.getUserLastName() }}</td>
-        </tr>
-        <tr class="govuk-table__row">
-        <td class="govuk-table__cell ">Email</td>
-        <td class="govuk-table__cell ">{{ cookie.getUserEmail() }} </td>
-        </tr>
-        <tr>
-        <td></td>
-        <td></td>
-        <td class="govuk-table__cell "><a class="govuk-button" href='/user/manageuserdetail/'>Edit</a></td>
-        </tr>
-      </tbody>
-    </table>
-
-     <h2 class="govuk-heading-m">Delete your Account</h1>
-
-     <p class="govuk-body-m">
-     You can delete your account at anytime. Deleting your account is permanent and you will no longer
-     be able to log in to the system using the registered email address. You will be able to re-register this
-     email address at a later date if you choose to.
-     </p>
-     <a class="govuk-button" href='/user/delete' role="button">Delete</a>
-
-  </section>
-
-  </div>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-  </div>
-  </form>
-
-    {% from "common/templates/includes/tabs/macro.njk" import govukTabs %}
-    {% from "common/templates/includes/table/macro.njk" import govukTable %}
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-full">
+		<form action="account-edit.html">
+			<h1 class="govuk-heading-xl">Account</h1>
+			<p class="govuk-body-l">Manage your account details and the details of any aircraft or people you want to save or have saved previously.</p>
+				<dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 1em;">
+					<div class="app-check-your-answers__contents" style="border-bottom: none;">
+						<dt class="app-check-your-answers__question" style="border-bottom: none;">
+							Given name
+						</dt>
+						<dd class="app-check-your-answers__answer" style="border-bottom: none;">
+							{{cookie.getUserFirstName()}}
+						</dd>
+					</div>
+					<div class="app-check-your-answers__contents" style="border-bottom: none;">
+						<dt class="app-check-your-answers__question" style="border-bottom: none;">
+							Surname
+						</dt>
+						<dd class="app-check-your-answers__answer" style="border-bottom: none;">
+							{{cookie.getUserLastName()}}
+						</dd>
+					</div>
+					<div class="app-check-your-answers__contents" style="border-bottom: none;">
+						<dt class="app-check-your-answers__question" style="border-bottom: none;">
+							Email
+						</dt>
+						<dd class="app-check-your-answers__answer" style="border-bottom: none;">
+							{{cookie.getUserEmail()}}
+						</dd>
+					</div>
+				</dl>
+				<a href="/user/manageuserdetail" role="button" draggable="false" class="govuk-button">
+					Edit details
+				</a>
+			</div>
+			<div class="govuk-grid-column-full">
+				<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+			</div>
+		</form>
+	</div>
+</div>
 
 {% endblock %}
+
