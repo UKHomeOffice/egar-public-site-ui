@@ -8,6 +8,7 @@ const sendTokenService = require('../../../common/services/send-token');
 const userCreateApi = require('../../../common/services/createUserApi');
 const tokenApi = require('../../../common/services/tokenApi');
 const whitelist = require('../../../common/services/whiteList');
+const config = require('../../../common/config');
 
 module.exports = (req, res) => {
   logger.debug('In user / register post controller');
@@ -56,50 +57,26 @@ module.exports = (req, res) => {
   logger.info('Validating registration input');
   validator.validateChains([userChain, confirmuserChain, fnameChain, lnameChain])
     .then(() => {
-      logger.info('Starting whitelist check');
-      whitelist.isWhitelisted(usrname)
-        .then((result) => {
-          if (result) {
-            logger.info('Creating the user in the db');
-            userCreateApi.post(fname, lname, usrname, cookie.getInviteUserToken())
-              .then((dbUser) => {
-                if (Object.prototype.hasOwnProperty.call(JSON.parse(dbUser), 'message')) {
-                  logger.info('Failed to register user in db');
-                  logger.info(`${JSON.parse(dbUser).message}`);
-                  cookie.setUserEmail(null);
-                  return res.redirect('/user/regmsg');
-                }
-                const { userId } = JSON.parse(dbUser);
-                cookie.setUserDbId(userId);
-                logger.info('Calling gov notify service');
-                sendTokenService.send(fname, usrname, token)
-                  .then(() => {
-                    logger.info('Storing token in db');
-                    tokenApi.setToken(hashtoken, userId);
-                    res.redirect('/user/regmsg');
-                  })
-                  .catch((err) => {
-                    logger.error(`Failed to send notify email for ${usrname}`);
-                    logger.error(err);
-                    res.render('app/user/register/index', { cookie, errors: [regFailureError] });
-                  });
-              })
-              .catch((err) => {
-                logger.error(`Failed to create ${usrname} in DB`);
-                logger.error(err);
-                res.render('app/user/register/index', { cookie, errors: [regFailureError] });
-              });
-          } else {
-            // Not whitelisted
-            cookie.setUserEmail(null);
-            res.redirect('/user/regmsg');
-          }
-        })
-        .catch((err) => {
-          logger.error('Failed to check against whitelist');
-          logger.error(err);
-          res.render('app/user/register/index', { cookie, errors: [regFailureError] });
-        });
+      if (config.WHITELIST_REQUIRED) {
+        logger.info('Starting whitelist check');
+        whitelist.isWhitelisted(usrname)
+          .then((result) => {
+            if (result) {
+              createUser();
+            } else {
+              // Not whitelisted
+              cookie.setUserEmail(null);
+              res.redirect('/user/regmsg');
+            }
+          })
+          .catch((err) => {
+            logger.error('Failed to check against whitelist');
+            logger.error(err);
+            res.render('app/user/register/index', { cookie, errors: [regFailureError] });
+          });
+      } else {
+        createUser();
+      }
     })
     .catch((err) => {
       logger.info('Failed registration validations');
@@ -107,3 +84,36 @@ module.exports = (req, res) => {
       res.render('app/user/register/index', { cookie, errors: err });
     });
 };
+
+
+function createUser() {
+  logger.info('Creating the user in the db');
+  userCreateApi.post(fname, lname, usrname, cookie.getInviteUserToken())
+    .then((dbUser) => {
+      if (Object.prototype.hasOwnProperty.call(JSON.parse(dbUser), 'message')) {
+        logger.info('Failed to register user in db');
+        logger.info(`${JSON.parse(dbUser).message}`);
+        cookie.setUserEmail(null);
+        return res.redirect('/user/regmsg');
+      }
+      const { userId } = JSON.parse(dbUser);
+      cookie.setUserDbId(userId);
+      logger.info('Calling gov notify service');
+      sendTokenService.send(fname, usrname, token)
+        .then(() => {
+          logger.info('Storing token in db');
+          tokenApi.setToken(hashtoken, userId);
+          res.redirect('/user/regmsg');
+        })
+        .catch((err) => {
+          logger.error(`Failed to send notify email for ${usrname}`);
+          logger.error(err);
+          res.render('app/user/register/index', { cookie, errors: [regFailureError] });
+        });
+    })
+    .catch((err) => {
+      logger.error(`Failed to create ${usrname} in DB`);
+      logger.error(err);
+      res.render('app/user/register/index', { cookie, errors: [regFailureError] });
+    });
+}
