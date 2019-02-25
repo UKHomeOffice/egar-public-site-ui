@@ -47,6 +47,8 @@ module.exports = (req, res) => {
 
   const regFailureError = { message: 'Registration failed, try again' };
 
+  const isWhitelistRequired = (config.WHITELIST_REQUIRED == 'true');
+
   // Validate chains
 
   // Generate a token for the user
@@ -57,7 +59,7 @@ module.exports = (req, res) => {
   logger.info('Validating registration input');
   validator.validateChains([userChain, confirmuserChain, fnameChain, lnameChain])
     .then(() => {
-      if (config.WHITELIST_REQUIRED) {
+      if (isWhitelistRequired) {
         logger.info('Starting whitelist check');
         whitelist.isWhitelisted(usrname)
           .then((result) => {
@@ -66,7 +68,7 @@ module.exports = (req, res) => {
             } else {
               // Not whitelisted
               cookie.setUserEmail(null);
-              res.redirect('/user/regmsg');
+              return req.session.save(() => {res.redirect('/user/regmsg')});
             }
           })
           .catch((err) => {
@@ -92,7 +94,7 @@ module.exports = (req, res) => {
             logger.info('Failed to register user in db');
             logger.info(`${JSON.parse(dbUser).message}`);
             cookie.setUserEmail(null);
-            return res.redirect('/user/regmsg');
+            return req.session.save(() => {res.redirect('/user/regmsg')});
           }
           const { userId } = JSON.parse(dbUser);
           cookie.setUserDbId(userId);
