@@ -23,7 +23,7 @@ exports.API_VERSION = process.env.API_VERSION;
 exports.CORRELATION_HEADER = process.env.CORRELATION_HEADER_NAME || 'x-request-id';
 exports.CONNECTOR_URL = process.env.CONNECTOR_URL;
 exports.CONTACT_EMAIL = process.env.CONTACT_URL || 'supportegar@homeoffice.gov.uk';
-exports.WHITELIST_REQUIRED = process.env.WHITELIST_REQUIRED 
+exports.WHITELIST_REQUIRED = process.env.WHITELIST_REQUIRED || 'true'
 
 // Application settings
 exports.NODE_ENV = process.env.NODE_ENV || 'DEV';
