@@ -107,18 +107,18 @@ function initialiseGlobalMiddleware(app) {
   app.use(bodyParser.urlencoded({
     extended: true
   }));
-  // app.use(csrf({cookie: {
-  //   httpOnly: true,
-  //   secure: true
-  // }}));
+ app.use(csrf({cookie: {
+    httpOnly: true,
+    secure: true
+  } }));
 
   app.use((req, res, next) => {
     res.locals.asset_path = '/public/'; // eslint-disable-line camelcase
     noCache(res);
-    // var token = req.csrfToken();
-    // res.cookie('XSRF-TOKEN', token);
+    var token = req.csrfToken();
+    res.cookie('XSRF-TOKEN', token);
 
-    // res.locals.csrfToken = token;
+    res.locals.csrfToken = token;
     next();
   });
   logger.info('Set csrf Token')
