@@ -195,4 +195,17 @@ describe('Validator', () => {
         expect(true).to.be.true;
       });
   });
+
+  it('Should return true when a + and min 5 max 20 digits no spaces', () => {
+    expect(validator.validIntlPhone('+12345')).to.be.true;
+    expect(validator.validIntlPhone('+1234544')).to.be.true;
+    expect(validator.validIntlPhone('+12233445566778899112')).to.be.true;
+  });
+
+  it('Should return false when a no + and less than 5 max more than 20 digits  spaces', () => {
+    expect(validator.validIntlPhone('12345')).to.be.false;
+    expect(validator.validIntlPhone('+1234')).to.be.false;
+    expect(validator.validIntlPhone('+122334455667788991123')).to.be.false;
+    expect(validator.validIntlPhone('+1234 5')).to.be.false;
+  });
 });
