@@ -53,11 +53,14 @@ module.exports = (req, res) => {
   const token = nanoid(alphabet, 13);
   const hashtoken = tokenservice.generateHash(token);
 
+  logger.info('Validating registration input');
   validator.validateChains([userChain, confirmuserChain, fnameChain, lnameChain])
     .then(() => {
+      logger.info('Starting whitelist check');
       whitelist.isWhitelisted(usrname)
         .then((result) => {
           if (result) {
+            logger.info('Creating the user in the db');
             userCreateApi.post(fname, lname, usrname, cookie.getInviteUserToken())
               .then((dbUser) => {
                 if (Object.prototype.hasOwnProperty.call(JSON.parse(dbUser), 'message')) {
@@ -73,7 +76,6 @@ module.exports = (req, res) => {
                   .then(() => {
                     logger.info('Storing token in db');
                     tokenApi.setToken(hashtoken, userId);
-                    //using redirect instead of render to fix bug of back button
                     res.redirect('/user/regmsg');
                   })
                   .catch((err) => {
@@ -100,8 +102,8 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      // validation handling
-      logger.debug(err);
+      logger.info('Failed registration validations');
+      logger.info(err);
       res.render('app/user/register/index', { cookie, errors: err });
     });
 };
