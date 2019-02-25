@@ -93,7 +93,9 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine2', errors) }}">
-       
+       <label class="govuk-label" for="address-line-2">
+						<span class="govuk-visually-hidden">Building and street line 2 of 2</span>
+					</label>
         {{ m.error_message('responsibleAddressLine2', errors) }}
        
         <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine2"
