@@ -128,7 +128,6 @@ router.post('/uploadgar', upload.single('file'), (req, res, data) => {
       person.documentType = person.documentTypeOther ? 'Other' : person.documentType;
     });
 
-<<<<<<< HEAD
     createGarApi.createGar(cookie.getUserDbId())
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
@@ -156,41 +155,6 @@ router.post('/uploadgar', upload.single('file'), (req, res, data) => {
             req.session.failureMsg = 'Failed to update GAR. Try again';
             req.session.failureIdentifier = 'file';
             return res.redirect('garfile/garupload');
-=======
-    // Perform excel file validations
-    validator.validateChains(validations(voyageParser.parse(), crew, passengers))
-      .then(() => {
-        logger.info('No validation errors detected on upload');
-        // Create GAR and update with the parsed information
-        createGarApi.createGar(cookie.getUserDbId())
-          .then((apiResponse) => {
-            const parsedResponse = JSON.parse(apiResponse);
-            if (parsedResponse.message) {
-              req.session.failureMsg = 'Failed to create GAR';
-              return req.session.save(() => res.redirect('garfile/garupload'));
-            }
-            logger.info('Created new GAR');
-            const { garId } = parsedResponse;
-            cookie.setGarId(garId);
-            cookie.setGarStatus('Draft');
-
-            const crewUpdate = garApi.patch(garId, 'Draft', { people: crew });
-            const passengerUpdate = garApi.patch(garId, 'Draft', { people: passengers });
-            const voyageUpdate = garApi.patch(garId, 'Draft', voyageParser.parse());
-
-            Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
-              .then(() => {
-                logger.info('Updated GAR with excel data');
-                return req.session.save(() => res.redirect('/garfile/departure'));
-              })
-              .catch((err) => {
-                logger.error('Failed to update API with GAR information');
-                logger.error(err);
-                req.session.failureMsg = 'Failed to read GAR';
-                req.session.failureIdentifier = 'file';
-                return res.redirect('/garfile/garupload');
-              });
->>>>>>> Add logic to validate entire GAR on upload and display a summary of errors on failure
           });
       })
       .catch((validationErrs) => {
