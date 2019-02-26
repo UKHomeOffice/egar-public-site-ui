@@ -82,7 +82,11 @@ Manage organisation | Submit a General Aviation Report (GAR)
         {% endfor %}
 			</tbody>
 		</table>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </form>
 	</div>
+
+
 </div>
 
 {% endblock %}
