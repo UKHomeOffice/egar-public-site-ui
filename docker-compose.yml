@@ -31,6 +31,7 @@ services:
     container_name: clamav-api
     environment:
       - CLAMD_HOST=clamav
+      - TIMEOUT=60000
     depends_on:
       - clamav
     ports:

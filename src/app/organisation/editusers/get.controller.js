@@ -10,7 +10,7 @@ module.exports = (req, res) => {
   logger.debug('In organisation / editusers get controller');
 
   if (userId === undefined) {
-    return res.redirect('/organisation/manage');
+    return res.redirect('/organisation');
   }
 
   orgApi.getUsers(cookie.getOrganisationId())
@@ -22,6 +22,6 @@ module.exports = (req, res) => {
     .catch((err) => {
       logger.error(err);
       req.session.errMsg =  { message: 'Failed to find user details. Try again' };
-      return res.redirect('/organisation/manage');
+      return res.redirect('/organisation');
     });
 };

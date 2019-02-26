@@ -1,0 +1,88 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+Manage organisation | Submit a General Aviation Report (GAR)
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-full">
+
+  {% if errors %}
+  	{% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+		<h1 class="govuk-heading-xl">Organisation</h1>
+		<p class="govuk-body-l">Manage your organisation's details.</p>
+
+    <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
+
+		<dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 1em;">
+			<div class="app-check-your-answers__contents" style="border-bottom: none;">
+				<dt class="app-check-your-answers__question" style="border-bottom: none;">
+					Organisation name
+				</dt>
+				<dd class="app-check-your-answers__answer" style="border-bottom: none;">
+					{{cookie.getOrganisationName()}}
+				</dd>
+		</dl>
+    <button type="submit" class="govuk-button" name="editOrg" value="{{cookie.getOrganisationId()}}">Edit</button>
+	</div>
+	<div class="govuk-grid-column-full">
+		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+	</div>
+
+	<div class="govuk-grid-column-full">
+		<h2 class="govuk-heading-l">Invite new users</h2>
+		<p class="govuk-body-l">Invite additional users to be able to manage GARs on behalf of your organisation.</p>
+		<a href="/organisation/inviteusers" role="button" draggable="false" class="govuk-button">
+			Invite users
+		</a>
+	</div>
+
+	<div class="govuk-grid-column-full">
+		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+	</div>
+
+	<div class="govuk-grid-column-full">
+		<h1 class="govuk-heading-l">Organisation's users</h1>
+		<p class="govuk-body-l">Here is a list of users who can manage GARs on behalf of your organisation.</p>
+		<table class="govuk-table">
+			<!-- <caption class="govuk-table__caption">Account details</caption> -->
+			<thead class="govuk-table__head">
+				<tr class="govuk-table__row">
+					<th class="govuk-table__header" scope="col">Surname</th>
+					<th class="govuk-table__header" scope="col">Given name</th>
+					<th class="govuk-table__header" scope="col">Email address</th>
+					<th class="govuk-table__header" scope="col">Role</th>
+				</tr>
+			</thead>
+			<tbody class="govuk-table__body">
+        {% for user in orgUsers.items %}
+				<tr class="govuk-table__row">
+          {% if user.email != cookie.getUserEmail() %}
+					<td class="govuk-table__cell"><button class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}">{{ user.lastName }}</button></td>
+          {% else %}
+          <td class="govuk-table__cell">{{ user.lastName }}</td>
+          {% endif %}
+					<td class="govuk-table__cell" scope="row">{{ user.firstName }}</th>
+					<td class="govuk-table__cell">{{ user.email }}</td>
+					<td class="govuk-table__cell">{{ user.role.name }}</td>
+				</tr>
+        {% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

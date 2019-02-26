@@ -9,8 +9,8 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter a last name'),
     ],
-    // [
-    //   new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Provide a user role'),
-    // ],
+    [
+      new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Provide a user role'),
+    ],
   ];
 };

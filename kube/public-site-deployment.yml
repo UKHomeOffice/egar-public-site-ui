@@ -64,6 +64,8 @@ spec:
           env:
             - name: CLAMD_HOST
               value: "localhost"
+            - name: TIMEOUT
+              value: "60000"
         - name: public-site-av
           image: quay.io/ukhomeofficedigital/clamav:v1.6.1
           imagePullPolicy: Always

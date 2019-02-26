@@ -1,4 +1,7 @@
 const ValidationRule = require('../../common/models/ValidationRule.class');
+const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
+const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
+const genderValues = require('../seeddata/egar_gender_choice.json');
 
 function notEmpty(value) {
   if (value === undefined) {
@@ -79,6 +82,45 @@ function validMinute(m) {
 
 function validTime(timeObj) {
   return validHour(timeObj.h) && validMinute(timeObj.m);
+}
+
+/**
+ * Predicate function which checks the length of a country code string
+ * @param {String} countryCode
+ * @returns {Bool} True if 3 chars, else false
+ */
+function validISOCountryLength(countryCode) {
+  return notEmpty(countryCode) && countryCode.length === 3;
+}
+
+/**
+ * Predicate function which checks a given free circulation value
+ * @param {String} value a free circulation value
+ * @returns {Bool} True if contained in freecirulation values else false
+ */
+function validFreeCirculation(value) {
+  const validValues = freeCirculationValues.map(item => item.value);
+  return validValues.includes(value);
+}
+
+/**
+ * Predicate function which checks a given visit reason value
+ * @param {String} value A visit reason value
+ * @returns {Bool} True if contained in visitreasons else false
+ */
+function validVisitReason(value) {
+  const validValues = visitReasonValues.map(item => item.value);
+  return validValues.includes(value);
+}
+
+/**
+ * Predicate function which checks a given gender value
+ * @param {String} value A gender value
+ * @returns {Bool} True if contained in gendervalues else false
+ */
+function validGender(value) {
+  const validValues = genderValues.map(item => item.gender);
+  return validValues.includes(value);
 }
 
 function currentOrFutureDate(dObj) {
@@ -259,6 +301,10 @@ module.exports = {
   validTime,
   validFlag,
   validPort,
+  validISOCountryLength,
+  validFreeCirculation,
+  validVisitReason,
+  validGender,
   lattitude,
   longitude,
   validIntlPhone,
