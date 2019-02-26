@@ -23,7 +23,7 @@ module.exports = (req, res) => {
   // Validate chains
   validator.validateChains([garChain])
     .then(() => {
-      if (req.body.garoption === 'Upload a file') return res.redirect('/garfile/garupload');
+      if (req.body.garoption === '1') return res.redirect('/garfile/garupload');
 
       createGarApi.createGar(cookie.getUserDbId())
         .then((apiResponse) => {
@@ -41,8 +41,6 @@ module.exports = (req, res) => {
           if (req.body.garoption === '0') {
             // Redirect to page 1 of gar form.
             res.redirect('/garfile/departure');
-          } else if (req.body.garoption === '1') {
-            res.redirect('/garfile/garupload');
           }
         })
         .catch((err) => {
