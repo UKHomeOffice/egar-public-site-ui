@@ -249,6 +249,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: NOTIFY_NOT_REGISTERED_TEMPLATE_ID
+            - name: WHITELIST_REQUIRED
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: WHITELIST_REQUIRED
           ports:
             - name: public-site-prt
               containerPort: 3000

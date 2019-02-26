@@ -14,13 +14,13 @@ the required environment variables. To obtain it please contact repository admin
 
 This will start local instances of:
 - Database (used for both Frontend and Backend)
-- API (you need a local copy of `api` docker image loaded, 
+- API (you need a local copy of `api` docker image loaded,
        please contact repository administrators to obtain it)
 - ClamAV engine
-- ClamAV REST API 
+- ClamAV REST API
 - Frontend
 
-Please note - due to security configuration, the following lines need to be 
+Please note - due to security configuration, the following lines need to be
 commented out for local development, but not committed back to the repository:
 ```
 ./src/server.js (lines 95-98):
@@ -138,6 +138,7 @@ which will automatically pick up the config file.
 | NOTIFY_MFA_TEMPLATE_ID            | Template id for sending MFA token   | True     |
 | NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID | Template id for account deletion    | True     |
 | NOTIFY_NOT_REGISTERED_TEMPLATE_ID | Template id for user not registered | True     |
+| WHITELIST_REQUIRED                | Flag for checking email whitelist   | True     |
 
 ## API Related Environment Variables
 | Variable            | Description                        | Required |
@@ -184,4 +185,3 @@ Please note: `BASE_URL` needs to be set in both Drone Secrets and Kube Secrets.
 | SESSION_TIMEOUT       | Session Timeout (MilliSeconds) | True     |
 | COOKIE_SECURE_FLAG    | Set secure flag                | true     |
 | GA_ID                 | Goggle Analytics tg Id         | true     |
-
