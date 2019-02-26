@@ -13,7 +13,7 @@ module.exports = (req, res) => {
         res.render('app/garfile/supportingdocuments/index', { cookie, errors: error });
       } else {
         const supportingDoc = JSON.parse(apiResponse);
-        if (req.query.query === 'e'){
+        if (req.query.query === 'e') {
           res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ identifier: 'file', message: 'File not uploaded. There was an error in scanning the file. Please try again'}]});
         } else if (req.query.query === 'v') {
           res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ message: 'File cannot be uploaded. The file has a virus.'}]})
@@ -21,7 +21,9 @@ module.exports = (req, res) => {
           logger.debug('no file')
           res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ identifier: 'file', message: 'No File selected for upload.'}]})
         } else if (req.query.query === 'limit') {
-          res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ message: 'File size exceeds total limit' }]})
+          res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ message: 'File size exceeds total limit' }] });
+        } else if (req.query.query === 'deletefailed') {
+          res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ message: 'Failed to delete document. Try again' }] });
         } else {
           res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc})
         }
