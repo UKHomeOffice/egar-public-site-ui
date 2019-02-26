@@ -236,6 +236,12 @@ function longitude(value) {
   return regex.test(value);
 }
 
+// very basic expects + followed by min 5 and max 2 numbers
+function validIntlPhone(value) {
+  const regex = /^[0-9]{5,20}$/;
+  return regex.test(value);
+}
+
 function validateChains(chains) {
   return new Promise((resolve, reject) => {
     const failedRules = [];
@@ -301,4 +307,5 @@ module.exports = {
   validGender,
   lattitude,
   longitude,
+  validIntlPhone,
 };

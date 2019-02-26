@@ -24,11 +24,18 @@ module.exports = (req, res) => {
       };
 
       cookie.setGarResponsiblePerson(responsiblePerson);
-      res.render('app/garfile/responsibleperson/index', { cookie });
+      res.render('app/garfile/responsibleperson/index', {
+        cookie,
+      });
     })
     .catch((err) => {
       logger.error('API failed to retrieve GAR');
       logger.error(err);
-      res.render('app/garfile/responsibleperson/index', { cookie, errors: [{message: "Problem retrieving GAR"}] });
+      res.render('app/garfile/responsibleperson/index', {
+        cookie,
+        errors: [{
+          message: 'Problem retrieving GAR',
+        }],
+      });
     });
 };

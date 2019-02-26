@@ -37,7 +37,12 @@ module.exports = (req, res) => {
           } else {
             cookie.setGarId(parsedResponse.garId);
             cookie.setGarStatus(garStatus);
-            return req.session.save(() => res.redirect('/garfile/departure'));
+          }
+          if (req.body.garoption === '0') {
+            // Redirect to page 1 of gar form.
+            res.redirect('/garfile/departure');
+          } else if (req.body.garoption === '1') {
+            res.redirect('/garfile/garupload');
           }
         })
         .catch((err) => {
