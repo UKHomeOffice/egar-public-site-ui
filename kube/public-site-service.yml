@@ -22,7 +22,7 @@ metadata:
     name: pub-site-av-svc
 spec:
   selector:
-    name: public-site-svc
+    name: pub-site-av-svc
   type: ClusterIP
   ports:
     - name: pub-site-av-prt
