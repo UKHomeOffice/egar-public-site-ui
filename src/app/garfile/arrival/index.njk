@@ -13,7 +13,7 @@
 {% block beforeContent %}
 
   {% include "phase.njk" %}
-  {% include "common/templates/includes/back.njk" %}
+  <a href="/garfile/departure" class="govuk-back-link">Back</a>
 
 {% endblock %}
 
@@ -128,8 +128,8 @@
         <div class="govuk-form-group">
           <label class="govuk-heading-m">Arrival coordinates</label>
           <span id="arrivalCoordinates-hint" class="govuk-hint">
-          You are only required to enter coordinates if your port does not have an IATA/ICAO code. 
-          Provide coordinates in decimal format to 4 decimal places.       
+          You are only required to enter coordinates if your port does not have an IATA/ICAO code.
+          Provide coordinates in decimal format to 4 decimal places.
           </span>
         </div>
 
