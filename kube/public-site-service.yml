@@ -13,3 +13,18 @@ spec:
     - name: public-prxy-prt
       port: 10443
       targetPort: 10443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pub-site-av-svc
+  labels:
+    name: pub-site-av-svc
+spec:
+  selector:
+    name: public-site-svc
+  type: ClusterIP
+  ports:
+    - name: pub-site-av-prt
+      port: 8080
+      targetPort: 8080
