@@ -17,9 +17,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pub-site-av-svc
+  name: public-site-svc
   labels:
-    name: pub-site-av-svc
+    name: public-site-svc
 spec:
   selector:
     name: public-site-svc
