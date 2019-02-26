@@ -18,7 +18,8 @@ module.exports = (req, res) => {
     sendTokenService.send(cookie.getUserFirstName(), cookie.getUserEmail(), token)
       .then(() => {
         logger.info('Storing new token in db');
-        tokenApi.setToken(hashtoken, cookie.getUserDbId());
+        // Updating token renders previous tokens invalid
+        tokenApi.updateToken(hashtoken, cookie.getUserDbId());
         res.render('app/user/regmsg/index', { cookie });
       });
   } else {
