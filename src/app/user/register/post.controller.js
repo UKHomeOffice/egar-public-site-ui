@@ -47,7 +47,7 @@ module.exports = (req, res) => {
 
   const regFailureError = { message: 'Registration failed, try again' };
 
-  const isWhitelistRequired = (config.WHITELIST_REQUIRED == 'true');
+  const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() == 'true');
 
   // Validate chains
 
