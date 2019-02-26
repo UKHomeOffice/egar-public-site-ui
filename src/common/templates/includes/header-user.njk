@@ -28,12 +28,18 @@
         <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
           <li class="govuk-header__navigation-item">
             <a class="govuk-header__link" id='nav-manage-gars' href="/home">
-              Manage GARs
+              GARs
             </a>
           </li>
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-manage-account' href="/user/details/">
-              Account
+            <a class="govuk-header__link" href="/aircraft">
+              Aircraft
+            </a>
+          </li>
+
+          <li class="govuk-header__navigation-item">
+            <a class="govuk-header__link" id='nav-people' href="/people">
+              People
             </a>
           </li>
           <li class="govuk-header__navigation-item">
@@ -42,13 +48,21 @@
             </a>
           </li>
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-dashboard'  href="/home">
-              User Dashboard
+            <a class="govuk-header__link" id='nav-manage-account' href="/user/details/">
+              Account
             </a>
           </li>
           <li class="govuk-header__navigation-item">
             <a class="govuk-header__link" id='nav-logout' href="/user/logout">
-              Log Out
+              Sign out
+            </a>
+          </li>
+        </ul>
+      {% elseif cookie.getUserRole() == 'Admin' or cookie.getUserRole() == 'Manager' %}
+        <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
+          <li class="govuk-header__navigation-item">
+            <a class="govuk-header__link" id='nav-manage-gars' href="/home">
+              GARs
             </a>
           </li>
           <li class="govuk-header__navigation-item">
@@ -62,13 +76,9 @@
               People
             </a>
           </li>
-
-        </ul>
-      {% elseif cookie.getUserRole() == 'Admin' or cookie.getUserRole() == 'Manager' %}
-        <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-manage-gars' href="/home">
-              Manage GARs
+            <a class="govuk-header__link" href="/organisation">
+              Organisation
             </a>
           </li>
           <li class="govuk-header__navigation-item">
@@ -77,13 +87,16 @@
             </a>
           </li>
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-dashboard' href="/home">
-              User Dashboard
+            <a class="govuk-header__link" id='nav-logout' href="/user/logout">
+              Sign out
             </a>
           </li>
+        </ul>
+      {% elseif cookie.getUserRole() == 'User' %}
+        <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-logout' href="/user/logout">
-              Log Out
+            <a class="govuk-header__link" id='nav-manage-gars' href="/home">
+              GARs
             </a>
           </li>
           <li class="govuk-header__navigation-item">
@@ -92,50 +105,18 @@
             </a>
           </li>
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" href="/organisation">
-              Organisation
-            </a>
-          </li>
-
-          <li class="govuk-header__navigation-item">
             <a class="govuk-header__link" id='nav-people' href="/people">
               People
             </a>
           </li>
-
-        </ul>
-      {% elseif cookie.getUserRole() == 'User' %}
-        <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
           <li class="govuk-header__navigation-item">
             <a class="govuk-header__link" id='nav-manage-account' href="/user/details">
               Account
             </a>
           </li>
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-dashboard' href="/home">
-              User Dashboard
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-manage-gars' href="/home">
-              Manage GARs
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
             <a class="govuk-header__link" id='nav-logout' href="/user/logout">
-              Log Out
-            </a>
-          </li>
-
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-people' href="/people">
-              People
-            </a>
-          </li>
-
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" href="/aircraft">
-              Aircraft
+              Sign out
             </a>
           </li>
         </ul>
