@@ -13,7 +13,16 @@
 {% block beforeContent %}
 
   {% include "phase.njk" %}
-  {% include "common/templates/includes/back.njk" %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/aircraft">Aircraft</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        Edit aircraft
+      </li>
+    </ol>
+  </div>
 
 {% endblock %}
 
