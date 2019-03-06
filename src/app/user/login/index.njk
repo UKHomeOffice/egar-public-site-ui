@@ -13,7 +13,7 @@
 {% block beforeContent %}
 
   {% include "phase.njk" %}
-  {% include "common/templates/includes/back.njk" %}
+  <a href="/" class="govuk-back-link">Back</a>
 
 {% endblock %}
 
@@ -41,14 +41,14 @@
         {{ m.error_message('Username', errors) }}
 				<input class="govuk-input" id="Username" name="Username" type="text">
 			</div>
-			
+
 			<button type="submit" class="govuk-button">
 				Sign in
 			</button>
 
 			<h3 class="govuk-heading-m">Need to register an account?</h3>
 			<p class="govuk-body"><a href="/user/register">Create an account</a></p>
-		
+
       <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 		</form>
 	</div>
