@@ -58,7 +58,7 @@ module.exports = (req, res) => {
             } else {
               // Successful
               cookie.setGarCraft(craft.registration, craft.craftType, craft.craftBase);
-              return buttonClicked === 'Save and Continue' ? res.redirect('/garfile/manifest') : res.redirect('/home');
+              return buttonClicked === 'Save and continue' ? res.redirect('/garfile/manifest') : res.redirect('/home');
             }
           })
           .catch((err) => {

@@ -27,7 +27,7 @@
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
       <form action="/user/register" autocomplete="false" method="post" role="form">
-        <h1 class="govuk-heading-xl">Register an account</h1>
+        <h1 class="govuk-heading-xl">Create an account</h1>
 
          <div class="govuk-form-group {{ m.form_group_class('userFname', errors) }}">
            <label class="govuk-label govuk-label--m" for="userFname">Given name</label>
@@ -47,7 +47,7 @@
            <label class="govuk-label govuk-label--m" for="userId">Email address</label>
            {{ m.error_message('userId', errors) }}
            <span class="govuk-hint">
-             You will use this to sign in to the eGAR service
+             You will use this to sign in to the Submit a GAR service
            </span>
            <input autocomplete="off" class="govuk-input"
             data-val="true" data-val-required="The e-mail address field is  required." id="userId" name="userId" style="width:100%" type="text" value="{{cookie.getUserEmail()}}" />
@@ -69,7 +69,7 @@
         </p>
 
     <div class="form-group">
-      <input id="login" class="govuk-button" type="submit" value="Agree and Submit" onclick="sendAnalytics(event, 'Register - submit', 'click')">
+      <input id="login" class="govuk-button" type="submit" value="Agree and submit" onclick="sendAnalytics(event, 'Register - submit', 'click')">
     </div>
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </form>

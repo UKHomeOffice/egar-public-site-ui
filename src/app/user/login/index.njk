@@ -36,7 +36,7 @@
 				</label>
 
 				<span id="departurePort-hint" class="govuk-hint">
-					This is the email address you used when you created your account
+					Enter the email address you used when you created your account
 				</span>
         {{ m.error_message('Username', errors) }}
 				<input class="govuk-input" id="Username" name="Username" type="text">
@@ -46,7 +46,7 @@
 				Sign in
 			</button>
 
-			<h3 class="govuk-heading-m">Need to register an account?</h3>
+			<h2 class="govuk-heading-m">Need to create an account?</h2>
 			<p class="govuk-body"><a href="/user/register">Create an account</a></p>
 
       <input type="hidden" name="_csrf" value="{{csrfToken}}" />

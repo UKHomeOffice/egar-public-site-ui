@@ -36,7 +36,7 @@ module.exports = (req, res) => {
             context.errors = [parsedResponse];
             res.render('app/garfile/customs/index', context);
           } else {
-            return buttonClicked === 'Save and Continue' ? res.redirect('/garfile/supportingdocuments') : res.redirect('/home');
+            return buttonClicked === 'Save and continue' ? res.redirect('/garfile/supportingdocuments') : res.redirect('/home');
           }
         })
         .catch((err) => {

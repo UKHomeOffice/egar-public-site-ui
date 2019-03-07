@@ -31,7 +31,7 @@ module.exports = (req, res) => {
 
   // Define a validation chain for first name
   const roleChain = [
-    new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Please select a role'),
+    new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Select a role'),
   ];
 
   // Validate chains

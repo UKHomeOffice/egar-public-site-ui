@@ -1,6 +1,6 @@
 <div class="govuk-form-group {{ m.form_group_class('savedpeople', errors) }}">
 <div class="govuk-form-group {{ m.form_group_class('first-name', errors) }}">
-  <label class="govuk-label govuk-label--m" for="first-name">Given Name(s)</label>
+  <label class="govuk-label govuk-label--m" for="first-name">Given name(s)</label>
     {{ m.error_message('first-name', errors) }}
   <input class="govuk-input" id="first-name" name="first-name" autocomplete="false" type="text" value="{{person['firstName'] or req.body['first-name']}}" />
 </div>
@@ -18,7 +18,7 @@
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
-  <label class="govuk-label govuk-label--m" for="birthplace">Place of Birth</label>
+  <label class="govuk-label govuk-label--m" for="birthplace">Place of birth</label>
   {{ m.error_message('birthplace', errors) }}
   <input class="govuk-input" id="birthplace" name="birthplace" autocomplete="false" type="text" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
   </div>
@@ -91,7 +91,7 @@
       {{ m.error_message('person-type', errors) }}
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h2 class="govuk-fieldset__heading">Person Type</h2>
+          <h2 class="govuk-fieldset__heading">Person type</h2>
         </legend>
         <div class="govuk-radios">
         {% for choice in persontype %}
@@ -109,7 +109,7 @@
     </div>
 
   <div class="govuk-form-group {{ m.form_group_class('travel-document-number', errors) }}">
-    <label class="govuk-label govuk-label--m" for="travel-document-number">Travel Document Number</label>
+    <label class="govuk-label govuk-label--m" for="travel-document-number">Travel document number</label>
     {{ m.error_message('travel-document-number', errors) }}
     <input class="govuk-input" id="travel-document-number" name="travel-document-number" type="text" value="{{person['documentNumber'] or req.body['travel-document-number']}}" />
   </div>
@@ -118,7 +118,7 @@
     <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">
-          What is the Document expiry date?
+          What is the document expiry date?
         </h2>
       </legend>
       <span id="dob-hint" class="govuk-hint">
@@ -156,13 +156,13 @@
   </div>
 
 <div class="govuk-form-group {{ m.form_group_class('issuing-state', errors) }}">
-  <label class="govuk-label govuk-label--m" for="issuing-state">Issuing State</label>
+  <label class="govuk-label govuk-label--m" for="issuing-state">Issuing state</label>
   {{ m.error_message('issuing-state', errors) }}
   <input class="govuk-input" id="issuing-state" maxlength="3" name="issuing-state" autocomplete="false" type="text" value="{{person['issuingState'] or req.body['issuing-state']}}" />
 </div>
 
   <div class="govuk-form-group {{ m.form_group_class('travel-document-type', errors) }}">
-    <label class="govuk-label govuk-label--m" for="travel-document-type">Travel Document Type</label>
+    <label class="govuk-label govuk-label--m" for="travel-document-type">Travel document type</label>
     <span class="govuk-hint">
           This should be one of either: Passport, Identity Card or Other
     </span>

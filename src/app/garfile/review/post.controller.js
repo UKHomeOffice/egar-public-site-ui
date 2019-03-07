@@ -29,7 +29,7 @@ module.exports = (req, res) => {
       }
 
       if (!manifest.validateCaptainCrew()) {
-        const captainCrewError = {message: 'There must be at least one Captain or Crew member on the voyage.', identifier: 'manifestTable'}
+        const captainCrewError = {message: 'There must be at least one captain or crew member on the voyage.', identifier: 'manifestTable'}
         logger.info('captain / crew validation failed')
         req.session.submiterrormessage.push(captainCrewError);
       }

@@ -47,11 +47,8 @@
 
       <div class="govuk-form-group {{ m.form_group_class('orgname', errors) }}">
 
-          <label class="govuk-label govuk-label--m"  for="orgname">Organisation Name</label>
+          <label class="govuk-label govuk-label--m"  for="orgname">Name</label>
           {{ m.error_message('orgname', errors) }}
-          <span class="govuk-hint">
-            Enter a new value
-          </span>
           <span class="field-validation-valid error-message" data-valmsg-for="orgname"
             data-valmsg-replace="true" style="display:block">
           </span>
@@ -63,8 +60,8 @@
         <div class="govuk-form-group">
           <table class="govuk-table">
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell "><a class="govuk-button" href="/organisation">Exit Without Saving</a></td>
-              <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and Exit"
+              <td class="govuk-table__cell "><a class="govuk-button" href="/organisation">Exit without saving</a></td>
+              <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and exit"
               onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
             </tr>
           </table>

@@ -28,7 +28,7 @@ module.exports = (req, res) => {
       });
   } else if (req.body.buttonClicked === 'Save and Exit') {
     res.redirect('/garfile/manifest');
-  } else if (req.body.buttonClicked === 'Save and Continue') {
+  } else if (req.body.buttonClicked === 'Save and continue') {
     // Perform manifest validation then redirect to next section
     garApi.getPeople(cookie.getGarId())
       .then((apiResponse) => {

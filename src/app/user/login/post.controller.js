@@ -22,7 +22,7 @@ module.exports = (req, res) => {
 
   // Define a validation chain for user registeration fields
   const unameChain = [
-    new ValidationRule(validator.notEmpty, 'Username', usrname, 'Enter your email.'),
+    new ValidationRule(validator.notEmpty, 'Username', usrname, 'Enter your email'),
   ];
 
   const errMsg = { message: 'There was a problem sending your code. Please try again' };

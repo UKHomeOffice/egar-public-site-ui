@@ -41,8 +41,8 @@
         <div class="govuk-form-group {{ m.form_group_class('prohibitedGoods', errors) }}" id="prohibitedGoods">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h2 class="govuk-fieldset__heading">Is it your or anyone on the aircrafts intention to make a customs declaration upon your arrival into the United Kingdom?</h2>
-              <span id="customs-hint" class="govuk-hint">This is optional but will assist with processing through the UK border. You’ll be required to make a customs declaration if, for example, anyone has goods over their duty-free allowance, large quantities of cash or carrying firearms.</span>
+              <h2 class="govuk-fieldset__heading">Is it your or anyone on the aircraft's intention to make a customs declaration upon your arrival into the United Kingdom?</h2>
+              <span id="customs-hint" class="govuk-hint">This is optional but will assist with processing through the UK border. You’ll be required to make a customs declaration if, for example, anyone on the aircraft has goods over their duty-free allowance, has large quantities of cash or is carrying firearms.</span>
             </legend>
 
             <div class="govuk-radios">
@@ -70,7 +70,7 @@
         <div class="govuk-form-group {{ m.form_group_class('freeCirculation', errors) }}" id="freeCirculation">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h2 class="govuk-fieldset__heading">Is the aircraft in free circulation in the E.U?</h2>
+              <h2 class="govuk-fieldset__heading">Is the aircraft in free circulation in the EU?</h2>
                 <span id="free-circulation-hint" class="govuk-hint">Aircraft imported from outside the EU are in free circulation in the EU when all import formalities have been complied with and all duties, levies or equivalent charges have been paid and not refunded.</span>
             </legend>
             <div class="govuk-radios">
@@ -91,7 +91,7 @@
         <div class="govuk-form-group {{ m.form_group_class('visitReason', errors) }}" id="visitReason">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              Reason for aircraft visit to the E.U?
+              Reason for aircraft visit to the EU?
               <span id="free-circulation-hint" class="govuk-hint">This is the reason for making the flight.</span>
             </legend>
             <div class="govuk-radios">
@@ -110,11 +110,11 @@
         </div>
 
         <div class="govuk-form-group">
-          <input id="prohibited-goods-btn" class="govuk-button" type="submit" name="buttonClicked" value="Save and Continue"
+          <input id="prohibited-goods-btn" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
           onclick="sendAnalytics(event, 'Signify whether prohibited goods - submit', 'click')">
 
           <p class="govuk-body-m">
-            <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and Exit</a>
+            <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and exit</a>
           </p>
 
           <p class="govuk-body-m">

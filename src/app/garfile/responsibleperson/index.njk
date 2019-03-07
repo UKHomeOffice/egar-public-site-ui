@@ -30,12 +30,13 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
       <form action="/garfile/responsibleperson" autocomplete="false" class="form-group"
       method="post" role="form">
       <span class="govuk-caption-xl">Section 5 of 8</span>
-      <h1 class="govuk-heading-xl">Responsible person details</h1>
-<p class="govuk-body-l">Provide the details of the person responsible for submitting the GAR for this flight.
-           This may be the owner or an operator but by default this is usually the Captain.</p>
+      <h1 class="govuk-heading-xl">Responsible person</h1>
+      <p class="govuk-body-l">
+        Provide the details of the person responsible for this flight. By default, this is the Captain.
+      </p>
       <div class="govuk-form-group {{ m.form_group_class('responsiblePerson', errors) }}">
         <div class="govuk-form-group {{ m.form_group_class('responsibleGivenName', errors) }}">
-          <label class="govuk-label govuk-label--m" for="responsibleGivenName">Given Name</label>
+          <label class="govuk-label govuk-label--m" for="responsibleGivenName">Given name</label>
           {{ m.error_message('responsibleGivenName', errors) }}
 
           <span class="field-validation-valid error-message" data-valmsg-for="responsibleGivenName"
@@ -59,7 +60,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
         </div>
 
         <div class="govuk-form-group govuk-!-margin-bottom-6 {{ m.form_group_class('responsibleContactNo', errors) }}">
-          <label class="govuk-label govuk-label--m" for="responsibleContactNo">Contact Telephone Number</label>
+          <label class="govuk-label govuk-label--m" for="responsibleContactNo">Contact telephone number</label>
           {{ m.error_message('responsibleContactNo', errors) }}
           <span class="govuk-hint">
            Include international dialling code, for example 44

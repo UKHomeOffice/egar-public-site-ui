@@ -17,7 +17,7 @@ module.exports = (req, res) => {
 
   // Define a validation chain for our representatives field
   const garChain = [
-    new ValidationRule(validator.notEmpty, 'garoption', req.body.garoption, 'Please select how you would like to create a GAR'),
+    new ValidationRule(validator.notEmpty, 'garoption', req.body.garoption, 'Select how you would like to create a GAR'),
   ];
 
   // Validate chains
