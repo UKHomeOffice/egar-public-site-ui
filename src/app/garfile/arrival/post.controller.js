@@ -18,13 +18,13 @@ module.exports = (req, res) => {
   cookie.setGarArrivalVoyage(voyage);
 
   // Define port / date validation msgs
-  const portMsg = 'As you have entered an arrival port code of "ZZZZ", you must provide longitude and latitude coordinates for the location.';
-  const portCodeMsg = 'The arrival airport code must be a minimum of 3 letters and a maximum of 4 letters.';
+  const portMsg = 'As you have entered an arrival port code of "ZZZZ", you must provide longitude and latitude coordinates for the location';
+  const portCodeMsg = 'The arrival airport code must be a minimum of 3 letters and a maximum of 4 letters';
   const futureDateMsg = 'Arrival date must be today or in the future';
-  const realDateMsg = 'Enter a real Arrival date';
-  const timeMsg = 'Enter a real Arrival time';
-  const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places.';
-  const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places.';
+  const realDateMsg = 'Enter a real arrival date';
+  const timeMsg = 'Enter a real arrival time';
+  const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places';
+  const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places';
 
   // Create validation input objs
   const arrivePortObj = {
