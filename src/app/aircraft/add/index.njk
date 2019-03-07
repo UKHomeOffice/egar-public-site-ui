@@ -41,17 +41,17 @@
       method="post" role="form">
 
       <h1 class="govuk-heading-xl">
-        Save an Aircraft
+        Save an aircraft
       </h1>
 
       <p class="govuk-body-l">Please enter the following information. This information can be re-used when submitting a GAR.</p>
 
       <div class="govuk-form-group {{ m.form_group_class('craftreg', errors) }}">
 
-          <label class="govuk-label" for="craftreg">Aircraft Registration</label>
+          <label class="govuk-label" for="craftreg">Aircraft registration</label>
           {{ m.error_message('craftreg', errors) }}
           <span class="govuk-hint">
-            Enter a new value
+            For example G-ABCD
           </span>
           <span class="field-validation-valid error-message" data-valmsg-for="craftreg"
             data-valmsg-replace="true" style="display:block">
@@ -62,10 +62,10 @@
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('crafttype', errors) }}">
-            <label class="govuk-label" for="crafttype">Aircraft Type</label>
+            <label class="govuk-label" for="crafttype">Aircraft type</label>
           {{ m.error_message('crafttype', errors) }}
           <span class="govuk-hint">
-            Enter a new value
+            For example Gulfstream
           </span>
           <span class="field-validation-valid error-message" data-valmsg-for="crafttype"
             data-valmsg-replace="true" style="display:block">
@@ -76,10 +76,10 @@
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('craftbase', errors) }}">
-             <label class="govuk-label" for="craftbase">Aircraft Home Aerodrome / Usual Base</label>
+             <label class="govuk-label" for="craftbase">Aircraft Home Aerodrome / Usual base</label>
           {{ m.error_message('craftbase', errors) }}
           <span class="govuk-hint">
-            Enter a new value
+            IATA / ICAO / Coordinates (decimal)
           </span>
           <span class="field-validation-valid error-message" data-valmsg-for="craftbase"
             data-valmsg-replace="true" style="display:block">
@@ -93,8 +93,8 @@
 
            <table class="govuk-table">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell "><a class="govuk-button" href="/aircraft">Exit Without Saving</a></td>
-            <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and Exit"
+            <td class="govuk-table__cell "><a class="govuk-button" href="/aircraft">Exit without saving</a></td>
+            <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and exit"
           onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
           </tr>
         </table>

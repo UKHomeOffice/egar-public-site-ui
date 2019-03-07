@@ -26,19 +26,19 @@
   {% endif %}
   <span class="govuk-caption-xl">Section 4 of 8</span>
 
-    <h1 class="govuk-heading-l">
-        Person Details
+    <h1 class="govuk-heading-xl">
+        Add new person details
     </h1>
-    <p class="govuk-body-m">
+    <p class="govuk-body-l">
       Check or provide the details of the person you want to add to the manifest.
-      Details should be as displayed on travel document
+      Details should be as displayed on the travel document
     <p>
 
   <form action="/garfile/manifest/addnewperson" autocomplete="false" class="form-group" method="post" role="form">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
         <div class="govuk-form-group {{ m.form_group_class('first_name', errors) }}">
-          <label class="govuk-label govuk-label--m" for="first_name">Given Name(s)</label>
+          <label class="govuk-label govuk-label--m" for="first_name">Given name(s)</label>
            {{ m.error_message('first_name', errors) }}
           <input class="govuk-input" id="first_name" name="first_name"
           autocomplete="false" type="text" value="{{personDetails.firstName}}" />
@@ -47,7 +47,7 @@
         <div class="govuk-form-group {{ m.form_group_class('dob', errors) }}">
           <fieldset class="govuk-fieldset" aria-describedby="dateOfBirth-hint" role="group">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            Date of Birth
+            Date of birth
           </legend>
           <span class="govuk-hint" id="dateOfBirth-hint">For example, 31 3 1980</span>
           <div class="form-date" id="dob">
@@ -81,7 +81,7 @@
       </div>
 
     <div class="govuk-form-group {{ m.form_group_class('persontype', errors) }}">
-      <label class="govuk-label govuk-label--m" for="persontype">Person Type</label>
+      <label class="govuk-label govuk-label--m" for="persontype">Person type</label>
       <span class="govuk-hint">
         For example, Captain, Crew or Passenger. First
         Office / Co-Pilot should be identified as Crew.
@@ -109,7 +109,7 @@
     </div>
 
     <div class="govuk-form-group {{ m.form_group_class('placeOfBirth', errors) }}">
-      <label class="govuk-label govuk-label--m" for="placeOfBirth">Place of Birth</label>
+      <label class="govuk-label govuk-label--m" for="placeOfBirth">Place of birth</label>
       {{ m.error_message('placeOfBirth', errors) }}
       <input class="govuk-input" id="placeOfBirth" name="placeOfBirth"
       type="text" value="{{ personDetails.placeOfBirth }}" />
@@ -141,14 +141,15 @@
 </div>
 
   <div class="govuk-grid-row">
-    <h2 class="govuk-heading-m">Travel Document Details</h2>
-    <p class="govuk-body-m">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-m">Travel document details</h2>
+      <p class="govuk-body-m">
         Check or provide the details of the persons travel document that you want to
         add to the manifest. Details should be as displayed on travel document
-    </p>
+      </p>
 
     <div class="govuk-form-group">
-      <label class="govuk-label govuk-label--m" for="documenttype">Travel Document Type</label>
+      <label class="govuk-label govuk-label--m" for="documenttype">Travel document type</label>
       <span class="govuk-hint">
         This should be one of either: Passport, Identity Card or Other
       </span>
@@ -164,18 +165,19 @@
       </select>
     </div>
   </div>
+  </div>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
       <div class="govuk-form-group {{ m.form_group_class('documentNumber', errors) }}">
-        <label class="govuk-label govuk-label--m" for="documentNumber">Document Number</label>
+        <label class="govuk-label govuk-label--m" for="documentNumber">Document number</label>
         {{ m.error_message('documentNumber', errors) }}
         <input class="govuk-input" id="documentNumber" name="documentNumber"
           type="text" value="{{personDetails.documentNumber}}" />
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('issuingState', errors) }}">
-      <label class="govuk-label govuk-label--m" for="issuingState">Issuing State</label>
+      <label class="govuk-label govuk-label--m" for="issuingState">Issuing state</label>
       {{ m.error_message('issuingState', errors) }}
       <input class="govuk-input" id="issuingState" name="issuingState"
       type="text" value="{{personDetails.issuingState}}" maxlength="3"/>
@@ -185,7 +187,7 @@
       <div class="govuk-form-group {{ m.form_group_class('docExpiry', errors) }}" id="docExpiry">
         <fieldset class="govuk-fieldset" aria-describedby="docExpiry-hint" role="group">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            Document Expiry Date
+            Document expiry date
           </legend>
           <span id="docExpiry-hint" class="govuk-hint">
             For example, 21 07 2030

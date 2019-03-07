@@ -65,11 +65,11 @@
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
-      <h2 class="govuk-heading-l">New Aircraft</h2>
-        <p class="govuk-body-m">Add the details of an Aircraft that you do not already have saved</p>
+      <h2 class="govuk-heading-l">New aircraft</h2>
+        <p class="govuk-body-l">Add the details of a new aircraft you have not already saved</p>
 				<div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
         <label class="govuk-label" for="craftReg">
-          Aircraft Registration
+          Aircraft registration
         </label>
         {{ m.error_message('craftReg', errors) }}
         <span class="govuk-hint">
@@ -85,11 +85,11 @@
 
     <div class="govuk-form-group {{ m.form_group_class('craftType', errors) }}">
       <label class="govuk-label" for="craftType">
-        Aircraft Type
+        Aircraft type
       </label>
       {{ m.error_message('craftType', errors) }}
       <span class="govuk-hint">
-        For example, Gulfstream
+        For example Gulfstream
       </span>
       <span class="field-validation-valid error-message" data-valmsg-for="craftType"
         data-valmsg-replace="true" style="display:block">
@@ -101,11 +101,11 @@
 
     <div class="govuk-form-group {{ m.form_group_class('craftBase', errors) }}">
     <label class="govuk-label" for="craftBase">
-      Home / Usual Base
+      Home / Usual base
     </label>
     {{ m.error_message('craftBase', errors) }}
     <span class="govuk-hint">
-      IATA/ICAO/Coordinates (Decimal)
+      IATA / ICAO / Coordinates (decimal)
     </span>
     <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
       data-valmsg-replace="true" style="display:block">
@@ -115,7 +115,7 @@
       value="{{cookie.getGarCraft().craftBase}}" />
     </div>
       <div class="govuk-form-group">
-        <input id="newCraft" class="govuk-button" type="submit" name="buttonClicked" value="Save and Continue"
+        <input id="newCraft" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
         onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
       </div>
       <p class="govuk-body-m">

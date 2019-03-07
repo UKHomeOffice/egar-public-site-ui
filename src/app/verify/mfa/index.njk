@@ -52,8 +52,8 @@
             data-valmsg-replace="true" style="display:block">
           </span>
           <input id="mfa-authentication-code" autocomplete="off" class="govuk-input" maxlength="{{ mfaTokenLength }}" name="mfa-authentication-code" type="text">
+          <p style="margin-top: 0.25em;" class="govuk-body-m"><a href="/login/authenticate?resend=true">Didn't receive a code?</a></p>
         </div>
-        <p style="margin-top: 0.25em;" class="govuk-body-m"><a href="/login/authenticate?resend=true">Didn't receive a code?</a></p>
         <div class="govuk-form-group">
           <input class="govuk-button" type="submit" value="Confirm"
           onclick="sendAnalytics(event, 'Send MFA code - submit', 'click')">

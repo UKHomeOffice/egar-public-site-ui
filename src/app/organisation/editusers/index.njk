@@ -36,7 +36,7 @@
       <p class="govuk-body-l">Edit the user's details</p>
 
       <div class="govuk-form-group {{ m.form_group_class('firstName', errors) }}">
-        <label class="govuk-label govuk-label--m" for="firstName">Given Name</label>
+        <label class="govuk-label govuk-label--m" for="firstName">Given name</label>
           {{ m.error_message('firstName', errors) }}
         <span class="govuk-hint">
             Given Name(s)
@@ -48,7 +48,7 @@
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('lastName', errors) }}">
-        <label class="govuk-label govuk-label--m" for="lastName">Last Name</label>
+        <label class="govuk-label govuk-label--m" for="lastName">Last name</label>
           {{ m.error_message('lastName', errors) }}
         <span class="govuk-hint">
           Surname
@@ -62,7 +62,7 @@
       <div class="govuk-form-group {{ m.form_group_class('role', errors) }}">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h1 class="govuk-fieldset__heading">Invite a User</h1>
+            <h1 class="govuk-fieldset__heading">Invite a user</h1>
             <span id="customs-hint" class="govuk-hint">Select the user's role</span>
           </legend>
         {{ m.error_message('role', errors) }}
@@ -83,8 +83,8 @@
       <div class="form-group">
         <table class="govuk-table">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell "><a class="govuk-button" href="/organisation">Exit Without Saving</a></td>
-            <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and Exit"
+            <td class="govuk-table__cell "><a class="govuk-button" href="/organisation">Exit without saving</a></td>
+            <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and exit"
             onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
           </tr>
         </table>
