@@ -32,7 +32,9 @@
     {# image url needs to be absolute e.g. http://wwww.domain.com/.../govuk-opengraph-image.png #}
     <meta property="og:image" content="{{ assetUrl | default('/assets') }}/images/govuk-opengraph-image.png">
   </head>
+
   <body class="govuk-template__body {{ bodyClasses }}">
+
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     {% block bodyStart %}{% endblock %}
 
@@ -41,6 +43,12 @@
         href: '#main-content',
         text: 'Skip to main content'
       }) }}
+    {% endblock %}
+
+    {% block cookie_message %}
+    <div class="app-cookie-banner" style="display: none;">
+      <p class="app-cookie-banner__message govuk-body-s">Submit a GAR uses cookies to make the site simpler. <a href="/cookies">Find out more about cookies</a></p>
+    </div>
     {% endblock %}
 
     {% block header %}
@@ -72,6 +80,11 @@
               <li class="govuk-footer__inline-list-item">
                 <a class="govuk-footer__link" href="mailto:GARSupport@homeoffice.gov.uk">
                   Help
+                </a>
+              </li>
+              <li class="govuk-footer__inline-list-item">
+                <a class="govuk-footer__link" href="/cookies">
+                  Cookies
                 </a>
               </li>
             </ul>
@@ -108,7 +121,6 @@
     </script>
 
     <script src="/javascripts/table-multiselect.js"></script>
-
-
+    <script src="/javascripts/cookie-banner.js"></script>
   </body>
 </html>

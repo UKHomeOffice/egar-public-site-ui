@@ -52,6 +52,7 @@ const peopleDelete = require('./people/delete');
 
 // Misc dependency
 const error = require('./error');
+const cookies = require('./cookie');
 
 // veirfy registeruser
 const verifyregisteruser = require('./verify/registeruser');
@@ -125,4 +126,5 @@ module.exports.bind = (app) => {
   app.use(peopleAdd.router);
   app.use(peopleEdit.router);
   app.use(peopleDelete.router);
+  app.use(cookies.router);
 };
