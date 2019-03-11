@@ -1,0 +1,21 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: public-site-ingress
+  labels:
+    stable.k8s.psg.io/kcm.class: default
+  annotations:
+    kubernetes.io/ingress.class: {{ .INGRESS_CLASS }}
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    ingress.kubernetes.io/proxy-body-size: "20m"
+    ingress.kubernetes.io/permanent-redirect: {{ .BASE_URL_SERVICE }}
+    ingress.kubernetes.io/permanent-redirect-code: '301'
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+  - host: {{ .BASE_URL }}
+  tls:
+  - hosts:
+    - {{ .BASE_URL }}
+    secretName: public-site-tls

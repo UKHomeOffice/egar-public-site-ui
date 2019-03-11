@@ -47,15 +47,18 @@ pipeline:
       - SIT_KUBE_SERVER
       - SIT_KUBE_TOKEN
       - SIT_BASE_URL
+      - SIT_BASE_URL_SERVICE
     commands:
       - export KUBE_ARTIFACTORY_APP_SECRET=$${SIT_KUBE_ARTIFACTORY_APP_SECRET}
       - export KUBE_SERVER=$${SIT_KUBE_SERVER}
       - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
       - export BASE_URL=$${SIT_BASE_URL}
+      - export BASE_URL_SERVICE=$${SIT_BASE_URL_SERVICE}
       - kd --file kube/artifactory-secret.yml
       - kd --file kube/public-site-network-policy.yml
       - kd --file kube/public-site-deployment.yml
       - kd --file kube/public-site-service.yml
+      - kd --file kube/public-site-ingress-for-service.gov.uk.yml
       - kd --file kube/public-site-ingress.yml
     when:
       branch: [ master, hotfix/* ]
@@ -95,16 +98,19 @@ pipeline:
       - STAGING_KUBE_SERVER
       - STAGING_KUBE_TOKEN
       - STAGING_BASE_URL
+      - STAGING_BASE_URL_SERVICE
     commands:
       - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
       - export KUBE_ARTIFACTORY_APP_SECRET=$${STAGING_KUBE_ARTIFACTORY_APP_SECRET}
       - export KUBE_SERVER=$${STAGING_KUBE_SERVER}
       - export KUBE_TOKEN=$${STAGING_KUBE_TOKEN}
       - export BASE_URL=$${STAGING_BASE_URL}
+      - export BASE_URL_SERVICE=$${STAGING_BASE_URL_SERVICE}
       - kd --file kube/artifactory-secret.yml
       - kd --file kube/public-site-network-policy.yml
       - kd --file kube/public-site-deployment.yml
       - kd --file kube/public-site-service.yml
+      - kd --file kube/public-site-ingress-for-service.gov.uk.yml
       - kd --file kube/public-site-ingress.yml
     when:
       branch: [ master, hotfix/* ]
@@ -137,16 +143,19 @@ pipeline:
       - PRODUCTION_KUBE_SERVER
       - PRODUCTION_KUBE_TOKEN
       - PRODUCTION_BASE_URL
+      - PRODUCTION_BASE_URL_SERVICE
     commands:
       - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
       - export KUBE_ARTIFACTORY_APP_SECRET=$${PRODUCTION_KUBE_ARTIFACTORY_APP_SECRET}
       - export KUBE_SERVER=$${PRODUCTION_KUBE_SERVER}
       - export KUBE_TOKEN=$${PRODUCTION_KUBE_TOKEN}
       - export BASE_URL=$${PRODUCTION_BASE_URL}
+      - export BASE_URL_SERVICE=$${PRODUCTION_BASE_URL_SERVICE}
       - kd --file kube/artifactory-secret.yml
       - kd --file kube/public-site-network-policy.yml
       - kd --file kube/public-site-deployment.yml
       - kd --file kube/public-site-service.yml
+      - kd --file kube/public-site-ingress-for-service.gov.uk.yml
       - kd --file kube/public-site-ingress.yml
     when:
       event: deployment
