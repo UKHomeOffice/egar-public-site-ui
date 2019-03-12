@@ -1,0 +1,73 @@
+{% extends "base-template.njk" %}
+
+{% block pageTitle %}
+GAR | Help
+{% endblock %}
+
+{% block head %}
+  {% include "head.njk" %}
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+{% include "phase.njk" %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+
+		<h1 class="govuk-heading-xl">
+		Help
+		</h1>
+
+    <p class="govuk-body-m">
+    You are required to complete a GAR prior to your departure. For information about this process please see the following
+    <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights">information</a>
+    </p>
+
+
+  <h2 class="govuk-heading-l">Support</h2>
+  <p class="govuk-body-m">
+    You can get support with using the service by emailing the Submit a GAR support team by emailing us at:
+  </p>
+  <p class="govuk-body-m">
+    <a href="mailto:GARSupport@homeoffice.gov.uk">GARSupport@homeoffice.gov.uk</a>
+  </p>
+
+  <p class="govuk-body-m">
+    You can call the Submit a GAR team on: <br>
+    Telephone: 0300 XXX XXXX <br>
+    Textphone: 0300 XXX XXXX <br>
+    From overseas: +44 (0) 300 XXX XXXX
+  </p>
+  <p class="govuk-body-m">
+    This is a 24/7 support service. <br>
+    <a href="https://www.gov.uk/call-charges">Find out about call charges</a>
+  </p>
+
+  <h2 class="govuk-heading-m">In an emergency, it is important that you contact the National Co-ordination Unit directly</h2>
+
+  <p class="govuk-body-m">
+  Telephone: +44 (0) 845 723 1110 <br><br>
+  This number allows General Aviation pilots, operators or owners to amend or submit a General Aviation Report (GAR) for Border Force purposes in an emergency situation. <br><br>
+  The emergency telephone line may only be used for a flight that is:
+  </p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>Not required to report under the Terrorism Act 2000; and</li>
+    <li>Is outside the GAR reporting timescales; and</li>
+  </ul>
+  <p class="govuk-body-m">An emergency such as:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>A medical emergency of a pilot/passenger; or</li>
+    <li>Air Ambulance with critical passengers; or</li>
+    <li>Other emergency requiring a change to information contained within an already submitted GAR; or</li>
+    <li>Last minute changes to a submitted GAR, when changes to online version are not possible.</li>
+  </ul>
+	</div>
+</div>
+{% endblock %}
+
