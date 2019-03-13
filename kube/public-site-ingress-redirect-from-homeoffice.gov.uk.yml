@@ -8,13 +8,21 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: {{ .INGRESS_CLASS }}
     ingress.kubernetes.io/force-ssl-redirect: "true"
+    ingress.kubernetes.io/backend-protocol: "HTTPS"
     ingress.kubernetes.io/proxy-body-size: "20m"
+    stable.k8s.psg.io/kcm.provider: "http"
+    kubernetes.io/tls-acme: "true"
     ingress.kubernetes.io/permanent-redirect: {{ .BASE_URL_SERVICE }}
     ingress.kubernetes.io/permanent-redirect-code: '301'
-    kubernetes.io/tls-acme: "true"
 spec:
   rules:
   - host: {{ .BASE_URL }}
+    http:
+      paths:
+      - backend:
+          serviceName: public-site-svc
+          servicePort: public-prxy-prt
+        path: /
   tls:
   - hosts:
     - {{ .BASE_URL }}

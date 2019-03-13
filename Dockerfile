@@ -14,7 +14,6 @@ COPY src/locales /public-site/locales
 COPY src/public /public-site/public
 COPY src/test /public-site/test
 COPY src/gruntfile.js /public-site/
-COPY src/keycloak.json /public-site/
 COPY src/server.js /public-site/
 COPY src/start.js /public-site/
 COPY src/package.json /public-site/
