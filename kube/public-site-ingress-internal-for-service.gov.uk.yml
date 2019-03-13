@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: public-site-ingress
+  name: service-site-ingress
   labels:
     stable.k8s.psg.io/kcm.class: default
   annotations:
@@ -13,7 +13,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-  - host: {{ .BASE_URL }}
+  - host: {{ .BASE_URL_SERVICE }}
     http:
       paths:
       - backend:
@@ -22,5 +22,5 @@ spec:
         path: /
   tls:
   - hosts:
-    - {{ .BASE_URL }}
-    secretName: public-site-tls
+    - {{ .BASE_URL_SERVICE }}
+    secretName: service-site-tls
