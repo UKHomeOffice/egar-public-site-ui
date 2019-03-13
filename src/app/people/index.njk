@@ -29,29 +29,12 @@
     {% include "common/templates/includes/success-action.njk" %}
   {% endif %}
 
+<h1 class="govuk-heading-xl">People</h1>
+
   {% if cookie.getUserRole() != 'User' %}
-	<h1 class="govuk-heading-xl">People</h1>
-		<p class="govuk-body-l">You can view, edit or delete people that you regularly add to GARs.</p>
-	</div>
-
-	<div class="govuk-grid-column-full">
-		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-	</div>
-
-	<div class="govuk-grid-column-full">
-		<h2 class="govuk-heading-l">Save a new person</h2>
-		<p class="govuk-body-l">Save the details of people that you regularly add to GARs.</p>
-		<a href="/people/add" role="button" draggable="false" class="govuk-button" id='save-person'>
-			Save a person
-		</a>
-	</div>
-
-	<div class="govuk-grid-column-full">
-		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-	</div>
+	  <p class="govuk-body-l">You can view, edit or delete people that you regularly add to GARs.</p>
   {% endif %}
-	<div class="govuk-grid-column-full">
-		<h2 class="govuk-heading-l">Saved people</h2>
+
     <form action="/people" method="post">
       <table class="govuk-table">
         <!-- <caption class="govuk-table__caption">Saved people</caption> -->
@@ -85,6 +68,25 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
 	</div>
+
+  {% if cookie.getUserRole() != 'User' %}
+
+	<div class="govuk-grid-column-full">
+		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+	</div>
+
+	<div class="govuk-grid-column-full">
+		<h2 class="govuk-heading-l">Add a new person</h2>
+		<p class="govuk-body-l">Add the details of people that you regularly add to GARs.</p>
+		<a href="/people/add" role="button" draggable="false" class="govuk-button" id='save-person'>
+			Add a person
+		</a>
+	</div>
+
+	<div class="govuk-grid-column-full">
+		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+	</div>
+  {% endif %}
 </div>
 
 {% endblock %}

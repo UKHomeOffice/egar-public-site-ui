@@ -1,8 +1,8 @@
 [
 	{ "id": "0", "option": "Based", "value": "Based"  },
-	{ "id": "1", "option": "Short Term Visit" , "value": "ShortTermVisit"},
+	{ "id": "1", "option": "Short term visit" , "value": "ShortTermVisit"},
     { "id": "2", "option": "Maintenance", "value": "Maintenance"  },
-    { "id": "3", "option": "Permanent Import", "value": "PermanentImport" },
+    { "id": "3", "option": "Permanent import", "value": "PermanentImport" },
     { "id": "4", "option": "Repair", "value": "Repair" }
-    
+
 ]
