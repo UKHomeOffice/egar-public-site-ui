@@ -54,12 +54,12 @@ pipeline:
       - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
       - export BASE_URL=$${SIT_BASE_URL}
       - export BASE_URL_SERVICE=$${SIT_BASE_URL_SERVICE}
-      - kd --file kube/artifactory-secret.yml
-      - kd --file kube/public-site-network-policy.yml
-      - kd --file kube/public-site-deployment.yml
-      - kd --file kube/public-site-service.yml
-      - kd --file kube/public-site-ingress-internal-for-service.gov.uk.yml
-      - kd --file kube/public-site-ingress-redirect-from-homeoffice.gov.uk.yml
+      - kd --timeout=6m --file kube/artifactory-secret.yml
+      - kd --timeout=6m --file kube/public-site-network-policy.yml
+      - kd --timeout=6m --file kube/public-site-deployment.yml
+      - kd --timeout=6m --file kube/public-site-service.yml
+      - kd --timeout=6m --file kube/public-site-ingress-internal-for-service.gov.uk.yml
+      - kd --timeout=6m --file kube/public-site-ingress-internal-redirect-from-homeoffice.gov.uk.yml
     when:
       branch: [ master, hotfix/* ]
       event: push
@@ -106,12 +106,12 @@ pipeline:
       - export KUBE_TOKEN=$${STAGING_KUBE_TOKEN}
       - export BASE_URL=$${STAGING_BASE_URL}
       - export BASE_URL_SERVICE=$${STAGING_BASE_URL_SERVICE}
-      - kd --file kube/artifactory-secret.yml
-      - kd --file kube/public-site-network-policy.yml
-      - kd --file kube/public-site-deployment.yml
-      - kd --file kube/public-site-service.yml
-      - kd --file kube/public-site-ingress-for-service.gov.uk.yml
-      - kd --file kube/public-site-ingress-redirect-from-homeoffice.gov.uk.yml
+      - kd --timeout=6m --file kube/artifactory-secret.yml
+      - kd --timeout=6m --file kube/public-site-network-policy.yml
+      - kd --timeout=6m --file kube/public-site-deployment.yml
+      - kd --timeout=6m --file kube/public-site-service.yml
+      - kd --timeout=6m --file kube/public-site-ingress-for-service.gov.uk.yml
+      - kd --timeout=6m --file kube/public-site-ingress-redirect-from-homeoffice.gov.uk.yml
     when:
       branch: [ master, hotfix/* ]
       event: push
@@ -151,12 +151,12 @@ pipeline:
       - export KUBE_TOKEN=$${PRODUCTION_KUBE_TOKEN}
       - export BASE_URL=$${PRODUCTION_BASE_URL}
       - export BASE_URL_SERVICE=$${PRODUCTION_BASE_URL_SERVICE}
-      - kd --file kube/artifactory-secret.yml
-      - kd --file kube/public-site-network-policy.yml
-      - kd --file kube/public-site-deployment.yml
-      - kd --file kube/public-site-service.yml
-      - kd --file kube/public-site-ingress-for-service.gov.uk.yml
-      - kd --file kube/public-site-ingress-redirect-from-homeoffice.gov.uk.yml
+      - kd --timeout=6m --file kube/artifactory-secret.yml
+      - kd --timeout=6m --file kube/public-site-network-policy.yml
+      - kd --timeout=6m --file kube/public-site-deployment.yml
+      - kd --timeout=6m --file kube/public-site-service.yml
+      - kd --timeout=6m --file kube/public-site-ingress-for-service.gov.uk.yml
+      - kd --timeout=6m --file kube/public-site-ingress-redirect-from-homeoffice.gov.uk.yml
     when:
       event: deployment
       branch: [ master, hotfix/* ]
