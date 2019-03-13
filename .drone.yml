@@ -58,7 +58,7 @@ pipeline:
       - kd --file kube/public-site-network-policy.yml
       - kd --file kube/public-site-deployment.yml
       - kd --file kube/public-site-service.yml
-      - kd --file kube/public-site-ingress-for-service.gov.uk.yml
+      - kd --file kube/public-site-ingress-internal-for-service.gov.uk.yml
       - kd --file kube/public-site-ingress.yml
     when:
       branch: [ master, hotfix/* ]
