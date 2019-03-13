@@ -10,6 +10,7 @@ metadata:
     ingress.kubernetes.io/force-ssl-redirect: "true"
     ingress.kubernetes.io/backend-protocol: "HTTPS"
     ingress.kubernetes.io/proxy-body-size: "20m"
+    stable.k8s.psg.io/kcm.provider: "http"
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
