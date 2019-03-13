@@ -59,7 +59,7 @@ pipeline:
       - kd --file kube/public-site-deployment.yml
       - kd --file kube/public-site-service.yml
       - kd --file kube/public-site-ingress-for-service.gov.uk.yml
-      - kd --file kube/public-site-ingress.yml
+      - kd --file kube/public-site-ingress-redirect-from-homeoffice.gov.uk.yml
     when:
       branch: [ master, hotfix/* ]
       event: push
@@ -111,7 +111,7 @@ pipeline:
       - kd --file kube/public-site-deployment.yml
       - kd --file kube/public-site-service.yml
       - kd --file kube/public-site-ingress-for-service.gov.uk.yml
-      - kd --file kube/public-site-ingress.yml
+      - kd --file kube/public-site-ingress-redirect-from-homeoffice.gov.uk.yml
     when:
       branch: [ master, hotfix/* ]
       event: push
@@ -156,7 +156,7 @@ pipeline:
       - kd --file kube/public-site-deployment.yml
       - kd --file kube/public-site-service.yml
       - kd --file kube/public-site-ingress-for-service.gov.uk.yml
-      - kd --file kube/public-site-ingress.yml
+      - kd --file kube/public-site-ingress-redirect-from-homeoffice.gov.uk.yml
     when:
       event: deployment
       branch: [ master, hotfix/* ]
