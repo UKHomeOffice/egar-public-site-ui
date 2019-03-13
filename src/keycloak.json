@@ -1,8 +1,0 @@
-{
-  "realm" : "${env.KC_REALM}",
-  "realm-public-key" : "${env.KC_REALM_KEY}",
-  "auth-server-url" : "${env.KC_AUTH_URL}",
-  "ssl-required" : "external",
-  "resource" : "${env.KC_RESOURCE}",
-  "public-client" : true
-}
