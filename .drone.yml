@@ -58,7 +58,6 @@ pipeline:
       - kd --timeout=6m --file kube/public-site-network-policy.yml
       - kd --timeout=6m --file kube/public-site-deployment.yml
       - kd --timeout=6m --file kube/public-site-service.yml
-      - kd --timeout=6m --file kube/public-site-ingress-internal-for-service.gov.uk.yml
       - kd --timeout=6m --file kube/public-site-ingress.yml
     when:
       branch: [ master, hotfix/* ]
@@ -110,7 +109,6 @@ pipeline:
       - kd --timeout=6m --file kube/public-site-network-policy.yml
       - kd --timeout=6m --file kube/public-site-deployment.yml
       - kd --timeout=6m --file kube/public-site-service.yml
-      - kd --timeout=6m --file kube/public-site-ingress-for-service.gov.uk.yml
       - kd --timeout=6m --file kube/public-site-ingress.yml
     when:
       branch: [ master, hotfix/* ]
@@ -156,7 +154,6 @@ pipeline:
       - kd --timeout=6m --file kube/public-site-deployment.yml
       - kd --timeout=6m --file kube/public-site-service.yml
       - kd --timeout=6m --file kube/public-site-ingress-for-service.gov.uk.yml
-      - kd --timeout=6m --file kube/public-site-ingress.yml
     when:
       event: deployment
       branch: [ master, hotfix/* ]
