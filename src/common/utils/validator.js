@@ -264,6 +264,18 @@ function validateChains(chains) {
 }
 
 /**
+ * false if all values in array are equal, else true
+ * @param {Array} values
+ * @returns {Bool}
+ */
+function notSameValues(values) {
+  if(values.includes(null) || values.includes(undefined)) {
+    return true;
+  }
+  return !values.every(v => v.trim().toLowerCase() === values[0].trim().toLowerCase());
+}
+
+/**
  * Generates chain of validations
  * @param {function} type Type of validator to use
  * @param {Array} cssIds Array of cssIds
@@ -308,4 +320,5 @@ module.exports = {
   lattitude,
   longitude,
   validIntlPhone,
+  notSameValues,
 };
