@@ -31,7 +31,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       new ValidationRule(validator.notEmpty, '', voyageObj.craftBase, 'Enter the usual base of the craft'),
     ],
     [
-      new ValidationRule(validator.notSameValues, '', [voyageObj.arrivalPort, voyageObj.departurePort], 'Arrival and departure ports must be different from each other. A single submission is for one leg of the journey only'),
+      new ValidationRule(validator.notSameValues, '', [voyageObj.arrivalPort, voyageObj.departurePort], 'Arrival port must be different to departure port'),
     ]
   ];
 

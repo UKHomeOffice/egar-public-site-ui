@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
   const timeMsg = 'Enter a real departure time';
   const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places';
   const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places';
-  const samePortMsg = 'Arrival and departure ports must be different from each other. A single submission is for one leg of the journey only'
+  const samePortMsg = 'Departure port must be different to arrival port';
 
   // Create validation input objs
   const departPortObj = {
