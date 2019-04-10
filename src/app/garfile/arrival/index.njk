@@ -116,7 +116,8 @@
 					Arrival port
 				</label>
 				<span id="arrivalPort-hint" class="govuk-hint">
-				The IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'.
+				The IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
+        The arrival port must be different to the departure port.
 				</span>
 
           {{ m.error_message('arrivalPort', errors) }}

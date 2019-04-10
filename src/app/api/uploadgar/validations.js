@@ -30,6 +30,9 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     [
       new ValidationRule(validator.notEmpty, '', voyageObj.craftBase, 'Enter the usual base of the craft'),
     ],
+    [
+      new ValidationRule(validator.notSameValues, '', [voyageObj.arrivalPort, voyageObj.departurePort], 'Arrival port must be different to departure port'),
+    ]
   ];
 
   // freeCirculation and visitReason are optional values as of this time, only validate if they are provided

@@ -286,4 +286,15 @@ describe('Validator', () => {
     expect(validator.longitude('181.0001')).to.be.false;
     expect(validator.longitude('-180.0001')).to.be.false;
   });
+
+  it('Should return true when validating different ports' , () => {
+    expect(validator.notSameValues(['ABC', 'DEF'])).to.be.true;
+    expect(validator.notSameValues(['ABC', null])).to.be.true;
+  })
+
+  it('Should return false when validating the same ports', () => {
+    expect(validator.notSameValues(['ABC', 'ABC'])).to.be.false;
+    expect(validator.notSameValues(['ABC', 'abc'])).to.be.false;
+    expect(validator.notSameValues(['ABc', 'aBc'])).to.be.false;
+  })
 });

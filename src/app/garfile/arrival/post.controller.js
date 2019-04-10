@@ -4,7 +4,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   logger.debug('In garfile / arrival post controller');
 
   const cookie = new CookieModel(req);
@@ -25,6 +25,7 @@ module.exports = (req, res) => {
   const timeMsg = 'Enter a real arrival time';
   const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places';
   const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places';
+  const samePortMsg = 'Arrival port must be different to departure port';
 
   // Create validation input objs
   const arrivePortObj = {
@@ -81,6 +82,14 @@ module.exports = (req, res) => {
       arrivalPortValidation,
     );
   }
+
+  const gar = await garApi.get(cookie.getGarId());
+
+  validations.push(
+    [
+      new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg)
+    ]
+  )
 
   validator.validateChains(validations)
     .then(() => {
