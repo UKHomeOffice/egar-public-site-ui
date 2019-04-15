@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   if (req.headers.referer === undefined
       || cookie.getUserDbId() === undefined
       || cookie.getUserDbId() === null) {
-    res.redirect('/');
+    res.redirect('/login');
   } else {
     next();
   }

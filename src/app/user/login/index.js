@@ -19,8 +19,8 @@ const paths = {
 };
 
 // Routing
-router.get(paths.index, flagpole, csrfcheck, usercheck, getController);
-router.post(paths.index, flagpole, parseForm, csrfcheck, usercheck, postController);
+router.get(paths.index, flagpole, csrfcheck, getController);
+router.post(paths.index, flagpole, parseForm, csrfcheck, postController);
 
 // Export
 module.exports = {
