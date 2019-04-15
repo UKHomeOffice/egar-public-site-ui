@@ -1,0 +1,51 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	Submit GAR | Failure
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+  <div class="govuk-grid-row">
+  	<div class="govuk-grid-column-two-thirds">
+
+     <h1 class="govuk-heading-xl">
+        The Submit a General Aviation Report (GAR) service is currently unavailable.
+     </h1>
+
+     <div>
+       <p class="govuk-body-m">
+         Please submit your GAR using the following method:
+       </p>
+
+        <p class="govuk-body-m">
+          Download the GAR template
+          <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/392679/GAR_Template_with_logos_v_6_3_Jan_2015_LJ.xls">here</a>
+          and fill in the details. Then submit the GAR by contacting
+          the National Co-ordination Unit directly at: <br> Telephone: +44 (0) 845 723 1110
+        </p>
+       <p class="govuk-body-m">
+
+     </div>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </div>
+
+{% endblock %}
