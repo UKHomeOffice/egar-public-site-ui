@@ -1,0 +1,90 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	Submit GAR | Failure
+{% endblock %}
+
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+
+  {% include "phase.njk" %}
+
+{% endblock %}
+
+{% block content %}
+
+
+  {% import "common/templates/includes/macros.njk" as m %}
+
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+  <div class="govuk-grid-row">
+  	<div class="govuk-grid-column-two-thirds">
+
+     <h1 class="govuk-heading-xl">
+        Submit a GAR is currently unavailable
+     </h1>
+
+     <div>
+      <p class="govuk-body-m">
+        Try again later.
+      </p>
+       <p class="govuk-body-m">
+
+       </p>
+       <p class="govuk-body-m">
+         Alternatively, you can submit a GAR in the following ways:
+       </p>
+
+       <h2 class="govuk-heading-l">
+         Non Emergency Situations
+       </h2>
+
+        <p class="govuk-body-m">
+          Download the GAR template
+          <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/392679/GAR_Template_with_logos_v_6_3_Jan_2015_LJ.xls">here</a>.
+          Complete and submit this by email to the
+         <a href="#">national co-ordination unit (NCU)</a>
+         <br>
+         Or contact Border Force on 0845 468 0084
+        </p>
+       <p class="govuk-body-m">
+
+       <h2 class="govuk-heading-l">
+         Emergency Situations
+       </h2>
+
+       <p class="govuk-body-m">
+         Contact Border Force on +44 (0) 845 723 1110
+       </p>
+       <p class="govuk-body-m">
+          <br>
+         The emergency telephone line may on be used for a flight that is:
+       </p>
+         <ul class="govuk-list govuk-list--bullet">
+           <li>Not required to report under the Terrorism Act 2000; and</li>
+           <li>Is outside the GAR reporting timescales; and</li>
+         </ul>
+         <br>
+       <p class="govuk-body-m">
+         An emergency such as:
+         <br>
+       </p>
+         <ul class="govuk-list govuk-list--bullet">
+           <li>A medical emergency of a pilot/passenger; or</li>
+           <li>Air Ambulance with critical passengers; or</li>
+           <li>Other emergency requiring a change to information contained within an already submitted GAR; or</li>
+           <li>Last minute changes to a submitted GAR, when changes to online version are not possible</li>
+         </ul>
+       </p>
+     </div>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </div>
+
+{% endblock %}
