@@ -156,6 +156,7 @@ which will automatically pick up the config file.
 | CLAMAV_BASE                 | ClaMAV base uRL                       | True     |
 | CLAMAV_PORT                 | CLAMAV port                           | True     |
 | NODE_TLS_REJECT_UNAUTHORIZED| Ignore TLS verification               | True     |
+| ENABLE_UNAVAILABLE_PAGE     | Show service unavailable page         | False    |
 
 Please note: `BASE_URL` needs to be set in both Drone Secrets and Kube Secrets.
 

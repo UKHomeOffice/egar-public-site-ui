@@ -90,6 +90,18 @@ function initialisexpresssession(app) {
 
 function initialiseGlobalMiddleware(app) {
   logger.info('Initalising global middleware');
+
+  if (config.ENABLE_UNAVAILABLE_PAGE.toLowerCase() == 'true') {
+    logger.info('Enabling service unavailable middleware');
+    app.use(function (req, res, next) {
+      const validRoutes = ['unavailable', 'public', 'javascripts', 'stylesheets']
+      if (!validRoutes.some(el => req.url.includes(el))) {
+        return res.redirect('/unavailable');
+      }
+      next();
+    });
+  }
+
   app.set('settings', {
     getVersionedPath: staticify.getVersionedPath
   });
