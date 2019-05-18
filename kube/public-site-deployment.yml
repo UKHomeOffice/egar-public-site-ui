@@ -254,6 +254,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: WHITELIST_REQUIRED
+            - name: ENABLE_UNAVAILABLE_PAGE
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: ENABLE_UNAVAILABLE_PAGE
           ports:
             - name: public-site-prt
               containerPort: 3000
