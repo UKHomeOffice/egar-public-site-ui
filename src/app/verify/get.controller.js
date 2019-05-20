@@ -22,6 +22,7 @@ module.exports = async (req, res) => {
     const parsedResponse = JSON.parse(apiResponse);
     let message = 'Your account has now been successfully verified.' +
     'You can now log on and submit GAR files online.';
+    logger.info(parsedResponse);
     if (parsedResponse.message === 'Token has expired') {
       logger.info('Token expired, updating');
       const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
@@ -42,7 +43,7 @@ module.exports = async (req, res) => {
     }
     return res.render('app/verify/registeruser/index', { message });
   } catch (err) {
-    // error handle
+    console.log(err);
     logger.error(err);
     return res.render('app/verify/registeruser/index');
   }
