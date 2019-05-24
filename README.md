@@ -186,3 +186,6 @@ Please note: `BASE_URL` needs to be set in both Drone Secrets and Kube Secrets.
 | SESSION_TIMEOUT       | Session Timeout (MilliSeconds) | True     |
 | COOKIE_SECURE_FLAG    | Set secure flag                | true     |
 | GA_ID                 | Goggle Analytics tg Id         | true     |
+
+## Setting service unavailable page
+Setting `ENABLE_UNAVAILABLE_PAGE=true` will redirect all requests to the /unavailable page.
