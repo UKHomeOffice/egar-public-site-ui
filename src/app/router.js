@@ -54,6 +54,7 @@ const peopleDelete = require('./people/delete');
 const error = require('./error');
 const cookies = require('./cookie');
 const help = require('./help');
+const unavailable = require('./unavailable');
 
 // veirfy registeruser
 const verifyregisteruser = require('./verify/registeruser');
@@ -129,4 +130,5 @@ module.exports.bind = (app) => {
   app.use(peopleDelete.router);
   app.use(cookies.router);
   app.use(help.router);
+  app.use(unavailable.router);
 };
