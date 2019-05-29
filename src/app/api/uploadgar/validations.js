@@ -47,8 +47,8 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${crew.firstName} ${crew.lastName}`)]);
     validationArr.push([new ValidationRule(validator.validISOCountryLength, '', crew.issuingState, `Enter a valid document issuing state for ${crew.firstName} ${crew.lastName}. Must be a ISO 3166 country code`)]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentNumber, `Enter a document number for ${crew.firstName} ${crew.lastName}`)]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.lastName, `Enter a last name for ${crew.firstName}`)]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.firstName, `Enter a first name for ${crew.lastName}`)]);
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.lastName, `Enter a surname for ${crew.firstName}`)]);
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.firstName, `Enter a given name for ${crew.lastName}`)]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a gender for ${crew.firstName} ${crew.lastName}`)]);
     validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid gender for ${crew.firstName} ${crew.lastName}`)]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.dateOfBirth, `Enter a date of birth for ${crew.firstName} ${crew.lastName}`)]);

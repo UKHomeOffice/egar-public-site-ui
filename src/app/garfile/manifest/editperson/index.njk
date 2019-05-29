@@ -30,211 +30,22 @@
         Person Details
     </h1>
     <p class="govuk-body-m">
-      Check or provide the details of the person you want to add to the manifest.
-      Details should be as displayed on travel document
+      Provide the details of the person you want to add to the manifest.
+      Details should be as displayed on the travel document
     <p>
 
   <form action="/garfile/manifest/editperson" autocomplete="false" class="form-group" method="post" role="form" >
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-        <div class="govuk-form-group {{ m.form_group_class('first_name', errors) }}">
-          <label class="govuk-label govuk-label--m" for="first_name">Given Name(s)</label>
-           {{ m.error_message('first_name', errors) }}
-          <input class="govuk-input" id="first_name" name="first_name"
-          autocomplete="false" type="text" value="{{personDetails.firstName}}" />
-        </div>
-
-        <div class="govuk-form-group {{ m.form_group_class('dob', errors) }}">
-          <fieldset class="govuk-fieldset" aria-describedby="dateOfBirth-hint" role="group">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            Date of Birth
-          </legend>
-          <span class="govuk-hint" id="dateOfBirth-hint">For example, 31 3 1980</span>
-          <div class="form-date" id="dob">
-          {{ m.error_message('dob', errors) }}
-
-            <div class="govuk-date-input" id="dob">
-              <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="dobday">Day</label>
-                  {{ m.error_message('dobday', errors) }}
-                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobday" name="dobday" type="number" value="{{cookie.dateSlice('day', personDetails.dateOfBirth)}}" pattern="[0-9]*">
-                </div>
-              </div>
-
-              <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="dobmonth">Month</label>
-                  {{ m.error_message('dobmonth', errors) }}
-                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobmonth" name="dobmonth" type="number" value="{{cookie.dateSlice('month', personDetails.dateOfBirth)}}" pattern="[0-9]*">
-                </div>
-              </div>
-
-              <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="dobyear">Year</label>
-                  {{ m.error_message('dobyear', errors) }}
-                  <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="dobyear" name="dobyear" type="number" value="{{cookie.dateSlice('year', personDetails.dateOfBirth)}}" pattern="[0-9]*">
-                </div>
-              </div>
-        </fieldset>
-      </div>
-
-    <div class="govuk-form-group {{ m.form_group_class('persontype', errors) }}">
-      <label class="govuk-label govuk-label--m" for="persontype">Person Type</label>
-      <span class="govuk-hint">
-        For example, Captain, Crew or Passenger. First
-        Office / Co-Pilot should be identified as Crew.
-      </span>
-      {{ m.error_message('persontype', errors) }}
-      <select class="govuk-select" id="persontype" name="persontype">
-        {% for person in travepersontype %}
-          {% if person.persontype  == personDetails.peopleType %}
-          <option selected="true">{{person.persontype}}</option>
-          {% else %}
-          <option>{{person.persontype}}</option>
-          {% endif %}
-        {% endfor %}
-      </select>
-    </div>
-
-  </div>
-
-  <div class="govuk-grid-column-one-third">
-    <div class="govuk-form-group {{ m.form_group_class('surname', errors) }}">
-      <label class="govuk-label govuk-label--m" for="surname">Surname</label>
-      {{ m.error_message('surname', errors) }}
-      <input class="govuk-input" id="surname" name="surname" autocomplete="false"
-      type="text" value="{{ personDetails.lastName }}" />
-    </div>
-
-    <div class="govuk-form-group {{ m.form_group_class('placeOfBirth', errors) }}">
-      <label class="govuk-label govuk-label--m" for="placeOfBirth">Place of Birth</label>
-      {{ m.error_message('placeOfBirth', errors) }}
-      <input class="govuk-input" id="placeOfBirth" name="placeOfBirth"
-      type="text" value="{{ personDetails.placeOfBirth }}" />
-    </div>
-  </div>
-
-  <div class="govuk-grid-column-one-third">
-    <div class="govuk-form-group {{ m.form_group_class('gender', errors) }}">
-     <label class="govuk-label govuk-label--m" for="gender">Gender</label>
-        {{ m.error_message('gender', errors) }}
-        <select class="govuk-select" id="gender" name="gender">
-          {% for choice in genderchoice %}
-            {% if choice.gender  == personDetails.gender %}
-            <option selected="true">{{choice.gender}}</option>
-            {% else %}
-            <option>{{choice.gender }}</option>
-            {% endif %}
-          {% endfor %}
-        </select>
-    </div>
-
-    <div class="form-group {{ m.form_group_class('nationality', errors) }}">
-      <label class="govuk-label govuk-label--m" for="nationality">Nationality</label>
-      {{ m.error_message('nationality', errors) }}
-      <input class="govuk-input" id="nationality" name="nationality"
-        type="text" value="{{personDetails.nationality}}" maxlength="3"/>
-    </div>
-  </div>
-</div>
-
-  <div class="govuk-grid-row">
-    <h2 class="govuk-heading-m">Travel Document Details</h2>
-    <p class="govuk-body-m">
-        Check or provide the details of the persons travel document that you want to
-        add to the manifest. Details should be as displayed on travel document
-    </p>
-
-    <div class="govuk-form-group">
-      <label class="govuk-label govuk-label--m" for="documenttype">Travel Document Type</label>
-      <span class="govuk-hint">
-        This should be one of either: Passport, Identity Card or Other
-      </span>
-      {{ m.error_message('documenttype', errors) }}
-      <select class="govuk-select" id="documenttype" name="documenttype">
-        {% for document in traveldocumenttype %}
-          {% if document.documenttype  == personDetails.documentType %}
-            <option selected="true">{{document.documenttype}}</option>
-          {% else %}
-            <option>{{document.documenttype}}</option>
-          {% endif %}
-      {% endfor %}
-      </select>
-    </div>
-  </div>
-
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-      <div class="govuk-form-group {{ m.form_group_class('documentNumber', errors) }}">
-        <label class="govuk-label govuk-label--m" for="documentNumber">Document Number</label>
-        {{ m.error_message('documentNumber', errors) }}
-        <input class="govuk-input" id="documentNumber" name="documentNumber"
-          type="text" value="{{personDetails.documentNumber}}" />
-      </div>
-
-      <div class="govuk-form-group {{ m.form_group_class('issuingState', errors) }}">
-      <label class="govuk-label govuk-label--m" for="issuingState">Issuing State</label>
-      {{ m.error_message('issuingState', errors) }}
-      <input class="govuk-input" id="issuingState" name="issuingState"
-      type="text" value="{{personDetails.issuingState}}" maxlength="3"/>
-    </div>
-  </div>
-  <div class="govuk-grid-column-one-third">
-      <div class="govuk-form-group {{ m.form_group_class('docExpiry', errors) }}" id="docExpiry">
-        <fieldset class="govuk-fieldset" aria-describedby="docExpiry-hint" role="group">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            Document Expiry Date
-          </legend>
-          <span id="docExpiry-hint" class="govuk-hint">
-            For example, 21 07 2030
-          </span>
-
-          <div class="govuk-date-input" id="docExpiry">
-
-          {{ m.error_message('docExpiry', errors) }}
-          <div class="govuk-date-input__item">
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label" for="expday">Day</label>
-              {{ m.error_message('expday', errors) }}
-              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expday" name="expday" type="number" value="{{cookie.dateSlice('day', personDetails.documentExpiryDate)}}" pattern="[0-9]*">
-            </div>
-          </div>
-
-          <div class="govuk-date-input__item">
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label" for="expmonth">Month</label>
-              {{ m.error_message('expmonth', errors) }}
-              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expmonth" name="expmonth" type="number" value="{{cookie.dateSlice('month', personDetails.documentExpiryDate)}}" pattern="[0-9]*">
-            </div>
-          </div>
-
-          <div class="govuk-date-input__item">
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label" for="expyear">Year</label>
-              {{ m.error_message('expyear', errors) }}
-              <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="expyear" name="expyear" type="number" value="{{cookie.dateSlice('year', personDetails.documentExpiryDate)}}" pattern="[0-9]*">
-            </div>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-  </div>
-
-  <div class="govuk-grid-column-full">
-    <div class="govuk-form-group">
-      <input id="add-person-manifest" class="govuk-button" type="submit" value="Add to GAR" onclick="sendAnalytics(event, 'Save and Exit', 'click')">
-      <p class="govuk-body-m">
-        <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and Exit</a>
-      </p>
-      <p class="govuk-body-m">
-        <a href="/garfile/manifest" > Exit without saving </a>
-      </p>
-    </div>
-  </div>
-    <input type="hidden" id="garPeopleId" name="garPeopleId" value="{{personDetails.garPeopleId}}" />
+    <input type="hidden" id="garPeopleId" name="garPeopleId" value="{{person.garPeopleId}}" />
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    {% include "person-details.njk" %}
+    <br>
+    <input id="add-person-manifest" class="govuk-button" type="submit" value="Add to GAR" onclick="sendAnalytics(event, 'Save and Exit', 'click')">
+    <p class="govuk-body-m">
+      <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and Exit</a>
+    </p>
+    <p class="govuk-body-m">
+      <a href="/garfile/manifest" > Exit without saving </a>
+    </p>
   </form>
 </div>
 {% endblock %}

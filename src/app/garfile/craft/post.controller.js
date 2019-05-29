@@ -35,7 +35,7 @@ module.exports = (req, res) => {
     const validationMsgs = [
       'Enter a registration',
       'Enter a type',
-      'Enter a home / usual base',
+      'Enter an aircraft home port / location',
     ];
 
     const { buttonClicked } = req.body;

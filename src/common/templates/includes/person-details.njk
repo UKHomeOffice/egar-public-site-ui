@@ -14,6 +14,9 @@
 <div class="govuk-form-group {{ m.form_group_class('nationality', errors) }}">
   <label class="govuk-label govuk-label--m" for="nationality">Nationality</label>
   {{ m.error_message('nationality', errors) }}
+  <span class="govuk-hint">
+    Provide the 3 letter country code, for example GBR
+  </span>
   <input class="govuk-input" id="nationality"  maxlength="3" name="nationality" autocomplete="false" type="text" value="{{ person['nationality'] or req.body['nationality'] }}" />
 </div>
 
@@ -33,7 +36,7 @@
           </h1>
       </legend>
       <span class="govuk-hint" id="dob-hint">
-          For example, 20 12 1988
+          For example 20 12 1988
       </span>
       {{ m.error_message('dob', errors) }}
       <div class="govuk-date-input" id="dob">
@@ -122,7 +125,7 @@
         </h2>
       </legend>
       <span id="dob-hint" class="govuk-hint">
-        For example, 22 5 2021
+        For example 22 05 2021
       </span>
       {{ m.error_message('documentExpiryDate', errors) }}
       <div class="govuk-date-input" id="expiry">
@@ -158,6 +161,9 @@
 <div class="govuk-form-group {{ m.form_group_class('issuing-state', errors) }}">
   <label class="govuk-label govuk-label--m" for="issuing-state">Issuing state</label>
   {{ m.error_message('issuing-state', errors) }}
+  <span class="govuk-hint">
+    Provide the 3 letter code for the issuing state, for example GBR
+  </span>
   <input class="govuk-input" id="issuing-state" maxlength="3" name="issuing-state" autocomplete="false" type="text" value="{{person['issuingState'] or req.body['issuing-state']}}" />
 </div>
 
