@@ -3,7 +3,7 @@ const tokenservice = require('../../../common/services/create-token');
 const sendTokenService = require('../../../common/services/send-token');
 const tokenApi = require('../../../common/services/tokenApi');
 const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger');
+const logger = require('../../../common/utils/logger')(__filename);
 
 module.exports = (req, res) => {
   logger.debug('In user / regmsg get controller');

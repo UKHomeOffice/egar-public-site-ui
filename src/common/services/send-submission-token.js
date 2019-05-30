@@ -1,5 +1,5 @@
 const notify = require('notifications-node-client');
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')(__filename);
 const config = require('../config/index');
 
 if (config.NOTIFY_API_KEY === null) {

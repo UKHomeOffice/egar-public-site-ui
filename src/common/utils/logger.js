@@ -14,4 +14,18 @@ if (process.env.NODE_ENV !== 'production') {
   }));
 }
 
-module.exports = logger;
+module.exports = function(fileName) {
+  var loggerWithFilename = {
+    error: function(text) {
+      logger.error(fileName + ': ' + text);
+    },
+    debug: function(text) {
+      logger.debug(fileName + ': ' + text);
+    },
+    info: function(text) {
+      logger.info(fileName + ': ' + text);
+    }
+  };
+
+  return loggerWithFilename;
+};

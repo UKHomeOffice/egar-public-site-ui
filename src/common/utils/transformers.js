@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')(__filename);
 
 function transformPerson(personObj) {
   const copyPersonObj = personObj;

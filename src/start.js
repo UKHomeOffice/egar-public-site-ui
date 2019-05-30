@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const throng = require('throng');
-const logger = require('./common/utils/logger');
+const logger = require('./common/utils/logger')(__filename);
 const server = require('./server');
 
 const pidFile = path.join(__dirname, '/.start.pid');

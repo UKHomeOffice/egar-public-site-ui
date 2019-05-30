@@ -1,4 +1,4 @@
-const logger = require('../../../common/utils/logger');
+const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
 const CookieModel = require('../../../common/models/Cookie.class');

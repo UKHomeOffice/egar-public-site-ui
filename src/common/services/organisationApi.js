@@ -1,5 +1,5 @@
 const request = require('request');
-const logger = require('../../common/utils/logger');
+const logger = require('../../common/utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {

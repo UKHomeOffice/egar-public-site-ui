@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const moment = require('moment');
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')(__filename);
 
 
 const config = require('../config/index');

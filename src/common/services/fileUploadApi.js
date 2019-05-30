@@ -1,5 +1,5 @@
 const request = require('request');
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 const stream = require('stream')
 

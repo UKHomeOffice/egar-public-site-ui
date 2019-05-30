@@ -1,5 +1,5 @@
 const CookieModel = require('../../../../common/models/Cookie.class');
-const logger = require('../../../../common/utils/logger');
+const logger = require('../../../../common/utils/logger')(__filename);
 const travepersontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const traveldocumenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
