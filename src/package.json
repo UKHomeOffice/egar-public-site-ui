@@ -42,7 +42,7 @@
     "proxyquire": "^2.1.0",
     "request": "^2.88.0",
     "require-dir": "^1.0.0",
-    "sequelize": "^4.41.2",
+    "sequelize": "^5.8.7",
     "serve-favicon": "^2.5.0",
     "session-file-store": "^1.2.0",
     "sinon": "^7.1.1",
@@ -56,9 +56,9 @@
     "xlsx": "^0.14.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babelify": "^8.0.0",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "babelify": "^10.0.0",
     "browserify": "^16.2.3",
     "chai": "^4.2.0",
     "eslint": "^5.6.1",
