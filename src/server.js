@@ -23,7 +23,7 @@ const uuid = require('uuid/v4');
 const FileStore = require('session-file-store')(session);
 const config = require('./common/config/index');
 const csrf = require('csurf');
-const nunjucksFilters = require('./templateFilters.js');
+const nunjucksFilters = require('./common/utils/templateFilters.js');
 
 
 // Local dependencies
