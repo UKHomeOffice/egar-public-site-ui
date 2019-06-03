@@ -31,15 +31,15 @@
       method="post" role="form">
 
       <h1 class="govuk-heading-xl">Invite a user</h1>
-      <p class="govuk-body-l">Please begin by providing the following information to register a user account in your organisation</p>
+      <p class="govuk-body-l">Please begin by providing the following information to register a user account in your organisation.</p>
 
        <div class="govuk-form-group {{ m.form_group_class('invite', errors) }}">
 
           <div class="govuk-form-group {{ m.form_group_class('fname', errors) }}">
-            <label class="govuk-label govuk-label--m" for="fname">First name</label>
+            <label class="govuk-label govuk-label--m" for="fname">Given name</label>
             {{ m.error_message('fname', errors) }}
             <span class="govuk-hint">
-              Enter the first name of the user
+              Enter the Given name of the user
             </span>
             <span class="field-validation-valid error-message" data-valmsg-for="fname"
               data-valmsg-replace="true" style="display:block">
@@ -50,10 +50,10 @@
           </div>
 
           <div class="govuk-form-group {{ m.form_group_class('lname', errors) }}">
-            <label class="govuk-label govuk-label--m" for="lname">Last name</label>
+            <label class="govuk-label govuk-label--m" for="lname">Surname</label>
             {{ m.error_message('lname', errors) }}
             <span class="govuk-hint">
-              Enter the last name of the user
+              Enter the surname of the user
             </span>
             <span class="field-validation-valid error-message" data-valmsg-for="lname"
               data-valmsg-replace="true" style="display:block">

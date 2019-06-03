@@ -23,6 +23,7 @@ const uuid = require('uuid/v4');
 const FileStore = require('session-file-store')(session);
 const config = require('./common/config/index');
 const csrf = require('csurf');
+const nunjucksFilters = require('./common/utils/templateFilters.js');
 
 
 // Local dependencies
@@ -187,6 +188,7 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('ga_id', GA_ID);
   nunjucksEnvironment.addGlobal('ga_id', GA_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
+  nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase)
   // logger.info('Set global settings for nunjucks');
 }
 

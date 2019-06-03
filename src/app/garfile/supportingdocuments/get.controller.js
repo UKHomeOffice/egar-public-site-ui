@@ -19,7 +19,7 @@ module.exports = (req, res) => {
           res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ message: 'File cannot be uploaded. The file has a virus.'}]})
         } else if (req.query.query === '0') {
           logger.debug('no file')
-          res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ identifier: 'file', message: 'No File selected for upload.'}]})
+          res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ identifier: 'file', message: 'No file selected for upload.'}]})
         } else if (req.query.query === 'limit') {
           res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ message: 'File size exceeds total limit' }] });
         } else if (req.query.query === 'deletefailed') {
