@@ -1,6 +1,6 @@
 <div class="govuk-form-group {{ m.form_group_class('savedpeople', errors) }}">
 <div class="govuk-form-group {{ m.form_group_class('first-name', errors) }}">
-  <label class="govuk-label govuk-label--m" for="first-name">Given name(s)</label>
+  <label class="govuk-label govuk-label--m" for="first-name">Given name</label>
     {{ m.error_message('first-name', errors) }}
   <input class="govuk-input" id="first-name" name="first-name" autocomplete="false" type="text" value="{{person['firstName'] or req.body['first-name']}}" />
 </div>
