@@ -2,25 +2,25 @@
 <div class="govuk-form-group {{ m.form_group_class('first-name', errors) }}">
   <label class="govuk-label govuk-label--m" for="first-name">Given name(s)</label>
     {{ m.error_message('first-name', errors) }}
-  <input class="govuk-input" id="first-name" name="first-name" autocomplete="false" type="text" value="{{person['firstName'] or req.body['first-name']}}" />
+  <input class="govuk-input" id="first-name" name="first-name" autocomplete="off" type="text" value="{{person['firstName'] or req.body['first-name']}}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('last-name', errors) }}">
   <label class="govuk-label govuk-label--m" for="last-name">Surname</label>
   {{ m.error_message('last-name', errors) }}
-  <input class="govuk-input" id="last-name" name="last-name" autocomplete="false" type="text" value="{{ person['lastName'] or req.body['last-name'] }}" />
+  <input class="govuk-input" id="last-name" name="last-name" autocomplete="off" type="text" value="{{ person['lastName'] or req.body['last-name'] }}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('nationality', errors) }}">
   <label class="govuk-label govuk-label--m" for="nationality">Nationality</label>
   {{ m.error_message('nationality', errors) }}
-  <input class="govuk-input" id="nationality"  maxlength="3" name="nationality" autocomplete="false" type="text" value="{{ person['nationality'] or req.body['nationality'] }}" />
+  <input class="govuk-input" id="nationality"  maxlength="3" name="nationality" autocomplete="off" type="text" value="{{ person['nationality'] or req.body['nationality'] }}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
   <label class="govuk-label govuk-label--m" for="birthplace">Place of birth</label>
   {{ m.error_message('birthplace', errors) }}
-  <input class="govuk-input" id="birthplace" name="birthplace" autocomplete="false" type="text" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
+  <input class="govuk-input" id="birthplace" name="birthplace" autocomplete="off" type="text" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
   </div>
 
   <!–– Date of birth -->
@@ -158,7 +158,7 @@
 <div class="govuk-form-group {{ m.form_group_class('issuing-state', errors) }}">
   <label class="govuk-label govuk-label--m" for="issuing-state">Issuing state</label>
   {{ m.error_message('issuing-state', errors) }}
-  <input class="govuk-input" id="issuing-state" maxlength="3" name="issuing-state" autocomplete="false" type="text" value="{{person['issuingState'] or req.body['issuing-state']}}" />
+  <input class="govuk-input" id="issuing-state" maxlength="3" name="issuing-state" autocomplete="off" type="text" value="{{person['issuingState'] or req.body['issuing-state']}}" />
 </div>
 
   <div class="govuk-form-group {{ m.form_group_class('travel-document-type', errors) }}">

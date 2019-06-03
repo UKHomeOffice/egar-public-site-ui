@@ -34,14 +34,14 @@
       Details should be as displayed on travel document
     <p>
 
-  <form action="/garfile/manifest/editperson" autocomplete="false" class="form-group" method="post" role="form" >
+  <form action="/garfile/manifest/editperson" autocomplete="off" class="form-group" method="post" role="form" >
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
         <div class="govuk-form-group {{ m.form_group_class('first_name', errors) }}">
           <label class="govuk-label govuk-label--m" for="first_name">Given Name(s)</label>
            {{ m.error_message('first_name', errors) }}
           <input class="govuk-input" id="first_name" name="first_name"
-          autocomplete="false" type="text" value="{{personDetails.firstName}}" />
+          autocomplete="off" type="text" value="{{personDetails.firstName}}" />
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('dob', errors) }}">
@@ -104,7 +104,7 @@
     <div class="govuk-form-group {{ m.form_group_class('surname', errors) }}">
       <label class="govuk-label govuk-label--m" for="surname">Surname</label>
       {{ m.error_message('surname', errors) }}
-      <input class="govuk-input" id="surname" name="surname" autocomplete="false"
+      <input class="govuk-input" id="surname" name="surname" autocomplete="off"
       type="text" value="{{ personDetails.lastName }}" />
     </div>
 
