@@ -4,7 +4,6 @@ const path = require('path');
 // Npm dependencies
 const express = require('express');
 const session = require('express-session');
-//const cookieSession = require('cookie-session');
 const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const i18n = require('i18n');
@@ -13,7 +12,6 @@ const argv = require('minimist')(process.argv.slice(2));
 const staticify = require('staticify')(path.join(__dirname, 'public'));
 const compression = require('compression');
 const nunjucks = require('nunjucks');
-const Sequelize = require('sequelize');
 const helmet = require('helmet');
 const _ = require('lodash');
 const logger = require('./common/utils/logger')(__filename);
@@ -49,10 +47,13 @@ const visitor = ua(GA_ID);
 const COOKIE_SECRET = (process.env.COOKIE_SECRET || '');
 const BASE_URL = (process.env.BASE_URL || '');
 const app = express;
+// Set Cookie secure flag depending on environment variable
 let secureFlag = false;
 if (process.env.COOKIE_SECURE_FLAG == "true") {
   secureFlag = true;
 }
+logger.debug('Secure Flag for Cookie set to:');
+logger.debug(secureFlag);
 // Define app views
 const APP_VIEWS = [
   path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
@@ -84,7 +85,6 @@ function initialisexpresssession(app) {
     },
   }));
   logger.info('Set express session');
-  logger.info('Set csrf');
 }
 
 
@@ -114,26 +114,39 @@ function initialiseGlobalMiddleware(app) {
       ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms',
     ));
   }
-  //app.use(csrf({cookie: true}));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
     extended: true
   }));
+
  app.use(csrf({cookie: {
     httpOnly: true,
-    secure: true
+    secure: secureFlag,
   } }));
 
   app.use((req, res, next) => {
     res.locals.asset_path = '/public/'; // eslint-disable-line camelcase
     noCache(res);
     var token = req.csrfToken();
-    res.cookie('XSRF-TOKEN', token);
+    res.locals._csrf = token;
+    // This might be needed, but leaving it in for now...
+    res.cookie('XSRF-TOKEN', token, { httpOnly: true, secure: secureFlag });
 
-    res.locals.csrfToken = token;
+    // Previously, local development required the disabling of CSRF token handling
+    // The below adds the csrfToken to the res.render function which should hopefully
+    // allow for local development without this hack
+    var _render = res.render;
+    // override res.render logic by adding the csrfToken
+    res.render = function( view, options, fn ) {
+        // Set the csrfToken within the res.render
+        _.extend( options, {csrfToken: token} );
+        // continue with original render
+        _render.call( this, view, options, fn );
+    }
+
     next();
   });
-  logger.info('Set csrf Token')
+  logger.info('Set CSRF Token')
   app.use(helmet());
 
   app.use('*', correlationHeader);
@@ -198,16 +211,6 @@ function initialisePublic(app) {
   logger.info('Initialised public assets');
 }
 
-function initialiseCookie(app) {
-  app.use(cookieSession({
-    name: '',
-    keys: [COOKIE_SECRET],
-    //maxAge: 8 * 60 * 60 * 500, // 4
-    httpOnly: true,
-  }));
-  logger.info('Initialised cookieSession');
-}
-
 function initialiseRoutes(app) {
   logger.info('Initialised router');
   router.bind(app);
@@ -242,7 +245,6 @@ function initialise() {
   initialiseProxy(app);
   initialiseI18n(app);
   initialiseGlobalMiddleware(app);
-  //initialiseCookie(app);
   initialiseTemplateEngine(app);
   initialiseRoutes(app);
   initialisePublic(app);
