@@ -290,6 +290,29 @@ function genValidations(type, cssIds, values, msgs) {
   return validationArr;
 }
 
+/**
+ * Given a filename and mimetype. Return true if:
+ *   - The extension in the fileName matches the mimeType and the mimetype is one of the allowed types
+ * Else return false
+ * @param {String} fileName
+ * @param {String} mimeType
+ * @returns {Bool}
+ */
+function isValidFileMime(fileName, mimeType) {
+  const fileTypeObj = {
+    'jpg': ['image/jpeg', 'image/x-citrix-jpeg'],
+    'jpeg': ['image/jpeg', 'image/x-citrix-jpeg'],
+    'png': ['image/png', 'image/x-citrix-png', 'image/x-png'],
+    'pdf': ['application/pdf'],
+    'gif': ['image/gif']
+  }
+  const fileExtension = fileName.split('.').slice(-1).pop()
+  if (fileTypeObj[fileExtension]) {
+    return fileTypeObj[fileExtension].includes(mimeType);
+  }
+  return false;
+}
+
 
 module.exports = {
   notEmpty,
@@ -321,4 +344,5 @@ module.exports = {
   longitude,
   validIntlPhone,
   notSameValues,
+  isValidFileMime
 };

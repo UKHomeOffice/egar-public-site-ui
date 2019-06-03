@@ -24,6 +24,8 @@ module.exports = (req, res) => {
           res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ message: 'File size exceeds total limit' }] });
         } else if (req.query.query === 'deletefailed') {
           res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ message: 'Failed to delete document. Try again' }] });
+        } else if (req.query.query === 'invalid') {
+          res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc, errors: [{ message: 'Invalid file type selected' }] });
         } else {
           res.render('app/garfile/supportingdocuments/index', { cookie, supportingDoc})
         }
