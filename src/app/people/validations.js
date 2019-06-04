@@ -12,10 +12,10 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.realDate, 'documentExpiryDate', expiryDateObj, 'Enter a real document expiry date'),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'first-name', req.body['first-name'], 'Enter the first name of the person'),
+      new ValidationRule(validator.notEmpty, 'first-name', req.body['first-name'], 'Enter the given name of the person'),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'last-name', req.body['last-name'], 'Enter the last name of the person'),
+      new ValidationRule(validator.notEmpty, 'last-name', req.body['last-name'], 'Enter the surname of the person'),
     ],
     [
       new ValidationRule(validator.notEmpty, 'nationality', req.body.nationality, 'Enter the nationality of the person'),

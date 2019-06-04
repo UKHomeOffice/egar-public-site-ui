@@ -6,6 +6,7 @@ const paths = {
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const fileType = require('file-type');
 
 const storage = multer.memoryStorage();
 
@@ -16,6 +17,7 @@ const logger = require('../../../common/utils/logger');
 const clamavService = require('../../../common/services/clamavservice');
 const garApi = require('../../../common/services/garApi');
 const transformers = require('../../../common/utils/transformers');
+const { isValidFileMime } = require('../../../common/utils/validator');
 
 router.get('/upload', (req, res) => {
   res.json({ message: 'welcome to our upload module apis' });
@@ -76,53 +78,59 @@ router.post('/upload', (req, res) => {
           return res.redirect('/garfile/supportingdocuments?query=limit');
         }
         logger.debug(`In Upload File Service. Uploaded File: ${req.file.originalname}`);
-        logger.debug('Calling ClamAv service');
+        const mimeType = fileType(req.file.buffer)
+        logger.info(`Detected uploaded file mimetype as: ${mimeType}`);
+        if(!mimeType || !isValidFileMime(req.file.originalname, mimeType.mime)) {
+          logger.info(`Rejecting file due to disallowed mimetype`);
+          return res.redirect('/garfile/supportingdocuments?query=invalid');
+        } else {
+          logger.info(`Valid mimetype, proceeding`);
+          const readStream = new stream.Readable();
+          readStream.push(req.file.buffer);
+          readStream.push(null);
+          const uriString = `${process.env.CLAMAV_BASE}:${process.env.CLAMAV_PORT}/scan`;
+          logger.debug(`uri: ${uriString}`);
 
-        const readStream = new stream.Readable();
-        readStream.push(req.file.buffer);
-        readStream.push(null);
-        const uriString = `${process.env.CLAMAV_BASE}:${process.env.CLAMAV_PORT}/scan`;
-        logger.debug(`uri: ${uriString}`);
-
-        const formData = {
-          name: req.file.originalname,
-          file: {
-            value: req.file.buffer, // Upload the  file in the multi-part post
-            options: {
-              filename: req.file.originalname,
+          const formData = {
+            name: req.file.originalname,
+            file: {
+              value: req.file.buffer, // Upload the  file in the multi-part post
+              options: {
+                filename: req.file.originalname,
+              },
             },
-          },
-        };
+          };
 
-        clamavService.scanFile(formData)
-          .then((clamavResp) => {
-            if (clamavResp) {
-              uploadFile.postFile(req.body.user, req.body.garid, req.file)
-                .then((response) => {
-                  const parsedResponse = JSON.parse(response);
-                  if (parsedResponse.hasOwnProperty('message')) {
-                    // API returned error
-                    logger.debug('Api returned message key');
-                    logger.debug(JSON.stringify(parsedResponse));
-                    res.redirect('/garfile/supportingdocuments?query=e');
-                  } else {
-                    logger.debug('File uploaded');
+          clamavService.scanFile(formData)
+            .then((clamavResp) => {
+              if (clamavResp) {
+                uploadFile.postFile(req.body.user, req.body.garid, req.file)
+                  .then((response) => {
+                    const parsedResponse = JSON.parse(response);
+                    if (parsedResponse.hasOwnProperty('message')) {
+                      // API returned error
+                      logger.debug('Api returned message key');
+                      logger.debug(JSON.stringify(parsedResponse));
+                      res.redirect('/garfile/supportingdocuments?query=e');
+                    } else {
+                      logger.debug('File uploaded');
+                      res.redirect('/garfile/supportingdocuments');
+                    }
+                  })
+                  .catch((err) => {
+                    logger.error('Failed to upload File.');
+                    logger.error(err);
                     res.redirect('/garfile/supportingdocuments');
-                  }
-                })
-                .catch((err) => {
-                  logger.error('Failed to upload File.');
-                  logger.error(err);
-                  res.redirect('/garfile/supportingdocuments');
-                });
-            } else {
-              return res.redirect('/garfile/supportingdocuments?query=v');
-            }
-          })
-          .catch(() => {
-            logger.debug('Error occurred during scanning the file');
-            res.redirect('/garfile/supportingdocuments?query=e');
-          });
+                  });
+              } else {
+                return res.redirect('/garfile/supportingdocuments?query=v');
+              }
+            })
+            .catch(() => {
+              logger.debug('Error occurred during scanning the file');
+              res.redirect('/garfile/supportingdocuments?query=e');
+            });
+        }
       })
       .catch(() => {
         logger.debug('Error occurred during scanning the file');

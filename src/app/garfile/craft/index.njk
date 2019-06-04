@@ -37,7 +37,7 @@
 	  <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
 	  <th class="govuk-table__header">Aircraft registration</th>
 	  <th class="govuk-table__header">Aircraft type</th>
-	  <th class="govuk-table__header">Home / Usual base</th>
+	  <th class="govuk-table__header">Aircraft home port / location</th>
 	</tr>
   </thead>
   <tbody class="govuk-table__body">
@@ -73,7 +73,7 @@
         </label>
         {{ m.error_message('craftReg', errors) }}
         <span class="govuk-hint">
-          For example, G-ABCD
+          For example G-ABCD
         </span>
         <span class="field-validation-valid error-message" data-valmsg-for="craftReg"
           data-valmsg-replace="true" style="display:block">
@@ -101,11 +101,11 @@
 
     <div class="govuk-form-group {{ m.form_group_class('craftBase', errors) }}">
     <label class="govuk-label" for="craftBase">
-      Home / Usual base
+      Aircraft home port / location
     </label>
     {{ m.error_message('craftBase', errors) }}
     <span class="govuk-hint">
-      IATA / ICAO / Coordinates (decimal)
+      Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA/ICAO code. Provide coordinates to 4 decimal places
     </span>
     <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
       data-valmsg-replace="true" style="display:block">

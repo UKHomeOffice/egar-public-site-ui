@@ -1,6 +1,6 @@
 <div class="govuk-form-group {{ m.form_group_class('savedpeople', errors) }}">
 <div class="govuk-form-group {{ m.form_group_class('first-name', errors) }}">
-  <label class="govuk-label govuk-label--m" for="first-name">Given name(s)</label>
+  <label class="govuk-label govuk-label--m" for="first-name">Given name</label>
     {{ m.error_message('first-name', errors) }}
   <input class="govuk-input" id="first-name" name="first-name" autocomplete="off" type="text" value="{{person['firstName'] or req.body['first-name']}}" />
 </div>
@@ -14,7 +14,10 @@
 <div class="govuk-form-group {{ m.form_group_class('nationality', errors) }}">
   <label class="govuk-label govuk-label--m" for="nationality">Nationality</label>
   {{ m.error_message('nationality', errors) }}
-  <input class="govuk-input" id="nationality"  maxlength="3" name="nationality" autocomplete="off" type="text" value="{{ person['nationality'] or req.body['nationality'] }}" />
+  <span class="govuk-hint">
+    Provide the 3 letter country code, for example GBR
+  </span>
+  <input class="govuk-input" id="nationality"  maxlength="3" name="nationality" autocomplete="false" type="text" value="{{ person['nationality'] or req.body['nationality'] }}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
@@ -33,7 +36,7 @@
           </h1>
       </legend>
       <span class="govuk-hint" id="dob-hint">
-          For example, 20 12 1988
+          For example 20 12 1988
       </span>
       {{ m.error_message('dob', errors) }}
       <div class="govuk-date-input" id="dob">
@@ -93,6 +96,9 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h2 class="govuk-fieldset__heading">Person type</h2>
         </legend>
+        <span id="dob-hint" class="govuk-hint">
+          For example Captain, Crew or Passenger. First Officer / Co-Pilot should be identified as Crew.
+        </span>
         <div class="govuk-radios">
         {% for choice in persontype %}
         <div class="govuk-radios__item">
@@ -108,6 +114,12 @@
       </fieldset>
     </div>
 
+  <h2 class="govuk-heading-l">Travel document details</h2>
+  <p class="govuk-body">
+    Provide the details of the person’s travel document that you want to add.
+    Details should be as displayed on the travel document.
+  </p>
+
   <div class="govuk-form-group {{ m.form_group_class('travel-document-number', errors) }}">
     <label class="govuk-label govuk-label--m" for="travel-document-number">Travel document number</label>
     {{ m.error_message('travel-document-number', errors) }}
@@ -118,11 +130,11 @@
     <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">
-          What is the document expiry date?
+          Document expiry date
         </h2>
       </legend>
       <span id="dob-hint" class="govuk-hint">
-        For example, 22 5 2021
+        For example 22 05 2021
       </span>
       {{ m.error_message('documentExpiryDate', errors) }}
       <div class="govuk-date-input" id="expiry">
@@ -158,7 +170,10 @@
 <div class="govuk-form-group {{ m.form_group_class('issuing-state', errors) }}">
   <label class="govuk-label govuk-label--m" for="issuing-state">Issuing state</label>
   {{ m.error_message('issuing-state', errors) }}
-  <input class="govuk-input" id="issuing-state" maxlength="3" name="issuing-state" autocomplete="off" type="text" value="{{person['issuingState'] or req.body['issuing-state']}}" />
+  <span class="govuk-hint">
+    Provide the 3 letter code for the issuing state, for example GBR
+  </span>
+  <input class="govuk-input" id="issuing-state" maxlength="3" name="issuing-state" autocomplete="false" type="text" value="{{person['issuingState'] or req.body['issuing-state']}}" />
 </div>
 
   <div class="govuk-form-group {{ m.form_group_class('travel-document-type', errors) }}">
