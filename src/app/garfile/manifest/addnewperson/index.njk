@@ -34,7 +34,7 @@
     Details should be as displayed on the travel document
   <p>
 
-  <form action="/garfile/manifest/addnewperson" autocomplete="false" class="form-group" method="post" role="form">
+  <form action="/garfile/manifest/addnewperson" autocomplete="off" class="form-group" method="post" role="form">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {% include "person-details.njk" %}
     <br>
