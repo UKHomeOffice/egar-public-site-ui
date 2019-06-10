@@ -119,7 +119,22 @@
       integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
       crossorigin="anonymous">
     </script>
-
+    <script src="https://terrylinooo.github.io/jquery.disableAutoFill/assets/js/jquery.disableAutoFill.min.js"></script>
+    <script>
+      $('#page-form').disableAutoFill(
+        {
+          randomizeInputName: true,
+        }
+      );
+      $("input[value='Save and continue'][type='submit']").click(function(eventObj) {
+        $("<input />")
+          .attr("type", "hidden")
+          .attr("name", "buttonClicked")
+          .attr("value", "Save and continue")
+          .appendTo("#main-form");
+        return true;
+      });
+    </script>
     <script src="/javascripts/table-multiselect.js"></script>
     <script src="/javascripts/cookie-banner.js"></script>
   </body>

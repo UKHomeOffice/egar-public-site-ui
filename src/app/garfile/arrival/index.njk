@@ -27,7 +27,7 @@
   {% endif %}
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
-      <form action="/garfile/arrival" autocomplete="off" class="form-group" method="post" role="form">
+      <form id="page-form" action="/garfile/arrival" autocomplete="off" class="form-group" method="post" role="form">
 
         <!–– Start Arrival date -->
           <div class="govuk-form-group" id="arrivalDate">
@@ -167,7 +167,7 @@
                 onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
 						<p class="govuk-body-m">
-		          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
+		          <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
 		        </p>
             <p class="govuk-body-m">
               <a href="/home" > Exit without saving </a>
