@@ -121,17 +121,17 @@
     </script>
     <script src="https://terrylinooo.github.io/jquery.disableAutoFill/assets/js/jquery.disableAutoFill.min.js"></script>
     <script>
-      $('#page-form').disableAutoFill(
+      $("#page-form").disableAutoFill(
         {
           randomizeInputName: true,
         }
       );
-      $("input[value='Save and continue'][type='submit']").click(function(eventObj) {
+      $("input[value='Save and continue'][type='button']").click(function(eventObj) {
         $("<input />")
           .attr("type", "hidden")
           .attr("name", "buttonClicked")
           .attr("value", "Save and continue")
-          .appendTo("#main-form");
+          .appendTo("#page-form");
         return true;
       });
     </script>
