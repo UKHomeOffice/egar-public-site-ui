@@ -4,7 +4,7 @@
   "description": "Electronic Gar Site",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=text mocha"
+    "test": "nyc --reporter=lcov --reporter=text mocha"
   },
   "author": "",
   "license": "ISC",
