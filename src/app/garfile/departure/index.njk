@@ -27,7 +27,7 @@
   {% endif %}
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
-      <form action="/garfile/departure" autocomplete="false" class="form-group" method="post" role="form">
+      <form id="page-form" action="/garfile/departure" autocomplete="off" class="form-group" method="post" role="form">
 
         <!-- Start departure date -->
           <div class="govuk-form-group" id="departureDate">
@@ -121,7 +121,7 @@
 				</span>
 
           {{ m.error_message('departurePort', errors) }}
-          <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="false" type="text" value="{{cookie.getGarDepartureVoyage().departurePort}}"/>
+          <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort}}"/>
         </div>
         <!-- End departure port -->
 
@@ -144,7 +144,7 @@
           </span>
 
           {{ m.error_message('departureLat', errors) }}
-          <input class="govuk-input" id="departureLat" name="departureLat" autocomplete="false" type="text" value="{{cookie.getGarDepartureVoyage().departureLat}}"/>
+          <input class="govuk-input" id="departureLat" name="departureLat" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departureLat}}"/>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('departureLong', errors) }}">
@@ -155,19 +155,18 @@
               For example -0.4542
           </span>
           {{ m.error_message('departureLong', errors) }}
-          <input class="govuk-input" id="departureLong" name="departureLong" autocomplete="false" type="text" value="{{cookie.getGarDepartureVoyage().departureLong}}"/>
+          <input class="govuk-input" id="departureLong" name="departureLong" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departureLong}}"/>
 
         </div>
         <!-- End departure coords -->
 
         <!-- start buttons -->
         <div class="column-two-thirds">
-
           <input id="newVoyage" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
           onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
 						<p class="govuk-body-m">
-		          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
+		          <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;" name="submit_button">Save and come back later</a>
 		        </p>
             <p class="govuk-body-m">
               <a href="/home" > Exit without saving </a>

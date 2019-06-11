@@ -23,7 +23,7 @@ module.exports = {
           base_url: config.BASE_URL,
         } })
         .then((response) => resolve(response))
-        .catch((err) = {
+        .catch((err) => {
           logger.error(err);
           reject(err);
         });

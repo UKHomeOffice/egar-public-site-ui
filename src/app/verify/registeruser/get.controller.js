@@ -19,7 +19,6 @@ module.exports = (req, res) => {
   logger.debug('Calling verify user endpoint');
   verifyUserService.verifyUser(hashedToken)
     .then((response) => {
-      console.log(`API User verify response: ${response}`);
       logger.debug(response);
       // TODO - Handle unhappy path
       // Check response for error message.

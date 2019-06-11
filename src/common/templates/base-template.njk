@@ -108,7 +108,6 @@
 
     {% block bodyEnd %}{% endblock %}
 
-
   <script src="/javascripts/all.min.js"></script>
   <script>
   GOVUKFrontend.initAll();
@@ -119,7 +118,22 @@
       integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
       crossorigin="anonymous">
     </script>
-
+    <script src="/javascripts/jquery.disableAutoFill.min.js"></script>
+    <script>
+      $("#page-form").disableAutoFill(
+        {
+          randomizeInputName: true,
+        }
+      );
+      $("input[value='Save and continue'][type='button']").click(function(eventObj) {
+        $("<input />")
+          .attr("type", "hidden")
+          .attr("name", "buttonClicked")
+          .attr("value", "Save and continue")
+          .appendTo("#page-form");
+        return true;
+      });
+    </script>
     <script src="/javascripts/table-multiselect.js"></script>
     <script src="/javascripts/cookie-banner.js"></script>
   </body>
