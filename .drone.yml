@@ -17,7 +17,13 @@ pipeline:
 
 
   SonarQube Scanner:
-    image: quay.io/ukhomeofficedigital/sonar-scanner:v3.0.3
+    image: quay.io/ukhomeofficedigital/sonar-scanner-node:latest
+    commands:
+      - cd src
+      - npm install
+      - npm test
+      - cd ..
+      - sonar-scanner
     when:
       event: [ push, deployment, pull_request ]
 
