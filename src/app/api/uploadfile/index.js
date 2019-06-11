@@ -24,7 +24,7 @@ router.get('/upload', (req, res) => {
 });
 
 function exceedFileLimit(fileSize, garId) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     // Get supporting docs and add file size
     // Check if fileSize + total >= MAX_SIZE
     const MAX_SIZE = (1024 ** 2) * 8;

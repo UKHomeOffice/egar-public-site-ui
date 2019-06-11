@@ -34,7 +34,7 @@ router.get('/uploadgar', (req, res) => {
   res.json({ message: 'welcome to our upload module apis' });
 });
 
-router.post('/uploadgar', upload.single('file'), (req, res, data) => {
+router.post('/uploadgar', upload.single('file'), (req, res) => {
   if (req.file) {
     logger.debug(`In Gar File Upload Service. Uploaded File: ${req.file.filename}`);
     const readStream = new stream.Readable();

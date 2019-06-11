@@ -11,7 +11,6 @@ module.exports = (req, res) => {
 
   const userRole = cookie.getUserRole();
   const userId = cookie.getUserDbId();
-  const crafts = userRole === 'Individual' ? craftApi.getCrafts(userId) : craftApi.getOrgCrafts(cookie.getOrganisationId());
 
   garApi.get(cookie.getGarId())
     .then((values) => {
@@ -22,7 +21,7 @@ module.exports = (req, res) => {
       if (userRole === 'Individual') {
         craftApi.getCrafts(userId)
           .then((values) => {
-            let garCraft = (JSON.parse(values));
+            const garCraft = (JSON.parse(values));
             if (garCraft.items.length > 0) {
               cookie.setSavedCraft(JSON.parse(values));
               return res.render('app/garfile/craft/index', { cookie });
@@ -38,7 +37,7 @@ module.exports = (req, res) => {
       } else {
         craftApi.getOrgCrafts(cookie.getOrganisationId())
           .then((values) => {
-            let garCraft = (JSON.parse(values));
+            const garCraft = (JSON.parse(values));
             if (garCraft.items.length > 0) {
               cookie.setSavedCraft(JSON.parse(values));
               return res.render('app/garfile/craft/index', { cookie });
