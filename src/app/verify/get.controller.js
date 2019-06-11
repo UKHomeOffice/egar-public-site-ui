@@ -43,7 +43,6 @@ module.exports = async (req, res) => {
     }
     return res.render('app/verify/registeruser/index', { message });
   } catch (err) {
-    console.log(err);
     logger.error(err);
     return res.render('app/verify/registeruser/index');
   }
