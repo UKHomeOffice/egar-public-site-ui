@@ -4,7 +4,8 @@
   "description": "Electronic Gar Site",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=text mocha"
+    "test": "nyc --reporter=lcov --reporter=text mocha",
+    "test-drone": "nyc --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha"
   },
   "author": "",
   "license": "ISC",

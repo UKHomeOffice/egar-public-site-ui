@@ -21,9 +21,9 @@ pipeline:
     commands:
       - cd src
       - npm install
-      - npm test
+      - npm run test-drone
       - cd ..
-      - sonar-scanner
+      - sonar-scanner -Dsonar.projectVersion=$${DRONE_BUILD_NUMBER}
     when:
       event: [ push, deployment, pull_request ]
 
