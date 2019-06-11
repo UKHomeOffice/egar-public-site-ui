@@ -28,10 +28,10 @@ module.exports = (req, res) => {
 
   // Define a validation chain for user registration fields
   const fnameChain = [
-    new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your first name'),
+    new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given name'),
   ];
   const lnameChain = [
-    new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your last name'),
+    new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),
   ];
 
   const userChain = [

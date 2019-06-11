@@ -5,20 +5,21 @@ pipeline:
     commands:
       - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
     when:
-      event: [ push, deployment ]
+      event: [ push, deployment, pull_request ]
+
 
   Unit tests:
     image: quay.io/ukhomeofficedigital/drone-docker
     commands:
       - docker run -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} sh -c "cd test/ && npm test"
     when:
-      event: [ push, deployment ]
+      event: [ push, deployment, pull_request ]
 
 
   SonarQube Scanner:
     image: quay.io/ukhomeofficedigital/sonar-scanner:v3.0.3
     when:
-      event: [ push, deployment ]
+      event: [ push, deployment, pull_request ]
 
 
   Push Image to Quay.io:

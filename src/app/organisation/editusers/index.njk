@@ -29,7 +29,7 @@
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
 
-    <form action="/organisation/users/edit" autocomplete="false" class="form-group"
+    <form action="/organisation/users/edit" autocomplete="off" class="form-group"
       method="post" role="form">
 
       <h1 class="govuk-heading-xl">Edit an organisation user</h1>
@@ -39,7 +39,7 @@
         <label class="govuk-label govuk-label--m" for="firstName">Given name</label>
           {{ m.error_message('firstName', errors) }}
         <span class="govuk-hint">
-            Given Name(s)
+            Given Name
         </span>
         <span class="field-validation-valid error-message" data-valmsg-for="firstName"
           data-valmsg-replace="true" style="display:block">
@@ -48,7 +48,7 @@
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('lastName', errors) }}">
-        <label class="govuk-label govuk-label--m" for="lastName">Last name</label>
+        <label class="govuk-label govuk-label--m" for="lastName">Surname</label>
           {{ m.error_message('lastName', errors) }}
         <span class="govuk-hint">
           Surname

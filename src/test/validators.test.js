@@ -297,4 +297,20 @@ describe('Validator', () => {
     expect(validator.notSameValues(['ABC', 'abc'])).to.be.false;
     expect(validator.notSameValues(['ABc', 'aBc'])).to.be.false;
   })
+
+  it('Should return true when a valid file and mimetype are provided', () => {
+    expect(validator.isValidFileMime('jpg', 'image/jpeg')).to.be.true;
+    expect(validator.isValidFileMime('jpeg', 'image/jpeg')).to.be.true;
+    expect(validator.isValidFileMime('png', 'image/png')).to.be.true;
+    expect(validator.isValidFileMime('pdf', 'application/pdf')).to.be.true;
+    expect(validator.isValidFileMime('gif', 'image/gif')).to.be.true;
+  })
+
+  it('Should return false when a valid file with an different valid extension is provided', () => {
+    expect(validator.isValidFileMime('png', 'image/jpeg')).to.be.false;
+  })
+
+  it('Should return false when a file with an invalid mimetype is provided', () => {
+    expect(validator.isValidFileMime('png', 'application/txt')).to.be.false;
+  })
 });

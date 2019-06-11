@@ -9,8 +9,8 @@ module.exports = (req, res) => {
   logger.debug('In verify / MFA get controller');
   const cookie = new CookieModel(req);
   const mfaTokenLength = settings.MFA_TOKEN_LENGTH;
-  const errMsg = { message: 'There was a problem creating your token. Try again' };
-  const context = { cookie, successHeader: 'We have resent your token', successMsg: 'Check your email', mfaTokenLength };
+  const errMsg = { message: 'There was a problem creating your code. Try again' };
+  const context = { cookie, successHeader: 'We have resent your code', successMsg: 'Check your email', mfaTokenLength };
 
   if (req.query.resend === 'true') {
     if (cookie.getUserVerified()) {

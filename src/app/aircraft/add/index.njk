@@ -37,7 +37,7 @@
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
-      <form action="/aircraft/add" autocomplete="false" class="form-group"
+      <form action="/aircraft/add" autocomplete="off" class="form-group"
       method="post" role="form">
 
       <h1 class="govuk-heading-xl">
@@ -76,10 +76,10 @@
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('craftbase', errors) }}">
-             <label class="govuk-label" for="craftbase">Aircraft Home Aerodrome / Usual base</label>
+             <label class="govuk-label" for="craftbase">Aircraft home port / location</label>
           {{ m.error_message('craftbase', errors) }}
           <span class="govuk-hint">
-            IATA / ICAO / Coordinates (decimal)
+            Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA/ICAO code. Provide coordinates to 4 decimal places.
           </span>
           <span class="field-validation-valid error-message" data-valmsg-for="craftbase"
             data-valmsg-replace="true" style="display:block">

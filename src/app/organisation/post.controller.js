@@ -3,7 +3,7 @@ const logger = require('../../common/utils/logger')(__filename);
 
 module.exports = (req, res) => {
   logger.debug('In organisation post controller');
-  console.log(req.body.editOrgUser);
+  logger.debug(req.body.editOrgUser);
   if (req.body.editOrg) {
     req.session.editOrgId = req.body.editOrg;
     return req.session.save(() => {res.redirect('/organisation/editorganisation')});

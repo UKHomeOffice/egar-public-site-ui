@@ -27,7 +27,7 @@
   {% endif %}
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
-      <form action="/garfile/arrival" autocomplete="false" class="form-group" method="post" role="form">
+      <form id="page-form" action="/garfile/arrival" autocomplete="off" class="form-group" method="post" role="form">
 
         <!–– Start Arrival date -->
           <div class="govuk-form-group" id="arrivalDate">
@@ -116,12 +116,12 @@
 					Arrival port
 				</label>
 				<span id="arrivalPort-hint" class="govuk-hint">
-				The IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
+				Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
         The arrival port must be different to the departure port.
 				</span>
 
           {{ m.error_message('arrivalPort', errors) }}
-          <input class="govuk-input" maxlength="4" id="arrivalPort" name="arrivalPort" autocomplete="false" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort}}"/>
+          <input class="govuk-input" maxlength="4" id="arrivalPort" name="arrivalPort" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort}}"/>
         </div>
         <!-- End arrival port -->
 
@@ -144,7 +144,7 @@
           </span>
 
           {{ m.error_message('arrivalLat', errors) }}
-          <input class="govuk-input" id="arrivalLat" name="arrivalLat" autocomplete="false" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLat}}"/>
+          <input class="govuk-input" id="arrivalLat" name="arrivalLat" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLat}}"/>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('arrivalLong', errors) }}">
@@ -155,7 +155,7 @@
                 For example -0.4542
           </span>
           {{ m.error_message('arrivalLong', errors) }}
-          <input class="govuk-input" id="arrivalLong" name="arrivalLong" autocomplete="false" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLong}}"/>
+          <input class="govuk-input" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLong}}"/>
 
         </div>
         <!-- End arrival coords -->
@@ -167,10 +167,10 @@
                 onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
 						<p class="govuk-body-m">
-		          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
+		          <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
 		        </p>
             <p class="govuk-body-m">
-              <a href="/home" > Exit without saving </a>
+              <a href="/home">Exit without saving</a>
             </p>
         </div>
         <!-- end buttons -->
