@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')(__filename);
 const db = require('../utils/db');
 
 module.exports = {

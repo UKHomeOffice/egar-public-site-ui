@@ -1,5 +1,5 @@
 /* eslint no-underscore-dangle: 0 */
-const logger = require('../../common/utils/logger');
+const logger = require('../../common/utils/logger')(__filename);
 const validations = require('../utils/validator');
 
 class Manifest {

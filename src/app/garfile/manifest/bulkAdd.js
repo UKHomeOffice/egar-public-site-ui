@@ -1,5 +1,5 @@
 const personApi = require('../../../common/services/personApi');
-const logger = require('../../../common/utils/logger');
+const logger = require('../../../common/utils/logger')(__filename);
 
 function getDetailsByIds(ids, userId) {
   return new Promise((resolve, reject) => {

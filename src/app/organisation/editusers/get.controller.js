@@ -1,5 +1,5 @@
 const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger');
+const logger = require('../../../common/utils/logger')(__filename);
 const orgApi = require('../../../common/services/organisationApi');
 const roles = require('../../../common/seeddata/egar_user_roles');
 

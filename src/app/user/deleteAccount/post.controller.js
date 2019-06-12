@@ -1,4 +1,4 @@
-const logger = require('../../../common/utils/logger');
+const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const emailService = require('../../../common/services/sendEmail');
 const userApi = require('../../../common/services/userManageApi');

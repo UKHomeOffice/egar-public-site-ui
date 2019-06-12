@@ -1,10 +1,12 @@
-const express = require('express');
-const app = express;
 const csurf = require('csurf');
+let secureFlag = false;
+if (process.env.COOKIE_SECURE_FLAG == "true") {
+  secureFlag = true;
+}
 module.exports = (req, res, next) => {
      let csrf = csurf({cookie: {
         httpOnly: true,
-        secure: true
+        secure: secureFlag
       }});
     next();
 }

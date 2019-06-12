@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')(__filename);
 const config = require('../config/index');
 
 const sequelize = new Sequelize(config.PUBLIC_SITE_DBNAME, config.PUBLIC_SITE_DBUSER, config.PUBLIC_SITE_DBPASSWORD, {

@@ -13,7 +13,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: (1024 ** 2) * 8 } }).single('file');
 const stream = require('stream');
 const uploadFile = require('../../../common/services/fileUploadApi');
-const logger = require('../../../common/utils/logger');
+const logger = require('../../../common/utils/logger')(__filename);
 const clamavService = require('../../../common/services/clamavservice');
 const garApi = require('../../../common/services/garApi');
 const transformers = require('../../../common/utils/transformers');
@@ -24,7 +24,7 @@ router.get('/upload', (req, res) => {
 });
 
 function exceedFileLimit(fileSize, garId) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     // Get supporting docs and add file size
     // Check if fileSize + total >= MAX_SIZE
     const MAX_SIZE = (1024 ** 2) * 8;

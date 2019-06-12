@@ -17,7 +17,13 @@ pipeline:
 
 
   SonarQube Scanner:
-    image: quay.io/ukhomeofficedigital/sonar-scanner:v3.0.3
+    image: quay.io/ukhomeofficedigital/sonar-scanner-node:latest
+    commands:
+      - cd src
+      - npm install
+      - npm run test-drone
+      - cd ..
+      - sonar-scanner -Dsonar.projectVersion=$${DRONE_BUILD_NUMBER}
     when:
       event: [ push, deployment, pull_request ]
 

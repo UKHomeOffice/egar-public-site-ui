@@ -1,5 +1,5 @@
 const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger');
+const logger = require('../../../common/utils/logger')(__filename);
 
 module.exports = (req, res) => {
   logger.debug('In user / register get controller');

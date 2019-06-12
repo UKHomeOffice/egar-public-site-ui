@@ -1,6 +1,6 @@
 const { URL } = require('url');
 const settings = require('./index');
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')(__filename);
 
 const { API_BASE } = settings;
 const { API_VERSION } = settings;
