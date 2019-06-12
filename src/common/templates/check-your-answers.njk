@@ -39,7 +39,7 @@
           Aircraft home port / location
         </dt>
         <dd class="app-check-your-answers__answer">
-          {{garfile.craftBase}}
+          {{garfile.craftBase | upper}}
         </dd>
         <dd class="app-check-your-answers__change">
         </dd>
@@ -87,7 +87,7 @@
           Departure port
         </dt>
         <dd class="app-check-your-answers__answer">
-          {{garfile.departurePort}}
+          {{garfile.departurePort | upper}}
         </dd>
         <dd class="app-check-your-answers__change">
         </dd>
@@ -146,7 +146,7 @@
           Arrival port
         </dt>
         <dd class="app-check-your-answers__answer">
-          {{garfile.arrivalPort}}
+          {{garfile.arrivalPort | upper}}
         </dd>
         <dd class="app-check-your-answers__change">
         </dd>
@@ -199,7 +199,7 @@
           <td class="govuk-table__cell">{{person.firstName}}</td>
           <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
           <td class="govuk-table__cell">{{person.documentNumber}}</td>
-          <td class="govuk-table__cell">{{person.nationality}}</td>
+          <td class="govuk-table__cell">{{person.nationality | upper}}</td>
           <td class="govuk-table__cell">{{person.peopleType.name}}</td>
         </tr>
         <tr class="govuk-table__row">
@@ -226,7 +226,7 @@
                         </tr>
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell">Travel document issuing state</td>
-                          <td class="govuk-table__cell">{{person.issuingState}}</td>
+                          <td class="govuk-table__cell">{{person.issuingState | upper}}</td>
                         </tr>
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell">Travel document expiry date</td>
@@ -343,7 +343,7 @@
       </div>
       <div class="app-check-your-answers__contents">
         <dt class="app-check-your-answers__question">
-          Is the Aircraft in free circulation in the EU?
+          Is the aircraft in free circulation in the EU?
         </dt>
         <dd class="app-check-your-answers__answer">
           {{garfile.freeCirculation}}

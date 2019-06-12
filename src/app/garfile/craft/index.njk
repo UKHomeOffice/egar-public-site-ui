@@ -105,14 +105,14 @@
     </label>
     {{ m.error_message('craftBase', errors) }}
     <span class="govuk-hint">
-      Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA/ICAO code. Provide coordinates to 4 decimal places
+      Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA / ICAO code. Provide coordinates to 4 decimal places
     </span>
     <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
       data-valmsg-replace="true" style="display:block">
     </span>
     <input class="govuk-input"
       id="craftBase" name="craftBase" style="width:100%" type="text"
-      value="{{cookie.getGarCraft().craftBase}}" />
+      value="{{cookie.getGarCraft().craftBase | upper }}" />
     </div>
       <div class="govuk-form-group">
         <input id="newCraft" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
