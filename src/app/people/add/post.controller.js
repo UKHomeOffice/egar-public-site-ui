@@ -6,6 +6,7 @@ const persontype = require('../../../common/seeddata/egar_type_of_saved_person')
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
 const personApi = require('../../../common/services/personApi');
+const _ = require('lodash');
 
 module.exports = (req, res) => {
 
@@ -14,13 +15,13 @@ module.exports = (req, res) => {
   const person = {
     firstName: req.body['first-name'],
     lastName: req.body['last-name'],
-    nationality: req.body.nationality,
+    nationality: _.toUpper(req.body.nationality),
     birthplace: req.body.birthplace,
     gender: req.body.gender,
     personType: req.body['person-type'],
     docNumber: req.body['travel-document-number'],
     docType: req.body['travel-document-type'],
-    issuingState: req.body['issuing-state'],
+    issuingState: _.toUpper(req.body['issuing-state']),
     expiryDate: `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`,
     dob: `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`,
   };

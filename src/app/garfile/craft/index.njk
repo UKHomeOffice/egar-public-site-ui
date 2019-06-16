@@ -66,7 +66,9 @@
 
 <div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
       <h2 class="govuk-heading-l">New aircraft</h2>
-        <p class="govuk-body-l">Add the details of a new aircraft you have not already saved</p>
+        {% if not cookie.getGarCraft().registration %}
+          <p class="govuk-body-l">Add the details of a new aircraft you have not already saved</p>
+        {% endif %}
 				<div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
         <label class="govuk-label" for="craftReg">
           Aircraft registration
