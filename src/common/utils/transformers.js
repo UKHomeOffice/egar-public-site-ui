@@ -1,4 +1,5 @@
 const logger = require('../utils/logger')(__filename);
+const _ = require('lodash');
 
 function transformPerson(personObj) {
   const copyPersonObj = personObj;
@@ -79,6 +80,10 @@ function unknownToUnspecified(aGender) {
   return aGender === 'Unknown' ? 'Unspecified' : aGender;
 }
 
+function toUpper(aStr) {
+  return aStr === undefined ? undefined : _.toUpper(aStr);
+}
+
 module.exports = {
   transformPerson,
   titleCase,
@@ -87,4 +92,5 @@ module.exports = {
   strToBytes,
   docTypeOrUndefined,
   unknownToUnspecified,
+  toUpper,
 };

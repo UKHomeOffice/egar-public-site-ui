@@ -55,7 +55,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.placeOfBirth, `Enter a place of birth for ${crew.firstName} ${crew.lastName}`)]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.nationality, `Enter a nationality for ${crew.firstName} ${crew.lastName}`)]);
     validationArr.push([new ValidationRule(validator.validISOCountryLength, '', crew.nationality, `Enter a valid nationality for ${crew.firstName} ${crew.lastName}. Must be a ISO 3166 country code`)]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a document expirty date for ${crew.firstName} ${crew.lastName}`)]);
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a document expiry date for ${crew.firstName} ${crew.lastName}`)]);
   });
 
   return validationArr;

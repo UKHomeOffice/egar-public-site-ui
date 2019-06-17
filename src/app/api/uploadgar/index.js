@@ -87,14 +87,14 @@ router.post('/uploadgar', upload.single('file'), (req, res) => {
     const manifestMap = {
       documentType: { location: 'A', transform: [transformers.titleCase, transformers.docTypeOrUndefined] },
       documentTypeOther: { location: 'B' },
-      issuingState: { location: 'C' },
+      issuingState: { location: 'C', transform: [transformers.toUpper] },
       documentNumber: { location: 'D', transform: [transformers.numToString] },
       lastName: { location: 'E' },
       firstName: { location: 'F' },
       gender: { location: 'G', transform: [transformers.upperCamelCase, transformers.unknownToUnspecified] },
       dateOfBirth: { location: 'H' },
       placeOfBirth: { location: 'I' },
-      nationality: { location: 'J' },
+      nationality: { location: 'J', transform: [transformers.toUpper] },
       documentExpiryDate: { location: 'K' },
     };
 
