@@ -111,8 +111,8 @@
                     </td>
                     <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
                     <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
-                    <td class="govuk-table__cell ">{{ gar.departurePort }} </td>
-                    <td class="govuk-table__cell ">{{ gar.arrivalPort }} </td>
+                    <td class="govuk-table__cell ">{{ gar.departurePort | upper }} </td>
+                    <td class="govuk-table__cell ">{{ gar.arrivalPort | upper }} </td>
                     <td class="govuk-table__cell ">{{ gar.garId }} </td>
                 </tr>
             {% endfor %}

@@ -121,7 +121,7 @@
 				</span>
 
           {{ m.error_message('departurePort', errors) }}
-          <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort}}"/>
+          <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
         </div>
         <!-- End departure port -->
 
@@ -129,7 +129,7 @@
         <div class="govuk-form-group">
           <label class="govuk-heading-m">Departure coordinates</label>
           <span id="departureCoordinates-hint" class="govuk-hint">
-           You are only required to enter coordinates if your port does not have an IATA/ICAO code.
+           You are only required to enter coordinates if your port does not have an IATA / ICAO code.
            Provide coordinates in decimal format to 4 decimal places.
           </span>
         </div>

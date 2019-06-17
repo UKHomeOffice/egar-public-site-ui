@@ -56,7 +56,7 @@ Manage aircraft | Submit a General Aviation Report (GAR)
             <td class="govuk-table__cell">{{ craft.registration }}</td>
             {% endif %}
             <td class="govuk-table__cell">{{ craft.craftType }}</td>
-            <td class="govuk-table__cell">{{ craft.craftBase }}</td>
+            <td class="govuk-table__cell">{{ craft.craftBase | upper }}</td>
             {% if cookie.getUserRole() != 'User' %}
             <td class="govuk-table__cell"><button class="govuk-link btn-link" name="deleteCraft" value="{{ craft.craftId }}">Delete</button></th>
             {% endif %}

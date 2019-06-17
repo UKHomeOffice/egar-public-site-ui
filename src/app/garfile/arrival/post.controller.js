@@ -3,6 +3,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
+const _ = require('lodash')
 
 module.exports = async (req, res) => {
   logger.debug('In garfile / arrival post controller');
@@ -14,6 +15,7 @@ module.exports = async (req, res) => {
 
   // Define voyage
   const voyage = req.body;
+  voyage.arrivalPort = _.toUpper(voyage.arrivalPort);
   delete voyage.buttonClicked;
   cookie.setGarArrivalVoyage(voyage);
 

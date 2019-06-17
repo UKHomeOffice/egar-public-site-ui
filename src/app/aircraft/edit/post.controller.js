@@ -3,6 +3,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const craftApi = require('../../../common/services/craftApi');
+const _ = require('lodash');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
@@ -10,7 +11,7 @@ module.exports = (req, res) => {
 
   const craftReg = req.body.craftReg;
   const craftType = req.body.craftType;
-  const craftBase = req.body.craftBase;
+  const craftBase = _.toUpper(req.body.craftBase);
   const craftId = req.body.craftId;
 
   cookie.updateEditCraft(craftReg, craftType, craftBase);

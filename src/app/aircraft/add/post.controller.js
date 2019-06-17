@@ -3,6 +3,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const craftApi = require('../../../common/services/craftApi');
+const _ = require('lodash');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
@@ -10,7 +11,7 @@ module.exports = (req, res) => {
 
   const craftReg = req.body.craftreg;
   const craftType = req.body.crafttype;
-  const craftBase = req.body.craftbase;
+  const craftBase = _.toUpper(req.body.craftbase);
 
 
   // Define a validation chain for user registeration fields

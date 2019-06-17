@@ -6,6 +6,7 @@ const documenttype = require('../../../../common/seeddata/egar_saved_people_trav
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
 const validations = require('../validations');
+const _ = require('lodash');
 
 module.exports = (req, res) => {
   // Get the ip address
@@ -22,11 +23,11 @@ module.exports = (req, res) => {
     gender: req.body.gender,
     dateOfBirth: birthdate,
     placeOfBirth: req.body.birthplace,
-    nationality: req.body.nationality,
+    nationality: _.toUpper(req.body.nationality),
     peopleType: req.body['person-type'],
     documentNumber: req.body['travel-document-number'],
     documentType: req.body['travel-document-type'],
-    issuingState: req.body['issuing-state'],
+    issuingState: _.toUpper(req.body['issuing-state']),
     documentExpiryDate: expiryDate,
   };
 

@@ -106,7 +106,7 @@
 								<td class="govuk-table__cell">{{person.firstName}}</td>
 								<td class="govuk-table__cell">{{person.dateOfBirth}}</td>
 								<td class="govuk-table__cell">{{person.documentNumber}}</td>
-								<td class="govuk-table__cell">{{person.nationality}}</td>
+								<td class="govuk-table__cell">{{person.nationality | upper}}</td>
 								<td class="govuk-table__cell">{{person.peopleType.name}}</td>
                 <td class="govuk-table__cell">
                   <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
@@ -134,7 +134,7 @@
 															</tr>
 															<tr class="govuk-table__row">
 																<td class="govuk-table__cell">Travel document issuing state</td>
-																<td class="govuk-table__cell">{{person.issuingState}}</td>
+																<td class="govuk-table__cell">{{person.issuingState | upper }}</td>
 															</tr>
 															<tr class="govuk-table__row">
 																<td class="govuk-table__cell">Travel document expiry date</td>

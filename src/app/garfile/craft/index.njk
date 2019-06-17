@@ -66,7 +66,9 @@
 
 <div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
       <h2 class="govuk-heading-l">New aircraft</h2>
-        <p class="govuk-body-l">Add the details of a new aircraft you have not already saved</p>
+        {% if not cookie.getGarCraft().registration %}
+          <p class="govuk-body-l">Add the details of a new aircraft you have not already saved</p>
+        {% endif %}
 				<div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
         <label class="govuk-label" for="craftReg">
           Aircraft registration
@@ -105,14 +107,14 @@
     </label>
     {{ m.error_message('craftBase', errors) }}
     <span class="govuk-hint">
-      Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA/ICAO code. Provide coordinates to 4 decimal places
+      Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA / ICAO code. Provide coordinates to 4 decimal places
     </span>
     <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
       data-valmsg-replace="true" style="display:block">
     </span>
     <input class="govuk-input"
       id="craftBase" name="craftBase" style="width:100%" type="text"
-      value="{{cookie.getGarCraft().craftBase}}" />
+      value="{{cookie.getGarCraft().craftBase | upper }}" />
     </div>
       <div class="govuk-form-group">
         <input id="newCraft" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
