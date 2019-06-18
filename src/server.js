@@ -20,6 +20,7 @@ const crypto = require('crypto');
 const uuid = require('uuid/v4');
 const FileStore = require('session-file-store')(session);
 const config = require('./common/config/index');
+const validation_settings = require('./common/config/validation_settings');
 const csrf = require('csurf');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 
@@ -199,9 +200,9 @@ function initialiseTemplateEngine(app) {
   // // nunjucksEnvironment.addGlobal('css_path', NODE_ENV === 'production' ? CSS_PATH2 : staticify.getVersionedPath('/stylesheets/govuk-frontend-2.1.0.min.css'))
   // nunjucksEnvironment.addGlobal('js_path', NODE_ENV === 'production' ? JAVASCRIPT_PATH : staticify.getVersionedPath('/javascripts/application.js'));
   nunjucksEnvironment.addGlobal('ga_id', GA_ID);
-  nunjucksEnvironment.addGlobal('ga_id', GA_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
-  nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase)
+  nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', validation_settings.MAX_STRING_LENGTH);
+  nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   // logger.info('Set global settings for nunjucks');
 }
 

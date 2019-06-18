@@ -1,0 +1,1 @@
+exports.MAX_STRING_LENGTH = 35;
