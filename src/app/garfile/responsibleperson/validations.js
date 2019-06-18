@@ -8,6 +8,7 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(validator.notEmpty, 'responsibleSurname', req.body.responsibleSurname, 'Enter a surname for the responsible person'),
+      new ValidationRule(validator.isValidStringLength, 'responsibleSurname', req.body.responsibleSurname, `Surname exceeded the limit of ${validator.validationSettings.MAX_STRING_LENGTH} characters` ),
     ],
     [
       new ValidationRule(validator.validIntlPhone, 'responsibleContactNo', req.body.responsibleContactNo, 'Enter a telephone number with international dialling code with no symbols'),

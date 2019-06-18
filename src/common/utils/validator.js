@@ -2,7 +2,7 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const validation_settings = require('../../common/config/validation_settings');
+const validationSettings = require('../../common/config/validation_settings');
 
 function notEmpty(value) {
   if (value === undefined) {
@@ -320,7 +320,7 @@ function isValidFileMime(fileName, mimeType) {
  * @return {Bool}
  */
 function isValidStringLength(value) {
-  return value.length <= validation_settings.MAX_STRING_LENGTH;
+  return value.length <= validationSettings.MAX_STRING_LENGTH;
 }
 
 module.exports = {
@@ -355,4 +355,5 @@ module.exports = {
   notSameValues,
   isValidFileMime,
   isValidStringLength,
+  validationSettings
 };

@@ -8,7 +8,7 @@
 <div class="govuk-form-group {{ m.form_group_class('last-name', errors) }}">
   <label class="govuk-label govuk-label--m" for="last-name">Surname</label>
   {{ m.error_message('last-name', errors) }}
-  <input class="govuk-input" id="last-name" name="last-name" autocomplete="off" type="text" value="{{ person['lastName'] or req.body['last-name'] }}" />
+  <input class="govuk-input" id="last-name" name="last-name" autocomplete="off" type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['lastName'] or req.body['last-name'] }}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('nationality', errors) }}">

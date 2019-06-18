@@ -32,6 +32,7 @@ module.exports = (req, res) => {
   ];
   const lnameChain = [
     new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),
+    new ValidationRule(validator.isValidStringLength, 'userLname', lname, `Surname exceeded the limit of ${validator.validationSettings.MAX_STRING_LENGTH} characters`),
   ];
 
   const userChain = [
