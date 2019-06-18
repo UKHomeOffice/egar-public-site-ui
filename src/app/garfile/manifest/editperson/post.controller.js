@@ -5,7 +5,7 @@ const garApi = require('../../../../common/services/garApi');
 const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
-const validations = require('../validations');
+const validations = require('../../../people/validations');
 const _ = require('lodash')
 
 module.exports = (req, res) => {

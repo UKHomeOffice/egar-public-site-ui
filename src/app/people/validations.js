@@ -16,6 +16,7 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(validator.notEmpty, 'last-name', req.body['last-name'], 'Enter the surname of the person'),
+      new ValidationRule(validator.isValidStringLength, 'last-name', req.body['last-name'], `Surname exceeded the limit of ${validator.validationSettings.MAX_STRING_LENGTH} characters`)
     ],
     [
       new ValidationRule(validator.notEmpty, 'nationality', req.body.nationality, 'Enter the nationality of the person'),
