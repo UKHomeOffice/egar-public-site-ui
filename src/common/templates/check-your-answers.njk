@@ -1,54 +1,6 @@
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
-          Aircraft details
-        </dt>
-        {% if showChangeLinks %}
-        <dd style="border-bottom: none;" class="app-check-your-answers__change">
-          <a href="/garfile/craft" id='aircraft-change'>
-            Change<span class="govuk-visually-hidden">Aircraft</span>
-          </a>
-        </dd>
-        {% endif %}
-      </div>
-    </dl>
-
-    <dl class="app-check-your-answers app-check-your-answers--short">
-      <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          Aircraft registration
-        </dt>
-        <dd class="app-check-your-answers__answer">
-          {{garfile.registration}}
-        </dd>
-        <dd class="app-check-your-answers__change">
-        </dd>
-      </div>
-      <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          Aircraft type
-        </dt>
-         <dd class="app-check-your-answers__answer">
-          {{garfile.craftType}}
-        </dd>
-        <dd class="app-check-your-answers__change">
-        </dd>
-      </div>
-      <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          Aircraft home port / location
-        </dt>
-        <dd class="app-check-your-answers__answer">
-          {{garfile.craftBase | upper}}
-        </dd>
-        <dd class="app-check-your-answers__change">
-        </dd>
-      </div>
-    </dl>
-
-    <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
-      <div class="app-check-your-answers__contents">
-        <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
           Departure details
         </dt>
         {% if showChangeLinks %}
@@ -158,6 +110,54 @@
         <dd class="app-check-your-answers__answer">
           Lat: {{garfile.arrivalLat}} <br>
           Long: {{garfile.arrivalLong}}
+        </dd>
+        <dd class="app-check-your-answers__change">
+        </dd>
+      </div>
+    </dl>
+
+    <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+      <div class="app-check-your-answers__contents">
+        <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
+          Aircraft details
+        </dt>
+        {% if showChangeLinks %}
+        <dd style="border-bottom: none;" class="app-check-your-answers__change">
+          <a href="/garfile/craft" id='aircraft-change'>
+            Change<span class="govuk-visually-hidden">Aircraft</span>
+          </a>
+        </dd>
+        {% endif %}
+      </div>
+    </dl>
+
+    <dl class="app-check-your-answers app-check-your-answers--short">
+      <div class="app-check-your-answers__contents">
+        <dt class="app-check-your-answers__question">
+          Aircraft registration
+        </dt>
+        <dd class="app-check-your-answers__answer">
+          {{garfile.registration}}
+        </dd>
+        <dd class="app-check-your-answers__change">
+        </dd>
+      </div>
+      <div class="app-check-your-answers__contents">
+        <dt class="app-check-your-answers__question">
+          Aircraft type
+        </dt>
+         <dd class="app-check-your-answers__answer">
+          {{garfile.craftType}}
+        </dd>
+        <dd class="app-check-your-answers__change">
+        </dd>
+      </div>
+      <div class="app-check-your-answers__contents">
+        <dt class="app-check-your-answers__question">
+          Aircraft home port / location
+        </dt>
+        <dd class="app-check-your-answers__answer">
+          {{garfile.craftBase | upper}}
         </dd>
         <dd class="app-check-your-answers__change">
         </dd>
