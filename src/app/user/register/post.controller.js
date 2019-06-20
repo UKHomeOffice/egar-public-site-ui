@@ -47,7 +47,7 @@ module.exports = (req, res) => {
 
   const regFailureError = { message: 'Registration failed, try again' };
 
-  const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() == 'true');
+  const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() === 'true');
 
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';

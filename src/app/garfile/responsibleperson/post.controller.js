@@ -54,9 +54,9 @@ module.exports = (req, res) => {
       logger.info('Validation failed');
       cookie.setGarResponsiblePerson(responsiblePerson);
       res.render('app/garfile/responsibleperson/index', {
+        req,
         cookie,
         errors: err,
-        req,
       });
     });
 };

@@ -8,8 +8,6 @@ const garoptions = require('../../common/seeddata/egar_create_gar_options.json')
 
 module.exports = (req, res) => {
   logger.debug('In register / reguser post controller');
-  //res.render('app/user/userregister/index')
-  let garoption = req.body.garoption;
   const cookie = new CookieModel(req);
   res.render('app/garfile/home/index', {cookie})
 };

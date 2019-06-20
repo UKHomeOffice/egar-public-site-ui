@@ -87,25 +87,6 @@ module.exports = async (req, res) => {
 
   const gar = await garApi.get(cookie.getGarId());
 
-  validations.push(
-    [
-      new ValidationRule(validator.notSameValues, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], samePortMsg)
-    ]
-  )
-
-  validator.validateChains(validations)
-    .then(() => {
-      performAPICall();
-    })
-    .catch((err) => {
-      logger.info('Validation failed');
-      logger.info(err);
-      res.render('app/garfile/departure/index', {
-        cookie,
-        errors: err,
-      });
-    });
-
   const performAPICall = () => {
     garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarDepartureVoyage())
       .then((apiResponse) => {
@@ -133,4 +114,23 @@ module.exports = async (req, res) => {
         });
       });
     }
+
+  validations.push(
+    [
+      new ValidationRule(validator.notSameValues, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], samePortMsg)
+    ]
+  )
+
+  validator.validateChains(validations)
+    .then(() => {
+      performAPICall();
+    })
+    .catch((err) => {
+      logger.info('Validation failed');
+      logger.info(err);
+      res.render('app/garfile/departure/index', {
+        cookie,
+        errors: err,
+      });
+    });
 };
