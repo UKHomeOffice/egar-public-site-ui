@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Departure | Submit a General Aviation Report (GAR)
+	Create GAR | Departure | {{ __('title') }}
 {% endblock %}
 
 {% block header %}
@@ -32,15 +32,15 @@
         <!-- Start departure date -->
           <div class="govuk-form-group" id="departureDate">
           <span class="govuk-caption-xl">Section 1 of 8</span>
-          <h1 class="govuk-heading-xl">Departure details</h1>
+          <h1 class="govuk-heading-xl">{{ __('label_departure_details') }}</h1>
           <p class="govuk-body-l">Provide the departure details of the flight</p>
           <div class="{{ m.form_group_class('departureDate', errors) }}">
             <fieldset class="govuk-fieldset" aria-describedby="departureDate-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              Departure date
+              {{ __('field_departure_date') }}
             </legend>
             <span id="departureDate-hint" class="govuk-hint">
-              For example 20 04 2019
+              {{ __('field_departure_date_hint') }}
             </span>
             {{ m.error_message('departureDate', errors) }}
             <div class="govuk-date-input" id="departure">
@@ -80,10 +80,10 @@
         <div class="govuk-form-group {{ m.form_group_class('departureTime', errors) }}" id="departureTime">
           <fieldset class="govuk-fieldset" aria-describedby="departureTime-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              Departure time (UTC)
+              {{ __('field_departure_time') }}
             </legend>
             <span id="departureTime-hint" class="govuk-hint">
-                For example 17 30
+              {{ __('field_departure_time_hint') }}
             </span>
             {{ m.error_message('departureTime', errors) }}
 

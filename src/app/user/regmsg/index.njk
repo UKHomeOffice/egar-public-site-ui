@@ -28,12 +28,16 @@
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
       <div class="govuk-panel govuk-panel--confirmation">
-        <h1 class="govuk-panel__title">Submit a GAR account successfully created</h1>
+        {% if resend %}
+          <h1 class="govuk-panel__title">Submit a GAR account verification email successfully resent</h1>
+        {% else %}
+          <h1 class="govuk-panel__title">Submit a GAR account successfully created</h1>
+        {% endif %}
       </div>
       <h2 class="govuk-heading-m">What happens next</h2>
       <p class="govuk-body-m">
         Click the verification link inside the email. This link will remain valid for 12 hours.
-      If you can't see the email, please check any spam folders or <a href="/user/regmsg?resend=true">resend the email.</a>
+        If you can't see the email, please check any spam folders or <a href="/user/regmsg?resend=true">resend the email</a>.
       </p>
       <a class="govuk-button" href="/login" role="button">Sign In</a>
 

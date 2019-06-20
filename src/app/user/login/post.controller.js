@@ -54,10 +54,17 @@ module.exports = (req, res) => {
             }
           } else {
             logger.debug('User found');
-            logger.debug(`User state ${user.state.toLowerCase()}`);
+            logger.debug(`User state: ${user.state.toLowerCase()}`);
             if (user.state.toLowerCase() !== 'verified') {
               logger.info('User not verified, skipping token send');
+              
+              // Set variables to be used by resend link on next screen
+              cookie.setUserFirstName(user.firstName);
+              cookie.setUserDbId(user.userId);
+
               return res.redirect('/login/authenticate');
+              // TODO: Once E2E tests are updated, redirect as appropriate
+              // return res.render('app/user/login/index', { cookie, unverified: true });
             }
             const mfaToken = token.genMfaToken();
             cookie.setUserVerified(true);

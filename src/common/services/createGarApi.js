@@ -10,7 +10,7 @@ module.exports = {
    * @returns {Promise} returns API response when resolved
    */
   createGar(userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.createGar(userId),

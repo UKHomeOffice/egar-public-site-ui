@@ -4,8 +4,19 @@
   "description": "Electronic Gar Site",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=text mocha",
-    "test-drone": "nyc --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha"
+    "test": "nyc --reporter=lcov --reporter=text mocha --recursive",
+    "test-drone": "nyc --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --recursive"
+  },
+  "nyc": {
+    "all": true,
+    "exclude": [
+      "public/javascripts/*.js",
+      "**/lcov-report",
+      "common/templates/includes/tabs/*.js",
+      "*.js",
+      "app/router.js",
+      "test/**/*.js"
+    ]
   },
   "author": "",
   "license": "ISC",
@@ -41,13 +52,11 @@
     "nyc": "^14.1.1",
     "path": "^0.12.7",
     "pg": "^7.7.1",
-    "proxyquire": "^2.1.0",
     "request": "^2.88.0",
     "require-dir": "^1.0.0",
     "sequelize": "^5.8.7",
     "serve-favicon": "^2.5.0",
     "session-file-store": "^1.2.0",
-    "sinon": "^7.1.1",
     "staticify": "^3.0.0",
     "throng": "^4.0.0",
     "universal-analytics": "^0.4.20",
@@ -55,7 +64,7 @@
     "url-join": "^4.0.0",
     "winston": "^3.1.0",
     "xls-to-json-lc": "^0.3.4",
-    "xlsx": "^0.14.0"
+    "xlsx": "^0.14.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -69,6 +78,10 @@
     "mocha": "^5.2.0",
     "nock": "^10.0.0",
     "node-test": "^1.2.4",
-    "nodemon": "^1.18.7"
+    "nodemon": "^1.18.7",
+    "proxyquire": "^2.1.0",
+    "sinon": "^7.1.1",
+    "sinon-chai": "^3.3.0",
+    "supertest": "^4.0.2"
   }
 }
