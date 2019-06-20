@@ -21,6 +21,22 @@
 
   {% import "common/templates/includes/macros.njk" as m %}
 
+	{% if unverified %}
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+      <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+              <li>
+                The email address supplied has not been verified. You should have recieved an email to verify.
+                <p class="govuk-body-m">
+                  Click the verification link inside the email. This link will remain valid for 12 hours.
+                  If you can't see the email, please check any spam folders or <a href="/user/regmsg?resend=true">resend the email</a>.
+                </p>
+              </li>
+          </ul>
+        </div>
+      </div>
+  {% endif %}
+
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}

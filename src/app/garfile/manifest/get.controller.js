@@ -28,7 +28,7 @@ module.exports = (req, res) => {
       if (req.session.manifestErr) {
         const { manifestErr, manifestInvalidPeople } = req.session;
         delete req.session.manifestErr;
-        return res.render('app/garfile/manifest/index', { cookie, savedPeople, manifest, errors: manifestErr, manifestInvalidPeople });
+        return res.render('app/garfile/manifest/index', { cookie, savedPeople, manifest, manifestInvalidPeople, errors: manifestErr });
       }
 
       if (req.session.successMsg) {

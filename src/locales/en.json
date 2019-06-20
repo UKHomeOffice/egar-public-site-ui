@@ -1,1 +1,11 @@
-{}
+{
+    "title": "Submit a General Aviation Report (GAR)",
+    "field_given_name": "Given name",
+    "field_surname": "Surname",
+    "label_departure_details": "Departure details",
+    "field_departure_date": "Departure date",
+    "field_departure_date_hint": "For example 20 04 2019",
+    "field_departure_time": "Departure time (UTC)",
+    "field_departure_time_hint": "For example 17 30",
+    "field_departure_port": "Departure port"
+}

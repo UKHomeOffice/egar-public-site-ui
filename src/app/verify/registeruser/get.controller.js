@@ -1,8 +1,6 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const validateTokenService = require('../../../common/services/validate-token');
 const verifyUserService = require('../../../common/services/verificationApi');
-
 
 module.exports = (req, res) => {
   logger.debug('In verify / registeruser get controller');
@@ -14,7 +12,7 @@ module.exports = (req, res) => {
 
   // Look up and validate token, checking it hasn't expired
   const token = req.query.token;
-  const hashedToken = validateTokenService.generateHash(token);
+  const hashedToken = verifyUserService.generateHash(token);
 
   logger.debug('Calling verify user endpoint');
   verifyUserService.verifyUser(hashedToken)

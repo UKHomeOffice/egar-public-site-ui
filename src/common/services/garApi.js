@@ -13,14 +13,13 @@ module.exports = {
   patch(garId, status, partial) {
     const reqBody = partial;
     reqBody.status = status;
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.patch({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateGar(garId),
         body: JSON.stringify(reqBody),
       }, (error, response, body) => {
         if (error) {
-          // return 'Generic response'
           logger.error('Failed to call GAR put API endpoint');
           return 'Failed to update GAR';
         }
@@ -40,13 +39,12 @@ module.exports = {
    * @returns {Promise} Resolves with API response.
    */
   get(garId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getGar(garId),
       }, (error, response, body) => {
         if (error) {
-          // return 'Generic response'
           logger.error('Failed to call GAR get API endpoint');
           return console.dir(error);
         }
@@ -66,7 +64,7 @@ module.exports = {
    * @returns {Promise} Resolves with API response.
    */
   getPeople(garId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getGarPeople(garId),
@@ -94,7 +92,7 @@ module.exports = {
    */
   getGars(userId, userType, orgId = null) {
     const garsUrl = userType === 'Individual' ? endpoints.getIndividualGars(userId) : endpoints.getOrgGars(userId, orgId);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: garsUrl,
@@ -114,13 +112,12 @@ module.exports = {
    * @returns {Promise} Resolves with API response.
    */
   getSupportingDocs(garId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getSupportingDoc(garId),
       }, (error, response, body) => {
         if (error) {
-          // return 'Generic response'
           logger.error('Failed to call GAR get supporting documents API endpoint');
           return console.dir(error);
         }
@@ -136,7 +133,7 @@ module.exports = {
   },
 
   deleteGarSupportingDoc(garId, garSupportingDocId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deleteGarSupportingDoc(garId, garSupportingDocId),
@@ -162,7 +159,7 @@ module.exports = {
    * @returns {Promise} resolves with API response.
    */
   updateGarPerson(garId, personDetails) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.patch({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateGarPerson(garId),
@@ -191,7 +188,7 @@ module.exports = {
    * @returns {Promise} resolves with API response.
    */
   deleteGarPerson(garId, garPersonId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deleteGarPerson(garId),

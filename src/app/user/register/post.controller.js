@@ -49,8 +49,6 @@ module.exports = (req, res) => {
 
   const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() == 'true');
 
-  // Validate chains
-
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
   const token = nanoid(alphabet, 13);
@@ -99,6 +97,7 @@ module.exports = (req, res) => {
           const { userId } = JSON.parse(dbUser);
           cookie.setUserDbId(userId);
           logger.info('Calling gov notify service');
+
           sendTokenService.send(fname, usrname, token)
             .then(() => {
               logger.info('Storing token in db');

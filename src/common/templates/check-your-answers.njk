@@ -1,7 +1,7 @@
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
-          Departure details
+          {{ __('label_departure_details') }}
         </dt>
         {% if showChangeLinks %}
         <dd style="border-bottom: none;" class="app-check-your-answers__change">
@@ -16,7 +16,7 @@
     <dl class="app-check-your-answers app-check-your-answers--short">
       <div class="app-check-your-answers__contents">
         <dt class="app-check-your-answers__question">
-          Departure date
+          {{ __('field_departure_date') }}
         </dt>
         <dd class="app-check-your-answers__answer">
           {{garfile.departureDate}}
@@ -26,7 +26,7 @@
       </div>
       <div class="app-check-your-answers__contents">
         <dt class="app-check-your-answers__question">
-          Departure time (UTC)
+          {{ __('field_departure_time') }}
         </dt>
         <dd class="app-check-your-answers__answer">
           {{garfile.departureTime}}

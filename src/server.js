@@ -164,7 +164,7 @@ function initialiseI18n(app) {
   });
   logger.info('Initialised i18n');
   app.use(i18n.init);
-  logger.info('Set il8n');
+  logger.info('Set i18n');
 }
 
 function initialiseProxy(app) {

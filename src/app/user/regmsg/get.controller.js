@@ -20,7 +20,7 @@ module.exports = (req, res) => {
         logger.info('Storing new token in db');
         // Updating token renders previous tokens invalid
         tokenApi.updateToken(hashtoken, cookie.getUserDbId());
-        res.render('app/user/regmsg/index', { cookie });
+        res.render('app/user/regmsg/index', { cookie, resend: true });
       });
   } else {
     res.render('app/user/regmsg/index', { cookie });
