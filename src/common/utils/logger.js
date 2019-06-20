@@ -15,16 +15,16 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = function(fileName) {
   // Dockerfile stores and sets working dir to public-site, so remove it from file path
-  const fileNameCleaned = fileName.replace('/public-site/', '');
+  const logPrefix = fileName.replace('/public-site/', '') + ': ';
   var loggerWithFilename = {
     error: function(text) {
-      logger.error(fileNameCleaned + ': ' + text);
+      logger.error(logPrefix + text);
     },
     debug: function(text) {
-      logger.debug(fileNameCleaned + ': ' + text);
+      logger.debug(logPrefix + text);
     },
     info: function(text) {
-      logger.info(fileNameCleaned + ': ' + text);
+      logger.info(logPrefix + text);
     }
   };
 

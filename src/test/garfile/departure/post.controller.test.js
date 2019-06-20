@@ -4,9 +4,9 @@ const garApi = require('../../../common/services/garApi');
 const expect = require('chai').expect;
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const logger = require('../../../common/utils/logger')(__filename);
 
 describe('Departure Post Controller', () => {
-
     let req, res;
 
     beforeEach(() => {
@@ -36,16 +36,16 @@ describe('Departure Post Controller', () => {
 
         // Stub APIs, in this case, GAR API
         sinon.stub(garApi, 'get').callsFake((garId) => {
-            console.log('Stubbed garApi get method called');
-            console.log('garId: ' + garId);
+            logger.info('Stubbed garApi get method called');
+            logger.info('garId: ' + garId);
             return Promise.resolve(JSON.stringify(req.session.gar));
         });
 
         sinon.stub(garApi, 'patch').callsFake((garId, status, partial) => {
-            console.log('Stubbed garApi patch method called');
-            console.log('garId: ' + garId);
-            console.log('status: ' + status);
-            console.log('partial: ' + partial);
+            logger.info('Stubbed garApi patch method called');
+            logger.info('garId: ' + garId);
+            logger.info('status: ' + status);
+            logger.info('partial: ' + partial);
             return Promise.resolve();
         });
     });
@@ -57,7 +57,6 @@ describe('Departure Post Controller', () => {
     it('should fail validation on basic submit', async() => {
         await controller(req, res);
 
-        // sinon.assert.calledOnce(res.render('Blah'));
         expect(res.render).to.have.been.calledWith('app/garfile/departure/index');
     });
 });
