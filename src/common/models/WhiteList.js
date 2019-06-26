@@ -1,6 +1,3 @@
-const uuid = require('uuid/v4');
-const Sequelize = require('sequelize');
-
 module.exports = (sequelize, DataTypes) => {
   const WhiteList = sequelize.define('WhiteList', {
     Id: {

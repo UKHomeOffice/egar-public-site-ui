@@ -1,7 +1,3 @@
-const uuid = require('uuid/v4');
-
-const Sequelize = require('sequelize');
-
 module.exports = (sequelize, DataTypes) => {
   const UserSessions = sequelize.define('UserSessions', {
     Id: {
