@@ -25,7 +25,7 @@ const nunjucksFilters = require('./common/utils/templateFilters.js');
 var countries = require("i18n-iso-countries");
 
 logger.info('Obtaining all countries and converting to alpha 3 codes')
-let alpha3List = [];
+const alpha3List = [];
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 Object.keys(countries.getNames('en')).map((key) => {
   const alpha3 = countries.alpha2ToAlpha3(key);
