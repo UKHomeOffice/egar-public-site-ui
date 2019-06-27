@@ -34,6 +34,7 @@ pipeline:
 
 
   Unit tests:
+    group: unit-tests
     image: quay.io/ukhomeofficedigital/drone-docker
     commands:
       - docker run -t -e NOTIFY_API_KEY=dummy egar_ui-public-site:$${DRONE_BUILD_NUMBER} sh -c "cd test/ && npm test"
@@ -44,6 +45,7 @@ pipeline:
 
 
   SonarQube Scanner:
+    group: unit-tests
     image: quay.io/ukhomeofficedigital/sonar-scanner-node:latest
     commands:
       - export NOTIFY_API_KEY=dummy
@@ -114,8 +116,12 @@ pipeline:
       - E2E_SMTP_PORT
       - E2E_INDIVIDUAL_USER_USERNAME
       - E2E_INDIVIDUAL_USER_PASSWORD
+      - E2E_FRONT_END_DB_HOST
+      - E2E_FRONT_END_DB_NAME
+      - E2E_FRONT_END_DB_USER
+      - E2E_FRONT_END_DB_PASSWORD
     commands:
-      - docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER} -e PROTOCOL=$${E2E_PROTOCOL} -e BASE_URL=$${E2E_BASE_URL} -e E2E_SMTP_SERVER=$${E2E_SMTP_SERVER} -e E2E_SMTP_PORT=$${E2E_SMTP_PORT} -e E2E_INDIVIDUAL_USER_USERNAME=$${E2E_INDIVIDUAL_USER_USERNAME} -e E2E_INDIVIDUAL_USER_PASSWORD=$${E2E_INDIVIDUAL_USER_PASSWORD} quay.io/ukhomeofficedigital/egar-e2e-test:latest
+      - docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER} -e PROTOCOL=$${E2E_PROTOCOL} -e BASE_URL=$${E2E_BASE_URL} -e E2E_SMTP_SERVER=$${E2E_SMTP_SERVER} -e E2E_SMTP_PORT=$${E2E_SMTP_PORT} -e E2E_INDIVIDUAL_USER_USERNAME=$${E2E_INDIVIDUAL_USER_USERNAME} -e E2E_INDIVIDUAL_USER_PASSWORD=$${E2E_INDIVIDUAL_USER_PASSWORD} -e E2E_DB_HOST=$${E2E_FRONT_END_DB_HOST} -e E2E_DB_NAME=$${E2E_FRONT_END_DB_NAME} -e E2E_DB_USER=$${E2E_FRONT_END_DB_USER} -e E2E_DB_PASSWORD=$${E2E_FRONT_END_DB_PASSWORD} quay.io/ukhomeofficedigital/egar-e2e-test:latest
     when:
       branch: [ master, hotfix/* ]
       event: push

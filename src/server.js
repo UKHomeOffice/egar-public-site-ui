@@ -18,7 +18,6 @@ const logger = require('./common/utils/logger')(__filename);
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const uuid = require('uuid/v4');
-const FileStore = require('session-file-store')(session);
 const config = require('./common/config/index');
 const csrf = require('csurf');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
@@ -48,7 +47,6 @@ const {
   NODE_ENV
 } = process.env;
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
-// const CSS_PATH2 = staticify.getVersionedPath('/stylesheets/govuk-frontend-2.1.0.min.css')
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
 const GA_ID = (process.env.GA_ID || '');
 const ua = require('universal-analytics');
@@ -58,7 +56,7 @@ const BASE_URL = (process.env.BASE_URL || '');
 const app = express;
 // Set Cookie secure flag depending on environment variable
 let secureFlag = false;
-if (process.env.COOKIE_SECURE_FLAG == "true") {
+if (process.env.COOKIE_SECURE_FLAG === "true") {
   secureFlag = true;
 }
 logger.debug('Secure Flag for Cookie set to:');
@@ -73,12 +71,12 @@ const APP_VIEWS = [
   'common/templates/includes',
 ];
 
-function initialisexpresssession(app) {
+function initialisExpressSession(app) {
   app.use(cookieParser());
   const pgSession = require('connect-pg-simple')(session);
   app.use(session({
     name: 'sess_id',
-    genid: function (req) {
+    genid: () => {
       return uuid()
     },
     store: new pgSession({
@@ -100,7 +98,7 @@ function initialisexpresssession(app) {
 function initialiseGlobalMiddleware(app) {
   logger.info('Initalising global middleware');
 
-  if (config.ENABLE_UNAVAILABLE_PAGE.toLowerCase() == 'true') {
+  if (config.ENABLE_UNAVAILABLE_PAGE.toLowerCase() === 'true') {
     logger.info('Enabling service unavailable middleware');
     app.use(function (req, res, next) {
       const validRoutes = ['unavailable', 'public', 'javascripts', 'stylesheets']
@@ -205,14 +203,12 @@ function initialiseTemplateEngine(app) {
   // Version static assets on production for better caching
   // if it's not production we want to re-evaluate the assets on each file change
   // nunjucksEnvironment.addGlobal('css_path', NODE_ENV === 'production' ? CSS_PATH : staticify.getVersionedPath('/stylesheets/application.min.css'));
-  // // nunjucksEnvironment.addGlobal('css_path', NODE_ENV === 'production' ? CSS_PATH2 : staticify.getVersionedPath('/stylesheets/govuk-frontend-2.1.0.min.css'))
   // nunjucksEnvironment.addGlobal('js_path', NODE_ENV === 'production' ? JAVASCRIPT_PATH : staticify.getVersionedPath('/javascripts/application.js'));
   nunjucksEnvironment.addGlobal('ga_id', GA_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('countryList', alpha3List);
-  // logger.info('Set global settings for nunjucks');
 }
 
 
@@ -231,7 +227,7 @@ function initialiseRoutes(app) {
 }
 
 function initialiseErrorHandling(app) {
-  app.use((req, res, next) => {
+  app.use((req, res) => {
     res.redirect('/error/404');
   });
   logger.info('Initialised error handling');
@@ -253,7 +249,7 @@ function initialise() {
   app.disable('x-powered-by');
   app.use(helmet.noCache())
   app.use(helmet.frameguard())
-  initialisexpresssession(app);
+  initialisExpressSession(app);
   initialiseProxy(app);
   initialiseI18n(app);
   initialiseGlobalMiddleware(app);
@@ -282,6 +278,6 @@ if (argv.i) {
 
 module.exports = {
   start,
-  getApp: initialise,
   staticify,
+  getApp: initialise,
 };
