@@ -22,7 +22,15 @@ const FileStore = require('session-file-store')(session);
 const config = require('./common/config/index');
 const csrf = require('csurf');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
+var countries = require("i18n-iso-countries");
 
+logger.info('Obtaining all countries and converting to alpha 3 codes')
+let alpha3List = [];
+countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+Object.keys(countries.getNames('en')).map((key) => {
+  const alpha3 = countries.alpha2ToAlpha3(key);
+  alpha3List.push({code: alpha3, label: countries.getNames('en')[key] + ' (' + alpha3 + ')'});
+});
 
 // Local dependencies
 const router = require('./app/router');
@@ -106,6 +114,7 @@ function initialiseGlobalMiddleware(app) {
   app.set('settings', {
     getVersionedPath: staticify.getVersionedPath
   });
+
   app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'assets', 'images', 'favicon.ico')));
   app.use(compression());
   app.use(staticify.middleware);
@@ -199,14 +208,16 @@ function initialiseTemplateEngine(app) {
   // // nunjucksEnvironment.addGlobal('css_path', NODE_ENV === 'production' ? CSS_PATH2 : staticify.getVersionedPath('/stylesheets/govuk-frontend-2.1.0.min.css'))
   // nunjucksEnvironment.addGlobal('js_path', NODE_ENV === 'production' ? JAVASCRIPT_PATH : staticify.getVersionedPath('/javascripts/application.js'));
   nunjucksEnvironment.addGlobal('ga_id', GA_ID);
-  nunjucksEnvironment.addGlobal('ga_id', GA_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
-  nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase)
+  nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
+  // Country list added to the nunjucks global environment, up for debate whether this is the best place
+  nunjucksEnvironment.addGlobal('countryList', alpha3List);
   // logger.info('Set global settings for nunjucks');
 }
 
 
 function initialisePublic(app) {
+  app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')))
   app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
@@ -229,8 +240,7 @@ function initialiseErrorHandling(app) {
 function listen() {
   const app = initialise();
   app.listen(PORT);
-  logger.info('App initialised..');
-  logger.info(app);
+  logger.info('App initialised');
   logger.info(`Listening on port ${PORT}`);
 }
 
@@ -252,7 +262,6 @@ function initialise() {
   initialisePublic(app);
   initialiseErrorHandling(app);
   logger.info('Initialised app: ');
-  logger.info(app);
   return app;
 }
 

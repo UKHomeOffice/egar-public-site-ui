@@ -3,8 +3,10 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
+
   /**
    * Calls create craft API endpoint.
+   *
    * @param {String} registration Registration of the craft
    * @param {String} craftType Type of craft
    * @param {String} craftBase Base of craft
@@ -12,7 +14,7 @@ module.exports = {
    * @returns {Promise} returns API response when resolved
    */
   create(registration, craftType, craftBase, userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.createCraft(userId),
@@ -23,7 +25,6 @@ module.exports = {
         }),
       }, (error, response, body) => {
         if (error) {
-          // return 'Generic response'
           logger.error('Failed to call craft creation API');
           return console.dir(error);
         }
@@ -38,13 +39,14 @@ module.exports = {
       });
   },
   /**
-   * Gets the details of a craft
+   * Gets the details of a craft.
+   *
    * @param {String} userId id of user doing the search
    * @param {String} craftId id of craft to be searched for
    * @returns {Promise} resolves with API response
    */
   getDetails(userId, craftId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getCraftData(userId, craftId),
@@ -61,12 +63,13 @@ module.exports = {
     });
   },
   /**
-   * Lists all crafts a user is able to see
+   * Lists all crafts a user is able to see.
+   *
    * @param {String} userId id of user trying to list crafts
    * @returns {Promise} resolves with API response
    */
   getCrafts(userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getCrafts(userId),
@@ -83,12 +86,13 @@ module.exports = {
     });
   },
   /**
-   * Lists all crafts a user is able to see
+   * Lists all crafts a user is able to see.
+   *
    * @param {String} orgid id of organisation trying to list crafts
    * @returns {Promise} resolves with API response
    */
   getOrgCrafts(orgId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgCrafts(orgId),
@@ -105,7 +109,8 @@ module.exports = {
     });
   },
   /**
-   * Updates a given craft
+   * Updates a given craft.
+   *
    * @param {String} registration new registration number of craft
    * @param {String} craftType new type of craft
    * @param {String} craftBase new base of craft
@@ -114,7 +119,7 @@ module.exports = {
    * @returns {Promise} resolves with API response
    */
   update(registration, craftType, craftBase, userId, craftId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateCraft(userId, craftId),
@@ -138,21 +143,20 @@ module.exports = {
       });
   },
   /**
-   * Delete an individual user's craft
+   * Delete an individual user's craft.
+   *
    * @param {String} userId id of user trying to delete craft
    * @param {String} craftId id of the craft to be deleted
    * @returns {Promise} resolves with API response
    */
   deleteCraft(requesterId, craftId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deleteCraft(requesterId, craftId),
         body: JSON.stringify({
           requesterId,
-          crafts: [
-            { craftId },
-          ],
+          crafts: [ { craftId } ],
         }),
       },
       (error, response, body) => {
@@ -167,22 +171,21 @@ module.exports = {
     });
   },
   /**
-   * Delete an organisation's craft
+   * Delete an organisation's craft.
+   *
    * @param {String} orgId id of the organisation the craft belongs to
    * @param {String} userId id of user trying to delete craft
    * @param {String} craftId if of the craft to be deleted
    * @returns {Promise} resolves with API response
    */
   deleteOrgCraft(orgId, requesterId, craftId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgCrafts(orgId),
         body: JSON.stringify({
           requesterId,
-          crafts: [
-            { craftId },
-          ],
+          crafts: [ { craftId } ],
         }),
       },
       (error, response, body) => {

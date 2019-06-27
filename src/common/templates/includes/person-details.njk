@@ -18,15 +18,21 @@
     Provide the 3 letter country code, for example GBR
   </span>
   <input class="govuk-input" id="nationality"  maxlength="3" name="nationality" autocomplete="off" type="text" value="{{ (person['nationality'] or req.body['nationality']) | upper}}" />
+  {# <select class="govuk-select" id="nationality-picker">
+    <option value="">Select a country</option>
+    {% for country in countryList|sort(attribute='label') %}
+      <option value="{{ country.code }}">{{ country.label }}</option>
+    {% endfor %}
+  </select> #}
 </div>
 
-<div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
-  <label class="govuk-label govuk-label--m" for="birthplace">Place of birth</label>
-  {{ m.error_message('birthplace', errors) }}
-  <input class="govuk-input" id="birthplace" name="birthplace" autocomplete="off" type="text" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
+  <div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
+    <label class="govuk-label govuk-label--m" for="birthplace">Place of birth</label>
+    {{ m.error_message('birthplace', errors) }}
+    <input class="govuk-input" id="birthplace" name="birthplace" autocomplete="off" type="text" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
   </div>
 
-  <!–– Date of birth -->
+  <!–- Date of birth -->
 
   <div class="govuk-form-group {{ m.form_group_class('dob', errors) }}">
       <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
@@ -182,13 +188,20 @@
           This should be one of either: Passport, Identity Card or Other
     </span>
     {{ m.error_message('travel-document-type', errors) }}
-      <select class="govuk-select" id="travel-document-type" name="travel-document-type">
-      {% for document in documenttype %}
-        {% if document.documenttype  == person['documentType'] or document.documenttype == req.body['travel-document-type']%}
-                <option selected="true">{{document.documenttype}}</option>
-        {% else %}
-                <option>{{document.documenttype}}</option>
-        {% endif %}
-      {% endfor %}
-      </select>
+    <select class="govuk-select" id="travel-document-type" name="travel-document-type">
+    {% for document in documenttype %}
+      {% if document.documenttype  == person['documentType'] or document.documenttype == req.body['travel-document-type']%}
+              <option selected="true">{{document.documenttype}}</option>
+      {% else %}
+              <option>{{document.documenttype}}</option>
+      {% endif %}
+    {% endfor %}
+    </select>
   </div>
+
+<script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+{# <script type="text/javascript">
+  accessibleAutocomplete.enhanceSelectElement({
+    selectElement: document.querySelector('#nationality-picker')
+  })
+</script> #}
