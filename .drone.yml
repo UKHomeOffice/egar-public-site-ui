@@ -33,19 +33,7 @@ pipeline:
         exclude: [ production ]
 
 
-  Unit tests:
-    group: unit-tests
-    image: quay.io/ukhomeofficedigital/drone-docker
-    commands:
-      - docker run -t -e NOTIFY_API_KEY=dummy egar_ui-public-site:$${DRONE_BUILD_NUMBER} sh -c "cd test/ && npm test"
-    when:
-      event: [ push, pull_request ]
-      environment:
-        exclude: [ production ]
-
-
-  SonarQube Scanner:
-    group: unit-tests
+  Unit Tests and SonarQube Scanner:
     image: quay.io/ukhomeofficedigital/sonar-scanner-node:latest
     commands:
       - export NOTIFY_API_KEY=dummy
