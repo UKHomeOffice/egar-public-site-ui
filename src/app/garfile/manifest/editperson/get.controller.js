@@ -21,8 +21,6 @@ module.exports = (req, res) => {
         return garPerson.garPeopleId === personId;
       });
 
-      console.log(JSON.stringify(person));
-      console.log(person['nationality']);
       res.render('app/garfile/manifest/editperson/index', {
         cookie, persontype, documenttype, genderchoice, req, person,
       });
