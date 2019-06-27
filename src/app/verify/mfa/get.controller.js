@@ -10,7 +10,7 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const mfaTokenLength = settings.MFA_TOKEN_LENGTH;
   const errMsg = { message: 'There was a problem creating your code. Try again' };
-  const context = { cookie, successHeader: 'We have resent your code', successMsg: 'Check your email', mfaTokenLength };
+  const context = { cookie, mfaTokenLength, successHeader: 'We have resent your code', successMsg: 'Check your email' };
 
   if (req.query.resend === 'true') {
     if (cookie.getUserVerified()) {
@@ -23,7 +23,7 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error(err);
-          return res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
+          return res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
         });
     } else {
       return res.render('app/verify/mfa/index', context);

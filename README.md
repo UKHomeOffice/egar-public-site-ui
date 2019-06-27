@@ -20,22 +20,6 @@ This will start local instances of:
 - ClamAV REST API
 - Frontend
 
-Please note - due to security configuration, the following lines need to be
-commented out for local development, but not committed back to the repository:
-```
-./src/server.js (lines 95-98):
-  // app.use(csrf({cookie: {
-  //   httpOnly: true,
-  //   secure: true
-  // }}));
-
-./src/server.js (lines 103-106):
-    // var token = req.csrfToken();
-    // res.cookie('XSRF-TOKEN', token);
-    //
-    // res.locals.csrfToken = token;
-```
-
 
 To start clean:
 ```
@@ -57,16 +41,8 @@ docker exec -ti database sh -c "PGPASSWORD=${POSTGRES_PASSWORD} psql -U ${POSTGR
 ```
 
 Once inside database REPL run these commands.
-Don't forget to update your email address in the INSERT command:
+Don't forget to update your email address in the INSERT command (White Listing can also be disabled to skip this step):
 ```
-CREATE TABLE "session" (
-  "sid" varchar NOT NULL COLLATE "default",
-	"sess" json NOT NULL,
-	"expire" timestamp(6) NOT NULL
-)
-WITH (OIDS=FALSE);
-ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
-
 INSERT INTO "WhiteList" ("email", "createdAt", "updatedAt") VALUES ('your@email.com', current_timestamp, current_timestamp);
 ```
 

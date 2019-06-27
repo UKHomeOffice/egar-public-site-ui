@@ -20,7 +20,21 @@ function createDB() {
     logger.info('Syncing db');
     db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
     db.sequelize.import('./common/models/UserSessions');
-    db.sequelize.sync().done();
+    db.sequelize.import('./common/models/Session');
+    db.sequelize.sync()
+    .then(() => {
+      logger.debug('Successfully created tables');
+    })
+    .then(() => {
+      return db.sequelize.query(
+        'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; ' + 
+        'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
+      );
+    })
+    .then(() => {
+      logger.debug('Successfully added session table constraints');
+    });
+    
   } catch (e) {
     logger.error('Failed to sync db');
     logger.error(e);

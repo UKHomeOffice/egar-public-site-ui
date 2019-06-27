@@ -1,11 +1,36 @@
 pipeline:
 
+  # Checkout specific tag for Testing:
+  #   image: quay.io/ukhomeofficedigital/drone-docker
+  #   commands:
+  #     - echo $${DRONE_JOB_NUMBER}
+  #     - echo $${DRONE_BUILD_NUMER}
+  #     - echo $${DRONE_COMMIT}
+  #     - echo $${DRONE_COMMIT_REF}
+  #     - echo $${DRONE_COMMIT_SHA}
+  #     - git checkout $${{DRONE_JOB_NUMBER}}
+  #   when:
+  #     event: deployment
+  #     branch: [ master, hotfix/* ]
+  #     environment: testing
+
+  # Checkout specific tag for Production:
+  #   image: quay.io/ukhomeofficedigital/drone-docker
+  #   commands:
+  #     - git checkout $${{DRONE_JOB_NUMBER}}
+  #   when:
+  #     event: deployment
+  #     branch: [ master, hotfix/* ]
+  #     environment: production
+
   Build:
     image: quay.io/ukhomeofficedigital/drone-docker
     commands:
       - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
     when:
-      event: [ push, deployment, pull_request ]
+      event: [ push, pull_request ]
+      environment:
+        exclude: [ production ]
 
 
   Unit tests:
@@ -13,7 +38,9 @@ pipeline:
     commands:
       - docker run -t -e NOTIFY_API_KEY=dummy egar_ui-public-site:$${DRONE_BUILD_NUMBER} sh -c "cd test/ && npm test"
     when:
-      event: [ push, deployment, pull_request ]
+      event: [ push, pull_request ]
+      environment:
+        exclude: [ production ]
 
 
   SonarQube Scanner:
@@ -26,7 +53,7 @@ pipeline:
       - cd ..
       - sonar-scanner -Dsonar.projectVersion=$${DRONE_BUILD_NUMBER}
     when:
-      event: [ push, deployment, pull_request ]
+      event: [ push, pull_request ]
 
 
   Push Image to Quay.io:
@@ -37,10 +64,13 @@ pipeline:
     registry: quay.io
     repo: quay.io/ukhomeofficedigital/egar-public-site-ui
     tags:
-      - ${DRONE_BUILD_NUMBER}
+      # - ${DRONE_BUILD_NUMBER}
+      - ${DRONE_COMMIT}
     when:
       branch: [ master, hotfix/* ]
-      event: [ push, deployment ]
+      event: [ push ]
+      environment:
+        exclude: [ production ]
 
 
   Deploy to SIT:
@@ -57,6 +87,7 @@ pipeline:
       - SIT_BASE_URL
       - SIT_BASE_URL_SERVICE
     commands:
+      - export TAGGED_VERSION=$${DRONE_COMMIT}
       - export KUBE_ARTIFACTORY_APP_SECRET=$${SIT_KUBE_ARTIFACTORY_APP_SECRET}
       - export KUBE_SERVER=$${SIT_KUBE_SERVER}
       - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
@@ -107,6 +138,7 @@ pipeline:
       - STAGING_BASE_URL
       - STAGING_BASE_URL_SERVICE
     commands:
+      - export TAGGED_VERSION=$${DRONE_COMMIT}
       - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
       - export KUBE_ARTIFACTORY_APP_SECRET=$${STAGING_KUBE_ARTIFACTORY_APP_SECRET}
       - export KUBE_SERVER=$${STAGING_KUBE_SERVER}
@@ -135,6 +167,18 @@ pipeline:
       environment:
         exclude: [ production ]
 
+  # Tag successful Staging deployment:
+  #   image: quay.io/ukhomeofficedigital/drone-docker
+  #   commands:
+  #     - echo "Tagging as $${DRONE_BUILD_NUMBER}"
+  #     - git tag $${DRONE_BUILD_NUMBER}
+  #     - git push origin $${DRONE_BUILD_NUMBER}
+  #   when:
+  #     branch: [ master, hotfix/* ]
+  #     event: push
+  #     environment:
+  #       exclude: [ production ]
+
 
   Deploy to Production:
     image: quay.io/ukhomeofficedigital/kd
@@ -151,6 +195,7 @@ pipeline:
       - PRODUCTION_BASE_URL
       - PRODUCTION_BASE_URL_SERVICE
     commands:
+      - export TAGGED_VERSION=$${DRONE_COMMIT}
       - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
       - export KUBE_ARTIFACTORY_APP_SECRET=$${PRODUCTION_KUBE_ARTIFACTORY_APP_SECRET}
       - export KUBE_SERVER=$${PRODUCTION_KUBE_SERVER}

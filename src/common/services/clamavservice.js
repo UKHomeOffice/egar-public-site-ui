@@ -31,7 +31,7 @@ module.exports = {
           resolve(false);
         } else {
           logger.info('Unexpected clamav response');
-          reject();
+          reject(`Unexpected clamav response: ${body}`);
         }
       });
     });

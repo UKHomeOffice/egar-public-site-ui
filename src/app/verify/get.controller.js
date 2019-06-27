@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
   cookie.initialise();
 
   try {
-    let token = req.query.query;
+    const token = req.query.query;
     const hashedToken = verifyUserService.generateHash(token);
     const apiResponse = await verifyUserService.verifyUser(hashedToken);
     const parsedResponse = JSON.parse(apiResponse);
@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
       message = 'Your token has expired. We have created a new token for you. ' +
         'Please check your email and click the new link';
     }
-    if (parsedResponse.message == 'Token is invalid') {
+    if (parsedResponse.message === 'Token is invalid') {
       message = 'This token is invalid, click the link provided in the email or ' +
         'contact support for additional help'
     }
