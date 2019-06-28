@@ -34,13 +34,16 @@ csv({
     console.log('Processing row ' + row.id + ' - ' + row.name);
     console.log('IATA: ' + row.IATA);
     console.log('ICAO: ' + row.ICAO);
+    // Adding a flag to the row to signify whether the airport is in the UK
+    // TODO: Does "Isle of Man" and others like "Jersey" also count as in the UK?
+    const british = row.country === 'United Kingdom';
     const label = row.name + ' (' + row.country + ') ';
     // It is possible that IATA codes do not exist, which appear to be read as a "\N" character so ignore those.
     if (row.IATA !== '\\N') {
-      processedArray.push({id: row.IATA, label: label + '(' + row.IATA + ')'})
+      processedArray.push({id: row.IATA, british: british, label: label + '(' + row.IATA + ')'})
     }
     if (row.ICAO !== '\\N') {
-      processedArray.push({id: row.ICAO, label: label + '(' + row.ICAO + ')'})
+      processedArray.push({id: row.ICAO, british: british, label: label + '(' + row.ICAO + ')'})
     }
   });
   console.log('Resulting output');
