@@ -32,11 +32,9 @@ class Manifest {
     let isValid = true;
     this.manifest.forEach((person) => {
       Object.keys(person).forEach((key) => {
-        if (key.toLowerCase().includes('date')) {
-          if (!validations.realDate(Manifest._constructDateObj(person[key]))) {
-            isValid = false;
-            this._recordValidationErr(this.manifest.indexOf(person));
-          }
+        if (key.toLowerCase().includes('date') && !validations.realDate(Manifest._constructDateObj(person[key]))) {
+          isValid = false;
+          this._recordValidationErr(this.manifest.indexOf(person));
         }
         if (!validations.notEmpty(person[key])) {
           isValid = false;
@@ -51,14 +49,14 @@ class Manifest {
     let captainCrewCount = 0;
     this.manifest.forEach((person) => {
       Object.keys(person).forEach((key) => {
-        if (key.toLowerCase().includes('peopletype')) {
-          if (person[key].name === 'Captain' || person[key].name === 'Crew') {
-            captainCrewCount += 1;
-          }
+        if (key.toLowerCase().includes('peopletype') && (person[key].name === 'Captain' || person[key].name === 'Crew')) {
+          captainCrewCount += 1;
         }
       });
     })
-    if (captainCrewCount >= 1) { return true }
+    if (captainCrewCount >= 1) { 
+      return true;
+    }
     return false;
   }
 
