@@ -2,7 +2,7 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define('GOVUKFrontend', ['exports'], factory) :
 	(factory((global.GOVUKFrontend = {})));
-}(this, (function (exports) { 'use strict';
+}(this, (function (exports) {
 
 /**
  * TODO: Ideally this would be a NodeList.prototype.forEach polyfill

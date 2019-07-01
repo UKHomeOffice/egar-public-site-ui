@@ -1,5 +1,3 @@
-'use strict'
-
 // Npm dependencies
 const express = require('express')
 
