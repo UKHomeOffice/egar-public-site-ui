@@ -61,6 +61,6 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error(err);
-      res.render('app/people/add/index', { cookie, persontype, documenttype, genderchoice, person: req.body, errors: err, req });
+      res.render('app/people/add/index', { cookie, req, persontype, documenttype, genderchoice, person: req.body, errors: err });
     });
 };
