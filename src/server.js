@@ -15,21 +15,12 @@ const nunjucks = require('nunjucks');
 const helmet = require('helmet');
 const _ = require('lodash');
 const logger = require('./common/utils/logger')(__filename);
+const autocompleteUtil = require('./common/utils/autocomplete');
 const cookieParser = require('cookie-parser');
-const crypto = require('crypto');
 const uuid = require('uuid/v4');
 const config = require('./common/config/index');
 const csrf = require('csurf');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
-var countries = require("i18n-iso-countries");
-
-logger.info('Obtaining all countries and converting to alpha 3 codes')
-const alpha3List = [];
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
-Object.keys(countries.getNames('en')).map((key) => {
-  const alpha3 = countries.alpha2ToAlpha3(key);
-  alpha3List.push({code: alpha3, label: countries.getNames('en')[key] + ' (' + alpha3 + ')'});
-});
 
 // Local dependencies
 const router = require('./app/router');
@@ -208,11 +199,10 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
-  nunjucksEnvironment.addGlobal('countryList', alpha3List);
+  nunjucksEnvironment.addGlobal('countryList', autocompleteUtil.generateCountryList());
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
 }
-
 
 function initialisePublic(app) {
   app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')))

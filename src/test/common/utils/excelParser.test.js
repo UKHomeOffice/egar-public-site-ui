@@ -1,13 +1,7 @@
-/* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
-
 const { expect } = require('chai');
-
-const chai = require('chai');
 const sinon = require('sinon');
 
-const should = chai.should();
-const { ExcelParser } = require('../common/utils/excelParser');
+const { ExcelParser } = require('../../../common/utils/excelParser');
 
 describe('ExcelParser', () => {
   const workbook = { A1: { v: '123' } };
