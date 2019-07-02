@@ -2,20 +2,11 @@ const logger = require('./logger')(__filename);
 const countries = require("i18n-iso-countries");
 
 /**
- * Utility class for generating the list of country codes in a format for this app.
- * 
+ * Utility function for generating the list of country codes in a format for this app.
+ * This essentially means taking the more normally used alpha-2 (GB) code and country
+ * pair and using instead alpha-3 (GBR) as the key.
  */
-
-/**
- * Some pages just simply create a Cookie instance of the request and render
- * the response for the given page. So this is a convenience method to perform
- * that step.
- * 
- * @param {} req 
- * @param {*} res 
- * @param {*} page 
- */
-const generateCountryList = (req, res, page) => {
+const generateCountryList = () => {
   logger.info('Obtaining all countries and converting to alpha 3 codes')
   const alpha3List = [];
   countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
