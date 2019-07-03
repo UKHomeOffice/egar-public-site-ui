@@ -1,29 +1,8 @@
 pipeline:
 
-  # Checkout specific tag for Testing:
-  #   image: quay.io/ukhomeofficedigital/drone-docker
-  #   commands:
-  #     - echo $${DRONE_JOB_NUMBER}
-  #     - echo $${DRONE_BUILD_NUMER}
-  #     - echo $${DRONE_COMMIT}
-  #     - echo $${DRONE_COMMIT_REF}
-  #     - echo $${DRONE_COMMIT_SHA}
-  #     - git checkout $${{DRONE_JOB_NUMBER}}
-  #   when:
-  #     event: deployment
-  #     branch: [ master, hotfix/* ]
-  #     environment: testing
-
-  # Checkout specific tag for Production:
-  #   image: quay.io/ukhomeofficedigital/drone-docker
-  #   commands:
-  #     - git checkout $${{DRONE_JOB_NUMBER}}
-  #   when:
-  #     event: deployment
-  #     branch: [ master, hotfix/* ]
-  #     environment: production
 
   Build:
+    group: build-stage
     image: quay.io/ukhomeofficedigital/drone-docker
     commands:
       - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
@@ -34,6 +13,7 @@ pipeline:
 
 
   Unit Tests and SonarQube Scanner:
+  group: build-stage
     image: quay.io/ukhomeofficedigital/sonar-scanner-node:latest
     commands:
       - export NOTIFY_API_KEY=dummy
@@ -164,18 +144,6 @@ pipeline:
       event: push
       environment:
         exclude: [ production ]
-
-  # Tag successful Staging deployment:
-  #   image: quay.io/ukhomeofficedigital/drone-docker
-  #   commands:
-  #     - echo "Tagging as $${DRONE_BUILD_NUMBER}"
-  #     - git tag $${DRONE_BUILD_NUMBER}
-  #     - git push origin $${DRONE_BUILD_NUMBER}
-  #   when:
-  #     branch: [ master, hotfix/* ]
-  #     event: push
-  #     environment:
-  #       exclude: [ production ]
 
 
   Deploy to Production:
