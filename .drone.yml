@@ -1,29 +1,8 @@
 pipeline:
 
-  # Checkout specific tag for Testing:
-  #   image: quay.io/ukhomeofficedigital/drone-docker
-  #   commands:
-  #     - echo $${DRONE_JOB_NUMBER}
-  #     - echo $${DRONE_BUILD_NUMER}
-  #     - echo $${DRONE_COMMIT}
-  #     - echo $${DRONE_COMMIT_REF}
-  #     - echo $${DRONE_COMMIT_SHA}
-  #     - git checkout $${{DRONE_JOB_NUMBER}}
-  #   when:
-  #     event: deployment
-  #     branch: [ master, hotfix/* ]
-  #     environment: testing
-
-  # Checkout specific tag for Production:
-  #   image: quay.io/ukhomeofficedigital/drone-docker
-  #   commands:
-  #     - git checkout $${{DRONE_JOB_NUMBER}}
-  #   when:
-  #     event: deployment
-  #     branch: [ master, hotfix/* ]
-  #     environment: production
 
   Build:
+    group: build-stage
     image: quay.io/ukhomeofficedigital/drone-docker
     commands:
       - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
@@ -33,17 +12,8 @@ pipeline:
         exclude: [ production ]
 
 
-  Unit tests:
-    image: quay.io/ukhomeofficedigital/drone-docker
-    commands:
-      - docker run -t -e NOTIFY_API_KEY=dummy egar_ui-public-site:$${DRONE_BUILD_NUMBER} sh -c "cd test/ && npm test"
-    when:
-      event: [ push, pull_request ]
-      environment:
-        exclude: [ production ]
-
-
-  SonarQube Scanner:
+  Unit Tests and SonarQube Scanner:
+    group: build-stage
     image: quay.io/ukhomeofficedigital/sonar-scanner-node:latest
     commands:
       - export NOTIFY_API_KEY=dummy
@@ -114,8 +84,16 @@ pipeline:
       - E2E_SMTP_PORT
       - E2E_INDIVIDUAL_USER_USERNAME
       - E2E_INDIVIDUAL_USER_PASSWORD
+      - E2E_FRONT_END_DB_HOST
+      - E2E_FRONT_END_DB_NAME
+      - E2E_FRONT_END_DB_USER
+      - E2E_FRONT_END_DB_PASSWORD
+      - E2E_BACK_END_DB_HOST
+      - E2E_BACK_END_DB_NAME
+      - E2E_BACK_END_DB_USER
+      - E2E_BACK_END_DB_PASSWORD
     commands:
-      - docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER} -e PROTOCOL=$${E2E_PROTOCOL} -e BASE_URL=$${E2E_BASE_URL} -e E2E_SMTP_SERVER=$${E2E_SMTP_SERVER} -e E2E_SMTP_PORT=$${E2E_SMTP_PORT} -e E2E_INDIVIDUAL_USER_USERNAME=$${E2E_INDIVIDUAL_USER_USERNAME} -e E2E_INDIVIDUAL_USER_PASSWORD=$${E2E_INDIVIDUAL_USER_PASSWORD} quay.io/ukhomeofficedigital/egar-e2e-test:latest
+      - docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER} -e PROTOCOL=$${E2E_PROTOCOL} -e BASE_URL=$${E2E_BASE_URL} -e E2E_SMTP_SERVER=$${E2E_SMTP_SERVER} -e E2E_SMTP_PORT=$${E2E_SMTP_PORT} -e E2E_INDIVIDUAL_USER_USERNAME=$${E2E_INDIVIDUAL_USER_USERNAME} -e E2E_INDIVIDUAL_USER_PASSWORD=$${E2E_INDIVIDUAL_USER_PASSWORD} -e E2E_FRONT_END_DB_HOST=$${E2E_FRONT_END_DB_HOST} -e E2E_FRONT_END_DB_NAME=$${E2E_FRONT_END_DB_NAME} -e E2E_FRONT_END_DB_USER=$${E2E_FRONT_END_DB_USER} -e E2E_FRONT_END_DB_PASSWORD=$${E2E_FRONT_END_DB_PASSWORD} -e E2E_BACK_END_DB_HOST=$${E2E_BACK_END_DB_HOST} -e E2E_BACK_END_DB_NAME=$${E2E_BACK_END_DB_NAME} -e E2E_BACK_END_DB_USER=$${E2E_BACK_END_DB_USER} -e E2E_BACK_END_DB_PASSWORD=$${E2E_BACK_END_DB_PASSWORD} quay.io/ukhomeofficedigital/egar-e2e-test:latest
     when:
       branch: [ master, hotfix/* ]
       event: push
@@ -166,18 +144,6 @@ pipeline:
       event: push
       environment:
         exclude: [ production ]
-
-  # Tag successful Staging deployment:
-  #   image: quay.io/ukhomeofficedigital/drone-docker
-  #   commands:
-  #     - echo "Tagging as $${DRONE_BUILD_NUMBER}"
-  #     - git tag $${DRONE_BUILD_NUMBER}
-  #     - git push origin $${DRONE_BUILD_NUMBER}
-  #   when:
-  #     branch: [ master, hotfix/* ]
-  #     event: push
-  #     environment:
-  #       exclude: [ production ]
 
 
   Deploy to Production:

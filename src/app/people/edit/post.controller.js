@@ -60,6 +60,6 @@ module.exports = (req, res) => {
     .catch((err) => {
       logger.error('There was a problem with adding person to saved people');
       logger.error(err);
-      res.render('app/people/edit/index', { cookie, persontype, documenttype, genderchoice, errors: err, req });
+      res.render('app/people/edit/index', { cookie, req, persontype, documenttype, genderchoice, errors: err});
     });
 };

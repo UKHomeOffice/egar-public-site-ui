@@ -1,5 +1,3 @@
-'use strict'
-
 // Npm dependencies
 const express = require('express')
 
@@ -26,6 +24,5 @@ router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, postControll
 
 // Export
 module.exports = {
-  router,
-  paths
+  router, paths
 }

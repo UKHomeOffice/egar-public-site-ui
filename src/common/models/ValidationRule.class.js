@@ -1,6 +1,5 @@
 /**
- @class ValidationRule
- * @property {string}
+ * Representation of a validation rule used through sGAR.
  */
 class ValidationRule {
   constructor(validator, identifier, value, message) {

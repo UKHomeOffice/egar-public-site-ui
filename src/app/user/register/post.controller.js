@@ -10,6 +10,31 @@ const tokenApi = require('../../../common/services/tokenApi');
 const whitelist = require('../../../common/services/whiteList');
 const config = require('../../../common/config');
 
+const regFailureError = { message: 'Registration failed, try again' };
+
+const createValidationChains = (fname, lname, usrname, cusrname) => {
+// Define a validation chain for user registration fields
+const fnameChain = [
+  new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given name'),
+];
+const lnameChain = [
+  new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),
+];
+
+const userChain = [
+  new ValidationRule(validator.notEmpty, 'userId', usrname, 'Please enter your email'),
+  new ValidationRule(validator.email, 'userId', usrname, 'Please enter a valid email address'),
+  new ValidationRule(validator.valuetrue, 'userId', usrname === cusrname, 'Please ensure the email addresses match'),
+];
+
+const confirmuserChain = [
+  new ValidationRule(validator.notEmpty, 'cUserId', cusrname, 'Please confirm the email address'),
+  new ValidationRule(validator.valuetrue, 'cUserId', usrname === cusrname, 'Please ensure the email addresses match'),
+];
+
+  return [userChain, confirmuserChain, fnameChain, lnameChain]
+}
+
 module.exports = (req, res) => {
   logger.debug('In user / register post controller');
 
@@ -26,26 +51,7 @@ module.exports = (req, res) => {
   cookie.setUserLastName(lname);
   cookie.setUserEmail(usrname);
 
-  // Define a validation chain for user registration fields
-  const fnameChain = [
-    new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given name'),
-  ];
-  const lnameChain = [
-    new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),
-  ];
-
-  const userChain = [
-    new ValidationRule(validator.notEmpty, 'userId', usrname, 'Please enter your email'),
-    new ValidationRule(validator.email, 'userId', usrname, 'Please enter a valid email address'),
-    new ValidationRule(validator.valuetrue, 'userId', usrname === cusrname, 'Please ensure the email addresses match'),
-  ];
-
-  const confirmuserChain = [
-    new ValidationRule(validator.notEmpty, 'cUserId', cusrname, 'Please confirm the email address'),
-    new ValidationRule(validator.valuetrue, 'cUserId', usrname === cusrname, 'Please ensure the email addresses match'),
-  ];
-
-  const regFailureError = { message: 'Registration failed, try again' };
+  const validationChains = createValidationChains(fname, lname, usrname, cusrname);
 
   const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() === 'true');
 
@@ -55,7 +61,7 @@ module.exports = (req, res) => {
   const hashtoken = tokenservice.generateHash(token);
 
   logger.info('Validating registration input');
-  validator.validateChains([userChain, confirmuserChain, fnameChain, lnameChain])
+  validator.validateChains(validationChains)
     .then(() => {
       if (isWhitelistRequired) {
         logger.info('Starting whitelist check');

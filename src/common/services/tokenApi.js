@@ -16,7 +16,7 @@ module.exports = {
   * @returns {Promise} returns response body when resolved
   */
   setToken(tokenId, userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
@@ -46,7 +46,7 @@ module.exports = {
   * @returns {Promise} returns response body when resolved
   */
   updateToken(tokenId, userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
@@ -78,7 +78,7 @@ module.exports = {
    * @returns {Promise} returns response body when resolved.
    */
   setInviteUserToken(tokenId, inviterId, organisationId, roleName) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
