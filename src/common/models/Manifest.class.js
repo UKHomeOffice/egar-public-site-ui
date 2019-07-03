@@ -57,8 +57,8 @@ class Manifest {
           }
         }
       });
-    })
-    if (captainCrewCount >= 1) { return true }
+    });
+    if (captainCrewCount >= 1) { return true; }
     return false;
   }
 

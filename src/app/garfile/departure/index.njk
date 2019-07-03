@@ -51,7 +51,7 @@
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureDay"
                   name="departureDay" type="text" pattern="[0-9]*" maxlength="2"
-                  value="{{cookie.dateSlice('day', cookie.getGarDepartureVoyage().departureDate)}}">
+                  value="{{ cookie.dateSlice('day', cookie.getGarDepartureVoyage().departureDate) }}">
                 </div>
               </div>
 
@@ -62,7 +62,7 @@
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMonth"
                   name="departureMonth" type="text" pattern="[0-9]*" maxlength="2"
-                  value="{{cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate)}}">
+                  value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}">
                   </div>
                 </div>
 
@@ -73,7 +73,7 @@
                     </label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureYear"
                     name="departureYear" type="text" pattern="[0-9]*" maxlength="4"
-                    value="{{cookie.dateSlice('year', cookie.getGarDepartureVoyage().departureDate)}}">
+                    value="{{ cookie.dateSlice('year', cookie.getGarDepartureVoyage().departureDate) }}">
                   </div>
                 </div>
               </div>
@@ -101,7 +101,7 @@
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureHour"
                   name="departureHour" type="text" pattern="[0-9]*" maxlength="2"
-                  value="{{cookie.timeSlice('hour', cookie.getGarDepartureVoyage().departureTime)}}">
+                  value="{{ cookie.timeSlice('hour', cookie.getGarDepartureVoyage().departureTime) }}">
                 </div>
               </div>
 
@@ -112,7 +112,7 @@
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMinute"
                   name="departureMinute" type="text" pattern="[0-9]*" maxlength="2"
-                  value="{{cookie.timeSlice('minute', cookie.getGarDepartureVoyage().departureTime)}}">
+                  value="{{ cookie.timeSlice('minute', cookie.getGarDepartureVoyage().departureTime) }}">
                 </div>
               </div>
             </div>
@@ -131,7 +131,8 @@
 				</span>
 
           {{ m.error_message('departurePort', errors) }}
-          <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
+          <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="off"
+          type="text" value="{{ cookie.getGarDepartureVoyage().departurePort | upper }}"/>
         </div>
         <!-- End departure port -->
 
@@ -154,7 +155,8 @@
           </span>
 
           {{ m.error_message('departureLat', errors) }}
-          <input class="govuk-input" id="departureLat" name="departureLat" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departureLat}}"/>
+          <input class="govuk-input" id="departureLat" name="departureLat" autocomplete="off" type="text"
+          value="{{ cookie.getGarDepartureVoyage().departureLat }}"/>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('departureLong', errors) }}">
@@ -165,7 +167,8 @@
               For example -0.4542
           </span>
           {{ m.error_message('departureLong', errors) }}
-          <input class="govuk-input" id="departureLong" name="departureLong" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departureLong}}"/>
+          <input class="govuk-input" id="departureLong" name="departureLong" autocomplete="off" type="text"
+          value="{{ cookie.getGarDepartureVoyage().departureLong }}"/>
 
         </div>
         <!-- End departure coords -->
@@ -176,7 +179,8 @@
           onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
 						<p class="govuk-body-m">
-		          <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;" name="submit_button">Save and come back later</a>
+		          <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;"
+              name="submit_button">Save and come back later</a>
 		        </p>
             <p class="govuk-body-m">
               <a href="/home" > Exit without saving </a>
