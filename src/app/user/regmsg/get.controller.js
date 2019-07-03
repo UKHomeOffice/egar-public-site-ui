@@ -1,5 +1,5 @@
 const nanoid = require('nanoid/generate');
-const tokenservice = require('../../../common/services/create-token');
+const tokenService = require('../../../common/services/create-token');
 const sendTokenService = require('../../../common/services/send-token');
 const tokenApi = require('../../../common/services/tokenApi');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -13,7 +13,7 @@ module.exports = (req, res) => {
     // Generate a new token for the user
     const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
     const token = nanoid(alphabet, 13);
-    const hashtoken = tokenservice.generateHash(token);
+    const hashtoken = tokenService.generateHash(token);
 
     sendTokenService.send(cookie.getUserFirstName(), cookie.getUserEmail(), token)
       .then(() => {
@@ -21,6 +21,16 @@ module.exports = (req, res) => {
         // Updating token renders previous tokens invalid
         tokenApi.updateToken(hashtoken, cookie.getUserDbId());
         res.render('app/user/regmsg/index', { cookie, resend: true });
+      })
+      .catch((err) => {
+        logger.error('Cannot send token');
+        logger.error(err.message);
+        // Question, what happens when GOV Notify is down? Is this error message sufficient?
+        return res.render('app/user/login/index', { 
+          cookie, 
+          unverified: true, 
+          errors: [{ identifier: 'Username', message: 'There was an error sending the verification email, please try again later.' }] 
+        });
       });
   } else {
     res.render('app/user/regmsg/index', { cookie });
