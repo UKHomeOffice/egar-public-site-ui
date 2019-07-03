@@ -200,6 +200,7 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('countryList', autocompleteUtil.generateCountryList());
+  nunjucksEnvironment.addGlobal('airportList', autocompleteUtil.airportList);
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
 }

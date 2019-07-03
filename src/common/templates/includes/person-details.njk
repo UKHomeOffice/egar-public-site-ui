@@ -17,13 +17,13 @@
   <span class="govuk-hint">
     {{ __('field_nationality_hint') }}
   </span>
-  {# <input class="govuk-input" id="nationality"  maxlength="3" name="nationality" autocomplete="off" type="text" value="{{ (person['nationality'] or req.body['nationality']) | upper}}" /> #}
-  <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}">
+  <input class="govuk-input" id="nationality"  maxlength="3" name="nationality" autocomplete="off" type="text" value="{{ (person['nationality'] or req.body['nationality']) | upper}}" />
+  {# <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}">
     <option value="">{{ __('country_no_selection') }}</option>
     {% for country in countryList|sort(attribute='label') %}
       <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
     {% endfor %}
-  </select>
+  </select> #}
 </div>
 
   <div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
@@ -151,13 +151,13 @@
   <label class="govuk-label govuk-label--m" for="issuing-state">{{ __('field_issuing_state') }}</label>
   {{ m.error_message('issuing-state', errors) }}
   <span class="govuk-hint">{{ __('field_issuing_state_hint') }}</span>
-  {# <input class="govuk-input" id="issuing-state" maxlength="3" name="issuing-state" autocomplete="off" type="text" value="{{(person['issuingState'] or req.body['issuing-state']) | upper}}" /> #}
-  <select class="govuk-select" id="issuing-state" name="issuing-state" value="{{ (person['issuingState'] or req.body['issuing-state'])}}">
+  <input class="govuk-input" id="issuing-state" maxlength="3" name="issuing-state" autocomplete="off" type="text" value="{{(person['issuingState'] or req.body['issuing-state']) | upper}}" />
+  {# <select class="govuk-select" id="issuing-state" name="issuing-state" value="{{ (person['issuingState'] or req.body['issuing-state'])}}">
     <option value="">{{ __('country_no_selection') }}</option>
     {% for country in countryList|sort(attribute='label') %}
       <option value="{{ country.code }}" {{ 'selected=selected' if (person['issuingState'] or req.body['issuing-state']) == country.code }}>{{ country.label }}</option>
     {% endfor %}
-  </select>
+  </select> #}
 </div>
 
   <div class="govuk-form-group {{ m.form_group_class('travel-document-type', errors) }}">
@@ -175,7 +175,7 @@
     </select>
   </div>
 
-<script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+<!-- <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
 <script type="text/javascript">
   accessibleAutocomplete.enhanceSelectElement({
     selectElement: document.querySelector('#nationality')
@@ -183,4 +183,4 @@
   accessibleAutocomplete.enhanceSelectElement({
     selectElement: document.querySelector('#issuing-state')
   });
-</script>
+</script> -->

@@ -20,7 +20,7 @@
     "caption_edit_person": "Please enter the following information. This information can be re-used when submitting a GAR.",
 
     "field_nationality": "Nationality",
-    "field_nationality_hint": "Type in or provide the 3 letter country code, for example GBR",
+    "field_nationality_hint": "Provide the 3 letter country code, for example GBR",
     "country_no_selection": "No country selected",
     "field_birth_place": "Place of birth",
     "field_dob": "Date of birth",
