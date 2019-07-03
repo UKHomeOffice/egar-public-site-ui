@@ -12,81 +12,79 @@ const tokenApi = require('../../../common/services/tokenApi');
 const controller = require('../../../app/user/regmsg/get.controller');
 
 describe('Register User Message Get Controller', () => {
-    let req, res;
+  let req, res;
 
-    beforeEach(() => {
-        chai.use(sinonChai);
+  beforeEach(() => {
+    chai.use(sinonChai);
 
-        req = {
-            session: {
-                u: {
-                    dbId: 123,
-                    fn: 'Example first name',
-                }
-            },
-            query: {
-                resend: true,
-            },
-        };
-    
-        res = {
-            render: sinon.stub(),
-        };
-
-        // sinon.stub(nanoid, '').callsFake((alphabet, size) => {
-        //     console.log('nanoid generate called with: ' + alphabet);
-        //     return 'blah';
-        // });
-        sinon.spy(nanoid);
-        sinon.stub(tokenService, 'generateHash').callsFake((token) => {
-            console.log('tokenService generateHash called with: ' + token);
-            return 'ExampleHash';
-        });
-
-        sinon.stub(tokenApi, 'updateToken').callsFake((hashtoken, userDbId) => {
-            console.log('tokenApi updateToken called with: ' + hashtoken);
-        });
-    });
-
-    afterEach(() => {
-        sinon.restore();
-    });
-
-    it('should not do anything if not a resend query or with no user email set', async() => {
-        const blankRequest = {
-            session: {},
-            query: {},
+    req = {
+      session: {
+        u: {
+          dbId: 123,
+          fn: 'Example first name',
         }
-        let a = new CookieModel(blankRequest);
-        await controller(blankRequest, res);
+      },
+      query: {
+        resend: true,
+      },
+    };
 
-        expect(res.render).to.have.been.calledWith('app/user/regmsg/index');
+    res = {
+      render: sinon.stub(),
+    };
+
+    sinon.spy(nanoid);
+    sinon.stub(tokenService, 'generateHash').callsFake((token) => {
+      console.log('tokenService generateHash called with: ' + token);
+      return 'ExampleHash';
     });
 
-    it('should generate a hash and a token and store it when send ok', async() => {
-        sinon.stub(sendTokenService, 'send').resolves();
-
-        let a = new CookieModel(req);
-        await controller(req, res);
-
-        expect(tokenService.generateHash).to.have.been.called;
-        expect(sendTokenService.send).to.have.been.called;
-        expect(tokenApi.updateToken).to.have.been.calledWith('ExampleHash', 123);
-        expect(res.render).to.have.been.calledWith('app/user/regmsg/index');
+    sinon.stub(tokenApi, 'updateToken').callsFake((hashtoken, userDbId) => {
+      console.log('tokenApi updateToken called with: ' + hashtoken);
     });
+  });
 
-    it('should not update token when send has an issue', async() => {
-        sinon.stub(sendTokenService, 'send').rejects({message: 'Example Reject'});
+  afterEach(() => {
+    sinon.restore();
+  });
 
-        let a = new CookieModel(req);
-        await controller(req, res);
+  it('should not do anything if not a resend query or with no user email set', async() => {
+    const blankRequest = {
+      session: {},
+      query: {},
+    }
+    let a = new CookieModel(blankRequest);
+    await controller(blankRequest, res);
 
-        expect(tokenService.generateHash).to.have.been.called;
-        expect(sendTokenService.send).to.have.been.called;
-        expect(tokenApi.updateToken).to.not.have.been.called;
+    expect(res.render).to.have.been.calledWith('app/user/regmsg/index');
+  });
 
-        // TODO: THIS DOES NOT WORK, APPEARS TO NEVER BE CALLED DESPITE THE LOGS BEING CALLED
-        // IS THIS A POSSIBLE ASYNC ISSUE?
-        // expect(res.render).to.have.been.called;//With('app/user/login/index');
-    });
+  it('should generate a hash and a token and store it when send ok', async() => {
+    sinon.stub(sendTokenService, 'send').resolves();
+
+    let a = new CookieModel(req);
+    await controller(req, res);
+
+    expect(tokenService.generateHash).to.have.been.called;
+    expect(sendTokenService.send).to.have.been.called;
+    expect(tokenApi.updateToken).to.have.been.calledWith('ExampleHash', 123);
+    expect(res.render).to.have.been.calledWith('app/user/regmsg/index');
+  });
+
+  it('should not update token when send has an issue', async() => {
+    sinon.stub(sendTokenService, 'send').rejects({message: 'Example Reject'});
+
+    let a = new CookieModel(req);
+
+    try {
+      await controller(req, res);
+    }
+    catch (err) {
+      expect(err.message).to.eq('Example Reject');
+      expect(tokenService.generateHash).to.have.been.called;
+      expect(sendTokenService.send).to.have.been.called;
+      expect(tokenApi.updateToken).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/user/login/index');
+    }
+  });
 });
