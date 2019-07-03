@@ -90,7 +90,7 @@ module.exports = (req, res) => {
           .then((apiResponse) => {
             logger.info('Received response from API');
             const parsedResponse = JSON.parse(apiResponse);
-            if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+            if (!Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
               logger.info('Successfully submitted GAR');
               cookie.setGarStatus('Submitted');
               emailService.send(config.NOTIFY_GAR_SUBMISSION_TEMPLATE_ID, cookie.getUserEmail(), {
