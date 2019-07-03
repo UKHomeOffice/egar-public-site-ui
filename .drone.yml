@@ -13,7 +13,7 @@ pipeline:
 
 
   Unit Tests and SonarQube Scanner:
-  group: build-stage
+    group: build-stage
     image: quay.io/ukhomeofficedigital/sonar-scanner-node:latest
     commands:
       - export NOTIFY_API_KEY=dummy
