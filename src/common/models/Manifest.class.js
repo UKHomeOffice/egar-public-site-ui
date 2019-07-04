@@ -53,8 +53,8 @@ class Manifest {
           captainCrewCount += 1;
         }
       });
-    })
-    if (captainCrewCount >= 1) { 
+    });
+    if (captainCrewCount >= 1) {
       return true;
     }
     return false;
