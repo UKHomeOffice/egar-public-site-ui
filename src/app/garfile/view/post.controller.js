@@ -8,7 +8,6 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const garId = req.body.garId;
   cookie.setGarId(req.body.garId);
-  const userId = cookie.getUserDbId();
   const garPeople = garApi.getPeople(garId);
   const garDetails = garApi.get(garId);
   const garDocs = garApi.getSupportingDocs(garId);

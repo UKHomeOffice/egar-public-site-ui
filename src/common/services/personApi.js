@@ -3,8 +3,10 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
+
   /**
    * Creates a new saved person.
+   *
    * @param {String} userId userId of user saving the person
    * @param {String} firstName first name of person to be saved
    * @param {String} lastName last name of person to be saved
@@ -14,7 +16,7 @@ module.exports = {
    * @param {String} personType type of person to be saved in ['Captain', 'Crew', 'Passenger']
    */
   create(userId, firstName, lastName, nationality, placeOfBirth, dateOfBirth, gender, documentType, documentNumber, documentExpiryDate, peopleType, issuingState) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.createPerson(userId),
@@ -33,7 +35,6 @@ module.exports = {
         }),
       }, (error, response, body) => {
         if (error) {
-          // return 'Generic response'
           logger.error('Failed to call person creation API endpoint');
           return console.dir(error);
         }
@@ -47,14 +48,16 @@ module.exports = {
         logger.error(err);
       });
   },
+
   /**
-   * Gets the details of a saved person
+   * Gets the details of a saved person.
+   *
    * @param {String} userId id of user doing the search
    * @param {String} personId id of person to be searched for
    * @returns {Promise} resolves with API response
    */
   getDetails(userId, personId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getPersonData(userId, personId),
@@ -71,14 +74,16 @@ module.exports = {
       });
     });
   },
+
   /**
-   * Get all the saved persons belonging to an individual or organisation
+   * Get all the saved persons belonging to an individual or organisation.
+   *
    * @param {String} id id of entity performing action
    * @param {String} userType type of user performing action in ['individual', 'organisation']
    * @returns {Promise} resolves with API response
    */
   getPeople(id, userType) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const individualUrl = endpoints.getPeople(id);
       const orgUrl = endpoints.getOrgPeople(id);
       request.get({
@@ -97,8 +102,9 @@ module.exports = {
       });
     });
   },
+
   update(userId, personId, firstName, lastName, nationality, placeOfBirth, dateOfBirth, gender, documentType, documentNumber, documentExpiryDate, peopleType, issuingState) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updatePerson(userId, personId),
@@ -129,14 +135,16 @@ module.exports = {
         logger.error(err);
       });
   },
+
   /**
-   * Calls the endpoint to delete a saved person
+   * Calls the endpoint to delete a saved person.
+   *
    * @param {String} userId The id of the user performing the delete
    * @param {String} personId The id of the saved person to be deleted
    * @returns {Promise} resolves with APi response
    */
   deletePerson(userId, personId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deletePerson(userId, personId),

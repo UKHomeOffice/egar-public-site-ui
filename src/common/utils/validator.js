@@ -129,11 +129,11 @@ function currentOrFutureDate(dObj) {
   if (dObj.y < currDate.getFullYear()) {
     return false;
   }
-  if (dObj.y == currDate.getFullYear()) {
+  if (dObj.y === currDate.getFullYear()) {
     if (dObj.m < currDate.getMonth() + 1) {
       return false;
     }
-    if (dObj.m == currDate.getMonth() + 1) {
+    if (dObj.m === currDate.getMonth() + 1) {
       return dObj.d >= currDate.getDate();
     }
   }
@@ -179,7 +179,6 @@ function validPort(value) {
 }
 
 function passwordValidCharacters(value) {
-  // if ((/^(?=.*[a-zA-Z])(?=.*[0-9])/.test(value))) {
   if (/^[a-zA-Z0-9]+$/.test(value)) {
     return true;
   }

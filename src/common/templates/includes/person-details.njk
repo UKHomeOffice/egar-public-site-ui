@@ -1,79 +1,74 @@
 <div class="govuk-form-group {{ m.form_group_class('savedpeople', errors) }}">
 <div class="govuk-form-group {{ m.form_group_class('first-name', errors) }}">
-  <label class="govuk-label govuk-label--m" for="first-name">Given name</label>
+  <label class="govuk-label govuk-label--m" for="first-name">{{ __('field_given_name') }}</label>
     {{ m.error_message('first-name', errors) }}
   <input class="govuk-input" id="first-name" name="first-name" autocomplete="off" type="text" value="{{person['firstName'] or req.body['first-name']}}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('last-name', errors) }}">
-  <label class="govuk-label govuk-label--m" for="last-name">Surname</label>
+  <label class="govuk-label govuk-label--m" for="last-name">{{ __('field_surname') }}</label>
   {{ m.error_message('last-name', errors) }}
   <input class="govuk-input" id="last-name" name="last-name" autocomplete="off" type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['lastName'] or req.body['last-name'] }}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('nationality', errors) }}">
-  <label class="govuk-label govuk-label--m" for="nationality">Nationality</label>
+  <label class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
   {{ m.error_message('nationality', errors) }}
   <span class="govuk-hint">
-    Provide the 3 letter country code, for example GBR
+    {{ __('field_nationality_hint') }}
   </span>
   <input class="govuk-input" id="nationality"  maxlength="3" name="nationality" autocomplete="off" type="text" value="{{ (person['nationality'] or req.body['nationality']) | upper}}" />
+  {# <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}">
+    <option value="">{{ __('country_no_selection') }}</option>
+    {% for country in countryList|sort(attribute='label') %}
+      <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
+    {% endfor %}
+  </select> #}
 </div>
 
-<div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
-  <label class="govuk-label govuk-label--m" for="birthplace">Place of birth</label>
-  {{ m.error_message('birthplace', errors) }}
-  <input class="govuk-input" id="birthplace" name="birthplace" autocomplete="off" type="text" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
+  <div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
+    <label class="govuk-label govuk-label--m" for="birthplace">{{ __('field_birth_place') }}</label>
+    {{ m.error_message('birthplace', errors) }}
+    <input class="govuk-input" id="birthplace" name="birthplace" autocomplete="off" type="text" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
   </div>
 
-  <!–– Date of birth -->
-
+  <!-- Date of birth -->
   <div class="govuk-form-group {{ m.form_group_class('dob', errors) }}">
-      <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
+    <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h1 class="govuk-fieldset__heading">
-          Date of birth
-          </h1>
+          <h1 class="govuk-fieldset__heading">{{ __('field_dob') }}</h1>
       </legend>
-      <span class="govuk-hint" id="dob-hint">
-          For example 20 12 1988
-      </span>
+      <span class="govuk-hint" id="dob-hint">{{ __('field_dob_hint') }}</span>
       {{ m.error_message('dob', errors) }}
       <div class="govuk-date-input" id="dob">
-          <div class="govuk-date-input__item">
+        <div class="govuk-date-input__item">
           <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label" for="dobDay">
-              Day
-              </label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobDay" name="dobDay" type="number" pattern="[0-9]*" value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}">
+            <label class="govuk-label govuk-date-input__label" for="dobDay">{{ __('field_date_day') }}</label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobDay" name="dobDay" type="number" pattern="[0-9]*" value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}">
           </div>
-          </div>
-          <div class="govuk-date-input__item">
+        </div>
+        <div class="govuk-date-input__item">
           <div class="govuk-form-group">
-              <label class="govuk-label" for="dobMonth">
-              Month
-              </label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobMonth" name="dobMonth" type="number" pattern="[0-9]*" value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}">
+            <label class="govuk-label" for="dobMonth">{{ __('field_date_month') }}</label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobMonth" name="dobMonth" type="number" pattern="[0-9]*" value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}">
           </div>
-          </div>
-          <div class="govuk-date-input__item">
+        </div>
+        <div class="govuk-date-input__item">
           <div class="govuk-form-group">
-              <label class="govuk-label" for="dobYear">
-              Year
-              </label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="dobYear" name="dobYear" type="number" pattern="[0-9]*" value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}">
+            <label class="govuk-label" for="dobYear">{{ __('field_date_year') }}</label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="dobYear" name="dobYear" type="number" pattern="[0-9]*" value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}">
           </div>
-          </div>
+        </div>
       </div>
-      </fieldset>
+    </fieldset>
   </div>
-        <!-- End date of birth -->
+  <!-- End date of birth -->
 
       <div class="govuk-form-group {{ m.form_group_class('gender', errors) }}" id="gender">
         {{ m.error_message('gender', errors) }}
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h2 class="govuk-fieldset__heading">Gender</h2>
+            <h2 class="govuk-fieldset__heading">{{ __('field_gender') }}</h2>
           </legend>
           <div class="govuk-radios">
           {% for choice in genderchoice %}
@@ -94,11 +89,9 @@
       {{ m.error_message('person-type', errors) }}
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h2 class="govuk-fieldset__heading">Person type</h2>
+          <h2 class="govuk-fieldset__heading">{{ __('field_person_type') }}</h2>
         </legend>
-        <span id="dob-hint" class="govuk-hint">
-          For example Captain, Crew or Passenger. First Officer / Co-Pilot should be identified as Crew.
-        </span>
+        <span id="dob-hint" class="govuk-hint">{{ __('field_person_type_hint') }}</span>
         <div class="govuk-radios">
         {% for choice in persontype %}
         <div class="govuk-radios__item">
@@ -114,14 +107,11 @@
       </fieldset>
     </div>
 
-  <h2 class="govuk-heading-l">Travel document details</h2>
-  <p class="govuk-body">
-    Provide the details of the person’s travel document that you want to add.
-    Details should be as displayed on the travel document.
-  </p>
+  <h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
+  <p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
 
   <div class="govuk-form-group {{ m.form_group_class('travel-document-number', errors) }}">
-    <label class="govuk-label govuk-label--m" for="travel-document-number">Travel document number</label>
+    <label class="govuk-label govuk-label--m" for="travel-document-number">{{ __('field_travel_document_number') }}</label>
     {{ m.error_message('travel-document-number', errors) }}
     <input class="govuk-input" id="travel-document-number" name="travel-document-number" type="text" value="{{person['documentNumber'] or req.body['travel-document-number']}}" />
   </div>
@@ -129,37 +119,27 @@
   <div class="govuk-form-group {{ m.form_group_class('documentExpiryDate', errors) }}" id="documentExpiryDate">
     <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">
-          Document expiry date
-        </h2>
+        <h2 class="govuk-fieldset__heading">{{ __('field_document_expiry_date') }}</h2>
       </legend>
-      <span id="dob-hint" class="govuk-hint">
-        For example 22 05 2021
-      </span>
+      <span id="dob-hint" class="govuk-hint">{{ __('field_document_expiry_date_hint') }}{{ futureYear }}</span>
       {{ m.error_message('documentExpiryDate', errors) }}
       <div class="govuk-date-input" id="expiry">
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="expiryDay">
-              Day
-            </label>
+            <label class="govuk-label govuk-date-input__label" for="expiryDay">{{ __('field_date_day') }}</label>
             <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay" type="number" pattern="[0-9]*" value="{{cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay']}}">
 
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="expiryMonth">
-              Month
-            </label>
+            <label class="govuk-label govuk-date-input__label" for="expiryMonth">{{ __('field_date_month') }}</label>
             <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth" type="number" pattern="[0-9]*" value="{{cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="expiryYear">
-              Year
-            </label>
+            <label class="govuk-label govuk-date-input__label" for="expiryYear">{{ __('field_date_year') }}</label>
             <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="expiryYear" name="expiryYear" type="number" pattern="[0-9]*" value="{{cookie.dateSlice('year', person.documentExpiryDate) or req.body['expiryYear']}}">
           </div>
         </div>
@@ -168,27 +148,39 @@
   </div>
 
 <div class="govuk-form-group {{ m.form_group_class('issuing-state', errors) }}">
-  <label class="govuk-label govuk-label--m" for="issuing-state">Issuing state</label>
+  <label class="govuk-label govuk-label--m" for="issuing-state">{{ __('field_issuing_state') }}</label>
   {{ m.error_message('issuing-state', errors) }}
-  <span class="govuk-hint">
-    Provide the 3 letter code for the issuing state, for example GBR
-  </span>
+  <span class="govuk-hint">{{ __('field_issuing_state_hint') }}</span>
   <input class="govuk-input" id="issuing-state" maxlength="3" name="issuing-state" autocomplete="off" type="text" value="{{(person['issuingState'] or req.body['issuing-state']) | upper}}" />
+  {# <select class="govuk-select" id="issuing-state" name="issuing-state" value="{{ (person['issuingState'] or req.body['issuing-state'])}}">
+    <option value="">{{ __('country_no_selection') }}</option>
+    {% for country in countryList|sort(attribute='label') %}
+      <option value="{{ country.code }}" {{ 'selected=selected' if (person['issuingState'] or req.body['issuing-state']) == country.code }}>{{ country.label }}</option>
+    {% endfor %}
+  </select> #}
 </div>
 
   <div class="govuk-form-group {{ m.form_group_class('travel-document-type', errors) }}">
-    <label class="govuk-label govuk-label--m" for="travel-document-type">Travel document type</label>
-    <span class="govuk-hint">
-          This should be one of either: Passport, Identity Card or Other
-    </span>
+    <label class="govuk-label govuk-label--m" for="travel-document-type">{{ __('field_travel_document_type') }}</label>
+    <span class="govuk-hint">{{ __('field_travel_document_type_hint') }}</span>
     {{ m.error_message('travel-document-type', errors) }}
-      <select class="govuk-select" id="travel-document-type" name="travel-document-type">
-      {% for document in documenttype %}
-        {% if document.documenttype  == person['documentType'] or document.documenttype == req.body['travel-document-type']%}
-                <option selected="true">{{document.documenttype}}</option>
-        {% else %}
-                <option>{{document.documenttype}}</option>
-        {% endif %}
-      {% endfor %}
-      </select>
+    <select class="govuk-select" id="travel-document-type" name="travel-document-type">
+    {% for document in documenttype %}
+      {% if document.documenttype  == person['documentType'] or document.documenttype == req.body['travel-document-type']%}
+              <option selected="true">{{document.documenttype}}</option>
+      {% else %}
+              <option>{{document.documenttype}}</option>
+      {% endif %}
+    {% endfor %}
+    </select>
   </div>
+
+<!-- <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+<script type="text/javascript">
+  accessibleAutocomplete.enhanceSelectElement({
+    selectElement: document.querySelector('#nationality')
+  });
+  accessibleAutocomplete.enhanceSelectElement({
+    selectElement: document.querySelector('#issuing-state')
+  });
+</script> -->

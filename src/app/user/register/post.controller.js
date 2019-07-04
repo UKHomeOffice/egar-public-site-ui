@@ -10,6 +10,31 @@ const tokenApi = require('../../../common/services/tokenApi');
 const whitelist = require('../../../common/services/whiteList');
 const config = require('../../../common/config');
 
+const regFailureError = {
+  message: 'Registration failed, try again',
+};
+
+const createValidationChains = (fname, lname, usrname, cusrname) => {
+  // Define a validation chain for user registration fields
+  const fnameChain = [
+    new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given name'),
+  ];
+  const lnameChain = [
+    new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),
+  ];
+  const userChain = [
+    new ValidationRule(validator.notEmpty, 'userId', usrname, 'Please enter your email'),
+    new ValidationRule(validator.email, 'userId', usrname, 'Please enter a valid email address'),
+    new ValidationRule(validator.valuetrue, 'userId', usrname === cusrname, 'Please ensure the email addresses match'),
+  ];
+  const confirmuserChain = [
+    new ValidationRule(validator.notEmpty, 'cUserId', cusrname, 'Please confirm the email address'),
+    new ValidationRule(validator.valuetrue, 'cUserId', usrname === cusrname, 'Please ensure the email addresses match'),
+  ];
+
+  return [userChain, confirmuserChain, fnameChain, lnameChain];
+};
+
 module.exports = (req, res) => {
   logger.debug('In user / register post controller');
 
@@ -26,31 +51,9 @@ module.exports = (req, res) => {
   cookie.setUserLastName(lname);
   cookie.setUserEmail(usrname);
 
-  // Define a validation chain for user registration fields
-  const fnameChain = [
-    new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given name'),
-  ];
-  const lnameChain = [
-    new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),
-    new ValidationRule(validator.isValidStringLength, 'userLname', lname, `Surname exceeded the limit of ${validator.validationSettings.MAX_STRING_LENGTH} characters`),
-  ];
+  const validationChains = createValidationChains(fname, lname, usrname, cusrname);
 
-  const userChain = [
-    new ValidationRule(validator.notEmpty, 'userId', usrname, 'Please enter your email'),
-    new ValidationRule(validator.email, 'userId', usrname, 'Please enter a valid email address'),
-    new ValidationRule(validator.valuetrue, 'userId', usrname === cusrname, 'Please ensure the email addresses match'),
-  ];
-
-  const confirmuserChain = [
-    new ValidationRule(validator.notEmpty, 'cUserId', cusrname, 'Please confirm the email address'),
-    new ValidationRule(validator.valuetrue, 'cUserId', usrname === cusrname, 'Please ensure the email addresses match'),
-  ];
-
-  const regFailureError = { message: 'Registration failed, try again' };
-
-  const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() == 'true');
-
-  // Validate chains
+  const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() === 'true');
 
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
@@ -58,7 +61,7 @@ module.exports = (req, res) => {
   const hashtoken = tokenservice.generateHash(token);
 
   logger.info('Validating registration input');
-  validator.validateChains([userChain, confirmuserChain, fnameChain, lnameChain])
+  validator.validateChains(validationChains)
     .then(() => {
       if (isWhitelistRequired) {
         logger.info('Starting whitelist check');
@@ -69,13 +72,18 @@ module.exports = (req, res) => {
             } else {
               // Not whitelisted
               cookie.setUserEmail(null);
-              return req.session.save(() => {res.redirect('/user/regmsg')});
+              return req.session.save(() => {
+                res.redirect('/user/regmsg');
+              });
             }
           })
           .catch((err) => {
             logger.error('Failed to check against whitelist');
             logger.error(err);
-            res.render('app/user/register/index', { cookie, errors: [regFailureError] });
+            res.render('app/user/register/index', {
+              cookie,
+              errors: [regFailureError],
+            });
           });
       } else {
         createUser();
@@ -84,38 +92,52 @@ module.exports = (req, res) => {
     .catch((err) => {
       logger.info('Failed registration validations');
       logger.info(err);
-      res.render('app/user/register/index', { cookie, errors: err });
+      res.render('app/user/register/index', {
+        cookie,
+        errors: err,
+      });
     });
 
-    function createUser() {
-      logger.info('Creating the user in the db');
-      userCreateApi.post(fname, lname, usrname, cookie.getInviteUserToken())
-        .then((dbUser) => {
-          if (Object.prototype.hasOwnProperty.call(JSON.parse(dbUser), 'message')) {
-            logger.info('Failed to register user in db');
-            logger.info(`${JSON.parse(dbUser).message}`);
-            cookie.setUserEmail(null);
-            return req.session.save(() => {res.redirect('/user/regmsg')});
-          }
-          const { userId } = JSON.parse(dbUser);
-          cookie.setUserDbId(userId);
-          logger.info('Calling gov notify service');
-          sendTokenService.send(fname, usrname, token)
-            .then(() => {
-              logger.info('Storing token in db');
-              tokenApi.setToken(hashtoken, userId);
-              res.redirect('/user/regmsg');
-            })
-            .catch((err) => {
-              logger.error(`Failed to send notify email for ${usrname}`);
-              logger.error(err);
-              res.render('app/user/register/index', { cookie, errors: [regFailureError] });
+  function createUser() {
+    logger.info('Creating the user in the db');
+    userCreateApi.post(fname, lname, usrname, cookie.getInviteUserToken())
+      .then((dbUser) => {
+        if (Object.prototype.hasOwnProperty.call(JSON.parse(dbUser), 'message')) {
+          logger.info('Failed to register user in db');
+          logger.info(`${JSON.parse(dbUser).message}`);
+          cookie.setUserEmail(null);
+          return req.session.save(() => {
+            res.redirect('/user/regmsg');
+          });
+        }
+        const {
+          userId
+        } = JSON.parse(dbUser);
+        cookie.setUserDbId(userId);
+        logger.info('Calling gov notify service');
+
+        sendTokenService.send(fname, usrname, token)
+          .then(() => {
+            logger.info('Storing token in db');
+            tokenApi.setToken(hashtoken, userId);
+            res.redirect('/user/regmsg');
+          })
+          .catch((err) => {
+            logger.error(`Failed to send notify email for ${usrname}`);
+            logger.error(err);
+            res.render('app/user/register/index', {
+              cookie,
+              errors: [regFailureError],
             });
-        })
-        .catch((err) => {
-          logger.error(`Failed to create ${usrname} in DB`);
-          logger.error(err);
-          res.render('app/user/register/index', { cookie, errors: [regFailureError] });
+          });
+      })
+      .catch((err) => {
+        logger.error(`Failed to create ${usrname} in DB`);
+        logger.error(err);
+        res.render('app/user/register/index', {
+          cookie,
+          errors: [regFailureError],
         });
-    }
+      });
+  }
 };

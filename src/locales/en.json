@@ -1,1 +1,44 @@
-{}
+{
+    "title": "Submit a General Aviation Report (GAR)",
+    "nav_bar_people": "People",
+    "nav_bar_sign_out": "Sign out",
+
+    "form_exit_without_saving": "Exit without saving",
+    "form_save_and_exit": "Save and exit",
+
+    "field_given_name": "Given name",
+    "field_surname": "Surname",
+    "label_departure_details": "Departure details",
+    "field_departure_date": "Departure date",
+    "field_departure_date_hint": "For example 20 04 2019",
+    "field_departure_time": "Departure time (UTC)",
+    "field_departure_time_hint": "For example 17 30",
+    "field_departure_port": "Departure port",
+
+    "title_edit_person": "Edit Person Details",
+    "heading_edit_person": "Edit a person",
+    "caption_edit_person": "Please enter the following information. This information can be re-used when submitting a GAR.",
+
+    "field_nationality": "Nationality",
+    "field_nationality_hint": "Provide the 3 letter country code, for example GBR",
+    "country_no_selection": "No country selected",
+    "field_birth_place": "Place of birth",
+    "field_dob": "Date of birth",
+    "field_dob_hint": "For example 20 12 1988",
+    "field_date_day": "Day",
+    "field_date_month": "Month",
+    "field_date_year": "Year",
+    "field_gender": "Gender",
+    "field_person_type": "Person type",
+    "field_person_type_hint": "For example Captain, Crew or Passenger. First Officer / Co-Pilot should be identified as Crew.",
+
+    "heading_travel_document_details": "Travel document details",
+    "caption_travel_document_details": "Provide the details of the person’s travel document that you want to add. Details should be as displayed on the travel document.",
+    "field_travel_document_number": "Travel document number",
+    "field_document_expiry_date": "Document expiry date",
+    "field_document_expiry_date_hint": "For example 22 05 ",
+    "field_issuing_state": "Issuing state",
+    "field_issuing_state_hint": "Type in or provide the 3 letter code for the issuing state, for example GBR",
+    "field_travel_document_type": "Travel document type",
+    "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other"
+}

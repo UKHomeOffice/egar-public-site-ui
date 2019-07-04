@@ -9,14 +9,13 @@ const validations = require('../../../people/validations');
 const _ = require('lodash');
 
 module.exports = (req, res) => {
-  // Get the ip address
-  const ip = req.header('x-forwarded-for');
   logger.debug('In Manifest/Add new Person post controller');
 
   const cookie = new CookieModel(req);
 
   const birthdate = `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`;
   const expiryDate = `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`;
+
   const person = {
     firstName: req.body['first-name'],
     lastName: req.body['last-name'],
@@ -38,7 +37,7 @@ module.exports = (req, res) => {
           const parsedResponse = JSON.parse(garResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             res.render('app/garfile/manifest/addnewperson/index', {
-              cookie, persontype, documenttype, genderchoice, errors: [parsedResponse], req, person,
+              req, cookie, person, persontype, documenttype, genderchoice, errors: [parsedResponse], 
             });
           } else {
             res.redirect('/garfile/manifest');
@@ -49,7 +48,7 @@ module.exports = (req, res) => {
       logger.error('There was a problem adding person to saved people');
       logger.error(JSON.stringify(err));
       res.render('app/garfile/manifest/addnewperson/index', {
-        cookie, persontype, documenttype, genderchoice, errors: err, req, person,
+        req, cookie, person, persontype, documenttype, genderchoice, errors: err, 
       });
     });
 };

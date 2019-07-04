@@ -1,5 +1,3 @@
-'use strict'
-
 // Npm dependencies
 const express = require('express')
 
@@ -18,7 +16,7 @@ const router = new express.Router()
 const indexPath = '/organisation/editorganisation'
 const paths = {
   index: indexPath 
-}
+};
 
 // Routing
 router.get(paths.index, flagpole, usercheck,csrfcheck, getController);
@@ -26,6 +24,5 @@ router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, postControll
 
 // Export
 module.exports = {
-  router,
-  paths
-}
+  router, paths
+};

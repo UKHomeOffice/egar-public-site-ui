@@ -5408,6 +5408,10 @@ p + .govuk-heading-s,
   }
 }
 
+.autocomplete__menu {
+  font-family: -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif;
+}
+
 .app-check-your-answers {
   font-family: "nta", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

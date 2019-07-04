@@ -15,15 +15,12 @@ const nunjucks = require('nunjucks');
 const helmet = require('helmet');
 const _ = require('lodash');
 const logger = require('./common/utils/logger')(__filename);
+const autocompleteUtil = require('./common/utils/autocomplete');
 const cookieParser = require('cookie-parser');
-const crypto = require('crypto');
 const uuid = require('uuid/v4');
-const FileStore = require('session-file-store')(session);
 const config = require('./common/config/index');
-const validation_settings = require('./common/config/validation_settings');
 const csrf = require('csurf');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
-
 
 // Local dependencies
 const router = require('./app/router');
@@ -41,7 +38,6 @@ const {
   NODE_ENV
 } = process.env;
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
-// const CSS_PATH2 = staticify.getVersionedPath('/stylesheets/govuk-frontend-2.1.0.min.css')
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
 const GA_ID = (process.env.GA_ID || '');
 const ua = require('universal-analytics');
@@ -51,7 +47,7 @@ const BASE_URL = (process.env.BASE_URL || '');
 const app = express;
 // Set Cookie secure flag depending on environment variable
 let secureFlag = false;
-if (process.env.COOKIE_SECURE_FLAG == "true") {
+if (process.env.COOKIE_SECURE_FLAG === "true") {
   secureFlag = true;
 }
 logger.debug('Secure Flag for Cookie set to:');
@@ -66,12 +62,12 @@ const APP_VIEWS = [
   'common/templates/includes',
 ];
 
-function initialisexpresssession(app) {
+function initialisExpressSession(app) {
   app.use(cookieParser());
   const pgSession = require('connect-pg-simple')(session);
   app.use(session({
     name: 'sess_id',
-    genid: function (req) {
+    genid: () => {
       return uuid()
     },
     store: new pgSession({
@@ -93,7 +89,7 @@ function initialisexpresssession(app) {
 function initialiseGlobalMiddleware(app) {
   logger.info('Initalising global middleware');
 
-  if (config.ENABLE_UNAVAILABLE_PAGE.toLowerCase() == 'true') {
+  if (config.ENABLE_UNAVAILABLE_PAGE.toLowerCase() === 'true') {
     logger.info('Enabling service unavailable middleware');
     app.use(function (req, res, next) {
       const validRoutes = ['unavailable', 'public', 'javascripts', 'stylesheets']
@@ -107,6 +103,7 @@ function initialiseGlobalMiddleware(app) {
   app.set('settings', {
     getVersionedPath: staticify.getVersionedPath
   });
+
   app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'assets', 'images', 'favicon.ico')));
   app.use(compression());
   app.use(staticify.middleware);
@@ -165,7 +162,7 @@ function initialiseI18n(app) {
   });
   logger.info('Initialised i18n');
   app.use(i18n.init);
-  logger.info('Set il8n');
+  logger.info('Set i18n');
 }
 
 function initialiseProxy(app) {
@@ -197,17 +194,23 @@ function initialiseTemplateEngine(app) {
   // Version static assets on production for better caching
   // if it's not production we want to re-evaluate the assets on each file change
   // nunjucksEnvironment.addGlobal('css_path', NODE_ENV === 'production' ? CSS_PATH : staticify.getVersionedPath('/stylesheets/application.min.css'));
-  // // nunjucksEnvironment.addGlobal('css_path', NODE_ENV === 'production' ? CSS_PATH2 : staticify.getVersionedPath('/stylesheets/govuk-frontend-2.1.0.min.css'))
   // nunjucksEnvironment.addGlobal('js_path', NODE_ENV === 'production' ? JAVASCRIPT_PATH : staticify.getVersionedPath('/javascripts/application.js'));
   nunjucksEnvironment.addGlobal('ga_id', GA_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
-  nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', validation_settings.MAX_STRING_LENGTH);
-  nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
+
   // logger.info('Set global settings for nunjucks');
+  nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
+  // Country list added to the nunjucks global environment, up for debate whether this is the best place
+  nunjucksEnvironment.addGlobal('countryList', autocompleteUtil.generateCountryList());
+  nunjucksEnvironment.addGlobal('airportList', autocompleteUtil.airportList);
+  // Just an example year two years into the future
+  nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
+  nunjucksEnvironment.addGlobal('MAX_NAME_LENGTH', config.MAX_NAME_LENGTH);
+  nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
 }
 
-
 function initialisePublic(app) {
+  app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')))
   app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
@@ -221,7 +224,7 @@ function initialiseRoutes(app) {
 }
 
 function initialiseErrorHandling(app) {
-  app.use((req, res, next) => {
+  app.use((req, res) => {
     res.redirect('/error/404');
   });
   logger.info('Initialised error handling');
@@ -230,8 +233,7 @@ function initialiseErrorHandling(app) {
 function listen() {
   const app = initialise();
   app.listen(PORT);
-  logger.info('App initialised..');
-  logger.info(app);
+  logger.info('App initialised');
   logger.info(`Listening on port ${PORT}`);
 }
 
@@ -244,7 +246,7 @@ function initialise() {
   app.disable('x-powered-by');
   app.use(helmet.noCache())
   app.use(helmet.frameguard())
-  initialisexpresssession(app);
+  initialisExpressSession(app);
   initialiseProxy(app);
   initialiseI18n(app);
   initialiseGlobalMiddleware(app);
@@ -253,7 +255,6 @@ function initialise() {
   initialisePublic(app);
   initialiseErrorHandling(app);
   logger.info('Initialised app: ');
-  logger.info(app);
   return app;
 }
 
@@ -274,6 +275,6 @@ if (argv.i) {
 
 module.exports = {
   start,
-  getApp: initialise,
   staticify,
+  getApp: initialise,
 };

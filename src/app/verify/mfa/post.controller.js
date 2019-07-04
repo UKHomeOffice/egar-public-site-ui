@@ -35,23 +35,23 @@ module.exports = (req, res) => {
                   })
                   .catch((err) => {
                     logger.error(err);
-                    res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
+                    res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
                   });
               })
               .catch((err) => {
                 logger.error(err);
-                res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
+                res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
               });
           }
         })
         .catch((err) => {
           // Validation error
           logger.info(err);
-          res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
+          res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
         });
     }).catch((err) => {
       // Validation error
       logger.info(err);
-      res.render('app/verify/mfa/index', { cookie, errors: err, mfaTokenLength });
+      res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: err });
     });
 };

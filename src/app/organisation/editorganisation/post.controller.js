@@ -5,10 +5,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const organisationApi = require('../../../common/services/organisationApi');
 
 module.exports = (req, res) => {
-  let orgname = req.body.orgname;
-
-  // Get the ip address
-  const ip = req.header('x-forwarded-for');
+  const orgname = req.body.orgname;
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);

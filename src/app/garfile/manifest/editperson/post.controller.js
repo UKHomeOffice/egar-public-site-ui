@@ -9,7 +9,7 @@ const validations = require('../../../people/validations');
 const _ = require('lodash')
 
 module.exports = (req, res) => {
-  logger.debug('In Manifest/Add new Person post controller');
+  logger.debug('In Manifest/Edit Person post controller');
 
   const cookie = new CookieModel(req);
 
@@ -40,7 +40,7 @@ module.exports = (req, res) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             return res.render('app/garfile/manifest/editperson/index', {
-              cookie, persontype, documenttype, genderchoice, errors: [parsedResponse], req, person,
+              req, cookie, person, persontype, documenttype, genderchoice, errors: [parsedResponse],
             });
           }
           return res.redirect('/garfile/manifest');
@@ -48,13 +48,13 @@ module.exports = (req, res) => {
         .catch((err) => {
           logger.error(err);
           res.render('app/garfile/manifest/editperson/index', {
-            cookie, persontype, documenttype, genderchoice, errors: [errMsg], req, person,
+            req, cookie, person, persontype, documenttype, genderchoice, errors: [errMsg], 
           });
         });
     })
     .catch((err) => {
       res.render('app/garfile/manifest/editperson/index', {
-        cookie, persontype, documenttype, genderchoice, errors: err, req, person,
+        req, cookie, person, persontype, documenttype, genderchoice, errors: err,
       });
     });
 };

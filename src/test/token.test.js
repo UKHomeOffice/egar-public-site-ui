@@ -68,3 +68,13 @@ describe('MFATokens', () => {
     expect(genToken.genMfaToken().toString().length).to.equal(settings.MFA_TOKEN_LENGTH);
   });
 });
+
+describe('Generate Hash', () => {
+  it('Should successfully generate a hash', () => {
+    settings.NOTIFY_TOKEN_SECRET = 'example';
+    const token = 'randominput'.toString();
+    var output = genToken.generateHash(token);
+    expect(output).not.to.equal(token);
+    expect(output.length).to.eq(64);
+  });
+});

@@ -87,6 +87,34 @@ module.exports = async (req, res) => {
 
   const gar = await garApi.get(cookie.getGarId());
 
+  const performAPICall = () => {
+    garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
+      .then((apiResponse) => {
+        const parsedResponse = JSON.parse(apiResponse);
+        if (parsedResponse.hasOwnProperty('message')) {
+          // API returned error
+          logger.debug(`Api returned: ${parsedResponse}`);
+          res.render('app/garfile/arrival/index', {
+            cookie,
+            errors: [parsedResponse],
+          });
+        } else {
+          // Successful
+          return buttonClicked === 'Save and continue' ? res.redirect('/garfile/craft') : res.redirect('/home');
+        }
+      })
+      .catch((err) => {
+        logger.error('Api failed to update GAR');
+        logger.error(err);
+        res.render('app/garfile/arrival/index', {
+          cookie,
+          errors: [{
+            message: 'Failed to add to GAR',
+          }],
+        });
+      });
+    }
+
   validations.push(
     [
       new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg)
@@ -95,31 +123,7 @@ module.exports = async (req, res) => {
 
   validator.validateChains(validations)
     .then(() => {
-      garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
-        .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (parsedResponse.hasOwnProperty('message')) {
-            // API returned error
-            logger.debug(`Api returned: ${parsedResponse}`);
-            res.render('app/garfile/arrival/index', {
-              cookie,
-              errors: [parsedResponse],
-            });
-          } else {
-            // Successful
-            return buttonClicked === 'Save and continue' ? res.redirect('/garfile/craft') : res.redirect('/home');
-          }
-        })
-        .catch((err) => {
-          logger.error('Api failed to update GAR');
-          logger.error(err);
-          res.render('app/garfile/arrival/index', {
-            cookie,
-            errors: [{
-              message: 'Failed to add to GAR',
-            }],
-          });
-        });
+      performAPICall();
     })
     .catch((err) => {
       logger.info('Validation failed');

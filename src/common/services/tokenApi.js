@@ -16,7 +16,7 @@ module.exports = {
   * @returns {Promise} returns response body when resolved
   */
   setToken(tokenId, userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
@@ -46,7 +46,7 @@ module.exports = {
   * @returns {Promise} returns response body when resolved
   */
   updateToken(tokenId, userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
@@ -78,7 +78,7 @@ module.exports = {
    * @returns {Promise} returns response body when resolved.
    */
   setInviteUserToken(tokenId, inviterId, organisationId, roleName) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
@@ -172,23 +172,23 @@ module.exports = {
                 resolve(true);
               }
               logger.info('Exceeded max token verification attempts');
-              reject();
+              reject('MFA token verification attempts exceeded');
             } else {
               logger.info('Token expired');
               logger.info(`Token verification attempt number ${sub.NumAttempts + 1}`);
               sub.increment('NumAttempts', { by: 1 });
-              reject();
+              reject('MFA token expired');
             }
           } else {
             logger.info('No matching token found');
             logger.info(`Token verification attempt number ${sub.NumAttempts + 1}`);
             sub.increment('NumAttempts', { by: 1 });
-            reject();
+            reject('No MFA token found');
           }
         })
         .catch((err) => {
-          logger.error(err);
           logger.error('Failed to validate MFA token');
+          logger.error(err);
           reject(err);
         });
     });
