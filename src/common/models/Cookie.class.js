@@ -193,19 +193,19 @@ class Cookie {
         voyageObj.arrivalMonth, voyageObj.arrivalYear);
 
       this.session.gar.voyageArrival.arrivalTime = this.generateTime(voyageObj.arrivalHour,
-          voyageObj.arrivalMinute);
-        } else {
-          // Set voyage from API response, so dates and times are already built
-          this.session.gar.voyageArrival.arrivalDate = voyageObj.arrivalDate;
-          this.session.gar.voyageArrival.arrivalTime = voyageObj.arrivalTime;
-        }    
-        this.session.gar.voyageArrival.arrivalPort = voyageObj.arrivalPort;
-        this.session.gar.voyageArrival.arrivalLong = voyageObj.arrivalLong;
-        this.session.gar.voyageArrival.arrivalLat = voyageObj.arrivalLat;
-      
+        voyageObj.arrivalMinute);
+    } else {
+      // Set voyage from API response, so dates and times are already built
+      this.session.gar.voyageArrival.arrivalDate = voyageObj.arrivalDate;
+      this.session.gar.voyageArrival.arrivalTime = voyageObj.arrivalTime;
+    }
+    this.session.gar.voyageArrival.arrivalPort = voyageObj.arrivalPort;
+    this.session.gar.voyageArrival.arrivalLong = voyageObj.arrivalLong;
+    this.session.gar.voyageArrival.arrivalLat = voyageObj.arrivalLat;
   }
+
   getGarArrivalVoyage() {
-   return this.session.gar.voyageArrival;
+    return this.session.gar.voyageArrival;
   }
 
   setGarDepartureVoyage(voyageObj) {
@@ -224,9 +224,9 @@ class Cookie {
       this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
       this.session.gar.voyageDeparture.departureLat = voyageObj.departureLat;
     }
-    
+
   getGarDepartureVoyage() {
-   return this.session.gar.voyageDeparture;
+    return this.session.gar.voyageDeparture;
   }
 
   setGarVoyage(voyageObj) {
@@ -257,7 +257,7 @@ class Cookie {
     this.session.gar.voyage.arrivalLat = voyageObj.arrivalLat;
   }
 
-  setGarVoyageFromFile(departureDate,departureTime,departurePort,arrivalDate,arrivalPort,arrivalTime) {
+  setGarVoyageFromFile(departureDate, departureTime, departurePort, arrivalDate, arrivalPort, arrivalTime) {
     this.session.gar.voyage.departureDate = departureDate;
     this.session.gar.voyage.departureTime = departureTime;
     this.session.gar.voyage.arrivalDate = arrivalDate;
@@ -724,36 +724,56 @@ class Cookie {
     return this.session.gar.status;
   }
 
-  generateDate(d, m, y) {
+  generateDate(day, month, year) {
+    const d = day == null ? '' : day;
+    const m = month == null ? '' : month;
+    const y = year == null ? '' : year;
     return `${y}-${m}-${d}`;
   }
 
-  generateTime(h, m) {
+  generateTime(hour, minute) {
+    const h = hour == null ? '' : hour;
+    const m = minute == null ? '' : minute;
     return `${h}:${m}`;
   }
 
   dateSlice(dateType, date) {
+    let dateValue = '';
     switch (dateType.toLowerCase()) {
       case 'day':
-        return date == null ? '' : date.split('-')[2];
+        dateValue = date == null ? '' : date.split('-')[2];
+        break;
       case 'month':
-        return date == null ? '' : date.split('-')[1];
+        dateValue = date == null ? '' : date.split('-')[1];
+        break;
       case 'year':
-        return date == null ? '' : date.split('-')[0];
+        dateValue = date == null ? '' : date.split('-')[0];
+        break;
       default:
         throw new Error('dateType must be day or month or year');
     }
+    if (dateValue === 'undefined') {
+      return '';
+    }
+    return dateValue;
   }
 
   timeSlice(timeType, time) {
+    let timeValue = '';
     switch (timeType.toLowerCase()) {
       case 'hour':
-        return time === null ? '' : time.split(':')[0];
+        timeValue = time == null ? '' : time.split(':')[0];
+        break;
       case 'minute':
-        return time === null ? '' : time.split(':')[1];
+        timeValue = time == null ? '' : time.split(':')[1];
+        break;
       default:
         throw new Error('timeType must be hour or minute');
     }
+    if (timeValue === 'undefined') {
+      return '';
+    }
+    return timeValue;
   }
 }
 
