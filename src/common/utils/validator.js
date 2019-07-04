@@ -2,6 +2,7 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
+const _ = require('lodash');
 
 function notEmpty(value) {
   if (value === undefined) {
@@ -46,12 +47,12 @@ function daysInMonth(m, y) {
 }
 
 // check if number
-function IsNumeric(input) {
-  return (input - 0) == input && input.length > 0;
+function isNumeric(input) {
+  return typeof(parseInt(input)) === 'number';
 }
 
 function validPhone(value) {
-  if (IsNumeric(value)) {
+  if (isNumeric(value)) {
     return value.length >= 11;
   }
   return false;
@@ -59,25 +60,25 @@ function validPhone(value) {
 
 // validday
 function validDay(d, m, y) {
-  if (IsNumeric(d)) {
+  if (isNumeric(d)) {
     return m >= 0 && m <= 12 && d > 0 && d <= daysInMonth(m, y);
   }
   return false;
 }
 
 function validMonth(m) {
-  if (IsNumeric(m)) {
+  if (isNumeric(m)) {
     return m >= 0 && m <= 12;
   }
   return false;
 }
 
 function validHour(h) {
-  return (IsNumeric(h) && (h >= 0) && (h <= 23));
+  return (isNumeric(h) && (h >= 0) && (h <= 23));
 }
 
 function validMinute(m) {
-  return (IsNumeric(m) && (m >= 0) && (m < 60));
+  return (isNumeric(m) && (m >= 0) && (m < 60));
 }
 
 function validTime(timeObj) {
@@ -145,12 +146,14 @@ function validYear(y) {
 
 function realDate(dObj) {
   if (dObj === null || dObj === undefined) return false;
-  return (IsNumeric(dObj.d) &&
-      IsNumeric(dObj.m) &&
-      IsNumeric(dObj.y) &&
-      validDay(dObj.d, dObj.m, dObj.y) &&
-      validMonth(dObj.m)) &&
+  return numericDateElements(dObj) &&
+    validDay(dObj.d, dObj.m, dObj.y) &&
+    validMonth(dObj.m) &&
     validYear(dObj.y);
+}
+
+function numericDateElements(dObj) {
+  return (isNumeric(dObj.d) && isNumeric(dObj.m) && isNumeric(dObj.y));
 }
 
 function passwordCheck(value) {
@@ -321,7 +324,7 @@ module.exports = {
   passwordMinLength,
   confirmPassword,
   valuetrue,
-  IsNumeric,
+  isNumeric,
   validPhone,
   validDay,
   validMonth,

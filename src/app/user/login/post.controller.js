@@ -25,7 +25,7 @@ module.exports = (req, res) => {
     new ValidationRule(validator.notEmpty, 'Username', usrname, 'Enter your email'),
   ];
 
-  const errMsg = { message: 'There was a problem sending your code. Please try again' };
+  const errMsg = { message: 'There was a problem sending your code. Please try again.' };
 
   cookie.setUserEmail(usrname);
 
@@ -39,19 +39,19 @@ module.exports = (req, res) => {
             logger.info(`Invalid email entered: ${usrname}`);
             cookie.setUserVerified(false);
             if (user.message === 'No results found') {
-              emailService
-                .send(config.NOTIFY_NOT_REGISTERED_TEMPLATE_ID, usrname, {
-                  base_url: config.BASE_URL,
-                })
-                .then(() => {
-                  res.redirect('/login/authenticate');
-                })
-                .catch((err) => {
-                  logger.error('Govnotify failed to send an email');
-                  logger.error(err);
-                  res.redirect('/login/authenticate');
-                });
+              emailService.send(config.NOTIFY_NOT_REGISTERED_TEMPLATE_ID, usrname, {
+                base_url: config.BASE_URL,
+              })
+              .then(() => {
+                res.redirect('/login/authenticate');
+              })
+              .catch((err) => {
+                logger.error('Govnotify failed to send an email');
+                logger.error(err);
+                res.redirect('/login/authenticate');
+              });
             }
+            throw new Error('Unexpected response from API: ' + user.message);
           } else {
             logger.debug('User found');
             logger.debug(`User state: ${user.state.toLowerCase()}`);

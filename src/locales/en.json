@@ -40,5 +40,10 @@
     "field_issuing_state": "Issuing state",
     "field_issuing_state_hint": "Type in or provide the 3 letter code for the issuing state, for example GBR",
     "field_travel_document_type": "Travel document type",
-    "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other"
+    "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other",
+
+    "verify_user_account_success": "Your account has now been successfully verified. You can now log on and submit GAR files online.",
+    "verify_user_account_token_expired": "Your token has expired. We have created a new token for you. Please check your email and click the new link.",
+    "verify_user_account_token_invalid": "This token is invalid, click the link provided in the email or contact support for additional help."
+    
 }

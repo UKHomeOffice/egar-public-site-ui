@@ -1,8 +1,5 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const CookieModel = require('../../../common/models/Cookie.class');
+const navUtil = require('../../../common/utils/nav');
 
 module.exports = (req, res) => {
-  const cookie = new CookieModel(req);
-  logger.debug('In register / user get controller');
-  res.render('app/user/login/index', { cookie });
+  navUtil.simpleGetRender(req, res, 'app/user/login/index');
 };
