@@ -2,6 +2,7 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
+const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
   if (value === undefined) {
@@ -145,12 +146,12 @@ function validYear(y) {
 
 function realDate(dObj) {
   if (dObj === null || dObj === undefined) return false;
-  return (IsNumeric(dObj.d) &&
-      IsNumeric(dObj.m) &&
-      IsNumeric(dObj.y) &&
-      validDay(dObj.d, dObj.m, dObj.y) &&
-      validMonth(dObj.m)) &&
-    validYear(dObj.y);
+  return (IsNumeric(dObj.d)
+    && IsNumeric(dObj.m)
+    && IsNumeric(dObj.y)
+    && validDay(dObj.d, dObj.m, dObj.y)
+    && validMonth(dObj.m))
+    && validYear(dObj.y);
 }
 
 function passwordCheck(value) {
@@ -244,9 +245,9 @@ function validIntlPhone(value) {
 function validateChains(chains) {
   return new Promise((resolve, reject) => {
     const failedRules = [];
-    for (let i = 0; i < chains.length; i++) {
+    for (let i = 0; i < chains.length; i += 1) {
       const rules = chains[i];
-      for (let x = 0; x < rules.length; x++) {
+      for (let x = 0; x < rules.length; x += 1) {
         const rule = rules[x];
         if (rule.validator(rule.value) === false) {
           failedRules.push(rule);
@@ -259,7 +260,7 @@ function validateChains(chains) {
     } else {
       reject(failedRules);
     }
-  })
+  });
 }
 
 /**
@@ -268,7 +269,7 @@ function validateChains(chains) {
  * @returns {Bool}
  */
 function notSameValues(values) {
-  if(values.includes(null) || values.includes(undefined)) {
+  if (values.includes(null) || values.includes(undefined)) {
     return true;
   }
   return !values.every(v => v.trim().toLowerCase() === values[0].trim().toLowerCase());
@@ -283,7 +284,7 @@ function notSameValues(values) {
  */
 function genValidations(type, cssIds, values, msgs) {
   const validationArr = [];
-  for (let i = 0; i < values.length; i++) {
+  for (let i = 0; i < values.length; i += 1) {
     validationArr.push([new ValidationRule(type, cssIds[i], values[i], msgs[i])]);
   }
   return validationArr;
@@ -299,17 +300,35 @@ function genValidations(type, cssIds, values, msgs) {
  */
 function isValidFileMime(fileName, mimeType) {
   const fileTypeObj = {
-    'jpg': ['image/jpeg', 'image/x-citrix-jpeg'],
-    'jpeg': ['image/jpeg', 'image/x-citrix-jpeg'],
-    'png': ['image/png', 'image/x-citrix-png', 'image/x-png'],
-    'pdf': ['application/pdf'],
-    'gif': ['image/gif']
-  }
-  const fileExtension = fileName.split('.').slice(-1).pop()
+    jpg: ['image/jpeg', 'image/x-citrix-jpeg'],
+    jpeg: ['image/jpeg', 'image/x-citrix-jpeg'],
+    png: ['image/png', 'image/x-citrix-png', 'image/x-png'],
+    pdf: ['application/pdf'],
+    gif: ['image/gif']
+  };
+  const fileExtension = fileName.split('.').slice(-1).pop();
   if (fileTypeObj[fileExtension]) {
     return fileTypeObj[fileExtension].includes(mimeType);
   }
   return false;
+}
+
+/**
+ * Verify that Arrival Date is greater than or equal to Departure Date
+ *
+ * @param {Object} voyageDateObject { depatureDate: 'yyyy-MM-dd', arrivalDate: 'yyyy-MM-dd' }
+ * @returns {Bool}
+ */
+function isValidDepAndArrDate(value) {
+  const depDate = new Date(value.departureDate);
+  const arrDate = new Date(value.arrivalDate);
+  return depDate <= arrDate;
+}
+
+function handleResponseError(parsedApiResponse) {
+  if ({}.hasOwnProperty.call(parsedApiResponse, 'message')) {
+    logger.debug(`Api return Error: ${parsedApiResponse}`);
+  }
 }
 
 
@@ -343,5 +362,7 @@ module.exports = {
   longitude,
   validIntlPhone,
   notSameValues,
-  isValidFileMime
+  isValidFileMime,
+  isValidDepAndArrDate,
+  handleResponseError,
 };
