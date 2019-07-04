@@ -724,11 +724,16 @@ class Cookie {
     return this.session.gar.status;
   }
 
-  generateDate(d, m, y) {
+  generateDate(day, month, year) {
+    const d = day == null ? '' : day;
+    const m = month == null ? '' : month;
+    const y = year == null ? '' : year;
     return `${y}-${m}-${d}`;
   }
 
-  generateTime(h, m) {
+  generateTime(hour, minute) {
+    const h = hour == null ? '' : hour;
+    const m = minute == null ? '' : minute;
     return `${h}:${m}`;
   }
 

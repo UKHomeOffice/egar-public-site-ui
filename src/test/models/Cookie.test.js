@@ -60,7 +60,7 @@ describe('Cookie Model', () => {
     const constructor = () => {
       return new CookieModel(req);
     }
-    
+
     cookie = constructor();
     expect(cookie).to.not.be.undefined;
     expect(cookie.initialise).to.have.been.called;
@@ -81,7 +81,7 @@ describe('Cookie Model', () => {
     const constructor = () => {
       return new CookieModel(req);
     }
-    
+
     cookie = constructor();
     expect(cookie).to.not.be.undefined;
     expect(cookie.initialise).to.have.been.called;
@@ -102,7 +102,7 @@ describe('Cookie Model', () => {
     const constructor = () => {
       return new CookieModel(req);
     }
-    
+
     cookie = constructor();
     expect(cookie).to.not.be.undefined;
     expect(cookie.initialise).to.have.been.called;
@@ -133,7 +133,7 @@ describe('Cookie Model', () => {
     const constructor = () => {
       return new CookieModel(req);
     }
-    
+
     cookie = constructor();
     expect(cookie.getGar()).to.eql({ id: 9000, tempAddPersonId: 1, status: 'Draft'});
 
@@ -170,10 +170,18 @@ describe('Cookie Model', () => {
       expect(cookie.generateDate(31,12,2015)).to.eq('2015-12-31');
     });
 
+    it('should return empty date string "--" when calling generateDate with undefined date', () => {
+      expect(cookie.generateDate(undefined, undefined, undefined)).to.eq('--');
+    });
+
     it('should create a time calling generateTime', () => {
       expect(cookie.generateTime(1,1)).to.eq('1:1');
       expect(cookie.generateTime(23,59)).to.eq('23:59');
     });
+
+    it('should return empty time string ":" when calling generateTime with undefined time', () => {
+      expect(cookie.generateTime(undefined, undefined, undefined)).to.eq(':');
+    })
 
     it('should throw error when calling dateSlice with unexpected type', () => {
       const dateSliceFunction = () => {
