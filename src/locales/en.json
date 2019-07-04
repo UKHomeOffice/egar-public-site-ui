@@ -3,6 +3,15 @@
     "nav_bar_people": "People",
     "nav_bar_sign_out": "Sign out",
 
+    "user_login_unverified": "The email address supplied has not been verified. You should have recieved an email to verify.",
+    "user_login_unverified_caption": "Click the verification link inside the email. This link will remain valid for 12 hours. If you can't see the email, please check any spam folders or ",
+    "user_login_unverified_resend": "resend the email",
+    "field_username": "Registered email address",
+    "field_username_hint": "Enter the email address you used when you created your account",
+    "button_sign_in": "Sign in",
+    "create_account_caption": "Need to create an account?",
+    "button_create_account": "Create an account",
+
     "form_exit_without_saving": "Exit without saving",
     "form_save_and_exit": "Save and exit",
 
