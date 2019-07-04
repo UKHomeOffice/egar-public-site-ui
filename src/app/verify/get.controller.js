@@ -5,6 +5,7 @@ const sendTokenService = require('../../common/services/send-token');
 const tokenService = require('../../common/services/create-token');
 const tokenApi = require('../../common/services/tokenApi');
 const nanoid = require('nanoid/generate');
+const i18n = require('i18n');
 
 module.exports = async (req, res) => {
   logger.debug('In verify / registeruser get controller');

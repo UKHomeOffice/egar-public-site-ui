@@ -18,13 +18,11 @@ module.exports = (req, res) => {
   verifyUserService.verifyUser(hashedToken)
     .then((response) => {
       logger.debug(response);
-      // TODO - Handle unhappy path
-      // Check response for error message.
-      // if found, render error messages
       res.render('app/verify/registeruser/index', { cookie });
     })
     .catch((err) => {
       logger.debug('Failed to verify token');
       logger.error(err);
+      res.render('app/verify/registeruser/index', { cookie, message: 'There was an issue verifying your account. Please try again later.' });
     });
 };

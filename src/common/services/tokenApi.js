@@ -9,12 +9,14 @@ const config = require('../config/index');
 const { lte } = Sequelize.Op;
 
 module.exports = {
+
   /**
-  * Sends user tokenId to API
-  * @param {String} tokenId token id
-  * @param {String} userId user id for which token was generated
-  * @returns {Promise} returns response body when resolved
-  */
+   * Sends user tokenId to API.
+   * 
+   * @param {String} tokenId token id
+   * @param {String} userId user id for which token was generated
+   * @returns {Promise} returns response body when resolved
+   */
   setToken(tokenId, userId) {
     return new Promise((resolve) => {
       request.post({
@@ -40,7 +42,8 @@ module.exports = {
   },
 
   /**
-  * Sends updated user tokenId to API
+  * Sends updated user tokenId to API. This presumes the existence of a token.
+  * 
   * @param {String} tokenId token id
   * @param {String} userId user id for which token was generated
   * @returns {Promise} returns response body when resolved
@@ -59,18 +62,19 @@ module.exports = {
           logger.error('There was a problem calling the settoken API');
           return console.dir(error);
         }
-        logger.info('Successfully called settoken API');
+        logger.info('Successfully called updateToken API');
         resolve(body);
         return body;
       });
     }).catch((err) => {
-      logger.error('There was a problem calling the settoken API');
+      logger.error('There was a problem calling the updateToken API');
       logger.info(err);
     });
   },
 
   /**
-   * Sends organisation invite token to API for storage
+   * Sends organisation invite token to API for storage.
+   * 
    * @param {String} tokenId token id to be stored
    * @param {String} invitorId userid of user sending the invite
    * @param {String} organisationId organisationid of the organisation sending the invite
@@ -103,7 +107,8 @@ module.exports = {
     });
   },
   /**
-   * Stores the MFA token for a specified user
+   * Stores the MFA token for a specified user.
+   *
    * @param {String} Email The email for the user requesting the token
    * @param {Integer} MFAToken The 8 digit MFA token
    * @param {Boolean} Status The status of a token. true if verified else false
@@ -131,7 +136,8 @@ module.exports = {
     });
   },
   /**
-   * Validates the number of verification attempts for a token
+   * Validates the number of verification attempts for a token.
+   *
    * @param {Object} UserSession object
    */
   validNumAttempts(token) {
@@ -140,7 +146,8 @@ module.exports = {
     return token.NumAttempts < config.MFA_TOKEN_MAX_ATTEMPTS;
   },
   /**
-   * Validates a MFA token for a given user
+   * Validates a MFA token for a given user.
+   *
    * @param {String} Email The email of the user attempting to validate a token
    * @param {Integer} MFAToken The token attempting to be validated
    * @returns {Promise} Resolves to boolean
@@ -181,8 +188,6 @@ module.exports = {
             }
           } else {
             logger.info('No matching token found');
-            logger.info(`Token verification attempt number ${sub.NumAttempts + 1}`);
-            sub.increment('NumAttempts', { by: 1 });
             reject('No MFA token found');
           }
         })
