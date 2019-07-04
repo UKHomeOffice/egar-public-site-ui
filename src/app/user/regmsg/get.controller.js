@@ -26,10 +26,10 @@ module.exports = (req, res) => {
         logger.error('Cannot send token');
         logger.error(err.message);
         // Question, what happens when GOV Notify is down? Is this error message sufficient?
-        return res.render('app/user/login/index', { 
-          cookie, 
-          unverified: true, 
-          errors: [{ identifier: 'Username', message: 'There was an error sending the verification email, please try again later.' }] 
+        return res.render('app/user/login/index', {
+          cookie,
+          unverified: true,
+          errors: [{ identifier: 'Username', message: 'There was an error sending the verification email, please try again later.' }],
         });
       });
   } else {

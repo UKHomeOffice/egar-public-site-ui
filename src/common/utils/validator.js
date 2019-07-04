@@ -2,7 +2,6 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const _ = require('lodash');
 const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
@@ -49,7 +48,7 @@ function daysInMonth(m, y) {
 
 // check if number
 function isNumeric(input) {
-  return typeof(parseInt(input)) === 'number';
+  return typeof (parseInt(input, 10)) === 'number';
 }
 
 function validPhone(value) {
@@ -145,16 +144,16 @@ function validYear(y) {
   return y.length === 4;
 }
 
+const numericDateElements = dObj => isNumeric(dObj.d)
+  && isNumeric(dObj.m)
+  && isNumeric(dObj.y);
+
 function realDate(dObj) {
   if (dObj === null || dObj === undefined) return false;
   return numericDateElements(dObj)
     && validDay(dObj.d, dObj.m, dObj.y)
     && validMonth(dObj.m)
     && validYear(dObj.y);
-}
-
-function numericDateElements(dObj) {
-  return (isNumeric(dObj.d) && isNumeric(dObj.m) && isNumeric(dObj.y));
 }
 
 function passwordCheck(value) {
@@ -212,7 +211,7 @@ function onlySymbols(value) {
 }
 
 function email(value) {
-  const regex = /^^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
+  const regex = /^^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
   return regex.test(value);
 }
 
@@ -294,9 +293,9 @@ function genValidations(type, cssIds, values, msgs) {
 }
 
 /**
- * Given a filename and mimetype. Return true if:
- *   - The extension in the fileName matches the mimeType and the mimetype is one of the allowed types
- * Else return false
+ * Given a filename and mimetype, return true if the extension in the fileName matches
+ * the mimeType and the mimetype is one of the allowed types otherwise return false.
+ *
  * @param {String} fileName
  * @param {String} mimeType
  * @returns {Bool}
@@ -307,7 +306,7 @@ function isValidFileMime(fileName, mimeType) {
     jpeg: ['image/jpeg', 'image/x-citrix-jpeg'],
     png: ['image/png', 'image/x-citrix-png', 'image/x-png'],
     pdf: ['application/pdf'],
-    gif: ['image/gif']
+    gif: ['image/gif'],
   };
   const fileExtension = fileName.split('.').slice(-1).pop();
   if (fileTypeObj[fileExtension]) {

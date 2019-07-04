@@ -31,7 +31,7 @@ module.exports = (req, res) => {
           }
           cookie.setUserFirstName(firstName);
           cookie.setUserLastName(lastName);
-          res.render('app/user/detailschanged/index', { cookie });
+          return res.render('app/user/detailschanged/index', { cookie });
         })
         .catch((err) => {
           logger.error('Failed to update user details');

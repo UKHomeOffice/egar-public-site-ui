@@ -24,7 +24,9 @@ module.exports = (req, res) => {
         const { successMsg, successHeader } = req.session;
         delete req.session.successHeader;
         delete req.session.successMsg;
-        return res.render('app/people/index', { cookie, people, successHeader, successMsg });
+        return res.render('app/people/index', {
+          cookie, people, successHeader, successMsg,
+        });
       }
       return res.render('app/people/index', { cookie, people });
     })

@@ -12,7 +12,7 @@ module.exports = {
 
   /**
    * Sends user tokenId to API.
-   * 
+   *
    * @param {String} tokenId token id
    * @param {String} userId user id for which token was generated
    * @returns {Promise} returns response body when resolved
@@ -42,12 +42,12 @@ module.exports = {
   },
 
   /**
-  * Sends updated user tokenId to API. This presumes the existence of a token.
-  * 
-  * @param {String} tokenId token id
-  * @param {String} userId user id for which token was generated
-  * @returns {Promise} returns response body when resolved
-  */
+   * Sends updated user tokenId to API. This presumes the existence of a token.
+   *
+   * @param {String} tokenId token id
+   * @param {String} userId user id for which token was generated
+   * @returns {Promise} returns response body when resolved
+   */
   updateToken(tokenId, userId) {
     return new Promise((resolve) => {
       request.put({
@@ -74,7 +74,7 @@ module.exports = {
 
   /**
    * Sends organisation invite token to API for storage.
-   * 
+   *
    * @param {String} tokenId token id to be stored
    * @param {String} invitorId userid of user sending the invite
    * @param {String} organisationId organisationid of the organisation sending the invite
@@ -179,16 +179,16 @@ module.exports = {
                 resolve(true);
               }
               logger.info('Exceeded max token verification attempts');
-              reject('MFA token verification attempts exceeded');
+              reject(new Error('MFA token verification attempts exceeded'));
             } else {
               logger.info('Token expired');
               logger.info(`Token verification attempt number ${sub.NumAttempts + 1}`);
               sub.increment('NumAttempts', { by: 1 });
-              reject('MFA token expired');
+              reject(new Error('MFA token expired'));
             }
           } else {
             logger.info('No matching token found');
-            reject('No MFA token found');
+            reject(new Error('No MFA token found'));
           }
         })
         .catch((err) => {

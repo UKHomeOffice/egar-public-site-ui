@@ -15,7 +15,8 @@ module.exports = {
    * @param {String} documentExpiryDate date in format 'yyyy-mm-dd'
    * @param {String} personType type of person to be saved in ['Captain', 'Crew', 'Passenger']
    */
-  create(userId, firstName, lastName, nationality, placeOfBirth, dateOfBirth, gender, documentType, documentNumber, documentExpiryDate, peopleType, issuingState) {
+  create(userId, firstName, lastName, nationality, placeOfBirth, dateOfBirth,
+    gender, documentType, documentNumber, documentExpiryDate, peopleType, issuingState) {
     return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
@@ -36,7 +37,7 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call person creation API endpoint');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called person creation endpoint');
@@ -65,7 +66,7 @@ module.exports = {
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call get person details endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called get person details API endpoint');
         resolve(body);
@@ -103,7 +104,9 @@ module.exports = {
     });
   },
 
-  update(userId, personId, firstName, lastName, nationality, placeOfBirth, dateOfBirth, gender, documentType, documentNumber, documentExpiryDate, peopleType, issuingState) {
+  update(userId, personId, firstName, lastName, nationality,
+    placeOfBirth, dateOfBirth, gender, documentType, documentNumber,
+    documentExpiryDate, peopleType, issuingState) {
     return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
@@ -124,7 +127,7 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call update person endpoint');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called update person endpoint');
@@ -148,11 +151,10 @@ module.exports = {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deletePerson(userId, personId),
-      },
-      (error, response, body) => {
+      }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call delete person endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called delete person endpoint');
         return resolve(body);

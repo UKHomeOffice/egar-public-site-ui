@@ -6,7 +6,7 @@ module.exports = {
 
   /**
    * Confirms user as verified via API.
-   * 
+   *
    * @param {String} tokenId tokenId sent to user to be verified
    * @param {String} userId userId of user to be verified
    * @returns {Promise} returns response body when resolved
@@ -21,18 +21,17 @@ module.exports = {
           tokenId,
         }),
       }, (error, response, body) => {
-        if(error) {
-          if(typeof response !== 'undefined') {
+        if (error) {
+          if (typeof response !== 'undefined') {
             logger.error(`Code: ${response.statusCode}, message: ${response.statusMessage}`);
           }
-          reject('Token verification service failed');
+          reject(new Error('Token verification service failed'));
           return ('Token verification service failed');
         }
         resolve(body);
         return body;
       });
-    })
-    .catch((err) => {
+    }).catch((err) => {
       logger.error(err);
     });
   },

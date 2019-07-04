@@ -11,7 +11,7 @@ module.exports = (req, res) => {
   cookie.initialise();
 
   // Look up and validate token, checking it hasn't expired
-  const token = req.query.token;
+  const { token } = req.query;
   const hashedToken = verifyUserService.generateHash(token);
 
   logger.debug('Calling verify user endpoint');

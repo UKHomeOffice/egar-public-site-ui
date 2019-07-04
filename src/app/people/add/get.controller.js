@@ -5,7 +5,10 @@ const documenttype = require('../../../common/seeddata/egar_saved_people_travel_
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
 
 module.exports = (req, res) => {
-  const cookie = new CookieModel(req);
   logger.debug('In people / add get controller');
-  res.render('app/people/add/index', { cookie, genderchoice, persontype, documenttype });
+
+  const cookie = new CookieModel(req);
+  res.render('app/people/add/index', {
+    cookie, genderchoice, persontype, documenttype,
+  });
 };

@@ -4,9 +4,9 @@
 class ExcelParser {
   /**
    * Parse xls/x files using a given config
-   * @param {Object} workbook XLSX Sheet object
-   * @param {Object} cellMap Config in the form { property: { location: cell, transform: function } }
-   * @param {Object} rangeConfig Config for parsing a more than 1 row { startRow: rowNum, terminator: terminateValue }
+   * @param workbook XLSX Sheet object
+   * @param cellMap Config in the form { property: { location: cell, transform: function } }
+   * @param rangeConfig Config for parsing range { startRow: rowNum, terminator: terminateValue }
    */
   constructor(workbook, cellMap, rangeConfig) {
     this._workbook = workbook;
@@ -40,7 +40,7 @@ class ExcelParser {
     while (flag) {
       const rowObj = {};
       Object.keys(this.cellMap).forEach((key) => {
-        let cellValue = flag ? this._getValue(`${this.cellMap[key]['location']}${rowNum}`) : null;
+        let cellValue = flag ? this._getValue(`${this.cellMap[key].location}${rowNum}`) : null;
         if (cellValue === this.rangeConfig.terminator) {
           flag = false;
         }

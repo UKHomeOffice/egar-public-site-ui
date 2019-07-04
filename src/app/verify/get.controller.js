@@ -1,11 +1,13 @@
+/* eslint-disable no-underscore-dangle */
+
+const nanoid = require('nanoid/generate');
+const i18n = require('i18n');
 const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
 const verifyUserService = require('../../common/services/verificationApi');
 const sendTokenService = require('../../common/services/send-token');
 const tokenService = require('../../common/services/create-token');
 const tokenApi = require('../../common/services/tokenApi');
-const nanoid = require('nanoid/generate');
-const i18n = require('i18n');
 
 module.exports = async (req, res) => {
   logger.debug('In verify / registeruser get controller');
@@ -25,13 +27,13 @@ module.exports = async (req, res) => {
     if (parsedResponse.message === 'Token has expired') {
       logger.info('Token expired, updating');
       const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
-      const token = nanoid(alphabet, 13);
-      const hashtoken = tokenService.generateHash(token);
+      const alphabetToken = nanoid(alphabet, 13);
+      const hashtoken = tokenService.generateHash(alphabetToken);
       tokenApi.updateToken(hashtoken, parsedResponse.userId);
       sendTokenService.send(
         parsedResponse.firstName,
         parsedResponse.email,
-        token
+        token,
       );
       message = i18n.__('verify_user_account_token_expired');
     }

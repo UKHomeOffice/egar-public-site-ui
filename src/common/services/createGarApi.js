@@ -2,10 +2,11 @@ const request = require('request');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
-
 module.exports = {
+
   /**
    * Calls create craft API endpoint.
+   *
    * @param {String} userId id of user creating the gar
    * @returns {Promise} returns API response when resolved
    */
@@ -16,7 +17,7 @@ module.exports = {
         url: endpoints.createGar(userId),
       }, (error, response, body) => {
         if (error) {
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         return body;

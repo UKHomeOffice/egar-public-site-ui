@@ -1,9 +1,9 @@
+const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const craftApi = require('../../../common/services/craftApi');
-const _ = require('lodash');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
@@ -33,7 +33,7 @@ module.exports = (req, res) => {
       craftApi.create(craftReg, craftType, craftBase, cookie.getUserDbId())
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
-          if (parsedResponse.hasOwnProperty('message')) {
+          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             res.render('app/aircraft/add/index', { errors: [parsedResponse], cookie });
           } else {
             res.redirect('/aircraft');

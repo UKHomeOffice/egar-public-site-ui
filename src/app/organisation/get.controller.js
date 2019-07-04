@@ -19,13 +19,15 @@ module.exports = (req, res) => {
         const { successMsg, successHeader } = req.session;
         delete req.session.successHeader;
         delete req.session.successMsg;
-        return res.render('app/organisation/index', { cookie, orgUsers, successHeader, successMsg });
+        return res.render('app/organisation/index', {
+          cookie, orgUsers, successHeader, successMsg,
+        });
       }
       return res.render('app/organisation/index', { cookie, orgUsers });
     })
     .catch((err) => {
       logger.error('There was an error fetching users for the organisation');
       logger.error(err);
-      res.render('app/organisation/index', { cookie, errors: [{ message: 'There was a problem fetching organisation users'}] });
+      res.render('app/organisation/index', { cookie, errors: [{ message: 'There was a problem fetching organisation users' }] });
     });
 };
