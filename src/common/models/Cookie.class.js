@@ -745,7 +745,7 @@ class Cookie {
         dateValue = date == null ? '' : date.split('-')[0];
         break;
       default:
-        throw new Error('dateType must be day month or year');
+        throw new Error('dateType must be day or month or year');
     }
     if (dateValue === 'undefined') {
       return '';
