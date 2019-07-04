@@ -5,11 +5,6 @@ const garApi = require('../../../common/services/garApi');
 const validator = require('../../../common/utils/validator');
 const validationList = require('./validations');
 
-function handleResponseError(parsedApiResponse) {
-  if ({}.hasOwnProperty.call(parsedApiResponse, 'message')) {
-    logger.debug(`Api returned Error: ${parsedApiResponse}`);
-  }
-}
 
 module.exports = (req, res) => {
   logger.debug('In garfile / review get controller');
@@ -19,35 +14,35 @@ module.exports = (req, res) => {
   Promise.all([
     garApi.get(garId),
     garApi.getPeople(garId),
-    garApi.getSupportingDocs(garId)])
-    .then((apiResponse) => {
-      const garfile = JSON.parse(apiResponse[0]);
-      handleResponseError(garfile);
+    garApi.getSupportingDocs(garId),
+  ]).then((apiResponse) => {
+    const garfile = JSON.parse(apiResponse[0]);
+    validator.handleResponseError(garfile);
 
-      const garpeople = JSON.parse(apiResponse[1]);
-      handleResponseError(garpeople);
+    const garpeople = JSON.parse(apiResponse[1]);
+    validator.handleResponseError(garpeople);
 
-      const garsupportingdocs = JSON.parse(apiResponse[2]);
-      handleResponseError(garsupportingdocs);
+    const garsupportingdocs = JSON.parse(apiResponse[2]);
+    validator.handleResponseError(garsupportingdocs);
 
-      const validations = validationList.validations(garfile, garpeople);
-      const renderObj = {
-        cookie,
-        showChangeLinks: true,
-        manifestFields,
-        garfile,
-        garpeople,
-        garsupportingdocs,
-      };
+    const validations = validationList.validations(garfile, garpeople);
+    const renderObj = {
+      cookie,
+      showChangeLinks: true,
+      manifestFields,
+      garfile,
+      garpeople,
+      garsupportingdocs,
+    };
 
-      validator.validateChains(validations)
-        .then(() => {
-          res.render('app/garfile/review/index', renderObj);
-        }).catch((err) => {
-          logger.info('Validation failed');
-          logger.info(err);
-          renderObj.errors = err;
-          res.render('app/garfile/review/index', renderObj);
-        });
-    });
+    validator.validateChains(validations)
+      .then(() => {
+        res.render('app/garfile/review/index', renderObj);
+      }).catch((err) => {
+        logger.info('Validation failed');
+        logger.info(err);
+        renderObj.errors = err;
+        res.render('app/garfile/review/index', renderObj);
+      });
+  });
 };

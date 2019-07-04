@@ -2,6 +2,7 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
+const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
   if (value === undefined) {
@@ -324,6 +325,12 @@ function isValidDepAndArrDate(value) {
   return depDate <= arrDate;
 }
 
+function handleResponseError(parsedApiResponse) {
+  if ({}.hasOwnProperty.call(parsedApiResponse, 'message')) {
+    logger.debug(`Api return Error: ${parsedApiResponse}`);
+  }
+}
+
 
 module.exports = {
   notEmpty,
@@ -357,4 +364,5 @@ module.exports = {
   notSameValues,
   isValidFileMime,
   isValidDepAndArrDate,
+  handleResponseError,
 };
