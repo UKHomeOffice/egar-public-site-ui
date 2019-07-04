@@ -3,7 +3,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 
 module.exports = (req, res) => {
-  logger.debug('In garfile/departureHour get controller');
+  logger.debug('In garfile/departure get controller');
   const cookie = new CookieModel(req);
 
   garApi.get(cookie.getGarId())

@@ -1,6 +1,7 @@
 const settings = require('../config/index');
 
-/**
+/*
+ *
  */
 class Cookie {
   /**
@@ -16,6 +17,7 @@ class Cookie {
     this.session = request.session;
 
     this.initialise();
+    this.initialiseGar();
   }
 
   initialise() {
@@ -80,8 +82,9 @@ class Cookie {
     if (this.session.editPerson == null) {
       this.session.editPerson = {};
     }
+  }
 
-    // Initialise gar
+  initialiseGar() {
     if (this.session.gar == null) {
       this.session.gar = {
         id: null,
@@ -138,7 +141,6 @@ class Cookie {
     }
   }
 
-
   /**
    *
    */
@@ -165,7 +167,7 @@ class Cookie {
     return this.session.gar.id;
   }
 
-  settAddPersonId(id) {
+  setAddPersonId(id) {
     this.session.gar.tempAddPersonId = id;
   }
 
@@ -186,8 +188,8 @@ class Cookie {
   }
 
   setGarArrivalVoyage(voyageObj) {
-    if (!voyageObj.arrivalDate) {
-      this.session.gar.voyageArrival.arrivalDate = this.genDate(voyageObj.arrivalDay,
+    if(!voyageObj.arrivalDate) {
+      this.session.gar.voyageArrival.arrivalDate = this.generateDate(voyageObj.arrivalDay,
         voyageObj.arrivalMonth, voyageObj.arrivalYear);
 
       this.session.gar.voyageArrival.arrivalTime = this.generateTime(voyageObj.arrivalHour,
@@ -207,20 +209,21 @@ class Cookie {
   }
 
   setGarDepartureVoyage(voyageObj) {
-    if (!voyageObj.departureDate) {
-      this.session.gar.voyageDeparture.departureDate = this.genDate(voyageObj.departureDay,
+    if(!voyageObj.departureDate) {
+      this.session.gar.voyageDeparture.departureDate = this.generateDate(voyageObj.departureDay,
         voyageObj.departureMonth,voyageObj.departureYear);
       this.session.gar.voyageDeparture.departureTime = this.generateTime(voyageObj.departureHour,
         voyageObj.departureMinute);
-    } else {
-      // get it from the api
-      this.session.gar.voyageDeparture.departureDate = voyageObj.departureDate;
-      this.session.gar.voyageDeparture.departureTime = voyageObj.departureTime;
+      }
+      else{
+        //get it from the api
+        this.session.gar.voyageDeparture.departureDate = voyageObj.departureDate;
+        this.session.gar.voyageDeparture.departureTime = voyageObj.departureTime;
+      }
+      this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
+      this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
+      this.session.gar.voyageDeparture.departureLat = voyageObj.departureLat;
     }
-    this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
-    this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
-    this.session.gar.voyageDeparture.departureLat = voyageObj.departureLat;
-  }
 
   getGarDepartureVoyage() {
     return this.session.gar.voyageDeparture;
@@ -229,12 +232,12 @@ class Cookie {
   setGarVoyage(voyageObj) {
     if (!voyageObj.departureDate) {
       // Set voyage from form data, so we must build dates and times
-      this.session.gar.voyage.departureDate = this.genDate(voyageObj.departureDay,
+      this.session.gar.voyage.departureDate = this.generateDate(voyageObj.departureDay,
         voyageObj.departureMonth,
         voyageObj.departureYear);
       this.session.gar.voyage.departureTime = this.generateTime(voyageObj.departureHour,
         voyageObj.departureMinute);
-      this.session.gar.voyage.arrivalDate = this.genDate(voyageObj.arrivalDay,
+      this.session.gar.voyage.arrivalDate = this.generateDate(voyageObj.arrivalDay,
         voyageObj.arrivalMonth,
         voyageObj.arrivalYear);
       this.session.gar.voyage.arrivalTime = this.generateTime(voyageObj.arrivalHour,
@@ -270,7 +273,6 @@ class Cookie {
 
   setGarManifest(manifest) {
     this.session.gar.manifest = manifest;
-    // this.session.gar.manifest.push(man);
   }
 
   garManifestAddPerson(person) {
@@ -316,14 +318,13 @@ class Cookie {
     return this.session.gar.responsiblePerson;
   }
 
-  getGarsupportingDocument() {
+  getGarSupportingDocument() {
     return this.session.gar.supportingDocument;
   }
 
-  setGarsupportingDocument(sdl) {
+  setGarSupportingDocument(sdl) {
     this.session.gar.supportingDocument.push(sdl);
   }
-
 
   /**
    *
@@ -346,7 +347,6 @@ class Cookie {
     this.session.u.dbId = id;
   }
 
-
   /**
    *
    */
@@ -367,7 +367,6 @@ class Cookie {
   setUserGarOp(op) {
     this.session.u.garop = op;
   }
-
 
   /**
    *
@@ -725,7 +724,7 @@ class Cookie {
     return this.session.gar.status;
   }
 
-  genDate(d, m, y) {
+  generateDate(d, m, y) {
     return `${y}-${m}-${d}`;
   }
 

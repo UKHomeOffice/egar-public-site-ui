@@ -9,7 +9,7 @@ module.exports = {
    * @returns {Promise} returns JSON parsed response content
    */
   getDetails(email) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getUserData(email),
@@ -34,7 +34,7 @@ module.exports = {
    * @returns {Promise} returns JSON parsed response when resolved
    */
   updateDetails(userId, firstName, lastName) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateUserData(userId),
@@ -72,7 +72,7 @@ module.exports = {
     });
   },
   userSearch(email) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.userSearch(email),

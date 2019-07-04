@@ -10,7 +10,7 @@ module.exports = {
    * @returns {Promise} returns response body when resolved.
    */
   create(organisationName, userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.registerOrg(),
@@ -40,7 +40,7 @@ module.exports = {
    * @returns {Promise} returns response body when resolved
    */
   update(organisationName, orgId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateOrg(orgId),
@@ -68,7 +68,7 @@ module.exports = {
    * @returns {Promise} returns response body when resolved
    */
   get(orgId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgDetails(orgId),
@@ -91,7 +91,7 @@ module.exports = {
    * @returns {Promise} resolves with API response.
    */
   getUsers(orgId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgUsers(orgId),

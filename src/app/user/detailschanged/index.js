@@ -1,5 +1,3 @@
-'use strict'
-
 // Npm dependencies
 const express = require('express')
 
@@ -17,15 +15,12 @@ const router = new express.Router()
 const indexPath = '/user/detailschanged'
 const paths = {
   index: indexPath 
-}
+};
 
 // Routing
 router.get(paths.index, flagpole, usercheck,csrfcheck, getController);
 
-
-
 // Export
 module.exports = {
-  router,
-  paths
-}
+  router, paths
+};

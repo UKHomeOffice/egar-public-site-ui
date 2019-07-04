@@ -1,5 +1,3 @@
-'use strict'
-
 const express = require('express');
 
 const flagpole = require('../../common/middleware/flagpole')
@@ -15,12 +13,11 @@ const indexPath = '/organisation';
 
 const paths = {
   index: indexPath
-}
+};
 
 router.get(paths.index, flagpole, usercheck, csrfcheck, getController);
 router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, postController);
 
 module.exports = {
-  router,
-  paths
-}
+  router, paths
+};

@@ -131,8 +131,13 @@
 				</span>
 
           {{ m.error_message('departurePort', errors) }}
-          <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="off"
-          type="text" value="{{ cookie.getGarDepartureVoyage().departurePort | upper }}"/>
+          <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
+          {# <select class="govuk-select" id="test" name="test" value="{{ cookie.getGarDepartureVoyage().departurePort }}">
+            <option value="">{{ __('country_no_selection') }}</option>
+            {% for airport in airportList|sort(attribute='label') %}
+              <option value="{{ airport.id }}" {{ 'selected=selected' if (cookie.getGarDepartureVoyage().departurePort) == country.id }}>{{ airport.label }}</option>
+            {% endfor %}
+          </select> #}
         </div>
         <!-- End departure port -->
 
@@ -191,4 +196,13 @@
     </form>
   </div>
 </div>
+
+<script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+<!-- <script type="text/javascript">
+  accessibleAutocomplete.enhanceSelectElement({
+    selectElement: document.querySelector('#test'),
+    minLength: 3,
+  });
+</script> -->
+
 {% endblock %}

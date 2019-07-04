@@ -7,7 +7,7 @@ const genderchoice = require('../../../../common/seeddata/egar_gender_choice.jso
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
-  logger.debug('In garfile / manifest get controller');
+  logger.debug('In garfile / manifest / edit person get controller');
   const personId = req.session.editPersonId;
 
   if (personId === undefined) {
