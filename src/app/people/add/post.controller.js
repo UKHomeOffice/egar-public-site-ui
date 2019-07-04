@@ -15,14 +15,14 @@ module.exports = (req, res) => {
     firstName: req.body['first-name'],
     lastName: req.body['last-name'],
     nationality: _.toUpper(req.body.nationality),
-    birthplace: req.body.birthplace,
+    placeOfBirth: req.body.birthplace,
     gender: req.body.gender,
-    personType: req.body['person-type'],
-    docNumber: req.body['travel-document-number'],
-    docType: req.body['travel-document-type'],
+    peopleType: req.body['person-type'],
+    documentNumber: req.body['travel-document-number'],
+    documentType: req.body['travel-document-type'],
     issuingState: _.toUpper(req.body['issuing-state']),
-    expiryDate: `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`,
-    dob: `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`,
+    documentExpiryDate: `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`,
+    dateOfBirth: `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`,
   };
 
   // Validate chains
@@ -31,17 +31,7 @@ module.exports = (req, res) => {
       // call the API to update the data base and then
       personApi.create(
         cookie.getUserDbId(),
-        person.firstName,
-        person.lastName,
-        person.nationality,
-        person.birthplace,
-        person.dob,
-        person.gender,
-        person.docType,
-        person.docNumber,
-        person.expiryDate,
-        person.personType,
-        person.issuingState,
+        person,
       ).then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {

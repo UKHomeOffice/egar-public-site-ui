@@ -34,17 +34,7 @@ module.exports = (req, res) => {
       personApi.update(
         cookie.getUserDbId(),
         cookie.getEditPerson().personId,
-        person.firstName,
-        person.lastName,
-        person.nationality,
-        person.placeOfBirth,
-        person.dateOfBirth,
-        person.gender,
-        person.documentType,
-        person.documentNumber,
-        person.documentExpiryDate,
-        person.peopleType,
-        person.issuingState,
+        person,
       ).then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
