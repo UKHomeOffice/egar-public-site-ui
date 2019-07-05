@@ -13,7 +13,6 @@ module.exports = (req, res) => {
   const craftType = req.body.crafttype;
   const craftBase = _.toUpper(req.body.craftbase);
 
-
   // Define a validation chain for user registeration fields
   const craftRegChain = [
     new ValidationRule(validator.notEmpty, 'craftreg', craftReg, 'Enter the registration deatils of the craft'),

@@ -49,7 +49,7 @@ describe('User Login Post Controller', () => {
     sinon.restore();
   });
 
-  it('should fail validation on erroneous submit', async () => {
+  it('should fail validation on empty submit', async () => {
     const emptyRequest = {
       body: {
         Username: '',
@@ -96,7 +96,7 @@ describe('User Login Post Controller', () => {
 
       callController().then(() => {
         expect(emailService.send).to.not.have.been.called;
-        // TODO: Resolve -> Resolve -> Resolve
+      }).then(() => {
         expect(res.render).to.have.been.calledWith('app/user/login/index');
       });
     });
@@ -117,6 +117,8 @@ describe('User Login Post Controller', () => {
         expect(emailService.send).to.have.been.called;
         // TODO: Resolve -> Resolve -> Resolve
         // expect(res.redirect).to.have.been.calledWith('/login/authenticate');
+      }).then(() => {
+        expect(res.redirect).to.have.been.calledWith('/login/authenticate');
       });
     });
 
@@ -134,9 +136,10 @@ describe('User Login Post Controller', () => {
 
       callController().then(() => {
         expect(emailService.send).to.have.been.called;
-        // TODO: Resolve -> Resolve -> Reject
-        // expect(res.redirect).to.have.been.calledWith('/login/authenticate');
-        expect(res.redirect).to.have.been.called;
+      }).then(() => {
+        // The emailService rejects the Promise
+      }).catch(() => {
+        expect(res.redirect).to.have.been.calledWith('/login/authenticate');
       });
     });
   });
@@ -161,8 +164,12 @@ describe('User Login Post Controller', () => {
       };
 
       callController().then(() => {
+        expect(userApi.userSearch).to.have.been.calledWith('exampleuser');
         expect(emailService.send).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('app/user/login/index');
+        expect(res.redirect).to.not.have.been.called;
+      }).then(() => {
+        expect(emailService.send).to.have.been.called;
+        expect(res.redirect).to.have.been.calledWith('/login/authenticate');
       });
     });
 
@@ -186,8 +193,11 @@ describe('User Login Post Controller', () => {
 
       callController().then(() => {
         expect(emailService.send).to.not.have.been.called;
-        // TODO: Resolve -> Resolve -> Reject
-        // expect(res.render).to.have.been.called;
+      }).then(() => {
+        // The tokenApi rejects the Promise
+      }).catch(() => {
+        expect(emailService.send).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/user/login/index');
       });
     });
   });
