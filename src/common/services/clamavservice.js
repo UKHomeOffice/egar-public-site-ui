@@ -1,6 +1,6 @@
+const request = require('request');
 const logger = require('../utils/logger')(__filename);
 const config = require('../config/index');
-const request = require('request');
 
 module.exports = {
   /**
@@ -25,14 +25,14 @@ module.exports = {
 
         if (body.includes('ok : true')) {
           logger.info('No virus found');
-          resolve(true);
-        } else if (body.includes('ok : false')) {
-          logger.info('Virus found, rejecting file');
-          resolve(false);
-        } else {
-          logger.info('Unexpected clamav response');
-          reject(`Unexpected clamav response: ${body}`);
+          return resolve(true);
         }
+        if (body.includes('ok : false')) {
+          logger.info('Virus found, rejecting file');
+          return resolve(false);
+        }
+        logger.info('Unexpected clamav response');
+        return reject(new Error(`Unexpected clamav response: ${body}`));
       });
     });
   },

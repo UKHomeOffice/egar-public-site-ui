@@ -2,7 +2,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const personApi = require('../../../common/services/personApi');
 
-
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In people / delete get controller');
@@ -11,7 +10,8 @@ module.exports = (req, res) => {
   const personId = req.session.deletePersonId;
 
   if (personId === undefined) {
-    return res.redirect('/people');
+    res.redirect('/people');
+    return;
   }
 
   personApi.deletePerson(cookie.getUserDbId(), personId)

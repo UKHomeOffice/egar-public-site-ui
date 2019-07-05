@@ -1,6 +1,6 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const verifyUserService = require('../../../common/services/verificationApi');
+const tokenService = require('../../../common/services/create-token');
 
 module.exports = (req, res) => {
   logger.debug('In verify / invite get controller');
@@ -12,7 +12,7 @@ module.exports = (req, res) => {
 
   // Look up and validate token, checking it hasn't expired
   const token = req.query.query;
-  const hashedToken = verifyUserService.generateHash(token);
+  const hashedToken = tokenService.generateHash(token);
   cookie.setInviteUserToken(hashedToken);
   logger.info('Set hashedToken');
   res.render('app/verify/organisationinvite/index');

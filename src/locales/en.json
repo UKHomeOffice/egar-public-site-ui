@@ -3,6 +3,15 @@
     "nav_bar_people": "People",
     "nav_bar_sign_out": "Sign out",
 
+    "user_login_unverified": "The email address supplied has not been verified. You should have recieved an email to verify.",
+    "user_login_unverified_caption": "Click the verification link inside the email. This link will remain valid for 12 hours. If you can't see the email, please check any spam folders or ",
+    "user_login_unverified_resend": "resend the email",
+    "field_username": "Registered email address",
+    "field_username_hint": "Enter the email address you used when you created your account",
+    "button_sign_in": "Sign in",
+    "create_account_caption": "Need to create an account?",
+    "button_create_account": "Create an account",
+
     "form_exit_without_saving": "Exit without saving",
     "form_save_and_exit": "Save and exit",
 
@@ -40,5 +49,10 @@
     "field_issuing_state": "Issuing state",
     "field_issuing_state_hint": "Type in or provide the 3 letter code for the issuing state, for example GBR",
     "field_travel_document_type": "Travel document type",
-    "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other"
+    "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other",
+
+    "verify_user_account_success": "Your account has now been successfully verified. You can now log on and submit GAR files online.",
+    "verify_user_account_token_expired": "Your token has expired. We have created a new token for you. Please check your email and click the new link.",
+    "verify_user_account_token_invalid": "This token is invalid, click the link provided in the email or contact support for additional help."
+    
 }

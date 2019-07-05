@@ -1,5 +1,3 @@
-const settings = require('../config/index');
-
 /*
  *
  */

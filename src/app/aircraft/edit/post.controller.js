@@ -1,18 +1,18 @@
+const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const craftApi = require('../../../common/services/craftApi');
-const _ = require('lodash');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  const craftReg = req.body.craftReg;
-  const craftType = req.body.craftType;
+  const { craftReg } = req.body;
+  const { craftType } = req.body;
   const craftBase = _.toUpper(req.body.craftBase);
-  const craftId = req.body.craftId;
+  const { craftId } = req.body;
 
   cookie.updateEditCraft(craftReg, craftType, craftBase);
 
@@ -36,7 +36,7 @@ module.exports = (req, res) => {
       craftApi.update(craftReg, craftType, craftBase, cookie.getUserDbId(), craftId)
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
-          if (parsedResponse.hasOwnProperty('message')) {
+          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             // API returned failure
             res.render('app/aircraft/edit/index', { cookie, errors: [parsedResponse] });
           } else {

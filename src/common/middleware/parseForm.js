@@ -1,6 +1,6 @@
-const bodyParser = require ('body-parser');
+const bodyParser = require('body-parser');
 
 module.exports = (req, res, next) => {
-    bodyParser.urlencoded({ extended: false });
-    next();
-}
+  bodyParser.urlencoded({ extended: false });
+  next();
+};

@@ -1,9 +1,9 @@
+const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const _ = require('lodash');
 
 const createValidationChains = (voyage) => {
   // Define port / date validation msgs
@@ -46,9 +46,9 @@ const createValidationChains = (voyage) => {
   const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, longitudeMsg)];
 
   const validations = [
-    [ new ValidationRule(validator.realDate, 'departureDate', departDateObj, realDateMsg), ],
-    [ new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, futureDateMsg), ],
-    [ new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, timeMsg), ],
+    [new ValidationRule(validator.realDate, 'departureDate', departDateObj, realDateMsg)],
+    [new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, futureDateMsg)],
+    [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, timeMsg)],
   ];
 
   // Check if port code is ZZZZ then need to validate lat/long and display req zzzz message
@@ -72,16 +72,20 @@ const performAPICall = (cookie, res, buttonClicked) => {
   garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarDepartureVoyage())
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
-      if (parsedResponse.hasOwnProperty('message')) {
+      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
         // API returned error
         logger.debug(`Api returned: ${parsedResponse}`);
         res.render('app/garfile/departure/index', {
           cookie,
           errors: [parsedResponse],
         });
+        return;
+      }
+      // Successful
+      if (buttonClicked === 'Save and continue') {
+        res.redirect('/garfile/arrival');
       } else {
-        // Successful
-        return buttonClicked === 'Save and continue' ? res.redirect('/garfile/arrival') : res.redirect('/home');
+        res.redirect('/home');
       }
     })
     .catch((err) => {
@@ -94,7 +98,7 @@ const performAPICall = (cookie, res, buttonClicked) => {
         }],
       });
     });
-  }
+};
 
 module.exports = async (req, res) => {
   logger.debug('In garfile / arrival post controller');
@@ -115,9 +119,9 @@ module.exports = async (req, res) => {
   const samePortMsg = 'Departure port must be different to arrival port';
   validations.push(
     [
-      new ValidationRule(validator.notSameValues, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], samePortMsg)
-    ]
-  )
+      new ValidationRule(validator.notSameValues, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], samePortMsg),
+    ],
+  );
 
   validator.validateChains(validations)
     .then(() => {
@@ -126,6 +130,6 @@ module.exports = async (req, res) => {
     .catch((err) => {
       logger.info('Validation failed');
       logger.info(err);
-      res.render('app/garfile/departure/index', { cookie, errors: err, });
+      res.render('app/garfile/departure/index', { cookie, errors: err });
     });
 };

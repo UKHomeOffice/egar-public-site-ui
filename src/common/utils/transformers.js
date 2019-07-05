@@ -1,9 +1,8 @@
-const logger = require('../utils/logger')(__filename);
 const _ = require('lodash');
 
 function transformPerson(personObj) {
   const copyPersonObj = personObj;
-  if (personObj.hasOwnProperty('peopleType')) {
+  if (Object.prototype.hasOwnProperty.call(personObj, 'peopleType')) {
     copyPersonObj.peopleType = personObj.peopleType.name;
   }
   return copyPersonObj;
@@ -19,9 +18,8 @@ function titleCase(str) {
     return str;
   }
   return str.split(' ')
-    .map((word) => {
-      return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
-    }).join(' ');
+    .map(word => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase())
+    .join(' ');
 }
 
 function upperCamelCase(str) {
@@ -29,9 +27,8 @@ function upperCamelCase(str) {
     return str;
   }
   return str.split(' ')
-    .map((word) => {
-      return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
-    }).join('');
+    .map(word => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase())
+    .join('');
 }
 
 function numToString(num) {

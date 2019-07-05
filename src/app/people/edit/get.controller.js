@@ -12,22 +12,27 @@ module.exports = (req, res) => {
   const id = req.session.editPersonId;
 
   if (id === undefined) {
-    return res.redirect('/people');
+    res.redirect('/people');
+    return;
   }
 
   personApi.getDetails(cookie.getUserDbId(), id)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        res.render('app/people/edit/index', { cookie, persontype, documenttype, genderchoice, errors: [{ message: 'Failed to get person information' }]});
+        res.render('app/people/edit/index', {
+          cookie, persontype, documenttype, genderchoice, errors: [{ message: 'Failed to get person information' }],
+        });
       } else {
         cookie.setEditPerson(parsedResponse);
-        res.render('app/people/edit/index', { person: parsedResponse, cookie, persontype, documenttype, genderchoice });
+        res.render('app/people/edit/index', {
+          person: parsedResponse, cookie, persontype, documenttype, genderchoice,
+        });
       }
     })
     .catch((err) => {
       logger.error('Failed to get org saved person details');
       logger.error(err);
-      return res.redirect('/people');
+      res.redirect('/people');
     });
 };

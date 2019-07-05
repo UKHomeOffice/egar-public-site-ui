@@ -7,21 +7,20 @@ const settings = require('../../../common/config/index');
 module.exports = (req, res) => {
   logger.debug('In user / deleteAccount postcontroller');
   const cookie = new CookieModel(req);
-  const errObj = { message: 'Failed to delete your account. Contact support or try again' }
+  const errObj = { message: 'Failed to delete your account. Contact support or try again' };
   userApi.deleteUser(cookie.getUserEmail())
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        return res.render('app/user/deleteAccount/index', { cookie, errors: [errObj] });
+        res.render('app/user/deleteAccount/index', { cookie, errors: [errObj] });
+        return;
       }
       emailService.send(
         settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
         cookie.getUserEmail(),
-        { firstName: cookie.getUserFirstName() }
+        { firstName: cookie.getUserFirstName() },
       )
-        .then(() => {
-          return res.redirect('/user/logout');
-        })
+        .then(() => res.redirect('/user/logout'))
         .catch((err) => {
           logger.error('Failed to send notify email');
           logger.error(err);

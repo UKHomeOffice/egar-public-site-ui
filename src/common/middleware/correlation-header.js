@@ -1,8 +1,8 @@
-const config = require('../config/index')
-// Constants
-const CORRELATION_HEADER = config.CORRELATION_HEADER
+const config = require('../config/index');
+
+const { CORRELATION_HEADER } = config;
 
 module.exports = (req, res, next) => {
-  req.correlationId = req.headers[CORRELATION_HEADER] || ''
+  req.correlationId = req.headers[CORRELATION_HEADER] || '';
   next();
 };

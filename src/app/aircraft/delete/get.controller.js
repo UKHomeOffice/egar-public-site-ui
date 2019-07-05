@@ -11,25 +11,24 @@ module.exports = (req, res) => {
   const craftId = req.session.deleteCraftId;
 
   if (craftId === undefined) {
-    return res.redirect('/aircraft');
+    res.redirect('/aircraft');
+    return;
   }
 
   const craft = cookie.getUserRole() === 'Individual' ? craftApi.deleteCraft(cookie.getUserDbId(), craftId) : craftApi.deleteOrgCraft(cookie.getOrganisationId(), cookie.getUserDbId(), craftId);
 
   craft.then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        req.session.errMsg = errMsg;
-        return req.session.save(() => {res.redirect('/aircraft')});
-      } else {
-        req.session.successHeader = 'Success';
-        req.session.successMsg = 'Craft deleted';
-        return req.session.save(() => {res.redirect('/aircraft')});
-      }
-    })
-    .catch((err) => {
-      logger.error(err);
+    const parsedResponse = JSON.parse(apiResponse);
+    if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
       req.session.errMsg = errMsg;
-      return req.session.save(() => {res.redirect('/aircraft')});
-    });
+      return req.session.save(() => { res.redirect('/aircraft'); });
+    }
+    req.session.successHeader = 'Success';
+    req.session.successMsg = 'Craft deleted';
+    return req.session.save(() => { res.redirect('/aircraft'); });
+  }).catch((err) => {
+    logger.error(err);
+    req.session.errMsg = errMsg;
+    return req.session.save(() => { res.redirect('/aircraft'); });
+  });
 };

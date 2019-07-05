@@ -1,6 +1,7 @@
 const csv = require('csvtojson/v2');
 const csvFile='./airports.dat';
 const fs = require('fs');
+const logger = require('../../../common/utils/logger')(__filename);
 
 /**
  * A converter to take in an openflights.org data file (in CSV format) and converting it into a JSON format that can be
@@ -29,11 +30,11 @@ csv({
     'source': 'omit',
   },
 }).fromFile(csvFile).then((jsonResult) => {
-  let processedArray = [];
+  const processedArray = [];
   jsonResult.forEach((row) => {
-    console.log('Processing row ' + row.id + ' - ' + row.name);
-    console.log('IATA: ' + row.IATA);
-    console.log('ICAO: ' + row.ICAO);
+    logger.info('Processing row ' + row.id + ' - ' + row.name);
+    logger.info('IATA: ' + row.IATA);
+    logger.info('ICAO: ' + row.ICAO);
     // Adding a flag to the row to signify whether the airport is in the UK
     // TODO: Does "Isle of Man" and others like "Jersey" also count as in the UK?
     const british = row.country === 'United Kingdom';
@@ -46,12 +47,12 @@ csv({
       processedArray.push({id: row.ICAO, british: british, label: label + '(' + row.ICAO + ')'})
     }
   });
-  console.log('Resulting output');
-  console.log(processedArray);
+  logger.info('Resulting output');
+  logger.info(processedArray);
   fs.writeFileSync('airport_codes.json', JSON.stringify(processedArray, null, 2), 'utf8', (err) => {
     if (err) {
-      console.log('An error occurred while saving to JSON');
-      return console.log(err);
+      logger.error('An error occurred while saving to JSON');
+      return logger.error(err);
     }
   })
 })

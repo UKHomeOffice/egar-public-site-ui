@@ -19,7 +19,4 @@ const paths = {
 router.get(paths.index, flagpole, usercheck, getController);
 
 // Export
-module.exports = {
-  router,
-  paths,
-};
+module.exports = { router, paths };
