@@ -95,7 +95,6 @@ module.exports = (req, res) => {
 
   const validationChains = createValidationChains(fname, lname, usrname, cusrname);
 
-  console.log(config.WHITELIST_REQUIRED);
   const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() === 'true');
 
   logger.info('Validating registration input');
