@@ -2,7 +2,7 @@
 <div class="govuk-form-group {{ m.form_group_class('first-name', errors) }}">
   <label class="govuk-label govuk-label--m" for="first-name">{{ __('field_given_name') }}</label>
     {{ m.error_message('first-name', errors) }}
-  <input class="govuk-input" id="first-name" name="first-name" autocomplete="off" type="text" value="{{person['firstName'] or req.body['first-name']}}" />
+  <input class="govuk-input" id="first-name" name="first-name" autocomplete="off" type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{person['firstName'] or req.body['first-name']}}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('last-name', errors) }}">

@@ -205,7 +205,7 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('airportList', autocompleteUtil.airportList);
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
-  nunjucksEnvironment.addGlobal('MAX_NAME_LENGTH', config.MAX_NAME_LENGTH);
+  nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
 }
 

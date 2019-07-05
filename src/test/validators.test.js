@@ -314,12 +314,12 @@ describe('Validator', () => {
     expect(validator.isValidFileMime('png', 'application/txt')).to.be.false;
   })
 
-  it('Shoud return true when string is less than or equal to MAX_NAME_LENGTH', () => {
+  it('Shoud return true when string is less than or equal to MAX_STRING_LENGTH', () => {
     const testValue = 'Tom';
     expect(validator.isValidStringLength(testValue)).to.be.true;
   })
 
-  it('Should return false when string is longer than MAX_NAME_LENGTH', () => {
+  it('Should return false when string is longer than MAX_STRING_LENGTH', () => {
     const testValue = 'AAAAAaaaaa BBBBBbbbbb CCCCCccccc DDDDDddddd';
     expect(validator.isValidStringLength(testValue)).to.be.false;
   })

@@ -1,6 +1,6 @@
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const MAX_NAME_LENGTH = require('../../../common/config/index').MAX_NAME_LENGTH;
+const MAX_STRING_LENGTH = require('../../../common/config/index').MAX_STRING_LENGTH;
 const MAX_REGISTRATION_LENGTH = require('../../../common/config/index').MAX_REGISTRATION_LENGTH;
 
 module.exports.validations = (craftObj) => {
@@ -16,7 +16,7 @@ module.exports.validations = (craftObj) => {
     ],
     [
       new ValidationRule(validator.notEmpty, 'craftType', craftType, 'Enter an aircraft type'),
-      new ValidationhRule(validator.isValidStringLength, 'craftType', craftType, `Aircraft type must not exceed ${{ MAX_NAME_LENGTH }} characters`)
+      new ValidationhRule(validator.isValidStringLength, 'craftType', craftType, `Aircraft type must not exceed ${{ MAX_STRING_LENGTH }} characters`)
     ],
     [
       new ValidationRule(validator.notEmpty, 'craftBase', craftBase, 'Enter an aircraft home port / location')

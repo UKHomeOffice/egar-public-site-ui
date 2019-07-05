@@ -35,7 +35,7 @@ exports.SESSION_TIMEOUT = process.env.SESSION_TIMEOUT || '3600000';
 exports.COOKIE_SECURE_FLAG = process.env.COOKIE_SECURE_FLAG || 'false';
 
 // Application form validation settings
-exports.MAX_NAME_LENGTH = 35;
+exports.MAX_STRING_LENGTH = 35;
 exports.MAX_REGISTRATION_LENGTH = 15;
 
 // ClamAv settings
