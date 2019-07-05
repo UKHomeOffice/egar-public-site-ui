@@ -7,20 +7,28 @@ const sinonChai = require('sinon-chai');
 
 const CookieModel = require('../../../common/models/Cookie.class');
 
-const controller = require('../../../app/user/login/get.controller');
+const controller = require('../../../app/user/register/get.controller');
 
-describe('User Login Get Controller', () => {
+describe('User Register Get Controller', () => {
   let req; let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
 
     req = {
-      session: {},
+      session: {
+        u: {
+          dbId: 123,
+          fn: 'Example first name',
+        },
+      },
+      query: {
+        resend: true,
+      },
     };
 
     res = {
-      render: sinon.spy(),
+      render: sinon.stub(),
     };
   });
 
@@ -32,7 +40,6 @@ describe('User Login Get Controller', () => {
     const cookie = new CookieModel(req);
     await controller(req, res);
 
-    // CookieModel instance created, can that be asserted
-    expect(res.render).to.have.been.calledWith('app/user/login/index', { cookie });
+    expect(res.render).to.have.been.calledWith('app/user/register/index', { cookie });
   });
 });

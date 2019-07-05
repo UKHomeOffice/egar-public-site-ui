@@ -1,20 +1,20 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
+
 const sinon = require('sinon');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
-const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenApi = require('../../../common/services/tokenApi');
-const token = require('../../../common/services/create-token');
 const userApi = require('../../../common/services/userManageApi');
 const emailService = require('../../../common/services/sendEmail');
-const validator = require('../../../common/utils/validator');
 
 const controller = require('../../../app/user/login/post.controller');
 
 describe('User Login Post Controller', () => {
-  let req, res;
+  let req; let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -35,8 +35,8 @@ describe('User Login Post Controller', () => {
             departureYear: 2019,
           },
         },
-        cookie: {}
-      }
+        cookie: {},
+      },
     };
 
     res = {
@@ -49,7 +49,7 @@ describe('User Login Post Controller', () => {
     sinon.restore();
   });
 
-  it('should fail validation on erroneous submit', async() => {
+  it('should fail validation on erroneous submit', async () => {
     const emptyRequest = {
       body: {
         Username: '',
@@ -57,26 +57,24 @@ describe('User Login Post Controller', () => {
       session: {
         cookie: {},
       },
-    }
+    };
     try {
       await controller(emptyRequest, res);
-    }
-    catch (err) {
+    } catch (err) {
       expect(err).to.eq('Validation error when logging in');
       expect(res.render).to.have.been.calledWith('app/user/login/index');
     }
   });
 
   describe('UserAPI rejects', () => {
-    it('should return the login page with error variable', async() => {
+    it('should return the login page with error variable', async () => {
       sinon.stub(userApi, 'userSearch').rejects('Example Reject');
-  
+
       try {
         await controller(req, res);
-      }
-      catch (err) {
-        expect(err).to.eq('Example Reject')
-        expect(res.render).to.have.been.calledWith('app/user/login/index', { errors: [{ message: 'There was a problem sending your code. Please try again.' }]});
+      } catch (err) {
+        expect(err).to.eq('Example Reject');
+        expect(res.render).to.have.been.calledWith('app/user/login/index', { errors: [{ message: 'There was a problem sending your code. Please try again.' }] });
       }
     });
   });
@@ -86,15 +84,16 @@ describe('User Login Post Controller', () => {
   describe('UserAPI resolves with no results', () => {
     it('should return an error message for an unexpected message', () => {
       const apiResponse = {
-        message: 'Unexpected message'
+        message: 'Unexpected message',
       };
       sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
-  
+
       // Promise chain, so controller call is wrapped into its own method
-      var callController = async() => {
+      const callController = async () => {
         await controller(req, res);
-      }
+      };
+
       callController().then(() => {
         expect(emailService.send).to.not.have.been.called;
         // TODO: Resolve -> Resolve -> Resolve
@@ -104,15 +103,16 @@ describe('User Login Post Controller', () => {
 
     it('should send en email and go to the MFA screen', () => {
       const apiResponse = {
-        message: 'No results found'
+        message: 'No results found',
       };
       sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
-  
+
       // Promise chain, so controller call is wrapped into its own method
-      var callController = async() => {
+      const callController = async () => {
         await controller(req, res);
-      }
+      };
+
       callController().then(() => {
         expect(emailService.send).to.have.been.called;
         // TODO: Resolve -> Resolve -> Resolve
@@ -121,22 +121,23 @@ describe('User Login Post Controller', () => {
     });
 
     it('should go to the MFA screen if email could not be sent', () => {
-        const apiResponse = {
-          message: 'No results found'
-        };
-        sinon.stub(emailService, 'send').rejects('Example Reject');
-        sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
-    
-        // Promise chain, so controller call is wrapped into its own method
-        var callController = async() => {
-          await controller(req, res);
-        }
-        callController().then(() => {
-          expect(emailService.send).to.have.been.called;
-          // TODO: Resolve -> Resolve -> Reject
-          // expect(res.redirect).to.have.been.calledWith('/login/authenticate');
-          expect(res.redirect).to.have.been.called;
-        });
+      const apiResponse = {
+        message: 'No results found',
+      };
+      sinon.stub(emailService, 'send').rejects('Example Reject');
+      sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
+
+      // Promise chain, so controller call is wrapped into its own method
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(emailService.send).to.have.been.called;
+        // TODO: Resolve -> Resolve -> Reject
+        // expect(res.redirect).to.have.been.calledWith('/login/authenticate');
+        expect(res.redirect).to.have.been.called;
+      });
     });
   });
 
@@ -153,11 +154,12 @@ describe('User Login Post Controller', () => {
       sinon.stub(tokenApi, 'setMfaToken').resolves();
       sinon.stub(emailService, 'send');
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
-  
+
       // Promise chain, so controller call is wrapped into its own method
-      var callController = async() => {
+      const callController = async () => {
         await controller(req, res);
-      }
+      };
+
       callController().then(() => {
         expect(emailService.send).to.not.have.been.called;
         expect(res.redirect).to.have.been.calledWith('app/user/login/index');
@@ -176,11 +178,12 @@ describe('User Login Post Controller', () => {
       sinon.stub(tokenApi, 'setMfaToken').rejects('Example Reject');
       sinon.stub(emailService, 'send');
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
-  
+
       // Promise chain, so controller call is wrapped into its own method
-      var callController = async() => {
+      const callController = async () => {
         await controller(req, res);
-      }
+      };
+
       callController().then(() => {
         expect(emailService.send).to.not.have.been.called;
         // TODO: Resolve -> Resolve -> Reject
@@ -200,13 +203,14 @@ describe('User Login Post Controller', () => {
         firstName: 'Darth',
       };
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
-  
+
       // Promise chain, so controller call is wrapped into its own method
-      var callController = async() => {
+      const callController = async () => {
         await controller(req, res);
-      }
+      };
+
       callController().then(() => {
-        expect(res.render).to.have.been.calledWith('app/user/login/index', { cookie: expectedCookie, unverified: true});
+        expect(res.render).to.have.been.calledWith('app/user/login/index', { cookie: expectedCookie, unverified: true });
       });
     });
   });
