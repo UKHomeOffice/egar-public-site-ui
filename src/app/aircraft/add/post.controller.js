@@ -15,7 +15,7 @@ module.exports = (req, res) => {
 
   // Define a validation chain for user registeration fields
   const craftRegChain = [
-    new ValidationRule(validator.notEmpty, 'craftreg', craftReg, 'Enter the registration deatils of the craft'),
+    new ValidationRule(validator.notEmpty, 'craftreg', craftReg, 'Enter the registration details of the craft'),
   ];
   const craftTypeChain = [
     new ValidationRule(validator.notEmpty, 'crafttype', craftType, 'Enter the craft type'),
@@ -41,7 +41,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Edit SavedCraft postcontroller - There was a problem with editing the saved craft');
-      logger.info(err);
+      logger.info(JSON.stringify(err));
       res.render('app/aircraft/add/index', { cookie, errors: err });
     });
 };

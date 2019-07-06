@@ -46,6 +46,7 @@ describe('User Login Post Controller', () => {
   });
 
   afterEach(() => {
+    sinon.reset();
     sinon.restore();
   });
 
@@ -115,8 +116,6 @@ describe('User Login Post Controller', () => {
 
       callController().then(() => {
         expect(emailService.send).to.have.been.called;
-        // TODO: Resolve -> Resolve -> Resolve
-        // expect(res.redirect).to.have.been.calledWith('/login/authenticate');
       }).then(() => {
         expect(res.redirect).to.have.been.calledWith('/login/authenticate');
       });
@@ -136,9 +135,12 @@ describe('User Login Post Controller', () => {
 
       callController().then(() => {
         expect(emailService.send).to.have.been.called;
+        expect(res.redirect).to.not.have.been.called;
       }).then(() => {
-        // The emailService rejects the Promise
-      }).catch(() => {
+        expect(emailService.send).to.have.been.called;
+        expect(res.redirect).to.not.have.been.called;
+      }).then(() => {
+        expect(emailService.send).to.have.been.called;
         expect(res.redirect).to.have.been.calledWith('/login/authenticate');
       });
     });
@@ -193,9 +195,11 @@ describe('User Login Post Controller', () => {
 
       callController().then(() => {
         expect(emailService.send).to.not.have.been.called;
+        expect(res.render).to.not.have.been.called;
       }).then(() => {
-        // The tokenApi rejects the Promise
-      }).catch(() => {
+        expect(emailService.send).to.not.have.been.called;
+        expect(res.render).to.not.have.been.called;
+      }).then(() => {
         expect(emailService.send).to.not.have.been.called;
         expect(res.render).to.have.been.calledWith('app/user/login/index');
       });

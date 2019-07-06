@@ -9,7 +9,7 @@ const getApp = require('../../../server').getApp;
 /**
  * N.B. NOTIFY_API_KEY needs to be set, as a NotifyClient instance is
  * created during this test.
- * 
+ *
  * TODO: Mock the NotifyClient...?
  * TODO: Branch condition is the presence of req.session, need to remove it
  */

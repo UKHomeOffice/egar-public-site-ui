@@ -1,19 +1,22 @@
 /* eslint-disable no-undef */
+
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
-const controller = require('../../app/welcome/get.controller');
+const controller = require('../../app/cookie/get.controller');
 
-describe('Welcome Get Controller', () => {
+describe('Cookie Get Controller', () => {
   let req; let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
 
     // Example request and response objects with appropriate spies
-    req = {};
+    req = {
+      session: {},
+    };
     res = {
       render: sinon.spy(),
     };
@@ -23,9 +26,9 @@ describe('Welcome Get Controller', () => {
     sinon.restore();
   });
 
-  it('should render the welcome page', async () => {
+  it('should render the appropriate page', async () => {
     await controller(req, res);
 
-    expect(res.render).to.have.been.calledWith('app/welcome/index');
+    expect(res.render).to.have.been.calledWith('app/cookie/index');
   });
 });

@@ -1,4 +1,7 @@
-const expect = require('chai').expect;
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
+
+const { expect } = require('chai');
 
 const index = require('../../../app/garfile/departure/index');
 

@@ -1,7 +1,7 @@
 const countries = require('i18n-iso-countries');
 const en = require('i18n-iso-countries/langs/en.json');
 const logger = require('./logger')(__filename);
-const airportList = require('./airport_codes.json');
+const airportList = require('./airport_codes_v2.json');
 /**
  * Utility function for generating the list of country codes in a format for this app.
  * This essentially means taking the more normally used alpha-2 (GB) code and country
