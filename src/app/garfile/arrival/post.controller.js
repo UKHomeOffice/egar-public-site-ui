@@ -131,7 +131,7 @@ module.exports = async (req, res) => {
     })
     .catch((err) => {
       logger.info('Validation failed');
-      logger.info(err);
+      logger.info(JSON.stringify(err));
       res.render('app/garfile/arrival/index', {
         cookie,
         errors: err,
