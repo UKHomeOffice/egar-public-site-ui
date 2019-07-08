@@ -17,7 +17,7 @@ module.exports = (req, res) => {
     new ValidationRule(validator.notEmpty, 'firstname', firstName, 'Enter your given name'),
   ];
   const lnameChain = [
-    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your surname name'),
+    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your surname'),
   ];
 
   validator.validateChains([firstNameChain, lnameChain])
@@ -41,7 +41,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error('Validation failed');
-      logger.error(err);
+      logger.error(JSON.stringify(err));
       res.render('app/user/manageuserdetail/index', { cookie, errors: err });
     });
 };
