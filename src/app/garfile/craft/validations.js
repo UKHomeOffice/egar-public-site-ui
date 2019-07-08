@@ -6,13 +6,13 @@ const { MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
 /**
  * Create a list of Validation Rules for Aircraft page
  *
- * @param craftObj { registration: string, craftType: string, craftBase: string }
- * @return Array of ValidationsRules
+ * @param {Object} craftObj { registration: string, craftType: string, craftBase: string }
+ * @return {Array} Array of ValidationsRules
  */
 module.exports.validations = (craftObj) => {
-  const { registration } = craftObj.registraion;
-  const { craftType } = craftObj.craftType;
-  const { craftBase } = craftObj.craftBase;
+  const { registration } = craftObj;
+  const { craftType } = craftObj;
+  const { craftBase } = craftObj;
 
   return [
     [

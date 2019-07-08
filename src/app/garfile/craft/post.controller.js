@@ -38,7 +38,7 @@ module.exports = (req, res) => {
 
     validator.validateChains(validations)
       .then(() => {
-        garApi.patch(cookie.getGarId(), cookie.getGarStatus(), craft)
+        garApi.patch(cookie.getGarId(), cookie.getGarStatus(), craftObj)
           .then((apiResponse) => {
             const parsedResponse = JSON.parse(apiResponse);
             if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -47,7 +47,7 @@ module.exports = (req, res) => {
               res.render('app/garfile/craft/index', { cookie, errors: [parsedResponse] });
             } else {
               // Successful
-              cookie.setGarCraft(craft.registration, craft.craftType, craft.craftBase);
+              cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase);
               return buttonClicked === 'Save and continue' ? res.redirect('/garfile/manifest') : res.redirect('/home');
             }
           })
