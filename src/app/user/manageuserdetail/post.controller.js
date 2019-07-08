@@ -3,7 +3,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const userApi = require('../../../common/services/userManageApi');
-
+const { MAX_STRING_LENGTH } = require('../../../common/config/index');
 
 module.exports = (req, res) => {
   const firstName = req.body.Firstname;
@@ -15,10 +15,11 @@ module.exports = (req, res) => {
   // Define a validation chain for user registeration fields
   const firstNameChain = [
     new ValidationRule(validator.notEmpty, 'firstname', firstName, 'Enter your given name'),
+    new ValidationRule(validator.isValidStringLength, 'firstname', firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
   ];
   const lnameChain = [
     new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your surname name'),
-    new ValidationRule(validator.isValidStringLength, 'lastname', lastname, `Surname exceeded the limit of ${validator.validationSettings.MAX_STRING_LENGTH} characters`)
+    new ValidationRule(validator.isValidStringLength, 'lastname', lastName, `Surname must be ${MAX_STRING_LENGTH} characters or less`),
   ];
 
   validator.validateChains([firstNameChain, lnameChain])
