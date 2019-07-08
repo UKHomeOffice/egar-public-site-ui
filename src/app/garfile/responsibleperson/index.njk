@@ -43,7 +43,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
             data-valmsg-replace="true" style="display:block">
           </span>
           <input class="govuk-input"
-            id="responsibleGivenName" name="responsibleGivenName"  type="text"
+            id="responsibleGivenName" name="responsibleGivenName"  type="text" maxlength="{{ MAX_STRING_LENGTH }}"
             value="{{cookie.getGarResponsiblePerson().responsibleGivenName}}" />
         </div>
 

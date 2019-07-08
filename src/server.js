@@ -208,10 +208,11 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_EMAIL_LENGTH', config.MAX_EMAIL_LENGTH);
+  nunjucksEnvironment.addGlobal('MAX_ADDRESS_LINE_LENGTH', config.MAX_ADDRESS_LINE_LENGTH);
 }
 
 function initialisePublic(app) {
-  app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')))
+  app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')));
   app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));

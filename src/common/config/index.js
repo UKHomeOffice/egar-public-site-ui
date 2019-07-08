@@ -38,6 +38,7 @@ exports.COOKIE_SECURE_FLAG = process.env.COOKIE_SECURE_FLAG || 'false';
 exports.MAX_STRING_LENGTH = 35;
 exports.MAX_REGISTRATION_LENGTH = 15;
 exports.MAX_EMAIL_LENGTH = 150;
+exports.MAX_ADDRESS_LINE_LENGTH = 250;
 
 // ClamAv settings
 exports.CLAMAV_BASE = process.env.CLAMAV_BASE;
