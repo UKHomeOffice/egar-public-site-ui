@@ -29,11 +29,14 @@ module.exports = async (req, res) => {
       const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
       const alphabetToken = nanoid(alphabet, 13);
       const hashtoken = tokenService.generateHash(alphabetToken);
+      // TODO: A Promise.all should wrap these two asynchronous calls to ensure
+      // both the new token and email are sent otherwise users will not know if
+      // an issue has arisen
       tokenApi.updateToken(hashtoken, parsedResponse.userId);
       sendTokenService.send(
         parsedResponse.firstName,
         parsedResponse.email,
-        token,
+        alphabetToken,
       );
       message = i18n.__('verify_user_account_token_expired');
     }
@@ -42,6 +45,7 @@ module.exports = async (req, res) => {
     }
     return res.render('app/verify/registeruser/index', { message });
   } catch (err) {
+    logger.error('Error during user verification');
     logger.error(err);
     return res.render('app/verify/registeruser/index');
   }
