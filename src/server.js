@@ -207,6 +207,7 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
   nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
+  nunjucksEnvironment.addGlobal('MAX_EMAIL_LENGTH', config.MAX_EMAIL_LENGTH);
 }
 
 function initialisePublic(app) {

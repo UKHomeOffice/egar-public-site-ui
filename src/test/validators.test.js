@@ -312,17 +312,39 @@ describe('Validator', () => {
 
   it('Should return false when a file with an invalid mimetype is provided', () => {
     expect(validator.isValidFileMime('png', 'application/txt')).to.be.false;
-  })
+  });
 
   it('Shoud return true when string is less than or equal to MAX_STRING_LENGTH', () => {
-    const testValue = 'Tom';
-    expect(validator.isValidStringLength(testValue)).to.be.true;
-  })
+    const thirtyfive = 'AAAAAaaaa BBBBBbbbb CCCCCccccc';
+    expect(validator.isValidStringLength(thirtyfive)).to.be.true;
+  });
 
   it('Should return false when string is longer than MAX_STRING_LENGTH', () => {
-    const testValue = 'AAAAAaaaaa BBBBBbbbbb CCCCCccccc DDDDDddddd';
-    expect(validator.isValidStringLength(testValue)).to.be.false;
-  })
+    const thirtysix = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDd';
+    expect(validator.isValidStringLength(thirtysix)).to.be.false;
+  });
+
+  it('Should return true when registration is less than or equal to MAX_REGISTRATION_LENGTH', () => {
+    const fifteen = 'AAAAAaaaa BBBBB';
+    expect(validator.isValidRegistrationLength(fifteen)).to.be.true;
+  });
+
+  it('Should return false when registration is longer than MAX_REGISTRATION_LENGTH', () => {
+    const sixteen = 'AAAAAaaaa BBBBBb';
+    expect(validator.isValidRegistrationLength(sixteen)).to.be.false;
+  });
+
+  it('Should return true when email is less than or equal to MAX_EMAIL_LENGTH', () => {
+    const fifty = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDdddd EEEEEeeee ';
+    const onehundredfifty = fifty.repeat(3);
+    expect(validator.isValidEmailLength(onehundredfifty)).to.be.true;
+  });
+
+  it('Should return false when email is longer than MAX_EMAIL_LENGTH', () => {
+    const fifty = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDdddd EEEEEeeee ';
+    const onehundredfifty = fifty.repeat(3);
+    const onehundredfiftyone = `${onehundredfifty}A`;
+    expect(validator.isValidEmailLength(onehundredfiftyone)).to.be.false;
   });
 
   describe('Departure and Arrival Dates', () => {

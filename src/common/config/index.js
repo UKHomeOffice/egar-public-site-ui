@@ -37,6 +37,7 @@ exports.COOKIE_SECURE_FLAG = process.env.COOKIE_SECURE_FLAG || 'false';
 // Application form validation settings
 exports.MAX_STRING_LENGTH = 35;
 exports.MAX_REGISTRATION_LENGTH = 15;
+exports.MAX_EMAIL_LENGTH = 150;
 
 // ClamAv settings
 exports.CLAMAV_BASE = process.env.CLAMAV_BASE;

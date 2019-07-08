@@ -2,8 +2,9 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const MAX_STRING_LENGTH = require('../config/index').MAX_STRING_LENGTH;
-const MAX_REGISTRATION_LENGTH = require('../config/index').MAX_REGISTRATION_LENGTH;
+const { MAX_STRING_LENGTH } = require('../config/index');
+const { MAX_REGISTRATION_LENGTH } = require('../config/index');
+const { MAX_EMAIL_LENGTH } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
@@ -306,7 +307,7 @@ function isValidFileMime(fileName, mimeType) {
     jpeg: ['image/jpeg', 'image/x-citrix-jpeg'],
     png: ['image/png', 'image/x-citrix-png', 'image/x-png'],
     pdf: ['application/pdf'],
-    gif: ['image/gif']
+    gif: ['image/gif'],
   };
   const fileExtension = fileName.split('.').slice(-1).pop();
   if (fileTypeObj[fileExtension]) {
@@ -326,6 +327,15 @@ function isValidStringLength(value) {
 
 function isValidRegistrationLength(value) {
   return value.length <= MAX_REGISTRATION_LENGTH;
+}
+
+/**
+ * Check if string lenght is within the limit
+ * @param  {String} value
+ * @return {Bool}
+ */
+function isValidEmailLength(value) {
+  return value.length <= MAX_EMAIL_LENGTH;
 }
 
 /**
@@ -378,6 +388,7 @@ module.exports = {
   notSameValues,
   isValidFileMime,
   isValidStringLength,
+  isValidEmailLength,
   isValidRegistrationLength,
   isValidDepAndArrDate,
   handleResponseError,
