@@ -49,21 +49,21 @@
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="dobDay">{{ __('field_date_day') }}</label>
             <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobDay" name="dobDay" type="number" pattern="[0-9]*"
-            maxlength="2" value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}">
+            min="01" max="31" value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label" for="dobMonth">{{ __('field_date_month') }}</label>
             <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobMonth" name="dobMonth" type="number" pattern="[0-9]*"
-            maxlength="2" value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}">
+            min="01" max="12" value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label" for="dobYear">{{ __('field_date_year') }}</label>
             <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="dobYear" name="dobYear" type="number" pattern="[0-9]*"
-            maxlength="4" value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}">
+            min="1900" max="2200" value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}">
           </div>
         </div>
       </div>
@@ -136,21 +136,21 @@
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryDay">{{ __('field_date_day') }}</label>
             <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay" type="number" pattern="[0-9]*"
-            maxlength="2" value="{{ cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay'] }}">
+            min="01" max="31" value="{{ cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay'] }}">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryMonth">{{ __('field_date_month') }}</label>
             <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth" type="number" pattern="[0-9]*"
-            maxlength="2" value="{{ cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}">
+            min="01" max="12" value="{{ cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryYear">{{ __('field_date_year') }}</label>
             <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="expiryYear" name="expiryYear" type="number" pattern="[0-9]*"
-            maxlength="4" value="{{ cookie.dateSlice('year', person.documentExpiryDate) or req.body['expiryYear'] }}">
+            min="1900" max="2200" value="{{ cookie.dateSlice('year', person.documentExpiryDate) or req.body['expiryYear'] }}">
           </div>
         </div>
       </div>

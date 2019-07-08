@@ -33,14 +33,16 @@
            <label class="govuk-label govuk-label--m" for="userFname">{{ __('field_given_name') }}</label>
            {{ m.error_message('userFname', errors) }}
            <input autocomplete="off" class="govuk-input"
-            data-val="true" data-val-required="The given name field is  required." id="userFname" name="userFname" style="width:100%" type="text" value="{{cookie.getUserFirstName()}}" >
+            data-val="true" data-val-required="The given name field is  required." id="userFname" name="userFname" style="width:100%"
+            type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{cookie.getUserFirstName()}}" >
          </div>
 
          <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }}">
            <label class="govuk-label govuk-label--m" for="userLname">{{ __('field_surname') }}</label>
            {{ m.error_message('userLname', errors) }}
            <input autocomplete="off" class="govuk-input"
-            data-val="true" data-val-required="The surname field is  required." id="userLname" name="userLname" style="width:100%" type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{cookie.getUserLastName()}}" />
+            data-val="true" data-val-required="The surname field is  required." id="userLname" name="userLname" style="width:100%"
+            type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{cookie.getUserLastName()}}" />
          </div>
 
          <div class="govuk-form-group {{ m.form_group_class('userId', errors) }}">
@@ -50,14 +52,16 @@
              You will use this to sign in to the Submit a GAR service
            </span>
            <input autocomplete="off" class="govuk-input"
-            data-val="true" data-val-required="The e-mail address field is  required." id="userId" name="userId" style="width:100%" type="text" value="{{cookie.getUserEmail()}}" />
+            data-val="true" data-val-required="The e-mail address field is  required." id="userId" name="userId" style="width:100%"
+            type="text" maxlength="{{ MAX_EMAIL_LENGTH }}" value="{{cookie.getUserEmail()}}" />
          </div>
 
          <div class="govuk-form-group {{ m.form_group_class('cUserId', errors) }}">
            <label class="govuk-label govuk-label--m" for="cUserId">Confirm email address</label>
            {{ m.error_message('cUserId', errors) }}
            <input autocomplete="off" class="govuk-input"
-            data-val="true" data-val-required="The e-mail address field is  required." id="cUserId" name="cUserId" style="width:100%" type="text" value="{{req.body.cUserId}}" />
+            data-val="true" data-val-required="The e-mail address field is  required." id="cUserId" name="cUserId" style="width:100%"
+            type="text" maxlength="{{ MAX_EMAIL_LENGTH }}" value="{{req.body.cUserId}}" />
          </div>
 
         <h2 class="govuk-heading-s">Declaration</h2>
