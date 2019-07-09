@@ -5,8 +5,9 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-
+const i18n = require('i18n');
 const XLSX = require('xlsx');
+
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const createGarApi = require('../../../common/services/createGarApi.js');
@@ -49,6 +50,24 @@ describe('API upload GAR post controller', () => {
       redirect: sinon.stub(),
       render: sinon.stub(),
     };
+
+    sinon.stub(i18n, '__').callsFake((key) => {
+      if (key.phrase) {
+        if (key.phrase === 'upload_gar_file_header' && key.locale === 'en') {
+          return 'GENERAL AVIATION REPORT (GAR) -  January 2015';
+        }
+      }
+      switch (key) {
+        case 'validation_api_uploadgar_no_file':
+          return 'Provide a file';
+        case 'validation_api_uploadgar_incorrect_type':
+          return 'Incorrect file type';
+        case 'validation_api_uploadgar_incorrect_gar_file':
+          return 'Incorrect xls or xlsx file';
+        default:
+          return 'Unexpected Key';
+      }
+    });
   });
 
   afterEach(() => {
@@ -124,7 +143,7 @@ describe('API upload GAR post controller', () => {
   });
 
   describe('validations', () => {
-    it('return message if on thing invalid', async () => {
+    it('return message if one thing invalid', async () => {
       const data = getInvalidWorkbook();
       data.Sheets.Sheet1.C9.v = 'USA';
       data.Sheets.Sheet1.J9.v = 'USA';
@@ -169,7 +188,6 @@ describe('API upload GAR post controller', () => {
   });
 
   describe('api calls', () => {
-    // TODO: Code does not do anything explicitly when createGarApi rejects
     it('should return when createGarApi rejects', () => {
       const data = getValidWorkbook();
 
@@ -182,11 +200,12 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      // TODO: CODE DOES NOT HANDLE THE REJECT!!!
-      callController().then(() => {
+      callController().then().then(() => {
         expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
         expect(req.session.save).to.not.have.been.called;
-        expect(garApi).to.not.have.been.called;
+        expect(req.session.failureMsg).to.eq('Failed to create GAR. Try again');
+        expect(req.session.failureIdentifier).to.eq('file');
+        expect(res.redirect).to.have.been.calledWith('garfile/garupload');
       });
     });
 

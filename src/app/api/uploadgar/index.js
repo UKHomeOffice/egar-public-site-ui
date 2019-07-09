@@ -4,19 +4,18 @@ const paths = {
 };
 
 const express = require('express');
+const multer = require('multer');
+const bodyParser = require('body-parser');
+const csrf = require('csurf');
+
+const csrfProtection = csrf({ cookie: true });
+const postController = require('./post.controller');
 
 const app = express();
 const router = express.Router();
-const multer = require('multer');
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const bodyParser = require('body-parser');
-const csrf = require('csurf');
-const logger = require('../../../common/utils/logger')(__filename);
-
-const csrfProtection = csrf({ cookie: true });
-const parseForm = bodyParser.urlencoded({ extended: false });
-const postController = require('./post.controller');
 
 app.use(bodyParser.json());
 
@@ -27,7 +26,4 @@ router.get('/uploadgar', (req, res) => {
 
 router.post('/uploadgar', upload.single('file'), postController);
 
-module.exports = {
-  router,
-  paths,
-};
+module.exports = { router, paths };
