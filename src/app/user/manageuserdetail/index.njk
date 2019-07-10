@@ -55,7 +55,7 @@
             data-valmsg-replace="true" style="display:block">
           </span>
           <input autocomplete="off" class="govuk-input"
-            data-val="true" data-val-required="Surname is required." id="lastname" name="Lastname" style="width:100%" type="text" value="{{cookie.getUserLastName()}}" />
+            data-val="true" data-val-required="Surname is required." id="lastname" name="Lastname" style="width:100%" type="text" maxlength="{{ MAX_STRING_LENGTH}}" value="{{cookie.getUserLastName()}}" />
         </div>
 
 

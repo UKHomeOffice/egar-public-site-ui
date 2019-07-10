@@ -10,7 +10,9 @@ const tokenApi = require('../../../common/services/tokenApi');
 const whitelist = require('../../../common/services/whiteList');
 const config = require('../../../common/config');
 
-const regFailureError = { message: 'Registration failed, try again' };
+const regFailureError = {
+  message: 'Registration failed, try again',
+};
 
 // Define a validation chain for user registration fields
 const createValidationChains = (fname, lname, usrname, cusrname) => {
@@ -115,7 +117,10 @@ module.exports = (req, res) => {
           .catch((err) => {
             logger.error('Failed to check against whitelist');
             logger.error(err);
-            res.render('app/user/register/index', { cookie, errors: [regFailureError] });
+            res.render('app/user/register/index', {
+              cookie,
+              errors: [regFailureError],
+            });
           });
       } else {
         createUser(req, res, cookie);
@@ -124,6 +129,9 @@ module.exports = (req, res) => {
     .catch((err) => {
       logger.info('Failed registration validations');
       logger.info(err);
-      res.render('app/user/register/index', { cookie, errors: err });
+      res.render('app/user/register/index', {
+        cookie,
+        errors: err,
+      });
     });
 };

@@ -3,6 +3,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const craftApi = require('../../../common/services/craftApi');
+const validationList = require('./validations');
 
 module.exports = (req, res) => {
   logger.debug('In garfile / craft post controller');
@@ -23,32 +24,21 @@ module.exports = (req, res) => {
         res.redirect('/garfile/craft');
       });
   } else {
-    const craft = {
+    const craftObj = {
       registration: req.body.craftReg,
       craftType: req.body.craftType,
       craftBase: req.body.craftBase,
     };
 
-    // Define not empty validation params
-    const validationIds = ['craftReg', 'craftType', 'craftBase'];
-    const validationValues = [req.body.craftReg, req.body.craftType, req.body.craftBase];
-    const validationMsgs = [
-      'Enter a registration',
-      'Enter a type',
-      'Enter an aircraft home port / location',
-    ];
-
     const { buttonClicked } = req.body;
 
-    cookie.setGarCraft(
-      craft.registration,
-      craft.craftType,
-      craft.craftBase,
-    );
+    cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase);
 
-    validator.validateChains(validator.genValidations(validator.notEmpty, validationIds, validationValues, validationMsgs))
+    const validations = validationList.validations(craftObj);
+
+    validator.validateChains(validations)
       .then(() => {
-        garApi.patch(cookie.getGarId(), cookie.getGarStatus(), craft)
+        garApi.patch(cookie.getGarId(), cookie.getGarStatus(), craftObj)
           .then((apiResponse) => {
             const parsedResponse = JSON.parse(apiResponse);
             if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -57,7 +47,7 @@ module.exports = (req, res) => {
               res.render('app/garfile/craft/index', { cookie, errors: [parsedResponse] });
             } else {
               // Successful
-              cookie.setGarCraft(craft.registration, craft.craftType, craft.craftBase);
+              cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase);
               return buttonClicked === 'Save and continue' ? res.redirect('/garfile/manifest') : res.redirect('/home');
             }
           })
@@ -70,7 +60,6 @@ module.exports = (req, res) => {
       .catch((err) => {
         logger.info('Validation failed');
         logger.info(err);
-
         res.render('app/garfile/craft/index', { cookie, errors: err });
       });
   }

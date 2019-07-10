@@ -34,6 +34,12 @@ exports.BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 exports.SESSION_TIMEOUT = process.env.SESSION_TIMEOUT || '3600000';
 exports.COOKIE_SECURE_FLAG = process.env.COOKIE_SECURE_FLAG || 'false';
 
+// Application form validation settings
+exports.MAX_STRING_LENGTH = 35;
+exports.MAX_REGISTRATION_LENGTH = 15;
+exports.MAX_EMAIL_LENGTH = 150;
+exports.MAX_ADDRESS_LINE_LENGTH = 250;
+
 // ClamAv settings
 exports.CLAMAV_BASE = process.env.CLAMAV_BASE;
 exports.CLAMAV_PORT = process.env.CLAMAV_PORT;
