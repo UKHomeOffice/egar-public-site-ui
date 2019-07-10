@@ -64,6 +64,8 @@
     "field_file": "Select a file",
     "form_upload_and_continue": "Upload and continue",
     "upload_gar_file_header": "GENERAL AVIATION REPORT (GAR) -  January 2015",
+    "validation_api_uploadgar_people_type_crew": "crew member",
+    "validation_api_uploadgar_people_type_passenger": "passenger",
     "validation_api_uploadgar_person_type_person_name": "{{peopleType}} {{firstName}} {{lastName}}",
     "validation_api_uploadgar_no_file": "Provide a file",
 	"validation_api_uploadgar_incorrect_type": "Incorrect file type",

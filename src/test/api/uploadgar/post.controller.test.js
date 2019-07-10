@@ -51,19 +51,25 @@ describe('API upload GAR post controller', () => {
       render: sinon.stub(),
     };
 
-    sinon.stub(i18n, '__').callsFake((key) => {
+    sinon.stub(i18n, '__').callsFake((key, params) => {
       if (key.phrase) {
         if (key.phrase === 'upload_gar_file_header' && key.locale === 'en') {
           return 'GENERAL AVIATION REPORT (GAR) -  January 2015';
         }
       }
       switch (key) {
+        case 'validation_api_uploadgar_person_type_person_name':
+          return `${params.peopleType} ${params.firstName} ${params.lastName}`;
         case 'validation_api_uploadgar_no_file':
           return 'Provide a file';
         case 'validation_api_uploadgar_incorrect_type':
           return 'Incorrect file type';
         case 'validation_api_uploadgar_incorrect_gar_file':
           return 'Incorrect xls or xlsx file';
+        case 'validation_api_uploadgar_people_type_crew':
+          return 'crew member';
+        case 'validation_api_uploadgar_people_type_passenger':
+          return 'passenger';
         default:
           return 'Unexpected Key';
       }
@@ -159,7 +165,7 @@ describe('API upload GAR post controller', () => {
 
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
-        expect(req.session.failureMsg).to.eql([new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid gender for James Kirk')]);
+        expect(req.session.failureMsg).to.eql([new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid gender for crew member James Kirk')]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
     });
@@ -175,12 +181,12 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.validISOCountryLength, '', 'ISSUING STATE', 'Enter a valid document issuing state for James Kirk. Must be a ISO 3166 country code'),
-          new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid gender for James Kirk'),
-          new ValidationRule(validator.validISOCountryLength, '', 'NATIONALITY', 'Enter a valid nationality for James Kirk. Must be a ISO 3166 country code'),
-          new ValidationRule(validator.validISOCountryLength, '', 'ISSUING STATE', 'Enter a valid document issuing state for Pavel Chekov. Must be a ISO 3166 country code'),
-          new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid gender for Pavel Chekov'),
-          new ValidationRule(validator.validISOCountryLength, '', 'NATIONALITY', 'Enter a valid nationality for Pavel Chekov. Must be a ISO 3166 country code'),
+          new ValidationRule(validator.validISOCountryLength, '', 'ISSUING STATE', 'Enter a valid document issuing state for crew member James Kirk. Must be a ISO 3166 country code'),
+          new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid gender for crew member James Kirk'),
+          new ValidationRule(validator.validISOCountryLength, '', 'NATIONALITY', 'Enter a valid nationality for crew member James Kirk. Must be a ISO 3166 country code'),
+          new ValidationRule(validator.validISOCountryLength, '', 'ISSUING STATE', 'Enter a valid document issuing state for passenger Pavel Chekov. Must be a ISO 3166 country code'),
+          new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid gender for passenger Pavel Chekov'),
+          new ValidationRule(validator.validISOCountryLength, '', 'NATIONALITY', 'Enter a valid nationality for passenger Pavel Chekov. Must be a ISO 3166 country code'),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
