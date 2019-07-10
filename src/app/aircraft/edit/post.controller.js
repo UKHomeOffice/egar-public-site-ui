@@ -16,7 +16,6 @@ module.exports = (req, res) => {
 
   cookie.updateEditCraft(craftReg, craftType, craftBase);
 
-
   // Define a validation chain for user registeration fields
   const craftRegChain = [
     new ValidationRule(validator.notEmpty, 'craftReg', craftReg, 'Enter the registration deatils of the craft'),
@@ -43,11 +42,15 @@ module.exports = (req, res) => {
             // API returned successful
             res.redirect('/aircraft');
           }
+        }).catch((err) => {
+          logger.error('Unexpected error updating aircraft');
+          logger.error(err);
+          res.render('app/aircraft/edit/index', { cookie, errors: [{ message: 'An error has occurred. Try again later' }] });
         });
     })
     .catch((err) => {
       logger.info('Edit SavedCraft postcontroller - There was a problem with editing the saved craft');
-      logger.info(err);
+      logger.info(JSON.stringify(err));
       res.render('app/aircraft/edit/index', { cookie, errors: err });
     });
 };

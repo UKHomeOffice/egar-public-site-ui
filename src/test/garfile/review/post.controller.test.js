@@ -16,7 +16,7 @@ const { Manifest } = require('../../../common/models/Manifest.class');
 
 const controller = require('../../../app/garfile/review/post.controller');
 
-describe('Arrival Post Controller', () => {
+describe('GAR Review Post Controller', () => {
   let req; let res;
   let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub; let garApiPatchStub;
   let sessionSaveStub;

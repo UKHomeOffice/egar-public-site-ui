@@ -14,7 +14,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 
 const controller = require('../../../app/garfile/review/get.controller');
 
-describe('Arrival Post Controller', () => {
+describe('GAR Review Get Controller', () => {
   let req; let res;
   let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub;
 
