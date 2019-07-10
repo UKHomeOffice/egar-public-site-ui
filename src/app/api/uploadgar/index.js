@@ -6,9 +6,10 @@ const paths = {
 const express = require('express');
 const multer = require('multer');
 const bodyParser = require('body-parser');
-const csrf = require('csurf');
 
-const csrfProtection = csrf({ cookie: true });
+const usercheck = require('../../../common/middleware/usercheck');
+const csrfcheck = require('../../../common/middleware/csrfcheck');
+
 const postController = require('./post.controller');
 
 const app = express();
@@ -24,6 +25,6 @@ router.get('/uploadgar', (req, res) => {
   res.json({ message: 'welcome to our upload module apis' });
 });
 
-router.post('/uploadgar', upload.single('file'), postController);
+router.post('/uploadgar', upload.single('file'), usercheck, csrfcheck, postController);
 
 module.exports = { router, paths };

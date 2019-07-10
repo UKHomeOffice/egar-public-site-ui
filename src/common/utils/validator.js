@@ -194,6 +194,13 @@ function passwordMinLength(value) {
   return true;
 }
 
+const nameMaxLength = (value) => {
+  if (value.length > 35) {
+    return false;
+  }
+  return true;
+};
+
 function confirmPassword(value1, value2) {
   if (value1 === value2) {
     return true;
@@ -340,6 +347,7 @@ module.exports = {
   passwordCheck,
   passwordValidCharacters,
   passwordMinLength,
+  nameMaxLength,
   confirmPassword,
   valuetrue,
   isNumeric,
