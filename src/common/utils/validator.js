@@ -2,6 +2,9 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
+const { MAX_STRING_LENGTH } = require('../config/index');
+const { MAX_REGISTRATION_LENGTH } = require('../config/index');
+const { MAX_EMAIL_LENGTH } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
@@ -194,13 +197,6 @@ function passwordMinLength(value) {
   return true;
 }
 
-const nameMaxLength = (value) => {
-  if (value.length > 35) {
-    return false;
-  }
-  return true;
-};
-
 function confirmPassword(value1, value2) {
   if (value1 === value2) {
     return true;
@@ -323,8 +319,29 @@ function isValidFileMime(fileName, mimeType) {
 }
 
 /**
+ * Check if the string length is within the limit. Default limit is 35 characters.
+ * @param {String} value
+ * @return {Bool}
+ */
+function isValidStringLength(value) {
+  return value.length <= MAX_STRING_LENGTH;
+}
+
+function isValidRegistrationLength(value) {
+  return value.length <= MAX_REGISTRATION_LENGTH;
+}
+
+/**
+ * Check if string lenght is within the limit
+ * @param  {String} value
+ * @return {Bool}
+ */
+function isValidEmailLength(value) {
+  return value.length <= MAX_EMAIL_LENGTH;
+}
+
+/**
  * Verify that Arrival Date is greater than or equal to Departure Date
- *
  * @param {Object} voyageDateObject { depatureDate: 'yyyy-MM-dd', arrivalDate: 'yyyy-MM-dd' }
  * @returns {Bool}
  */
@@ -373,6 +390,9 @@ module.exports = {
   validIntlPhone,
   notSameValues,
   isValidFileMime,
+  isValidStringLength,
+  isValidEmailLength,
+  isValidRegistrationLength,
   isValidDepAndArrDate,
   handleResponseError,
 };

@@ -81,7 +81,7 @@
           data-valmsg-replace="true" style="display:block">
         </span>
         <input class="govuk-input"
-          id="craftReg" name="craftReg" style="width:100%" type="text"
+          id="craftReg" name="craftReg" style="width:100%" type="text" maxlength="{{ MAX_REGISTRATION_LENGTH }}"
           value="{{cookie.getGarCraft().registration}}" />
   </div>
 
@@ -97,7 +97,7 @@
         data-valmsg-replace="true" style="display:block">
       </span>
       <input class="govuk-input"
-        id="craftType" name="craftType" style="width:100%" type="text"
+        id="craftType" name="craftType" style="width:100%" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
         value="{{cookie.getGarCraft().craftType}}" />
     </div>
 

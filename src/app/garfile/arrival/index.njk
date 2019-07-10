@@ -50,7 +50,7 @@
                     Day
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalDay"
-                  name="arrivalDay" type="text" pattern="[0-9]*" maxlength="2"
+                  name="arrivalDay" type="number" pattern="[0-9]*" min="1" max="31"
                   value="{{cookie.dateSlice('day', cookie.getGarArrivalVoyage().arrivalDate)}}">
                 </div>
               </div>
@@ -61,7 +61,7 @@
                     Month
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMonth"
-                  name="arrivalMonth" type="text" pattern="[0-9]*" maxlength="2"
+                  name="arrivalMonth" type="number" pattern="[0-9]*" min="1" max="12"
                   value="{{cookie.dateSlice('month', cookie.getGarArrivalVoyage().arrivalDate)}}">
                   </div>
                 </div>
@@ -72,7 +72,7 @@
                       Year
                     </label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalYear"
-                    name="arrivalYear" type="text" pattern="[0-9]*" maxlength="4"
+                    name="arrivalYear" type="number" pattern="[0-9]*" min="1900" max="2200";
                     value="{{cookie.dateSlice('year', cookie.getGarArrivalVoyage().arrivalDate)}}">
                   </div>
                 </div>
@@ -100,7 +100,7 @@
                     Hour
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalHour"
-                  name="arrivalHour" type="text" pattern="[0-9]*" maxlength="2"
+                  name="arrivalHour" type="number" pattern="[0-9]*" min="0" max="23"
                   value="{{cookie.timeSlice('hour', cookie.getGarArrivalVoyage().arrivalTime)}}">
                 </div>
               </div>
@@ -111,7 +111,7 @@
                       Minute
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMinute"
-                  name="arrivalMinute" type="text" pattern="[0-9]*" maxlength="2"
+                  name="arrivalMinute" type="number" pattern="[0-9]*" min="0" max="59"
                   value="{{cookie.timeSlice('minute', cookie.getGarArrivalVoyage().arrivalTime)}}">
                 </div>
               </div>
