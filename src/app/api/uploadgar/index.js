@@ -20,11 +20,6 @@ const upload = multer({ storage });
 
 app.use(bodyParser.json());
 
-// TODO: Delete this?
-router.get('/uploadgar', (req, res) => {
-  res.json({ message: 'welcome to our upload module apis' });
-});
-
 router.post('/uploadgar', upload.single('file'), usercheck, csrfcheck, postController);
 
 module.exports = { router, paths };

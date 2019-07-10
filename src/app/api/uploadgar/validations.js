@@ -69,7 +69,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.firstName, `Enter a given name for ${peopleType} ${crew.lastName}`),
-      new ValidationRule(validator.isValidStringLength, '', crew.firstName, `Given name for ${name} must be ${MAX_STRING_LENGTH} characters or less`)
+      new ValidationRule(validator.isValidStringLength, '', crew.firstName, `Given name for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
     ]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a gender for ${name}`)]);
     validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid gender for ${name}`)]);

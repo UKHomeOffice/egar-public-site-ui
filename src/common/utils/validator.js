@@ -364,7 +364,6 @@ module.exports = {
   passwordCheck,
   passwordValidCharacters,
   passwordMinLength,
-  nameMaxLength,
   confirmPassword,
   valuetrue,
   isNumeric,

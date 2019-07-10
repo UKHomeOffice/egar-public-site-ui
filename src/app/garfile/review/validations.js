@@ -14,7 +14,7 @@ module.exports.validations = (garfile, garpeople) => {
       new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', voyageDateObj, voyageDateMsg),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'resgistration', garfile.registration, registrationMsg),
+      new ValidationRule(validator.notEmpty, 'registration', garfile.registration, registrationMsg),
     ],
     [
       new ValidationRule(validator.notEmpty, 'garPeople', garpeople.items, validateCaptainCrewMsg),
