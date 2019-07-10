@@ -50,12 +50,12 @@ function daysInMonth(m, y) {
 }
 
 // check if number
-function IsNumeric(input) {
-  return (input - 0) == input && input.length > 0;
+function isNumeric(input) {
+  return typeof (parseInt(input, 10)) === 'number';
 }
 
 function validPhone(value) {
-  if (IsNumeric(value)) {
+  if (isNumeric(value)) {
     return value.length >= 11;
   }
   return false;
@@ -63,25 +63,25 @@ function validPhone(value) {
 
 // validday
 function validDay(d, m, y) {
-  if (IsNumeric(d)) {
+  if (isNumeric(d)) {
     return m >= 0 && m <= 12 && d > 0 && d <= daysInMonth(m, y);
   }
   return false;
 }
 
 function validMonth(m) {
-  if (IsNumeric(m)) {
+  if (isNumeric(m)) {
     return m >= 0 && m <= 12;
   }
   return false;
 }
 
 function validHour(h) {
-  return (IsNumeric(h) && (h >= 0) && (h <= 23));
+  return (isNumeric(h) && (h >= 0) && (h <= 23));
 }
 
 function validMinute(m) {
-  return (IsNumeric(m) && (m >= 0) && (m < 60));
+  return (isNumeric(m) && (m >= 0) && (m < 60));
 }
 
 function validTime(timeObj) {
@@ -147,13 +147,15 @@ function validYear(y) {
   return y.length === 4;
 }
 
+const numericDateElements = dObj => isNumeric(dObj.d)
+  && isNumeric(dObj.m)
+  && isNumeric(dObj.y);
+
 function realDate(dObj) {
   if (dObj === null || dObj === undefined) return false;
-  return (IsNumeric(dObj.d)
-    && IsNumeric(dObj.m)
-    && IsNumeric(dObj.y)
+  return numericDateElements(dObj)
     && validDay(dObj.d, dObj.m, dObj.y)
-    && validMonth(dObj.m))
+    && validMonth(dObj.m)
     && validYear(dObj.y);
 }
 
@@ -212,7 +214,7 @@ function onlySymbols(value) {
 }
 
 function email(value) {
-  const regex = /^^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
+  const regex = /^^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
   return regex.test(value);
 }
 
@@ -294,9 +296,9 @@ function genValidations(type, cssIds, values, msgs) {
 }
 
 /**
- * Given a filename and mimetype. Return true if:
- *   - The extension in the fileName matches the mimeType and the mimetype is one of the allowed types
- * Else return false
+ * Given a filename and mimetype, return true if the extension in the fileName matches
+ * the mimeType and the mimetype is one of the allowed types otherwise return false.
+ *
  * @param {String} fileName
  * @param {String} mimeType
  * @returns {Bool}
@@ -364,7 +366,7 @@ module.exports = {
   passwordMinLength,
   confirmPassword,
   valuetrue,
-  IsNumeric,
+  isNumeric,
   validPhone,
   validDay,
   validMonth,

@@ -5,17 +5,35 @@ const endpoints = require('../config/endpoints');
 module.exports = {
 
   /**
-   * Creates a new saved person.
+   * Creates a new saved person. Person object contains:
+   * firstName,
+   * lastName,
+   * nationality,
+   * placeOfBirth,
+   * dateOfBirth,
+   * gender,
+   * documentType,
+   * documentNumber,
+   * documentExpiryDate,
+   * peopleType,
+   * issuingState,
    *
    * @param {String} userId userId of user saving the person
-   * @param {String} firstName first name of person to be saved
-   * @param {String} lastName last name of person to be saved
-   * @param {String} documentType type of document in ['Identity Card', 'Passport', 'Other]
-   * @param {String} documentNumber document number
-   * @param {String} documentExpiryDate date in format 'yyyy-mm-dd'
-   * @param {String} personType type of person to be saved in ['Captain', 'Crew', 'Passenger']
+   * @param {Object} person person Object
    */
-  create(userId, firstName, lastName, nationality, placeOfBirth, dateOfBirth, gender, documentType, documentNumber, documentExpiryDate, peopleType, issuingState) {
+  create(userId, person) {
+    const { firstName } = person;
+    const { lastName } = person;
+    const { nationality } = person;
+    const { placeOfBirth } = person;
+    const { dateOfBirth } = person;
+    const { gender } = person;
+    const { documentType } = person;
+    const { documentNumber } = person;
+    const { documentExpiryDate } = person;
+    const { peopleType } = person;
+    const { issuingState } = person;
+
     return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
@@ -36,7 +54,7 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call person creation API endpoint');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called person creation endpoint');
@@ -65,7 +83,7 @@ module.exports = {
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call get person details endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called get person details API endpoint');
         resolve(body);
@@ -103,7 +121,26 @@ module.exports = {
     });
   },
 
-  update(userId, personId, firstName, lastName, nationality, placeOfBirth, dateOfBirth, gender, documentType, documentNumber, documentExpiryDate, peopleType, issuingState) {
+  /**
+   * Update a person.
+   *
+   * @param {String} userId id of the person within the DB
+   * @param {String} personId id of the person within the GAR
+   * @param {Object} person Object representing the person
+   */
+  update(userId, personId, person) {
+    const { firstName } = person;
+    const { lastName } = person;
+    const { nationality } = person;
+    const { placeOfBirth } = person;
+    const { dateOfBirth } = person;
+    const { gender } = person;
+    const { documentType } = person;
+    const { documentNumber } = person;
+    const { documentExpiryDate } = person;
+    const { peopleType } = person;
+    const { issuingState } = person;
+
     return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
@@ -124,7 +161,7 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call update person endpoint');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called update person endpoint');
@@ -148,11 +185,10 @@ module.exports = {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deletePerson(userId, personId),
-      },
-      (error, response, body) => {
+      }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call delete person endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called delete person endpoint');
         return resolve(body);

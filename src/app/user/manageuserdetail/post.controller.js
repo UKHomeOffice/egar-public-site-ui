@@ -18,7 +18,7 @@ module.exports = (req, res) => {
     new ValidationRule(validator.isValidStringLength, 'firstname', firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
   ];
   const lnameChain = [
-    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your surname name'),
+    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your surname'),
     new ValidationRule(validator.isValidStringLength, 'lastname', lastName, `Surname must be ${MAX_STRING_LENGTH} characters or less`),
   ];
 
@@ -33,7 +33,7 @@ module.exports = (req, res) => {
           }
           cookie.setUserFirstName(firstName);
           cookie.setUserLastName(lastName);
-          res.render('app/user/detailschanged/index', { cookie });
+          return res.render('app/user/detailschanged/index', { cookie });
         })
         .catch((err) => {
           logger.error('Failed to update user details');
@@ -43,7 +43,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error('Validation failed');
-      logger.error(err);
+      logger.error(JSON.stringify(err));
       res.render('app/user/manageuserdetail/index', { cookie, errors: err });
     });
 };

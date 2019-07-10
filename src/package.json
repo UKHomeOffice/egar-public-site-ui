@@ -4,7 +4,7 @@
   "description": "Electronic Gar Site",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=text mocha --recursive",
+    "test": "nyc --reporter=lcov mocha --recursive",
     "test-drone": "nyc --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --recursive"
   },
   "nyc": {
@@ -84,6 +84,7 @@
     "node-test": "^1.2.4",
     "nodemon": "^1.18.7",
     "proxyquire": "^2.1.0",
+    "rewire": "^4.0.1",
     "sinon": "^7.1.1",
     "sinon-chai": "^3.3.0",
     "supertest": "^4.0.2"

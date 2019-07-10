@@ -86,7 +86,7 @@ module.exports = {
   /**
    * Gets the GARs belonging to an individual or organisation
    * @param {String} userId id of user making the request
-   * @param {String} userType type of user making request in ['Individual', 'Admin', 'Manager', 'User']
+   * @param {String} userType type of user ['Individual', 'Admin', 'Manager', 'User']
    * @param {String} orgId id of organisation a user belongs to. Only required if org user.
    * @returns {Promise} Resolves with API response.
    */
@@ -144,7 +144,6 @@ module.exports = {
         }
         resolve(body);
         logger.debug('Successfully called delete gar supporting document endpoint');
-        return body;
       });
     })
       .catch((err) => {
@@ -173,7 +172,6 @@ module.exports = {
         }
         resolve(body);
         logger.debug('Successfully called update garperson endpoint');
-        return body;
       });
     })
       .catch((err) => {
@@ -202,11 +200,10 @@ module.exports = {
         }
         resolve(body);
         logger.debug('Successfully called update garperson endpoint');
-        return body;
       });
     })
       .catch((err) => {
         logger.error(err.message);
       });
-  }
+  },
 };

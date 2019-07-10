@@ -1,5 +1,6 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
+const tokenService = require('../../../common/services/create-token');
 const verifyUserService = require('../../../common/services/verificationApi');
 
 module.exports = (req, res) => {
@@ -11,20 +12,18 @@ module.exports = (req, res) => {
   cookie.initialise();
 
   // Look up and validate token, checking it hasn't expired
-  const token = req.query.token;
-  const hashedToken = verifyUserService.generateHash(token);
+  const { token } = req.query;
+  const hashedToken = tokenService.generateHash(token);
 
   logger.debug('Calling verify user endpoint');
   verifyUserService.verifyUser(hashedToken)
     .then((response) => {
       logger.debug(response);
-      // TODO - Handle unhappy path
-      // Check response for error message.
-      // if found, render error messages
       res.render('app/verify/registeruser/index', { cookie });
     })
     .catch((err) => {
       logger.debug('Failed to verify token');
       logger.error(err);
+      res.render('app/verify/registeruser/index', { cookie, message: 'There was an issue verifying your account. Please try again later.' });
     });
 };

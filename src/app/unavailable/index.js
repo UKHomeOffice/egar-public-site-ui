@@ -15,7 +15,4 @@ const paths = {
 router.get(paths.index, getController);
 
 // Export
-module.exports = {
-  router,
-  paths,
-};
+module.exports = { router, paths };

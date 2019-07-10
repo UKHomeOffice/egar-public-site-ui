@@ -1,24 +1,26 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const csv = require('csvtojson/v2');
-const csvFile='./airports.dat';
 const fs = require('fs');
+const logger = require('./common/utils/logger')(__filename);
 
+const csvFile = './airports.dat';
 /**
- * A converter to take in an openflights.org data file (in CSV format) and converting it into a JSON format that can be
- * used by sGAR.
+ * A converter to take in an openflights.org data file (in CSV format) and converting
+ * it into a JSON format that can be used by sGAR.
  *
  * This will not be expected to be used during the app use and is expected to be run as:
- * 
+ *
  * node import-codes
- * 
+ *
  * Which will take a file called "airports.dat" which can be obtained via:
  * https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat
- * 
+ *
  * So Kudos to openflights: https://openflights.org/data.html
  */
 csv({
   headers: ['id', 'name', 'city', 'country', 'IATA', 'ICAO', 'lat', 'long', 'alt', 'utc', 'dst', 'tz', 'type', 'source'],
   colParser: {
-    'city': 'omit',
+    city: 'omit',
     'lat': 'omit',
     'long': 'omit',
     'alt': 'omit',
@@ -29,29 +31,37 @@ csv({
     'source': 'omit',
   },
 }).fromFile(csvFile).then((jsonResult) => {
-  let processedArray = [];
+  const processedArray = [];
   jsonResult.forEach((row) => {
-    console.log('Processing row ' + row.id + ' - ' + row.name);
-    console.log('IATA: ' + row.IATA);
-    console.log('ICAO: ' + row.ICAO);
+    logger.info(`Processing row ${row.id} - ${row.name}`);
+    logger.info(`IATA: ${row.IATA}`);
+    logger.info(`ICAO: ${row.ICAO}`);
     // Adding a flag to the row to signify whether the airport is in the UK
     // TODO: Does "Isle of Man" and others like "Jersey" also count as in the UK?
     const british = row.country === 'United Kingdom';
-    const label = row.name + ' (' + row.country + ') ';
-    // It is possible that IATA codes do not exist, which appear to be read as a "\N" character so ignore those.
-    if (row.IATA !== '\\N') {
-      processedArray.push({id: row.IATA, british: british, label: label + '(' + row.IATA + ')'})
-    }
+    const label = `${row.name} (${row.country}) `;
+    let code = '(';
+    let hasIATA = false;
     if (row.ICAO !== '\\N') {
-      processedArray.push({id: row.ICAO, british: british, label: label + '(' + row.ICAO + ')'})
+      code += row.ICAO;
     }
+    // It is possible that IATA codes do not exist, which appear to be read as
+    // a "\N" character so ignore those.
+    if (row.IATA !== '\\N') {
+      hasIATA = true;
+      if (row.ICAO !== '\\N') {
+        code += ' / ';
+      }
+      code += row.IATA;
+    }
+    code += ')';
+    processedArray.push({ id: hasIATA ? row.IATA : row.ICAO, british, label: label + code });
   });
-  console.log('Resulting output');
-  console.log(processedArray);
+  logger.info('Resulting output');
+  logger.info(JSON.stringify(processedArray));
   fs.writeFileSync('airport_codes.json', JSON.stringify(processedArray, null, 2), 'utf8', (err) => {
     if (err) {
-      console.log('An error occurred while saving to JSON');
-      return console.log(err);
+      logger.error('An error occurred while saving to JSON');
     }
-  })
-})
+  });
+});

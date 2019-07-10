@@ -39,7 +39,8 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     ],
   ];
 
-  // freeCirculation and visitReason are optional values as of this time, only validate if they are provided
+  // freeCirculation and visitReason are optional values as of this time,
+  // only validate if they are provided
   // The below will display an error message identifying the person by firstName + lastName
   // This will be blank in the case where neither piece of information is entered
   if (voyageObj.freeCirculation) validationArr.push(new ValidationRule(validator.validFreeCirculation, '', voyageObj.freeCirculation, 'Enter a valid value for free circulation'));

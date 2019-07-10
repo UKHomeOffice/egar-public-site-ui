@@ -3,8 +3,7 @@ const express = require('express');
 
 // Middleware
 const flagpole = require('../../../common/middleware/flagpole');
-const csrfcheck = require('../../../common/middleware/csrfcheck')
-const parseForm = require('../../../common/middleware/parseForm');
+const csrfcheck = require('../../../common/middleware/csrfcheck');
 
 // Local dependencies
 const getController = require('./get.controller');
@@ -19,9 +18,5 @@ const paths = {
 // Routing
 router.get(paths.index, flagpole, csrfcheck, getController);
 
-
 // Export
-module.exports = {
-  router,
-  paths,
-};
+module.exports = { router, paths };

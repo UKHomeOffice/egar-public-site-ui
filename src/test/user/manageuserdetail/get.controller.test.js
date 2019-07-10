@@ -1,38 +1,42 @@
+/* eslint-disable no-undef */
+
 const sinon = require('sinon');
-const controller = require('../../../app/user/manageuserdetail/get.controller');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+
 const CookieModel = require('../../../common/models/Cookie.class');
 
+const controller = require('../../../app/user/manageuserdetail/get.controller');
+
 describe('Manage User Detail Get Controller', () => {
-    let req, res, stub;
+  let req; let res;
 
-    beforeEach(() => {
-        chai.use(sinonChai);
+  beforeEach(() => {
+    chai.use(sinonChai);
 
-        // Example request and response objects with appropriate spies
-        req = {
-            session: {
-            }
-        };
-    
-        res = {
-            render: sinon.spy(),
-        };
-        // Need to figure out how to stub the CookieModel and its constructor,
-        // in order to just check it is instantiated
-    });
+    // Example request and response objects with appropriate spies
+    req = {
+      session: {
+      },
+    };
 
-    afterEach(() => {
-        sinon.restore();
-    });
+    res = {
+      render: sinon.spy(),
+    };
+    // Need to figure out how to stub the CookieModel and its constructor,
+    // in order to just check it is instantiated
+  });
 
-    it('should render the appropriate page', async() => {
-        let a = new CookieModel(req);
-        await controller(req, res);
+  afterEach(() => {
+    sinon.restore();
+  });
 
-        // CookieModel instance created, can that be asserted
-        expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index');
-    });
+  it('should render the appropriate page', async () => {
+    const cookie = new CookieModel(req);
+    await controller(req, res);
+
+    // CookieModel instance created, can that be asserted
+    expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', { cookie });
+  });
 });

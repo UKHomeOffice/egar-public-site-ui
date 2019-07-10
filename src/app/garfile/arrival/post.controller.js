@@ -1,9 +1,9 @@
+const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const _ = require('lodash')
 
 module.exports = async (req, res) => {
   logger.debug('In garfile / arrival post controller');
@@ -91,16 +91,20 @@ module.exports = async (req, res) => {
     garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
-        if (parsedResponse.hasOwnProperty('message')) {
+        if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
           // API returned error
           logger.debug(`Api returned: ${parsedResponse}`);
           res.render('app/garfile/arrival/index', {
             cookie,
             errors: [parsedResponse],
           });
+          return;
+        }
+        // Successful
+        if (buttonClicked === 'Save and continue') {
+          res.redirect('/garfile/craft');
         } else {
-          // Successful
-          return buttonClicked === 'Save and continue' ? res.redirect('/garfile/craft') : res.redirect('/home');
+          res.redirect('/home');
         }
       })
       .catch((err) => {
@@ -113,13 +117,13 @@ module.exports = async (req, res) => {
           }],
         });
       });
-    }
+  };
 
   validations.push(
     [
-      new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg)
-    ]
-  )
+      new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg),
+    ],
+  );
 
   validator.validateChains(validations)
     .then(() => {
@@ -127,7 +131,7 @@ module.exports = async (req, res) => {
     })
     .catch((err) => {
       logger.info('Validation failed');
-      logger.info(err);
+      logger.info(JSON.stringify(err));
       res.render('app/garfile/arrival/index', {
         cookie,
         errors: err,

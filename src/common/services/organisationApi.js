@@ -21,7 +21,7 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call create organisation API');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called create organisation API');
@@ -50,7 +50,7 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call update organisation API');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called update organisation API');
@@ -74,7 +74,7 @@ module.exports = {
         url: endpoints.getOrgDetails(orgId),
       }, (error, response, body) => {
         if (error) {
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called get organisation details API');
@@ -97,7 +97,7 @@ module.exports = {
         url: endpoints.getOrgUsers(orgId),
       }, (error, response, body) => {
         if (error) {
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called get organisation users API endpoint');
@@ -109,9 +109,10 @@ module.exports = {
     });
   },
   /**
-   * Update the details of an organisational user
+   * Update the details of an organisational user.
+   *
    * @param {String} requesterId The id of the user performing the edit
-   * @param {Object} userObj The updated user object containing keys: ['firstName', 'lastName', 'userId', 'role']
+   * @param {Object} userObj The user object containing: ['firstName', 'lastName', 'userId', 'role']
    * @returns {Promise} Resolves with API response
    */
   editUser(requesterId, orgId, userObj) {

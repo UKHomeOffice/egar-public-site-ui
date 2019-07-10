@@ -26,7 +26,7 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call craft creation API');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called craft creation endpoint');
@@ -54,11 +54,10 @@ module.exports = {
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call get craft details endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called get craft details API endpoint');
-        resolve(body);
-
+        return resolve(body);
       });
     });
   },
@@ -77,7 +76,7 @@ module.exports = {
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call get crafts API endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called get crafts API endpoint');
         resolve(body);
@@ -100,7 +99,7 @@ module.exports = {
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call get org crafts API endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called get org crafts API endpoint');
         resolve(body);
@@ -130,8 +129,8 @@ module.exports = {
         }),
       }, (error, response, body) => {
         if (error) {
-          logger.error('Failed to call update craft endpoint')
-          return console.dir(error);
+          logger.error('Failed to call update craft endpoint');
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called update craft API');
@@ -156,13 +155,13 @@ module.exports = {
         url: endpoints.deleteCraft(requesterId, craftId),
         body: JSON.stringify({
           requesterId,
-          crafts: [ { craftId } ],
+          crafts: [{ craftId }],
         }),
       },
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call delete crafts API endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called delete crafts API endpoint');
         resolve(body);
@@ -185,13 +184,13 @@ module.exports = {
         url: endpoints.getOrgCrafts(orgId),
         body: JSON.stringify({
           requesterId,
-          crafts: [ { craftId } ],
+          crafts: [{ craftId }],
         }),
       },
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call delete org crafts endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called delete org crafts endpoint');
         resolve(body);

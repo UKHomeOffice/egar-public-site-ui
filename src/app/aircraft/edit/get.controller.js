@@ -9,7 +9,8 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const craftId = req.session.editCraftId;
   if (craftId === undefined) {
-    return res.redirect('/aircraft');
+    res.redirect('/aircraft');
+    return;
   }
   craftApi.getDetails(cookie.getUserDbId(), craftId)
     .then((apiResponse) => {

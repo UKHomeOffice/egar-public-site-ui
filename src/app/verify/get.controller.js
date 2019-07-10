@@ -1,10 +1,13 @@
+/* eslint-disable no-underscore-dangle */
+
+const nanoid = require('nanoid/generate');
+const i18n = require('i18n');
 const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
 const verifyUserService = require('../../common/services/verificationApi');
 const sendTokenService = require('../../common/services/send-token');
-const tokenservice = require('../../common/services/create-token');
+const tokenService = require('../../common/services/create-token');
 const tokenApi = require('../../common/services/tokenApi');
-const nanoid = require('nanoid/generate');
 
 module.exports = async (req, res) => {
   logger.debug('In verify / registeruser get controller');
@@ -16,32 +19,33 @@ module.exports = async (req, res) => {
 
   try {
     const token = req.query.query;
-    const hashedToken = verifyUserService.generateHash(token);
+    const hashedToken = tokenService.generateHash(token);
     const apiResponse = await verifyUserService.verifyUser(hashedToken);
     const parsedResponse = JSON.parse(apiResponse);
-    let message = 'Your account has now been successfully verified.' +
-      'You can now log on and submit GAR files online.';
+    let message = i18n.__('verify_user_account_success');
 
     if (parsedResponse.message === 'Token has expired') {
       logger.info('Token expired, updating');
       const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
-      const token = nanoid(alphabet, 13);
-      const hashtoken = tokenservice.generateHash(token);
+      const alphabetToken = nanoid(alphabet, 13);
+      const hashtoken = tokenService.generateHash(alphabetToken);
+      // TODO: A Promise.all should wrap these two asynchronous calls to ensure
+      // both the new token and email are sent otherwise users will not know if
+      // an issue has arisen
       tokenApi.updateToken(hashtoken, parsedResponse.userId);
       sendTokenService.send(
         parsedResponse.firstName,
         parsedResponse.email,
-        token
+        alphabetToken,
       );
-      message = 'Your token has expired. We have created a new token for you. ' +
-        'Please check your email and click the new link';
+      message = i18n.__('verify_user_account_token_expired');
     }
     if (parsedResponse.message === 'Token is invalid') {
-      message = 'This token is invalid, click the link provided in the email or ' +
-        'contact support for additional help'
+      message = i18n.__('verify_user_account_token_invalid');
     }
     return res.render('app/verify/registeruser/index', { message });
   } catch (err) {
+    logger.error('Error during user verification');
     logger.error(err);
     return res.render('app/verify/registeruser/index');
   }

@@ -39,6 +39,6 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'UserSessions',
   });
 
-  UserSessions.schema("public");
+  UserSessions.schema('public');
   return UserSessions;
 };

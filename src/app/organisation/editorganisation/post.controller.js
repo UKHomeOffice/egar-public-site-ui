@@ -5,12 +5,11 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const organisationApi = require('../../../common/services/organisationApi');
 
 module.exports = (req, res) => {
-  const orgname = req.body.orgname;
+  const { orgname } = req.body;
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
   cookie.setOrganisationName(req.body.Orgname);
-
 
   // Define a validation chain for user registeration fields
   const orgnameChain = [
@@ -19,12 +18,13 @@ module.exports = (req, res) => {
 
   // Validate chains
   validator.validateChains([orgnameChain])
-    .then((response) => {
+    .then(() => {
       // todo call to API pass organisation name, orgname
       // API should return OrgId
       organisationApi.update(orgname, cookie.getOrganisationId())
         .then((apiResponse) => {
           const responseObj = JSON.parse(apiResponse);
+          logger.debug(`Response from API: ${responseObj}`);
           // Check for error
           // Update cookie
           cookie.setOrganisationName(orgname);

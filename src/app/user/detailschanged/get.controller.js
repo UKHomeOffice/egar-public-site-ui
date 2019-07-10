@@ -1,6 +1,5 @@
-const CookieModel = require('../../../common/models/Cookie.class');
+const navUtil = require('../../../common/utils/nav');
 
 module.exports = (req, res) => {
-  var cookie = new CookieModel(req);
-  res.render('app/user/detailschanged/index',{ cookie });
+  navUtil.simpleGetRender(req, res, 'app/user/detailschanged/index');
 };

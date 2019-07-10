@@ -1,6 +1,7 @@
 const csurf = require('csurf');
+
 let secureFlag = false;
-if (process.env.COOKIE_SECURE_FLAG === "true") {
+if (process.env.COOKIE_SECURE_FLAG === 'true') {
   secureFlag = true;
 }
 module.exports = (req, res, next) => {
@@ -8,9 +9,9 @@ module.exports = (req, res, next) => {
     {
       cookie: {
         httpOnly: true,
-        secure: secureFlag
-      }
-    }
+        secure: secureFlag,
+      },
+    },
   );
   next();
-}
+};
