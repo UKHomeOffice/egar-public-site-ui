@@ -56,7 +56,7 @@ module.exports = (req, res) => {
         identifier: '',
       };
       req.session.submiterrormessage.push(submitError);
-      logger.info('gar already submitted');
+      logger.info('GAR already submitted');
       return req.session.save(() => {
         res.redirect('/garfile/review');
       });
@@ -105,5 +105,9 @@ module.exports = (req, res) => {
       renderObj.errors = err;
       res.render('app/garfile/review/index', renderObj);
     });
+  }).catch((err) => {
+    logger.error('Error retrieving GAR for review');
+    logger.error(JSON.stringify(err));
+    res.render('app/garfile/home/index', { cookie, errors: [{ message: 'There was error retrieving the GAR. Try again later' }] });
   });
 };

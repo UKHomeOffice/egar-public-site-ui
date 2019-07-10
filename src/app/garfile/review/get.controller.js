@@ -28,11 +28,11 @@ module.exports = (req, res) => {
     const validations = validationList.validations(garfile, garpeople);
     const renderObj = {
       cookie,
-      showChangeLinks: true,
       manifestFields,
       garfile,
       garpeople,
       garsupportingdocs,
+      showChangeLinks: true,
     };
 
     validator.validateChains(validations)
