@@ -6,7 +6,6 @@ const userattributes = require('../../../common/seeddata/egar_user_account_detai
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
 const createGarApi = require('../../../common/services/createGarApi.js');
 
-
 module.exports = (req, res) => {
   logger.debug('In garfile / home post controller');
 
@@ -23,25 +22,25 @@ module.exports = (req, res) => {
   // Validate chains
   validator.validateChains([garChain])
     .then(() => {
-      if (req.body.garoption === '1') return res.redirect('/garfile/garupload');
+      if (req.body.garoption === '1') {
+        res.redirect('/garfile/garupload');
+        return;
+      }
 
       createGarApi.createGar(cookie.getUserDbId())
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
-          if (parsedResponse.hasOwnProperty('message')) {
+          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             // API returned error
-            res.render('app/garfile/manifest/index', {
-              errors: [parsedResponse],
-              cookie,
+            res.render('app/garfile/home/index', {
+              cookie, userattributes, garoptions, errors: [parsedResponse],
             });
-          } else {
-            cookie.setGarId(parsedResponse.garId);
-            cookie.setGarStatus(garStatus);
+            return;
           }
-          if (req.body.garoption === '0') {
-            // Redirect to page 1 of gar form.
-            res.redirect('/garfile/departure');
-          }
+          // Success
+          cookie.setGarId(parsedResponse.garId);
+          cookie.setGarStatus(garStatus);
+          res.redirect('/garfile/departure');
         })
         .catch((err) => {
           logger.error('Failed to create GAR');
