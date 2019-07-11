@@ -1,17 +1,14 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
-const chai = require('chai');
-const should = chai.should();
+const { expect } = require('chai');
 const validator = require('../common/utils/validator');
-const validationRules = require('../common/models/ValidationRule.class');
 
 function genPortObj(portCode, lat, long) {
   return {
     portCode,
     lat,
-    long
+    long,
   };
 }
 
@@ -19,14 +16,14 @@ function genDateObj(d, m, y) {
   return {
     d,
     m,
-    y
+    y,
   };
 }
 
 function genTimeObj(h, m) {
   return {
     h,
-    m
+    m,
   };
 }
 
@@ -314,6 +311,11 @@ describe('Validator', () => {
     expect(validator.isValidFileMime('png', 'application/txt')).to.be.false;
   });
 
+  it('Should return false when a file with an unknown extension is provided', () => {
+    expect(validator.isValidFileMime('svg', 'application/txt')).to.be.false;
+    expect(validator.isValidFileMime('svg', 'image/svg+xml')).to.be.false;
+  });
+
   it('Shoud return true when string is less than or equal to MAX_STRING_LENGTH', () => {
     const thirtyfive = 'AAAAAaaaa BBBBBbbbb CCCCCccccc';
     expect(validator.isValidStringLength(thirtyfive)).to.be.true;
@@ -355,7 +357,7 @@ describe('Validator', () => {
     it('Should retun true when departure date is less than or equal to arrival date', () => {
       const voyageDateObj = {
         departureDate: dateOne,
-        arrivalDate: dateTwo
+        arrivalDate: dateTwo,
       };
       expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.true;
     });
@@ -363,7 +365,7 @@ describe('Validator', () => {
     it('Should return true when departure date equals arrival date', () => {
       const voyageDateObj = {
         departureDate: dateOne,
-        arrivalDate: dateOnePrime
+        arrivalDate: dateOnePrime,
       };
       expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.true;
     });
@@ -371,9 +373,19 @@ describe('Validator', () => {
     it('Should return false when departure date is greater than arrival date', () => {
       const voyageDateObj = {
         departureDate: dateTwo,
-        arrivalDate: dateOne
+        arrivalDate: dateOne,
       };
       expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.false;
+    });
+
+    it('should return false when provided country code is unknown', () => {
+      expect(validator.validISO3Country('CHI')).to.be.false;
+      expect(validator.validISO3Country('UK')).to.be.false;
+    });
+
+    it('should return true when provided country code is valid', () => {
+      expect(validator.validISO3Country('USA')).to.be.true;
+      expect(validator.validISO3Country('GBR')).to.be.true;
     });
   });
 });

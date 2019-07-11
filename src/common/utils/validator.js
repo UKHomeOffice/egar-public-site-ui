@@ -1,3 +1,5 @@
+const countries = require('i18n-iso-countries');
+
 const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
@@ -89,7 +91,8 @@ function validTime(timeObj) {
 }
 
 /**
- * Predicate function which checks the length of a country code string
+ * Predicate function which checks the length of a country code string.
+ *
  * @param {String} countryCode
  * @returns {Bool} True if 3 chars, else false
  */
@@ -98,7 +101,18 @@ function validISOCountryLength(countryCode) {
 }
 
 /**
- * Predicate function which checks a given free circulation value
+ * Predicate to check whether the country code is a valid ISO1366 alpha 3 code.
+ *
+ * @param {String} countryCode
+ * @returns {Bool} True if 3 an ISO1366 code, false otherwise
+ */
+function validISO3Country(countryCode) {
+  return countries.isValid(countryCode);
+}
+
+/**
+ * Predicate function which checks a given free circulation value.
+ *
  * @param {String} value a free circulation value
  * @returns {Bool} True if contained in freecirulation values else false
  */
@@ -381,6 +395,7 @@ module.exports = {
   validFlag,
   validPort,
   validISOCountryLength,
+  validISO3Country,
   validFreeCirculation,
   validVisitReason,
   validGender,
