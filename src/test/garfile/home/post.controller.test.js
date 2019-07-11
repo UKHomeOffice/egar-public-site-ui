@@ -41,7 +41,7 @@ describe('GAR Customs Post Controller', () => {
     sinon.restore();
   });
 
-  it.only('should error on validation', () => {
+  it('should error on validation', () => {
     const cookie = new CookieModel(req);
     const callController = async () => {
       await controller(req, res);
@@ -60,7 +60,7 @@ describe('GAR Customs Post Controller', () => {
     });
   });
 
-  it.only('should redirect to garupload if option is selected', () => {
+  it('should redirect to garupload if option is selected', () => {
     req.body.garoption = '1';
 
     const callController = async () => {
@@ -75,7 +75,7 @@ describe('GAR Customs Post Controller', () => {
   });
 
   // shows error message if api rejects
-  it.only('should return an error message if api rejects', () => {
+  it('should return an error message if api rejects', () => {
     cookie = new CookieModel(req);
     req.body.garoption = '0';
     createGarApiStub.rejects('createGarApi.createGar Example Reject');
@@ -94,7 +94,7 @@ describe('GAR Customs Post Controller', () => {
     });
   });
 
-  it.only('should return an error message if api rejects', () => {
+  it('should return an error message if api rejects', () => {
     // Back end does not really return any other outcome, contriving example
     cookie = new CookieModel(req);
     req.body.garoption = '0';
@@ -115,7 +115,7 @@ describe('GAR Customs Post Controller', () => {
     });
   });
 
-  it.only('should redirect to departure page on success', () => {
+  it('should redirect to departure page on success', () => {
     cookie = new CookieModel(req);
     req.body.garoption = '0';
     createGarApiStub.resolves(JSON.stringify({
