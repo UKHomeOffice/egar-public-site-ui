@@ -21,14 +21,14 @@ csv({
   headers: ['id', 'name', 'city', 'country', 'IATA', 'ICAO', 'lat', 'long', 'alt', 'utc', 'dst', 'tz', 'type', 'source'],
   colParser: {
     city: 'omit',
-    'lat': 'omit',
-    'long': 'omit',
-    'alt': 'omit',
-    'utc': 'omit',
-    'dst': 'omit',
-    'tz': 'omit',
-    'type': 'omit',
-    'source': 'omit',
+    lat: 'omit',
+    long: 'omit',
+    alt: 'omit',
+    utc: 'omit',
+    dst: 'omit',
+    tz: 'omit',
+    type: 'omit',
+    source: 'omit',
   },
 }).fromFile(csvFile).then((jsonResult) => {
   const processedArray = [];
@@ -55,7 +55,7 @@ csv({
       code += row.IATA;
     }
     code += ')';
-    processedArray.push({ id: hasIATA ? row.IATA : row.ICAO, british, label: label + code });
+    processedArray.push({ british, id: hasIATA ? row.IATA : row.ICAO, label: label + code });
   });
   logger.info('Resulting output');
   logger.info(JSON.stringify(processedArray));

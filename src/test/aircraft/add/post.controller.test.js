@@ -43,7 +43,7 @@ describe('Aircraft Add Post Controller', () => {
 
   describe('validation chains', () => {
     it('should return message when registration is empty', () => {
-      delete req.body.craftreg;
+      req.body.craftreg = '';
       const rule = new ValidationRule(validator.notEmpty, 'craftreg', '', 'Enter the registration details of the craft');
       const cookie = new CookieModel(req);
 
@@ -57,7 +57,7 @@ describe('Aircraft Add Post Controller', () => {
     });
 
     it('should return message when type is empty', () => {
-      delete req.body.crafttype;
+      req.body.crafttype = '';
       const rule = new ValidationRule(validator.notEmpty, 'crafttype', '', 'Enter the craft type');
       const cookie = new CookieModel(req);
 
@@ -72,7 +72,7 @@ describe('Aircraft Add Post Controller', () => {
     });
 
     it('should return message when base is empty', () => {
-      delete req.body.craftbase;
+      req.body.craftbase = '';
       const rule = new ValidationRule(validator.notEmpty, 'craftbase', '', 'Enter the base of the craft');
       const cookie = new CookieModel(req);
 

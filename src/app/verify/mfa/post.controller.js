@@ -21,29 +21,25 @@ module.exports = (req, res) => {
 
   validator.validateChains([mfaCodeChain])
     .then(() => {
-      // TODO: validateMfaToken never resolves to false, so this if statement is
-      // redundant (let the catch blocks handle rejects)
       tokenApi.validateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
-        .then((valid) => {
-          if (valid) {
-            tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
-              .then(() => {
-                userApi.getDetails(cookie.getUserEmail())
-                  .then((apiResponse) => {
-                    const parsedResponse = JSON.parse(apiResponse);
-                    cookie.setLoginInfo(parsedResponse);
-                    res.redirect('/home');
-                  })
-                  .catch((err) => {
-                    logger.error(err);
-                    res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
-                  });
-              })
-              .catch((err) => {
-                logger.error(err);
-                res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
-              });
-          }
+        .then(() => {
+          tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
+            .then(() => {
+              userApi.getDetails(cookie.getUserEmail())
+                .then((apiResponse) => {
+                  const parsedResponse = JSON.parse(apiResponse);
+                  cookie.setLoginInfo(parsedResponse);
+                  res.redirect('/home');
+                })
+                .catch((err) => {
+                  logger.error(err);
+                  res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
+                });
+            })
+            .catch((err) => {
+              logger.error(err);
+              res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
+            });
         })
         .catch((err) => {
           // Token API error

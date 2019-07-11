@@ -10,16 +10,18 @@ module.exports = (req, res) => {
   garApi
     .patch(cookie.getGarId(), 'Cancelled', {})
     .then(() => {
-      emailService
-        .send(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, cookie.getUserEmail(), {
-          firstName: cookie.getUserFirstName(),
-          garId: cookie.getGarId(),
-        })
-        .then(() => {
-          req.session.successMsg = 'The GAR has been successfully cancelled';
-          req.session.successHeader = 'Cancellation Confirmation';
-          res.redirect('/home');
-        });
+      emailService.send(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, cookie.getUserEmail(), {
+        firstName: cookie.getUserFirstName(),
+        garId: cookie.getGarId(),
+      }).then(() => {
+        req.session.successMsg = 'The GAR has been successfully cancelled';
+        req.session.successHeader = 'Cancellation Confirmation';
+        res.redirect('/home');
+      }).catch(() => {
+        req.session.successMsg = 'The GAR has been successfully cancelled, but there was a problem with sending the email';
+        req.session.successHeader = 'Cancellation Confirmation';
+        res.redirect('/home');
+      });
     })
     .catch((err) => {
       logger.error(err);
