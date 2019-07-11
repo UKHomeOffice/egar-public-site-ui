@@ -11,6 +11,7 @@ const generateCountryList = () => {
   logger.info('Obtaining all countries and converting to alpha 3 codes');
   const alpha3List = [];
   countries.registerLocale(en);
+  alpha3List.push({ code: '', label: '' });
   Object.keys(countries.getNames('en')).forEach((key) => {
     const alpha3 = countries.alpha2ToAlpha3(key);
     const countryName = countries.getNames('en')[key];

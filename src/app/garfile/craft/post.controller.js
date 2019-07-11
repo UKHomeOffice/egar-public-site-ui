@@ -43,23 +43,27 @@ module.exports = (req, res) => {
             const parsedResponse = JSON.parse(apiResponse);
             if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
               // API returned error
-              logger.debug(`Api returned: ${parsedResponse}`);
+              logger.error(`Patch GAR API returned: ${apiResponse}`);
               res.render('app/garfile/craft/index', { cookie, errors: [parsedResponse] });
+              return;
+            }
+            // Successful
+            cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase);
+            if (buttonClicked === 'Save and continue') {
+              res.redirect('/garfile/manifest');
             } else {
-              // Successful
-              cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase);
-              return buttonClicked === 'Save and continue' ? res.redirect('/garfile/manifest') : res.redirect('/home');
+              res.redirect('/home');
             }
           })
           .catch((err) => {
             logger.error('Api failed to update GAR');
             logger.error(err);
-            res.render('app/garfile/craft/index', { cookie, errors: [{ message: 'Failed to add to GAR' }] });
+            res.render('app/garfile/craft/index', { cookie, errors: [{ message: 'Failed to add aircraft to GAR' }] });
           });
       })
       .catch((err) => {
         logger.info('Validation failed');
-        logger.info(err);
+        logger.info(JSON.stringify(err));
         res.render('app/garfile/craft/index', { cookie, errors: err });
       });
   }

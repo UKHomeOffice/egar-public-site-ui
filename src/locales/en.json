@@ -53,6 +53,21 @@
 
     "verify_user_account_success": "Your account has now been successfully verified. You can now log on and submit GAR files online.",
     "verify_user_account_token_expired": "Your token has expired. We have created a new token for you. Please check your email and click the new link.",
-    "verify_user_account_token_invalid": "This token is invalid, click the link provided in the email or contact support for additional help."
-    
+    "verify_user_account_token_invalid": "This token is invalid, click the link provided in the email or contact support for additional help.",
+
+    "title_garupload": "Upload your GAR file",
+    "garupload_caption": "Select the GAR file to be uploaded.",
+    "garupload_assistive_warning": "Warning",
+    "garupload_warning_1": "GAR files should be of the version and format of the template file found ",
+    "garupload_warning_2": "here",
+    "garupload_warning_3": ". Files that are uploaded are automatically checked for validity and integrity before being accepted by the system. Once complete, you will be shown a validation screen where you will be able to correct any validation errors before submitting.",
+    "field_file": "Select a file",
+    "form_upload_and_continue": "Upload and continue",
+    "upload_gar_file_header": "GENERAL AVIATION REPORT (GAR) -  January 2015",
+    "validation_api_uploadgar_people_type_crew": "crew member",
+    "validation_api_uploadgar_people_type_passenger": "passenger",
+    "validation_api_uploadgar_person_type_person_name": "{{peopleType}} {{firstName}} {{lastName}}",
+    "validation_api_uploadgar_no_file": "Provide a file",
+	"validation_api_uploadgar_incorrect_type": "Incorrect file type",
+	"validation_api_uploadgar_incorrect_gar_file": "Incorrect xls or xlsx file"
 }

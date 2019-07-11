@@ -28,11 +28,11 @@ module.exports = (req, res) => {
     const validations = validationList.validations(garfile, garpeople);
     const renderObj = {
       cookie,
-      showChangeLinks: true,
       manifestFields,
       garfile,
       garpeople,
       garsupportingdocs,
+      showChangeLinks: true,
     };
 
     validator.validateChains(validations)
@@ -40,9 +40,13 @@ module.exports = (req, res) => {
         res.render('app/garfile/review/index', renderObj);
       }).catch((err) => {
         logger.info('Validation failed');
-        logger.info(err);
+        logger.info(JSON.stringify(err));
         renderObj.errors = err;
         res.render('app/garfile/review/index', renderObj);
       });
+  }).catch((err) => {
+    logger.error('Error retrieving GAR for review');
+    logger.error(JSON.stringify(err));
+    res.render('app/garfile/review/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
   });
 };

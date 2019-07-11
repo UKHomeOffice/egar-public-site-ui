@@ -1,3 +1,7 @@
+/* eslint-disable no-underscore-dangle */
+
+const i18n = require('i18n');
+
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH } = require('../../../common/config/index');
@@ -48,32 +52,35 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
 
   const manifest = crewArr.concat(passengersArr);
   manifest.forEach((crew) => {
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentType, `Enter a document type for ${crew.firstName} ${crew.lastName}`)]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${crew.firstName} ${crew.lastName}`)]);
-    validationArr.push([new ValidationRule(validator.validISOCountryLength, '', crew.issuingState, `Enter a valid document issuing state for ${crew.firstName} ${crew.lastName}. Must be a ISO 3166 country code`)]);
+    const crewLabel = i18n.__('validation_api_uploadgar_people_type_crew');
+    const passengerLabel = i18n.__('validation_api_uploadgar_people_type_passenger');
+    const peopleType = crew.peopleType === 'Crew' ? crewLabel : passengerLabel;
+    const name = i18n.__('validation_api_uploadgar_person_type_person_name', { peopleType, firstName: crew.firstName, lastName: crew.lastName });
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentType, `Enter a document type for ${name}`)]);
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${name}`)]);
+    validationArr.push([new ValidationRule(validator.validISOCountryLength, '', crew.issuingState, `Enter a valid document issuing state for ${name}. Must be a ISO 3166 country code`)]);
     validationArr.push([
-      new ValidationRule(validator.notEmpty, '', crew.documentNumber, `Enter a document number for ${crew.firstName} ${crew.lastName}`),
-      new ValidationRule(validator.isValidStringLength, '', crew.documentNumber, `Travel document number for ${crew.firstName} ${crew.lastName} must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.notEmpty, '', crew.documentNumber, `Enter a document number for ${name}`),
+      new ValidationRule(validator.isValidStringLength, '', crew.documentNumber, `Travel document number for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
     ]);
     validationArr.push([
-      new ValidationRule(validator.notEmpty, '', crew.lastName, `Enter a surname for ${crew.firstName}`),
-      new ValidationRule(validator.isValidStringLength, '', crew.lastName, `Surname for ${crew.firstName} must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.notEmpty, '', crew.lastName, `Enter a surname for ${peopleType} ${crew.firstName}`),
+      new ValidationRule(validator.isValidStringLength, '', crew.lastName, `Surname for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
     ]);
     validationArr.push([
-      new ValidationRule(validator.notEmpty, '', crew.firstName, `Enter a given name for ${crew.lastName}`),
-      new ValidationRule(validator.isValidStringLength, '', crew.firstName, `Given name for ${crew.lastName} must be ${MAX_STRING_LENGTH} characters or less`),
-
+      new ValidationRule(validator.notEmpty, '', crew.firstName, `Enter a given name for ${peopleType} ${crew.lastName}`),
+      new ValidationRule(validator.isValidStringLength, '', crew.firstName, `Given name for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
     ]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a gender for ${crew.firstName} ${crew.lastName}`)]);
-    validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid gender for ${crew.firstName} ${crew.lastName}`)]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.dateOfBirth, `Enter a date of birth for ${crew.firstName} ${crew.lastName}`)]);
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a gender for ${name}`)]);
+    validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid gender for ${name}`)]);
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.dateOfBirth, `Enter a date of birth for ${name}`)]);
     validationArr.push([
-      new ValidationRule(validator.notEmpty, '', crew.placeOfBirth, `Enter a place of birth for ${crew.firstName} ${crew.lastName}`),
-      new ValidationRule(validator.isValidStringLength, '', crew.placeOfBirth, `Place of birth for ${crew.firstName} ${crew.lastName} must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.notEmpty, '', crew.placeOfBirth, `Enter a place of birth for ${name}`),
+      new ValidationRule(validator.isValidStringLength, '', crew.placeOfBirth, `Place of birth for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
     ]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.nationality, `Enter a nationality for ${crew.firstName} ${crew.lastName}`)]);
-    validationArr.push([new ValidationRule(validator.validISOCountryLength, '', crew.nationality, `Enter a valid nationality for ${crew.firstName} ${crew.lastName}. Must be a ISO 3166 country code`)]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a document expiry date for ${crew.firstName} ${crew.lastName}`)]);
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.nationality, `Enter a nationality for ${name}`)]);
+    validationArr.push([new ValidationRule(validator.validISOCountryLength, '', crew.nationality, `Enter a valid nationality for ${name}. Must be a ISO 3166 country code`)]);
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a document expiry date for ${name}`)]);
   });
 
   return validationArr;

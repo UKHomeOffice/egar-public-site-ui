@@ -93,18 +93,6 @@ describe('Verify MFA Post Controller', () => {
   });
 
   describe('token api resolves', () => {
-    // TODO: The service never resolves to false
-    it('should do nothing if not valid', async () => {
-      sinon.stub(tokenApi, 'validateMfaToken').resolves(false);
-      sinon.stub(tokenApi, 'updateMfaToken');
-      sinon.stub(userApi, 'getDetails');
-
-      await controller(req, res);
-      expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
-      expect(tokenApi.updateMfaToken).to.not.have.been.called;
-      expect(res.render).to.not.have.been;
-    });
-
     it('should return message if valid but token api update rejects', async () => {
       sinon.stub(tokenApi, 'validateMfaToken').resolves(true);
       sinon.stub(tokenApi, 'updateMfaToken').rejects('tokenApi.updateMfaToken Example Reject');
@@ -168,7 +156,7 @@ describe('Verify MFA Post Controller', () => {
     });
 
     it('should successfully login', async () => {
-      sinon.stub(tokenApi, 'validateMfaToken').resolves(true);
+      sinon.stub(tokenApi, 'validateMfaToken').resolves();
       sinon.stub(tokenApi, 'updateMfaToken').resolves();
       sinon.stub(userApi, 'getDetails').resolves(JSON.stringify({
         firstName: 'Darth',
