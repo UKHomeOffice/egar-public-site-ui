@@ -9,13 +9,6 @@ module.exports = (req, res) => {
   crafts.then((values) => {
     const savedCrafts = JSON.parse(values);
     // Pagination, returns _meta and _links:
-
-    // console.log('items: ');
-    // console.log(JSON.stringify(savedCrafts.items));
-    // console.log('_meta');
-    // console.log(JSON.stringify(savedCrafts._meta));
-    // console.log('_links');
-    // console.log(JSON.stringify(savedCrafts._links));
     cookie.setSavedCraft(savedCrafts);
     if (req.session.errMsg) {
       const { errMsg } = req.session;
