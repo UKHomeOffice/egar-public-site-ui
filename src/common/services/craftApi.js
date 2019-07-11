@@ -3,8 +3,10 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
+
   /**
    * Calls create craft API endpoint.
+   *
    * @param {String} registration Registration of the craft
    * @param {String} craftType Type of craft
    * @param {String} craftBase Base of craft
@@ -12,7 +14,7 @@ module.exports = {
    * @returns {Promise} returns API response when resolved
    */
   create(registration, craftType, craftBase, userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.createCraft(userId),
@@ -23,9 +25,8 @@ module.exports = {
         }),
       }, (error, response, body) => {
         if (error) {
-          // return 'Generic response'
           logger.error('Failed to call craft creation API');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called craft creation endpoint');
@@ -38,13 +39,14 @@ module.exports = {
       });
   },
   /**
-   * Gets the details of a craft
+   * Gets the details of a craft.
+   *
    * @param {String} userId id of user doing the search
    * @param {String} craftId id of craft to be searched for
    * @returns {Promise} resolves with API response
    */
   getDetails(userId, craftId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getCraftData(userId, craftId),
@@ -52,21 +54,21 @@ module.exports = {
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call get craft details endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called get craft details API endpoint');
-        resolve(body);
-
+        return resolve(body);
       });
     });
   },
   /**
-   * Lists all crafts a user is able to see
+   * Lists all crafts a user is able to see.
+   *
    * @param {String} userId id of user trying to list crafts
    * @returns {Promise} resolves with API response
    */
   getCrafts(userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getCrafts(userId),
@@ -74,7 +76,7 @@ module.exports = {
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call get crafts API endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called get crafts API endpoint');
         resolve(body);
@@ -83,12 +85,13 @@ module.exports = {
     });
   },
   /**
-   * Lists all crafts a user is able to see
+   * Lists all crafts a user is able to see.
+   *
    * @param {String} orgid id of organisation trying to list crafts
    * @returns {Promise} resolves with API response
    */
   getOrgCrafts(orgId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgCrafts(orgId),
@@ -96,7 +99,7 @@ module.exports = {
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call get org crafts API endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called get org crafts API endpoint');
         resolve(body);
@@ -105,7 +108,8 @@ module.exports = {
     });
   },
   /**
-   * Updates a given craft
+   * Updates a given craft.
+   *
    * @param {String} registration new registration number of craft
    * @param {String} craftType new type of craft
    * @param {String} craftBase new base of craft
@@ -114,7 +118,7 @@ module.exports = {
    * @returns {Promise} resolves with API response
    */
   update(registration, craftType, craftBase, userId, craftId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateCraft(userId, craftId),
@@ -125,8 +129,8 @@ module.exports = {
         }),
       }, (error, response, body) => {
         if (error) {
-          logger.error('Failed to call update craft endpoint')
-          return console.dir(error);
+          logger.error('Failed to call update craft endpoint');
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called update craft API');
@@ -138,27 +142,26 @@ module.exports = {
       });
   },
   /**
-   * Delete an individual user's craft
+   * Delete an individual user's craft.
+   *
    * @param {String} userId id of user trying to delete craft
    * @param {String} craftId id of the craft to be deleted
    * @returns {Promise} resolves with API response
    */
   deleteCraft(requesterId, craftId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deleteCraft(requesterId, craftId),
         body: JSON.stringify({
           requesterId,
-          crafts: [
-            { craftId },
-          ],
+          crafts: [{ craftId }],
         }),
       },
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call delete crafts API endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called delete crafts API endpoint');
         resolve(body);
@@ -167,28 +170,27 @@ module.exports = {
     });
   },
   /**
-   * Delete an organisation's craft
+   * Delete an organisation's craft.
+   *
    * @param {String} orgId id of the organisation the craft belongs to
    * @param {String} userId id of user trying to delete craft
    * @param {String} craftId if of the craft to be deleted
    * @returns {Promise} resolves with API response
    */
   deleteOrgCraft(orgId, requesterId, craftId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgCrafts(orgId),
         body: JSON.stringify({
           requesterId,
-          crafts: [
-            { craftId },
-          ],
+          crafts: [{ craftId }],
         }),
       },
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call delete org crafts endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called delete org crafts endpoint');
         resolve(body);

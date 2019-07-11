@@ -3,18 +3,38 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
+
   /**
-   * Creates a new saved person.
+   * Creates a new saved person. Person object contains:
+   * firstName,
+   * lastName,
+   * nationality,
+   * placeOfBirth,
+   * dateOfBirth,
+   * gender,
+   * documentType,
+   * documentNumber,
+   * documentExpiryDate,
+   * peopleType,
+   * issuingState,
+   *
    * @param {String} userId userId of user saving the person
-   * @param {String} firstName first name of person to be saved
-   * @param {String} lastName last name of person to be saved
-   * @param {String} documentType type of document in ['Identity Card', 'Passport', 'Other]
-   * @param {String} documentNumber document number
-   * @param {String} documentExpiryDate date in format 'yyyy-mm-dd'
-   * @param {String} personType type of person to be saved in ['Captain', 'Crew', 'Passenger']
+   * @param {Object} person person Object
    */
-  create(userId, firstName, lastName, nationality, placeOfBirth, dateOfBirth, gender, documentType, documentNumber, documentExpiryDate, peopleType, issuingState) {
-    return new Promise((resolve, reject) => {
+  create(userId, person) {
+    const { firstName } = person;
+    const { lastName } = person;
+    const { nationality } = person;
+    const { placeOfBirth } = person;
+    const { dateOfBirth } = person;
+    const { gender } = person;
+    const { documentType } = person;
+    const { documentNumber } = person;
+    const { documentExpiryDate } = person;
+    const { peopleType } = person;
+    const { issuingState } = person;
+
+    return new Promise((resolve) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.createPerson(userId),
@@ -33,9 +53,8 @@ module.exports = {
         }),
       }, (error, response, body) => {
         if (error) {
-          // return 'Generic response'
           logger.error('Failed to call person creation API endpoint');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called person creation endpoint');
@@ -47,14 +66,16 @@ module.exports = {
         logger.error(err);
       });
   },
+
   /**
-   * Gets the details of a saved person
+   * Gets the details of a saved person.
+   *
    * @param {String} userId id of user doing the search
    * @param {String} personId id of person to be searched for
    * @returns {Promise} resolves with API response
    */
   getDetails(userId, personId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getPersonData(userId, personId),
@@ -62,7 +83,7 @@ module.exports = {
       (error, response, body) => {
         if (error) {
           logger.error('Failed to call get person details endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called get person details API endpoint');
         resolve(body);
@@ -71,14 +92,16 @@ module.exports = {
       });
     });
   },
+
   /**
-   * Get all the saved persons belonging to an individual or organisation
+   * Get all the saved persons belonging to an individual or organisation.
+   *
    * @param {String} id id of entity performing action
    * @param {String} userType type of user performing action in ['individual', 'organisation']
    * @returns {Promise} resolves with API response
    */
   getPeople(id, userType) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const individualUrl = endpoints.getPeople(id);
       const orgUrl = endpoints.getOrgPeople(id);
       request.get({
@@ -97,8 +120,28 @@ module.exports = {
       });
     });
   },
-  update(userId, personId, firstName, lastName, nationality, placeOfBirth, dateOfBirth, gender, documentType, documentNumber, documentExpiryDate, peopleType, issuingState) {
-    return new Promise((resolve, reject) => {
+
+  /**
+   * Update a person.
+   *
+   * @param {String} userId id of the person within the DB
+   * @param {String} personId id of the person within the GAR
+   * @param {Object} person Object representing the person
+   */
+  update(userId, personId, person) {
+    const { firstName } = person;
+    const { lastName } = person;
+    const { nationality } = person;
+    const { placeOfBirth } = person;
+    const { dateOfBirth } = person;
+    const { gender } = person;
+    const { documentType } = person;
+    const { documentNumber } = person;
+    const { documentExpiryDate } = person;
+    const { peopleType } = person;
+    const { issuingState } = person;
+
+    return new Promise((resolve) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updatePerson(userId, personId),
@@ -118,7 +161,7 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call update person endpoint');
-          return console.dir(error);
+          return error;
         }
         resolve(body);
         logger.debug('Successfully called update person endpoint');
@@ -129,22 +172,23 @@ module.exports = {
         logger.error(err);
       });
   },
+
   /**
-   * Calls the endpoint to delete a saved person
+   * Calls the endpoint to delete a saved person.
+   *
    * @param {String} userId The id of the user performing the delete
    * @param {String} personId The id of the saved person to be deleted
    * @returns {Promise} resolves with APi response
    */
   deletePerson(userId, personId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deletePerson(userId, personId),
-      },
-      (error, response, body) => {
+      }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call delete person endpoint');
-          return console.dir(error);
+          return error;
         }
         logger.debug('Successfully called delete person endpoint');
         return resolve(body);

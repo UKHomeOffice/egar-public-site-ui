@@ -56,7 +56,7 @@
         <span class="field-validation-valid error-message" data-valmsg-for="lastName"
           data-valmsg-replace="true" style="display:block">
         </span>
-        <input class="govuk-input" id="lastName" name="lastName"  type="text" value="{{orgUser.lastName}}" />
+        <input class="govuk-input" id="lastName" name="lastName"  type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{orgUser.lastName}}" />
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('role', errors) }}">

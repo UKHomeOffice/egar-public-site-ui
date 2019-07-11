@@ -3,8 +3,10 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
+
   /**
    * Posts userdata to user creation API endpoint.
+   *
    * @param {String} fname First name of user
    * @param {String} lname Last name of user
    * @param {String} userEmail Email of user

@@ -2,57 +2,51 @@ const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
+const validator = require('../../../common/utils/validator');
+const validationList = require('./validations');
+
 
 module.exports = (req, res) => {
-  const cookie = new CookieModel(req);
   logger.debug('In garfile / review get controller');
+  const cookie = new CookieModel(req);
+  const garId = cookie.getGarId();
 
-   garApi.getPeople(cookie.getGarId() )
-   .then((apiResponse) => {
-    const parsedResponse = JSON.parse(apiResponse);
-    if (parsedResponse.hasOwnProperty('message')) {
-    // API returned error
-      logger.debug(`Api returned Error: ${parsedResponse}`);
-    }
-    else{
-      const garpeople = JSON.parse(apiResponse);
-      garApi.get(cookie.getGarId())//get the gar
-      .then((apiResponse) => {
-        const parsedResponse = JSON.parse(apiResponse);
-        if (parsedResponse.hasOwnProperty('message')) {
-        // API returned error
-          logger.debug(`Api returned Error: ${parsedResponse}`);
-        }
-        else{
-          const garfile = JSON.parse(apiResponse);
-          garApi.getSupportingDocs(cookie.getGarId())
-          .then((apiResponse) => {
-            const parsedResponse = JSON.parse(apiResponse);
-            if (parsedResponse.hasOwnProperty('message')) {
-              // API returned error
-                logger.debug(`Api returned Error: ${parsedResponse}`);
-              }
-              else{
-                const supportingdocs = JSON.parse(apiResponse);
-                if (req.session.submiterrormessage && req.session.submiterrormessage.length > 0) {
-                  let msg = req.session.submiterrormessage;
-                  delete req.session.submiterrormessage
-                  res.render('app/garfile/review/index', {cookie,
-                    errors: msg,
-                    showChangeLinks: true,
-                    manifestFields, garfile,garpeople, supportingdocs});
-                  }
-                  else{
-                    res.render('app/garfile/review/index', {cookie,
-                      showChangeLinks: true,
-                      manifestFields,
-                      garfile,garpeople,
-                      supportingdocs});
-                  }
-              }
-            });
-          }
-        });
-      }
-    });
-  }
+  Promise.all([
+    garApi.get(garId),
+    garApi.getPeople(garId),
+    garApi.getSupportingDocs(garId),
+  ]).then((apiResponse) => {
+    const garfile = JSON.parse(apiResponse[0]);
+    validator.handleResponseError(garfile);
+
+    const garpeople = JSON.parse(apiResponse[1]);
+    validator.handleResponseError(garpeople);
+
+    const garsupportingdocs = JSON.parse(apiResponse[2]);
+    validator.handleResponseError(garsupportingdocs);
+
+    const validations = validationList.validations(garfile, garpeople);
+    const renderObj = {
+      cookie,
+      manifestFields,
+      garfile,
+      garpeople,
+      garsupportingdocs,
+      showChangeLinks: true,
+    };
+
+    validator.validateChains(validations)
+      .then(() => {
+        res.render('app/garfile/review/index', renderObj);
+      }).catch((err) => {
+        logger.info('Validation failed');
+        logger.info(JSON.stringify(err));
+        renderObj.errors = err;
+        res.render('app/garfile/review/index', renderObj);
+      });
+  }).catch((err) => {
+    logger.error('Error retrieving GAR for review');
+    logger.error(JSON.stringify(err));
+    res.render('app/garfile/review/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
+  });
+};

@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const nock = require('nock');
 const personApi = require('../common/services/personApi');
 const endpoints = require('../common/config/endpoints');
@@ -79,7 +79,7 @@ describe('PersonService', () => {
   });
 
   it('Should successfully create a person for an individual user', (done) => {
-    personApi.create(userId, person.firstName, person.lastName, person.nationality, person.placeOfBirth, person.dateOfBirth, person.gender, person.documentType, person.documentNumber, person.documentExpiryDate, person.peopleType, person.issuingState)
+    personApi.create(userId, person)
       .then((response) => {
         const responseObj = JSON.parse(response);
         expect(typeof responseObj).to.equal('object');
@@ -117,7 +117,7 @@ describe('PersonService', () => {
   });
 
   it('Should successfully update a saved persons information', (done) => {
-    personApi.update(userId, personId, newPerson.firstName, newPerson.lastName, newPerson.nationality, newPerson.placeOfBirth, newPerson.dateOfBirth, newPerson.gender, newPerson.documentType, newPerson.documentNumber, newPerson.documentExpiryDate, newPerson.peopleType, newPerson.issuingState)
+    personApi.update(userId, personId, newPerson)
       .then((response) => {
         const responseObj = JSON.parse(response);
         expect(typeof responseObj).to.equal('object');

@@ -36,6 +36,6 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Failed validations');
-      res.render('app/organisation/editusers/index', { cookie, errors: err, orgUser });
+      res.render('app/organisation/editusers/index', { cookie, orgUser, errors: err });
     });
 };

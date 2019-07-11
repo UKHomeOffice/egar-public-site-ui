@@ -8,7 +8,7 @@ module.exports = (req, res) => {
       logger.error(err);
     } else {
       cookie.reset();
-      res.redirect('/login');
     }
+    res.redirect('/login');
   });
 };

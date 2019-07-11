@@ -1,11 +1,5 @@
-
-'use strict'
-const settings = require('../../../common/config/index');
-const cookieModel = require('../../../common/models/Cookie.class')
-
+const navUtil = require('../../../common/utils/nav');
 
 module.exports = (req, res) => {
-  var cookie = new cookieModel(req)
-  //logger.info('calll to create a new organisation')
-    res.render('app/organisation/createsucess/index',{ cookie });
-  }
+  navUtil.simpleGetRender(req, res, 'app/organisation/createsuccess/index');
+};

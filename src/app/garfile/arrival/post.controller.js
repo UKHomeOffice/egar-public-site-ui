@@ -1,34 +1,53 @@
+const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const _ = require('lodash')
 
-module.exports = async (req, res) => {
-  logger.debug('In garfile / arrival post controller');
+const performAPICall = (cookie, buttonClicked, res) => {
+  garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
+    .then((apiResponse) => {
+      const parsedResponse = JSON.parse(apiResponse);
+      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+        // API returned error
+        logger.debug(`Api returned: ${parsedResponse}`);
+        res.render('app/garfile/arrival/index', {
+          cookie,
+          errors: [parsedResponse],
+        });
+        return;
+      }
+      // Successful
+      if (buttonClicked === 'Save and continue') {
+        res.redirect('/garfile/craft');
+      } else {
+        res.redirect('/home');
+      }
+    })
+    .catch((err) => {
+      logger.error('Api failed to update GAR');
+      logger.error(err);
+      res.render('app/garfile/arrival/index', {
+        cookie,
+        errors: [{
+          message: 'Failed to add to GAR',
+        }],
+      });
+    });
+};
 
-  const cookie = new CookieModel(req);
-  const {
-    buttonClicked,
-  } = req.body;
+// Define port / date validation msgs
+const portMsg = 'As you have entered an arrival port code of "ZZZZ", you must provide longitude and latitude coordinates for the location';
+const portCodeMsg = 'The arrival airport code must be a minimum of 3 letters and a maximum of 4 letters';
+const futureDateMsg = 'Arrival date must be today or in the future';
+const realDateMsg = 'Enter a real arrival date';
+const timeMsg = 'Enter a real arrival time';
+const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places';
+const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places';
+const samePortMsg = 'Arrival port must be different to departure port';
 
-  // Define voyage
-  const voyage = req.body;
-  voyage.arrivalPort = _.toUpper(voyage.arrivalPort);
-  delete voyage.buttonClicked;
-  cookie.setGarArrivalVoyage(voyage);
-
-  // Define port / date validation msgs
-  const portMsg = 'As you have entered an arrival port code of "ZZZZ", you must provide longitude and latitude coordinates for the location';
-  const portCodeMsg = 'The arrival airport code must be a minimum of 3 letters and a maximum of 4 letters';
-  const futureDateMsg = 'Arrival date must be today or in the future';
-  const realDateMsg = 'Enter a real arrival date';
-  const timeMsg = 'Enter a real arrival time';
-  const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places';
-  const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places';
-  const samePortMsg = 'Arrival port must be different to departure port';
-
+const buildValidations = (voyage) => {
   // Create validation input objs
   const arrivePortObj = {
     portCode: voyage.arrivalPort,
@@ -85,52 +104,41 @@ module.exports = async (req, res) => {
     );
   }
 
+  return validations;
+};
+
+module.exports = async (req, res) => {
+  logger.debug('In garfile / arrival post controller');
+
+  const cookie = new CookieModel(req);
+  const { buttonClicked } = req.body;
+
+  // Define voyage
+  const voyage = req.body;
+  voyage.arrivalPort = _.toUpper(voyage.arrivalPort);
+  delete voyage.buttonClicked;
+  cookie.setGarArrivalVoyage(voyage);
+
+  const validations = buildValidations(voyage);
+
   const gar = await garApi.get(cookie.getGarId());
 
   validations.push(
     [
-      new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg)
-    ]
-  )
+      new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg),
+    ],
+  );
 
   validator.validateChains(validations)
     .then(() => {
-      performAPICall();
+      performAPICall(cookie, buttonClicked, res);
     })
     .catch((err) => {
       logger.info('Validation failed');
-      logger.info(err);
+      logger.info(JSON.stringify(err));
       res.render('app/garfile/arrival/index', {
         cookie,
         errors: err,
       });
     });
-
-  const performAPICall = () => {
-    garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
-      .then((apiResponse) => {
-        const parsedResponse = JSON.parse(apiResponse);
-        if (parsedResponse.hasOwnProperty('message')) {
-          // API returned error
-          logger.debug(`Api returned: ${parsedResponse}`);
-          res.render('app/garfile/arrival/index', {
-            cookie,
-            errors: [parsedResponse],
-          });
-        } else {
-          // Successful
-          return buttonClicked === 'Save and continue' ? res.redirect('/garfile/craft') : res.redirect('/home');
-        }
-      })
-      .catch((err) => {
-        logger.error('Api failed to update GAR');
-        logger.error(err);
-        res.render('app/garfile/arrival/index', {
-          cookie,
-          errors: [{
-            message: 'Failed to add to GAR',
-          }],
-        });
-      });
-    }
 };

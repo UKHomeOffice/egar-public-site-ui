@@ -159,7 +159,7 @@ describe('Validator', () => {
   it('Should generate an array of 2 validationRules', () => {
     const validationArr = validator.genValidations(validator.notEmpty, ['1', '2'], ['1', '2'], ['1', '2']);
     expect(validationArr).to.be.an('array');
-    for (let i = 0; i < validationArr.length; i++) {
+    for (let i = 0; i < validationArr.length; i += 1) {
       expect(validationArr[i]).to.be.an('array');
     }
     expect(validationArr).to.have.length(2);
@@ -287,16 +287,16 @@ describe('Validator', () => {
     expect(validator.longitude('-180.0001')).to.be.false;
   });
 
-  it('Should return true when validating different ports' , () => {
+  it('Should return true when validating different ports', () => {
     expect(validator.notSameValues(['ABC', 'DEF'])).to.be.true;
     expect(validator.notSameValues(['ABC', null])).to.be.true;
-  })
+  });
 
   it('Should return false when validating the same ports', () => {
     expect(validator.notSameValues(['ABC', 'ABC'])).to.be.false;
     expect(validator.notSameValues(['ABC', 'abc'])).to.be.false;
     expect(validator.notSameValues(['ABc', 'aBc'])).to.be.false;
-  })
+  });
 
   it('Should return true when a valid file and mimetype are provided', () => {
     expect(validator.isValidFileMime('jpg', 'image/jpeg')).to.be.true;
@@ -304,13 +304,76 @@ describe('Validator', () => {
     expect(validator.isValidFileMime('png', 'image/png')).to.be.true;
     expect(validator.isValidFileMime('pdf', 'application/pdf')).to.be.true;
     expect(validator.isValidFileMime('gif', 'image/gif')).to.be.true;
-  })
+  });
 
   it('Should return false when a valid file with an different valid extension is provided', () => {
     expect(validator.isValidFileMime('png', 'image/jpeg')).to.be.false;
-  })
+  });
 
   it('Should return false when a file with an invalid mimetype is provided', () => {
     expect(validator.isValidFileMime('png', 'application/txt')).to.be.false;
-  })
+  });
+
+  it('Shoud return true when string is less than or equal to MAX_STRING_LENGTH', () => {
+    const thirtyfive = 'AAAAAaaaa BBBBBbbbb CCCCCccccc';
+    expect(validator.isValidStringLength(thirtyfive)).to.be.true;
+  });
+
+  it('Should return false when string is longer than MAX_STRING_LENGTH', () => {
+    const thirtysix = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDd';
+    expect(validator.isValidStringLength(thirtysix)).to.be.false;
+  });
+
+  it('Should return true when registration is less than or equal to MAX_REGISTRATION_LENGTH', () => {
+    const fifteen = 'AAAAAaaaa BBBBB';
+    expect(validator.isValidRegistrationLength(fifteen)).to.be.true;
+  });
+
+  it('Should return false when registration is longer than MAX_REGISTRATION_LENGTH', () => {
+    const sixteen = 'AAAAAaaaa BBBBBb';
+    expect(validator.isValidRegistrationLength(sixteen)).to.be.false;
+  });
+
+  it('Should return true when email is less than or equal to MAX_EMAIL_LENGTH', () => {
+    const fifty = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDdddd EEEEEeeee ';
+    const onehundredfifty = fifty.repeat(3);
+    expect(validator.isValidEmailLength(onehundredfifty)).to.be.true;
+  });
+
+  it('Should return false when email is longer than MAX_EMAIL_LENGTH', () => {
+    const fifty = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDdddd EEEEEeeee ';
+    const onehundredfifty = fifty.repeat(3);
+    const onehundredfiftyone = `${onehundredfifty}A`;
+    expect(validator.isValidEmailLength(onehundredfiftyone)).to.be.false;
+  });
+
+  describe('Departure and Arrival Dates', () => {
+    const dateOne = '2019-01-01';
+    const dateTwo = '2019-01-02';
+    const dateOnePrime = '2019-01-01';
+
+    it('Should retun true when departure date is less than or equal to arrival date', () => {
+      const voyageDateObj = {
+        departureDate: dateOne,
+        arrivalDate: dateTwo
+      };
+      expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.true;
+    });
+
+    it('Should return true when departure date equals arrival date', () => {
+      const voyageDateObj = {
+        departureDate: dateOne,
+        arrivalDate: dateOnePrime
+      };
+      expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.true;
+    });
+
+    it('Should return false when departure date is greater than arrival date', () => {
+      const voyageDateObj = {
+        departureDate: dateTwo,
+        arrivalDate: dateOne
+      };
+      expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.false;
+    });
+  });
 });

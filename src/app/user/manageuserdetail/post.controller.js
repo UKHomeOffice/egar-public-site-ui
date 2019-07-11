@@ -3,7 +3,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const userApi = require('../../../common/services/userManageApi');
-
+const { MAX_STRING_LENGTH } = require('../../../common/config/index');
 
 module.exports = (req, res) => {
   const firstName = req.body.Firstname;
@@ -15,9 +15,11 @@ module.exports = (req, res) => {
   // Define a validation chain for user registeration fields
   const firstNameChain = [
     new ValidationRule(validator.notEmpty, 'firstname', firstName, 'Enter your given name'),
+    new ValidationRule(validator.isValidStringLength, 'firstname', firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
   ];
   const lnameChain = [
-    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your surname name'),
+    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your surname'),
+    new ValidationRule(validator.isValidStringLength, 'lastname', lastName, `Surname must be ${MAX_STRING_LENGTH} characters or less`),
   ];
 
   validator.validateChains([firstNameChain, lnameChain])
@@ -31,7 +33,7 @@ module.exports = (req, res) => {
           }
           cookie.setUserFirstName(firstName);
           cookie.setUserLastName(lastName);
-          res.render('app/user/detailschanged/index', { cookie });
+          return res.render('app/user/detailschanged/index', { cookie });
         })
         .catch((err) => {
           logger.error('Failed to update user details');
@@ -41,7 +43,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error('Validation failed');
-      logger.error(err);
+      logger.error(JSON.stringify(err));
       res.render('app/user/manageuserdetail/index', { cookie, errors: err });
     });
 };

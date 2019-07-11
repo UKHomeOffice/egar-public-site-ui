@@ -1,5 +1,4 @@
 const winston = require('winston');
-
 const config = require('../config/index');
 
 const logger = winston.createLogger({
@@ -13,19 +12,13 @@ if (process.env.NODE_ENV !== 'production') {
   }));
 }
 
-module.exports = function(fileName) {
+module.exports = (fileName) => {
   // Dockerfile stores and sets working dir to public-site, so remove it from file path
-  const logPrefix = fileName.replace('/public-site/', '') + ': ';
-  var loggerWithFilename = {
-    error: function(text) {
-      logger.error(logPrefix + text);
-    },
-    debug: function(text) {
-      logger.debug(logPrefix + text);
-    },
-    info: function(text) {
-      logger.info(logPrefix + text);
-    }
+  const logPrefix = `${fileName.replace('/public-site/', '')}: `;
+  const loggerWithFilename = {
+    error: text => logger.error(logPrefix + text),
+    debug: text => logger.debug(logPrefix + text),
+    info: text => logger.info(logPrefix + text),
   };
 
   return loggerWithFilename;

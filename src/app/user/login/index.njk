@@ -26,10 +26,9 @@
       <div class="govuk-error-summary__body">
           <ul class="govuk-list govuk-error-summary__list">
               <li>
-                The email address supplied has not been verified. You should have recieved an email to verify.
+                {{ __('user_login_unverified') }}
                 <p class="govuk-body-m">
-                  Click the verification link inside the email. This link will remain valid for 12 hours.
-                  If you can't see the email, please check any spam folders or <a href="/user/regmsg?resend=true">resend the email</a>.
+                  {{ __('user_login_unverified_caption') }}<a href="/user/regmsg?resend=true">{{ __('user_login_unverified_resend') }}</a>.
                 </p>
               </li>
           </ul>
@@ -44,26 +43,22 @@
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
 		<form action="login" autocomplete="off" method="POST">
-			<h1 class="govuk-heading-xl">Sign in</h1>
+			<h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
 			<div class="govuk-form-group {{ m.form_group_class('Username', errors) }}">
 
-				<label class="govuk-label govuk-label--m" for="Username">
-					Registered email address
-				</label>
+				<label class="govuk-label govuk-label--m" for="Username">{{ __('field_username') }}</label>
 
-				<span id="departurePort-hint" class="govuk-hint">
-					Enter the email address you used when you created your account
-				</span>
+				<span id="departurePort-hint" class="govuk-hint">{{ __('field_username_hint') }}</span>
         {{ m.error_message('Username', errors) }}
 				<input class="govuk-input" id="Username" name="Username" type="text">
 			</div>
 
 			<button type="submit" class="govuk-button">
-				Sign in
+				{{ __('button_sign_in' )}}
 			</button>
 
-			<h2 class="govuk-heading-m">Need to create an account?</h2>
-			<p class="govuk-body"><a href="/user/register">Create an account</a></p>
+			<h2 class="govuk-heading-m">{{ __('create_account_caption') }}</h2>
+			<p class="govuk-body"><a href="/user/register">{{ __('button_create_account') }}</a></p>
 
       <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 		</form>

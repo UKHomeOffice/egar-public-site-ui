@@ -8,7 +8,6 @@ const settings = require('../../../common/config/index');
 
 module.exports = (req, res) => {
   logger.debug('In verify / mfa post controller');
-
   const token = req.body['mfa-authentication-code'];
 
   const mfaCodeChain = [
@@ -18,40 +17,38 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
   const mfaTokenLength = settings.MFA_TOKEN_LENGTH;
-
   const errMsg = { message: 'There was a problem verifying your token. Try again' };
+
   validator.validateChains([mfaCodeChain])
     .then(() => {
       tokenApi.validateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
-        .then((valid) => {
-          if (valid) {
-            tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
-              .then(() => {
-                userApi.getDetails(cookie.getUserEmail())
-                  .then((apiResponse) => {
-                    const parsedResponse = JSON.parse(apiResponse);
-                    cookie.setLoginInfo(parsedResponse);
-                    res.redirect('/home');
-                  })
-                  .catch((err) => {
-                    logger.error(err);
-                    res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
-                  });
-              })
-              .catch((err) => {
-                logger.error(err);
-                res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
-              });
-          }
+        .then(() => {
+          tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
+            .then(() => {
+              userApi.getDetails(cookie.getUserEmail())
+                .then((apiResponse) => {
+                  const parsedResponse = JSON.parse(apiResponse);
+                  cookie.setLoginInfo(parsedResponse);
+                  res.redirect('/home');
+                })
+                .catch((err) => {
+                  logger.error(err);
+                  res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
+                });
+            })
+            .catch((err) => {
+              logger.error(err);
+              res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
+            });
         })
         .catch((err) => {
-          // Validation error
-          logger.info(err);
-          res.render('app/verify/mfa/index', { cookie, errors: [errMsg], mfaTokenLength });
+          // Token API error
+          logger.error(err);
+          res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
         });
     }).catch((err) => {
-      // Validation error
-      logger.info(err);
-      res.render('app/verify/mfa/index', { cookie, errors: err, mfaTokenLength });
+      // Page validation error
+      logger.info(JSON.stringify(err));
+      res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: err });
     });
 };

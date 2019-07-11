@@ -6,10 +6,7 @@ const orgApi = require('../../../common/services/organisationApi');
 
 
 module.exports = (req, res) => {
-  let orgname = req.body.Orgname;
-
-  // Get the ip address
-  const ip = req.header('x-forwarded-for');
+  const orgname = req.body.Orgname;
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
@@ -22,7 +19,7 @@ module.exports = (req, res) => {
   ];
 
   // Validate chains
-  validator.validateChains([orgnameChain]).then((response) => {
+  validator.validateChains([orgnameChain]).then(() => {
     // todo call to API pass organisation name, orgname
     // API should return OrgId
     logger.debug('Calling create org api endpoint');

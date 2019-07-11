@@ -38,9 +38,7 @@
           </li>
 
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-people' href="/people">
-              People
-            </a>
+            <a class="govuk-header__link" id='nav-people' href="/people">{{ __('nav_bar_people') }}</a>
           </li>
           <li class="govuk-header__navigation-item">
             <a class="govuk-header__link" id='nav-create-org' href="/organisation/create">
@@ -53,9 +51,7 @@
             </a>
           </li>
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-logout' href="/user/logout">
-              Sign out
-            </a>
+            <a class="govuk-header__link" id='nav-logout' href="/user/logout">{{ __('nav_bar_sign_out') }}</a>
           </li>
         </ul>
       {% elseif cookie.getUserRole() == 'Admin' or cookie.getUserRole() == 'Manager' %}

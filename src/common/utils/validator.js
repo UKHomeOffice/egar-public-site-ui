@@ -2,6 +2,10 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
+const { MAX_STRING_LENGTH } = require('../config/index');
+const { MAX_REGISTRATION_LENGTH } = require('../config/index');
+const { MAX_EMAIL_LENGTH } = require('../config/index');
+const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
   if (value === undefined) {
@@ -46,12 +50,12 @@ function daysInMonth(m, y) {
 }
 
 // check if number
-function IsNumeric(input) {
-  return (input - 0) == input && input.length > 0;
+function isNumeric(input) {
+  return typeof (parseInt(input, 10)) === 'number';
 }
 
 function validPhone(value) {
-  if (IsNumeric(value)) {
+  if (isNumeric(value)) {
     return value.length >= 11;
   }
   return false;
@@ -59,25 +63,25 @@ function validPhone(value) {
 
 // validday
 function validDay(d, m, y) {
-  if (IsNumeric(d)) {
+  if (isNumeric(d)) {
     return m >= 0 && m <= 12 && d > 0 && d <= daysInMonth(m, y);
   }
   return false;
 }
 
 function validMonth(m) {
-  if (IsNumeric(m)) {
+  if (isNumeric(m)) {
     return m >= 0 && m <= 12;
   }
   return false;
 }
 
 function validHour(h) {
-  return (IsNumeric(h) && (h >= 0) && (h <= 23));
+  return (isNumeric(h) && (h >= 0) && (h <= 23));
 }
 
 function validMinute(m) {
-  return (IsNumeric(m) && (m >= 0) && (m < 60));
+  return (isNumeric(m) && (m >= 0) && (m < 60));
 }
 
 function validTime(timeObj) {
@@ -128,11 +132,11 @@ function currentOrFutureDate(dObj) {
   if (dObj.y < currDate.getFullYear()) {
     return false;
   }
-  if (dObj.y == currDate.getFullYear()) {
+  if (dObj.y === currDate.getFullYear()) {
     if (dObj.m < currDate.getMonth() + 1) {
       return false;
     }
-    if (dObj.m == currDate.getMonth() + 1) {
+    if (dObj.m === currDate.getMonth() + 1) {
       return dObj.d >= currDate.getDate();
     }
   }
@@ -143,14 +147,16 @@ function validYear(y) {
   return y.length === 4;
 }
 
+const numericDateElements = dObj => isNumeric(dObj.d)
+  && isNumeric(dObj.m)
+  && isNumeric(dObj.y);
+
 function realDate(dObj) {
   if (dObj === null || dObj === undefined) return false;
-  return (IsNumeric(dObj.d) &&
-      IsNumeric(dObj.m) &&
-      IsNumeric(dObj.y) &&
-      validDay(dObj.d, dObj.m, dObj.y) &&
-      validMonth(dObj.m)) &&
-    validYear(dObj.y);
+  return numericDateElements(dObj)
+    && validDay(dObj.d, dObj.m, dObj.y)
+    && validMonth(dObj.m)
+    && validYear(dObj.y);
 }
 
 function passwordCheck(value) {
@@ -178,7 +184,6 @@ function validPort(value) {
 }
 
 function passwordValidCharacters(value) {
-  // if ((/^(?=.*[a-zA-Z])(?=.*[0-9])/.test(value))) {
   if (/^[a-zA-Z0-9]+$/.test(value)) {
     return true;
   }
@@ -209,7 +214,7 @@ function onlySymbols(value) {
 }
 
 function email(value) {
-  const regex = /^^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
+  const regex = /^^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
   return regex.test(value);
 }
 
@@ -245,9 +250,9 @@ function validIntlPhone(value) {
 function validateChains(chains) {
   return new Promise((resolve, reject) => {
     const failedRules = [];
-    for (let i = 0; i < chains.length; i++) {
+    for (let i = 0; i < chains.length; i += 1) {
       const rules = chains[i];
-      for (let x = 0; x < rules.length; x++) {
+      for (let x = 0; x < rules.length; x += 1) {
         const rule = rules[x];
         if (rule.validator(rule.value) === false) {
           failedRules.push(rule);
@@ -260,7 +265,7 @@ function validateChains(chains) {
     } else {
       reject(failedRules);
     }
-  })
+  });
 }
 
 /**
@@ -269,7 +274,7 @@ function validateChains(chains) {
  * @returns {Bool}
  */
 function notSameValues(values) {
-  if(values.includes(null) || values.includes(undefined)) {
+  if (values.includes(null) || values.includes(undefined)) {
     return true;
   }
   return !values.every(v => v.trim().toLowerCase() === values[0].trim().toLowerCase());
@@ -284,33 +289,72 @@ function notSameValues(values) {
  */
 function genValidations(type, cssIds, values, msgs) {
   const validationArr = [];
-  for (let i = 0; i < values.length; i++) {
+  for (let i = 0; i < values.length; i += 1) {
     validationArr.push([new ValidationRule(type, cssIds[i], values[i], msgs[i])]);
   }
   return validationArr;
 }
 
 /**
- * Given a filename and mimetype. Return true if:
- *   - The extension in the fileName matches the mimeType and the mimetype is one of the allowed types
- * Else return false
+ * Given a filename and mimetype, return true if the extension in the fileName matches
+ * the mimeType and the mimetype is one of the allowed types otherwise return false.
+ *
  * @param {String} fileName
  * @param {String} mimeType
  * @returns {Bool}
  */
 function isValidFileMime(fileName, mimeType) {
   const fileTypeObj = {
-    'jpg': ['image/jpeg', 'image/x-citrix-jpeg'],
-    'jpeg': ['image/jpeg', 'image/x-citrix-jpeg'],
-    'png': ['image/png', 'image/x-citrix-png', 'image/x-png'],
-    'pdf': ['application/pdf'],
-    'gif': ['image/gif']
-  }
-  const fileExtension = fileName.split('.').slice(-1).pop()
+    jpg: ['image/jpeg', 'image/x-citrix-jpeg'],
+    jpeg: ['image/jpeg', 'image/x-citrix-jpeg'],
+    png: ['image/png', 'image/x-citrix-png', 'image/x-png'],
+    pdf: ['application/pdf'],
+    gif: ['image/gif'],
+  };
+  const fileExtension = fileName.split('.').slice(-1).pop();
   if (fileTypeObj[fileExtension]) {
     return fileTypeObj[fileExtension].includes(mimeType);
   }
   return false;
+}
+
+/**
+ * Check if the string length is within the limit. Default limit is 35 characters.
+ * @param {String} value
+ * @return {Bool}
+ */
+function isValidStringLength(value) {
+  return value.length <= MAX_STRING_LENGTH;
+}
+
+function isValidRegistrationLength(value) {
+  return value.length <= MAX_REGISTRATION_LENGTH;
+}
+
+/**
+ * Check if string lenght is within the limit
+ * @param  {String} value
+ * @return {Bool}
+ */
+function isValidEmailLength(value) {
+  return value.length <= MAX_EMAIL_LENGTH;
+}
+
+/**
+ * Verify that Arrival Date is greater than or equal to Departure Date
+ * @param {Object} voyageDateObject { depatureDate: 'yyyy-MM-dd', arrivalDate: 'yyyy-MM-dd' }
+ * @returns {Bool}
+ */
+function isValidDepAndArrDate(value) {
+  const depDate = new Date(value.departureDate);
+  const arrDate = new Date(value.arrivalDate);
+  return depDate <= arrDate;
+}
+
+function handleResponseError(parsedApiResponse) {
+  if ({}.hasOwnProperty.call(parsedApiResponse, 'message')) {
+    logger.debug(`Api return Error: ${parsedApiResponse}`);
+  }
 }
 
 
@@ -322,7 +366,7 @@ module.exports = {
   passwordMinLength,
   confirmPassword,
   valuetrue,
-  IsNumeric,
+  isNumeric,
   validPhone,
   validDay,
   validMonth,
@@ -344,5 +388,10 @@ module.exports = {
   longitude,
   validIntlPhone,
   notSameValues,
-  isValidFileMime
+  isValidFileMime,
+  isValidStringLength,
+  isValidEmailLength,
+  isValidRegistrationLength,
+  isValidDepAndArrDate,
+  handleResponseError,
 };

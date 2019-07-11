@@ -29,7 +29,7 @@
     {% include "common/templates/includes/success-action.njk" %}
   {% endif %}
 
-<h1 class="govuk-heading-xl">People</h1>
+<h1 class="govuk-heading-xl">{{ __('nav_bar_people') }}</h1>
 
   {% if cookie.getUserRole() != 'User' %}
 	  <p class="govuk-body-l">You can view, edit or delete people that you regularly add to GARs.</p>

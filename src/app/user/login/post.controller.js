@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -12,7 +13,7 @@ const config = require('../../../common/config/index');
 module.exports = (req, res) => {
   logger.debug('In user / login post controller');
 
-  const usrname = req.body.Username;
+  const usrname = _.toLower(req.body.Username);
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
@@ -25,67 +26,61 @@ module.exports = (req, res) => {
     new ValidationRule(validator.notEmpty, 'Username', usrname, 'Enter your email'),
   ];
 
-  const errMsg = { message: 'There was a problem sending your code. Please try again' };
+  const errMsg = { message: 'There was a problem sending your code. Please try again.' };
 
   cookie.setUserEmail(usrname);
 
   // Validate chains
   validator.validateChains([unameChain])
     .then(() => {
-      userApi.userSearch(usrname)
-        .then((result) => {
-          const user = JSON.parse(result);
-          if (Object.prototype.hasOwnProperty.call(user, 'message')) {
-            logger.info(`Invalid email entered: ${usrname}`);
-            cookie.setUserVerified(false);
-            if (user.message === 'No results found') {
-              emailService
-                .send(config.NOTIFY_NOT_REGISTERED_TEMPLATE_ID, usrname, {
-                  base_url: config.BASE_URL,
-                })
-                .then(() => {
-                  res.redirect('/login/authenticate');
-                })
-                .catch((err) => {
-                  logger.error('Govnotify failed to send an email');
-                  logger.error(err);
-                  res.redirect('/login/authenticate');
-                });
-            }
-          } else {
-            logger.debug('User found');
-            logger.debug(`User state: ${user.state.toLowerCase()}`);
-            if (user.state.toLowerCase() !== 'verified') {
-              logger.info('User not verified, skipping token send');
-              
-              // Set variables to be used by resend link on next screen
-              cookie.setUserFirstName(user.firstName);
-              cookie.setUserDbId(user.userId);
-
-              return res.redirect('/login/authenticate');
-              // TODO: Once E2E tests are updated, redirect as appropriate
-              // return res.render('app/user/login/index', { cookie, unverified: true });
-            }
-            const mfaToken = token.genMfaToken();
-            cookie.setUserVerified(true);
-            tokenApi.setMfaToken(usrname, mfaToken, true)
-              .then(() => {
-                emailService.send(settings.NOTIFY_MFA_TEMPLATE_ID, usrname, { mfaToken });
-                return res.redirect('/login/authenticate');
-              })
-              .catch((err) => {
-                logger.error(err);
-                return res.render('app/user/login/index', { cookie, errors: [errMsg] });
-              });
+      userApi.userSearch(usrname).then((result) => {
+        const user = JSON.parse(result);
+        if (Object.prototype.hasOwnProperty.call(user, 'message')) {
+          logger.info(`Invalid email entered: ${usrname}`);
+          cookie.setUserVerified(false);
+          if (user.message !== 'No results found') {
+            throw new Error(`Unexpected response from API: ${user.message}`);
           }
-        })
-        .catch((err) => {
-          logger.error(err);
-          res.render('app/user/login/index', { cookie, errors: [errMsg] });
-        });
+          emailService.send(config.NOTIFY_NOT_REGISTERED_TEMPLATE_ID, usrname, {
+            base_url: config.BASE_URL,
+          }).then(() => res.redirect('/login/authenticate'))
+            .catch((err) => {
+              logger.error('Govnotify failed to send an email');
+              logger.error(err);
+              res.redirect('/login/authenticate');
+            });
+          return;
+        }
+        logger.debug('User found');
+        logger.debug(`User state: ${user.state.toLowerCase()}`);
+        if (user.state.toLowerCase() !== 'verified') {
+          logger.info('User not verified, skipping token send');
+
+          // Set variables to be used by resend link on next screen
+          cookie.setUserFirstName(user.firstName);
+          cookie.setUserDbId(user.userId);
+
+          res.render('app/user/login/index', { cookie, unverified: true });
+          return;
+        }
+        const mfaToken = token.genMfaToken();
+        cookie.setUserVerified(true);
+        tokenApi.setMfaToken(usrname, mfaToken, true)
+          .then(() => {
+            emailService.send(settings.NOTIFY_MFA_TEMPLATE_ID, usrname, { mfaToken });
+            res.redirect('/login/authenticate');
+          })
+          .catch((err) => {
+            logger.error(err);
+            res.render('app/user/login/index', { cookie, errors: [errMsg] });
+          });
+      }).catch((err) => {
+        logger.error(err);
+        res.render('app/user/login/index', { cookie, errors: [errMsg] });
+      });
     })
     .catch((err) => {
-      logger.error(err);
+      logger.error('Validation error when logging in');
       res.render('app/user/login/index', { cookie, errors: err });
     });
 };

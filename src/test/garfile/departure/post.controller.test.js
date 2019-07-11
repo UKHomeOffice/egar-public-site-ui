@@ -1,62 +1,216 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
+
 const sinon = require('sinon');
-const controller = require('../../../app/garfile/departure/post.controller');
-const garApi = require('../../../common/services/garApi');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const logger = require('../../../common/utils/logger')(__filename);
+
+const garApi = require('../../../common/services/garApi');
+const CookieModel = require('../../../common/models/Cookie.class');
+const validator = require('../../../common/utils/validator');
+const ValidationRule = require('../../../common/models/ValidationRule.class');
+
+const controller = require('../../../app/garfile/departure/post.controller');
 
 describe('Departure Post Controller', () => {
-    let req, res;
+  let req; let res; let apiResponse;
 
-    beforeEach(() => {
-        chai.use(sinonChai);
+  beforeEach(() => {
+    chai.use(sinonChai);
 
-        // Example request and response objects with appropriate spies
-        req = {
-            body: {
-                departureDate: null,
-                departurePort: 'ZZZZ',
-            },
-            session: {
-                gar: {
-                    id: 12345,
-                    voyageDeparture: {
-                        departureDay: 6,
-                        departureMonth: 6,
-                        departureYear: 2019,
-                    },
-                },
-            }
-        };
-    
-        res = {
-            render: sinon.spy(),
-        };
+    // Example request and response objects with appropriate spies
+    req = {
+      body: {
+        departurePort: 'ZZZZ',
+        departureLat: '45.1000',
+        departureLong: '12.1000',
+        departureDay: '30',
+        departureMonth: '5',
+        departureYear: '2020',
+        departureHour: '15',
+        departureMinute: '00',
+      },
+      session: {
+        gar: {
+          id: '12345',
+          voyageDeparture: {},
+          status: 'Draft',
+        },
+      },
+    };
 
-        // Stub APIs, in this case, GAR API
-        sinon.stub(garApi, 'get').callsFake((garId) => {
-            logger.info('Stubbed garApi get method called');
-            logger.info('garId: ' + garId);
-            return Promise.resolve(JSON.stringify(req.session.gar));
-        });
+    res = {
+      redirect: sinon.spy(),
+      render: sinon.spy(),
+    };
 
-        sinon.stub(garApi, 'patch').callsFake((garId, status, partial) => {
-            logger.info('Stubbed garApi patch method called');
-            logger.info('garId: ' + garId);
-            logger.info('status: ' + status);
-            logger.info('partial: ' + partial);
-            return Promise.resolve();
-        });
+    apiResponse = JSON.stringify({
+      departureDate: '2012-30-05',
+      departureTime: '15:00',
+      departurePort: 'LHR',
+      departureLong: '',
+      departureLat: '',
     });
+  });
 
-    afterEach(() => {
-        sinon.restore();
-    });
+  afterEach(() => {
+    sinon.restore();
+  });
 
-    it('should fail validation on basic submit', async() => {
+  // TODO: Validations could stub the performAPICall as it won't reach
+  // it normally (need to use rewire library)
+  it('should fail validation on basic submit', async () => {
+    delete req.body.departurePort;
+
+    sinon.stub(garApi, 'get').resolves(apiResponse);
+    sinon.stub(garApi, 'patch');
+
+    await controller(req, res);
+
+    expect(garApi.get).to.have.been.called;
+    expect(garApi.patch).to.not.have.been.called;
+    expect(res.render).to.have.been.calledWith('app/garfile/departure/index');
+  });
+
+  describe('port codes and co-ordinates', () => {
+    it('should fail if port is ZZZZ and no longitude or latitude', () => {
+      req.body.departurePort = 'ZZZZ';
+      delete req.body.departureLong;
+      delete req.body.departureLat;
+      const cookie = new CookieModel(req);
+
+      sinon.stub(garApi, 'get').resolves(apiResponse);
+      sinon.stub(garApi, 'patch');
+
+      const callController = async () => {
         await controller(req, res);
+      };
 
-        expect(res.render).to.have.been.calledWith('app/garfile/departure/index');
+      callController().then(() => {
+        expect(garApi.get).to.have.been.calledWith('12345');
+        expect(garApi.patch).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
+          cookie,
+          errors: [
+            // SIC: lattitude instead of latitide
+            new ValidationRule(validator.lattitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
+            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
+          ],
+        });
+      });
     });
+
+    // TODO: Technically, if the port is NOT ZZZZ then there should not be a longitude or latitude
+    // which is not actually represented in the code
+    // it('should fail if port is not ZZZZ yet there is longitude and latitude', () => {
+    //   const cookie = new CookieModel(req);
+
+    //   sinon.stub(garApi, 'get').resolves(apiResponse);
+    //   sinon.stub(garApi, 'patch');
+
+    //   const callController = async () => {
+    //     await controller(req, res);
+    //   };
+
+    //   callController().then(() => {
+    //     expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
+    //     expect(garApi.patch).to.not.have.been.called;
+    //     expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
+    //       cookie,
+    //       errors: [
+    //         // SIC: lattitude instead of latitide
+    // new ValidationRule(
+    //    validator.lattitude,
+    //    'departureLat', undefined,
+    //    'Value entered is incorrect. Enter latitude to 4 decimal places'),
+    // new ValidationRule(
+    //    validator.longitude,
+    //    'departureLong', undefined,
+    //    'Value entered is incorrect. Enter longitude to 4 decimal places'),
+    //       ],
+    //     });
+    //   });
+    // });
+  });
+
+  describe('performAPICall', () => {
+    it('should return an error message if api rejects', () => {
+      const cookie = new CookieModel(req);
+      sinon.stub(garApi, 'get').resolves(apiResponse);
+      sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject');
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(garApi.get).to.have.been.calledWith('12345');
+        expect(garApi.patch).to.have.been.calledWith('12345', cookie.getGarStatus(), cookie.getGarDepartureVoyage());
+        expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
+          cookie,
+          errors: [{
+            message: 'Failed to add to GAR',
+          }],
+        });
+      });
+    });
+
+    it('should return the error message if one is returned from api', () => {
+      const cookie = new CookieModel(req);
+      sinon.stub(garApi, 'get').resolves(apiResponse);
+      sinon.stub(garApi, 'patch').resolves(JSON.stringify({
+        message: 'GAR does not exist',
+      }));
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(garApi.get).to.have.been.calledWith('12345');
+        expect(garApi.patch).to.have.been.calledWith('12345', cookie.getGarStatus(), cookie.getGarDepartureVoyage());
+        expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
+          cookie,
+          errors: [{
+            message: 'GAR does not exist',
+          }],
+        });
+      });
+    });
+
+    // TODO:
+    // Save and Continue currently goes to the next page, but it
+    // should probably go to the craft page if going through the flow,
+    // but back to the GAR view if going into specific sections.
+    it('should go to the home page if no buttonClicked property', () => {
+      const cookie = new CookieModel(req);
+      sinon.stub(garApi, 'get').resolves(apiResponse);
+      sinon.stub(garApi, 'patch').resolves(JSON.stringify({}));
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(req.body.buttonClicked).to.be.undefined;
+        expect(garApi.get).to.have.been.calledWith('12345');
+        expect(garApi.patch).to.have.been.calledWith('12345', cookie.getGarStatus(), cookie.getGarDepartureVoyage());
+        expect(res.redirect).to.have.been.calledWith('/home');
+      });
+    });
+
+    it('should go to arrival page if buttonClicked property is set', () => {
+      req.body.buttonClicked = 'Save and continue';
+      const cookie = new CookieModel(req);
+      sinon.stub(garApi, 'get').resolves(apiResponse);
+      sinon.stub(garApi, 'patch').resolves(JSON.stringify({}));
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(garApi.get).to.have.been.calledWith('12345');
+        expect(garApi.patch).to.have.been.calledWith('12345', cookie.getGarStatus(), cookie.getGarDepartureVoyage());
+        expect(res.redirect).to.have.been.calledWith('/garfile/arrival');
+      });
+    });
+  });
 });
