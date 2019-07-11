@@ -198,7 +198,7 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('ga_id', GA_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
 
-  // logger.info('Set global settings for nunjucks');
+  logger.info('Set global settings for nunjucks');
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('countryList', autocompleteUtil.generateCountryList());
