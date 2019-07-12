@@ -1,27 +1,26 @@
 /* eslint-disable no-undef */
+
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
-const controller = require('../../../app/user/detailschanged/get.controller');
+const CookieModel = require('../../common/models/Cookie.class');
 
-describe('Manage User Detail Get Controller', () => {
+const controller = require('../../app/home/post.controller');
+
+describe('Home Post Controller', () => {
   let req; let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
 
-    // Example request and response objects with appropriate spies
     req = {
       session: {},
     };
-
     res = {
       render: sinon.spy(),
     };
-    // Need to figure out how to stub the CookieModel and its constructor,
-    // in order to just check it is instantiated
   });
 
   afterEach(() => {
@@ -29,8 +28,10 @@ describe('Manage User Detail Get Controller', () => {
   });
 
   it('should render the appropriate page', async () => {
+    cookie = new CookieModel(req);
+
     await controller(req, res);
 
-    expect(res.render).to.have.been.calledWith('app/user/detailschanged/index');
+    expect(res.render).to.have.been.calledWith('app/garfile/home/index', { cookie });
   });
 });

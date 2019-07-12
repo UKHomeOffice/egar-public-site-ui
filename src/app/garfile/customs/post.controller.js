@@ -8,7 +8,6 @@ const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reaso
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
 
 module.exports = (req, res) => {
-
   const cookie = new CookieModel(req);
 
   const customs = {
@@ -32,11 +31,15 @@ module.exports = (req, res) => {
       garApi.patch(cookie.getGarId(), cookie.getGarStatus(), customs)
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
-          if (parsedResponse.hasOwnProperty('message')) {
+          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             context.errors = [parsedResponse];
             res.render('app/garfile/customs/index', context);
+            return;
+          }
+          if (buttonClicked === 'Save and continue') {
+            res.redirect('/garfile/supportingdocuments');
           } else {
-            return buttonClicked === 'Save and continue' ? res.redirect('/garfile/supportingdocuments') : res.redirect('/home');
+            res.redirect('/home');
           }
         })
         .catch((err) => {
@@ -47,8 +50,9 @@ module.exports = (req, res) => {
         });
     })
     .catch((validationErrs) => {
-      logger.debug('Failed validations');
+      logger.debug('Failed validations submitting declarations');
       context.errors = validationErrs;
+      logger.debug(JSON.stringify(validationErrs));
       res.render('app/garfile/customs/index', context);
     });
 };

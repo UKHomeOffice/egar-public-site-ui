@@ -8,6 +8,7 @@ module.exports = (req, res) => {
   const crafts = cookie.getUserRole() === 'Individual' ? craftApi.getCrafts(cookie.getUserDbId()) : craftApi.getOrgCrafts(cookie.getOrganisationId());
   crafts.then((values) => {
     const savedCrafts = JSON.parse(values);
+    // Pagination, returns _meta and _links:
     cookie.setSavedCraft(savedCrafts);
     if (req.session.errMsg) {
       const { errMsg } = req.session;
