@@ -8,5 +8,8 @@ module.exports = (req, res) => {
   } else if (req.body.editPerson) {
     req.session.editPersonId = req.body.editPerson;
     req.session.save(() => res.redirect('/people/edit'));
+  } else {
+    // Unexpected action, just redirect back to calling screen
+    res.redirect('/people');
   }
 };

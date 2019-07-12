@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const logger = require('../../../../common/utils/logger')(__filename);
 const validator = require('../../../../common/utils/validator');
 const CookieModel = require('../../../../common/models/Cookie.class');
@@ -6,7 +8,6 @@ const documenttype = require('../../../../common/seeddata/egar_saved_people_trav
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
 const validations = require('../../../people/validations');
-const _ = require('lodash');
 
 module.exports = (req, res) => {
   logger.debug('In Manifest/Add new Person post controller');
@@ -37,18 +38,24 @@ module.exports = (req, res) => {
           const parsedResponse = JSON.parse(garResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             res.render('app/garfile/manifest/addnewperson/index', {
-              req, cookie, person, persontype, documenttype, genderchoice, errors: [parsedResponse], 
+              req, cookie, person, persontype, documenttype, genderchoice, errors: [parsedResponse],
             });
           } else {
             res.redirect('/garfile/manifest');
           }
+        }).catch((err) => {
+          logger.error('Unexpected error from GAR API when adding new person to the manifest');
+          logger.error(JSON.stringify(err));
+          res.render('app/garfile/manifest/addnewperson/index', {
+            req, cookie, person, persontype, documenttype, genderchoice, errors: [{ message: 'Error adding a new person. Try again later' }],
+          });
         });
     })
     .catch((err) => {
-      logger.error('There was a problem adding person to saved people');
-      logger.error(JSON.stringify(err));
+      logger.info('There was a problem adding person to saved people');
+      logger.debug(JSON.stringify(err));
       res.render('app/garfile/manifest/addnewperson/index', {
-        req, cookie, person, persontype, documenttype, genderchoice, errors: err, 
+        req, cookie, person, persontype, documenttype, genderchoice, errors: err,
       });
     });
 };
