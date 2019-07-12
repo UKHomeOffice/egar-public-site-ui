@@ -28,6 +28,7 @@ module.exports = (req, res) => {
       if (req.session.manifestErr) {
         const { manifestErr, manifestInvalidPeople } = req.session;
         delete req.session.manifestErr;
+        delete req.session.manifestInvalidPeople;
         return res.render('app/garfile/manifest/index', { cookie, savedPeople, manifest, manifestInvalidPeople, errors: manifestErr });
       }
 
@@ -42,6 +43,6 @@ module.exports = (req, res) => {
       // Get savedpeople / manifest failed
       logger.error('Failed to add person to GAR');
       logger.error(err);
-      res.render('app/garfile/manifest/index', { cookie, errors: [{ message: 'Failed to get data' }] });
+      res.render('app/garfile/manifest/index', { cookie, errors: [{ message: 'Failed to get manifest data' }] });
     });
 };

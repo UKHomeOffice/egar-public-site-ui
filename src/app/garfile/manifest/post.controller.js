@@ -9,10 +9,10 @@ module.exports = (req, res) => {
   logger.debug('In garfile / manifest post controller');
   if (req.body.editPersonId) {
     req.session.editPersonId = req.body.editPersonId;
-    req.session.save(() => { res.redirect('/garfile/manifest/editperson'); });
+    req.session.save(() => res.redirect('/garfile/manifest/editperson'));
   } else if (req.body.deletePersonId) {
     req.session.deletePersonId = req.body.deletePersonId;
-    req.session.save(() => { res.redirect('/garfile/manifest/deleteperson'); });
+    req.session.save(() => res.redirect('/garfile/manifest/deleteperson'));
   } else if (req.body.personId) {
     logger.debug('Found people to add to manifest');
     manifestUtil.getDetailsByIds(req.body.personId, cookie.getUserDbId())
@@ -25,6 +25,10 @@ module.exports = (req, res) => {
             logger.info('Failed to patch GAR with updated manifest');
             res.redirect('/garfile/manifest');
           });
+      })
+      .catch(() => {
+        logger.info('Failed to retrieve manifest ids');
+        res.redirect('/garfile/manifest');
       });
   } else if (req.body.buttonClicked === 'Save and Exit') {
     res.redirect('/garfile/manifest');
@@ -34,20 +38,21 @@ module.exports = (req, res) => {
       .then((apiResponse) => {
         const manifest = new Manifest(apiResponse);
         if (manifest.validate()) {
-          return res.redirect('/garfile/responsibleperson');
+          res.redirect('/garfile/responsibleperson');
+          return;
         }
         logger.info('Manifest validation failed, redirecting with error msg');
         req.session.manifestErr = manifest.genErrValidations();
         req.session.manifestInvalidPeople = manifest.invalidPeople;
-        return res.redirect('/garfile/manifest');
+        res.redirect('/garfile/manifest');
       })
       .catch((err) => {
         logger.error('Failed to get manifest');
         logger.error(err);
         req.session.manifestErr = 'Failed to get manifest';
-        return res.redirect('/garfile/manifest');
+        res.redirect('/garfile/manifest');
       });
   } else {
-    return res.redirect('/garfile/manifest');
+    res.redirect('/garfile/manifest');
   }
 };
