@@ -5,9 +5,11 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
-const controller = require('../../app/welcome/get.controller');
+const CookieModel = require('../../../common/models/Cookie.class');
 
-describe('Welcome Get Controller', () => {
+const controller = require('../../../app/organisation/createsuccess/get.controller');
+
+describe('Organisation Create Success Get Controller', () => {
   let req; let res;
 
   beforeEach(() => {
@@ -16,7 +18,9 @@ describe('Welcome Get Controller', () => {
       chai.assert.fail(`Unhandled rejection encountered: ${error}`);
     });
 
-    req = {};
+    req = {
+      session: {},
+    };
     res = {
       render: sinon.spy(),
     };
@@ -26,9 +30,11 @@ describe('Welcome Get Controller', () => {
     sinon.restore();
   });
 
-  it('should render the welcome page', async () => {
+  it('should render the appropriate page', async () => {
+    const cookie = new CookieModel(req);
+
     await controller(req, res);
 
-    expect(res.render).to.have.been.calledWith('app/welcome/index');
+    expect(res.render).to.have.been.calledWith('app/organisation/createsuccess/index', { cookie });
   });
 });

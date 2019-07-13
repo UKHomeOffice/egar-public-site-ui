@@ -13,8 +13,10 @@ describe('Aircraft Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
-    // Example response object with appropriate spies
     res = {
       redirect: sinon.stub(),
       render: sinon.stub(),
