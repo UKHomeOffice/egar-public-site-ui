@@ -128,8 +128,8 @@ module.exports = async (req, res) => {
       performAPICall(cookie, res, buttonClicked);
     })
     .catch((err) => {
-      logger.info('Validation failed');
-      logger.info(JSON.stringify(err));
+      logger.info('GAR departure validation failed');
+      logger.debug(JSON.stringify(err));
       res.render('app/garfile/departure/index', { cookie, errors: err });
     });
 };
