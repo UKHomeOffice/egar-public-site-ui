@@ -83,7 +83,7 @@ describe('User Register Post Controller', () => {
     const stubCreateUser = sinon.stub(createUserFunction, 'createUser');
 
     beforeEach(() => {
-      config.WHITELIST_REQUIRED = 'true';
+      sinon.stub(config, 'WHITELIST_REQUIRED').value('true');
       rewiredController.__set__('createUser', stubCreateUser);
     });
 
@@ -92,7 +92,7 @@ describe('User Register Post Controller', () => {
     });
 
     it('should create user if whitelisted', async () => {
-      config.WHITELIST_REQUIRED = 'true';
+      sinon.stub(config, 'WHITELIST_REQUIRED').value('true');
       const cookie = new CookieModel(req);
       sinon.stub(whiteListService, 'isWhitelisted').resolves(true);
 
@@ -144,7 +144,7 @@ describe('User Register Post Controller', () => {
 
   describe('whitelist disabled', () => {
     it('should call createUser function, and send token when all resolves', async () => {
-      config.WHITELIST_REQUIRED = 'false';
+      sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
       sinon.stub(sendTokenService, 'send').resolves();
       sinon.stub(tokenApi, 'setToken');
       sinon.stub(userCreateApi, 'post').resolves(
@@ -166,7 +166,7 @@ describe('User Register Post Controller', () => {
     });
 
     it('should call createUser function, but inform user if there is an issue with GOV notify', async () => {
-      config.WHITELIST_REQUIRED = 'false';
+      sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
       const cookie = new CookieModel(req);
       sinon.stub(sendTokenService, 'send').rejects('Example Reject');
       sinon.stub(tokenApi, 'setToken');
@@ -194,7 +194,7 @@ describe('User Register Post Controller', () => {
   // TODO: Current functionality is that a message from the API could be that a user exists
   // but then goes to the next page without informing the user (so re-registering is not a thing)
   it('should redirect if createUserApi resolves but with an error', async () => {
-    config.WHITELIST_REQUIRED = 'false';
+    sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
     sinon.stub(req.session, 'save').callsArg(0);
     sinon.stub(sendTokenService, 'send');
     sinon.stub(tokenApi, 'setToken');
@@ -218,7 +218,7 @@ describe('User Register Post Controller', () => {
   });
 
   it('should return an error message when userCreateApi rejects', async () => {
-    config.WHITELIST_REQUIRED = 'false';
+    sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
     const cookie = new CookieModel(req);
     sinon.stub(sendTokenService, 'send');
     sinon.stub(tokenApi, 'setToken');

@@ -50,7 +50,7 @@ describe('Verify Get Controller', () => {
           return 'Unexpected Key';
       }
     });
-    config.NOTIFY_TOKEN_SECRET = 'example_secret';
+    sinon.stub(config, 'NOTIFY_TOKEN_SECRET').value('example_secret');
   });
 
   afterEach(() => {
