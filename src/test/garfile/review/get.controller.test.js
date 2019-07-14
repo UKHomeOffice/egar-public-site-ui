@@ -20,6 +20,9 @@ describe('GAR Review Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
     req = {
       body: {
@@ -114,7 +117,56 @@ describe('GAR Review Get Controller', () => {
     });
   });
 
-  it('sends render the page as appropriate', () => {
+  it('should render the page but log out a message if API returns one', () => {
+    const cookie = new CookieModel(req);
+    garApiGetStub.resolves(JSON.stringify({
+      registration: 'Z-AFTC',
+      departureDate: '2012-12-13',
+      arrivalDate: '2012-12-14',
+      status: {
+        name: 'draft',
+      },
+      responsibleGivenName: 'James',
+    }));
+    garApiGetPeopleStub.resolves(JSON.stringify({
+      items: [
+        { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
+      ],
+    }));
+    garApiGetSupportingDocsStub.resolves(JSON.stringify({
+      message: 'GAR not found',
+    }));
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then().then().then(() => {
+      expect(res.render).to.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
+        cookie,
+        manifestFields,
+        garfile: {
+          registration: 'Z-AFTC',
+          departureDate: '2012-12-13',
+          arrivalDate: '2012-12-14',
+          status: {
+            name: 'draft',
+          },
+          responsibleGivenName: 'James',
+        },
+        garpeople: {
+          items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
+        },
+        garsupportingdocs: {
+          message: 'GAR not found',
+        },
+        showChangeLinks: true,
+      });
+    });
+  });
+
+  it('should render the page as appropriate', () => {
     const cookie = new CookieModel(req);
     garApiGetStub.resolves(JSON.stringify({
       registration: 'Z-AFTC',

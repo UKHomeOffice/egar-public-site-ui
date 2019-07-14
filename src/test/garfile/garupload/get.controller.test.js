@@ -66,8 +66,4 @@ describe('GAR Upload Get Controller', () => {
       errors: [{ identifier: '1', message: 'Message 1' }, { identifier: '2', message: 'Message 2' }],
     });
   });
-
-  // TODO:
-  // req.session.failureMsg single object
-  // req.session.failureMsg array of messages
 });

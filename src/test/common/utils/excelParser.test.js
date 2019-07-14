@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
+
 const { expect } = require('chai');
 const sinon = require('sinon');
 
@@ -53,7 +56,9 @@ describe('ExcelParser', () => {
 
   it('Should parse a configured cell-range by searching for start cell', () => {
     const mapConfig = { cell1: { location: 'A' }, cell2: { location: 'B' } };
-    const parser = new ExcelParser(rangeWorkbook, mapConfig, { startIdentifier: 'A456', startColumn: 'A', skipNum: 1, terminator: 'STOP' });
+    const parser = new ExcelParser(rangeWorkbook, mapConfig, {
+      startIdentifier: 'A456', startColumn: 'A', skipNum: 1, terminator: 'STOP',
+    });
     expect(parser.rangeParse()).to.have.length(1);
   });
 

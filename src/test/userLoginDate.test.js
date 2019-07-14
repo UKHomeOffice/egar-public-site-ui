@@ -1,15 +1,13 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const moment = require('moment');
 
 const findOneStub = sinon.stub().resolves({
   get() {
-    return  '2018-12-12 14:24:23.195+00';
-  }
+    return '2018-12-12 14:24:23.195+00';
+  },
 });
 
 const dbStub = {
@@ -25,12 +23,10 @@ const dbStub = {
 const tokenApi = proxyquire('../common/services/tokenApi', { '../utils/db': dbStub });
 
 describe('DateService', () => {
-
   it('Should successfully get the last successful login date', (done) => {
-    tokenApi.getLastLogin('test@test.com')
-    .then(() => {
+    tokenApi.getLastLogin('test@test.com').then(() => {
       sinon.assert.calledOnce(findOneStub);
       done();
     });
+  });
 });
-})

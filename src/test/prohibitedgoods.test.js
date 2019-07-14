@@ -1,14 +1,13 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const nock = require('nock');
 const garApi = require('../common/services/garApi');
 const endpoints = require('../common/config/endpoints');
 
 const BASE_URL = endpoints.baseUrl();
 const garId = 'c2d86db6-006c-4f5e-9e22-e039c8b1ddc7';
-const userId = 'f058e37b-3fa2-4c05-a057-6c810d6c6bd6';
 
 const garProhibitedGoodsPartial = {
   status: 'Draft',

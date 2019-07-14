@@ -15,8 +15,10 @@ describe('Arrival Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
-    // Example request and response objects with appropriate spies
     req = {
       body: {
         departureDate: null,

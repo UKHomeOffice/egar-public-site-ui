@@ -22,6 +22,9 @@ describe('API upload GAR post controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
     incorrectWorkbook = {
       SheetNames: ['Sheet1'],
@@ -321,16 +324,48 @@ describe('API upload GAR post controller', () => {
           expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
           expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
             people: [{
-              documentTypeOther: 'Biochip', issuingState: 'USA', documentNumber: 'Document Number', lastName: 'Kirk', firstName: 'James', gender: 'Male', dateOfBirth: 'Date of Birth', placeOfBirth: 'Place of Birth', nationality: 'USA', documentExpiryDate: 'Document Expiry Date', peopleType: 'Crew', documentType: 'Other',
+              documentTypeOther: 'Biochip',
+              issuingState: 'USA',
+              documentNumber: 'Document Number',
+              lastName: 'Kirk',
+              firstName: 'James',
+              gender: 'Male',
+              dateOfBirth: 'Date of Birth',
+              placeOfBirth: 'Place of Birth',
+              nationality: 'USA',
+              documentExpiryDate: 'Document Expiry Date',
+              peopleType: 'Crew',
+              documentType: 'Other',
             }],
           });
           expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
             people: [{
-              documentTypeOther: 'Federation Card', issuingState: 'USA', documentNumber: 'Document Number', lastName: 'Chekov', firstName: 'Pavel', gender: 'Male', dateOfBirth: 'Date of Birth', placeOfBirth: 'Place of Birth', nationality: 'RUS', documentExpiryDate: 'Document Expiry Date', peopleType: 'Passenger', documentType: 'Other',
+              documentTypeOther: 'Federation Card',
+              issuingState: 'USA',
+              documentNumber: 'Document Number',
+              lastName: 'Chekov',
+              firstName: 'Pavel',
+              gender: 'Male',
+              dateOfBirth: 'Date of Birth',
+              placeOfBirth: 'Place of Birth',
+              nationality: 'RUS',
+              documentExpiryDate: 'Document Expiry Date',
+              peopleType: 'Passenger',
+              documentType: 'Other',
             }],
           });
           expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
-            arrivalPort: 'Arrival Port', arrivalDate: 'Arrival Date', arrivalTime: 'Arrival Time', departurePort: 'Departure Port', departureDate: 'Departure Date', departureTime: 'Departure Time', registration: 'Registration', craftType: 'Craft Type', craftBase: 'Craft Base', freeCirculation: 'FreeCirculation', visitReason: 'VisitReason',
+            arrivalPort: 'Arrival Port',
+            arrivalDate: 'Arrival Date',
+            arrivalTime: 'Arrival Time',
+            departurePort: 'Departure Port',
+            departureDate: 'Departure Date',
+            departureTime: 'Departure Time',
+            registration: 'Registration',
+            craftType: 'Craft Type',
+            craftBase: 'Craft Base',
+            freeCirculation: 'FreeCirculation',
+            visitReason: 'VisitReason',
           });
           expect(req.session.failureMsg).to.be.undefined;
           expect(req.session.failureIdentifier).to.be.undefined;

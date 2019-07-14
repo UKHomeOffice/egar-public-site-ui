@@ -56,6 +56,8 @@ describe('Organisation Post Controller', () => {
   });
 
   describe('api returns ok', () => {
+    let cookie;
+
     const apiResponse = {
       items: [
         { id: 'USER-1', firstName: 'Jessica' },
@@ -63,12 +65,15 @@ describe('Organisation Post Controller', () => {
       ],
     };
 
-    it('should display error message if set', () => {
-      const cookie = new CookieModel(req);
+    beforeEach(() => {
+      cookie = new CookieModel(req);
       cookie.setOrganisationUsers(apiResponse);
-      req.session.errMsg = { message: 'Example error message' };
 
       orgApiStub.resolves(JSON.stringify(apiResponse));
+    });
+
+    it('should display error message if set', () => {
+      req.session.errMsg = { message: 'Example error message' };
 
       const callController = async () => {
         await controller(req, res);
@@ -91,12 +96,8 @@ describe('Organisation Post Controller', () => {
     });
 
     it('should display success message if set', () => {
-      const cookie = new CookieModel(req);
-      cookie.setOrganisationUsers(apiResponse);
       req.session.successHeader = 'Successful header';
       req.session.successMsg = 'Example success message';
-
-      orgApiStub.resolves(JSON.stringify(apiResponse));
 
       const callController = async () => {
         await controller(req, res);
@@ -122,11 +123,6 @@ describe('Organisation Post Controller', () => {
     });
 
     it('should redirect with no messages if no parameters', () => {
-      const cookie = new CookieModel(req);
-      cookie.setOrganisationUsers(apiResponse);
-
-      orgApiStub.resolves(JSON.stringify(apiResponse));
-
       const callController = async () => {
         await controller(req, res);
       };

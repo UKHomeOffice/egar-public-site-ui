@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
+
 const { expect } = require('chai');
 const autocomplete = require('../../../common/utils/autocomplete');
 
@@ -11,15 +14,11 @@ describe('Autocomplete Utility', () => {
     const result = autocomplete.generateCountryList();
     expect(result).to.not.be.undefined;
 
-    const uk = result.find((row) => {
-      return row.code === 'GBR';
-    });
+    const uk = result.find(row => row.code === 'GBR');
     expect(uk.code).to.eq('GBR');
     expect(uk.label).to.eq('United Kingdom (GBR)');
 
-    const jpn = result.find((row) => {
-      return row.code === 'JPN';
-    });
+    const jpn = result.find(row => row.code === 'JPN');
     expect(jpn.code).to.eq('JPN');
     expect(jpn.label).to.eq('Japan (JPN)');
   });

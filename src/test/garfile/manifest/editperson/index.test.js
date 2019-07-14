@@ -1,5 +1,9 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-expressions */
+
+const { expect } = require('chai');
+
 const index = require('../../../../app/garfile/manifest/editperson/index');
-const expect = require('chai').expect;
 
 describe('Garfile Manifest Edit Person index.js', () => {
   it('should have included everything', () => {

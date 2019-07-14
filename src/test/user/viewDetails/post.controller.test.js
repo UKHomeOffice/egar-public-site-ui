@@ -8,7 +8,7 @@ const sinonChai = require('sinon-chai');
 
 const controller = require('../../../app/user/viewDetails/post.controller');
 
-describe('Aircraft Post Controller', () => {
+describe('User View Details Post Controller', () => {
   let res;
 
   beforeEach(() => {

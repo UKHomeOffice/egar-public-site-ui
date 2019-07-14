@@ -1,14 +1,11 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const nock = require('nock');
-const chai = require('chai');
-const settings = require('../common/config');
+
 const endpoints = require('../common/config/endpoints');
 const craftApi = require('../common/services/craftApi');
-
-const should = chai.should();
 
 describe('CraftService', () => {
   const userId = '43f70daa-dc2e-4c88-af9c-f0dc1ff13a8e';

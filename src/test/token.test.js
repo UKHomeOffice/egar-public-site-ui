@@ -1,9 +1,8 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const nock = require('nock');
-const sinon = require('sinon');
 const endpoints = require('../common/config/endpoints');
 const tokenApi = require('../common/services/tokenApi');
 const genToken = require('../common/services/create-token');
@@ -28,7 +27,9 @@ describe('TokenService', () => {
       .reply(201, {});
 
     nock(BASE_URL)
-      .post(url, { tokenId, inviterId: userId, organisationId: orgId, roleName })
+      .post(url, {
+        tokenId, inviterId: userId, organisationId: orgId, roleName,
+      })
       .reply(201, {});
   });
 
@@ -73,7 +74,8 @@ describe('Generate Hash', () => {
   it('Should successfully generate a hash', () => {
     settings.NOTIFY_TOKEN_SECRET = 'example';
     const token = 'randominput'.toString();
-    var output = genToken.generateHash(token);
+    const output = genToken.generateHash(token);
+
     expect(output).not.to.equal(token);
     expect(output.length).to.eq(64);
   });

@@ -3,7 +3,7 @@
 
 const { expect } = require('chai');
 const nock = require('nock');
-const chai = require('chai');
+
 const endpoints = require('../common/config/endpoints');
 const organisationApi = require('../common/services/organisationApi');
 

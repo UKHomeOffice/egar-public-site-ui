@@ -7,7 +7,6 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/personApi');
 
 const controller = require('../../../app/register/logout/get.controller');
 
