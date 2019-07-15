@@ -23,6 +23,10 @@ describe('Correlation Header Middleware', () => {
     next = sinon.spy();
   });
 
+  afterEach(() => {
+    sinon.restore();
+  });
+
   it('should leave blank if CORRELATION_HEADER not set', () => {
     middleware(req, res, next);
 

@@ -24,6 +24,10 @@ describe('Flagpole Middleware', () => {
     next = sinon.spy();
   });
 
+  afterEach(() => {
+    sinon.restore();
+  });
+
   it('should redirect if FLAGPOLE_MAINTENANCE set', () => {
     sinon.stub(config, 'FLAGPOLE_MAINTENANCE').value('true');
 

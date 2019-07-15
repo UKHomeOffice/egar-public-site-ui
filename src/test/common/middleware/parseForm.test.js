@@ -5,9 +5,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const bodyParser = require('body-parser');
-
-const middleware = require('../../../common/middleware/parseForm');
+const proxyquire = require('proxyquire');
 
 describe('Parse Form Middleware', () => {
   let res; let req; let next;
@@ -21,12 +19,19 @@ describe('Parse Form Middleware', () => {
     next = sinon.spy();
   });
 
-  it('should call next and invoke the bodyParser', async () => {
-    bodyParser.urlencoded({ extended: false });
-    // Attempted to wrap undefined property urlencoded as function
-    // so need to investigate: sinon.spy(bodyParser, 'urlencoded');
-    await middleware(req, res, next);
+  afterEach(() => {
+    sinon.restore();
+  });
 
+  it('should call next and invoke the bodyParser', async () => {
+    const bodyParserStub = sinon.stub();
+    const proxiedMiddleware = proxyquire('../../../common/middleware/parseForm', {
+      'body-parser': { urlencoded: bodyParserStub },
+    });
+
+    await proxiedMiddleware(req, res, next);
+
+    expect(bodyParserStub).to.have.been.calledOnceWithExactly({ extended: false });
     expect(next).to.have.been.called;
   });
 });
