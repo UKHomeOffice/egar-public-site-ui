@@ -128,7 +128,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Failed registration validations');
-      logger.info(err);
+      logger.debug(JSON.stringify(err));
       res.render('app/user/register/index', {
         cookie,
         errors: err,

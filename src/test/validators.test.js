@@ -2,6 +2,8 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
+const sinon = require('sinon');
+
 const validator = require('../common/utils/validator');
 
 function genPortObj(portCode, lat, long) {
@@ -28,10 +30,26 @@ function genTimeObj(h, m) {
 }
 
 describe('Validator', () => {
+  it('Should return false when numeric inputs are not', () => {
+    expect(validator.isNumeric('aa')).to.be.false;
+    expect(validator.isNumeric('true')).to.be.false;
+  });
+
+  it('Should return true when numeric inputs are input', () => {
+    expect(validator.isNumeric('12')).to.be.true;
+    expect(validator.isNumeric('31')).to.be.true;
+  });
+
   it('Should return false when fields are empty', () => {
     expect(validator.notEmpty(null)).to.be.false;
     expect(validator.notEmpty(undefined)).to.be.false;
     expect(validator.notEmpty('')).to.be.false;
+  });
+
+  it('Should return false when fields have symbols or spaces at the start', () => {
+    expect(validator.notEmpty('     still invalid')).to.be.false;
+    expect(validator.notEmpty('!@£$%^&*')).to.be.false;
+    expect(validator.notEmpty(' still not valid')).to.be.false;
   });
 
   it('Should return true when a field is not empty', () => {
@@ -44,14 +62,6 @@ describe('Validator', () => {
 
   it('Should not validate false', () => {
     expect(validator.valuetrue(false)).to.be.false;
-  });
-
-  it('Should successfully reject a password under 6 chars', () => {
-    expect(validator.passwordCheck('hello')).to.be.false;
-  });
-
-  it('Should successfully accept a password over 12 chars', () => {
-    expect(validator.passwordCheck('hellouvuvuuvuvuvuvuvuv')).to.be.true;
   });
 
   it('Should return true when two password match', () => {
@@ -89,6 +99,7 @@ describe('Validator', () => {
     expect(validator.validDay('32', '12', '1999')).to.be.false;
     expect(validator.validDay('-1', '12', '1999')).to.be.false;
     expect(validator.validDay('aa', '01', '1999')).to.be.false;
+    expect(validator.validDay('!!!', '01', '1999')).to.be.false;
   });
 
   it('Should return true for a valid numeric month', () => {
@@ -118,27 +129,55 @@ describe('Validator', () => {
   });
 
   it('Should return false for invalid dates', () => {
+    expect(validator.realDate(null)).to.be.false;
+    expect(validator.realDate(undefined)).to.be.false;
     expect(validator.realDate(genDateObj('aa', 'bb', 'cccc'))).to.be.false;
     expect(validator.realDate(genDateObj('1f', 'd2', '20S5'))).to.be.false;
   });
 
   it('Should return true for a date greater than today', () => {
+    const clock = sinon.useFakeTimers(new Date(2011, 9, 2).getTime());
+
     const currDate = new Date();
     const day = currDate.getDate();
-    const month = currDate.getMonth() + 1;
+    const nextDay = day + 1;
+    const month = currDate.getMonth();
+    const nextMonth = currDate.getMonth() + 1;
     const year = currDate.getFullYear();
-    expect(validator.currentOrFutureDate(genDateObj(day, month, year))).to.be.true;
+    const nextYear = currDate.getFullYear() + 1;
+    expect(validator.currentOrFutureDate(genDateObj(day, nextMonth, year))).to.be.true;
+    expect(validator.currentOrFutureDate(genDateObj(day, nextMonth, nextYear))).to.be.true;
+    expect(validator.currentOrFutureDate(genDateObj(nextDay, month, nextYear))).to.be.true;
     expect(validator.currentOrFutureDate(genDateObj('22', '12', '2055'))).to.be.true;
     expect(validator.currentOrFutureDate(genDateObj('01', '01', '2020'))).to.be.true;
+
+    clock.restore();
+  });
+
+  it('Should return true for a date after, edge cases', () => {
+    const clock = sinon.useFakeTimers(new Date(2011, 11, 31).getTime());
+
+    expect(validator.currentOrFutureDate(genDateObj(1, 1, 2011))).to.be.false;
+    expect(validator.currentOrFutureDate(genDateObj(31, 1, 2011))).to.be.false;
+    expect(validator.currentOrFutureDate(genDateObj(1, 1, 2012))).to.be.true;
+    expect(validator.currentOrFutureDate(genDateObj(31, 12, 2011))).to.be.true;
+
+    clock.restore();
   });
 
   it('Should return false for a date before today', () => {
+    const clock = sinon.useFakeTimers(new Date(2011, 12, 31).getTime());
+
     const currDate = new Date();
     const day = currDate.getDate() - 1;
     const month = currDate.getMonth() + 1;
+    const previousMonth = currDate.getMonth() - 1;
     const year = currDate.getFullYear();
     expect(validator.currentOrFutureDate(genDateObj(day, month, year))).to.be.false;
+    expect(validator.currentOrFutureDate(genDateObj(currDate.getDate(), previousMonth, year))).to.be.false;
     expect(validator.currentOrFutureDate(genDateObj('22', '12', '1999'))).to.be.false;
+
+    clock.restore();
   });
 
   it('Should return true for valid times', () => {
@@ -376,6 +415,17 @@ describe('Validator', () => {
         arrivalDate: dateOne,
       };
       expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.false;
+    });
+
+    it('should return true for validFlag if not null', () => {
+      expect(validator.validFlag('anything')).to.be.true;
+      expect(validator.validFlag('true')).to.be.true;
+      expect(validator.validFlag(123)).to.be.true;
+    });
+
+    it('should return false for validFlag if null', () => {
+      expect(validator.validFlag(undefined)).to.be.false;
+      expect(validator.validFlag(null)).to.be.false;
     });
 
     it('should return false when provided country code is unknown', () => {

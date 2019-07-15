@@ -19,8 +19,10 @@ describe('GAR Craft Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
-    // Example response object with appropriate spies
     req = {
       body: {
         craftReg: 'G-ABCD',

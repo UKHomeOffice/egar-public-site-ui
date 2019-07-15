@@ -42,8 +42,8 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.error('Validation failed');
-      logger.error(JSON.stringify(err));
+      logger.error('User manage details validation failed');
+      logger.debug(JSON.stringify(err));
       res.render('app/user/manageuserdetail/index', { cookie, errors: err });
     });
 };

@@ -62,8 +62,8 @@ module.exports = (req, res) => {
           });
       })
       .catch((err) => {
-        logger.info('Validation failed');
-        logger.info(JSON.stringify(err));
+        logger.info('GAR aircraft validation failed');
+        logger.debug(JSON.stringify(err));
         res.render('app/garfile/craft/index', { cookie, errors: err });
       });
   }

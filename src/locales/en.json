@@ -17,6 +17,11 @@
 
     "field_given_name": "Given name",
     "field_surname": "Surname",
+    "field_day": "Day",
+    "field_month": "Month",
+    "field_year": "Year",
+    "field_hour": "Hour",
+    "field_minute": "Minute",
     "label_departure_details": "Departure details",
     "field_departure_date": "Departure date",
     "field_departure_date_hint": "For example 20 04 2019",

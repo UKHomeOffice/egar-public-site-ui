@@ -14,7 +14,7 @@ module.exports = {
    * @returns {Promise} returns API response when resolved
    */
   create(registration, craftType, craftBase, userId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.createCraft(userId),
@@ -26,10 +26,11 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call craft creation API');
+          reject(error);
           return error;
         }
-        resolve(body);
         logger.debug('Successfully called craft creation endpoint');
+        resolve(body);
         return body;
       });
     })

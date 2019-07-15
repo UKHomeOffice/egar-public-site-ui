@@ -20,7 +20,7 @@ module.exports = {
           logger.error(error);
           return reject(error);
         }
-        logger.debug(`ClamAV response: ${response}`);
+        logger.debug(`ClamAV response: ${JSON.stringify(response)}`);
         logger.debug(`body: ${body}`);
 
         if (body.includes('ok : true')) {

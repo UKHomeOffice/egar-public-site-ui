@@ -8,13 +8,15 @@ const sinonChai = require('sinon-chai');
 
 const controller = require('../../../app/user/viewDetails/post.controller');
 
-describe('Aircraft Post Controller', () => {
+describe('User View Details Post Controller', () => {
   let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
-    // Example response object with appropriate spies
     res = {
       redirect: sinon.stub(),
       render: sinon.stub(),

@@ -4,9 +4,7 @@ const validations = require('./validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const orgApi = require('../../../common/services/organisationApi');
 
-
 module.exports = (req, res) => {
-  // Get the ip address
   logger.debug('In organisation / editusers post controller');
   const cookie = new CookieModel(req);
 
@@ -30,12 +28,12 @@ module.exports = (req, res) => {
         .catch((err) => {
           logger.error('Failed to update org user details');
           logger.error(err);
-          req.session.errMsg = 'Failed to update user details. Try again';
+          req.session.errMsg = { message: 'Failed to update user details. Try again' };
           return req.session.save(() => res.redirect('/organisation'));
         });
     })
     .catch((err) => {
-      logger.info('Failed validations');
+      logger.info('Failed validations editing an organisation user');
       res.render('app/organisation/editusers/index', { cookie, orgUser, errors: err });
     });
 };

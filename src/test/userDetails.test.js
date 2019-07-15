@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const nock = require('nock');
 const endpoints = require('../common/config/endpoints');
 const userManageApi = require('../common/services/userManageApi');

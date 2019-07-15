@@ -16,13 +16,17 @@ module.exports = (req, res) => {
       if (req.session.errMsg) {
         const { errMsg } = req.session;
         delete req.session.errMsg;
-        return res.render('app/user/viewDetails/index', { cookie, savedCrafts, savedPeople, errors: [errMsg] });
+        return res.render('app/user/viewDetails/index', {
+          cookie, savedCrafts, savedPeople, errors: [errMsg],
+        });
       }
       if (req.session.successMsg) {
         const { successMsg, successHeader } = req.session;
         delete req.session.successHeader;
         delete req.session.successMsg;
-        return res.render('app/user/viewDetails/index', { cookie, savedCrafts, savedPeople, successHeader, successMsg });
+        return res.render('app/user/viewDetails/index', {
+          cookie, savedCrafts, savedPeople, successHeader, successMsg,
+        });
       }
       return res.render('app/user/viewDetails/index', { cookie, savedCrafts, savedPeople });
     })

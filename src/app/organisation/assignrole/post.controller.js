@@ -15,8 +15,6 @@ module.exports = (req, res) => {
   cookie.setInviteUserRole(role);
   logger.debug(`Invitee role: ${role}`);
 
-  cookie.setInviteUserRole(role);
-
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
   const token = nanoid(alphabet, 13);
@@ -40,38 +38,35 @@ module.exports = (req, res) => {
       tokenApi.setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId)
         .then((apiResponse) => {
           const apiResponseObj = JSON.parse(apiResponse);
-          if (!apiResponseObj.hasOwnProperty('message')) {
-            // API call successful
-            emailService
-              .send(config.NOTIFY_INVITE_TEMPLATE_ID, inviteeEmail, {
-                firstname: firstName,
-                user: inviterName,
-                org_name: inviteOrgName,
-                base_url: config.BASE_URL,
-                token,
-              })
-              .then(() => {
-                res.redirect('/organisation/invite/success');
-              })
-              .catch((err) => {
-                logger.error('Govnotify failed to send an email');
-                logger.error(err);
-                res.render('app/organisation/inviteusers/index', { cookie, errors: err });
-              });
-          } else {
+          if (Object.prototype.hasOwnProperty.call(apiResponseObj, 'message')) {
             // API call unsuccessful
-            res.render('app/organisation/inviteusers/index', { cookie, errors: apiResponse.message });
+            res.render('app/organisation/inviteusers/index', { cookie, errors: [apiResponseObj] });
+            return;
           }
+          // API call successful
+          emailService.send(config.NOTIFY_INVITE_TEMPLATE_ID, inviteeEmail, {
+            firstname: firstName,
+            user: inviterName,
+            org_name: inviteOrgName,
+            base_url: config.BASE_URL,
+            token,
+          }).then(() => {
+            res.redirect('/organisation/invite/success');
+          }).catch((err) => {
+            logger.error('Govnotify failed to send an email');
+            logger.error(JSON.stringify(err));
+            res.render('app/organisation/inviteusers/index', { cookie, errors: [err] });
+          });
         })
         .catch((err) => {
-          logger.error('Govnotify failed to send an email');
-          logger.error(err);
-          res.render('app/organisation/inviteusers/index', { cookie, errors: err });
+          logger.error('Error setting the invite token');
+          logger.error(JSON.stringify(err));
+          res.render('app/organisation/inviteusers/index', { cookie, errors: [err] });
         });
     })
     .catch((err) => {
       logger.info('Invite Users Organisation postcontroller - There was a problem with creating the organisation');
-      logger.info(err);
+      logger.info(JSON.stringify(err));
       res.render('app/organisation/inviteusers/index', { cookie, errors: err });
     });
 };

@@ -14,8 +14,10 @@ describe('Manage User Detail Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
-    // Example request and response objects with appropriate spies
     req = {
       session: {
       },
@@ -24,8 +26,6 @@ describe('Manage User Detail Get Controller', () => {
     res = {
       render: sinon.spy(),
     };
-    // Need to figure out how to stub the CookieModel and its constructor,
-    // in order to just check it is instantiated
   });
 
   afterEach(() => {
