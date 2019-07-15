@@ -7,6 +7,9 @@ const craftApi = require('../../common/services/craftApi');
 
 module.exports = (req, res) => {
   logger.debug('In user aircraft get controller');
+  logger.debug('Does session have nextPage set?');
+  logger.debug(req.session.nextPage);
+
   const cookie = new CookieModel(req);
   const crafts = cookie.getUserRole() === 'Individual' ? craftApi.getCrafts(cookie.getUserDbId(), req.query.page) : craftApi.getOrgCrafts(cookie.getOrganisationId());
   crafts.then((values) => {
@@ -17,6 +20,12 @@ module.exports = (req, res) => {
     const endItem = Math.min((startItem - 1) + 10, savedCrafts._meta.totalItems);
     const { totalPages, totalItems } = savedCrafts._meta;
     // {"page":1,"perPage":10,"totalPages":2,"totalItems":11}
+    // If page is greater than total pages, go to the last available page
+    if (totalPages < req.query.page) {
+      req.query.page = totalPages;
+      res.redirect('/aircraft?page=' + totalPages);
+      return;
+    }
     const items = paginate.getArrayPages(req)(3, totalPages, req.query.page);
     console.log(JSON.stringify(items));
     console.log(JSON.stringify(paginate.hasNextPages(req)(totalPages)));

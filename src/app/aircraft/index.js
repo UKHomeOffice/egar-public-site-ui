@@ -23,8 +23,16 @@ const paths = {
 
 // Routing
 router.get(paths.index, flagpole, usercheck, csrfcheck, getController);
+
 router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, postController);
 
-
+router.get(paths.index + '/next', flagpole, usercheck, csrfcheck, (req, res) => {
+  console.log('OHMIGOSH, NEXT PAGE');
+  req.session.nextPage = true;
+  req.session.save(() => {
+    res.redirect('/aircraft?page=1');
+  })
+  
+});
 // Export
 module.exports = { router, paths };
