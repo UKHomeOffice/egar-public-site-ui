@@ -5,11 +5,13 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
+const { URL } = require('url');
 
 const config = require('../../../common/config/index');
 
 describe('Create GAR API Service', () => {
-  const { API_VERSION } = config;
+  const { API_VERSION, API_BASE } = config;
+  const BASE_URL = new URL(API_VERSION, API_BASE).href;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -32,7 +34,7 @@ describe('Create GAR API Service', () => {
 
     expect(requestStub).to.have.been.calledOnceWith({
       headers: { 'content-type': 'application/json' },
-      url: `http://localhost:5000/${API_VERSION}/user/USER-ID-1/gar`,
+      url: `${BASE_URL}/user/USER-ID-1/gar`,
     });
   });
 
@@ -46,7 +48,7 @@ describe('Create GAR API Service', () => {
 
     expect(requestStub).to.have.been.calledOnceWith({
       headers: { 'content-type': 'application/json' },
-      url: `http://localhost:5000/${API_VERSION}/user/USER-ID-1/gar`,
+      url: `${BASE_URL}/user/USER-ID-1/gar`,
     });
     expect(result).to.be.undefined;
   });
@@ -64,7 +66,7 @@ describe('Create GAR API Service', () => {
 
     expect(requestStub).to.have.been.calledOnceWith({
       headers: { 'content-type': 'application/json' },
-      url: `http://localhost:5000/${API_VERSION}/user/USER-ID-1/gar`,
+      url: `${BASE_URL}/user/USER-ID-1/gar`,
     });
     expect(result).to.eql(JSON.stringify(apiResponse));
   });

@@ -5,11 +5,13 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
+const { URL } = require('url');
 
 const config = require('../../../common/config/index');
 
 describe('Create User API Service', () => {
-  const { API_VERSION } = config;
+  const { API_VERSION, API_BASE } = config;
+  const BASE_URL = new URL(API_VERSION, API_BASE).href;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -33,7 +35,7 @@ describe('Create User API Service', () => {
     expect(requestStub).to.have.been.calledOnceWith({
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ firstName: 'Darth', lastName: 'Vader', email: 'vader@sith.net' }),
-      url: `http://localhost:5000/${API_VERSION}/user/register`,
+      url: `${BASE_URL}/user/register`,
     });
   });
 
@@ -48,7 +50,7 @@ describe('Create User API Service', () => {
     expect(requestStub).to.have.been.calledOnceWith({
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ firstName: 'Darth', lastName: 'Vader', email: 'vader@sith.net' }),
-      url: `http://localhost:5000/${API_VERSION}/user/register`,
+      url: `${BASE_URL}/user/register`,
     });
     expect(result).to.be.undefined;
   });
@@ -67,7 +69,7 @@ describe('Create User API Service', () => {
     expect(requestStub).to.have.been.calledOnceWith({
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ firstName: 'Darth', lastName: 'Vader', email: 'vader@sith.net' }),
-      url: `http://localhost:5000/${API_VERSION}/user/register`,
+      url: `${BASE_URL}/user/register`,
     });
     expect(result).to.eql(JSON.stringify(apiResponse));
   });
@@ -88,7 +90,7 @@ describe('Create User API Service', () => {
       body: JSON.stringify({
         firstName: 'Darth', lastName: 'Vader', email: 'vader@sith.net', tokenId: 'TOKEN12345',
       }),
-      url: `http://localhost:5000/${API_VERSION}/user/register`,
+      url: `${BASE_URL}/user/register`,
     });
     expect(result).to.eql(JSON.stringify(apiResponse));
   });
