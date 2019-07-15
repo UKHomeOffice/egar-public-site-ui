@@ -31,11 +31,11 @@ Manage aircraft | Submit a General Aviation Report (GAR)
     {% include "common/templates/includes/success-action.njk" %}
   {% endif %}
 
-      <h1 class="govuk-heading-xl">Aircraft</h1>
+    <h1 class="govuk-heading-xl">Aircraft</h1>
       {% if cookie.getUserRole() != 'User' %}
 		  <p class="govuk-body-l">You can view, edit or delete aircraft that you regularly add to GARs.</p>
       {% endif %}
-      <form id="aircraft" action="/aircraft" class="form-group" method="post" role="form" >
+    <form id="aircraft" action="/aircraft" class="form-group" method="post" role="form" >
 		  <table class="govuk-table" id="SavedCraft">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -64,8 +64,24 @@ Manage aircraft | Submit a General Aviation Report (GAR)
           {% endfor %}
         </tbody>
       </table>
+      <nav>
+        <div class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results {{ paginate }}, current page: {{ pages.currentPage }}</div>
+        <ul class="pagination">
+        {% for page in pages.items %}
+          {% if page.number == pages.currentPage %}
+            <li class="pagination__item"><a class="pagination__link current" href="" aria-current="true" aria-label="Page {{ page.number }}, current page">{{ page.number }}</a></li>
+          {% else %}
+            <li class="pagination__item"><a class="pagination__link" href="{{ page.url }}">{{ page.number }}</a></li>
+          {% endif %}
+        {% endfor%}
+          {# <li class="pagination__item"><a class="pagination__link" href="#" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
+          <li class="pagination__item"><a class="pagination__link current" href="#" aria-current="true" aria-label="Page 1, current page">1</a></li>
+          <li class="pagination__item"><a class="pagination__link" href="#" aria-label="Page 2">2</a></li>
+          <li class="pagination__item"><a class="pagination__link" href="#" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li> #}
+        </ul>
+      </nav>
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-      </form>
+    </form>
 	</div>
 
   {% if cookie.getUserRole() != 'User' %}
