@@ -3,9 +3,6 @@
 
 const { expect } = require('chai');
 
-const chai = require('chai');
-
-const should = chai.should();
 const transformer = require('../common/utils/transformers');
 
 describe('Transformers', () => {

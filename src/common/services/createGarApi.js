@@ -11,12 +11,13 @@ module.exports = {
    * @returns {Promise} returns API response when resolved
    */
   createGar(userId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.createGar(userId),
       }, (error, response, body) => {
         if (error) {
+          reject(error);
           return error;
         }
         resolve(body);

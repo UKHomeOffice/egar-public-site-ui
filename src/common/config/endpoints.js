@@ -10,16 +10,6 @@ const endpoints = {
   baseUrl() {
     return BASE_URL;
   },
-  login() {
-    const endpoint = new URL(`${API_VERSION}/user/login`, BASE_URL).href;
-    logger.debug(`Calling login endpoint ${endpoint}`);
-    return endpoint;
-  },
-  logout() {
-    const endpoint = new URL(`${API_VERSION}/user/logout`, BASE_URL).href;
-    logger.debug(`Calling logout endpoint ${endpoint}`);
-    return endpoint;
-  },
   register() {
     const endpoint = new URL(`${API_VERSION}/user/register`, BASE_URL).href;
     logger.debug(`Calling register endpoint ${endpoint}`);

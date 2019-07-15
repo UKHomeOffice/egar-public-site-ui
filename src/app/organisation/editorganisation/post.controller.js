@@ -24,7 +24,7 @@ module.exports = (req, res) => {
       organisationApi.update(orgname, cookie.getOrganisationId())
         .then((apiResponse) => {
           const responseObj = JSON.parse(apiResponse);
-          logger.debug(`Response from API: ${responseObj}`);
+          logger.debug(`Response from API: ${JSON.stringify(responseObj)}`);
           // Check for error
           // Update cookie
           cookie.setOrganisationName(orgname);
@@ -32,13 +32,13 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('There was a problem updating the organisation');
-          logger.error(err);
-          res.render('app/organisation/editorganisation/index', { cookie, errors: err });
+          logger.error(JSON.stringify(err));
+          res.render('app/organisation/editorganisation/index', { cookie, errors: [err] });
         });
     })
     .catch((err) => {
-      logger.info('organisation editorganisation postcontroller - There was a problem with creating the organisation');
-      logger.info(err);
+      logger.info('There was a problem with editing the organisation');
+      logger.debug(JSON.stringify(err));
       res.render('app/organisation/editorganisation/index', { cookie, errors: err });
     });
 };

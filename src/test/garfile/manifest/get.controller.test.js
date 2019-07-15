@@ -17,6 +17,9 @@ describe('Manifest Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
     apiResponse = {
       items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],

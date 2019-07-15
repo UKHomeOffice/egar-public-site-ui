@@ -12,6 +12,9 @@ const { getDetailsByIds } = require('../../../app/garfile/manifest/bulkAdd');
 describe('bulkAdd class', () => {
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
   });
 
   afterEach(() => {

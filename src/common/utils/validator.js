@@ -51,16 +51,9 @@ function daysInMonth(m, y) {
   }
 }
 
-// check if number
 function isNumeric(input) {
-  return typeof (parseInt(input, 10)) === 'number';
-}
-
-function validPhone(value) {
-  if (isNumeric(value)) {
-    return value.length >= 11;
-  }
-  return false;
+  // Essentially jQuery's implementation...
+  return (input - parseFloat(input) + 1) >= 0;
 }
 
 // validday
@@ -173,16 +166,6 @@ function realDate(dObj) {
     && validYear(dObj.y);
 }
 
-function passwordCheck(value) {
-  if ((/^(?=.*[a-zA-Z])(?=.*[0-9])/.test(value))) {
-    return true;
-  }
-  if (value.length < 8) {
-    return false;
-  }
-  return true;
-}
-
 function validFlag(value) {
   if (value) {
     return true;
@@ -195,20 +178,6 @@ function validPort(value) {
     return true;
   }
   return false;
-}
-
-function passwordValidCharacters(value) {
-  if (/^[a-zA-Z0-9]+$/.test(value)) {
-    return true;
-  }
-  return false;
-}
-
-function passwordMinLength(value) {
-  if (value.length < 8) {
-    return false;
-  }
-  return true;
 }
 
 function confirmPassword(value1, value2) {
@@ -375,13 +344,9 @@ function handleResponseError(parsedApiResponse) {
 module.exports = {
   notEmpty,
   email,
-  passwordCheck,
-  passwordValidCharacters,
-  passwordMinLength,
   confirmPassword,
   valuetrue,
   isNumeric,
-  validPhone,
   validDay,
   validMonth,
   validYear,

@@ -29,10 +29,7 @@ module.exports = (req, res) => {
   validator.validateChains(validations.validations(req))
     .then(() => {
       // call the API to update the data base and then
-      personApi.create(
-        cookie.getUserDbId(),
-        person,
-      ).then((apiResponse) => {
+      personApi.create(cookie.getUserDbId(), person).then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
           // API returned error
@@ -47,12 +44,13 @@ module.exports = (req, res) => {
         logger.error('There was a problem adding person to saved people');
         logger.error(err);
         res.render('app/people/add/index', {
-          cookie, persontype, documenttype, genderchoice, errors: [{ message: 'There was a problem creating the person.' }],
+          cookie, persontype, documenttype, genderchoice, errors: [{ message: 'There was a problem creating the person. Please try again' }],
         });
       });
     })
     .catch((err) => {
-      logger.error(err);
+      logger.info('Validation errors creating a new person');
+      logger.debug(JSON.stringify(err));
       res.render('app/people/add/index', {
         cookie, req, persontype, documenttype, genderchoice, person: req.body, errors: err,
       });

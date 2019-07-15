@@ -14,18 +14,17 @@ module.exports = (req, res) => {
   let person = {};
 
   if (personId === undefined) {
-    return res.render('app/garfile/manifest/addnewperson/index', {
+    res.render('app/garfile/manifest/addnewperson/index', {
       cookie, persontype, documenttype, genderchoice, req, person,
     });
+    return;
   }
 
   personApi.getPeople(cookie.getUserDbId(), 'individual')
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
-      person = parsedResponse.find((person) => {
-        return person.personId === personId;
-      });
-      req.session.addPersonId = undefined;
+      person = parsedResponse.find(element => element.personId === personId);
+      delete req.session.addPersonId;
       person = transformer.transformPerson(person);
       res.render('app/garfile/manifest/addnewperson/index', {
         cookie, persontype, documenttype, genderchoice, req, person,

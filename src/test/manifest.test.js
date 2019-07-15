@@ -1,10 +1,9 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
-const expect = require('chai').expect;
-const chai = require('chai');
-const { Manifest } = require('../common/models/Manifest.class');
 
-const should = chai.should();
+const { expect } = require('chai');
+
+const { Manifest } = require('../common/models/Manifest.class');
 
 const apiResponse = JSON.stringify({
   items: [

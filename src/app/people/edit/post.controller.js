@@ -38,19 +38,25 @@ module.exports = (req, res) => {
       ).then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+          // API returned error
           res.render('app/people/edit/index', {
             cookie, persontype, documenttype, genderchoice, errors: [parsedResponse],
           });
-          // API returned error
         } else {
           // Successful
           res.redirect('/people');
         }
+      }).catch((err) => {
+        logger.error('There was a problem with calling the API');
+        logger.error(JSON.stringify(err));
+        res.render('app/people/edit/index', {
+          cookie, req, persontype, documenttype, genderchoice, errors: [{ message: 'An error occurred. Please try again' }],
+        });
       });
     })
     .catch((err) => {
       logger.error('There was a problem with adding person to saved people');
-      logger.error(err);
+      logger.error(JSON.stringify(err));
       res.render('app/people/edit/index', {
         cookie, req, persontype, documenttype, genderchoice, errors: err,
       });

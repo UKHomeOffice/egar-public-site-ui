@@ -17,6 +17,9 @@ describe('GAR Craft Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
     req = {
       session: {

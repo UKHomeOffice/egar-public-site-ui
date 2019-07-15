@@ -121,7 +121,7 @@ module.exports = (req, res) => {
       performAPICall(garId, cookie, req, res);
     }).catch((err) => {
       logger.info('Failed to submit incomplete GAR - validation failed');
-      logger.info(JSON.stringify(err));
+      logger.debug(JSON.stringify(err));
       renderObj.errors = err;
       res.render('app/garfile/review/index', renderObj);
     });

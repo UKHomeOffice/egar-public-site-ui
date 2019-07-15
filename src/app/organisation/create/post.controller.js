@@ -26,7 +26,7 @@ module.exports = (req, res) => {
     orgApi.create(orgname, cookie.getUserDbId())
       .then((apiResponse) => {
         const responseObj = JSON.parse(apiResponse);
-        if (responseObj.hasOwnProperty('message')) {
+        if (Object.prototype.hasOwnProperty.call(responseObj, 'message')) {
           const error = [{ message: responseObj.message }];
           res.render('app/organisation/create/index', { cookie, errors: error });
         } else {
@@ -39,13 +39,13 @@ module.exports = (req, res) => {
       })
       .catch((err) => {
         logger.error('Failed to create organisation');
-        logger.error(err);
-        res.render('app/organisation/create/index', { cookie, errors: err });
+        logger.error(JSON.stringify(err));
+        res.render('app/organisation/create/index', { cookie, errors: [err] });
       });
   })
     .catch((err) => {
-      logger.info('Create Organisation postcontroller - There was a problem with creating the organisation');
-      logger.info(err);
+      logger.info('There was a problem with creating the organisation');
+      logger.debug(JSON.stringify(err));
       res.render('app/organisation/create/index', { cookie, errors: err });
     });
 };

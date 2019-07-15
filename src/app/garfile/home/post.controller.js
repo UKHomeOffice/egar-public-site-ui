@@ -53,7 +53,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.debug('Gar creation validation failed');
+      logger.info('Gar creation validation failed');
       logger.debug(err);
       res.render('app/garfile/home/index', {
         cookie,

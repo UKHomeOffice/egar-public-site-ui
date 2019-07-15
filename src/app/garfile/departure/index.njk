@@ -30,7 +30,7 @@
       <form id="page-form" action="/garfile/departure" autocomplete="off" class="form-group" method="post" role="form">
 
         <!-- Start departure date -->
-          <div class="govuk-form-group" id="departureDate">
+        <div class="govuk-form-group" id="departureDate">
           <span class="govuk-caption-xl">Section 1 of 8</span>
           <h1 class="govuk-heading-xl">{{ __('label_departure_details') }}</h1>
           <p class="govuk-body-l">Provide the departure details of the flight</p>
@@ -46,9 +46,7 @@
             <div class="govuk-date-input" id="departure">
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="departureDay">
-                    Day
-                  </label>
+                  <label class="govuk-label govuk-date-input__label" for="departureDay">{{__('field_day')}}</label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureDay"
                   name="departureDay" type="number" pattern="[0-9]*" min="1" max="31"
                   value="{{ cookie.dateSlice('day', cookie.getGarDepartureVoyage().departureDate) }}">
@@ -57,9 +55,7 @@
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="departureMonth">
-                    Month
-                  </label>
+                  <label class="govuk-label govuk-date-input__label" for="departureMonth">{{__('field_month')}}</label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMonth"
                   name="departureMonth" type="number" pattern="[0-9]*" min="1" max="12"
                   value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}">
@@ -68,9 +64,7 @@
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="departureYear">
-                      Year
-                    </label>
+                    <label class="govuk-label govuk-date-input__label" for="departureYear">{{__('field_year')}}</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureYear"
                     name="departureYear" type="number" pattern="[0-9]*" min="1900" max="2200"
                     value="{{ cookie.dateSlice('year', cookie.getGarDepartureVoyage().departureDate) }}">
@@ -96,9 +90,7 @@
             <div class="govuk-date-input" id="departureTime">
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="departureHour">
-                    Hour
-                  </label>
+                  <label class="govuk-label govuk-date-input__label" for="departureHour">{{__('field_hour')}}</label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureHour"
                   name="departureHour" type="number" pattern="[0-9]*" min="00" max="23"
                   value="{{ cookie.timeSlice('hour', cookie.getGarDepartureVoyage().departureTime) }}">
@@ -107,9 +99,7 @@
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="departureMinute">
-                      Minute
-                  </label>
+                  <label class="govuk-label govuk-date-input__label" for="departureMinute">{{__('field_minute')}}</label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMinute"
                   name="departureMinute" type="number" pattern="[0-9]*" min="00" max="59"
                   value="{{ cookie.timeSlice('minute', cookie.getGarDepartureVoyage().departureTime) }}">
@@ -122,20 +112,27 @@
 
         <!-- Start departure port -->
         <div class="govuk-form-group {{ m.form_group_class('departurePort', errors) }}">
-				<label class="govuk-label govuk-label--m" for="departurePort">
-					Departure port
-				</label>
-				<span id="departurePort-hint" class="govuk-hint">
-				Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
-        The departure port must be different to the arrival port.
-				</span>
-
+          <label class="govuk-label govuk-label--m" for="departurePort">
+            Departure port
+          </label>
+          <span id="departurePort-hint" class="govuk-hint">
+            Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
+            The departure port must be different to the arrival port.
+          </span>
           {{ m.error_message('departurePort', errors) }}
           <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
-          {# <select class="govuk-select" id="test" name="test" value="{{ cookie.getGarDepartureVoyage().departurePort }}">
-            <option value="">{{ __('country_no_selection') }}</option>
+          {# Airport list v1
+          <select class="govuk-select" id="test1" name="test1" value="">
+            <option value=""></option>
             {% for airport in airportList|sort(attribute='label') %}
-              <option value="{{ airport.id }}" {{ 'selected=selected' if (cookie.getGarDepartureVoyage().departurePort) == country.id }}>{{ airport.label }}</option>
+              <option value="{{ airport.id }}" {{ 'selected=selected' if (cookie.getGarDepartureVoyage().departurePort) == airport.id }}>{{ airport.label }}</option>
+            {% endfor %}
+          </select>
+          Airport list v2
+          <select class="govuk-select" id="test2" name="test2" value="">
+            <option value=""></option>
+            {% for airport in airportList2|sort(attribute='label') %}
+              <option value="{{ airport.id }}" {{ 'selected=selected' if (cookie.getGarDepartureVoyage().departurePort) == airport.id }}>{{ airport.label }}</option>
             {% endfor %}
           </select> #}
         </div>
@@ -200,8 +197,12 @@
 <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
 {# <script type="text/javascript">
   accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#test'),
-    minLength: 3,
+    selectElement: document.querySelector('#test1'),
+    minLength: 2,
+  });
+  accessibleAutocomplete.enhanceSelectElement({
+    selectElement: document.querySelector('#test2'),
+    minLength: 2,
   });
 </script> #}
 

@@ -26,12 +26,12 @@ module.exports = (req, res) => {
       } else {
         cookie.setEditPerson(parsedResponse);
         res.render('app/people/edit/index', {
-          person: parsedResponse, cookie, persontype, documenttype, genderchoice,
+          cookie, persontype, documenttype, genderchoice, person: parsedResponse,
         });
       }
     })
     .catch((err) => {
-      logger.error('Failed to get org saved person details');
+      logger.error('Failed to get saved person details');
       logger.error(err);
       res.redirect('/people');
     });

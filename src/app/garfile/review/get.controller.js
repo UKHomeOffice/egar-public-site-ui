@@ -39,8 +39,8 @@ module.exports = (req, res) => {
       .then(() => {
         res.render('app/garfile/review/index', renderObj);
       }).catch((err) => {
-        logger.info('Validation failed');
-        logger.info(JSON.stringify(err));
+        logger.info('GAR review validation failed');
+        logger.debug(JSON.stringify(err));
         renderObj.errors = err;
         res.render('app/garfile/review/index', renderObj);
       });

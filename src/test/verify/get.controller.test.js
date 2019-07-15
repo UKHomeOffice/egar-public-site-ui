@@ -20,8 +20,10 @@ describe('Verify Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    process.on('unhandledRejection', (error) => {
+      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+    });
 
-    // Example request and response objects with appropriate spies
     req = {
       session: {},
       query: {
@@ -48,7 +50,7 @@ describe('Verify Get Controller', () => {
           return 'Unexpected Key';
       }
     });
-    config.NOTIFY_TOKEN_SECRET = 'example_secret';
+    sinon.stub(config, 'NOTIFY_TOKEN_SECRET').value('example_secret');
   });
 
   afterEach(() => {

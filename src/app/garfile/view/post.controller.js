@@ -6,8 +6,8 @@ const garApi = require('../../../common/services/garApi');
 module.exports = (req, res) => {
   logger.debug('In garfile / view post controller');
   const cookie = new CookieModel(req);
-  const garId = req.body.garId;
-  cookie.setGarId(req.body.garId);
+  const { garId } = req.body;
+  cookie.setGarId(garId);
   const garPeople = garApi.getPeople(garId);
   const garDetails = garApi.get(garId);
   const garDocs = garApi.getSupportingDocs(garId);
@@ -16,8 +16,8 @@ module.exports = (req, res) => {
     cookie,
     manifestFields,
     garfile: {},
-    garpeople: [],
-    garDocs: {},
+    garpeople: {},
+    supportingdocs: {},
   };
 
   Promise.all([garDetails, garPeople, garDocs])
@@ -46,6 +46,7 @@ module.exports = (req, res) => {
     .catch((err) => {
       logger.error('Failed to get GAR information');
       logger.error(err);
-      res.render('app/garfile/view/submitted', { cookie, renderContext, errors: [{ message: 'Failed to get GAR information' }] });
+      renderContext.errors = [{ message: 'Failed to get GAR information' }];
+      res.render('app/garfile/view/submitted', renderContext);
     });
 };

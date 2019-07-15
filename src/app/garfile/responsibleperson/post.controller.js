@@ -49,7 +49,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.info('Validation failed');
+      logger.info('GAR responsible person validation failed');
       cookie.setGarResponsiblePerson(responsiblePerson);
       res.render('app/garfile/responsibleperson/index', {
         req, cookie, errors: err,

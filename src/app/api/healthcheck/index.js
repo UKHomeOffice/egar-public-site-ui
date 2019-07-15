@@ -1,21 +1,18 @@
 // Npm dependencies
-const express = require('express')
+const express = require('express');
 
 // Local dependencies
-const getController = require('./get.controller')
+const getController = require('./get.controller');
 
 // Initialisation
-const router = new express.Router()
-const indexPath = '/healthcheck'
+const router = new express.Router();
+const indexPath = '/healthcheck';
 const paths = {
-  index: indexPath
-}
+  index: indexPath,
+};
 
 // Routing
-router.get(paths.index, getController)
+router.get(paths.index, getController);
 
 // Export
-module.exports = {
-  router,
-  paths
-}
+module.exports = { router, paths };

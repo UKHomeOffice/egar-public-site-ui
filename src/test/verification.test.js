@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const nock = require('nock');
 const endpoints = require('../common/config/endpoints');
 const verificationApi = require('../common/services/verificationApi');
@@ -32,9 +32,8 @@ describe('VerificationService', () => {
       .put(url, { tokenId })
       .replyWithError('Example error to test');
 
-    verificationApi.verifyUser(tokenId)
-      .then(() => {
-        done();
-      })
+    verificationApi.verifyUser(tokenId).then(() => {
+      done();
+    });
   });
 });
