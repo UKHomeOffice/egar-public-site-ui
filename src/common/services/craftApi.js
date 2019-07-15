@@ -72,7 +72,7 @@ module.exports = {
     return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
-        url: `${endpoints.getCrafts(userId)}?per_page=10&page=${pageNumber}`, // ?per_page=10&page=2`, or via qs
+        url: `${endpoints.getCrafts(userId)}?per_page=5&page=${pageNumber}`, // ?per_page=10&page=2`, or via qs
       },
       (error, response, body) => {
         if (error) {

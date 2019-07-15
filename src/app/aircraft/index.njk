@@ -65,8 +65,14 @@ Manage aircraft | Submit a General Aviation Report (GAR)
         </tbody>
       </table>
       <nav>
-        <div class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results {{ paginate }}, current page: {{ pages.currentPage }}</div>
+        {# Previous: {{ pages.previous }} <br> Next: {{ pages.next }} , current page: {{ pages.currentPage }} #}
+        <div class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results {{ paginate }}</div>
         <ul class="pagination">
+        {% if pages.currentPage > 1 %}
+          <li class="pagination__item"><a class="pagination__link" href="{{ pages.previous }}" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
+        {% else %}
+          <li class="pagination__item"><a class="pagination__link current" href=""><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
+        {% endif %}
         {% for page in pages.items %}
           {% if page.number == pages.currentPage %}
             <li class="pagination__item"><a class="pagination__link current" href="" aria-current="true" aria-label="Page {{ page.number }}, current page">{{ page.number }}</a></li>
@@ -74,11 +80,16 @@ Manage aircraft | Submit a General Aviation Report (GAR)
             <li class="pagination__item"><a class="pagination__link" href="{{ page.url }}">{{ page.number }}</a></li>
           {% endif %}
         {% endfor%}
+        {% if pages.hasNext %}
+          <li class="pagination__item"><a class="pagination__link" href="{{ pages.next }} " aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+        {% else %}
+          <li class="pagination__item"><a class="pagination__link current" href="">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+        {% endif %}
           {# <li class="pagination__item"><a class="pagination__link" href="#" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
           <li class="pagination__item"><a class="pagination__link current" href="#" aria-current="true" aria-label="Page 1, current page">1</a></li>
           <li class="pagination__item"><a class="pagination__link" href="#" aria-label="Page 2">2</a></li>
           <li class="pagination__item"><a class="pagination__link" href="#" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li> #}
-          <li class="pagination__item"><a class="pagination__link" href="/aircraft/next" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+          {# <li class="pagination__item"><a class="pagination__link" href="/aircraft/next" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li> #}
         </ul>
       </nav>
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
