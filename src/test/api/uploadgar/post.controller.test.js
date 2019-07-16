@@ -20,11 +20,12 @@ describe('API upload GAR post controller', () => {
   let req; let res;
   let incorrectWorkbook;
 
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
+
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     incorrectWorkbook = {
       SheetNames: ['Sheet1'],
@@ -330,10 +331,10 @@ describe('API upload GAR post controller', () => {
               lastName: 'Kirk',
               firstName: 'James',
               gender: 'Male',
-              dateOfBirth: 'Date of Birth',
+              dateOfBirth: '1965-10-13',
               placeOfBirth: 'Place of Birth',
               nationality: 'USA',
-              documentExpiryDate: 'Document Expiry Date',
+              documentExpiryDate: '2033-02-28',
               peopleType: 'Crew',
               documentType: 'Other',
             }],
@@ -346,10 +347,10 @@ describe('API upload GAR post controller', () => {
               lastName: 'Chekov',
               firstName: 'Pavel',
               gender: 'Male',
-              dateOfBirth: 'Date of Birth',
+              dateOfBirth: '1975-10-31',
               placeOfBirth: 'Place of Birth',
               nationality: 'RUS',
-              documentExpiryDate: 'Document Expiry Date',
+              documentExpiryDate: '2023-06-01',
               peopleType: 'Passenger',
               documentType: 'Other',
             }],

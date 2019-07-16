@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const logger = require('../utils/logger')(__filename);
 const db = require('../utils/db');
 
@@ -9,11 +11,12 @@ module.exports = {
    */
   isWhitelisted(email) {
     return new Promise((resolve, reject) => {
+      const lowercased = _.toLower(email);
       logger.info(`Searching ${email} against whitelist`);
       db.sequelize.models.WhiteList
         .findOne({
           where: {
-            email,
+            email: lowercased,
           },
         })
         .then((result) => {

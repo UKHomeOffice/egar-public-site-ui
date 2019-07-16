@@ -1,4 +1,6 @@
+const _ = require('lodash');
 const nanoid = require('nanoid/generate');
+
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -38,7 +40,7 @@ const createValidationChains = (fname, lname, usrname, cusrname) => {
 const createUser = (req, res, cookie) => {
   logger.info('Creating the user in the db');
   // Get form values
-  const usrname = req.body.userId;
+  const usrname = _.toLower(req.body.userId);
   const fname = req.body.userFname;
   const lname = req.body.userLname;
 

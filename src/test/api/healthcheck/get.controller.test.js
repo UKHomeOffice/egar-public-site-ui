@@ -16,6 +16,10 @@ const controller = require('../../../app/api/healthcheck/get.controller');
  * created during this test.
  */
 describe('API healthcheck get controller', () => {
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
+
   // API endpoint via supertest
   it('should return HTTP 200 status with expected JSON', (done) => {
     supertest(getApp())
@@ -34,9 +38,6 @@ describe('API healthcheck get controller', () => {
 
     beforeEach(() => {
       chai.use(sinonChai);
-      process.on('unhandledRejection', (error) => {
-        chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-      });
 
       req = {
         body: {

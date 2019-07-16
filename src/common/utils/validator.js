@@ -1,4 +1,5 @@
 const countries = require('i18n-iso-countries');
+const moment = require('moment');
 
 const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
@@ -164,6 +165,11 @@ function realDate(dObj) {
     && validDay(dObj.d, dObj.m, dObj.y)
     && validMonth(dObj.m)
     && validYear(dObj.y);
+}
+
+function realDateFromString(str) {
+  moment.suppressDeprecationWarnings = true;
+  return moment(str).isValid();
 }
 
 function validFlag(value) {
@@ -340,7 +346,6 @@ function handleResponseError(parsedApiResponse) {
   }
 }
 
-
 module.exports = {
   notEmpty,
   email,
@@ -355,6 +360,7 @@ module.exports = {
   genValidations,
   validatePortCoords,
   realDate,
+  realDateFromString,
   currentOrFutureDate,
   validTime,
   validFlag,
