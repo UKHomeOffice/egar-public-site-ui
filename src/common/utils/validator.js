@@ -1,12 +1,11 @@
 const countries = require('i18n-iso-countries');
+const moment = require('moment');
 
 const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const { MAX_STRING_LENGTH } = require('../config/index');
-const { MAX_REGISTRATION_LENGTH } = require('../config/index');
-const { MAX_EMAIL_LENGTH } = require('../config/index');
+const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
@@ -324,14 +323,32 @@ function isValidEmailLength(value) {
 }
 
 /**
+ * Parse datetime string to moment object
+ * @param {String} dateTimeStr 'yyyy-MM-dd HH:mm:ss'
+ * @param {String} dateTimeFormat defines the moment format default: 'YYYY-MM-DD HH:mm:ss'
+ * @return {Bool}
+ */
+function isValidDateTime(dateTimeStr, dateTimeFormat = 'YYYY-MM-DD HH:mm:ss') {
+  return moment.utc(dateTimeStr, dateTimeFormat).isValid();
+}
+
+/**
  * Verify that Arrival Date is greater than or equal to Departure Date
- * @param {Object} voyageDateObject { depatureDate: 'yyyy-MM-dd', arrivalDate: 'yyyy-MM-dd' }
+ * @param {Object} voyageDateObject { depatureDate: 'yyyy-MM-dd', departureTiem: 'HH:mm:ss', arrivalDate: 'yyyy-MM-dd' arrivalTime: 'HH:mm:ss' }
  * @returns {Bool}
  */
-function isValidDepAndArrDate(value) {
-  const depDate = new Date(value.departureDate);
-  const arrDate = new Date(value.arrivalDate);
-  return depDate <= arrDate;
+function isValidDepAndArrDate(voyageDateTimeObject) {
+  const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss';
+  const { departureDate, departureTime, arrivalDate, arrivalTime } = voyageDateTimeObject;
+  const depDateTimeStr = `${departureDate} ${departureTime}`;
+  const arrDateTimeStr = `${arrivalDate} ${arrivalTime}`;
+
+  if (isValidDateTime(depDateTimeStr) && isValidDateTime(arrDateTimeStr)) {
+    const depDateTime = moment.utc(`${departureDate} ${departureTime}`, dateTimeFormat);
+    const arrDateTime = moment.utc(`${arrivalDate} ${arrivalTime}`, dateTimeFormat);
+    return arrDateTime.isAfter(depDateTime);
+  }
+  return false;
 }
 
 function handleResponseError(parsedApiResponse) {
