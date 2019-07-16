@@ -15,6 +15,7 @@ module.exports = (req, res) => {
     return;
   }
 
+  console.log(req.query.page);
   const craft = cookie.getUserRole() === 'Individual' ? craftApi.deleteCraft(cookie.getUserDbId(), craftId) : craftApi.deleteOrgCraft(cookie.getOrganisationId(), cookie.getUserDbId(), craftId);
 
   craft.then((apiResponse) => {
@@ -25,7 +26,8 @@ module.exports = (req, res) => {
     }
     req.session.successHeader = 'Success';
     req.session.successMsg = 'Craft deleted';
-    return req.session.save(() => { res.redirect('/aircraft'); });
+    logger.debug(`Page currently on: ${req.query.page}`);
+    return req.session.save(() => { res.redirect('/aircraft?page=' + req.query.page); });
   }).catch((err) => {
     logger.error(err);
     req.session.errMsg = errMsg;

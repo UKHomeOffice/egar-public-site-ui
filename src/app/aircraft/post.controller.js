@@ -10,6 +10,6 @@ module.exports = (req, res) => {
   }
   if (req.body.deleteCraft) {
     req.session.deleteCraftId = req.body.deleteCraft;
-    req.session.save(() => res.redirect('/aircraft/delete'));
+    req.session.save(() => res.redirect('/aircraft/delete?page=' + req.body.currentPage));
   }
 };

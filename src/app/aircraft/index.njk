@@ -92,6 +92,7 @@ Manage aircraft | Submit a General Aviation Report (GAR)
           {# <li class="pagination__item"><a class="pagination__link" href="/aircraft/next" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li> #}
         </ul>
       </nav>
+      <input type="hidden" name="currentPage" value="{{ pages.currentPage }}" />
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
 	</div>

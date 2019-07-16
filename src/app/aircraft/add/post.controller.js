@@ -35,7 +35,9 @@ module.exports = (req, res) => {
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             res.render('app/aircraft/add/index', { errors: [parsedResponse], cookie });
           } else {
-            res.redirect('/aircraft');
+            console.log('Response form API');
+            console.log(apiResponse);
+            res.redirect('/aircraft?page=1000000');
           }
         });
     })
