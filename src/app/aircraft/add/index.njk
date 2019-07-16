@@ -16,10 +16,10 @@
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="/aircraft">Aircraft</a>
+        <a class="govuk-breadcrumbs__link" href="/aircraft">{{__('title_aircraft')}}</a>
       </li>
       <li class="govuk-breadcrumbs__list-item">
-        Add aircraft
+        {{__('title_add_aircraft')}}
       </li>
     </ol>
   </div>
@@ -40,19 +40,15 @@
       <form action="/aircraft/add" autocomplete="off" class="form-group"
       method="post" role="form">
 
-      <h1 class="govuk-heading-xl">
-        Add an aircraft
-      </h1>
+      <h1 class="govuk-heading-xl">{{__('title_add_aircraft')}}</h1>
 
-      <p class="govuk-body-l">Please enter the following information. This information can be re-used when submitting a GAR.</p>
+      <p class="govuk-body-l">{{__('add_aircraft_caption')}}</p>
 
       <div class="govuk-form-group {{ m.form_group_class('craftreg', errors) }}">
 
-          <label class="govuk-label" for="craftreg">Aircraft registration</label>
+          <label class="govuk-label" for="craftreg">{{__('field_aircraft_registration')}}</label>
           {{ m.error_message('craftreg', errors) }}
-          <span class="govuk-hint">
-            For example G-ABCD
-          </span>
+          <span class="govuk-hint">{{__('field_aircraft_registration_hint')}}</span>
           <span class="field-validation-valid error-message" data-valmsg-for="craftreg"
             data-valmsg-replace="true" style="display:block">
           </span>
@@ -62,11 +58,9 @@
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('crafttype', errors) }}">
-            <label class="govuk-label" for="crafttype">Aircraft type</label>
+            <label class="govuk-label" for="crafttype">{{__('field_aircraft_type')}}</label>
           {{ m.error_message('crafttype', errors) }}
-          <span class="govuk-hint">
-            For example Gulfstream
-          </span>
+          <span class="govuk-hint">{{__('field_aircraft_type_hint')}}</span>
           <span class="field-validation-valid error-message" data-valmsg-for="crafttype"
             data-valmsg-replace="true" style="display:block">
           </span>
@@ -76,7 +70,7 @@
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('craftbase', errors) }}">
-             <label class="govuk-label" for="craftbase">Aircraft home port / location</label>
+             <label class="govuk-label" for="craftbase">{{__('field_aircraft_base')}}</label>
           {{ m.error_message('craftbase', errors) }}
           <span class="govuk-hint">
             Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA / ICAO code. Provide coordinates to 4 decimal places.
@@ -89,19 +83,19 @@
             value="" />
       </div>
 
-          <div class="govuk-form-group">
+      <div class="govuk-form-group">
 
-           <table class="govuk-table">
+        <table class="govuk-table">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell "><a class="govuk-button" href="/aircraft">Exit without adding</a></td>
-            <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Add and exit"
+            <td class="govuk-table__cell "><a class="govuk-button" href="/aircraft?page={{ query.page }}">{{__('form_exit_without_adding')}}</a></td>
+            <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="{{__('form_add_and_exit')}}"
           onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
           </tr>
         </table>
 
-          </div>
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
+      </div>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <input type="hidden" name="currentPage" value="{{ query.page }}"/>
     </form>
 
  </div>

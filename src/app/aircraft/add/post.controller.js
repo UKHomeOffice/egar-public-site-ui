@@ -8,6 +8,7 @@ const craftApi = require('../../../common/services/craftApi');
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
+  const originalPage = req.body.currentPage;
 
   const craftReg = req.body.craftreg;
   const craftType = req.body.crafttype;
@@ -23,7 +24,6 @@ module.exports = (req, res) => {
   const craftBaseChain = [
     new ValidationRule(validator.notEmpty, 'craftbase', craftBase, 'Enter the base of the craft'),
   ];
-
 
   // Validate chains
   validator.validateChains([craftRegChain, craftTypeChain, craftBaseChain])
@@ -42,8 +42,8 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.info('Edit SavedCraft postcontroller - There was a problem with editing the saved craft');
-      logger.info(JSON.stringify(err));
-      res.render('app/aircraft/add/index', { cookie, errors: err });
+      logger.info('Add craft postcontroller - There was a problem with adding the saved craft');
+      // logger.info(JSON.stringify(err));
+      res.render('app/aircraft/add/index', { cookie, errors: err, query: { page: originalPage } });
     });
 };

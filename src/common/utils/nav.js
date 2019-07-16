@@ -16,4 +16,11 @@ const simpleGetRender = (req, res, page) => {
   res.render(page, { cookie });
 };
 
+const simpleGetRenderWithQuery = (req, res, page) => {
+  logger.info(`Rendering page ${page}`);
+  const cookie = new CookieModel(req);
+  res.render(page, { cookie, query: req.query });
+};
+
 exports.simpleGetRender = simpleGetRender;
+exports.simpleGetRenderWithQuery = simpleGetRenderWithQuery;
