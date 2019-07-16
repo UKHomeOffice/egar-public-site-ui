@@ -165,6 +165,30 @@ describe('User Register Post Controller', () => {
       });
     });
 
+    it('should call createUser function, and send token when all resolves, lower casing the username', async () => {
+      req.body.userId = 'CAPITAL@rAnDoM.net';
+      req.body.cUserId = 'CAPITAL@rAnDoM.net';
+      sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
+      sinon.stub(sendTokenService, 'send').resolves();
+      sinon.stub(tokenApi, 'setToken');
+      sinon.stub(userCreateApi, 'post').resolves(
+        JSON.stringify({
+          userId: 123456,
+        }),
+      );
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'capital@random.net', sinon.match.falsy);
+        expect(sendTokenService.send).to.have.been.calledWith('Darth', 'capital@random.net', sinon.match.string);
+      }).then(() => {
+        expect(res.redirect).to.have.been.calledWith('/user/regmsg');
+      });
+    });
+
     it('should call createUser function, but inform user if there is an issue with GOV notify', async () => {
       sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
       const cookie = new CookieModel(req);

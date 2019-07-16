@@ -16,12 +16,12 @@ describe('API upload file post controller', () => {
   let req; let res;
   let garApiGetDocsStub; let garApiDeleteDocsStub;
   let clamAVServiceStub; let fileUploadApiStub;
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       file: {
