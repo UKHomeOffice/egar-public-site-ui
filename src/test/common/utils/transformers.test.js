@@ -3,7 +3,7 @@
 
 const { expect } = require('chai');
 
-const transformer = require('../common/utils/transformers');
+const transformer = require('../../../common/utils/transformers');
 
 describe('Transformers', () => {
   it('Should flatten nested peopletypes', () => {
@@ -22,15 +22,22 @@ describe('Transformers', () => {
     expect(transformer.transformPerson(person).peopleType).to.equal('Captain');
   });
 
-  it('Should titlecase different document types', () => {
-    expect(transformer.titleCase('identity card')).to.equal('Identity Card');
-    expect(transformer.titleCase('Identity card')).to.equal('Identity Card');
-    expect(transformer.titleCase('passport')).to.equal('Passport');
-    expect(transformer.titleCase('iDentITy Card')).to.equal('Identity Card');
-  });
+  describe('titleCase function', () => {
+    it('Should titlecase different document types', () => {
+      expect(transformer.titleCase('identity card')).to.equal('Identity Card');
+      expect(transformer.titleCase('Identity card')).to.equal('Identity Card');
+      expect(transformer.titleCase('passport')).to.equal('Passport');
+      expect(transformer.titleCase('iDentITy Card')).to.equal('Identity Card');
+    });
 
-  it('Should return undefined if given undefined as an input', () => {
-    expect(transformer.titleCase(undefined)).to.equal(undefined);
+    it('Should return the input if not a string', () => {
+      expect(transformer.titleCase(123)).to.equal(123);
+      expect(transformer.titleCase(false)).to.equal(false);
+    });
+
+    it('Should return undefined if given undefined as an input', () => {
+      expect(transformer.titleCase(undefined)).to.equal(undefined);
+    });
   });
 
   it('Should convert a string to UpperCamelCase', () => {
