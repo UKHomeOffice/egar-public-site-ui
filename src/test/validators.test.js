@@ -392,27 +392,36 @@ describe('Validator', () => {
     const dateOne = '2019-01-01';
     const dateTwo = '2019-01-02';
     const dateOnePrime = '2019-01-01';
+    const timeOne = '03:15:00';
+    const timeTwo = '04:15:00';
+    const timeOnePrime = '03:15:00';
 
-    it('Should retun true when departure date is less than or equal to arrival date', () => {
+    it('Should retun true when departure datetime is less than or equal to arrival datetime', () => {
       const voyageDateObj = {
         departureDate: dateOne,
+        departureTime: timeTwo,
         arrivalDate: dateTwo,
+        arrivalTime: timeOne,
       };
       expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.true;
     });
 
-    it('Should return true when departure date equals arrival date', () => {
+    it('Should return false when departure datetime equals arrival datetime', () => {
       const voyageDateObj = {
         departureDate: dateOne,
+        departureTime: timeOne,
         arrivalDate: dateOnePrime,
+        arrivalTime: timeOnePrime,
       };
-      expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.true;
+      expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.false;
     });
 
-    it('Should return false when departure date is greater than arrival date', () => {
+    it('Should return false when departure date is later than arrival date', () => {
       const voyageDateObj = {
         departureDate: dateTwo,
+        departureTime: timeOne,
         arrivalDate: dateOne,
+        arrivalTime: timeTwo,
       };
       expect(validator.isValidDepAndArrDate(voyageDateObj)).to.be.false;
     });

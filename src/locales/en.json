@@ -73,6 +73,8 @@
     "validation_api_uploadgar_people_type_passenger": "passenger",
     "validation_api_uploadgar_person_type_person_name": "{{peopleType}} {{firstName}} {{lastName}}",
     "validation_api_uploadgar_no_file": "Provide a file",
-	"validation_api_uploadgar_incorrect_type": "Incorrect file type",
-	"validation_api_uploadgar_incorrect_gar_file": "Incorrect xls or xlsx file"
+	  "validation_api_uploadgar_incorrect_type": "Incorrect file type",
+    "validation_api_uploadgar_incorrect_gar_file": "Incorrect xls or xlsx file",
+
+    "validator_msg_voyage_dates": "Arrival time must be after departure time"
 }

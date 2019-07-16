@@ -333,7 +333,7 @@ function isValidDateTime(dateTimeStr, dateTimeFormat = 'YYYY-MM-DD HH:mm:ss') {
 }
 
 /**
- * Verify that Arrival Date is greater than or equal to Departure Date
+ * Verify that Arrival Date is after Departure Date
  * @param {Object} voyageDateObject { depatureDate: 'yyyy-MM-dd', departureTiem: 'HH:mm:ss', arrivalDate: 'yyyy-MM-dd' arrivalTime: 'HH:mm:ss' }
  * @returns {Bool}
  */
@@ -344,8 +344,8 @@ function isValidDepAndArrDate(voyageDateTimeObject) {
   const arrDateTimeStr = `${arrivalDate} ${arrivalTime}`;
 
   if (isValidDateTime(depDateTimeStr) && isValidDateTime(arrDateTimeStr)) {
-    const depDateTime = moment.utc(`${departureDate} ${departureTime}`, dateTimeFormat);
-    const arrDateTime = moment.utc(`${arrivalDate} ${arrivalTime}`, dateTimeFormat);
+    const depDateTime = moment.utc(`${departureDate} ${departureTime}`, dateTimeFormat, true);
+    const arrDateTime = moment.utc(`${arrivalDate} ${arrivalTime}`, dateTimeFormat, true);
     return arrDateTime.isAfter(depDateTime);
   }
   return false;
