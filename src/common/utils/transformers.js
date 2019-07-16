@@ -14,7 +14,7 @@ function transformPerson(personObj) {
  * @returns {String} Undefined if undefined input else the string title case'd
  */
 function titleCase(str) {
-  if (str === undefined) {
+  if (str === undefined || !_.isString(str)) {
     return str;
   }
   return str.split(' ')
