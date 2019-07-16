@@ -56,6 +56,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     const passengerLabel = i18n.__('validation_api_uploadgar_people_type_passenger');
     const peopleType = crew.peopleType === 'Crew' ? crewLabel : passengerLabel;
     const name = i18n.__('validation_api_uploadgar_person_type_person_name', { peopleType, firstName: crew.firstName, lastName: crew.lastName });
+
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentType, `Enter a valid document type for ${name}`)]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${name}`)]);
     validationArr.push([
@@ -76,7 +77,10 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     ]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a gender for ${name}`)]);
     validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid gender for ${name}`)]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.dateOfBirth, `Enter a date of birth for ${name}`)]);
+    validationArr.push([
+      new ValidationRule(validator.notEmpty, '', crew.dateOfBirth, `Enter a date of birth for ${name}`),
+      new ValidationRule(validator.realDateFromString, '', crew.dateOfBirth, `Enter a valid date of birth for ${name}`),
+    ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.placeOfBirth, `Enter a place of birth for ${name}`),
       new ValidationRule(validator.isValidStringLength, '', crew.placeOfBirth, `Place of birth for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
@@ -86,7 +90,10 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       new ValidationRule(validator.validISOCountryLength, '', crew.nationality, `Enter a valid nationality for ${name}. Must be a ISO 3166 country code`),
       new ValidationRule(validator.validISO3Country, '', crew.nationality, `Enter a valid nationality for ${name}. Must be a ISO 3166 country code`),
     ]);
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a document expiry date for ${name}`)]);
+    validationArr.push([
+      new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a document expiry date for ${name}`),
+      new ValidationRule(validator.realDateFromString, '', crew.documentExpiryDate, `Enter a valid document expiry date for ${name}`),
+    ]);
   });
 
   return validationArr;
