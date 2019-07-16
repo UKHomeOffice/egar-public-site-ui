@@ -9,9 +9,10 @@ module.exports = (req, res) => {
 
   const errMsg = { message: 'Failed to delete craft. Try again' };
   const craftId = req.session.deleteCraftId;
+  const redirectUrl = `/aircraft?page=${req.query.page}`;
 
   if (craftId === undefined) {
-    res.redirect('/aircraft');
+    res.redirect(redirectUrl);
     return;
   }
 
@@ -22,15 +23,15 @@ module.exports = (req, res) => {
     const parsedResponse = JSON.parse(apiResponse);
     if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
       req.session.errMsg = errMsg;
-      return req.session.save(() => { res.redirect('/aircraft'); });
+      return req.session.save(() => { res.redirect(redirectUrl); });
     }
     req.session.successHeader = 'Success';
     req.session.successMsg = 'Craft deleted';
     logger.debug(`Page currently on: ${req.query.page}`);
-    return req.session.save(() => { res.redirect('/aircraft?page=' + req.query.page); });
+    return req.session.save(() => { res.redirect(redirectUrl); });
   }).catch((err) => {
     logger.error(err);
     req.session.errMsg = errMsg;
-    return req.session.save(() => { res.redirect('/aircraft'); });
+    return req.session.save(() => { res.redirect(redirectUrl); });
   });
 };

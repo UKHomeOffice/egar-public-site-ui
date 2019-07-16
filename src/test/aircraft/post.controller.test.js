@@ -45,6 +45,7 @@ describe('Aircraft Post Controller', () => {
   it('should redirect to edit', async () => {
     const editRequest = {
       body: {
+        currentPage: 4,
         editCraft: '1234',
       },
       session: {
@@ -62,13 +63,14 @@ describe('Aircraft Post Controller', () => {
       expect(editRequest.session.editCraftId).to.eq('1234');
       expect(sessionSaveStub).to.have.been.called;
     }).then(() => {
-      expect(res.redirect).to.have.been.calledWith('/aircraft/edit');
+      expect(res.redirect).to.have.been.calledWith('/aircraft/edit?page=4');
     });
   });
 
   it('should redirect to delete', async () => {
     const deleteRequest = {
       body: {
+        currentPage: 3,
         deleteCraft: '1234',
       },
       session: {
@@ -86,7 +88,7 @@ describe('Aircraft Post Controller', () => {
       expect(deleteRequest.session.deleteCraftId).to.eq('1234');
       expect(sessionSaveStub).to.have.been.called;
     }).then(() => {
-      expect(res.redirect).to.have.been.calledWith('/aircraft/delete');
+      expect(res.redirect).to.have.been.calledWith('/aircraft/delete?page=3');
     });
   });
 });

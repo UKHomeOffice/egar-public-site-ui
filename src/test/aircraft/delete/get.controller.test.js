@@ -18,6 +18,7 @@ describe('Aircraft Delete Get Controller', () => {
 
     // Example request and response objects with appropriate spies
     req = {
+      query: { page: 2 },
       session: {
         deleteCraftId: 'G-ABCD',
         save: callback => callback(),
@@ -47,7 +48,7 @@ describe('Aircraft Delete Get Controller', () => {
 
     expect(deleteCraftStub).to.not.have.been.called;
     expect(deleteOrgCraftStub).to.not.have.been.called;
-    expect(res.redirect).to.have.been.calledWith('/aircraft');
+    expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
   });
 
   describe('individuals', () => {
@@ -73,7 +74,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
       });
     });
 
@@ -92,7 +93,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
       });
     });
 
@@ -108,7 +109,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
       });
     });
   });
@@ -118,7 +119,7 @@ describe('Aircraft Delete Get Controller', () => {
       req.session.u.rl = 'Individual';
     });
 
-    it('should redirect if with success message', () => {
+    it('should redirect with success message', () => {
       deleteCraftStub.resolves(JSON.stringify({}));
       const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
 
@@ -133,7 +134,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
       });
     });
 
@@ -152,7 +153,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
       });
     });
 
@@ -168,7 +169,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
       });
     });
   });

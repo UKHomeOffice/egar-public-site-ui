@@ -48,7 +48,7 @@ describe('CraftService', () => {
       .reply(200, {});
 
     nock(BASE_URL)
-      .get(`/user/${userId}/crafts`)
+      .get(`/user/${userId}/crafts?per_page=5&page=1`)
       .reply(200, {});
 
     nock(BASE_URL)
@@ -90,7 +90,7 @@ describe('CraftService', () => {
   });
 
   it('Should successfully list all crafts an individual user is able to see', (done) => {
-    craftApi.getCrafts(userId)
+    craftApi.getCrafts(userId, 1)
       .then((response) => {
         const responseObj = JSON.parse(response);
         expect(typeof responseObj).to.equal('object');

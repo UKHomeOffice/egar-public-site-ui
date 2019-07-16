@@ -8,15 +8,13 @@ const pagination = require('./pagination');
 
 module.exports = (req, res) => {
   logger.debug('In user aircraft get controller');
-  logger.debug('Does session have nextPage set?');
-  logger.debug(req.session.nextPage);
 
   const cookie = new CookieModel(req);
   const crafts = cookie.getUserRole() === 'Individual' ? craftApi.getCrafts(cookie.getUserDbId(), req.query.page) : craftApi.getOrgCrafts(cookie.getOrganisationId());
   crafts.then((values) => {
     const savedCrafts = JSON.parse(values);
     // Pagination, returns _meta and _links:
-    logger.debug(JSON.stringify(savedCrafts._meta));
+    // logger.debug(JSON.stringify(savedCrafts._meta));
 
     const { totalPages, totalItems } = savedCrafts._meta;
 
@@ -34,7 +32,9 @@ module.exports = (req, res) => {
     if (req.session.errMsg) {
       const { errMsg } = req.session;
       delete req.session.errMsg;
-      res.render('app/aircraft/index', { cookie, savedCrafts, pages: paginationStuff, errors: [errMsg] });
+      res.render('app/aircraft/index', {
+        cookie, savedCrafts, pages: paginationStuff, errors: [errMsg],
+      });
       return;
     }
     if (req.session.successMsg) {

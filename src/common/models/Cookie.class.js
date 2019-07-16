@@ -436,20 +436,6 @@ class Cookie {
   /**
    *
    */
-  setUserIP(ip) {
-    this.session.u.ip = ip;
-  }
-
-  /**
-   *
-   */
-  getUserIP() {
-    return this.session.u.ip;
-  }
-
-  /**
-   *
-   */
   setUserFirstName(firstName) {
     this.session.u.fn = firstName;
   }
@@ -475,20 +461,6 @@ class Cookie {
   /**
    *
    */
-  getUserId() {
-    return this.session.u.i;
-  }
-
-  /**
-   *
-   */
-  setUserId(id) {
-    this.session.u.i = id;
-  }
-
-  /**
-   *
-   */
   getUserEmail() {
     return this.session.u.e;
   }
@@ -498,20 +470,6 @@ class Cookie {
    */
   setUserEmail(email) {
     this.session.u.e = email;
-  }
-
-  /**
-   *
-   */
-  getUserOrgId() {
-    return this.session.U.orgId;
-  }
-
-  /**
-   *
-   */
-  setUserOrgId(id) {
-    this.session.u.orgId = id;
   }
 
   /**
@@ -637,7 +595,6 @@ class Cookie {
     if (apiResponse.organisation !== null) {
       this.setOrganisationName(apiResponse.organisation.name);
       this.setOrganisationId(apiResponse.organisation.organisationId);
-      this.setUserOrgId(apiResponse.organisation.organisationId);
     }
   }
 

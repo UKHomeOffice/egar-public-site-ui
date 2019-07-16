@@ -112,7 +112,7 @@ describe('Aircraft Add Post Controller', () => {
       };
 
       callController().then(() => {
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+        expect(res.redirect).to.have.been.calledWith('/aircraft?page=1000000');
       });
     });
   });

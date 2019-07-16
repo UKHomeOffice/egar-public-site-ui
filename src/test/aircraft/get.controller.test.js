@@ -5,18 +5,20 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const proxyquire = require('proxyquire');
 
 const CookieModel = require('../../common/models/Cookie.class');
 const craftApi = require('../../common/services/craftApi');
 
-const controller = require('../../app/aircraft/get.controller');
-
 describe('Aircraft Get Controller', () => {
   let res; let individualCraftStub; let organisationCraftStub;
+  let controller;
+  let paginationStub;
 
-  const apiResponse = JSON.stringify(
-    [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
-  );
+  const apiResponse = JSON.stringify({
+    items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+    _meta: { totalPages: 1, totalItems: 2 },
+  });
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -26,6 +28,12 @@ describe('Aircraft Get Controller', () => {
     };
     individualCraftStub = sinon.stub(craftApi, 'getCrafts');
     organisationCraftStub = sinon.stub(craftApi, 'getOrgCrafts');
+    paginationStub = sinon.stub();
+
+    // In order to stub out the pagination module
+    controller = proxyquire('../../app/aircraft/get.controller', {
+      './pagination': paginationStub,
+    });
   });
 
   afterEach(() => {
@@ -33,7 +41,9 @@ describe('Aircraft Get Controller', () => {
   });
 
   describe('individuals', () => {
+    let cookie;
     const req = {
+      query: { page: 1 },
       session: {
         u: {
           dbId: 'example@somewhere.com',
@@ -42,8 +52,12 @@ describe('Aircraft Get Controller', () => {
       },
     };
 
+    beforeEach(() => {
+      cookie = new CookieModel(req);
+      paginationStub.returns({ startItem: 1, endItem: 1 });
+    });
+
     it('should return an error message when craft api rejects', async () => {
-      const cookie = new CookieModel(req);
       individualCraftStub.rejects('craftApi.getCrafts Example Reject');
 
       const callController = async () => {
@@ -60,14 +74,17 @@ describe('Aircraft Get Controller', () => {
 
     it('should return error messages if in the session', async () => {
       req.session.errMsg = 'Example Error Message';
-      const cookie = new CookieModel(req);
       individualCraftStub.resolves(apiResponse);
       await controller(req, res);
 
       expect(req.session.errMsg).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/aircraft/index', {
         cookie,
-        savedCrafts: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+        savedCrafts: {
+          items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+          _meta: { totalPages: 1, totalItems: 2 },
+        },
+        pages: { startItem: 1, endItem: 1 },
         errors: ['Example Error Message'],
       });
     });
@@ -75,7 +92,6 @@ describe('Aircraft Get Controller', () => {
     it('should return success messages if in the session', async () => {
       req.session.successMsg = 'Example Success Message';
       req.session.successHeader = 'Example Success Header';
-      const cookie = new CookieModel(req);
       individualCraftStub.resolves(apiResponse);
       await controller(req, res);
 
@@ -84,14 +100,17 @@ describe('Aircraft Get Controller', () => {
       expect(req.session.successHeader).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/aircraft/index', {
         cookie,
-        savedCrafts: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+        savedCrafts: {
+          items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+          _meta: { totalPages: 1, totalItems: 2 },
+        },
+        pages: { startItem: 1, endItem: 1 },
         successMsg: 'Example Success Message',
         successHeader: 'Example Success Header',
       });
     });
 
     it('should just go to the page if no messages', async () => {
-      const cookie = new CookieModel(req);
       individualCraftStub.resolves(apiResponse);
       await controller(req, res);
 
@@ -100,13 +119,18 @@ describe('Aircraft Get Controller', () => {
       expect(req.session.successHeader).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/aircraft/index', {
         cookie,
-        savedCrafts: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+        savedCrafts: {
+          items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+          _meta: { totalPages: 1, totalItems: 2 },
+        },
+        pages: { startItem: 1, endItem: 1 },
       });
     });
   });
 
   describe('organisations', () => {
     const req = {
+      query: { page: 1 },
       session: {
         u: {
           dbId: 'example@somewhere.com',
@@ -134,6 +158,7 @@ describe('Aircraft Get Controller', () => {
     it('should just go to the page if no messages', async () => {
       const cookie = new CookieModel(req);
       organisationCraftStub.resolves(apiResponse);
+      paginationStub.returns({ startItem: 1, endItem: 2 });
       await controller(req, res);
 
       expect(req.session.errMsg).to.be.undefined;
@@ -141,7 +166,11 @@ describe('Aircraft Get Controller', () => {
       expect(req.session.successHeader).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/aircraft/index', {
         cookie,
-        savedCrafts: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+        savedCrafts: {
+          items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+          _meta: { totalPages: 1, totalItems: 2 },
+        },
+        pages: { startItem: 1, endItem: 2 },
       });
     });
   });
