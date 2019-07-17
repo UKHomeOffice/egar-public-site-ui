@@ -35,7 +35,7 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.notEmpty, 'responsibleTown', responsibleTown, 'Enter a town or city for the responsible person'),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'responsibleCounty', responsibleCounty, 'Enter a county for the responsible person'),
+      new ValidationRule(validator.notEmpty, 'responsibleCounty', responsibleCounty, 'Enter a country for the responsible person'),
     ],
   ];
 };
