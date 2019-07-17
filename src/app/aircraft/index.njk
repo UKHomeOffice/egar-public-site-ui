@@ -1,6 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/pagination.njk" as pagination %}
 
 {% block pageTitle %}
 Manage aircraft | {{__('title')}}
@@ -74,40 +75,7 @@ Manage aircraft | {{__('title')}}
           </tbody>
         </table>
         {% if savedCrafts.items | length %}
-        <nav>
-          <script type="text/javascript">
-            function transitionToPage(pageNumber) {
-              nextPage=document.createElement('input');
-              nextPage.type='hidden';
-              nextPage.name='nextPage';
-              nextPage.value=pageNumber;
-              document.getElementById('aircraft').appendChild(nextPage);
-              document.getElementById('aircraft').submit();
-              return false;
-            }
-          </script>
-          <div class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results {{ paginate }}</div>
-          <ul class="pagination">
-          {% if pages.currentPage > 1 %}
-            <li class="pagination__item"><a class="pagination__link" href="#" onclick="transitionToPage({{ pages.previous }})" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
-          {% else %}
-            <li class="pagination__item"><a class="pagination__link current" href=""><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
-          {% endif %}
-          {% for page in pages.items %}
-            {% if page.number == pages.currentPage %}
-              <li class="pagination__item"><a class="pagination__link current" href="" aria-current="true" aria-label="Page {{ page.number }}, current page">{{ page.number }}</a></li>
-            {% else %}
-              <li class="pagination__item"><a class="pagination__link" onclick="transitionToPage({{ page.number }})">{{ page.number }}</a></li>
-            {% endif %}
-          {% endfor%}
-          {% if pages.hasNext %}
-            {# <li class="pagination__item"><a class="pagination__link" href="{{ pages.next }} " aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li> #}
-            <li class="pagination__item"><a class="pagination__link" href="#" onclick="transitionToPage({{ pages.next }})" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
-          {% else %}
-            <li class="pagination__item"><a class="pagination__link current" href="">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
-          {% endif %}
-          </ul>
-        </nav>
+          {{ pagination.build('aircraft', pages, __)}}
         {% endif %}
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       </form>

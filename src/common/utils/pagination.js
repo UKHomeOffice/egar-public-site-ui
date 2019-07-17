@@ -3,6 +3,8 @@ const _ = require('lodash');
 
 const logger = require('./logger')(__filename);
 
+const PAGE_SIZE = 5;
+
 /**
  * For a given page (like '/aircraft' or '/people') return the current page as
  * set in the session (provided by req). If the currentPage map is not present,
@@ -40,19 +42,6 @@ const setCurrentPage = (req, pageUrl, pageNumber) => {
 };
 
 /**
- * Returns a boolean to denote whether there are any more pages from the
- * current page, used for rendering elements in the templates. Returns true
- * if current page is less than the page count.
- *
- * @param {Number} currentPage Current page app is on
- * @param {Number} pageCount Page count for the given screen
- */
-const hasNextPages = (currentPage, pageCount) => {
-  if (typeof pageCount !== 'number' || pageCount < 0) throw new Error('pagination error: pageCount is not a number >= 0');
-  return currentPage < pageCount;
-};
-
-/**
  * Given a limit variable, creates an array of numbers that represent the
  * nearby links that could be used. This returns an array of numbers, and takes
  * inspiration from the express-paginate library, which also returned urls for
@@ -69,9 +58,7 @@ const getPages = (limit, pageCount, currentPage) => {
     const start = Math.max(1, (currentPage < (limit - 1)) ? 1 : (end - limit) + 1);
 
     for (let i = start; i <= end; i += 1) {
-      pages.push({
-        number: i,
-      });
+      pages.push(i);
     }
     return pages;
   }
@@ -83,9 +70,9 @@ const getPages = (limit, pageCount, currentPage) => {
  * session via the req scope, return an object containing metadata to be used
  * by the pagination templates, containing information such as previous or next
  * page numbers, what numbers should be displayed,
- * @param {Object} req 
- * @param {Number} totalPages 
- * @param {Number} totalItems 
+ * @param {Object} req Request object containing the session
+ * @param {Number} totalPages Total pages for the screen
+ * @param {Number} totalItems Total items for the screen
  */
 const build = (req, totalPages, totalItems) => {
   logger.debug('Entering the pagination module');
@@ -100,12 +87,10 @@ const build = (req, totalPages, totalItems) => {
 
     return {
       startItem: 0,
-      previous: '0',
-      hasNext: false,
-      next: '0',
       endItem: 0,
       currentPage,
       totalItems,
+      totalPages,
       items: [],
     };
   }
@@ -120,12 +105,11 @@ const build = (req, totalPages, totalItems) => {
     throw totalPages;
   }
 
-  const startItem = ((currentPage - 1) * 5) + 1;
-  const endItem = Math.min((startItem - 1) + 5, totalItems);
+  const startItem = ((currentPage - 1) * PAGE_SIZE) + 1;
+  const endItem = Math.min((startItem - 1) + PAGE_SIZE, totalItems);
   const items = getPages(3, totalPages, currentPage);
 
   logger.debug(JSON.stringify(items));
-  logger.debug(JSON.stringify(hasNextPages(currentPage, totalPages)));
 
   logger.debug('HREFs:');
   logger.debug(currentPage - 1);
@@ -133,12 +117,10 @@ const build = (req, totalPages, totalItems) => {
 
   return {
     startItem,
-    previous: currentPage - 1,
-    hasNext: hasNextPages(currentPage, totalPages),
-    next: currentPage + 1,
     endItem,
     currentPage,
     totalItems,
+    totalPages,
     items,
   };
 };

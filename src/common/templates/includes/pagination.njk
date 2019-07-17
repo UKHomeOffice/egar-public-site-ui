@@ -1,0 +1,41 @@
+{#
+Macro representing the pagination component, takes the form name which when
+submitted results in page transitions, and the pages object, an object returned
+from the pagination.js build function. The i18n __ reference also needs to be
+passed in explicitly it seems.
+#}
+{% macro build(formName, pages, __) %}
+<nav>
+  <script type="text/javascript">
+    function transitionToPage(pageNumber) {
+      nextPage=document.createElement('input');
+      nextPage.type='hidden';
+      nextPage.name='nextPage';
+      nextPage.value=pageNumber;
+      document.getElementById('{{formName}}').appendChild(nextPage);
+      document.getElementById('{{formName}}').submit();
+      return false;
+    }
+  </script>
+  <div class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results {{ paginate }}</div>
+  <ul class="pagination">
+  {% if pages.currentPage > 1 %}
+    <li class="pagination__item"><a class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage - 1 }})" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
+  {% else %}
+    <li class="pagination__item"><a class="pagination__link current" href=""><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
+  {% endif %}
+  {% for pageNumber in pages.items %}
+    {% if pageNumber === pages.currentPage %}
+      <li class="pagination__item"><a class="pagination__link current" href="" aria-current="true" aria-label="Page {{ pageNumber }}, current page">{{ pageNumber }}</a></li>
+    {% else %}
+      <li class="pagination__item"><a class="pagination__link" onclick="transitionToPage({{ pageNumber }})">{{ pageNumber }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if pages.currentPage < pages.totalPages %}
+    <li class="pagination__item"><a class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage + 1 }})" aria-label="Next page">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+  {% else %}
+    <li class="pagination__item"><a class="pagination__link current" href="">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+  {% endif %}
+  </ul>
+</nav>
+{% endmacro %}
