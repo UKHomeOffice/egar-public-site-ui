@@ -165,6 +165,11 @@ function realDate(dObj) {
     && validYear(dObj.y);
 }
 
+function realDateFromString(str) {
+  moment.suppressDeprecationWarnings = true;
+  return moment(str).isValid();
+}
+
 function validFlag(value) {
   if (value) {
     return true;
@@ -357,7 +362,6 @@ function handleResponseError(parsedApiResponse) {
   }
 }
 
-
 module.exports = {
   notEmpty,
   email,
@@ -372,6 +376,7 @@ module.exports = {
   genValidations,
   validatePortCoords,
   realDate,
+  realDateFromString,
   currentOrFutureDate,
   validTime,
   validFlag,
