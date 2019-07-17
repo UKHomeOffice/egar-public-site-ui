@@ -2,7 +2,6 @@
 const express = require('express');
 
 // Middleware
-const paginate = require('express-paginate');
 const flagpole = require('../../common/middleware/flagpole');
 const usercheck = require('../../common/middleware/usercheck');
 const csrfcheck = require('../../common/middleware/csrfcheck');
@@ -13,9 +12,7 @@ const getController = require('./get.controller');
 const postController = require('./post.controller');
 
 // Initialisation
-const app = express();
 const router = new express.Router();
-app.use(paginate.middleware(10, 50));
 const indexPath = '/aircraft';
 const paths = {
   index: indexPath,

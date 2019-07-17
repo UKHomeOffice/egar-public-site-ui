@@ -26,9 +26,9 @@ describe('Aircraft Add Post Controller', () => {
     // Example response object with appropriate spies
     req = {
       body: {
-        craftreg: 'G-ABCD',
-        crafttype: 'Gulfstream',
-        craftbase: 'LHR',
+        craftReg: 'G-ABCD',
+        craftType: 'Gulfstream',
+        craftBase: 'LHR',
       },
       session: {
         cookie: {},
@@ -49,8 +49,8 @@ describe('Aircraft Add Post Controller', () => {
 
   describe('validation chains', () => {
     it('should return message when registration is empty', () => {
-      req.body.craftreg = '';
-      const rule = new ValidationRule(validator.notEmpty, 'craftreg', '', 'Enter the registration details of the craft');
+      req.body.craftReg = '';
+      const rule = new ValidationRule(validator.notEmpty, 'craftReg', '', 'Enter the registration details of the craft');
       const cookie = new CookieModel(req);
 
       const callController = async () => {
@@ -64,8 +64,8 @@ describe('Aircraft Add Post Controller', () => {
     });
 
     it('should return message when type is empty', () => {
-      req.body.crafttype = '';
-      const rule = new ValidationRule(validator.notEmpty, 'crafttype', '', 'Enter the craft type');
+      req.body.craftType = '';
+      const rule = new ValidationRule(validator.notEmpty, 'craftType', '', 'Enter the craft type');
       const cookie = new CookieModel(req);
 
       const callController = async () => {
@@ -80,8 +80,8 @@ describe('Aircraft Add Post Controller', () => {
     });
 
     it('should return message when base is empty', () => {
-      req.body.craftbase = '';
-      const rule = new ValidationRule(validator.notEmpty, 'craftbase', '', 'Enter the base of the craft');
+      req.body.craftBase = '';
+      const rule = new ValidationRule(validator.notEmpty, 'craftBase', '', 'Enter the base of the craft');
       const cookie = new CookieModel(req);
 
       const callController = async () => {

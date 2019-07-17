@@ -10,19 +10,18 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  const craftReg = req.body.craftreg;
-  const craftType = req.body.crafttype;
-  const craftBase = _.toUpper(req.body.craftbase);
+  const { craftReg, craftType } = req.body;
+  const craftBase = _.toUpper(req.body.craftBase);
 
   // Define a validation chain for user registeration fields
   const craftRegChain = [
-    new ValidationRule(validator.notEmpty, 'craftreg', craftReg, 'Enter the registration details of the craft'),
+    new ValidationRule(validator.notEmpty, 'craftReg', craftReg, 'Enter the registration details of the craft'),
   ];
   const craftTypeChain = [
-    new ValidationRule(validator.notEmpty, 'crafttype', craftType, 'Enter the craft type'),
+    new ValidationRule(validator.notEmpty, 'craftType', craftType, 'Enter the craft type'),
   ];
   const craftBaseChain = [
-    new ValidationRule(validator.notEmpty, 'craftbase', craftBase, 'Enter the base of the craft'),
+    new ValidationRule(validator.notEmpty, 'craftBase', craftBase, 'Enter the base of the craft'),
   ];
 
   // Validate chains
