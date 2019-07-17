@@ -150,10 +150,10 @@
          <!-- Start departure coords -->
         <div class="govuk-form-group {{ m.form_group_class('departureLat', errors) }}">
           <label class="govuk-label" for="departureLat">
-            Latitude
+            {{__('field_latitude')}}
           </label>
           <span id="departureLattitude-hint" class="govuk-hint">
-              For example 51.4700
+            {{__('field_latitude_hint')}}
           </span>
 
           {{ m.error_message('departureLat', errors) }}
@@ -163,10 +163,10 @@
 
         <div class="govuk-form-group {{ m.form_group_class('departureLong', errors) }}">
           <label class="govuk-label" for="departureLong">
-            Longitude
+            {{__('field_longitude')}}
           </label>
           <span id="departureLongitude-hint" class="govuk-hint">
-              For example -0.4542
+            {{__('field_longitude_hint')}}
           </span>
           {{ m.error_message('departureLong', errors) }}
           <input class="govuk-input" id="departureLong" name="departureLong" autocomplete="off" type="text"
