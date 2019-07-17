@@ -87,7 +87,7 @@
 
         <table class="govuk-table">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell "><a class="govuk-button" href="/aircraft?page={{ query.page }}">{{__('form_exit_without_adding')}}</a></td>
+            <td class="govuk-table__cell "><a class="govuk-button" href="/aircraft">{{__('form_exit_without_adding')}}</a></td>
             <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="{{__('form_add_and_exit')}}"
           onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
           </tr>
@@ -95,7 +95,6 @@
 
       </div>
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-      <input type="hidden" name="currentPage" value="{{ query.page }}"/>
     </form>
 
  </div>

@@ -12,13 +12,14 @@ const controller = require('../../../app/aircraft/delete/get.controller');
 
 describe('Aircraft Delete Get Controller', () => {
   let req; let res; let deleteCraftStub; let deleteOrgCraftStub;
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
 
   beforeEach(() => {
     chai.use(sinonChai);
 
-    // Example request and response objects with appropriate spies
     req = {
-      query: { page: 2 },
       session: {
         deleteCraftId: 'G-ABCD',
         save: callback => callback(),
@@ -48,7 +49,7 @@ describe('Aircraft Delete Get Controller', () => {
 
     expect(deleteCraftStub).to.not.have.been.called;
     expect(deleteOrgCraftStub).to.not.have.been.called;
-    expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
+    expect(res.redirect).to.have.been.calledWith('/aircraft');
   });
 
   describe('individuals', () => {
@@ -74,7 +75,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
+        expect(res.redirect).to.have.been.calledWith('/aircraft');
       });
     });
 
@@ -93,7 +94,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
+        expect(res.redirect).to.have.been.calledWith('/aircraft');
       });
     });
 
@@ -109,7 +110,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
+        expect(res.redirect).to.have.been.calledWith('/aircraft');
       });
     });
   });
@@ -134,7 +135,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
+        expect(res.redirect).to.have.been.calledWith('/aircraft');
       });
     });
 
@@ -153,7 +154,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
+        expect(res.redirect).to.have.been.calledWith('/aircraft');
       });
     });
 
@@ -169,7 +170,7 @@ describe('Aircraft Delete Get Controller', () => {
         expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft?page=2');
+        expect(res.redirect).to.have.been.calledWith('/aircraft');
       });
     });
   });

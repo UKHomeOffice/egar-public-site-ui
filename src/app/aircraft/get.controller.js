@@ -3,28 +3,24 @@
 const CookieModel = require('../../common/models/Cookie.class');
 const logger = require('../../common/utils/logger')(__filename);
 const craftApi = require('../../common/services/craftApi');
-
-const pagination = require('./pagination');
+const pagination = require('../../common/utils/pagination');
 
 module.exports = (req, res) => {
   logger.debug('In user aircraft get controller');
 
   const cookie = new CookieModel(req);
-  const crafts = cookie.getUserRole() === 'Individual' ? craftApi.getCrafts(cookie.getUserDbId(), req.query.page) : craftApi.getOrgCrafts(cookie.getOrganisationId());
+  const currentPage = pagination.getCurrentPage(req, '/aircraft');
+  const crafts = cookie.getUserRole() === 'Individual' ? craftApi.getCrafts(cookie.getUserDbId(), currentPage) : craftApi.getOrgCrafts(cookie.getOrganisationId());
   crafts.then((values) => {
     const savedCrafts = JSON.parse(values);
-    // Pagination, returns _meta and _links:
-    // logger.debug(JSON.stringify(savedCrafts._meta));
-
     const { totalPages, totalItems } = savedCrafts._meta;
 
     let paginationStuff;
     try {
-      paginationStuff = pagination(req, totalPages, totalItems);
+      paginationStuff = pagination.build(req, totalPages, totalItems);
     } catch (link) {
-      logger.debug('Pagination module threw error, should contain link to follow');
-      logger.debug(link);
-      res.redirect(link);
+      logger.debug('Pagination module threw error, refreshing page');
+      res.redirect('/aircraft');
       return;
     }
 

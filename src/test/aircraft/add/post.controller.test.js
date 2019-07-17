@@ -12,9 +12,13 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const controller = require('../../../app/aircraft/add/post.controller');
+const paginate = require('../../../app/aircraft/pagination');
 
 describe('Aircraft Add Post Controller', () => {
-  let req; let res; let craftApiStub;
+  let req; let res; let craftApiStub; let sessionSaveStub;
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -28,6 +32,7 @@ describe('Aircraft Add Post Controller', () => {
       },
       session: {
         cookie: {},
+        save: callback => callback(),
       },
     };
     res = {
@@ -35,6 +40,7 @@ describe('Aircraft Add Post Controller', () => {
       render: sinon.stub(),
     };
     craftApiStub = sinon.stub(craftApi, 'create');
+    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
   afterEach(() => {
@@ -52,7 +58,8 @@ describe('Aircraft Add Post Controller', () => {
       };
 
       callController().then(() => {
-        expect(res.render).to.have.been.calledWith('app/aircraft/add/index', { cookie, errors: [rule] });
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { cookie, errors: [rule] });
       });
     });
 
@@ -67,7 +74,8 @@ describe('Aircraft Add Post Controller', () => {
 
       callController().then(() => {
         // TODO: Cookie and Error Message Check
-        expect(res.render).to.have.been.calledWith('app/aircraft/add/index', { cookie, errors: [rule] });
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { cookie, errors: [rule] });
       });
     });
 
@@ -82,7 +90,8 @@ describe('Aircraft Add Post Controller', () => {
 
       callController().then(() => {
         expect(craftApiStub).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/aircraft/add/index', { cookie, errors: [rule] });
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { cookie, errors: [rule] });
       });
     });
   });
@@ -99,20 +108,24 @@ describe('Aircraft Add Post Controller', () => {
       };
 
       callController().then(() => {
-        expect(res.render).to.have.been.calledWith('app/aircraft/add/index', { errors: [{ message: 'Some sort of error' }], cookie });
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { errors: [{ message: 'Some sort of error' }], cookie });
       });
     });
 
     it('should redirect when ok', () => {
       cookie = new CookieModel(req);
       craftApiStub.resolves(JSON.stringify({}));
+      sinon.stub(paginate, 'setCurrentPage');
 
       const callController = async () => {
         await controller(req, res);
       };
 
       callController().then(() => {
-        expect(res.redirect).to.have.been.calledWith('/aircraft?page=1000000');
+        expect(sessionSaveStub).to.have.been.called;
+        expect(paginate.setCurrentPage).to.have.been.calledOnceWithExactly(req, '/aircraft', 1000000);
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
       });
     });
   });

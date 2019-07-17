@@ -6,89 +6,93 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+const pagination = require('../../app/aircraft/pagination');
+
 const controller = require('../../app/aircraft/post.controller');
 
 describe('Aircraft Post Controller', () => {
-  let res;
+  let req; let res;
+  let paginationStub; let sessionSaveStub;
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
 
   beforeEach(() => {
     chai.use(sinonChai);
 
-    // Example response object with appropriate spies
+    req = {
+      body: {},
+      session: {
+        cookie: {},
+        save: callback => callback(),
+      },
+    };
+
     res = {
       redirect: sinon.stub(),
       render: sinon.stub(),
     };
+
+    paginationStub = sinon.stub(pagination, 'setCurrentPage');
+    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
   afterEach(() => {
     sinon.restore();
   });
 
-  it('should do nothing if editCraft or deleteCraft are not set', async () => {
-    const emptyRequest = {
-      body: {
-      },
-      session: {
-        cookie: {},
-        save: sinon.spy(),
-      },
-    };
+  it('should do nothing if nextPage or editCraft or deleteCraft are not set', async () => {
+    await controller(req, res);
 
-    await controller(emptyRequest, res);
-
-    expect(emptyRequest.session.editCraftId).to.be.undefined;
-    expect(emptyRequest.session.deleteCraftId).to.be.undefined;
-    expect(emptyRequest.session.save).to.not.have.been.called;
+    expect(req.session.editCraftId).to.be.undefined;
+    expect(req.session.deleteCraftId).to.be.undefined;
+    expect(req.session.save).to.not.have.been.called;
   });
 
-  it('should redirect to edit', async () => {
-    const editRequest = {
-      body: {
-        currentPage: 4,
-        editCraft: '1234',
-      },
-      session: {
-        cookie: {},
-        save: callback => callback(),
-      },
-    };
-    const sessionSaveStub = sinon.stub(editRequest.session, 'save').callsArg(0);
+  it('should redirect if nextPage found', () => {
+    req.body.nextPage = 6;
 
     callController = async () => {
-      await controller(editRequest, res);
+      await controller(req, res);
     };
 
     callController().then(() => {
-      expect(editRequest.session.editCraftId).to.eq('1234');
+      expect(paginationStub).to.have.been.called;
       expect(sessionSaveStub).to.have.been.called;
     }).then(() => {
-      expect(res.redirect).to.have.been.calledWith('/aircraft/edit?page=4');
+      expect(res.redirect).to.have.been.calledWith('/aircraft');
+    });
+  });
+
+  it('should redirect to edit', async () => {
+    req.body.editCraft = '1234';
+
+    callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(req.session.editCraftId).to.eq('1234');
+      expect(paginationStub).to.not.have.been.called;
+      expect(sessionSaveStub).to.have.been.called;
+    }).then(() => {
+      expect(res.redirect).to.have.been.calledWith('/aircraft/edit');
     });
   });
 
   it('should redirect to delete', async () => {
-    const deleteRequest = {
-      body: {
-        currentPage: 3,
-        deleteCraft: '1234',
-      },
-      session: {
-        cookie: {},
-        save: callback => callback(),
-      },
-    };
-    const sessionSaveStub = sinon.stub(deleteRequest.session, 'save').callsArg(0);
+    req.body.deleteCraft = '1234';
 
     callController = async () => {
-      await controller(deleteRequest, res);
+      await controller(req, res);
     };
 
     callController().then(() => {
-      expect(deleteRequest.session.deleteCraftId).to.eq('1234');
+      expect(req.session.deleteCraftId).to.eq('1234');
+      expect(paginationStub).to.not.have.been.called;
       expect(sessionSaveStub).to.have.been.called;
     }).then(() => {
-      expect(res.redirect).to.have.been.calledWith('/aircraft/delete?page=3');
+      expect(res.redirect).to.have.been.calledWith('/aircraft/delete');
     });
   });
 });

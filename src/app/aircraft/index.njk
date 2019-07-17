@@ -21,7 +21,7 @@ Manage aircraft | {{__('title')}}
 {% import "common/templates/includes/macros.njk" as m %}
 
 <div class="govuk-grid-row">
-	<div class="govuk-grid-column-full">
+	<div class="govuk-grid-column-two-thirds">
 
   {% if errors %}
   	{% include "common/templates/includes/errors.njk" %}
@@ -35,7 +35,9 @@ Manage aircraft | {{__('title')}}
     {% if cookie.getUserRole() != 'User' %}
     <p class="govuk-body-l">{{__('aircraft_caption')}}</p>
     {% endif %}
-    {% if savedCrafts.items | length %}
+  </div>
+  <div class="govuk-grid-column-full">
+    
       <form id="aircraft" action="/aircraft" class="form-group" method="post" role="form" >
         <table class="govuk-table" id="SavedCraft">
           <thead class="govuk-table__head">
@@ -49,6 +51,7 @@ Manage aircraft | {{__('title')}}
             </tr>
           </thead>
           <tbody class="govuk-table__body">
+          {% if savedCrafts.items | length %}
             {% for craft in savedCrafts.items %}
             <tr class="govuk-table__row">
               {% if cookie.getUserRole() != 'User' %}
@@ -63,13 +66,30 @@ Manage aircraft | {{__('title')}}
               {% endif %}
             </tr>
             {% endfor %}
+          {% else %}
+            <tr class="govuk-table__row">
+              <td colspan="4"><p class="govuk-inset-text">{{__('aircraft_no_records')}}</p></td>
+            </tr>
+          {% endif %}
           </tbody>
         </table>
+        {% if savedCrafts.items | length %}
         <nav>
+          <script type="text/javascript">
+            function transitionToPage(pageNumber) {
+              nextPage=document.createElement('input');
+              nextPage.type='hidden';
+              nextPage.name='nextPage';
+              nextPage.value=pageNumber;
+              document.getElementById('aircraft').appendChild(nextPage);
+              document.getElementById('aircraft').submit();
+              return false;
+            }
+          </script>
           <div class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results {{ paginate }}</div>
           <ul class="pagination">
           {% if pages.currentPage > 1 %}
-            <li class="pagination__item"><a class="pagination__link" href="{{ pages.previous }}" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#" onclick="transitionToPage({{ pages.previous }})" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
           {% else %}
             <li class="pagination__item"><a class="pagination__link current" href=""><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
           {% endif %}
@@ -77,23 +97,20 @@ Manage aircraft | {{__('title')}}
             {% if page.number == pages.currentPage %}
               <li class="pagination__item"><a class="pagination__link current" href="" aria-current="true" aria-label="Page {{ page.number }}, current page">{{ page.number }}</a></li>
             {% else %}
-              <li class="pagination__item"><a class="pagination__link" href="{{ page.url }}">{{ page.number }}</a></li>
+              <li class="pagination__item"><a class="pagination__link" onclick="transitionToPage({{ page.number }})">{{ page.number }}</a></li>
             {% endif %}
           {% endfor%}
           {% if pages.hasNext %}
-            <li class="pagination__item"><a class="pagination__link" href="{{ pages.next }} " aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+            {# <li class="pagination__item"><a class="pagination__link" href="{{ pages.next }} " aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li> #}
+            <li class="pagination__item"><a class="pagination__link" href="#" onclick="transitionToPage({{ pages.next }})" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
           {% else %}
             <li class="pagination__item"><a class="pagination__link current" href="">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
           {% endif %}
           </ul>
-          <input type="hidden" name="currentPage" value="{{ pages.currentPage }}" />
         </nav>
+        {% endif %}
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       </form>
-    {% else %}
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-      <p class="govuk-body-m">{{__('aircraft_no_records')}}</p>
-    {% endif %}
     
 	</div>
 
@@ -102,10 +119,10 @@ Manage aircraft | {{__('title')}}
 		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
 	</div>
 
-	<div class="govuk-grid-column-full">
+	<div class="govuk-grid-column-two-thirds">
 		<h2 class="govuk-heading-l">{{__('aircraft_add')}}</h2>
 		<p class="govuk-body-l">{{__('aircraft_add_caption')}}</p>
-		<a href='/aircraft/add?page={{ pages.currentPage }}' class='govuk-button'>{{__('aircraft_add_button')}}</a>
+		<a href='/aircraft/add' class='govuk-button'>{{__('aircraft_add_button')}}</a>
 	</div>
 
 	<div class="govuk-grid-column-full">

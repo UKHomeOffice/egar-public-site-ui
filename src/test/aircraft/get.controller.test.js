@@ -5,15 +5,19 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
 
 const CookieModel = require('../../common/models/Cookie.class');
 const craftApi = require('../../common/services/craftApi');
+pagination = require('../../common/utils/pagination');
+
+controller = require('../../app/aircraft/get.controller');
 
 describe('Aircraft Get Controller', () => {
   let res; let individualCraftStub; let organisationCraftStub;
-  let controller;
-  let paginationStub;
+  let paginationBuildStub; let paginationGetCurrentPageStub;
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
 
   const apiResponse = JSON.stringify({
     items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
@@ -24,16 +28,13 @@ describe('Aircraft Get Controller', () => {
     chai.use(sinonChai);
 
     res = {
+      redirect: sinon.spy(),
       render: sinon.spy(),
     };
     individualCraftStub = sinon.stub(craftApi, 'getCrafts');
     organisationCraftStub = sinon.stub(craftApi, 'getOrgCrafts');
-    paginationStub = sinon.stub();
-
-    // In order to stub out the pagination module
-    controller = proxyquire('../../app/aircraft/get.controller', {
-      './pagination': paginationStub,
-    });
+    paginationBuildStub = sinon.stub(pagination, 'build');
+    paginationGetCurrentPageStub = sinon.stub(pagination, 'getCurrentPage');
   });
 
   afterEach(() => {
@@ -49,12 +50,14 @@ describe('Aircraft Get Controller', () => {
           dbId: 'example@somewhere.com',
           rl: 'Individual',
         },
+        save: callback => callback(),
       },
     };
 
     beforeEach(() => {
       cookie = new CookieModel(req);
-      paginationStub.returns({ startItem: 1, endItem: 1 });
+      paginationBuildStub.returns({ startItem: 1, endItem: 1 });
+      paginationGetCurrentPageStub.returns(1);
     });
 
     it('should return an error message when craft api rejects', async () => {
@@ -65,11 +68,24 @@ describe('Aircraft Get Controller', () => {
       };
 
       callController().then(() => {
-        expect(individualCraftStub).to.have.been.called;
+        expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
         expect(organisationCraftStub).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/aircraft/index');
-        res.render('app/aircraft/index', { cookie, errors: [{ message: 'There was a problem fetching data' }] });
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/index', {
+          cookie, errors: [{ message: 'There was a problem fetching data' }],
+        });
       });
+    });
+
+    // TODO: Should redirect if pagination throws an error
+    it('should redirect if the pagination module throws an error', async () => {
+      individualCraftStub.resolves(apiResponse);
+      paginationBuildStub.throws('Example');
+      await controller(req, res);
+
+      expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
+      expect(req.session.errMsg).to.be.undefined;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
+      expect(res.render).to.not.have.been.called;
     });
 
     it('should return error messages if in the session', async () => {
@@ -77,6 +93,7 @@ describe('Aircraft Get Controller', () => {
       individualCraftStub.resolves(apiResponse);
       await controller(req, res);
 
+      expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
       expect(req.session.errMsg).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/aircraft/index', {
         cookie,
@@ -95,6 +112,7 @@ describe('Aircraft Get Controller', () => {
       individualCraftStub.resolves(apiResponse);
       await controller(req, res);
 
+      expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
       expect(req.session.errMsg).to.be.undefined;
       expect(req.session.successMsg).to.be.undefined;
       expect(req.session.successHeader).to.be.undefined;
@@ -114,6 +132,7 @@ describe('Aircraft Get Controller', () => {
       individualCraftStub.resolves(apiResponse);
       await controller(req, res);
 
+      expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
       expect(req.session.errMsg).to.be.undefined;
       expect(req.session.successMsg).to.be.undefined;
       expect(req.session.successHeader).to.be.undefined;
@@ -158,7 +177,7 @@ describe('Aircraft Get Controller', () => {
     it('should just go to the page if no messages', async () => {
       const cookie = new CookieModel(req);
       organisationCraftStub.resolves(apiResponse);
-      paginationStub.returns({ startItem: 1, endItem: 2 });
+      paginationBuildStub.returns({ startItem: 1, endItem: 2 });
       await controller(req, res);
 
       expect(req.session.errMsg).to.be.undefined;

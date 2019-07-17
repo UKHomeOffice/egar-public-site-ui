@@ -11,6 +11,9 @@ const controller = require('../../../app/aircraft/add/get.controller');
 
 describe('Aircraft Add Get Controller', () => {
   let req; let res;
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
 
   beforeEach(() => {
     chai.use(sinonChai);

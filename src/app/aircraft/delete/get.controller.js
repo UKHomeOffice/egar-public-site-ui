@@ -9,14 +9,13 @@ module.exports = (req, res) => {
 
   const errMsg = { message: 'Failed to delete craft. Try again' };
   const craftId = req.session.deleteCraftId;
-  const redirectUrl = `/aircraft?page=${req.query.page}`;
+  const redirectUrl = '/aircraft';
 
   if (craftId === undefined) {
     res.redirect(redirectUrl);
     return;
   }
 
-  console.log(req.query.page);
   const craft = cookie.getUserRole() === 'Individual' ? craftApi.deleteCraft(cookie.getUserDbId(), craftId) : craftApi.deleteOrgCraft(cookie.getOrganisationId(), cookie.getUserDbId(), craftId);
 
   craft.then((apiResponse) => {
@@ -27,7 +26,6 @@ module.exports = (req, res) => {
     }
     req.session.successHeader = 'Success';
     req.session.successMsg = 'Craft deleted';
-    logger.debug(`Page currently on: ${req.query.page}`);
     return req.session.save(() => { res.redirect(redirectUrl); });
   }).catch((err) => {
     logger.error(err);

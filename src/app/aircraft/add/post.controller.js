@@ -4,11 +4,11 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const craftApi = require('../../../common/services/craftApi');
+const pagination = require('../../../common/utils/pagination');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
-  const originalPage = req.body.currentPage;
 
   const craftReg = req.body.craftreg;
   const craftType = req.body.crafttype;
@@ -35,15 +35,15 @@ module.exports = (req, res) => {
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             res.render('app/aircraft/add/index', { errors: [parsedResponse], cookie });
           } else {
-            console.log('Response form API');
-            console.log(apiResponse);
-            res.redirect('/aircraft?page=1000000');
+            // Set the page to a large number and expect the page to redirect back to
+            // the correct last page (two calls in exchange for less logic to calculate the last page)
+            pagination.setCurrentPage(req, '/aircraft', 1000000);
+            req.session.save(() => res.redirect('/aircraft'));
           }
         });
     })
     .catch((err) => {
       logger.info('Add craft postcontroller - There was a problem with adding the saved craft');
-      // logger.info(JSON.stringify(err));
-      res.render('app/aircraft/add/index', { cookie, errors: err, query: { page: originalPage } });
+      res.render('app/aircraft/add/index', { cookie, errors: err });
     });
 };
