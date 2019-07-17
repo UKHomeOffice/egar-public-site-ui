@@ -192,12 +192,12 @@
 					<input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" type="number" value={{manifest.items.length}}>
 				</div>
 
-        <input class="govuk-button" type="submit" name="buttonClicked" value="Save and continue">
+        <input id="save-and-continue" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue">
         <p class="govuk-body-m">
-          <a href="/home" >Save and come back later</a>
+          <a id="save-and-exit" href="/home" >Save and come back later</a>
         </p>
         <p class="govuk-body-m">
-          <a href="/home" > Exit without saving </a>
+          <a id="exit-no-save" href="/home" > Exit without saving </a>
         </p>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 		</form>
