@@ -52,10 +52,10 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
 
   const manifest = crewArr.concat(passengersArr);
   manifest.forEach((crew) => {
-    const crewLabel = i18n.__('validation_api_uploadgar_people_type_crew');
-    const passengerLabel = i18n.__('validation_api_uploadgar_people_type_passenger');
+    const crewLabel = i18n.__('validator_api_uploadgar_people_type_crew');
+    const passengerLabel = i18n.__('validator_api_uploadgar_people_type_passenger');
     const peopleType = crew.peopleType === 'Crew' ? crewLabel : passengerLabel;
-    const name = i18n.__('validation_api_uploadgar_person_type_person_name', { peopleType, firstName: crew.firstName, lastName: crew.lastName });
+    const name = i18n.__('validator_api_uploadgar_person_type_person_name', { peopleType, firstName: crew.firstName, lastName: crew.lastName });
 
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentType, `Enter a valid document type for ${name}`)]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${name}`)]);

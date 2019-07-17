@@ -39,6 +39,10 @@
     "field_departure_time": "Departure time (UTC)",
     "field_departure_time_hint": "For example 17 30",
     "field_departure_port": "Departure port",
+    "field_longitude": "Longitude",
+    "field_longitude_hint": "For example -0.4542",
+    "field_latitude": "Latitude",
+    "field_latitude_hint": "For example 51.4700",
 
     "title_edit_person": "Edit Person Details",
     "heading_edit_person": "Edit a person",
@@ -80,12 +84,12 @@
     "field_file": "Select a file",
     "form_upload_and_continue": "Upload and continue",
     "upload_gar_file_header": "GENERAL AVIATION REPORT (GAR) -  January 2015",
-    "validation_api_uploadgar_people_type_crew": "crew member",
-    "validation_api_uploadgar_people_type_passenger": "passenger",
-    "validation_api_uploadgar_person_type_person_name": "{{peopleType}} {{firstName}} {{lastName}}",
-    "validation_api_uploadgar_no_file": "Provide a file",
-	"validation_api_uploadgar_incorrect_type": "Incorrect file type",
-    "validation_api_uploadgar_incorrect_gar_file": "Incorrect xls or xlsx file",
+    "validator_api_uploadgar_people_type_crew": "crew member",
+    "validator_api_uploadgar_people_type_passenger": "passenger",
+    "validator_api_uploadgar_person_type_person_name": "{{peopleType}} {{firstName}} {{lastName}}",
+    "validator_api_uploadgar_no_file": "Provide a file",
+	"validator_api_uploadgar_incorrect_type": "Incorrect file type",
+    "validator_api_uploadgar_incorrect_gar_file": "Incorrect xls or xlsx file",
     
     "title_aircraft": "Aircraft",
     "aircraft_caption": "You can view, edit or delete aircraft that you regularly add to GARs.",
@@ -110,5 +114,7 @@
     
     "supportingdocuments_no_records": " There are no supporting documents uploaded",
 
-    "organisation_no_records": "There are no organisation members"
+    "organisation_no_records": "There are no organisation members",
+
+    "validator_msg_voyage_dates": "Arrival time must be after departure time"
 }

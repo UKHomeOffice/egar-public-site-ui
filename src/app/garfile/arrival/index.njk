@@ -147,10 +147,10 @@
          <!-- Start arrival coords -->
         <div class="govuk-form-group {{ m.form_group_class('arrivalLat', errors) }}">
           <label class="govuk-label" for="arrivalLat">
-            Latitude
+            {{__('field_latitude')}}
           </label>
           <span id="arrivalLattitude-hint" class="govuk-hint">
-              For example 51.4700
+            {{__('field_latitude_hint')}}
           </span>
 
           {{ m.error_message('arrivalLat', errors) }}
@@ -159,10 +159,10 @@
 
         <div class="govuk-form-group {{ m.form_group_class('arrivalLong', errors) }}">
           <label class="govuk-label" for="arrivalLong">
-            Longitude
+            {{__('field_longitude')}}
           </label>
           <span id="arrivalLongitude-hint" class="govuk-hint">
-                For example -0.4542
+            {{__('field_longitude_hint')}}
           </span>
           {{ m.error_message('arrivalLong', errors) }}
           <input class="govuk-input" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLong}}"/>
