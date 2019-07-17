@@ -5,7 +5,6 @@ const garApi = require('../../../common/services/garApi');
 const validator = require('../../../common/utils/validator');
 const validationList = require('./validations');
 
-
 module.exports = (req, res) => {
   logger.debug('In garfile / review get controller');
   const cookie = new CookieModel(req);
