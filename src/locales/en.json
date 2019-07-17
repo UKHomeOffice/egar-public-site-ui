@@ -28,6 +28,10 @@
     "field_departure_time": "Departure time (UTC)",
     "field_departure_time_hint": "For example 17 30",
     "field_departure_port": "Departure port",
+    "field_longitude": "Longitude",
+    "field_longitude_hint": "For example -0.4542",
+    "field_latitude": "Latitude",
+    "field_latitude_hint": "For example 51.4700",
 
     "title_edit_person": "Edit Person Details",
     "heading_edit_person": "Edit a person",
