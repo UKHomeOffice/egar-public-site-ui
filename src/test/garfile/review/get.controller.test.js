@@ -1,6 +1,8 @@
+
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
+const i18n = require('i18n');
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -11,7 +13,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-
 const controller = require('../../../app/garfile/review/get.controller');
 
 describe('GAR Review Get Controller', () => {
@@ -53,6 +54,15 @@ describe('GAR Review Get Controller', () => {
     garApiGetStub = sinon.stub(garApi, 'get');
     garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
     garApiGetSupportingDocsStub = sinon.stub(garApi, 'getSupportingDocs');
+
+    sinon.stub(i18n, '__').callsFake((key) => {
+      switch (key) {
+        case 'validator_msg_voyage_dates':
+          return 'Arrival time must be after departure time';
+        default:
+          return '';
+      }
+    });
   });
 
   afterEach(() => {
@@ -84,6 +94,7 @@ describe('GAR Review Get Controller', () => {
       status: {
         name: 'draft',
       },
+
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [],
@@ -109,7 +120,7 @@ describe('GAR Review Get Controller', () => {
         garsupportingdocs: {},
         showChangeLinks: true,
         errors: [
-          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', { arrivalDate: undefined, departureDate: undefined }, 'Arrival date must not be earlier than departure date'),
+          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', { arrivalDate: undefined, arrivalTime: undefined, departureDate: undefined, departureTime: undefined }, 'Arrival time must be after departure time'),
           new ValidationRule(validator.notEmpty, 'registration', undefined, 'Aircraft registration must be completed'),
           new ValidationRule(validator.notEmpty, 'responsibleGivenName', undefined, 'Responsible person details must be completed'),
         ],
@@ -122,7 +133,9 @@ describe('GAR Review Get Controller', () => {
     garApiGetStub.resolves(JSON.stringify({
       registration: 'Z-AFTC',
       departureDate: '2012-12-13',
+      departureTime: '15:03:00',
       arrivalDate: '2012-12-14',
+      arrivalTime: '16:04:00',
       status: {
         name: 'draft',
       },
@@ -149,7 +162,9 @@ describe('GAR Review Get Controller', () => {
         garfile: {
           registration: 'Z-AFTC',
           departureDate: '2012-12-13',
+          departureTime: '15:03:00',
           arrivalDate: '2012-12-14',
+          arrivalTime: '16:04:00',
           status: {
             name: 'draft',
           },
@@ -171,7 +186,9 @@ describe('GAR Review Get Controller', () => {
     garApiGetStub.resolves(JSON.stringify({
       registration: 'Z-AFTC',
       departureDate: '2012-12-13',
+      departureTime: '15:04:00',
       arrivalDate: '2012-12-14',
+      arrivalTime: '08:17:00',
       status: {
         name: 'draft',
       },
@@ -196,7 +213,9 @@ describe('GAR Review Get Controller', () => {
         garfile: {
           registration: 'Z-AFTC',
           departureDate: '2012-12-13',
+          departureTime: '15:04:00',
           arrivalDate: '2012-12-14',
+          arrivalTime: '08:17:00',
           status: {
             name: 'draft',
           },

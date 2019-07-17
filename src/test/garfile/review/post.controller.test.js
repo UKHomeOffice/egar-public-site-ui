@@ -1,6 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-
+const i18n = require('i18n');
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -13,7 +14,6 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const emailService = require('../../../common/services/sendEmail');
 const { Manifest } = require('../../../common/models/Manifest.class');
-
 const controller = require('../../../app/garfile/review/post.controller');
 
 describe('GAR Review Post Controller', () => {
@@ -57,6 +57,15 @@ describe('GAR Review Post Controller', () => {
     garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
     garApiGetSupportingDocsStub = sinon.stub(garApi, 'getSupportingDocs');
     garApiPatchStub = sinon.stub(garApi, 'patch');
+
+    sinon.stub(i18n, '__').callsFake((key) => {
+      switch (key) {
+        case 'validator_msg_voyage_dates':
+          return 'Arrival time must be after departure time';
+        default:
+          return '';
+      }
+    });
   });
 
   afterEach(() => {
@@ -138,7 +147,7 @@ describe('GAR Review Post Controller', () => {
         garsupportingdocs: {},
         showChangeLinks: true,
         errors: [
-          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', { arrivalDate: undefined, departureDate: undefined }, 'Arrival date must not be earlier than departure date'),
+          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', { arrivalDate: undefined, arrivalTime: undefined, departureDate: undefined, departureTime: undefined }, 'Arrival time must be after departure time'),
           new ValidationRule(validator.notEmpty, 'registration', undefined, 'Aircraft registration must be completed'),
           new ValidationRule(validator.notEmpty, 'responsibleGivenName', undefined, 'Responsible person details must be completed'),
           new ValidationRule(validator.valuetrue, 'captainCrew', '', 'There must be at least one captain or crew member on the voyage'),
@@ -182,7 +191,7 @@ describe('GAR Review Post Controller', () => {
         garsupportingdocs: {},
         showChangeLinks: true,
         errors: [
-          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', { arrivalDate: undefined, departureDate: undefined }, 'Arrival date must not be earlier than departure date'),
+          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', { arrivalDate: undefined, arrivalTime: undefined, departureDate: undefined, departureTime: undefined }, 'Arrival time must be after departure time'),
           new ValidationRule(validator.notEmpty, 'registration', undefined, 'Aircraft registration must be completed'),
           new ValidationRule(validator.notEmpty, 'responsibleGivenName', undefined, 'Responsible person details must be completed'),
           new ValidationRule(validator.valuetrue, 'resolveError', '', 'Resolve manifest errors before submitting'),
@@ -198,7 +207,9 @@ describe('GAR Review Post Controller', () => {
       garApiGetStub.resolves(JSON.stringify({
         registration: 'Z-AFTC',
         departureDate: '2012-12-13',
+        departureTime: '15:03:00',
         arrivalDate: '2012-12-14',
+        arrivalTime: '16:04:00',
         status: {
           name: 'draft',
         },
@@ -227,7 +238,9 @@ describe('GAR Review Post Controller', () => {
       garApiGetStub.resolves(JSON.stringify({
         registration: 'Z-AFTC',
         departureDate: '2012-12-13',
+        departureTime: '15:03:00',
         arrivalDate: '2012-12-14',
+        arrivalTime: '16:04:00',
         status: {
           name: 'draft',
         },
@@ -264,7 +277,9 @@ describe('GAR Review Post Controller', () => {
       garApiGetStub.resolves(JSON.stringify({
         registration: 'Z-AFTC',
         departureDate: '2012-12-13',
+        departureTime: '15:03:00',
         arrivalDate: '2012-12-14',
+        arrivalTime: '16:04:00',
         status: {
           name: 'draft',
         },
@@ -302,7 +317,9 @@ describe('GAR Review Post Controller', () => {
       garApiGetStub.resolves(JSON.stringify({
         registration: 'Z-AFTC',
         departureDate: '2012-12-13',
+        departureTime: '15:03:00',
         arrivalDate: '2012-12-14',
+        arrivalTime: '16:04:00',
         status: {
           name: 'draft',
         },
