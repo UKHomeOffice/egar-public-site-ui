@@ -6,7 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
-const pagination = require('../../app/aircraft/pagination');
+const pagination = require('../../common/utils/pagination');
 
 const controller = require('../../app/aircraft/post.controller');
 

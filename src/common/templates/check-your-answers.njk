@@ -1,3 +1,4 @@
+  <div class="govuk-grid-column-two-thirds">
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
@@ -178,9 +179,10 @@
         {% endif %}
       </div>
     </dl>
-
+  </div>
     <div class="govuk-form-group {{ m.form_group_class('manifestTable', errors) }}">
     {{ m.error_message('manifestTable', errors) }}
+    <div class="govuk-grid-column-full">
     <table class="govuk-table" id="manifestTable">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -193,6 +195,7 @@
         </tr>
       </thead>
       <tbody class="govuk-table__body">
+      {% if garpeople.items | length %}
         {% for person in garpeople.items%}
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">{{person.lastName}}</td>
@@ -240,10 +243,16 @@
           </td>
         </tr>
         {% endfor %}
+      {% else %}
+        <tr class="govuk-table__row">
+          <td colspan="6"><p class="govuk-inset-text">{{__('manifest_no_records')}}</p></td>
+        </tr>
+      {% endif %}
       </tbody>
     </table>
     </div>
-
+  </div>
+  <div class="govuk-grid-column-two-thirds">
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 500px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
@@ -378,7 +387,8 @@
         {% endif %}
       </div>
     </dl>
-
+  </div>
+  <div class="govuk-grid-column-full">
 		<table class="govuk-table">
 			<thead class="govuk-table__head">
 				<tr class="govuk-table__row">
@@ -388,6 +398,7 @@
 				</tr>
 			</thead>
 			<tbody class="govuk-table__body">
+      {% if supportingdocs.items | length %}
         {% for file in supportingdocs.items %}
 				<tr class="govuk-table__row">
 					<td class="govuk-table__cell">{{file.fileName}}</td>
@@ -395,5 +406,11 @@
 					<td class="govuk-table__cell">Done</td>
 				</tr>
 				{% endfor %}
+      {% else %}
+        <tr class="govuk-table__row">
+          <td colspan="4"><p class="govuk-inset-text">{{__('supportingdocuments_no_records')}}</p></td>
+        </tr>
+      {% endif %}
 			</tbody>
 		</table>
+  </div>

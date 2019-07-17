@@ -61,10 +61,12 @@
   </div>
 
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds">
     	<form id="signform2" action="/garfile/view" method="post" role="form">
       <h1 class="govuk-heading-l">Manage GARs</h1>
       <p class="govuk-body-l">You can view, edit, cancel or delete GARs dependent on the status of the GAR. Only an un-submitted GAR can be cancelled.</p>
+    </div>
+    <div class="govuk-grid-column-full">
       <div class="govuk-tabs" data-module="tabs">
         <ul class="govuk-tabs__list">
           <li class="govuk-tabs__list-item">
@@ -84,9 +86,9 @@
           </li>
         </ul>
 
+        {# REFACTOR! THREE DUPLICATE TABLES VIRTUALLY #}
         <section class="govuk-tabs__panel" id="gars-draft">
           <table class="govuk-table">
-            <!-- <caption class="govuk-table__caption">Saved craft</caption> -->
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="col">Aircraft registration</th>
@@ -98,24 +100,28 @@
               </tr>
             </thead>
             <tbody class="govuk-table__body">
-            {% for gar in draftGars %}
+            {% if draftGars | length %}
+              {% for gar in draftGars %}
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">
-                        {% if gar.registration === null %}
-                            <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">TBD</button>
-
-                        {% else %}
-                            <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
-
-                        {% endif %}
-                    </td>
-                    <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
-                    <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
-                    <td class="govuk-table__cell ">{{ gar.departurePort | upper }} </td>
-                    <td class="govuk-table__cell ">{{ gar.arrivalPort | upper }} </td>
-                    <td class="govuk-table__cell ">{{ gar.garId }} </td>
+                  <td class="govuk-table__cell">
+                  {% if gar.registration === null %}
+                    <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">TBD</button>
+                  {% else %}
+                    <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
+                  {% endif %}
+                  </td>
+                  <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
+                  <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
+                  <td class="govuk-table__cell ">{{ gar.departurePort | upper }} </td>
+                  <td class="govuk-table__cell ">{{ gar.arrivalPort | upper }} </td>
+                  <td class="govuk-table__cell ">{{ gar.garId }} </td>
                 </tr>
-            {% endfor %}
+              {% endfor %}
+            {% else %}
+              <tr class="govuk-table__row">
+                <td colspan="6"><p class="govuk-inset-text">{{__('gar_draft_no_records')}}</p></td>
+              </tr>
+            {% endif %}
             </tbody>
           </table>
           <!-- <nav role="navigation" aria-label="Pagination">
@@ -134,7 +140,6 @@
 
         <section class="govuk-tabs__panel" id="gars-submitted">
           <table class="govuk-table">
-            <!-- <caption class="govuk-table__caption">Saved craft</caption> -->
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="col">Aircraft registration</th>
@@ -146,22 +151,28 @@
               </tr>
             </thead>
             <tbody class="govuk-table__body">
-            {% for gar in submittedGars %}
+            {% if submittedGars | length %}
+              {% for gar in submittedGars %}
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">
-                        {% if gar.registration === null %}
-                            <button class="link btn-link" name="garId" value="{{ gar.garId }}">TBD</button>
-                        {% else %}
-                            <button class="link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
-                        {% endif %}
-                    </td>
-                    <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
-                    <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
-                    <td class="govuk-table__cell ">{{ gar.departurePort }} </td>
-                    <td class="govuk-table__cell ">{{ gar.arrivalPort }} </td>
-                    <td class="govuk-table__cell ">{{ gar.garId }} </td>
+                  <td class="govuk-table__cell">
+                    {% if gar.registration === null %}
+                      <button class="link btn-link" name="garId" value="{{ gar.garId }}">TBD</button>
+                    {% else %}
+                      <button class="link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
+                    {% endif %}
+                  </td>
+                  <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
+                  <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
+                  <td class="govuk-table__cell ">{{ gar.departurePort }} </td>
+                  <td class="govuk-table__cell ">{{ gar.arrivalPort }} </td>
+                  <td class="govuk-table__cell ">{{ gar.garId }} </td>
                 </tr>
-            {% endfor %}
+              {% endfor %}
+            {% else %}
+              <tr class="govuk-table__row">
+                <td colspan="6"><p class="govuk-inset-text">{{__('gar_submitted_no_records')}}</p></td>
+              </tr>
+            {% endif %}
             </tbody>
           </table>
           {# <nav role="navigation" aria-label="Pagination">
@@ -179,7 +190,6 @@
         </section>
         <section class="govuk-tabs__panel" id="gars-cancelled">
           <table class="govuk-table">
-            <!-- <caption class="govuk-table__caption">Saved craft</caption> -->
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="col">Aircraft registration</th>
@@ -191,22 +201,28 @@
               </tr>
             </thead>
             <tbody class="govuk-table__body">
-            {% for gar in cancelledGars %}
+            {% if cancelledGars | length %}
+              {% for gar in cancelledGars %}
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">
-                        {% if gar.registration === null %}
-                            <button class="link btn-link" name="garId" value="{{ gar.garId }}">TBD</button>
-                        {% else %}
-                            <button class="link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
-                        {% endif %}
-                    </td>
-                    <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
-                    <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
-                    <td class="govuk-table__cell ">{{ gar.departurePort }} </td>
-                    <td class="govuk-table__cell ">{{ gar.arrivalPort }} </td>
-                    <td class="govuk-table__cell ">{{ gar.garId }} </td>
+                  <td class="govuk-table__cell">
+                    {% if gar.registration === null %}
+                      <button class="link btn-link" name="garId" value="{{ gar.garId }}">TBD</button>
+                    {% else %}
+                      <button class="link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
+                    {% endif %}
+                  </td>
+                  <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
+                  <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
+                  <td class="govuk-table__cell ">{{ gar.departurePort }} </td>
+                  <td class="govuk-table__cell ">{{ gar.arrivalPort }} </td>
+                  <td class="govuk-table__cell ">{{ gar.garId }} </td>
                 </tr>
-            {% endfor %}
+              {% endfor %}
+            {% else %}
+              <tr class="govuk-table__row">
+                <td colspan="6"><p class="govuk-inset-text">{{__('gar_submitted_no_records')}}</p></td>
+              </tr>
+            {% endif %}
             </tbody>
           </table>
           <!-- <nav role="navigation" aria-label="Pagination">

@@ -12,7 +12,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const controller = require('../../../app/aircraft/add/post.controller');
-const paginate = require('../../../app/aircraft/pagination');
+const paginate = require('../../../common/utils/pagination');
 
 describe('Aircraft Add Post Controller', () => {
   let req; let res; let craftApiStub; let sessionSaveStub;

@@ -33,17 +33,24 @@
 
 			<h2 class="govuk-heading-l">{{ __('nav_bar_people') }}</h2>
 				<p class="govuk-body-l">Add the details of people you have previously added</p>
-
+  </div>
+  <div class="govuk-grid-column-full">
+        {% if cookie.getSavedCraft().items | length %}
         <table class="table-clickable govuk-table">
+        {% else %}
+        <table class="govuk-table">
+        {% endif %}
           <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
+              {% if cookie.getSavedCraft().items | length %}
               <div class="govuk-checkboxes__item">
                 <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
                 <label class="govuk-label govuk-checkboxes__label" for="radio-all">
                   &nbsp;
                 </label>
               </div>
+              {% endif %}
             </th>
             <th class="govuk-table__header">Surname</th>
             <th class="govuk-table__header">Given name</th>
@@ -51,7 +58,7 @@
           </tr>
           </thead>
           <tbody class="govuk-table__body">
-
+          {% if savedPeople | length %}
             {% for person in savedPeople %}
             <tr class="govuk-table__row">
               <td class="govuk-table__cell multiple-choice--hod">
@@ -67,21 +74,32 @@
               <td class="govuk-table__cell">{{person.peopleType.name}}</td>
             </tr>
             {% endfor %}
-
+          {% else %}
+            <tr class="govuk-table__row">
+              <td colspan="4"><p class="govuk-inset-text">{{__('people_no_records')}}</p></td>
+            </tr>
+          {% endif %}
           </tbody>
         </table>
+  </div>
+  <div class="govuk-grid-column-two-thirds">
         <button type="submit" name="addToManifest"  class="govuk-button">Add to GAR</button>
-
+  </div>
+  <div class="govuk-grid-column-full">
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
+  </div>
+  <div class="govuk-grid-column-two-thirds">
 				<h2 class="govuk-heading-l">New people</h2>
 				<p class="govuk-body-m"><a href="/garfile/manifest/addnewperson">Add a new person to the GAR</a></p>
-
+  </div>
+  <div class="govuk-grid-column-full">
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
+  </div>
+  <div class="govuk-grid-column-two-thirds">
 				<h2 class="govuk-heading-l">Current manifest</h2>
 				<p class="govuk-body-l">People currently on the manifest of this GAR</p>
-
+  </div>
+  <div class="govuk-grid-column-full">
 					<table class="govuk-table">
 						<thead class="govuk-table__head">
 							<tr class="govuk-table__row">
@@ -95,6 +113,7 @@
 							</tr>
 						</thead>
 						<tbody class="govuk-table__body">
+            {% if manifest.items | length %}
               {% for person in manifest.items %}
               {% if manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople) %}
                 <tr class="govuk-table__row row-error" id="person-{{loop.index0}}">
@@ -156,9 +175,15 @@
 									</div>
 								</td>
 							</tr>
+            {% else %}
+              <tr class="govuk-table__row">
+                <td colspan="4"><p class="govuk-inset-text">{{__('manifest_no_records')}}</p></td>
+              </tr>
+            {% endif %}
 						</tbody>
 					</table>
-
+  </div>
+  <div class="govuk-grid-column-two-thirds">
 				<div class="govuk-form-group">
 					<label class="govuk-label" for="totalPersonsOnBoard">
 						Total persons on board
