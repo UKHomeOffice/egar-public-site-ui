@@ -71,14 +71,10 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
           </div>
 
           <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-					Address
-				</legend>
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Address</legend>
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine1', errors) }}">
-              <label class="govuk-label" for="responsibleAddressLine1">House number / building and street
-          <span class="govuk-visually-hidden">line 1 of 2</span>
-              </label>
+              <label class="govuk-label" for="responsibleAddressLine1">House number / building and street <span class="govuk-visually-hidden">line 1 of 2</span></label>
               {{ m.error_message('responsibleAddressLine1', errors) }}
 
               <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine1"
@@ -89,9 +85,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
             </div>
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine2', errors) }}">
-              <label class="govuk-label" for="address-line-2">
-                <span class="govuk-visually-hidden">Building and street line 2 of 2</span>
-              </label>
+              <label class="govuk-label" for="address-line-2"><span class="govuk-visually-hidden">Building and street line 2 of 2</span></label>
               {{ m.error_message('responsibleAddressLine2', errors) }}
 
               <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine2"
@@ -119,11 +113,11 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
               {{ m.error_message('responsibleCounty', errors) }}
               <select class="govuk-select" id="responsibleCounty" name="responsibleCounty"
               value="{{cookie.getGarResponsiblePerson().responsibleCounty}}">
-              {% for country in countryList|sort(attribute='label') %}
-                <option value="{{ country.label }}"
+                {% for country in countryList | sort(attribute = 'label') %}
+                  <option value="{{ country.label }}"
                 {{ 'selected=selected' if cookie.getGarResponsiblePerson().responsibleCounty == country.label }}
                 >{{ country.label }}</option>
-              {% endfor %}
+                {% endfor %}
               </select>
             </div>
 
@@ -161,8 +155,6 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
     </div>
     <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
     <script type="text/javascript">
-      accessibleAutocomplete.enhanceSelectElement({
-        selectElement: document.querySelector('#responsibleCounty')
-      });
+      accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#responsibleCounty')});
     </script>
   {% endblock %}
