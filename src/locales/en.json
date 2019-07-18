@@ -1,6 +1,5 @@
 {
     "title": "Submit a General Aviation Report (GAR)",
-    "nav_bar_people": "People",
     "nav_bar_sign_out": "Sign out",
 
     "user_login_unverified": "The email address supplied has not been verified. You should have recieved an email to verify.",
@@ -96,7 +95,6 @@
     "aircraft_no_records": "There are no saved aircraft records",
     "aircraft_add": "Add a new aircraft",
     "aircraft_add_caption": "Add the details of an aircraft that you regularly submit GARs for.",
-    "aircraft_add_button": "Add an aircraft",
     "field_aircraft_registration": "Aircraft registration",
     "field_aircraft_registration_hint": "For example G-ABCD",
     "field_aircraft_type": "Aircraft type",
@@ -111,7 +109,14 @@
     "title_add_aircraft": "Add an aircraft",
     "add_aircraft_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
 
+    "title_people": "People",
+    "people_caption": "You can view, edit or delete people that you regularly add to GARs.",
     "people_no_records": "There are no saved people records",
+    "people_add": "Add a new person",
+    "people_add_caption": "Add the details of people that you regularly add to GARs.",
+
+    "title_add_person": "Add a person",
+    "add_person_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
 
     "manifest_no_records": "There are no people on the manifest",
     

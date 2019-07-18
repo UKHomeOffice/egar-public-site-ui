@@ -56,14 +56,14 @@ Manage aircraft | {{__('title')}}
             {% for craft in savedCrafts.items %}
             <tr class="govuk-table__row">
               {% if cookie.getUserRole() != 'User' %}
-              <td class="govuk-table__cell" scope="row"><button class="govuk-link btn-link" name="editCraft" value="{{ craft.craftId }}">{{ craft.registration }}</button></th>
+              <td class="govuk-table__cell" scope="row"><button id="edit_craft_{{ loop.index }}" class="govuk-link btn-link" name="editCraft" value="{{ craft.craftId }}">{{ craft.registration }}</button></th>
               {% else %}
               <td class="govuk-table__cell">{{ craft.registration }}</td>
               {% endif %}
               <td class="govuk-table__cell">{{ craft.craftType }}</td>
               <td class="govuk-table__cell">{{ craft.craftBase | upper }}</td>
               {% if cookie.getUserRole() != 'User' %}
-              <td class="govuk-table__cell"><button class="govuk-link btn-link" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
+              <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-link btn-link" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
               {% endif %}
             </tr>
             {% endfor %}
@@ -90,7 +90,7 @@ Manage aircraft | {{__('title')}}
 	<div class="govuk-grid-column-two-thirds">
 		<h2 class="govuk-heading-l">{{__('aircraft_add')}}</h2>
 		<p class="govuk-body-l">{{__('aircraft_add_caption')}}</p>
-		<a href='/aircraft/add' class='govuk-button'>{{__('aircraft_add_button')}}</a>
+		<a href='/aircraft/add' class='govuk-button'>{{__('title_add_aircraft')}}</a>
 	</div>
 
 	<div class="govuk-grid-column-full">

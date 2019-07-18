@@ -1,6 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/pagination.njk" as pagination %}
 
 {% block pageTitle %}
 	Manage people | Submit a General Aviation Report (GAR)
@@ -29,23 +30,23 @@
     {% include "common/templates/includes/success-action.njk" %}
   {% endif %}
 
-<h1 class="govuk-heading-xl">{{ __('nav_bar_people') }}</h1>
+  <h1 class="govuk-heading-xl">{{ __('title_people') }}</h1>
 
   {% if cookie.getUserRole() != 'User' %}
-	  <p class="govuk-body-l">You can view, edit or delete people that you regularly add to GARs.</p>
+	  <p class="govuk-body-l">{{__('people_caption')}}</p>
   {% endif %}
   </div>
   <div class="govuk-grid-column-full">
     {% if people | length %}
-    <form action="/people" method="post">
+    <form id="people" action="/people" method="post">
       <table class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Surname</th>
-            <th class="govuk-table__header" scope="col">Given name</th>
-            <th class="govuk-table__header" scope="col">Type</th>
+            <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_person_type')}}</th>
             {% if cookie.getUserRole() != 'User' %}
-            <th class="govuk-table__header" scope="col">Action</th>
+            <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
             {% endif %}
           </tr>
         </thead>
@@ -54,14 +55,14 @@
           {% for person in people %}
           <tr class="govuk-table__row">
             {% if cookie.getUserRole() != 'User' %}
-            <td class="govuk-table__cell"><button class="link btn-link" title="Edit details for Adrian Crouch" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
+            <td class="govuk-table__cell"><button class="link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
             {% else %}
             <td class="govuk-table__cell">{{person.lastName}}</td>
             {% endif %}
             <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
             <td class="govuk-table__cell">{{person.peopleType.name}}</td>
             {% if cookie.getUserRole() != 'User' %}
-            <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">Delete</button></td>
+            <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button></td>
             {% endif %}
           </tr>
           {% endfor %}
@@ -72,6 +73,8 @@
         {% endif %} #}
         </tbody>
       </table>
+      {# Pagination not possible until back end supports it #}
+      {# {{ pagination.build('people', pages, __)}} #}
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
     {% else %}
@@ -87,10 +90,10 @@
 	</div>
 
 	<div class="govuk-grid-column-full">
-		<h2 class="govuk-heading-l">Add a new person</h2>
-		<p class="govuk-body-l">Add the details of people that you regularly add to GARs.</p>
+		<h2 class="govuk-heading-l">{{__('people_add')}}</h2>
+		<p class="govuk-body-l">{{__('people_add_caption')}}</p>
 		<a href="/people/add" role="button" draggable="false" class="govuk-button" id='save-person'>
-			Add a person
+			{{__('title_add_person')}}
 		</a>
 	</div>
 

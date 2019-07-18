@@ -20,21 +20,21 @@ passed in explicitly it seems.
   <div class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results {{ paginate }}</div>
   <ul class="pagination">
   {% if pages.currentPage > 1 %}
-    <li class="pagination__item"><a class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage - 1 }})" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
+    <li class="pagination__item"><a id="{{formName}}_pagination_previous" class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage - 1 }})" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
   {% else %}
-    <li class="pagination__item"><a class="pagination__link current" href=""><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
+    <li class="pagination__item"><a id="{{formName}}_pagination_previous" class="pagination__link current" href=""><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
   {% endif %}
   {% for pageNumber in pages.items %}
     {% if pageNumber === pages.currentPage %}
-      <li class="pagination__item"><a class="pagination__link current" href="" aria-current="true" aria-label="Page {{ pageNumber }}, current page">{{ pageNumber }}</a></li>
+      <li class="pagination__item"><a id="{{formName}}_pagination_{{pageNumber}}" class="pagination__link current" href="" aria-current="true" aria-label="Page {{ pageNumber }}, current page">{{ pageNumber }}</a></li>
     {% else %}
-      <li class="pagination__item"><a class="pagination__link" onclick="transitionToPage({{ pageNumber }})">{{ pageNumber }}</a></li>
+      <li class="pagination__item"><a id="{{formName}}_pagination_{{pageNumber}}" class="pagination__link" onclick="transitionToPage({{ pageNumber }})">{{ pageNumber }}</a></li>
     {% endif %}
   {% endfor %}
   {% if pages.currentPage < pages.totalPages %}
-    <li class="pagination__item"><a class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage + 1 }})" aria-label="Next page">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+    <li class="pagination__item"><a id="{{formName}}_pagination_next" class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage + 1 }})" aria-label="Next page">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
   {% else %}
-    <li class="pagination__item"><a class="pagination__link current" href="">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+    <li class="pagination__item"><a id="{{formName}}_pagination_next" class="pagination__link current" href="">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
   {% endif %}
   </ul>
 </nav>

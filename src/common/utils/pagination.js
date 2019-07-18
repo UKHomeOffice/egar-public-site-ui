@@ -69,15 +69,17 @@ const getPages = (limit, pageCount, currentPage) => {
  * With the supplied total number of pages, total number of items and the
  * session via the req scope, return an object containing metadata to be used
  * by the pagination templates, containing information such as previous or next
- * page numbers, what numbers should be displayed,
+ * page numbers, what numbers should be displayed, and item numbers.
+ *
  * @param {Object} req Request object containing the session
  * @param {Number} totalPages Total pages for the screen
  * @param {Number} totalItems Total items for the screen
+ * @param {String} optionalPath If the url path is not the key, this should be supplied
  */
-const build = (req, totalPages, totalItems) => {
+const build = (req, totalPages, totalItems, optionalPath) => {
   logger.debug('Entering the pagination module');
 
-  const pathName = url.parse(req.originalUrl).pathname;
+  const pathName = (typeof optionalArg === 'undefined') ? url.parse(req.originalUrl).pathname : optionalPath;
   const currentPage = getCurrentPage(req, pathName);
 
   if (totalPages === 0) {
