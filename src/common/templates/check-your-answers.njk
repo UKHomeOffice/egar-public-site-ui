@@ -1,4 +1,4 @@
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
@@ -179,80 +179,79 @@
         {% endif %}
       </div>
     </dl>
-  </div>
+
     <div class="govuk-form-group {{ m.form_group_class('manifestTable', errors) }}">
-    {{ m.error_message('manifestTable', errors) }}
-    <div class="govuk-grid-column-full">
-    <table class="govuk-table" id="manifestTable">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">Surname</th>
-          <th class="govuk-table__header" scope="col">Given name</th>
-          <th class="govuk-table__header" scope="col">Date of birth</th>
-          <th class="govuk-table__header" scope="col">Travel document number</th>
-          <th class="govuk-table__header" scope="col">Nationality</th>
-          <th class="govuk-table__header" scope="col">Type</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-      {% if garpeople.items | length %}
-        {% for person in garpeople.items%}
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">{{person.lastName}}</td>
-          <td class="govuk-table__cell">{{person.firstName}}</td>
-          <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
-          <td class="govuk-table__cell">{{person.documentNumber}}</td>
-          <td class="govuk-table__cell">{{person.nationality | upper}}</td>
-          <td class="govuk-table__cell">{{person.peopleType.name}}</td>
-        </tr>
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell" colspan="6">
-            <div>
-              <details role="group">
-                <summary role="button" aria-controls="details-content-2" aria-expanded="false" title="Further information for {{person.firstName}} {{person.lastName}}">
-                  <span class="summary btn-link">Further information</span>
-                </summary>
-                  <div class="panel panel-border-narrow" id="details-content-2" aria-hidden="true">
-                    <table class="govuk-table" width="100%">
-                      <tbody class="govuk-table__body">
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">Gender</td>
-                          <td class="govuk-table__cell">{{person.gender}}</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">Place of birth</td>
-                          <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">Travel document type</td>
-                          <td class="govuk-table__cell">{{person.documentType}}</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">Travel document issuing state</td>
-                          <td class="govuk-table__cell">{{person.issuingState | upper}}</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">Travel document expiry date</td>
-                          <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-              </details>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      {% else %}
-        <tr class="govuk-table__row">
-          <td colspan="6"><p class="govuk-inset-text">{{__('manifest_no_records')}}</p></td>
-        </tr>
-      {% endif %}
-      </tbody>
-    </table>
+      {{ m.error_message('manifestTable', errors) }}
+
+      <table class="govuk-table" id="manifestTable">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Surname</th>
+            <th class="govuk-table__header" scope="col">Given name</th>
+            <th class="govuk-table__header" scope="col">Date of birth</th>
+            <th class="govuk-table__header" scope="col">Travel document number</th>
+            <th class="govuk-table__header" scope="col">Nationality</th>
+            <th class="govuk-table__header" scope="col">Type</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+        {% if garpeople.items | length %}
+          {% for person in garpeople.items%}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{person.lastName}}</td>
+            <td class="govuk-table__cell">{{person.firstName}}</td>
+            <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.documentNumber}}</td>
+            <td class="govuk-table__cell">{{person.nationality | upper}}</td>
+            <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" colspan="6">
+              <div>
+                <details role="group">
+                  <summary role="button" aria-controls="details-content-2" aria-expanded="false" title="Further information for {{person.firstName}} {{person.lastName}}">
+                    <span class="summary btn-link">Further information</span>
+                  </summary>
+                    <div class="panel panel-border-narrow" id="details-content-2" aria-hidden="true">
+                      <table class="govuk-table" width="100%">
+                        <tbody class="govuk-table__body">
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">Gender</td>
+                            <td class="govuk-table__cell">{{person.gender}}</td>
+                          </tr>
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">Place of birth</td>
+                            <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
+                          </tr>
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">Travel document type</td>
+                            <td class="govuk-table__cell">{{person.documentType}}</td>
+                          </tr>
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">Travel document issuing state</td>
+                            <td class="govuk-table__cell">{{person.issuingState | upper}}</td>
+                          </tr>
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">Travel document expiry date</td>
+                            <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                </details>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr class="govuk-table__row">
+            <td colspan="6"><p class="govuk-inset-text">{{__('manifest_no_records')}}</p></td>
+          </tr>
+        {% endif %}
+        </tbody>
+      </table>
     </div>
-  </div>
-  <div class="govuk-grid-column-two-thirds">
+  
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 500px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
@@ -372,7 +371,6 @@
       </div>
     </dl>
 
-
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 400px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
@@ -387,8 +385,7 @@
         {% endif %}
       </div>
     </dl>
-  </div>
-  <div class="govuk-grid-column-full">
+  
 		<table class="govuk-table">
 			<thead class="govuk-table__head">
 				<tr class="govuk-table__row">
