@@ -1,6 +1,10 @@
 {
     "title": "Submit a General Aviation Report (GAR)",
+    "nav_bar_gars": "GARs",
     "nav_bar_sign_out": "Sign out",
+    "nav_bar_create_organisation": "Create Organisation",
+    "nav_bar_organisation": "Organisation",
+    "nav_bar_account": "Account",
 
     "user_login_unverified": "The email address supplied has not been verified. You should have recieved an email to verify.",
     "user_login_unverified_caption": "Click the verification link inside the email. This link will remain valid for 12 hours. If you can't see the email, please check any spam folders or ",
