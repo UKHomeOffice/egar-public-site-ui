@@ -70,6 +70,8 @@
     "field_travel_document_type": "Travel document type",
     "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other",
 
+    "field_address_country": "Country",
+
     "verify_user_account_success": "Your account has now been successfully verified. You can now log on and submit GAR files online.",
     "verify_user_account_token_expired": "Your token has expired. We have created a new token for you. Please check your email and click the new link.",
     "verify_user_account_token_invalid": "This token is invalid, click the link provided in the email or contact support for additional help.",

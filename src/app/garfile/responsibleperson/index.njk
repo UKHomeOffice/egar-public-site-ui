@@ -7,7 +7,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -26,145 +26,135 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
   {% endif %}
 
   <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds">
       <form id="page-form" action="/garfile/responsibleperson" autocomplete="off" class="form-group"
       method="post" role="form">
-      <span class="govuk-caption-xl">Section 5 of 8</span>
-      <h1 class="govuk-heading-xl">Responsible person</h1>
-      <p class="govuk-body-l">
+        <span class="govuk-caption-xl">Section 5 of 8</span>
+        <h1 class="govuk-heading-xl">Responsible person</h1>
+        <p class="govuk-body-l">
         Provide the details of the person responsible for this flight. By default, this is the Captain.
       </p>
-      <div class="govuk-form-group {{ m.form_group_class('responsiblePerson', errors) }}">
-        <div class="govuk-form-group {{ m.form_group_class('responsibleGivenName', errors) }}">
-          <label class="govuk-label govuk-label--m" for="responsibleGivenName">Given name</label>
-          {{ m.error_message('responsibleGivenName', errors) }}
+        <div class="govuk-form-group {{ m.form_group_class('responsiblePerson', errors) }}">
+          <div class="govuk-form-group {{ m.form_group_class('responsibleGivenName', errors) }}">
+            <label class="govuk-label govuk-label--m" for="responsibleGivenName">Given name</label>
+            {{ m.error_message('responsibleGivenName', errors) }}
 
-          <span class="field-validation-valid error-message" data-valmsg-for="responsibleGivenName"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input class="govuk-input"
+            <span class="field-validation-valid error-message" data-valmsg-for="responsibleGivenName"
+            data-valmsg-replace="true" style="display:block"></span>
+            <input class="govuk-input"
             id="responsibleGivenName" name="responsibleGivenName"  type="text" maxlength="{{ MAX_STRING_LENGTH }}"
-            value="{{cookie.getGarResponsiblePerson().responsibleGivenName}}" />
-        </div>
+            value="{{cookie.getGarResponsiblePerson().responsibleGivenName}}"/>
+          </div>
 
-        <div class="govuk-form-group {{ m.form_group_class('responsibleSurname', errors) }}">
-          <label class="govuk-label govuk-label--m" for="responsibleSurname">Surname</label>
-          {{ m.error_message('responsibleSurname', errors) }}
+          <div class="govuk-form-group {{ m.form_group_class('responsibleSurname', errors) }}">
+            <label class="govuk-label govuk-label--m" for="responsibleSurname">Surname</label>
+            {{ m.error_message('responsibleSurname', errors) }}
 
-          <span class="field-validation-valid error-message" data-valmsg-for="responsibleSurname"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input class="govuk-input"
+            <span class="field-validation-valid error-message" data-valmsg-for="responsibleSurname"
+            data-valmsg-replace="true" style="display:block"></span>
+            <input class="govuk-input"
             id="responsibleSurname" name="responsibleSurname" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
-            value="{{cookie.getGarResponsiblePerson().responsibleSurname}}" />
-        </div>
+            value="{{cookie.getGarResponsiblePerson().responsibleSurname}}"/>
+          </div>
 
-        <div class="govuk-form-group govuk-!-margin-bottom-6 {{ m.form_group_class('responsibleContactNo', errors) }}">
-          <label class="govuk-label govuk-label--m" for="responsibleContactNo">Contact telephone number</label>
-          {{ m.error_message('responsibleContactNo', errors) }}
-          <span class="govuk-hint">
+          <div class="govuk-form-group govuk-!-margin-bottom-6 {{ m.form_group_class('responsibleContactNo', errors) }}">
+            <label class="govuk-label govuk-label--m" for="responsibleContactNo">Contact telephone number</label>
+            {{ m.error_message('responsibleContactNo', errors) }}
+            <span class="govuk-hint">
            Include international dialling code, for example 44
           </span>
-          <span class="field-validation-valid error-message" data-valmsg-for="responsibleContactNo"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input class="govuk-input"
+            <span class="field-validation-valid error-message" data-valmsg-for="responsibleContactNo"
+            data-valmsg-replace="true" style="display:block"></span>
+            <input class="govuk-input"
             id="responsibleContactNo" name="responsibleContactNo" type="text"
-            value="{{cookie.getGarResponsiblePerson().responsibleContactNo}}" />
+            value="{{cookie.getGarResponsiblePerson().responsibleContactNo}}"/>
+          </div>
+
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Address</legend>
+
+            <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine1', errors) }}">
+              <label class="govuk-label" for="responsibleAddressLine1">House number / building and street <span class="govuk-visually-hidden">line 1 of 2</span></label>
+              {{ m.error_message('responsibleAddressLine1', errors) }}
+
+              <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine1"
+              data-valmsg-replace="true" style="display:block"></span>
+              <input class="govuk-input"
+              id="responsibleAddressLine1" name="responsibleAddressLine1" type="text"
+              value="{{cookie.getGarResponsiblePerson().responsibleAddressLine1}}"/>
+            </div>
+
+            <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine2', errors) }}">
+              <label class="govuk-label" for="address-line-2"><span class="govuk-visually-hidden">Building and street line 2 of 2</span></label>
+              {{ m.error_message('responsibleAddressLine2', errors) }}
+
+              <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine2"
+              data-valmsg-replace="true" style="display:block"></span>
+              <input class="govuk-input"
+              id="responsibleAddressLine2" name="responsibleAddressLine2" type="text"
+              value="{{cookie.getGarResponsiblePerson().responsibleAddressLine2}}"/>
+            </div>
+
+            <div class="govuk-form-group {{ m.form_group_class('responsibleTown', errors) }}">
+              <label class="govuk-label" for="responsibleTown">Town or city</label>
+
+              {{ m.error_message('responsibleTown', errors) }}
+
+              <span class="field-validation-valid error-message" data-valmsg-for="responsibleTown"
+              data-valmsg-replace="true" style="display:block"></span>
+
+              <input class="govuk-input govuk-!-width-two-thirds"
+              id="responsibleTown" name="responsibleTown" type="text"
+              value="{{cookie.getGarResponsiblePerson().responsibleTown}}"/>
+            </div>
+
+            <div class="govuk-form-group {{ m.form_group_class('responsibleCounty', errors) }}">
+              <label class="govuk-label govuk-label--m" for="responsibleCounty">{{__('field_address_country')}}</label>
+              {{ m.error_message('responsibleCounty', errors) }}
+              <select class="govuk-select" id="responsibleCounty" name="responsibleCounty"
+              value="{{cookie.getGarResponsiblePerson().responsibleCounty}}">
+                {% for country in countryList | sort(attribute = 'label') %}
+                  <option value="{{ country.label }}"
+                {{ 'selected=selected' if cookie.getGarResponsiblePerson().responsibleCounty == country.label }}
+                >{{ country.label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="govuk-form-group {{ m.form_group_class('responsiblePostcode', errors) }}">
+              <label class="govuk-label" for="responsiblePostcode">Postcode, area code or ZIP code</label>
+
+              {# {{ m.error_message('responsiblePostcode', errors) }}
+
+              <span class="field-validation-valid error-message" data-valmsg-for="responsiblePostcode"
+              data-valmsg-replace="true" style="display:block">
+              </span> #}
+
+              <input class="govuk-input govuk-input--width-10"
+              id="responsiblePostcode" name="responsiblePostcode" type="text"
+              value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}"/>
+            </div>
+          </fieldset>
         </div>
 
-
-        <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-					Address
-				</legend>
-
-        <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine1', errors) }}">
-          <label class="govuk-label" for="responsibleAddressLine1">House number / building and street
-          <span class="govuk-visually-hidden">line 1 of 2</span>
-          </label>
-         {{ m.error_message('responsibleAddressLine1', errors) }}
-
-         <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine1"
-           data-valmsg-replace="true" style="display:block">
-         </span>
-         <input class="govuk-input"
-           id="responsibleAddressLine1" name="responsibleAddressLine1" type="text"
-           value="{{cookie.getGarResponsiblePerson().responsibleAddressLine1}}" />
+        <div class="column-two-thirds">
+          <div class="govuk-form-group">
+            <input id="newResponsiblePerson" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
+            onclick="sendAnalytics(event, 'Add responsible person to GAR - submit', 'click')">
+            <p class="govuk-body-m">
+              <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
+            </p>
+            <p class="govuk-body-m">
+              <a href="/home">Exit without saving</a>
+            </p>
+          </div>
         </div>
 
-        <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine2', errors) }}">
-       <label class="govuk-label" for="address-line-2">
-						<span class="govuk-visually-hidden">Building and street line 2 of 2</span>
-					</label>
-        {{ m.error_message('responsibleAddressLine2', errors) }}
-
-        <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine2"
-          data-valmsg-replace="true" style="display:block">
-        </span>
-        <input class="govuk-input"
-          id="responsibleAddressLine2" name="responsibleAddressLine2" type="text"
-          value="{{cookie.getGarResponsiblePerson().responsibleAddressLine2}}" />
-        </div>
-
-        <div class="govuk-form-group {{ m.form_group_class('responsibleTown', errors) }}">
-          <label class="govuk-label" for="responsibleTown">Town or city</label>
-
-       {{ m.error_message('responsibleTown', errors) }}
-
-       <span class="field-validation-valid error-message" data-valmsg-for="responsibleTown"
-         data-valmsg-replace="true" style="display:block">
-       </span>
-
-       <input class="govuk-input govuk-!-width-two-thirds"
-         id="responsibleTown" name="responsibleTown" type="text"
-         value="{{cookie.getGarResponsiblePerson().responsibleTown}}" />
-        </div>
-
-        <div class="govuk-form-group {{ m.form_group_class('responsibleCounty', errors) }}">
-         <label class="govuk-label" for="responsibleCounty">County</label>
-
-      {{ m.error_message('responsibleCounty', errors) }}
-
-      <span class="field-validation-valid error-message" data-valmsg-for="responsibleCounty"
-        data-valmsg-replace="true" style="display:block">
-      </span>
-      <input class="govuk-input govuk-!-width-two-thirds"
-        id="responsibleCounty" name="responsibleCounty" type="text"
-        value="{{cookie.getGarResponsiblePerson().responsibleCounty}}" />
-      </div>
-
-      <div class="govuk-form-group {{ m.form_group_class('responsiblePostcode', errors) }}">
-        <label class="govuk-label" for="responsiblePostcode">Postcode, area code or ZIP code</label>
-
-     {# {{ m.error_message('responsiblePostcode', errors) }}
-
-     <span class="field-validation-valid error-message" data-valmsg-for="responsiblePostcode"
-       data-valmsg-replace="true" style="display:block">
-     </span> #}
-
-     <input class="govuk-input govuk-input--width-10"
-       id="responsiblePostcode" name="responsiblePostcode" type="text"
-       value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}" />
-      </div>
-     </fieldset>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      </form>
     </div>
-
-
-    <div class="column-two-thirds">
-      <div class="govuk-form-group">
-        <input id="newResponsiblePerson" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
-        onclick="sendAnalytics(event, 'Add responsible person to GAR - submit', 'click')">
-        <p class="govuk-body-m">
-          <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
-        </p>
-        <p class="govuk-body-m">
-          <a href="/home">Exit without saving</a>
-        </p>
-      </div>
-    </div>
-
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    </form>
- </div>
-{% endblock %}
+    <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+    <script type="text/javascript">
+      accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#responsibleCounty')});
+    </script>
+  {% endblock %}
