@@ -103,19 +103,13 @@ const build = (req, totalPages, totalItems, optionalPath) => {
   // page should suffice
   if (totalPages < currentPage) {
     setCurrentPage(req, pathName, totalPages);
-    logger.debug(`Page has been set to ${totalPages}`);
+    logger.debug(`Page has been reset to ${totalPages}`);
     throw totalPages;
   }
 
   const startItem = ((currentPage - 1) * PAGE_SIZE) + 1;
   const endItem = Math.min((startItem - 1) + PAGE_SIZE, totalItems);
   const items = getPages(3, totalPages, currentPage);
-
-  logger.debug(JSON.stringify(items));
-
-  logger.debug('HREFs:');
-  logger.debug(currentPage - 1);
-  logger.debug(currentPage + 1);
 
   return {
     startItem,
