@@ -7,7 +7,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 const garApi = require('../../../common/services/garApi');
-const clamAVService = require('../../../common/services/clamavservice');
+const clamAVService = require('../../../common/services/clamAVService');
 const fileUploadApi = require('../../../common/services/fileUploadApi');
 
 const controller = require('../../../app/api/uploadfile/post.controller');
@@ -289,7 +289,7 @@ describe('API upload file post controller', () => {
           expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
           expect(garApiDeleteDocsStub).to.not.have.been.called;
           expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
-          expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('Example User Field', 'GAR-1', {
+          expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
             originalname: 'test-gar.pdf',
             buffer: req.file.buffer,
             size: 10000,
@@ -311,7 +311,7 @@ describe('API upload file post controller', () => {
         expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
         expect(garApiDeleteDocsStub).to.not.have.been.called;
         expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
-        expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('Example User Field', 'GAR-1', {
+        expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
           originalname: 'test-gar.pdf',
           buffer: req.file.buffer,
           size: 10000,
@@ -332,7 +332,7 @@ describe('API upload file post controller', () => {
         expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
         expect(garApiDeleteDocsStub).to.not.have.been.called;
         expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
-        expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('Example User Field', 'GAR-1', {
+        expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
           originalname: 'test-gar.pdf',
           buffer: req.file.buffer,
           size: 10000,

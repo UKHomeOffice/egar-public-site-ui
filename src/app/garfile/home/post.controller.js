@@ -12,7 +12,6 @@ module.exports = (req, res) => {
   const garStatus = 'Draft';
   const garOption = req.body.garoption;
   const cookie = new CookieModel(req);
-  cookie.setUserGarOp(garOption);
 
   // Define a validation chain for our representatives field
   const garChain = [
