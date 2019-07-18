@@ -28,6 +28,7 @@ module.exports = (req, res) => {
               userApi.getDetails(cookie.getUserEmail())
                 .then((apiResponse) => {
                   const parsedResponse = JSON.parse(apiResponse);
+                  logger.debug(`Response from userApi.getDetails: ${apiResponse}`);
                   cookie.setLoginInfo(parsedResponse);
                   res.redirect('/home');
                 })

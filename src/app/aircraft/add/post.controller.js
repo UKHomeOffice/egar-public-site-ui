@@ -4,26 +4,25 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const craftApi = require('../../../common/services/craftApi');
+const pagination = require('../../../common/utils/pagination');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  const craftReg = req.body.craftreg;
-  const craftType = req.body.crafttype;
-  const craftBase = _.toUpper(req.body.craftbase);
+  const { craftReg, craftType } = req.body;
+  const craftBase = _.toUpper(req.body.craftBase);
 
   // Define a validation chain for user registeration fields
   const craftRegChain = [
-    new ValidationRule(validator.notEmpty, 'craftreg', craftReg, 'Enter the registration details of the craft'),
+    new ValidationRule(validator.notEmpty, 'craftReg', craftReg, 'Enter the registration details of the craft'),
   ];
   const craftTypeChain = [
-    new ValidationRule(validator.notEmpty, 'crafttype', craftType, 'Enter the craft type'),
+    new ValidationRule(validator.notEmpty, 'craftType', craftType, 'Enter the craft type'),
   ];
   const craftBaseChain = [
-    new ValidationRule(validator.notEmpty, 'craftbase', craftBase, 'Enter the base of the craft'),
+    new ValidationRule(validator.notEmpty, 'craftBase', craftBase, 'Enter the base of the craft'),
   ];
-
 
   // Validate chains
   validator.validateChains([craftRegChain, craftTypeChain, craftBaseChain])
@@ -35,13 +34,15 @@ module.exports = (req, res) => {
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             res.render('app/aircraft/add/index', { errors: [parsedResponse], cookie });
           } else {
-            res.redirect('/aircraft');
+            // Set the page to a large number and expect the page to redirect back to
+            // the correct last page (two calls in exchange for less logic to calculate the last page)
+            pagination.setCurrentPage(req, '/aircraft', 1000000);
+            req.session.save(() => res.redirect('/aircraft'));
           }
         });
     })
     .catch((err) => {
-      logger.info('Edit SavedCraft postcontroller - There was a problem with editing the saved craft');
-      logger.info(JSON.stringify(err));
+      logger.info('Add craft postcontroller - There was a problem with adding the saved craft');
       res.render('app/aircraft/add/index', { cookie, errors: err });
     });
 };

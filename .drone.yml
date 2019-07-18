@@ -130,7 +130,7 @@ pipeline:
       - kd --timeout=6m --file kube/public-site-ingress.yml
     when:
       branch: [ master, hotfix/* ]
-      event: push
+      event: [ push, deployment ]
       environment:
         exclude: [ production ]
 

@@ -13,7 +13,18 @@
     "button_create_account": "Create an account",
 
     "form_exit_without_saving": "Exit without saving",
+    "form_exit_without_adding": "Exit without adding",
+    "form_save_and_continue": "Save and continue",
+    "form_save_and_come_back": "Save and come back later",
     "form_save_and_exit": "Save and exit",
+    "form_add_and_exit": "Add and exit",
+
+    "tab_gar_draft": "Draft",
+    "gar_draft_no_records": "There are no draft GARs",
+    "tab_gar_submitted": "Submitted",
+    "gar_submitted_no_records": "There are no submitted GARs",
+    "tab_gar_cancelled": "Cancelled",
+    "gar_cancelled_no_records": "There are no cancelled GARs",
 
     "field_given_name": "Given name",
     "field_surname": "Surname",
@@ -78,12 +89,37 @@
     "field_file": "Select a file",
     "form_upload_and_continue": "Upload and continue",
     "upload_gar_file_header": "GENERAL AVIATION REPORT (GAR) -  January 2015",
-    "validation_api_uploadgar_people_type_crew": "crew member",
-    "validation_api_uploadgar_people_type_passenger": "passenger",
-    "validation_api_uploadgar_person_type_person_name": "{{peopleType}} {{firstName}} {{lastName}}",
-    "validation_api_uploadgar_no_file": "Provide a file",
-	  "validation_api_uploadgar_incorrect_type": "Incorrect file type",
-    "validation_api_uploadgar_incorrect_gar_file": "Incorrect xls or xlsx file",
+    "validator_api_uploadgar_people_type_crew": "crew member",
+    "validator_api_uploadgar_people_type_passenger": "passenger",
+    "validator_api_uploadgar_person_type_person_name": "{{peopleType}} {{firstName}} {{lastName}}",
+    "validator_api_uploadgar_no_file": "Provide a file",
+	"validator_api_uploadgar_incorrect_type": "Incorrect file type",
+    "validator_api_uploadgar_incorrect_gar_file": "Incorrect xls or xlsx file",
+    
+    "title_aircraft": "Aircraft",
+    "aircraft_caption": "You can view, edit or delete aircraft that you regularly add to GARs.",
+    "aircraft_no_records": "There are no saved aircraft records",
+    "aircraft_add": "Add a new aircraft",
+    "aircraft_add_caption": "Add the details of an aircraft that you regularly submit GARs for.",
+    "aircraft_add_button": "Add an aircraft",
+    "field_aircraft_registration": "Aircraft registration",
+    "field_aircraft_registration_hint": "For example G-ABCD",
+    "field_aircraft_type": "Aircraft type",
+    "field_aircraft_type_hint": "For example Gulfstream",
+    "field_aircraft_base": "Aircraft home port / location",
+    "table_action": "Action",
+    "table_delete": "Delete",
+
+    "title_add_aircraft": "Add an aircraft",
+    "add_aircraft_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
+
+    "people_no_records": "There are no saved people records",
+
+    "manifest_no_records": "There are no people on the manifest",
+    
+    "supportingdocuments_no_records": " There are no supporting documents uploaded",
+
+    "organisation_no_records": "There are no organisation members",
 
     "validator_msg_voyage_dates": "Arrival time must be after departure time"
 }

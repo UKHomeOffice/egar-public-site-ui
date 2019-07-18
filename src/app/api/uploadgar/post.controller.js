@@ -24,14 +24,14 @@ const checkFileIsExcel = (req, res) => {
 
     // Redirect if incorrect file type is uploaded
     if ((fileExtension !== 'xls' && fileExtension !== 'xlsx') || (typeof fileExtension === 'undefined')) {
-      req.session.failureMsg = i18n.__('validation_api_uploadgar_incorrect_type');
+      req.session.failureMsg = i18n.__('validator_api_uploadgar_incorrect_type');
       req.session.failureIdentifier = 'file';
       res.redirect('garfile/garupload');
       return false;
     }
   } else {
     logger.debug('No file selected for upload');
-    req.session.failureMsg = i18n.__('validation_api_uploadgar_no_file');
+    req.session.failureMsg = i18n.__('validator_api_uploadgar_no_file');
     req.session.failureIdentifier = 'file';
     res.redirect('/garfile/garupload?query=0');
     return false;
@@ -45,7 +45,7 @@ const checkFileIsGAR = (req, res, worksheet) => {
   const versionCellValue = (versionCell ? versionCell.v : undefined);
   if (versionCellValue === undefined
       || versionCellValue.trim() !== i18n.__({ phrase: 'upload_gar_file_header', locale: 'en' })) {
-    req.session.failureMsg = i18n.__('validation_api_uploadgar_incorrect_gar_file');
+    req.session.failureMsg = i18n.__('validator_api_uploadgar_incorrect_gar_file');
     req.session.failureIdentifier = 'file';
     res.redirect('garfile/garupload');
     return false;
