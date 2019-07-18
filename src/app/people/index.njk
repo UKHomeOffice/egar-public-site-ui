@@ -73,8 +73,7 @@
         {% endif %} #}
         </tbody>
       </table>
-      {# Pagination not possible until back end supports it #}
-      {# {{ pagination.build('people', pages, __)}} #}
+      {{ pagination.build('people', pages, __)}}
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
     {% else %}
