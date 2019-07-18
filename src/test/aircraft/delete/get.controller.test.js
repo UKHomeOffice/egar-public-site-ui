@@ -12,11 +12,13 @@ const controller = require('../../../app/aircraft/delete/get.controller');
 
 describe('Aircraft Delete Get Controller', () => {
   let req; let res; let deleteCraftStub; let deleteOrgCraftStub;
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
 
   beforeEach(() => {
     chai.use(sinonChai);
 
-    // Example request and response objects with appropriate spies
     req = {
       session: {
         deleteCraftId: 'G-ABCD',
@@ -118,7 +120,7 @@ describe('Aircraft Delete Get Controller', () => {
       req.session.u.rl = 'Individual';
     });
 
-    it('should redirect if with success message', () => {
+    it('should redirect with success message', () => {
       deleteCraftStub.resolves(JSON.stringify({}));
       const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
 

@@ -27,21 +27,23 @@
   {% endif %}
 
   <div class="govuk-grid-row">
-	  <div class="govuk-grid-column-full">
     <form action="/upload?_csrf={{csrfToken}}" class="form-group" method="post" role="form" enctype="multipart/form-data">
-    <span class="govuk-caption-xl">Section 7 of 8</span>
-    <h1 class="govuk-heading-xl">
-      Would you like to upload any supporting documentation to your GAR?
-    </h1>
-    <div class="govuk-form-group {{ m.form_group_class('supportingdocuments', errors) }}"></div>
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-xl">Section 7 of 8</span>
+      <h1 class="govuk-heading-xl">
+        Would you like to upload any supporting documentation to your GAR?
+      </h1>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-form-group {{ m.form_group_class('supportingdocuments', errors) }}"></div>
         <p class="govuk-body-l">You don’t have to provide any supporting documentation, but doing so may assist Border Force to process your flight more quickly.</p>
 
         <div class="govuk-warning-text">
           <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-            <strong class="govuk-warning-text__text">
-              <span class="govuk-warning-text__assistive">Warning</span>
-              Supporting documentation may include firearms certificates / licences, firearms serial numbers or remote clearance forms.
-            </strong>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">Warning</span>
+            Supporting documentation may include firearms certificates / licences, firearms serial numbers or remote clearance forms.
+          </strong>
         </div>
 
         <p>
@@ -68,7 +70,8 @@
 
         <h2 class="govuk-heading-m">Uploaded documents</h2>
         <p class="govuk-body-m">Here are the documents you have attached to this GAR.</p>
-
+    </div>
+    <div class="govuk-grid-column-full">
         <div class="form-group">
           <table class="govuk-table">
             <thead class="govuk-table__head">
@@ -80,35 +83,40 @@
                 </tr>
             </thead>
             <tbody class="govuk-table__body">
-            {% for file in supportingDoc.items %}
-                <tr class="govuk-table__row">
+            {% if supportingDoc.items | length %}
+              {% for file in supportingDoc.items %}
+              <tr class="govuk-table__row">
                 <td class="govuk-table__cell ">{{file.fileName}} </td>
                 <td class="govuk-table__cell ">{{file.size}} </td>
                 <td class="govuk-table__cell ">Done</td>
                 <td class="govuk-table__cell "><button class="govuk-link btn-link" name="deleteDocId" value="{{ file.supportingDocumentId }}">Delete</button></td>
-                </tr lass="govuk-table__cell ">
-            {%endfor%}
-                <tr>
+              </tr lass="govuk-table__cell ">
+              {% endfor %}
+            {% else %}
+              <tr class="govuk-table__row">
+                <td colspan="4"><p class="govuk-inset-text">{{__('supportingdocuments_no_records')}}</p></td>
+              </tr>
+            {% endif %}
             </tbody>
         </table>
     </div>
-    <div>
-    <input type="hidden" id="user" name='user' value="{{cookie.getUserDbId()}}">
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <input type="hidden" id="user" name='user' value="{{cookie.getUserDbId()}}">
       <input type="hidden" id="garid" name='garid' value="{{cookie.getGarId()}}">
       <input type="hidden" id="cookie" name='cookie' value = "{{cookie.getUserRole()}}">
-    </div>
 
-	<div class="govuk-form-group">
-		<a href='/garfile/review' class="govuk-button">Save and continue</a>
-    <p class="govuk-body-m">
-      <a href="/home">Save and exit</a>
-    </p>
-    <p class="govuk-body-m">
-      <a href="/home">Exit without saving</a>
-    </p>
-	</div>
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-</form>
+    <div class="govuk-form-group">
+      <a href='/garfile/review' class="govuk-button">Save and continue</a>
+      <p class="govuk-body-m">
+        <a href="/home">Save and exit</a>
+      </p>
+      <p class="govuk-body-m">
+        <a href="/home">Exit without saving</a>
+      </p>
+    </div>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  </form>
 
 </div>
 

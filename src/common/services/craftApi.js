@@ -68,11 +68,11 @@ module.exports = {
    * @param {String} userId id of user trying to list crafts
    * @returns {Promise} resolves with API response
    */
-  getCrafts(userId) {
+  getCrafts(userId, pageNumber) {
     return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
-        url: `${endpoints.getCrafts(userId)}`, // ?per_page=10&page=2`, or via qs
+        url: `${endpoints.getCrafts(userId)}?per_page=5&page=${pageNumber}`, // ?per_page=10&page=2`, or via qs
       },
       (error, response, body) => {
         if (error) {

@@ -12,9 +12,13 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const controller = require('../../../app/aircraft/add/post.controller');
+const paginate = require('../../../common/utils/pagination');
 
 describe('Aircraft Add Post Controller', () => {
-  let req; let res; let craftApiStub;
+  let req; let res; let craftApiStub; let sessionSaveStub;
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -22,12 +26,13 @@ describe('Aircraft Add Post Controller', () => {
     // Example response object with appropriate spies
     req = {
       body: {
-        craftreg: 'G-ABCD',
-        crafttype: 'Gulfstream',
-        craftbase: 'LHR',
+        craftReg: 'G-ABCD',
+        craftType: 'Gulfstream',
+        craftBase: 'LHR',
       },
       session: {
         cookie: {},
+        save: callback => callback(),
       },
     };
     res = {
@@ -35,6 +40,7 @@ describe('Aircraft Add Post Controller', () => {
       render: sinon.stub(),
     };
     craftApiStub = sinon.stub(craftApi, 'create');
+    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
   afterEach(() => {
@@ -43,8 +49,8 @@ describe('Aircraft Add Post Controller', () => {
 
   describe('validation chains', () => {
     it('should return message when registration is empty', () => {
-      req.body.craftreg = '';
-      const rule = new ValidationRule(validator.notEmpty, 'craftreg', '', 'Enter the registration details of the craft');
+      req.body.craftReg = '';
+      const rule = new ValidationRule(validator.notEmpty, 'craftReg', '', 'Enter the registration details of the craft');
       const cookie = new CookieModel(req);
 
       const callController = async () => {
@@ -52,13 +58,14 @@ describe('Aircraft Add Post Controller', () => {
       };
 
       callController().then(() => {
-        expect(res.render).to.have.been.calledWith('app/aircraft/add/index', { cookie, errors: [rule] });
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { cookie, errors: [rule] });
       });
     });
 
     it('should return message when type is empty', () => {
-      req.body.crafttype = '';
-      const rule = new ValidationRule(validator.notEmpty, 'crafttype', '', 'Enter the craft type');
+      req.body.craftType = '';
+      const rule = new ValidationRule(validator.notEmpty, 'craftType', '', 'Enter the craft type');
       const cookie = new CookieModel(req);
 
       const callController = async () => {
@@ -67,13 +74,14 @@ describe('Aircraft Add Post Controller', () => {
 
       callController().then(() => {
         // TODO: Cookie and Error Message Check
-        expect(res.render).to.have.been.calledWith('app/aircraft/add/index', { cookie, errors: [rule] });
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { cookie, errors: [rule] });
       });
     });
 
     it('should return message when base is empty', () => {
-      req.body.craftbase = '';
-      const rule = new ValidationRule(validator.notEmpty, 'craftbase', '', 'Enter the base of the craft');
+      req.body.craftBase = '';
+      const rule = new ValidationRule(validator.notEmpty, 'craftBase', '', 'Enter the base of the craft');
       const cookie = new CookieModel(req);
 
       const callController = async () => {
@@ -82,7 +90,8 @@ describe('Aircraft Add Post Controller', () => {
 
       callController().then(() => {
         expect(craftApiStub).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/aircraft/add/index', { cookie, errors: [rule] });
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { cookie, errors: [rule] });
       });
     });
   });
@@ -99,20 +108,24 @@ describe('Aircraft Add Post Controller', () => {
       };
 
       callController().then(() => {
-        expect(res.render).to.have.been.calledWith('app/aircraft/add/index', { errors: [{ message: 'Some sort of error' }], cookie });
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { errors: [{ message: 'Some sort of error' }], cookie });
       });
     });
 
     it('should redirect when ok', () => {
       cookie = new CookieModel(req);
       craftApiStub.resolves(JSON.stringify({}));
+      sinon.stub(paginate, 'setCurrentPage');
 
       const callController = async () => {
         await controller(req, res);
       };
 
       callController().then(() => {
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+        expect(sessionSaveStub).to.have.been.called;
+        expect(paginate.setCurrentPage).to.have.been.calledOnceWithExactly(req, '/aircraft', 1000000);
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
       });
     });
   });

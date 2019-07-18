@@ -19,7 +19,7 @@
 {% block content %}
 
 <div class="govuk-grid-row">
-	<div class="govuk-grid-column-full">
+	<div class="govuk-grid-column-two-thirds">
 
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
@@ -34,10 +34,11 @@
   {% if cookie.getUserRole() != 'User' %}
 	  <p class="govuk-body-l">You can view, edit or delete people that you regularly add to GARs.</p>
   {% endif %}
-
+  </div>
+  <div class="govuk-grid-column-full">
+    {% if people | length %}
     <form action="/people" method="post">
       <table class="govuk-table">
-        <!-- <caption class="govuk-table__caption">Saved people</caption> -->
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Surname</th>
@@ -49,6 +50,7 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body">
+        {# {% if people | length %} #}
           {% for person in people %}
           <tr class="govuk-table__row">
             {% if cookie.getUserRole() != 'User' %}
@@ -63,10 +65,19 @@
             {% endif %}
           </tr>
           {% endfor %}
+        {# {% else %}
+          <tr class="govuk-table__row">
+            <td colspan="4"><p class="govuk-inset-text">{{__('people_no_records')}}</p></td>
+          </tr>
+        {% endif %} #}
         </tbody>
       </table>
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
+    {% else %}
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+      <p class="govuk-inset-text">{{__('people_no_records')}}</p>
+    {% endif %}
 	</div>
 
   {% if cookie.getUserRole() != 'User' %}

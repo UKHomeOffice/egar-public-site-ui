@@ -62,17 +62,17 @@ describe('API upload GAR post controller', () => {
         }
       }
       switch (key) {
-        case 'validation_api_uploadgar_person_type_person_name':
+        case 'validator_api_uploadgar_person_type_person_name':
           return `${params.peopleType} ${params.firstName} ${params.lastName}`;
-        case 'validation_api_uploadgar_no_file':
+        case 'validator_api_uploadgar_no_file':
           return 'Provide a file';
-        case 'validation_api_uploadgar_incorrect_type':
+        case 'validator_api_uploadgar_incorrect_type':
           return 'Incorrect file type';
-        case 'validation_api_uploadgar_incorrect_gar_file':
+        case 'validator_api_uploadgar_incorrect_gar_file':
           return 'Incorrect xls or xlsx file';
-        case 'validation_api_uploadgar_people_type_crew':
+        case 'validator_api_uploadgar_people_type_crew':
           return 'crew member';
-        case 'validation_api_uploadgar_people_type_passenger':
+        case 'validator_api_uploadgar_people_type_passenger':
           return 'passenger';
         default:
           return 'Unexpected Key';
