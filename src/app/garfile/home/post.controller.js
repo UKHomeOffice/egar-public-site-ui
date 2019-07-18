@@ -10,7 +10,6 @@ module.exports = (req, res) => {
   logger.debug('In garfile / home post controller');
 
   const garStatus = 'Draft';
-  const garOption = req.body.garoption;
   const cookie = new CookieModel(req);
 
   // Define a validation chain for our representatives field

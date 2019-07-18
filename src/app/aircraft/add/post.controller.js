@@ -45,7 +45,7 @@ module.exports = (req, res) => {
             // this catch and return should at least prevent the application from hanging
             logger.error('Parsing attempt from API caused error, was not JSON');
             let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
-            if (_.toString(err).includes('DETAIL:  Key (registration)')) {
+            if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {
               errMsg = { message: 'Craft already exists' };
             }
             res.render('app/aircraft/add/index', { cookie, errors: [errMsg] });
