@@ -12,6 +12,7 @@ module.exports = (req, res) => {
 
   const customs = {
     prohibitedGoods: req.body.prohibitedGoods,
+    goodsDeclaration: req.body.goodsDeclaration,
     freeCirculation: req.body.freeCirculation,
     visitReason: req.body.visitReason,
   };

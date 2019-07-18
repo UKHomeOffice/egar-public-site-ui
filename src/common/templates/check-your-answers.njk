@@ -323,7 +323,7 @@
     <dl class="app-check-your-answers app-check-your-answers--short">
       <div class="app-check-your-answers__contents">
         <dt class="app-check-your-answers__question">
-          Prohibited goods
+          {{__('field_prohibited_goods')}}
         </dt>
         <dd class="app-check-your-answers__answer">
           {{garfile.prohibitedGoods}}
@@ -331,16 +331,18 @@
         <dd class="app-check-your-answers__change">
         </dd>
       </div>
+      {% if garfile.prohibitedGoods === 'Yes' %}
       <div class="app-check-your-answers__contents">
         <dt class="app-check-your-answers__question">
-          Intentions declared
+          {{__('field_goods_declaration')}}
         </dt>
         <dd class="app-check-your-answers__answer">
-          {{garfile.intentionsDeclared}}
+          {{garfile.goodsDeclaration}}
         </dd>
         <dd class="app-check-your-answers__change">
         </dd>
       </div>
+      {% endif %}
       <div class="app-check-your-answers__contents">
         <dt class="app-check-your-answers__question">
           Is the aircraft in free circulation in the EU?

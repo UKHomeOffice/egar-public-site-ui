@@ -133,6 +133,7 @@ class Cookie {
           responsibleContactNo: null,
         },
         prohibitedGoods: null,
+        goodsDeclaration: null,
         prohibitedGoodsList: [],
         supportingDocument: [],
       };
@@ -207,21 +208,20 @@ class Cookie {
   }
 
   setGarDepartureVoyage(voyageObj) {
-    if(!voyageObj.departureDate) {
+    if (!voyageObj.departureDate) {
       this.session.gar.voyageDeparture.departureDate = this.generateDate(voyageObj.departureDay,
         voyageObj.departureMonth,voyageObj.departureYear);
       this.session.gar.voyageDeparture.departureTime = this.generateTime(voyageObj.departureHour,
         voyageObj.departureMinute);
-      }
-      else{
-        //get it from the api
-        this.session.gar.voyageDeparture.departureDate = voyageObj.departureDate;
-        this.session.gar.voyageDeparture.departureTime = voyageObj.departureTime;
-      }
-      this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
-      this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
-      this.session.gar.voyageDeparture.departureLat = voyageObj.departureLat;
+    } else {
+      // get it from the api
+      this.session.gar.voyageDeparture.departureDate = voyageObj.departureDate;
+      this.session.gar.voyageDeparture.departureTime = voyageObj.departureTime;
     }
+    this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
+    this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
+    this.session.gar.voyageDeparture.departureLat = voyageObj.departureLat;
+  }
 
   getGarDepartureVoyage() {
     return this.session.gar.voyageDeparture;
@@ -291,6 +291,14 @@ class Cookie {
 
   setGarProhibitedGoods(pg) {
     this.session.gar.prohibitedGoods = pg;
+  }
+
+  getGoodsDeclaration() {
+    return this.session.gar.declarationDetsils;
+  }
+
+  setGoodsDeclaration(dd) {
+    this.session.gar.goodsDeclaration = dd;
   }
 
   getGarProhibitedGoodsList() {
