@@ -34,6 +34,8 @@ module.exports = {
         logger.info('Unexpected ClamAV response');
         return reject(new Error(`Unexpected ClamAV response: ${body}`));
       });
+    }).catch((err) => {
+      logger.error(err);
     });
   },
 };

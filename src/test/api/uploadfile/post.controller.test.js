@@ -276,7 +276,6 @@ describe('API upload file post controller', () => {
       clamAVServiceStub.resolves(true);
     });
 
-    // TODO: Some error message?
     it('should redirect if api rejects', () => {
       fileUploadApiStub.rejects('fileUploadApi.postFile Example Reject');
 
@@ -320,7 +319,6 @@ describe('API upload file post controller', () => {
       });
     });
 
-    // TODO: Some success message?
     it('should redirect if successful', () => {
       fileUploadApiStub.resolves(JSON.stringify({}));
 
