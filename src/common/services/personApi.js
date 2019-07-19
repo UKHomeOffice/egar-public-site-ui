@@ -101,14 +101,13 @@ module.exports = {
    * @param {Number} page page of interested
    * @returns {Promise} resolves with API response
    */
-  getPeople(id, userType) { // , page) {
+  getPeople(id, userType) {
     return new Promise((resolve) => {
       const individualUrl = endpoints.getPeople(id);
       const orgUrl = endpoints.getOrgPeople(id);
       request.get({
         headers: { 'content-type': 'application/json' },
         url: userType.toLowerCase() === 'individual' ? individualUrl : orgUrl,
-        // qs: { page, per_page: 5 },
       },
       (error, response, body) => {
         if (error) {
