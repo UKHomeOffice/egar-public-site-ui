@@ -5,7 +5,7 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH } = require('../config/index');
+const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, MAX_TEXT_BOX_LENGTH } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
@@ -319,12 +319,21 @@ function isValidRegistrationLength(value) {
 }
 
 /**
- * Check if string lenght is within the limit
+ * Check if string length is within the limit
  * @param  {String} value
  * @return {Bool}
  */
 function isValidEmailLength(value) {
   return value.length <= MAX_EMAIL_LENGTH;
+}
+
+/**
+ * Check if string length is within the limit
+ * @param {String} value
+ * @param {Bool}
+ */
+function isValidTextBoxLength(value) {
+  return value.length <= MAX_TEXT_BOX_LENGTH;
 }
 
 /**
@@ -394,6 +403,7 @@ module.exports = {
   isValidStringLength,
   isValidEmailLength,
   isValidRegistrationLength,
+  isValidTextBoxLength,
   isValidDepAndArrDate,
   handleResponseError,
 };
