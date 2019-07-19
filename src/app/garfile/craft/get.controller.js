@@ -13,8 +13,8 @@ module.exports = (req, res) => {
   const userId = cookie.getUserDbId();
 
   garApi.get(cookie.getGarId())
-    .then((values) => {
-      const gar = JSON.parse(values);
+    .then((garApiResponse) => {
+      const gar = JSON.parse(garApiResponse);
       if ((gar.registration !== null || gar.registration !== 'Undefined') && req.headers.referer.indexOf('garfile/craft') < 0) {
         cookie.setGarCraft(gar.registration, gar.craftType, gar.craftBase);
       }
@@ -24,10 +24,10 @@ module.exports = (req, res) => {
             const garCraft = (JSON.parse(values));
             if (garCraft.items.length > 0) {
               cookie.setSavedCraft(JSON.parse(values));
-              return res.render('app/garfile/craft/index', { cookie });
-            } else {
-              return res.render('app/garfile/craft/index', { cookie });
+              res.render('app/garfile/craft/index', { cookie });
+              return;
             }
+            res.render('app/garfile/craft/index', { cookie });
           })
           .catch((err) => {
             logger.error('Failed to get Saved Crafts from API');
@@ -37,14 +37,13 @@ module.exports = (req, res) => {
       } else {
         craftApi.getOrgCrafts(cookie.getOrganisationId())
           .then((values) => {
-            // TODO: Remove the items, just use the array...?
             const garCraft = (JSON.parse(values));
             if (garCraft.items.length > 0) {
               cookie.setSavedCraft(JSON.parse(values));
-              return res.render('app/garfile/craft/index', { cookie });
-            } else {
-              return res.render('app/garfile/craft/index', { cookie });
+              res.render('app/garfile/craft/index', { cookie });
+              return;
             }
+            res.render('app/garfile/craft/index', { cookie });
           })
           .catch((err) => {
             logger.error('Failed to get Saved Crafts from API');

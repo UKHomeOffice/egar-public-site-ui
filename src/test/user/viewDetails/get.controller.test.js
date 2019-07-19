@@ -82,7 +82,6 @@ describe('User View Details Get Controller', () => {
     beforeEach(() => {
       cookie = new CookieModel(req);
       cookie.setSavedCraft(craftApiResponse);
-      cookie.setSavedPeople(personApiResponse);
 
       craftApiStub.resolves(JSON.stringify(craftApiResponse));
       personApiStub.resolves(JSON.stringify(personApiResponse));

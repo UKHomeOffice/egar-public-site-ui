@@ -62,7 +62,7 @@ describe('Cookie Model', () => {
     expect(req.session.org).to.eql({ id: null, name: null, users: null });
     expect(req.session.s).to.eql([]);
     expect(req.session.u).to.eql({
-      kcId: null, dbId: null, fn: null, ln: null, e: null, ip: null, vr: null, rl: null, orgId: null, token: null, garop: null,
+      dbId: null, fn: null, ln: null, e: null, ip: null, vr: null, rl: null, orgId: null,
     });
     expect(req.session.inv).to.eql({
       fn: null, ln: null, e: null, ip: null, rl: null, orgId: null, token: null,
@@ -85,7 +85,7 @@ describe('Cookie Model', () => {
     expect(req.session.org).to.eql({ id: 1, name: 'exampleName', users: 'exampleUsers' });
     expect(req.session.s).to.eql(['exampleSubmission1', 'exampleSubmission2']);
     expect(req.session.u).to.eql({
-      kcId: null, dbId: null, fn: null, ln: null, e: null, ip: null, vr: null, rl: null, orgId: null, token: null, garop: null,
+      dbId: null, fn: null, ln: null, e: null, ip: null, vr: null, rl: null, orgId: null,
     });
     expect(req.session.inv).to.eql({
       fn: null, ln: null, e: null, ip: null, rl: null, orgId: null, token: null,
@@ -108,7 +108,7 @@ describe('Cookie Model', () => {
     expect(req.session.org).to.eql({ id: 1, name: 'exampleName', users: 'exampleUsers' });
     expect(req.session.s).to.eql(['exampleSubmission1', 'exampleSubmission2']);
     expect(req.session.u).to.eql({
-      kcId: null, dbId: null, fn: null, ln: null, e: null, ip: null, vr: null, rl: null, orgId: null, token: null, garop: null,
+      dbId: null, fn: null, ln: null, e: null, ip: null, vr: null, rl: null, orgId: null,
     });
     expect(req.session.inv).to.eql({
       fn: null, ln: null, e: null, ip: null, rl: null, orgId: null, token: null,

@@ -95,7 +95,6 @@ describe('API upload GAR post controller', () => {
   });
 
   describe('file type check', () => {
-    // TODO: The (typeof fileExtension === 'undefined'), is this actually possible...
     it('return message if no file name', async () => {
       req.file.originalname = '';
 
@@ -219,8 +218,6 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    // TODO: There appears to be no circumstance where /user/{id}/gar POST call returns anything
-    // other than 200, so message here is contrived
     it('should return with an error when api returns a message', () => {
       const data = getValidWorkbook();
 

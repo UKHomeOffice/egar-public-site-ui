@@ -3,9 +3,9 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
-  postFile(userId, garId, file) {
+  postFile(garId, file) {
     logger.debug('SupportingDocuments upload API');
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const formData = {
         file: {
           value: file.buffer, // Upload the file in the multi-part post
@@ -21,6 +21,7 @@ module.exports = {
         formData,
       }, (error, response, body) => {
         if (error) {
+          reject(error);
           return error;
         }
         return resolve(body);

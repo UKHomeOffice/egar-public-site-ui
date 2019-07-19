@@ -1,5 +1,29 @@
+// Npm dependencies
+const express = require('express');
+
+// Middleware
+const flagpole = require('../../common/middleware/flagpole');
+const usercheck = require('../../common/middleware/usercheck');
+const csrfcheck = require('../../common/middleware/csrfcheck');
+const parseForm = require('../../common/middleware/parseForm');
+
 const logger = require('./logger')(__filename);
 const CookieModel = require('../models/Cookie.class');
+
+const buildRouterAndPaths = (path, getController, postController) => {
+  // Initialisation
+  const router = new express.Router();
+  const indexPath = path;
+  const paths = {
+    index: indexPath,
+  };
+
+  // Routing
+  router.get(paths.index, flagpole, usercheck, csrfcheck, getController);
+  router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, postController);
+
+  return { router, paths };
+};
 
 /**
  * Some pages just simply create a Cookie instance of the request and render
@@ -16,11 +40,5 @@ const simpleGetRender = (req, res, page) => {
   res.render(page, { cookie });
 };
 
-const simpleGetRenderWithQuery = (req, res, page) => {
-  logger.info(`Rendering page ${page}`);
-  const cookie = new CookieModel(req);
-  res.render(page, { cookie, query: req.query });
-};
-
 exports.simpleGetRender = simpleGetRender;
-exports.simpleGetRenderWithQuery = simpleGetRenderWithQuery;
+exports.buildRouterAndPaths = buildRouterAndPaths;

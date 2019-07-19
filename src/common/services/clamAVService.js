@@ -7,7 +7,7 @@ module.exports = {
    * Send file to clamAv REST service
    * @param {Object} formData Object with name and file keys
    * @returns {Promise} Resolves to bool, true if not virus else false
-  */
+   */
   scanFile(formData) {
     return new Promise((resolve, reject) => {
       request.post({
@@ -31,9 +31,11 @@ module.exports = {
           logger.info('Virus found, rejecting file');
           return resolve(false);
         }
-        logger.info('Unexpected clamav response');
-        return reject(new Error(`Unexpected clamav response: ${body}`));
+        logger.info('Unexpected ClamAV response');
+        return reject(new Error(`Unexpected ClamAV response: ${body}`));
       });
+    }).catch((err) => {
+      logger.error(err);
     });
   },
 };

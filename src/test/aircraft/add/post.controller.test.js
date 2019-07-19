@@ -113,6 +113,34 @@ describe('Aircraft Add Post Controller', () => {
       });
     });
 
+    it('should return error message if api does not return JSON', () => {
+      cookie = new CookieModel(req);
+      craftApiStub.resolves('Example return');
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { errors: [{ message: 'There was a problem saving the aircraft. Try again later' }], cookie });
+      });
+    });
+
+    it('should return error message if api does not return JSON and contains DETAIL:  Key (registration)', () => {
+      cookie = new CookieModel(req);
+      craftApiStub.resolves('Something containing DETAIL:  Key (registration) ');
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { cookie, errors: [{ message: 'Craft already exists' }] });
+      });
+    });
+
     it('should redirect when ok', () => {
       cookie = new CookieModel(req);
       craftApiStub.resolves(JSON.stringify({}));

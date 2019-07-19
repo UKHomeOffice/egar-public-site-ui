@@ -36,7 +36,6 @@ class Cookie {
     // Initialise user
     if (this.session.u == null) {
       this.session.u = {
-        kcId: null,
         dbId: null,
         fn: null,
         ln: null,
@@ -45,8 +44,6 @@ class Cookie {
         vr: null,
         rl: null,
         orgId: null,
-        token: null,
-        garop: null,
       };
     }
 
@@ -327,20 +324,6 @@ class Cookie {
   /**
    *
    */
-  getUserKcId() {
-    return this.session.u.kcId;
-  }
-
-  /**
-   *
-   */
-  setUserKcId(id) {
-    this.session.u.kcId = id;
-  }
-
-  /**
-   *
-   */
   setUserDbId(id) {
     this.session.u.dbId = id;
   }
@@ -350,20 +333,6 @@ class Cookie {
    */
   getUserDbId() {
     return this.session.u.dbId;
-  }
-
-  /**
-   *
-   */
-  getUserGarOption() {
-    return this.session.u.garop;
-  }
-
-  /**
-   *
-   */
-  setUserGarOp(op) {
-    this.session.u.garop = op;
   }
 
   /**
@@ -533,34 +502,6 @@ class Cookie {
   /**
    *
    */
-  setKeyCloakToken(token) {
-    this.session.u.token = token;
-  }
-
-  /**
-   *
-   */
-  getKeyCloakToken() {
-    return this.session.u.token;
-  }
-
-  /**
-   *
-   */
-  setInviteKeyCloakToken(token) {
-    this.session.inv.token = token;
-  }
-
-  /**
-   *
-   */
-  getInviteKeyCloakToken() {
-    return this.session.inv.token;
-  }
-
-  /**
-   *
-   */
   setInviteOrgId(id) {
     this.session.inv.orgId = id;
   }
@@ -606,16 +547,6 @@ class Cookie {
   // get savedcraft
   getSavedCraft() {
     return this.session.svc;
-  }
-
-  // set savedpeople
-  setSavedPeople(svp) {
-    this.session.svp = svp;
-  }
-
-  // get savedcraft
-  getSavedPeople() {
-    return this.session.svp;
   }
 
   setEditPerson(person) {

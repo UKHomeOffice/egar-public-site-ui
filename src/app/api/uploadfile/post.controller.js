@@ -4,7 +4,7 @@ const stream = require('stream');
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 const transformers = require('../../../common/utils/transformers');
-const clamavService = require('../../../common/services/clamavservice');
+const clamAVService = require('../../../common/services/clamAVService');
 const uploadFile = require('../../../common/services/fileUploadApi');
 const { isValidFileMime } = require('../../../common/utils/validator');
 
@@ -95,10 +95,10 @@ module.exports = (req, res) => {
         },
       };
 
-      clamavService.scanFile(formData)
+      clamAVService.scanFile(formData)
         .then((clamavResp) => {
           if (clamavResp) {
-            uploadFile.postFile(req.body.user, req.body.garid, req.file)
+            uploadFile.postFile(req.body.garid, req.file)
               .then((response) => {
                 const parsedResponse = JSON.parse(response);
                 if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {

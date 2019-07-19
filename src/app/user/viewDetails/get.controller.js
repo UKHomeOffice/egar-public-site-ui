@@ -12,7 +12,7 @@ module.exports = (req, res) => {
       const savedCrafts = JSON.parse(values[0]);
       const savedPeople = JSON.parse(values[1]);
       cookie.setSavedCraft(savedCrafts);
-      cookie.setSavedPeople(savedPeople);
+
       if (req.session.errMsg) {
         const { errMsg } = req.session;
         delete req.session.errMsg;

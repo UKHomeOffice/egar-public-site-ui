@@ -88,11 +88,11 @@ const build = (req, totalPages, totalItems, optionalPath) => {
     logger.debug('No results detected');
 
     return {
-      startItem: 0,
-      endItem: 0,
       currentPage,
       totalItems,
       totalPages,
+      startItem: 0,
+      endItem: 0,
       items: [],
     };
   }

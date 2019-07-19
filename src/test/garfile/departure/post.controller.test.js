@@ -60,8 +60,6 @@ describe('Departure Post Controller', () => {
     sinon.restore();
   });
 
-  // TODO: Validations could stub the performAPICall as it won't reach
-  // it normally (need to use rewire library)
   it('should fail validation on basic submit', async () => {
     delete req.body.departurePort;
 
