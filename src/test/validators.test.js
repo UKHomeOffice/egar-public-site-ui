@@ -388,6 +388,19 @@ describe('Validator', () => {
     expect(validator.isValidEmailLength(onehundredfiftyone)).to.be.false;
   });
 
+  it('Should return true when text is less than or equal to MAX_TEXT_BOX_LENGTH', () => {
+    const fifty = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDdddd EEEEEeeee ';
+    const twohundredfifty = fifty.repeat(5);
+    expect(validator.isValidTextBoxLength(twohundredfifty)).to.be.true;
+  });
+
+  it('Should return false when text is longer than MAX_TEXT_BOX_LENGTH', () => {
+    const fifty = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDdddd EEEEEeeee ';
+    const twohundredfifty = fifty.repeat(5);
+    const twohundredfiftyone = `${twohundredfifty}A`;
+    expect(validator.isValidTextBoxLength(twohundredfiftyone)).to.be.false;
+  });
+
   describe('Departure and Arrival Dates', () => {
     const dateOne = '2019-01-01';
     const dateTwo = '2019-01-02';
