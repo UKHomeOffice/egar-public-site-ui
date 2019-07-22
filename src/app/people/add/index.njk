@@ -16,11 +16,9 @@
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="/people">{{ __('nav_bar_people') }}</a>
+        <a class="govuk-breadcrumbs__link" href="/people">{{ __('title_people') }}</a>
       </li>
-      <li class="govuk-breadcrumbs__list-item">
-        Add a person
-      </li>
+      <li class="govuk-breadcrumbs__list-item">{{__('title_add_person')}}</li>
     </ol>
   </div>
 
@@ -37,26 +35,22 @@
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
     <form action="/people/add" autocomplete="off" class="form-group" method="post" role="form">
+      <h1 class="govuk-heading-xl">{{__('title_add_person')}}</h1>
 
-    <h1 class="govuk-heading-xl">
-      Add a person
-    </h1>
+      <p class="govuk-body-l">{{__('people_add_caption')}}</p>
 
-    <p class="govuk-body-l">Please enter the following information. This information can be re-used when submitting a GAR.</p>
+      {% include "person-details.njk" %}
 
-    {% include "person-details.njk" %}
-
-    <div class="govuk-form-group">
-    <table class="govuk-table">
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell "><a class="govuk-button" href="/people">Exit without adding</a></td>
-        <td class="govuk-table__cell "><input id="save-and-exit" class="govuk-button" type="submit" value="Add and exit" onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
-      </tr>
-    </table>
-    </div>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <div class="govuk-form-group">
+        <table class="govuk-table">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell "><a class="govuk-button" href="/people">{{__('form_exit_without_adding')}}</a></td>
+            <td class="govuk-table__cell "><input id="save-and-exit" class="govuk-button" type="submit" value="{{__('form_add_and_exit')}}" onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
+          </tr>
+        </table>
+      </div>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
-
   </div>
 </div>
 {% endblock %}

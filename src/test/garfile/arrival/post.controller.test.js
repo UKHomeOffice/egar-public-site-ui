@@ -52,7 +52,6 @@ describe('Arrival Post Controller', () => {
     sinon.restore();
   });
 
-  // TODO: All the permutations?
   describe('validation chains', () => {
     let apiResponse;
 

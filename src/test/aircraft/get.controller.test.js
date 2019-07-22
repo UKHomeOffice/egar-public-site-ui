@@ -76,7 +76,6 @@ describe('Aircraft Get Controller', () => {
       });
     });
 
-    // TODO: Should redirect if pagination throws an error
     it('should redirect if the pagination module throws an error', async () => {
       individualCraftStub.resolves(apiResponse);
       paginationBuildStub.throws('Example');

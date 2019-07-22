@@ -98,6 +98,7 @@ module.exports = {
    *
    * @param {String} id id of entity performing action
    * @param {String} userType type of user performing action in ['individual', 'organisation']
+   * @param {Number} page page of interested
    * @returns {Promise} resolves with API response
    */
   getPeople(id, userType) {

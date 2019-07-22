@@ -10,113 +10,43 @@
 
             <image src="/assets/images/govuk-logotype-crown.png" class="govuk-header__logotype-crown-fallback-image"></image>
           </svg>
-          <span class="govuk-header__logotype-text">
-            GOV.UK
-          </span>
+          <span class="govuk-header__logotype-text">GOV.UK</span>
         </span>
       </a>
     </div>
     <div class="govuk-header__content">
 
-      <a href="/home" class="govuk-header__link govuk-header__link--service-name">
-        Submit a General Aviation Report (GAR)
-      </a>
+      <a href="/home" class="govuk-header__link govuk-header__link--service-name">{{__('title')}}</a>
 
       <button type="button" role="button" class="govuk-header__menu-button js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
       <nav>
+        <ul id="navigation" class="govuk-header__navigation" aria-label="Top Level Navigation">
+          <li class="govuk-header__navigation-item">
+            <a class="govuk-header__link" id='nav-manage-gars' href="/home">{{__('nav_bar_gars')}}</a>
+          </li>
+          <li class="govuk-header__navigation-item">
+            <a class="govuk-header__link" id="nav-aircraft" href="/aircraft">{{__('title_aircraft')}}</a>
+          </li>
+          <li class="govuk-header__navigation-item">
+            <a class="govuk-header__link" id="nav-people" href="/people">{{ __('title_people') }}</a>
+          </li>
       {% if cookie.getUserRole() == 'Individual' %}
-        <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-manage-gars' href="/home">
-              GARs
-            </a>
+            <a class="govuk-header__link" id="nav-create-org" href="/organisation/create">{{__('nav_bar_create_organisation')}}</a>
           </li>
+      {% elseif cookie.getUserRole() == 'Admin' or cookie.getUserRole() == 'Manager' %}
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" href="/aircraft">
-              Aircraft
-            </a>
+            <a class="govuk-header__link" id="nav-org" href="/organisation">{{__('nav_bar_organisation')}}</a>
           </li>
-
+      {% elseif cookie.getUserRole() == 'User' %}
+      {% endif %}
           <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-people' href="/people">{{ __('nav_bar_people') }}</a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-create-org' href="/organisation/create">
-              Create Organisation
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-manage-account' href="/user/details/">
-              Account
-            </a>
+            <a class="govuk-header__link" id="nav-manage-account" href="/user/details/">{{__('nav_bar_account')}}</a>
           </li>
           <li class="govuk-header__navigation-item">
             <a class="govuk-header__link" id='nav-logout' href="/user/logout">{{ __('nav_bar_sign_out') }}</a>
           </li>
         </ul>
-      {% elseif cookie.getUserRole() == 'Admin' or cookie.getUserRole() == 'Manager' %}
-        <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-manage-gars' href="/home">
-              GARs
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" href="/aircraft">
-              Aircraft
-            </a>
-          </li>
-
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-people' href="/people">
-              People
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" href="/organisation">
-              Organisation
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-manage-account' href="/user/details/">
-              Account
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-logout' href="/user/logout">
-              Sign out
-            </a>
-          </li>
-        </ul>
-      {% elseif cookie.getUserRole() == 'User' %}
-        <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-manage-gars' href="/home">
-              GARs
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" href="/aircraft">
-              Aircraft
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-people' href="/people">
-              People
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-manage-account' href="/user/details">
-              Account
-            </a>
-          </li>
-          <li class="govuk-header__navigation-item">
-            <a class="govuk-header__link" id='nav-logout' href="/user/logout">
-              Sign out
-            </a>
-          </li>
-        </ul>
-      {% endif %}
       </nav>
     </div>
   </div>

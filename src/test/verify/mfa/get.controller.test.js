@@ -62,9 +62,6 @@ describe('Verify MFA Get Controller', () => {
     expect(res.render).to.have.been.calledWith('app/verify/mfa/index', { cookie, mfaTokenLength: 20 });
   });
 
-  // TODO: Essentially, existing functionality just returns you to the page if you are
-  // unverified. In the future, this screen should not even be possible to enter if
-  // the user is unverified...
   it('should create a token and send an email if verified user', async () => {
     sinon.stub(tokenApi, 'setMfaToken').resolves();
     sinon.stub(tokenService, 'genMfaToken').returns('123456');

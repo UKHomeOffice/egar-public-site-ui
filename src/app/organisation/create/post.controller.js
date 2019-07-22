@@ -20,7 +20,6 @@ module.exports = (req, res) => {
 
   // Validate chains
   validator.validateChains([orgnameChain]).then(() => {
-    // todo call to API pass organisation name, orgname
     // API should return OrgId
     logger.debug('Calling create org api endpoint');
     orgApi.create(orgname, cookie.getUserDbId())
