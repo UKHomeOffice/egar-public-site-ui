@@ -294,7 +294,7 @@ class Cookie {
   }
 
   getGoodsDeclaration() {
-    return this.session.gar.declarationDetsils;
+    return this.session.gar.goodsDeclaration;
   }
 
   setGoodsDeclaration(dd) {

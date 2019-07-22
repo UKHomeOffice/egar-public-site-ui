@@ -389,16 +389,22 @@ describe('Validator', () => {
   });
 
   it('Should return true when text is less than or equal to MAX_TEXT_BOX_LENGTH', () => {
+    const MAX_LENGTH = 250;
     const fifty = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDdddd EEEEEeeee ';
     const twohundredfifty = fifty.repeat(5);
-    expect(validator.isValidTextBoxLength(twohundredfifty)).to.be.true;
+
+    const valueObj = { value: twohundredfifty, maxLength: MAX_LENGTH };
+    expect(validator.validTextLength(valueObj)).to.be.true;
   });
 
   it('Should return false when text is longer than MAX_TEXT_BOX_LENGTH', () => {
+    const MAX_LENGTH = 250;
     const fifty = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDdddd EEEEEeeee ';
     const twohundredfifty = fifty.repeat(5);
     const twohundredfiftyone = `${twohundredfifty}A`;
-    expect(validator.isValidTextBoxLength(twohundredfiftyone)).to.be.false;
+
+    const valueObj = { value: twohundredfiftyone, maxLength: MAX_LENGTH };
+    expect(validator.validTextLength(valueObj)).to.be.false;
   });
 
   describe('Departure and Arrival Dates', () => {

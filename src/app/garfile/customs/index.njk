@@ -51,8 +51,8 @@
             {% for choice in prohibitedGoodsOptions %}
               <div class="govuk-radios__item">
                 <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="prohibitedGoods" value="{{choice.value}}"
-                {% if choice.value === 'Yes' %}data-aria-controls="conditional-goodsDeclaration" {% endif %}
-                {% if choice.value == gar.prohibitedGoods %}checked{% endif %}>
+                {{ "data-aria-controls=conditional-goodsDeclaration" if choice.value === 'Yes' }}
+                {{ "checked" if choice.value == gar.prohibitedGoods }}>
                 <label class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
               </div>
               {% if choice.value == 'Yes' %}

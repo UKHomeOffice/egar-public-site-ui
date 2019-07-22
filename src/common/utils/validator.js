@@ -306,6 +306,16 @@ function isValidFileMime(fileName, mimeType) {
 }
 
 /**
+ * Check if string length is within limit
+ * @param {Object} valueObj {value: string, maxLength: number}
+ * @return {Bool}
+ */
+function validTextLength(valueObj) {
+  const { value, maxLength } = valueObj;
+  return value.length <= maxLength;
+}
+
+/**
  * Check if the string length is within the limit. Default limit is 35 characters.
  * @param {String} value
  * @return {Bool}
@@ -314,6 +324,11 @@ function isValidStringLength(value) {
   return value.length <= MAX_STRING_LENGTH;
 }
 
+/**
+ * Check if aricraft registration length is within the limit
+ * @param {String} value
+ * @return {Bool}
+ */
 function isValidRegistrationLength(value) {
   return value.length <= MAX_REGISTRATION_LENGTH;
 }
@@ -328,19 +343,10 @@ function isValidEmailLength(value) {
 }
 
 /**
- * Check if string length is within the limit
- * @param {String} value
- * @param {Bool}
- */
-function isValidTextBoxLength(value) {
-  return value.length <= MAX_TEXT_BOX_LENGTH;
-}
-
-/**
  * Parse datetime string to moment object
  * @param {String} dateTimeStr 'yyyy-MM-dd HH:mm:ss'
  * @param {String} dateTimeFormat defines the moment format default: 'YYYY-MM-DD HH:mm:ss'
- * @return {Bool}
+ * @return {Bool}ß
  */
 function isValidDateTime(dateTimeStr, dateTimeFormat = 'YYYY-MM-DD HH:mm:ss') {
   return moment.utc(dateTimeStr, dateTimeFormat).isValid();
@@ -400,10 +406,10 @@ module.exports = {
   validIntlPhone,
   notSameValues,
   isValidFileMime,
+  validTextLength,
   isValidStringLength,
   isValidEmailLength,
   isValidRegistrationLength,
-  isValidTextBoxLength,
   isValidDepAndArrDate,
   handleResponseError,
 };
