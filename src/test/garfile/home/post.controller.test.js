@@ -77,7 +77,6 @@ describe('GAR Customs Post Controller', () => {
     });
   });
 
-  // shows error message if api rejects
   it('should return an error message if api rejects', () => {
     cookie = new CookieModel(req);
     req.body.garoption = '0';
@@ -87,7 +86,7 @@ describe('GAR Customs Post Controller', () => {
       await controller(req, res);
     };
 
-    // TODO: ERROR MESSAGE
+    // TODO: Return the error message?
     callController().then().then(() => {
       expect(createGarApiStub).to.have.been.calledWith('ExampleUser1');
       expect(res.redirect).to.not.have.been.called;
@@ -98,7 +97,7 @@ describe('GAR Customs Post Controller', () => {
   });
 
   it('should return an error message if api rejects', () => {
-    // Back end does not really return any other outcome, contriving example
+    // Back end does not really return any other outcome, contrived example
     cookie = new CookieModel(req);
     req.body.garoption = '0';
     createGarApiStub.resolves(JSON.stringify({

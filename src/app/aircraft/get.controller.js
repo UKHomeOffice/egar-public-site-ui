@@ -10,14 +10,15 @@ module.exports = (req, res) => {
 
   const cookie = new CookieModel(req);
   const currentPage = pagination.getCurrentPage(req, '/aircraft');
+
   const crafts = cookie.getUserRole() === 'Individual' ? craftApi.getCrafts(cookie.getUserDbId(), currentPage) : craftApi.getOrgCrafts(cookie.getOrganisationId());
   crafts.then((values) => {
     const savedCrafts = JSON.parse(values);
     const { totalPages, totalItems } = savedCrafts._meta;
 
-    let paginationStuff;
+    let paginationData;
     try {
-      paginationStuff = pagination.build(req, totalPages, totalItems);
+      paginationData = pagination.build(req, totalPages, totalItems);
     } catch (link) {
       logger.debug('Pagination module threw error, refreshing page');
       res.redirect('/aircraft');
@@ -29,7 +30,7 @@ module.exports = (req, res) => {
       const { errMsg } = req.session;
       delete req.session.errMsg;
       res.render('app/aircraft/index', {
-        cookie, savedCrafts, pages: paginationStuff, errors: [errMsg],
+        cookie, savedCrafts, pages: paginationData, errors: [errMsg],
       });
       return;
     }
@@ -38,14 +39,14 @@ module.exports = (req, res) => {
       delete req.session.successHeader;
       delete req.session.successMsg;
       res.render('app/aircraft/index', {
-        cookie, savedCrafts, successMsg, successHeader, pages: paginationStuff,
+        cookie, savedCrafts, successMsg, successHeader, pages: paginationData,
       });
       return;
     }
     res.render('app/aircraft/index', {
       cookie,
       savedCrafts,
-      pages: paginationStuff,
+      pages: paginationData,
     });
   }).catch((err) => {
     logger.error('There was an error fetching craft data for an individual');

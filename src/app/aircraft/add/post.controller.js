@@ -30,14 +30,25 @@ module.exports = (req, res) => {
       // call the API to update the data base and then
       craftApi.create(craftReg, craftType, craftBase, cookie.getUserDbId())
         .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-            res.render('app/aircraft/add/index', { errors: [parsedResponse], cookie });
-          } else {
-            // Set the page to a large number and expect the page to redirect back to
-            // the correct last page (two calls in exchange for less logic to calculate the last page)
-            pagination.setCurrentPage(req, '/aircraft', 1000000);
-            req.session.save(() => res.redirect('/aircraft'));
+          try {
+            const parsedResponse = JSON.parse(apiResponse);
+            if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+              res.render('app/aircraft/add/index', { errors: [parsedResponse], cookie });
+            } else {
+              // Set the page to a large number and expect the page to redirect back to
+              // the correct last page (two calls in exchange for less logic to calculate the last page)
+              pagination.setCurrentPage(req, '/aircraft', 1000000);
+              req.session.save(() => res.redirect('/aircraft'));
+            }
+          } catch (err) {
+            // Until the back end corrects the issue with indexing (preventing duplicate registrations)
+            // this catch and return should at least prevent the application from hanging
+            logger.error('Parsing attempt from API caused error, was not JSON');
+            let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
+            if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {
+              errMsg = { message: 'Craft already exists' };
+            }
+            res.render('app/aircraft/add/index', { cookie, errors: [errMsg] });
           }
         });
     })
