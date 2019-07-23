@@ -5,7 +5,7 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, MAX_TEXT_BOX_LENGTH } = require('../config/index');
+const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
@@ -346,7 +346,7 @@ function isValidEmailLength(value) {
  * Parse datetime string to moment object
  * @param {String} dateTimeStr 'yyyy-MM-dd HH:mm:ss'
  * @param {String} dateTimeFormat defines the moment format default: 'YYYY-MM-DD HH:mm:ss'
- * @return {Bool}ß
+ * @return {Bool}
  */
 function isValidDateTime(dateTimeStr, dateTimeFormat = 'YYYY-MM-DD HH:mm:ss') {
   return moment.utc(dateTimeStr, dateTimeFormat).isValid();
