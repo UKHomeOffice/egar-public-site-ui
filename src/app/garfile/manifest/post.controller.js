@@ -2,6 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const garApi = require('../../../common/services/garApi');
+const pagination = require('../../../common/utils/pagination');
 const manifestUtil = require('./bulkAdd');
 
 module.exports = (req, res) => {
@@ -15,7 +16,9 @@ module.exports = (req, res) => {
     req.session.save(() => res.redirect('/garfile/manifest/deleteperson'));
   } else if (req.body.personId) {
     logger.debug('Found people to add to manifest');
-    manifestUtil.getDetailsByIds(req.body.personId, cookie.getUserDbId())
+
+    const page = pagination.getCurrentPage(req, '/garfile/people');
+    manifestUtil.getDetailsByIds(req.body.personId, cookie.getUserDbId(), page)
       .then((selectedPeople) => {
         garApi.patch(cookie.getGarId(), 'Draft', { people: selectedPeople })
           .then(() => {

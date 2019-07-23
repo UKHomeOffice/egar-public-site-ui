@@ -40,6 +40,8 @@ exports.MAX_REGISTRATION_LENGTH = 15;
 exports.MAX_EMAIL_LENGTH = 150;
 exports.MAX_ADDRESS_LINE_LENGTH = 250;
 
+exports.PAGINATION_PAGE_SIZE = 5;
+
 // ClamAv settings
 exports.CLAMAV_BASE = process.env.CLAMAV_BASE;
 exports.CLAMAV_PORT = process.env.CLAMAV_PORT;

@@ -67,10 +67,12 @@ describe('PersonService', () => {
 
     nock(BASE_URL)
       .get(`/user/${userId}/people`)
+      .query({ per_page: 5, page: 1 })
       .reply(200, {});
 
     nock(BASE_URL)
       .get(`/organisations/${orgId}/people`)
+      .query({ per_page: 5, page: 1 })
       .reply(200, {});
 
     nock(BASE_URL)
@@ -99,7 +101,7 @@ describe('PersonService', () => {
   });
 
   it('Should successfully get all the saved persons for an individual', (done) => {
-    personApi.getPeople(userId, 'individual')
+    personApi.getPeople(userId, 'individual', 1)
       .then((response) => {
         const responseObj = JSON.parse(response);
         expect(typeof responseObj).to.equal('object');
@@ -108,7 +110,7 @@ describe('PersonService', () => {
   });
 
   it('Should successfully get all the saved persons for an org', (done) => {
-    personApi.getPeople(orgId, 'organisation')
+    personApi.getPeople(orgId, 'organisation', 1)
       .then((response) => {
         const responseObj = JSON.parse(response);
         expect(typeof responseObj).to.equal('object');

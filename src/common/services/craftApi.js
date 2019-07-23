@@ -1,6 +1,7 @@
 const request = require('request');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
+const { PAGINATION_PAGE_SIZE } = require('../../common/config/index');
 
 module.exports = {
 
@@ -68,11 +69,12 @@ module.exports = {
    * @param {String} userId id of user trying to list crafts
    * @returns {Promise} resolves with API response
    */
-  getCrafts(userId, pageNumber) {
+  getCrafts(userId, page) {
     return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
-        url: `${endpoints.getCrafts(userId)}?per_page=5&page=${pageNumber}`, // ?per_page=10&page=2`, or via qs
+        url: endpoints.getCrafts(userId),
+        qs: { page, per_page: PAGINATION_PAGE_SIZE },
       },
       (error, response, body) => {
         if (error) {

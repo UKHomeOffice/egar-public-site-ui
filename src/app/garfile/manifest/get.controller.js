@@ -1,22 +1,29 @@
+/* eslint-disable no-underscore-dangle */
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const personApi = require('../../../common/services/personApi');
 const garApi = require('../../../common/services/garApi');
-
+const pagination = require('../../../common/utils/pagination');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile / manifest get controller');
 
+  const page = pagination.getCurrentPage(req, '/garfile/people');
+
   const userId = cookie.getUserDbId();
   const garId = cookie.getGarId();
 
-  const getSavedPeople = personApi.getPeople(userId, 'individual');
+  const getSavedPeople = personApi.getPeople(userId, 'individual', page);
   const getManifest = garApi.getPeople(garId);
 
   Promise.all([getSavedPeople, getManifest])
     .then((values) => {
-      const savedPeople = JSON.parse(values[0]);
+      console.log(values[0]);
+      const savedPeopleResponse = JSON.parse(values[0]);
+      const savedPeople = savedPeopleResponse.items;
+      const { totalPages, totalItems } = savedPeopleResponse._meta;
+      console.log(`totalPages: ${totalPages}, totalItems: ${totalItems}`);
       const manifest = JSON.parse(values[1]);
 
       if (req.session.errMsg) {

@@ -1,6 +1,7 @@
 const request = require('request');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
+const { PAGINATION_PAGE_SIZE } = require('../../common/config/index');
 
 module.exports = {
 
@@ -108,7 +109,7 @@ module.exports = {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: userType.toLowerCase() === 'individual' ? individualUrl : orgUrl,
-        qs: { page, per_page: 5 },
+        qs: { page, per_page: PAGINATION_PAGE_SIZE },
       },
       (error, response, body) => {
         if (error) {

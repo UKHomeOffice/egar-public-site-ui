@@ -9,17 +9,19 @@ const sinonChai = require('sinon-chai');
 const CookieModel = require('../../../common/models/Cookie.class');
 const personApi = require('../../../common/services/personApi');
 const garApi = require('../../../common/services/garApi');
+const pagination = require('../../../common/utils/pagination');
 
 const controller = require('../../../app/garfile/manifest/get.controller');
 
 describe('Manifest Get Controller', () => {
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
+
   let req; let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     apiResponse = {
       items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],
@@ -46,12 +48,14 @@ describe('Manifest Get Controller', () => {
     cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').rejects('Some reason here');
     sinon.stub(garApi, 'getPeople').resolves();
+    sinon.stub(pagination, 'getCurrentPage');
 
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then().then(() => {
+      expect(pagination.getCurrentPage).to.have.been.calledOnceWithExactly(req, '/garfile/people');
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie, errors: [{ message: 'Failed to get manifest data' }],
       });
@@ -62,12 +66,14 @@ describe('Manifest Get Controller', () => {
     cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').resolves();
     sinon.stub(garApi, 'getPeople').rejects('garApi.getPeople Example Reject');
+    sinon.stub(pagination, 'getCurrentPage');
 
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then().then(() => {
+      expect(pagination.getCurrentPage).to.have.been.calledOnceWithExactly(req, '/garfile/people');
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie, errors: [{ message: 'Failed to get manifest data' }],
       });
@@ -78,10 +84,15 @@ describe('Manifest Get Controller', () => {
     let personApiStub; let garApiStub;
 
     beforeEach(() => {
-      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify([
-        { firstName: 'James', lastName: 'Kirk' },
-        { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
-      ]));
+      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify({
+        items: [
+          { firstName: 'James', lastName: 'Kirk' },
+          { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
+        ],
+        _meta: {
+          totalPages: 1, totalItems: 2,
+        },
+      }));
       garApiStub = sinon.stub(garApi, 'getPeople').resolves(JSON.stringify([
         { firstName: 'Montgomery', lastName: 'Scott' },
       ]));
@@ -91,11 +102,14 @@ describe('Manifest Get Controller', () => {
       req.session.errMsg = { message: 'Example Error Message' };
       cookie = new CookieModel(req);
 
+      sinon.stub(pagination, 'getCurrentPage');
+
       const callController = async () => {
         await controller(req, res);
       };
 
       callController().then(() => {
+        expect(pagination.getCurrentPage).to.have.been.calledOnceWithExactly(req, '/garfile/people');
         expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(req.session.errMsg).to.be.undefined;
@@ -116,11 +130,14 @@ describe('Manifest Get Controller', () => {
       req.session.manifestInvalidPeople = [{ firstName: 'Jean-Luc', lastName: 'Picard' }];
       cookie = new CookieModel(req);
 
+      sinon.stub(pagination, 'getCurrentPage');
+
       const callController = async () => {
         await controller(req, res);
       };
 
       callController().then(() => {
+        expect(pagination.getCurrentPage).to.have.been.calledOnceWithExactly(req, '/garfile/people');
         expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(req.session.errMsg).to.be.undefined;
@@ -143,11 +160,14 @@ describe('Manifest Get Controller', () => {
       req.session.successMsg = 'All present captain';
       cookie = new CookieModel(req);
 
+      sinon.stub(pagination, 'getCurrentPage');
+
       const callController = async () => {
         await controller(req, res);
       };
 
       callController().then(() => {
+        expect(pagination.getCurrentPage).to.have.been.calledOnceWithExactly(req, '/garfile/people');
         expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(req.session.successMsg).to.be.undefined;
@@ -166,11 +186,14 @@ describe('Manifest Get Controller', () => {
     it('should render without any extra parameters', async () => {
       cookie = new CookieModel(req);
 
+      sinon.stub(pagination, 'getCurrentPage');
+
       const callController = async () => {
         await controller(req, res);
       };
 
       callController().then(() => {
+        expect(pagination.getCurrentPage).to.have.been.calledOnceWithExactly(req, '/garfile/people');
         expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {

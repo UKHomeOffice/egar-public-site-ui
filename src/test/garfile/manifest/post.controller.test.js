@@ -9,17 +9,19 @@ const sinonChai = require('sinon-chai');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const manifestUtil = require('../../../app/garfile/manifest/bulkAdd');
+const pagination = require('../../../common/utils/pagination');
 
 const controller = require('../../../app/garfile/manifest/post.controller');
 
 describe('Manifest Post Controller', () => {
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
+
   let req; let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     apiResponse = {
       items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],
@@ -101,6 +103,7 @@ describe('Manifest Post Controller', () => {
   // TODO: It really should inform the user of an issue...
   it('should redirect if garApi rejects', () => {
     req.body.personId = 'ABCDEFG';
+    sinon.stub(pagination, 'getCurrentPage').returns(3);
     sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject');
     sinon.stub(manifestUtil, 'getDetailsByIds').rejects('bulkAdd.getDetailsByIds Example Reject');
 
@@ -109,26 +112,27 @@ describe('Manifest Post Controller', () => {
     };
 
     callController().then().then(() => {
-      expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345');
+      expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345', 3);
       expect(garApi.patch).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
     });
   });
 
   // TODO: It really should inform the user of an issue...
-  it('should redirect if garApi rejects', () => {
+  it('should redirect if garApi rejects but manifest resolves', () => {
     req.body.personId = 'ABCDEFG';
     sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject');
     sinon.stub(manifestUtil, 'getDetailsByIds').resolves([
       { firstName: 'Random', lastName: 'Person' },
     ]);
+    sinon.stub(pagination, 'getCurrentPage').returns(2);
 
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then().then(() => {
-      expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345');
+      expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345', 2);
       expect(garApi.patch).to.have.been.calledWith('9001', 'Draft', { people: [{ firstName: 'Random', lastName: 'Person' }] });
       expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
     });
@@ -140,13 +144,14 @@ describe('Manifest Post Controller', () => {
     sinon.stub(manifestUtil, 'getDetailsByIds').resolves([
       { firstName: 'Random', lastName: 'Person' },
     ]);
+    sinon.stub(pagination, 'getCurrentPage').returns(4);
 
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then().then(() => {
-      expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345');
+      expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345', 4);
       expect(garApi.patch).to.have.been.calledWith('9001', 'Draft', { people: [{ firstName: 'Random', lastName: 'Person' }] });
       expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
     });
@@ -221,7 +226,6 @@ describe('Manifest Post Controller', () => {
   it('should redirect to next page if buttonClicked is Save and Continue and gar api resolves', () => {
     req.body.buttonClicked = 'Save and continue';
     cookie = new CookieModel(req);
-    // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
       items: [
         { firstName: 'James', lastName: 'Kirk' },

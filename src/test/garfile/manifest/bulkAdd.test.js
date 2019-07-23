@@ -10,11 +10,12 @@ const personApi = require('../../../common/services/personApi');
 const { getDetailsByIds } = require('../../../app/garfile/manifest/bulkAdd');
 
 describe('bulkAdd class', () => {
+  process.on('unhandledRejection', (error) => {
+    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
+  });
+
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
   });
 
   afterEach(() => {
@@ -26,9 +27,9 @@ describe('bulkAdd class', () => {
   });
 
   it('should return nothing if required ids do not match', async () => {
-    sinon.stub(personApi, 'getPeople').resolves(JSON.stringify([
-      { personId: 'PERSON-3' },
-    ]));
+    sinon.stub(personApi, 'getPeople').resolves(JSON.stringify({
+      items: [{ personId: 'PERSON-3' }],
+    }));
 
     await getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then((result) => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-ID-1', 'individual');
@@ -37,10 +38,12 @@ describe('bulkAdd class', () => {
   });
 
   it('should return one person if required ids match', async () => {
-    sinon.stub(personApi, 'getPeople').resolves(JSON.stringify([
-      { personId: 'PERSON-3', peopleType: { name: 'Passenger' } },
-      { personId: 'PERSON-1', peopleType: { name: 'Captain' } },
-    ]));
+    sinon.stub(personApi, 'getPeople').resolves(JSON.stringify({
+      items: [
+        { personId: 'PERSON-3', peopleType: { name: 'Passenger' } },
+        { personId: 'PERSON-1', peopleType: { name: 'Captain' } },
+      ],
+    }));
 
     await getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then((result) => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-ID-1', 'individual');
@@ -51,11 +54,13 @@ describe('bulkAdd class', () => {
   });
 
   it('should return matches', async () => {
-    sinon.stub(personApi, 'getPeople').resolves(JSON.stringify([
-      { personId: 'PERSON-3', peopleType: { name: 'Passenger' } },
-      { personId: 'PERSON-1', peopleType: { name: 'Captain' } },
-      { personId: 'PERSON-2', peopleType: { name: 'Crew' } },
-    ]));
+    sinon.stub(personApi, 'getPeople').resolves(JSON.stringify({
+      items: [
+        { personId: 'PERSON-3', peopleType: { name: 'Passenger' } },
+        { personId: 'PERSON-1', peopleType: { name: 'Captain' } },
+        { personId: 'PERSON-2', peopleType: { name: 'Crew' } },
+      ],
+    }));
 
     await getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then((result) => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-ID-1', 'individual');
