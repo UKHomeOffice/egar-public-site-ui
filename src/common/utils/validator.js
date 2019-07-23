@@ -306,6 +306,16 @@ function isValidFileMime(fileName, mimeType) {
 }
 
 /**
+ * Check if string length is within limit
+ * @param {Object} valueObj {value: string, maxLength: number}
+ * @return {Bool}
+ */
+function validTextLength(valueObj) {
+  const { value, maxLength } = valueObj;
+  return value.length <= maxLength;
+}
+
+/**
  * Check if the string length is within the limit. Default limit is 35 characters.
  * @param {String} value
  * @return {Bool}
@@ -314,12 +324,17 @@ function isValidStringLength(value) {
   return value.length <= MAX_STRING_LENGTH;
 }
 
+/**
+ * Check if aricraft registration length is within the limit
+ * @param {String} value
+ * @return {Bool}
+ */
 function isValidRegistrationLength(value) {
   return value.length <= MAX_REGISTRATION_LENGTH;
 }
 
 /**
- * Check if string lenght is within the limit
+ * Check if string length is within the limit
  * @param  {String} value
  * @return {Bool}
  */
@@ -391,6 +406,7 @@ module.exports = {
   validIntlPhone,
   notSameValues,
   isValidFileMime,
+  validTextLength,
   isValidStringLength,
   isValidEmailLength,
   isValidRegistrationLength,

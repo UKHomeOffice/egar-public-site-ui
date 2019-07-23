@@ -1,16 +1,27 @@
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
+const { MAX_TEXT_BOX_LENGTH } = require('../../../common/config/index');
 
 module.exports.validations = (req) => {
+  const {
+    prohibitedGoods,
+    goodsDeclaration,
+    freeCirculation,
+    visitReason,
+  } = req.body;
+
   return [
     [
-      new ValidationRule(validator.notEmpty, 'prohibitedGoods', req.body.prohibitedGoods, 'Select a value for customs declaration'),
+      new ValidationRule(validator.notEmpty, 'prohibitedGoods', prohibitedGoods, 'Select a value for customs declaration'),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'freeCirculation', req.body.freeCirculation, 'Select a free circulation value'),
+      new ValidationRule(validator.validTextLength, 'goodsDeclaration', { value: goodsDeclaration, maxLength: MAX_TEXT_BOX_LENGTH }, `Declaration details must be ${MAX_TEXT_BOX_LENGTH} characters or less`),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'visitReason', req.body.visitReason, 'Select a reason for visit'),
+      new ValidationRule(validator.notEmpty, 'freeCirculation', freeCirculation, 'Select a free circulation value'),
+    ],
+    [
+      new ValidationRule(validator.notEmpty, 'visitReason', visitReason, 'Select a reason for visit'),
     ],
   ];
 };

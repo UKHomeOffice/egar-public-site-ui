@@ -1,5 +1,7 @@
 {% extends "base-template.njk" %}
 
+{% from "radios/macro.njk" import govukRadios %}
+
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
@@ -45,27 +47,28 @@
               <span id="customs-hint" class="govuk-hint">This is optional but will assist with processing through the UK border. You’ll be required to make a customs declaration if, for example, anyone on the aircraft has goods over their duty free allowance, has large quantities of cash or is carrying firearms.</span>
             </legend>
 
-            <div class="govuk-radios">
+            <div class="govuk-radios govuk-radio--conditional" data-module="radios">
             {% for choice in prohibitedGoodsOptions %}
-            <div class="govuk-radios__item">
-              {% if choice.option == gar.prohibitedGoods %}
-                <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="prohibitedGoods" value="{{choice.value}}" checked>
-              {% else %}
-                <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="prohibitedGoods" value="{{choice.value}}" >
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="prohibitedGoods" value="{{choice.value}}"
+                {{ "data-aria-controls=conditional-goodsDeclaration" if choice.value === 'Yes' }}
+                {{ "checked" if choice.value == gar.prohibitedGoods }}>
+                <label class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
+              </div>
+              {% if choice.value == 'Yes' %}
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-goodsDeclaration">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="goodsDeclaration">Can you provide more details?</label>
+                  <textarea class="govuk-textarea" id="goodsDeclaration" name="goodsDeclaration"
+                  rows="5" aria-describedby="goods-declaration-hint"
+                  maxlength="{{ MAX_TEXT_BOX_LENGTH }}">{{gar.goodsDeclaration}}</textarea>
+                </div>
+              </div>
               {% endif %}
-              <label class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
-              {# {% if choice.value == "Yes" %}
-              <div class="panel panel-border-narrow js-hidden" id="contact-by-email">
-                <label class="form-label" for="contact-email">Email address</label>
-                <input class="form-control" name="contact-email" type="text" id="contact-email">
-              </div>
-              {% endif %} #}
-              </div>
             {% endfor %}
             </div>
           </fieldset>
         </div>
-
 
         <div class="govuk-form-group {{ m.form_group_class('freeCirculation', errors) }}" id="freeCirculation">
           <fieldset class="govuk-fieldset">

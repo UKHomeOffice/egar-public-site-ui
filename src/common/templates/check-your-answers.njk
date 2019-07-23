@@ -16,43 +16,25 @@
 
     <dl class="app-check-your-answers app-check-your-answers--short">
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          {{ __('field_departure_date') }}
-        </dt>
-        <dd class="app-check-your-answers__answer">
-          {{garfile.departureDate}}
-        </dd>
-        <dd class="app-check-your-answers__change">
-        </dd>
+        <dt class="app-check-your-answers__question">{{ __('field_departure_date') }}</dt>
+        <dd class="app-check-your-answers__answer">{{garfile.departureDate}}</dd>
+        <dd class="app-check-your-answers__change"></dd>
       </div>
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          {{ __('field_departure_time') }}
-        </dt>
-        <dd class="app-check-your-answers__answer">
-          {{garfile.departureTime}}
-        </dd>
-        <dd class="app-check-your-answers__change">
-        </dd>
+        <dt class="app-check-your-answers__question">{{ __('field_departure_time') }}</dt>
+        <dd class="app-check-your-answers__answer">{{garfile.departureTime}}</dd>
+        <dd class="app-check-your-answers__change"></dd>
       </div>
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          Departure port
-        </dt>
-        <dd class="app-check-your-answers__answer">
-          {{garfile.departurePort | upper}}
-        </dd>
-        <dd class="app-check-your-answers__change">
-        </dd>
+        <dt class="app-check-your-answers__question">Departure port</dt>
+        <dd class="app-check-your-answers__answer">{{garfile.departurePort | upper}}</dd>
+        <dd class="app-check-your-answers__change"></dd>
       </div>
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          Departure port coordinates
-        </dt>
+        <dt class="app-check-your-answers__question">Departure port coordinates</dt>
         <dd class="app-check-your-answers__answer">
-          {{__('field_latitude')}}: {{garfile.departureLat}} <br>
-          {{__('field_longitude')}}: {{garfile.departureLong}}
-        </dd>
+          {{__('field_latitude')}}: {{garfile.departureLat}}<br>
+          {{__('field_longitude')}}: {{garfile.departureLong}}</dd>
         <dd class="app-check-your-answers__change">
         </dd>
       </div>
@@ -251,7 +233,7 @@
         </tbody>
       </table>
     </div>
-  
+
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 500px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
@@ -330,42 +312,25 @@
 
     <dl class="app-check-your-answers app-check-your-answers--short">
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          Prohibited goods
-        </dt>
-        <dd class="app-check-your-answers__answer">
-          {{garfile.prohibitedGoods}}
-        </dd>
-        <dd class="app-check-your-answers__change">
-        </dd>
+        <dt class="app-check-your-answers__question">{{__('field_prohibited_goods')}}</dt>
+        <dd class="app-check-your-answers__answer">{{garfile.prohibitedGoods}}</dd>
+        <dd class="app-check-your-answers__change"></dd>
+      </div>
+      {% if garfile.prohibitedGoods === 'Yes' %}
+      <div class="app-check-your-answers__contents">
+        <dt class="app-check-your-answers__question">{{__('field_goods_declaration')}}</dt>
+        <dd class="app-check-your-answers__answer">{{garfile.goodsDeclaration | truncate(50)}}</dd>
+        <dd class="app-check-your-answers__change"></dd>
+      </div>
+      {% endif %}
+      <div class="app-check-your-answers__contents">
+        <dt class="app-check-your-answers__question">Is the aircraft in free circulation in the EU?</dt>
+        <dd class="app-check-your-answers__answer">{{garfile.freeCirculation}}</dd>
+        <dd class="app-check-your-answers__change"></dd>
       </div>
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          Intentions declared
-        </dt>
-        <dd class="app-check-your-answers__answer">
-          {{garfile.intentionsDeclared}}
-        </dd>
-        <dd class="app-check-your-answers__change">
-        </dd>
-      </div>
-      <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          Is the aircraft in free circulation in the EU?
-        </dt>
-        <dd class="app-check-your-answers__answer">
-          {{garfile.freeCirculation}}
-        </dd>
-        <dd class="app-check-your-answers__change">
-        </dd>
-      </div>
-      <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">
-          Reason for visit
-        </dt>
-        <dd class="app-check-your-answers__answer">
-          {{garfile.visitReason | uncamelCase }}
-        </dd>
+        <dt class="app-check-your-answers__question">Reason for visit</dt>
+        <dd class="app-check-your-answers__answer">{{garfile.visitReason | uncamelCase }}</dd>
         <dd class="app-check-your-answers__change">
         </dd>
       </div>
@@ -385,7 +350,7 @@
         {% endif %}
       </div>
     </dl>
-  
+
 		<table class="govuk-table">
 			<thead class="govuk-table__head">
 				<tr class="govuk-table__row">
