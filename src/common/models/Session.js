@@ -21,7 +21,5 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
-  session.schema('public');
-
   return session;
 };
