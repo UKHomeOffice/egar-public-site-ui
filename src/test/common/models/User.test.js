@@ -9,7 +9,7 @@ const {
 
 const UserModel = require('../../../common/models/User');
 
-describe.only('src/models/Simple', () => {
+describe('User model', () => {
   const Model = UserModel(sequelize, dataTypes);
   const instance = new Model();
   checkModelName(Model)('User');
