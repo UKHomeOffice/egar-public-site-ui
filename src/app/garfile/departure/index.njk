@@ -37,7 +37,9 @@
           <div class="{{ m.form_group_class('departureDate', errors) }}">
             <fieldset class="govuk-fieldset" aria-describedby="departureDate-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              {{ __('field_departure_date') }}
+              <h2 class="govuk-fieldset__heading">
+                {{ __('field_departure_date') }}
+              </h2>
             </legend>
             <span id="departureDate-hint" class="govuk-hint">
               {{ __('field_departure_date_hint') }}
@@ -80,7 +82,9 @@
         <div class="govuk-form-group {{ m.form_group_class('departureTime', errors) }}" id="departureTime">
           <fieldset class="govuk-fieldset" aria-describedby="departureTime-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              {{ __('field_departure_time') }}
+              <h2 class="govuk-fieldset__heading">
+                {{ __('field_departure_time') }}
+              </h2>
             </legend>
             <span id="departureTime-hint" class="govuk-hint">
               {{ __('field_departure_time_hint') }}
@@ -120,7 +124,7 @@
             The departure port must be different to the arrival port.
           </span>
           {{ m.error_message('departurePort', errors) }}
-          <input class="govuk-input" maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
+          <input class="govuk-input govuk-input__width-20" maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
           {# Airport list v1
           <select class="govuk-select" id="test1" name="test1" value="">
             <option value=""></option>

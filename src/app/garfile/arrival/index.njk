@@ -37,7 +37,9 @@
           <div class="{{ m.form_group_class('arrivalDate', errors) }}">
             <fieldset class="govuk-fieldset" aria-describedby="arrivalDate-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              Arrival date
+              <h2 class="govuk-fieldset__heading">
+                Arrival date
+              </h2>
             </legend>
             <span id="arrivalDate-hint" class="govuk-hint">
               For example 20 04 2019
@@ -86,10 +88,12 @@
         <div class="govuk-form-group {{ m.form_group_class('arrivalTime', errors) }}" id="arrivalTime">
           <fieldset class="govuk-fieldset" aria-describedby="arrivalTime-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              Arrival time (UTC)
+              <h2 class="govuk-fieldset__heading">
+                Arrival time (UTC)
+              </h2>
             </legend>
             <span id="arrivalTime-hint" class="govuk-hint">
-                For example 17 30
+              For example 17 30
             </span>
             {{ m.error_message('arrivalTime', errors) }}
 
@@ -122,16 +126,15 @@
 
         <!-- Start arrival port -->
         <div class="govuk-form-group {{ m.form_group_class('arrivalPort', errors) }}">
-				<label class="govuk-label govuk-label--m" for="arrivalPort">
-					Arrival port
-				</label>
-				<span id="arrivalPort-hint" class="govuk-hint">
-				Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
-        The arrival port must be different to the departure port.
-				</span>
-
+				  <label class="govuk-label govuk-label--m" for="arrivalPort">
+					  Arrival port
+				  </label>
+				  <span id="arrivalPort-hint" class="govuk-hint">
+				    Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
+            The arrival port must be different to the departure port.
+				  </span>
           {{ m.error_message('arrivalPort', errors) }}
-          <input class="govuk-input" maxlength="4" id="arrivalPort" name="arrivalPort" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort | upper }}"/>
+          <input class="govuk-input govuk-input--width-20" maxlength="4" id="arrivalPort" name="arrivalPort" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort | upper }}"/>
         </div>
         <!-- End arrival port -->
 
