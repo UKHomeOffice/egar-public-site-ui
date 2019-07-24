@@ -68,6 +68,7 @@ describe('GAR Craft Post Controller', () => {
     let craftApiStub;
 
     beforeEach(() => {
+      req.body.buttonClicked = 'Add to GAR';
       req.body.addCraft = 'ExampleCraft';
       craftApiStub = sinon.stub(craftApi, 'getDetails');
     });
@@ -176,6 +177,26 @@ describe('GAR Craft Post Controller', () => {
     });
 
     it('should go to the manifest screen if save and continue is buttonClicked', () => {
+      req.body.buttonClicked = 'Save and continue';
+      cookie = new CookieModel(req);
+      garApiPatchStub.resolves(JSON.stringify({}));
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then().then(() => {
+        expect(garApiPatchStub).to.have.been.calledWith('GAR1-ID', 'Draft', {
+          registration: 'G-ABCD',
+          craftType: 'Gulfstream',
+          craftBase: 'LHR',
+        });
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+      });
+    });
+
+    it('should go to the manifest screen if save and continue is buttonClicked even if addCraft is set', () => {
+      req.body.addCraft = 'ExampleCraft';
       req.body.buttonClicked = 'Save and continue';
       cookie = new CookieModel(req);
       garApiPatchStub.resolves(JSON.stringify({}));
