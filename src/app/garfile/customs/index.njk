@@ -33,99 +33,99 @@
     method="post" role="form">
 
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-      <span class="govuk-caption-xl">Section 6 of 8</span>
-      <h1 class="govuk-heading-xl">Customs</h1>
+        <span class="govuk-caption-xl">Section 6 of 8</span>
+        <h1 class="govuk-heading-xl">Customs</h1>
       </legend>
-        <p class="govuk-body-l">You don’t have to provide this information, but doing so may assist Border Force to process your flight more quickly.</p>
+      <p class="govuk-body-l">You don’t have to provide this information, but doing so may assist Border Force to process your flight more quickly.</p>
 
-        <div class="govuk-form-group {{ m.form_group_class('prohibitedGoods', errors) }}" id="prohibitedGoods">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h2 class="govuk-fieldset__heading">Is it your or anyone on the aircraft's intention to make a customs declaration upon your arrival into the United Kingdom?</h2>
-              <span id="customs-hint" class="govuk-hint">This is optional but will assist with processing through the UK border. You’ll be required to make a customs declaration if, for example, anyone on the aircraft has goods over their duty free allowance, has large quantities of cash or is carrying firearms.</span>
-            </legend>
+      <div class="govuk-form-group {{ m.form_group_class('prohibitedGoods', errors) }}" id="prohibitedGoods">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h2 class="govuk-fieldset__heading">Is it your or anyone on the aircraft's intention to make a customs declaration upon your arrival into the United Kingdom?</h2>
+            <span id="customs-hint" class="govuk-hint">This is optional but will assist with processing through the UK border. You’ll be required to make a customs declaration if, for example, anyone on the aircraft has goods over their duty free allowance, has large quantities of cash or is carrying firearms.</span>
+          </legend>
 
-            <div class="govuk-radios govuk-radio--conditional" data-module="radios">
-            {% for choice in prohibitedGoodsOptions %}
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="prohibitedGoods" value="{{choice.value}}"
-                {{ "data-aria-controls=conditional-goodsDeclaration" if choice.value === 'Yes' }}
-                {{ "checked" if choice.value == gar.prohibitedGoods }}>
-                <label class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
-              </div>
-              {% if choice.value == 'Yes' %}
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-goodsDeclaration">
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="goodsDeclaration">Can you provide more details?</label>
-                  <textarea class="govuk-textarea" id="goodsDeclaration" name="goodsDeclaration"
-                  rows="5" aria-describedby="goods-declaration-hint"
-                  maxlength="{{ MAX_TEXT_BOX_LENGTH }}">{{gar.goodsDeclaration}}</textarea>
-                </div>
-              </div>
-              {% endif %}
-            {% endfor %}
-            </div>
-          </fieldset>
-        </div>
-
-        <div class="govuk-form-group {{ m.form_group_class('freeCirculation', errors) }}" id="freeCirculation">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h2 class="govuk-fieldset__heading">Is the aircraft in free circulation in the EU?</h2>
-                <span id="free-circulation-hint" class="govuk-hint">Aircraft imported from outside the EU are in free circulation in the EU when all import formalities have been complied with and all duties, levies or equivalent charges have been paid and not refunded.</span>
-            </legend>
-            <div class="govuk-radios">
-            {% for choice in freeCirculationOptions %}
+          <div class="govuk-radios govuk-radio--conditional" data-module="radios">
+          {% for choice in prohibitedGoodsOptions %}
             <div class="govuk-radios__item">
-              {% if choice.value == gar.freeCirculation %}
-                <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="freeCirculation" value="{{choice.value}}" checked>
-              {% else %}
-                <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="freeCirculation" value="{{choice.value}}" >
-              {% endif %}
-              <label class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.value}}</label>
-            </div>
-            {% endfor %}
-            </div>
-          </fieldset>
-        </div>
-
-        <div class="govuk-form-group {{ m.form_group_class('visitReason', errors) }}" id="visitReason">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              Reason for aircraft visit to the EU?
-              <span id="free-circulation-hint" class="govuk-hint">This is the reason for making the flight.</span>
-            </legend>
-            <div class="govuk-radios">
-            {% for choice in reasonForVisitOptions %}
-            <div class="govuk-radios__item">
-              {% if choice.value == gar.visitReason %}
-                <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="visitReason" value={{choice.value}} checked>
-              {% else %}
-                <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="visitReason" value={{choice.value}} >
-              {% endif %}
+              <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="prohibitedGoods" value="{{choice.value}}"
+              {{ "data-aria-controls=conditional-goodsDeclaration" if choice.value === 'Yes' }}
+              {{ "checked" if choice.value == gar.prohibitedGoods }}>
               <label class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
             </div>
-            {% endfor %}
+            {% if choice.value == 'Yes' %}
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-goodsDeclaration">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="goodsDeclaration">Can you provide more details?</label>
+                <textarea class="govuk-textarea" id="goodsDeclaration" name="goodsDeclaration"
+                rows="5" aria-describedby="goods-declaration-hint"
+                maxlength="{{ MAX_TEXT_BOX_LENGTH }}">{{gar.goodsDeclaration}}</textarea>
+              </div>
             </div>
-          </fieldset>
-        </div>
-
-        <div class="govuk-form-group">
-          <input id="prohibited-goods-btn" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
-          onclick="sendAnalytics(event, 'Signify whether prohibited goods - submit', 'click')">
-
-          <p class="govuk-body-m">
-            <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and exit</a>
-          </p>
-
-          <p class="govuk-body-m">
-            <a href="/home">Exit without saving</a>
-          </p>
-        </div>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-      </form>
+            {% endif %}
+          {% endfor %}
+          </div>
+        </fieldset>
       </div>
+
+      <div class="govuk-form-group {{ m.form_group_class('freeCirculation', errors) }}" id="freeCirculation">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h2 class="govuk-fieldset__heading">Is the aircraft in free circulation in the EU?</h2>
+            <span id="free-circulation-hint" class="govuk-hint">Aircraft imported from outside the EU are in free circulation in the EU when all import formalities have been complied with and all duties, levies or equivalent charges have been paid and not refunded.</span>
+          </legend>
+          <div class="govuk-radios">
+          {% for choice in freeCirculationOptions %}
+          <div class="govuk-radios__item">
+            {% if choice.value == gar.freeCirculation %}
+              <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="freeCirculation" value="{{choice.value}}" checked>
+            {% else %}
+              <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="freeCirculation" value="{{choice.value}}" >
+            {% endif %}
+            <label class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.value}}</label>
+          </div>
+          {% endfor %}
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group {{ m.form_group_class('visitReason', errors) }}" id="visitReason">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            Reason for aircraft visit to the EU?
+            <span id="free-circulation-hint" class="govuk-hint">This is the reason for making the flight.</span>
+          </legend>
+          <div class="govuk-radios">
+          {% for choice in reasonForVisitOptions %}
+          <div class="govuk-radios__item">
+            {% if choice.value == gar.visitReason %}
+              <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="visitReason" value={{choice.value}} checked>
+            {% else %}
+              <input class="govuk-radios__input" id="{{choice.option}}" type="radio" name="visitReason" value={{choice.value}} >
+            {% endif %}
+          <label class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
+          </div>
+          {% endfor %}
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <input id="prohibited-goods-btn" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
+        onclick="sendAnalytics(event, 'Signify whether prohibited goods - submit', 'click')">
+
+        <p class="govuk-body-m">
+          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and exit</a>
+        </p>
+
+        <p class="govuk-body-m">
+          <a href="/home">Exit without saving</a>
+        </p>
+      </div>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+    </form>
     </div>
+  </div>
 
 {% endblock %}
