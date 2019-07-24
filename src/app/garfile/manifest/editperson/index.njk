@@ -24,28 +24,30 @@
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
-  <span class="govuk-caption-xl">Section 4 of 8</span>
+  <div class="govuk-grid-row">
+	  <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-xl">Section 4 of 8</span>
 
-  <h1 class="govuk-heading-l">
-      Person Details
-  </h1>
-  <p class="govuk-body-m">
-    Provide the details of the person you want to add to the manifest.
-    Details should be as displayed on the travel document.
-  <p>
+      <h1 class="govuk-heading-xl">Person details</h1>
+      <p class="govuk-body-m">
+        Provide the details of the person you want to add to the manifest.
+        Details should be as displayed on the travel document.
+      </p>
 
-  <form action="/garfile/manifest/editperson" autocomplete="off" class="form-group" method="post" role="form" >
-    <input type="hidden" id="garPeopleId" name="garPeopleId" value="{{person.garPeopleId}}" />
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    {% include "person-details.njk" %}
-    <br>
-    <input id="add-person-manifest" class="govuk-button" type="submit" value="Add to GAR" onclick="sendAnalytics(event, 'Save and Exit', 'click')">
-    <p class="govuk-body-m">
-      <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">{{ __('form_save_and_exit') }}</a>
-    </p>
-    <p class="govuk-body-m">
-      <a href="/garfile/manifest">{{ __('form_exit_without_saving') }}</a>
-    </p>
-  </form>
+      <form action="/garfile/manifest/editperson" autocomplete="off" class="form-group" method="post" role="form" >
+        <input type="hidden" id="garPeopleId" name="garPeopleId" value="{{person.garPeopleId}}" />
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        {% include "person-details.njk" %}
+        <br>
+        <input id="add-person-manifest" class="govuk-button" type="submit" value="Add to GAR" onclick="sendAnalytics(event, 'Save and Exit', 'click')">
+        <p class="govuk-body-m">
+          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">{{ __('form_save_and_exit') }}</a>
+        </p>
+        <p class="govuk-body-m">
+          <a href="/garfile/manifest">{{ __('form_exit_without_saving') }}</a>
+        </p>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

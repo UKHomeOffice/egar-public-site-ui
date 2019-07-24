@@ -41,7 +41,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
 
             <span class="field-validation-valid error-message" data-valmsg-for="responsibleGivenName"
             data-valmsg-replace="true" style="display:block"></span>
-            <input class="govuk-input"
+            <input class="govuk-input govuk-input--width-30"
             id="responsibleGivenName" name="responsibleGivenName"  type="text" maxlength="{{ MAX_STRING_LENGTH }}"
             value="{{cookie.getGarResponsiblePerson().responsibleGivenName}}"/>
           </div>
@@ -52,7 +52,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
 
             <span class="field-validation-valid error-message" data-valmsg-for="responsibleSurname"
             data-valmsg-replace="true" style="display:block"></span>
-            <input class="govuk-input"
+            <input class="govuk-input govuk-input--width-30"
             id="responsibleSurname" name="responsibleSurname" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
             value="{{cookie.getGarResponsiblePerson().responsibleSurname}}"/>
           </div>
@@ -65,7 +65,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
           </span>
             <span class="field-validation-valid error-message" data-valmsg-for="responsibleContactNo"
             data-valmsg-replace="true" style="display:block"></span>
-            <input class="govuk-input"
+            <input class="govuk-input govuk-input--width-20"
             id="responsibleContactNo" name="responsibleContactNo" type="text"
             value="{{cookie.getGarResponsiblePerson().responsibleContactNo}}"/>
           </div>
@@ -103,7 +103,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
               <span class="field-validation-valid error-message" data-valmsg-for="responsibleTown"
               data-valmsg-replace="true" style="display:block"></span>
 
-              <input class="govuk-input govuk-!-width-two-thirds"
+              <input class="govuk-input"
               id="responsibleTown" name="responsibleTown" type="text"
               value="{{cookie.getGarResponsiblePerson().responsibleTown}}"/>
             </div>
