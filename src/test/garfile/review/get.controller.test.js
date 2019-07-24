@@ -120,7 +120,9 @@ describe('GAR Review Get Controller', () => {
         garsupportingdocs: {},
         showChangeLinks: true,
         errors: [
-          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', { arrivalDate: undefined, arrivalTime: undefined, departureDate: undefined, departureTime: undefined }, 'Arrival time must be after departure time'),
+          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', {
+            arrivalDate: undefined, arrivalTime: undefined, departureDate: undefined, departureTime: undefined,
+          }, 'Arrival time must be after departure time'),
           new ValidationRule(validator.notEmpty, 'registration', undefined, 'Aircraft registration must be completed'),
           new ValidationRule(validator.notEmpty, 'responsibleGivenName', undefined, 'Responsible person details must be completed'),
         ],

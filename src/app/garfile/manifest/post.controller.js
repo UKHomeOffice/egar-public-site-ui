@@ -6,6 +6,8 @@ const manifestUtil = require('./bulkAdd');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
+  const { buttonClicked } = req.body;
+
   logger.debug('In garfile / manifest post controller');
   if (req.body.editPersonId) {
     req.session.editPersonId = req.body.editPersonId;
@@ -13,7 +15,7 @@ module.exports = (req, res) => {
   } else if (req.body.deletePersonId) {
     req.session.deletePersonId = req.body.deletePersonId;
     req.session.save(() => res.redirect('/garfile/manifest/deleteperson'));
-  } else if (req.body.personId) {
+  } else if (req.body.personId && buttonClicked === 'Add to GAR') {
     logger.debug('Found people to add to manifest');
     manifestUtil.getDetailsByIds(req.body.personId, cookie.getUserDbId())
       .then((selectedPeople) => {
