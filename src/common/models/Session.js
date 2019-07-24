@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const session = sequelize.define('session', {
+  const Session = sequelize.define('session', {
     sid: {
       allowNull: false,
       primaryKey: true,
@@ -21,5 +21,5 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
-  return session;
+  return Session;
 };
