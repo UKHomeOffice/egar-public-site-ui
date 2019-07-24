@@ -106,8 +106,7 @@ describe('Arrival Post Controller', () => {
           expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
             cookie,
             errors: [
-              // SIC: lattitude instead of latitide
-              new ValidationRule(validator.lattitude, 'arrivalLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
+              new ValidationRule(validator.latitude, 'arrivalLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
               new ValidationRule(validator.longitude, 'arrivalLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
             ],
           });
@@ -132,9 +131,8 @@ describe('Arrival Post Controller', () => {
       //     expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
       //       cookie,
       //       errors: [
-      //         // SIC: lattitude instead of latitide
       // new ValidationRule(
-      //    validator.lattitude,
+      //    validator.latitude,
       //    'arrivalLat', undefined,
       //    'Value entered is incorrect. Enter latitude to 4 decimal places'),
       // new ValidationRule(

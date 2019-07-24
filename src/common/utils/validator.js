@@ -218,7 +218,7 @@ function validatePortCoords(portObj) {
   return true;
 }
 
-function lattitude(value) {
+function latitude(value) {
   const regex = /^-?([1-8]?[0-9]\.{1}\d{4}$|90\.{1}0{4}$)/;
   return regex.test(value);
 }
@@ -401,7 +401,7 @@ module.exports = {
   validFreeCirculation,
   validVisitReason,
   validGender,
-  lattitude,
+  latitude,
   longitude,
   validIntlPhone,
   notSameValues,

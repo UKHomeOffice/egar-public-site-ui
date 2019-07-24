@@ -285,22 +285,22 @@ describe('Validator', () => {
   });
 
   // Latitude tests
-  it('Should return true for a valid lattitude - 4 dp', () => {
-    expect(validator.lattitude('51.9576')).to.be.true;
-    expect(validator.lattitude('1.9576')).to.be.true;
-    expect(validator.lattitude('-51.9576')).to.be.true;
-    expect(validator.lattitude('90.0000')).to.be.true;
-    expect(validator.lattitude('-90.0000')).to.be.true;
+  it('Should return true for a valid latitude - 4 dp', () => {
+    expect(validator.latitude('51.9576')).to.be.true;
+    expect(validator.latitude('1.9576')).to.be.true;
+    expect(validator.latitude('-51.9576')).to.be.true;
+    expect(validator.latitude('90.0000')).to.be.true;
+    expect(validator.latitude('-90.0000')).to.be.true;
   });
 
-  it('Should return false for an invalid lattitude - 4 dp', () => {
-    expect(validator.lattitude('51.95377')).to.be.false;
-    expect(validator.lattitude('51.953')).to.be.false;
-    expect(validator.lattitude('51.95')).to.be.false;
-    expect(validator.lattitude('51.9')).to.be.false;
-    expect(validator.lattitude('51')).to.be.false;
-    expect(validator.lattitude('90.0001')).to.be.false;
-    expect(validator.lattitude('-90.0001')).to.be.false;
+  it('Should return false for an invalid latitude - 4 dp', () => {
+    expect(validator.latitude('51.95377')).to.be.false;
+    expect(validator.latitude('51.953')).to.be.false;
+    expect(validator.latitude('51.95')).to.be.false;
+    expect(validator.latitude('51.9')).to.be.false;
+    expect(validator.latitude('51')).to.be.false;
+    expect(validator.latitude('90.0001')).to.be.false;
+    expect(validator.latitude('-90.0001')).to.be.false;
   });
 
   // Longitude tests

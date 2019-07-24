@@ -7,7 +7,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 
 const createValidationChains = (voyage) => {
   // Define port / date validation msgs
-  const portMsg = 'As you have entered an arrival port code of "ZZZZ", you must provide longitude and latitude coordinates for the location';
+  const portMsg = 'As you have entered a departure port code of "YYYY", you must provide longitude and latitude coordinates for the location';
   const portCodeMsg = 'The departure airport code must be a minimum of 3 letters and a maximum of 4 letters';
   const futureDateMsg = 'Departure date must be today or in the future';
   const realDateMsg = 'Enter a real departure date';
@@ -40,7 +40,7 @@ const createValidationChains = (voyage) => {
   const departurePortZZZZ = [new ValidationRule(validator.validatePortCoords, 'departurePort', departPortObj, portMsg)];
 
   // Define latitude validations
-  const departureLatValidation = [new ValidationRule(validator.lattitude, 'departureLat', voyage.departureLat, latitudeMsg)];
+  const departureLatValidation = [new ValidationRule(validator.latitude, 'departureLat', voyage.departureLat, latitudeMsg)];
 
   // Define latitude validations
   const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, longitudeMsg)];
@@ -52,7 +52,7 @@ const createValidationChains = (voyage) => {
   ];
 
   // Check if port code is ZZZZ then need to validate lat/long and display req zzzz message
-  if (departPortObj.portCode.toUpperCase() === 'ZZZZ') {
+  if (departPortObj.portCode.toUpperCase() === 'YYYY') {
     validations.push(
       departurePortZZZZ,
       departureLatValidation,
@@ -110,6 +110,9 @@ module.exports = async (req, res) => {
   const voyage = req.body;
   voyage.departurePort = _.toUpper(voyage.departurePort);
   delete voyage.buttonClicked;
+  if (voyage.departurePort === 'ZZZZ') {
+    voyage.departurePort = 'YYYY';
+  }
   cookie.setGarDepartureVoyage(voyage);
 
   const validations = createValidationChains(voyage);
