@@ -129,8 +129,8 @@ which will automatically pick up the config file.
 | BASE_URL                    | Base url of application               | True     |
 | NODE_ENV                    | Code environment                      | False    |
 | LOG_LEVEL                   | Application logging level (lowercase) | False    |
-| CLAMAV_BASE                 | ClaMAV base uRL                       | True     |
-| CLAMAV_PORT                 | CLAMAV port                           | True     |
+| CLAMAV_BASE                 | ClamAV base uRL                       | True     |
+| CLAMAV_PORT                 | ClamAV port                           | True     |
 | NODE_TLS_REJECT_UNAUTHORIZED| Ignore TLS verification               | True     |
 | ENABLE_UNAVAILABLE_PAGE     | Show service unavailable page         | False    |
 
@@ -160,8 +160,8 @@ Please note: `BASE_URL` needs to be set in both Drone Secrets and Kube Secrets.
 | SESSION_ENCODE_SECRET | Session Encode Secret          | True     |
 | SESSION_ENCODE_SECRET | Session Encode Secret          | True     |
 | SESSION_TIMEOUT       | Session Timeout (MilliSeconds) | True     |
-| COOKIE_SECURE_FLAG    | Set secure flag                | true     |
-| GA_ID                 | Goggle Analytics tg Id         | true     |
+| COOKIE_SECURE_FLAG    | Set secure flag                | True     |
+| GA_ID                 | Goggle Analytics tg Id         | True     |
 
-## Setting service unavailable page
+## Setting Service Unavailable Page
 Setting `ENABLE_UNAVAILABLE_PAGE=true` will redirect all requests to the /unavailable page.

@@ -8,7 +8,7 @@ const sinonChai = require('sinon-chai');
 
 const CookieModel = require('../../common/models/Cookie.class');
 const craftApi = require('../../common/services/craftApi');
-pagination = require('../../common/utils/pagination');
+const pagination = require('../../common/utils/pagination');
 
 controller = require('../../app/aircraft/get.controller');
 

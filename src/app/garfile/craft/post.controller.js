@@ -4,12 +4,19 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const craftApi = require('../../../common/services/craftApi');
 const validationList = require('./validations');
+const pagination = require('../../../common/utils/pagination');
 
 module.exports = (req, res) => {
   logger.debug('In garfile / craft post controller');
 
   const cookie = new CookieModel(req);
   const userId = cookie.getUserDbId();
+
+  if (req.body.nextPage) {
+    pagination.setCurrentPage(req, '/garfile/craft', req.body.nextPage);
+    req.session.save(() => res.redirect('/garfile/craft#saved_aircraft'));
+    return;
+  }
 
   if (req.body.addCraft) {
     craftApi.getDetails(userId, req.body.addCraft)
