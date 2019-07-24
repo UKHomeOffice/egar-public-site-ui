@@ -24,7 +24,7 @@
   {% import "common/templates/includes/macros.njk" as m %}
 
 <div class="govuk-grid-row">
-	<div class="govuk-grid-column-full">
+	<div class="govuk-grid-column-two-thirds">
     {% if errors %}
       {% include "common/templates/includes/errors.njk" %}
     {% endif %}
@@ -33,11 +33,9 @@
     method="post" role="form">
 
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-        <span class="govuk-caption-xl">Section 6 of 8</span>
-        <h1 class="govuk-fieldset__heading">
-          Customs
-        </h1>
-        </legend>
+      <span class="govuk-caption-xl">Section 6 of 8</span>
+      <h1 class="govuk-heading-xl">Customs</h1>
+      </legend>
         <p class="govuk-body-l">You don’t have to provide this information, but doing so may assist Border Force to process your flight more quickly.</p>
 
         <div class="govuk-form-group {{ m.form_group_class('prohibitedGoods', errors) }}" id="prohibitedGoods">

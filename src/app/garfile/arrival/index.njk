@@ -154,7 +154,7 @@
           </span>
 
           {{ m.error_message('arrivalLat', errors) }}
-          <input class="govuk-input" id="arrivalLat" name="arrivalLat" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLat}}"/>
+          <input class="govuk-input govuk-input--width-10" id="arrivalLat" name="arrivalLat" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLat}}"/>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('arrivalLong', errors) }}">
@@ -165,7 +165,7 @@
             {{__('field_longitude_hint')}}
           </span>
           {{ m.error_message('arrivalLong', errors) }}
-          <input class="govuk-input" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLong}}"/>
+          <input class="govuk-input govuk-input--width-10" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLong}}"/>
 
         </div>
         <!-- End arrival coords -->

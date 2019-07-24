@@ -157,7 +157,7 @@
           </span>
 
           {{ m.error_message('departureLat', errors) }}
-          <input class="govuk-input" id="departureLat" name="departureLat" autocomplete="off" type="text"
+          <input class="govuk-input govuk-input--width-10" id="departureLat" name="departureLat" autocomplete="off" type="text"
           value="{{ cookie.getGarDepartureVoyage().departureLat }}"/>
         </div>
 
@@ -169,7 +169,7 @@
             {{__('field_longitude_hint')}}
           </span>
           {{ m.error_message('departureLong', errors) }}
-          <input class="govuk-input" id="departureLong" name="departureLong" autocomplete="off" type="text"
+          <input class="govuk-input govuk-input--width-10" id="departureLong" name="departureLong" autocomplete="off" type="text"
           value="{{ cookie.getGarDepartureVoyage().departureLong }}"/>
 
         </div>
