@@ -227,4 +227,26 @@ describe('GAR Customs Post Controller', () => {
       expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
     });
   });
+
+  it('should set goodsDeclaration=empty string if prohibitedGoods=No', () => {
+    req.body.buttonClicked = 'Save and continue';
+    req.body.prohibitedGoods = 'No';
+    req.body.goodsDeclaration = 'adFnjKekNnveAiej1324mk';
+    garApiPatchStub.resolves(JSON.stringify({}));
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(req.body.buttonClicked).to.eq('Save and continue');
+      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
+        prohibitedGoods: 'No',
+        goodsDeclaration: '',
+        freeCirculation: 0,
+        visitReason: 2,
+      });
+      expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
+    });
+  });
 });

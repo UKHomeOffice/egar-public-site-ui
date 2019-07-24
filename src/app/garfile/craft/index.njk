@@ -1,6 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/pagination.njk" as pagination %}
 
 {% block pageTitle %}
 	Create GAR | Aircraft
@@ -27,43 +28,10 @@
 			<span class="govuk-caption-xl">Section 3 of 8</span>
 			<h1 class="govuk-heading-xl">Aircraft details</h1>
 
-			<h2 class="govuk-heading-l">Aircraft</h1>
+			<h2 id="saved_aircraft" class="govuk-heading-l">Aircraft</h1>
 				<p class="govuk-body-l">Add the details of an aircraft you have previously added</p>
-
-{# {% if cookie.getSavedCraft().items | length %}
-<table class="table-clickable govuk-table">
-  <thead class="govuk-table__head">
-	<tr class="govuk-table__row">
-	  <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
-	  <th class="govuk-table__header">Aircraft registration</th>
-	  <th class="govuk-table__header">Aircraft type</th>
-	  <th class="govuk-table__header">Aircraft home port / location</th>
-	</tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    {% for craft in cookie.getSavedCraft().items %}
-    <tr class="govuk-table__row">
-      <div class="govuk-radios">
-      <td class="govuk-table__cell">
-      <div class="govuk-radios govuk-radios--inline">
-          <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="aircraft" name="addCraft" type="radio" value="{{craft.craftId}}">
-              <label class="govuk-label govuk-radios__label" for="aircraft"></label>
-          </div>
-      </div>
-      </td>
-    <td class="govuk-table__cell">{{ craft.registration }}</td>
-    <td class="govuk-table__cell">{{ craft.craftType }}</td>
-    <td class="govuk-table__cell">{{ craft.craftBase }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-  <p class="govuk-inset-text">{{__('aircraft_no_records')}}</p>
-{% endif %} #}
-</div>
-<div class="govuk-grid-column-full">
+  </div>
+  <div class="govuk-grid-column-full">
 {% if cookie.getSavedCraft().items | length %}
 <table class="table-clickable govuk-table">
 {% else %}
@@ -102,15 +70,20 @@
   {% endif %}
   </tbody>
 </table>
+{% if cookie.getSavedCraft().items | length %}
+  {{ pagination.build('page-form', pages, __)}}
+{% endif %}
 </div>
 <div class="govuk-grid-column-two-thirds">
-  <div class="govuk-form-group">
-    <input id="saveCraft" class="govuk-button" type="submit" value="Add to GAR"
-    onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
-  </div>
+  {% if cookie.getSavedCraft().items | length %}
+    <div class="govuk-form-group">
+      <input id="saveCraft" class="govuk-button" type="submit" value="Add to GAR"
+      onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
+    </div>
+  {% endif %}
 
   <div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
-    <h2 class="govuk-heading-l">{{__('aircraft_add')}}<!--New aircraft--></h2>
+    <h2 class="govuk-heading-l">{{__('aircraft_add')}}</h2>
         {% if not cookie.getGarCraft().registration %}
           <p class="govuk-body-l">Add the details of a new aircraft you have not already saved</p>
         {% endif %}
