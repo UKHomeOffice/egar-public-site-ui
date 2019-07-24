@@ -11,11 +11,12 @@ const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
+const pagination = require('../../../common/utils/pagination');
 
 const controller = require('../../../app/garfile/craft/post.controller');
 
 describe('GAR Craft Post Controller', () => {
-  let req; let res;
+  let req; let res; let paginationStub; let saveSessionStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -33,16 +34,34 @@ describe('GAR Craft Post Controller', () => {
         gar: { id: 'GAR1-ID', status: 'Draft', craft: {} },
         u: { dbId: 'USER1-ID' },
         cookie: {},
+        save: callback => callback(),
       },
     };
     res = {
       redirect: sinon.stub(),
       render: sinon.stub(),
     };
+    paginationStub = sinon.stub(pagination, 'setCurrentPage');
+    saveSessionStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  it('should redirect if nextPage found', () => {
+    req.body.nextPage = 6;
+
+    callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(paginationStub).to.have.been.called;
+      expect(saveSessionStub).to.have.been.called;
+    }).then(() => {
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/craft#saved_aircraft');
+    });
   });
 
   describe('add craft', () => {

@@ -1,13 +1,16 @@
+/* eslint-disable no-underscore-dangle */
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const craftApi = require('../../../common/services/craftApi');
 const garApi = require('../../../common/services/garApi');
+const pagination = require('../../../common/utils/pagination');
 
 module.exports = (req, res) => {
   logger.debug('In garfile/craft get controller');
 
   // Clear existing editcraft
   const cookie = new CookieModel(req);
+  const currentPage = pagination.getCurrentPage(req, '/garfile/craft');
 
   const userRole = cookie.getUserRole();
   const userId = cookie.getUserDbId();
@@ -19,12 +22,16 @@ module.exports = (req, res) => {
         cookie.setGarCraft(gar.registration, gar.craftType, gar.craftBase);
       }
       if (userRole === 'Individual') {
-        craftApi.getCrafts(userId)
+        craftApi.getCrafts(userId, currentPage)
           .then((values) => {
             const garCraft = (JSON.parse(values));
+
             if (garCraft.items.length > 0) {
+              const { totalPages, totalItems } = garCraft._meta;
+              const paginationData = pagination.build(req, totalPages, totalItems);
               cookie.setSavedCraft(JSON.parse(values));
-              res.render('app/garfile/craft/index', { cookie });
+
+              res.render('app/garfile/craft/index', { cookie, pages: paginationData });
               return;
             }
             res.render('app/garfile/craft/index', { cookie });
