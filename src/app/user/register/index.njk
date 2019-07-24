@@ -32,7 +32,7 @@
          <div class="govuk-form-group {{ m.form_group_class('userFname', errors) }}">
            <label class="govuk-label govuk-label--m" for="userFname">{{ __('field_given_name') }}</label>
            {{ m.error_message('userFname', errors) }}
-           <input autocomplete="off" class="govuk-input"
+           <input autocomplete="off" class="govuk-input govuk-input--width-30"
             data-val="true" data-val-required="The given name field is  required." id="userFname" name="userFname" style="width:100%"
             type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{cookie.getUserFirstName()}}" >
          </div>
@@ -40,7 +40,7 @@
          <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }}">
            <label class="govuk-label govuk-label--m" for="userLname">{{ __('field_surname') }}</label>
            {{ m.error_message('userLname', errors) }}
-           <input autocomplete="off" class="govuk-input"
+           <input autocomplete="off" class="govuk-input govuk-input--width-30"
             data-val="true" data-val-required="The surname field is  required." id="userLname" name="userLname" style="width:100%"
             type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{cookie.getUserLastName()}}" />
          </div>
