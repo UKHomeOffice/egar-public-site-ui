@@ -26,7 +26,7 @@ module.exports.validations = (req) => {
   ];
 
   if (prohibitedGoods === 'Yes') {
-    validations[1].push(new ValidationRule(validator.notEmpty, 'goodsDeclaration', goodsDeclaration.trim(), 'Please enter customs declaration details'));
+    validations[1].push(new ValidationRule(validator.notEmpty, 'goodsDeclaration', goodsDeclaration, 'Please enter customs declaration details'));
   }
 
   return validations;
