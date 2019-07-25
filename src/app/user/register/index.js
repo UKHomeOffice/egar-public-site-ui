@@ -4,4 +4,4 @@ const nav = require('../../../common/utils/nav');
 const getController = require('./get.controller');
 const postController = require('./post.controller');
 
-module.exports = nav.buildRouterAndPaths('/user/register', getController, postController);
+module.exports = nav.buildRouterAndPathsNoUserCheck('/user/register', getController, postController);
