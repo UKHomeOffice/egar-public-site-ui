@@ -24,16 +24,16 @@
 	{% if unverified %}
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
       <div class="govuk-error-summary__body">
-          <ul class="govuk-list govuk-error-summary__list">
-              <li>
-                {{ __('user_login_unverified') }}
-                <p class="govuk-body-m">
-                  {{ __('user_login_unverified_caption') }}<a href="/user/regmsg?resend=true">{{ __('user_login_unverified_resend') }}</a>.
-                </p>
-              </li>
-          </ul>
-        </div>
+        <ul class="govuk-list govuk-error-summary__list">
+          <li>
+            {{ __('user_login_unverified') }}
+            <p class="govuk-body-m">
+              {{ __('user_login_unverified_caption') }}<a href="/user/regmsg?resend=true">{{ __('user_login_unverified_resend') }}</a>.
+            </p>
+          </li>
+        </ul>
       </div>
+    </div>
   {% endif %}
 
   {% if errors %}
@@ -58,7 +58,7 @@
 			</button>
 
 			<h2 class="govuk-heading-m">{{ __('create_account_caption') }}</h2>
-			<p class="govuk-body"><a href="/user/register">{{ __('button_create_account') }}</a></p>
+			<p class="govuk-body"><a href="/user/register">{{ __('title_create_account') }}</a></p>
 
       <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 		</form>

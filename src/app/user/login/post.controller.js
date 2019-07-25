@@ -40,7 +40,7 @@ module.exports = (req, res) => {
           if (user.message !== 'No results found') {
             throw new Error(`Unexpected response from API: ${user.message}`);
           }
-          
+
           emailService.send(config.NOTIFY_NOT_REGISTERED_TEMPLATE_ID, usrname, {
             base_url: config.BASE_URL,
           }).then(() => res.redirect('/login/authenticate'))
