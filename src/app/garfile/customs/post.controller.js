@@ -10,6 +10,12 @@ const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_f
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
+  if (req.body.goodsDeclaration) {
+    req.body.goodsDeclaration = req.body.goodsDeclaration.trim();
+  } else {
+    req.body.goodsDeclaration = '';
+  }
+
   const customs = {
     prohibitedGoods: req.body.prohibitedGoods,
     goodsDeclaration: (req.body.prohibitedGoods === 'Yes' ? req.body.goodsDeclaration : ''),
