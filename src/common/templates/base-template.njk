@@ -14,7 +14,8 @@
     <meta name="theme-color" content="{{ themeColor | default('#0b0c0c') }}" /> {# Hardcoded value of $govuk-black #}
     {# Ensure that older IE versions always render with the correct rendering engine #}
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+    {# Stack overflow suggests this might help for Edge and issues with empty referer #}
+    <meta name="referrer" content="origin-when-cross-origin" />
 
   <link href="/stylesheets/application.min.css" rel="stylesheet" />
   <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet"/>
