@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -13,7 +12,7 @@ const config = require('../../../common/config/index');
 module.exports = (req, res) => {
   logger.debug('In user / login post controller');
 
-  const usrname = _.toLower(req.body.Username);
+  const usrname = req.body.Username;
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);

@@ -166,7 +166,7 @@ describe('User Login Post Controller', () => {
       };
 
       callController().then(() => {
-        expect(userApi.userSearch).to.have.been.calledWith('exampleuser');
+        expect(userApi.userSearch).to.have.been.calledWith('ExampleUser');
         expect(emailService.send).to.not.have.been.called;
         expect(res.redirect).to.not.have.been.called;
       }).then(() => {
