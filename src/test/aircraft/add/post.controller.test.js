@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const craftApi = require('../../../common/services/craftApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -16,9 +17,6 @@ const paginate = require('../../../common/utils/pagination');
 
 describe('Aircraft Add Post Controller', () => {
   let req; let res; let craftApiStub; let sessionSaveStub;
-  process.on('unhandledRejection', (error) => {
-    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-  });
 
   beforeEach(() => {
     chai.use(sinonChai);

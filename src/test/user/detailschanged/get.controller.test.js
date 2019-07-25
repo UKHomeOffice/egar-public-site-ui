@@ -4,6 +4,8 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
+
 const controller = require('../../../app/user/detailschanged/get.controller');
 
 describe('Manage User Detail Get Controller', () => {
@@ -11,9 +13,6 @@ describe('Manage User Detail Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       session: {},

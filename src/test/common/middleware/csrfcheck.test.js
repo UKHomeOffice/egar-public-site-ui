@@ -7,15 +7,14 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
 
+require('../../global.test');
+
 describe('CSRF Check Middleware', () => {
   let res; let req; let next;
   let proxiedMiddleware; let csurfStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     csurfStub = sinon.stub();
     next = sinon.spy();

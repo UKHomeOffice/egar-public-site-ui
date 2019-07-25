@@ -5,6 +5,8 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
+require('./global.test');
+
 const findOneStub = sinon.stub().resolves({
   email: 'oshinos@mail.com',
 });

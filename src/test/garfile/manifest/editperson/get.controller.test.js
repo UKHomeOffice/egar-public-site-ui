@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../../global.test');
 const garApi = require('../../../../common/services/garApi');
 
 const controller = require('../../../../app/garfile/manifest/editperson/get.controller');
@@ -15,9 +16,6 @@ describe('Manifest Edit Person Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     apiResponse = {
       items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],

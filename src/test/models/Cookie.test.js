@@ -6,6 +6,8 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
+require('../global.test');
+
 const CookieModel = require('../../common/models/Cookie.class');
 
 /**

@@ -6,6 +6,8 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../global.test');
+
 const controller = require('../../app/welcome/post.controller');
 
 describe('Welcome Post Controller', () => {
@@ -13,14 +15,8 @@ describe('Welcome Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
-    // Example request and response objects with appropriate spies
-    req = {
-    };
-
+    req = {};
     res = {
       render: sinon.spy(),
       redirect: sinon.spy(),

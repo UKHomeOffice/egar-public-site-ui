@@ -8,6 +8,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const rewire = require('rewire');
 
+require('../../global.test');
 const tokenApi = require('../../../common/services/tokenApi');
 const config = require('../../../common/config');
 const userCreateApi = require('../../../common/services/createUserApi');
@@ -23,9 +24,6 @@ describe('User Register Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {

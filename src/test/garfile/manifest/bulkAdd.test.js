@@ -5,6 +5,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const personApi = require('../../../common/services/personApi');
 
 const { getDetailsByIds } = require('../../../app/garfile/manifest/bulkAdd');
@@ -12,9 +13,6 @@ const { getDetailsByIds } = require('../../../app/garfile/manifest/bulkAdd');
 describe('bulkAdd class', () => {
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
   });
 
   afterEach(() => {

@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../global.test');
 const pagination = require('../../common/utils/pagination');
 
 const controller = require('../../app/aircraft/post.controller');
@@ -13,9 +14,6 @@ const controller = require('../../app/aircraft/post.controller');
 describe('Aircraft Post Controller', () => {
   let req; let res;
   let paginationStub; let sessionSaveStub;
-  process.on('unhandledRejection', (error) => {
-    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-  });
 
   beforeEach(() => {
     chai.use(sinonChai);

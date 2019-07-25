@@ -1,10 +1,12 @@
+/* eslint-disable no-underscore-dangle */
+
 // Node.js core dependencies
 const path = require('path');
-
-// Npm dependencies
 const express = require('express');
 const session = require('express-session');
 const favicon = require('serve-favicon');
+
+// Npm dependencies
 const bodyParser = require('body-parser');
 const i18n = require('i18n');
 const loggingMiddleware = require('morgan');
@@ -14,40 +16,38 @@ const compression = require('compression');
 const nunjucks = require('nunjucks');
 const helmet = require('helmet');
 const _ = require('lodash');
-const logger = require('./common/utils/logger')(__filename);
-const autocompleteUtil = require('./common/utils/autocomplete');
 const cookieParser = require('cookie-parser');
 const uuid = require('uuid/v4');
-const config = require('./common/config/index');
 const csrf = require('csurf');
-const nunjucksFilters = require('./common/utils/templateFilters.js');
+const ua = require('universal-analytics');
+const PgSession = require('connect-pg-simple')(session);
 
 // Local dependencies
+const logger = require('./common/utils/logger')(__filename);
+const config = require('./common/config/index');
 const router = require('./app/router');
+const db = require('./common/utils/db');
 const noCache = require('./common/utils/no-cache');
+const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
+const nunjucksFilters = require('./common/utils/templateFilters.js');
 
 // Global constants
-const unconfiguredApp = express();
 const oneYear = 86400000 * 365;
-const publicCaching = {
-  maxAge: oneYear
-};
 const PORT = (process.env.PORT || 3000);
-const {
-  NODE_ENV
-} = process.env;
-const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
-const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
+const { NODE_ENV } = process.env;
 const GA_ID = (process.env.GA_ID || '');
-const ua = require('universal-analytics');
+const BASE_URL = (process.env.BASE_URL || '');
+
 const visitor = ua(GA_ID);
 const COOKIE_SECRET = (process.env.COOKIE_SECRET || '');
-const BASE_URL = (process.env.BASE_URL || '');
-const app = express;
+const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
+const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
+const publicCaching = { maxAge: oneYear };
+
 // Set Cookie secure flag depending on environment variable
 let secureFlag = false;
-if (process.env.COOKIE_SECURE_FLAG === "true") {
+if (process.env.COOKIE_SECURE_FLAG === 'true') {
   secureFlag = true;
 }
 logger.debug('Secure Flag for Cookie set to:');
@@ -62,15 +62,39 @@ const APP_VIEWS = [
   'common/templates/includes',
 ];
 
+function initialiseDb() {
+  return new Promise((resolve, reject) => {
+    try {
+      logger.info('Syncing db');
+      db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+      db.sequelize.import('./common/models/UserSessions');
+      db.sequelize.import('./common/models/Session');
+      db.sequelize.sync()
+        .then(() => {
+          logger.debug('Successfully created tables');
+        })
+        .then(() => db.sequelize.query(
+          'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; '
+          + 'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
+        ))
+        .then(() => {
+          logger.debug('Successfully added session table constraints');
+          resolve();
+        });
+    } catch (e) {
+      logger.error('Failed to sync db');
+      logger.error(e);
+      reject(e);
+    }
+  });
+}
+
 function initialisExpressSession(app) {
   app.use(cookieParser());
-  const pgSession = require('connect-pg-simple')(session);
   app.use(session({
     name: 'sess_id',
-    genid: () => {
-      return uuid()
-    },
-    store: new pgSession({
+    genid: () => uuid(),
+    store: new PgSession({
       conString: config.PUBLIC_SITE_DB_CONNSTR,
     }),
     secret: config.SESSION_ENCODE_SECRET,
@@ -79,7 +103,7 @@ function initialisExpressSession(app) {
     cookie: {
       secure: secureFlag,
       httpOnly: true,
-      maxAge: 60 * 60 * 1000
+      maxAge: 60 * 60 * 1000,
     },
   }));
   logger.info('Set express session');
@@ -91,17 +115,18 @@ function initialiseGlobalMiddleware(app) {
 
   if (config.ENABLE_UNAVAILABLE_PAGE.toLowerCase() === 'true') {
     logger.info('Enabling service unavailable middleware');
-    app.use(function (req, res, next) {
-      const validRoutes = ['unavailable', 'public', 'javascripts', 'stylesheets']
+    const validRoutes = ['unavailable', 'public', 'javascripts', 'stylesheets'];
+    app.use((req, res, next) => {
       if (!validRoutes.some(el => req.url.includes(el))) {
-        return res.redirect('/unavailable');
+        res.redirect('/unavailable');
+        return;
       }
       next();
     });
   }
 
   app.set('settings', {
-    getVersionedPath: staticify.getVersionedPath
+    getVersionedPath: staticify.getVersionedPath,
   });
 
   app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'assets', 'images', 'favicon.ico')));
@@ -115,18 +140,20 @@ function initialiseGlobalMiddleware(app) {
   }
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
-    extended: true
+    extended: true,
   }));
 
- app.use(csrf({cookie: {
-    httpOnly: true,
-    secure: secureFlag,
-  } }));
+  app.use(csrf({
+    cookie: {
+      httpOnly: true,
+      secure: secureFlag,
+    },
+  }));
 
   app.use((req, res, next) => {
     res.locals.asset_path = '/public/'; // eslint-disable-line camelcase
     noCache(res);
-    var token = req.csrfToken();
+    const token = req.csrfToken();
     res.locals._csrf = token;
     // This might be needed, but leaving it in for now...
     res.cookie('XSRF-TOKEN', token, { httpOnly: true, secure: secureFlag });
@@ -134,18 +161,16 @@ function initialiseGlobalMiddleware(app) {
     // Previously, local development required the disabling of CSRF token handling
     // The below adds the csrfToken to the res.render function which should hopefully
     // allow for local development without this hack
-    var _render = res.render;
-    // override res.render logic by adding the csrfToken
-    res.render = function( view, options, fn ) {
-        // Set the csrfToken within the res.render
-        _.extend( options, {csrfToken: token} );
-        // continue with original render
-        _render.call( this, view, options, fn );
-    }
+    const _render = res.render;
+    res.render = function addToken(view, options, fn) {
+      _.extend(options, { csrfToken: token });
+      _render.call(this, view, options, fn);
+    };
 
     next();
   });
-  logger.info('Set CSRF Token')
+
+  logger.info('Set CSRF Token');
   app.use(helmet());
 
   app.use('*', correlationHeader);
@@ -234,32 +259,41 @@ function initialiseErrorHandling(app) {
   logger.info('Initialised error handling');
 }
 
-function listen() {
-  const app = initialise();
-  app.listen(PORT);
-  logger.info('App initialised');
-  logger.info(`Listening on port ${PORT}`);
-}
-
 /**
  * Configures app
  * @return app
  */
 function initialise() {
-  const app = unconfiguredApp;
-  app.disable('x-powered-by');
-  app.use(helmet.noCache())
-  app.use(helmet.frameguard())
-  initialisExpressSession(app);
-  initialiseProxy(app);
-  initialiseI18n(app);
-  initialiseGlobalMiddleware(app);
-  initialiseTemplateEngine(app);
-  initialiseRoutes(app);
-  initialisePublic(app);
-  initialiseErrorHandling(app);
-  logger.info('Initialised app: ');
-  return app;
+  const unconfiguredApp = express();
+  unconfiguredApp.disable('x-powered-by');
+  unconfiguredApp.use(helmet.noCache());
+  unconfiguredApp.use(helmet.frameguard());
+
+  // DB calls are asynchronous, need them executed before aspects like
+  // sessions which talk to the DB are executed, so all other init calls
+  // performed after initialiseDb
+  async function prepDb() {
+    await initialiseDb();
+    initialisExpressSession(unconfiguredApp);
+    initialiseProxy(unconfiguredApp);
+    initialiseI18n(unconfiguredApp);
+    initialiseGlobalMiddleware(unconfiguredApp);
+    initialiseTemplateEngine(unconfiguredApp);
+    initialiseRoutes(unconfiguredApp);
+    initialisePublic(unconfiguredApp);
+    initialiseErrorHandling(unconfiguredApp);
+    logger.info('Initialised app: ');
+  }
+  prepDb();
+
+  return unconfiguredApp;
+}
+
+function listen() {
+  const app = initialise();
+  app.listen(PORT);
+  logger.info('App initialised');
+  logger.info(`Listening on port ${PORT}`);
 }
 
 /**

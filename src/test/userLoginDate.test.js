@@ -4,6 +4,8 @@
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
+require('./global.test');
+
 const findOneStub = sinon.stub().resolves({
   get() {
     return '2018-12-12 14:24:23.195+00';

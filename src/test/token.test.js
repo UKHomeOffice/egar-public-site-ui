@@ -3,6 +3,8 @@
 
 const { expect } = require('chai');
 const nock = require('nock');
+
+require('./global.test');
 const endpoints = require('../common/config/endpoints');
 const tokenApi = require('../common/services/tokenApi');
 const genToken = require('../common/services/create-token');

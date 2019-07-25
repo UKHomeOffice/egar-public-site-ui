@@ -1,10 +1,26 @@
+const sinon = require('sinon');
 const { expect } = require('chai');
 const supertest = require('supertest');
-const { describe, it } = require('mocha');
+const {
+  describe, it, beforeEach, afterEach,
+} = require('mocha');
+
+require('../global.test');
+const db = require('../../common/utils/db');
 
 const { getApp } = require('../../server');
 
 describe('Error Routes', () => {
+  beforeEach(() => {
+    sinon.stub(db.sequelize, 'import');
+    sinon.stub(db.sequelize, 'query');
+    sinon.stub(db.sequelize, 'sync').resolves();
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
   it('should render 404', (done) => {
     supertest(getApp())
       .get('/error/404')

@@ -3,6 +3,8 @@
 
 const { expect } = require('chai');
 
+require('../../global.test');
+
 const templateFilters = require('../../../common/utils/templateFilters');
 
 // TODO: Uncamcelcase should frankly just use a library to perform the operation

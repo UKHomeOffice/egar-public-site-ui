@@ -6,14 +6,13 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const rewire = require('rewire');
 
+require('../../global.test');
+
 const config = require('../../../common/config/index');
 
 describe('Send Token Service', () => {
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
   });
 
   afterEach(() => {

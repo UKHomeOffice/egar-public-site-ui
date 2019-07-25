@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const roles = require('../../../common/seeddata/egar_user_roles');
 const orgApi = require('../../../common/services/organisationApi');
@@ -17,9 +18,6 @@ describe('Organisation Edit Users Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       session: { editUserId: 'EXAMPLE-EDIT-USER-ID', org: { i: 'ORGANISATION-ID-1' } },

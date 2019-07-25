@@ -4,6 +4,8 @@
 const { expect } = require('chai');
 const nock = require('nock');
 
+require('./global.test');
+
 const endpoints = require('../common/config/endpoints');
 const craftApi = require('../common/services/craftApi');
 

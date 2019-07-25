@@ -7,6 +7,8 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
 
+require('../../global.test');
+
 const config = require('../../../common/config/index');
 
 describe('File Upload API Service', () => {
@@ -14,10 +16,6 @@ describe('File Upload API Service', () => {
     originalname: 'example.doc',
     buffer: Buffer.alloc(10000),
   };
-
-  process.on('unhandledRejection', (error) => {
-    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-  });
 
   beforeEach(() => {
     chai.use(sinonChai);
