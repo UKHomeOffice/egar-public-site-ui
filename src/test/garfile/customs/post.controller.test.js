@@ -81,6 +81,36 @@ describe('GAR Customs Post Controller', () => {
     });
   });
 
+  it('should render with valdiations message if customs declartion is "Yes" and declaration details is empty string', () => {
+    req.body.prohibitedGoods = 'Yes';
+    req.body.goodsDeclaration = '          ';
+    const cookie = new CookieModel(req);
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApiPatchStub).to.not.have.been.called;
+      expect(res.redirect).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
+        freeCirculationOptions,
+        reasonForVisitOptions,
+        prohibitedGoodsOptions,
+        cookie,
+        gar: {
+          prohibitedGoods: 'Yes',
+          goodsDeclaration: '',
+          freeCirculation: 0,
+          visitReason: 2,
+        },
+        errors: [
+          new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
+        ],
+      });
+    });
+  });
+
   it('should show error if api rejects', () => {
     const cookie = new CookieModel(req);
     garApiPatchStub.rejects('garApi.patch Example Reject');
@@ -241,6 +271,27 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         prohibitedGoods: 'No',
         goodsDeclaration: '',
+        freeCirculation: 0,
+        visitReason: 2,
+      });
+      expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
+    });
+  });
+
+  it('should trim white spaces for goodsDeclaration', () => {
+    req.body.buttonClicked = 'Save and continue';
+    req.body.prohibitedGoods = 'Yes';
+    req.body.goodsDeclaration = '      a      ';
+    garApiPatchStub.resolves(JSON.stringify({}));
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
+        prohibitedGoods: 'Yes',
+        goodsDeclaration: 'a',
         freeCirculation: 0,
         visitReason: 2,
       });
