@@ -3,7 +3,10 @@
 
 const { expect } = require('chai');
 const nock = require('nock');
+
+require('./global.test');
 const endpoints = require('../common/config/endpoints');
+
 const verificationApi = require('../common/services/verificationApi');
 
 const BASE_URL = endpoints.baseUrl();

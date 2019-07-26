@@ -7,6 +7,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 const i18n = require('i18n');
+require('../global.test');
 const config = require('../../common/config');
 const tokenService = require('../../common/services/create-token');
 const verifyUserService = require('../../common/services/verificationApi');
@@ -20,9 +21,6 @@ describe('Verify Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       session: {},

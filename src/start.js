@@ -7,51 +7,10 @@ const server = require('./server');
 const pidFile = path.join(__dirname, '/.start.pid');
 const fileOptions = { encoding: 'utf-8' };
 let pid;
-const db = require('./common/utils/db');
-const config = require('./common/config/index');
-
 
 /**
- * Throng is a wrapper around node cluster
- * https://github.com/hunterloftis/throng
+ * Start master process
  */
-function createDB() {
-  try {
-    logger.info('Syncing db');
-    db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-    db.sequelize.import('./common/models/UserSessions');
-    db.sequelize.import('./common/models/Session');
-    db.sequelize.sync()
-    .then(() => {
-      logger.debug('Successfully created tables');
-    })
-    .then(() => {
-      return db.sequelize.query(
-        'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; ' + 
-        'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
-      );
-    })
-    .then(() => {
-      logger.debug('Successfully added session table constraints');
-    });
-    
-  } catch (e) {
-    logger.error('Failed to sync db');
-    logger.error(e);
-  }
-}
-function start() {
-  createDB();
-  throng({
-    workers: process.env.NODE_WORKER_COUNT || 1,
-    master: startMaster,
-    start: startWorker,
-  });
-}
-
-/**
-   * Start master process
-   */
 function startMaster() {
   logger.info(`Master started. PID: ${process.pid}`);
   process.on('SIGINT', () => {
@@ -61,9 +20,9 @@ function startMaster() {
 }
 
 /**
-   * Start cluster worker. Log start and exit
-   * @param  {Number} workerId
-   */
+ * Start cluster worker. Log start and exit
+ * @param  {Number} workerId
+ */
 function startWorker(workerId) {
   server.start();
   logger.info(`Started worker ${workerId}, PID: ${process.pid}`);
@@ -75,8 +34,20 @@ function startWorker(workerId) {
 }
 
 /**
-   * Make sure all child processes are cleaned up
-   */
+ * Throng is a wrapper around node cluster
+ * https://github.com/hunterloftis/throng
+ */
+function start() {
+  throng({
+    workers: process.env.NODE_WORKER_COUNT || 1,
+    master: startMaster,
+    start: startWorker,
+  });
+}
+
+/**
+ * Make sure all child processes are cleaned up
+ */
 function onInterrupt() {
   logger.info('Ensuring all child processes are cleaned up');
   pid = fs.readFileSync(pidFile, fileOptions);
@@ -88,8 +59,8 @@ function onInterrupt() {
 }
 
 /**
-   * Keep track of processes, and clean up on SIGINT
-   */
+ * Keep track of processes, and clean up on SIGINT
+ */
 function monitor() {
   fs.writeFileSync(pidFile, process.pid, fileOptions);
   process.on('SIGINT', onInterrupt);

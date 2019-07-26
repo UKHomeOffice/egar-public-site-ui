@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -13,7 +12,7 @@ const config = require('../../../common/config/index');
 module.exports = (req, res) => {
   logger.debug('In user / login post controller');
 
-  const usrname = _.toLower(req.body.Username);
+  const usrname = req.body.Username;
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
@@ -41,6 +40,7 @@ module.exports = (req, res) => {
           if (user.message !== 'No results found') {
             throw new Error(`Unexpected response from API: ${user.message}`);
           }
+
           emailService.send(config.NOTIFY_NOT_REGISTERED_TEMPLATE_ID, usrname, {
             base_url: config.BASE_URL,
           }).then(() => res.redirect('/login/authenticate'))
@@ -51,6 +51,8 @@ module.exports = (req, res) => {
             });
           return;
         }
+        const returnedEmail = user.email;
+        cookie.setUserEmail(returnedEmail);
         logger.debug('User found');
         logger.debug(`User state: ${user.state.toLowerCase()}`);
         if (user.state.toLowerCase() !== 'verified') {
@@ -65,7 +67,7 @@ module.exports = (req, res) => {
         }
         const mfaToken = token.genMfaToken();
         cookie.setUserVerified(true);
-        tokenApi.setMfaToken(usrname, mfaToken, true)
+        tokenApi.setMfaToken(user.email, mfaToken, true)
           .then(() => {
             emailService.send(settings.NOTIFY_MFA_TEMPLATE_ID, usrname, { mfaToken });
             res.redirect('/login/authenticate');

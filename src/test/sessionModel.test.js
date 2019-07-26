@@ -6,6 +6,8 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const moment = require('moment');
 
+require('./global.test');
+
 const createStub = sinon.stub().resolves(true);
 const updateStub = sinon.stub().resolves(true);
 const findOneStub = sinon.stub().resolves({

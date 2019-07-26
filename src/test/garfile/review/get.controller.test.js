@@ -8,6 +8,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const garApi = require('../../../common/services/garApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
@@ -21,9 +22,6 @@ describe('GAR Review Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {

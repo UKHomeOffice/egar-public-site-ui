@@ -3,6 +3,8 @@
 
 const { expect } = require('chai');
 
+require('../../../global.test');
+
 const index = require('../../../../app/garfile/manifest/editperson/index');
 
 describe('Garfile Manifest Edit Person index.js', () => {

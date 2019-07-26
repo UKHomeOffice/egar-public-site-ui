@@ -4,6 +4,8 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
+require('./global.test');
+
 const validator = require('../common/utils/validator');
 
 function genPortObj(portCode, lat, long) {

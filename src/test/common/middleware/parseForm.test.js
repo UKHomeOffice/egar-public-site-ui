@@ -7,14 +7,13 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
 
+require('../../global.test');
+
 describe('Parse Form Middleware', () => {
   let res; let req; let next;
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     next = sinon.spy();
   });

@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
 const craftApi = require('../../common/services/craftApi');
 const pagination = require('../../common/utils/pagination');
@@ -15,9 +16,6 @@ controller = require('../../app/aircraft/get.controller');
 describe('Aircraft Get Controller', () => {
   let res; let individualCraftStub; let organisationCraftStub;
   let paginationBuildStub; let paginationGetCurrentPageStub;
-  process.on('unhandledRejection', (error) => {
-    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-  });
 
   const apiResponse = JSON.stringify({
     items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],

@@ -3,6 +3,8 @@
 
 const { expect } = require('chai');
 
+require('../../global.test');
+
 const transformer = require('../../../common/utils/transformers');
 
 describe('Transformers', () => {

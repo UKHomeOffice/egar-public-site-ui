@@ -2,6 +2,9 @@
 /* eslint-disable no-undef */
 
 const { expect } = require('chai');
+
+require('../../global.test');
+
 const autocomplete = require('../../../common/utils/autocomplete');
 
 /**

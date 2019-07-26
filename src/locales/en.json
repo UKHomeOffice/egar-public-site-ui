@@ -13,7 +13,6 @@
     "field_username_hint": "Enter the email address you used when you created your account",
     "button_sign_in": "Sign in",
     "create_account_caption": "Need to create an account?",
-    "button_create_account": "Create an account",
 
     "form_exit_without_saving": "Exit without saving",
     "form_exit_without_adding": "Exit without adding",
@@ -21,6 +20,16 @@
     "form_save_and_come_back": "Save and come back later",
     "form_save_and_exit": "Save and exit",
     "form_add_and_exit": "Add and exit",
+
+    "title_create_account": "Create an account",
+    "field_email": "Email address",
+    "field_email_hint": "You will use this to sign in to the Submit a GAR service",
+    "field_confirm_email": "Confirm email address",
+    "heading_declaration": "Declaration",
+    "declaration_caption_1": "By creating this account, you agree:",
+    "declaration_caption_2": "that the information you have provided is correct to the best of your knowledge",
+    "declaration_caption_3": "that you have read and accept our ",
+    "declaration_caption_4": "privacy policy",
 
     "tab_gar_draft": "Draft",
     "gar_draft_no_records": "There are no draft GARs",

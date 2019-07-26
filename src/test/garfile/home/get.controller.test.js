@@ -5,6 +5,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const userattributes = require('../../../common/seeddata/egar_user_account_details.json');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
@@ -16,9 +17,6 @@ describe('GAR Home Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       session: {},

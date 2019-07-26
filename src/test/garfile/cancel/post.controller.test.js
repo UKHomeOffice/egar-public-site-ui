@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const garApi = require('../../../common/services/garApi');
 const config = require('../../../common/config');
 const emailService = require('../../../common/services/sendEmail');
@@ -18,9 +19,6 @@ describe('GAR Cancel Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       session: {

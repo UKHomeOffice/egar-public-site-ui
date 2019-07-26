@@ -8,6 +8,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const rewire = require('rewire');
 
+require('../../global.test');
 const tokenApi = require('../../../common/services/tokenApi');
 const config = require('../../../common/config');
 const userCreateApi = require('../../../common/services/createUserApi');
@@ -23,9 +24,6 @@ describe('User Register Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {
@@ -165,7 +163,7 @@ describe('User Register Post Controller', () => {
       });
     });
 
-    it('should call createUser function, and send token when all resolves, lower casing the username', async () => {
+    it('should call createUser function, and send token when all resolves, maintaining case', async () => {
       req.body.userId = 'CAPITAL@rAnDoM.net';
       req.body.cUserId = 'CAPITAL@rAnDoM.net';
       sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
@@ -182,8 +180,8 @@ describe('User Register Post Controller', () => {
       };
 
       callController().then(() => {
-        expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'capital@random.net', sinon.match.falsy);
-        expect(sendTokenService.send).to.have.been.calledWith('Darth', 'capital@random.net', sinon.match.string);
+        expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'CAPITAL@rAnDoM.net', sinon.match.falsy);
+        expect(sendTokenService.send).to.have.been.calledWith('Darth', 'CAPITAL@rAnDoM.net', sinon.match.string);
       }).then(() => {
         expect(res.redirect).to.have.been.calledWith('/user/regmsg');
       });

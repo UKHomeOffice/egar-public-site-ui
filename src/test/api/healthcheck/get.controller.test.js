@@ -7,6 +7,8 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const supertest = require('supertest');
 
+require('../../global.test');
+const db = require('../../../common/utils/db');
 const { getApp } = require('../../../server');
 
 const controller = require('../../../app/api/healthcheck/get.controller');
@@ -16,12 +18,11 @@ const controller = require('../../../app/api/healthcheck/get.controller');
  * created during this test.
  */
 describe('API healthcheck get controller', () => {
-  process.on('unhandledRejection', (error) => {
-    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-  });
-
   // API endpoint via supertest
   it('should return HTTP 200 status with expected JSON', (done) => {
+    sinon.stub(db.sequelize, 'import');
+    sinon.stub(db.sequelize, 'query');
+    sinon.stub(db.sequelize, 'sync').resolves();
     supertest(getApp())
       .get('/healthcheck')
       .set('Accept', 'application/json')
@@ -31,6 +32,10 @@ describe('API healthcheck get controller', () => {
         expect(response.ping.healthy).to.equal(true);
       })
       .end(done);
+  });
+
+  afterEach(() => {
+    sinon.restore();
   });
 
   describe('controller code', () => {
@@ -53,10 +58,6 @@ describe('API healthcheck get controller', () => {
         setHeader: sinon.spy(),
         json: sinon.spy(),
       };
-    });
-
-    afterEach(() => {
-      sinon.restore();
     });
 
     it('should populate the cookie if session exists', async () => {

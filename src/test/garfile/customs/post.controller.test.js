@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const garApi = require('../../../common/services/garApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const emailService = require('../../../common/services/sendEmail');
@@ -23,9 +24,6 @@ describe('GAR Customs Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {
@@ -83,9 +81,39 @@ describe('GAR Customs Post Controller', () => {
     });
   });
 
-  it('should render with valdiations message if customs declartion is "Yes" and declaration details is empty string', () => {
+  it('should render with validation message if customs declaration is "Yes" and declaration details is empty string', () => {
     req.body.prohibitedGoods = 'Yes';
     req.body.goodsDeclaration = '          ';
+    const cookie = new CookieModel(req);
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApiPatchStub).to.not.have.been.called;
+      expect(res.redirect).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
+        freeCirculationOptions,
+        reasonForVisitOptions,
+        prohibitedGoodsOptions,
+        cookie,
+        gar: {
+          prohibitedGoods: 'Yes',
+          goodsDeclaration: '',
+          freeCirculation: 0,
+          visitReason: 2,
+        },
+        errors: [
+          new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
+        ],
+      });
+    });
+  });
+
+  it('should render with validation message if customs declaration is "Yes" and declaration details is undefined', () => {
+    req.body.prohibitedGoods = 'Yes';
+    delete req.body.goodsDeclaration;
     const cookie = new CookieModel(req);
 
     const callController = async () => {
