@@ -30,7 +30,9 @@ module.exports = (req, res) => {
                   const parsedResponse = JSON.parse(apiResponse);
                   logger.debug(`Response from userApi.getDetails: ${apiResponse}`);
                   cookie.setLoginInfo(parsedResponse);
-                  res.redirect('/home');
+                  req.session.save(() => {
+                    res.redirect('/home');
+                  });
                 })
                 .catch((err) => {
                   logger.error(err);

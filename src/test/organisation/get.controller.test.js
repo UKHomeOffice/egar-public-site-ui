@@ -26,6 +26,7 @@ describe('Organisation Post Controller', () => {
     };
 
     res = {
+      redirect: sinon.spy(),
       render: sinon.spy(),
     };
 
@@ -34,6 +35,19 @@ describe('Organisation Post Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  it('should redirect to error if no organisation id set', () => {
+    delete req.session.org.i;
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(res.render).to.not.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/error/404');
+    });
   });
 
   it('should redirect with errors if api rejects', () => {

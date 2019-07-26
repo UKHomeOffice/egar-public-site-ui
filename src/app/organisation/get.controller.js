@@ -6,6 +6,15 @@ const logger = require('../../common/utils/logger')(__filename);
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
+  // Individuals cannot go to the /organisation page, so, redirect to error.
+  // If this is the only generally restricted area, then this single if statement
+  // probably suffices rather than some middleware
+  if (cookie.getOrganisationId() === undefined) {
+    logger.info('Entered organisation URL without organisation id set');
+    res.redirect('/error/404');
+    return;
+  }
+
   orgApi.getUsers(cookie.getOrganisationId())
     .then((values) => {
       const orgUsers = JSON.parse(values);

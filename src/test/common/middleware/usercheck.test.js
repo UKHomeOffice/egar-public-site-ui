@@ -35,14 +35,6 @@ describe('User Check Middleware', () => {
     sinon.restore();
   });
 
-  it('should redirect if referer is undefined', async () => {
-    delete req.headers.referer;
-    await middleware(req, res, next);
-
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/login');
-    expect(next).to.not.have.been.called;
-  });
-
   it('should redirect if userDBId is null', async () => {
     req.session.u.dbId = null;
     await middleware(req, res, next);

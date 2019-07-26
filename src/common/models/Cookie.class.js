@@ -184,7 +184,7 @@ class Cookie {
   }
 
   setGarArrivalVoyage(voyageObj) {
-    if(!voyageObj.arrivalDate) {
+    if (!voyageObj.arrivalDate) {
       this.session.gar.voyageArrival.arrivalDate = this.generateDate(voyageObj.arrivalDay,
         voyageObj.arrivalMonth, voyageObj.arrivalYear);
 
@@ -207,7 +207,7 @@ class Cookie {
   setGarDepartureVoyage(voyageObj) {
     if (!voyageObj.departureDate) {
       this.session.gar.voyageDeparture.departureDate = this.generateDate(voyageObj.departureDay,
-        voyageObj.departureMonth,voyageObj.departureYear);
+        voyageObj.departureMonth, voyageObj.departureYear);
       this.session.gar.voyageDeparture.departureTime = this.generateTime(voyageObj.departureHour,
         voyageObj.departureMinute);
     } else {
@@ -271,11 +271,11 @@ class Cookie {
   }
 
   garManifestAddPerson(person) {
+    let personCopy = person;
     if (typeof person.peopleType === 'object') {
-      // Un-nest persontype
-      person.peopleType = person.peopleType.name;
+      personCopy = person.peopleType.name;
     }
-    this.session.gar.manifest.push(person);
+    this.session.gar.manifest.push(personCopy);
   }
 
   getGarManifest() {
@@ -538,9 +538,9 @@ class Cookie {
     // Set role
     this.setUserRole(apiResponse.role.name);
 
-    // Set organisation information if it exists
     this.setUserVerified(apiResponse.state);
 
+    // Set organisation information if it exists
     if (apiResponse.organisation !== null) {
       this.setOrganisationName(apiResponse.organisation.name);
       this.setOrganisationId(apiResponse.organisation.organisationId);
