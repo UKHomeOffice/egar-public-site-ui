@@ -29,7 +29,7 @@
   <div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
     <label class="govuk-label govuk-label--m" for="birthplace">{{ __('field_birth_place') }}</label>
     {{ m.error_message('birthplace', errors) }}
-    <input class="govuk-input" id="birthplace" name="birthplace" autocomplete="off" type="text"
+    <input class="govuk-input govuk-input--width-30" id="birthplace" name="birthplace" autocomplete="off" type="text"
     maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
   </div>
 
