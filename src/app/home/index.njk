@@ -18,16 +18,16 @@
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
     {% if userSession.StatusChangedTimestamp%}
-        <h1 class="govuk-heading-m">
-            <span class="heading-secondary govuk-hint">
-                You last logged in on {{userSession.StatusChangedTimestamp}}
-            </span>
-            Welcome back, {{cookie.getUserFirstName()}}
-        </h1>
+      <h1 class="govuk-heading-m">
+        <span class="heading-secondary govuk-hint">
+          You last logged in on {{userSession.StatusChangedTimestamp}}
+        </span>
+        Welcome back, {{cookie.getUserFirstName()}}
+      </h1>
     {% else %}
-        <h1 class="govuk-heading-m">
-            Welcome, {{cookie.getUserFirstName()}}
-        </h1>
+      <h1 class="govuk-heading-m">
+        Welcome, {{cookie.getUserFirstName()}}
+      </h1>
     {% endif %}
 	</div>
 </div>
@@ -46,11 +46,9 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-xl">Create a GAR</h1>
-      <p class="govuk-body-l">You can create a GAR online or from a <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/392679/GAR_Template_with_logos_v_6_3_Jan_2015_LJ.xls">pre-populated template</a>.</p>
-      <a class="govuk-button" href="/garfile/home" role="button">
-        Start now
-      </a>
+      <h1 class="govuk-heading-xl">{{__('heading_create_gar')}}</h1>
+      <p class="govuk-body-l">{{__('create_gar_caption_1')}}<a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/392679/GAR_Template_with_logos_v_6_3_Jan_2015_LJ.xls">{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
+      <a class="govuk-button" href="/garfile/home" role="button">{{__('button_start_now')}}</a>
     </div>
   </div>
 
@@ -63,185 +61,86 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
     	<form id="signform2" action="/garfile/view" method="post" role="form">
-      <h1 class="govuk-heading-l">Manage GARs</h1>
-      <p class="govuk-body-l">You can view, edit, cancel or delete GARs dependent on the status of the GAR. Only an un-submitted GAR can be cancelled.</p>
+      <h1 class="govuk-heading-l">{{__('heading_manage_gars')}}</h1>
+      <p class="govuk-body-l">{{__('manage_gars_caption')}}</p>
     </div>
     <div class="govuk-grid-column-full">
       <div class="govuk-tabs" data-module="tabs">
         <ul class="govuk-tabs__list">
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft">
-              Draft ({{ draftGars.length }})
+              {{__('tab_gar_draft', draftGars.length)}}
             </a>
           </li>
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-submitted">
-              Submitted ({{ submittedGars.length }})
+              {{__('tab_gar_submitted', submittedGars.length)}}
             </a>
           </li>
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-cancelled">
-              Cancelled ({{ cancelledGars.length }})
+              {{__('tab_gar_cancelled', cancelledGars.length)}}
             </a>
           </li>
         </ul>
-
-        {# REFACTOR! THREE DUPLICATE TABLES VIRTUALLY #}
-        <section class="govuk-tabs__panel" id="gars-draft">
-          <table class="govuk-table">
-            <thead class="govuk-table__head">
+    {% macro gar_summary_table(name, gars) %}
+      <section class="govuk-tabs__panel" id="gars-{{ name }}">
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">{{__('field_aircraft_registration')}}</th>
+              <th class="govuk-table__header" scope="col">{{__('field_departure_date')}}</th>
+              <th class="govuk-table__header" scope="col">{{__('field_departure_time')}}</th>
+              <th class="govuk-table__header" scope="col">{{__('field_departure_port')}}</th>
+              <th class="govuk-table__header" scope="col">{{__('field_arrival_port')}}</th>
+              <th class="govuk-table__header" scope="col">{{__('field_submission_reference')}}</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+          {% if gars | length %}
+            {% for gar in gars %}
               <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">Aircraft registration</th>
-                <th class="govuk-table__header" scope="col">Departure date</th>
-                <th class="govuk-table__header" scope="col">Departure time</th>
-                <th class="govuk-table__header" scope="col">Departure port</th>
-                <th class="govuk-table__header" scope="col">Arrival port</th>
-                <th class="govuk-table__header" scope="col">Submission reference</th>
+                <td class="govuk-table__cell">
+                {% if gar.registration === null %}
+                  <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
+                {% else %}
+                  <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
+                {% endif %}
+                </td>
+                <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
+                <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
+                <td class="govuk-table__cell ">{{ gar.departurePort | upper }} </td>
+                <td class="govuk-table__cell ">{{ gar.arrivalPort | upper }} </td>
+                <td class="govuk-table__cell ">{{ gar.garId }} </td>
               </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-            {% if draftGars | length %}
-              {% for gar in draftGars %}
-                <tr class="govuk-table__row">
-                  <td class="govuk-table__cell">
-                  {% if gar.registration === null %}
-                    <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">TBD</button>
-                  {% else %}
-                    <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
-                  {% endif %}
-                  </td>
-                  <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
-                  <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
-                  <td class="govuk-table__cell ">{{ gar.departurePort | upper }} </td>
-                  <td class="govuk-table__cell ">{{ gar.arrivalPort | upper }} </td>
-                  <td class="govuk-table__cell ">{{ gar.garId }} </td>
-                </tr>
-              {% endfor %}
-            {% else %}
-              <tr class="govuk-table__row">
-                <td colspan="6"><p class="govuk-inset-text">{{__('gar_draft_no_records')}}</p></td>
-              </tr>
-            {% endif %}
-            </tbody>
-          </table>
-          <!-- <nav role="navigation" aria-label="Pagination">
-            <div class="pagination__summary">Showing 101 &ndash; 150 of 246 results</div>
-            <ul class="pagination">
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 1">1</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 2">2</a></li>
-              <li class="pagination__item"><a class="pagination__link current" href="#0" aria-current="true" aria-label="Page 3, current page">3</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 4">4</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 5">5</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
-            </ul>
-          </nav> -->
-        </section>
-
-        <section class="govuk-tabs__panel" id="gars-submitted">
-          <table class="govuk-table">
-            <thead class="govuk-table__head">
-              <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">Aircraft registration</th>
-                <th class="govuk-table__header" scope="col">Departure date</th>
-                <th class="govuk-table__header" scope="col">Departure time</th>
-                <th class="govuk-table__header" scope="col">Departure port</th>
-                <th class="govuk-table__header" scope="col">Arrival port</th>
-                <th class="govuk-table__header" scope="col">Submission reference</th>
-              </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-            {% if submittedGars | length %}
-              {% for gar in submittedGars %}
-                <tr class="govuk-table__row">
-                  <td class="govuk-table__cell">
-                    {% if gar.registration === null %}
-                      <button class="link btn-link" name="garId" value="{{ gar.garId }}">TBD</button>
-                    {% else %}
-                      <button class="link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
-                    {% endif %}
-                  </td>
-                  <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
-                  <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
-                  <td class="govuk-table__cell ">{{ gar.departurePort }} </td>
-                  <td class="govuk-table__cell ">{{ gar.arrivalPort }} </td>
-                  <td class="govuk-table__cell ">{{ gar.garId }} </td>
-                </tr>
-              {% endfor %}
-            {% else %}
-              <tr class="govuk-table__row">
-                <td colspan="6"><p class="govuk-inset-text">{{__('gar_submitted_no_records')}}</p></td>
-              </tr>
-            {% endif %}
-            </tbody>
-          </table>
-          {# <nav role="navigation" aria-label="Pagination">
-            <div class="pagination__summary">Showing 101 &ndash; 111 of 246 results</div>
-            <ul class="pagination">
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 1">1</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 2">2</a></li>
-              <li class="pagination__item"><a class="pagination__link current" href="#0" aria-current="true" aria-label="Page 3, current page">3</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 4">4</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 5">5</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
-            </ul>
-          </nav> #}
-        </section>
-        <section class="govuk-tabs__panel" id="gars-cancelled">
-          <table class="govuk-table">
-            <thead class="govuk-table__head">
-              <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">Aircraft registration</th>
-                <th class="govuk-table__header" scope="col">Departure date</th>
-                <th class="govuk-table__header" scope="col">Departure time</th>
-                <th class="govuk-table__header" scope="col">Departure port</th>
-                <th class="govuk-table__header" scope="col">Arrival port</th>
-                <th class="govuk-table__header" scope="col">Submission reference</th>
-              </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-            {% if cancelledGars | length %}
-              {% for gar in cancelledGars %}
-                <tr class="govuk-table__row">
-                  <td class="govuk-table__cell">
-                    {% if gar.registration === null %}
-                      <button class="link btn-link" name="garId" value="{{ gar.garId }}">TBD</button>
-                    {% else %}
-                      <button class="link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
-                    {% endif %}
-                  </td>
-                  <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
-                  <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
-                  <td class="govuk-table__cell ">{{ gar.departurePort }} </td>
-                  <td class="govuk-table__cell ">{{ gar.arrivalPort }} </td>
-                  <td class="govuk-table__cell ">{{ gar.garId }} </td>
-                </tr>
-              {% endfor %}
-            {% else %}
-              <tr class="govuk-table__row">
-                <td colspan="6"><p class="govuk-inset-text">{{__('gar_cancelled_no_records')}}</p></td>
-              </tr>
-            {% endif %}
-            </tbody>
-          </table>
-          <!-- <nav role="navigation" aria-label="Pagination">
-            <div class="pagination__summary">Showing 101 &ndash; 150 of 246 results</div>
-            <ul class="pagination">
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 1">1</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 2">2</a></li>
-              <li class="pagination__item"><a class="pagination__link current" href="#0" aria-current="true" aria-label="Page 3, current page">3</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 4">4</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 5">5</a></li>
-              <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
-            </ul>
-          </nav> -->
-        </section>
-      </div>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-      <form>
+            {% endfor %}
+          {% else %}
+            <tr class="govuk-table__row">
+              <td colspan="6"><p class="govuk-inset-text">{{__('gar_' + name + '_no_records')}}</p></td>
+            </tr>
+          {% endif %}
+          </tbody>
+        </table>
+        {# <nav role="navigation" aria-label="Pagination">
+          <div class="pagination__summary">Showing 101 &ndash; 150 of 246 results</div>
+          <ul class="pagination">
+            <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 1">1</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 2">2</a></li>
+            <li class="pagination__item"><a class="pagination__link current" href="#0" aria-current="true" aria-label="Page 3, current page">3</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 4">4</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Page 5">5</a></li>
+            <li class="pagination__item"><a class="pagination__link" href="#0" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+          </ul>
+        </nav> #}
+      </section>
+    {% endmacro %}
+      {{ gar_summary_table('draft', draftGars) }}
+      {{ gar_summary_table('submitted', submittedGars) }}
+      {{ gar_summary_table('cancelled', cancelledGars) }}
     </div>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </div>
+</div>
 
 {% endblock %}
