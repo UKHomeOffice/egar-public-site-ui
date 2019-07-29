@@ -29,6 +29,7 @@ describe('Organisation Edit Post Controller', () => {
       },
     };
     res = {
+      redirect: sinon.stub(),
       render: sinon.stub(),
     };
 
@@ -78,7 +79,7 @@ describe('Organisation Edit Post Controller', () => {
 
   // TODO: Should there be one for the api error message...?
 
-  it('should render and sets cookie value when api ok', () => {
+  it('should redirect and sets cookie value when api ok', () => {
     cookie = new CookieModel(req);
 
     orgApiStub.resolves(JSON.stringify({}));
@@ -90,9 +91,8 @@ describe('Organisation Edit Post Controller', () => {
     callController().then().then(() => {
       expect(req.session.org.name).to.eq('Evil Empire');
       expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
-        cookie,
-      });
+      expect(res.render).to.not.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
     });
   });
 });
