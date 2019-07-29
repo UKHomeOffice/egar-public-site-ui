@@ -16,10 +16,10 @@
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="/organisation">Organisation</a>
+        <a class="govuk-breadcrumbs__link" href="/organisation">{{__('nav_bar_organisation')}}</a>
       </li>
       <li class="govuk-breadcrumbs__list-item">
-        Edit organisation
+        {{__('title_edit_organisation')}}
       </li>
     </ol>
   </div>
@@ -28,7 +28,6 @@
 
 {% block content %}
 
-
   {% import "common/templates/includes/macros.njk" as m %}
 
   {% if errors %}
@@ -36,44 +35,38 @@
   {% endif %}
 
   <div class="govuk-grid-row">
-	  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="/organisation/editorganisation" autocomplete="off" class="form-group"
+        method="post" role="form">
 
-    <div>
-    <form action="/organisation/editorganisation" autocomplete="off" class="form-group"
-      method="post" role="form">
+        <h1 class="govuk-heading-xl">{{__('title_edit_organisation')}}</h1>
+        <p class="govuk-body-l">{{__('edit_organisation_caption')}}</p>
 
-      <h1 class="govuk-heading-xl">Edit organisation</h1>
-      <p class="govuk-body-l">Edit the details of the organisation</p>
+        <div class="govuk-form-group {{ m.form_group_class('orgname', errors) }}">
 
-      <div class="govuk-form-group {{ m.form_group_class('orgname', errors) }}">
-
-          <label class="govuk-label govuk-label--m"  for="orgname">Name</label>
-          {{ m.error_message('orgname', errors) }}
+          <label class="govuk-label govuk-label--m"  for="orgname">{{__('field_organisation_name')}}</label>
+            {{ m.error_message('orgname', errors) }}
           <span class="field-validation-valid error-message" data-valmsg-for="orgname"
             data-valmsg-replace="true" style="display:block">
           </span>
           <input class="govuk-input"
             id="orgname" name="orgname" style="width:100%" type="text"
             value="{{cookie.getOrganisationName()}}" />
-         </div>
+        </div>
 
         <div class="govuk-form-group">
           <table class="govuk-table">
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell "><a class="govuk-button" href="/organisation">Exit without saving</a></td>
-              <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and exit"
+              <td class="govuk-table__cell ">
+                <a id="exit-without-saving" class="govuk-button" href="/organisation">{{__('form_exit_without_saving')}}</a></td>
+              <td class="govuk-table__cell "><input id="save-and-exit" class="govuk-button" type="submit" value="{{__('form_save_and_exit')}}"
               onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
             </tr>
           </table>
         </div>
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-    </form>
-
- </div>
-
-
-
-
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </form>
+    </div>
+  </div>
 </main>
 {% endblock %}

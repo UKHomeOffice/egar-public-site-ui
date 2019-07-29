@@ -159,5 +159,12 @@
 
     "organisation_no_records": "There are no organisation members",
 
-    "validator_msg_voyage_dates": "Arrival time must be after departure time"
+    "validator_msg_voyage_dates": "Arrival time must be after departure time",
+
+    "title_organisation": "Organisation",
+    "organisation_caption": "Manage your organisation's details.",
+
+    "title_edit_organisation": "Edit organisation",
+    "edit_organisation_caption": "Edit the details of the organisation.",
+    "field_organisation_name": "Organisation name"
 }
