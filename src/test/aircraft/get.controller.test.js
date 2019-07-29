@@ -13,7 +13,7 @@ const pagination = require('../../common/utils/pagination');
 
 controller = require('../../app/aircraft/get.controller');
 
-describe('Aircraft Get Controller', () => {
+describe('Saved Aircraft Get Controller', () => {
   let res; let individualCraftStub; let organisationCraftStub;
   let paginationBuildStub; let paginationGetCurrentPageStub;
 

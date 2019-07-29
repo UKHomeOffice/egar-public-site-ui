@@ -11,7 +11,7 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const currentPage = pagination.getCurrentPage(req, '/aircraft');
 
-  const crafts = cookie.getUserRole() === 'Individual' ? craftApi.getCrafts(cookie.getUserDbId(), currentPage) : craftApi.getOrgCrafts(cookie.getOrganisationId());
+  const crafts = cookie.getUserRole() === 'Individual' ? craftApi.getCrafts(cookie.getUserDbId(), currentPage) : craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage);
   crafts.then((values) => {
     const savedCrafts = JSON.parse(values);
     const { totalPages, totalItems } = savedCrafts._meta;
