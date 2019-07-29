@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Arrival | Submit a General Aviation Report (GAR)
+	Create GAR | Arrival | {{__('title')}}
 {% endblock %}
 
 {% block header %}
@@ -29,28 +29,22 @@
 	  <div class="govuk-grid-column-two-thirds">
       <form id="page-form" action="/garfile/arrival" autocomplete="off" class="form-group" method="post" role="form">
 
-        <!-- Start Arrival date -->
-          <div class="govuk-form-group" id="arrivalDate">
-          <span class="govuk-caption-xl">Section 2 of 8</span>
-          <h1 class="govuk-heading-xl">Arrival details</h1>
-          <p class="govuk-body-l">Provide the arrival details of the flight</p>
+        {# Start Arrival date #}
+        <div class="govuk-form-group" id="arrivalDate">
+          <span class="govuk-caption-xl">{{__('section_count', 2, 8)}}</span>
+          <h1 class="govuk-heading-xl">{{__('heading_arrival_details')}}</h1>
+          <p class="govuk-body-l">{{__('arrival_details_caption')}}</p>
           <div class="{{ m.form_group_class('arrivalDate', errors) }}">
             <fieldset class="govuk-fieldset" aria-describedby="arrivalDate-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h2 class="govuk-fieldset__heading">
-                Arrival date
-              </h2>
+              <h2 class="govuk-fieldset__heading">{{__('field_arrival_date')}}</h2>
             </legend>
-            <span id="arrivalDate-hint" class="govuk-hint">
-              For example 20 04 2019
-            </span>
+            <span id="arrivalDate-hint" class="govuk-hint">{{__('field_date_hint')}}</span>
             {{ m.error_message('arrivalDate', errors) }}
             <div class="govuk-date-input" id="arrival">
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalDay">
-                    Day
-                  </label>
+                  <label class="govuk-label govuk-date-input__label" for="arrivalDay">{{__('field_day')}}</label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalDay"
                   name="arrivalDay" type="number" pattern="[0-9]*" min="1" max="31"
                   value="{{cookie.dateSlice('day', cookie.getGarArrivalVoyage().arrivalDate)}}">
@@ -59,9 +53,7 @@
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalMonth">
-                    Month
-                  </label>
+                  <label class="govuk-label govuk-date-input__label" for="arrivalMonth">{{__('field_month')}}</label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMonth"
                   name="arrivalMonth" type="number" pattern="[0-9]*" min="1" max="12"
                   value="{{cookie.dateSlice('month', cookie.getGarArrivalVoyage().arrivalDate)}}">
@@ -70,9 +62,7 @@
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="arrivalYear">
-                      Year
-                    </label>
+                    <label class="govuk-label govuk-date-input__label" for="arrivalYear">{{__('field_year')}}</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalYear"
                     name="arrivalYear" type="number" pattern="[0-9]*" min="1900" max="2200";
                     value="{{cookie.dateSlice('year', cookie.getGarArrivalVoyage().arrivalDate)}}">
@@ -82,27 +72,21 @@
             </fieldset>
           </div>
         </div>
-        <!-- End arrival date -->
+        {# End arrival date #}
 
-        <!-- Start arrival time -->
+        {# Start arrival time #}
         <div class="govuk-form-group {{ m.form_group_class('arrivalTime', errors) }}" id="arrivalTime">
           <fieldset class="govuk-fieldset" aria-describedby="arrivalTime-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h2 class="govuk-fieldset__heading">
-                Arrival time (UTC)
-              </h2>
+              <h2 class="govuk-fieldset__heading">{{__('field_arrival_time')}}</h2>
             </legend>
-            <span id="arrivalTime-hint" class="govuk-hint">
-              For example 17 30
-            </span>
+            <span id="arrivalTime-hint" class="govuk-hint">{{__('field_time_hint')}}</span>
             {{ m.error_message('arrivalTime', errors) }}
 
             <div class="govuk-date-input" id="arrivalTime">
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalHour">
-                    Hour
-                  </label>
+                  <label class="govuk-label govuk-date-input__label" for="arrivalHour">{{__('field_hour')}}</label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalHour"
                   name="arrivalHour" type="number" pattern="[0-9]*" min="0" max="23"
                   value="{{cookie.timeSlice('hour', cookie.getGarArrivalVoyage().arrivalTime)}}">
@@ -111,9 +95,7 @@
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalMinute">
-                      Minute
-                  </label>
+                  <label class="govuk-label govuk-date-input__label" for="arrivalMinute">{{__('field_minute')}}</label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMinute"
                   name="arrivalMinute" type="number" pattern="[0-9]*" min="0" max="59"
                   value="{{cookie.timeSlice('minute', cookie.getGarArrivalVoyage().arrivalTime)}}">
@@ -122,13 +104,11 @@
             </div>
           </fieldset>
         </div>
-        <!-- End arrival time -->
+        {# End arrival time #}
 
-        <!-- Start arrival port -->
+        {# Start arrival port #}
         <div class="govuk-form-group {{ m.form_group_class('arrivalPort', errors) }}">
-				  <label class="govuk-label govuk-label--m" for="arrivalPort">
-					  Arrival port
-				  </label>
+				  <label class="govuk-label govuk-label--m" for="arrivalPort">{{__('field_arrival_port')}}</label>
 				  <span id="arrivalPort-hint" class="govuk-hint">
 				    Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
             The arrival port must be different to the departure port.
@@ -136,8 +116,7 @@
           {{ m.error_message('arrivalPort', errors) }}
           <input class="govuk-input govuk-input--width-20" maxlength="4" id="arrivalPort" name="arrivalPort" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort | upper }}"/>
         </div>
-        <!-- End arrival port -->
-
+        {# End arrival port #}
 
         <div class="govuk-form-group">
           <label class="govuk-heading-m">Arrival coordinates</label>
@@ -147,7 +126,7 @@
           </span>
         </div>
 
-         <!-- Start arrival coords -->
+        {# Start arrival coords #}
         <div class="govuk-form-group {{ m.form_group_class('arrivalLat', errors) }}">
           <label class="govuk-label" for="arrivalLat">
             {{__('field_latitude')}}
@@ -171,24 +150,29 @@
           <input class="govuk-input govuk-input--width-10" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLong}}"/>
 
         </div>
-        <!-- End arrival coords -->
+        {# End arrival coords #}
 
-        <!-- start buttons -->
+        {# Start buttons #}
         <div class="column-two-thirds">
+          <input id="newVoyage" class="govuk-button" type="submit"
+            name="buttonClicked"
+            value="{{__('form_save_and_continue')}}"
+            onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
-                <input id="newVoyage" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
-                onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
-
-						<p class="govuk-body-m">
-		          <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;"name="submit_button">Save and come back later</a>
-		        </p>
-            <p class="govuk-body-m">
-              <a href="/home">Exit without saving</a>
-            </p>
+          <p class="govuk-body-m">
+            <a href="#" 
+              class="disableAutoFillSubmit"
+              onclick="document.forms[0].submit();return false;"
+              name="submit_button">{{__('form_save_and_come_back')}}
+            </a>
+          </p>
+          <p class="govuk-body-m">
+            <a href="/home">{{__('form_exit_without_saving')}}</a>
+          </p>
         </div>
-        <!-- end buttons -->
+        {# End buttons #}
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    </form>
+      </form>
+    </div>
   </div>
-</div>
 {% endblock %}

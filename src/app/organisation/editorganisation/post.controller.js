@@ -27,7 +27,7 @@ module.exports = (req, res) => {
           // Check for error
           // Update cookie
           cookie.setOrganisationName(orgname);
-          res.render('app/organisation/index', { cookie });
+          res.redirect('/organisation');
         })
         .catch((err) => {
           logger.error('There was a problem updating the organisation');

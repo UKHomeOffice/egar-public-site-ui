@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Departure | {{ __('title') }}
+	Create GAR | Departure | {{__('title')}}
 {% endblock %}
 
 {% block header %}
@@ -31,19 +31,17 @@
 
         <!-- Start departure date -->
         <div class="govuk-form-group" id="departureDate">
-          <span class="govuk-caption-xl">Section 1 of 8</span>
-          <h1 class="govuk-heading-xl">{{ __('label_departure_details') }}</h1>
-          <p class="govuk-body-l">Provide the departure details of the flight</p>
+          <span class="govuk-caption-xl">{{__('section_count', 1, 8)}}</span>
+          <h1 class="govuk-heading-xl">{{__('label_departure_details')}}</h1>
+          <p class="govuk-body-l">{{__('departure_details_caption')}}</p>
           <div class="{{ m.form_group_class('departureDate', errors) }}">
             <fieldset class="govuk-fieldset" aria-describedby="departureDate-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
               <h2 class="govuk-fieldset__heading">
-                {{ __('field_departure_date') }}
+                {{__('field_departure_date')}}
               </h2>
             </legend>
-            <span id="departureDate-hint" class="govuk-hint">
-              {{ __('field_departure_date_hint') }}
-            </span>
+            <span id="departureDate-hint" class="govuk-hint">{{__('field_date_hint')}}</span>
             {{ m.error_message('departureDate', errors) }}
             <div class="govuk-date-input" id="departure">
               <div class="govuk-date-input__item">
@@ -83,12 +81,10 @@
           <fieldset class="govuk-fieldset" aria-describedby="departureTime-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
               <h2 class="govuk-fieldset__heading">
-                {{ __('field_departure_time') }}
+                {{__('field_departure_time')}}
               </h2>
             </legend>
-            <span id="departureTime-hint" class="govuk-hint">
-              {{ __('field_departure_time_hint') }}
-            </span>
+            <span id="departureTime-hint" class="govuk-hint">{{__('field_time_hint')}}</span>
             {{ m.error_message('departureTime', errors) }}
 
             <div class="govuk-date-input" id="departureTime">
@@ -116,9 +112,7 @@
 
         <!-- Start departure port -->
         <div class="govuk-form-group {{ m.form_group_class('departurePort', errors) }}">
-          <label class="govuk-label govuk-label--m" for="departurePort">
-            Departure port
-          </label>
+          <label class="govuk-label govuk-label--m" for="departurePort">{{__('field_departure_port')}}</label>
           <span id="departurePort-hint" class="govuk-hint">
             Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'YYYY'. <br>
             The departure port must be different to the arrival port.
@@ -181,15 +175,20 @@
 
         <!-- start buttons -->
         <div class="column-two-thirds">
-          <input id="newVoyage" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue"
-          onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
+          <input id="newVoyage" class="govuk-button" type="submit"
+            name="buttonClicked"
+            value="{{__('form_save_and_continue')}}"
+            onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
 						<p class="govuk-body-m">
-		          <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;"
-              name="submit_button">Save and come back later</a>
+		          <a href="#"
+                class="disableAutoFillSubmit"
+                onclick="document.forms[0].submit();return false;"
+                name="submit_button">{{__('form_save_and_come_back')}}
+              </a>
 		        </p>
             <p class="govuk-body-m">
-              <a href="/home" > Exit without saving </a>
+              <a href="/home" >{{__('form_exit_without_saving')}}</a>
             </p>
         </div>
         <!-- end buttons -->

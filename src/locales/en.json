@@ -31,13 +31,23 @@
     "declaration_caption_3": "that you have read and accept our ",
     "declaration_caption_4": "privacy policy",
 
-    "tab_gar_draft": "Draft",
+    "heading_create_gar": "Create a GAR",
+    "create_gar_caption_1": "You can create a GAR online or by ",
+    "create_gar_caption_link": "using an offline Excel template",
+    "create_gar_caption_2": ".",
+    "button_start_now": "Start now",
+    "heading_manage_gars": "Manage GARs",
+    "manage_gars_caption": "You can view, edit, cancel or delete GARs dependent on the status of the GAR.",
+    "tab_gar_draft": "Draft (%s)",
     "gar_draft_no_records": "There are no draft GARs",
-    "tab_gar_submitted": "Submitted",
+    "tab_gar_submitted": "Submitted (%s)",
     "gar_submitted_no_records": "There are no submitted GARs",
-    "tab_gar_cancelled": "Cancelled",
+    "tab_gar_cancelled": "Cancelled (%s)",
     "gar_cancelled_no_records": "There are no cancelled GARs",
+    "field_submission_reference": "Submission reference",
+    "value_aircraft_registration_null": "TBD",
 
+    "section_count": "Section %s of %s",
     "field_given_name": "Given name",
     "field_surname": "Surname",
     "field_day": "Day",
@@ -46,15 +56,22 @@
     "field_hour": "Hour",
     "field_minute": "Minute",
     "label_departure_details": "Departure details",
+    "departure_details_caption": "Provide the departure details of the flight",
     "field_departure_date": "Departure date",
-    "field_departure_date_hint": "For example 20 04 2019",
+    "field_date_hint": "For example 20 04 2019",
     "field_departure_time": "Departure time (UTC)",
-    "field_departure_time_hint": "For example 17 30",
+    "field_time_hint": "For example 17 30",
     "field_departure_port": "Departure port",
     "field_longitude": "Longitude",
     "field_longitude_hint": "For example -0.4542",
     "field_latitude": "Latitude",
     "field_latitude_hint": "For example 51.4700",
+
+    "heading_arrival_details": "Arrival details",
+    "arrival_details_caption": "Provide the arrival details of the flight",
+    "field_arrival_date": "Arrival date",
+    "field_arrival_time": "Arrival time (UTC)",
+    "field_arrival_port": "Arrival port",
 
     "title_edit_person": "Edit Person Details",
     "heading_edit_person": "Edit a person",
@@ -142,5 +159,12 @@
 
     "organisation_no_records": "There are no organisation members",
 
-    "validator_msg_voyage_dates": "Arrival time must be after departure time"
+    "validator_msg_voyage_dates": "Arrival time must be after departure time",
+
+    "title_organisation": "Organisation",
+    "organisation_caption": "Manage your organisation's details.",
+
+    "title_edit_organisation": "Edit organisation",
+    "edit_organisation_caption": "Edit the details of the organisation.",
+    "field_organisation_name": "Organisation name"
 }
