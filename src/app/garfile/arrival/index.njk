@@ -114,7 +114,8 @@
             The arrival port must be different to the departure port.
 				  </span>
           {{ m.error_message('arrivalPort', errors) }}
-          <input class="govuk-input govuk-input--width-20" maxlength="4" id="arrivalPort" name="arrivalPort" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort | upper }}"/>
+          <input class="govuk-input govuk-input--width-4" maxlength="4" id="arrivalPort" name="arrivalPort"
+          autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort | upper }}"/>
         </div>
         {# End arrival port #}
 
@@ -160,7 +161,7 @@
             onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
           <p class="govuk-body-m">
-            <a href="#" 
+            <a href="#"
               class="disableAutoFillSubmit"
               onclick="document.forms[0].submit();return false;"
               name="submit_button">{{__('form_save_and_come_back')}}

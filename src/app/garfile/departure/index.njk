@@ -118,7 +118,8 @@
             The departure port must be different to the arrival port.
           </span>
           {{ m.error_message('departurePort', errors) }}
-          <input class="govuk-input govuk-input__width-20" maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
+          <input class="govuk-input govuk-input--width-4"
+          maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
           {# Airport list v1
           <select class="govuk-select" id="test1" name="test1" value="">
             <option value=""></option>
