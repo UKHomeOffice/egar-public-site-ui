@@ -114,8 +114,12 @@
             The arrival port must be different to the departure port.
 				  </span>
           {{ m.error_message('arrivalPort', errors) }}
-          <input class="govuk-input govuk-input--width-4" maxlength="4" id="arrivalPort" name="arrivalPort"
-          autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort | upper }}"/>
+          <select class="govuk-select" id="arrivalPort" name="arrivalPort" value="{{ cookie.getGarArrivalVoyage().arrivalPort }}">
+            {% for airport in airportList|sort(attribute='label') %}
+              <option value="{{ airport.id }}" {{ 'selected=selected' if (cookie.getGarArrivalVoyage().arrivalPort) == airport.id }}>{{ airport.label }}</option>
+            {% endfor %}
+            <option value="ZZZZ" {{ 'selected=selected' if (cookie.getGarDepartureVoyage().departurePort) == 'ZZZZ' }}>No port code available (Enter co-ordinates below) (ZZZZ)</option>
+          </select>
         </div>
         {# End arrival port #}
 
@@ -176,4 +180,12 @@
       </form>
     </div>
   </div>
+
+<script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+<script type="text/javascript">
+  accessibleAutocomplete.enhanceSelectElement({
+    selectElement: document.querySelector('#arrivalPort'),
+    minLength: 2,
+  });
+</script>
 {% endblock %}

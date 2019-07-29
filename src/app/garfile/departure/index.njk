@@ -118,22 +118,12 @@
             The departure port must be different to the arrival port.
           </span>
           {{ m.error_message('departurePort', errors) }}
-          <input class="govuk-input govuk-input--width-4"
-          maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
-          {# Airport list v1
-          <select class="govuk-select" id="test1" name="test1" value="">
-            <option value=""></option>
+          <select class="govuk-select" id="departurePort" name="departurePort" value="{{ cookie.getGarDepartureVoyage().departurePort }}">
             {% for airport in airportList|sort(attribute='label') %}
               <option value="{{ airport.id }}" {{ 'selected=selected' if (cookie.getGarDepartureVoyage().departurePort) == airport.id }}>{{ airport.label }}</option>
             {% endfor %}
+            <option value="YYYY" {{ 'selected=selected' if (cookie.getGarDepartureVoyage().departurePort) == 'YYYY' }}>No port code available (Enter co-ordinates below) (YYYY)</option>
           </select>
-          Airport list v2
-          <select class="govuk-select" id="test2" name="test2" value="">
-            <option value=""></option>
-            {% for airport in airportList2|sort(attribute='label') %}
-              <option value="{{ airport.id }}" {{ 'selected=selected' if (cookie.getGarDepartureVoyage().departurePort) == airport.id }}>{{ airport.label }}</option>
-            {% endfor %}
-          </select> #}
         </div>
         <!-- End departure port -->
 
@@ -199,15 +189,11 @@
 </div>
 
 <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
-{# <script type="text/javascript">
+<script type="text/javascript">
   accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#test1'),
+    selectElement: document.querySelector('#departurePort'),
     minLength: 2,
   });
-  accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#test2'),
-    minLength: 2,
-  });
-</script> #}
+</script>
 
 {% endblock %}

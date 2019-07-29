@@ -54,6 +54,7 @@
           </span>
           <input  class="govuk-input govuk-input--width-10"
             id="craftReg" name="craftReg" style="width:100%" type="text"
+            maxlength="{{ MAX_REGISTRATION_LENGTH }}"
             value="" />
       </div>
 
@@ -66,6 +67,7 @@
           </span>
           <input  class="govuk-input govuk-input--width-20"
             id="craftType" name="craftType" style="width:100%" type="text"
+            maxlength="{{ MAX_STRING_LENGTH }}"
             value="" />
       </div>
 
@@ -73,6 +75,7 @@
              <label class="govuk-label" for="craftBase">{{__('field_aircraft_base')}}</label>
           {{ m.error_message('craftBase', errors) }}
           <span class="govuk-hint">
+            {# TODO: Maybe co-ordinates are needed here...? #}
             Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA / ICAO code. Provide coordinates to 4 decimal places.
           </span>
           <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
