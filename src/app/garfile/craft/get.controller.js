@@ -42,12 +42,14 @@ module.exports = (req, res) => {
             res.render('app/garfile/craft/index', { cookie, errors: [{ message: 'There was a problem getting aircraft information' }] });
           });
       } else {
-        craftApi.getOrgCrafts(cookie.getOrganisationId())
+        craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage)
           .then((values) => {
             const garCraft = (JSON.parse(values));
             if (garCraft.items.length > 0) {
+              const { totalPages, totalItems } = garCraft._meta;
+              const paginationData = pagination.build(req, totalPages, totalItems);
               cookie.setSavedCraft(JSON.parse(values));
-              res.render('app/garfile/craft/index', { cookie });
+              res.render('app/garfile/craft/index', { cookie, pages: paginationData });
               return;
             }
             res.render('app/garfile/craft/index', { cookie });
