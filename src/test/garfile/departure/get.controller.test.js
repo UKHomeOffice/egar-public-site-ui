@@ -81,7 +81,7 @@ describe('Departure Get Controller', () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('12345');
     cookie.setGarDepartureVoyage(apiResponse);
-    cookie.session.gar.voyageDeparture.departurePort = 'YYYY';
+    cookie.session.gar.voyageDeparture.departurePort = 'ZZZZ';
     sinon.stub(garApi, 'get').resolves(apiResponse);
 
     const callController = async () => {

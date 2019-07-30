@@ -98,32 +98,6 @@ describe('Departure Post Controller', () => {
       });
     });
 
-    it('should fail if port is YYYY and no longitude or latitude', () => {
-      req.body.departurePort = 'YYYY';
-      delete req.body.departureLong;
-      delete req.body.departureLat;
-      const cookie = new CookieModel(req);
-
-      sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch');
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApi.get).to.have.been.calledWith('12345');
-        expect(garApi.patch).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
-          cookie,
-          errors: [
-            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
-            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
-          ],
-        });
-      });
-    });
-
     // TODO: Technically, if the port is NOT ZZZZ then there should not be a longitude or latitude
     // which is not actually represented in the code
     // it('should fail if port is not ZZZZ yet there is longitude and latitude', () => {
