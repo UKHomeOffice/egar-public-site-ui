@@ -6,14 +6,26 @@
     "nav_bar_organisation": "Organisation",
     "nav_bar_account": "Account",
 
-    "user_login_unverified": "The email address supplied has not been verified. You should have recieved an email to verify.",
-    "user_login_unverified_caption": "Click the verification link inside the email. This link will remain valid for 12 hours. If you can't see the email, please check any spam folders or ",
-    "user_login_unverified_resend": "resend the email",
     "field_username": "Registered email address",
     "field_username_hint": "Enter the email address you used when you created your account",
     "button_sign_in": "Sign in",
     "create_account_caption": "Need to create an account?",
 
+    "account_verification_success": "Submit a GAR account successfully created",
+    "account_verification_resent": "Submit a GAR account verification email successfully resent",
+    "account_verification_heading": "What happens next",
+    "user_login_unverified": "The email address supplied has not been verified. You should have recieved an email to verify.",
+    "user_login_unverified_caption_1": "Click the verification link inside the email. This link will remain valid for 12 hours. If you can't see the email, please check any spam folders or ",
+    "user_login_unverified_resend": "resend the verification email",
+    "user_login_unverified_caption_3": ".", 
+
+    "title_confirm_mfa_code": "Confirm your multi-factor authentication code",
+    "confirm_mfa_code_caption": "If the email that you entered is associated with an account then you will have received an email with your login code. Please enter it below.",
+    "field_authentication_code": "Authentication code",
+    "field_authentication_code_hint": "Please enter the code you received",
+    "resend_code": "Didn't receive a code?",
+
+    "form_error_summary_title": "There is a problem",
     "form_exit_without_saving": "Exit without saving",
     "form_exit_without_adding": "Exit without adding",
     "form_save_and_continue": "Save and continue",
@@ -31,6 +43,9 @@
     "declaration_caption_3": "that you have read and accept our ",
     "declaration_caption_4": "privacy policy",
 
+    "last_logged_on": "You last logged in on %s",
+    "welcome_user": "Welcome, %s",
+    "welcome_back_user": "Welcome back, %s",
     "heading_create_gar": "Create a GAR",
     "create_gar_caption_1": "You can create a GAR online or by ",
     "create_gar_caption_link": "using an offline Excel template",
@@ -105,9 +120,12 @@
     "field_prohibited_goods": "Customs declaration",
     "field_goods_declaration": "Customs declaration details",
 
-    "verify_user_account_success": "Your account has now been successfully verified. You can now log on and submit GAR files online.",
+    "verify_user_account_success": "Your account has been successfully verified. You can now log in and submit GAR files online. Click 'Sign in' to begin.",
     "verify_user_account_token_expired": "Your token has expired. We have created a new token for you. Please check your email and click the new link.",
     "verify_user_account_token_invalid": "This token is invalid, click the link provided in the email or contact support for additional help.",
+    "verify_help_caption_1": "If you are having difficulties using this service, please ",
+    "verify_help_caption_2": "contact us",
+    "verify_help_caption_3": ".",
 
     "title_garupload": "Upload your GAR file",
     "garupload_caption": "Select the GAR file to be uploaded.",

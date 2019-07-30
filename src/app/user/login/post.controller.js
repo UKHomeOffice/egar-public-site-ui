@@ -12,7 +12,7 @@ const config = require('../../../common/config/index');
 module.exports = (req, res) => {
   logger.debug('In user / login post controller');
 
-  const usrname = req.body.Username;
+  const usrname = req.body.username;
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
@@ -22,7 +22,7 @@ module.exports = (req, res) => {
 
   // Define a validation chain for user registeration fields
   const unameChain = [
-    new ValidationRule(validator.notEmpty, 'Username', usrname, 'Enter your email'),
+    new ValidationRule(validator.notEmpty, 'username', usrname, 'Enter your email'),
   ];
 
   const errMsg = { message: 'There was a problem sending your code. Please try again.' };

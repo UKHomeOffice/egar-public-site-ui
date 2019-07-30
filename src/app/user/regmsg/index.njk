@@ -29,18 +29,17 @@
 	<div class="govuk-grid-column-two-thirds">
       <div class="govuk-panel govuk-panel--confirmation">
         {% if resend %}
-          <h1 class="govuk-panel__title">Submit a GAR account verification email successfully resent</h1>
+          <h1 class="govuk-panel__title">{{__('account_verification_resent')}}</h1>
         {% else %}
-          <h1 class="govuk-panel__title">Submit a GAR account successfully created</h1>
+          <h1 class="govuk-panel__title">{{__('account_verification_success')}}</h1>
         {% endif %}
       </div>
-      <h2 class="govuk-heading-m">What happens next</h2>
+      <h2 class="govuk-heading-m">{{__('account_verification_heading')}}</h2>
       <p class="govuk-body-m">
-        Click the verification link inside the email. This link will remain valid for 12 hours.
-        If you can't see the email, please check any spam folders or <a href="/user/regmsg?resend=true">resend the email</a>.
+        {{__('user_login_unverified_caption_1')}}
+        <a href="/user/regmsg?resend=true">{{__('user_login_unverified_resend')}}</a>{{__('user_login_unverified_caption_3')}}
       </p>
-      <a class="govuk-button" href="/login" role="button">Sign In</a>
-
+      <a class="govuk-button" href="/login">{{__('button_sign_in')}}</a>
     </div>
   </div>
   <input type="hidden" name="_csrf" value="{{ csrfToken }}" />

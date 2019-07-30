@@ -30,29 +30,19 @@
         {% include "common/templates/includes/success-action.njk" %}
       {% endif %}
 
-      <h1 class="govuk-heading-l">
-        Confirm your multi-factor authentication code
-      </h1>
+      <h1 class="govuk-heading-l">{{__('title_confirm_mfa_code')}}</h1>
 
-      <p class="govuk-body-l">
-        If the email that you entered is associated with an account then you will have received
-        an email with your login code. Please enter it below.
-      </p>
+      <p class="govuk-body-l">{{__('confirm_mfa_code_caption')}}</p>
 
       <form action="/login/authenticate" method="post">
-        <div class="govuk-form-group {{ m.form_group_class('mfa-authentication-code', errors) }}">
-          <label class="govuk-label" for="mfa-authentication-code">
-            <h2 class="govuk-heading-m">Authentication code</h2>
+        <div class="govuk-form-group {{ m.form_group_class('mfa-code', errors) }}">
+          <label class="govuk-label" for="mfa-code">
+            <h2 class="govuk-heading-m">{{__('field_authentication_code')}}</h2>
           </label>
-          <span class="govuk-hint">
-            Please enter the code you received
-          </span>
-          {{ m.error_message('mfa-authentication-code', errors) }}
-          <span class="field-validation-valid error-message" data-valmsg-for="mfa-authentication-code"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input id="mfa-authentication-code" autocomplete="off" class="govuk-input" maxlength="{{ mfaTokenLength }}" name="mfa-authentication-code" type="text">
-          <p style="margin-top: 0.25em;" class="govuk-body-m"><a href="/login/authenticate?resend=true">Didn't receive a code?</a></p>
+          <span id="mfa-code-hint" class="govuk-hint">{{__('field_authentication_code_hint')}}</span>
+          {{ m.error_message('mfa-code', errors) }}
+          <input id="mfa-code" autocomplete="off" class="govuk-input" maxlength="{{ mfaTokenLength }}" name="mfa-code" type="text" aria-describedby="mfa-code-hint mfa-code-error">
+          <p style="margin-top: 0.25em;" class="govuk-body-m"><a href="/login/authenticate?resend=true">{{__('resend_code')}}</a></p>
         </div>
         <div class="govuk-form-group">
           <input class="govuk-button" type="submit" value="Confirm"

@@ -22,13 +22,16 @@
   {% import "common/templates/includes/macros.njk" as m %}
 
 	{% if unverified %}
-    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+    <div class="govuk-error-summary" aria-labelledby="unverified-error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+      <h2 class="govuk-error-summary__title" id="unverified-error-summary-title">
+        {{__('form_error_summary_title')}}
+      </h2>
       <div class="govuk-error-summary__body">
         <ul class="govuk-list govuk-error-summary__list">
           <li>
             {{ __('user_login_unverified') }}
             <p class="govuk-body-m">
-              {{ __('user_login_unverified_caption') }}<a href="/user/regmsg?resend=true">{{ __('user_login_unverified_resend') }}</a>.
+              {{__('user_login_unverified_caption_1')}}<a href="/user/regmsg?resend=true">{{__('user_login_unverified_resend')}}</a>{{__('user_login_unverified_caption_3')}}
             </p>
           </li>
         </ul>
@@ -44,13 +47,11 @@
 	<div class="govuk-grid-column-two-thirds">
 		<form action="login" autocomplete="off" method="POST">
 			<h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
-			<div class="govuk-form-group {{ m.form_group_class('Username', errors) }}">
-
-				<label class="govuk-label govuk-label--m" for="Username">{{ __('field_username') }}</label>
-
-				<span id="departurePort-hint" class="govuk-hint">{{ __('field_username_hint') }}</span>
-        {{ m.error_message('Username', errors) }}
-				<input class="govuk-input" id="Username" name="Username" type="text">
+			<div class="govuk-form-group {{ m.form_group_class('username', errors) }}">
+				<label class="govuk-label govuk-label--m" for="username">{{ __('field_username') }}</label>
+				<span id="username-hint" class="govuk-hint">{{ __('field_username_hint') }}</span>
+        {{ m.error_message('username', errors) }}
+				<input class="govuk-input" id="username" name="username" type="text" aria-describedby="username-hint username-error">
 			</div>
 
 			<button type="submit" class="govuk-button">
@@ -58,7 +59,9 @@
 			</button>
 
 			<h2 class="govuk-heading-m">{{ __('create_account_caption') }}</h2>
-			<p class="govuk-body"><a href="/user/register">{{ __('title_create_account') }}</a></p>
+			<p class="govuk-body">
+        <a href="/user/register">{{ __('title_create_account') }}</a>
+      </p>
 
       <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 		</form>

@@ -162,7 +162,7 @@ function initialiseGlobalMiddleware(app) {
     // The below adds the csrfToken to the res.render function which should hopefully
     // allow for local development without this hack
     const _render = res.render;
-    res.render = function addToken(view, options, fn) {
+    res.render = function (view, options, fn) {
       _.extend(options, { csrfToken: token });
       _render.call(this, view, options, fn);
     };
