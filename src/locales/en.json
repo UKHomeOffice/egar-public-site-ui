@@ -1,5 +1,7 @@
 {
     "title": "Submit a General Aviation Report (GAR)",
+    "error_prefix": "Error:",
+
     "nav_bar_gars": "GARs",
     "nav_bar_sign_out": "Sign out",
     "nav_bar_create_organisation": "Create Organisation",
@@ -96,6 +98,7 @@
     "field_arrival_date": "Arrival date",
     "field_arrival_time": "Arrival time (UTC)",
     "field_arrival_port": "Arrival port",
+    "field_arrival_coordinates": "Arrival coordinates",
 
     "title_edit_person": "Edit Person Details",
     "heading_edit_person": "Edit a person",

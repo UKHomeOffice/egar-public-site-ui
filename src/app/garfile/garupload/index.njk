@@ -37,7 +37,7 @@
 
       <div class="govuk-form-group {{ m.form_group_class('file', errors) }}">
         <label class="govuk-label" for="file">{{__('field_file')}}</label>
-        {{ m.error_message("file", errors) }}
+        {{ m.error_message("file", errors, __) }}
         <input type="file" id="file" class="govuk-file-upload" name='file' accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
       </div>
 

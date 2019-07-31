@@ -38,7 +38,7 @@
             <h1 class="govuk-fieldset__heading">Invite a user</h1>
             <span id="customs-hint" class="govuk-hint">Please select the role you would like the user to perform within your organisation.</span>
           </legend>
-          {{ m.error_message('invite', errors) }}
+          {{ m.error_message('invite', errors, __) }}
 
           <div class="govuk-radios">
           {% for role in roles %}

@@ -29,7 +29,7 @@
             <h1 class="govuk-fieldset__heading">{{__('heading_how_to_create')}}</h1>
           </legend>
           <span id="gar-option-hint" class="govuk-hint">{{__('how_to_create_caption')}}</span>
-          {{ m.error_message("garoption", errors) }}
+          {{ m.error_message("garoption", errors, __) }}
             <div class="govuk-radios" id="garoption">
             {% for gar in garoptions %}
               <div class="govuk-radios__item">

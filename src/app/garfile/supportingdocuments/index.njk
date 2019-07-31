@@ -59,7 +59,7 @@
             <strong class="bold-medium">Upload a file</strong>
           </label>
 
-          {{ m.error_message('file', errors) }}
+          {{ m.error_message('file', errors, __) }}
           <input class="govuk-file-upload" type="file" id="file" name='file'
             accept="image/gif, image/jpeg, image/png, application/pdf">
         </div>

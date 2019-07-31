@@ -1,21 +1,21 @@
 <div class="govuk-form-group {{ m.form_group_class('savedpeople', errors) }}">
 <div class="govuk-form-group {{ m.form_group_class('first-name', errors) }}">
   <label class="govuk-label govuk-label--m" for="first-name">{{ __('field_given_name') }}</label>
-    {{ m.error_message('first-name', errors) }}
+    {{ m.error_message('first-name', errors, __) }}
   <input class="govuk-input govuk-input--width-30" id="first-name" name="first-name" autocomplete="off" type="text"
   maxlength="{{ MAX_STRING_LENGTH }}" value="{{person['firstName'] or req.body['first-name']}}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('last-name', errors) }}">
   <label class="govuk-label govuk-label--m" for="last-name">{{ __('field_surname') }}</label>
-  {{ m.error_message('last-name', errors) }}
+  {{ m.error_message('last-name', errors, __) }}
   <input class="govuk-input govuk-input--width-30" id="last-name" name="last-name" autocomplete="off" type="text"
   maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['lastName'] or req.body['last-name'] }}" />
 </div>
 
 <div class="govuk-form-group {{ m.form_group_class('nationality', errors) }}">
   <label class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
-  {{ m.error_message('nationality', errors) }}
+  {{ m.error_message('nationality', errors, __) }}
   <span class="govuk-hint">
     {{ __('field_nationality_hint') }}
   </span>
@@ -28,7 +28,7 @@
 
   <div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
     <label class="govuk-label govuk-label--m" for="birthplace">{{ __('field_birth_place') }}</label>
-    {{ m.error_message('birthplace', errors) }}
+    {{ m.error_message('birthplace', errors, __) }}
     <input class="govuk-input govuk-input--width-30" id="birthplace" name="birthplace" autocomplete="off" type="text"
     maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
   </div>
@@ -40,7 +40,7 @@
           <h1 class="govuk-fieldset__heading">{{ __('field_dob') }}</h1>
       </legend>
       <span class="govuk-hint" id="dob-hint">{{ __('field_dob_hint') }}</span>
-      {{ m.error_message('dob', errors) }}
+      {{ m.error_message('dob', errors, __) }}
       <div class="govuk-date-input" id="dob">
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
@@ -69,7 +69,7 @@
   <!-- End date of birth -->
 
       <div class="govuk-form-group {{ m.form_group_class('gender', errors) }}" id="gender">
-        {{ m.error_message('gender', errors) }}
+        {{ m.error_message('gender', errors, __) }}
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             <h2 class="govuk-fieldset__heading">{{ __('field_gender') }}</h2>
@@ -90,7 +90,7 @@
       </div>
 
     <div class="govuk-form-group {{ m.form_group_class('person-type', errors) }}" id="person-type">
-      {{ m.error_message('person-type', errors) }}
+      {{ m.error_message('person-type', errors, __) }}
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h2 class="govuk-fieldset__heading">{{ __('field_person_type') }}</h2>
@@ -116,7 +116,7 @@
 
   <div class="govuk-form-group {{ m.form_group_class('travel-document-number', errors) }}">
     <label class="govuk-label govuk-label--m" for="travel-document-number">{{ __('field_travel_document_number') }}</label>
-    {{ m.error_message('travel-document-number', errors) }}
+    {{ m.error_message('travel-document-number', errors, __) }}
     <input class="govuk-input govuk-input--width-20" id="travel-document-number" name="travel-document-number" type="text"
     maxlength="{{ MAX_STRING_LENGTH }}" value="{{person['documentNumber'] or req.body['travel-document-number']}}" />
   </div>
@@ -127,7 +127,7 @@
         <h2 class="govuk-fieldset__heading">{{ __('field_document_expiry_date') }}</h2>
       </legend>
       <span id="dob-hint" class="govuk-hint">{{ __('field_document_expiry_date_hint') }}{{ futureYear }}</span>
-      {{ m.error_message('documentExpiryDate', errors) }}
+      {{ m.error_message('documentExpiryDate', errors, __) }}
       <div class="govuk-date-input" id="expiry">
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
@@ -156,7 +156,7 @@
 
 <div class="govuk-form-group {{ m.form_group_class('issuing-state', errors) }}">
   <label class="govuk-label govuk-label--m" for="issuing-state">{{ __('field_issuing_state') }}</label>
-  {{ m.error_message('issuing-state', errors) }}
+  {{ m.error_message('issuing-state', errors, __) }}
   <span class="govuk-hint">{{ __('field_issuing_state_hint') }}</span>
   <select class="govuk-select" id="issuing-state" name="issuing-state" value="{{ (person['issuingState'] or req.body['issuing-state'])}}">
     {% for country in countryList|sort(attribute='label') %}
@@ -168,7 +168,7 @@
   <div class="govuk-form-group {{ m.form_group_class('travel-document-type', errors) }}">
     <label class="govuk-label govuk-label--m" for="travel-document-type">{{ __('field_travel_document_type') }}</label>
     <span class="govuk-hint">{{ __('field_travel_document_type_hint') }}</span>
-    {{ m.error_message('travel-document-type', errors) }}
+    {{ m.error_message('travel-document-type', errors, __) }}
     <select class="govuk-select" id="travel-document-type" name="travel-document-type">
     {% for document in documenttype %}
       {% if document.documenttype  == person['documentType'] or document.documenttype == req.body['travel-document-type']%}

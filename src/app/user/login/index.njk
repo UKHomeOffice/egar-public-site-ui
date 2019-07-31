@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Sign In
+	{{__('error_prefix') if errors}} GAR | Sign In
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% block beforeContent %}
 
   {% include "phase.njk" %}
-  <a href="/" class="govuk-back-link">Back</a>
+  <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>
 
 {% endblock %}
 
@@ -50,7 +50,7 @@
 			<div class="govuk-form-group {{ m.form_group_class('username', errors) }}">
 				<label class="govuk-label govuk-label--m" for="username">{{ __('field_username') }}</label>
 				<span id="username-hint" class="govuk-hint">{{ __('field_username_hint') }}</span>
-        {{ m.error_message('username', errors) }}
+        {{ m.error_message('username', errors, __) }}
 				<input class="govuk-input" id="username" name="username" type="text" aria-describedby="username-hint username-error">
 			</div>
 
