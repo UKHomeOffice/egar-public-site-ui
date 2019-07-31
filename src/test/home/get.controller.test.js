@@ -68,7 +68,9 @@ describe('Home Get Controller', () => {
     callController().then().then(() => {
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
       expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', undefined);
-      expect(res.render).to.have.been.calledOnceWith('app/home/index', { cookie, errors: [{ message: 'Failed to get GARs' }] });
+      expect(res.render).to.have.been.calledOnceWith('app/home/index', {
+        cookie, successHeader: undefined, successMsg: undefined, errors: [{ message: 'Failed to get GARs' }],
+      });
     });
   });
 
@@ -99,6 +101,56 @@ describe('Home Get Controller', () => {
       expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', undefined);
       expect(res.render).to.have.been.calledOnceWith('app/home/index', {
         cookie,
+        successMsg: undefined,
+        successHeader: undefined,
+        userSession: { StatusChangedTimestamp: '2018-11-20' },
+        draftGars: [
+          { id: 'GAR-1', status: { name: 'Draft' } },
+          { id: 'GAR-2', status: { name: 'Draft' } },
+        ],
+        submittedGars: [
+          { id: 'GAR-4', status: { name: 'Submitted' } },
+          { id: 'GAR-5', status: { name: 'Submitted' } },
+          { id: 'GAR-6', status: { name: 'Submitted' } },
+        ],
+        cancelledGars: [{ id: 'GAR-3', status: { name: 'Cancelled' } }],
+      });
+    });
+  });
+
+  it('should render the page with session data if ok and with success messages', () => {
+    const apiResponse = {
+      items: [
+        { id: 'GAR-1', status: { name: 'Draft' } },
+        { id: 'GAR-2', status: { name: 'Draft' } },
+        { id: 'GAR-3', status: { name: 'Cancelled' } },
+        { id: 'GAR-4', status: { name: 'Submitted' } },
+        { id: 'GAR-5', status: { name: 'Submitted' } },
+        { id: 'GAR-6', status: { name: 'Submitted' } },
+      ],
+    };
+    req.session.successHeader = 'Windows XP';
+    req.session.successMsg = 'Task failed successfully.';
+    tokenApiStub.resolves({
+      StatusChangedTimestamp: '2018-11-20',
+    });
+    garApiStub.resolves(JSON.stringify(apiResponse));
+
+    const cookie = new CookieModel(req);
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then().then(() => {
+      expect(req.session.successHeader).to.be.undefined;
+      expect(req.session.successMsg).to.be.undefined;
+      expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
+      expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', undefined);
+      expect(res.render).to.have.been.calledOnceWith('app/home/index', {
+        cookie,
+        successHeader: 'Windows XP',
+        successMsg: 'Task failed successfully.',
         userSession: { StatusChangedTimestamp: '2018-11-20' },
         draftGars: [
           { id: 'GAR-1', status: { name: 'Draft' } },

@@ -34,13 +34,22 @@ module.exports = (req, res) => {
       // call the API to update craft
       craftApi.update(craftReg, craftType, craftBase, cookie.getUserDbId(), craftId)
         .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-            // API returned failure
-            res.render('app/aircraft/edit/index', { cookie, errors: [parsedResponse] });
-          } else {
-            // API returned successful
-            res.redirect('/aircraft');
+          try {
+            const parsedResponse = JSON.parse(apiResponse);
+            if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+              // API returned failure
+              res.render('app/aircraft/edit/index', { cookie, errors: [parsedResponse] });
+            } else {
+              // API returned successful
+              res.redirect('/aircraft');
+            }
+          } catch (err) {
+            logger.error('Error parsing response updating aircraft, may not be JSON');
+            let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
+            if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {
+              errMsg = { message: 'Craft already exists' };
+            }
+            res.render('app/aircraft/edit/index', { cookie, errors: [errMsg] });
           }
         }).catch((err) => {
           logger.error('Unexpected error updating aircraft');

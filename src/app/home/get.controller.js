@@ -36,7 +36,9 @@ module.exports = (req, res) => {
         .catch((err) => {
           logger.error('Failed to get GARS from API');
           logger.error(err);
-          res.render('app/home/index', { cookie, successMsg, successHeader, errors: [{ message: 'Failed to get GARs' }] });
+          res.render('app/home/index', {
+            cookie, successMsg, successHeader, errors: [{ message: 'Failed to get GARs' }],
+          });
         });
     })
     .catch((err) => {
