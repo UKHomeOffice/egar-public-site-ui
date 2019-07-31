@@ -77,6 +77,7 @@
     "field_minute": "Minute",
     "label_departure_details": "Departure details",
     "departure_details_caption": "Provide the departure details of the flight",
+    "field_departure_hint": "Departure ",
     "field_departure_date": "Departure date",
     "field_date_hint": "For example 20 04 2019",
     "field_departure_month_hint": "Enter a number, between 1 and 12",
@@ -91,6 +92,7 @@
 
     "heading_arrival_details": "Arrival details",
     "arrival_details_caption": "Provide the arrival details of the flight",
+    "field_arrival_hint": "Arrival ",
     "field_arrival_date": "Arrival date",
     "field_arrival_time": "Arrival time (UTC)",
     "field_arrival_port": "Arrival port",

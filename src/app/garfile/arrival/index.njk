@@ -44,7 +44,9 @@
             <div class="govuk-date-input" id="arrival">
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalDay">{{__('field_day')}}</label>
+                  <label class="govuk-label govuk-date-input__label" for="arrivalDay">
+                    <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_day')}}
+                  </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalDay"
                   name="arrivalDay" type="number" pattern="[0-9]*" min="1" max="31"
                   value="{{cookie.dateSlice('day', cookie.getGarArrivalVoyage().arrivalDate)}}">
@@ -53,7 +55,9 @@
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalMonth">{{__('field_month')}}</label>
+                  <label class="govuk-label govuk-date-input__label" for="arrivalMonth">
+                    <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_month')}}
+                  </label>
                   <span id="arrival-month-hint" class="govuk-visually-hidden">{{__('field_departure_month_hint')}}</span>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMonth"
                     name="arrivalMonth" type="number" pattern="[0-9]*" min="1" max="12"
@@ -64,7 +68,9 @@
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="arrivalYear">{{__('field_year')}}</label>
+                    <label class="govuk-label govuk-date-input__label" for="arrivalYear">
+                      <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_year')}}
+                    </label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalYear"
                     name="arrivalYear" type="number" pattern="[0-9]*" min="1900" max="2200"
                     value="{{cookie.dateSlice('year', cookie.getGarArrivalVoyage().arrivalDate)}}">
@@ -88,7 +94,9 @@
             <div class="govuk-date-input" id="arrivalTime">
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalHour">{{__('field_hour')}}</label>
+                  <label class="govuk-label govuk-date-input__label" for="arrivalHour">
+                    <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_hour')}}
+                  </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalHour"
                   name="arrivalHour" type="number" pattern="[0-9]*" min="0" max="23"
                   value="{{cookie.timeSlice('hour', cookie.getGarArrivalVoyage().arrivalTime)}}">
@@ -97,7 +105,9 @@
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalMinute">{{__('field_minute')}}</label>
+                  <label class="govuk-label govuk-date-input__label" for="arrivalMinute">
+                    <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_minute')}}
+                  </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMinute"
                   name="arrivalMinute" type="number" pattern="[0-9]*" min="0" max="59"
                   value="{{cookie.timeSlice('minute', cookie.getGarArrivalVoyage().arrivalTime)}}">
