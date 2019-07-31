@@ -13,7 +13,7 @@
 {% block beforeContent %}
 
   {% include "phase.njk" %}
-  <a href="/garfile/departure" class="govuk-back-link">Back</a>
+  <a href="/garfile/departure" class="govuk-back-link">{{__('nav_back')}}</a>
 
 {% endblock %}
 
@@ -54,9 +54,11 @@
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
                   <label class="govuk-label govuk-date-input__label" for="arrivalMonth">{{__('field_month')}}</label>
+                  <span id="arrival-month-hint" class="govuk-visually-hidden">{{__('field_departure_month_hint')}}</span>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMonth"
-                  name="arrivalMonth" type="number" pattern="[0-9]*" min="1" max="12"
-                  value="{{cookie.dateSlice('month', cookie.getGarArrivalVoyage().arrivalDate)}}">
+                    name="arrivalMonth" type="number" pattern="[0-9]*" min="1" max="12"
+                    value="{{cookie.dateSlice('month', cookie.getGarArrivalVoyage().arrivalDate)}}"
+                    aria-describedby="arrival-month-hint">
                   </div>
                 </div>
 
@@ -64,7 +66,7 @@
                 <div class="govuk-form-group">
                     <label class="govuk-label govuk-date-input__label" for="arrivalYear">{{__('field_year')}}</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalYear"
-                    name="arrivalYear" type="number" pattern="[0-9]*" min="1900" max="2200";
+                    name="arrivalYear" type="number" pattern="[0-9]*" min="1900" max="2200"
                     value="{{cookie.dateSlice('year', cookie.getGarArrivalVoyage().arrivalDate)}}">
                   </div>
                 </div>
@@ -109,13 +111,14 @@
         {# Start arrival port #}
         <div class="govuk-form-group {{ m.form_group_class('arrivalPort', errors) }}">
 				  <label class="govuk-label govuk-label--m" for="arrivalPort">{{__('field_arrival_port')}}</label>
-				  <span id="arrivalPort-hint" class="govuk-hint">
+				  <span id="arrival-port-hint" class="govuk-hint">
 				    Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
             The arrival port must be different to the departure port.
 				  </span>
           {{ m.error_message('arrivalPort', errors) }}
           <input class="govuk-input govuk-input--width-4" maxlength="4" id="arrivalPort" name="arrivalPort"
-          autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort | upper }}"/>
+            autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort | upper }}"
+            aria-describedby="arrival-port-hint"/>
         </div>
         {# End arrival port #}
 
@@ -137,7 +140,8 @@
           </span>
 
           {{ m.error_message('arrivalLat', errors) }}
-          <input class="govuk-input govuk-input--width-10" id="arrivalLat" name="arrivalLat" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLat}}"/>
+          <input class="govuk-input govuk-input--width-10" id="arrivalLat" name="arrivalLat" autocomplete="off" type="text"
+            value="{{cookie.getGarArrivalVoyage().arrivalLat}}" aria-describedby="arrivalCoordinates-hint arrivalLatitude-hint"/>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('arrivalLong', errors) }}">
@@ -148,7 +152,8 @@
             {{__('field_longitude_hint')}}
           </span>
           {{ m.error_message('arrivalLong', errors) }}
-          <input class="govuk-input govuk-input--width-10" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalLong}}"/>
+          <input class="govuk-input govuk-input--width-10" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text"
+            value="{{cookie.getGarArrivalVoyage().arrivalLong}}" aria-describedby="arrivalCoordinates-hint arrivalLongitude-hint"/>
 
         </div>
         {# End arrival coords #}

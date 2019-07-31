@@ -13,7 +13,7 @@
 {% block beforeContent %}
 
   {% include "phase.njk" %}
-  <a href="/garfile/home" class="govuk-back-link">Back</a>
+  <a href="/garfile/home" class="govuk-back-link">{{__('nav_back')}}</a>
 
 {% endblock %}
 
@@ -56,9 +56,11 @@
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
                   <label class="govuk-label govuk-date-input__label" for="departureMonth">{{__('field_month')}}</label>
+                  <span id="departure-month-hint" class="govuk-visually-hidden">{{__('field_departure_month_hint')}}</span>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMonth"
-                  name="departureMonth" type="number" pattern="[0-9]*" min="1" max="12"
-                  value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}">
+                    name="departureMonth" type="number" pattern="[0-9]*" min="1" max="12"
+                    value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}"
+                    aria-describedby="departure-month-hint">
                   </div>
                 </div>
 
@@ -113,13 +115,15 @@
         <!-- Start departure port -->
         <div class="govuk-form-group {{ m.form_group_class('departurePort', errors) }}">
           <label class="govuk-label govuk-label--m" for="departurePort">{{__('field_departure_port')}}</label>
-          <span id="departurePort-hint" class="govuk-hint">
+          <span id="departure-port-hint" class="govuk-hint">
             Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'YYYY'. <br>
             The departure port must be different to the arrival port.
           </span>
           {{ m.error_message('departurePort', errors) }}
           <input class="govuk-input govuk-input--width-4"
-          maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
+            maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text"
+            value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"
+            aria-describedby="departure-port-hint"/>
           {# Airport list v1
           <select class="govuk-select" id="test1" name="test1" value="">
             <option value=""></option>
@@ -139,7 +143,7 @@
 
 
         <div class="govuk-form-group">
-          <label class="govuk-heading-m">Departure coordinates</label>
+          <label class="govuk-heading-m">{{__('field_departure_coordinates')}}</label>
           <span id="departureCoordinates-hint" class="govuk-hint">
            You are only required to enter coordinates if your port does not have an IATA / ICAO code.
            Provide coordinates in decimal format to 4 decimal places.
@@ -157,7 +161,7 @@
 
           {{ m.error_message('departureLat', errors) }}
           <input class="govuk-input govuk-input--width-10" id="departureLat" name="departureLat" autocomplete="off" type="text"
-          value="{{ cookie.getGarDepartureVoyage().departureLat }}"/>
+            value="{{ cookie.getGarDepartureVoyage().departureLat }}" aria-describedby="departureCoordinates-hint departureLatitude-hint"/>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('departureLong', errors) }}">
@@ -169,8 +173,7 @@
           </span>
           {{ m.error_message('departureLong', errors) }}
           <input class="govuk-input govuk-input--width-10" id="departureLong" name="departureLong" autocomplete="off" type="text"
-          value="{{ cookie.getGarDepartureVoyage().departureLong }}"/>
-
+            value="{{ cookie.getGarDepartureVoyage().departureLong }}" aria-describedby="departureCoordinates-hint departureLongitude-hint"/>
         </div>
         <!-- End departure coords -->
 
