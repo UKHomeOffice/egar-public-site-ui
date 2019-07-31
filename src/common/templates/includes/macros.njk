@@ -11,7 +11,7 @@
 {% macro error_message(identifier, errors) %}
 	{% for error in errors %}
 		{% if error.identifier == identifier %}
-			<p class="govuk-error-message">{{error.message}}</p>
+			<p id="{{ identifier }}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error: </span>{{error.message}}</p>
 		{% endif %}
 	{% endfor %}
 {% endmacro %}

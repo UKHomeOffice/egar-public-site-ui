@@ -22,7 +22,7 @@ describe('User Login Post Controller', () => {
 
     req = {
       body: {
-        Username: 'ExampleUser',
+        username: 'ExampleUser',
         departureDate: null,
         departurePort: 'ZZZZ',
       },
@@ -53,7 +53,7 @@ describe('User Login Post Controller', () => {
   it('should fail validation on empty submit', async () => {
     const emptyRequest = {
       body: {
-        Username: '',
+        username: '',
       },
       session: {
         cookie: {},

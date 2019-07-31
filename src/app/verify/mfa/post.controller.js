@@ -8,10 +8,10 @@ const settings = require('../../../common/config/index');
 
 module.exports = (req, res) => {
   logger.debug('In verify / mfa post controller');
-  const token = req.body['mfa-authentication-code'];
+  const token = req.body['mfa-code'];
 
   const mfaCodeChain = [
-    new ValidationRule(validator.notEmpty, 'mfa-authentication-code', token, 'Enter your code'),
+    new ValidationRule(validator.notEmpty, 'mfa-code', token, 'Enter your code'),
   ];
 
   const cookie = new CookieModel(req);
