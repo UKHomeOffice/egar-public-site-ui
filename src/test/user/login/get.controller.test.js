@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -17,10 +18,12 @@ describe('User Login Get Controller', () => {
     chai.use(sinonChai);
 
     req = {
+      headers: {},
       session: {},
     };
 
     res = {
+      redirect: sinon.spy(),
       render: sinon.spy(),
     };
   });
@@ -33,7 +36,36 @@ describe('User Login Get Controller', () => {
     const cookie = new CookieModel(req);
     await controller(req, res);
 
-    // CookieModel instance created, can that be asserted
-    expect(res.render).to.have.been.calledWith('app/user/login/index', { cookie });
+    expect(res.redirect).to.not.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/user/login/index', { cookie });
+  });
+
+  it('should render if referer but no user object in session', async () => {
+    req.headers.referer = '/example';
+    const cookie = new CookieModel(req);
+    await controller(req, res);
+
+    expect(res.redirect).to.not.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/user/login/index', { cookie });
+  });
+
+  it('should render if referer but no dbId in session', async () => {
+    req.headers.referer = '/example';
+    req.session.u = {};
+    const cookie = new CookieModel(req);
+    await controller(req, res);
+
+    expect(res.redirect).to.not.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/user/login/index', { cookie });
+  });
+
+  it('should redirect if there is a referrer and dbId set in the cookie', async () => {
+    req.headers.referer = '/example';
+    req.session.u = { dbId: 'ALREADY_LOGGED_IN_ID' };
+
+    await controller(req, res);
+
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
+    expect(res.render).to.not.have.been.called;
   });
 });
