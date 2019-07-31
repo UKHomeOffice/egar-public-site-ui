@@ -5,6 +5,7 @@
     "nav_bar_create_organisation": "Create Organisation",
     "nav_bar_organisation": "Organisation",
     "nav_bar_account": "Account",
+    "nav_back": "Back",
 
     "field_username": "Registered email address",
     "field_username_hint": "Enter the email address you used when you created your account",
@@ -61,6 +62,10 @@
     "gar_cancelled_no_records": "There are no cancelled GARs",
     "field_submission_reference": "Submission reference",
     "value_aircraft_registration_null": "TBD",
+
+    "heading_how_to_create": "How would you like to create a GAR?",
+    "how_to_create_caption": "You have the option to create a GAR using our online web form, or by uploading a pre-populated template file. Please select how you would like to create your GAR to proceed.",
+    "button_continue": "Continue",
 
     "section_count": "Section %s of %s",
     "field_given_name": "Given name",

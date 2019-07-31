@@ -12,45 +12,40 @@
 
 {% block beforeContent %}
   {% include "phase.njk" %}
-  <a href="/home" class="govuk-back-link">Back</a>
+  <a href="/home" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-  {% import "common/templates/includes/macros.njk" as m %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+    {% import "common/templates/includes/macros.njk" as m %}
+    {% if errors %}
+      {% include "common/templates/includes/errors.njk" %}
+    {% endif %}
     <form action="" method="post" class="form">
-        <div class="govuk-form-group {{ m.form_group_class('garoption', errors) }}">
-            <fieldset class="govuk-fieldset" aria-describedby="gar-type-choice">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                  <h1 class="govuk-fieldset__heading">How would you like to create a GAR?</h1>
-                </legend>
-                <span id="gar-type-choice" class="govuk-hint">
-                 You have the option to create a GAR using our online web form, or by uploading a pre-populated template file.
-                 Please select how you would like to create your GAR to proceed.
-                </span>
-                {{ m.error_message("garoption", errors) }}
-                  <div class="govuk-radios" id="garoption">
-                  {% for gar in garoptions %}
-                      <div class="govuk-radios__item">
-                        {% if gar.option == req.body.garoption %}
-                        		<input class="govuk-radios__input" id="option-{{gar.id}}" name="garoption" type="radio" value="{{gar.id}}" checked="checked">
-                        {% else %}
-                            <input class="govuk-radios__input" id="option-{{gar.id}}" name="garoption" type="radio" value="{{gar.id}}">
-                        {% endif %}
-                        <label class="govuk-label govuk-radios__label" for="option-{{gar.id}}">{{ gar.option}}</label>
-                      </div>
-                  {% endfor %}
-                  </div>
-            </fieldset>
-        </div>
+      <div class="govuk-form-group {{ m.form_group_class('garoption', errors) }}">
+        <fieldset class="govuk-fieldset" aria-describedby="gar-option-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading">{{__('heading_how_to_create')}}</h1>
+          </legend>
+          <span id="gar-option-hint" class="govuk-hint">{{__('how_to_create_caption')}}</span>
+          {{ m.error_message("garoption", errors) }}
+            <div class="govuk-radios" id="garoption">
+            {% for gar in garoptions %}
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="option-{{gar.id}}" name="garoption" type="radio" value="{{gar.id}}">
+                <label class="govuk-label govuk-radios__label" for="option-{{gar.id}}">{{ gar.option}}</label>
+              </div>
+            {% endfor %}
+            </div>
+        </fieldset>
+      </div>
 
-        <div class="form-group">
-            <input type="submit" class="govuk-button" value="Continue">
-        </div>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <div class="form-group">
+        <input type="submit" class="govuk-button" value="{{__('button_continue')}}">
+      </div>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
+  </div>
+</div>
 {% endblock %}
