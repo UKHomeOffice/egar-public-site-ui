@@ -28,11 +28,10 @@
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
 		<form action="/garfile/manifest" method="post">
-			<span class="govuk-caption-xl">Section 4 of 8</span>
-			<h1 class="govuk-heading-xl">Manifest details</h1>
-
+			<span class="govuk-caption-xl">{{__('section_count', 4, 8)}}</span>
+			<h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
 			<h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
-				<p class="govuk-body-l">Add the details of people you have previously added</p>
+			<p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
   </div>
   <div class="govuk-grid-column-full">
         {% if savedPeople | length %}

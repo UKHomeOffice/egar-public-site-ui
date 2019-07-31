@@ -18,7 +18,7 @@
     "user_login_unverified": "The email address supplied has not been verified. You should have recieved an email to verify.",
     "user_login_unverified_caption_1": "Click the verification link inside the email. This link will remain valid for 12 hours. If you can't see the email, please check any spam folders or ",
     "user_login_unverified_resend": "resend the verification email",
-    "user_login_unverified_caption_3": ".", 
+    "user_login_unverified_caption_3": ".",
 
     "title_confirm_mfa_code": "Confirm your multi-factor authentication code",
     "confirm_mfa_code_caption": "If the email that you entered is associated with an account then you will have received an email with your login code. Please enter it below.",
@@ -53,7 +53,7 @@
     "create_gar_caption_2": ".",
     "button_start_now": "Start now",
     "heading_manage_gars": "Manage GARs",
-    "manage_gars_caption": "You can view, edit, cancel or delete GARs dependent on the status of the GAR.",
+    "manage_gars_caption": "You can view, edit, cancel or delete GARs depending on the status of the GAR. Only an unsubmitted GAR can be cancelled. You cannot edit a GAR once it has been submitted.",
     "tab_gar_draft": "Draft (%s)",
     "gar_draft_no_records": "There are no draft GARs",
     "tab_gar_submitted": "Submitted (%s)",
@@ -92,6 +92,9 @@
     "field_arrival_date": "Arrival date",
     "field_arrival_time": "Arrival time (UTC)",
     "field_arrival_port": "Arrival port",
+
+    "heading_manifest_details": "Manifest details",
+    "caption_manifest_details": "Select the details of people you have previously added.",
 
     "title_edit_person": "Edit Person Details",
     "heading_edit_person": "Edit a person",
@@ -147,7 +150,7 @@
     "validator_api_uploadgar_no_file": "Provide a file",
 	"validator_api_uploadgar_incorrect_type": "Incorrect file type",
     "validator_api_uploadgar_incorrect_gar_file": "Incorrect xls or xlsx file",
-    
+
     "title_aircraft": "Aircraft",
     "aircraft_caption": "You can view, edit or delete aircraft that you regularly add to GARs.",
     "aircraft_no_records": "There are no saved aircraft records",
@@ -177,7 +180,7 @@
     "add_person_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
 
     "manifest_no_records": "There are no people on the manifest",
-    
+
     "supportingdocuments_no_records": " There are no supporting documents uploaded",
 
     "organisation_no_records": "There are no organisation members",
