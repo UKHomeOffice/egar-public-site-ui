@@ -26,7 +26,7 @@
         <dd class="app-check-your-answers__change"></dd>
       </div>
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">Departure port</dt>
+        <dt class="app-check-your-answers__question">{{__('field_departure_port')}}</dt>
         <dd class="app-check-your-answers__answer">{{garfile.departurePort | upper}}</dd>
         <dd class="app-check-your-answers__change"></dd>
       </div>
@@ -150,7 +150,7 @@
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
-          Manifest details
+          {{__('heading_manifest_details')}}
         </dt>
         {% if showChangeLinks %}
         <dd style="border-bottom: none;" class="app-check-your-answers__change">
@@ -168,12 +168,12 @@
       <table class="govuk-table" id="manifestTable">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Surname</th>
-            <th class="govuk-table__header" scope="col">Given name</th>
-            <th class="govuk-table__header" scope="col">Date of birth</th>
-            <th class="govuk-table__header" scope="col">Travel document number</th>
-            <th class="govuk-table__header" scope="col">Nationality</th>
-            <th class="govuk-table__header" scope="col">Type</th>
+            <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -191,30 +191,30 @@
             <td class="govuk-table__cell" colspan="6">
               <div>
                 <details role="group">
-                  <summary role="button" aria-controls="details-content-2" aria-expanded="false" title="Further information for {{person.firstName}} {{person.lastName}}">
-                    <span class="summary btn-link">Further information</span>
+                  <summary role="button" aria-controls="details-content-2" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
+                    <span class="summary btn-link">{{__('label_manifest_further_personal_details')}}</span>
                   </summary>
                     <div class="panel panel-border-narrow" id="details-content-2" aria-hidden="true">
                       <table class="govuk-table" width="100%">
                         <tbody class="govuk-table__body">
                           <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">Gender</td>
+                            <td class="govuk-table__cell">{{__('field_gender')}}</td>
                             <td class="govuk-table__cell">{{person.gender}}</td>
                           </tr>
                           <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">Place of birth</td>
+                            <td class="govuk-table__cell">{{__('field_birth_place')}}</td>
                             <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
                           </tr>
                           <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">Travel document type</td>
+                            <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
                             <td class="govuk-table__cell">{{person.documentType}}</td>
                           </tr>
                           <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">Travel document issuing state</td>
+                            <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
                             <td class="govuk-table__cell">{{person.issuingState | upper}}</td>
                           </tr>
                           <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">Travel document expiry date</td>
+                            <td class="govuk-table__cell">{{__('field_travel_document_expiry_date')}}</td>
                             <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
                           </tr>
                         </tbody>
@@ -324,12 +324,12 @@
       </div>
       {% endif %}
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">Is the aircraft in free circulation in the EU?</dt>
+        <dt class="app-check-your-answers__question">{{__('field_free_circulation')}}</dt>
         <dd class="app-check-your-answers__answer">{{garfile.freeCirculation}}</dd>
         <dd class="app-check-your-answers__change"></dd>
       </div>
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">Reason for visit</dt>
+        <dt class="app-check-your-answers__question">{{__('field_visit_reason_question')}}</dt>
         <dd class="app-check-your-answers__answer">{{garfile.visitReason | uncamelCase }}</dd>
         <dd class="app-check-your-answers__change">
         </dd>

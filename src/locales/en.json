@@ -78,7 +78,7 @@
     "create_gar_caption_2": ".",
     "button_start_now": "Start now",
     "heading_manage_gars": "Manage GARs",
-    "manage_gars_caption": "You can view, edit, cancel or delete GARs dependent on the status of the GAR.",
+    "manage_gars_caption": "You can view, edit, cancel or delete GARs depending on the status of the GAR. You cannot edit a GAR once it has been submitted.",
     "tab_gar_draft": "Draft (%s)",
     "gar_draft_no_records": "There are no draft GARs",
     "tab_gar_submitted": "Submitted (%s)",
@@ -123,6 +123,18 @@
     "field_arrival_port": "Arrival port",
     "field_arrival_coordinates": "Arrival coordinates",
 
+    "heading_aircraft_details": "Aircraft details",
+    "caption_aircraft_details": "Select the details of an aircraft you have previously added",
+
+    "heading_manifest_details": "Manifest details",
+    "caption_manifest_details": "Select the details of people you have previously added.",
+
+    "heading_manifest_add_person_details": "Add new person details",
+    "heading_manifest_edit_person_details": "Person details",
+    "caption_manifest_person_details": "Provide the details of the person you want to add to the manifest. Details should be as displayed on the travel document.",
+    "label_manifest_further_personal_details": "Further personal details",
+    "further_information_for": "Further information for %s %s",
+
     "title_edit_person": "Edit Person Details",
     "heading_edit_person": "Edit a person",
     "caption_edit_person": "Please enter the following information. This information can be re-used when submitting a GAR.",
@@ -138,6 +150,7 @@
     "field_date_year": "Year",
     "field_gender": "Gender",
     "field_person_type": "Person type",
+    "field_person_type_short": "Type",
     "field_person_type_hint": "For example Captain, Crew or Passenger. First Officer / Co-Pilot should be identified as Crew.",
 
     "heading_travel_document_details": "Travel document details",
@@ -149,6 +162,8 @@
     "field_issuing_state_hint": "Type in or provide the 3 letter code for the issuing state, for example GBR",
     "field_travel_document_type": "Travel document type",
     "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other",
+    "field_travel_document_issuing_state": "Travel document issuing state",
+    "field_travel_document_expiry_date": "Travel document expiry date",
 
     "field_address_country": "Country",
 
