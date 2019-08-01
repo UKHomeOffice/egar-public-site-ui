@@ -223,6 +223,11 @@
 
     "validator_msg_voyage_dates": "Arrival time must be after departure time",
 
+    "title_cancel_gar": "Cancel GAR",
+    "heading_cancel_gar": "Are you sure you want to cancel this GAR?",
+    "cancel_gar_caption": "You will need to ensure that a new GAR is submitted if this flight takes place.",
+    "form_exit_without_cancelling": "Exit without cancelling",
+
     "title_organisation": "Organisation",
     "organisation_caption": "Manage your organisation's details.",
 

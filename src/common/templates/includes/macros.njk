@@ -31,13 +31,12 @@
   <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 {% endmacro %}
 
-{% macro exit_without_saving(garId, csrfToken, __) %}
+{% macro exit_without_saving(csrfToken, __) %}
 <form id="cancel-form" action="/garfile/view" method="post" role="form">
   <p class="govuk-body-m">
     <button type="submit" id="exit-without-saving" class="govuk-button govuk-button--secondary" data-module="govuk-button">
       {{__('form_exit_without_saving')}}
     </button>
-    <input type="hidden" name="garId" value="{{ garId }}">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </p>
 </form>

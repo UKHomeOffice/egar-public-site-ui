@@ -175,7 +175,7 @@
     {# Start buttons #}
         {{ m.submit_buttons('GAR Departure', csrfToken, __) }}
     </form>
-    {{ m.exit_without_saving(cookie.getGarId(), csrfToken, __) }}
+    {{ m.exit_without_saving(csrfToken, __) }}
     {# End buttons #}
     </div>
   </div>

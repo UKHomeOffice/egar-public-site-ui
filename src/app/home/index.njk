@@ -107,16 +107,16 @@
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
                 {% if gar.registration === null %}
-                  <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
+                  <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
                 {% else %}
-                  <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
+                  <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
                 {% endif %}
                 </td>
-                <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
-                <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
-                <td class="govuk-table__cell ">{{ gar.departurePort | upper }} </td>
-                <td class="govuk-table__cell ">{{ gar.arrivalPort | upper }} </td>
-                <td class="govuk-table__cell ">{{ gar.garId }} </td>
+                <td class="govuk-table__cell">{{ gar.departureDate }}</td>
+                <td class="govuk-table__cell">{{ gar.departureTime }} </td>
+                <td class="govuk-table__cell">{{ gar.departurePort | upper }} </td>
+                <td class="govuk-table__cell">{{ gar.arrivalPort | upper }} </td>
+                <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell">{{ gar.garId }} </td>
               </tr>
             {% endfor %}
           {% else %}
