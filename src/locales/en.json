@@ -161,6 +161,8 @@
     "field_issuing_state_hint": "Type in or provide the 3 letter code for the issuing state, for example GBR",
     "field_travel_document_type": "Travel document type",
     "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other",
+    "field_travel_document_issuing_state": "Travel document issuing state",
+    "field_travel_document_expiry_date": "Travel document expiry date",
 
     "field_address_country": "Country",
 

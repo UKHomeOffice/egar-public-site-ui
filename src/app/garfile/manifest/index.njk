@@ -141,28 +141,28 @@
 												<table class="govuk-table" width="100%">
 													<tbody class="govuk-table__body">
 														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">Gender</td>
+															<td class="govuk-table__cell">{{__('field_gender')}}</td>
 															<td class="govuk-table__cell">{{person.gender}}</td>
 														</tr>
 														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">Place of birth</td>
+															<td class="govuk-table__cell">{{__('field_birth_place')}}</td>
 															<td class="govuk-table__cell">{{person.placeOfBirth}}</td>
 														</tr>
 														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">Travel document type</td>
+															<td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
 															<td class="govuk-table__cell">{{person.documentType}}</td>
 														</tr>
 														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">Travel document issuing state</td>
+															<td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
 															<td class="govuk-table__cell">{{person.issuingState | upper }}</td>
 														</tr>
 														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">Travel document expiry date</td>
+															<td class="govuk-table__cell">{{__('field_travel_document_expiry_date')}}</td>
 															<td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
 														</tr>
                             <tr class="govuk-table__row">
                               <td class="govuk-table__cell" colspan="7">
-                                <button class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">Delete</button>
+                                <button class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">{{__('table_delete')}}</button>
                               </td>
                             </tr>
 													</tbody>
