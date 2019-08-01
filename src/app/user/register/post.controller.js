@@ -14,6 +14,7 @@ const config = require('../../../common/config');
 const regFailureError = {
   message: 'Registration failed, try again',
 };
+const userAlreadyRegisterMsg = 'User already registered';
 
 // Define a validation chain for user registration fields
 const createValidationChains = (fname, lname, usrname, cusrname) => {
@@ -52,10 +53,14 @@ const createUser = (req, res, cookie) => {
     .then((dbUser) => {
       if (Object.prototype.hasOwnProperty.call(JSON.parse(dbUser), 'message')) {
         logger.info('Failed to register user in db');
-        logger.info(`${JSON.parse(dbUser).message}`);
+        const errMessage = `${JSON.parse(dbUser).message}`;
+        logger.info(errMessage);
         cookie.setUserEmail(null);
-        req.session.save(() => { res.redirect('/user/regmsg'); });
-        return;
+        if (userAlreadyRegisterMsg === errMessage) {
+          res.render('app/user/register/index', { cookie, errors: [{ message: errMessage }] });
+        } else {
+          req.session.save(() => { res.redirect('/user/regmsg'); });
+        }
       }
       const { userId } = JSON.parse(dbUser);
       cookie.setUserDbId(userId);
