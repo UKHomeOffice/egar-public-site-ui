@@ -37,7 +37,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
         <div class="govuk-form-group {{ m.form_group_class('responsiblePerson', errors) }}">
           <div class="govuk-form-group {{ m.form_group_class('responsibleGivenName', errors) }}">
             <label class="govuk-label govuk-label--m" for="responsibleGivenName">Given name</label>
-            {{ m.error_message('responsibleGivenName', errors) }}
+            {{ m.error_message('responsibleGivenName', errors, __) }}
 
             <span class="field-validation-valid error-message" data-valmsg-for="responsibleGivenName"
             data-valmsg-replace="true" style="display:block"></span>
@@ -48,7 +48,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
 
           <div class="govuk-form-group {{ m.form_group_class('responsibleSurname', errors) }}">
             <label class="govuk-label govuk-label--m" for="responsibleSurname">Surname</label>
-            {{ m.error_message('responsibleSurname', errors) }}
+            {{ m.error_message('responsibleSurname', errors, __) }}
 
             <span class="field-validation-valid error-message" data-valmsg-for="responsibleSurname"
             data-valmsg-replace="true" style="display:block"></span>
@@ -59,7 +59,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
 
           <div class="govuk-form-group govuk-!-margin-bottom-6 {{ m.form_group_class('responsibleContactNo', errors) }}">
             <label class="govuk-label govuk-label--m" for="responsibleContactNo">Contact telephone number</label>
-            {{ m.error_message('responsibleContactNo', errors) }}
+            {{ m.error_message('responsibleContactNo', errors, __) }}
             <span class="govuk-hint">
            Include international dialling code, for example 44
           </span>
@@ -75,7 +75,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine1', errors) }}">
               <label class="govuk-label" for="responsibleAddressLine1">House number / building and street <span class="govuk-visually-hidden">line 1 of 2</span></label>
-              {{ m.error_message('responsibleAddressLine1', errors) }}
+              {{ m.error_message('responsibleAddressLine1', errors, __) }}
 
               <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine1"
               data-valmsg-replace="true" style="display:block"></span>
@@ -86,7 +86,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine2', errors) }}">
               <label class="govuk-label" for="address-line-2"><span class="govuk-visually-hidden">Building and street line 2 of 2</span></label>
-              {{ m.error_message('responsibleAddressLine2', errors) }}
+              {{ m.error_message('responsibleAddressLine2', errors, __) }}
 
               <span class="field-validation-valid error-message" data-valmsg-for="responsibleAddressLine2"
               data-valmsg-replace="true" style="display:block"></span>
@@ -98,7 +98,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
             <div class="govuk-form-group {{ m.form_group_class('responsibleTown', errors) }}">
               <label class="govuk-label" for="responsibleTown">Town or city</label>
 
-              {{ m.error_message('responsibleTown', errors) }}
+              {{ m.error_message('responsibleTown', errors, __) }}
 
               <span class="field-validation-valid error-message" data-valmsg-for="responsibleTown"
               data-valmsg-replace="true" style="display:block"></span>
@@ -110,7 +110,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleCounty', errors) }}">
               <label class="govuk-label govuk-label--m" for="responsibleCounty">{{__('field_address_country')}}</label>
-              {{ m.error_message('responsibleCounty', errors) }}
+              {{ m.error_message('responsibleCounty', errors, __) }}
               <select class="govuk-select" id="responsibleCounty" name="responsibleCounty"
               value="{{cookie.getGarResponsiblePerson().responsibleCounty}}">
                 {% for country in countryList | sort(attribute = 'label') %}
@@ -124,7 +124,7 @@ Create GAR | Responsible person | Submit a General Aviation Report (GAR)
             <div class="govuk-form-group {{ m.form_group_class('responsiblePostcode', errors) }}">
               <label class="govuk-label" for="responsiblePostcode">Postcode, area code or ZIP code</label>
 
-              {# {{ m.error_message('responsiblePostcode', errors) }}
+              {# {{ m.error_message('responsiblePostcode', errors, __) }}
 
               <span class="field-validation-valid error-message" data-valmsg-for="responsiblePostcode"
               data-valmsg-replace="true" style="display:block">

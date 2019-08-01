@@ -37,7 +37,7 @@
 
       <div class="govuk-form-group {{ m.form_group_class('firstName', errors) }}">
         <label class="govuk-label govuk-label--m" for="firstName">Given name</label>
-          {{ m.error_message('firstName', errors) }}
+          {{ m.error_message('firstName', errors, __) }}
         <span class="govuk-hint">
             Given Name
         </span>
@@ -49,7 +49,7 @@
 
       <div class="govuk-form-group {{ m.form_group_class('lastName', errors) }}">
         <label class="govuk-label govuk-label--m" for="lastName">Surname</label>
-          {{ m.error_message('lastName', errors) }}
+          {{ m.error_message('lastName', errors, __) }}
         <span class="govuk-hint">
           Surname
         </span>
@@ -65,7 +65,7 @@
             <h1 class="govuk-fieldset__heading">Invite a user</h1>
             <span id="customs-hint" class="govuk-hint">Select the user's role</span>
           </legend>
-        {{ m.error_message('role', errors) }}
+        {{ m.error_message('role', errors, __) }}
           <div class="govuk-radios">
           {% for role in roles %}
             <div class="govuk-radios__item">

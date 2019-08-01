@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | MFA Verify
+	{{__('error_prefix') if errors}} GAR | MFA Verify
 {% endblock %}
 
 {% block header %}
@@ -35,14 +35,16 @@
       <p class="govuk-body-l">{{__('confirm_mfa_code_caption')}}</p>
 
       <form action="/login/authenticate" method="post">
-        <div class="govuk-form-group {{ m.form_group_class('mfa-code', errors) }}">
-          <label class="govuk-label" for="mfa-code">
+        <div class="govuk-form-group {{ m.form_group_class('mfaCode', errors) }}">
+          <label class="govuk-label" for="mfaCode">
             <h2 class="govuk-heading-m">{{__('field_authentication_code')}}</h2>
           </label>
-          <span id="mfa-code-hint" class="govuk-hint">{{__('field_authentication_code_hint')}}</span>
-          {{ m.error_message('mfa-code', errors) }}
-          <input id="mfa-code" autocomplete="off" class="govuk-input" maxlength="{{ mfaTokenLength }}" name="mfa-code" type="text" aria-describedby="mfa-code-hint mfa-code-error">
-          <p style="margin-top: 0.25em;" class="govuk-body-m"><a href="/login/authenticate?resend=true">{{__('resend_code')}}</a></p>
+          <span id="mfaCode-hint" class="govuk-hint">{{__('field_authentication_code_hint')}}</span>
+          {{ m.error_message('mfaCode', errors, __) }}
+          <input id="mfaCode" autocomplete="off" class="govuk-input" maxlength="{{ mfaTokenLength }}" name="mfaCode" type="text" aria-describedby="mfaCode-hint mfaCode-error">
+          <p style="margin-top: 0.25em;" class="govuk-body-m">
+            <a href="/login/authenticate?resend=true">{{__('resend_code')}}</a>
+          </p>
         </div>
         <div class="govuk-form-group">
           <input class="govuk-button" type="submit" value="Confirm"

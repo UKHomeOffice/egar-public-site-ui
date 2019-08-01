@@ -85,7 +85,7 @@
         {% endif %}
 				<div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
         <label class="govuk-label" for="craftReg">{{__('field_aircraft_registration')}}</label>
-        {{ m.error_message('craftReg', errors) }}
+        {{ m.error_message('craftReg', errors, __) }}
         <span class="govuk-hint">{{__('field_aircraft_registration_hint')}}</span>
         <span class="field-validation-valid error-message" data-valmsg-for="craftReg"
           data-valmsg-replace="true" style="display:block">
@@ -97,7 +97,7 @@
 
     <div class="govuk-form-group {{ m.form_group_class('craftType', errors) }}">
       <label class="govuk-label" for="craftType">{{__('field_aircraft_type')}}</label>
-      {{ m.error_message('craftType', errors) }}
+      {{ m.error_message('craftType', errors, __) }}
       <span class="govuk-hint">{{__('field_aircraft_type_hint')}}</span>
       <span class="field-validation-valid error-message" data-valmsg-for="craftType"
         data-valmsg-replace="true" style="display:block">
@@ -109,7 +109,7 @@
 
     <div class="govuk-form-group {{ m.form_group_class('craftBase', errors) }}">
     <label class="govuk-label" for="craftBase">{{__('field_aircraft_base')}}</label>
-    {{ m.error_message('craftBase', errors) }}
+    {{ m.error_message('craftBase', errors, __) }}
     <span class="govuk-hint">
       Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA / ICAO code. Provide coordinates to 4 decimal places
     </span>

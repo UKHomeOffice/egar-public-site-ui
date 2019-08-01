@@ -8,10 +8,10 @@ const settings = require('../../../common/config/index');
 
 module.exports = (req, res) => {
   logger.debug('In verify / mfa post controller');
-  const token = req.body['mfa-code'];
+  const { mfaCode } = req.body;
 
   const mfaCodeChain = [
-    new ValidationRule(validator.notEmpty, 'mfa-code', token, 'Enter your code'),
+    new ValidationRule(validator.notEmpty, 'mfaCode', mfaCode, 'Enter your code'),
   ];
 
   const cookie = new CookieModel(req);
@@ -21,9 +21,9 @@ module.exports = (req, res) => {
 
   validator.validateChains([mfaCodeChain])
     .then(() => {
-      tokenApi.validateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
+      tokenApi.validateMfaToken(cookie.getUserEmail(), parseInt(mfaCode, 10))
         .then(() => {
-          tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
+          tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(mfaCode, 10))
             .then(() => {
               userApi.getDetails(cookie.getUserEmail())
                 .then((apiResponse) => {
