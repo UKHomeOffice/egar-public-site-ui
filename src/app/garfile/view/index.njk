@@ -11,10 +11,8 @@
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-  {% include "common/templates/includes/back.njk" %}
-
+  <a href="/home" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
@@ -26,9 +24,11 @@
     {% include "check-your-answers.njk" %}
 
     <div class="govuk-grid-column-two-thirds">
-      <a href="/garfile/cancel">
-        <button class="govuk-button" type="submit" id='cancel-gar'>Cancel GAR</button>
-      </a>
+      {% if garfile.status.name !== 'Cancelled' %}
+        <a href="/garfile/cancel">
+          <button class="govuk-button" id="cancel-gar" type="submit">Cancel GAR</button>
+        </a>
+      {% endif %}
       <p class="govuk-body-m">
         <a href="/home" id='exit-view'>Exit</a>
       </p>

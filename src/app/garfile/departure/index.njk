@@ -192,25 +192,36 @@
         <!-- End departure coords -->
 
         <!-- start buttons -->
-        <div class="column-two-thirds">
           <input id="newVoyage" class="govuk-button" type="submit"
             name="buttonClicked"
             value="{{__('form_save_and_continue')}}"
             onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 
 						<p class="govuk-body-m">
-		          <a href="#"
+		          {# <a href="#"
                 class="disableAutoFillSubmit"
                 onclick="document.forms[0].submit();return false;"
                 name="submit_button">{{__('form_save_and_come_back')}}
-              </a>
+              </a> #}
+              <input id="save-and-come-back" class="disableAutoFillSubmit govuk-button govuk-button--secondary" type="submit"
+                name="buttonClicked"
+                value="{{__('form_save_and_come_back')}}"
+                onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
 		        </p>
-            <p class="govuk-body-m">
-              <a href="/home" >{{__('form_exit_without_saving')}}</a>
-            </p>
-        </div>
+            {# <p class="govuk-body-m">
+              <a href="/garfile/view" >{{__('form_exit_without_saving')}}</a>
+            </p> #}
         <!-- end buttons -->
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </form>
+    <form id="cancel-form" action="/garfile/view" method="post" role="form">
+        <p class="govuk-body-m">
+          <button type="submit" id="exit-without-saving" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+            {{__('form_exit_without_saving')}}
+          </button>
+          <input type="hidden" name="garId" value="{{ cookie.getGarId() }}">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        </p>
     </form>
   </div>
 </div>

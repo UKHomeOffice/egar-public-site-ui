@@ -11,6 +11,9 @@ module.exports = (req, res) => {
   const role = cookie.getUserRole();
   const orgId = cookie.getOrganisationId();
 
+  // Delete any GAR stored in the cookie session
+  cookie.session.gar = null;
+
   tokenApi.getLastLogin(cookie.getUserEmail())
     .then((userSession) => {
       const { successHeader, successMsg } = req.session;
