@@ -26,24 +26,18 @@
   {% endif %}
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">Section 4 of 8</span>
+      <span class="govuk-caption-xl">{{__('section_count', 4, 8)}}</span>
 
-      <h1 class="govuk-heading-xl">Add new person details</h1>
-      <p class="govuk-body-l">
-        Provide the details of the person you want to add to the manifest.
-        Details should be as displayed on the travel document
-      </p>
+      <h1 class="govuk-heading-xl">{{__('heading_manifest_add_person_details')}}</h1>{# Add new person details #}
+      <p class="govuk-body-l">{{__('caption_manifest_person_details')}}</p>
 
       <form action="/garfile/manifest/addnewperson" autocomplete="off" class="form-group" method="post" role="form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% include "person-details.njk" %}
         <br>
-        <input id="add-person-manifest" class="govuk-button" type="submit" value="Add to GAR" onclick="sendAnalytics(event, 'Save and Exit', 'click')">
+        <input id="add-person-manifest" class="govuk-button" type="submit" value="Save and add to GAR" onclick="sendAnalytics(event, 'Save and Exit', 'click')">
         <p class="govuk-body-m">
-          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Save and Exit</a>
-        </p>
-        <p class="govuk-body-m">
-          <a href="/garfile/manifest" > Exit without saving </a>
+          <a href="/garfile/manifest" >{{__('form_exit_without_saving')}}</a>
         </p>
       </form>
     </div>

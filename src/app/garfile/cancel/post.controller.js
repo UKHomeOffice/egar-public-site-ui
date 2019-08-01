@@ -16,15 +16,11 @@ module.exports = (req, res) => {
       }).then(() => {
         req.session.successMsg = 'The GAR has been successfully cancelled';
         req.session.successHeader = 'Cancellation Confirmation';
-        req.session.save(() => {
-          res.redirect('/home');
-        });
+        res.redirect('/home');
       }).catch(() => {
         req.session.successMsg = 'The GAR has been successfully cancelled, but there was a problem with sending the email';
         req.session.successHeader = 'Cancellation Confirmation';
-        req.session.save(() => {
-          res.redirect('/home');
-        });
+        res.redirect('/home');
       });
     })
     .catch((err) => {
