@@ -26,13 +26,10 @@
   {% endif %}
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">Section 4 of 8</span>
+      <span class="govuk-caption-xl">{{__('section_count', 4, 8)}}</span>
 
-      <h1 class="govuk-heading-xl">Add new person details</h1>
-      <p class="govuk-body-l">
-        Provide the details of the person you want to add to the manifest.
-        Details should be as displayed on the travel document
-      </p>
+      <h1 class="govuk-heading-xl">{{__('title_manifest_add_person_details')}}</h1>{# Add new person details #}
+      <p class="govuk-body-l">{{_('caption_manifest_person_details')}}</p>
 
       <form action="/garfile/manifest/addnewperson" autocomplete="off" class="form-group" method="post" role="form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />

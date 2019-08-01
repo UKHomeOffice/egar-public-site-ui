@@ -219,6 +219,9 @@
     "add_person_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
 
     "manifest_no_records": "There are no people on the manifest",
+    "title_manifest_add_person_details": "Add new person details",
+    "title_manifest_edit_person_details": "Person details",
+    "caption_manifest_person_details": "Provide the details of the person you want to add to the manifest. Details should be as displayed on the travel document.",
 
     "supportingdocuments_no_records": " There are no supporting documents uploaded",
 
