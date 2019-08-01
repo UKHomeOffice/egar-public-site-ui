@@ -150,7 +150,7 @@
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
-          Manifest details
+          {{__('heading_manifest_details')}}
         </dt>
         {% if showChangeLinks %}
         <dd style="border-bottom: none;" class="app-check-your-answers__change">
@@ -168,12 +168,12 @@
       <table class="govuk-table" id="manifestTable">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Surname</th>
-            <th class="govuk-table__header" scope="col">Given name</th>
-            <th class="govuk-table__header" scope="col">Date of birth</th>
-            <th class="govuk-table__header" scope="col">Travel document number</th>
-            <th class="govuk-table__header" scope="col">Nationality</th>
-            <th class="govuk-table__header" scope="col">Type</th>
+            <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -324,12 +324,12 @@
       </div>
       {% endif %}
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">Is the aircraft in free circulation in the EU?</dt>
+        <dt class="app-check-your-answers__question">{{__('field_free_circulation')}}</dt>
         <dd class="app-check-your-answers__answer">{{garfile.freeCirculation}}</dd>
         <dd class="app-check-your-answers__change"></dd>
       </div>
       <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__question">Reason for visit</dt>
+        <dt class="app-check-your-answers__question">{{__('field_visit_reason_question')}}</dt>
         <dd class="app-check-your-answers__answer">{{garfile.visitReason | uncamelCase }}</dd>
         <dd class="app-check-your-answers__change">
         </dd>

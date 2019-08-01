@@ -150,6 +150,7 @@
     "field_date_year": "Year",
     "field_gender": "Gender",
     "field_person_type": "Person type",
+    "field_person_type_short": "Type",
     "field_person_type_hint": "For example Captain, Crew or Passenger. First Officer / Co-Pilot should be identified as Crew.",
 
     "heading_travel_document_details": "Travel document details",
