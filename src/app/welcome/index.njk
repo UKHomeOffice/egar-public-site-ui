@@ -20,20 +20,19 @@ Create GAR | Start
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
 
-		<h1 class="govuk-heading-xl">
-		Submit a General Aviation Report (GAR)
-		</h1>
+		<h1 class="govuk-heading-xl">{{__('title')}}</h1>
 
-		<p class="govuk-body-l">Use this service to:</p>
+		<p class="govuk-body-l">{{__('welcome_caption')}}</p>
 
 		<ul class="govuk-list govuk-list--bullet">
-			<li>Submit a GAR</li>
-			<li>View or cancel a GAR and edit draft GARs</li>
-			<li>Add, remove or manage people on your flight</li>
+			<li>{{__('welcome_caption_list_1')}}{# Submit a GAR #}</li>
+			<li>{{__('welcome_caption_list_2')}}{# View or cancel a GAR and edit draft GARs #}</li>
+			<li>{{__('welcome_caption_list_3')}}{# Add, remove or manage people on your flight #}</li>
 		</ul>
 
-		<a href="/login" role="button" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">Start
-			now</a>
+		<a id="start_now" href="/login" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">
+      {{__('button_start_now')}}
+    </a>
 
 		<div class="govuk-tabs" data-module="tabs">
 			<h2 class="govuk-tabs__title">
@@ -43,40 +42,44 @@ Create GAR | Start
 			<ul class="govuk-tabs__list">
 				<li class="govuk-tabs__list-item">
 					<a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#more-information">
-						More information
+						{{__('welcome_tab_1')}}{# More information #}
 					</a>
 				</li>
 				<li class="govuk-tabs__list-item">
 					<a class="govuk-tabs__tab" href="#other-ways">
-						Other ways to submit a GAR
+						{{__('welcome_tab_2')}}{# Other ways to submit a GAR #}
 					</a>
 				</li>
 			</ul>
 
 			<section class="govuk-tabs__panel" id="more-information">
-				<h2 class="govuk-heading-s">You’ll need the following:</h2>
+				<h2 class="govuk-heading-s">{{__('welcome_tab_1_content_caption')}}</h2>{# You’ll need the following: #}
 
 				<ul class="govuk-list govuk-list--bullet">
-					<li>Aircraft details (including registration number and base)</li>
-					<li>Arrival and departure details (date, location and scheduled times)</li>
-          <li>Captain, crew and passenger details (including travel document information and UK visiting address)</li>
-					<li>Name and telephone number of the person responsible for goods on board</li>
-					<li>Aircraft tax information (whether taxes have been paid and accounted for in the EU)</li>
+					<li>{{__('welcome_tab_1_content_list_1')}}</li>{# Aircraft details (including registration number and base) #}
+					<li>{{__('welcome_tab_1_content_list_2')}}</li>{# Arrival and departure details (date, location and scheduled times) #}
+          <li>{{__('welcome_tab_1_content_list_3')}}</li>{# Captain, crew and passenger details (including travel document information and UK visiting address) #}
+					<li>{{__('welcome_tab_1_content_list_4')}}</li>{# Name and telephone number of the person responsible for goods on board #}
+					<li>{{__('welcome_tab_1_content_list_5')}}</li>{# Aircraft tax information (whether taxes have been paid and accounted for in the EU) #}
 				</ul>
 			</section>
 
 			<section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="other-ways">
-				<h3 class="govuk-heading-s">By email</h3>
-				<p>Send the <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights"
+				<h3 class="govuk-heading-s">{{__('welcome_tab_2_content_heading_1')}}</h3>{# By email #}
+        <p>
+          {{__('welcome_tab_2_content_1_block_1_1')}}<a href="{{__('gar_form_link')}}" target="_blank">{{__('welcome_tab_2_content_1_block_1_2')}}</a>{{__('welcome_tab_2_content_1_block_1_3')}}<a href="mailto:ncu@hmrc.gsi.gov.uk">{{__('welcome_tab_2_content_1_block_1_4')}}</a>{{__('welcome_tab_2_content_1_block_1_5')}}
+        </p>
+				{# <p>Send the <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights"
 						target="_blank">General Aviation Report form</a>, to the <a href="mailto:ncu@hmrc.gsi.gov.uk">national
-						co-ordination unit (NCU)</a> to send to Border Force or the police.</p>
+						co-ordination unit (NCU)</a> to send to Border Force or the police.</p> #}
 
-				<p>You should title your email: ‘GAR, airfield registration, name of airfield, postcode of airfield (if
+        <p>{{__('welcome_tab_2_content_1_block_2')}}</p>
+				{# <p>You should title your email: ‘GAR, airfield registration, name of airfield, postcode of airfield (if
 					known)’. Please check the attached guidance in the Related Content section before completing and submitting
-					the GAR form.</p>
+					the GAR form.</p> #}
 
-				<h3 class="govuk-heading-s">By Phone - In an emergency only</h3>
-				<p>+44 (0) 845 723 1110</p>
+				<h3 class="govuk-heading-s">{{__('welcome_tab_2_content_heading_2')}}</h3>{# By Phone - In an emergency only #}
+				<p>{{__('welcome_tab_2_content_2_block_1')}}</p>{# +44 (0) 845 723 1110 #}
 			</section>
 		</div>
 	</div>

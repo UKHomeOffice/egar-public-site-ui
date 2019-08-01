@@ -8,10 +8,10 @@
 	{{class}}
 {% endmacro %}
 
-{% macro error_message(identifier, errors) %}
+{% macro error_message(identifier, errors, __) %}
 	{% for error in errors %}
 		{% if error.identifier == identifier %}
-			<p id="{{ identifier }}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error: </span>{{error.message}}</p>
+			<p id="{{ identifier }}-error" class="govuk-error-message"><span class="govuk-visually-hidden">{{__('error_prefix')}}</span>{{error.message}}</p>
 		{% endif %}
 	{% endfor %}
 {% endmacro %}

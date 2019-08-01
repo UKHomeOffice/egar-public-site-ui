@@ -42,14 +42,14 @@
 
         <div class="govuk-form-group {{ m.form_group_class('firstname', errors) }}">
           <label class="govuk-label govuk-label--m" for="firstname">Given name</label>
-          {{ m.error_message('firstname', errors) }}
+          {{ m.error_message('firstname', errors, __) }}
           <input autocomplete="off" class="govuk-input"
             data-val="true" data-val-required="First Name is required." id="firstname" name="Firstname" style="width:100%" type="text" value="{{cookie.getUserFirstName()}}" />
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('lastname', errors) }}">
           <label class="govuk-label govuk-label--m" for="lastname">Surname</label>
-          {{ m.error_message('lastname', errors) }}
+          {{ m.error_message('lastname', errors, __) }}
 
           <span class="field-validation-valid error-message" data-valmsg-for="Lastname"
             data-valmsg-replace="true" style="display:block">

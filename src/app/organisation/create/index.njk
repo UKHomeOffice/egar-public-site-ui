@@ -36,7 +36,7 @@
       <p class="govuk-body-l">Please provide the following information to create an organisation.</p>
       <div class="govuk-form-group {{ m.form_group_class('Orgname', errors) }}">
           <label class="govuk-label govuk-label--m" for="Orgname">Organisation name</label>
-          {{ m.error_message('Orgname', errors) }}
+          {{ m.error_message('Orgname', errors, __) }}
           <span class="field-validation-valid error-message" data-valmsg-for="Orgname"
             data-valmsg-replace="true" style="display:block">
           </span>

@@ -48,7 +48,7 @@
 
       <div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
           <label class="govuk-label" for="craftReg">Aircraft registration</label>
-          {{ m.error_message('craftReg', errors) }}
+          {{ m.error_message('craftReg', errors, __) }}
           <span class="govuk-hint">
             For example G-ABCD
           </span>
@@ -62,7 +62,7 @@
 
       <div class="govuk-form-group {{ m.form_group_class('craftType', errors) }}">
             <label class="govuk-label" for="craftType">Aircraft type</label>
-          {{ m.error_message('craftType', errors) }}
+          {{ m.error_message('craftType', errors, __) }}
           <span class="govuk-hint">
             For example Gulfstream
           </span>
@@ -75,18 +75,18 @@
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('craftBase', errors) }}">
-             <label class="govuk-label" for="craftBase">Aircraft home port / location</label>
-          {{ m.error_message('craftBase', errors) }}
-          <span class="govuk-hint">
-            IATA / ICAO / Coordinates (decimal)
-          </span>
-          <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input  class="govuk-input govuk-input--width-10"
-            id="craftBase" name="craftBase" style="width:100%" type="text"
-            value="{{cookie.getEditCraft().craftBase}}" />
-         <input type="hidden" id="craftId" name="craftId" value="{{cookie.getEditCraft().craftId}}">
+        <label class="govuk-label" for="craftBase">Aircraft home port / location</label>
+        {{ m.error_message('craftBase', errors, __) }}
+        <span class="govuk-hint">
+          IATA / ICAO / Coordinates (decimal)
+        </span>
+        <span class="field-validation-valid error-message" data-valmsg-for="craftBase"
+          data-valmsg-replace="true" style="display:block">
+        </span>
+        <input  class="govuk-input govuk-input--width-10"
+          id="craftBase" name="craftBase" style="width:100%" type="text"
+          value="{{cookie.getEditCraft().craftBase}}" />
+        <input type="hidden" id="craftId" name="craftId" value="{{cookie.getEditCraft().craftId}}">
       </div>
 
           <div class="govuk-form-group">

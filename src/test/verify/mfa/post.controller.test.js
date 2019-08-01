@@ -28,7 +28,7 @@ describe('Verify MFA Post Controller', () => {
         },
       },
       body: {
-        'mfa-code': 123456,
+        mfaCode: 123456,
       },
     };
 
@@ -48,7 +48,7 @@ describe('Verify MFA Post Controller', () => {
     const emptyReq = {
       session: {},
       body: {
-        'mfa-code': '',
+        mfaCode: '',
       },
     };
     sinon.stub(tokenApi, 'validateMfaToken');
@@ -63,7 +63,7 @@ describe('Verify MFA Post Controller', () => {
       expect(tokenApi.validateMfaToken).to.not.have.been.called;
       expect(tokenApi.updateMfaToken).to.not.have.been.called;
       expect(res.render).to.have.been.calledWithExactly('app/verify/mfa/index', {
-        cookie, mfaTokenLength: 20, errors: [{ identifier: 'mfa-code', value: '', message: 'Enter your code' }],
+        cookie, mfaTokenLength: 20, errors: [{ identifier: 'mfaCode', value: '', message: 'Enter your code' }],
       });
     }
   });

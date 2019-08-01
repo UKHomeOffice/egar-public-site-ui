@@ -45,7 +45,7 @@
         <div class="govuk-form-group {{ m.form_group_class('orgname', errors) }}">
 
           <label class="govuk-label govuk-label--m"  for="orgname">{{__('field_organisation_name')}}</label>
-            {{ m.error_message('orgname', errors) }}
+            {{ m.error_message('orgname', errors, __) }}
           <span class="field-validation-valid error-message" data-valmsg-for="orgname"
             data-valmsg-replace="true" style="display:block">
           </span>

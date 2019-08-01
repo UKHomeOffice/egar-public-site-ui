@@ -39,7 +39,7 @@ describe('User Check Middleware', () => {
     delete req.headers.referer;
     await middleware(req, res, next);
 
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/login');
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/welcome/index');
     expect(next).to.not.have.been.called;
   });
 
@@ -47,7 +47,7 @@ describe('User Check Middleware', () => {
     req.session.u.dbId = null;
     await middleware(req, res, next);
 
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/login');
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/welcome/index');
     expect(next).to.not.have.been.called;
   });
 
@@ -55,7 +55,7 @@ describe('User Check Middleware', () => {
     delete req.session.u.dbId;
     await middleware(req, res, next);
 
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/login');
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/welcome/index');
     expect(next).to.not.have.been.called;
   });
 

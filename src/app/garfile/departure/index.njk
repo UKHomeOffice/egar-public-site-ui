@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Departure | {{__('title')}}
+	{{__('error_prefix') if errors}} Create GAR | Departure | {{__('title')}}
 {% endblock %}
 
 {% block header %}
@@ -13,7 +13,7 @@
 {% block beforeContent %}
 
   {% include "phase.njk" %}
-  <a href="/garfile/home" class="govuk-back-link">Back</a>
+  <a href="/garfile/home" class="govuk-back-link">{{__('nav_back')}}</a>
 
 {% endblock %}
 
@@ -42,32 +42,42 @@
               </h2>
             </legend>
             <span id="departureDate-hint" class="govuk-hint">{{__('field_date_hint')}}</span>
-            {{ m.error_message('departureDate', errors) }}
+            {{ m.error_message('departureDate', errors, __) }}
             <div class="govuk-date-input" id="departure">
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="departureDay">{{__('field_day')}}</label>
+                  <label class="govuk-label govuk-date-input__label" for="departureDay">
+                    <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_day')}}
+                  </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureDay"
                   name="departureDay" type="number" pattern="[0-9]*" min="1" max="31"
-                  value="{{ cookie.dateSlice('day', cookie.getGarDepartureVoyage().departureDate) }}">
+                  value="{{ cookie.dateSlice('day', cookie.getGarDepartureVoyage().departureDate) }}"
+                  aria-describedby="departureDate-error">
                 </div>
               </div>
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="departureMonth">{{__('field_month')}}</label>
+                  <label class="govuk-label govuk-date-input__label" for="departureMonth">
+                    <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_month')}}
+                  </label>
+                  <span id="departure-month-hint" class="govuk-visually-hidden">{{__('field_departure_month_hint')}}</span>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMonth"
-                  name="departureMonth" type="number" pattern="[0-9]*" min="1" max="12"
-                  value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}">
+                      name="departureMonth" type="number" pattern="[0-9]*" min="1" max="12"
+                      value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}"
+                      aria-describedby="departureDate-error departure-month-hint">
                   </div>
                 </div>
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="departureYear">{{__('field_year')}}</label>
+                    <label class="govuk-label govuk-date-input__label" for="departureYear">
+                      <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_year')}}
+                    </label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureYear"
-                    name="departureYear" type="number" pattern="[0-9]*" min="1900" max="2200"
-                    value="{{ cookie.dateSlice('year', cookie.getGarDepartureVoyage().departureDate) }}">
+                      name="departureYear" type="number" pattern="[0-9]*" min="1900" max="2200"
+                      value="{{ cookie.dateSlice('year', cookie.getGarDepartureVoyage().departureDate) }}"
+                      aria-describedby="departureDate-error">
                   </div>
                 </div>
               </div>
@@ -85,24 +95,30 @@
               </h2>
             </legend>
             <span id="departureTime-hint" class="govuk-hint">{{__('field_time_hint')}}</span>
-            {{ m.error_message('departureTime', errors) }}
+            {{ m.error_message('departureTime', errors, __) }}
 
             <div class="govuk-date-input" id="departureTime">
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="departureHour">{{__('field_hour')}}</label>
+                  <label class="govuk-label govuk-date-input__label" for="departureHour">
+                    <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_hour')}}
+                  </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureHour"
-                  name="departureHour" type="number" pattern="[0-9]*" min="00" max="23"
-                  value="{{ cookie.timeSlice('hour', cookie.getGarDepartureVoyage().departureTime) }}">
+                    name="departureHour" type="number" pattern="[0-9]*" min="00" max="23"
+                    value="{{ cookie.timeSlice('hour', cookie.getGarDepartureVoyage().departureTime) }}"
+                    aria-describedby="departureTime-error">
                 </div>
               </div>
 
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="departureMinute">{{__('field_minute')}}</label>
+                  <label class="govuk-label govuk-date-input__label" for="departureMinute">
+                    <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_minute')}}
+                  </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMinute"
-                  name="departureMinute" type="number" pattern="[0-9]*" min="00" max="59"
-                  value="{{ cookie.timeSlice('minute', cookie.getGarDepartureVoyage().departureTime) }}">
+                    name="departureMinute" type="number" pattern="[0-9]*" min="00" max="59"
+                    value="{{ cookie.timeSlice('minute', cookie.getGarDepartureVoyage().departureTime) }}"
+                    aria-describedby="departureTime-error">
                 </div>
               </div>
             </div>
@@ -117,9 +133,11 @@
             Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'YYYY'. <br>
             The departure port must be different to the arrival port.
           </span>
-          {{ m.error_message('departurePort', errors) }}
+          {{ m.error_message('departurePort', errors, __) }}
           <input class="govuk-input govuk-input--width-4"
-          maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text" value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"/>
+            maxlength="4" id="departurePort" name="departurePort" autocomplete="off" type="text"
+            value="{{cookie.getGarDepartureVoyage().departurePort | upper}}"
+            aria-describedby="departurePort-hint departurePort-error"/>
           {# Airport list v1
           <select class="govuk-select" id="test1" name="test1" value="">
             <option value=""></option>
@@ -139,7 +157,7 @@
 
 
         <div class="govuk-form-group">
-          <label class="govuk-heading-m">Departure coordinates</label>
+          <label class="govuk-heading-m">{{__('field_departure_coordinates')}}</label>
           <span id="departureCoordinates-hint" class="govuk-hint">
            You are only required to enter coordinates if your port does not have an IATA / ICAO code.
            Provide coordinates in decimal format to 4 decimal places.
@@ -155,9 +173,9 @@
             {{__('field_latitude_hint')}}
           </span>
 
-          {{ m.error_message('departureLat', errors) }}
+          {{ m.error_message('departureLat', errors, __) }}
           <input class="govuk-input govuk-input--width-10" id="departureLat" name="departureLat" autocomplete="off" type="text"
-          value="{{ cookie.getGarDepartureVoyage().departureLat }}"/>
+            value="{{ cookie.getGarDepartureVoyage().departureLat }}" aria-describedby="departureCoordinates-hint departureLatitude-hint departureLat-error"/>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('departureLong', errors) }}">
@@ -167,10 +185,9 @@
           <span id="departureLongitude-hint" class="govuk-hint">
             {{__('field_longitude_hint')}}
           </span>
-          {{ m.error_message('departureLong', errors) }}
+          {{ m.error_message('departureLong', errors, __) }}
           <input class="govuk-input govuk-input--width-10" id="departureLong" name="departureLong" autocomplete="off" type="text"
-          value="{{ cookie.getGarDepartureVoyage().departureLong }}"/>
-
+            value="{{ cookie.getGarDepartureVoyage().departureLong }}" aria-describedby="departureCoordinates-hint departureLongitude-hint departureLong-error"/>
         </div>
         <!-- End departure coords -->
 

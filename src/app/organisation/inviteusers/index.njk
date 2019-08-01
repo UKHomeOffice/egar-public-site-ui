@@ -37,7 +37,7 @@
 
           <div class="govuk-form-group {{ m.form_group_class('fname', errors) }}">
             <label class="govuk-label govuk-label--m" for="fname">Given name</label>
-            {{ m.error_message('fname', errors) }}
+            {{ m.error_message('fname', errors, __) }}
             <span class="govuk-hint">
               Enter the Given name of the user
             </span>
@@ -51,7 +51,7 @@
 
           <div class="govuk-form-group {{ m.form_group_class('lname', errors) }}">
             <label class="govuk-label govuk-label--m" for="lname">Surname</label>
-            {{ m.error_message('lname', errors) }}
+            {{ m.error_message('lname', errors, __) }}
             <span class="govuk-hint">
               Enter the surname of the user
             </span>
@@ -65,7 +65,7 @@
 
           <div class="govuk-form-group {{ m.form_group_class('email', errors) }}">
             <label class="govuk-label govuk-label--m" for="email">Email address</label>
-            {{ m.error_message('email', errors) }}
+            {{ m.error_message('email', errors, __) }}
             <span class="govuk-hint">
               Enter the email of the user
             </span>
@@ -79,7 +79,7 @@
 
           <div class="govuk-form-group {{ m.form_group_class('cemail', errors) }}">
             <label class="govuk-label govuk-label--m" for="cemail">Confirm email address</label>
-            {{ m.error_message('cemail', errors) }}
+            {{ m.error_message('cemail', errors, __) }}
             <span class="govuk-hint">
               Confirm the email of the user
             </span>
