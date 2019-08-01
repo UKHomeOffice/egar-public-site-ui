@@ -134,38 +134,40 @@
 								<td class="govuk-table__cell" colspan="7">
 									<div>
 										<details role="group">
-											<summary role="button" aria-controls="details-content-2" aria-expanded="false" title="Further information for Chris Grover"><span class="summary">Further information</span></summary>
-												<div class="panel panel-border-narrow" id="details-content-2" aria-hidden="true">
-													<table class="govuk-table" width="100%">
-														<tbody class="govuk-table__body">
-															<tr class="govuk-table__row">
-																<td class="govuk-table__cell">Gender</td>
-																<td class="govuk-table__cell">{{person.gender}}</td>
-															</tr>
-															<tr class="govuk-table__row">
-																<td class="govuk-table__cell">Place of birth</td>
-																<td class="govuk-table__cell">{{person.placeOfBirth}}</td>
-															</tr>
-															<tr class="govuk-table__row">
-																<td class="govuk-table__cell">Travel document type</td>
-																<td class="govuk-table__cell">{{person.documentType}}</td>
-															</tr>
-															<tr class="govuk-table__row">
-																<td class="govuk-table__cell">Travel document issuing state</td>
-																<td class="govuk-table__cell">{{person.issuingState | upper }}</td>
-															</tr>
-															<tr class="govuk-table__row">
-																<td class="govuk-table__cell">Travel document expiry date</td>
-																<td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
-															</tr>
-                              <tr class="govuk-table__row">
-                                <td class="govuk-table__cell" colspan="7">
-                                  <button class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">Delete</button>
-                                </td>
-                              </tr>
-														</tbody>
-													</table>
-												</div>
+											<summary role="button" aria-controls="details-content-2" aria-expanded="false" title="Further information for {{person.firstName}} {{person.lastName}}">
+                        <span class="summary">{{__('label_manifest_further_personal_details')}}</span>
+                      </summary>
+											<div class="panel panel-border-narrow" id="details-content-2" aria-hidden="true">
+												<table class="govuk-table" width="100%">
+													<tbody class="govuk-table__body">
+														<tr class="govuk-table__row">
+															<td class="govuk-table__cell">Gender</td>
+															<td class="govuk-table__cell">{{person.gender}}</td>
+														</tr>
+														<tr class="govuk-table__row">
+															<td class="govuk-table__cell">Place of birth</td>
+															<td class="govuk-table__cell">{{person.placeOfBirth}}</td>
+														</tr>
+														<tr class="govuk-table__row">
+															<td class="govuk-table__cell">Travel document type</td>
+															<td class="govuk-table__cell">{{person.documentType}}</td>
+														</tr>
+														<tr class="govuk-table__row">
+															<td class="govuk-table__cell">Travel document issuing state</td>
+															<td class="govuk-table__cell">{{person.issuingState | upper }}</td>
+														</tr>
+														<tr class="govuk-table__row">
+															<td class="govuk-table__cell">Travel document expiry date</td>
+															<td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+														</tr>
+                            <tr class="govuk-table__row">
+                              <td class="govuk-table__cell" colspan="7">
+                                <button class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">Delete</button>
+                              </td>
+                            </tr>
+													</tbody>
+												</table>
+											</div>
 										</details>
 									</div>
 								</td>

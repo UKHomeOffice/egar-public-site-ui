@@ -132,6 +132,7 @@
     "heading_manifest_add_person_details": "Add new person details",
     "heading_manifest_edit_person_details": "Person details",
     "caption_manifest_person_details": "Provide the details of the person you want to add to the manifest. Details should be as displayed on the travel document.",
+    "label_manifest_further_personal_details": "Further personal details",
 
     "title_edit_person": "Edit Person Details",
     "heading_edit_person": "Edit a person",
