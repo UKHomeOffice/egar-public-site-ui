@@ -129,11 +129,15 @@
     "heading_manifest_details": "Manifest details",
     "caption_manifest_details": "Select the details of people you have previously added.",
 
+    "heading_manifest_new_people": "New people",
     "heading_manifest_add_person_details": "Add new person details",
     "heading_manifest_edit_person_details": "Person details",
     "caption_manifest_person_details": "Provide the details of the person you want to add to the manifest. Details should be as displayed on the travel document.",
+    "heading_current_manifest": "Current manifest",
+    "current_manifest_caption": "People currently on the manifest of this GAR",
     "label_manifest_further_personal_details": "Further personal details",
     "further_information_for": "Further information for %s %s",
+    "total_persons_on_board": "Total persons on board",
 
     "title_edit_person": "Edit Person Details",
     "heading_edit_person": "Edit a person",
@@ -199,7 +203,7 @@
     "validator_api_uploadgar_people_type_passenger": "passenger",
     "validator_api_uploadgar_person_type_person_name": "{{peopleType}} {{firstName}} {{lastName}}",
     "validator_api_uploadgar_no_file": "Provide a file",
-	  "validator_api_uploadgar_incorrect_type": "Incorrect file type",
+	"validator_api_uploadgar_incorrect_type": "Incorrect file type",
     "validator_api_uploadgar_incorrect_gar_file": "Incorrect xls or xlsx file",
 
     "title_aircraft": "Aircraft",
@@ -207,6 +211,7 @@
     "aircraft_no_records": "There are no saved aircraft records",
     "aircraft_add": "Add a new aircraft",
     "aircraft_add_caption": "Add the details of an aircraft that you regularly submit GARs for.",
+    "aircraft_add_caption_garfile": "Add the details of a new aircraft you have not already saved",
     "field_aircraft_registration": "Aircraft registration",
     "field_aircraft_registration_hint": "For example G-ABCD",
     "field_aircraft_type": "Aircraft type",
@@ -222,9 +227,11 @@
     "add_aircraft_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
 
     "title_people": "People",
+    "button_add_to_gar": "Add to GAR",
     "people_caption": "You can view, edit or delete people that you regularly add to GARs.",
     "people_no_records": "There are no saved people records",
     "people_add": "Add a new person",
+    "garfile_people_add": "Add a new person to the GAR",
     "people_add_caption": "Add the details of people that you regularly add to GARs.",
 
     "title_add_person": "Add a person",
