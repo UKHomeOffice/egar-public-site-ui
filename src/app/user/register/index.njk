@@ -7,14 +7,12 @@
 {% endblock %}
 
 {% block header %}
-{% include "header-pre-user.njk" %}
+  {% include "header-pre-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>
-
 {% endblock %}
 
 {% block content %}
@@ -41,7 +39,7 @@
         {{ m.error_message('userLname', errors, __) }}
         <input id="userLname" name="userLname" autocomplete="off" class="govuk-input govuk-input--width-30"
           type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{cookie.getUserLastName()}}"
-          aria-describedby="userFname-error">
+          aria-describedby="userLname-error">
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('userId', errors) }}">

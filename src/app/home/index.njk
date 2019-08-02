@@ -52,8 +52,8 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-xl">{{__('heading_create_gar')}}</h1>
-      <p class="govuk-body-l">{{__('create_gar_caption_1')}}<a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/392679/GAR_Template_with_logos_v_6_3_Jan_2015_LJ.xls">{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
-      <a id="start_now" class="govuk-button" href="/garfile/home">{{__('button_start_now')}}</a>
+      <p class="govuk-body-l">{{__('create_gar_caption_1')}}<a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/392679/GAR_Template_with_logos_v_6_3_Jan_2015_LJ.xls"><span class="govuk-visually-hidden">{{__('heading_create_gar')}} </span>{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
+      <a id="start_now" class="govuk-button govuk-button--start" href="/garfile/home">{{__('button_start_now')}}</a>
     </div>
   </div>
 
@@ -116,7 +116,14 @@
                 <td class="govuk-table__cell">{{ gar.departureTime }} </td>
                 <td class="govuk-table__cell">{{ gar.departurePort | upper }} </td>
                 <td class="govuk-table__cell">{{ gar.arrivalPort | upper }} </td>
-                <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell">{{ gar.garId }} </td>
+                <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell">
+                  {{ m.gar_id_screen_reader(gar.garId) }}
+                  {#
+                    At attempt to improve NVDA's pronounciation of the GAR ID
+                  #}
+                  {# {% for letter in gar.garId.split('') %}{{ letter }}<span class="govuk-visually-hidden">{{'dash' if letter == '-'}}, </span>{% endfor %} #}
+                  {# {{ gar.garId.split('').join('<span class="govuk-visually-hidden">, </span>') }} #}
+                </td>
               </tr>
             {% endfor %}
           {% else %}
