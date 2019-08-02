@@ -93,9 +93,7 @@
               </tr lass="govuk-table__cell ">
               {% endfor %}
             {% else %}
-              <tr class="govuk-table__row">
-                <td colspan="4"><p class="govuk-inset-text">{{__('supportingdocuments_no_records')}}</p></td>
-              </tr>
+              {{ m.empty_table_message(__('supportingdocuments_no_records')) }}
             {% endif %}
             </tbody>
         </table>

@@ -13,7 +13,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 
 const controller = require('../../../app/organisation/inviteusers/post.controller');
 
-describe('Organisation Post Controller', () => {
+describe('Organisation Invite User Post Controller', () => {
   let req; let res; let cookie;
 
   beforeEach(() => {
@@ -58,6 +58,9 @@ describe('Organisation Post Controller', () => {
         expect(res.redirect).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
           cookie,
+          fname: '',
+          lname: '',
+          email: '',
           errors: [
             new ValidationRule(validator.notEmpty, 'fname', req.body.fname, 'Please enter the given name of the user'),
             new ValidationRule(validator.notEmpty, 'lname', req.body.lname, 'Please enter the surname of the user'),
@@ -84,6 +87,9 @@ describe('Organisation Post Controller', () => {
         expect(res.redirect).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
           cookie,
+          fname: 'abcdefghijklmnopqrstuvwxyzabcdefghijk',
+          lname: 'abcdefghijklmnopqrstuvwxyzabcdefghij',
+          email: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com',
           errors: [
             new ValidationRule(validator.isValidStringLength, 'fname', 'abcdefghijklmnopqrstuvwxyzabcdefghijk', 'Given name must be 35 characters or less'),
             new ValidationRule(validator.isValidStringLength, 'lname', 'abcdefghijklmnopqrstuvwxyzabcdefghij', 'Surname must be 35 characters or less'),
@@ -112,6 +118,9 @@ describe('Organisation Post Controller', () => {
         expect(res.redirect).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
           cookie,
+          fname: 'Malcolm',
+          lname: 'Reynolds',
+          email: 'mal@serenity.com',
           errors: [
             new ValidationRule(validator.valuetrue, 'cemail', false, 'Please ensure the email addresses match'),
           ],

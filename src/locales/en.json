@@ -49,7 +49,7 @@
     "confirm_mfa_code_caption": "If the email that you entered is associated with an account then you will have received an email with your login code. Please enter it below.",
     "field_authentication_code": "Authentication code",
     "field_authentication_code_hint": "Please enter the code you received.",
-    "resend_code": "If you did not receive a code, click here to resend.",
+    "resend_code": "Didn't receive a code? Send a new code",
     "validator_authentication_error": "There was a problem verifying your token. Try again.",
 
     "form_error_summary_title": "There is a problem",
@@ -269,5 +269,19 @@
 
     "title_edit_organisation": "Edit organisation",
     "edit_organisation_caption": "Edit the details of the organisation.",
-    "field_organisation_name": "Organisation name"
+    "field_organisation_name": "Organisation name",
+
+    "title_invite_users": "Invite new users",
+    "invite_users_caption": "Invite additional users to be able to manage GARs on behalf of your organisation.",
+    "field_role": "Role",
+
+    "title_invite_user": "Invite user",
+    "invite_user_caption": "Begin by providing the following information to register a user account in your organisation.",
+    "invite_user_given_name_hint": "Enter the given name of the user.",
+    "invite_user_surname_hint": "Enter the surname of the user.",
+    "invite_user_email_hint": "Enter the email of the user.",
+    "invite_user_cemail_hint": "Confirm the email of the user.",
+
+    "title_organisation_users": "Organisation's users",
+    "organisations_users_caption": "Here is a list of users who can manage GARs on behalf of your organisation."
 }

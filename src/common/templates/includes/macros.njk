@@ -16,6 +16,12 @@
 	{% endfor %}
 {% endmacro %}
 
+{% macro empty_table_message(message) %}
+<tr class="govuk-table__row">
+  <caption class="govuk-inset-text" style="caption-side:bottom">{{ message }}</caption>
+</tr>
+{% endmacro %}
+
 {% macro submit_buttons(analyticsPage, csrfToken, __) %}
   <input id="save-and-continue" class="govuk-button" type="submit"
     name="buttonClicked"

@@ -11,15 +11,11 @@
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-  <a href="/organisation" class="govuk-back-link">Back</a>
-
+  <a href="/organisation" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
-
   {% import "common/templates/includes/macros.njk" as m %}
 
   {% if errors %}
@@ -30,77 +26,59 @@
     <form action="/organisation/inviteusers" autocomplete="off" class="form-group"
       method="post" role="form">
 
-      <h1 class="govuk-heading-xl">Invite a user</h1>
-      <p class="govuk-body-l">Please begin by providing the following information to register a user account in your organisation.</p>
+      <h1 class="govuk-heading-xl">{{__('title_invite_user')}}</h1>
+      <p class="govuk-body-l">{{__('invite_user_caption')}}</p>
 
-       <div class="govuk-form-group {{ m.form_group_class('invite', errors) }}">
+      <div class="govuk-form-group {{ m.form_group_class('invite', errors) }}">
 
-          <div class="govuk-form-group {{ m.form_group_class('fname', errors) }}">
-            <label class="govuk-label govuk-label--m" for="fname">Given name</label>
-            {{ m.error_message('fname', errors, __) }}
-            <span class="govuk-hint">
-              Enter the Given name of the user
-            </span>
-            <span class="field-validation-valid error-message" data-valmsg-for="fname"
-              data-valmsg-replace="true" style="display:block">
-            </span>
-            <input class="govuk-input"
-              id="fname" name="fname" style="width:100%" type="text"
-              value="" />
-          </div>
-
-          <div class="govuk-form-group {{ m.form_group_class('lname', errors) }}">
-            <label class="govuk-label govuk-label--m" for="lname">Surname</label>
-            {{ m.error_message('lname', errors, __) }}
-            <span class="govuk-hint">
-              Enter the surname of the user
-            </span>
-            <span class="field-validation-valid error-message" data-valmsg-for="lname"
-              data-valmsg-replace="true" style="display:block">
-            </span>
-            <input  class="govuk-input"
-              id="lname" name="lname" style="width:100%" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
-              value="" />
-          </div>
-
-          <div class="govuk-form-group {{ m.form_group_class('email', errors) }}">
-            <label class="govuk-label govuk-label--m" for="email">Email address</label>
-            {{ m.error_message('email', errors, __) }}
-            <span class="govuk-hint">
-              Enter the email of the user
-            </span>
-            <span class="field-validation-valid error-message" data-valmsg-for="email"
-              data-valmsg-replace="true" style="display:block">
-            </span>
-            <input  class="govuk-input"
-              id="email" name="email" style="width:100%" type="text"
-              value="" />
-          </div>
-
-          <div class="govuk-form-group {{ m.form_group_class('cemail', errors) }}">
-            <label class="govuk-label govuk-label--m" for="cemail">Confirm email address</label>
-            {{ m.error_message('cemail', errors, __) }}
-            <span class="govuk-hint">
-              Confirm the email of the user
-            </span>
-            <span class="field-validation-valid error-message" data-valmsg-for="cemail"
-              data-valmsg-replace="true" style="display:block">
-            </span>
-            <input class="govuk-input"
-              id="cemail" name="cemail" style="width:100%" type="text"
-              value="" />
-          </div>
-
+        <div class="govuk-form-group {{ m.form_group_class('fname', errors) }}">
+          <label class="govuk-label govuk-label--m" for="fname">{{__('field_given_name')}}</label>
+          <span class="govuk-hint">
+            {{__('invite_user_given_name_hint')}}
+          </span>
+          {{ m.error_message('fname', errors, __) }}
+          <input id="fname" class="govuk-input"
+            name="fname" type="text" value="{{ fname }}" />
         </div>
 
-         <div class="form-group">
-          <input id="createorg" class="govuk-button" type="submit" value="Submit"
+        <div class="govuk-form-group {{ m.form_group_class('lname', errors) }}">
+          <label class="govuk-label govuk-label--m" for="lname">{{__('field_surname')}}</label>
+          <span class="govuk-hint">
+            {{__('invite_user_surname_hint')}}
+          </span>
+          {{ m.error_message('lname', errors, __) }}
+          <input id="lname" class="govuk-input"
+            name="lname" type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lname }}" />
+        </div>
+
+        <div class="govuk-form-group {{ m.form_group_class('email', errors) }}">
+          <label class="govuk-label govuk-label--m" for="email">{{__('field_email')}}</label>
+          <span class="govuk-hint">
+            {{__('invite_user_email_hint')}}
+          </span>
+          {{ m.error_message('email', errors, __) }}
+          <input id="email" class="govuk-input"
+            name="email" type="text" value="{{ email }}" />
+        </div>
+
+        <div class="govuk-form-group {{ m.form_group_class('cemail', errors) }}">
+          <label class="govuk-label govuk-label--m" for="cemail">{{__('field_confirm_email')}}</label>
+          <span class="govuk-hint">
+            {{__('invite_user_cemail_hint')}}
+          </span>
+          {{ m.error_message('cemail', errors, __) }}
+          <input id="cemail" class="govuk-input"
+            name="cemail" type="text" value="" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input id="createorg" class="govuk-button" type="submit" value="Submit"
           onclick="sendAnalytics(event, 'Invite User - submit', 'click')">
-        </div>
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
+      </div>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
   </div>
- </div>
+</div>
 
 {% endblock %}

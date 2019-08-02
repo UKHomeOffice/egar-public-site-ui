@@ -41,16 +41,16 @@
           </label>
           <span id="mfaCode-hint" class="govuk-hint">{{__('field_authentication_code_hint')}}</span>
           {{ m.error_message('mfaCode', errors, __) }}
-          <input id="mfaCode" autocomplete="off" class="govuk-input" maxlength="{{ mfaTokenLength }}" name="mfaCode" type="text" aria-describedby="mfaCode-hint mfaCode-error">
-          <p style="margin-top: 0.25em;" class="govuk-body-m">
-            {# Should this resend link be placed elsewhere? #}
-            <a href="/login/authenticate?resend=true">{{__('resend_code')}}</a>
-          </p>
+          <input id="mfaCode" autocomplete="off" class="govuk-input" maxlength="{{ mfaTokenLength }}" name="mfaCode" type="text" aria-describedby="mfaCode-hint{{ ' mfaCode-error' if errors}}">
         </div>
         <div class="govuk-form-group">
           <input class="govuk-button" type="submit" value="Confirm"
           onclick="sendAnalytics(event, 'Send MFA code - submit', 'click')">
+          <p class="govuk-body-m">
+            <a href="/login/authenticate?resend=true">{{__('resend_code')}}</a>
+          </p>
         </div>
+        
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       </form>
   </div>
