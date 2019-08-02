@@ -96,6 +96,40 @@ describe('Aircraft Edit Post Controller', () => {
     });
   });
 
+  // Back end needs indices corrected and this should then be obselete
+  it('should return an error if message returned by API is not JSON', () => {
+    cookie = new CookieModel(req);
+    sinon.stub(craftApi, 'update').resolves('<html><head></head><body></body></html>');
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
+      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
+        cookie,
+        errors: [{ message: 'There was a problem saving the aircraft. Try again later' }],
+      });
+    });
+  });
+
+  // Back end needs indices corrected and this should then be obselete
+  it('should return an error if message returned by API is not JSON containing possible duplicate error', () => {
+    cookie = new CookieModel(req);
+    sinon.stub(craftApi, 'update').resolves('DETAIL:  Key (registration)');
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
+      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
+        cookie,
+        errors: [{ message: 'Craft already exists' }],
+      });
+    });
+  });
+
   it('should redirect if successful', () => {
     sinon.stub(craftApi, 'update').resolves(JSON.stringify({}));
     const callController = async () => {

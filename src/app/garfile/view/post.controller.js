@@ -6,7 +6,10 @@ const garApi = require('../../../common/services/garApi');
 module.exports = (req, res) => {
   logger.debug('In garfile / view post controller');
   const cookie = new CookieModel(req);
-  const { garId } = req.body;
+  let { garId } = req.body;
+  if (garId === undefined) {
+    garId = cookie.getGarId();
+  }
   cookie.setGarId(garId);
   const garPeople = garApi.getPeople(garId);
   const garDetails = garApi.get(garId);
@@ -35,18 +38,17 @@ module.exports = (req, res) => {
         garpeople: parsedPeople,
         supportingdocs: supportingDocuments,
       };
-      if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
-        logger.info('Rendering submitted GAR review page');
-        return res.render('app/garfile/view/submitted', renderContext);
-      }
-      logger.info('Rendering unsubmitted GAR review page');
       renderContext.showChangeLinks = true;
-      return res.render('app/garfile/view/unsubmitted', renderContext);
+      if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
+        renderContext.showChangeLinks = false;
+      }
+      logger.info('Rendering GAR review page');
+      res.render('app/garfile/view/index', renderContext);
     })
     .catch((err) => {
       logger.error('Failed to get GAR information');
       logger.error(err);
       renderContext.errors = [{ message: 'Failed to get GAR information' }];
-      res.render('app/garfile/view/submitted', renderContext);
+      res.render('app/garfile/view/index', renderContext);
     });
 };

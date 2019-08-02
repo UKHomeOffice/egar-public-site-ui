@@ -96,6 +96,7 @@ function initialisExpressSession(app) {
     genid: () => uuid(),
     store: new PgSession({
       conString: config.PUBLIC_SITE_DB_CONNSTR,
+      ttl: 60 * 60,
     }),
     secret: config.SESSION_ENCODE_SECRET,
     resave: false,

@@ -11,10 +11,8 @@
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-  <a href="/garfile/craft" class="govuk-back-link">Back</a>
-
+  <a href="/garfile/craft" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
@@ -26,19 +24,19 @@
   {% endif %}
 
 <div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-		<form action="/garfile/manifest" method="post">
-			<span class="govuk-caption-xl">{{__('section_count', 4, 8)}}</span>
-			<h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
-			<h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
-			<p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
-  </div>
-  <div class="govuk-grid-column-full">
-        {% if savedPeople | length %}
+  <form action="/garfile/manifest" method="post">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">{{__('section_count', 4, 8)}}</span>
+        <h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
+        <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
+        <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
+    </div>
+    <div class="govuk-grid-column-full">
+      {% if savedPeople | length %}
         <table class="table-clickable govuk-table">
-        {% else %}
+      {% else %}
         <table class="govuk-table">
-        {% endif %}
+      {% endif %}
           <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
@@ -78,131 +76,131 @@
               <td colspan="4"><p class="govuk-inset-text">{{__('people_no_records')}}</p></td>
             </tr>
           {% endif %}
-          </tbody>
-        </table>
-  </div>
-  <div class="govuk-grid-column-two-thirds">
-    <button id="addToManifest" type="submit" name="buttonClicked" value="Add to GAR" class="govuk-button">Add to GAR</button>
-  </div>
-  <div class="govuk-grid-column-full">
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-  </div>
-  <div class="govuk-grid-column-two-thirds">
-				<h2 class="govuk-heading-l">New people</h2>
-				<p class="govuk-body-m"><a href="/garfile/manifest/addnewperson">Add a new person to the GAR</a></p>
-  </div>
-  <div class="govuk-grid-column-full">
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-  </div>
-  <div class="govuk-grid-column-two-thirds">
-				<h2 class="govuk-heading-l">Current manifest</h2>
-				<p class="govuk-body-l">People currently on the manifest of this GAR</p>
-  </div>
-  <div class="govuk-grid-column-full">
-					<table class="govuk-table">
-						<thead class="govuk-table__head">
-							<tr class="govuk-table__row">
-								<th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
-								<th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
-								<th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
-								<th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
-								<th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
-								<th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
-                <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
-							</tr>
-						</thead>
-						<tbody class="govuk-table__body">
-            {% if manifest.items | length %}
-              {% for person in manifest.items %}
-              {% if manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople) %}
-                <tr class="govuk-table__row row-error" id="person-{{loop.index0}}">
-              {% else %}
-                <tr class="govuk-table__row" id="person-{{loop.index0}}">
-              {% endif %}
+        </tbody>
+      </table>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <button id="addToManifest" type="submit" name="buttonClicked" value="Add to GAR" class="govuk-button">{{__('button_add_to_gar')}}</button>
+    </div>
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-heading-l">{{__('heading_manifest_new_people')}}</h2>
+      <p class="govuk-body-m"><a href="/garfile/manifest/addnewperson">{{__('garfile_people_add')}}</a></p>
+    </div>
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-heading-l">{{__('heading_current_manifest')}}</h2>
+      <p class="govuk-body-l">{{__('current_manifest_caption')}}</p>
+    </div>
+    <div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+        {% if manifest.items | length %}
+          {% for person in manifest.items %}
+          {% if manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople) %}
+            <tr class="govuk-table__row row-error" id="person-{{loop.index0}}">
+          {% else %}
+            <tr class="govuk-table__row" id="person-{{loop.index0}}">
+          {% endif %}
 
-								<td class="govuk-table__cell">{{person.lastName}}</td>
-								<td class="govuk-table__cell">{{person.firstName}}</td>
-								<td class="govuk-table__cell">{{person.dateOfBirth}}</td>
-								<td class="govuk-table__cell">{{person.documentNumber}}</td>
-								<td class="govuk-table__cell">{{person.nationality | upper}}</td>
-								<td class="govuk-table__cell">{{person.peopleType.name}}</td>
-                <td class="govuk-table__cell">
-                  <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
-                </td>
-							</tr>
-							<tr class="govuk-table__row">
-								<td class="govuk-table__cell" colspan="7">
-									<div>
-										<details role="group">
-											<summary role="button" aria-controls="details-content-2" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
-                        <span class="summary">{{__('label_manifest_further_personal_details')}}</span>
-                      </summary>
-											<div class="panel panel-border-narrow" id="details-content-2" aria-hidden="true">
-												<table class="govuk-table" width="100%">
-													<tbody class="govuk-table__body">
-														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">{{__('field_gender')}}</td>
-															<td class="govuk-table__cell">{{person.gender}}</td>
-														</tr>
-														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">{{__('field_birth_place')}}</td>
-															<td class="govuk-table__cell">{{person.placeOfBirth}}</td>
-														</tr>
-														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
-															<td class="govuk-table__cell">{{person.documentType}}</td>
-														</tr>
-														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
-															<td class="govuk-table__cell">{{person.issuingState | upper }}</td>
-														</tr>
-														<tr class="govuk-table__row">
-															<td class="govuk-table__cell">{{__('field_travel_document_expiry_date')}}</td>
-															<td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
-														</tr>
-                            <tr class="govuk-table__row">
-                              <td class="govuk-table__cell" colspan="7">
-                                <button class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">{{__('table_delete')}}</button>
-                              </td>
-                            </tr>
-													</tbody>
-												</table>
-											</div>
-										</details>
-									</div>
-								</td>
-							</tr>
-              {% endfor %}
-									</div>
-								</td>
-							</tr>
-            {% else %}
-              <tr class="govuk-table__row">
-                <td colspan="4"><p class="govuk-inset-text">{{__('manifest_no_records')}}</p></td>
-              </tr>
-            {% endif %}
-						</tbody>
-					</table>
-  </div>
-  <div class="govuk-grid-column-two-thirds">
-				<div class="govuk-form-group">
-					<label class="govuk-label" for="totalPersonsOnBoard">
-						Total persons on board
-					</label>
+            <td class="govuk-table__cell">{{person.lastName}}</td>
+            <td class="govuk-table__cell">{{person.firstName}}</td>
+            <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.documentNumber}}</td>
+            <td class="govuk-table__cell">{{person.nationality | upper}}</td>
+            <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+            <td class="govuk-table__cell">
+              <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" colspan="7">
+              <div>
+                <details role="group">
+                  <summary role="button" aria-controls="details-content-{{ loop.index }}" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
+                    <span id="further-information-{{ loop.index }}" class="summary">{{__('label_manifest_further_personal_details')}}</span>
+                  </summary>
+                  <div class="panel panel-border-narrow" id="details-content-{{ loop.index }}" aria-hidden="true">
+                    <table class="govuk-table" width="100%">
+                      <tbody class="govuk-table__body">
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell">{{__('field_gender')}}</td>
+                          <td class="govuk-table__cell">{{person.gender}}</td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell">{{__('field_birth_place')}}</td>
+                          <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
+                          <td class="govuk-table__cell">{{person.documentType}}</td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
+                          <td class="govuk-table__cell">{{person.issuingState | upper }}</td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell">{{__('field_travel_document_expiry_date')}}</td>
+                          <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell" colspan="7">
+                            <button id="delete-person-{{ loop.index }}" class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">{{__('table_delete')}}</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </details>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+              </div>
+            </td>
+          </tr>
+        {% else %}
+          <tr class="govuk-table__row">
+            <td colspan="4"><p class="govuk-inset-text">{{__('manifest_no_records')}}</p></td>
+          </tr>
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="totalPersonsOnBoard">
+          {{__('total_persons_on_board')}}
+        </label>
 
-					<input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" type="number" value={{manifest.items.length}}>
-				</div>
+        <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
+      </div>
 
-        <input id="save-and-continue" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue">
-        <p class="govuk-body-m">
-          <a id="save-and-exit" href="/home" >Save and come back later</a>
-        </p>
-        <p class="govuk-body-m">
-          <a id="exit-no-save" href="/home" > Exit without saving </a>
-        </p>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-		</form>
-	</div>
+      <input id="save-and-continue" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue">
+      <p class="govuk-body-m">
+        <a id="save-and-exit" href="/home" >Save and come back later</a>
+      </p>
+      <p class="govuk-body-m">
+        <a id="exit-no-save" href="/home" > Exit without saving </a>
+      </p>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+	  </div>
+  </form>
 </div>
 
 {% endblock %}

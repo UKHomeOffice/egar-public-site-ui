@@ -172,27 +172,11 @@
         </div>
         {# End arrival coords #}
 
-        {# Start buttons #}
-        <div class="column-two-thirds">
-          <input id="newVoyage" class="govuk-button" type="submit"
-            name="buttonClicked"
-            value="{{__('form_save_and_continue')}}"
-            onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
-
-          <p class="govuk-body-m">
-            <a href="#"
-              class="disableAutoFillSubmit"
-              onclick="document.forms[0].submit();return false;"
-              name="submit_button">{{__('form_save_and_come_back')}}
-            </a>
-          </p>
-          <p class="govuk-body-m">
-            <a href="/home">{{__('form_exit_without_saving')}}</a>
-          </p>
-        </div>
-        {# End buttons #}
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-      </form>
+    {# Start buttons #}
+        {{ m.submit_buttons('GAR Departure', csrfToken, __) }}
+    </form>
+    {{ m.exit_without_saving(csrfToken, __) }}
+    {# End buttons #}
     </div>
   </div>
 {% endblock %}
