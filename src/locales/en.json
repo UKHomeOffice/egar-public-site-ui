@@ -33,7 +33,7 @@
     "nav_back": "Back",
 
     "field_username": "Registered email address",
-    "field_username_hint": "Enter the email address you used when you created your account",
+    "field_username_hint": "Enter the email address you used when you created your account.",
     "button_sign_in": "Sign in",
     "create_account_caption": "Need to create an account?",
 
@@ -48,8 +48,9 @@
     "title_confirm_mfa_code": "Confirm your multi-factor authentication code",
     "confirm_mfa_code_caption": "If the email that you entered is associated with an account then you will have received an email with your login code. Please enter it below.",
     "field_authentication_code": "Authentication code",
-    "field_authentication_code_hint": "Please enter the code you received",
-    "resend_code": "Didn't receive a code?",
+    "field_authentication_code_hint": "Please enter the code you received.",
+    "resend_code": "Didn't receive a code? Send a new code",
+    "validator_authentication_error": "There was a problem verifying your token. Try again.",
 
     "form_error_summary_title": "There is a problem",
     "form_exit_without_saving": "Exit without saving",
@@ -61,7 +62,7 @@
 
     "title_create_account": "Create an account",
     "field_email": "Email address",
-    "field_email_hint": "You will use this to sign in to the Submit a GAR service",
+    "field_email_hint": "You will use this email address to sign in to the Submit a GAR service.",
     "field_confirm_email": "Confirm email address",
     "heading_declaration": "Declaration",
     "declaration_caption_1": "By creating this account, you agree:",
@@ -100,20 +101,21 @@
     "field_year": "Year",
     "field_hour": "Hour",
     "field_minute": "Minute",
-    "label_departure_details": "Departure details",
+
+    "heading_departure_details": "Departure details",
     "departure_details_caption": "Provide the departure details of the flight",
     "field_departure_hint": "Departure ",
     "field_departure_date": "Departure date",
-    "field_date_hint": "For example 20 04 2019",
+    "field_date_hint": "For example 20 04 2019.",
     "field_departure_month_hint": "Enter a number, between 1 and 12",
     "field_departure_time": "Departure time (UTC)",
-    "field_time_hint": "For example 17 30",
+    "field_time_hint": "For example 17 30.",
     "field_departure_port": "Departure port",
     "field_departure_coordinates": "Departure coordinates",
     "field_longitude": "Longitude",
-    "field_longitude_hint": "For example -0.4542",
+    "field_longitude_hint": "For example -0.4542.",
     "field_latitude": "Latitude",
-    "field_latitude_hint": "For example 51.4700",
+    "field_latitude_hint": "For example 51.4700.",
 
     "heading_arrival_details": "Arrival details",
     "arrival_details_caption": "Provide the arrival details of the flight",
@@ -169,6 +171,9 @@
     "field_travel_document_issuing_state": "Travel document issuing state",
     "field_travel_document_expiry_date": "Travel document expiry date",
 
+    "heading_responsible_person_details": "Responsible person details",
+    "field_address": "Address",
+    "field_contact_details": "Contact details",
     "field_address_country": "Country",
 
     "heading_customs": "Customs",
@@ -239,21 +244,44 @@
 
     "manifest_no_records": "There are no people on the manifest",
 
-    "supportingdocuments_no_records": " There are no supporting documents uploaded",
-
     "organisation_no_records": "There are no organisation members",
 
     "validator_msg_voyage_dates": "Arrival time must be after departure time",
+
+    "title_gar_summary": "GAR summary",
+    "change_prefix": "Change ",
+
+    "heading_supporting_documentation_details": "Supporting documentation details",
+    "supportingdocuments_no_records": " There are no supporting documents uploaded",
+    "field_file_name": "File name",
+    "field_file_size": "File size",
+    "field_file_status": "Status",
+    "field_file_status_done": "Done",
 
     "title_cancel_gar": "Cancel GAR",
     "heading_cancel_gar": "Are you sure you want to cancel this GAR?",
     "cancel_gar_caption": "You will need to ensure that a new GAR is submitted if this flight takes place.",
     "form_exit_without_cancelling": "Exit without cancelling",
+    "form_exit": "Exit",
 
     "title_organisation": "Organisation",
     "organisation_caption": "Manage your organisation's details.",
 
     "title_edit_organisation": "Edit organisation",
     "edit_organisation_caption": "Edit the details of the organisation.",
-    "field_organisation_name": "Organisation name"
+    "field_organisation_name": "Organisation name",
+
+    "title_invite_users": "Invite new users",
+    "invite_users_caption": "Invite additional users to be able to manage GARs on behalf of your organisation.",
+    "field_role": "Role",
+
+    "title_invite_user": "Invite user",
+    "invite_user_caption": "Begin by providing the following information to register a user account in your organisation.",
+    "invite_user_given_name_hint": "Enter the given name of the user.",
+    "invite_user_surname_hint": "Enter the surname of the user.",
+    "invite_user_email_hint": "Enter the email of the user.",
+    "invite_user_cemail_hint": "Confirm the email of the user.",
+
+    "title_organisation_users": "Organisation's users",
+    "organisations_users_caption": "Here is a list of users who can manage GARs on behalf of your organisation."
 }

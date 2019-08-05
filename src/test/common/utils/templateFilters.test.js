@@ -19,4 +19,33 @@ describe('Template Filters Utility', () => {
       expect(templateFilters.uncamelCase('ShortTermVisit')).to.eq('Short term visit');
     });
   });
+  describe('containsError', () => {
+    let exampleArray;
+
+    beforeEach(() => {
+      exampleArray = [
+        { identifier: 'firstName', error: 'Not important' },
+        { identifier: 'surname', error: 'Does not matter' },
+      ];
+    });
+
+    it('should return false if array is undefined', () => {
+      expect(templateFilters.containsError(undefined, undefined)).to.be.false;
+    });
+
+    it('should return false if parameter is undefined', () => {
+      expect(templateFilters.containsError([], undefined)).to.be.false;
+      expect(templateFilters.containsError(exampleArray, undefined)).to.be.false;
+    });
+
+    it('should return false if not found', () => {
+      expect(templateFilters.containsError(exampleArray, 'oranges')).to.be.false;
+      expect(templateFilters.containsError(exampleArray, 'firstname')).to.be.false;
+    });
+
+    it('should return true if found', () => {
+      expect(templateFilters.containsError(exampleArray, 'firstName')).to.be.true;
+      expect(templateFilters.containsError(exampleArray, 'surname')).to.be.true;
+    });
+  });
 });

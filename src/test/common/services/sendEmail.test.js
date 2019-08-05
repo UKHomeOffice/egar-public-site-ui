@@ -26,9 +26,12 @@ describe('Send Email Service', () => {
     sinon.restore();
   });
 
+  // For the sake of code coverage, have this rewire the logger for production...
   it('should throw an error if no API key set', () => {
+    process.env.NODE_ENV = 'production';
     sinon.stub(config, 'NOTIFY_API_KEY').value(null);
     try {
+      rewire('../../../common/utils/logger')(__filename);
       sendTokenService = rewire('../../../common/services/sendEmail');
     } catch (err) {
       expect(err.message).to.eq('Mandatory environment variable for GOV.UK Notify not set');
