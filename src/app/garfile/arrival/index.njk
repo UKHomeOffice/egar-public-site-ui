@@ -124,15 +124,20 @@
 
         {# Start arrival port #}
         <div class="govuk-form-group {{ m.form_group_class('arrivalPort', errors) }}">
-				  <label class="govuk-label govuk-label--m" for="arrivalPort">{{__('field_arrival_port')}}</label>
-				  <span id="arrivalPort-hint" class="govuk-hint">
-				    Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'. <br>
+          <label class="govuk-label govuk-label--m" for="arrivalPort">{{__('field_arrival_port')}}</label>
+          {{ m.error_message('arrivalPort', errors, __) }}
+          <span id="arrivalPort-hint" class="govuk-hint">
+				    Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'.<br>
             The arrival port must be different to the departure port.
 				  </span>
-          {{ m.error_message('arrivalPort', errors, __) }}
-          <input class="govuk-input govuk-input--width-4" maxlength="4" id="arrivalPort" name="arrivalPort"
-            autocomplete="off" type="text" value="{{cookie.getGarArrivalVoyage().arrivalPort | upper }}"
-            aria-describedby="arrivalPort-hint{{ ' arrivalPort-error' if errors | containsError('arrivalPort') }}"/>
+          <select class="govuk-select" id="arrivalPort" name="arrivalPort"
+          value="{{ cookie.getGarArrivalVoyage().arrivalPort | upper }}">
+            {% for airport in airportList | sort(attribute = 'label') %}
+            <option value="{{ airport.id }}"
+            {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == port.id }}
+            >{{ airport.label }}</option>
+            {% endfor%}
+          </select>
         </div>
         {# End arrival port #}
 
@@ -179,4 +184,10 @@
     {# End buttons #}
     </div>
   </div>
+  <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+  <script type="text/javascript">
+    accessibleAutocomplete.enhanceSelectElement({
+      selectElement: document.querySelector('#arrivalPort')
+    });
+  </script>
 {% endblock %}
