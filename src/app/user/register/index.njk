@@ -7,14 +7,12 @@
 {% endblock %}
 
 {% block header %}
-{% include "header-pre-user.njk" %}
+  {% include "header-pre-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>
-
 {% endblock %}
 
 {% block content %}
@@ -32,16 +30,16 @@
         <label class="govuk-label govuk-label--m" for="userFname">{{ __('field_given_name') }}</label>
         {{ m.error_message('userFname', errors, __) }}
         <input id="userFname" name="userFname" autocomplete="off" class="govuk-input govuk-input--width-30"
-          type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{cookie.getUserFirstName()}}"
-          aria-describedby="userFname-error">
+          type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ fname }}"
+          {{ 'aria-describedby=userFname-error' if errors | containsError('userFname') }}>
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }}">
         <label class="govuk-label govuk-label--m" for="userLname">{{ __('field_surname') }}</label>
         {{ m.error_message('userLname', errors, __) }}
         <input id="userLname" name="userLname" autocomplete="off" class="govuk-input govuk-input--width-30"
-          type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{cookie.getUserLastName()}}"
-          aria-describedby="userFname-error">
+          type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lname }}"
+          {{ 'aria-describedby=userLname-error' if errors | containsError('userLname') }}>
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('userId', errors) }}">
@@ -49,16 +47,16 @@
         <span id="userId-hint" class="govuk-hint">{{__('field_email_hint')}}</span>
         {{ m.error_message('userId', errors, __) }}
         <input id="userId" name="userId" autocomplete="off" class="govuk-input"
-          type="text" maxlength="{{ MAX_EMAIL_LENGTH }}" value="{{cookie.getUserEmail()}}"
-          aria-describedby="userId-hint userId-error">
+          type="text" maxlength="{{ MAX_EMAIL_LENGTH }}" value="{{ usrname }}"
+          aria-describedby="userId-hint{{ ' userId-error' if errors | containsError('userId') }}">
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('cUserId', errors) }}">
         <label class="govuk-label govuk-label--m" for="cUserId">{{__('field_confirm_email')}}</label>
         {{ m.error_message('cUserId', errors, __) }}
         <input id="cUserId" name="cUserId" autocomplete="off" class="govuk-input"
-          type="text" maxlength="{{ MAX_EMAIL_LENGTH }}" value="{{req.body.cUserId}}"
-          aria-describedby="cUserId-error">
+          type="text" maxlength="{{ MAX_EMAIL_LENGTH }}" value=""
+          {{ 'aria-describedby=cUserId-error' if errors | containsError('cUserId') }}>
       </div>
 
       <h2 class="govuk-heading-s">{{__('heading_declaration')}}</h2>

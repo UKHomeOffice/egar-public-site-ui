@@ -96,11 +96,6 @@ module.exports = (req, res) => {
   const fname = req.body.userFname;
   const lname = req.body.userLname;
 
-  // Update the cookie
-  cookie.setUserFirstName(fname);
-  cookie.setUserLastName(lname);
-  cookie.setUserEmail(usrname);
-
   const validationChains = createValidationChains(fname, lname, usrname, cusrname);
 
   const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() === 'true');
@@ -108,6 +103,11 @@ module.exports = (req, res) => {
   logger.info('Validating registration input');
   validator.validateChains(validationChains)
     .then(() => {
+      // Update the cookie
+      cookie.setUserFirstName(fname);
+      cookie.setUserLastName(lname);
+      cookie.setUserEmail(usrname);
+
       if (isWhitelistRequired) {
         logger.info('Starting whitelist check');
         whitelist.isWhitelisted(usrname)
@@ -134,9 +134,11 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Failed registration validations');
-      logger.debug(JSON.stringify(err));
       res.render('app/user/register/index', {
         cookie,
+        fname,
+        lname,
+        usrname,
         errors: err,
       });
     });

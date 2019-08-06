@@ -15,3 +15,62 @@
 		{% endif %}
 	{% endfor %}
 {% endmacro %}
+
+{% macro empty_table_message(message) %}
+<tr class="govuk-table__row">
+  <caption class="govuk-inset-text" style="caption-side:bottom">{{ message }}</caption>
+</tr>
+{% endmacro %}
+
+{% macro submit_buttons(analyticsPage, csrfToken, __) %}
+  <input id="save-and-continue" class="govuk-button" type="submit"
+    name="buttonClicked"
+    value="{{__('form_save_and_continue')}}"
+    onclick="sendAnalytics(event, '{{ analyicsPage }} - Save and Continue', 'click')">
+  <p class="govuk-body-m">
+    <input id="save-and-come-back" class="disableAutoFillSubmit govuk-button govuk-button--secondary" type="submit"
+      name="buttonClicked"
+      value="{{__('form_save_and_come_back')}}"
+      onclick="sendAnalytics(event, '{{ analyicsPage }} - Save and Exit', 'click')">
+  </p>
+  
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+{% endmacro %}
+
+{% macro exit_without_saving(csrfToken, __) %}
+<form id="cancel-form" action="/garfile/view" method="post" role="form">
+  <p class="govuk-body-m">
+    <button type="submit" id="exit-without-saving" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+      {{__('form_exit_without_saving')}}
+    </button>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  </p>
+</form>
+{% endmacro %}
+
+{% macro check_your_answers_row(label, value) %}
+<div class="app-check-your-answers__contents">
+  <dt class="app-check-your-answers__question">{{ label }}</dt>
+  <dd class="app-check-your-answers__answer">{{ value }}</dd>
+</div>
+{% endmacro %}
+
+{% macro check_your_answers_row_coordinates(label, latitude, longitude, __) %}
+<div class="app-check-your-answers__contents">
+  <dt class="app-check-your-answers__question">{{ label }}</dt>
+  <dd class="app-check-your-answers__answer">
+    {{__('field_latitude')}}: {{ latitude }}
+    <br>
+    {{__('field_longitude')}}: {{ longitude }}
+  </dd>
+</div>
+{% endmacro %}
+
+{#
+  An attempt to improve a screen readers pronunciation of the GAR ID. This is only tested on
+  NVDA at the moment, and will most likely behave differently between screen readers and user
+  settings
+#}
+{% macro gar_id_screen_reader(garid) %}
+  {% for letter in garid.split('') %}{{ letter }}<span class="govuk-visually-hidden">{{'dash' if letter == '-'}}, </span>{% endfor %}                
+{% endmacro %}

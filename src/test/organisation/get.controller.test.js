@@ -12,7 +12,7 @@ const orgApi = require('../../common/services/organisationApi');
 
 const controller = require('../../app/organisation/get.controller');
 
-describe('Organisation Post Controller', () => {
+describe('Organisation Get Controller', () => {
   let req; let res; let orgApiStub;
 
   beforeEach(() => {

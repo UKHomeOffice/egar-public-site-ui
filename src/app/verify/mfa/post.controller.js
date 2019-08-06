@@ -1,3 +1,7 @@
+/* eslint-disable no-underscore-dangle */
+
+const i18n = require('i18n');
+
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -17,7 +21,7 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
   const mfaTokenLength = settings.MFA_TOKEN_LENGTH;
-  const errMsg = { message: 'There was a problem verifying your token. Try again' };
+  const errMsg = { identifier: 'mfaCode', message: i18n.__('validator_authentication_error') };
 
   validator.validateChains([mfaCodeChain])
     .then(() => {

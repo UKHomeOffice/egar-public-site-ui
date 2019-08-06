@@ -39,6 +39,10 @@
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
+  {% if successMsg %}
+    {% include "common/templates/includes/success-action.njk" %}
+  {% endif %}
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
@@ -48,8 +52,8 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-xl">{{__('heading_create_gar')}}</h1>
-      <p class="govuk-body-l">{{__('create_gar_caption_1')}}<a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/392679/GAR_Template_with_logos_v_6_3_Jan_2015_LJ.xls">{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
-      <a id="start_now" class="govuk-button" href="/garfile/home">{{__('button_start_now')}}</a>
+      <p class="govuk-body-l">{{__('create_gar_caption_1')}}<a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/392679/GAR_Template_with_logos_v_6_3_Jan_2015_LJ.xls"><span class="govuk-visually-hidden">{{__('heading_create_gar')}} </span>{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
+      <a id="start_now" class="govuk-button govuk-button--start" href="/garfile/home">{{__('button_start_now')}}</a>
     </div>
   </div>
 
@@ -103,22 +107,22 @@
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
                 {% if gar.registration === null %}
-                  <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
+                  <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
                 {% else %}
-                  <button class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
+                  <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
                 {% endif %}
                 </td>
-                <td class="govuk-table__cell ">{{ gar.departureDate }}</td>
-                <td class="govuk-table__cell ">{{ gar.departureTime }} </td>
-                <td class="govuk-table__cell ">{{ gar.departurePort | upper }} </td>
-                <td class="govuk-table__cell ">{{ gar.arrivalPort | upper }} </td>
-                <td class="govuk-table__cell ">{{ gar.garId }} </td>
+                <td class="govuk-table__cell">{{ gar.departureDate }}</td>
+                <td class="govuk-table__cell">{{ gar.departureTime }} </td>
+                <td class="govuk-table__cell">{{ gar.departurePort | upper }} </td>
+                <td class="govuk-table__cell">{{ gar.arrivalPort | upper }} </td>
+                <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell">
+                  {{ m.gar_id_screen_reader(gar.garId) }}
+                </td>
               </tr>
             {% endfor %}
           {% else %}
-            <tr class="govuk-table__row">
-              <td colspan="6"><p class="govuk-inset-text">{{__('gar_' + name + '_no_records')}}</p></td>
-            </tr>
+            {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
           {% endif %}
           </tbody>
         </table>

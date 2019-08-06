@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Cancel GAR
+	{{__('title_cancel_gar')}}
 {% endblock %}
 
 {% block header %}
@@ -25,17 +25,22 @@
   {% endif %}
 
   <h1 class="govuk-heading-l">
-    Are you sure you want to cancel this GAR ?
+    {{__('heading_cancel_gar')}}
   </h1>
   <p class="govuk-body-m">
-    You will need to ensure that a new GAR is submitted if this flight takes place.
+    {{__('cancel_gar_caption')}}
   </p>
   <br>
   <form action="/garfile/cancel" method="post">
-    <input class="govuk-button" type="submit" value="Cancel GAR">
+    <button id="cancel-gar" class="govuk-button" type="submit">{{__('title_cancel_gar')}}</button>
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </form>
+  <form id="cancel-form" action="/garfile/view" method="post" role="form">
   <p class="govuk-body-m">
-    <a href="/home">Exit without cancelling</a>
+    <button type="submit" id="exit-without-cancelling" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+      {{__('form_exit_without_cancelling')}}
+    </button>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </p>
+</form>
 {% endblock %}

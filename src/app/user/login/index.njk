@@ -51,7 +51,7 @@
 				<label class="govuk-label govuk-label--m" for="username">{{ __('field_username') }}</label>
 				<span id="username-hint" class="govuk-hint">{{ __('field_username_hint') }}</span>
         {{ m.error_message('username', errors, __) }}
-				<input class="govuk-input" id="username" name="username" type="text" aria-describedby="username-hint username-error">
+				<input class="govuk-input" id="username" name="username" type="text" aria-describedby="username-hint{{ ' username-error' if errors }}">
 			</div>
 
 			<button type="submit" class="govuk-button">

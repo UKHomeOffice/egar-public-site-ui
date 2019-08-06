@@ -96,6 +96,7 @@ function initialisExpressSession(app) {
     genid: () => uuid(),
     store: new PgSession({
       conString: config.PUBLIC_SITE_DB_CONNSTR,
+      ttl: 60 * 60,
     }),
     secret: config.SESSION_ENCODE_SECRET,
     resave: false,
@@ -225,6 +226,7 @@ function initialiseTemplateEngine(app) {
 
   logger.info('Set global settings for nunjucks');
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
+  nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('countryList', autocompleteUtil.generateCountryList());
   nunjucksEnvironment.addGlobal('airportList', autocompleteUtil.airportList);

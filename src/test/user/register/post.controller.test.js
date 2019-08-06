@@ -15,6 +15,8 @@ const userCreateApi = require('../../../common/services/createUserApi');
 const tokenService = require('../../../common/services/create-token');
 const sendTokenService = require('../../../common/services/send-token');
 const CookieModel = require('../../../common/models/Cookie.class');
+const ValidationRule = require('../../../common/models/ValidationRule.class');
+const validator = require('../../../common/utils/validator');
 const whiteListService = require('../../../common/services/whiteList');
 
 const controller = require('../../../app/user/register/post.controller');
@@ -61,18 +63,35 @@ describe('User Register Post Controller', () => {
   it('should fail validation on erroneous submit', async () => {
     const emptyRequest = {
       body: {
-        Username: '',
+        userFname: '',
+        userLname: '',
+        userId: '',
+        cUserId: '',
       },
       session: {
         cookie: {},
       },
     };
-    try {
+    const cookie = new CookieModel(emptyRequest);
+
+    callController = async () => {
       await controller(emptyRequest, res);
-    } catch (err) {
-      expect(err).to.eq('Validation error when logging in');
-      expect(res.render).to.have.been.calledWith('app/user/login/index');
-    }
+    };
+
+    callController().then(() => {
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/register/index', {
+        cookie,
+        fname: '',
+        lname: '',
+        usrname: '',
+        errors: [
+          new ValidationRule(validator.notEmpty, 'userId', '', 'Please enter your email'),
+          new ValidationRule(validator.notEmpty, 'cUserId', '', 'Please confirm the email address'),
+          new ValidationRule(validator.notEmpty, 'userFname', '', 'Please enter your given name'),
+          new ValidationRule(validator.notEmpty, 'userLname', '', 'Please enter your surname'),
+        ],
+      });
+    });
   });
 
   describe('whitelist enabled', () => {
