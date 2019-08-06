@@ -61,6 +61,7 @@ const createUser = (req, res, cookie) => {
         } else {
           req.session.save(() => { res.redirect('/user/regmsg'); });
         }
+        return;
       }
       const { userId } = JSON.parse(dbUser);
       cookie.setUserDbId(userId);
