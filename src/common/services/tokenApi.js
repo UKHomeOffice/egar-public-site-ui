@@ -143,7 +143,7 @@ module.exports = {
   validNumAttempts(token) {
     token.increment('NumAttempts', { by: 1 });
     logger.info(`Token verification attempt number ${token.NumAttempts}`);
-    return token.NumAttempts < config.MFA_TOKEN_MAX_ATTEMPTS;
+    return token.NumAttempts <= config.MFA_TOKEN_MAX_ATTEMPTS;
   },
   /**
    * Validates a MFA token for a given user.
@@ -173,7 +173,6 @@ module.exports = {
             const { MFA_TOKEN_EXPIRY, MFA_TOKEN_MAX_ATTEMPTS } = config;
             const expiresTimestamp = issuedTimestamp.add(parseInt(MFA_TOKEN_EXPIRY, 10), 'minutes');
             const now = moment();
-            sub.increment('NumAttempts', { by: 1 });
             if (sub.MFAToken !== MFAToken) {
               logger.info('Invalid token (token did not match)');
               reject(new Error('Invalid MFA token'));
