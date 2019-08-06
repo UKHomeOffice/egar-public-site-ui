@@ -5,14 +5,17 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const moment = require('moment');
+const chai = require('chai');
+const config = require('../../../common/config/index');
 
-require('./global.test');
+require('../../global.test');
 
+const { MFA_TOKEN_EXPIRY, MFA_TOKEN_MAX_ATTEMPTS } = config;
 const createStub = sinon.stub().resolves(true);
 const updateStub = sinon.stub().resolves(true);
 const findOneStub = sinon.stub().resolves({
   get() {
-    return '2018-12-12 14:24:23.195+00';
+    return '2019-03-01 14:24:23.195+00';
   },
   increment() {
     this.NumAttempts += 1;
@@ -33,9 +36,14 @@ const dbStub = {
   },
 };
 
-const tokenApi = proxyquire('../common/services/tokenApi', { '../utils/db': dbStub });
+const tokenApi = proxyquire('../../../common/services/tokenApi', { '../utils/db': dbStub });
 
 describe('UserSessions', () => {
+  beforeEach(() => {
+    this.clock = date => sinon.useFakeTimers(new Date(date));
+    this.clock('2019-04-01');
+  });
+
   it('Should create a usersession entry', (done) => {
     tokenApi.setMfaToken('myemail@email.com', 87654321, true)
       .then(() => {
@@ -52,35 +60,18 @@ describe('UserSessions', () => {
       });
   });
 
-  it('Should not validate an old token', (done) => {
-    tokenApi.validateMfaToken('myemail@email.com', 87654321)
-      .then(() => {
-        // Should expect exception to be thrown
-        expect(true).to.be.false;
-      })
-      .catch(() => {
-        sinon.assert.calledOnce(findOneStub);
-        expect(true).to.be.true;
-        done();
-      });
-  });
-
-  it('Should not validate an incorrect token', (done) => {
+  it('Should not validate an incorrect token', async () => {
     // Should resolve to null after changes to tokenApi functions made.
     const findOneStubFail = sinon.stub().resolves(false);
     dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
-    tokenApi.validateMfaToken('myemail@email.com', 87654322)
-      .then(() => {
-        expect(false).to.be.true;
-      })
-      .catch(() => {
-        sinon.assert.calledOnce(findOneStub);
-        expect(true).to.be.true;
-        done();
-      });
+    try {
+      await tokenApi.validateMfaToken('myemail@email.com', 87654322);
+    } catch (err) {
+      expect(err.message).to.equal('No MFA token found');
+    }
   });
 
-  it('Should validate a new token', (done) => {
+  it('Should validate a new token', async () => {
     const findOneStubSucc = sinon.stub().resolves({
       get() {
         return moment();
@@ -92,14 +83,11 @@ describe('UserSessions', () => {
       NumAttempts: 0,
     });
     dbStub.sequelize.models.UserSessions.findOne = findOneStubSucc;
-    tokenApi.validateMfaToken('myemail@email.com', 87654321)
-      .then((result) => {
-        expect(result).to.be.true;
-        done();
-      });
+    const result = await tokenApi.validateMfaToken('myemail@email.com', 87654321);
+    expect(result).to.equal(true);
   });
 
-  it('Should validate a correctly entered token after 3 incorrect attempts', (done) => {
+  it('Should validate a correctly entered token after 4 incorrect attempts', async () => {
     const findOneStubFail = sinon.stub().resolves({
       get() {
         return moment();
@@ -108,17 +96,14 @@ describe('UserSessions', () => {
         this.NumAttempts += 1;
       },
       MFAToken: 87654321,
-      NumAttempts: 3,
+      NumAttempts: 4,
     });
     dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
-    tokenApi.validateMfaToken('myemail@email.com', 87654321)
-      .then((result) => {
-        expect(result).to.be.true;
-        done();
-      });
+    const result = await tokenApi.validateMfaToken('myemail@email.com', 87654321);
+    expect(result).to.equal(true);
   });
 
-  it('Should reject a correctly entered token after 5 incorrect attempts', (done) => {
+  it('Should reject a correctly entered token after 5 incorrect attempts', async () => {
     const findOneStubFail = sinon.stub().resolves({
       get() {
         return moment();
@@ -129,14 +114,31 @@ describe('UserSessions', () => {
       MFAToken: 87654321,
       NumAttempts: 5,
     });
+
     dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
-    tokenApi.validateMfaToken('myemail@email.com', 87654321)
-      .then(() => {
-        expect(false).to.be.true;
-      })
-      .catch(() => {
-        expect(true).to.be.true;
-        done();
-      });
+    try {
+      await tokenApi.validateMfaToken('myemail@email.com', 87654321);
+    } catch (err) {
+      expect(err.message).to.equal(`MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`);
+    }
+  });
+
+  it('Should reject a correctly entered token that has been expired', async () => {
+    const findOneStubFail = sinon.stub().resolves({
+      get() {
+        return '2019-03-01 14:24:23.195+00';
+      },
+      increment() {
+        this.NumAttempts += 1;
+      },
+      MFAToken: 87654321,
+      NumAttempts: 3,
+    });
+    dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
+    try {
+      await tokenApi.validateMfaToken('myemail@email.com', 87654321);
+    } catch (err) {
+      expect(err.message).to.equal(`MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`);
+    }
   });
 });
