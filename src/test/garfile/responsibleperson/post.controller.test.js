@@ -174,7 +174,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleContactNo: '1234567890',
       });
       expect(res.render).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/home');
+      expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
     });
   });
 

@@ -72,5 +72,5 @@
   settings
 #}
 {% macro gar_id_screen_reader(garid) %}
-  {% for letter in garid.split('') %}{{ letter }}<span class="govuk-visually-hidden">{{'dash' if letter == '-'}}, </span>{% endfor %}                
+  {% for letter in garid.split('') %}{{ letter }}<span class="govuk-visually-hidden">{{'dash' if letter == '-'}},</span>{% endfor %}
 {% endmacro %}

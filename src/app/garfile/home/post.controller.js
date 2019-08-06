@@ -37,7 +37,9 @@ module.exports = (req, res) => {
           // Success
           cookie.setGarId(parsedResponse.garId);
           cookie.setGarStatus(garStatus);
-          res.redirect('/garfile/departure');
+          req.session.save(() => {
+            res.redirect('/garfile/departure');
+          });
         })
         .catch((err) => {
           logger.error('Failed to create GAR');

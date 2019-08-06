@@ -22,7 +22,8 @@ const performAPICall = (cookie, buttonClicked, res) => {
       if (buttonClicked === 'Save and continue') {
         res.redirect('/garfile/craft');
       } else {
-        res.redirect('/home');
+        // Temporary redirect (307) so this POST also becomes a POST for garfile/view
+        res.redirect(307, '/garfile/view');
       }
     })
     .catch((err) => {
