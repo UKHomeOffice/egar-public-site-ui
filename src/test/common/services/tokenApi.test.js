@@ -124,7 +124,7 @@ describe('UserSessions', () => {
   });
 
   it('Should reject a correctly entered token that has been expired', async () => {
-    const findOneStubFail = sinon.stub().resolves({
+    const findOneStubExpired = sinon.stub().resolves({
       get() {
         return '2019-03-01 14:24:23.195+00';
       },
@@ -134,7 +134,7 @@ describe('UserSessions', () => {
       MFAToken: 87654321,
       NumAttempts: 3,
     });
-    dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
+    dbStub.sequelize.models.UserSessions.findOne = findOneStubExpired;
     try {
       await tokenApi.validateMfaToken('myemail@email.com', 87654321);
     } catch (err) {

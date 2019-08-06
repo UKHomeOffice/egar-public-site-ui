@@ -234,7 +234,7 @@ describe('User Register Post Controller', () => {
 
   // TODO: Current functionality is that a message from the API could be that a user exists
   // but then goes to the next page without informing the user (so re-registering is not a thing)
-  it('should redirect if createUserApi resolves but with an error', async () => {
+  it('should render page if createUserApi resolves but user already exists', async () => {
     sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
     sinon.stub(req.session, 'save').callsArg(0);
     sinon.stub(sendTokenService, 'send');
@@ -242,6 +242,30 @@ describe('User Register Post Controller', () => {
     sinon.stub(userCreateApi, 'post').resolves(
       JSON.stringify({
         message: 'User already exists',
+      }),
+    );
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'dvader@empire.net', sinon.match.falsy);
+      expect(sendTokenService.send).to.not.have.been.called;
+      expect(req.session.save).to.have.been.called;
+    }).then(() => {
+      expect(res.render).to.have.been.calledWith('app/user/register/index', { cookie, errors: [{ message: 'User already registered' }] });
+    }).catch(() => {});
+  });
+
+  it('should redirect if createUserApi resolves but with an error', async () => {
+    sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
+    sinon.stub(req.session, 'save').callsArg(0);
+    sinon.stub(sendTokenService, 'send');
+    sinon.stub(tokenApi, 'setToken');
+    sinon.stub(userCreateApi, 'post').resolves(
+      JSON.stringify({
+        message: 'Unknown errors',
       }),
     );
 
