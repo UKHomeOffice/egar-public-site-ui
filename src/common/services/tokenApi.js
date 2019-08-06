@@ -170,26 +170,33 @@ module.exports = {
             // Get the existing timestamp
             const issuedTimestamp = moment(sub.get('IssuedTimestamp'));
             // Calculate the expiry
-            const expiresTimestamp = issuedTimestamp.clone();
-            expiresTimestamp.add(parseInt(config.MFA_TOKEN_EXPIRY, 10), 'minutes');
-            // Determine whether the expiry is before current time
-            if (!expiresTimestamp.isBefore(moment()) && sub.MFAToken === MFAToken) {
-              // Return valid token
-              if (this.validNumAttempts(sub)) {
-                resolve(true);
-              }
-              logger.info('Exceeded max token verification attempts');
-              reject(new Error('MFA token verification attempts exceeded'));
-            } else {
-              logger.info('Token expired');
-              logger.info(`Token verification attempt number ${sub.NumAttempts + 1}`);
-              sub.increment('NumAttempts', { by: 1 });
-              reject(new Error('MFA token expired'));
+            const { MFA_TOKEN_EXPIRY, MFA_TOKEN_MAX_ATTEMPTS } = config;
+            const expiresTimestamp = issuedTimestamp.add(parseInt(MFA_TOKEN_EXPIRY, 10), 'minutes');
+            const now = moment();
+            sub.increment('NumAttempts', { by: 1 });
+            if (sub.MFAToken !== MFAToken) {
+              logger.info('Invalid token (token did not match)');
+              reject(new Error('Invalid MFA token'));
+              return;
             }
+            if (now.isAfter(expiresTimestamp)) {
+              logger.info(`Token expired. (Current time ${now}, token expiry time ${expiresTimestamp}`);
+              reject(new Error(`MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`));
+              return;
+            }
+            if (!this.validNumAttempts(sub)) {
+              logger.info(`Exceeded max token verification attempts (attempt ${sub.NumAttempts})`);
+              reject(new Error(`MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`));
+              return;
+            }
+            resolve(true);
           } else {
             logger.info('No matching token found');
             reject(new Error('No MFA token found'));
           }
+        }, (findOneErr) => {
+          logger.error('Failed to connect to db and find token');
+          logger.error(findOneErr);
         })
         .catch((err) => {
           logger.error('Failed to validate MFA token');
