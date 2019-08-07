@@ -17,7 +17,7 @@ const controller = require('../../../app/garfile/home/post.controller');
 
 describe('GAR Customs Post Controller', () => {
   let req; let res;
-  let createGarApiStub;
+  let createGarApiStub; let sessionSaveStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -26,6 +26,7 @@ describe('GAR Customs Post Controller', () => {
       body: {},
       session: {
         u: { dbId: 'ExampleUser1' },
+        save: callback => callback(),
       },
     };
 
@@ -35,6 +36,7 @@ describe('GAR Customs Post Controller', () => {
     };
 
     createGarApiStub = sinon.stub(createGarApi, 'createGar');
+    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
   afterEach(() => {
@@ -49,6 +51,7 @@ describe('GAR Customs Post Controller', () => {
 
     callController().then(() => {
       expect(createGarApiStub).to.not.have.been.called;
+      expect(sessionSaveStub).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
         cookie,
         garoptions,
@@ -68,6 +71,7 @@ describe('GAR Customs Post Controller', () => {
 
     callController().then(() => {
       expect(createGarApiStub).to.not.have.been.called;
+      expect(sessionSaveStub).to.not.have.been.called;
       expect(res.render).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/garupload');
     });
@@ -85,6 +89,7 @@ describe('GAR Customs Post Controller', () => {
     // TODO: Return the error message?
     callController().then().then(() => {
       expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
+      expect(sessionSaveStub).to.not.have.been.called;
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
         cookie, garoptions,
@@ -106,6 +111,7 @@ describe('GAR Customs Post Controller', () => {
 
     callController().then().then(() => {
       expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
+      expect(sessionSaveStub).to.not.have.been.called;
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
         cookie, garoptions, errors: [{ message: 'Example contrived error message' }],
@@ -128,6 +134,7 @@ describe('GAR Customs Post Controller', () => {
     callController().then().then(() => {
       expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
       expect(res.render).to.not.have.been.called;
+      expect(sessionSaveStub).to.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/departure');
     });
   });
