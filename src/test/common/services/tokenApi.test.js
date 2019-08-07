@@ -5,7 +5,6 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const moment = require('moment');
-const chai = require('chai');
 const config = require('../../../common/config/index');
 
 require('../../global.test');

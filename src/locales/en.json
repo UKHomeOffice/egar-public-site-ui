@@ -176,6 +176,17 @@
     "field_contact_details": "Contact details",
     "field_address_country": "Country",
 
+    "heading_responsible_person": "Responsible person",
+    "responsible_person_caption": "Provide the details of the person responsible for this flight. By default, this is the Captain.",
+    "field_contact_number": "Contact telephone number",
+    "field_contact_number_hint": "Include international dialling code, for example 44.",
+    "validator_contact_number": "Enter a telephone number with international dialling code, no symbols and no spaces",
+    "field_house_number": "House number / building and street ",
+    "field_line_1_of_2": "line 1 of 2",
+    "field_line_2_of_2": "Building and street line 2 of 2",
+    "field_town": "Town or city",
+    "field_postcode": "Postcode, area code or ZIP code",
+
     "heading_customs": "Customs",
     "caption_customs": "You don’t have to provide this information, but doing so may assist Border Force to process your flight more quickly.",
     "field_prohibited_goods": "Customs declaration",

@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Invite user
+	GAR | Assign User Role
 {% endblock %}
 
 {% block header %}
@@ -11,14 +11,11 @@
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   <a href="/organisation/inviteusers" class="govuk-back-link">Back</a>
-
 {% endblock %}
 
 {% block content %}
-
 
   {% import "common/templates/includes/macros.njk" as m %}
 
@@ -29,10 +26,9 @@
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
 
-    <form action="/organisation/assignrole" autocomplete="off" class="form-group"
-      method="post" role="form" >
+    <form action="/organisation/assignrole" autocomplete="off" class="form-group" method="post" role="form" >
 
-       <div class="form-group {{ m.form_group_class('invite', errors) }}">
+       <div id="role" class="form-group {{ m.form_group_class('invite', errors) }}">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             <h1 class="govuk-fieldset__heading">Invite a user</h1>

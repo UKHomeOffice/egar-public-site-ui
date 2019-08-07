@@ -64,7 +64,7 @@ const createUser = (req, res, cookie) => {
         return;
       }
       const { userId } = JSON.parse(dbUser);
-      cookie.setUserDbId(userId);
+      // cookie.setUserDbId(userId);
       logger.info('Calling gov notify service');
 
       sendTokenService.send(fname, usrname, token)

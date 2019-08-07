@@ -21,8 +21,9 @@
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
-  <div class="govuk-grid-row">
-	  <div class="govuk-grid-column-two-thirds">
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
     <form action="/organisation/inviteusers" autocomplete="off" class="form-group"
       method="post" role="form">
 
@@ -33,9 +34,7 @@
 
         <div class="govuk-form-group {{ m.form_group_class('fname', errors) }}">
           <label class="govuk-label govuk-label--m" for="fname">{{__('field_given_name')}}</label>
-          <span class="govuk-hint">
-            {{__('invite_user_given_name_hint')}}
-          </span>
+          <span class="govuk-hint">{{__('invite_user_given_name_hint')}}</span>
           {{ m.error_message('fname', errors, __) }}
           <input id="fname" class="govuk-input"
             name="fname" type="text" value="{{ fname }}" />
@@ -43,9 +42,7 @@
 
         <div class="govuk-form-group {{ m.form_group_class('lname', errors) }}">
           <label class="govuk-label govuk-label--m" for="lname">{{__('field_surname')}}</label>
-          <span class="govuk-hint">
-            {{__('invite_user_surname_hint')}}
-          </span>
+          <span class="govuk-hint">{{__('invite_user_surname_hint')}}</span>
           {{ m.error_message('lname', errors, __) }}
           <input id="lname" class="govuk-input"
             name="lname" type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lname }}" />
@@ -53,9 +50,7 @@
 
         <div class="govuk-form-group {{ m.form_group_class('email', errors) }}">
           <label class="govuk-label govuk-label--m" for="email">{{__('field_email')}}</label>
-          <span class="govuk-hint">
-            {{__('invite_user_email_hint')}}
-          </span>
+          <span class="govuk-hint">{{__('invite_user_email_hint')}}</span>
           {{ m.error_message('email', errors, __) }}
           <input id="email" class="govuk-input"
             name="email" type="text" value="{{ email }}" />
@@ -63,9 +58,7 @@
 
         <div class="govuk-form-group {{ m.form_group_class('cemail', errors) }}">
           <label class="govuk-label govuk-label--m" for="cemail">{{__('field_confirm_email')}}</label>
-          <span class="govuk-hint">
-            {{__('invite_user_cemail_hint')}}
-          </span>
+          <span class="govuk-hint">{{__('invite_user_cemail_hint')}}</span>
           {{ m.error_message('cemail', errors, __) }}
           <input id="cemail" class="govuk-input"
             name="cemail" type="text" value="" />
@@ -73,8 +66,10 @@
       </div>
 
       <div class="form-group">
-        <input id="createorg" class="govuk-button" type="submit" value="Submit"
+        <button id="createorg" class="govuk-button" type="submit"
           onclick="sendAnalytics(event, 'Invite User - submit', 'click')">
+          Submit
+        </button>
       </div>
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>

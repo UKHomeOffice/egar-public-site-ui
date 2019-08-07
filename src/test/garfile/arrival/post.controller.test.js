@@ -215,7 +215,7 @@ describe('Arrival Post Controller', () => {
         expect(req.body.buttonClicked).to.be.undefined;
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
         expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
-        expect(res.redirect).to.have.been.calledWith('/home');
+        expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
       });
     });
 
