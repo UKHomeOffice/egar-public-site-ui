@@ -1,5 +1,10 @@
 [
   {
+    "id": "",
+    "british": false,
+    "label": ""
+  },
+  {
     "id": "MAG",
     "british": false,
     "label": "Madang Airport (Papua New Guinea) (AYMD / MAG)"

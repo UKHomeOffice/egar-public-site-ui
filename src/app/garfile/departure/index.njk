@@ -131,7 +131,7 @@
           value="{{ cookie.getGarDepartureVoyage().departurePort | upper }}">
             {% for airport in airportList | sort(attribute = 'label') %}
             <option value="{{ airport.id }}"
-            {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == port.id }}
+            {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == airport.id }}
             >{{ airport.label }}</option>
             {% endfor%}
             <option value="YYYY"
