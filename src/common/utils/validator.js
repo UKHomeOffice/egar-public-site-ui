@@ -207,12 +207,13 @@ function email(value) {
 
 /**
  * Returns true if valid portcode given.
- * Returns false if ZZZZ entered without coords.
+ * Returns false if ZZZZ or YYYY entered without coords.
  * @param {Object} portObj contains keys [portCode, lat, long]
  * @returns {Boolean} true if valid port, false if zzzz without coords
  */
 function validatePortCoords(portObj) {
-  if (portObj.portCode.toUpperCase() === 'ZZZZ') {
+  const portCode = portObj.portCode.toUpperCase();
+  if (portCode === 'ZZZZ' || portCode === 'YYYY') {
     return ((portObj.lat !== '') && (portObj.long !== ''));
   }
   return true;
