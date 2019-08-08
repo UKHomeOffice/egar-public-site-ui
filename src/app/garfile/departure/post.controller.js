@@ -8,7 +8,6 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const createValidationChains = (voyage) => {
   // Define port / date validation msgs
   const portMsg = 'As you have entered a departure port code of "YYYY", you must provide longitude and latitude coordinates for the location';
-  const portCodeMsg = 'The departure airport code must be a minimum of 3 letters and a maximum of 4 letters';
   const futureDateMsg = 'Departure date must be today or in the future';
   const realDateMsg = 'Enter a real departure date';
   const timeMsg = 'Enter a real departure time';
@@ -31,11 +30,6 @@ const createValidationChains = (voyage) => {
     m: voyage.departureMinute,
   };
 
-  // Define port validations
-  const departurePortValidation = [
-    new ValidationRule(validator.validPort, 'departurePort', voyage.departurePort, portCodeMsg),
-  ];
-
   // Define ZZZZ port validations
   const departurePortZZZZ = [new ValidationRule(validator.validatePortCoords, 'departurePort', departPortObj, portMsg)];
 
@@ -57,11 +51,6 @@ const createValidationChains = (voyage) => {
       departurePortZZZZ,
       departureLatValidation,
       departureLongValidation,
-    );
-  } else {
-    // if not just add port validation
-    validations.push(
-      departurePortValidation,
     );
   }
 
