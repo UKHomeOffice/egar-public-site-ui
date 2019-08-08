@@ -123,7 +123,7 @@
 
         {# Start departure port #}
         <div class="govuk-form-group {{ m.form_group_class('departurePort', errors) }}">
-          <label class="govuk-label govuk-label--m" for="departurePort">{{__('field_arrival_port')}}</label>
+          <label class="govuk-label govuk-label--m" for="departurePort">{{__('field_departure_port')}}</label>
           <span id="departurePort-hint" class="govuk-hint">
 				    Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'YYYY'.<br>
             The arrival port must be different to the departure port.
@@ -176,7 +176,7 @@
         {# End departure coords #}
 
     {# Start buttons #}
-        {{ m.submit_buttons('GAR Arrival', csrfToken, __) }}
+        {{ m.submit_buttons('GAR Departure', csrfToken, __) }}
     </form>
     {{ m.exit_without_saving(csrfToken, __) }}
     {# End buttons #}
