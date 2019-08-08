@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Save Person Details
+	{{__('error_prefix') if errors}} GAR | Save Person Details
 {% endblock %}
 
 {% block header %}
@@ -42,13 +42,15 @@
       {% include "person-details.njk" %}
 
       <div class="govuk-form-group">
-        <table class="govuk-table">
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell "><a class="govuk-button" href="/people">{{__('form_exit_without_adding')}}</a></td>
-            <td class="govuk-table__cell "><input id="save-and-exit" class="govuk-button" type="submit" value="{{__('form_add_and_exit')}}" onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
-          </tr>
-        </table>
+        <input id="add-and-exit" class="govuk-button" type="submit"
+          name="buttonClicked"
+          value="{{__('form_add_and_exit')}}"
+          onclick="sendAnalytics(event, 'Saved People Add - Save', 'click')">
+        <p class="govuk-body-m">
+          <a class="govuk-button govuk-button--secondary" href="/people" onclick="sendAnalytics(event, 'Saved People Add - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
+        </p>
       </div>
+
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
   </div>
