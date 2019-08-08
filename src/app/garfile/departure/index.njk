@@ -19,16 +19,17 @@
 
 {% block content %}
 
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
-
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
+      {% if errors %}
+        {% include "common/templates/includes/errors.njk" %}
+      {% endif %}
+
       <form id="page-form" action="/garfile/departure" autocomplete="off" class="form-group" method="post" role="form">
         <span class="govuk-caption-xl">{{__('section_count', 1, 8)}}</span>
         <h1 class="govuk-heading-xl">{{__('heading_departure_details')}}</h1>
         <p class="govuk-body-l">{{__('departure_details_caption')}}</p>
+
         {# Start departure date #}
         <div id="departureDate" class="govuk-form-group {{ m.form_group_class('departureDate', errors) }}">
           <fieldset class="govuk-fieldset" aria-describedby="departureDate-hint" role="group">
@@ -124,10 +125,7 @@
         {# Start departure port #}
         <div class="govuk-form-group {{ m.form_group_class('departurePort', errors) }}">
           <label class="govuk-label govuk-label--m" for="departurePort">{{__('field_departure_port')}}</label>
-          <span id="departurePort-hint" class="govuk-hint">
-				    Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'YYYY'.<br>
-            The arrival port must be different to the departure port.
-				  </span>
+          <span id="departurePort-hint" class="govuk-hint">{{__('field_port_hint', "YYYY")}}</span>
           {{ m.error_message('departurePort', errors, __) }}
           <select class="govuk-select" id="departurePort" name="departurePort"
           value="{{ cookie.getGarDepartureVoyage().departurePort | upper }}">
@@ -136,16 +134,16 @@
             {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == port.id }}
             >{{ airport.label }}</option>
             {% endfor%}
+            <option value="YYYY"
+            {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == "YYYY" }}
+            >Unknown port code (YYYY)</option>
           </select>
         </div>
         {# End departure port #}
 
         <div class="govuk-form-group">
           <span class="govuk-heading-m">{{__('field_departure_coordinates')}}</span>
-          <span id="departureCoordinates-hint" class="govuk-hint">
-           You are only required to enter coordinates if your port does not have an IATA / ICAO code.
-           Provide coordinates in decimal format to 4 decimal places.
-          </span>
+          <span id="departureCoordinates-hint" class="govuk-hint">{{__('field_coordinate_hint')}}</span>
         </div>
 
         {# Start departure coords #}

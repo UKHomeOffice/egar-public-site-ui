@@ -125,6 +125,9 @@
     "field_arrival_port": "Arrival port",
     "field_arrival_coordinates": "Arrival coordinates",
 
+    "field_port_hint": "Provide the IATA or ICAO code for the port. If the port does not have a code, enter '%s'. The arrival port must be different to the departure port.",
+    "field_coordinate_hint": "You are only required to enter coordinates if your port does not have an IATA or ICAO code. Provide coordinates in decimal format to 4 decimal places.",
+
     "heading_aircraft_details": "Aircraft details",
     "caption_aircraft_details": "Select the details of an aircraft you have previously added",
 

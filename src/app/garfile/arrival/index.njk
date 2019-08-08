@@ -17,15 +17,14 @@
 
 {% block content %}
 
-  {% import "common/templates/includes/macros.njk" as m %}
-
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
-
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
-      <form id="page-form" action="/garfile/arrival" autocomplete="off" class="form-group" method="post" role="form">
+      {% if errors %}
+        {% include "common/templates/includes/errors.njk" %}
+      {% endif %}
+
+      <form id="page-form" action="/garfile/arrival" autocomplete="off" class="form-group"
+      method="post" role="form">
 
         {# Start Arrival date #}
         <div class="govuk-form-group" id="arrivalDate">
@@ -124,10 +123,7 @@
         <div class="govuk-form-group {{ m.form_group_class('arrivalPort', errors) }}">
           <label class="govuk-label govuk-label--m" for="arrivalPort">{{__('field_arrival_port')}}</label>
           {{ m.error_message('arrivalPort', errors, __) }}
-          <span id="arrivalPort-hint" class="govuk-hint">
-				    Provide the IATA or ICAO code for the port. If the port does not have a code, enter 'ZZZZ'.<br>
-            The arrival port must be different to the departure port.
-				  </span>
+          <span id="arrivalPort-hint" class="govuk-hint">{{__('field_port_hint', "ZZZZ")}}</span>
           <select class="govuk-select" id="arrivalPort" name="arrivalPort"
           value="{{ cookie.getGarArrivalVoyage().arrivalPort | upper }}">
             {% for airport in airportList | sort(attribute = 'label') %}
@@ -135,16 +131,15 @@
             {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == port.id }}
             >{{ airport.label }}</option>
             {% endfor%}
+            <option value="ZZZZ" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == "ZZZZ" }}
+            >Unknown port code (ZZZZ)</option>
           </select>
         </div>
         {# End arrival port #}
 
         <div class="govuk-form-group">
           <span class="govuk-heading-m">{{__('field_arrival_coordinates')}}</span>
-          <span id="arrivalCoordinates-hint" class="govuk-hint">
-            You are only required to enter coordinates if your port does not have an IATA / ICAO code.
-            Provide coordinates in decimal format to 4 decimal places.
-          </span>
+          <span id="arrivalCoordinates-hint" class="govuk-hint">{{__('field_coordinate_hint')}}</span>
         </div>
 
         {# Start arrival coords #}
