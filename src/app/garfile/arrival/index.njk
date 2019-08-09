@@ -180,7 +180,8 @@
   <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
   <script type="text/javascript">
     accessibleAutocomplete.enhanceSelectElement({
-      selectElement: document.querySelector('#arrivalPort')
+      selectElement: document.querySelector('#arrivalPort'),
+      minLength: 2,
     });
   </script>
 {% endblock %}
