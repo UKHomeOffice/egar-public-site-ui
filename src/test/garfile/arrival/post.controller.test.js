@@ -63,8 +63,8 @@ describe('Arrival Post Controller', () => {
       });
     });
 
-    it('should fail for two letter port code', () => {
-      req.body.arrivalPort = 'no'; // Check this upper cases the port
+    it('should fail for empty port code', () => {
+      req.body.arrivalPort = '';
       const cookie = new CookieModel(req);
 
       sinon.stub(garApi, 'get').resolves(apiResponse);
@@ -79,7 +79,7 @@ describe('Arrival Post Controller', () => {
         expect(garApi.patch).to.not.have.been.called;
         expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
           cookie,
-          errors: [new ValidationRule(validator.validPort, 'arrivalPort', 'NO', 'The arrival airport code must be a minimum of 3 letters and a maximum of 4 letters')],
+          errors: [new ValidationRule(validator.notEmpty, 'arrivalPort', '', 'The arrival airport code must be entered')],
         });
       });
     });

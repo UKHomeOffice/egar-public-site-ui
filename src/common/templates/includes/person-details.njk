@@ -1,43 +1,45 @@
-<div class="govuk-form-group {{ m.form_group_class('savedpeople', errors) }}">
-<div class="govuk-form-group {{ m.form_group_class('first-name', errors) }}">
-  <label class="govuk-label govuk-label--m" for="first-name">{{ __('field_given_name') }}</label>
-    {{ m.error_message('first-name', errors, __) }}
-  <input class="govuk-input govuk-input--width-30" id="first-name" name="first-name" autocomplete="off" type="text"
-  maxlength="{{ MAX_STRING_LENGTH }}" value="{{person['firstName'] or req.body['first-name']}}" />
-</div>
+<div class="{{ m.form_group_class('savedpeople', errors) }}">
+  <div class="{{ m.form_group_class('firstName', errors) }}">
+    <label class="govuk-label govuk-label--m" for="firstName">{{ __('field_given_name') }}</label>
+    {{ m.error_message('firstName', errors, __) }}
+    <input class="govuk-input govuk-input--width-30" id="firstName" name="firstName" autocomplete="off" type="text"
+      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.firstName or req.body.firstName }}"
+      {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
+  </div>
 
-<div class="govuk-form-group {{ m.form_group_class('last-name', errors) }}">
-  <label class="govuk-label govuk-label--m" for="last-name">{{ __('field_surname') }}</label>
-  {{ m.error_message('last-name', errors, __) }}
-  <input class="govuk-input govuk-input--width-30" id="last-name" name="last-name" autocomplete="off" type="text"
-  maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['lastName'] or req.body['last-name'] }}" />
-</div>
+  <div class="{{ m.form_group_class('lastName', errors) }}">
+    <label class="govuk-label govuk-label--m" for="lastName">{{ __('field_surname') }}</label>
+    {{ m.error_message('lastName', errors, __) }}
+    <input class="govuk-input govuk-input--width-30" id="lastName" name="lastName" autocomplete="off" type="text"
+      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.lastName or req.body.lastName }}"
+      {{ 'aria-describedby=lastName-error' if errors | containsError('lastName') }}>
+  </div>
 
-<div class="govuk-form-group {{ m.form_group_class('nationality', errors) }}">
-  <label class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
-  {{ m.error_message('nationality', errors, __) }}
-  <span class="govuk-hint">
-    {{ __('field_nationality_hint') }}
-  </span>
-  <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}">
-    {% for country in countryList|sort(attribute='label') %}
-      <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
-    {% endfor %}
-  </select>
-</div>
+  <div class="{{ m.form_group_class('nationality', errors) }}">
+    <label class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
+    {{ m.hint('nationality', __('field_nationality_hint')) }}
+    {{ m.error_message('nationality', errors, __) }}
+    {# <span class="govuk-hint">{{ __('field_nationality_hint') }}</span> #}
+    <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}" aria-describedby="nationality-hint">
+      {% for country in countryList|sort(attribute='label') %}
+        <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
+      {% endfor %}
+    </select>
+  </div>
 
-  <div class="govuk-form-group {{ m.form_group_class('birthplace', errors) }}">
+  <div class="{{ m.form_group_class('birthplace', errors) }}">
     <label class="govuk-label govuk-label--m" for="birthplace">{{ __('field_birth_place') }}</label>
     {{ m.error_message('birthplace', errors, __) }}
     <input class="govuk-input govuk-input--width-30" id="birthplace" name="birthplace" autocomplete="off" type="text"
-    maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}" />
+      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}"
+      {{ 'aria-describedby=birthplace-error' if errors | containsError('birthplace') }}>
   </div>
 
   <!-- Date of birth -->
-  <div class="govuk-form-group {{ m.form_group_class('dob', errors) }}">
+  <div class="{{ m.form_group_class('dob', errors) }}">
     <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h1 class="govuk-fieldset__heading">{{ __('field_dob') }}</h1>
+        <h1 class="govuk-fieldset__heading">{{ __('field_dob') }}</h1>
       </legend>
       <span class="govuk-hint" id="dob-hint">{{ __('field_dob_hint') }}</span>
       {{ m.error_message('dob', errors, __) }}
@@ -68,65 +70,65 @@
   </div>
   <!-- End date of birth -->
 
-      <div class="govuk-form-group {{ m.form_group_class('gender', errors) }}" id="gender">
-        {{ m.error_message('gender', errors, __) }}
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h2 class="govuk-fieldset__heading">{{ __('field_gender') }}</h2>
-          </legend>
-          <div class="govuk-radios">
-          {% for choice in genderchoice %}
-            <div class="govuk-radios__item">
-            {% if choice.gender == person.gender or choice.gender == req.body.gender %}
-              <input class="govuk-radios__input" id={{choice.gender}} type="radio" name="gender" value={{choice.gender}} checked>
-            {% else %}
-              <input class="govuk-radios__input" id={{choice.gender}} type="radio" name="gender" value={{choice.gender}}>
-            {% endif %}
-              <label class="govuk-label govuk-radios__label" for={{choice.gender}}>{{choice.gender}}</label>
-            </div>
-          {% endfor %}
+  <div class="govuk-form-group {{ m.form_group_class('gender', errors) }}" id="gender">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">{{ __('field_gender') }}</h2>
+      </legend>
+      {{ m.error_message('gender', errors, __) }}
+      <div class="govuk-radios">
+        {% for choice in genderchoice %}
+          <div class="govuk-radios__item">
+          {% if choice.gender == person.gender or choice.gender == req.body.gender %}
+            <input class="govuk-radios__input" id={{choice.gender}} type="radio" name="gender" value={{choice.gender}} checked>
+          {% else %}
+            <input class="govuk-radios__input" id={{choice.gender}} type="radio" name="gender" value={{choice.gender}}>
+          {% endif %}
+            <label class="govuk-label govuk-radios__label" for={{choice.gender}}>{{choice.gender}}</label>
           </div>
-        </fieldset>
+        {% endfor %}
       </div>
+    </fieldset>
+  </div>
 
-    <div class="govuk-form-group {{ m.form_group_class('person-type', errors) }}" id="person-type">
-      {{ m.error_message('person-type', errors, __) }}
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h2 class="govuk-fieldset__heading">{{ __('field_person_type') }}</h2>
-        </legend>
-        <span id="dob-hint" class="govuk-hint">{{ __('field_person_type_hint') }}</span>
-        <div class="govuk-radios">
+  <div class="{{ m.form_group_class('personType', errors) }}" id="personTypeContainer">
+    <fieldset class="govuk-fieldset" aria-describedby="personType-hint personType-error">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">{{ __('field_person_type') }}</h2>
+      </legend>
+      {{ m.hint('personType', __('field_person_type_hint')) }}
+      {{ m.error_message('personType', errors, __) }}
+      <div class="govuk-radios">
         {% for choice in persontype %}
         <div class="govuk-radios__item">
-        {% if choice.persontype == person['peopleType'].name or choice.persontype == req.body['person-type'] %}
-          <input class="govuk-radios__input" id={{choice.persontype}} type="radio" name="person-type" value={{choice.persontype}} checked>
+        {% if choice.persontype == person['peopleType'].name or choice.persontype == req.body.personType %}
+          <input class="govuk-radios__input" id={{choice.persontype}} type="radio" name="personType" value={{choice.persontype}} checked>
         {% else %}
-          <input class="govuk-radios__input" id={{choice.persontype}} type="radio" name="person-type" value={{choice.persontype}}>
+          <input class="govuk-radios__input" id={{choice.persontype}} type="radio" name="personType" value={{choice.persontype}}>
         {% endif %}
         <label class="govuk-label govuk-radios__label" for={{choice.persontype}}>{{choice.persontype}}</label>
-        </div>
-      {% endfor %}
       </div>
-      </fieldset>
-    </div>
+    {% endfor %}
+    </fieldset>
+  </div>
 
   <h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
   <p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
 
-  <div class="govuk-form-group {{ m.form_group_class('travel-document-number', errors) }}">
-    <label class="govuk-label govuk-label--m" for="travel-document-number">{{ __('field_travel_document_number') }}</label>
-    {{ m.error_message('travel-document-number', errors, __) }}
-    <input class="govuk-input govuk-input--width-20" id="travel-document-number" name="travel-document-number" type="text"
-    maxlength="{{ MAX_STRING_LENGTH }}" value="{{person['documentNumber'] or req.body['travel-document-number']}}" />
+  <div class="govuk-form-group {{ m.form_group_class('travelDocumentNumber', errors) }}">
+    <label class="govuk-label govuk-label--m" for="travelDocumentNumber">{{ __('field_travel_document_number') }}</label>
+    {{ m.error_message('travelDocumentNumber', errors, __) }}
+    <input id="travelDocumentNumber" name="travelDocumentNumber" class="govuk-input govuk-input--width-20" type="text"
+      maxlength="{{ MAX_STRING_LENGTH }}" value="{{person.documentNumber or req.body.travelDocumentNumber}}"
+      {{ 'aria-describedby=travelDocumentNumber-error' if errors | containsError('travelDocumentNumber') }}>
   </div>
 
-  <div class="govuk-form-group {{ m.form_group_class('documentExpiryDate', errors) }}" id="documentExpiryDate">
+  <div class="{{ m.form_group_class('documentExpiryDate', errors) }}" id="documentExpiryDate">
     <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">{{ __('field_document_expiry_date') }}</h2>
       </legend>
-      <span id="dob-hint" class="govuk-hint">{{ __('field_document_expiry_date_hint') }}{{ futureYear }}</span>
+      <span id="dob-hint" class="govuk-hint">{{ __('field_document_expiry_date_hint') }}{{ futureYear }}.</span>
       {{ m.error_message('documentExpiryDate', errors, __) }}
       <div class="govuk-date-input" id="expiry">
         <div class="govuk-date-input__item">
@@ -154,27 +156,27 @@
     </fieldset>
   </div>
 
-<div class="govuk-form-group {{ m.form_group_class('issuing-state', errors) }}">
-  <label class="govuk-label govuk-label--m" for="issuing-state">{{ __('field_issuing_state') }}</label>
-  {{ m.error_message('issuing-state', errors, __) }}
-  <span class="govuk-hint">{{ __('field_issuing_state_hint') }}</span>
-  <select class="govuk-select" id="issuing-state" name="issuing-state" value="{{ (person['issuingState'] or req.body['issuing-state'])}}">
-    {% for country in countryList|sort(attribute='label') %}
-      <option value="{{ country.code }}" {{ 'selected=selected' if (person['issuingState'] or req.body['issuing-state']) == country.code }}>{{ country.label }}</option>
-    {% endfor %}
-  </select>
-</div>
+  <div class="{{ m.form_group_class(issuingState, errors) }}">
+    <label class="govuk-label govuk-label--m" for="issuingState">{{ __('field_issuing_state') }}</label>
+    {{ m.hint('issuingState', __('field_issuing_state_hint')) }}
+    {{ m.error_message(issuingState, errors, __) }}
+    <select class="govuk-select" id="issuingState" name="issuingState" value="{{ (person.issuingState or req.body.issuingState)}}">
+      {% for country in countryList|sort(attribute='label') %}
+        <option value="{{ country.code }}" {{ 'selected=selected' if (person.issuingState or req.body.issuingState) == country.code }}>{{ country.label }}</option>
+      {% endfor %}
+    </select>
+  </div>
 
-  <div class="govuk-form-group {{ m.form_group_class('travel-document-type', errors) }}">
-    <label class="govuk-label govuk-label--m" for="travel-document-type">{{ __('field_travel_document_type') }}</label>
-    <span class="govuk-hint">{{ __('field_travel_document_type_hint') }}</span>
-    {{ m.error_message('travel-document-type', errors, __) }}
-    <select class="govuk-select" id="travel-document-type" name="travel-document-type">
+  <div class="{{ m.form_group_class('travelDocumentType', errors) }}">
+    <label class="govuk-label govuk-label--m" for="travelDocumentType">{{ __('field_travel_document_type') }}</label>
+    {{ m.hint('travelDocumentType', __('field_travel_document_type_hint')) }}
+    {{ m.error_message('travelDocumentType', errors, __) }}
+    <select class="govuk-select" id="travelDocumentType" name="travelDocumentType">
     {% for document in documenttype %}
-      {% if document.documenttype  == person['documentType'] or document.documenttype == req.body['travel-document-type']%}
-              <option selected="true">{{document.documenttype}}</option>
+      {% if document.documenttype  == person['documentType'] or document.documenttype == req.body.travelDocumentType %}
+        <option selected="true">{{document.documenttype}}</option>
       {% else %}
-              <option>{{document.documenttype}}</option>
+        <option>{{document.documenttype}}</option>
       {% endif %}
     {% endfor %}
     </select>
@@ -186,6 +188,6 @@
     selectElement: document.querySelector('#nationality')
   });
   accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#issuing-state')
+    selectElement: document.querySelector('#issuingState')
   });
 </script>

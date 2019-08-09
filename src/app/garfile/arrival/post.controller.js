@@ -40,7 +40,7 @@ const performAPICall = (cookie, buttonClicked, res) => {
 
 // Define port / date validation msgs
 const portMsg = 'As you have entered an arrival port code of "ZZZZ", you must provide longitude and latitude coordinates for the location';
-const portCodeMsg = 'The arrival airport code must be a minimum of 3 letters and a maximum of 4 letters';
+const portCodeMsg = 'The arrival airport code must be entered';
 const futureDateMsg = 'Arrival date must be today or in the future';
 const realDateMsg = 'Enter a real arrival date';
 const timeMsg = 'Enter a real arrival time';
@@ -67,7 +67,7 @@ const buildValidations = (voyage) => {
 
   // Define port validations
   const arrivalPortValidation = [
-    new ValidationRule(validator.validPort, 'arrivalPort', voyage.arrivalPort, portCodeMsg),
+    new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, portCodeMsg),
   ];
 
   // Define ZZZZ port validations

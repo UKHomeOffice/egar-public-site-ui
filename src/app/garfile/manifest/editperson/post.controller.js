@@ -17,16 +17,16 @@ module.exports = (req, res) => {
   const expiryDate = `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`;
 
   const person = {
-    firstName: req.body['first-name'],
-    lastName: req.body['last-name'],
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     gender: req.body.gender,
     dateOfBirth: birthdate,
     placeOfBirth: req.body.birthplace,
     nationality: _.toUpper(req.body.nationality),
-    peopleType: req.body['person-type'],
-    documentNumber: req.body['travel-document-number'],
-    documentType: req.body['travel-document-type'],
-    issuingState: _.toUpper(req.body['issuing-state']),
+    peopleType: req.body.personType,
+    documentNumber: req.body.travelDocumentNumber,
+    documentType: req.body.travelDocumentType,
+    issuingState: _.toUpper(req.body.issuingState),
     documentExpiryDate: expiryDate,
     garPeopleId: req.body.garPeopleId,
   };

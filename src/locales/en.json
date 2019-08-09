@@ -125,6 +125,9 @@
     "field_arrival_port": "Arrival port",
     "field_arrival_coordinates": "Arrival coordinates",
 
+    "field_port_hint": "Provide the IATA or ICAO code for the port. If the port does not have a code, enter '%s'. The arrival port must be different to the departure port.",
+    "field_coordinate_hint": "You are only required to enter coordinates if your port does not have an IATA or ICAO code. Provide coordinates in decimal format to 4 decimal places.",
+
     "heading_aircraft_details": "Aircraft details",
     "caption_aircraft_details": "Select the details of an aircraft you have previously added",
 
@@ -146,11 +149,11 @@
     "caption_edit_person": "Please enter the following information. This information can be re-used when submitting a GAR.",
 
     "field_nationality": "Nationality",
-    "field_nationality_hint": "Provide the 3 letter country code, for example GBR",
+    "field_nationality_hint": "Provide the 3 letter country code, for example GBR.",
     "country_no_selection": "No country selected",
     "field_birth_place": "Place of birth",
     "field_dob": "Date of birth",
-    "field_dob_hint": "For example 20 12 1988",
+    "field_dob_hint": "For example 20 12 1988.",
     "field_date_day": "Day",
     "field_date_month": "Month",
     "field_date_year": "Year",
@@ -165,9 +168,9 @@
     "field_document_expiry_date": "Document expiry date",
     "field_document_expiry_date_hint": "For example 22 05 ",
     "field_issuing_state": "Issuing state",
-    "field_issuing_state_hint": "Type in or provide the 3 letter code for the issuing state, for example GBR",
+    "field_issuing_state_hint": "Type in or provide the 3 letter code for the issuing state, for example GBR.",
     "field_travel_document_type": "Travel document type",
-    "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other",
+    "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other.",
     "field_travel_document_issuing_state": "Travel document issuing state",
     "field_travel_document_expiry_date": "Travel document expiry date",
 
@@ -229,9 +232,9 @@
     "aircraft_add_caption": "Add the details of an aircraft that you regularly submit GARs for.",
     "aircraft_add_caption_garfile": "Add the details of a new aircraft you have not already saved",
     "field_aircraft_registration": "Aircraft registration",
-    "field_aircraft_registration_hint": "For example G-ABCD",
+    "field_aircraft_registration_hint": "For example G-ABCD.",
     "field_aircraft_type": "Aircraft type",
-    "field_aircraft_type_hint": "For example Gulfstream",
+    "field_aircraft_type_hint": "For example Gulfstream.",
     "field_aircraft_base": "Aircraft home port / location",
     "table_action": "Action",
     "table_delete": "Delete",
