@@ -44,7 +44,7 @@ module.exports = (req, res) => {
           if (buttonClicked === 'Save and continue') {
             res.redirect('/garfile/supportingdocuments');
           } else {
-            res.redirect('/home');
+            res.redirect(307, '/garfile/view');
           }
         })
         .catch((err) => {

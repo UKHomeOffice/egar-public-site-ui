@@ -220,7 +220,7 @@ describe('GAR Customs Post Controller', () => {
         freeCirculation: 0,
         visitReason: 2,
       });
-      expect(res.redirect).to.have.been.calledWith('/home');
+      expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
     });
   });
 
