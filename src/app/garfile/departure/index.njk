@@ -134,9 +134,8 @@
             {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == airport.id }}
             >{{ airport.label }}</option>
             {% endfor%}
-            <option value="YYYY"
-            {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == "YYYY" }}
-            >Unknown port code (YYYY)</option>
+            {# Hard coded as it should be temporary #}
+            <option value="YYYY" {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == "YYYY" }}>Unknown port code (YYYY)</option>
           </select>
         </div>
         {# End departure port #}
