@@ -24,13 +24,18 @@
     {% include "check-your-answers.njk" %}
 
     <div class="govuk-grid-column-two-thirds">
+      {% if garfile.status.name === 'Draft' %}
+        <a id="submit-gar" class="govuk-button" href="/garfile/review">Submit this GAR</a>
+      {% endif %}
       {% if garfile.status.name !== 'Cancelled' %}
-        <a href="/garfile/cancel">
-          <button class="govuk-button" id="cancel-gar" type="submit">{{__('title_cancel_gar')}}</button>
-        </a>
+        <p class="govuk-body-m">
+          <a id="cancel-gar" href="/garfile/cancel">
+            <button class="govuk-button" id="cancel-gar" type="submit">{{__('title_cancel_gar')}}</button>
+          </a>
+        </p>
       {% endif %}
       <p class="govuk-body-m">
-        <a href="/home" id='exit-view'>{{__('form_exit')}}</a>
+        <a id='exit-view' class="govuk-button govuk-button--secondary" href="/home" >{{__('form_exit')}}</a>
       </p>
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </div>

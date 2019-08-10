@@ -3,53 +3,50 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Review
+	{{__('error_prefix') if errors}} Create GAR | Review
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-  <a href="/garfile/supportingdocuments" class="govuk-back-link">Back</a>
-
+  <a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-xl">Section 8 of 8</span>
-    <h1 class="govuk-heading-xl">Check all the information provided before submitting your GAR</h1>
+    <span class="govuk-caption-xl">{{__('section_count', 8, 8)}}</span>
+    <h1 class="govuk-heading-xl">{{__('title_review_gar')}}</h1>
 
     {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
+      {% include "common/templates/includes/errors.njk" %}
     {% endif %}
 
     {% include "check-your-answers.njk" %}
 
-  <form action="/garfile/review" method="post" class="form">
-    <h2 class="govuk-heading-m">Submit your GAR</h2>
+    <form action="/garfile/review" method="post" class="form">
+      <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
 
-    <p class="govuk-body-m">
-      By submitting this General Aviation Report you are confirming that,
-      to the best of your knowledge, the information you are providing is correct
-      and you have the explicit permission of the persons named in this report to submit information on their behalf.
-    </p>
+      <p class="govuk-body-m">{{__('submit_gar_caption')}}</p>
 
-    <div class="govuk-form-group">
-      <input type="submit" id='review-submit' class="govuk-button" value="Accept and submit GAR">
-      <p class="govuk-body-m">
-        <a href="/home" id='review-save-and-exit' name="submit_button">Save and come back later</a>
-      </p>
-      <p class="govuk-body-m">
-        <a href="/home"> Exit without saving </a>
-      </p>
-    </div>
-        <input type="hidden" id='review-exit-without-saving' name="_csrf" value="{{ csrfToken }}" />
-  </form>
+      <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit')}}">
+      {# <p class="govuk-body-m">
+        <a id='review-exit' href="/home">{{__('review_gar_exit')}}</a>
+      </p> #}
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </form>
+    <form id="cancel-form" action="/garfile/view" method="post" role="form">
+  {# <p class="govuk-body-m"> #}
+    <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+      {{__('review_gar_exit')}}
+    </button>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  {# </p> #}
+</form>
   </div>
 </div>
 {% endblock %}

@@ -264,6 +264,7 @@
 
     "title_gar_summary": "GAR summary",
     "change_prefix": "Change ",
+    "button_submit_this_gar": "Submit this GAR",
 
     "heading_supporting_documentation_details": "Supporting documentation details",
     "supportingdocuments_no_records": " There are no supporting documents uploaded",
@@ -277,6 +278,12 @@
     "cancel_gar_caption": "You will need to ensure that a new GAR is submitted if this flight takes place.",
     "form_exit_without_cancelling": "Exit without cancelling",
     "form_exit": "Exit",
+
+    "title_review_gar": "Check all the information provided before submitting your GAR",
+    "heading_submit_gar": "Submit your GAR",
+    "submit_gar_caption": "By submitting this General Aviation Report you are confirming that, to the best of your knowledge, the information you are providing is correct and you have the explicit permission of the persons named in this report to submit information on their behalf.",
+    "review_gar_submit": "Accept and submit GAR",
+    "review_gar_exit": "Exit without submitting",
 
     "title_organisation": "Organisation",
     "organisation_caption": "Manage your organisation's details.",
