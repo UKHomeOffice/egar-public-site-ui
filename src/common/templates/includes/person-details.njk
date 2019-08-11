@@ -16,11 +16,10 @@
   </div>
 
   <div class="{{ m.form_group_class('nationality', errors) }}">
-    <label class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
+    <label id="nationality-label" class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
     {{ m.hint('nationality', __('field_nationality_hint')) }}
     {{ m.error_message('nationality', errors, __) }}
-    {# <span class="govuk-hint">{{ __('field_nationality_hint') }}</span> #}
-    <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}" aria-describedby="nationality-hint">
+    <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}" aria-labelledby="nationality-label" aria-describedby="nationality-hint">
       {% for country in countryList|sort(attribute='label') %}
         <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
       {% endfor %}
@@ -157,10 +156,10 @@
   </div>
 
   <div class="{{ m.form_group_class(issuingState, errors) }}">
-    <label class="govuk-label govuk-label--m" for="issuingState">{{ __('field_issuing_state') }}</label>
+    <label id="issuingState-label" class="govuk-label govuk-label--m" for="issuingState">{{ __('field_issuing_state') }}</label>
     {{ m.hint('issuingState', __('field_issuing_state_hint')) }}
     {{ m.error_message(issuingState, errors, __) }}
-    <select class="govuk-select" id="issuingState" name="issuingState" value="{{ (person.issuingState or req.body.issuingState)}}">
+    <select class="govuk-select" id="issuingState" name="issuingState" value="{{ (person.issuingState or req.body.issuingState)}}"  aria-labelledby="issuingState-label"  aria-describedby="issuingState-hint">
       {% for country in countryList|sort(attribute='label') %}
         <option value="{{ country.code }}" {{ 'selected=selected' if (person.issuingState or req.body.issuingState) == country.code }}>{{ country.label }}</option>
       {% endfor %}

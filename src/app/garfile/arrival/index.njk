@@ -70,9 +70,9 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_year')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalYear"
-                  name="arrivalYear" type="number" pattern="[0-9]*" min="1900" max="2200"
-                  value="{{cookie.dateSlice('year', cookie.getGarArrivalVoyage().arrivalDate)}}"
-                  {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
+                    name="arrivalYear" type="number" pattern="[0-9]*" min="1900" max="2200"
+                    value="{{cookie.dateSlice('year', cookie.getGarArrivalVoyage().arrivalDate)}}"
+                    {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
                 </div>
               </div>
             </div>
@@ -121,15 +121,15 @@
 
         {# Start arrival port #}
         <div class="govuk-form-group {{ m.form_group_class('arrivalPort', errors) }}">
-          <label class="govuk-label govuk-label--m" for="arrivalPort">{{__('field_arrival_port')}}</label>
+          <label id="arrivalPort-label" class="govuk-label govuk-label--m" for="arrivalPort">{{__('field_arrival_port')}}</label>
           {{ m.error_message('arrivalPort', errors, __) }}
           <span id="arrivalPort-hint" class="govuk-hint">{{__('field_port_hint', "ZZZZ")}}</span>
           <select class="govuk-select" id="arrivalPort" name="arrivalPort"
-          value="{{ cookie.getGarArrivalVoyage().arrivalPort | upper }}">
+            value="{{ cookie.getGarArrivalVoyage().arrivalPort | upper }}"
+            aria-labelledby="arrivalPort-label"
+            aria-describedby="arrivalPort-hint{{ ' arrivalPort-error' if errors | containsError('arrivalPort') }}">>
             {% for airport in airportList | sort(attribute = 'label') %}
-            <option value="{{ airport.id }}"
-            {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id }}
-            >{{ airport.label }}</option>
+              <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id }}>{{ airport.label }}</option>
             {% endfor%}
             {# Hard coded as it should be temporary #}
             <option value="ZZZZ" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == "ZZZZ" }}>Unknown port code (ZZZZ)</option>

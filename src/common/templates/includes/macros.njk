@@ -37,7 +37,7 @@
 {% endmacro %}
 
 {% macro exit_without_saving(csrfToken, __) %}
-<form id="cancel-form" action="/garfile/view" method="post" role="form">
+<form id="cancel-form" action="/garfile/view" method="post">
   <p class="govuk-body-m">
     <button type="submit" id="exit-without-saving" class="govuk-button govuk-button--secondary" data-module="govuk-button">
       {{__('form_exit_without_saving')}}
