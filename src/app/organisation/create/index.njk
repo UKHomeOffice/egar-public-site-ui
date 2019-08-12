@@ -40,8 +40,6 @@
           type="text" value="" {{ 'aria-describedby=orgName-error' if errors | containsError('orgName') }}>
       </div>
       <div class="govuk-form-group">
-        {# <input id="create" class="govuk-button" type="submit" value="Create"
-          onclick="sendAnalytics(event, 'Create Organisation - submit', 'click')"> #}
         <button id="create" class="govuk-button" onclick="sendAnalytics(event, 'Create Organisation - Submit', 'click')">
           {{__('nav_bar_create_organisation')}}
         </button>
