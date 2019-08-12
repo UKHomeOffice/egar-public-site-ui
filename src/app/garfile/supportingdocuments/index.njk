@@ -7,120 +7,107 @@
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-  <a href="/garfile/customs" class="govuk-back-link">Back</a>
-
+  <a href="/garfile/customs" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
   <div class="govuk-grid-row">
     <form action="/upload?_csrf={{csrfToken}}" class="form-group" method="post" role="form" enctype="multipart/form-data">
-    <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">Section 7 of 8</span>
-      <h1 class="govuk-heading-xl">
-        Would you like to upload any supporting documentation to your GAR?
-      </h1>
-    </div>
-    <div class="govuk-grid-column-two-thirds">
-      <div class="govuk-form-group {{ m.form_group_class('supportingdocuments', errors) }}"></div>
-        <p class="govuk-body-l">You don’t have to provide any supporting documentation, but doing so may assist Border Force to process your flight more quickly.</p>
+      <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">{{__('section_count', 7, 8)}}</span>
+        <h1 class="govuk-heading-xl">{{__('heading_supporting_documents')}}</h1>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group {{ m.form_group_class('supportingdocuments', errors) }}"></div>
+          <p class="govuk-body-l">{{__('supporting_documents_caption')}}</p>
 
-        <div class="govuk-warning-text">
-          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-          <strong class="govuk-warning-text__text">
-            <span class="govuk-warning-text__assistive">Warning</span>
-            Supporting documentation may include firearms certificates / licences, firearms serial numbers or remote clearance forms.
-          </strong>
+          <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+              <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('supporting_documents_warning')}}
+            </strong>
+          </div>
+
+          <p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{{__('supporting_documents_list_1')}}</li>
+              <li>{{__('supporting_documents_list_2')}}</li>
+              <li>{{__('supporting_documents_list_3')}}</li>
+            </ul>
+          </p>
+
+          <div class="govuk-form-group {{ m.form_group_class('file', errors) }}">
+            <label class="govuk-label govuk-label--m" for="file">{{__('heading_upload_file')}}</label>
+            {{ m.error_message('file', errors, __) }}
+            <input id="file" name='file' class="govuk-file-upload" type="file"
+              accept="image/gif, image/jpeg, image/png, application/pdf"
+              {{ 'aria-describedby=file-error' if errors | containsError('file') }}>
+          </div>
+
+          <p class="govuk-body-m">
+            <button id="upload" class="govuk-button">{{__('button_upload_file')}}</button>
+          </p>
+
+          <h2 class="govuk-heading-m">{{__('heading_uploaded_files')}}</h2>
+          <p class="govuk-body-m">{{__('uploaded_files_caption')}}</p>
         </div>
-
-        <p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>The maximum size for the entire GAR submission cannot exceed 8MB</li>
-            <li>You can upload as many supporting documents as you wish within this size limit</li>
-            <li>The following file types can be uploaded: PDF, JPG, JPEG, PNG, GIF</li>
-          </ul>
-        </p>
-
-        <div class="govuk-form-group {{ m.form_group_class('file', errors) }}">
-          <label class="govuk-label govuk-label--m" for="file">
-            <strong class="bold-medium">Upload a file</strong>
-          </label>
-
-          {{ m.error_message('file', errors, __) }}
-          <input class="govuk-file-upload" type="file" id="file" name='file'
-            accept="image/gif, image/jpeg, image/png, application/pdf">
-        </div>
-
-        <p class="govuk-body-m">
-          <a href="#" onclick="document.forms[0].submit();return false;"name="submit_button">Upload selected file</a>
-        </p>
-
-        <h2 class="govuk-heading-m">Uploaded documents</h2>
-        <p class="govuk-body-m">Here are the documents you have attached to this GAR.</p>
-    </div>
-    <div class="govuk-grid-column-full">
-        <div class="form-group">
-          <table class="govuk-table">
-            <thead class="govuk-table__head">
+        <div class="govuk-grid-column-full">
+          <div class="form-group">
+            <table class="govuk-table">
+              <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                  <th class="govuk-table__header" scope="col">{{__('field_file_name')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('field_file_size')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('field_file_status')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
+                  </tr>
+              </thead>
+              <tbody class="govuk-table__body">
+              {% if supportingDoc.items | length %}
+                {% for file in supportingDoc.items %}
                 <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">File name</th>
-                <th class="govuk-table__header" scope="col">File size</th>
-                <th class="govuk-table__header" scope="col">Status</th>
-                <th class="govuk-table__header" scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-            {% if supportingDoc.items | length %}
-              {% for file in supportingDoc.items %}
-              <tr class="govuk-table__row">
-                <td class="govuk-table__cell ">{{file.fileName}} </td>
-                <td class="govuk-table__cell ">{{file.size}} </td>
-                <td class="govuk-table__cell ">Done</td>
-                <td class="govuk-table__cell "><button class="govuk-link btn-link" name="deleteDocId" value="{{ file.supportingDocumentId }}">Delete</button></td>
-              </tr lass="govuk-table__cell ">
-              {% endfor %}
-            {% else %}
-              {{ m.empty_table_message(__('supportingdocuments_no_records')) }}
-            {% endif %}
-            </tbody>
-        </table>
-    </div>
-    </div>
-    <div class="govuk-grid-column-two-thirds">
-      <input type="hidden" id="user" name='user' value="{{cookie.getUserDbId()}}">
-      <input type="hidden" id="garid" name='garid' value="{{cookie.getGarId()}}">
-      <input type="hidden" id="cookie" name='cookie' value = "{{cookie.getUserRole()}}">
+                  <td class="govuk-table__cell ">{{file.fileName}} </td>
+                  <td class="govuk-table__cell ">{{file.size}} </td>
+                  <td class="govuk-table__cell ">{{__('field_file_status_done')}}</td>
+                  <td class="govuk-table__cell "><button class="govuk-link btn-link" name="deleteDocId" value="{{ file.supportingDocumentId }}">{{__('table_delete')}}</button></td>
+                </tr lass="govuk-table__cell ">
+                {% endfor %}
+              {% else %}
+                {{ m.empty_table_message(__('supportingdocuments_no_records')) }}
+              {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+          <input type="hidden" id="user" name='user' value="{{cookie.getUserDbId()}}">
+          <input type="hidden" id="garid" name='garid' value="{{cookie.getGarId()}}">
+          <input type="hidden" id="cookie" name='cookie' value = "{{cookie.getUserRole()}}">
 
-{#
-  Should probably be two different buttons:
-  Review this GAR
-  Exit to Summary
- #}
-    <div class="govuk-form-group">
-      <a href='/garfile/review' class="govuk-button">Save and continue</a>
-      <p class="govuk-body-m">
-        <a href="/home">Save and exit</a>
-      </p>
-      <p class="govuk-body-m">
-        <a href="/home">Exit without saving</a>
-      </p>
+          <a id="continue" href='/garfile/review' class="govuk-button">{{__('button_supporting_documents_continue')}}</a>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        </div>
+      </form>
+      <div class="govuk-grid-column-two-thirds">
+        <form id="cancel-form" action="/garfile/view" method="post">
+          <p class="govuk-body-m">
+            <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
+              onclick="sendAnalytics(event, 'GAR Supporting Documents - Exit', 'click')">
+              {{__('form_exit')}}
+            </button>
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+          </p>
+        </form>
+      </div>
     </div>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-  </form>
-
-</div>
-
+  </div>
 {% endblock %}
