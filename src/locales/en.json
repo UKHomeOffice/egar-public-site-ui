@@ -303,6 +303,14 @@
     "invite_user_email_hint": "Enter the email of the user.",
     "invite_user_cemail_hint": "Confirm the email of the user.",
 
+	"account_caption": "Manage your account details.",
+	"form_edit_details": "Edit details",
     "title_organisation_users": "Organisation's users",
-    "organisations_users_caption": "Here is a list of users who can manage GARs on behalf of your organisation."
+	"organisations_users_caption": "Here is a list of users who can manage GARs on behalf of your organisation.",
+	"title_edit_account": "Edit account",
+	"edit_account_caption": "Edit the details of your account.",
+	"form_save_changes": "Save changes",
+	"heading_delete_account": "Delete account",
+	"delete_account_caption": "Delete this account and any organisation listed in it.",
+	"form_delete_this_account": "Delete this account"
 }

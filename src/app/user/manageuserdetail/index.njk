@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Edit User Details
+	{{__('error_prefix') if errors}} GAR | Edit User Details
 {% endblock %}
 
 {% block header %}
@@ -16,73 +16,59 @@
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="/user/details">Account</a>
+        <a class="govuk-breadcrumbs__link" href="/user/details">{{__('nav_bar_account')}}</a>
       </li>
-      <li class="govuk-breadcrumbs__list-item" aria-current="page">Edit account</li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">{{__('title_edit_account')}}</li>
     </ol>
   </div>
 {% endblock %}
 
 {% block content %}
 
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-
-      <form id="signform" action="/user/manageuserdetail" autocomplete="new-password" class="form-group"
-      method="post" role="form">
-
-      <h1 class="govuk-heading-xl">Edit account</h1>
-      <p class="govuk-body-l">Edit the details of your account.</p>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="signform" action="/user/manageuserdetail" autocomplete="new-password" class="form-group" method="post" role="form">
+        <h1 class="govuk-heading-xl">{{__('title_edit_account')}}</h1>
+        <p class="govuk-body-l">{{__('edit_account_caption')}}</p>
 
         <div class="govuk-form-group {{ m.form_group_class('firstname', errors) }}">
-          <label class="govuk-label govuk-label--m" for="firstname">Given name</label>
+          <label class="govuk-label govuk-label--m" for="firstname">{{__('field_given_name')}}</label>
           {{ m.error_message('firstname', errors, __) }}
-          <input autocomplete="off" class="govuk-input"
-            data-val="true" data-val-required="First Name is required." id="firstname" name="Firstname" style="width:100%" type="text" value="{{cookie.getUserFirstName()}}" />
+          <input id="firstname" name="Firstname" autocomplete="off" class="govuk-input"
+            type="text" value="{{cookie.getUserFirstName()}}"
+            {{ 'aria-describedby=firstname-error' if errors | containsError('firstname') }}>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('lastname', errors) }}">
-          <label class="govuk-label govuk-label--m" for="lastname">Surname</label>
+          <label class="govuk-label govuk-label--m" for="lastname">{{__('field_surname')}}</label>
           {{ m.error_message('lastname', errors, __) }}
-
-          <span class="field-validation-valid error-message" data-valmsg-for="Lastname"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input autocomplete="off" class="govuk-input"
-            data-val="true" data-val-required="Surname is required." id="lastname" name="Lastname" style="width:100%" type="text" maxlength="{{ MAX_STRING_LENGTH}}" value="{{cookie.getUserLastName()}}" />
+          <input id="lastname" name="Lastname" autocomplete="off" class="govuk-input"
+            type="text" maxlength="{{ MAX_STRING_LENGTH}}" value="{{cookie.getUserLastName()}}"
+            {{ 'aria-describedby=lastname-error' if errors | containsError('lastname') }}>
         </div>
 
+        <button type="submit" class="govuk-button" onclick="sendAnalytics(event, 'Edit Account - Save', 'click')">{{__('form_save_changes')}}</button>
 
-			<button type="submit" class="govuk-button">
-				Save changes
-			</button>
-
-			<p class="govuk-body-m">
-				<a href="/user/details">Exit without saving</a>
-			</p>
-
-    </div>
-
+        <p class="govuk-body-m">
+          <a class="govuk-button govuk-button--secondary" href="/user/details#" onclick="sendAnalytics(event, 'Edit Account - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
+        </p>
+      
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </form>
 
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <div class="govuk-form-group">
+        <h1 class="govuk-heading-l">{{__('heading_delete_account')}}</h1>
+        <p class="govuk-body-l">{{__('delete_account_caption')}}</p>
+        <p class="govuk-body-m">
+          <a href="/user/delete">{{__('form_delete_this_account')}}</a>
+        </p>
+    </div>
   </div>
-  </form>
-
-  	    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-        <div class="govuk-form-group">
-            <h1 class="govuk-heading-m">Delete account</h1>
-            <p class="govuk-body-l">Delete this account and any organisation listed in it.</p>
-            <p class="govuk-body-m">
-                <a href="/user/delete">Delete this account</a>
-            </p>
-        </div>
-
-  </div>
+</div>
 
 {% endblock %}
