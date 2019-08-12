@@ -11,6 +11,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const orgApi = require('../../../common/services/organisationApi');
+const roles = require('../../../common/seeddata/egar_user_roles.json');
 
 const controller = require('../../../app/organisation/editusers/post.controller');
 
@@ -69,6 +70,7 @@ describe('Organisation Edit Users Post Controller', () => {
             role: '',
             userId: 'EDIT-BADDIE-1',
           },
+          roles,
           errors: [
             new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter a given name'),
             new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter a surname'),
@@ -99,6 +101,7 @@ describe('Organisation Edit Users Post Controller', () => {
             role: 'Individual',
             userId: 'EDIT-BADDIE-1',
           },
+          roles,
           errors: [
             new ValidationRule(validator.isValidStringLength, 'firstName', 'abcdefghijklmnopqrstuvwxyzabcdefghijk', 'Given name must be 35 characters or less'),
             new ValidationRule(validator.isValidStringLength, 'lastName', 'abcdefghijklmnopqrstuvwxyzabcdefghij', 'Surname must be 35 characters or less'),

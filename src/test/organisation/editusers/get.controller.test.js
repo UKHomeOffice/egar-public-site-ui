@@ -66,11 +66,11 @@ describe('Organisation Edit Users Get Controller', () => {
 
     orgApiStub.resolves(JSON.stringify({
       items: [
-        { id: 'PERSON-1', userId: 'EXAMPLE-EDIT-USER-ID-2' },
-        { id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID-2' },
-        { id: 'PERSON-3', userId: 'EXAMPLE-EDIT-USER-ID-2' },
-        { id: 'PERSON-4', userId: 'EXAMPLE-EDIT-USER-ID-2' },
-        { id: 'PERSON-5', userId: 'EXAMPLE-EDIT-USER-ID-2' },
+        { id: 'PERSON-1', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
+        { id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
+        { id: 'PERSON-3', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
+        { id: 'PERSON-4', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
+        { id: 'PERSON-5', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
       ],
     }));
     const callController = async () => {
@@ -94,11 +94,11 @@ describe('Organisation Edit Users Get Controller', () => {
 
     orgApiStub.resolves(JSON.stringify({
       items: [
-        { id: 'PERSON-1', userId: 'EXAMPLE-EDIT-USER-ID-2' },
-        { id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID' },
-        { id: 'PERSON-3', userId: 'EXAMPLE-EDIT-USER-ID-2' },
-        { id: 'PERSON-4', userId: 'EXAMPLE-EDIT-USER-ID-2' },
-        { id: 'PERSON-5', userId: 'EXAMPLE-EDIT-USER-ID' },
+        { id: 'PERSON-1', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
+        { id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID', role: { name: 'User' } },
+        { id: 'PERSON-3', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
+        { id: 'PERSON-4', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
+        { id: 'PERSON-5', userId: 'EXAMPLE-EDIT-USER-ID', role: { name: 'Admin' } },
       ],
     }));
     const callController = async () => {
@@ -111,8 +111,8 @@ describe('Organisation Edit Users Get Controller', () => {
       expect(res.render).to.not.have.been.calledOnceWithExactly('app/organisation/editusers/index', {
         cookie,
         orgUser: [
-          { id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID' },
-          { id: 'PERSON-5', userId: 'EXAMPLE-EDIT-USER-ID' },
+          { id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID', role: 'User' },
+          { id: 'PERSON-5', userId: 'EXAMPLE-EDIT-USER-ID', role: 'Admin' },
         ],
         roles,
       });

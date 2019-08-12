@@ -324,6 +324,9 @@
 	"title_assign_role": "Assign user role",
 	"assign_role_caption": "Please select the role you would like the user to perform within your organisation.",
 
+	"title_edit_organisation_user": "Edit an organisation user",
+	"edit_organisation_user_caption": "Edit the user's details",
+
 	"account_caption": "Manage your account details.",
 	"form_edit_details": "Edit details",
     "title_organisation_users": "Organisation's users",

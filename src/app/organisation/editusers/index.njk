@@ -3,95 +3,82 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Edit Organisation Users
+	{{ __('error_prefix') if errors }} GAR | Edit Organisation Users
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-  {% include "common/templates/includes/back.njk" %}
-
+  <a href="/organisation" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
-
-  {% import "common/templates/includes/macros.njk" as m %}
 
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
-  <div class="govuk-grid-row">
-	  <div class="govuk-grid-column-two-thirds">
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form action="/organisation/users/edit" autocomplete="off" class="form-group" method="post" role="form">
 
-    <form action="/organisation/users/edit" autocomplete="off" class="form-group"
-      method="post" role="form">
+      <h1 class="govuk-heading-xl">{{__('title_edit_organisation_user')}}</h1>
+      <p class="govuk-body-l">{{__('edit_organisation_user_caption')}}</p>
 
-      <h1 class="govuk-heading-xl">Edit an organisation user</h1>
-      <p class="govuk-body-l">Edit the user's details</p>
-
-      <div class="govuk-form-group {{ m.form_group_class('firstName', errors) }}">
-        <label class="govuk-label govuk-label--m" for="firstName">Given name</label>
-          {{ m.error_message('firstName', errors, __) }}
-        <span class="govuk-hint">
-            Given Name
-        </span>
-        <span class="field-validation-valid error-message" data-valmsg-for="firstName"
-          data-valmsg-replace="true" style="display:block">
-        </span>
-        <input class="govuk-input" id="firstName" name="firstName"  type="text" value="{{orgUser.firstName}}" />
+      <div class="{{ m.form_group_class('firstName', errors) }}">
+        <label class="govuk-label govuk-label--m" for="firstName">{{__('field_given_name')}}</label>
+        {{ m.error_message('firstName', errors, __) }}
+        <input id="firstName" name="firstName" class="govuk-input" type="text"
+          value="{{orgUser.firstName}}" {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
       </div>
 
-      <div class="govuk-form-group {{ m.form_group_class('lastName', errors) }}">
-        <label class="govuk-label govuk-label--m" for="lastName">Surname</label>
-          {{ m.error_message('lastName', errors, __) }}
-        <span class="govuk-hint">
-          Surname
-        </span>
-        <span class="field-validation-valid error-message" data-valmsg-for="lastName"
-          data-valmsg-replace="true" style="display:block">
-        </span>
-        <input class="govuk-input" id="lastName" name="lastName"  type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{orgUser.lastName}}" />
+      <div class="{{ m.form_group_class('lastName', errors) }}">
+        <label class="govuk-label govuk-label--m" for="lastName">{{__('field_surname')}}</label>
+        {{ m.error_message('lastName', errors, __) }}
+        <input id="lastName" name="lastName" class="govuk-input" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
+          value="{{orgUser.lastName}}" {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
       </div>
 
-      <div class="govuk-form-group {{ m.form_group_class('role', errors) }}">
-        <fieldset class="govuk-fieldset">
+      <div class="{{ m.form_group_class('role', errors) }}">
+        <fieldset class="govuk-fieldset" aria-describedby="role-hint{{ ' role-error' if errors | containsError('role') }}">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h1 class="govuk-fieldset__heading">Invite a user</h1>
-            <span id="customs-hint" class="govuk-hint">Select the user's role</span>
+            <h1 class="govuk-fieldset__heading">{{__('title_assign_role')}}</h1>
+            <span id="role-hint" class="govuk-hint">{{__('assign_role_caption')}}</span>
           </legend>
-        {{ m.error_message('role', errors, __) }}
+          {{ m.error_message('role', errors, __) }}
           <div class="govuk-radios">
-          {% for role in roles %}
-            <div class="govuk-radios__item">
-            {% if role.name == orgUser.role.name %}
-              <input class="govuk-radios__input" id="option-{{role.id}}" type="radio" name="role" value="{{role.name}}" checked>
-            {% else %}
-              <input class="govuk-radios__input" id="option-{{role.id}}" type="radio" name="role" value="{{role.name}}">
-            {% endif %}
-            <label class="govuk-label govuk-radios__label" for="option-{{role.id}}">{{role.name}}</label>
-            </div>
-          {% endfor %}
-
+            {% for role in roles %}
+              <div class="govuk-radios__item">
+                <input id="option-{{role.id}}" name="role" class="govuk-radios__input" type="radio"
+                  value="{{role.name}}"
+                  aria-labelledby="option-{{role.id}}-label" aria-describedby="option-{{role.id}}-hint" 
+                  {{ 'checked' if role.name == orgUser.role}}>
+                <label id="option-{{role.id}}-label" class="govuk-label govuk-radios__label" for="option-{{role.id}}">{{role.name}}</label>
+                <span id="option-{{role.id}}-hint" class="govuk-hint govuk-radios__hint">{{role.description}}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </fieldset>
       </div>
 
-      <div class="form-group">
-        <table class="govuk-table">
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell "><a class="govuk-button" href="/organisation">Exit without saving</a></td>
-            <td class="govuk-table__cell "><input id="login" class="govuk-button" type="submit" value="Save and exit"
-            onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
-          </tr>
-        </table>
+      <div class="govuk-form-group">
+        <button id="save-and-exit" class="govuk-button" type="submit"
+          onclick="sendAnalytics(event, 'Edit Organisation User - Save and exit', 'click')">
+          {{__('form_save_and_exit')}}
+        </button>
+        <p class="govuk-body-m">
+          <a id="exit-without-saving" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
+            href="/organisation#"
+            onclick="sendAnalytics(event, 'Edit Organisation User - Exit without saving', 'click')">
+            {{__('form_exit_without_saving')}}
+          </a>
+        </p>
       </div>
-
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
-
-</main>
+  </div>
+</div>
 {% endblock %}
