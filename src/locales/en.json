@@ -27,7 +27,7 @@
 
     "nav_bar_gars": "GARs",
     "nav_bar_sign_out": "Sign out",
-    "nav_bar_create_organisation": "Create Organisation",
+    "nav_bar_create_organisation": "Create organisation",
     "nav_bar_organisation": "Organisation",
     "nav_bar_account": "Account",
     "nav_back": "Back",
@@ -54,7 +54,8 @@
 
     "form_error_summary_title": "There is a problem",
     "form_exit_without_saving": "Exit without saving",
-    "form_exit_without_adding": "Exit without adding",
+	"form_exit_without_adding": "Exit without adding",
+	"form_submit": "Submit",
     "form_save_and_continue": "Save and continue",
     "form_save_and_come_back": "Save and come back later",
     "form_save_and_exit": "Save and exit",
@@ -211,7 +212,6 @@
 
     "title_garupload": "Upload your GAR file",
     "garupload_caption": "Select the GAR file to be uploaded.",
-    "garupload_assistive_warning": "Warning",
     "garupload_warning_1": "GAR files should be of the template ",
     "garupload_warning_2": "Excel spreadsheet as found on the GOV.UK website",
     "garupload_warning_3": ". Files that are uploaded are automatically checked for validity and integrity before being accepted by the system. Once complete, you will be shown any errors which must be rectified before the file is uploaded again.",
@@ -283,7 +283,13 @@
     "heading_submit_gar": "Submit your GAR",
     "submit_gar_caption": "By submitting this General Aviation Report you are confirming that, to the best of your knowledge, the information you are providing is correct and you have the explicit permission of the persons named in this report to submit information on their behalf.",
     "review_gar_submit": "Accept and submit GAR",
-    "review_gar_exit": "Exit without submitting",
+	"review_gar_exit": "Exit without submitting",
+	
+	"create_organisation_caption_1": "Creating an organisation enables you to collaborate with other users on creating and submitting GARs.",
+	"create_organisation_caption_2": "There is no restriction on who can create an organisation and you retain full control over which users belong to, and can submit GARs on behalf of, your organisation.",
+	"assistive_warning": "Warning ",
+	"create_organisation_warning": "Creating an organisation will not transfer any GARs you have already drafted or submitted personally. If you would like to retain access to these, please register a new account and create your organisation using this. Alternatively to retain access to these GARs, register a new account with a different email address from this one.",
+	"create_organisation_caption_3": "Please provide the following information to create an organisation.",
 
     "title_organisation": "Organisation",
     "organisation_caption": "Manage your organisation's details.",

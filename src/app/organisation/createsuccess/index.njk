@@ -11,15 +11,10 @@
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
@@ -29,12 +24,11 @@
 
   <div class="govuk-panel govuk-panel--confirmation">
     <h1 class="govuk-panel__title">
-      Organisation created
+      {{__('organisation_created')}}
     </h1>
   </div>
 
 	</div>
 </div>
 
-	<input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 {% endblock %}

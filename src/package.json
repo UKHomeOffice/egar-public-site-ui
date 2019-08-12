@@ -39,7 +39,7 @@
     "govuk_frontend_toolkit": "^7.6.0",
     "helmet": "^3.13.0",
     "i18n": "^0.8.3",
-    "i18n-iso-countries": "^4.2.1",
+    "i18n-iso-countries": "^4.3.0",
     "location-href": "^1.0.0",
     "lodash": "^4.17.14",
     "minimist": "^1.2.0",

@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | {{__('title_edit_organisation')}}
+	{{ __('error_prefix' if errors )}} GAR | {{__('title_edit_organisation')}}
 {% endblock %}
 
 {% block header %}
@@ -42,23 +42,19 @@
         <h1 class="govuk-heading-xl">{{__('title_edit_organisation')}}</h1>
         <p class="govuk-body-l">{{__('edit_organisation_caption')}}</p>
 
-        <div class="govuk-form-group {{ m.form_group_class('orgname', errors) }}">
-
-          <label class="govuk-label govuk-label--m"  for="orgname">{{__('field_organisation_name')}}</label>
-            {{ m.error_message('orgname', errors, __) }}
-          <span class="field-validation-valid error-message" data-valmsg-for="orgname"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input class="govuk-input"
-            id="orgname" name="orgname" style="width:100%" type="text"
-            value="{{cookie.getOrganisationName()}}" />
+        <div class="govuk-form-group {{ m.form_group_class('orgName', errors) }}">
+          <label class="govuk-label govuk-label--m" for="orgName">{{__('field_organisation_name')}}</label>
+          {{ m.error_message('orgName', errors, __) }}
+          <input id="orgName" name="orgName" class="govuk-input"
+            type="text" {{ 'aria-describedby=orgName-error' if errors }}
+            value="{{ orgName or cookie.getOrganisationName() }}">
         </div>
 
         <div class="govuk-form-group">
           <table class="govuk-table">
             <tr class="govuk-table__row">
               <td class="govuk-table__cell ">
-                <a id="exit-without-saving" class="govuk-button" href="/organisation">{{__('form_exit_without_saving')}}</a></td>
+                <a id="exit-without-saving" class="govuk-button" href="/organisation#">{{__('form_exit_without_saving')}}</a></td>
               <td class="govuk-table__cell "><input id="save-and-exit" class="govuk-button" type="submit" value="{{__('form_save_and_exit')}}"
               onclick="sendAnalytics(event, 'Save and Exit', 'click')"></td>
             </tr>
