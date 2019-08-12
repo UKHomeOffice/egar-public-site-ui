@@ -239,6 +239,9 @@
     "table_action": "Action",
     "table_delete": "Delete",
 
+    "title_edit_aircraft": "Edit aircraft",
+    "edit_aircraft_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
+
     "pagination_previous": " Previous",
     "pagination_next": "Next ",
 
