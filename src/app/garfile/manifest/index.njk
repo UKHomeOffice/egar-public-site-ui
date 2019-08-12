@@ -187,16 +187,34 @@
         <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
       </div>
 
-      <input id="save-and-continue" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue">
+    {# Start buttons #}
+        {# {{ m.submit_buttons('GAR Manifest', csrfToken, __) }} #}
+      <input id="continue" type="submit" class="govuk-button" 
+        name="buttonClicked"
+        value="{{__('button_continue')}}"
+        onclick="sendAnalytics(event, 'GAR Manifest - Continue', 'click')">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </form>
+    <form id="cancel-form" action="/garfile/view" method="post">
+      <p class="govuk-body-m">
+        <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
+          onclick="sendAnalytics(event, 'GAR Manifest - Exit', 'click')">
+          {{__('form_exit')}}
+        </button>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </p>
+    </form>
+    {# End buttons #}
+      {# <input id="save-and-continue" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue">
       <p class="govuk-body-m">
         <a id="save-and-exit" href="/home" >Save and come back later</a>
       </p>
       <p class="govuk-body-m">
         <a id="exit-no-save" href="/home" > Exit without saving </a>
       </p>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" /> #}
 	  </div>
-  </form>
+  {# </form> #}
 </div>
 
 {% endblock %}
