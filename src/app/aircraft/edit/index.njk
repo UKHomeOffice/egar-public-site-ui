@@ -57,7 +57,7 @@
           {{ m.error_message('craftBase', errors, __) }}
           <input id="craftBase" name="craftBase" class="govuk-input govuk-input--width-10"
             type="text" aria-describedby="craftBase-hint{{ ' craftBase-error' if errors | containsError('craftBase') }}"
-            value="{{cookie.getEditCraft().craftBase}}">
+            value="{{ cookie.getEditCraft().craftBase }}">
         </div>
 
         <div class="govuk-form-group">

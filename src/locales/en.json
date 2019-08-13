@@ -241,9 +241,9 @@
 
     "title_edit_aircraft": "Edit aircraft",
     "edit_aircraft_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
-    "validation_aircraft_registration": "Enter the registration details of the craft",
-    "validation_aircraft_type": "Enter the craft type",
-    "validation_aircraft_base": "Enter the base of the craft",
+    "validation_aircraft_registration": "Enter a registration",
+    "validation_aircraft_type": "Enter an aircraft type",
+    "validation_aircraft_base": "Enter an aircraft home port / location",
 
     "pagination_previous": " Previous",
     "pagination_next": "Next ",
