@@ -22,7 +22,7 @@ describe('Organisation Edit Post Controller', () => {
 
     req = {
       body: {
-        orgname: 'Evil Empire',
+        orgName: 'Evil Empire',
       },
       session: {
         org: { i: 'FIRST-ORDER-ID' },
@@ -41,7 +41,7 @@ describe('Organisation Edit Post Controller', () => {
   });
 
   it('should render message when name empty', () => {
-    req.body.orgname = '';
+    req.body.orgName = '';
     cookie = new CookieModel(req);
 
     const callController = async () => {
@@ -52,8 +52,9 @@ describe('Organisation Edit Post Controller', () => {
       expect(orgApiStub).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
         cookie,
+        orgName: '',
         errors: [
-          new ValidationRule(validator.notEmpty, 'orgname', '', 'Enter the name of the organisation'),
+          new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation'),
         ],
       });
     });
@@ -72,6 +73,7 @@ describe('Organisation Edit Post Controller', () => {
       expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
         cookie,
+        orgName: 'Evil Empire',
         errors: [{ message: 'orgApi.update Example Reject' }],
       });
     });

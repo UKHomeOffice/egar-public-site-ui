@@ -11,16 +11,11 @@
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   {% include "common/templates/includes/back.njk" %}
-
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
@@ -38,7 +33,6 @@
 		<p class="govuk-body-m">
 			If you have an urgent query whilst the service is unavailable please <a href="mailto:garsupport@homeoffice.gov.uk">contact us</a>.
 		</p>
-
 	</div>
 </div>
 {% endblock %}

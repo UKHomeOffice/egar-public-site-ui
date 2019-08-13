@@ -25,12 +25,12 @@
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-full">
 		<form action="account-edit.html">
-			<h1 class="govuk-heading-xl">Account</h1>
-			<p class="govuk-body-l">Manage your account details and the details of any aircraft or people you want to save or have saved previously.</p>
+			<h1 class="govuk-heading-xl">{{__('nav_bar_account')}}</h1>
+			<p class="govuk-body-l">{{__('account_caption')}}</p>
 				<dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 1em;">
 					<div class="app-check-your-answers__contents" style="border-bottom: none;">
 						<dt class="app-check-your-answers__question" style="border-bottom: none;">
-							Given name
+							{{__('field_given_name')}}
 						</dt>
 						<dd class="app-check-your-answers__answer" style="border-bottom: none;">
 							{{cookie.getUserFirstName()}}
@@ -38,7 +38,7 @@
 					</div>
 					<div class="app-check-your-answers__contents" style="border-bottom: none;">
 						<dt class="app-check-your-answers__question" style="border-bottom: none;">
-							Surname
+							{{__('field_surname')}}
 						</dt>
 						<dd class="app-check-your-answers__answer" style="border-bottom: none;">
 							{{cookie.getUserLastName()}}
@@ -46,7 +46,7 @@
 					</div>
 					<div class="app-check-your-answers__contents" style="border-bottom: none;">
 						<dt class="app-check-your-answers__question" style="border-bottom: none;">
-							Email
+							{{__('field_email')}}
 						</dt>
 						<dd class="app-check-your-answers__answer" style="border-bottom: none;">
 							{{cookie.getUserEmail()}}
@@ -54,7 +54,7 @@
 					</div>
 				</dl>
 				<a href="/user/manageuserdetail" role="button" draggable="false" class="govuk-button">
-					Edit details
+					{{__('form_edit_details')}}
 				</a>
 			</div>
 			<div class="govuk-grid-column-full">

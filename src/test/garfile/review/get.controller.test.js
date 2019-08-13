@@ -118,11 +118,12 @@ describe('GAR Review Get Controller', () => {
         garsupportingdocs: {},
         showChangeLinks: true,
         errors: [
-          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', {
+          new ValidationRule(validator.isValidDepAndArrDate, 'departure', {
             arrivalDate: undefined, arrivalTime: undefined, departureDate: undefined, departureTime: undefined,
           }, 'Arrival time must be after departure time'),
-          new ValidationRule(validator.notEmpty, 'registration', undefined, 'Aircraft registration must be completed'),
-          new ValidationRule(validator.notEmpty, 'responsibleGivenName', undefined, 'Responsible person details must be completed'),
+          new ValidationRule(validator.notEmpty, 'aircraft', undefined, 'Aircraft registration must be completed'),
+          new ValidationRule(validator.notEmpty, 'responsiblePerson', undefined, 'Responsible person details must be completed'),
+          new ValidationRule(validator.notEmpty, 'customs', undefined, 'Customs declaration questions not answered'),
         ],
       });
     });
@@ -140,6 +141,9 @@ describe('GAR Review Get Controller', () => {
         name: 'draft',
       },
       responsibleGivenName: 'James',
+      prohibitedGoods: 'No',
+      freeCirculation: 'No',
+      visitReason: 'No',
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -169,6 +173,9 @@ describe('GAR Review Get Controller', () => {
             name: 'draft',
           },
           responsibleGivenName: 'James',
+          prohibitedGoods: 'No',
+          freeCirculation: 'No',
+          visitReason: 'No',
         },
         garpeople: {
           items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
@@ -193,6 +200,9 @@ describe('GAR Review Get Controller', () => {
         name: 'draft',
       },
       responsibleGivenName: 'James',
+      prohibitedGoods: 'No',
+      freeCirculation: 'No',
+      visitReason: 'No',
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -220,6 +230,9 @@ describe('GAR Review Get Controller', () => {
             name: 'draft',
           },
           responsibleGivenName: 'James',
+          prohibitedGoods: 'No',
+          freeCirculation: 'No',
+          visitReason: 'No',
         },
         garpeople: {
           items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],

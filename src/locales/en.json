@@ -27,7 +27,7 @@
 
     "nav_bar_gars": "GARs",
     "nav_bar_sign_out": "Sign out",
-    "nav_bar_create_organisation": "Create Organisation",
+    "nav_bar_create_organisation": "Create organisation",
     "nav_bar_organisation": "Organisation",
     "nav_bar_account": "Account",
     "nav_back": "Back",
@@ -54,7 +54,8 @@
 
     "form_error_summary_title": "There is a problem",
     "form_exit_without_saving": "Exit without saving",
-    "form_exit_without_adding": "Exit without adding",
+	"form_exit_without_adding": "Exit without adding",
+	"form_submit": "Submit",
     "form_save_and_continue": "Save and continue",
     "form_save_and_come_back": "Save and come back later",
     "form_save_and_exit": "Save and exit",
@@ -211,10 +212,9 @@
 
     "title_garupload": "Upload your GAR file",
     "garupload_caption": "Select the GAR file to be uploaded.",
-    "garupload_assistive_warning": "Warning",
-    "garupload_warning_1": "GAR files should be of the version and format of the template file found ",
-    "garupload_warning_2": "here",
-    "garupload_warning_3": ". Files that are uploaded are automatically checked for validity and integrity before being accepted by the system. Once complete, you will be shown a validation screen where you will be able to correct any validation errors before submitting.",
+    "garupload_warning_1": "GAR files should be of the template ",
+    "garupload_warning_2": "Excel spreadsheet as found on the GOV.UK website",
+    "garupload_warning_3": ". Files that are uploaded are automatically checked for validity and integrity before being accepted by the system. Once complete, you will be shown any errors which must be rectified before the file is uploaded again.",
     "field_file": "Select a file",
     "form_upload_and_continue": "Upload and continue",
     "upload_gar_file_header": "GENERAL AVIATION REPORT (GAR) -  January 2015",
@@ -238,6 +238,12 @@
     "field_aircraft_base": "Aircraft home port / location",
     "table_action": "Action",
     "table_delete": "Delete",
+
+    "title_edit_aircraft": "Edit aircraft",
+    "edit_aircraft_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
+    "validation_aircraft_registration": "Enter a registration",
+    "validation_aircraft_type": "Enter an aircraft type",
+    "validation_aircraft_base": "Enter an aircraft home port / location",
 
     "pagination_previous": " Previous",
     "pagination_next": "Next ",
@@ -264,6 +270,19 @@
 
     "title_gar_summary": "GAR summary",
     "change_prefix": "Change ",
+    "button_submit_this_gar": "Submit this GAR",
+
+	"heading_supporting_documents": "Would you like to upload any supporting documentation to your GAR?",
+    "supporting_documents_caption": "You don’t have to provide any supporting documentation, but doing so may assist Border Force to process your flight more quickly.",
+    "supporting_documents_warning": "Supporting documentation may include firearms certificates / licences, firearms serial numbers or remote clearance forms.",
+	"supporting_documents_list_1": "The maximum size for the entire GAR submission cannot exceed 8MB.",
+	"supporting_documents_list_2": "You can upload as many supporting documents as you wish within this size limit.",
+	"supporting_documents_list_3": "The following file types can be uploaded: PDF, JPG, JPEG, PNG, GIF.",
+	"heading_upload_file": "Upload a file",
+	"button_upload_file": "Upload selected file",
+    "heading_uploaded_files": "Uploaded documents",
+	"uploaded_files_caption": "Here are the documents you have attached to this GAR.",
+	"button_supporting_documents_continue": "Continue to GAR review",
 
     "heading_supporting_documentation_details": "Supporting documentation details",
     "supportingdocuments_no_records": " There are no supporting documents uploaded",
@@ -278,6 +297,18 @@
     "form_exit_without_cancelling": "Exit without cancelling",
     "form_exit": "Exit",
 
+    "title_review_gar": "Check all the information provided before submitting your GAR",
+    "heading_submit_gar": "Submit your GAR",
+    "submit_gar_caption": "By submitting this General Aviation Report you are confirming that, to the best of your knowledge, the information you are providing is correct and you have the explicit permission of the persons named in this report to submit information on their behalf.",
+    "review_gar_submit": "Accept and submit GAR",
+	"review_gar_exit": "Exit without submitting",
+	
+	"create_organisation_caption_1": "Creating an organisation enables you to collaborate with other users on creating and submitting GARs.",
+	"create_organisation_caption_2": "There is no restriction on who can create an organisation and you retain full control over which users belong to, and can submit GARs on behalf of, your organisation.",
+	"assistive_warning": "Warning ",
+	"create_organisation_warning": "Creating an organisation will not transfer any GARs you have already drafted or submitted personally. If you would like to retain access to these, please register a new account and create your organisation using this. Alternatively to retain access to these GARs, register a new account with a different email address from this one.",
+	"create_organisation_caption_3": "Please provide the following information to create an organisation.",
+
     "title_organisation": "Organisation",
     "organisation_caption": "Manage your organisation's details.",
 
@@ -287,15 +318,29 @@
 
     "title_invite_users": "Invite new users",
     "invite_users_caption": "Invite additional users to be able to manage GARs on behalf of your organisation.",
-    "field_role": "Role",
+	"field_role": "Role",
 
     "title_invite_user": "Invite user",
     "invite_user_caption": "Begin by providing the following information to register a user account in your organisation.",
     "invite_user_given_name_hint": "Enter the given name of the user.",
     "invite_user_surname_hint": "Enter the surname of the user.",
     "invite_user_email_hint": "Enter the email of the user.",
-    "invite_user_cemail_hint": "Confirm the email of the user.",
+	"invite_user_cemail_hint": "Confirm the email of the user.",
 
+	"title_assign_role": "Assign user role",
+	"assign_role_caption": "Please select the role you would like the user to perform within your organisation.",
+
+	"title_edit_organisation_user": "Edit an organisation user",
+	"edit_organisation_user_caption": "Edit the user's details",
+
+	"account_caption": "Manage your account details.",
+	"form_edit_details": "Edit details",
     "title_organisation_users": "Organisation's users",
-    "organisations_users_caption": "Here is a list of users who can manage GARs on behalf of your organisation."
+	"organisations_users_caption": "Here is a list of users who can manage GARs on behalf of your organisation.",
+	"title_edit_account": "Edit account",
+	"edit_account_caption": "Edit the details of your account.",
+	"form_save_changes": "Save changes",
+	"heading_delete_account": "Delete account",
+	"delete_account_caption": "Delete this account and any organisation listed in it.",
+	"form_delete_this_account": "Delete this account"
 }

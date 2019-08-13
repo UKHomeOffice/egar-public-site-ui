@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | File upload
+	{{__('error_prefix') if errors}} Create GAR | File upload
 {% endblock %}
 
 {% block header %}
@@ -29,25 +29,25 @@
       <p class="govuk-body-m">{{__('garupload_caption')}}</p>
       <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-          <strong class="govuk-warning-text__text">
-            <span class="govuk-warning-text__assistive">{{__('garupload_assistive_warning')}}</span>
-              {{__('garupload_warning_1')}}<a href="{{__('gar_form_link')}}">{{__('garupload_warning_2')}}</a>{{__('garupload_warning_3')}}
-          </strong>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>
+            {{__('garupload_warning_1')}}<a href="{{__('gar_form_link')}}">{{__('garupload_warning_2')}}</a>{{__('garupload_warning_3')}}
+        </strong>
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('file', errors) }}">
         <label class="govuk-label" for="file">{{__('field_file')}}</label>
-        {{ m.error_message("file", errors, __) }}
-        <input type="file" id="file" class="govuk-file-upload" name='file' accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+        {{ m.error_message('file', errors, __) }}
+        <input id="file" name='file' type="file" class="govuk-file-upload"
+          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          {{ 'aria-describedby=file-error' if errors | containsError('file') }}>
       </div>
 
       <div>
-        <input type="hidden" id="user" name='user' value="{{cookie.getUserDbId()}}">
-        <input type="hidden" id="garid" name='garid' value="{{cookie.getGarId()}}">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       </div>
       <div class="form-group">
-        <input type="submit" class="govuk-button" value="{{__('form_upload_and_continue')}}" name="submit_button">
+        <button id="submit" type="submit" class="govuk-button">{{__('form_upload_and_continue')}}</button>
       </div>
     </form>
   </div>

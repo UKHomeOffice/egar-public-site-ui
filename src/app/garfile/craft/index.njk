@@ -115,19 +115,7 @@
     {# Start buttons #}</div>
         {{ m.submit_buttons('Add craft to GAR', csrfToken, __) }}
     </form>
-    
     {# End buttons #}
-      {# <div class="govuk-form-group">
-        <input id="newCraft" class="govuk-button" type="submit" name="buttonClicked" value="{{__('form_save_and_continue')}}"
-          onclick="sendAnalytics(event, 'Add craft to GAR - Submit', 'click')">
-      </div>
-      <p class="govuk-body-m">
-        <a href="#" class="disableAutoFillSubmit" onclick="document.forms[0].submit();return false;" name="submit_button">{{__('form_save_and_come_back')}}</a>
-      </p>
-      <p class="govuk-body-m">
-        <a href="/home">{{__('form_exit_without_saving')}}</a>
-      </p>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" /> #}
 	  </div>
     <div class="govuk-grid-column-two-thirds">
       {{ m.exit_without_saving(csrfToken, __) }}

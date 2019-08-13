@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Assign User Role
+	{{ __('error_prefix') if errors }} GAR | {{__('title_assign_role')}}
 {% endblock %}
 
 {% block header %}
@@ -12,13 +12,10 @@
 
 {% block beforeContent %}
   {% include "phase.njk" %}
-  <a href="/organisation/inviteusers" class="govuk-back-link">Back</a>
+  <a href="/organisation/inviteusers" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
@@ -26,36 +23,45 @@
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
 
-    <form action="/organisation/assignrole" autocomplete="off" class="form-group" method="post" role="form" >
+      <form action="/organisation/assignrole" autocomplete="off" class="form-group" method="post" role="form" >
+        <div id="role" class="{{ m.form_group_class('role', errors) }}">
+          <fieldset class="govuk-fieldset" aria-describedby="role-hint{{ ' role-error' if errors | containsError('role') }}">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <h1 class="govuk-fieldset__heading">{{__('title_assign_role')}}</h1>
+              <span id="role-hint" class="govuk-hint">{{__('assign_role_caption')}}</span>
+            </legend>
+            {{ m.error_message('role', errors, __) }}
 
-       <div id="role" class="form-group {{ m.form_group_class('invite', errors) }}">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h1 class="govuk-fieldset__heading">Invite a user</h1>
-            <span id="customs-hint" class="govuk-hint">Please select the role you would like the user to perform within your organisation.</span>
-          </legend>
-          {{ m.error_message('invite', errors, __) }}
-
-          <div class="govuk-radios">
-          {% for role in roles %}
-            <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="option-{{role.id}}" type="radio" name="role" value="{{role.name}}">
-                <label class="govuk-label govuk-radios__label" for="option-{{role.id}}">{{role.name}}</label>
-                <p>{{role.description}}</p>
+            <div class="govuk-radios">
+              {% for role in roles %}
+                <div class="govuk-radios__item">
+                  <input id="option-{{role.id}}" name="role" class="govuk-radios__input" type="radio"
+                    aria-labelledby="option-{{role.id}}-label" aria-describedby="option-{{role.id}}-hint" value="{{role.name}}">
+                  <label id="option-{{role.id}}-label" class="govuk-label govuk-radios__label" for="option-{{role.id}}">{{role.name}}</label>
+                  <span id="option-{{role.id}}-hint" class="govuk-hint govuk-radios__hint">{{role.description}}</span>
+                </div>
+              {% endfor %}
             </div>
-          {% endfor %}
-          </div>
 
-        </fieldset>
-		   </div>
-
-         <div class="govuk-form-group">
-          <input id="createorg" class="govuk-button" type="submit" value="Submit"
-          onclick="sendAnalytics(event, 'Invite User - submit', 'click')">
+          </fieldset>
         </div>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-    </form>
- </div>
+        <div class="govuk-form-group">
+          <button id="submit" class="govuk-button" onclick="sendAnalytics(event, 'Assign Role - Submit', 'click')">
+            {{__('form_submit')}}
+          </button>
+          <p class="govuk-body-m">
+            <a id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
+              href="/organisation#"
+              onclick="sendAnalytics(event, 'Assign Role - Exit', 'click')">
+              {{__('form_exit')}}
+            </a>
+          </p>
+        </div>
+        
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </form>
+    </div>
+  </div>
 
 {% endblock %}

@@ -4,18 +4,16 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const orgApi = require('../../../common/services/organisationApi');
 
-
 module.exports = (req, res) => {
-  const orgname = req.body.Orgname;
+  const orgname = req.body.orgName;
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
-  cookie.setOrganisationName(req.body.Orgname);
-
+  cookie.setOrganisationName(orgname);
 
   // Define a validation chain for organisation fields
   const orgnameChain = [
-    new ValidationRule(validator.notEmpty, 'Orgname', orgname, 'Enter the name of the organisation'),
+    new ValidationRule(validator.notEmpty, 'orgName', orgname, 'Enter the name of the organisation'),
   ];
 
   // Validate chains
@@ -43,8 +41,7 @@ module.exports = (req, res) => {
       });
   })
     .catch((err) => {
-      logger.info('There was a problem with creating the organisation');
-      logger.debug(JSON.stringify(err));
+      logger.info('There was a validation problem with creating the organisation');
       res.render('app/organisation/create/index', { cookie, errors: err });
     });
 };

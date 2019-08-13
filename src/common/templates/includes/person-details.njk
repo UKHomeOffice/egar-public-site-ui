@@ -16,11 +16,10 @@
   </div>
 
   <div class="{{ m.form_group_class('nationality', errors) }}">
-    <label class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
+    <label id="nationality-label" class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
     {{ m.hint('nationality', __('field_nationality_hint')) }}
     {{ m.error_message('nationality', errors, __) }}
-    {# <span class="govuk-hint">{{ __('field_nationality_hint') }}</span> #}
-    <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}" aria-describedby="nationality-hint">
+    <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}" aria-labelledby="nationality-label" aria-describedby="nationality-hint">
       {% for country in countryList|sort(attribute='label') %}
         <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
       {% endfor %}
@@ -41,27 +40,27 @@
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h1 class="govuk-fieldset__heading">{{ __('field_dob') }}</h1>
       </legend>
-      <span class="govuk-hint" id="dob-hint">{{ __('field_dob_hint') }}</span>
+      {{ m.hint('dob', __('field_dob_hint')) }}
       {{ m.error_message('dob', errors, __) }}
       <div class="govuk-date-input" id="dob">
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="dobDay">{{ __('field_date_day') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobDay" name="dobDay" type="number" pattern="[0-9]*"
-            min="01" max="31" value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}">
+            <input id="dobDay" name="dobDay" class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" pattern="[0-9]*"
+              min="01" max="31" value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label" for="dobMonth">{{ __('field_date_month') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="dobMonth" name="dobMonth" type="number" pattern="[0-9]*"
+            <input id="dobMonth" name="dobMonth" class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" pattern="[0-9]*"
             min="01" max="12" value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label" for="dobYear">{{ __('field_date_year') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="dobYear" name="dobYear" type="number" pattern="[0-9]*"
+            <input id="dobYear" name="dobYear" class="govuk-input govuk-date-input__input govuk-input--width-4" type="number" pattern="[0-9]*"
             min="1900" max="2200" value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}">
           </div>
         </div>
@@ -71,7 +70,7 @@
   <!-- End date of birth -->
 
   <div class="govuk-form-group {{ m.form_group_class('gender', errors) }}" id="gender">
-    <fieldset class="govuk-fieldset">
+    <fieldset class="govuk-fieldset"{{ ' aria-describedby=gender-error' if errors | containsError('gender') }}>
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">{{ __('field_gender') }}</h2>
       </legend>
@@ -79,20 +78,19 @@
       <div class="govuk-radios">
         {% for choice in genderchoice %}
           <div class="govuk-radios__item">
-          {% if choice.gender == person.gender or choice.gender == req.body.gender %}
-            <input class="govuk-radios__input" id={{choice.gender}} type="radio" name="gender" value={{choice.gender}} checked>
-          {% else %}
-            <input class="govuk-radios__input" id={{choice.gender}} type="radio" name="gender" value={{choice.gender}}>
-          {% endif %}
-            <label class="govuk-label govuk-radios__label" for={{choice.gender}}>{{choice.gender}}</label>
+            <input id={{choice.gender}} name="gender" class="govuk-radios__input" type="radio"
+              value={{choice.gender}}
+              aria-labelledby="gender-label-{{ loop.index }}"
+              {{ 'checked' if choice.gender == person.gender or choice.gender == req.body.gender }}>
+            <label id="gender-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for={{choice.gender}}>{{choice.gender}}</label>
           </div>
         {% endfor %}
       </div>
     </fieldset>
   </div>
 
-  <div class="{{ m.form_group_class('personType', errors) }}" id="personTypeContainer">
-    <fieldset class="govuk-fieldset" aria-describedby="personType-hint personType-error">
+  <div class="{{ m.form_group_class('personType', errors) }}" id="personType">
+    <fieldset class="govuk-fieldset" aria-describedby="personType-hint{{ ' personType-error' if errors | containsError('personType' )}}">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">{{ __('field_person_type') }}</h2>
       </legend>
@@ -100,15 +98,15 @@
       {{ m.error_message('personType', errors, __) }}
       <div class="govuk-radios">
         {% for choice in persontype %}
-        <div class="govuk-radios__item">
-        {% if choice.persontype == person['peopleType'].name or choice.persontype == req.body.personType %}
-          <input class="govuk-radios__input" id={{choice.persontype}} type="radio" name="personType" value={{choice.persontype}} checked>
-        {% else %}
-          <input class="govuk-radios__input" id={{choice.persontype}} type="radio" name="personType" value={{choice.persontype}}>
-        {% endif %}
-        <label class="govuk-label govuk-radios__label" for={{choice.persontype}}>{{choice.persontype}}</label>
+          <div class="govuk-radios__item">
+            <input id="{{choice.persontype}}" name="personType" class="govuk-radios__input" type="radio"
+              value={{choice.persontype}}
+              aria-labelledby="personType-label-{{ loop.index }}"
+              {{ 'checked' if choice.persontype == person['peopleType'].name or choice.persontype == req.body.personType }}>
+            <label id="personType-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for={{choice.persontype}}>{{choice.persontype}}</label>
+          </div>
+      {% endfor %}
       </div>
-    {% endfor %}
     </fieldset>
   </div>
 
@@ -157,10 +155,10 @@
   </div>
 
   <div class="{{ m.form_group_class(issuingState, errors) }}">
-    <label class="govuk-label govuk-label--m" for="issuingState">{{ __('field_issuing_state') }}</label>
+    <label id="issuingState-label" class="govuk-label govuk-label--m" for="issuingState">{{ __('field_issuing_state') }}</label>
     {{ m.hint('issuingState', __('field_issuing_state_hint')) }}
     {{ m.error_message(issuingState, errors, __) }}
-    <select class="govuk-select" id="issuingState" name="issuingState" value="{{ (person.issuingState or req.body.issuingState)}}">
+    <select class="govuk-select" id="issuingState" name="issuingState" value="{{ (person.issuingState or req.body.issuingState)}}"  aria-labelledby="issuingState-label"  aria-describedby="issuingState-hint">
       {% for country in countryList|sort(attribute='label') %}
         <option value="{{ country.code }}" {{ 'selected=selected' if (person.issuingState or req.body.issuingState) == country.code }}>{{ country.label }}</option>
       {% endfor %}

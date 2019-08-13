@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
+
 const i18n = require('i18n');
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -145,12 +146,13 @@ describe('GAR Review Post Controller', () => {
         garsupportingdocs: {},
         showChangeLinks: true,
         errors: [
-          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', {
+          new ValidationRule(validator.isValidDepAndArrDate, 'departure', {
             arrivalDate: undefined, arrivalTime: undefined, departureDate: undefined, departureTime: undefined,
           }, 'Arrival time must be after departure time'),
-          new ValidationRule(validator.notEmpty, 'registration', undefined, 'Aircraft registration must be completed'),
-          new ValidationRule(validator.notEmpty, 'responsibleGivenName', undefined, 'Responsible person details must be completed'),
-          new ValidationRule(validator.valuetrue, 'captainCrew', '', 'There must be at least one captain or crew member on the voyage'),
+          new ValidationRule(validator.notEmpty, 'aircraft', undefined, 'Aircraft registration must be completed'),
+          new ValidationRule(validator.notEmpty, 'responsiblePerson', undefined, 'Responsible person details must be completed'),
+          new ValidationRule(validator.notEmpty, 'customs', undefined, 'Customs declaration questions not answered'),
+          new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
         ],
       });
     });
@@ -191,13 +193,14 @@ describe('GAR Review Post Controller', () => {
         garsupportingdocs: {},
         showChangeLinks: true,
         errors: [
-          new ValidationRule(validator.isValidDepAndArrDate, 'voyageDates', {
+          new ValidationRule(validator.isValidDepAndArrDate, 'departure', {
             arrivalDate: undefined, arrivalTime: undefined, departureDate: undefined, departureTime: undefined,
           }, 'Arrival time must be after departure time'),
-          new ValidationRule(validator.notEmpty, 'registration', undefined, 'Aircraft registration must be completed'),
-          new ValidationRule(validator.notEmpty, 'responsibleGivenName', undefined, 'Responsible person details must be completed'),
+          new ValidationRule(validator.notEmpty, 'aircraft', undefined, 'Aircraft registration must be completed'),
+          new ValidationRule(validator.notEmpty, 'responsiblePerson', undefined, 'Responsible person details must be completed'),
+          new ValidationRule(validator.notEmpty, 'customs', undefined, 'Customs declaration questions not answered'),
           new ValidationRule(validator.valuetrue, 'resolveError', '', 'Resolve manifest errors before submitting'),
-          new ValidationRule(validator.valuetrue, 'captainCrew', '', 'There must be at least one captain or crew member on the voyage'),
+          new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
         ],
       });
     });
@@ -216,6 +219,9 @@ describe('GAR Review Post Controller', () => {
           name: 'draft',
         },
         responsibleGivenName: 'James',
+        prohibitedGoods: 'No',
+        freeCirculation: 'No',
+        visitReason: 'No',
       }));
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
@@ -247,6 +253,9 @@ describe('GAR Review Post Controller', () => {
           name: 'draft',
         },
         responsibleGivenName: 'James',
+        prohibitedGoods: 'No',
+        freeCirculation: 'No',
+        visitReason: 'No',
       }));
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
@@ -286,6 +295,9 @@ describe('GAR Review Post Controller', () => {
           name: 'draft',
         },
         responsibleGivenName: 'James',
+        prohibitedGoods: 'No',
+        freeCirculation: 'No',
+        visitReason: 'No',
       }));
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
@@ -326,6 +338,9 @@ describe('GAR Review Post Controller', () => {
           name: 'draft',
         },
         responsibleGivenName: 'James',
+        prohibitedGoods: 'No',
+        freeCirculation: 'No',
+        visitReason: 'No',
       }));
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [

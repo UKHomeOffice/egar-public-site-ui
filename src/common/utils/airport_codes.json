@@ -3687,7 +3687,7 @@
   {
     "id": "GHF",
     "british": false,
-    "label": "[Duplicate] Giebelstadt Army Air Field (Germany) (ETEU / GHF)"
+    "label": "Giebelstadt Army Air Field (Germany) (ETEU / GHF)"
   },
   {
     "id": "ETHB",
@@ -22595,11 +22595,6 @@
     "label": "Tobias Bolanos International Airport (Costa Rica) (MRPV / SYQ)"
   },
   {
-    "id": "MRSR",
-    "british": false,
-    "label": "(Duplicate) Playa Samara Airport (Costa Rica) (MRSR)"
-  },
-  {
     "id": "JEE",
     "british": false,
     "label": "Jérémie Airport (Haiti) (MTJE / JEE)"
@@ -36788,11 +36783,6 @@
     "id": "EDNV",
     "british": false,
     "label": "Vogtareuth Airport (Germany) (EDNV)"
-  },
-  {
-    "id": "XXXX",
-    "british": false,
-    "label": "[Duplicate] Illertissen see EDMI - ED-0425 location moved out-of-the way (New Zealand) (XXXX)"
   },
   {
     "id": "KEVB",

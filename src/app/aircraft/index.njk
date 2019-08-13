@@ -16,24 +16,21 @@
 {% endblock %}
 
 {% block content %}
-
-{% import "common/templates/includes/macros.njk" as m %}
-
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
 
-  {% if errors %}
-  	{% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+    {% if errors %}
+      {% include "common/templates/includes/errors.njk" %}
+    {% endif %}
 
-  {% if successMsg %}
-    {% include "common/templates/includes/success-action.njk" %}
-  {% endif %}
+    {% if successMsg %}
+      {% include "common/templates/includes/success-action.njk" %}
+    {% endif %}
 
     <h1 class="govuk-heading-xl">{{__('title_aircraft')}}</h1>
-      {% if cookie.getUserRole() != 'User' %}
-        <p class="govuk-body-l">{{__('aircraft_caption')}}</p>
-      {% endif %}
+    {% if cookie.getUserRole() != 'User' %}
+      <p class="govuk-body-l">{{__('aircraft_caption')}}</p>
+    {% endif %}
   </div>
   <div class="govuk-grid-column-full">
     <form id="aircraft" action="/aircraft" class="form-group" method="post" role="form" >

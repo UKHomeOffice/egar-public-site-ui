@@ -1,5 +1,5 @@
   <div class="govuk-grid-column-full">
-    <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+    <dl id="departure" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
           {{ __('heading_departure_details') }}
@@ -21,7 +21,7 @@
       {{ m.check_your_answers_row_coordinates(__('field_departure_coordinates'), garfile.departureLat, garfile.departureLong, __) }}
     </dl>
 
-    <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+    <dl id="arrival" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
       {% if showChangeLinks %}
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
@@ -43,7 +43,7 @@
       {{ m.check_your_answers_row_coordinates(__('field_arrival_coordinates'), garfile.arrivalLat, garfile.arrivalLong, __) }}
     </dl>
 
-    <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+    <dl id="aircraft" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
           {{__('heading_aircraft_details')}}
@@ -64,7 +64,7 @@
       {{ m.check_your_answers_row(__('field_aircraft_base'), garfile.craftBase) }}
     </dl>
 
-    <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+    <dl id="manifest" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
           {{__('heading_manifest_details')}}
@@ -149,7 +149,7 @@
       </table>
     </div>
 
-    <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+    <dl id="responsiblePerson" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 500px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
           {{__('heading_responsible_person_details')}}
@@ -182,7 +182,7 @@
       {{ m.check_your_answers_row(__('field_contact_details'), garfile.responsibleContactNo) }}
     </dl>
 
-    <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+    <dl id="customs" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
           {{__('heading_customs')}}

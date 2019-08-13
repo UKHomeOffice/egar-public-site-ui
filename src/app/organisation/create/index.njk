@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Create Organisation
+	{{ __('error_prefix') if errors }} GAR | Create Organisation
 {% endblock %}
 
 {% block header %}
@@ -17,45 +17,35 @@
 {% block content %}
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-  {% import "common/templates/includes/macros.njk" as m %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
 
-  <h1 class="govuk-heading-xl">Create organisation</h1>
-  <p class="govuk-body-l">Creating an organisation enables you to collaborate with other users on creating and submitting GARs.</p>
-	<p class="govuk-body-m">There is no restriction on who can create an organisation and you retain full control over which users belong to, and can submit GARs on behalf of, your organisation.</p>
+    {% if errors %}
+      {% include "common/templates/includes/errors.njk" %}
+    {% endif %}
 
-    <form action="/organisation/create" autocomplete="off" class="form-group"
-      method="post" role="form" >
+    <h1 class="govuk-heading-xl">{{__('nav_bar_create_organisation')}}</h1>
+    <p class="govuk-body-l">{{__('create_organisation_caption_1')}}</p>
+    <p class="govuk-body-m">{{__('create_organisation_caption_2')}}</p>
+
+    <form action="/organisation/create" autocomplete="off" class="form-group" method="post" role="form" >
       <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text"><span class="govuk-warning-text__assistive">Warning</span> Creating an organisation will not transfer any GARs you have already drafted or submitted personally. If you would like to retain access to these, please register a new account and create your organisation using this. Alternatively to retain access to these GARs, register a new account and update the email address associated with this one.</strong>
+        <strong class="govuk-warning-text__text"><span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('create_organisation_warning')}}</strong>
       </div>
 
-      <p class="govuk-body-l">Please provide the following information to create an organisation.</p>
-      <div class="govuk-form-group {{ m.form_group_class('Orgname', errors) }}">
-          <label class="govuk-label govuk-label--m" for="Orgname">Organisation name</label>
-          {{ m.error_message('Orgname', errors, __) }}
-          <span class="field-validation-valid error-message" data-valmsg-for="Orgname"
-            data-valmsg-replace="true" style="display:block">
-          </span>
-          <input autocomplete="off" class="govuk-input"
-            data-val="true" data-val-required= "The organisation name is required."
-            id="Orgname" name="Orgname" style="width:100%" type="text"
-            value="" />
-        </div>
-         <div class="govuk-form-group">
-          <input id="createorg" class="govuk-button" type="submit" value="Create"
-          onclick="sendAnalytics(event, 'Create Organisation - submit', 'click')">
-        </div>
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
+      <p class="govuk-body-l">{{__('create_organisation_caption_3')}}</p>
+      <div class="{{ m.form_group_class('orgName', errors) }}">
+        <label class="govuk-label govuk-label--m" for="orgName">{{__('field_organisation_name')}}</label>
+        {{ m.error_message('orgName', errors, __) }}
+        <input id="orgName" name="orgName" autocomplete="off" class="govuk-input"
+          type="text" value="" {{ 'aria-describedby=orgName-error' if errors | containsError('orgName') }}>
+      </div>
+      <div class="govuk-form-group">
+        <button id="create" class="govuk-button" onclick="sendAnalytics(event, 'Create Organisation - Submit', 'click')">
+          {{__('nav_bar_create_organisation')}}
+        </button>
+      </div>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
   </div>
- </div>
-
-
-
-</main>
+</div>
 {% endblock %}
