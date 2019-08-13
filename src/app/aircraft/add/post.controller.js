@@ -1,4 +1,8 @@
+/* eslint-disable no-underscore-dangle */
+
 const _ = require('lodash');
+const i18n = require('i18n');
+
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -15,13 +19,13 @@ module.exports = (req, res) => {
 
   // Define a validation chain for user registeration fields
   const craftRegChain = [
-    new ValidationRule(validator.notEmpty, 'craftReg', craftReg, 'Enter the registration details of the craft'),
+    new ValidationRule(validator.notEmpty, 'craftReg', craftReg, i18n.__('validation_aircraft_registration')),
   ];
   const craftTypeChain = [
-    new ValidationRule(validator.notEmpty, 'craftType', craftType, 'Enter the craft type'),
+    new ValidationRule(validator.notEmpty, 'craftType', craftType, i18n.__('validation_aircraft_type')),
   ];
   const craftBaseChain = [
-    new ValidationRule(validator.notEmpty, 'craftBase', craftBase, 'Enter the base of the craft'),
+    new ValidationRule(validator.notEmpty, 'craftBase', craftBase, i18n.__('validation_aircraft_base')),
   ];
 
   // Validate chains
