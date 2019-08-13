@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -23,8 +23,7 @@
         {% include "common/templates/includes/errors.njk" %}
       {% endif %}
 
-      <form id="page-form" action="/garfile/arrival" autocomplete="off" class="form-group"
-      method="post" role="form">
+      <form id="page-form" action="/garfile/arrival" autocomplete="off" class="form-group" method="post" role="form">
 
         {# Start Arrival date #}
         <div class="govuk-form-group" id="arrivalDate">

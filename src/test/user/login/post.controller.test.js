@@ -102,7 +102,9 @@ describe('User Login Post Controller', () => {
       });
     });
 
-    it('should send en email and go to the MFA screen', () => {
+    it('should return unregistered back to the page if no user found', () => {
+      const cookie = new CookieModel(req);
+      cookie.setUserVerified(false);
       const apiResponse = {
         message: 'No results found',
       };
@@ -115,33 +117,10 @@ describe('User Login Post Controller', () => {
       };
 
       callController().then(() => {
-        expect(emailService.send).to.have.been.called;
+        expect(emailService.send).to.not.have.been.called;
       }).then(() => {
-        expect(res.redirect).to.have.been.calledWith('/login/authenticate');
-      });
-    });
-
-    it('should go to the MFA screen if email could not be sent', () => {
-      const apiResponse = {
-        message: 'No results found',
-      };
-      sinon.stub(emailService, 'send').rejects('Example Reject');
-      sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
-
-      // Promise chain, so controller call is wrapped into its own method
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(emailService.send).to.have.been.called;
         expect(res.redirect).to.not.have.been.called;
-      }).then(() => {
-        expect(emailService.send).to.have.been.called;
-        expect(res.redirect).to.not.have.been.called;
-      }).then(() => {
-        expect(emailService.send).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/login/authenticate');
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/login/index', { cookie, unregistered: true });
       });
     });
   });

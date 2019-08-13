@@ -44,6 +44,10 @@
     "user_login_unverified_caption_1": "Click the verification link inside the email. This link will remain valid for 12 hours. If you can't see the email, please check any spam folders or ",
     "user_login_unverified_resend": "resend the verification email",
     "user_login_unverified_caption_3": ".",
+    "user_login_unregistered": "The email address supplied has not been recognised.",
+	"user_login_unregistered_caption_1": "Please try again, or ",
+	"user_login_unregistered_caption_2": "create a new account here",
+	"user_login_unregistered_caption_3": ".",
 
     "title_confirm_mfa_code": "Confirm your multi-factor authentication code",
     "confirm_mfa_code_caption": "If the email that you entered is associated with an account then you will have received an email with your login code. Please enter it below.",
