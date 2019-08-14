@@ -71,7 +71,7 @@ Manage organisation | Submit a General Aviation Report (GAR)
           {% for user in orgUsers.items %}
           <tr class="govuk-table__row">
             {% if user.email != cookie.getUserEmail() %}
-            <td class="govuk-table__cell"><button class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}">{{ user.lastName }}</button></td>
+            <td class="govuk-table__cell"><button id="edit_user_{{ loop.index }}" class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}">{{ user.lastName }}</button></td>
             {% else %}
             <td class="govuk-table__cell">{{ user.lastName }}</td>
             {% endif %}

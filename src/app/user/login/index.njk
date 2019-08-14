@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	{{__('error_prefix') if errors}} GAR | Sign In
+	{{__('error_prefix') if errors or unverified or unregistered }} GAR | Sign In
 {% endblock %}
 
 {% block header %}
@@ -11,16 +11,11 @@
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>
-
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
 	{% if unverified %}
     <div class="govuk-error-summary" aria-labelledby="unverified-error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
       <h2 class="govuk-error-summary__title" id="unverified-error-summary-title">
@@ -32,6 +27,24 @@
             {{ __('user_login_unverified') }}
             <p class="govuk-body-m">
               {{__('user_login_unverified_caption_1')}}<a href="/user/regmsg?resend=true">{{__('user_login_unverified_resend')}}</a>{{__('user_login_unverified_caption_3')}}
+            </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if unregistered %}
+    <div class="govuk-error-summary" aria-labelledby="unregistered-error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+      <h2 class="govuk-error-summary__title" id="unregistered-error-summary-title">
+        {{__('form_error_summary_title')}}
+      </h2>
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          <li>
+            {{ __('user_login_unregistered') }}
+            <p class="govuk-body-m">
+              {{__('user_login_unregistered_caption_1')}}<a href="/user/register">{{__('user_login_unregistered_caption_2')}}</a>{{__('user_login_unregistered_caption_3')}}
             </p>
           </li>
         </ul>

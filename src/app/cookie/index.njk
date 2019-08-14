@@ -1,7 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% block pageTitle %}
-GAR | Cookies
+  GAR | Cookies
 {% endblock %}
 
 {% block head %}
@@ -9,151 +9,123 @@ GAR | Cookies
 {% endblock %}
 
 {% block header %}
-{% include "header-pre-user.njk" %}
+  {% include "header-pre-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-{% include "phase.njk" %}
+  {% include "phase.njk" %}
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-
-		<h1 class="govuk-heading-xl">
-		Cookies
-		</h1>
+		<h1 class="govuk-heading-xl">{{__('title_cookies')}}</h1>
 
 		<p class="govuk-body-m">
-      This service puts small files (known as 'cookies') onto your computer to collect
-      information about how you browse the site.
-      <br><br>
-      Cookies are used to:
+      {{__('cookies_caption')}}
+    </p>
+    <p class="govuk-body-m">
+      {{__('heading_cookies_use_list')}}
+      <ul class="govuk-list govuk-list--bullet">
+        <li>{{__('cookies_use_list_1')}}</li>
+        <li>{{__('cookies_use_list_2')}}</li>
+        <li>{{__('cookies_use_list_3')}}</li>
+      </ul>
     </p>
 
-		<ul class="govuk-list govuk-list--bullet">
-			<li>Measure how you use the website so it can be updated and improved based on your needs</li>
-			<li>Prevent malicious system usage</li>
-			<li>Remember notifications you've seen so we do not show them to you again</li>
-		</ul>
+    <h2 class="govuk-heading-m">{{__('heading_how_cookies_are_used')}}</h2>
 
-  <h2 class="govuk-heading-m">How cookies are used</h2>
+    <h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_1')}}</h2>
 
+    <p class="govuk-body-m">{{__('how_cookies_are_used_1_caption_1')}}</p>
+    <p class="govuk-body-m">{{__('how_cookies_are_used_1_caption_2')}}</p>
 
-  <h3 class="govuk-heading-s">Measuring website usage (Google Analytics)</h2>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>{{__('how_cookies_are_used_1_list_item_1')}}</li>
+      <li>{{__('how_cookies_are_used_1_list_item_2')}}</li>
+      <li>{{__('how_cookies_are_used_1_list_item_3')}}</li>
+      <li>{{__('how_cookies_are_used_1_list_item_4')}}</li>
+    </ul>
 
-  <p class="govuk-body-m">
-    We use Google Analytics software (Universal Analytics) to collect information about how you use Submit a GAR. We do this to help make sure the site is meeting the needs of its users and to help us make improvements.
-  </p>
-  <p class="govuk-body-m">
-    Google Analytics stores information about:
-  </p>
-  <ul class="govuk-list govuk-list--bullet">
-		<li>The pages you visit on Submit a GAR</li>
-		<li>How long you spend on each Submit a GAR page</li>
-		<li>How you got to the site</li>
-    <li>What you click on while you're visiting the site</li>
-	</ul>
+    {% macro table_header() %}
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>{{__('table_heading_name')}}</strong></p></th>
+          <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>{{__('table_heading_purpose')}}</strong></p></th>
+          <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>{{__('table_heading_expires')}}</strong></p></th>
+        </tr>
+      </thead>
+    {% endmacro %}
 
-  <table class="govuk-table">
-
-    <thead class="govuk-table__head">
+    {% macro table_row(name, purpose, expires) %}
       <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Name</strong></p></th>
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Purpose</strong></p></th>
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Expires</strong></p></th>
+        <td class="govuk-table__cell"><p class="govuk-body-s">{{ name }}</p></td>
+        <td class="govuk-table__cell"><p class="govuk-body-s">{{ purpose }}</p></td>
+        <td class="govuk-table__cell"><p class="govuk-body-s">{{ expires }}</p></td>
       </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell"><p class="govuk-body-s">_ga</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">This helps us count how many people visit Submit a GAR by tracking if you’ve visited before</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">2 years</p></td>
-      </tr>
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell"><p class="govuk-body-s">_gid</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">This helps us count how many people visit Submit a GAR by tracking if you’ve visited before</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">24 hours</p></td>
-      </tr>
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell"><p class="govuk-body-s">_gat</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">Used to manage the rate at which page view requests are made</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">10 minutes</p></td>
-      </tr>
-    </tbody>
-  </table>
+    {% endmacro %}
 
-  <h3 class="govuk-heading-s">Security cookies</h2>
+    <table class="govuk-table">
+      {{ table_header() }}
+      <tbody class="govuk-table__body">
+        {{ table_row(
+          __('how_cookies_are_used_1_table_row_1_name'),
+          __('how_cookies_are_used_1_table_row_1_purpose'),
+          __('how_cookies_are_used_1_table_row_1_expires'))}}
+        {{ table_row(
+          __('how_cookies_are_used_1_table_row_2_name'),
+          __('how_cookies_are_used_1_table_row_2_purpose'),
+          __('how_cookies_are_used_1_table_row_2_expires'))}}
+        {{ table_row(
+          __('how_cookies_are_used_1_table_row_3_name'),
+          __('how_cookies_are_used_1_table_row_3_purpose'),
+          __('how_cookies_are_used_1_table_row_3_expires'))}}
+      </tbody>
+    </table>
 
-  <p class="govuk-body-m">
-    We set some security related cookies to ensure actions performed under your account on Submit a GAR are actions performed by you
-  </p>
+    <h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_2')}}</h2>
 
-  <table class="govuk-table">
-    <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Name</strong></p></th>
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Purpose</strong></p></th>
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Expires</strong></p></th>
-      </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell"><p class="govuk-body-s">csrftoken</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">Contains a string of random characters that is required to perform actions and that an attacker cannot guess</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">1 year</p></td>
-      </tr>
-    </tbody>
-  </table>
+    <p class="govuk-body-m">
+      {{__('how_cookies_are_used_2_caption')}}
+    </p>
 
+    <table class="govuk-table">
+      {{ table_header() }}
+      <tbody class="govuk-table__body">
+        {{ table_row(
+          __('how_cookies_are_used_2_table_row_1_name'),
+          __('how_cookies_are_used_2_table_row_1_purpose'),
+          __('how_cookies_are_used_2_table_row_1_expires'))}}
+      </tbody>
+    </table>
 
-  <h3 class="govuk-heading-s">Our introductory message</h2>
+    <h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_3')}}</h2>
 
-  <p class="govuk-body-m">
-    You may see a pop-up welcome message when you first visit Submit a GAR. We’ll store a cookie so that your computer knows you’ve seen it and knows not to show it again.
-  </p>
+    <p class="govuk-body-m">{{__('how_cookies_are_used_3_caption')}}</p>
 
-  <table class="govuk-table">
-    <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Name</strong></p></th>
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Purpose</strong></p></th>
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Expires</strong></p></th>
-      </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell"><p class="govuk-body-s">seen_cookie_message</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">Saves a message to let us know that you've seen our cookie message</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">1 month</p></td>
-      </tr>
-    </tbody>
-  </table>
+    <table class="govuk-table">
+      {{ table_header() }}
+      <tbody class="govuk-table__body">
+        {{ table_row(
+          __('how_cookies_are_used_3_table_row_1_name'),
+          __('how_cookies_are_used_3_table_row_1_purpose'),
+          __('how_cookies_are_used_3_table_row_1_expires'))}}
+      </tbody>
+    </table>
 
-  <h3 class="govuk-heading-s">Session information</h2>
+    <h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_4')}}</h2>
 
-  <p class="govuk-body-m">
-    In order to improve usability and retain information about your account and privileges, we store a unique identifier for each session
-  </p>
+    <p class="govuk-body-m">{{__('how_cookies_are_used_4_caption')}}</p>
 
-  <table class="govuk-table">
-    <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Name</strong></p></th>
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Purpose</strong></p></th>
-        <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>Expires</strong></p></th>
-      </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell"><p class="govuk-body-s">sess_id</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">Saves a unique identifier which the system can use to show you the correct information</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">1 hour</p></td>
-      </tr>
-    </tbody>
-  </table>
-
+    <table class="govuk-table">
+      {{ table_header() }}
+      <tbody class="govuk-table__body">
+        {{ table_row(
+          __('how_cookies_are_used_4_table_row_1_name'),
+          __('how_cookies_are_used_4_table_row_1_purpose'),
+          __('how_cookies_are_used_4_table_row_1_expires'))}}
+      </tbody>
+    </table>
 	</div>
 </div>
 {% endblock %}
-
