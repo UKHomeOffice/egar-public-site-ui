@@ -54,14 +54,14 @@
           {% for person in people %}
           <tr class="govuk-table__row">
             {% if cookie.getUserRole() != 'User' %}
-            <td class="govuk-table__cell"><button class="link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
+              <td class="govuk-table__cell"><button id="edit-person-{{ loop.index }}" class="link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
             {% else %}
-            <td class="govuk-table__cell">{{person.lastName}}</td>
+              <td class="govuk-table__cell">{{person.lastName}}</td>
             {% endif %}
             <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
             <td class="govuk-table__cell">{{person.peopleType.name}}</td>
             {% if cookie.getUserRole() != 'User' %}
-            <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button></td>
+              <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button></td>
             {% endif %}
           </tr>
           {% endfor %}
@@ -85,9 +85,8 @@
 	<div class="govuk-grid-column-full">
 		<h2 class="govuk-heading-l">{{__('people_add')}}</h2>
 		<p class="govuk-body-l">{{__('people_add_caption')}}</p>
-		<a href="/people/add" role="button" draggable="false" class="govuk-button" id='save-person'>
-			{{__('title_add_person')}}
-		</a>
+
+		<a id="add-person" href="/people/add" role="button" draggable="false" class="govuk-button">{{__('title_add_person')}}</a>
 	</div>
 
 	<div class="govuk-grid-column-full">
