@@ -6,20 +6,17 @@
 	GAR | Invite sent
 {% endblock %}
 
+{% set active = '/organisation' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
@@ -29,16 +26,14 @@
 
   <div class="govuk-panel govuk-panel--confirmation">
     <h1 class="govuk-panel__title">
-      Invitation sent
+      {{__('heading_invite_sent')}}
     </h1>
   </div>
 
 	<div>
-	<h2 class="govuk-heading-m">What happens next</h2>
-	<p class="govuk-body-m">We have sent the user an email that contains an invitation link. This link will remain valid for 12 hours.
-	The user will need to click the link in the email to complete the account registration process.
-	</p>
-	 <p class="govuk-body-m">If you have any queries please <a href="mailto:egarsupport@homeoffice.gov.uk">contact us</a>.</p>
+	  <h2 class="govuk-heading-m">{{__('heading_what_happens_next')}}</h2>
+	  <p class="govuk-body-m">{{__('what_happens_next_caption')}}</p>
+	  <p class="govuk-body-m">{{__('what_happens_next_any_queries_1')}}<a href="{{__('support_email')}}">{{__('what_happens_next_any_queries_2')}}</a>{{__('what_happens_next_any_queries_3')}}</p>
 	</div>
 	<input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 </div>

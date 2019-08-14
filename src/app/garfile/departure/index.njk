@@ -6,15 +6,15 @@
 	{{__('error_prefix') if errors}} Create GAR | Departure | {{__('title')}}
 {% endblock %}
 
+{% set active = '/home' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   <a href="/garfile/home" class="govuk-back-link">{{__('nav_back')}}</a>
-
 {% endblock %}
 
 {% block content %}

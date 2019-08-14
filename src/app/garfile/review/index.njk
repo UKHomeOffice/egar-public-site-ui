@@ -6,6 +6,8 @@
 	{{__('error_prefix') if errors}} Create GAR | Review
 {% endblock %}
 
+{% set active = '/home' %}
+
 {% block header %}
   {% include "header-user.njk" %}
 {% endblock %}
@@ -34,19 +36,14 @@
       <p class="govuk-body-m">{{__('submit_gar_caption')}}</p>
 
       <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit')}}">
-      {# <p class="govuk-body-m">
-        <a id='review-exit' href="/home">{{__('review_gar_exit')}}</a>
-      </p> #}
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
     <form id="cancel-form" action="/garfile/view" method="post" role="form">
-  {# <p class="govuk-body-m"> #}
-    <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-      {{__('review_gar_exit')}}
-    </button>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-  {# </p> #}
-</form>
+      <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+        {{__('review_gar_exit')}}
+      </button>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </form>
   </div>
 </div>
 {% endblock %}

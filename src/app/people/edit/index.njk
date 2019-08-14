@@ -6,8 +6,10 @@
 	{{__('error_prefix') if errors}} GAR | {{ __('title_edit_person') }}
 {% endblock %}
 
+{% set active = '/people' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}

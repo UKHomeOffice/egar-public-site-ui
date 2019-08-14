@@ -6,21 +6,18 @@
 	Create GAR | Add person
 {% endblock %}
 
+{% set active = '/home' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   <a href="/garfile/manifest" class="govuk-back-link">Back</a>
-
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
@@ -36,9 +33,9 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% include "person-details.njk" %}
         <br>
-        <input id="add-person-manifest" class="govuk-button" type="submit" value="Save and add to GAR" onclick="sendAnalytics(event, 'Save and Exit', 'click')">
+        <input id="add-person-manifest" class="govuk-button" type="submit" value="{{__('form_save_and_add_to_gar')}}" onclick="sendAnalytics(event, 'GAR Manifest Edit Person - Save', 'click')">
         <p class="govuk-body-m">
-          <a href="/garfile/manifest">{{ __('form_exit_without_saving') }}</a>
+          <a href="/garfile/manifest" class="govuk-button govuk-button--secondary" onclick="sendAnalytics(event, 'GAR Manifest Edit Person - Cancel', 'click')">{{ __('form_exit_without_saving') }}</a>
         </p>
       </form>
     </div>

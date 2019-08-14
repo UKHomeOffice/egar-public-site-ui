@@ -6,8 +6,10 @@
 	Create GAR | Manifest
 {% endblock %}
 
+{% set active = '/home' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -16,9 +18,6 @@
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
@@ -26,10 +25,10 @@
 <div class="govuk-grid-row">
   <form action="/garfile/manifest" method="post">
     <div class="govuk-grid-column-two-thirds">
-        <span class="govuk-caption-xl">{{__('section_count', 4, 8)}}</span>
-        <h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
-        <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
-        <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
+      <span class="govuk-caption-xl">{{__('section_count', 4, 8)}}</span>
+      <h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
+      <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
+      <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
     </div>
     <div class="govuk-grid-column-full">
       {% if savedPeople | length %}
@@ -115,7 +114,6 @@
           {% else %}
             <tr class="govuk-table__row" id="person-{{loop.index0}}">
           {% endif %}
-
             <td class="govuk-table__cell">{{person.lastName}}</td>
             <td class="govuk-table__cell">{{person.firstName}}</td>
             <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
@@ -188,7 +186,6 @@
       </div>
 
     {# Start buttons #}
-        {# {{ m.submit_buttons('GAR Manifest', csrfToken, __) }} #}
       <input id="continue" type="submit" class="govuk-button" 
         name="buttonClicked"
         value="{{__('button_continue')}}"
@@ -205,16 +202,7 @@
       </p>
     </form>
     {# End buttons #}
-      {# <input id="save-and-continue" class="govuk-button" type="submit" name="buttonClicked" value="Save and continue">
-      <p class="govuk-body-m">
-        <a id="save-and-exit" href="/home" >Save and come back later</a>
-      </p>
-      <p class="govuk-body-m">
-        <a id="exit-no-save" href="/home" > Exit without saving </a>
-      </p>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" /> #}
 	  </div>
-  {# </form> #}
 </div>
 
 {% endblock %}

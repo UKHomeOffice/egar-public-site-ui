@@ -6,8 +6,10 @@
 	{{__('error_prefix') if errors}} GAR | Save Person Details
 {% endblock %}
 
+{% set active = '/people' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -25,9 +27,6 @@
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
