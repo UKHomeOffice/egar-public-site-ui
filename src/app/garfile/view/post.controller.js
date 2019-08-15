@@ -3,6 +3,23 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
 
+const checkGARUser = (parsedGar, userId, organisationId) => {
+  if (parsedGar === undefined || parsedGar === null) return false;
+
+  if (parsedGar.organisationId && organisationId) {
+    // Contains an organisation id and the user as well,
+    if (parsedGar.organisationId === organisationId) {
+      logger.info('GAR organisation id matches current user ID');
+      return true;
+    }
+  }
+  if (parsedGar.userId === userId) {
+    logger.info('GAR user id matches current user ID');
+    return true;
+  }
+  return false;
+};
+
 module.exports = (req, res) => {
   logger.debug('In garfile / view post controller');
   const cookie = new CookieModel(req);
@@ -28,6 +45,14 @@ module.exports = (req, res) => {
       const parsedGar = JSON.parse(responseValues[0]);
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
+
+      // Do the check here
+      if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
+        logger.error('Determined that the GAR should not be viewed by this person!');
+      } else {
+        logger.info('Check GAR passed true, carry on');
+      }
+
       cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
@@ -52,3 +77,4 @@ module.exports = (req, res) => {
       res.render('app/garfile/view/index', renderContext);
     });
 };
+module.exports.checkGARUser = checkGARUser;

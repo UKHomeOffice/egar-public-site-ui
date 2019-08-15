@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -34,6 +35,67 @@ describe('GAR view post controller', () => {
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  describe('checkGARUser', () => {
+    it('should return false if all undefined fields', () => {
+      expect(controller.checkGARUser(undefined, undefined, undefined)).to.be.false;
+    });
+
+    it('should return false if all null fields', () => {
+      expect(controller.checkGARUser(null, null, null)).to.be.false;
+    });
+
+    it('should return false if user id no match and undefined organisation', () => {
+      const parsedGar = {
+        userId: 'USER-123',
+      };
+
+      expect(controller.checkGARUser(parsedGar, undefined, 'USER-234')).to.be.false;
+    });
+
+    it('should return false if organisation id no match and undefined user', () => {
+      const parsedGar = {
+        userId: 'USER-123',
+        organisationId: 'ORG-123',
+      };
+
+      expect(controller.checkGARUser(parsedGar, undefined, 'ORG-234')).to.be.false;
+    });
+
+    it('should return false if no match', () => {
+      const parsedGar = {
+        userId: 'USER-123',
+        organisationId: 'ORG-123',
+      };
+
+      expect(controller.checkGARUser(parsedGar, 'USER-234', 'ORG-234')).to.be.false;
+    });
+
+    it('should return true if user ids match', () => {
+      const parsedGar = {
+        userId: 'USER-123',
+      };
+
+      expect(controller.checkGARUser(parsedGar, 'USER-123', undefined)).to.be.true;
+    });
+
+    it('should return true if organisation ids match', () => {
+      const parsedGar = {
+        organisationId: 'ORG-123',
+      };
+
+      expect(controller.checkGARUser(parsedGar, 'USER-123', 'ORG-123')).to.be.true;
+    });
+
+    it('should return true if organisation ids match and user ids match', () => {
+      const parsedGar = {
+        organisationId: 'ORG-123',
+        userId: 'USER-123',
+      };
+
+      expect(controller.checkGARUser(parsedGar, 'USER-123', 'ORG-123')).to.be.true;
+    });
   });
 
   it('should render with errors if one of the api calls rejects', () => {
