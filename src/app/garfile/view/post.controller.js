@@ -15,12 +15,9 @@ const garApi = require('../../../common/services/garApi');
 const checkGARUser = (parsedGar, userId, organisationId) => {
   if (parsedGar === undefined || parsedGar === null) return false;
 
-  if (parsedGar.organisationId && organisationId) {
-    // Contains an organisation id and the user as well,
-    if (parsedGar.organisationId === organisationId) {
-      logger.info('GAR organisation id matches current user ID');
-      return true;
-    }
+  if ((parsedGar.organisationId && organisationId) && parsedGar.organisationId === organisationId) {
+    logger.info('GAR organisation id matches current user ID');
+    return true;
   }
   if (parsedGar.userId === userId) {
     logger.info('GAR user id matches current user ID');
