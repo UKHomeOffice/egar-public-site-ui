@@ -2,7 +2,9 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
+const chai = require('chai');
 const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
 const moment = require('moment');
 const config = require('../../../common/config/index');
@@ -39,6 +41,7 @@ const tokenApi = proxyquire('../../../common/services/tokenApi', { '../utils/db'
 
 describe('UserSessions', () => {
   beforeEach(() => {
+    chai.use(sinonChai);
     this.clock = date => sinon.useFakeTimers(new Date(date));
     this.clock('2019-04-01');
   });
@@ -51,12 +54,40 @@ describe('UserSessions', () => {
       });
   });
 
+  it('setMfaToken rejects', () => {
+    createStub.rejects(new Error('Test'));
+    const callSetToken = async () => {
+      await tokenApi.setMfaToken('example@email.com', 'tokenId', 'status');
+    };
+
+    callSetToken().then(() => {
+      chai.assert.fail('Should have rejected');
+    }).catch((result) => {
+      expect(result.message).to.eq('Test');
+    });
+  });
+
   it('Should update a usersession entry', (done) => {
     tokenApi.updateMfaToken('myemail@email.com', 87654321)
       .then(() => {
         sinon.assert.calledOnce(updateStub);
         done();
       });
+  });
+
+  it('updateMfaToken rejects', () => {
+    updateStub.resetHistory();
+    updateStub.rejects(new Error('Test Update MFA Token'));
+    const callSetToken = async () => {
+      await tokenApi.updateMfaToken('myemail@email.com', 87654321);
+    };
+
+    callSetToken().then(() => {
+      chai.assert.fail('Should have rejected');
+    }).catch((result) => {
+      expect(updateStub).to.have.been.calledOnce;
+      expect(result.message).to.eq('Test Update MFA Token');
+    });
   });
 
   it('Should not validate an incorrect token', async () => {

@@ -19,13 +19,15 @@ module.exports = (req, res) => {
   validator.validateChains([orgNameChain])
     .then(() => {
       // API should return OrgId
-      cookie.setOrganisationName(req.body.orgName);
       organisationApi.update(orgName, cookie.getOrganisationId())
         .then((apiResponse) => {
           const responseObj = JSON.parse(apiResponse);
           logger.debug(`Response from API: ${JSON.stringify(responseObj)}`);
           // Check for error
-          res.redirect('/organisation');
+          cookie.setOrganisationName(req.body.orgName);
+          req.session.save(() => {
+            res.redirect('/organisation');
+          });
         })
         .catch((err) => {
           logger.error('There was a problem updating the organisation');

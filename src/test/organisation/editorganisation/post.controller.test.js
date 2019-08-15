@@ -26,6 +26,7 @@ describe('Organisation Edit Post Controller', () => {
       },
       session: {
         org: { i: 'FIRST-ORDER-ID' },
+        save: callback => callback(),
       },
     };
     res = {
@@ -84,6 +85,7 @@ describe('Organisation Edit Post Controller', () => {
   it('should redirect and sets cookie value when api ok', () => {
     cookie = new CookieModel(req);
 
+    sinon.stub(req.session, 'save').callsArg(0);
     orgApiStub.resolves(JSON.stringify({}));
 
     const callController = async () => {
@@ -94,6 +96,7 @@ describe('Organisation Edit Post Controller', () => {
       expect(req.session.org.name).to.eq('Evil Empire');
       expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
       expect(res.render).to.not.have.been.called;
+      expect(req.session.save).to.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
     });
   });
