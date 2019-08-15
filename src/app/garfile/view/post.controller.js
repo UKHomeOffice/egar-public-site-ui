@@ -3,6 +3,15 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
 
+/**
+ * For a supplied GAR object, check that the user id or organisation id
+ * match the given parameters. Returns true if there is a match or false
+ * otherwise.
+ *
+ * @param {Object} parsedGar The GAR to check
+ * @param {String} userId The user id to check against
+ * @param {String} organisationId The organisation to check against
+ */
 const checkGARUser = (parsedGar, userId, organisationId) => {
   if (parsedGar === undefined || parsedGar === null) return false;
 
@@ -48,14 +57,19 @@ module.exports = (req, res) => {
 
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
-        logger.error('Determined that the GAR should not be viewed by this person!');
-      } else {
-        logger.info('Check GAR passed true, carry on');
+        logger.error(`Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`);
+        res.redirect('/home');
+        return;
       }
 
       cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
+
+      // Maybe not necessary but delete the ids as the template does not need them
+      delete parsedGar.userId;
+      delete parsedGar.organisationId;
+
       renderContext = {
         cookie,
         manifestFields,
