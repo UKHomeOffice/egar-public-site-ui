@@ -3,11 +3,13 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Invite User
+	{{ __('error_prefix') if errors }} GAR | Invite User
 {% endblock %}
 
+{% set active = '/organisation' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -16,8 +18,6 @@
 {% endblock %}
 
 {% block content %}
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}

@@ -3,12 +3,14 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-Manage organisation | Submit a General Aviation Report (GAR)
+  Manage organisation | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+	{% include "header-user.njk" %}
 {% endblock %}
+
+{% set active = '/organisation' %}
 
 {% block beforeContent %}
   {% include "phase.njk" %}
@@ -22,10 +24,10 @@ Manage organisation | Submit a General Aviation Report (GAR)
   	{% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
-		<h1 class="govuk-heading-xl">{{__('nav_bar_organisation')}}</h1>
-		<p class="govuk-body-l">{{__('organisation_caption')}}</p>
+  <h1 class="govuk-heading-xl">{{__('nav_bar_organisation')}}</h1>
+  <p class="govuk-body-l">{{__('organisation_caption')}}</p>
 
-    <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
+  <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
 
 		<dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 1em;">
 			<div class="app-check-your-answers__contents" style="border-bottom: none;">

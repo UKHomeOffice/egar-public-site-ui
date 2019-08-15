@@ -18,7 +18,7 @@ module.exports = {
    * @returns {Promise} returns response body when resolved
    */
   setToken(tokenId, userId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
@@ -29,15 +29,12 @@ module.exports = {
       }, (error, response, body) => {
         if (error) {
           logger.error('There was a problem calling the settoken API');
-          return console.dir(error);
+          logger.error(error);
+          reject(error);
         }
         logger.debug('Successfully called settoken API');
         resolve(body);
-        return body;
       });
-    }).catch((err) => {
-      logger.error('There was a problem calling the settoken API');
-      logger.info(err);
     });
   },
 

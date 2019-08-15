@@ -6,8 +6,10 @@
 	{{__('error_prefix') if errors}} GAR | Save an Aircraft
 {% endblock %}
 
+{% set active = '/aircraft' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}

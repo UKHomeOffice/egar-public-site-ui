@@ -1,22 +1,21 @@
 {% extends "base-template.njk" %}
 
 {% from "radios/macro.njk" import govukRadios %}
-
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
 	{{__('error_prefix') if errors}} Create GAR | Customs
 {% endblock %}
 
+{% set active = '/home' %}
+
 {% block header %}
   {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   <a href="/garfile/responsibleperson" class="govuk-back-link">{{__('nav_back')}}</a>
-
 {% endblock %}
 
 {% block content %}

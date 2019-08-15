@@ -7,6 +7,8 @@
 	{{__('error_prefix') if errors}} Create GAR | Aircraft
 {% endblock %}
 
+{% set active = '/home' %}
+
 {% block header %}
   {% include "common/templates/includes/header-user.njk" %}
 {% endblock %}
@@ -19,7 +21,6 @@
 {% block content %}
 
 <div class="govuk-grid-row">
-
 	{% if errors %}
 		{% include "common/templates/includes/errors.njk" %}
 	{% endif %}

@@ -6,8 +6,10 @@
 	GAR | View
 {% endblock %}
 
+{% set active = '/home' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -25,7 +27,7 @@
 
     <div class="govuk-grid-column-two-thirds">
       {% if garfile.status.name === 'Draft' %}
-        <a id="submit-gar" class="govuk-button" href="/garfile/review">Submit this GAR</a>
+        <a id="submit-gar" class="govuk-button" href="/garfile/review">{{__('button_submit_this_gar')}}</a>
       {% endif %}
       {% if garfile.status.name !== 'Cancelled' %}
         <p class="govuk-body-m">

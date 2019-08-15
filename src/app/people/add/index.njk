@@ -6,8 +6,10 @@
 	{{__('error_prefix') if errors}} GAR | Save Person Details
 {% endblock %}
 
+{% set active = '/people' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -25,9 +27,6 @@
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
@@ -47,7 +46,7 @@
           value="{{__('form_add_and_exit')}}"
           onclick="sendAnalytics(event, 'Saved People Add - Save', 'click')">
         <p class="govuk-body-m">
-          <a class="govuk-button govuk-button--secondary" href="/people#" onclick="sendAnalytics(event, 'Saved People Add - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
+          <a id="exit-without-adding" class="govuk-button govuk-button--secondary" href="/people#" onclick="sendAnalytics(event, 'Saved People Add - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
         </p>
       </div>
 

@@ -178,6 +178,7 @@
     "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other.",
     "field_travel_document_issuing_state": "Travel document issuing state",
     "field_travel_document_expiry_date": "Travel document expiry date",
+    "form_save_and_add_to_gar": "Save and add to GAR",
 
     "heading_responsible_person_details": "Responsible person details",
     "field_address": "Address",
@@ -329,7 +330,15 @@
     "invite_user_given_name_hint": "Enter the given name of the user.",
     "invite_user_surname_hint": "Enter the surname of the user.",
     "invite_user_email_hint": "Enter the email of the user.",
-	"invite_user_cemail_hint": "Confirm the email of the user.",
+    "invite_user_cemail_hint": "Confirm the email of the user.",
+    
+    "heading_invite_sent": "Invitation sent",
+    "heading_what_happens_next": "What happens next",
+    "what_happens_next_caption": "We have sent the user an email that contains an invitation link. This link will remain valid for 12 hours. The user will need to click the link in the email to complete the account registration process.",
+    "what_happens_next_any_queries_1": "If you have any queries please ",
+    "what_happens_next_any_queries_2": "contact us",
+    "support_email": "mailto:egarsupport@homeoffice.gov.uk",
+    "what_happens_next_any_queries_3": ".",
 
 	"title_assign_role": "Assign user role",
 	"assign_role_caption": "Please select the role you would like the user to perform within your organisation.",

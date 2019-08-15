@@ -6,6 +6,8 @@
 	Manage account | Submit a General Aviation Report (GAR)
 {% endblock %}
 
+{% set active = '/user/details' %}
+
 {% block header %}
   {% include "header-user.njk" %}
 {% endblock %}
@@ -15,9 +17,6 @@
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}

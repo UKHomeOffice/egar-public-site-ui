@@ -6,6 +6,8 @@
 	{{__('title_cancel_gar')}}
 {% endblock %}
 
+{% set active = '/home' %}
+
 {% block header %}
   {% include "header-user.njk" %}
 {% endblock %}
@@ -31,11 +33,11 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </form>
   <form id="cancel-form" action="/garfile/view" method="post" role="form">
-  <p class="govuk-body-m">
-    <button type="submit" id="exit-without-cancelling" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-      {{__('form_exit_without_cancelling')}}
-    </button>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-  </p>
-</form>
+    <p class="govuk-body-m">
+      <button type="submit" id="exit-without-cancelling" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+        {{__('form_exit_without_cancelling')}}
+      </button>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </p>
+  </form>
 {% endblock %}
