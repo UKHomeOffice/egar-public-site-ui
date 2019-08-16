@@ -20,7 +20,7 @@ module.exports = (req, res) => {
     try {
       paginationData = pagination.build(req, totalPages, totalItems);
     } catch (link) {
-      logger.debug('Pagination module threw error, refreshing page');
+      logger.debug('Pagination module threw max page, refreshing page');
       res.redirect('/aircraft');
       return;
     }
