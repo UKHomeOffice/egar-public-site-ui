@@ -2,6 +2,8 @@
 
 const i18n = require('i18n');
 const XLSX = require('xlsx');
+const stream = require('stream');
+
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 const createGarApi = require('../../../common/services/createGarApi.js');
@@ -18,6 +20,12 @@ const checkFileIsExcel = (req, res) => {
     const mimeType = req.file.mimetype;
 
     logger.debug(`In Gar File Upload Service. Uploaded File: ${fileName}, Size: ${fileSize}, MIME: ${mimeType}`);
+
+    logger.debug('Creating a stream of the incoming buffer');
+    const readStream = new stream.Readable();
+    readStream.push(req.file.buffer);
+    readStream.push(null);
+    logger.debug('Stream created, about to check file name extension');
 
     const fileExtension = fileName.split('.').pop();
     // Redirect if incorrect file type is uploaded
