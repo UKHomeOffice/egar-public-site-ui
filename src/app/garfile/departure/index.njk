@@ -123,7 +123,7 @@
         </div>
         {# End departure time #}
 
-        <div class="{{ m.form_group_class('departureChoice', errors) }}">
+        <div class="{{ m.form_group_class('portChoice', errors) }}">
           <fieldset class="govuk-fieldset" aria-describedby="departureChoice-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
               <h2 class="govuk-fieldset__heading">
@@ -133,26 +133,33 @@
             <span id="departureChoice-hint" class="govuk-hint">
               {{__('field_port_choice_hint')}}
             </span>
+            {{ m.error_message('portChoice', errors, __) }}
             <div class="govuk-radios govuk-radios--conditional" data-module="radios">
               <div class="govuk-radios__item">
-                <input id="departureChoicePort" name="departureChoice" class="govuk-radios__input" type="radio" value="Yes" data-aria-controls="departurePortContainer">
-                <label class="govuk-label govuk-radios__label" for="departureChoicePort">Yes</label>
+                <input id="departureChoicePort" name="portChoice" class="govuk-radios__input"
+                  type="radio" value="Yes"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort != 'YYYY'}}
+                  data-aria-controls="departurePortContainer" aria-labelledby="departureChoicePort-label">
+                <label id="departureChoicePort-label" class="govuk-label govuk-radios__label" for="departureChoicePort">Yes</label>
               </div>
               <div id="departurePortContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
-                {{ m.hint('departurePort', __('field_port_hint')) }}
-                {{ m.error_message('departurePort', errors, __) }}
-                <select id="departurePort" name="departurePort" class="govuk-select" 
-                  value="{{ cookie.getGarDepartureVoyage().departurePort | upper }}"
-                  aria-labelledby="departurePort-label"
-                  aria-describedby="departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}">
-                  {% for airport in airportList | sort(attribute = 'label') %}
-                    <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == airport.id }}>{{ airport.label }}</option>
-                  {% endfor%}
-                </select>
+                <div class="{{ m.form_group_class('departurePort', errors) }}">
+                  {{ m.hint('departurePort', __('field_port_hint')) }}
+                  {{ m.error_message('departurePort', errors, __) }}
+                  <select id="departurePort" name="departurePort" class="govuk-select" 
+                    value="{{ cookie.getGarDepartureVoyage().departurePort | upper }}"
+                    aria-labelledby="departurePort-label"
+                    aria-describedby="departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}">
+                    {% for airport in airportList | sort(attribute = 'label') %}
+                      <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == airport.id }}>{{ airport.label }}</option>
+                    {% endfor%}
+                  </select>
+                </div>
               </div>
               <div class="govuk-radios__item">
-                <input id="departureChoiceCoordinates" name="departureChoice" class="govuk-radios__input" type="radio" value="No" data-aria-controls="departureCoordinatesContainer">
-                <label class="govuk-label govuk-radios__label" for="departureChoiceCoordinates">No</label>
+                <input id="departureChoiceCoordinates" name="portChoice" class="govuk-radios__input"
+                type="radio" value="No"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort == 'YYYY'}}
+                data-aria-controls="departureCoordinatesContainer" aria-labelledby="departureChoiceCoordinates-label">
+                <label id="departureChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="departureChoiceCoordinates">No</label>
               </div>
               <div id="departureCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
                 <div class="govuk-form-group">

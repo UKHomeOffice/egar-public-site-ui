@@ -7,7 +7,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 
 const createValidationChains = (voyage) => {
   // Define port / date validation msgs
-  const portMsg = 'As you have entered a departure port code of "YYYY", you must provide longitude and latitude coordinates for the location';
+  const portChoiceMsg = 'Select whether the port code is known';
   const portCodeMsg = 'The departure airport code must be entered';
   const futureDateMsg = 'Departure date must be today or in the future';
   const realDateMsg = 'Enter a real departure date';
@@ -36,9 +36,6 @@ const createValidationChains = (voyage) => {
     new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, portCodeMsg),
   ];
 
-  // Define ZZZZ port validations
-  const departurePortZZZZ = [new ValidationRule(validator.validatePortCoords, 'departurePort', departPortObj, portMsg)];
-
   // Define latitude validations
   const departureLatValidation = [new ValidationRule(validator.latitude, 'departureLat', voyage.departureLat, latitudeMsg)];
 
@@ -49,16 +46,17 @@ const createValidationChains = (voyage) => {
     [new ValidationRule(validator.realDate, 'departureDate', departDateObj, realDateMsg)],
     [new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, futureDateMsg)],
     [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, timeMsg)],
+    [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, portChoiceMsg)],
   ];
 
   // Check if port code is ZZZZ then need to validate lat/long and display req zzzz message
   if (departPortObj.portCode.toUpperCase() === 'YYYY') {
     validations.push(
-      departurePortZZZZ,
+      // departurePortZZZZ,
       departureLatValidation,
       departureLongValidation,
     );
-  } else {
+  } else if (voyage.portChoice) {
     // if not just add port validation
     validations.push(
       departurePortValidation,
@@ -111,8 +109,13 @@ module.exports = async (req, res) => {
   const voyage = req.body;
   voyage.departurePort = _.toUpper(voyage.departurePort);
   delete voyage.buttonClicked;
-  if (voyage.departurePort === 'ZZZZ') {
+  // TODO: Update this once the intended 'unknown' port code is discovered.
+  if (voyage.departurePort === 'ZZZZ' || voyage.portChoice === 'No') {
     voyage.departurePort = 'YYYY';
+  } else {
+    // If 'Yes' is selected then clear the coordinate values
+    voyage.departureLat = '';
+    voyage.departureLong = '';
   }
   cookie.setGarDepartureVoyage(voyage);
 
