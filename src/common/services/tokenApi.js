@@ -171,7 +171,7 @@ module.exports = {
             const expiresTimestamp = issuedTimestamp.add(parseInt(MFA_TOKEN_EXPIRY, 10), 'minutes');
             const now = moment();
             if (sub.MFAToken !== MFAToken) {
-              logger.info('Invalid token (token did not match)');
+              logger.info(`Invalid token (token did not match), user entered: '${MFAToken}' which does not match up to UserSession token with id: ${sub.Id}`);
               reject(new Error('Invalid MFA token'));
               return;
             }
