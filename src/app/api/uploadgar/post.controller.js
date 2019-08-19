@@ -96,7 +96,7 @@ const passengerMapConfig = {
 };
 
 module.exports = (req, res) => {
-  logger.debug('Entering upload GAR post controller');
+  logger.debug('Entering upload GAR post controller', { userId: req.session.u.dbId });
   if (!checkFileIsExcel(req, res)) {
     return;
   }
