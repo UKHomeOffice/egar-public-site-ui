@@ -1,5 +1,4 @@
 const fileType = require('file-type');
-const stream = require('stream');
 
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
@@ -78,17 +77,13 @@ module.exports = (req, res) => {
         return;
       }
       logger.info('Valid mimetype, proceeding');
-      // TODO: This does not look like any useful use of Readable!
-      const readStream = new stream.Readable();
-      readStream.push(req.file.buffer);
-      readStream.push(null);
       const uriString = `${process.env.CLAMAV_BASE}:${process.env.CLAMAV_PORT}/scan`;
       logger.debug(`uri: ${uriString}`);
 
       const formData = {
         name: req.file.originalname,
         file: {
-          value: req.file.buffer, // Upload the  file in the multi-part post
+          value: req.file.buffer, // Upload the file in the multi-part post
           options: {
             filename: req.file.originalname,
           },
