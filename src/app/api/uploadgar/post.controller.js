@@ -3,6 +3,7 @@
 const i18n = require('i18n');
 const XLSX = require('xlsx');
 const stream = require('stream');
+
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 const createGarApi = require('../../../common/services/createGarApi.js');
@@ -14,14 +15,19 @@ const { ExcelParser } = require('../../../common/utils/excelParser');
 
 const checkFileIsExcel = (req, res) => {
   if (req.file) {
-    logger.debug(`In Gar File Upload Service. Uploaded File: ${req.file.originalname}`);
+    const fileName = req.file.originalname;
+    const fileSize = req.file.size;
+    const mimeType = req.file.mimetype;
 
+    logger.debug(`In Gar File Upload Service. Uploaded File: ${fileName}, Size: ${fileSize}, MIME: ${mimeType}`);
+
+    logger.debug('Creating a stream of the incoming buffer');
     const readStream = new stream.Readable();
     readStream.push(req.file.buffer);
     readStream.push(null);
+    logger.debug('Stream created, about to check file name extension');
 
-    const fileExtension = req.file.originalname.split('.').pop();
-
+    const fileExtension = fileName.split('.').pop();
     // Redirect if incorrect file type is uploaded
     if ((fileExtension !== 'xls' && fileExtension !== 'xlsx') || (typeof fileExtension === 'undefined')) {
       req.session.failureMsg = i18n.__('validator_api_uploadgar_incorrect_type');
@@ -98,10 +104,11 @@ const passengerMapConfig = {
 };
 
 module.exports = (req, res) => {
-  logger.debug('Entering upload GAR post controller');
+  logger.debug('Entering upload GAR post controller', { userId: req.session.u.dbId });
   if (!checkFileIsExcel(req, res)) {
     return;
   }
+  logger.debug('Determined file to be Excel, beginning to read');
 
   const cookie = new CookieModel(req);
 
@@ -113,6 +120,7 @@ module.exports = (req, res) => {
   if (!checkFileIsGAR(req, res, worksheet)) {
     return;
   }
+  logger.debug('Determined file to be a valid GAR template, beginning to parse');
   const voyageParser = new ExcelParser(worksheet, cellMap);
 
   // Excel sheet provides two possible cells per person which may correspond to documentType

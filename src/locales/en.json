@@ -397,5 +397,9 @@
     "how_cookies_are_used_4_caption": "In order to improve usability and retain information about your account and privileges, we store a unique identifier for each session.",
     "how_cookies_are_used_4_table_row_1_name": "sess_id",
     "how_cookies_are_used_4_table_row_1_purpose": "Saves a unique identifier which the system can use to show you the correct information",
-    "how_cookies_are_used_4_table_row_1_expires": "1 hour"
+    "how_cookies_are_used_4_table_row_1_expires": "1 hour",
+
+    "heading_are_you_sure_delete_account": "Are you sure you want to delete your account?",
+    "are_you_sure_delete_account_caption": "Deleting your account is permanent and you will no longer be able to log in to the system using the registered email address. You will be able to re-register this email address at a later date if you choose to.",
+    "form_exit_without_deleting": "Exit without deleting"
 }

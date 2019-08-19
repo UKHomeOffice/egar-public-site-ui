@@ -6,41 +6,36 @@
 	GAR | Delete Account
 {% endblock %}
 
+{% set active = '/user/details' %}
+
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
     <h1 class="govuk-heading-l">
-      Are you sure you want to delete your account ?
+      {{__('heading_are_you_sure_delete_account')}}
     </h1>
     <p class="govuk-body-m">
-     Deleting your account is permanent and you will no longer
-     be able to log in to the system using the registered email address. You will be able to re-register this
-     email address at a later date if you choose to.
+      {{__('are_you_sure_delete_account_caption')}}
     </p>
   <br>
 
   <form action="/user/delete" method="post">
-    <input class="govuk-button" type="submit" value="Delete account">
+    <input id="delete" class="govuk-button" type="submit" onclick="sendAnalytics(event, 'Delete Account - Delete', 'click')" value="{{__('heading_delete_account')}}">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </form>
 
   <p class="govuk-body-m">
-    <a href="/user/details">Exit without deleting</a>
+    <a id="exit-without-deleting" href="/user/details" onclick="sendAnalytics(event, 'Delete Account - Cancel', 'click')">{{__('form_exit_without_deleting')}}</a>
   </p>
 </main>
 {% endblock %}
