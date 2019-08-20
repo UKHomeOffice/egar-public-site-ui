@@ -22,6 +22,7 @@ describe('Arrival Post Controller', () => {
 
     req = {
       body: {
+        portChoice: 'No',
         arrivalPort: 'LHR',
         arrivalLat: '45.1000',
         arrivalLong: '12.1000',
@@ -63,7 +64,26 @@ describe('Arrival Post Controller', () => {
       });
     });
 
+    it('should fail validation if no port choice selected', async () => {
+      delete req.body.portChoice;
+
+      const cookie = new CookieModel(req);
+
+      sinon.stub(garApi, 'get').resolves(apiResponse);
+      sinon.stub(garApi, 'patch');
+
+      await controller(req, res);
+
+      expect(garApi.get).to.have.been.called;
+      expect(garApi.patch).to.not.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/arrival/index', {
+        cookie,
+        errors: [new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known')],
+      });
+    });
+
     it('should fail for empty port code', () => {
+      req.body.portChoice = 'Yes';
       req.body.arrivalPort = '';
       const cookie = new CookieModel(req);
 
@@ -110,37 +130,6 @@ describe('Arrival Post Controller', () => {
           });
         });
       });
-
-      // TODO: Technically, if the port is NOT ZZZZ then there should not be a longitude or latitude
-      // which is not actually represented in the code
-      // it('should fail if port is not ZZZZ yet there is longitude and latitude', () => {
-      //   const cookie = new CookieModel(req);
-
-      //   sinon.stub(garApi, 'get').resolves(apiResponse);
-      //   sinon.stub(garApi, 'patch');
-
-      //   const callController = async () => {
-      //     await controller(req, res);
-      //   };
-
-      //   callController().then(() => {
-      //     expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-      //     expect(garApi.patch).to.not.have.been.called;
-      //     expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-      //       cookie,
-      //       errors: [
-      // new ValidationRule(
-      //    validator.latitude,
-      //    'arrivalLat', undefined,
-      //    'Value entered is incorrect. Enter latitude to 4 decimal places'),
-      // new ValidationRule(
-      //    validator.longitude,
-      //    'arrivalLong', undefined,
-      //    'Value entered is incorrect. Enter longitude to 4 decimal places'),
-      //       ],
-      //     });
-      //   });
-      // });
     });
   });
 

@@ -59,7 +59,7 @@
                 <label class="govuk-label govuk-date-input__label" for="departureMonth">
                   <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_month')}}
                 </label>
-                <span id="departure-month-hint" class="govuk-visually-hidden">{{__('field_departure_month_hint')}}</span>
+                <span id="departure-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMonth"
                     name="departureMonth" type="number" pattern="[0-9]*" min="1" max="12"
                     value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}"
@@ -124,20 +124,20 @@
         {# End departure time #}
 
         <div class="{{ m.form_group_class('portChoice', errors) }}">
-          <fieldset class="govuk-fieldset" aria-describedby="departureChoice-hint">
+          <fieldset class="govuk-fieldset" aria-describedby="portChoice-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
               <h2 class="govuk-fieldset__heading">{{__('field_port_choice')}}</h2>
             </legend>
-            <span id="departureChoice-hint" class="govuk-hint">{{__('field_port_choice_hint')}}</span>
+            <span id="portChoice-hint" class="govuk-hint">{{__('field_port_choice_hint')}}</span>
             {{ m.error_message('portChoice', errors, __) }}
             <div class="govuk-radios govuk-radios--conditional" data-module="radios">
               <div class="govuk-radios__item">
-                <input id="departureChoicePort" name="portChoice" class="govuk-radios__input"
+                <input id="portChoiceCode" name="portChoice" class="govuk-radios__input"
                   type="radio" value="Yes"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort != undefined and cookie.getGarDepartureVoyage().departurePort != 'YYYY'}}
-                  data-aria-controls="departurePortContainer" aria-labelledby="departureChoicePort-label">
-                <label id="departureChoicePort-label" class="govuk-label govuk-radios__label" for="departureChoicePort">{{__('field_choice_yes')}}</label>
+                  data-aria-controls="portChoiceCodeContainer" aria-labelledby="portChoiceCode-label">
+                <label id="portChoiceCode-label" class="govuk-label govuk-radios__label" for="portChoiceCode">{{__('field_choice_yes')}}</label>
               </div>
-              <div id="departurePortContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
+              <div id="portChoiceCodeContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
                 <div class="{{ m.form_group_class('departurePort', errors) }}">
                   <label id="departurePort-label" class="govuk-label" for="departurePort">{{__('field_port_code')}}</label>
                   {{ m.hint('departurePort', __('field_port_hint')) }}
@@ -153,16 +153,15 @@
                 </div>
               </div>
               <div class="govuk-radios__item">
-                <input id="departureChoiceCoordinates" name="portChoice" class="govuk-radios__input"
+                <input id="portChoiceCoordinates" name="portChoice" class="govuk-radios__input"
                 type="radio" value="No"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort == 'YYYY'}}
-                data-aria-controls="departureCoordinatesContainer" aria-labelledby="departureChoiceCoordinates-label">
-                <label id="departureChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="departureChoiceCoordinates">{{__('field_choice_no')}}</label>
+                data-aria-controls="portChoiceCoordinatesContainer" aria-labelledby="portChoiceCoordinates-label">
+                <label id="portChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="portChoiceCoordinates">{{__('field_choice_no')}}</label>
               </div>
-              <div id="departureCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
+              <div id="portChoiceCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
                 <div class="govuk-form-group">
                   {{ m.hint('departureCoordinates', __('field_coordinate_hint')) }}
                 </div>
-
                 {# Start departure coords #}
                 <div class="govuk-form-group {{ m.form_group_class('departureLat', errors) }}">
                   <label class="govuk-label" for="departureLat">
