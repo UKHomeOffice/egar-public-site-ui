@@ -133,7 +133,7 @@
             <div class="govuk-radios govuk-radios--conditional" data-module="radios">
               <div class="govuk-radios__item">
                 <input id="departureChoicePort" name="portChoice" class="govuk-radios__input"
-                  type="radio" value="Yes"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort != 'YYYY'}}
+                  type="radio" value="Yes"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort != undefined and cookie.getGarDepartureVoyage().departurePort != 'YYYY'}}
                   data-aria-controls="departurePortContainer" aria-labelledby="departureChoicePort-label">
                 <label id="departureChoicePort-label" class="govuk-label govuk-radios__label" for="departureChoicePort">{{__('field_choice_yes')}}</label>
               </div>
