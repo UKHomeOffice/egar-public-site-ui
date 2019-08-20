@@ -126,23 +126,20 @@
         <div class="{{ m.form_group_class('portChoice', errors) }}">
           <fieldset class="govuk-fieldset" aria-describedby="departureChoice-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h2 class="govuk-fieldset__heading">
-                {{__('field_port_choice')}}
-              </h2>
+              <h2 class="govuk-fieldset__heading">{{__('field_port_choice')}}</h2>
             </legend>
-            <span id="departureChoice-hint" class="govuk-hint">
-              {{__('field_port_choice_hint')}}
-            </span>
+            <span id="departureChoice-hint" class="govuk-hint">{{__('field_port_choice_hint')}}</span>
             {{ m.error_message('portChoice', errors, __) }}
             <div class="govuk-radios govuk-radios--conditional" data-module="radios">
               <div class="govuk-radios__item">
                 <input id="departureChoicePort" name="portChoice" class="govuk-radios__input"
                   type="radio" value="Yes"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort != 'YYYY'}}
                   data-aria-controls="departurePortContainer" aria-labelledby="departureChoicePort-label">
-                <label id="departureChoicePort-label" class="govuk-label govuk-radios__label" for="departureChoicePort">Yes</label>
+                <label id="departureChoicePort-label" class="govuk-label govuk-radios__label" for="departureChoicePort">{{__('field_choice_yes')}}</label>
               </div>
               <div id="departurePortContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
                 <div class="{{ m.form_group_class('departurePort', errors) }}">
+                  <label id="departurePort-label" class="govuk-label" for="departurePort">{{__('field_port_code')}}</label>
                   {{ m.hint('departurePort', __('field_port_hint')) }}
                   {{ m.error_message('departurePort', errors, __) }}
                   <select id="departurePort" name="departurePort" class="govuk-select" 
@@ -159,11 +156,11 @@
                 <input id="departureChoiceCoordinates" name="portChoice" class="govuk-radios__input"
                 type="radio" value="No"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort == 'YYYY'}}
                 data-aria-controls="departureCoordinatesContainer" aria-labelledby="departureChoiceCoordinates-label">
-                <label id="departureChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="departureChoiceCoordinates">No</label>
+                <label id="departureChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="departureChoiceCoordinates">{{__('field_choice_no')}}</label>
               </div>
               <div id="departureCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
                 <div class="govuk-form-group">
-                  {{ m.hint('departureCoordinates', 'Provide geographic coordinates as latitude and longitude pairs, in decimal format to 4 decimal places.') }}
+                  {{ m.hint('departureCoordinates', __('field_coordinate_hint')) }}
                 </div>
 
                 {# Start departure coords #}
