@@ -93,6 +93,7 @@
     "gar_cancelled_no_records": "There are no cancelled GARs",
     "field_submission_reference": "Submission reference",
     "value_aircraft_registration_null": "TBD",
+    "value_port_code_zzzz": "N/A",
 
     "heading_how_to_create": "How would you like to create a GAR?",
     "how_to_create_caption": "You have the option to create a GAR using our online web form, or by uploading a pre-populated template file. Please select how you would like to create your GAR to proceed.",
