@@ -113,9 +113,11 @@ describe('UserEdit', () => {
 describe('DeleteUser', () => {
   const email = 'someemail@server.com';
 
-  nock(BASE_URL)
-    .delete(`/user/${email}`)
-    .reply(200, { message: 'User deleted' });
+  beforeEach(() => {
+    nock(BASE_URL)
+      .delete(`/user/${email}`)
+      .reply(200, { message: 'User deleted' });
+  });
 
   it('Should successfully delete a user', (done) => {
     userApi.deleteUser(email)

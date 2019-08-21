@@ -14,7 +14,7 @@ const checkUserInSession = (userSessionObject) => {
 };
 
 module.exports = (req, res) => {
-  if (req.headers.referer && req.session.u && checkUserInSession(req.session.u)) {
+  if (req.headers.referer && checkUserInSession(req.session.u)) {
     res.redirect('/home');
     return;
   }

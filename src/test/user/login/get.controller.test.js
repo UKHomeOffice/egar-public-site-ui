@@ -43,6 +43,7 @@ describe('User Login Get Controller', () => {
   it('should render if referer but no user object in session', async () => {
     req.headers.referer = '/example';
     const cookie = new CookieModel(req);
+    delete req.session.u;
     await controller(req, res);
 
     expect(res.redirect).to.not.have.been.called;

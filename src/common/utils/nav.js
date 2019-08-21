@@ -20,7 +20,9 @@ const buildRouterAndPaths = (path, getController, postController) => {
 
   // Routing
   router.get(paths.index, flagpole, usercheck, csrfcheck, getController);
-  router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, postController);
+  if (postController) {
+    router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, postController);
+  }
 
   return { router, paths };
 };
