@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const garApi = require('../../../common/services/garApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
@@ -18,12 +19,10 @@ describe('Arrival Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {
+        portChoice: 'No',
         arrivalPort: 'LHR',
         arrivalLat: '45.1000',
         arrivalLong: '12.1000',
@@ -65,8 +64,27 @@ describe('Arrival Post Controller', () => {
       });
     });
 
-    it('should fail for two letter port code', () => {
-      req.body.arrivalPort = 'no'; // Check this upper cases the port
+    it('should fail validation if no port choice selected', async () => {
+      delete req.body.portChoice;
+
+      const cookie = new CookieModel(req);
+
+      sinon.stub(garApi, 'get').resolves(apiResponse);
+      sinon.stub(garApi, 'patch');
+
+      await controller(req, res);
+
+      expect(garApi.get).to.have.been.called;
+      expect(garApi.patch).to.not.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/arrival/index', {
+        cookie,
+        errors: [new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known')],
+      });
+    });
+
+    it('should fail for empty port code', () => {
+      req.body.portChoice = 'Yes';
+      req.body.arrivalPort = '';
       const cookie = new CookieModel(req);
 
       sinon.stub(garApi, 'get').resolves(apiResponse);
@@ -81,7 +99,7 @@ describe('Arrival Post Controller', () => {
         expect(garApi.patch).to.not.have.been.called;
         expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
           cookie,
-          errors: [new ValidationRule(validator.validPort, 'arrivalPort', 'NO', 'The arrival airport code must be a minimum of 3 letters and a maximum of 4 letters')],
+          errors: [new ValidationRule(validator.notEmpty, 'arrivalPort', '', 'The arrival airport code must be entered')],
         });
       });
     });
@@ -106,45 +124,12 @@ describe('Arrival Post Controller', () => {
           expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
             cookie,
             errors: [
-              // SIC: lattitude instead of latitide
-              new ValidationRule(validator.lattitude, 'arrivalLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
+              new ValidationRule(validator.latitude, 'arrivalLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
               new ValidationRule(validator.longitude, 'arrivalLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
             ],
           });
         });
       });
-
-      // TODO: Technically, if the port is NOT ZZZZ then there should not be a longitude or latitude
-      // which is not actually represented in the code
-      // it('should fail if port is not ZZZZ yet there is longitude and latitude', () => {
-      //   const cookie = new CookieModel(req);
-
-      //   sinon.stub(garApi, 'get').resolves(apiResponse);
-      //   sinon.stub(garApi, 'patch');
-
-      //   const callController = async () => {
-      //     await controller(req, res);
-      //   };
-
-      //   callController().then(() => {
-      //     expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-      //     expect(garApi.patch).to.not.have.been.called;
-      //     expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-      //       cookie,
-      //       errors: [
-      //         // SIC: lattitude instead of latitide
-      // new ValidationRule(
-      //    validator.lattitude,
-      //    'arrivalLat', undefined,
-      //    'Value entered is incorrect. Enter latitude to 4 decimal places'),
-      // new ValidationRule(
-      //    validator.longitude,
-      //    'arrivalLong', undefined,
-      //    'Value entered is incorrect. Enter longitude to 4 decimal places'),
-      //       ],
-      //     });
-      //   });
-      // });
     });
   });
 
@@ -219,7 +204,7 @@ describe('Arrival Post Controller', () => {
         expect(req.body.buttonClicked).to.be.undefined;
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
         expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
-        expect(res.redirect).to.have.been.calledWith('/home');
+        expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
       });
     });
 

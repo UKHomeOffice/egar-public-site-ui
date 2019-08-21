@@ -184,7 +184,7 @@ class Cookie {
   }
 
   setGarArrivalVoyage(voyageObj) {
-    if(!voyageObj.arrivalDate) {
+    if (!voyageObj.arrivalDate) {
       this.session.gar.voyageArrival.arrivalDate = this.generateDate(voyageObj.arrivalDay,
         voyageObj.arrivalMonth, voyageObj.arrivalYear);
 
@@ -207,7 +207,7 @@ class Cookie {
   setGarDepartureVoyage(voyageObj) {
     if (!voyageObj.departureDate) {
       this.session.gar.voyageDeparture.departureDate = this.generateDate(voyageObj.departureDay,
-        voyageObj.departureMonth,voyageObj.departureYear);
+        voyageObj.departureMonth, voyageObj.departureYear);
       this.session.gar.voyageDeparture.departureTime = this.generateTime(voyageObj.departureHour,
         voyageObj.departureMinute);
     } else {
@@ -508,20 +508,7 @@ class Cookie {
   }
 
   /**
-   *
-   */
-  setInviteOrgId(id) {
-    this.session.inv.orgId = id;
-  }
-
-  /**
-   *
-   */
-  getInviteOrgId() {
-    return this.session.inv.orgId;
-  }
-
-  /** Records neccessary login information
+   * Records neccessary login information
    * @param {Object} kcAuth keycloak grant object
    * @param {Object} apiResponse datalayer response object
    * @param {String} userName username of user logging in

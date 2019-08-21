@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const nanoid = require('nanoid/generate');
 
 const logger = require('../../../common/utils/logger')(__filename);
@@ -15,6 +14,7 @@ const config = require('../../../common/config');
 const regFailureError = {
   message: 'Registration failed, try again',
 };
+const userAlreadyRegisteredMsg = 'User already registered';
 
 // Define a validation chain for user registration fields
 const createValidationChains = (fname, lname, usrname, cusrname) => {
@@ -40,7 +40,7 @@ const createValidationChains = (fname, lname, usrname, cusrname) => {
 const createUser = (req, res, cookie) => {
   logger.info('Creating the user in the db');
   // Get form values
-  const usrname = _.toLower(req.body.userId);
+  const usrname = req.body.userId;
   const fname = req.body.userFname;
   const lname = req.body.userLname;
 
@@ -53,13 +53,17 @@ const createUser = (req, res, cookie) => {
     .then((dbUser) => {
       if (Object.prototype.hasOwnProperty.call(JSON.parse(dbUser), 'message')) {
         logger.info('Failed to register user in db');
-        logger.info(`${JSON.parse(dbUser).message}`);
+        const errMessage = `${JSON.parse(dbUser).message}`;
+        logger.info(errMessage);
         cookie.setUserEmail(null);
-        req.session.save(() => { res.redirect('/user/regmsg'); });
+        if (userAlreadyRegisteredMsg === errMessage) {
+          res.render('app/user/register/index', { cookie, errors: [{ message: errMessage }] });
+        } else {
+          req.session.save(() => { res.redirect('/user/regmsg'); });
+        }
         return;
       }
       const { userId } = JSON.parse(dbUser);
-      cookie.setUserDbId(userId);
       logger.info('Calling gov notify service');
 
       sendTokenService.send(fname, usrname, token)
@@ -92,11 +96,6 @@ module.exports = (req, res) => {
   const fname = req.body.userFname;
   const lname = req.body.userLname;
 
-  // Update the cookie
-  cookie.setUserFirstName(fname);
-  cookie.setUserLastName(lname);
-  cookie.setUserEmail(usrname);
-
   const validationChains = createValidationChains(fname, lname, usrname, cusrname);
 
   const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() === 'true');
@@ -104,6 +103,11 @@ module.exports = (req, res) => {
   logger.info('Validating registration input');
   validator.validateChains(validationChains)
     .then(() => {
+      // Update the cookie
+      cookie.setUserFirstName(fname);
+      cookie.setUserLastName(lname);
+      cookie.setUserEmail(usrname);
+
       if (isWhitelistRequired) {
         logger.info('Starting whitelist check');
         whitelist.isWhitelisted(usrname)
@@ -130,9 +134,11 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Failed registration validations');
-      logger.debug(JSON.stringify(err));
       res.render('app/user/register/index', {
         cookie,
+        fname,
+        lname,
+        usrname,
         errors: err,
       });
     });

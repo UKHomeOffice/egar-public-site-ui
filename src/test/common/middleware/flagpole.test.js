@@ -5,6 +5,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const config = require('../../../common/config/index');
 
 const middleware = require('../../../common/middleware/flagpole');
@@ -14,9 +15,6 @@ describe('Flagpole Middleware', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     res = {
       redirect: sinon.spy(),

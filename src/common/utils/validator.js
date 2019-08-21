@@ -207,18 +207,19 @@ function email(value) {
 
 /**
  * Returns true if valid portcode given.
- * Returns false if ZZZZ entered without coords.
+ * Returns false if ZZZZ or YYYY entered without coords.
  * @param {Object} portObj contains keys [portCode, lat, long]
  * @returns {Boolean} true if valid port, false if zzzz without coords
  */
 function validatePortCoords(portObj) {
-  if (portObj.portCode.toUpperCase() === 'ZZZZ') {
+  const portCode = portObj.portCode.toUpperCase();
+  if (portCode === 'ZZZZ' || portCode === 'YYYY') {
     return ((portObj.lat !== '') && (portObj.long !== ''));
   }
   return true;
 }
 
-function lattitude(value) {
+function latitude(value) {
   const regex = /^-?([1-8]?[0-9]\.{1}\d{4}$|90\.{1}0{4}$)/;
   return regex.test(value);
 }
@@ -228,7 +229,7 @@ function longitude(value) {
   return regex.test(value);
 }
 
-// very basic expects + followed by min 5 and max 2 numbers
+// very basic min 5 and max 20 numbers
 function validIntlPhone(value) {
   const regex = /^[0-9]{5,20}$/;
   return regex.test(value);
@@ -401,7 +402,7 @@ module.exports = {
   validFreeCirculation,
   validVisitReason,
   validGender,
-  lattitude,
+  latitude,
   longitude,
   validIntlPhone,
   notSameValues,

@@ -1,0 +1,45 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | View
+{% endblock %}
+
+{% set active = '/home' %}
+
+{% block header %}
+  {% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+  <a href="/home" class="govuk-back-link">{{__('nav_back')}}</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">{{__('title_gar_summary')}}</h1>
+    </div>
+
+    {% include "check-your-answers.njk" %}
+
+    <div class="govuk-grid-column-two-thirds">
+      {% if garfile.status.name === 'Draft' %}
+        <a id="submit-gar" class="govuk-button" href="/garfile/review">{{__('button_submit_this_gar')}}</a>
+      {% endif %}
+      {% if garfile.status.name !== 'Cancelled' %}
+        <p class="govuk-body-m">
+          <a id="cancel-gar" href="/garfile/cancel">
+            <button class="govuk-button" id="cancel-gar" type="submit">{{__('title_cancel_gar')}}</button>
+          </a>
+        </p>
+      {% endif %}
+      <p class="govuk-body-m">
+        <a id='exit-view' class="govuk-button govuk-button--secondary" href="/home" >{{__('form_exit')}}</a>
+      </p>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </div>
+  </div>
+{% endblock %}

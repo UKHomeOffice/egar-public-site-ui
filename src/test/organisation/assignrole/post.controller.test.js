@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
@@ -13,6 +14,7 @@ const tokenService = require('../../../common/services/create-token');
 const tokenApi = require('../../../common/services/tokenApi');
 const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config/index');
+const roles = require('../../../common/seeddata/egar_user_roles.json');
 
 const controller = require('../../../app/organisation/assignrole/post.controller');
 
@@ -22,9 +24,6 @@ describe('Organisation Assign Role Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {
@@ -63,8 +62,9 @@ describe('Organisation Assign Role Post Controller', () => {
       expect(tokenApiStub).to.not.have.been.called;
       expect(emailServiceStub).to.not.have.been.called;
       expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
         cookie,
+        roles,
         errors: [
           new ValidationRule(validator.notEmpty, 'role', '', 'Select a role'),
         ],
@@ -85,8 +85,9 @@ describe('Organisation Assign Role Post Controller', () => {
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('ExampleGeneratedHash', 'USER-DB-ID-1', 'ORG-ID-1', 'SuperUser');
       expect(emailServiceStub).to.not.have.been.called;
       expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
         cookie,
+        roles,
         errors: [{ message: 'tokenApi.generateHash Example Reject' }],
       });
     });
@@ -106,8 +107,9 @@ describe('Organisation Assign Role Post Controller', () => {
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('ExampleGeneratedHash', 'USER-DB-ID-1', 'ORG-ID-1', 'SuperUser');
       expect(emailServiceStub).to.not.have.been.called;
       expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
         cookie,
+        roles,
         errors: [{ message: 'User ID not found' }],
       });
     });
@@ -136,9 +138,10 @@ describe('Organisation Assign Role Post Controller', () => {
         token: generatedToken,
       });
       expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
         cookie,
-        errors: [{ message: 'emailService.send Example Reject' }],
+        roles,
+        errors: [{ message: 'Could not send an invitation email, try again later.' }],
       });
     });
   });

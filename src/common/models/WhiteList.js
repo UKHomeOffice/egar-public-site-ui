@@ -15,6 +15,5 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'WhiteList',
   });
 
-  WhiteList.schema('public');
   return WhiteList;
 };

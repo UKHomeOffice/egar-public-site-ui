@@ -5,6 +5,8 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../global.test');
+
 const controller = require('../../app/welcome/get.controller');
 
 describe('Welcome Get Controller', () => {
@@ -12,9 +14,6 @@ describe('Welcome Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {};
     res = {

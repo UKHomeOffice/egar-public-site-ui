@@ -18,6 +18,9 @@ module.exports = (req, res) => {
     .then((apiResponse) => {
       const orgUsers = JSON.parse(apiResponse).items;
       const orgUser = orgUsers.find(user => user.userId === userId);
+      if (orgUser !== undefined) {
+        orgUser.role = orgUser.role.name;
+      }
       return res.render('app/organisation/editusers/index', { cookie, orgUser, roles });
     })
     .catch((err) => {

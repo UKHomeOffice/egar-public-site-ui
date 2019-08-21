@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const logger = require('../../../../common/utils/logger')(__filename);
 const validator = require('../../../../common/utils/validator');
 const CookieModel = require('../../../../common/models/Cookie.class');
@@ -6,7 +8,6 @@ const documenttype = require('../../../../common/seeddata/egar_saved_people_trav
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
 const validations = require('../../../people/validations');
-const _ = require('lodash')
 
 module.exports = (req, res) => {
   logger.debug('In Manifest/Edit Person post controller');
@@ -17,16 +18,16 @@ module.exports = (req, res) => {
   const expiryDate = `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`;
 
   const person = {
-    firstName: req.body['first-name'],
-    lastName: req.body['last-name'],
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     gender: req.body.gender,
     dateOfBirth: birthdate,
     placeOfBirth: req.body.birthplace,
     nationality: _.toUpper(req.body.nationality),
-    peopleType: req.body['person-type'],
-    documentNumber: req.body['travel-document-number'],
-    documentType: req.body['travel-document-type'],
-    issuingState: _.toUpper(req.body['issuing-state']),
+    peopleType: req.body.personType,
+    documentNumber: req.body.travelDocumentNumber,
+    documentType: req.body.travelDocumentType,
+    issuingState: _.toUpper(req.body.issuingState),
     documentExpiryDate: expiryDate,
     garPeopleId: req.body.garPeopleId,
   };
@@ -48,7 +49,7 @@ module.exports = (req, res) => {
         .catch((err) => {
           logger.error(err);
           res.render('app/garfile/manifest/editperson/index', {
-            req, cookie, person, persontype, documenttype, genderchoice, errors: [errMsg], 
+            req, cookie, person, persontype, documenttype, genderchoice, errors: [errMsg],
           });
         });
     })

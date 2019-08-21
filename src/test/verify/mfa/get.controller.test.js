@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
 const tokenApi = require('../../../common/services/tokenApi');
@@ -19,9 +20,6 @@ describe('Verify MFA Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       session: {

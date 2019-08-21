@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const garApi = require('../../../common/services/garApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const emailService = require('../../../common/services/sendEmail');
@@ -23,9 +24,6 @@ describe('GAR Customs Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {
@@ -78,6 +76,66 @@ describe('GAR Customs Post Controller', () => {
         },
         errors: [
           new ValidationRule(validator.notEmpty, 'visitReason', '', 'Select a reason for visit'),
+        ],
+      });
+    });
+  });
+
+  it('should render with validation message if customs declaration is "Yes" and declaration details is empty string', () => {
+    req.body.prohibitedGoods = 'Yes';
+    req.body.goodsDeclaration = '          ';
+    const cookie = new CookieModel(req);
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApiPatchStub).to.not.have.been.called;
+      expect(res.redirect).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
+        freeCirculationOptions,
+        reasonForVisitOptions,
+        prohibitedGoodsOptions,
+        cookie,
+        gar: {
+          prohibitedGoods: 'Yes',
+          goodsDeclaration: '',
+          freeCirculation: 0,
+          visitReason: 2,
+        },
+        errors: [
+          new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
+        ],
+      });
+    });
+  });
+
+  it('should render with validation message if customs declaration is "Yes" and declaration details is undefined', () => {
+    req.body.prohibitedGoods = 'Yes';
+    delete req.body.goodsDeclaration;
+    const cookie = new CookieModel(req);
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApiPatchStub).to.not.have.been.called;
+      expect(res.redirect).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
+        freeCirculationOptions,
+        reasonForVisitOptions,
+        prohibitedGoodsOptions,
+        cookie,
+        gar: {
+          prohibitedGoods: 'Yes',
+          goodsDeclaration: '',
+          freeCirculation: 0,
+          visitReason: 2,
+        },
+        errors: [
+          new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
         ],
       });
     });
@@ -162,7 +220,7 @@ describe('GAR Customs Post Controller', () => {
         freeCirculation: 0,
         visitReason: 2,
       });
-      expect(res.redirect).to.have.been.calledWith('/home');
+      expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
     });
   });
 
@@ -221,6 +279,49 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         prohibitedGoods: 'adFnjKekNnveAiej1324mk',
         goodsDeclaration: '',
+        freeCirculation: 0,
+        visitReason: 2,
+      });
+      expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
+    });
+  });
+
+  it('should set goodsDeclaration=empty string if prohibitedGoods=No', () => {
+    req.body.buttonClicked = 'Save and continue';
+    req.body.prohibitedGoods = 'No';
+    req.body.goodsDeclaration = 'adFnjKekNnveAiej1324mk';
+    garApiPatchStub.resolves(JSON.stringify({}));
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(req.body.buttonClicked).to.eq('Save and continue');
+      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
+        prohibitedGoods: 'No',
+        goodsDeclaration: '',
+        freeCirculation: 0,
+        visitReason: 2,
+      });
+      expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
+    });
+  });
+
+  it('should trim white spaces for goodsDeclaration', () => {
+    req.body.buttonClicked = 'Save and continue';
+    req.body.prohibitedGoods = 'Yes';
+    req.body.goodsDeclaration = '      a      ';
+    garApiPatchStub.resolves(JSON.stringify({}));
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
+        prohibitedGoods: 'Yes',
+        goodsDeclaration: 'a',
         freeCirculation: 0,
         visitReason: 2,
       });

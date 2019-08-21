@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const FunctionType = sequelize.define('User', {
+  const UserModel = sequelize.define('User', {
 
     Id: {
       type: DataTypes.UUID,
@@ -27,6 +27,6 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'user', // this will define the table's name
     timestamps: false, // this will deactivate the timestamp columns
   });
-  FunctionType.schema('public');
-  return FunctionType;
+
+  return UserModel;
 };

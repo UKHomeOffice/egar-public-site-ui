@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('./validations');
 const validator = require('../../../common/utils/validator');
@@ -9,6 +11,8 @@ const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_f
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
+
+  req.body.goodsDeclaration = _.trim(req.body.goodsDeclaration);
 
   const customs = {
     prohibitedGoods: req.body.prohibitedGoods,
@@ -40,7 +44,7 @@ module.exports = (req, res) => {
           if (buttonClicked === 'Save and continue') {
             res.redirect('/garfile/supportingdocuments');
           } else {
-            res.redirect('/home');
+            res.redirect(307, '/garfile/view');
           }
         })
         .catch((err) => {
@@ -53,7 +57,7 @@ module.exports = (req, res) => {
     .catch((validationErrs) => {
       logger.debug('Failed validations submitting declarations');
       context.errors = validationErrs;
-      logger.debug(JSON.stringify(validationErrs));
+      logger.info(JSON.stringify(validationErrs));
       res.render('app/garfile/customs/index', context);
     });
 };

@@ -3,6 +3,8 @@
 
 const { expect } = require('chai');
 const nock = require('nock');
+
+require('./global.test');
 const personApi = require('../common/services/personApi');
 const endpoints = require('../common/config/endpoints');
 

@@ -5,6 +5,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 
@@ -15,9 +16,6 @@ describe('Departure Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {
@@ -60,6 +58,30 @@ describe('Departure Get Controller', () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('12345');
     cookie.setGarDepartureVoyage(apiResponse);
+    sinon.stub(garApi, 'get').resolves(apiResponse);
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApi.get).to.have.been.calledWith('12345');
+      expect(res.render).to.have.been.calledWith('app/garfile/departure/index', { cookie });
+    });
+  });
+
+  it('should set cookie values on response, changing if port is ZZZZ', async () => {
+    apiResponse = JSON.stringify({
+      departureDate: '2012-30-05',
+      departureTime: '15:00',
+      departurePort: 'ZZZZ',
+      departureLong: '12.4000',
+      departureLat: '-4.1234',
+    });
+    const cookie = new CookieModel(req);
+    cookie.setGarId('12345');
+    cookie.setGarDepartureVoyage(apiResponse);
+    cookie.session.gar.voyageDeparture.departurePort = 'YYYY';
     sinon.stub(garApi, 'get').resolves(apiResponse);
 
     const callController = async () => {

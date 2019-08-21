@@ -5,6 +5,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const roles = require('../../../common/seeddata/egar_user_roles.json');
 const CookieModel = require('../../../common/models/Cookie.class');
 
@@ -15,9 +16,6 @@ describe('Organisation Assign Role Get Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       session: {},

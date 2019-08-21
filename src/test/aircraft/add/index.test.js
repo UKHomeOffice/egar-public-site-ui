@@ -3,6 +3,7 @@
 
 const { expect } = require('chai');
 
+require('../../global.test');
 const index = require('../../../app/aircraft/add/index');
 
 describe('Aircraft index.js', () => {

@@ -1,3 +1,7 @@
+/* eslint-disable no-underscore-dangle */
+
+const i18n = require('i18n');
+
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const { MAX_STRING_LENGTH } = require('../../../common/config/index');
@@ -23,7 +27,7 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.isValidStringLength, 'responsibleSurname', responsibleSurname, `Surname must be ${MAX_STRING_LENGTH} characters or less`),
     ],
     [
-      new ValidationRule(validator.validIntlPhone, 'responsibleContactNo', responsibleContactNo, 'Enter a telephone number with international dialling code with no symbols'),
+      new ValidationRule(validator.validIntlPhone, 'responsibleContactNo', responsibleContactNo, i18n.__('validator_contact_number')),
     ],
     [
       new ValidationRule(validator.notEmpty, 'responsibleAddressLine1', responsibleAddressLine1, 'Enter address line 1 of the responsible person'),

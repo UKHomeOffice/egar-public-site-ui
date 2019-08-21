@@ -8,6 +8,7 @@ const sinonChai = require('sinon-chai');
 const i18n = require('i18n');
 const XLSX = require('xlsx');
 
+require('../../global.test');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const createGarApi = require('../../../common/services/createGarApi.js');
@@ -19,10 +20,6 @@ const { getInvalidWorkbook, getValidWorkbook } = require('./workbook-data');
 describe('API upload GAR post controller', () => {
   let req; let res;
   let incorrectWorkbook;
-
-  process.on('unhandledRejection', (error) => {
-    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-  });
 
   beforeEach(() => {
     chai.use(sinonChai);

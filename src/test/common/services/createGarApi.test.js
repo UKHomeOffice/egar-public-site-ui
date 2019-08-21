@@ -7,6 +7,8 @@ const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
 const { URL } = require('url');
 
+require('../../global.test');
+
 const config = require('../../../common/config/index');
 
 describe('Create GAR API Service', () => {
@@ -15,9 +17,6 @@ describe('Create GAR API Service', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
   });
 
   afterEach(() => {

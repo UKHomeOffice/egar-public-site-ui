@@ -6,22 +6,21 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const craftApi = require('../../../common/services/craftApi');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
+const pagination = require('../../../common/utils/pagination');
 
 const controller = require('../../../app/garfile/craft/post.controller');
 
 describe('GAR Craft Post Controller', () => {
-  let req; let res;
+  let req; let res; let paginationStub; let saveSessionStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {
@@ -33,22 +32,41 @@ describe('GAR Craft Post Controller', () => {
         gar: { id: 'GAR1-ID', status: 'Draft', craft: {} },
         u: { dbId: 'USER1-ID' },
         cookie: {},
+        save: callback => callback(),
       },
     };
     res = {
       redirect: sinon.stub(),
       render: sinon.stub(),
     };
+    paginationStub = sinon.stub(pagination, 'setCurrentPage');
+    saveSessionStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
   afterEach(() => {
     sinon.restore();
   });
 
+  it('should redirect if nextPage found', () => {
+    req.body.nextPage = 6;
+
+    callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(paginationStub).to.have.been.called;
+      expect(saveSessionStub).to.have.been.called;
+    }).then(() => {
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/craft#saved_aircraft');
+    });
+  });
+
   describe('add craft', () => {
     let craftApiStub;
 
     beforeEach(() => {
+      req.body.buttonClicked = 'Add to GAR';
       req.body.addCraft = 'ExampleCraft';
       craftApiStub = sinon.stub(craftApi, 'getDetails');
     });
@@ -174,6 +192,26 @@ describe('GAR Craft Post Controller', () => {
         expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
       });
     });
+
+    it('should go to the manifest screen if save and continue is buttonClicked even if addCraft is set', () => {
+      req.body.addCraft = 'ExampleCraft';
+      req.body.buttonClicked = 'Save and continue';
+      cookie = new CookieModel(req);
+      garApiPatchStub.resolves(JSON.stringify({}));
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then().then(() => {
+        expect(garApiPatchStub).to.have.been.calledWith('GAR1-ID', 'Draft', {
+          registration: 'G-ABCD',
+          craftType: 'Gulfstream',
+          craftBase: 'LHR',
+        });
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+      });
+    });
     // success button clicked save and continue
     it('should go to the dashboard if buttonClicked is not set', () => {
       cookie = new CookieModel(req);
@@ -189,9 +227,8 @@ describe('GAR Craft Post Controller', () => {
           craftType: 'Gulfstream',
           craftBase: 'LHR',
         });
-        expect(res.redirect).to.have.been.calledWith('/home');
+        expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
       });
     });
-    // success redirect home
   });
 });

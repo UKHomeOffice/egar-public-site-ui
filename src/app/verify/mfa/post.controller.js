@@ -1,3 +1,7 @@
+/* eslint-disable no-underscore-dangle */
+
+const i18n = require('i18n');
+
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -8,29 +12,31 @@ const settings = require('../../../common/config/index');
 
 module.exports = (req, res) => {
   logger.debug('In verify / mfa post controller');
-  const token = req.body['mfa-authentication-code'];
+  const { mfaCode } = req.body;
 
   const mfaCodeChain = [
-    new ValidationRule(validator.notEmpty, 'mfa-authentication-code', token, 'Enter your code'),
+    new ValidationRule(validator.notEmpty, 'mfaCode', mfaCode, 'Enter your code'),
   ];
 
   const cookie = new CookieModel(req);
 
   const mfaTokenLength = settings.MFA_TOKEN_LENGTH;
-  const errMsg = { message: 'There was a problem verifying your token. Try again' };
+  const errMsg = { identifier: 'mfaCode', message: i18n.__('validator_authentication_error') };
 
   validator.validateChains([mfaCodeChain])
     .then(() => {
-      tokenApi.validateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
+      tokenApi.validateMfaToken(cookie.getUserEmail(), parseInt(mfaCode, 10))
         .then(() => {
-          tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(token, 10))
+          tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(mfaCode, 10))
             .then(() => {
               userApi.getDetails(cookie.getUserEmail())
                 .then((apiResponse) => {
                   const parsedResponse = JSON.parse(apiResponse);
                   logger.debug(`Response from userApi.getDetails: ${apiResponse}`);
                   cookie.setLoginInfo(parsedResponse);
-                  res.redirect('/home');
+                  req.session.save(() => {
+                    res.redirect('/home');
+                  });
                 })
                 .catch((err) => {
                   logger.error(err);

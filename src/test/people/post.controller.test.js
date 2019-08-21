@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../global.test');
 const controller = require('../../app/people/post.controller');
 
 describe('People Post Controller', () => {
@@ -13,9 +14,6 @@ describe('People Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {},

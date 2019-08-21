@@ -7,23 +7,19 @@
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-
   {% include "phase.njk" %}
   {% include "common/templates/includes/back.njk" %}
-
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
+
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
 
@@ -36,6 +32,6 @@
     </div>
   </div>
 
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
 {% endblock %}

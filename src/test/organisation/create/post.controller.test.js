@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
@@ -18,13 +19,10 @@ describe('Organisation Create Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {
-        Orgname: 'New Evil Empire',
+        orgName: 'New Evil Empire',
       },
       session: {
         u: { dbId: 'USER-DB-ID-1' },
@@ -43,7 +41,7 @@ describe('Organisation Create Post Controller', () => {
   });
 
   it('should render message when name empty', () => {
-    req.body.Orgname = '';
+    req.body.orgName = '';
     cookie = new CookieModel(req);
 
     const callController = async () => {
@@ -58,7 +56,7 @@ describe('Organisation Create Post Controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
         cookie,
         errors: [
-          new ValidationRule(validator.notEmpty, 'Orgname', '', 'Enter the name of the organisation'),
+          new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation'),
         ],
       });
     });

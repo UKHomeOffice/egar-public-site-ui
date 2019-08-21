@@ -4,20 +4,28 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const craftApi = require('../../../common/services/craftApi');
 const validationList = require('./validations');
+const pagination = require('../../../common/utils/pagination');
 
 module.exports = (req, res) => {
   logger.debug('In garfile / craft post controller');
 
+  const { buttonClicked } = req.body;
   const cookie = new CookieModel(req);
   const userId = cookie.getUserDbId();
 
-  if (req.body.addCraft) {
+  if (req.body.nextPage) {
+    pagination.setCurrentPage(req, '/garfile/craft', req.body.nextPage);
+    req.session.save(() => res.redirect('/garfile/craft#saved_aircraft'));
+    return;
+  }
+
+  if (req.body.addCraft && buttonClicked === 'Add to GAR') {
     craftApi.getDetails(userId, req.body.addCraft)
       .then((apiResponse) => {
         const craft = JSON.parse(apiResponse);
         // Overwrite GAR craft info if a user has clicked on a craft
         cookie.setGarCraft(craft.registration, craft.craftType, craft.craftBase);
-        res.redirect('/garfile/craft');
+        req.session.save(() => res.redirect('/garfile/craft'));
       })
       .catch((err) => {
         logger.error(err);
@@ -29,8 +37,6 @@ module.exports = (req, res) => {
       craftType: req.body.craftType,
       craftBase: req.body.craftBase,
     };
-
-    const { buttonClicked } = req.body;
 
     cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase);
 
@@ -52,7 +58,7 @@ module.exports = (req, res) => {
             if (buttonClicked === 'Save and continue') {
               res.redirect('/garfile/manifest');
             } else {
-              res.redirect('/home');
+              res.redirect(307, '/garfile/view');
             }
           })
           .catch((err) => {

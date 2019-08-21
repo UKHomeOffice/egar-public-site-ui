@@ -6,6 +6,8 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
+
 const controller = require('../../../app/user/viewDetails/post.controller');
 
 describe('User View Details Post Controller', () => {
@@ -13,9 +15,6 @@ describe('User View Details Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     res = {
       redirect: sinon.stub(),

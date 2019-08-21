@@ -3,6 +3,8 @@
 
 const { expect } = require('chai');
 
+require('../../global.test');
+
 const index = require('../../../app/garfile/departure/index');
 
 describe('Departure index.js', () => {

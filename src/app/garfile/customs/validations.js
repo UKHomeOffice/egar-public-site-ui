@@ -10,7 +10,7 @@ module.exports.validations = (req) => {
     visitReason,
   } = req.body;
 
-  return [
+  const validations = [
     [
       new ValidationRule(validator.notEmpty, 'prohibitedGoods', prohibitedGoods, 'Select a value for customs declaration'),
     ],
@@ -24,4 +24,10 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.notEmpty, 'visitReason', visitReason, 'Select a reason for visit'),
     ],
   ];
+
+  if (prohibitedGoods === 'Yes') {
+    validations[1].push(new ValidationRule(validator.notEmpty, 'goodsDeclaration', goodsDeclaration, 'Please enter customs declaration details'));
+  }
+
+  return validations;
 };

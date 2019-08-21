@@ -4,6 +4,8 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
+require('./global.test');
+
 const validator = require('../common/utils/validator');
 
 function genPortObj(portCode, lat, long) {
@@ -221,6 +223,14 @@ describe('Validator', () => {
     expect(validator.validatePortCoords(genPortObj('ZZZZ', '', ''))).to.be.false;
   });
 
+  it('Should return false when a YYYY is entered as a port without lat and long coords', () => {
+    expect(validator.validatePortCoords(genPortObj('YYYY', '', ''))).to.be.false;
+  });
+
+  it('Should return true when YYYY is entered as a port alongside lat and long coords', () => {
+    expect(validator.validatePortCoords(genPortObj('YYYY', '28.120439', '-7.077516'))).to.be.true;
+  });
+
   it('Should validate a 3 char length ISO country code', () => {
     expect(validator.validISOCountryLength('ZAF')).to.be.true;
     expect(validator.validISOCountryLength('')).to.be.false;
@@ -285,22 +295,22 @@ describe('Validator', () => {
   });
 
   // Latitude tests
-  it('Should return true for a valid lattitude - 4 dp', () => {
-    expect(validator.lattitude('51.9576')).to.be.true;
-    expect(validator.lattitude('1.9576')).to.be.true;
-    expect(validator.lattitude('-51.9576')).to.be.true;
-    expect(validator.lattitude('90.0000')).to.be.true;
-    expect(validator.lattitude('-90.0000')).to.be.true;
+  it('Should return true for a valid latitude - 4 dp', () => {
+    expect(validator.latitude('51.9576')).to.be.true;
+    expect(validator.latitude('1.9576')).to.be.true;
+    expect(validator.latitude('-51.9576')).to.be.true;
+    expect(validator.latitude('90.0000')).to.be.true;
+    expect(validator.latitude('-90.0000')).to.be.true;
   });
 
-  it('Should return false for an invalid lattitude - 4 dp', () => {
-    expect(validator.lattitude('51.95377')).to.be.false;
-    expect(validator.lattitude('51.953')).to.be.false;
-    expect(validator.lattitude('51.95')).to.be.false;
-    expect(validator.lattitude('51.9')).to.be.false;
-    expect(validator.lattitude('51')).to.be.false;
-    expect(validator.lattitude('90.0001')).to.be.false;
-    expect(validator.lattitude('-90.0001')).to.be.false;
+  it('Should return false for an invalid latitude - 4 dp', () => {
+    expect(validator.latitude('51.95377')).to.be.false;
+    expect(validator.latitude('51.953')).to.be.false;
+    expect(validator.latitude('51.95')).to.be.false;
+    expect(validator.latitude('51.9')).to.be.false;
+    expect(validator.latitude('51')).to.be.false;
+    expect(validator.latitude('90.0001')).to.be.false;
+    expect(validator.latitude('-90.0001')).to.be.false;
   });
 
   // Longitude tests

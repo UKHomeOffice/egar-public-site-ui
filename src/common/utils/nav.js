@@ -25,6 +25,21 @@ const buildRouterAndPaths = (path, getController, postController) => {
   return { router, paths };
 };
 
+const buildRouterAndPathsNoUserCheck = (path, getController, postController) => {
+  // Initialisation
+  const router = new express.Router();
+  const indexPath = path;
+  const paths = {
+    index: indexPath,
+  };
+
+  // Routing
+  router.get(paths.index, flagpole, csrfcheck, getController);
+  router.post(paths.index, flagpole, parseForm, csrfcheck, postController);
+
+  return { router, paths };
+};
+
 /**
  * Some pages just simply create a Cookie instance of the request and render
  * the response for the given page. So this is a convenience method to perform
@@ -42,3 +57,4 @@ const simpleGetRender = (req, res, page) => {
 
 exports.simpleGetRender = simpleGetRender;
 exports.buildRouterAndPaths = buildRouterAndPaths;
+exports.buildRouterAndPathsNoUserCheck = buildRouterAndPathsNoUserCheck;

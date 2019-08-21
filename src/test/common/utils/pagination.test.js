@@ -7,13 +7,12 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const rewire = require('rewire');
 
+require('../../global.test');
+
 const pagination = require('../../../common/utils/pagination');
 
 describe('Pagination Module', () => {
   let req; let saveSessionStub;
-  process.on('unhandledRejection', (error) => {
-    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-  });
 
   beforeEach(() => {
     chai.use(sinonChai);

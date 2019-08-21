@@ -4,6 +4,8 @@
 const { expect } = require('chai');
 const nock = require('nock');
 
+require('./global.test');
+
 const endpoints = require('../common/config/endpoints');
 const craftApi = require('../common/services/craftApi');
 
@@ -44,7 +46,7 @@ describe('CraftService', () => {
       .reply(200, {});
 
     nock(BASE_URL)
-      .get(`/organisations/${orgId}/crafts`)
+      .get(`/organisations/${orgId}/crafts?per_page=5&page=1`)
       .reply(200, {});
 
     nock(BASE_URL)
@@ -101,7 +103,7 @@ describe('CraftService', () => {
   });
 
   it('Should successfully list all crafts an org user is able to see', (done) => {
-    craftApi.getOrgCrafts(orgId)
+    craftApi.getOrgCrafts(orgId, 1)
       .then((response) => {
         const responseObj = JSON.parse(response);
         expect(typeof responseObj).to.equal('object');

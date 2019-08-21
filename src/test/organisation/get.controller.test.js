@@ -6,19 +6,17 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
 const orgApi = require('../../common/services/organisationApi');
 
 const controller = require('../../app/organisation/get.controller');
 
-describe('Organisation Post Controller', () => {
+describe('Organisation Get Controller', () => {
   let req; let res; let orgApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       body: {},

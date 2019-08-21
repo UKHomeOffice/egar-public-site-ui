@@ -3,6 +3,8 @@
 
 const { expect } = require('chai');
 
+require('../../global.test');
+
 const templateFilters = require('../../../common/utils/templateFilters');
 
 // TODO: Uncamcelcase should frankly just use a library to perform the operation
@@ -15,6 +17,35 @@ describe('Template Filters Utility', () => {
     it('should uncamelcase', () => {
       expect(templateFilters.uncamelCase('GetOranges')).to.eq('Get oranges');
       expect(templateFilters.uncamelCase('ShortTermVisit')).to.eq('Short term visit');
+    });
+  });
+  describe('containsError', () => {
+    let exampleArray;
+
+    beforeEach(() => {
+      exampleArray = [
+        { identifier: 'firstName', error: 'Not important' },
+        { identifier: 'surname', error: 'Does not matter' },
+      ];
+    });
+
+    it('should return false if array is undefined', () => {
+      expect(templateFilters.containsError(undefined, undefined)).to.be.false;
+    });
+
+    it('should return false if parameter is undefined', () => {
+      expect(templateFilters.containsError([], undefined)).to.be.false;
+      expect(templateFilters.containsError(exampleArray, undefined)).to.be.false;
+    });
+
+    it('should return false if not found', () => {
+      expect(templateFilters.containsError(exampleArray, 'oranges')).to.be.false;
+      expect(templateFilters.containsError(exampleArray, 'firstname')).to.be.false;
+    });
+
+    it('should return true if found', () => {
+      expect(templateFilters.containsError(exampleArray, 'firstName')).to.be.true;
+      expect(templateFilters.containsError(exampleArray, 'surname')).to.be.true;
     });
   });
 });

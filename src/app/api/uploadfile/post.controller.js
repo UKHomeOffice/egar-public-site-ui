@@ -78,17 +78,20 @@ module.exports = (req, res) => {
         return;
       }
       logger.info('Valid mimetype, proceeding');
-      // TODO: This does not look like any useful use of Readable!
+
+      logger.debug('About to create a Stream of the file buffer');
       const readStream = new stream.Readable();
       readStream.push(req.file.buffer);
       readStream.push(null);
+      logger.debug('Stream created, about to send to AV scan endpoint');
+
       const uriString = `${process.env.CLAMAV_BASE}:${process.env.CLAMAV_PORT}/scan`;
       logger.debug(`uri: ${uriString}`);
 
       const formData = {
         name: req.file.originalname,
         file: {
-          value: req.file.buffer, // Upload the  file in the multi-part post
+          value: req.file.buffer, // Upload the file in the multi-part post
           options: {
             filename: req.file.originalname,
           },

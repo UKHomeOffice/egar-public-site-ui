@@ -2,7 +2,6 @@ const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const userattributes = require('../../../common/seeddata/egar_user_account_details.json');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
 const createGarApi = require('../../../common/services/createGarApi.js');
 
@@ -31,21 +30,22 @@ module.exports = (req, res) => {
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             // API returned error
             res.render('app/garfile/home/index', {
-              cookie, userattributes, garoptions, errors: [parsedResponse],
+              cookie, garoptions, errors: [parsedResponse],
             });
             return;
           }
           // Success
           cookie.setGarId(parsedResponse.garId);
           cookie.setGarStatus(garStatus);
-          res.redirect('/garfile/departure');
+          req.session.save(() => {
+            res.redirect('/garfile/departure');
+          });
         })
         .catch((err) => {
           logger.error('Failed to create GAR');
           logger.error(err);
           res.render('app/garfile/home/index', {
             cookie,
-            userattributes,
             garoptions,
           });
         });
@@ -55,7 +55,6 @@ module.exports = (req, res) => {
       logger.debug(err);
       res.render('app/garfile/home/index', {
         cookie,
-        userattributes,
         garoptions,
         errors: err,
       });

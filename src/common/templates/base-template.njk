@@ -14,7 +14,8 @@
     <meta name="theme-color" content="{{ themeColor | default('#0b0c0c') }}" /> {# Hardcoded value of $govuk-black #}
     {# Ensure that older IE versions always render with the correct rendering engine #}
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+    {# Stack overflow suggests this might help for Edge and issues with empty referer #}
+    <meta name="referrer" content="origin-when-cross-origin" />
 
   <link href="/stylesheets/application.min.css" rel="stylesheet" />
   <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet"/>
@@ -126,11 +127,19 @@
           randomizeInputName: true,
         }
       );
-      $("input[value='Save and continue'][type='button']").click(function(eventObj) {
+      $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function(eventObj) {
         $("<input />")
           .attr("type", "hidden")
           .attr("name", "buttonClicked")
-          .attr("value", "Save and continue")
+          .attr("value", "{{__('form_save_and_continue')}}")
+          .appendTo("#page-form");
+        return true;
+      });
+      $("input[value='{{__('button_add_to_gar')}}'][type='button']").click(function(eventObj) {
+        $("<input />")
+          .attr("type", "hidden")
+          .attr("name", "buttonClicked")
+          .attr("value", "{{__('button_add_to_gar')}}")
           .appendTo("#page-form");
         return true;
       });

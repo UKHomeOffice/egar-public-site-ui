@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
 const tokenApi = require('../../../common/services/tokenApi');
@@ -15,22 +16,20 @@ const settings = require('../../../common/config/index');
 const controller = require('../../../app/verify/mfa/post.controller');
 
 describe('Verify MFA Post Controller', () => {
-  let req; let res;
+  let req; let res; let sessionSaveStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       session: {
         u: {
           e: 'example@somewhere.com',
         },
+        save: callback => callback(),
       },
       body: {
-        'mfa-authentication-code': 123456,
+        mfaCode: 123456,
       },
     };
 
@@ -40,6 +39,7 @@ describe('Verify MFA Post Controller', () => {
     };
 
     sinon.stub(tokenService, 'generateHash').returns('Token123');
+    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
   afterEach(() => {
@@ -50,7 +50,7 @@ describe('Verify MFA Post Controller', () => {
     const emptyReq = {
       session: {},
       body: {
-        'mfa-authentication-code': '',
+        mfaCode: '',
       },
     };
     sinon.stub(tokenApi, 'validateMfaToken');
@@ -64,8 +64,9 @@ describe('Verify MFA Post Controller', () => {
     } catch (err) {
       expect(tokenApi.validateMfaToken).to.not.have.been.called;
       expect(tokenApi.updateMfaToken).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWithExactly('app/verify/mfa/index', {
-        cookie, mfaTokenLength: 20, errors: [{ identifier: 'mfa-authentication-code', value: '', message: 'Enter your code' }],
+      expect(sessionSaveStub).to.not.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactlyExactly('app/verify/mfa/index', {
+        cookie, mfaTokenLength: 20, errors: [{ identifier: 'mfaCode', value: '', message: 'Enter your code' }],
       });
     }
   });
@@ -83,14 +84,15 @@ describe('Verify MFA Post Controller', () => {
     };
 
     callController().then(() => {
-      expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
+      expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
       expect(tokenApi.updateMfaToken).to.not.have.been.called;
       expect(res.render).to.not.have.been.called;
     }).then(() => {
-      expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
+      expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
       expect(tokenApi.updateMfaToken).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/verify/mfa/index', {
-        cookie, mfaTokenLength: 20, errors: [{ message: 'There was a problem verifying your token. Try again' }],
+      expect(sessionSaveStub).to.not.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/verify/mfa/index', {
+        cookie, mfaTokenLength: 20, errors: [{ identifier: 'mfaCode', message: 'There was a problem verifying your token. Try again.' }],
       });
     });
   });
@@ -109,10 +111,11 @@ describe('Verify MFA Post Controller', () => {
       };
 
       callController().then().then().then(() => {
-        expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
+        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
         expect(tokenApi.updateMfaToken).to.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/verify/mfa/index', {
-          cookie, mfaTokenLength: 20, errors: [{ message: 'There was a problem verifying your token. Try again' }],
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/verify/mfa/index', {
+          cookie, mfaTokenLength: 20, errors: [{ identifier: 'mfaCode', message: 'There was a problem verifying your token. Try again.' }],
         });
       });
     });
@@ -133,27 +136,28 @@ describe('Verify MFA Post Controller', () => {
       // Mystery here is why the second and third block have the same
       // assertions. It could be the nested catches perhaps in the code
       callController().then(() => {
-        expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
+        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
         expect(tokenApi.updateMfaToken).to.have.been.called;
         expect(userApi.getDetails).to.not.have.been.called;
         expect(res.render).to.not.have.been.called;
       }).then(() => {
-        expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
+        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
         expect(tokenApi.updateMfaToken).to.have.been.called;
         expect(userApi.getDetails).to.have.been.called;
         expect(res.render).to.not.have.been.called;
       }).then(() => {
-        expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
+        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
         expect(tokenApi.updateMfaToken).to.have.been.called;
         expect(userApi.getDetails).to.have.been.called;
         expect(res.render).to.not.have.been.called;
       })
         .then(() => {
-          expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
+          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
           expect(tokenApi.updateMfaToken).to.have.been.called;
           expect(userApi.getDetails).to.have.been.called;
-          expect(res.render).to.have.been.calledWith('app/verify/mfa/index', {
-            cookie, mfaTokenLength: 20, errors: [{ message: 'There was a problem verifying your token. Try again' }],
+          expect(sessionSaveStub).to.not.have.been.called;
+          expect(res.render).to.have.been.calledOnceWithExactly('app/verify/mfa/index', {
+            cookie, mfaTokenLength: 20, errors: [{ identifier: 'mfaCode', message: 'There was a problem verifying your token. Try again.' }],
           });
         });
     });
@@ -182,20 +186,21 @@ describe('Verify MFA Post Controller', () => {
       // Mystery here is why the second and third block have the same
       // assertions. It could be the catches perhaps in the code
       callController().then(() => {
-        expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
-        expect(tokenApi.updateMfaToken).to.have.been.called.calledWith('example@somewhere.com', 123456);
+        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
+        expect(tokenApi.updateMfaToken).to.have.been.called.calledOnceWithExactly('example@somewhere.com', 123456);
         expect(userApi.getDetails).to.not.have.been.called;
         expect(res.redirect).to.not.have.been.called;
       }).then(() => {
-        expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
-        expect(tokenApi.updateMfaToken).to.have.been.called.calledWith('example@somewhere.com', 123456);
-        expect(userApi.getDetails).to.have.been.called.calledWith('example@somewhere.com');
+        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
+        expect(tokenApi.updateMfaToken).to.have.been.called.calledOnceWithExactly('example@somewhere.com', 123456);
+        expect(userApi.getDetails).to.have.been.called.calledOnceWithExactly('example@somewhere.com');
         expect(res.redirect).to.not.have.been.called;
       }).then(() => {
-        expect(tokenApi.validateMfaToken).to.have.been.calledWith('example@somewhere.com', 123456);
-        expect(tokenApi.updateMfaToken).to.have.been.called.calledWith('example@somewhere.com', 123456);
-        expect(userApi.getDetails).to.have.been.calledWith('example@somewhere.com');
-        expect(res.redirect).to.have.been.calledWith('/home');
+        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
+        expect(tokenApi.updateMfaToken).to.have.been.called.calledOnceWithExactly('example@somewhere.com', 123456);
+        expect(userApi.getDetails).to.have.been.calledOnceWithExactly('example@somewhere.com');
+        expect(sessionSaveStub).to.have.been.called;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
       });
     });
   });

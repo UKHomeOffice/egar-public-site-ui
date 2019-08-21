@@ -5,37 +5,38 @@ from the pagination.js build function. The i18n __ reference also needs to be
 passed in explicitly it seems.
 #}
 {% macro build(formName, pages, __) %}
-<nav>
+<nav role="navigation" aria-label="Pagination Navigation" aria-labelledby="{{ formName }}">
   <script type="text/javascript">
     function transitionToPage(pageNumber) {
       nextPage=document.createElement('input');
       nextPage.type='hidden';
       nextPage.name='nextPage';
       nextPage.value=pageNumber;
-      document.getElementById('{{formName}}').appendChild(nextPage);
-      document.getElementById('{{formName}}').submit();
+      document.getElementById('{{ formName }}').appendChild(nextPage);
+      document.getElementById('{{ formName }}').submit();
       return false;
     }
   </script>
-  <div class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results {{ paginate }}</div>
-  <ul class="pagination">
-  {% if pages.currentPage > 1 %}
-    <li class="pagination__item"><a id="{{formName}}_pagination_previous" class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage - 1 }})" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
-  {% else %}
-    <li class="pagination__item"><a id="{{formName}}_pagination_previous" class="pagination__link current" href=""><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
-  {% endif %}
-  {% for pageNumber in pages.items %}
-    {% if pageNumber === pages.currentPage %}
-      <li class="pagination__item"><a id="{{formName}}_pagination_{{pageNumber}}" class="pagination__link current" href="" aria-current="true" aria-label="Page {{ pageNumber }}, current page">{{ pageNumber }}</a></li>
+  <div id="{{ formName }}_pagination_summary" class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results</div>
+  
+    <ul class="pagination">
+    {% if pages.totalPages > 1 %}
+      {% if pages.currentPage > 1 %}
+        <li class="pagination__item"><a id="{{formName}}_pagination_previous" class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage - 1 }})" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
+      {% endif %}
+      {% for pageNumber in pages.items %}
+        {% if pageNumber === pages.currentPage %}
+          <li class="pagination__item"><a id="{{formName}}_pagination_{{pageNumber}}" class="pagination__link current" href="" aria-current="true" aria-label="Page {{ pageNumber }}, current page">{{ pageNumber }}</a></li>
+        {% else %}
+          <li class="pagination__item"><a id="{{formName}}_pagination_{{pageNumber}}" class="pagination__link" onclick="transitionToPage({{ pageNumber }})" aria-label="Go to page {{ pageNumber }}">{{ pageNumber }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if pages.currentPage < pages.totalPages %}
+        <li class="pagination__item"><a id="{{formName}}_pagination_next" class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage + 1 }})" aria-label="Next page">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+      {% endif %}
     {% else %}
-      <li class="pagination__item"><a id="{{formName}}_pagination_{{pageNumber}}" class="pagination__link" onclick="transitionToPage({{ pageNumber }})">{{ pageNumber }}</a></li>
+      <li id="{{ formName }}_pagination_empty" class="pagination__item"><a class="pagination__link current"></a></li>
     {% endif %}
-  {% endfor %}
-  {% if pages.currentPage < pages.totalPages %}
-    <li class="pagination__item"><a id="{{formName}}_pagination_next" class="pagination__link" href="#" onclick="transitionToPage({{ pages.currentPage + 1 }})" aria-label="Next page">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
-  {% else %}
-    <li class="pagination__item"><a id="{{formName}}_pagination_next" class="pagination__link current" href="">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
-  {% endif %}
-  </ul>
+    </ul>
 </nav>
 {% endmacro %}

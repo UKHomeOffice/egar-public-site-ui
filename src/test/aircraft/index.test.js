@@ -1,5 +1,12 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-expressions */
+
+const { expect } = require('chai');
+
+require('../global.test');
+
 const index = require('../../app/aircraft/index');
-const expect = require('chai').expect;
+
 
 describe('Aircraft index.js', () => {
   it('should have included everything', () => {

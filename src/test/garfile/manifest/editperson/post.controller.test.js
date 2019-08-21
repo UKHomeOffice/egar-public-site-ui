@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../../global.test');
 const CookieModel = require('../../../../common/models/Cookie.class');
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
@@ -21,9 +22,6 @@ describe('Manifest Edit Person Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     apiResponse = {
       items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],
@@ -32,18 +30,18 @@ describe('Manifest Edit Person Post Controller', () => {
     // TODO: Why the inconsistencies with field names
     req = {
       body: {
-        'first-name': 'Benjamin',
-        'last-name': 'Sisko',
+        firstName: 'Benjamin',
+        lastName: 'Sisko',
         gender: 'Male',
         dobYear: '1937',
         dobMonth: '06',
         dobDay: '07',
         birthplace: 'New Orleans',
         nationality: 'usa',
-        'person-type': 'Captain',
-        'travel-document-number': '1234567890',
-        'travel-document-type': 'Passport',
-        'issuing-state': 'usa',
+        personType: 'Captain',
+        travelDocumentNumber: '1234567890',
+        travelDocumentType: 'Passport',
+        issuingState: 'usa',
         expiryYear: '2150',
         expiryMonth: '05',
         expiryDay: '04',
@@ -60,15 +58,15 @@ describe('Manifest Edit Person Post Controller', () => {
     };
 
     person = {
-      firstName: req.body['first-name'],
-      lastName: req.body['last-name'],
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       gender: req.body.gender,
       dateOfBirth: '1937-06-07',
       placeOfBirth: req.body.birthplace,
       nationality: 'USA', // Check it upper cases it
-      peopleType: req.body['person-type'],
-      documentNumber: req.body['travel-document-number'],
-      documentType: req.body['travel-document-type'],
+      peopleType: req.body.personType,
+      documentNumber: req.body.travelDocumentNumber,
+      documentType: req.body.travelDocumentType,
       issuingState: 'USA', // Check it upper cases it
       documentExpiryDate: '2150-05-04',
       garPeopleId: req.body.garPeopleId,
@@ -80,7 +78,7 @@ describe('Manifest Edit Person Post Controller', () => {
   });
 
   it('should render with errors if surname is empty', () => {
-    req.body['last-name'] = '';
+    req.body.lastName = '';
     person.lastName = ''; // expected
     const cookie = new CookieModel(req);
     sinon.stub(garApi, 'updateGarPerson');
@@ -100,7 +98,7 @@ describe('Manifest Edit Person Post Controller', () => {
         documenttype,
         genderchoice,
         errors: [
-          new ValidationRule(validator.notEmpty, 'last-name', req.body['last-name'], 'Enter the surname of the person'),
+          new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
         ],
       });
     });

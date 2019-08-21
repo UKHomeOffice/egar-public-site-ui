@@ -5,6 +5,8 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
+
 const middleware = require('../../../common/middleware/correlation-header');
 
 describe('Correlation Header Middleware', () => {
@@ -12,9 +14,6 @@ describe('Correlation Header Middleware', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
-    process.on('unhandledRejection', (error) => {
-      chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-    });
 
     req = {
       headers: {},

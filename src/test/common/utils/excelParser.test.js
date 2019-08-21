@@ -4,6 +4,8 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
+require('../../global.test');
+
 const { ExcelParser } = require('../../../common/utils/excelParser');
 
 describe('ExcelParser', () => {

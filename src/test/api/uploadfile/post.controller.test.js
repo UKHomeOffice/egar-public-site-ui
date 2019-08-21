@@ -6,6 +6,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const garApi = require('../../../common/services/garApi');
 const clamAVService = require('../../../common/services/clamAVService');
 const fileUploadApi = require('../../../common/services/fileUploadApi');
@@ -16,9 +17,6 @@ describe('API upload file post controller', () => {
   let req; let res;
   let garApiGetDocsStub; let garApiDeleteDocsStub;
   let clamAVServiceStub; let fileUploadApiStub;
-  process.on('unhandledRejection', (error) => {
-    chai.assert.fail(`Unhandled rejection encountered: ${error}`);
-  });
 
   beforeEach(() => {
     chai.use(sinonChai);

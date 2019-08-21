@@ -5,6 +5,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+require('../../global.test');
 const personApi = require('../../../common/services/personApi');
 
 const { getDetailsByIds } = require('../../../app/garfile/manifest/bulkAdd');
