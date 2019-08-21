@@ -57,10 +57,7 @@ const handleDeleteDocument = (req, res) => {
 module.exports = (req, res) => {
   logger.info('Entering upload file post controller');
 
-  const result = handleDeleteDocument(req, res);
-  console.log(result);
-  if (result) {
-    console.log('Handle delete function returned true');
+  if (handleDeleteDocument(req, res)) {
     return;
   }
 
