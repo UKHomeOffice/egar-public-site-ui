@@ -42,6 +42,14 @@ describe('Validator', () => {
     expect(validator.isNumeric('31')).to.be.true;
   });
 
+  it('Should return false when string contains "\\n"', () => {
+    expect(validator.isPrintable('John\n')).to.be.false;
+  });
+
+  it('Should retunr true when string does not contain "\\n"', () => {
+    expect(validator.isPrintable('John Doe')).to.be.true;
+  });
+
   it('Should return false when fields are empty', () => {
     expect(validator.notEmpty(null)).to.be.false;
     expect(validator.notEmpty(undefined)).to.be.false;

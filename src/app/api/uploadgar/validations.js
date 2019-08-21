@@ -4,8 +4,38 @@ const i18n = require('i18n');
 
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const { MAX_STRING_LENGTH } = require('../../../common/config/index');
-const { MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
+const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
+
+function getVoyageFieldLabel(key) {
+  switch (key) {
+    case 'arrivalPort': return i18n.__('field_arrival_port');
+    case 'departurePort': return i18n.__('field_departure_port');
+    case 'arrivalTime': return i18n.__('field_arrival_time');
+    case 'departureTime': return i18n.__('field_departure_time');
+    case 'arrivalDate': return i18n.__('field_arrival_date');
+    case 'departureDate': return i18n.__('field_departure_date');
+    case 'registration': return i18n.__('field_aircraft_registration');
+    case 'craftType': return i18n.__('field_aircraft_type');
+    case 'craftBase': return i18n.__('field_aircraft_base');
+    default: return 'One of the voyage details';
+  }
+}
+
+function getCrewFieldLabel(key) {
+  switch (key) {
+    case 'documentType': return i18n.__('field_travel_document_type');
+    case 'issuingState': return i18n.__('field_issuing_state');
+    case 'documentNumber': return i18n.__('field_travel_document_number');
+    case 'lastName': return i18n.__('field_surname');
+    case 'firstName': return i18n.__('field_given_name');
+    case 'gender': return i18n.__('field_gender');
+    case 'dateOfBirth': return i18n.__('field_dob');
+    case 'placeOfBirth': return i18n.__('field_birth_place');
+    case 'nationality': return i18n.__('field_nationality');
+    case 'documentExpiryDate': return i18n.__('field_document_expiry_date');
+    default: return 'One of the value';
+  }
+}
 
 module.exports.validations = (voyageObj, crewArr, passengersArr) => {
   const validationArr = [
@@ -43,12 +73,22 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     ],
   ];
 
+
   // freeCirculation and visitReason are optional values as of this time,
   // only validate if they are provided
   // The below will display an error message identifying the person by firstName + lastName
   // This will be blank in the case where neither piece of information is entered
   if (voyageObj.freeCirculation) validationArr.push(new ValidationRule(validator.validFreeCirculation, '', voyageObj.freeCirculation, 'Enter a valid value for free circulation'));
   if (voyageObj.visitReason) validationArr.push(new ValidationRule(validator.validVisitReason, '', voyageObj.visitReason, 'Enter a valid value for the reason of visit'));
+
+  Object.keys(voyageObj).forEach((key) => {
+    if (typeof voyageObj[key] === 'string' && !validator.isPrintable(voyageObj[key])) {
+      const fieldLabel = getVoyageFieldLabel(key);
+      validationArr.push([
+        new ValidationRule(validator.isPrintable, '', voyageObj[key], `${fieldLabel} contains invalid multiple lines in the cell`),
+      ]);
+    }
+  });
 
   const manifest = crewArr.concat(passengersArr);
   manifest.forEach((crew) => {
@@ -94,6 +134,14 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a document expiry date for ${name}`),
       new ValidationRule(validator.realDateFromString, '', crew.documentExpiryDate, `Enter a valid document expiry date for ${name}`),
     ]);
+    Object.keys(crew).forEach((key) => {
+      if (typeof crew[key] === 'string' && !validator.isPrintable(crew[key])) {
+        const fieldLabel = getCrewFieldLabel(key);
+        validationArr.push([
+          new ValidationRule(validator.isPrintable, '', crew[key], `${fieldLabel} for ${name} contains invalid multiple lines in the cell`),
+        ]);
+      }
+    });
   });
 
   return validationArr;
