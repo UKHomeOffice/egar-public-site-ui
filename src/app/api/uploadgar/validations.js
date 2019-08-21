@@ -17,7 +17,7 @@ function getVoyageFieldLabel(key) {
     case 'registration': return i18n.__('field_aircraft_registration');
     case 'craftType': return i18n.__('field_aircraft_type');
     case 'craftBase': return i18n.__('field_aircraft_base');
-    default: return 'One of the voyage details';
+    default: return `One of the voyage details (${key})`;
   }
 }
 
@@ -33,7 +33,7 @@ function getCrewFieldLabel(key) {
     case 'placeOfBirth': return i18n.__('field_birth_place');
     case 'nationality': return i18n.__('field_nationality');
     case 'documentExpiryDate': return i18n.__('field_document_expiry_date');
-    default: return 'One of the value';
+    default: return `One of the value (${key})`;
   }
 }
 
