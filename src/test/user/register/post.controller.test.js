@@ -232,8 +232,6 @@ describe('User Register Post Controller', () => {
     });
   });
 
-  // TODO: Current functionality is that a message from the API could be that a user exists
-  // but then goes to the next page without informing the user (so re-registering is not a thing)
   it('should render page if createUserApi resolves but user already exists', async () => {
     sinon.stub(config, 'WHITELIST_REQUIRED').value('false');
     sinon.stub(req.session, 'save').callsArg(0);
@@ -241,7 +239,7 @@ describe('User Register Post Controller', () => {
     sinon.stub(tokenApi, 'setToken');
     sinon.stub(userCreateApi, 'post').resolves(
       JSON.stringify({
-        message: 'User already exists',
+        message: 'User already registered',
       }),
     );
 

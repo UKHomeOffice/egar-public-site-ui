@@ -57,7 +57,7 @@
                   <label class="govuk-label govuk-date-input__label" for="arrivalMonth">
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_month')}}
                   </label>
-                  <span id="arrival-month-hint" class="govuk-visually-hidden">{{__('field_departure_month_hint')}}</span>
+                  <span id="arrival-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMonth"
                     name="arrivalMonth" type="number" pattern="[0-9]*" min="1" max="12"
                     value="{{cookie.dateSlice('month', cookie.getGarArrivalVoyage().arrivalDate)}}"
@@ -120,56 +120,66 @@
         </div>
         {# End arrival time #}
 
-        {# Start arrival port #}
-        <div class="govuk-form-group {{ m.form_group_class('arrivalPort', errors) }}">
-          <label id="arrivalPort-label" class="govuk-label govuk-label--m" for="arrivalPort">{{__('field_arrival_port')}}</label>
-          {{ m.error_message('arrivalPort', errors, __) }}
-          <span id="arrivalPort-hint" class="govuk-hint">{{__('field_port_hint', "ZZZZ")}}</span>
-          <select class="govuk-select" id="arrivalPort" name="arrivalPort"
-            value="{{ cookie.getGarArrivalVoyage().arrivalPort | upper }}"
-            aria-labelledby="arrivalPort-label"
-            aria-describedby="arrivalPort-hint{{ ' arrivalPort-error' if errors | containsError('arrivalPort') }}">>
-            {% for airport in airportList | sort(attribute = 'label') %}
-              <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id }}>{{ airport.label }}</option>
-            {% endfor%}
-            {# Hard coded as it should be temporary #}
-            <option value="ZZZZ" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == "ZZZZ" }}>Unknown port code (ZZZZ)</option>
-          </select>
+        <div class="{{ m.form_group_class('portChoice', errors) }}">
+          <fieldset class="govuk-fieldset" aria-describedby="portChoice-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <h2 class="govuk-fieldset__heading">{{__('field_port_choice')}}</h2>
+            </legend>
+            <span id="portChoice-hint" class="govuk-hint">{{__('field_port_choice_hint')}}</span>
+            {{ m.error_message('portChoice', errors, __) }}
+            <div class="govuk-radios govuk-radios--conditional" data-module="radios">
+              <div class="govuk-radios__item">
+                <input id="portChoiceCode" name="portChoice" class="govuk-radios__input"
+                  type="radio" value="Yes"{{ ' checked' if cookie.getGarArrivalVoyage().arrivalPort != undefined and cookie.getGarArrivalVoyage().arrivalPort != 'ZZZZ'}}
+                  data-aria-controls="portChoiceCodeContainer" aria-labelledby="portChoiceCode-label">
+                <label id="portChoiceCode-label" class="govuk-label govuk-radios__label" for="portChoiceCode">{{__('field_choice_yes')}}</label>
+              </div>
+              <div id="portChoiceCodeContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
+                <div class="{{ m.form_group_class('arrivalPort', errors) }}">
+                  <label id="arrivalPort-label" class="govuk-label" for="arrivalPort">{{__('field_port_code')}}</label>
+                  {{ m.hint('arrivalPort', __('field_port_hint')) }}
+                  {{ m.error_message('arrivalPort', errors, __) }}
+                  <select id="arrivalPort" name="arrivalPort" class="govuk-select" 
+                    value="{{ cookie.getGarArrivalVoyage().arrivalPort | upper }}"
+                    aria-labelledby="arrivalPort-label"
+                    aria-describedby="arrivalPort-hint{{ ' arrivalPort-error' if errors | containsError('arrivalPort') }}">
+                    {% for airport in airportList | sort(attribute = 'label') %}
+                      <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id }}>{{ airport.label }}</option>
+                    {% endfor%}
+                  </select>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input id="portChoiceCoordinates" name="portChoice" class="govuk-radios__input"
+                type="radio" value="No"{{ ' checked' if cookie.getGarArrivalVoyage().arrivalPort == 'ZZZZ'}}
+                data-aria-controls="portChoiceCoordinatesContainer" aria-labelledby="portChoiceCoordinates-label">
+                <label id="portChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="portChoiceCoordinates">{{__('field_choice_no')}}</label>
+              </div>
+              <div id="portChoiceCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
+                <div class="govuk-form-group">
+                  {{ m.hint('arrivalCoordinates', __('field_coordinate_hint')) }}
+                </div>
+                {# Start arrival coords #}
+                <div class="govuk-form-group {{ m.form_group_class('arrivalLat', errors) }}">
+                  <label class="govuk-label" for="arrivalLat">{{__('field_latitude')}}</label>
+                  {{ m.hint('arrivalLatitude', __('field_latitude_hint')) }}
+                  {{ m.error_message('arrivalLat', errors, __) }}
+                  <input class="govuk-input govuk-input--width-10" id="arrivalLat" name="arrivalLat" autocomplete="off" type="text"
+                    value="{{ cookie.getGarArrivalVoyage().arrivalLat }}" aria-describedby="arrivalCoordinates-hint arrivalLatitude-hint{{ ' arrivalLat-error' if errors | containsError('arrivalLat')}}"/>
+                </div>
+
+                <div class="govuk-form-group {{ m.form_group_class('arrivalLong', errors) }}">
+                  <label class="govuk-label" for="arrivalLong">{{__('field_longitude')}}</label>
+                  {{ m.hint('arrivalLongitude', __('field_longitude_hint')) }}
+                  {{ m.error_message('arrivalLong', errors, __) }}
+                  <input class="govuk-input govuk-input--width-10" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text"
+                    value="{{ cookie.getGarArrivalVoyage().arrivalLong }}" aria-describedby="arrivalCoordinates-hint arrivalLongitude-hint{{ ' arrivalLong-error' if errors | containsError('arrivalLong') }}"/>
+                </div>
+                {# End arrival coords #}
+              </div>
+            </div>
+          </fieldset>
         </div>
-        {# End arrival port #}
-
-        <div class="govuk-form-group">
-          <span class="govuk-heading-m">{{__('field_arrival_coordinates')}}</span>
-          <span id="arrivalCoordinates-hint" class="govuk-hint">{{__('field_coordinate_hint')}}</span>
-        </div>
-
-        {# Start arrival coords #}
-        <div class="govuk-form-group {{ m.form_group_class('arrivalLat', errors) }}">
-          <label class="govuk-label" for="arrivalLat">
-            {{__('field_latitude')}}
-          </label>
-          <span id="arrivalLatitude-hint" class="govuk-hint">
-            {{__('field_latitude_hint')}}
-          </span>
-
-          {{ m.error_message('arrivalLat', errors, __) }}
-          <input class="govuk-input govuk-input--width-10" id="arrivalLat" name="arrivalLat" autocomplete="off" type="text"
-            value="{{cookie.getGarArrivalVoyage().arrivalLat}}" aria-describedby="arrivalCoordinates-hint arrivalLatitude-hint{{ ' arrivalLat-error' if errors | containsError('arrivalLat') }}"/>
-        </div>
-
-        <div class="govuk-form-group {{ m.form_group_class('arrivalLong', errors, __) }}">
-          <label class="govuk-label" for="arrivalLong">
-            {{__('field_longitude')}}
-          </label>
-          <span id="arrivalLongitude-hint" class="govuk-hint">
-            {{__('field_longitude_hint')}}
-          </span>
-          {{ m.error_message('arrivalLong', errors, __) }}
-          <input class="govuk-input govuk-input--width-10" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text"
-            value="{{cookie.getGarArrivalVoyage().arrivalLong}}" aria-describedby="arrivalCoordinates-hint arrivalLongitude-hint{{ ' arrivalLong-error' if errors | containsError('arrivalLong') }}"/>
-
-        </div>
-        {# End arrival coords #}
 
     {# Start buttons #}
         {{ m.submit_buttons('GAR Arrival', csrfToken, __) }}
@@ -184,5 +194,6 @@
       selectElement: document.querySelector('#arrivalPort'),
       minLength: 2,
     });
+    document.getElementById('arrivalPort').setAttribute('aria-describedby', 'arrivalPort-hint{{ ' arrival-error' if errors | containsError('arrivalPort') }}');
   </script>
 {% endblock %}
