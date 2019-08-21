@@ -207,6 +207,7 @@
     selectElement: document.querySelector('#departurePort'),
     minLength: 2,
   });
+  document.getElementById("departurePort").setAttribute('aria-describedby', 'departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}');
 </script>
 
 {% endblock %}

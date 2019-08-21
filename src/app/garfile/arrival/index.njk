@@ -194,5 +194,6 @@
       selectElement: document.querySelector('#arrivalPort'),
       minLength: 2,
     });
+    document.getElementById('arrivalPort').setAttribute('aria-describedby', 'arrivalPort-hint{{ ' arrival-error' if errors | containsError('arrivalPort') }}');
   </script>
 {% endblock %}
