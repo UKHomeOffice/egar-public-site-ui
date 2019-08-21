@@ -39,7 +39,7 @@ const performAPICall = (cookie, buttonClicked, res) => {
 };
 
 // Define port / date validation msgs
-const portMsg = 'As you have entered an arrival port code of "ZZZZ", you must provide longitude and latitude coordinates for the location';
+const portChoiceMsg = 'Select whether the port code is known';
 const portCodeMsg = 'The arrival airport code must be entered';
 const futureDateMsg = 'Arrival date must be today or in the future';
 const realDateMsg = 'Enter a real arrival date';
@@ -70,9 +70,6 @@ const buildValidations = (voyage) => {
     new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, portCodeMsg),
   ];
 
-  // Define ZZZZ port validations
-  const arrivalPortZZZZ = [new ValidationRule(validator.validatePortCoords, 'arrivalPort', arrivePortObj, portMsg)];
-
   // Define latitude validations
   const arrivalLatValidation = [new ValidationRule(validator.latitude, 'arrivalLat', voyage.arrivalLat, latitudeMsg)];
 
@@ -80,25 +77,19 @@ const buildValidations = (voyage) => {
   const arrivalLongValidation = [new ValidationRule(validator.longitude, 'arrivalLong', voyage.arrivalLong, longitudeMsg)];
 
   const validations = [
-    [
-      new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, realDateMsg),
-    ],
-    [
-      new ValidationRule(validator.currentOrFutureDate, 'arrivalDate', arriveDateObj, futureDateMsg),
-    ],
-    [
-      new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, timeMsg),
-    ],
+    [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, realDateMsg)],
+    [new ValidationRule(validator.currentOrFutureDate, 'arrivalDate', arriveDateObj, futureDateMsg)],
+    [new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, timeMsg)],
+    [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, portChoiceMsg)],
   ];
 
   // Check if port code is ZZZZ as then need to validate lat/long
   if (arrivePortObj.portCode.toUpperCase() === 'ZZZZ') {
     validations.push(
-      arrivalPortZZZZ,
       arrivalLatValidation,
       arrivalLongValidation,
     );
-  } else {
+  } else if (voyage.portChoice) {
     // if not just add port validation
     validations.push(
       arrivalPortValidation,
@@ -116,8 +107,15 @@ module.exports = async (req, res) => {
 
   // Define voyage
   const voyage = req.body;
-  voyage.arrivalPort = _.toUpper(voyage.arrivalPort);
   delete voyage.buttonClicked;
+  if (voyage.portChoice === 'No') {
+    voyage.arrivalPort = 'ZZZZ';
+  } else {
+    // If 'Yes' is selected then clear the coordinate values
+    voyage.arrivalLat = '';
+    voyage.arrivalLong = '';
+    voyage.arrivalPort = _.toUpper(voyage.arrivalPort);
+  }
   cookie.setGarArrivalVoyage(voyage);
 
   const validations = buildValidations(voyage);

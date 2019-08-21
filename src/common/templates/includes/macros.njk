@@ -47,24 +47,6 @@
 </form>
 {% endmacro %}
 
-{% macro check_your_answers_row(label, value) %}
-<div class="app-check-your-answers__contents">
-  <dt class="app-check-your-answers__question">{{ label }}</dt>
-  <dd class="app-check-your-answers__answer">{{ value }}</dd>
-</div>
-{% endmacro %}
-
-{% macro check_your_answers_row_coordinates(label, latitude, longitude, __) %}
-<div class="app-check-your-answers__contents">
-  <dt class="app-check-your-answers__question">{{ label }}</dt>
-  <dd class="app-check-your-answers__answer">
-    {{__('field_latitude')}}: {{ latitude }}
-    <br>
-    {{__('field_longitude')}}: {{ longitude }}
-  </dd>
-</div>
-{% endmacro %}
-
 {#
   An attempt to improve a screen readers pronunciation of the GAR ID. This is only tested on
   NVDA at the moment, and will most likely behave differently between screen readers and user
