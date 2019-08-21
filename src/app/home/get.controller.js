@@ -11,8 +11,15 @@ module.exports = (req, res) => {
   const role = cookie.getUserRole();
   const orgId = cookie.getOrganisationId();
 
+  // Delete any GAR stored in the cookie session
+  cookie.session.gar = null;
+
   tokenApi.getLastLogin(cookie.getUserEmail())
     .then((userSession) => {
+      const { successHeader, successMsg } = req.session;
+      delete req.session.successHeader;
+      delete req.session.successMsg;
+
       garApi.getGars(userId, role, orgId)
         .then((apiResponse) => {
           const garList = JSON.parse(apiResponse).items;
@@ -22,6 +29,8 @@ module.exports = (req, res) => {
           res.render('app/home/index', {
             cookie,
             userSession,
+            successMsg,
+            successHeader,
             draftGars,
             submittedGars,
             cancelledGars,
@@ -30,7 +39,9 @@ module.exports = (req, res) => {
         .catch((err) => {
           logger.error('Failed to get GARS from API');
           logger.error(err);
-          res.render('app/home/index', { cookie, errors: [{ message: 'Failed to get GARs' }] });
+          res.render('app/home/index', {
+            cookie, successMsg, successHeader, errors: [{ message: 'Failed to get GARs' }],
+          });
         });
     })
     .catch((err) => {

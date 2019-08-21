@@ -227,9 +227,8 @@ describe('GAR Craft Post Controller', () => {
           craftType: 'Gulfstream',
           craftBase: 'LHR',
         });
-        expect(res.redirect).to.have.been.calledWith('/home');
+        expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
       });
     });
-    // success redirect home
   });
 });

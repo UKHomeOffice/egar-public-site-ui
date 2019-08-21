@@ -2,5 +2,6 @@ const nav = require('../../../common/utils/nav');
 
 // Local dependencies
 const getController = require('./get.controller');
+const postController = require('./post.controller');
 
-module.exports = nav.buildRouterAndPathsOrganisation('/organisation/editorganisation', getController);
+module.exports = nav.buildRouterAndPathsOrganisation('/organisation/editorganisation', getController, postController);

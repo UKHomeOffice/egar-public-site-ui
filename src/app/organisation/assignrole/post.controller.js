@@ -7,6 +7,7 @@ const tokenservice = require('../../../common/services/create-token');
 const emailService = require('../../../common/services/sendEmail');
 const tokenApi = require('../../../common/services/tokenApi');
 const config = require('../../../common/config/index');
+const roles = require('../../../common/seeddata/egar_user_roles.json');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
@@ -40,7 +41,7 @@ module.exports = (req, res) => {
           const apiResponseObj = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(apiResponseObj, 'message')) {
             // API call unsuccessful
-            res.render('app/organisation/inviteusers/index', { cookie, errors: [apiResponseObj] });
+            res.render('app/organisation/assignrole/index', { cookie, roles, errors: [apiResponseObj] });
             return;
           }
           // API call successful
@@ -55,18 +56,17 @@ module.exports = (req, res) => {
           }).catch((err) => {
             logger.error('Govnotify failed to send an email');
             logger.error(JSON.stringify(err));
-            res.render('app/organisation/inviteusers/index', { cookie, errors: [err] });
+            res.render('app/organisation/assignrole/index', { cookie, roles, errors: [{ message: 'Could not send an invitation email, try again later.' }] });
           });
         })
         .catch((err) => {
           logger.error('Error setting the invite token');
           logger.error(JSON.stringify(err));
-          res.render('app/organisation/inviteusers/index', { cookie, errors: [err] });
+          res.render('app/organisation/assignrole/index', { cookie, roles, errors: [err] });
         });
     })
     .catch((err) => {
-      logger.info('Invite Users Organisation postcontroller - There was a problem with creating the organisation');
-      logger.info(JSON.stringify(err));
-      res.render('app/organisation/inviteusers/index', { cookie, errors: err });
+      logger.info('Assign Role post controller - There was a problem with assigning the role');
+      res.render('app/organisation/assignrole/index', { cookie, roles, errors: err });
     });
 };

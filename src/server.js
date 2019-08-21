@@ -96,6 +96,7 @@ function initialisExpressSession(app) {
     genid: () => uuid(),
     store: new PgSession({
       conString: config.PUBLIC_SITE_DB_CONNSTR,
+      ttl: 60 * 60,
     }),
     secret: config.SESSION_ENCODE_SECRET,
     resave: false,
@@ -162,7 +163,7 @@ function initialiseGlobalMiddleware(app) {
     // The below adds the csrfToken to the res.render function which should hopefully
     // allow for local development without this hack
     const _render = res.render;
-    res.render = function addToken(view, options, fn) {
+    res.render = function (view, options, fn) {
       _.extend(options, { csrfToken: token });
       _render.call(this, view, options, fn);
     };
@@ -225,10 +226,10 @@ function initialiseTemplateEngine(app) {
 
   logger.info('Set global settings for nunjucks');
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
+  nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('countryList', autocompleteUtil.generateCountryList());
   nunjucksEnvironment.addGlobal('airportList', autocompleteUtil.airportList);
-  // nunjucksEnvironment.addGlobal('airportList2', autocompleteUtil.airportList2);
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
   nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);

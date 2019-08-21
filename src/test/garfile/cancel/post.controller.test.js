@@ -7,6 +7,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
+const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const config = require('../../../common/config');
 const emailService = require('../../../common/services/sendEmail');
@@ -14,7 +15,7 @@ const emailService = require('../../../common/services/sendEmail');
 const controller = require('../../../app/garfile/cancel/post.controller');
 
 describe('GAR Cancel Post Controller', () => {
-  let req; let res;
+  let req; let res; let sessionSaveStub;
   let garApiPatchStub; let emailServiceStub;
 
   beforeEach(() => {
@@ -27,8 +28,9 @@ describe('GAR Cancel Post Controller', () => {
         },
         u: {
           fn: 'Roberto Baggio',
-          e: 'missed@italia90.fifa.com',
+          e: 'missed@usa94.fifa.com',
         },
+        save: callback => callback(),
       },
     };
 
@@ -39,6 +41,7 @@ describe('GAR Cancel Post Controller', () => {
 
     garApiPatchStub = sinon.stub(garApi, 'patch');
     emailServiceStub = sinon.stub(emailService, 'send');
+    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
   afterEach(() => {
@@ -46,6 +49,7 @@ describe('GAR Cancel Post Controller', () => {
   });
 
   it('should return an error message if api rejects', () => {
+    const cookie = new CookieModel(req);
     garApiPatchStub.rejects('garApi.patch Example Reject');
 
     const callController = async () => {
@@ -53,9 +57,10 @@ describe('GAR Cancel Post Controller', () => {
     };
 
     callController().then(() => {
-      expect(garApiPatchStub).to.have.been.calledWith('ABCDE-CANCEL', 'Cancelled', {});
+      expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
       expect(emailServiceStub).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/garfile/cancel');
+      expect(sessionSaveStub).to.not.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/cancel', { cookie, error: [{ message: 'Failed to cancel GAR' }] });
     });
   });
 
@@ -68,11 +73,12 @@ describe('GAR Cancel Post Controller', () => {
     };
 
     callController().then(() => {
-      expect(garApiPatchStub).to.have.been.calledWith('ABCDE-CANCEL', 'Cancelled', {});
-      expect(emailServiceStub).to.have.been.calledWith(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@italia90.fifa.com', { firstName: 'Roberto Baggio', garId: 'ABCDE-CANCEL' });
+      expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
+      expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', garId: 'ABCDE-CANCEL' });
       expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled');
       expect(req.session.successHeader).to.eq('Cancellation Confirmation');
-      expect(res.redirect).to.have.been.calledWith('/home');
+      expect(sessionSaveStub).to.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
     });
   });
 
@@ -85,11 +91,12 @@ describe('GAR Cancel Post Controller', () => {
     };
 
     callController().then().then(() => {
-      expect(garApiPatchStub).to.have.been.calledWith('ABCDE-CANCEL', 'Cancelled', {});
-      expect(emailServiceStub).to.have.been.calledWith(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@italia90.fifa.com', { firstName: 'Roberto Baggio', garId: 'ABCDE-CANCEL' });
+      expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
+      expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', garId: 'ABCDE-CANCEL' });
       expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled, but there was a problem with sending the email');
       expect(req.session.successHeader).to.eq('Cancellation Confirmation');
-      expect(res.redirect).to.have.been.calledWith('/home');
+      expect(sessionSaveStub).to.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
     });
   });
 });

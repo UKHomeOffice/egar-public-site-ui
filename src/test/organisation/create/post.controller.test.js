@@ -22,7 +22,7 @@ describe('Organisation Create Post Controller', () => {
 
     req = {
       body: {
-        Orgname: 'New Evil Empire',
+        orgName: 'New Evil Empire',
       },
       session: {
         u: { dbId: 'USER-DB-ID-1' },
@@ -41,7 +41,7 @@ describe('Organisation Create Post Controller', () => {
   });
 
   it('should render message when name empty', () => {
-    req.body.Orgname = '';
+    req.body.orgName = '';
     cookie = new CookieModel(req);
 
     const callController = async () => {
@@ -56,7 +56,7 @@ describe('Organisation Create Post Controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
         cookie,
         errors: [
-          new ValidationRule(validator.notEmpty, 'Orgname', '', 'Enter the name of the organisation'),
+          new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation'),
         ],
       });
     });

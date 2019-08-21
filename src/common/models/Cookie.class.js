@@ -508,20 +508,7 @@ class Cookie {
   }
 
   /**
-   *
-   */
-  setInviteOrgId(id) {
-    this.session.inv.orgId = id;
-  }
-
-  /**
-   *
-   */
-  getInviteOrgId() {
-    return this.session.inv.orgId;
-  }
-
-  /** Records neccessary login information
+   * Records neccessary login information
    * @param {Object} kcAuth keycloak grant object
    * @param {Object} apiResponse datalayer response object
    * @param {String} userName username of user logging in

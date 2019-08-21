@@ -189,8 +189,8 @@ describe('Manifest Post Controller', () => {
   });
 
 
-  it('should redirect with errors if buttonClicked is Save and Continue and gar api rejects', () => {
-    req.body.buttonClicked = 'Save and continue';
+  it('should redirect with errors if buttonClicked is Continue and gar api rejects', () => {
+    req.body.buttonClicked = 'Continue';
     cookie = new CookieModel(req);
     sinon.stub(garApi, 'getPeople').rejects('garApi.getPeople Example Reject');
     sinon.stub(manifestUtil, 'getDetailsByIds');
@@ -208,8 +208,8 @@ describe('Manifest Post Controller', () => {
   });
   //   garApi resolves - manifest invalid
   //   garApi resolves - manifest valid
-  it('should redirect with errors if buttonClicked is Save and Continue and gar api resolves but is invalid', () => {
-    req.body.buttonClicked = 'Save and continue';
+  it('should redirect with errors if buttonClicked is Continue and gar api resolves but is invalid', () => {
+    req.body.buttonClicked = 'Continue';
     cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
@@ -238,8 +238,8 @@ describe('Manifest Post Controller', () => {
     });
   });
 
-  it('should redirect to next page if buttonClicked is Save and Continue and gar api resolves', () => {
-    req.body.buttonClicked = 'Save and continue';
+  it('should redirect to next page if buttonClicked is Continue and gar api resolves', () => {
+    req.body.buttonClicked = 'Continue';
     cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
@@ -263,8 +263,8 @@ describe('Manifest Post Controller', () => {
     });
   });
 
-  it('should redirect to next page if buttonClicked is Save and Continue and gar api resolves even if personId set', () => {
-    req.body.buttonClicked = 'Save and continue';
+  it('should redirect to next page if buttonClicked is Continue and gar api resolves even if personId set', () => {
+    req.body.buttonClicked = 'Continue';
     req.body.personId = ['ABCDEFG', 'HIJKLMN'];
     cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);

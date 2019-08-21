@@ -25,18 +25,18 @@ describe('GAR Manifest Add Person Post Controller', () => {
 
     req = {
       body: {
-        'first-name': 'Benjamin',
-        'last-name': 'Sisko',
+        firstName: 'Benjamin',
+        lastName: 'Sisko',
         gender: 'Male',
         dobYear: '1937',
         dobMonth: '06',
         dobDay: '07',
         birthplace: 'New Orleans',
         nationality: 'usa',
-        'person-type': 'Captain',
-        'travel-document-number': '1234567890',
-        'travel-document-type': 'Passport',
-        'issuing-state': 'usa',
+        personType: 'Captain',
+        travelDocumentNumber: '1234567890',
+        travelDocumentType: 'Passport',
+        issuingState: 'usa',
         expiryYear: '2150',
         expiryMonth: '05',
         expiryDay: '04',
@@ -53,15 +53,15 @@ describe('GAR Manifest Add Person Post Controller', () => {
     };
 
     person = {
-      firstName: req.body['first-name'],
-      lastName: req.body['last-name'],
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       gender: req.body.gender,
       dateOfBirth: '1937-06-07',
       placeOfBirth: req.body.birthplace,
       nationality: 'USA', // Check it upper cases it
-      peopleType: req.body['person-type'],
-      documentNumber: req.body['travel-document-number'],
-      documentType: req.body['travel-document-type'],
+      peopleType: req.body.personType,
+      documentNumber: req.body.travelDocumentNumber,
+      documentType: req.body.travelDocumentType,
       issuingState: 'USA', // Check it upper cases it
       documentExpiryDate: '2150-05-04',
     };
@@ -74,7 +74,7 @@ describe('GAR Manifest Add Person Post Controller', () => {
   });
 
   it('should render with errors if surname is empty', () => {
-    req.body['last-name'] = '';
+    req.body.lastName = '';
     person.lastName = '';
     const cookie = new CookieModel(req);
 
@@ -86,7 +86,7 @@ describe('GAR Manifest Add Person Post Controller', () => {
       expect(garApiStub).to.not.have.been.called;
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/addnewperson/index', {
-        req, cookie, person, persontype, documenttype, genderchoice, errors: [new ValidationRule(validator.notEmpty, 'last-name', req.body['last-name'], 'Enter the surname of the person')],
+        req, cookie, person, persontype, documenttype, genderchoice, errors: [new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person')],
       });
     });
   });

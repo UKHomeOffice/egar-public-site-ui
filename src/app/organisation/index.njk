@@ -3,12 +3,14 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-Manage organisation | Submit a General Aviation Report (GAR)
+  Manage organisation | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+	{% include "header-user.njk" %}
 {% endblock %}
+
+{% set active = '/organisation' %}
 
 {% block beforeContent %}
   {% include "phase.njk" %}
@@ -22,31 +24,31 @@ Manage organisation | Submit a General Aviation Report (GAR)
   	{% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
-		<h1 class="govuk-heading-xl">Organisation</h1>
-		<p class="govuk-body-l">Manage your organisation's details.</p>
+  <h1 class="govuk-heading-xl">{{__('nav_bar_organisation')}}</h1>
+  <p class="govuk-body-l">{{__('organisation_caption')}}</p>
 
-    <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
+  <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
 
 		<dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 1em;">
 			<div class="app-check-your-answers__contents" style="border-bottom: none;">
 				<dt class="app-check-your-answers__question" style="border-bottom: none;">
-					Organisation name
+					{{__('field_organisation_name')}}
 				</dt>
 				<dd class="app-check-your-answers__answer" style="border-bottom: none;">
 					{{cookie.getOrganisationName()}}
 				</dd>
 		</dl>
-    <button type="submit" class="govuk-button" name="editOrg" value="{{cookie.getOrganisationId()}}">Edit</button>
+    <button id="edit-organisation" type="submit" class="govuk-button" name="editOrg" value="{{cookie.getOrganisationId()}}">{{__('title_edit_organisation')}}</button>
 	</div>
 	<div class="govuk-grid-column-full">
 		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
 	</div>
 
 	<div class="govuk-grid-column-full">
-		<h2 class="govuk-heading-l">Invite new users</h2>
-		<p class="govuk-body-l">Invite additional users to be able to manage GARs on behalf of your organisation.</p>
-		<a href="/organisation/inviteusers" role="button" draggable="false" class="govuk-button">
-			Invite users
+		<h2 class="govuk-heading-l">{{__('title_invite_users')}}</h2>
+		<p class="govuk-body-l">{{__('invite_users_caption')}}</p>
+		<a id="invite-users" href="/organisation/inviteusers" role="button" draggable="false" class="govuk-button">
+			{{__('title_invite_user')}}
 		</a>
 	</div>
 
@@ -55,15 +57,15 @@ Manage organisation | Submit a General Aviation Report (GAR)
 	</div>
 
 	<div class="govuk-grid-column-full">
-		<h1 class="govuk-heading-l">Organisation's users</h1>
-		<p class="govuk-body-l">Here is a list of users who can manage GARs on behalf of your organisation.</p>
+		<h1 class="govuk-heading-l">{{__('title_organisation_users')}}</h1>
+		<p class="govuk-body-l">{{__('organisations_users_caption')}}</p>
 		<table class="govuk-table">
 			<thead class="govuk-table__head">
 				<tr class="govuk-table__row">
-					<th class="govuk-table__header" scope="col">Surname</th>
-					<th class="govuk-table__header" scope="col">Given name</th>
-					<th class="govuk-table__header" scope="col">Email address</th>
-					<th class="govuk-table__header" scope="col">Role</th>
+					<th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
+					<th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
+					<th class="govuk-table__header" scope="col">{{__('field_email')}}</th>
+					<th class="govuk-table__header" scope="col">{{__('field_role')}}</th>
 				</tr>
 			</thead>
 			<tbody class="govuk-table__body">
@@ -71,7 +73,7 @@ Manage organisation | Submit a General Aviation Report (GAR)
           {% for user in orgUsers.items %}
           <tr class="govuk-table__row">
             {% if user.email != cookie.getUserEmail() %}
-            <td class="govuk-table__cell"><button class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}">{{ user.lastName }}</button></td>
+            <td class="govuk-table__cell"><button id="edit_user_{{ loop.index }}" class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}">{{ user.lastName }}</button></td>
             {% else %}
             <td class="govuk-table__cell">{{ user.lastName }}</td>
             {% endif %}
@@ -81,17 +83,13 @@ Manage organisation | Submit a General Aviation Report (GAR)
           </tr>
           {% endfor %}
         {% else %}
-          <tr class="govuk-table__row">
-            <td colspan="4"><p class="govuk-inset-text">{{__('organisation_no_records')}}</p></td>
-          </tr>
+          {{ m.empty_table_message(__('organisation_no_records')) }}
         {% endif %}
 			</tbody>
 		</table>
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
 	</div>
-
-
 </div>
 
 {% endblock %}

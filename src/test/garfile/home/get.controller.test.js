@@ -7,7 +7,6 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const userattributes = require('../../../common/seeddata/egar_user_account_details.json');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
 
 const controller = require('../../../app/garfile/home/get.controller');
@@ -35,8 +34,8 @@ describe('GAR Home Get Controller', () => {
 
     await controller(req, res);
 
-    expect(res.render).to.have.been.calledWith('app/garfile/home/index', {
-      cookie, userattributes, garoptions,
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
+      cookie, garoptions,
     });
   });
 });

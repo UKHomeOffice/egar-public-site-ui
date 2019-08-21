@@ -91,11 +91,15 @@ module.exports = {
    * @param {String} orgid id of organisation trying to list crafts
    * @returns {Promise} resolves with API response
    */
-  getOrgCrafts(orgId) {
+  getOrgCrafts(orgId, pageNumber) {
     return new Promise((resolve) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgCrafts(orgId),
+        qs: {
+          per_page: 5,
+          page: pageNumber,
+        },
       },
       (error, response, body) => {
         if (error) {

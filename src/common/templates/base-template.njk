@@ -127,11 +127,19 @@
           randomizeInputName: true,
         }
       );
-      $("input[value='Save and continue'][type='button']").click(function(eventObj) {
+      $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function(eventObj) {
         $("<input />")
           .attr("type", "hidden")
           .attr("name", "buttonClicked")
-          .attr("value", "Save and continue")
+          .attr("value", "{{__('form_save_and_continue')}}")
+          .appendTo("#page-form");
+        return true;
+      });
+      $("input[value='{{__('button_add_to_gar')}}'][type='button']").click(function(eventObj) {
+        $("<input />")
+          .attr("type", "hidden")
+          .attr("name", "buttonClicked")
+          .attr("value", "{{__('button_add_to_gar')}}")
           .appendTo("#page-form");
         return true;
       });

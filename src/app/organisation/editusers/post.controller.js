@@ -3,6 +3,7 @@ const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const orgApi = require('../../../common/services/organisationApi');
+const roles = require('../../../common/seeddata/egar_user_roles');
 
 module.exports = (req, res) => {
   logger.debug('In organisation / editusers post controller');
@@ -34,6 +35,8 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Failed validations editing an organisation user');
-      res.render('app/organisation/editusers/index', { cookie, orgUser, errors: err });
+      res.render('app/organisation/editusers/index', {
+        cookie, orgUser, roles, errors: err,
+      });
     });
 };
