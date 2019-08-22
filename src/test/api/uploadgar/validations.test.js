@@ -6,8 +6,8 @@ const { expect } = require('chai');
 
 const i18n = require('i18n');
 const rewire = require('rewire');
-// const val = require('../../../app/api/uploadgar/validations');
-const validations = rewire('../../../app/api/uploadgar/validations')
+
+const validations = rewire('../../../app/api/uploadgar/validations');
 
 require('../../global.test');
 
