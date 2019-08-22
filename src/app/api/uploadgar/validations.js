@@ -21,7 +21,7 @@ function getVoyageFieldLabel(key) {
   }
 }
 
-function getCrewFieldLabel(key) {
+function getCrewFieldLabel(key) { //NOSONAR
   switch (key) {
     case 'documentType': return i18n.__('field_travel_document_type');
     case 'issuingState': return i18n.__('field_issuing_state');

@@ -46,7 +46,7 @@ describe('Validator', () => {
     expect(validator.isPrintable('John\n')).to.be.false;
   });
 
-  it('Should retunr true when string does not contain "\\n"', () => {
+  it('Should return true when string does not contain "\\n"', () => {
     expect(validator.isPrintable('John Doe')).to.be.true;
   });
 
