@@ -28,11 +28,11 @@ function getCrewFieldLabel(key) {
     case 'documentNumber': return i18n.__('field_travel_document_number');
     case 'lastName': return i18n.__('field_surname');
     case 'firstName': return i18n.__('field_given_name');
-    case 'gender': return i18n.__('field_gender');
     case 'dateOfBirth': return i18n.__('field_dob');
     case 'placeOfBirth': return i18n.__('field_birth_place');
-    case 'nationality': return i18n.__('field_nationality');
     case 'documentExpiryDate': return i18n.__('field_document_expiry_date');
+    case 'gender':
+    case 'nationality': return i18n.__(`field_${key}`);
     default: return `One of the value (${key})`;
   }
 }
