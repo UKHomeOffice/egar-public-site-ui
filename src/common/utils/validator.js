@@ -55,6 +55,14 @@ function isNumeric(input) {
   return (input - parseFloat(input) + 1) >= 0;
 }
 
+/**
+ * Check that string does not contains non-printable characters "\"
+ * @param {String} value
+ */
+function isPrintable(value) {
+  return !value.includes('\n');
+}
+
 // validday
 function validDay(d, m, y) {
   if (isNumeric(d)) {
@@ -384,6 +392,7 @@ module.exports = {
   confirmPassword,
   valuetrue,
   isNumeric,
+  isPrintable,
   validDay,
   validMonth,
   validYear,

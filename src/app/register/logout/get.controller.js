@@ -4,6 +4,6 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   req.session.destroy(() => {
     cookie.reset();
-    res.redirect('/login');
+    res.redirect('/welcome/index');
   });
 };

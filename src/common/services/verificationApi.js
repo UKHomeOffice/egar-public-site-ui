@@ -20,16 +20,13 @@ module.exports = {
         body: JSON.stringify({
           tokenId,
         }),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
-          if (typeof response !== 'undefined') {
-            logger.error(`Code: ${response.statusCode}, message: ${response.statusMessage}`);
-          }
+          logger.error('Failed to call token verification service');
           reject(new Error('Token verification service failed'));
-          return ('Token verification service failed');
+          return;
         }
         resolve(body);
-        return body;
       });
     }).catch((err) => {
       logger.error(err);

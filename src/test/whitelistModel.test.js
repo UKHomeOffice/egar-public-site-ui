@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
+const chai = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
@@ -62,6 +63,19 @@ describe('WhiteList', () => {
       .then((result) => {
         sinon.assert.calledOnce(findOneStubFail);
         expect(result).to.be.false;
+        done();
+      });
+  });
+
+  it('should reject on error', (done) => {
+    const findOneStubFail = sinon.stub().rejects(new Error('Example Reject'));
+    dbStub.sequelize.models.WhiteList.findOne = findOneStubFail;
+    whitelist.isWhitelisted('notthere@gmail.com')
+      .then(() => {
+        sinon.assert.fail('Should not be resolved');
+      }).catch((err) => {
+        sinon.assert.calledOnce(findOneStubFail);
+        expect(err.message).to.eq('Example Reject');
         done();
       });
   });

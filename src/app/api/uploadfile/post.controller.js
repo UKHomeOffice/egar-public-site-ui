@@ -31,26 +31,33 @@ const exceedFileLimit = (fileSize, garId) => {
   });
 };
 
+const handleDeleteDocument = (req, res) => {
+  if (!req.body.deleteDocId) {
+    return false;
+  }
+  logger.info('Found delete supporting document request');
+  garApi.deleteGarSupportingDoc(req.body.garid, req.body.deleteDocId)
+    .then((apiResponse) => {
+      const parsedResponse = JSON.parse(apiResponse);
+      if (parsedResponse.message) {
+        res.redirect('/garfile/supportingdocuments?query=deletefailed');
+        return;
+      }
+      // Redirect to supporting docs
+      res.redirect('/garfile/supportingdocuments');
+    })
+    .catch((deleteSupportingDocErr) => {
+      logger.error('Failed to delete supporting document');
+      logger.error(deleteSupportingDocErr);
+      res.redirect('/garfile/supportingdocuments?query=deletefailed');
+    });
+  return true;
+};
+
 module.exports = (req, res) => {
   logger.info('Entering upload file post controller');
 
-  if (req.body.deleteDocId) {
-    logger.info('Found delete supporting document request');
-    garApi.deleteGarSupportingDoc(req.body.garid, req.body.deleteDocId)
-      .then((apiResponse) => {
-        const parsedResponse = JSON.parse(apiResponse);
-        if (parsedResponse.message) {
-          res.redirect('/garfile/supportingdocuments?query=deletefailed');
-          return;
-        }
-        // Redirect to supporting docs
-        res.redirect('/garfile/supportingdocuments');
-      })
-      .catch((deleteSupportingDocErr) => {
-        logger.error('Failed to delete supporting document');
-        logger.error(deleteSupportingDocErr);
-        res.redirect('/garfile/supportingdocuments?query=deletefailed');
-      });
+  if (handleDeleteDocument(req, res)) {
     return;
   }
 

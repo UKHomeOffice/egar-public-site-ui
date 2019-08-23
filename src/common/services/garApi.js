@@ -12,7 +12,6 @@ module.exports = {
    * @param {Object} partial new GAR fields
    * @returns {Promise} resolves with API response
    */
-
   patch(garId, status, partial) {
     const reqBody = partial;
     reqBody.status = status;
@@ -21,8 +20,7 @@ module.exports = {
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateGar(garId),
         body: JSON.stringify(reqBody),
-      }, (error, response, body) => {
-        logger.debug(`Patch GAR details returned status code: ${response && response.statusCode}`);
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call GAR put API endpoint');
           reject(error);
@@ -44,8 +42,7 @@ module.exports = {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getGar(garId),
-      }, (error, response, body) => {
-        logger.debug(`Get GAR details returned status code: ${response && response.statusCode}`);
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call GAR get API endpoint');
           reject(error);
@@ -57,7 +54,8 @@ module.exports = {
     });
   },
   /**
-   * Gets a GAR's saved people details
+   * Gets a GAR's saved people details.
+   *
    * @param {String} garId id of GAR being requested
    * @returns {Promise} Resolves with API response.
    */
@@ -66,8 +64,7 @@ module.exports = {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getGarPeople(garId),
-      }, (error, response, body) => {
-        logger.debug(`Get GAR people details returned status code: ${response && response.statusCode}`);
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call GAR get people API endpoint');
           reject(error);
@@ -92,8 +89,7 @@ module.exports = {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: garsUrl,
-      }, (error, response, body) => {
-        logger.debug(`Get GARs returned status code: ${response && response.statusCode}`);
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call get GARs endpoint');
           reject(error);
@@ -106,7 +102,8 @@ module.exports = {
   },
 
   /**
-   * Gets a GAR's supporting people details
+   * Gets a GAR's supporting people details.
+   *
    * @param {String} garId id of GAR being requested
    * @returns {Promise} Resolves with API response.
    */
@@ -116,7 +113,6 @@ module.exports = {
         headers: { 'content-type': 'application/json' },
         url: endpoints.getSupportingDoc(garId),
       }, (error, response, body) => {
-        logger.debug(`Get GAR details returned status code: ${response && response.statusCode}`);
         if (error) {
           logger.error('Failed to call GAR get supporting documents API endpoint');
           reject(error);
@@ -133,8 +129,7 @@ module.exports = {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deleteGarSupportingDoc(garId, garSupportingDocId),
-      }, (error, response, body) => {
-        logger.debug(`Delete GAR supporting document returned status code: ${response && response.statusCode}`);
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call delete gar supporting document endpoint');
           reject(error);
@@ -162,8 +157,7 @@ module.exports = {
         body: JSON.stringify({
           people: [personDetails],
         }),
-      }, (error, response, body) => {
-        logger.debug(`Patch GAR person returned status code: ${response && response.statusCode}`);
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call update garperson endpoint');
           reject(error);
@@ -191,8 +185,7 @@ module.exports = {
         body: JSON.stringify({
           garPeopleId: garPersonId,
         }),
-      }, (error, response, body) => {
-        logger.debug(`Delete GAR person returned status code: ${response && response.statusCode}`);
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call delete garperson endpoint');
           reject(error);
