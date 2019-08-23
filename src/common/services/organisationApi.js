@@ -4,13 +4,14 @@ const endpoints = require('../config/endpoints');
 
 module.exports = {
   /**
-   * Call the create organisation endpoint
+   * Call the create organisation endpoint.
+   *
    * @param {String} organisationName Name of organisation to be created
    * @param {String} userId user id of owner of the organisation to be created
    * @returns {Promise} returns response body when resolved.
    */
   create(organisationName, userId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.registerOrg(),
@@ -18,71 +19,65 @@ module.exports = {
           organisationName,
           userId,
         }),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call create organisation API');
-          return error;
+          reject(error);
+          return;
         }
-        resolve(body);
         logger.debug('Successfully called create organisation API');
-        return body;
+        resolve(body);
       });
-    }).catch((err) => {
-      logger.error('Failed to call create organisation API');
-      logger.error(err);
     });
   },
 
   /**
-   * Calls organisation update endpoint and provides new organisation name
+   * Calls organisation update endpoint and provides new organisation name.
+   *
    * @param {String} newOrganisationName new name of organisation
    * @param {String} orgId id of organisation to update
    * @returns {Promise} returns response body when resolved
    */
   update(organisationName, orgId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateOrg(orgId),
         body: JSON.stringify({
           organisationName,
         }),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call update organisation API');
-          return error;
+          reject(error);
+          return;
         }
-        resolve(body);
         logger.debug('Successfully called update organisation API');
-        return body;
+        resolve(body);
       });
-    }).catch((err) => {
-      logger.error('Failed to call update organisation API');
-      logger.error(err);
     });
   },
 
   /**
-   * Calls get organisation API endpoint and returns organisation details
+   * Calls get organisation API endpoint and returns organisation details.
+   *
    * @param {String} orgId
    * @returns {Promise} returns response body when resolved
    */
   get(orgId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgDetails(orgId),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
-          return error;
+          logger.error('Failed to call get organisation details API');
+          reject(error);
+          return;
         }
-        resolve(body);
         logger.debug('Successfully called get organisation details API');
-        return body;
+        resolve(body);
       });
-    }).catch((err) => {
-      logger.error('Failed to call get organisation details API');
-      logger.error(err);
     });
   },
   /**
@@ -91,21 +86,19 @@ module.exports = {
    * @returns {Promise} resolves with API response.
    */
   getUsers(orgId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgUsers(orgId),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
-          return error;
+          logger.error('Failed to call get organisation users API endpoint');
+          reject(error);
+          return;
         }
-        resolve(body);
         logger.debug('Successfully called get organisation users API endpoint');
-        return body;
+        resolve(body);
       });
-    }).catch((err) => {
-      logger.error('Failed to call get organisation users API endpoint');
-      logger.error(err);
     });
   },
   /**
@@ -126,16 +119,15 @@ module.exports = {
             userObj,
           ],
         }),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
+          logger.error('Failed to call edit organisation users API endpoint');
           reject(error);
+          return;
         }
         logger.debug('Successfully called edit organisation users API endpoint');
-        return resolve(body);
+        resolve(body);
       });
-    }).catch((err) => {
-      logger.error('Failed to call edit organisation users API endpoint');
-      logger.error(err);
     });
   },
 };

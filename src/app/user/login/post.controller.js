@@ -76,7 +76,7 @@ module.exports = (req, res) => {
       });
     })
     .catch((err) => {
-      logger.error('Validation error when logging in');
+      logger.info('Validation error when logging in');
       res.render('app/user/login/index', { cookie, errors: err });
     });
 };

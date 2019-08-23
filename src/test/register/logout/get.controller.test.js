@@ -45,7 +45,7 @@ describe('Logout Get Controller', () => {
     callController().then(() => {
       expect(cookie.session.u).to.be.null;
       expect(sessionDestroyStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/login');
+      expect(res.redirect).to.have.been.calledWith('/welcome/index');
     });
   });
 });

@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
+const chai = require('chai');
 const nock = require('nock');
 
 require('./global.test');
@@ -80,7 +81,7 @@ describe('PersonService', () => {
       .reply(200, {});
   });
 
-  it('Should successfully create a person for an individual user', (done) => {
+  it('should successfully create a person for an individual user', (done) => {
     personApi.create(userId, person)
       .then((response) => {
         const responseObj = JSON.parse(response);
@@ -88,6 +89,19 @@ describe('PersonService', () => {
         expect(responseObj).to.have.property('peopleType');
         done();
       });
+  });
+
+  it('should throw an error when creating a person for an individual user', () => {
+    nock.cleanAll();
+    nock(BASE_URL)
+      .post(`/user/${userId}/people`, person)
+      .replyWithError({ message: 'Example create error', code: 404 });
+
+    personApi.create(userId, person).then(() => {
+      chai.assert.fail('Should not have returned without error');
+    }).catch((err) => {
+      expect(err.message).to.equal('Example create error');
+    });
   });
 
   it('Should successfully get the details of a saved person', (done) => {
@@ -100,7 +114,20 @@ describe('PersonService', () => {
       });
   });
 
-  it('Should successfully get all the saved persons for an individual', (done) => {
+  it('should throw an error when getting the details of a saved person', () => {
+    nock.cleanAll();
+    nock(BASE_URL)
+      .get(`/user/${userId}/people/${personId}`)
+      .replyWithError({ message: 'Example getDetails error', code: 404 });
+
+    personApi.getDetails(userId, personId).then(() => {
+      chai.assert.fail('Should not have returned without error');
+    }).catch((err) => {
+      expect(err.message).to.equal('Example getDetails error');
+    });
+  });
+
+  it('should successfully get all the saved people for an individual', (done) => {
     personApi.getPeople(userId, 'individual')
       .then((response) => {
         const responseObj = JSON.parse(response);
@@ -109,7 +136,20 @@ describe('PersonService', () => {
       });
   });
 
-  it('Should successfully get all the saved persons for an org', (done) => {
+  it('should throw an error when getting all the saved people for an individual', () => {
+    nock.cleanAll();
+    nock(BASE_URL)
+      .get(`/user/${userId}/people`)
+      .replyWithError({ message: 'Example getPeople error', code: 404 });
+
+    personApi.getPeople(userId, 'individual').then(() => {
+      chai.assert.fail('Should not have returned without error');
+    }).catch((err) => {
+      expect(err.message).to.equal('Example getPeople error');
+    });
+  });
+
+  it('should successfully get all the saved persons for an org', (done) => {
     personApi.getPeople(orgId, 'organisation')
       .then((response) => {
         const responseObj = JSON.parse(response);
@@ -118,13 +158,26 @@ describe('PersonService', () => {
       });
   });
 
-  it('Should successfully update a saved persons information', (done) => {
+  it('should successfully update a saved persons information', (done) => {
     personApi.update(userId, personId, newPerson)
       .then((response) => {
         const responseObj = JSON.parse(response);
         expect(typeof responseObj).to.equal('object');
         done();
       });
+  });
+
+  it('should throw an error when updating a saved persons information', () => {
+    nock.cleanAll();
+    nock(BASE_URL)
+      .put(`/user/${userId}/people/${personId}`, newPerson)
+      .replyWithError({ message: 'Example update error', code: 404 });
+
+    personApi.update(userId, personId, newPerson).then(() => {
+      chai.assert.fail('Should not have returned without error');
+    }).catch((err) => {
+      expect(err.message).to.equal('Example update error');
+    });
   });
 
   it('Should delete a saved person for an individual', (done) => {
@@ -135,6 +188,19 @@ describe('PersonService', () => {
         expect(responseObj).to.be.empty;
         done();
       });
+  });
+
+  it('should throw an error when deleting a saved person for an individual', () => {
+    nock.cleanAll();
+    nock(BASE_URL)
+      .delete(`/user/${userId}/people/${personId}`)
+      .replyWithError({ message: 'Example deletePerson error', code: 404 });
+
+    personApi.deletePerson(userId, personId).then(() => {
+      chai.assert.fail('Should not have returned without error');
+    }).catch((err) => {
+      expect(err.message).to.equal('Example deletePerson error');
+    });
   });
 
   it('Should delete a saved person for an organisation', (done) => {

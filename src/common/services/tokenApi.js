@@ -26,7 +26,7 @@ module.exports = {
           tokenId,
           userId,
         }),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
           logger.error('There was a problem calling the settoken API');
           logger.error(error);
@@ -46,7 +46,7 @@ module.exports = {
    * @returns {Promise} returns response body when resolved
    */
   updateToken(tokenId, userId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
@@ -54,18 +54,15 @@ module.exports = {
           tokenId,
           userId,
         }),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
-          logger.error('There was a problem calling the settoken API');
-          return console.dir(error);
+          logger.error('There was a problem calling the updateToken API');
+          reject(error);
+          return;
         }
         logger.info('Successfully called updateToken API');
         resolve(body);
-        return body;
       });
-    }).catch((err) => {
-      logger.error('There was a problem calling the updateToken API');
-      logger.info(err);
     });
   },
 
@@ -79,7 +76,7 @@ module.exports = {
    * @returns {Promise} returns response body when resolved.
    */
   setInviteUserToken(tokenId, inviterId, organisationId, roleName) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
@@ -89,20 +86,18 @@ module.exports = {
           organisationId,
           roleName,
         }),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
-          logger.error('There was a problem calling the settoken API');
-          return console.dir(error);
+          logger.error('There was a problem calling the setInviteUserToken API');
+          reject(error);
+          return;
         }
-        logger.info('Successfully called settoken API');
+        logger.info('Successfully called setInviteUserToken API');
         resolve(body);
-        return body;
       });
-    }).catch((err) => {
-      logger.error('There was a problem calling the settoken API');
-      logger.info(err);
     });
   },
+
   /**
    * Stores the MFA token for a specified user.
    *
@@ -193,11 +188,7 @@ module.exports = {
         }, (findOneErr) => {
           logger.error('Failed to connect to db and find token');
           logger.error(findOneErr);
-        })
-        .catch((err) => {
-          logger.error('Failed to validate MFA token');
-          logger.error(err);
-          reject(err);
+          reject(findOneErr);
         });
     });
   },
