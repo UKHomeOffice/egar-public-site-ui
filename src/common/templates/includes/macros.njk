@@ -59,3 +59,7 @@
 {% macro hint(id, hint) %}
   <span id="{{ id }}-hint" class="govuk-hint">{{ hint }}</span>
 {% endmacro %}
+
+{% macro abbreviation(id, abbreviation, phrase) %}
+  <abbr title="{{ phrase }}"><a href="/terms#{{ id }}" title="{{ phrase }}" class="glossary">{{ abbreviation }}</a></abbr>
+{% endmacro %}

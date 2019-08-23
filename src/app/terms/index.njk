@@ -1,0 +1,59 @@
+{% extends "base-template.njk" %}
+
+{% block pageTitle %}
+  Glossary of Terms | {{__('title')}}
+{% endblock %}
+
+{% block head %}
+  {% include "head.njk" %}
+{% endblock %}
+
+{% block header %}
+  {% if cookie.getUserDbId() and cookie.getUserVerified() and cookie.getUserRole() %}
+    {% include "header-user.njk" %}
+  {% else %}
+    {% include "header-pre-user.njk" %}
+  {% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+	  <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Glossary of Terms</h1>
+
+      <h2 id="GAR" class="govuk-heading-m">GAR</h2>
+      <p class="govuk-body-m">
+        General Aviation Report
+      </p>
+
+      <h2 id="IATA" class="govuk-heading-m">IATA</h2>
+      <p class="govuk-body-m">
+        International Air Transport Association, codes with 3 letters.
+      </p>
+
+      <h2 id="ICAO" class="govuk-heading-m">ICAO</h2>
+      <p class="govuk-body-m">
+        International Civil Aviation Organisation, codes with 4 letters.
+      </p>
+
+      <h2 id="UTC" class="govuk-heading-m">UTC</h2>
+      <p class="govuk-body-m">
+        Coordinated Universal Time
+      </p>
+
+      <h2 id="UTC" class="govuk-heading-m">TBD</h2>
+      <p class="govuk-body-m">
+        To Be Determined
+      </p>
+
+      <h2 id="NA" class="govuk-heading-m">N/A</h2>
+      <p class="govuk-body-m">
+        Not Available
+      </p>
+    </div>
+  </div>
+{% endblock %}

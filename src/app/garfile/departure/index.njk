@@ -128,7 +128,14 @@
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
               <h2 class="govuk-fieldset__heading">{{__('field_port_choice')}}</h2>
             </legend>
-            <span id="portChoice-hint" class="govuk-hint">{{__('field_port_choice_hint')}}</span>
+            <span id="portChoice-hint" class="govuk-hint">
+              {# {{__('field_port_choice_hint')}} #}
+              {{__('field_port_choice_hint_2') | replace('--ABBR-IATA', m.abbreviation('IATA', 'IATA', 'International Air Transport Association')) | replace('--ABBR-ICAO', m.abbreviation('ICAO', 'ICAO', 'International Civil Aviation Organisation')) | safe }}
+              <br>
+              {# TODO: Difficulty is taking a phrase from the i18n en.json but adding the markup for the abbreviations #}
+              {# This might require javascript, or breaking the phrase up, or doing something like the above, which is a little verbose, and a custom filter must certainly make this more elegant #}
+              If the {{ m.abbreviation('IATA', 'IATA', 'International Air Transport Association') }} or {{ m.abbreviation('ICAO', 'ICAO', 'International Civil Aviation Organisation') }} code is unknown, geographic coordinates are expected.
+            </span>
             {{ m.error_message('portChoice', errors, __) }}
             <div class="govuk-radios govuk-radios--conditional" data-module="radios">
               <div class="govuk-radios__item">
@@ -140,7 +147,9 @@
               <div id="portChoiceCodeContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
                 <div class="{{ m.form_group_class('departurePort', errors) }}">
                   <label id="departurePort-label" class="govuk-label" for="departurePort">{{__('field_port_code')}}</label>
-                  {{ m.hint('departurePort', __('field_port_hint')) }}
+                  {# {{ m.hint('departurePort', __('field_port_hint')) }} #}
+                  <span id="departurePort-hint" class="govuk-hint">
+                    Provide the 3 letter {{ m.abbreviation('IATA', 'IATA', 'International Air Transport Association') }} or the 4 letter {{ m.abbreviation('ICAO', 'ICAO', 'International Civil Aviation Organisation') }} code for the port. The arrival port must be different to the departure port.</span>
                   {{ m.error_message('departurePort', errors, __) }}
                   <select id="departurePort" name="departurePort" class="govuk-select" 
                     value="{{ cookie.getGarDepartureVoyage().departurePort | upper }}"
@@ -160,7 +169,8 @@
               </div>
               <div id="portChoiceCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
                 <div class="govuk-form-group">
-                  {{ m.hint('departureCoordinates', __('field_coordinate_hint')) }}
+                  {# {{ m.hint('departureCoordinates', __('field_coordinate_hint')) }} #}
+                  {{ m.hint('departureCoordinates', __('field_coordinate_hint_2')) | replace('--ABBR-IATA', m.abbreviation('IATA', 'IATA', 'International Air Transport Association')) | replace('--ABBR-ICAO', m.abbreviation('ICAO', 'ICAO', 'International Civil Aviation Organisation')) | safe  }}
                 </div>
                 {# Start departure coords #}
                 <div class="govuk-form-group {{ m.form_group_class('departureLat', errors) }}">
