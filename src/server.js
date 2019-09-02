@@ -182,6 +182,7 @@ function initialiseI18n(app) {
   i18n.configure({
     locales: ['en'],
     directory: path.join(__dirname, '/locales'),
+    updateFiles: false,
     objectNotation: true,
     defaultLocale: 'en',
     register: global,

@@ -16,6 +16,8 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const emailService = require('../../../common/services/sendEmail');
 const { Manifest } = require('../../../common/models/Manifest.class');
+const config = require('../../../common/config');
+
 const controller = require('../../../app/garfile/review/post.controller');
 
 describe('GAR Review Post Controller', () => {
@@ -40,6 +42,11 @@ describe('GAR Review Post Controller', () => {
       session: {
         gar: {
           id: 'ABCDE',
+          reference: '1234 4321 7890 0987',
+        },
+        u: {
+          fn: 'Jim',
+          e: 'captain@1701.net',
         },
         submiterrormessage: [],
         save: callback => callback(),
@@ -357,7 +364,7 @@ describe('GAR Review Post Controller', () => {
 
       callController().then().then().then(() => {
         cookie.setGarStatus('Submitted');
-        expect(emailService.send).to.have.been.called;
+        expect(emailService.send).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_SUBMISSION_TEMPLATE_ID, 'captain@1701.net', { firstName: 'Jim', garId: '1234 4321 7890 0987' });
       })
         .then(() => {
           expect(res.render).to.have.been.called;

@@ -12,7 +12,7 @@ module.exports = (req, res) => {
     .then(() => {
       emailService.send(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, cookie.getUserEmail(), {
         firstName: cookie.getUserFirstName(),
-        garId: cookie.getGarId(),
+        garId: cookie.getGarReference(),
       }).then(() => {
         req.session.successMsg = 'The GAR has been successfully cancelled';
         req.session.successHeader = 'Cancellation Confirmation';

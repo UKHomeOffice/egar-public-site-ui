@@ -31,7 +31,7 @@ const performAPICall = (garId, cookie, req, res) => {
       cookie.setGarStatus('Submitted');
       emailService.send(config.NOTIFY_GAR_SUBMISSION_TEMPLATE_ID, cookie.getUserEmail(), {
         firstName: cookie.getUserFirstName(),
-        garId: cookie.getGarId(),
+        garId: cookie.getGarReference(),
       }).then(() => {
         res.render('app/garfile/submit/success/index', {
           cookie,
