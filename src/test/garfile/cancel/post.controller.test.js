@@ -83,6 +83,25 @@ describe('GAR Cancel Post Controller', () => {
     });
   });
 
+  it('should send an email and redirect with message using UUID', () => {
+    delete req.session.gar.reference;
+    garApiPatchStub.resolves();
+    emailServiceStub.resolves();
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
+      expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', garId: 'ABCDE-CANCEL' });
+      expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled');
+      expect(req.session.successHeader).to.eq('Cancellation Confirmation');
+      expect(sessionSaveStub).to.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
+    });
+  });
+
   it('should redirect with error message', () => {
     garApiPatchStub.resolves();
     emailServiceStub.rejects('emailService.send Example Reject');

@@ -7,12 +7,13 @@ const config = require('../../../common/config');
 module.exports = (req, res) => {
   logger.debug('In garfile / cancel get controller');
   const cookie = new CookieModel(req);
+  const reference = cookie.getGarReference() == null ? cookie.getGarId() : cookie.getGarReference();
   garApi
     .patch(cookie.getGarId(), 'Cancelled', {})
     .then(() => {
       emailService.send(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, cookie.getUserEmail(), {
         firstName: cookie.getUserFirstName(),
-        garId: cookie.getGarReference(),
+        garId: reference,
       }).then(() => {
         req.session.successMsg = 'The GAR has been successfully cancelled';
         req.session.successHeader = 'Cancellation Confirmation';

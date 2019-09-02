@@ -29,9 +29,10 @@ const performAPICall = (garId, cookie, req, res) => {
 
       logger.info('Successfully submitted GAR');
       cookie.setGarStatus('Submitted');
+      const reference = cookie.getGarReference() == null ? cookie.getGarId() : cookie.getGarReference();
       emailService.send(config.NOTIFY_GAR_SUBMISSION_TEMPLATE_ID, cookie.getUserEmail(), {
         firstName: cookie.getUserFirstName(),
-        garId: cookie.getGarReference(),
+        garId: reference,
       }).then(() => {
         res.render('app/garfile/submit/success/index', {
           cookie,
