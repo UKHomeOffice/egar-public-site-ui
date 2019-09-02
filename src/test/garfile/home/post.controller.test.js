@@ -124,6 +124,7 @@ describe('GAR Customs Post Controller', () => {
     req.body.garoption = '0';
     createGarApiStub.resolves(JSON.stringify({
       garId: 'NEWLY-CREATED-ID',
+      reference: '1234 1234 1234 1234',
     }));
 
     const callController = async () => {
@@ -136,6 +137,7 @@ describe('GAR Customs Post Controller', () => {
       expect(res.render).to.not.have.been.called;
       expect(sessionSaveStub).to.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/departure');
+      expect(cookie.getGarReference()).to.eq('1234 1234 1234 1234');
     });
   });
 });

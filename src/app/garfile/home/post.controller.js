@@ -36,6 +36,7 @@ module.exports = (req, res) => {
           }
           // Success
           cookie.setGarId(parsedResponse.garId);
+          cookie.setGarReference(parsedResponse.reference);
           cookie.setGarStatus(garStatus);
           req.session.save(() => {
             res.redirect('/garfile/departure');

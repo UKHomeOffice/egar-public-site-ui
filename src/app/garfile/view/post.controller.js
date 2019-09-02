@@ -60,8 +60,9 @@ module.exports = (req, res) => {
       }
 
       cookie.setGarId(parsedGar.garId);
+      cookie.setGarReference(parsedGar.reference);
       cookie.setGarStatus(parsedGar.status.name);
-      logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
+      logger.info(`Retrieved GAR id: ${parsedGar.garId} with reference: ${parsedGar.reference}`);
 
       // Maybe not necessary but delete the ids as the template does not need them
       delete parsedGar.userId;

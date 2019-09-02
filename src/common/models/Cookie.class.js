@@ -83,6 +83,7 @@ class Cookie {
     if (this.session.gar == null) {
       this.session.gar = {
         id: null,
+        reference: null,
         status: null,
         craft: {
           registration: null,
@@ -161,6 +162,14 @@ class Cookie {
 
   getGarId() {
     return this.session.gar.id;
+  }
+
+  getGarReference() {
+    return this.session.gar.reference;
+  }
+
+  setGarReference(reference) {
+    this.session.gar.reference = reference;
   }
 
   setAddPersonId(id) {

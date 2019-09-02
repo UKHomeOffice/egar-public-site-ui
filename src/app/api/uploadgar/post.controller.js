@@ -156,6 +156,7 @@ module.exports = (req, res) => {
           logger.info('Created new GAR');
           const { garId } = parsedResponse;
           cookie.setGarId(garId);
+          cookie.setGarReference(parsedResponse.reference);
           cookie.setGarStatus('Draft');
 
           const crewUpdate = garApi.patch(garId, 'Draft', { people: crew });
