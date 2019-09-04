@@ -15,7 +15,12 @@ const generateCountryList = () => {
   Object.keys(countries.getNames('en')).forEach((key) => {
     const alpha3 = countries.alpha2ToAlpha3(key);
     const countryName = countries.getNames('en')[key];
-    alpha3List.push({ code: alpha3, label: `${countryName} (${alpha3})` });
+    // Some people may type in "UK", so this particular case is handled here
+    if (key === 'GB') {
+      alpha3List.push({ code: alpha3, label: `${countryName} (${alpha3} - ${key} - UK)` });
+    } else {
+      alpha3List.push({ code: alpha3, label: `${countryName} (${alpha3} - ${key})` });
+    }
   });
 
   return alpha3List;
