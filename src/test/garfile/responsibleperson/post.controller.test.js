@@ -201,6 +201,7 @@ describe('GAR Responsible Person Post Controller', () => {
       });
       expect(res.render).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledWith('/garfile/customs');
+      expect(cookie.getGarResponsiblePerson().responsibleGivenName).to.eq('Jean-Luc');
     });
   });
 });

@@ -113,6 +113,15 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
   // Read xls/x file into memory
+  try {
+    XLSX.read(req.file.buffer, { cellDates: true });
+  } catch (err) {
+    logger.error(`Error when reading the Excel spreadsheet: ${err.message}`);
+    req.session.failureMsg = `Error processing file: ${err.message}`;
+    req.session.failureIdentifier = 'file';
+    req.session.save(() => res.redirect('/garfile/garupload'));
+    return;
+  }
   const workbook = XLSX.read(req.file.buffer, { cellDates: true });
   const firstSheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[firstSheetName];
@@ -184,6 +193,7 @@ module.exports = (req, res) => {
     })
     .catch((validationErrs) => {
       logger.info('Validation errors detected on file upload');
+      logger.error(JSON.stringify(validationErrs));
       req.session.failureMsg = validationErrs;
       req.session.save(() => res.redirect('/garfile/garupload'));
     });

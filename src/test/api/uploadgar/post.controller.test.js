@@ -135,6 +135,17 @@ describe('API upload GAR post controller', () => {
       expect(res.redirect).to.have.been.calledWith('garfile/garupload');
     });
 
+    it('return message if read returns an error', async () => {
+      sinon.stub(XLSX, 'read').throws(new Error('File is password-protected'));
+      req.file.originalname = 'incorrect.xls';
+
+      await controller(req, res);
+
+      expect(req.session.failureMsg).to.eq('Error processing file: File is password-protected');
+      expect(req.session.failureIdentifier).to.eq('file');
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/garupload');
+    });
+
     it('return message if cell C1 is undefined', async () => {
       delete incorrectWorkbook.Sheets.Sheet1.C1;
       sinon.stub(XLSX, 'read').returns(incorrectWorkbook);
@@ -239,7 +250,7 @@ describe('API upload GAR post controller', () => {
 
     // TODO: Error message informs the GAR could not be updated, but one was created anyways?
     // TODO: There are three calls to update the GAR, but payload could be combined into one? Maybe?
-    it('should mention when on of the update steps rejects', () => {
+    it('should mention when one of the update steps rejects', () => {
       const data = getValidWorkbook();
 
       sinon.stub(createGarApi, 'createGar').resolves(JSON.stringify({
