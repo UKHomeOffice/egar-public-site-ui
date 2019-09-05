@@ -42,12 +42,15 @@ describe('Verify Organisation Invite Get Controller', () => {
     cookie.reset();
     cookie.initialise();
     cookie.setInviteUserToken('HashedToken123');
+    cookie.setInviteUserLastName('Example');
+    expect(cookie.getInviteUserLastName()).to.equal('Example');
 
     await controller(req, res);
 
     // CookieModel instance created, can that be asserted
     expect(tokenService.generateHash).to.have.been.calledOnceWithExactly('Example Incoming Unhashed Token');
     expect(cookie.getInviteUserToken()).to.eq('HashedToken123');
+    expect(cookie.getInviteUserLastName()).to.equal(null);
     expect(res.render).to.have.been.calledOnceWithExactly('app/verify/organisationinvite/index');
   });
 });

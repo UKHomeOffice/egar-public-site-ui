@@ -132,6 +132,7 @@ describe('Manage User Detail Post Controller', () => {
     callController().then().then(() => {
       expect(userApi.updateDetails).to.have.been.calledWith('kylo.ren@firstorder.emp', 'Kylo', 'Ren');
       expect(res.render).to.have.been.calledWith('app/user/detailschanged/index', { cookie });
+      expect(cookie.getUserLastName()).to.equal('Ren');
     });
   });
 });

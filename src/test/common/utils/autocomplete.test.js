@@ -19,10 +19,10 @@ describe('Autocomplete Utility', () => {
 
     const uk = result.find(row => row.code === 'GBR');
     expect(uk.code).to.eq('GBR');
-    expect(uk.label).to.eq('United Kingdom (GBR)');
+    expect(uk.label).to.eq('United Kingdom (GBR - GB - UK)');
 
     const jpn = result.find(row => row.code === 'JPN');
     expect(jpn.code).to.eq('JPN');
-    expect(jpn.label).to.eq('Japan (JPN)');
+    expect(jpn.label).to.eq('Japan (JPN - JP)');
   });
 });

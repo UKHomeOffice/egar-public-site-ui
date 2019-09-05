@@ -205,7 +205,8 @@
 <script type="text/javascript">
   accessibleAutocomplete.enhanceSelectElement({
     selectElement: document.querySelector('#departurePort'),
-    minLength: 2,
+    showNoOptionsFound: false,
+    minLength: 3,
   });
   document.getElementById("departurePort").setAttribute('aria-describedby', 'departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}');
 </script>

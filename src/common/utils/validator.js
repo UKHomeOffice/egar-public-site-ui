@@ -185,13 +185,6 @@ function validFlag(value) {
   return false;
 }
 
-function validPort(value) {
-  if (value.length >= 3) {
-    return true;
-  }
-  return false;
-}
-
 function confirmPassword(value1, value2) {
   if (value1 === value2) {
     return true;
@@ -368,7 +361,9 @@ function isValidDateTime(dateTimeStr, dateTimeFormat = 'YYYY-MM-DD HH:mm:ss') {
  */
 function isValidDepAndArrDate(voyageDateTimeObject) {
   const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss';
-  const { departureDate, departureTime, arrivalDate, arrivalTime } = voyageDateTimeObject;
+  const {
+    departureDate, departureTime, arrivalDate, arrivalTime,
+  } = voyageDateTimeObject;
   const depDateTimeStr = `${departureDate} ${departureTime}`;
   const arrDateTimeStr = `${arrivalDate} ${arrivalTime}`;
 
@@ -405,7 +400,6 @@ module.exports = {
   currentOrFutureDate,
   validTime,
   validFlag,
-  validPort,
   validISOCountryLength,
   validISO3Country,
   validFreeCirculation,
