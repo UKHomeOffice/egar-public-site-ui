@@ -19,10 +19,13 @@
     <label id="nationality-label" class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
     {{ m.hint('nationality', __('field_nationality_hint')) }}
     {{ m.error_message('nationality', errors, __) }}
-    <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}" aria-labelledby="nationality-label" aria-describedby="nationality-hint">
-      {% for country in countryList|sort(attribute='label') %}
-        <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
-      {% endfor %}
+    <select id="nationality" name="nationality" class="govuk-select"
+    value="{{ (person['nationality'] or req.body['nationality'])}}"
+    aria-labelledby="nationality-label"
+    aria-describedby="nationality-hint">
+    {% for country in countryList|sort(attribute='label') %}
+      <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
+    {% endfor %}
     </select>
   </div>
 
@@ -188,4 +191,6 @@
   accessibleAutocomplete.enhanceSelectElement({
     selectElement: document.querySelector('#issuingState')
   });
+    document.getElementById('nationality').setAttribute('aria-describedby', 'nationality-hint');
+    document.getElementById('issuingState').setAttribute('aria-describedby', 'issuingState-hint');
 </script>
