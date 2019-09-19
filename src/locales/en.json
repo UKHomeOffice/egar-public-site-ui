@@ -131,7 +131,7 @@
     "field_arrival_port": "Arrival port",
     "field_arrival_coordinates": "Arrival coordinates",
 
-    "field_port_choice": "Do you know the departure port's ICAO or IATA code?",
+    "field_port_choice": "Do you know the %s port's ICAO or IATA code?",
     "field_choice_yes": "Yes",
     "field_choice_no": "No",
     "field_port_code": "IATA or ICAO code",
@@ -313,7 +313,7 @@
     "submit_gar_caption": "By submitting this General Aviation Report you are confirming that, to the best of your knowledge, the information you are providing is correct and you have the explicit permission of the persons named in this report to submit information on their behalf.",
     "review_gar_submit": "Accept and submit GAR",
 	"review_gar_exit": "Exit without submitting",
-	
+
 	"create_organisation_caption_1": "Creating an organisation enables you to collaborate with other users on creating and submitting GARs.",
 	"create_organisation_caption_2": "There is no restriction on who can create an organisation and you retain full control over which users belong to, and can submit GARs on behalf of, your organisation.",
 	"assistive_warning": "Warning ",
@@ -337,7 +337,7 @@
     "invite_user_surname_hint": "Enter the surname of the user.",
     "invite_user_email_hint": "Enter the email of the user.",
     "invite_user_cemail_hint": "Confirm the email of the user.",
-    
+
     "heading_invite_sent": "Invitation sent",
     "heading_what_happens_next": "What happens next",
     "what_happens_next_caption": "We have sent the user an email that contains an invitation link. This link will remain valid for 12 hours. The user will need to click the link in the email to complete the account registration process.",
@@ -362,7 +362,7 @@
 	"heading_delete_account": "Delete account",
 	"delete_account_caption": "Delete this account and any organisation listed in it.",
     "form_delete_this_account": "Delete this account",
-    
+
     "title_cookies": "Cookies",
     "cookies_caption": "This service puts small files (known as 'cookies') onto your computer to collect information about how you browse the site.",
     "heading_cookies_use_list": "Cookies are used to:",
