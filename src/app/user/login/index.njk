@@ -58,7 +58,7 @@
 
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-		<form action="login" autocomplete="off" method="POST">
+		<form action="login" autocomplete="off" method="POST" onsubmit="submitButton.disabled=true; return true;">
 			<h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
 			<div class="govuk-form-group {{ m.form_group_class('username', errors) }}">
 				<label class="govuk-label govuk-label--m" for="username">{{ __('field_username') }}</label>
@@ -67,7 +67,7 @@
 				<input class="govuk-input" id="username" name="username" type="text" aria-describedby="username-hint{{ ' username-error' if errors }}">
 			</div>
 
-			<button type="submit" class="govuk-button">
+			<button id="submitButton" type="submit" class="govuk-button" data-prevent-double-click="true">
 				{{ __('button_sign_in' )}}
 			</button>
 
