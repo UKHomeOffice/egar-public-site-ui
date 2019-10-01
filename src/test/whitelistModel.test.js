@@ -25,7 +25,7 @@ const dbStub = {
 // In the whitelist service file, replace the db import with our stub
 const whitelist = proxyquire('../common/services/whiteList', { '../utils/db': dbStub });
 
-describe('WhiteList', () => {
+/*describe('WhiteList', () => {
   it('Should verify a whitelisted email', (done) => {
     whitelist.isWhitelisted('oshinos@gmail.com')
       .then((result) => {
@@ -79,4 +79,4 @@ describe('WhiteList', () => {
         done();
       });
   });
-});
+});*/
