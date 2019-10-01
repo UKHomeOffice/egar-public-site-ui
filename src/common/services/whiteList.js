@@ -5,16 +5,16 @@ module.exports = {
   /**
    * Predicate. True if email is in whitelist table, else false.
    *
-   * @param {String} email Email to check for in whitelist table
+   * @param {String} emailAddress Email to check for in whitelist table
    * @returns {Promise} resolves to bool
    */
-  isWhitelisted(email) {
+  isWhitelisted(emailAddress) {
     return new Promise((resolve, reject) => {
-      logger.info(`Searching ${email} against whitelist`);
+      logger.info(`Searching ${emailAddress} against whitelist`);
       db.sequelize.models.WhiteList
         .findOne({
           where: {
-            email,
+            email: db.sequelize.where(db.sequelize.fn('LOWER', db.sequelize.col('email')), '=', emailAddress.toLowerCase())
           },
         })
         .then((result) => {
