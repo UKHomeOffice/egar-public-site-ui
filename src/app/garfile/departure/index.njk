@@ -48,7 +48,8 @@
                   <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_day')}}
                 </label>
                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureDay"
-                name="departureDay" type="number" pattern="[0-9]*" min="1" max="31"
+                name="departureDay" type="number" pattern="[0-9]*" min="1" max="31" maxlength="2"
+                onKeyPress="if(this.value.length === this.maxLength) return false;"
                 value="{{ cookie.dateSlice('day', cookie.getGarDepartureVoyage().departureDate) }}"
                 {{ 'aria-describedby=departureDate-error' if errors | containsError('departureDate') }}>
               </div>
@@ -61,7 +62,8 @@
                 </label>
                 <span id="departure-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMonth"
-                    name="departureMonth" type="number" pattern="[0-9]*" min="1" max="12"
+                    name="departureMonth" type="number" pattern="[0-9]*" min="1" max="12" maxlength="2"
+                    onKeyPress="if(this.value.length === this.maxLength) return false;"
                     value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}"
                     aria-describedby="{{ 'departureDate-error ' if errors | containsError('departureDate') }}departure-month-hint">
               </div>
@@ -73,7 +75,8 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_year')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureYear"
-                    name="departureYear" type="number" pattern="[0-9]*" min="1900" max="2200"
+                    name="departureYear" type="number" pattern="[0-9]*" min="1900" max="2200" maxlength="4"
+                    onKeyPress="if(this.value.length === this.maxLength) return false;"
                     value="{{ cookie.dateSlice('year', cookie.getGarDepartureVoyage().departureDate) }}"
                     {{ 'aria-describedby=departureDate-error' if errors | containsError('departureDate') }}>
                 </div>
@@ -101,7 +104,8 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_hour')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureHour"
-                    name="departureHour" type="number" pattern="[0-9]*" min="00" max="23"
+                    name="departureHour" type="number" pattern="[0-9]*" min="00" max="23" maxlength="2"
+                    onKeyPress="if(this.value.length === this.maxLength) return false;"
                     value="{{ cookie.timeSlice('hour', cookie.getGarDepartureVoyage().departureTime) }}"
                     {{ 'aria-describedby=departureTime-error' if errors | containsError('departureTime') }}>
                 </div>
@@ -113,7 +117,8 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_minute')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMinute"
-                    name="departureMinute" type="number" pattern="[0-9]*" min="00" max="59"
+                    name="departureMinute" type="number" pattern="[0-9]*" min="00" max="59" maxlength="2"
+                    onKeyPress="if(this.value.length === this.maxLength) return false;"
                     value="{{ cookie.timeSlice('minute', cookie.getGarDepartureVoyage().departureTime) }}"
                     {{ 'aria-describedby=departureTime-error' if errors | containsError('departureTime') }}>
                 </div>
