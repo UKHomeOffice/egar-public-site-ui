@@ -65,7 +65,7 @@ spec:
             - name: TIMEOUT
               value: "60000"
         - name: public-site-av
-          image: quay.io/ukhomeofficedigital/clamav:d298d2c281c9e6169c99c67d03ff71f4bda029eb
+          image: quay.io/ukhomeofficedigital/clamav:latest
           imagePullPolicy: Always
           securityContext:
             runAsNonRoot: true
