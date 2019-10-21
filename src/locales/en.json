@@ -131,7 +131,8 @@
     "field_arrival_port": "Arrival port",
     "field_arrival_coordinates": "Arrival coordinates",
 
-    "field_port_choice": "Do you know the departure port's ICAO or IATA code?",
+    "field_port_choice_departure": "Do you know the departure port's ICAO or IATA code?",
+    "field_port_choice_arrival": "Do you know the arrival port's ICAO or IATA code?",
     "field_choice_yes": "Yes",
     "field_choice_no": "No",
     "field_port_code": "IATA or ICAO code",

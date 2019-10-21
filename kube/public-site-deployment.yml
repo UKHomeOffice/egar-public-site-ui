@@ -254,3 +254,4 @@ spec:
           ports:
             - name: public-site-prt
               containerPort: 3000
+
