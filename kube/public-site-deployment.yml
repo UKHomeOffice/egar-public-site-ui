@@ -43,6 +43,8 @@ spec:
               value: "add_header Strict-Transport-Security \"max-age=31536000; includeSubDomains\" always;"
             - name: CLIENT_MAX_BODY_SIZE
               value: '20'
+            - name: STATSD_METRICS
+              value: 'FALSE'
         - name: public-site-avp
           image: quay.io/ukhomeofficedigital/docker-clamav-rest:1.0.0
           imagePullPolicy: Always
