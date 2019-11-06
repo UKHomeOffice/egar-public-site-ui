@@ -13,8 +13,6 @@ spec:
         name: public-site-svc
         service: public-site-svc
     spec:
-      imagePullSecrets:
-        - name: artifactory-secret
       containers:
         - name: public-site-proxy
           image: quay.io/ukhomeofficedigital/egar-nginx-proxy:v3.4.2
@@ -45,6 +43,8 @@ spec:
               value: "add_header Strict-Transport-Security \"max-age=31536000; includeSubDomains\" always;"
             - name: CLIENT_MAX_BODY_SIZE
               value: '20'
+            - name: STATSD_METRICS
+              value: 'FALSE'
         - name: public-site-avp
           image: quay.io/ukhomeofficedigital/docker-clamav-rest:1.0.0
           imagePullPolicy: Always
@@ -67,7 +67,7 @@ spec:
             - name: TIMEOUT
               value: "60000"
         - name: public-site-av
-          image: quay.io/ukhomeofficedigital/clamav:v1.6.1
+          image: quay.io/ukhomeofficedigital/clamav:latest
           imagePullPolicy: Always
           securityContext:
             runAsNonRoot: true
@@ -96,14 +96,6 @@ spec:
               memory: "2048Mi"
               cpu: "2000m"
           env:
-            - name: KUBE_ARTIFACTORY_APP_SECRET
-              value: {{ .KUBE_ARTIFACTORY_APP_SECRET }}
-            - name: KUBE_NAMESPACE
-              value: {{ .KUBE_NAMESPACE }}
-            - name: KUBE_SERVER
-              value: {{ .KUBE_SERVER }}
-            - name: KUBE_TOKEN
-              value: {{ .KUBE_TOKEN }}
             - name: LOG_LEVEL
               valueFrom:
                 secretKeyRef:
@@ -262,3 +254,4 @@ spec:
           ports:
             - name: public-site-prt
               containerPort: 3000
+
