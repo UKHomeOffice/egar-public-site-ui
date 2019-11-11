@@ -25,12 +25,12 @@
   <input id="save-and-continue" class="govuk-button" type="submit"
     name="buttonClicked"
     value="{{__('form_save_and_continue')}}"
-    onclick="sendAnalytics(event, '{{ analyicsPage }} - Save and Continue', 'click')">
+    onclick="sendAnalytics(event, '{{ analyticsPage }} - Save and Continue', 'click')">
   <p class="govuk-body-m">
     <input id="save-and-come-back" class="disableAutoFillSubmit govuk-button govuk-button--secondary" type="submit"
       name="buttonClicked"
       value="{{__('form_save_and_come_back')}}"
-      onclick="sendAnalytics(event, '{{ analyicsPage }} - Save and Exit', 'click')">
+      onclick="sendAnalytics(event, '{{ analyticsPage }} - Save and Exit', 'click')">
   </p>
   
   <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
