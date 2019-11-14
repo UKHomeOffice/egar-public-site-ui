@@ -22,12 +22,16 @@ module.exports = (req, res) => {
       organisationApi.update(orgName, cookie.getOrganisationId())
         .then((apiResponse) => {
           const responseObj = JSON.parse(apiResponse);
-          logger.debug(`Response from API: ${JSON.stringify(responseObj)}`);
-          // Check for error
-          cookie.setOrganisationName(req.body.orgName);
-          req.session.save(() => {
-            res.redirect('/organisation');
-          });
+            // Check for error
+          if(Object.prototype.hasOwnProperty.call(responseObj, 'message')) {
+              const error = [{ message: responseObj.message }];
+              res.render('app/organisation/editorganisation/index', { cookie, orgName, errors: error });
+          } else {
+              cookie.setOrganisationName(req.body.orgName);
+              req.session.save(() => {
+                  res.redirect('/organisation');
+              });
+          }
         })
         .catch((err) => {
           logger.error('There was a problem updating the organisation');
