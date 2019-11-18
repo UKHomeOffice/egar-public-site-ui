@@ -61,6 +61,29 @@ describe('Organisation Edit Post Controller', () => {
     });
   });
 
+  it('should render message when organisation already exists', () => {
+    req.body.orgName = 'myOrganisation';
+    cookie = new CookieModel(req);
+
+    orgApiStub.resolves(JSON.stringify({
+      message: 'Organisation already exists',
+    }));
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(orgApiStub).to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
+        cookie,
+        orgName: 'myOrganisation',
+        errors: [{message: 'Organisation already exists'}],
+      });
+    });
+
+  });
+
   it('should render with error message when api rejects', () => {
     cookie = new CookieModel(req);
 
