@@ -25,9 +25,11 @@ module.exports = (req, res) => {
             // Check for error
           if(Object.prototype.hasOwnProperty.call(responseObj, 'message')) {
               const error = [{ message: responseObj.message }];
+              logger.error(JSON.stringify(responseObj.message));
               res.render('app/organisation/editorganisation/index', { cookie, orgName, errors: error });
           } else {
               cookie.setOrganisationName(req.body.orgName);
+              logger.info('Organisation successfully updated');
               req.session.save(() => {
                   res.redirect('/organisation');
               });
