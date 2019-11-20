@@ -6,14 +6,6 @@ const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 
 const createValidationChains = (voyage) => {
-  // Define port / date validation msgs
-  const portChoiceMsg = 'Select whether the port code is known';
-  const portCodeMsg = 'The departure airport code must be entered';
-  const futureDateMsg = 'Departure date must be today or in the future';
-  const realDateMsg = 'Enter a real departure date';
-  const timeMsg = 'Enter a real departure time';
-  const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places';
-  const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places';
 
   // Create validation input objs
   const departPortObj = {
@@ -33,20 +25,20 @@ const createValidationChains = (voyage) => {
 
   // Define port validations
   const departurePortValidation = [
-    new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, portCodeMsg),
+    new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, __('field_departure_port_code_validation')),
   ];
 
   // Define latitude validations
-  const departureLatValidation = [new ValidationRule(validator.latitude, 'departureLat', voyage.departureLat, latitudeMsg)];
+  const departureLatValidation = [new ValidationRule(validator.latitude, 'departureLat', voyage.departureLat, __('field_latitude_validation'))];
 
   // Define latitude validations
-  const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, longitudeMsg)];
+  const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, __('field_longitude_validation'))];
 
   const validations = [
-    [new ValidationRule(validator.realDate, 'departureDate', departDateObj, realDateMsg)],
-    [new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, futureDateMsg)],
-    [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, timeMsg)],
-    [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, portChoiceMsg)],
+    [new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation'))],
+    [new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, __('field_departure_date_validation'))],
+    [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, __('field_departure_real_time_validation'))],
+    [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
   ];
 
   // Check if port code is ZZZZ then need to validate lat/long and display req zzzz message
@@ -122,10 +114,9 @@ module.exports = async (req, res) => {
 
   const gar = await garApi.get(cookie.getGarId());
 
-  const samePortMsg = 'Departure port must be different to arrival port';
   validations.push(
     [
-      new ValidationRule(validator.notSameValues, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], samePortMsg),
+      new ValidationRule(validator.notSameValues, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], __('field_same_departure_port_validation')),
     ],
   );
 
