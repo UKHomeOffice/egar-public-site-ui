@@ -44,6 +44,8 @@ describe('Verify Get Controller', () => {
           return 'Example Invalid Token Message';
         case 'verify_user_account_token_expired':
           return 'Example Token Expired Message';
+        case 'verify_user_account_token_not_provided':
+          return 'Example Token Not Provided Message';
         default:
           return 'Unexpected Key';
       }
@@ -69,6 +71,16 @@ describe('Verify Get Controller', () => {
     expect(tokenService.generateHash).to.have.been.calledWith('abcd1234');
     expect(verifyUserService.verifyUser).to.have.been.calledWith(tokenSpy.returnValues[0]);
     expect(res.render).to.have.been.calledWith('app/verify/registeruser/index');
+  });
+
+  it('should return an error message when no user registration token is provided in the verification url', async () => {
+
+    reqNoQuery = {
+      session: {},
+    };
+
+    await controller(reqNoQuery, res);
+    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Token Not Provided Message'});
   });
 
   it('should return with a success message', async () => {
