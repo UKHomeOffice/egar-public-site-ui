@@ -17,8 +17,9 @@ module.exports = async (req, res) => {
   cookie.reset();
   cookie.initialise();
 
+  var token;
   try {
-    const token = req.query.query;
+    token = req.query.query;
     const hashedToken = tokenService.generateHash(token);
     const apiResponse = await verifyUserService.verifyUser(hashedToken);
     const parsedResponse = JSON.parse(apiResponse);
@@ -40,13 +41,16 @@ module.exports = async (req, res) => {
       );
       message = i18n.__('verify_user_account_token_expired');
     }
+
     if (parsedResponse.message === 'Token is invalid') {
       message = i18n.__('verify_user_account_token_invalid');
     }
+
     return res.render('app/verify/registeruser/index', { message });
+
   } catch (err) {
     logger.error('Error during user verification');
-    logger.error(err);
+    token == null ? logger.error('Could not determine user registration token from URL') : logger.error(err);
     return res.render('app/verify/registeruser/index');
   }
 };
