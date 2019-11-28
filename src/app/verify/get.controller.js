@@ -50,7 +50,14 @@ module.exports = async (req, res) => {
 
   } catch (err) {
     logger.error('Error during user verification');
-    token == null ? logger.error('Could not determine user registration token from URL') : logger.error(err);
+    if(token == null) {
+      message = i18n.__('verify_user_account_token_not_provided');
+      logger.info(message);
+      return res.render('app/verify/registeruser/index', { message });
+    } else {
+      logger.error(err);
+    }
+
     return res.render('app/verify/registeruser/index');
   }
 };
