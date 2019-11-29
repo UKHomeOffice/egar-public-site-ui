@@ -226,6 +226,7 @@
     "verify_user_account_success": "Your account has been successfully verified. You can now log in and submit GAR files online. Click 'Sign in' to begin.",
     "verify_user_account_token_expired": "Your token has expired. We have created a new token for you. Please check your email and click the new link.",
     "verify_user_account_token_invalid": "This token is invalid, click the link provided in the email or contact support for additional help.",
+    "verify_user_account_token_not_provided": "Could not determine user registration token from URL, please check the link provided in the email",
     "verify_help_caption_1": "If you are having difficulties using this service, please ",
     "verify_help_caption_2": "contact us",
     "verify_help_caption_3": ".",
