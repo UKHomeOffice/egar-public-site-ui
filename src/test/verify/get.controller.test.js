@@ -44,6 +44,8 @@ describe('Verify Get Controller', () => {
           return 'Example Invalid Token Message';
         case 'verify_user_account_token_expired':
           return 'Example Token Expired Message';
+        case 'verify_user_account_token_not_provided':
+          return 'Example Token Not Provided Message';
         default:
           return 'Unexpected Key';
       }
@@ -71,6 +73,17 @@ describe('Verify Get Controller', () => {
     expect(res.render).to.have.been.calledWith('app/verify/registeruser/index');
   });
 
+  it('should return an error message when no user registration token is provided in the verification url', async () => {
+
+    reqNoQuery = {
+      session: {},
+    };
+
+    await controller(reqNoQuery, res);
+    expect(i18n.__).to.have.been.calledWith('verify_user_account_token_not_provided');
+    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Token Not Provided Message'});
+  });
+
   it('should return with a success message', async () => {
     // Happy path from the API is 'Token verified'
     const apiResponse = {
@@ -84,7 +97,7 @@ describe('Verify Get Controller', () => {
     expect(tokenService.generateHash).to.have.been.calledWith('abcd1234');
     expect(verifyUserService.verifyUser).to.have.been.calledWith('hashedTokenExample');
     expect(i18n.__).to.have.been.calledWith('verify_user_account_success');
-    expect(res.render).to.have.been.calledWith('app/verify/registeruser/index', { message: 'Example Success Message' });
+    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Success Message' });
   });
 
   it('should return with a token invalid message', async () => {
@@ -100,7 +113,7 @@ describe('Verify Get Controller', () => {
     expect(verifyUserService.verifyUser).to.have.been.calledWith('hashedTokenExample');
     expect(i18n.__).to.have.been.calledWith('verify_user_account_success');
     expect(i18n.__).to.have.been.calledWith('verify_user_account_token_invalid');
-    expect(res.render).to.have.been.calledWith('app/verify/registeruser/index', { message: 'Example Invalid Token Message' });
+    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Invalid Token Message' });
   });
 
   it('should return with a token invalid message', async () => {
@@ -116,7 +129,7 @@ describe('Verify Get Controller', () => {
     expect(verifyUserService.verifyUser).to.have.been.calledWith('hashedTokenExample');
     expect(i18n.__).to.have.been.calledWith('verify_user_account_success');
     expect(i18n.__).to.have.been.calledWith('verify_user_account_token_invalid');
-    expect(res.render).to.have.been.calledWith('app/verify/registeruser/index', { message: 'Example Invalid Token Message' });
+    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Invalid Token Message' });
   });
 
   // TODO: The block has two asynchronous events with no specific rejection
@@ -145,6 +158,6 @@ describe('Verify Get Controller', () => {
     expect(tokenApi.updateToken).to.have.been.calledWith('secondHashedTokenExample', '1234');
     expect(sendTokenService.send).to.have.been.calledWith('Some First Name', 'someone@somewhere.com', parameter);
     expect(i18n.__).to.have.been.calledWith('verify_user_account_token_expired');
-    expect(res.render).to.have.been.calledWith('app/verify/registeruser/index', { message: 'Example Token Expired Message' });
+    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Token Expired Message' });
   });
 });

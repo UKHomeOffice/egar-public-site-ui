@@ -28825,6 +28825,11 @@
     "label": "Tulip City Airport (United States) (KBIV)"
   },
   {
+    "id": "EGLD",
+    "british": true,
+    "label": "Denham Aerodrome (United Kingdom) (EGLD)"
+  },
+  {
     "id": "EGLW",
     "british": true,
     "label": "London Heliport (United Kingdom) (EGLW)"
@@ -38478,5 +38483,10 @@
     "id": "UKDM",
     "british": false,
     "label": "Melitopol Air Base (Ukraine) (UKDM)"
+  },
+  {
+    "id": "EGPG",
+    "british": true,
+    "label": "Cumbernauld Airport (United Kingdom) (EGPG)"
   }
 ]
