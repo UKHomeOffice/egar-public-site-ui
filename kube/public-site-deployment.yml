@@ -254,4 +254,10 @@ spec:
           ports:
             - name: public-site-prt
               containerPort: 3000
-
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: public-site-prt
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 300
