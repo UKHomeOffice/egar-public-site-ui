@@ -48,7 +48,7 @@
                   <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_day')}}
                 </label>
                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureDay"
-                name="departureDay" type="text" maxLength=2 onKeyup="validateDeparture(this, 'day');"
+                name="departureDay" type="text" maxLength=2 onKeyup="validateDeparture(this);"
                 value="{{ cookie.dateSlice('day', cookie.getGarDepartureVoyage().departureDate) }}"
                 {{ 'aria-describedby=departureDate-error' if errors | containsError('departureDate') }}>
               </div>
@@ -61,7 +61,7 @@
                 </label>
                 <span id="departure-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMonth"
-                    name="departureMonth" type="text" maxLength=2 onKeyup="validateDeparture(this, 'month');"
+                    name="departureMonth" type="text" maxLength=2 onKeyup="validateDeparture(this);"
                     value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}"
                     aria-describedby="{{ 'departureDate-error ' if errors | containsError('departureDate') }}departure-month-hint">
               </div>
@@ -73,7 +73,7 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_year')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureYear"
-                    name="departureYear" type="text" maxLength=4  onKeyup="validateDeparture(this, 'year');"
+                    name="departureYear" type="text" maxLength=4  onKeyup="validateDeparture(this);"
                     value="{{ cookie.dateSlice('year', cookie.getGarDepartureVoyage().departureDate) }}"
                     {{ 'aria-describedby=departureDate-error' if errors | containsError('departureDate') }}>
                 </div>
@@ -101,7 +101,7 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_hour')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureHour"
-                    name="departureHour" type="text" maxLength=2 onKeyup="validateDeparture(this, 'hour');"
+                    name="departureHour" type="text" maxLength=2 onKeyup="validateDeparture(this);"
                     value="{{ cookie.timeSlice('hour', cookie.getGarDepartureVoyage().departureTime) }}"
                     {{ 'aria-describedby=departureTime-error' if errors | containsError('departureTime') }}>
                 </div>
@@ -113,7 +113,7 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_minute')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMinute"
-                    name="departureMinute" type="text" maxLength=2  onKeyup="validateDeparture(this, 'minute');"
+                    name="departureMinute" type="text" maxLength=2  onKeyup="validateDeparture(this);"
                     value="{{ cookie.timeSlice('minute', cookie.getGarDepartureVoyage().departureTime) }}"
                     {{ 'aria-describedby=departureTime-error' if errors | containsError('departureTime') }}>
                 </div>
@@ -209,30 +209,29 @@
   });
   document.getElementById("departurePort").setAttribute('aria-describedby', 'departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}');
 
-function validateDeparture(object, type) {
+function validateDeparture(object) {
   var regexForOneTwoDigits = /[0-9]{1,2}/;
   var regexForFourDigits = /[0-9]{1,4}/;
 
-  var newValue;
+  var sanitizedValue;
 
-  switch (type) {
-    case 'day':
-    case 'month':
-    case 'hour':
-    case 'minute':
-      newValue = object.value.match(regexForOneTwoDigits);
+  switch (object.id) {
+    case 'departureDay':
+    case 'departureMonth':
+    case 'departureHour':
+    case 'departureMinute':
+      sanitizedValue = object.value.match(regexForOneTwoDigits);
       break;
-    case 'year':
-      newValue = object.value.match(regexForFourDigits);
+    case 'departureYear':
+      sanitizedValue = object.value.match(regexForFourDigits);
       break;
   }
 
-  if (newValue === null) {
+  if (sanitizedValue === null) {
     object.value = "";
   } else {
-    object.value = newValue[0];
+    object.value = sanitizedValue[0];
   }
-  return true;
 }
 
 </script>
