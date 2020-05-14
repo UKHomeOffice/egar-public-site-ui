@@ -208,32 +208,31 @@
     minLength: 2,
   });
   document.getElementById("departurePort").setAttribute('aria-describedby', 'departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}');
+  
+  const regexForOneTwoDigits = /[0-9]{1,2}/;
+  const regexForFourDigits = /[0-9]{1,4}/;
 
-function validateDeparture(object) {
-  var regexForOneTwoDigits = /[0-9]{1,2}/;
-  var regexForFourDigits = /[0-9]{1,4}/;
+  function validateDeparture(object) {
+    let sanitizedValue;
 
-  var sanitizedValue;
+    switch (object.id) {
+      case 'departureDay':
+      case 'departureMonth':
+      case 'departureHour':
+      case 'departureMinute':
+        sanitizedValue = object.value.match(regexForOneTwoDigits);
+        break;
+      case 'departureYear':
+        sanitizedValue = object.value.match(regexForFourDigits);
+        break;
+    }
 
-  switch (object.id) {
-    case 'departureDay':
-    case 'departureMonth':
-    case 'departureHour':
-    case 'departureMinute':
-      sanitizedValue = object.value.match(regexForOneTwoDigits);
-      break;
-    case 'departureYear':
-      sanitizedValue = object.value.match(regexForFourDigits);
-      break;
+    if (sanitizedValue === null) {
+      object.value = "";
+    } else {
+      object.value = sanitizedValue[0];
+    }
   }
-
-  if (sanitizedValue === null) {
-    object.value = "";
-  } else {
-    object.value = sanitizedValue[0];
-  }
-}
-
 </script>
 
 {% endblock %}
