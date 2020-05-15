@@ -2,7 +2,7 @@ const { expect } = require('chai');
 
 require('./global.test');
 
-const sanitiseValue = require('../public/javascripts/sanitise-value');
+const sanitiseValue = require('../public/javascripts/sanitisevalue');
 
 describe('Sanitise value tests', () => {
   let testValue;
