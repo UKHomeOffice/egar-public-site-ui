@@ -1,0 +1,49 @@
+#!/bin/bash
+
+set -o nounset
+
+# Manifests to be deployed and destroyed always
+readonly COMMON_MANIFESTS=(
+  deployment
+  network-policy
+  service 
+)
+
+readonly MANIFESTS_EXCLUDED_FROM_DESTRUCTION=(
+#  artifactory-secret
+  ingress
+# !!!Uncomment this line only if you know what you are doing.!!!
+# Uncommenting this line would create an open url of the public-site.
+#  ingress-for-service.gov.uk
+)
+
+readonly THIS_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
+
+# Include the dev environment variables if present (ideally these should come from the drone secrets)
+if [[ -r .idea ]]; then
+  source .idea
+fi
+
+
+if [[ ! -r $THIS_DIR/common_lib ]]; then
+  echo "Failed to access the common library $THIS_DIR/common_lib." >&2
+  exit 1
+fi
+source $THIS_DIR/common_lib
+
+KUBE_CTL_CMD="kd --context=acp-notprod_EGAR --namespace=$KUBE_NAMESPACE --timeout=6m"
+
+delete=''
+manifests=(${MANIFESTS_EXCLUDED_FROM_DESTRUCTION[@]} ${COMMON_MANIFESTS[@]})
+# Delete the app if requested
+if [[ $(basename ${BASH_SOURCE[0]}) =~ ^destroy ]]; then
+  delete='--delete'
+  manifests=(${COMMON_MANIFESTS[@]})
+fi
+curr_config=
+for curr_config in ${manifests[@]}; do
+  if ! $KUBE_CTL_CMD $delete --file kube/${APP_NAME}-${curr_config}.yml; then
+  	echo "Failed to deploy the manifest kube/${APP_NAME}-${curr_config}.yml" >&2
+  	exit 1
+  fi
+done
