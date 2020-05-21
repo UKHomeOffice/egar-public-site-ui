@@ -59,7 +59,7 @@
 
     {% block main %}
       <div class="govuk-width-container">
-
+      <p class="govuk-body-l">{{__('covid_19_notification')}}</p> {# if you are infected with covid 19 - self isolate #}
         {% block beforeContent %}{% endblock %}
         <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main">
           {% block content %}{% endblock %}
