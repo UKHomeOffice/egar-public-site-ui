@@ -31,8 +31,6 @@ if [[ ! -r $THIS_DIR/common_lib ]]; then
 fi
 source $THIS_DIR/common_lib
 
-KUBE_CTL_CMD="kd --context=acp-notprod_EGAR --namespace=$KUBE_NAMESPACE --timeout=6m"
-
 delete=''
 manifests=(${MANIFESTS_EXCLUDED_FROM_DESTRUCTION[@]} ${COMMON_MANIFESTS[@]})
 # Delete the app if requested
