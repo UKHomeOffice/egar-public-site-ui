@@ -1,10 +1,14 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: public-site
   namespace: {{ .KUBE_NAMESPACE }}
 spec:
+  selector:
+    matchLabels: 
+      name: {{ .APP_NAME }}-svc
+      service: {{ .APP_NAME }}-svc
   replicas: 3
   revisionHistoryLimit: 10
   template:
