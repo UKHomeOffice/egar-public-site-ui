@@ -165,3 +165,28 @@ Please note: `BASE_URL` needs to be set in both Drone Secrets and Kube Secrets.
 
 ## Setting Service Unavailable Page
 Setting `ENABLE_UNAVAILABLE_PAGE=true` will redirect all requests to the /unavailable page.
+
+## Deploying (only in sit) directly into namespace
+
+:warning: This section must not be used beyond SIT namespace.
+
+All the **above** sections deal with developing the application. They may not be applicable when it comes to testing things like the Kubernetes manifests. The earlier practise is to commit the changes and have the application deployed through the drone. This results in more time consumption (commit, push and have it built all over from the scratch). In addition, this results in spams of builds in the Drone which will become very difficult to keep track of the last successful build. 
+
+To deploy directly into the namespace, simply run the following script:
+
+```./deploy_app```
+
+Similarly, you can also destroy the app by running the following script:
+
+```./destroy_app```
+
+For the above scripts to work, the following variables must be existing in the session:
+
+```
+export KUBE_NAMESPACE='target-namespace'                    # The target namespace
+
+export TAGGED_VERSION='docker-tag'                          # The docker image tag as found in the quay io
+export BASE_URL='internal url'                              # The internal url. Please refer to drone secrets.
+export BASE_URL_SERVICE='www.egar-sit.homeoffice.gov.uk'    # The external url. Please refer to drone secrets.
+```
+The easiest is to have a file called `.idea` with all the above variables defined in it which will be included automatically in the `deploy_app` and the `destroy_app` scripts; the file `.idea` will not be tracked by git.
