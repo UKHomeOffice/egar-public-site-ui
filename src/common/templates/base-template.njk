@@ -59,7 +59,8 @@
 
     {% block main %}
       <div class="govuk-width-container">
-        <p class="govuk-body-l">{{__('covid_19_notification')}} <a href="{{__('covid_19_notification_link')}}">here</a> </p> {# There are now new rules in place for people entering the UK. Find out more #}
+      <p class="govuk-body-l"> <span style="background-color: #FFFF00"> <br> {{__('covid_19_notification')}} <a href="{{__('covid_19_notification_link')}}">here</a> </span>  </p> {# There are now new rules in place for people entering the UK. Find out more #}
+      
         {% block beforeContent %}{% endblock %}
         <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main">
           {% block content %}{% endblock %}
