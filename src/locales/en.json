@@ -420,5 +420,6 @@
     "form_exit_without_deleting": "Exit without deleting",
     "organisation_created": "organisation_created",
 
-    "covid_19_notification": "if you are infected with covid 19 - self isolate"
+    "covid_19_notification": "There are now new rules in place for people entering the UK. Find out more ",
+    "covid_19_notification_link": "https://www.gov.uk/uk-border-control"
 }
