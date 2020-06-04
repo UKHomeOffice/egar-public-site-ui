@@ -1,16 +1,16 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: public-site-ingress
   labels:
-    stable.k8s.psg.io/kcm.class: default
+    cert-manager.io/solver: route53
   annotations:
-    kubernetes.io/ingress.class: {{ .INGRESS_CLASS }}
-    ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/enabled: "true"
     ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.class: "nginx-internal"
     ingress.kubernetes.io/proxy-body-size: "20m"
-    kubernetes.io/tls-acme: "true"
 spec:
   rules:
   - host: {{ .BASE_URL }}
@@ -23,4 +23,4 @@ spec:
   tls:
   - hosts:
     - {{ .BASE_URL }}
-    secretName: public-site-tls
+    secretName: public-site-tls-cmio
