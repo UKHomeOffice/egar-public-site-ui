@@ -14,7 +14,7 @@ pipeline:
 
   Unit Tests and SonarQube Scanner:
     group: build-stage
-    image: quay.io/ukhomeofficedigital/sonar-scanner-node:latest
+    image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
     commands:
       - export NOTIFY_API_KEY=dummy
       - cd src
@@ -63,6 +63,7 @@ pipeline:
       - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
       - export BASE_URL=$${SIT_BASE_URL}
       - export BASE_URL_SERVICE=$${SIT_BASE_URL_SERVICE}
+      - source common_lib
       - kd --timeout=6m --file kube/artifactory-secret.yml
       - kd --timeout=6m --file kube/public-site-network-policy.yml
       - kd --timeout=6m --file kube/public-site-deployment.yml
@@ -143,6 +144,7 @@ pipeline:
       - export KUBE_TOKEN=$${STAGING_KUBE_TOKEN}
       - export BASE_URL=$${STAGING_BASE_URL}
       - export BASE_URL_SERVICE=$${STAGING_BASE_URL_SERVICE}
+      - source common_lib
       - kd --timeout=6m --file kube/artifactory-secret.yml
       - kd --timeout=6m --file kube/public-site-network-policy.yml
       - kd --timeout=6m --file kube/public-site-deployment.yml
@@ -188,6 +190,7 @@ pipeline:
       - export KUBE_TOKEN=$${PRODUCTION_KUBE_TOKEN}
       - export BASE_URL=$${PRODUCTION_BASE_URL}
       - export BASE_URL_SERVICE=$${PRODUCTION_BASE_URL_SERVICE}
+      - source common_lib
       - kd --timeout=6m --file kube/artifactory-secret.yml
       - kd --timeout=6m --file kube/public-site-network-policy.yml
       - kd --timeout=6m --file kube/public-site-deployment.yml
