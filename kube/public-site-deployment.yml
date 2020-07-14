@@ -208,13 +208,13 @@ spec:
             - name: PUBLIC_SITE_DBUSER
               valueFrom:
                 secretKeyRef:
-                  name: environment
-                  key: PUBLIC_SITE_DBUSER
+                  name: appdbcreds
+                  key: FRONTENDDBUSER
             - name: PUBLIC_SITE_DBPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: environment
-                  key: PUBLIC_SITE_DBPASSWORD
+                  name: appdbcreds
+                  key: FRONTENDDBPASSWORD
             - name: SESSION_PARSER_SECRET
               valueFrom:
                 secretKeyRef:
