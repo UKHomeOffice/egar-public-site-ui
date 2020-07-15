@@ -135,6 +135,7 @@ pipeline:
         -e E2E_BACK_END_DB_USER=${E2E_BACK_END_DB_USER}
         -e E2E_BACK_END_DB_PASSWORD=${E2E_BACK_END_DB_PASSWORD}
         quay.io/ukhomeofficedigital/egar-e2e-test:latest
+      - rm db_creds 
     when:
       branch: [ master, hotfix/* ]
       event: push
