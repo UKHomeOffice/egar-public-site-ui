@@ -76,6 +76,29 @@ pipeline:
         exclude: [ production ]
 
 
+  Get_the_Dynamic_DB_creds:
+    image: quay.io/ukhomeofficedigital/kd
+    environment:
+      - NODE_ENV=sit
+      - INSECURE_SKIP_TLS_VERIFY=true
+      - KUBE_NAMESPACE=egar-sit
+      - INGRESS_CLASS=nginx-internal
+    secrets:
+      - SIT_KUBE_SERVER
+      - SIT_KUBE_TOKEN
+    commands:
+      - export KUBE_SERVER=$${SIT_KUBE_SERVER}
+      - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
+      - echo "export E2E_FRONT_END_DB_USER=$(kd run get secret appdbcreds --template={{.data.FRONTENDDBUSER}} | base64 -d)" > db_creds
+      - echo "export E2E_FRONT_END_DB_PASSWORD=$(kd run get secret appdbcreds --template={{.data.FRONTENDDBPASSWORD}} | base64 -d)" >> db_creds
+      - echo "export E2E_BACK_END_DB_USER=$(kd run get secret appdbcreds --template={{.data.BACKENDDBUSER}} | base64 -d)" >> db_creds
+      - echo "export E2E_BACK_END_DB_PASSWORD=$(kd run get secret appdbcreds --template={{.data.BACKENDDBPASSWORD}} | base64 -d)" >> db_creds
+    when:
+      branch: [ master, hotfix/* ]
+      event: push
+      environment:
+        exclude: [ production ]
+
   End to End tests:
     image: quay.io/ukhomeofficedigital/drone-docker
     secrets:
@@ -89,13 +112,10 @@ pipeline:
       - E2E_ORGANISATION_USER_PASSWORD
       - E2E_FRONT_END_DB_HOST
       - E2E_FRONT_END_DB_NAME
-      - E2E_FRONT_END_DB_USER
-      - E2E_FRONT_END_DB_PASSWORD
       - E2E_BACK_END_DB_HOST
       - E2E_BACK_END_DB_NAME
-      - E2E_BACK_END_DB_USER
-      - E2E_BACK_END_DB_PASSWORD
     commands:
+      - source db_creds
       - >
         docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER} 
         -e PROTOCOL=$${E2E_PROTOCOL}
@@ -108,12 +128,12 @@ pipeline:
         -e E2E_ORGANISATION_USER_PASSWORD=$${E2E_ORGANISATION_USER_PASSWORD}
         -e E2E_FRONT_END_DB_HOST=$${E2E_FRONT_END_DB_HOST}
         -e E2E_FRONT_END_DB_NAME=$${E2E_FRONT_END_DB_NAME}
-        -e E2E_FRONT_END_DB_USER=$${E2E_FRONT_END_DB_USER}
-        -e E2E_FRONT_END_DB_PASSWORD=$${E2E_FRONT_END_DB_PASSWORD}
+        -e E2E_FRONT_END_DB_USER=${E2E_FRONT_END_DB_USER}
+        -e E2E_FRONT_END_DB_PASSWORD=${E2E_FRONT_END_DB_PASSWORD}
         -e E2E_BACK_END_DB_HOST=$${E2E_BACK_END_DB_HOST}
         -e E2E_BACK_END_DB_NAME=$${E2E_BACK_END_DB_NAME}
-        -e E2E_BACK_END_DB_USER=$${E2E_BACK_END_DB_USER}
-        -e E2E_BACK_END_DB_PASSWORD=$${E2E_BACK_END_DB_PASSWORD}
+        -e E2E_BACK_END_DB_USER=${E2E_BACK_END_DB_USER}
+        -e E2E_BACK_END_DB_PASSWORD=${E2E_BACK_END_DB_PASSWORD}
         quay.io/ukhomeofficedigital/egar-e2e-test:latest
     when:
       branch: [ master, hotfix/* ]
