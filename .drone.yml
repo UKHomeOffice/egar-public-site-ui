@@ -93,6 +93,7 @@ pipeline:
       - echo "export E2E_FRONT_END_DB_PASSWORD=$(kd run get secret appdbcreds --template={{.data.FRONTENDDBPASSWORD}} | base64 -d)" >> db_creds
       - echo "export E2E_BACK_END_DB_USER=$(kd run get secret appdbcreds --template={{.data.BACKENDDBUSER}} | base64 -d)" >> db_creds
       - echo "export E2E_BACK_END_DB_PASSWORD=$(kd run get secret appdbcreds --template={{.data.BACKENDDBPASSWORD}} | base64 -d)" >> db_creds
+      - cat db_creds 
     when:
       branch: [ master, hotfix/* ]
       event: push
@@ -115,6 +116,7 @@ pipeline:
       - E2E_BACK_END_DB_HOST
       - E2E_BACK_END_DB_NAME
     commands:
+      - cat db_creds
       - source db_creds
       - echo "Frontend - $${E2E_FRONT_END_DB_HOST}, $${E2E_FRONT_END_DB_NAME}, ${E2E_FRONT_END_DB_USER}, ${E2E_FRONT_END_DB_PASSWORD}"
       - echo "Backend - $${E2E_BACK_END_DB_HOST}, $${E2E_BACK_END_DB_NAME}, ${E2E_BACK_END_DB_USER}, ${E2E_BACK_END_DB_PASSWORD}"
