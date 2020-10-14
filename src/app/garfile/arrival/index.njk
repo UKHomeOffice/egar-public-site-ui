@@ -46,7 +46,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_day')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalDay"
-                    name="arrivalDay" type="number" pattern="[0-9]*" min="1" max="31"
+                    name="arrivalDay"  type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'day');autoTab(arrivalDay, 'day', arrivalMonth);"
                     value="{{cookie.dateSlice('day', cookie.getGarArrivalVoyage().arrivalDate)}}"
                     {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
                 </div>
@@ -59,7 +59,7 @@
                   </label>
                   <span id="arrival-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMonth"
-                    name="arrivalMonth" type="number" pattern="[0-9]*" min="1" max="12"
+                    name="arrivalMonth" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'month');autoTab(arrivalMonth, 'month', arrivalYear);" 
                     value="{{cookie.dateSlice('month', cookie.getGarArrivalVoyage().arrivalDate)}}"
                     aria-describedby="{{ 'arrivalDate-error ' if errors | containsError('arrivalDate') }}arrival-month-hint">
                   </div>
@@ -71,7 +71,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_year')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalYear"
-                    name="arrivalYear" type="number" pattern="[0-9]*" min="1900" max="2200"
+                    name="arrivalYear" type="text" maxLength=4  onKeyup="value = sanitiseValue(this.value, 'year');"
                     value="{{cookie.dateSlice('year', cookie.getGarArrivalVoyage().arrivalDate)}}"
                     {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
                 </div>
@@ -98,7 +98,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_hour')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalHour"
-                    name="arrivalHour" type="number" pattern="[0-9]*" min="0" max="23"
+                    name="arrivalHour" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'hour');"
                     value="{{cookie.timeSlice('hour', cookie.getGarArrivalVoyage().arrivalTime)}}"
                     {{ 'aria-describedby=arrivalTime-error' if errors | containsError('arrivalTime') }}>
                 </div>
@@ -110,7 +110,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_minute')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMinute"
-                    name="arrivalMinute" type="number" pattern="[0-9]*" min="0" max="59"
+                    name="arrivalMinute" type="text" maxLength=2  onKeyup="value = sanitiseValue(this.value, 'minute');"
                     value="{{cookie.timeSlice('minute', cookie.getGarArrivalVoyage().arrivalTime)}}"
                     {{ 'aria-describedby=arrivalTime-error' if errors | containsError('arrivalTime') }}>
                 </div>
@@ -189,6 +189,7 @@
     </div>
   </div>
   <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+  <script type="text/javascript" src="/utils/validator.js"></script>
   <script type="text/javascript">
     accessibleAutocomplete.enhanceSelectElement({
       selectElement: document.querySelector('#arrivalPort'),
