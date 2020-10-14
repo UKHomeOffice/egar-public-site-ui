@@ -46,22 +46,22 @@
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="dobDay">{{ __('field_date_day') }}</label>
-            <input id="dobDay" name="dobDay" class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" pattern="[0-9]*"
-              min="01" max="31" value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}">
+            <input id="dobDay" name="dobDay" class="govuk-input govuk-date-input__input govuk-input--width-2" type="text" maxLength=2
+             value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}" onKeyup="value = sanitiseValue(this.value, 'day');autoTab(dobDay, 'day', dobMonth);">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label" for="dobMonth">{{ __('field_date_month') }}</label>
-            <input id="dobMonth" name="dobMonth" class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" pattern="[0-9]*"
-            min="01" max="12" value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}">
+            <input id="dobMonth" name="dobMonth" class="govuk-input govuk-date-input__input govuk-input--width-2" type="text" maxLength=2
+            value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}" onKeyup="value = sanitiseValue(this.value, 'month');autoTab(dobMonth, 'month', dobYear);">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label" for="dobYear">{{ __('field_date_year') }}</label>
-            <input id="dobYear" name="dobYear" class="govuk-input govuk-date-input__input govuk-input--width-4" type="number" pattern="[0-9]*"
-            min="1900" max="2200" value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}">
+            <input id="dobYear" name="dobYear" class="govuk-input govuk-date-input__input govuk-input--width-4" type="text" maxLength=4
+            value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}" onKeyup="value = sanitiseValue(this.value, 'year');">
           </div>
         </div>
       </div>
@@ -181,6 +181,7 @@
   </div>
 
 <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+<script type="text/javascript" src="/utils/validator.js"></script>
 <script type="text/javascript">
   accessibleAutocomplete.enhanceSelectElement({
     selectElement: document.querySelector('#nationality')
