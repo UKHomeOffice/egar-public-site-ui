@@ -132,22 +132,22 @@
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryDay">{{ __('field_date_day') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay" type="number" pattern="[0-9]*"
-            min="01" max="31" value="{{ cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay'] }}">
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay" type="text" maxLength=2
+            value="{{ cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay'] }}" onKeyup="value = sanitiseValue(this.value, 'day');autoTab(expiryDay, 'day', expiryMonth);">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryMonth">{{ __('field_date_month') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth" type="number" pattern="[0-9]*"
-            min="01" max="12" value="{{ cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}">
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth" type="text" maxLength=2
+            value="{{ cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}" onKeyup="value = sanitiseValue(this.value, 'month');autoTab(expiryMonth, 'month', expiryYear);">
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryYear">{{ __('field_date_year') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="expiryYear" name="expiryYear" type="number" pattern="[0-9]*"
-            min="1900" max="2200" value="{{ cookie.dateSlice('year', person.documentExpiryDate) or req.body['expiryYear'] }}">
+            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="expiryYear" name="expiryYear" type="text" maxLength=4
+            value="{{ cookie.dateSlice('year', person.documentExpiryDate) or req.body['expiryYear'] }}" onKeyup="value = sanitiseValue(this.value, 'year');">
           </div>
         </div>
       </div>
