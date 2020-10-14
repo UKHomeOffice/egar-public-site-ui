@@ -48,7 +48,7 @@
                   <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_day')}}
                 </label>
                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureDay"
-                name="departureDay" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'day');"
+                name="departureDay" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'day');autoTab(departureDay, 'day', departureMonth);"
                 value="{{ cookie.dateSlice('day', cookie.getGarDepartureVoyage().departureDate) }}"
                 {{ 'aria-describedby=departureDate-error' if errors | containsError('departureDate') }}>
               </div>
@@ -61,7 +61,7 @@
                 </label>
                 <span id="departure-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMonth"
-                    name="departureMonth" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'month');"
+                    name="departureMonth" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'month');autoTab(departureMonth, 'month', departureYear);"
                     value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}"
                     aria-describedby="{{ 'departureDate-error ' if errors | containsError('departureDate') }}departure-month-hint">
               </div>
