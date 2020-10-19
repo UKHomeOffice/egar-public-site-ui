@@ -38488,8 +38488,121 @@
     "id": "EGPG",
     "british": true,
     "label": "Cumbernauld Airport (United Kingdom) (EGPG)"
-  }
-]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  TRIP (United Kingdom) (EGDS)"
+  },
+  {
+    "id": "EGAL",
+    "british": true,
+    "label": "LANGFORD LODGE (United Kingdom) (EGAL)"
+  },
+  {
+    "id": "EGBC",
+    "british": true,
+    "label": "CHELTENHAM RACECOURSE (United Kingdom) (EGBC)"
+  },
+  {
+    "id": "EGBD",
+    "british": true,
+    "label": "DERBY - EGGINGTON (United Kingdom) (EGBD)"
+  },
+  {
+    "id": "EGBF",
+    "british": true,
+    "label": "BEDFORD - THURLEIGH (United Kingdom) (EGBF)"
+  },
+  {
+    "id": "ORM",
+    "british": true,
+    "label": "NORTHAMPTON - SYWELL (United Kingdom) (EGBK / ORM)"
+  },
+  {
+    "id": "EGBL",
+    "british": true,
+    "label": "LONG MARSTON (United Kingdom) (EGBL)"
+  },
+  {
+    "id": "EGBR",
+    "british": true,
+    "label": "BREIGHTON - SELBY (United Kingdom) (EGBR)"
+  },
+  {
+    "id": "EGBV",
+    "british": true,
+    "label": "SILVERSTONE RACING CIRCUIT (United Kingdom) (EGBV)"
+  },
+  {
+    "id": "EGCA",
+    "british": true,
+    "label": "COAL ASTON - BENTLEY FARM (United Kingdom) (EGCA)"
+  },
+  {
+    "id": "EGCG",
+    "british": true,
+    "label": "STRUBBY (United Kingdom) (EGCG)"
+  },
+  {
+    "id": "EGCL",
+    "british": true,
+    "label": "FENLAND (United Kingdom) (EGCL)"
+  },
+  {
+    "id": "EGCM",
+    "british": true,
+    "label": "LEEDS EAST - CHURCH FENTON (United Kingdom) (EGCM)"
+  },
+  {
+    "id": "EGCO",
+    "british": true,
+    "label": "SOUTHPORT BEACH - BIRKDALE SANDS  (United Kingdom) (EGCO)"
+  },
+  {
+    "id": "EGCP",
+    "british": true,
+    "label": "THORNE - DAIRY FARM (United Kingdom) (EGCP)"
+  },
+  {
+    "id": "EGCR",
+    "british": true,
+    "label": "ASHCROFT - BRYANS LANDING (United Kingdom) (EGCR)"
+  },
+  {
+    "id": "EGCT",
+    "british": true,
+    "label": "TILSTOCK (United Kingdom) (EGCT  )"
+  },
+  {
+    "id": "EGCW",
+    "british": true,
+    "label": "WELSHPOOL - MID WALES AIRPORT (United Kingdom) (EGCW)"
+  },
+  {
+    "id": "EGDD",
+    "british": true,
+    "label": "BICESTER (United Kingdom) (EGDD)"
+  },
+  {
+    "id": "EGDJ",
+    "british": true,
+    "label": "UPAVON  (United Kingdom) (EGDJ )"
+  },
+  {
+    "id": "EGDN",
+    "british": true,
+    "label": "NETHERAVON (United Kingdom) (EGDN)"
+  },
+  {
+    "id": "EGDO",
+    "british": true,
+    "label": "PREDANNACK (United Kingdom) (EGDO)"
+  },
+  {
+    "id": "EGDP",
+    "british": true,
+    "label": "RNAS PORTLAND (United Kingdom) (EGDP)"
+  },
+  {
+    "id": "EGDS",
+    "british": true,
+    "label": "BULFORD - CARTER STRIP (United Kingdom) (EGDS)"
   },
   {
     "id": "EGDV",
@@ -38507,9 +38620,9 @@
     "label": "CULTER HELIPAD (H) (United Kingdom) (EGEA)"
   },
   {
-    "id": "EGEH",
+    "id": "WHS",
     "british": true,
-    "label": "WHALSAY (United Kingdom) (EGEH)"
+    "label": "WHALSAY (United Kingdom) (EGEH / WHS)"
   },
   {
     "id": "EGEI",
@@ -38814,4 +38927,129 @@
   {
     "id": "EGTP",
     "british": true,
-    "labe
+    "label": "PERRANPORTH (United Kingdom) (EGTP)"
+  },
+  {
+    "id": "EGTU",
+    "british": true,
+    "label": "DUNKESWELL (United Kingdom) (EGTU)"
+  },
+  {
+    "id": "EGTW",
+    "british": true,
+    "label": "OAKSEY PARK  (United Kingdom) (EGTW )"
+  },
+  {
+    "id": "EGUA",
+    "british": true,
+    "label": "UPPER HEYFORD (United Kingdom) (EGUA)"
+  },
+  {
+    "id": "EGUD",
+    "british": true,
+    "label": "RAF ABINGDON  (United Kingdom) (EGUD )"
+  },
+  {
+    "id": "EGUH",
+    "british": true,
+    "label": "RAF COMMAND HIGH WYCOMBE (United Kingdom) (EGUH)"
+  },
+  {
+    "id": "EGUO",
+    "british": true,
+    "label": "COLERNE (United Kingdom) (EGUO)"
+  },
+  {
+    "id": "EGVF",
+    "british": true,
+    "label": "FLEETLANDS",
+    "PORTSMOUTH RNAY  (United Kingdom) (EGVF)": null
+  },
+  {
+    "id": "EGVG",
+    "british": true,
+    "label": "WOODBRIDGE - ROCK BARRACKS (United Kingdom) (EGVG)"
+  },
+  {
+    "id": "EGVH",
+    "british": true,
+    "label": "HEREFORD (United Kingdom) (EGVH)"
+  },
+  {
+    "id": "EGVJ",
+    "british": true,
+    "label": "BENTWATERS (United Kingdom) (EGVJ)"
+  },
+  {
+    "id": "EGVL",
+    "british": true,
+    "label": "RAF LITTLE RISSINGTON  (United Kingdom) (EGVL)"
+  },
+  {
+    "id": "EGVP",
+    "british": true,
+    "label": "MIDDLE WALLOP (United Kingdom) (EGVP)"
+  },
+  {
+    "id": "EGWE",
+    "british": true,
+    "label": "RAF HENLOW (United Kingdom) (EGWE)"
+  },
+  {
+    "id": "EGWL",
+    "british": true,
+    "label": "RAF NORTH LUFFENHAM (United Kingdom) (EGWL)"
+  },
+  {
+    "id": "EGWN",
+    "british": true,
+    "label": "RAF HALTON  (United Kingdom) (EGWN )"
+  },
+  {
+    "id": "EGWZ",
+    "british": true,
+    "label": "RAF ALCONBURY (United Kingdom) (EGWZ)"
+  },
+  {
+    "id": "EGXS",
+    "british": true,
+    "label": "SWINDERBY (United Kingdom) (EGXS)"
+  },
+  {
+    "id": "EGXV",
+    "british": true,
+    "label": "LECONFIELD - NORMADY BARRACKS (United Kingdom) (EGXV)"
+  },
+  {
+    "id": "EGXY",
+    "british": true,
+    "label": "RAF SYERSTON (United Kingdom) (EGXY)"
+  },
+  {
+    "id": "EGYC",
+    "british": true,
+    "label": "RAF COLTISHALL (United Kingdom) (EGYC)"
+  },
+  {
+    "id": "EGYJ",
+    "british": true,
+    "label": "RUFFORTH WEST (United Kingdom) (EGYJ)"
+  },
+  {
+    "id": "EGYK",
+    "british": true,
+    "label": "ELVINGTON (United Kingdom) (EGYK)"
+  },
+  {
+    "id": "EGYR",
+    "british": true,
+    "label": "RAF WATTON (United Kingdom) (EGYR)"
+  }
+]
+  
+
+
+
+
+
+
