@@ -392,6 +392,17 @@ function sanitiseValue(input, type) {
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
 }
 
+function autoTab(field1, dayMonthOrYear, field2) {
+
+  let len = (dayMonthOrYear === 'year') ? 4 : 2;
+
+  let field1Value = sanitiseValue(field1.value, dayMonthOrYear);
+
+  if (field1Value.length == len) {
+    field2.focus();
+ 	}
+}
+
 module.exports = {
   notEmpty,
   email,
@@ -429,4 +440,5 @@ module.exports = {
   isValidDepAndArrDate,
   handleResponseError,
   sanitiseValue,
+  autoTab,
 };
