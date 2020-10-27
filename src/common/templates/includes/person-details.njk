@@ -46,22 +46,24 @@
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="dobDay">{{ __('field_date_day') }}</label>
-            <input id="dobDay" name="dobDay" class="govuk-input govuk-date-input__input govuk-input--width-2" type="text" maxLength=2
-             value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}" onKeyup="value = sanitiseValue(this.value, 'day');autoTab(dobDay, 'day', dobMonth);">
+            <input id="dobDay" name="dobDay" class="govuk-input govuk-date-input__input govuk-input--width-2" 
+            type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'day');autoTab(dobDay, 'day', dobMonth);"
+             value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}" >
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label" for="dobMonth">{{ __('field_date_month') }}</label>
-            <input id="dobMonth" name="dobMonth" class="govuk-input govuk-date-input__input govuk-input--width-2" type="text" maxLength=2
-            value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}" onKeyup="value = sanitiseValue(this.value, 'month');autoTab(dobMonth, 'month', dobYear);">
+            <input id="dobMonth" name="dobMonth" class="govuk-input govuk-date-input__input govuk-input--width-2" 
+            type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'month');autoTab(dobMonth, 'month', dobYear);"
+            value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}" >
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label" for="dobYear">{{ __('field_date_year') }}</label>
             <input id="dobYear" name="dobYear" class="govuk-input govuk-date-input__input govuk-input--width-4" type="text" maxLength=4
-            value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}" onKeyup="value = sanitiseValue(this.value, 'year');">
+            onKeyup="value = sanitiseValue(this.value, 'year');" value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}">
           </div>
         </div>
       </div>
@@ -132,15 +134,17 @@
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryDay">{{ __('field_date_day') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay" type="text" maxLength=2
-            value="{{ cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay'] }}" onKeyup="value = sanitiseValue(this.value, 'day');autoTab(expiryDay, 'day', expiryMonth);">
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay" 
+            type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'day');autoTab(expiryDay, 'day', expiryMonth);"
+            value="{{ cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay'] }}" >
           </div>
         </div>
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryMonth">{{ __('field_date_month') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth" type="text" maxLength=2
-            value="{{ cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}" onKeyup="value = sanitiseValue(this.value, 'month');autoTab(expiryMonth, 'month', expiryYear);">
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth" 
+            type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'month');autoTab(expiryMonth, 'month', expiryYear);"
+            value="{{ cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}" >
           </div>
         </div>
         <div class="govuk-date-input__item">
