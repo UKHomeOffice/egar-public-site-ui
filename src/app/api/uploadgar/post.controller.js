@@ -93,6 +93,7 @@ const manifestMap = {
 const crewMapConfig = {
   startRow: 9,
   terminator: 'TOTAL CREW',
+  maxRows: 100,
 };
 
 // Mappings for the rows representing passengers
@@ -101,6 +102,7 @@ const passengerMapConfig = {
   startColumn: 'A',
   skipNum: 2,
   terminator: 'TOTAL PASSENGERS',
+  maxRows: 2000,
 };
 
 module.exports = (req, res) => {

@@ -36,12 +36,13 @@ class ExcelParser {
   rangeParse() {
     const rowArr = [];
     let rowNum = this.rangeConfig.startRow || this.getRangeStartRow(this.rangeConfig.startIdentifier, this.rangeConfig.startColumn);
+    let rowCount = 0; 
     let flag = true;
     while (flag) {
       const rowObj = {};
       Object.keys(this.cellMap).forEach((key) => {
         let cellValue = flag ? this._getValue(`${this.cellMap[key].location}${rowNum}`) : null;
-        if (cellValue === this.rangeConfig.terminator) {
+        if (cellValue === this.rangeConfig.terminator || rowCount === this.rangeConfig.maxRows ) {
           flag = false;
         }
         if (this.cellMap[key].transform && flag) {
@@ -55,6 +56,7 @@ class ExcelParser {
         rowArr.push(rowObj);
       }
       rowNum += 1;
+      rowCount += 1;
     }
     return rowArr;
   }
