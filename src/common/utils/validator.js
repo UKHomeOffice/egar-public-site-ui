@@ -173,6 +173,32 @@ function realDate(dObj) {
     && validYear(dObj.y);
 }
 
+
+function bornInLast200Years(dObj) {
+  if (dObj === null || dObj === undefined) return false;
+  return numericDateElements(dObj)
+    && validDay(dObj.d, dObj.m, dObj.y)
+    && validMonth(dObj.m)
+    && validYear(dObj.y)
+    && (dObj.y > 1800);
+}
+
+function realDateInFuture(dObj) {
+  if (dObj === null || dObj === undefined) return false;
+
+  var currentDate = new Date();
+
+
+  var providedDate = new Date(dObj.y, dObj.m, dObj.d, 0, 0, 0, 0);
+
+
+  return numericDateElements(dObj)
+    && validDay(dObj.d, dObj.m, dObj.y)
+    && validMonth(dObj.m)
+    && validYear(dObj.y)
+    && providedDate > currentDate;
+}
+
 function realDateFromString(str) {
   moment.suppressDeprecationWarnings = true;
   return moment(str).isValid();
@@ -418,6 +444,8 @@ module.exports = {
   genValidations,
   validatePortCoords,
   realDate,
+  realDateInFuture,
+  bornInLast200Years,
   realDateFromString,
   currentOrFutureDate,
   validTime,

@@ -5,12 +5,21 @@ const { MAX_STRING_LENGTH } = require('../../common/config/index');
 module.exports.validations = (req) => {
   const dobObj = { d: req.body.dobDay, m: req.body.dobMonth, y: req.body.dobYear };
   const expiryDateObj = { d: req.body.expiryDay, m: req.body.expiryMonth, y: req.body.expiryYear };
+
+  // /garfile/manifest/addnewperson
+
   return [
     [
-      new ValidationRule(validator.realDate, 'dob', dobObj, 'Enter a real date of birth'),
+      new ValidationRule(validator.bornInLast200Years, 'dob', dobObj, 'Enter a real date of birth'),
     ],
+    // [
+    //   new ValidationRule(validator.realDate, 'dob', dobObj, 'Enter a real date of birth'),
+    // ],
+    // [
+    //   new ValidationRule(validator.realDate, 'documentExpiryDate', expiryDateObj, 'Enter a real document expiry date'),
+    // ],
     [
-      new ValidationRule(validator.realDate, 'documentExpiryDate', expiryDateObj, 'Enter a real document expiry date'),
+      new ValidationRule(validator.realDateInFuture, 'documentExpiryDate', expiryDateObj, 'Enter a real document expiry date'),
     ],
     [
       new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter the given name of the person'),
