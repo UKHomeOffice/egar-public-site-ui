@@ -500,19 +500,28 @@ describe('Validator', () => {
 
 
   describe('realDateInFuture', () => {
-    it('Should pass if the provided day is in future', () => {
-      var date = genDateObj('22', '12', (new Date().getFullYear() + 1).toString() );
-      expect(validator.realDateInFuture(date)).to.be.true;
+
+    var currentDay, currentMonthStr, currentYearStr;
+    beforeEach(function() {
+      currentDay = new Date().getDate();
+      //months are 0 to 11 so adding 1 to it for the normal representation of 1 to 12
+      currentMonthStr = (new Date().getMonth() + 1).toString(); 
+      currentYearStr = (new Date().getFullYear()).toString();
+    });
+
+    it('Should pass if the provided day is in future -- next day', () => {
+      var currentDate = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );   
+      expect(validator.realDateInFuture(currentDate)).to.be.true;
     });
 
     it('should fail if the provided day is today', () => {
-      var currentDay = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-      expect(validator.realDateInFuture(currentDay)).to.be.false;
+      var currentDate = genDateObj((currentDay).toString(), currentMonthStr, currentYearStr)
+      expect(validator.realDateInFuture(currentDate)).to.be.false;
     });
 
     it('should fail if the provided day is yesterday', () => {
-      var previousDay = new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - 1));
-       expect(validator.realDateInFuture(previousDay)).to.be.false;
+      var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
+      expect(validator.realDateInFuture(previousDay)).to.be.false;
     });
 
     it('should fail if the provided day is old date -- 14/12/2007', () => {
@@ -528,6 +537,15 @@ describe('Validator', () => {
   });
 
   describe('bornAfter1900', () => {
+    
+    var currentDay, currentMonthStr, currentYearStr;
+    beforeEach(function() {
+      currentDay = new Date().getDate();
+      //months are 0 to 11 so adding 1 to it for the normal representation of 1 to 12
+      currentMonthStr = (new Date().getMonth() + 1).toString();
+      currentYearStr = (new Date().getFullYear()).toString();
+    });
+
     it('Should pass if the provided day is after 1900 -- 01/01/1900', () => {
       expect(validator.bornAfter1900(genDateObj('01', '01', '1900'))).to.be.true;
     });
@@ -578,6 +596,21 @@ describe('Validator', () => {
 
     it('should fail if the provided day is before 1900 -- 17/06/1600', () => {
       expect(validator.bornAfter1900(genDateObj('17', '06', '1600'))).to.be.false;
+    });
+
+    it('should pass if the provided day is today', () => {
+      var currentDate = genDateObj((currentDay).toString(), currentMonthStr, currentYearStr)
+      expect(validator.bornAfter1900(currentDate)).to.be.true;
+    });
+
+    it('should pass if the provided day is yesterday', () => {
+      var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
+      expect(validator.bornAfter1900(previousDay)).to.be.true;
+    });
+
+    it('Should fail if the provided day is in future -- next day', () => {
+      var date = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );   
+      expect(validator.bornAfter1900(date)).to.be.false;
     });
 
     it('Should return false for invalid dates', () => {
