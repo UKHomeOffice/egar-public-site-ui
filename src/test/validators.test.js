@@ -498,6 +498,129 @@ describe('Validator', () => {
     });
   });
 
+
+  describe('realDateInFuture', () => {
+
+    var currentDay, currentMonthStr, currentYearStr;
+    beforeEach(function() {
+      currentDay = new Date().getDate();
+      //months are 0 to 11 so adding 1 to it for the normal representation of 1 to 12
+      currentMonthStr = (new Date().getMonth() + 1).toString(); 
+      currentYearStr = (new Date().getFullYear()).toString();
+    });
+
+    it('Should pass if the provided day is in future -- next day', () => {
+      var currentDate = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );   
+      expect(validator.realDateInFuture(currentDate)).to.be.true;
+    });
+
+    it('should fail if the provided day is today', () => {
+      var currentDate = genDateObj((currentDay).toString(), currentMonthStr, currentYearStr)
+      expect(validator.realDateInFuture(currentDate)).to.be.false;
+    });
+
+    it('should fail if the provided day is yesterday', () => {
+      var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
+      expect(validator.realDateInFuture(previousDay)).to.be.false;
+    });
+
+    it('should fail if the provided day is old date -- 14/12/2007', () => {
+      expect(validator.realDateInFuture(genDateObj('14', '12', '2007'))).to.be.false;
+    });
+
+    it('Should return false for invalid dates', () => {
+      expect(validator.realDateInFuture(null)).to.be.false;
+      expect(validator.realDateInFuture(undefined)).to.be.false;
+      expect(validator.realDateInFuture(genDateObj('aa', 'bb', 'cccc'))).to.be.false;
+      expect(validator.realDateInFuture(genDateObj('1f', 'd2', '20S5'))).to.be.false;
+    });
+  });
+
+  describe('bornAfter1900', () => {
+    
+    var currentDay, currentMonthStr, currentYearStr;
+    beforeEach(function() {
+      currentDay = new Date().getDate();
+      //months are 0 to 11 so adding 1 to it for the normal representation of 1 to 12
+      currentMonthStr = (new Date().getMonth() + 1).toString();
+      currentYearStr = (new Date().getFullYear()).toString();
+    });
+
+    it('Should pass if the provided day is after 1900 -- 01/01/1900', () => {
+      expect(validator.bornAfter1900(genDateObj('01', '01', '1900'))).to.be.true;
+    });
+
+    it('Should pass if the provided day is after 1900 -- 05/06/1980', () => {
+      expect(validator.bornAfter1900(genDateObj('05', '06', '1980'))).to.be.true;
+    });
+
+    it('Should pass if the provided day is after 1900 -- 07/10/1990', () => {
+      expect(validator.bornAfter1900(genDateObj('07', '10', '1990'))).to.be.true;
+    });
+
+    it('Should pass if the provided day is after 1900 -- 15/03/1995', () => {
+      expect(validator.bornAfter1900(genDateObj('15', '03', '1995'))).to.be.true;
+    });
+
+    it('Should pass if the provided day is after 1900 -- 14/08/2006', () => {
+      expect(validator.bornAfter1900(genDateObj('14', '08', '2006'))).to.be.true;
+    });
+
+    it('Should pass if the provided day is after 1900 -- 12/03/2010', () => {
+      expect(validator.bornAfter1900(genDateObj('12', '03', '2010'))).to.be.true;
+    });
+
+    it('Should pass if the provided day is after 1900 -- 10/05/2012', () => {
+      expect(validator.bornAfter1900(genDateObj('10', '05', '2012'))).to.be.true;
+    });
+
+    it('Should pass if the provided day is after 1900 -- 14/07/2015', () => {
+      expect(validator.bornAfter1900(genDateObj('14', '07', '2015'))).to.be.true;
+    });
+
+    it('should fail if the provided day is before 1900 -- 31/12/1899', () => {
+      expect(validator.bornAfter1900(genDateObj('31', '12', '1899'))).to.be.false;
+    });
+
+    it('should fail if the provided day is before 1900 -- 01/01/0001', () => {
+      expect(validator.bornAfter1900(genDateObj('01', '01', '0001'))).to.be.false;
+    });
+
+    it('should fail if the provided day is before 1900 -- 07/10/1750', () => {
+      expect(validator.bornAfter1900(genDateObj('07', '10', '1750'))).to.be.false;
+    });
+
+    it('should fail if the provided day is before 1900 -- 15/12/1870', () => {
+      expect(validator.bornAfter1900(genDateObj('15', '12', '1870'))).to.be.false;
+    });
+
+    it('should fail if the provided day is before 1900 -- 17/06/1600', () => {
+      expect(validator.bornAfter1900(genDateObj('17', '06', '1600'))).to.be.false;
+    });
+
+    it('should pass if the provided day is today', () => {
+      var currentDate = genDateObj((currentDay).toString(), currentMonthStr, currentYearStr)
+      expect(validator.bornAfter1900(currentDate)).to.be.true;
+    });
+
+    it('should pass if the provided day is yesterday', () => {
+      var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
+      expect(validator.bornAfter1900(previousDay)).to.be.true;
+    });
+
+    it('Should fail if the provided day is in future -- next day', () => {
+      var date = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );   
+      expect(validator.bornAfter1900(date)).to.be.false;
+    });
+
+    it('Should return false for invalid dates', () => {
+      expect(validator.bornAfter1900(null)).to.be.false;
+      expect(validator.bornAfter1900(undefined)).to.be.false;
+      expect(validator.bornAfter1900(genDateObj('aa', 'bb', 'cccc'))).to.be.false;
+      expect(validator.bornAfter1900(genDateObj('1f', 'd2', '20S5'))).to.be.false;
+    });
+  });
+
   describe('Sanitise value tests', () => {
     let testValue;
     let type;
