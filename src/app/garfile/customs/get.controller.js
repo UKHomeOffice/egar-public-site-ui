@@ -12,6 +12,7 @@ module.exports = (req, res) => {
   const garId = cookie.getGarId();
 
   const context = {
+    freeCirculationOptions,
     reasonForVisitOptions,
     prohibitedGoodsOptions,
     cookie,

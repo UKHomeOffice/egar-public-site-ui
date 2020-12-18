@@ -17,10 +17,12 @@ module.exports = (req, res) => {
   const customs = {
     prohibitedGoods: req.body.prohibitedGoods,
     goodsDeclaration: (req.body.prohibitedGoods === 'Yes' ? req.body.goodsDeclaration : ''),
+    freeCirculation: req.body.freeCirculation,
     visitReason: req.body.visitReason,
   };
 
   const context = {
+    freeCirculationOptions,
     reasonForVisitOptions,
     prohibitedGoodsOptions,
     cookie,
