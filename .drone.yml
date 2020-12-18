@@ -37,7 +37,7 @@ pipeline:
       # - ${DRONE_BUILD_NUMBER}
       - ${DRONE_COMMIT}
     when:
-      branch: [ master, hotfix/* ]
+#      branch: [ master, hotfix/* ]
       event: [ push ]
       environment:
         exclude: [ production ]
@@ -70,7 +70,7 @@ pipeline:
       - kd --timeout=6m --file kube/public-site-service.yml
       - kd --timeout=6m --file kube/public-site-ingress.yml
     when:
-      branch: [ master, hotfix/* ]
+#      branch: [ master, hotfix/* ]
       event: push
       environment:
         exclude: [ production ]
@@ -94,7 +94,7 @@ pipeline:
       - echo "export E2E_BACK_END_DB_USER=$(kd run get secret appdbcreds --template={{.data.BACKENDDBUSER}} | base64 -d)" >> db_creds
       - echo "export E2E_BACK_END_DB_PASSWORD=$(kd run get secret appdbcreds --template={{.data.BACKENDDBPASSWORD}} | base64 -d)" >> db_creds
     when:
-      branch: [ master, hotfix/* ]
+#      branch: [ master, hotfix/* ]
       event: push
       environment:
         exclude: [ production ]
@@ -137,7 +137,7 @@ pipeline:
         quay.io/ukhomeofficedigital/egar-e2e-test:latest
       - rm db_creds 
     when:
-      branch: [ master, hotfix/* ]
+#      branch: [ master, hotfix/* ]
       event: push
       environment:
         exclude: [ production ]
