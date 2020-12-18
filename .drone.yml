@@ -8,6 +8,7 @@ pipeline:
       - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
     when:
 #srini      event: [ push, pull_request ]
+      even: tag # srini
       environment:
         exclude: [ production ]
 
@@ -24,6 +25,7 @@ pipeline:
       - sonar-scanner -Dsonar.projectVersion=$${DRONE_BUILD_NUMBER}
     when:
 #srini      event: [ push, pull_request ]
+      even: tag # srini
 
 
   Push Image to Quay.io:
@@ -39,6 +41,7 @@ pipeline:
     when:
 #      branch: [ master, hotfix/* ]
 #srini      event: [ push ]
+      even: tag # srini
       environment:
         exclude: [ production ]
 
@@ -72,6 +75,7 @@ pipeline:
     when:
 #      branch: [ master, hotfix/* ]
 #srini      event: push
+      even: tag # srini
       environment:
         exclude: [ production ]
 
