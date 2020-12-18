@@ -7,7 +7,7 @@ pipeline:
     commands:
       - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
     when:
-      event: [ push, pull_request ]
+#srini      event: [ push, pull_request ]
       environment:
         exclude: [ production ]
 
@@ -23,7 +23,7 @@ pipeline:
       - cd ..
       - sonar-scanner -Dsonar.projectVersion=$${DRONE_BUILD_NUMBER}
     when:
-      event: [ push, pull_request ]
+#srini      event: [ push, pull_request ]
 
 
   Push Image to Quay.io:
@@ -38,7 +38,7 @@ pipeline:
       - ${DRONE_COMMIT}
     when:
 #      branch: [ master, hotfix/* ]
-      event: [ push ]
+#srini      event: [ push ]
       environment:
         exclude: [ production ]
 
@@ -71,7 +71,7 @@ pipeline:
       - kd --timeout=6m --file kube/public-site-ingress.yml
     when:
 #      branch: [ master, hotfix/* ]
-      event: push
+#srini      event: push
       environment:
         exclude: [ production ]
 
