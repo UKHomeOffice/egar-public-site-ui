@@ -234,7 +234,6 @@
       {% if garfile.prohibitedGoods === 'Yes' %}
         {{ check_your_answers_row(__('field_goods_declaration'), garfile.goodsDeclaration | truncate(50)) }}
       {% endif %}
-      {{ check_your_answers_row(__('field_free_circulation'), garfile.freeCirculation) }}
       {{ check_your_answers_row(__('field_visit_reason_question'), garfile.visitReason | uncamelCase) }}
     </dl>
 
