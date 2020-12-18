@@ -27,3 +27,5 @@ drone registry add \
   --username ${DOCKER_USERNAME} \
   --password ${DOCKER_PASSWORD}
 echo -e "Adding registry exitcode = $?\n"
+
+# dummy comment to trigger build
