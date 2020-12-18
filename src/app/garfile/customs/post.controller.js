@@ -7,7 +7,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
-const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -17,12 +16,10 @@ module.exports = (req, res) => {
   const customs = {
     prohibitedGoods: req.body.prohibitedGoods,
     goodsDeclaration: (req.body.prohibitedGoods === 'Yes' ? req.body.goodsDeclaration : ''),
-    freeCirculation: req.body.freeCirculation,
     visitReason: req.body.visitReason,
   };
 
   const context = {
-    freeCirculationOptions,
     reasonForVisitOptions,
     prohibitedGoodsOptions,
     cookie,

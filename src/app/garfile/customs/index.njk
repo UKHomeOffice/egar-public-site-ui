@@ -66,26 +66,6 @@
         </fieldset>
       </div>
 
-      <div class="govuk-form-group {{ m.form_group_class('freeCirculation', errors) }}" id="freeCirculation">
-        <fieldset class="govuk-fieldset" aria-describedby="freeCirculation-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h2 class="govuk-fieldset__heading">{{__('field_free_circulation')}}</h2>
-            <span id="freeCirculation-hint" class="govuk-hint">{{__('field_free_circulation_hint')}}</span>
-            {{ m.error_message('freeCirculation', errors, __) }}
-          </legend>
-          <div class="govuk-radios">
-          {% for choice in freeCirculationOptions %}
-          <div class="govuk-radios__item">
-            <input id="{{choice.option}}" name="freeCirculation" class="govuk-radios__input" type="radio"
-              value="{{choice.value}}" aria-labelledby="freeCirculation-label-{{ loop.index }}"
-              {{ "checked" if choice.value == gar.freeCirculation }}>
-            <label id="freeCirculation-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.value}}</label>
-          </div>
-          {% endfor %}
-          </div>
-        </fieldset>
-      </div>
-
       <div class="govuk-form-group {{ m.form_group_class('visitReason', errors) }}" id="visitReason">
         <fieldset class="govuk-fieldset" aria-describedby="visitReason-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
