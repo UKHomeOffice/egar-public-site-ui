@@ -6,7 +6,6 @@ module.exports.validations = (req) => {
   const {
     prohibitedGoods,
     goodsDeclaration,
-    freeCirculation,
     visitReason,
   } = req.body;
 
@@ -16,9 +15,6 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(validator.validTextLength, 'goodsDeclaration', { value: goodsDeclaration, maxLength: MAX_TEXT_BOX_LENGTH }, `Declaration details must be ${MAX_TEXT_BOX_LENGTH} characters or less`),
-    ],
-    [
-      new ValidationRule(validator.notEmpty, 'freeCirculation', freeCirculation, 'Select a free circulation value'),
     ],
     [
       new ValidationRule(validator.notEmpty, 'visitReason', visitReason, 'Select a reason for visit'),
