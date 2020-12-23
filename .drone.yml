@@ -37,7 +37,7 @@ pipeline:
       # - ${DRONE_BUILD_NUMBER}
       - ${DRONE_COMMIT}
     when:
-#      branch: [ master, hotfix/* ]
+      branch: [ master, hotfix/* ]
       event: [ push ]
       environment:
         exclude: [ production ]
@@ -70,7 +70,7 @@ pipeline:
       - kd --timeout=6m --file kube/public-site-service.yml
       - kd --timeout=6m --file kube/public-site-ingress.yml
     when:
-#      branch: [ master, hotfix/* ]
+      branch: [ master, hotfix/* ]
       event: push
       environment:
         exclude: [ production ]
