@@ -233,7 +233,7 @@
 
     "title_garupload": "Upload your GAR file",
     "garupload_caption": "Select the GAR file to be uploaded.",
-    "garupload_warning_1": "GAR files should be of the <b>latest</b> template ",
+    "garupload_warning_1": "GAR files should be of the <i>latest</i> template ",
     "garupload_warning_2": "Excel spreadsheet as found on the GOV.UK website",
     "garupload_warning_3": ". Files that are uploaded are automatically checked for validity and integrity before being accepted by the system. Once complete, you will be shown any errors which must be rectified before the file is uploaded again.",
     "field_file": "Select a file",
