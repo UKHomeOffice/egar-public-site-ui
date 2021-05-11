@@ -1,6 +1,5 @@
 pipeline:
 
-
   Build:
     group: build-stage
     image: quay.io/ukhomeofficedigital/drone-docker

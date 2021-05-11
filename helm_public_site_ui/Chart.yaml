@@ -1,0 +1,8 @@
+apiVersion: v2
+name: publicsiteui
+description: Chart for deploying the publicsiteui
+type: application
+version: "0.0.0"
+appVersion: "0.0.0"
+version: "20210423104516" # This will rarely change
+appVersion: "0" # Dont bother to change this. Just keep it in this version

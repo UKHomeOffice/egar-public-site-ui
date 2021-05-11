@@ -1,0 +1,114 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.global.publicsiteui.appName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels: 
+      {{- include "publicsiteui.labels" . | nindent 6 }}
+  replicas: 3
+  revisionHistoryLimit: 10
+  template:
+    metadata:
+      labels:
+        {{- include "publicsiteui.labels" . | nindent 8 }}
+      #annotations:
+      #  {{- include "sgar_umbrella.appcredssha" . | nindent 8 }}
+      #  {{- include "publicsiteui.fedbsha" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Values.global.publicsiteui.appName }}-proxy
+          image: {{ .Values.global.common.quayRepo }}/egar-nginx-proxy:{{ .Values.global.publicsiteui.proxyTag }}
+          imagePullPolicy: {{ .Values.global.common.imagePullPolicy }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          ports:
+            - name: public-prxy-prt
+              containerPort: 10443
+          env:
+            - name: PROXY_SERVICE_HOST
+              value: "127.0.0.1"
+            - name: PROXY_SERVICE_PORT
+              value: "3000"
+            - name: NAXSI_USE_DEFAULT_RULES
+              value: "FALSE"
+            - name: ENABLE_UUID_PARAM
+              value: "FALSE"
+            - name: ADD_NGINX_SERVER_CFG
+              value: "add_header Strict-Transport-Security \"max-age=31536000; includeSubDomains\" always;"
+            - name: CLIENT_MAX_BODY_SIZE
+              value: '20'
+            - name: STATSD_METRICS
+              value: 'FALSE'
+        - name: {{ .Values.global.publicsiteui.appName }}-avp
+          image: {{ .Values.global.common.quayRepo }}/docker-clamav-rest:{{ .Values.global.publicsiteui.avProxyTag }}
+          imagePullPolicy: {{ .Values.global.common.imagePullPolicy }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
+            requests:
+              memory: "2048Mi"
+              cpu: "2000m"
+          ports:
+            - name: public-avp-prt
+              containerPort: 8080
+          env:
+            - name: CLAMD_HOST
+              value: "localhost"
+            - name: TIMEOUT
+              value: "60000"
+        - name: {{ .Values.global.publicsiteui.appName }}-av
+          image: {{ .Values.global.common.quayRepo }}/clamav:{{ .Values.global.publicsiteui.clamavTag }}
+          imagePullPolicy: {{ .Values.global.common.imagePullPolicy }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
+            requests:
+              memory: "2048Mi"
+              cpu: "2000m"
+          ports:
+            - name: public-av-prt
+              containerPort: 3310
+        - name: {{ .Values.global.publicsiteui.appName }}
+          image: {{ .Values.global.common.quayRepo }}/egar-public-site-ui:{{ .Values.global.publicsiteui.imageTag }}
+          imagePullPolicy: {{ .Values.global.common.imagePullPolicy }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "4096Mi"
+              cpu: "4000m"
+            requests:
+              memory: "2048Mi"
+              cpu: "2000m"
+          env:
+            {{- include "publicsiteui.envData" . | nindent 12 }}
+          ports:
+            - name: public-site-prt
+              containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: public-site-prt
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 300

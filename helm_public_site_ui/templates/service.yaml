@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.global.publicsiteui.appName }}-svc
+  labels:
+    name: {{ .Values.global.publicsiteui.appName }}-svc
+spec:
+  selector:
+    name: {{ .Values.global.publicsiteui.appName }}-svc
+  type: ClusterIP
+  ports:
+    - name: public-prxy-prt
+      port: 10443
+      targetPort: 10443

@@ -1,0 +1,28 @@
+{{- if .Values.ingress_enabled | default true -}}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Values.global.publicsiteui.appName }}-ingress
+  labels:
+    cert-manager.io/solver: route53
+  annotations:
+    cert-manager.io/enabled: "true"
+    ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.class: "nginx-internal"
+    ingress.kubernetes.io/proxy-body-size: "20m"
+    cert-manager.io/cluster-issuer: {{ .Values.global.publicsiteui.cert_issuer | default "letsencrypt-staging" }}
+spec:
+  rules:
+  - host: {{ .Values.global.publicsiteui.envData.BASE_URL }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Values.global.publicsiteui.appName }}-svc
+          servicePort: public-prxy-prt
+        path: /
+  tls:
+  - hosts:
+    - {{ .Values.global.publicsiteui.envData.BASE_URL }}
+    secretName: "{{ .Values.global.publicsiteui.appName }}-tls-cmio"
+{{- end }}
