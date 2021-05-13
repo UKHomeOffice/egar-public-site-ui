@@ -56,7 +56,7 @@ steps:
       from_secret: DOCKER_REGISTRY_URL
   commands:
   - docker login -u="$${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} $${DOCKER_REGISTRY_URL}
-  - docker tag egar_ui-public-site:$${DRONE_COMMIT} ${{DOCKER_REGISTRY_URL}}/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+  - docker tag egar_ui-public-site:$${DRONE_COMMIT} ${DOCKER_REGISTRY_URL}/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
   - docker push quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
   when:
     #branch:
