@@ -27,22 +27,22 @@ steps:
       exclude:
       - production
 
-- name: Unit Tests and SonarQube Scanner
-  pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
-  commands:
-  - export NOTIFY_API_KEY=dummy
-  - cd src
-  - npm install
-  - npm run test-drone
-  - cd ..
-  - sonar-scanner -Dsonar.projectVersion=$${DRONE_BUILD_NUMBER}
-  settings:
-    group: build-stage
-  when:
-    event:
-    - push
-    - pull_request
+#- name: Unit Tests and SonarQube Scanner
+#  pull: if-not-exists
+#  image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
+#  commands:
+#  - export NOTIFY_API_KEY=dummy
+#  - cd src
+#  - npm install
+#  - npm run test-drone
+#  - cd ..
+#  - sonar-scanner -Dsonar.projectVersion=$${DRONE_BUILD_NUMBER}
+#  settings:
+#    group: build-stage
+#  when:
+#    event:
+#    - push
+#    - pull_request
 
 - name: Push Image to Quay.io
   pull: if-not-exists
