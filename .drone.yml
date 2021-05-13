@@ -16,7 +16,7 @@ steps:
   - echo "Checking for docker availability."
   - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
   - echo "echo docker now available."
-  - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
+  - docker build -t egar_ui-public-site:$${DRONE_COMMIT} .
   settings:
     group: build-stage
   when:
@@ -47,20 +47,21 @@ steps:
 - name: Push Image to Quay.io
   pull: if-not-exists
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-  settings:
-    registry: quay.io
-    repo: quay.io/ukhomeofficedigital/egar-public-site-ui
-    tags:
-    - ${DRONE_COMMIT}
   environment:
     DOCKER_PASSWORD:
       from_secret: DOCKER_PASSWORD
     DOCKER_USERNAME:
       from_secret: DOCKER_USERNAME
+    DOCKER_REGISTRY_URL:
+      from_secret: DOCKER_REGISTRY_URL
+  commands:
+  - docker login -u="$${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} $${DOCKER_REGISTRY_URL}
+  - docker tag egar_ui-public-site:$${DRONE_COMMIT} ${{DOCKER_REGISTRY_URL}}/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+  - docker push quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
   when:
-    branch:
-    - master
-    - hotfix/*
+    #branch:
+    #- master
+    #- hotfix/*
     event:
     - push
     target:
@@ -99,9 +100,9 @@ steps:
     SIT_KUBE_TOKEN:
       from_secret: SIT_KUBE_TOKEN
   when:
-    branch:
-    - master
-    - hotfix/*
+    #branch:
+    #- master
+    #- hotfix/*
     event:
     - push
     target:
@@ -128,9 +129,9 @@ steps:
     SIT_KUBE_TOKEN:
       from_secret: SIT_KUBE_TOKEN
   when:
-    branch:
-    - master
-    - hotfix/*
+    #branch:
+    #- master
+    #- hotfix/*
     event:
     - push
     target:
@@ -170,11 +171,11 @@ steps:
     E2E_SMTP_SERVER:
       from_secret: E2E_SMTP_SERVER
   when:
-    branch:
-    - master
-    - hotfix/*
-    event:
-    - push
+    #branch:
+    #- master
+    #- hotfix/*
+    #event:
+    #- push
     target:
       exclude:
       - production
