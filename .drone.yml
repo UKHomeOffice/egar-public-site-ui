@@ -7,26 +7,26 @@ services:
 - name: docker
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
 
-steps:
-- name: Build
-  pull: if-not-exists
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-  commands:
-  # Wait for the docker service to be up
-  - echo "Checking for docker availability."
-  - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
-  - echo "echo docker now available."
-  - docker build -t egar_ui-public-site:$${DRONE_COMMIT} .
-  settings:
-    group: build-stage
-  when:
-    event:
-    - push
-    - pull_request
-    target:
-      exclude:
-      - production
-
+#steps:
+#- name: Build
+#  pull: if-not-exists
+#  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+#  commands:
+#  # Wait for the docker service to be up
+#  - echo "Checking for docker availability."
+#  - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
+#  - echo "echo docker now available."
+#  - docker build -t egar_ui-public-site:$${DRONE_COMMIT} .
+#  settings:
+#    group: build-stage
+#  when:
+#    event:
+#    - push
+#    - pull_request
+#    target:
+#      exclude:
+#      - production
+#
 #- name: Unit Tests and SonarQube Scanner
 #  pull: if-not-exists
 #  image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
