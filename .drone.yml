@@ -26,3 +26,85 @@ steps:
     target:
       exclude:
       - production
+
+#- name: Unit Tests and SonarQube Scanner
+#  pull: if-not-exists
+#  image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
+#  commands:
+#  - export NOTIFY_API_KEY=dummy
+#  - cd src
+#  - npm install
+#  - npm run test-drone
+#  - cd ..
+#  - sonar-scanner -Dsonar.projectVersion=$${DRONE_BUILD_NUMBER}
+#  settings:
+#    group: build-stage
+#  when:
+#    event:
+#    - push
+#    - pull_request
+
+- name: Push Image to Quay.io
+  pull: if-not-exists
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+    DOCKER_REGISTRY_URL:
+      from_secret: DOCKER_REGISTRY_URL
+  commands:
+  - docker login -u="$${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} $${DOCKER_REGISTRY_URL}
+  - docker tag egar_ui-public-site:$${DRONE_COMMIT} ${{DOCKER_REGISTRY_URL}}/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+  - docker push quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+  when:
+    #branch:
+    #- master
+    #- hotfix/*
+    event:
+    - push
+    target:
+      exclude:
+      - production
+
+- name: Deploy to SIT
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/kd
+  commands:
+  - export TAGGED_VERSION=$${DRONE_COMMIT}
+  - export KUBE_ARTIFACTORY_APP_SECRET=$${SIT_KUBE_ARTIFACTORY_APP_SECRET}
+  - export KUBE_SERVER=$${SIT_KUBE_SERVER}
+  - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
+  - export BASE_URL=$${SIT_BASE_URL}
+  - export BASE_URL_SERVICE=$${SIT_BASE_URL_SERVICE}
+  - source common_lib
+  - kd --timeout=6m --file kube/artifactory-secret.yml
+  - kd --timeout=6m --file kube/public-site-network-policy.yml
+  - kd --timeout=6m --file kube/public-site-deployment.yml
+  - kd --timeout=6m --file kube/public-site-service.yml
+  - kd --timeout=6m --file kube/public-site-ingress.yml
+  environment:
+    INGRESS_CLASS: nginx-internal
+    INSECURE_SKIP_TLS_VERIFY: true
+    KUBE_NAMESPACE: egar-sit
+    NODE_ENV: sit
+    SIT_BASE_URL:
+      from_secret: SIT_BASE_URL
+    SIT_BASE_URL_SERVICE:
+      from_secret: SIT_BASE_URL_SERVICE
+    SIT_KUBE_ARTIFACTORY_APP_SECRET:
+      from_secret: SIT_KUBE_ARTIFACTORY_APP_SECRET
+    SIT_KUBE_SERVER:
+      from_secret: SIT_KUBE_SERVER
+    SIT_KUBE_TOKEN:
+      from_secret: SIT_KUBE_TOKEN
+  when:
+    #branch:
+    #- master
+    #- hotfix/*
+    event:
+    - push
+    target:
+      exclude:
+      - production
