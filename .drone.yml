@@ -16,6 +16,7 @@ steps:
   - echo "Checking for docker availability."
   - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
   - echo "echo docker now available."
+  - docker build -t egar_ui-public-site:$${DRONE_COMMIT} .
   settings:
     group: build-stage
   when:
