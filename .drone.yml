@@ -10,8 +10,12 @@ services:
 steps:
 - name: Build
   pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/drone-docker
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
   commands:
+  # Wait for the docker service to be up
+  - echo "Checking for docker availability."
+  - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
+  - echo "echo docker now available."
   - docker build -t egar_ui-public-site:$${DRONE_BUILD_NUMBER} .
   settings:
     group: build-stage
@@ -42,7 +46,7 @@ steps:
 
 - name: Push Image to Quay.io
   pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/drone-docker
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
   settings:
     registry: quay.io
     repo: quay.io/ukhomeofficedigital/egar-public-site-ui
