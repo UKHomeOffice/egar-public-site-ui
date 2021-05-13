@@ -301,10 +301,10 @@ services:
 #    status:
 #    - failure
 
-trigger:
-  branch:
-    exclude:
-    - wip*
-    - WIP*
-
-...
+#trigger:
+#  branch:
+#    exclude:
+#    - wip*
+#    - WIP*
+#
+#...
