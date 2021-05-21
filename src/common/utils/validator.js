@@ -414,6 +414,20 @@ function handleResponseError(parsedApiResponse) {
   }
 }
 
+function sanitiseName(value) {
+
+  var regexp = new RegExp('^[a-zA-Z0-9,]*[ ]{0,1}[a-zA-Z0-9,]*');
+
+
+  logger.debug(`Hello: `);
+
+  console.log('regex: ' + regexp);
+  console.log('regex.test(value): '+ regexp.test(value));
+
+
+  return regexp.test(value);
+}
+
 function sanitiseValue(input, type) {
   const regex = (type === 'year') ? '[0-9]{1,4}' : '[0-9]{1,2}';
 
@@ -470,5 +484,6 @@ module.exports = {
   isValidDepAndArrDate,
   handleResponseError,
   sanitiseValue,
+  sanitiseName,
   autoTab,
 };

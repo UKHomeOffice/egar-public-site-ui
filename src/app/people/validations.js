@@ -16,6 +16,7 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter the given name of the person'),
       new ValidationRule(validator.isValidStringLength, 'firstName', req.body.firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.sanitiseName, 'firstName', req.body.firstName, `Given name must be valid`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
