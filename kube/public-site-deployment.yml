@@ -256,12 +256,12 @@ spec:
                   name: environment
                   key: ENABLE_UNAVAILABLE_PAGE
             - name: USER_FIRST_NAME_CHARACTER_COUNT
-                valueFrom:
+              valueFrom:
                 secretKeyRef:
                   name: environment
                   key: USER_FIRST_NAME_CHARACTER_COUNT
             - name: USER_SURNAME_CHARACTER_COUNT
-                valueFrom:
+              valueFrom:
                 secretKeyRef:
                   name: environment
                   key: USER_SURNAME_CHARACTER_COUNT
