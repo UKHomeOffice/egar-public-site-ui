@@ -94,6 +94,172 @@ describe('User Register Post Controller', () => {
     });
   });
 
+  it('should fail validation on invalid character at start or end of name', async () => {
+      const fName = '\'Mary-Lou'
+      const lName = 'O\'Connell-'
+      const email = 'mlou@email.net'
+
+      const emptyRequest = {
+        body: {
+          userFname: fName,
+          userLname: lName,
+          userId: email,
+          cUserId: email,
+        },
+        session: {
+          cookie: {},
+        },
+      };
+      const cookie = new CookieModel(emptyRequest);
+
+      callController = async () => {
+        await controller(emptyRequest, res);
+      };
+
+      callController().then(() => {
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/register/index', {
+          cookie,
+          fname: fName,
+          lname: lName,
+          usrname: email,
+          errors: [
+                new ValidationRule(validator.validName, 'userFname', fName, 'Please enter a valid first name'),
+                new ValidationRule(validator.validName, 'userLname', lName, 'Please enter a valid surname'),
+          ],
+        });
+      });
+    });
+
+  it('should pass validation first name or last name with hyphen or apostrophe characters', async () => {
+
+      const fName = 'Mary-Lou'
+      const lName = 'O\'Connell'
+      const email = 'mlou@email.net'
+
+      const request = {
+        body: {
+          userFname: fName,
+          userLname: lName,
+          userId: email,
+          cUserId: email,
+        },
+        session: {
+          cookie: {},
+        },
+      };
+
+      sinon.stub(sendTokenService, 'send').resolves({})
+      sinon.stub(tokenApi, 'setToken');
+      sinon.stub(userCreateApi, 'post').resolves(
+      JSON.stringify(
+        {
+            "organisation": null,
+            "firstName": fName,
+            "role": {
+                "name": "Individual",
+                "roleId": "8d06ca43-6422-4d96-a885-245e2ae59469"
+            },
+            "crafts": [],
+            "userId": "895fbc32-2d2a-4dd5-8705-875086f6347f",
+            "lastName": lName,
+            "state": "unverified",
+            "email": email
+        }),
+      );
+
+      callController = async () => {
+        await controller(request, res);
+      };
+
+      callController().then(() => {
+            expect(userCreateApi.post).to.have.been.calledWith(fName, lName, email);
+            expect(sendTokenService.send).to.have.been.called;
+      }).then(() => {
+            expect(res.redirect).to.have.been.calledWith('/user/regmsg');
+      });
+   });
+
+   function stringGen(len) {
+    var text = "";
+    var charset = "abcdefghijklmnopqrstuvwxyz";
+    for (var i = 0; i < len; i++)
+      text += charset.charAt(Math.floor(Math.random() * charset.length));
+    return text;
+  }
+
+  it('should fail validation on invalid first name or last name length', async () => {
+
+      const maxFirstNameLength = process.env.USER_FIRST_NAME_CHARACTER_COUNT;
+      const maxSurnameLength = process.env.USER_SURNAME_CHARACTER_COUNT;
+
+      const fName = stringGen(maxFirstNameLength + 1)
+      const lName = stringGen(maxSurnameLength + 1)
+
+      const email = 'dvader@empire.net'
+
+      const emptyRequest = {
+        body: {
+          userFname: fName,
+          userLname: lName,
+          userId: email,
+          cUserId: email,
+        },
+        session: {
+          cookie: {},
+        },
+      };
+      const cookie = new CookieModel(emptyRequest);
+
+      callController = async () => {
+        await controller(emptyRequest, res);
+      };
+
+      callController().then(() => {
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/register/index', {
+          cookie,
+          fname: fName,
+          lname: lName,
+          usrname: email,
+          errors: [
+            new ValidationRule(validator.validFirstNameLength, 'userFname', fName, `Please enter a first name of at most ${maxFirstNameLength} characters`),
+            new ValidationRule(validator.validSurnameLength, 'userLname', lName, `Please enter a surname of at most ${maxSurnameLength} characters`),
+          ],
+        });
+      });
+    });
+
+    it('should fail validation on invalid first name or last name characters', async () => {
+          const emptyRequest = {
+            body: {
+              userFname: 'D4rth',
+              userLname: 'V4D3R',
+              userId: 'dvader@empire.net',
+              cUserId: 'dvader@empire.net',
+            },
+            session: {
+              cookie: {},
+            },
+          };
+          const cookie = new CookieModel(emptyRequest);
+
+          callController = async () => {
+            await controller(emptyRequest, res);
+          };
+
+          callController().then(() => {
+            expect(res.render).to.have.been.calledOnceWithExactly('app/user/register/index', {
+              cookie,
+              fname: 'D4rth',
+              lname: 'V4D3R',
+              usrname: 'dvader@empire.net',
+              errors: [
+                new ValidationRule(validator.validName, 'userFname', 'D4rth', 'Please enter a valid first name'),
+                new ValidationRule(validator.validName, 'userLname', 'V4D3R', 'Please enter a valid surname'),
+              ],
+            });
+          });
+        });
+
   describe('whitelist enabled', () => {
     const rewiredController = rewire('../../../app/user/register/post.controller.js');
     const createUserFunction = { createUser: rewiredController.__get__('createUser') };
