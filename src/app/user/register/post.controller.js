@@ -10,6 +10,7 @@ const userCreateApi = require('../../../common/services/createUserApi');
 const tokenApi = require('../../../common/services/tokenApi');
 const whitelist = require('../../../common/services/whiteList');
 const config = require('../../../common/config');
+const { USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config/index');
 
 const regFailureError = {
   message: 'Registration failed, try again',
@@ -20,9 +21,13 @@ const userAlreadyRegisteredMsg = 'User already registered';
 const createValidationChains = (fname, lname, usrname, cusrname) => {
   const fnameChain = [
     new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given name'),
+    new ValidationRule(validator.validName, 'userFname', fname, 'Please enter a valid first name'),
+    new ValidationRule(validator.validFirstNameLength, 'userFname', fname, `Please enter a first name of at most ${USER_FIRST_NAME_CHARACTER_COUNT} characters`),
   ];
   const lnameChain = [
     new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),
+    new ValidationRule(validator.validName, 'userLname', lname, 'Please enter a valid surname'),
+    new ValidationRule(validator.validSurnameLength, 'userLname', lname, `Please enter a surname of at most ${USER_SURNAME_CHARACTER_COUNT} characters`),
   ];
   const userChain = [
     new ValidationRule(validator.notEmpty, 'userId', usrname, 'Please enter your email'),

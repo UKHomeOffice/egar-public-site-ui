@@ -28,7 +28,7 @@ describe('Departure Post Controller', () => {
         departureLong: '12.1000',
         departureDay: '30',
         departureMonth: '5',
-        departureYear: '2020',
+        departureYear: '2022',
         departureHour: '15',
         departureMinute: '00',
       },

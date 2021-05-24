@@ -5,7 +5,7 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH } = require('../config/index');
+const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 
 function notEmpty(value) {
@@ -27,6 +27,22 @@ function notEmpty(value) {
     return false;
   }
   return true;
+}
+
+// only allow alpha, hyphen and apostrophe
+// must start and end with alpha
+// special characters cannot be placed sequentially
+function validName(value) {
+  const regex = /^[A-z](?:[A-z]|[-|\'](?=[A-z]))*[A-z]$/
+  return regex.test(value);
+}
+
+function validFirstNameLength(value) {
+  return value.length <= USER_FIRST_NAME_CHARACTER_COUNT;
+}
+
+function validSurnameLength(value) {
+  return value.length <= USER_SURNAME_CHARACTER_COUNT;
 }
 
 function valuetrue(value) {
@@ -193,7 +209,7 @@ function realDateInFuture(dObj) {
 
   var nextDay = new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() + 1));
   var providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
-  
+
   return numericDateElements(dObj)
     && validDay(dObj.d, dObj.m, dObj.y)
     && validMonth(dObj.m)
@@ -433,6 +449,9 @@ function autoTab(field1, dayMonthOrYear, field2) {
 
 module.exports = {
   notEmpty,
+  validName,
+  validFirstNameLength,
+  validSurnameLength,
   email,
   confirmPassword,
   valuetrue,

@@ -28,7 +28,7 @@ describe('Arrival Post Controller', () => {
         arrivalLong: '12.1000',
         arrivalDay: '30',
         arrivalMonth: '5',
-        arrivalYear: '2020',
+        arrivalYear: '2022',
         arrivalHour: '15',
         arrivalMinute: '00',
       },

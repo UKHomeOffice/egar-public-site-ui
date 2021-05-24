@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .KUBE_NAMESPACE }}
 spec:
   selector:
-    matchLabels: 
+    matchLabels:
       name: {{ .APP_NAME }}-svc
       service: {{ .APP_NAME }}-svc
   replicas: 3
@@ -255,6 +255,16 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: ENABLE_UNAVAILABLE_PAGE
+            - name: USER_FIRST_NAME_CHARACTER_COUNT
+                valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: USER_FIRST_NAME_CHARACTER_COUNT
+            - name: USER_SURNAME_CHARACTER_COUNT
+                valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: USER_SURNAME_CHARACTER_COUNT
           ports:
             - name: public-site-prt
               containerPort: 3000
