@@ -39048,81 +39048,100 @@
 {
  "id": "EXAF",
  "british": true,
-"label": "ALBA NORTH (United Kingdom) (EXAF) " },
+"label": "ALBA NORTH (United Kingdom) (EXAF) " 
+},
 {
  "id": "EXAG",
  "british": true,
-"label": "AMETHYST A1D (United Kingdom) (EXAG) " },
+"label": "AMETHYST A1D (United Kingdom) (EXAG) " 
+},
 {
  "id": "EXAH",
  "british": true,
-"label": "AMETHYST A2D (United Kingdom) (EXAH) " },
+"label": "AMETHYST A2D (United Kingdom) (EXAH) " 
+},
 {
  "id": "EXAI",
  "british": true,
-"label": "AMETHYST B1D (United Kingdom) (EXAI) " },
+"label": "AMETHYST B1D (United Kingdom) (EXAI) " 
+},
 {
  "id": "EXAK",
  "british": true,
-"label": "ANDREW (United Kingdom) (EXAK) " },
+"label": "ANDREW (United Kingdom) (EXAK) " 
+},
 {
  "id": "EXAN",
  "british": true,
-"label": "ARBROATH (United Kingdom) (EXAN) " },
+"label": "ARBROATH (United Kingdom) (EXAN) " 
+},
 {
  "id": "EXAO",
  "british": true,
-"label": "ARDMORE (United Kingdom) (EXAO) " },
+"label": "ARDMORE (United Kingdom) (EXAO) " 
+},
 {
  "id": "EXAP",
  "british": true,
-"label": "ARMADA (United Kingdom) (EXAP) " },
+"label": "ARMADA (United Kingdom) (EXAP) " 
+},
 {
  "id": "EXAY",
  "british": true,
-"label": "BEATRICE AD (United Kingdom) (EXAY) " },
+"label": "BEATRICE AD (United Kingdom) (EXAY) " 
+},
 {
  "id": "EXAZ",
  "british": true,
-"label": "BEATRICE AP (United Kingdom) (EXAZ) " },
+"label": "BEATRICE AP (United Kingdom) (EXAZ) " 
+},
 {
  "id": "EXBA",
  "british": true,
-"label": "BEATRICE B (United Kingdom) (EXBA) " },
+"label": "BEATRICE B (United Kingdom) (EXBA) " 
+},
 {
  "id": "EXBB",
  "british": true,
-"label": "BEATRICE C (United Kingdom) (EXBB) " },
+"label": "BEATRICE C (United Kingdom) (EXBB) " 
+},
 
 { 
 "id": "EXBC", 
 "british": true,
-"label": "BEATRICE CSS (United Kingdom) (EXBC) " },
+"label": "BEATRICE CSS (United Kingdom) (EXBC) " 
+},
 {
  "id": "EXBD",
  "british": true,
-"label": "BESSEMER A (United Kingdom) (EXBD) " },
+"label": "BESSEMER A (United Kingdom) (EXBD) " 
+},
 {
  "id": "EXBG",
  "british": true,
-"label": "BOULTON (United Kingdom) (EXBG) " },
+"label": "BOULTON (United Kingdom) (EXBG) " 
+},
 {
  "id": "EXBH",
  "british": true,
-"label": "BRAE A (United Kingdom) (EXBH) " },
+"label": "BRAE A (United Kingdom) (EXBH) " 
+},
 {
  "id": "EXBI",
  "british": true,
-"label": "BRAE B (United Kingdom) (EXBI) " },
+"label": "BRAE B (United Kingdom) (EXBI) " 
+},
 
 { 
 "id": "EXBJ",
  "british": true,
-"label": "BRAE EAST (United Kingdom) (EXBJ) " },
+"label": "BRAE EAST (United Kingdom) (EXBJ) " 
+},
 {
  "id": "EXBL",
  "british": true,
-"label": "BRIDGE LINKED PLATFORM (United Kingdom) (EXBL) " },
+"label": "BRIDGE LINKED PLATFORM (United Kingdom) (EXBL) " 
+},
 {
  "id": "EXBO",
  "british": true,
@@ -39346,151 +39365,188 @@
 {
  "id": "EXFE",
  "british": true,
-"label": "FULMAR AD (United Kingdom) (EXFE) " },
+"label": "FULMAR AD (United Kingdom) (EXFE) " 
+},
 {
  "id": "EXFF",
  "british": true,
-"label": "GALAHAD (United Kingdom) (EXFF) " },
+"label": "GALAHAD (United Kingdom) (EXFF) " 
+},
 {
  "id": "EXFI",
  "british": true,
-"label": "GANNET A (United Kingdom) (EXFI) " },
+"label": "GANNET A (United Kingdom) (EXFI) " 
+},
 {
  "id": "EXFK",
  "british": true,
-"label": "GARROW NUI (United Kingdom) (EXFK) " },
+"label": "GARROW NUI (United Kingdom) (EXFK) " 
+},
 {
  "id": "EXFL",
  "british": true,
-"label": "GOLDEN EAGLE PUQ PLATFORM (United Kingdom) (EXFL) " },
+"label": "GOLDEN EAGLE PUQ PLATFORM (United Kingdom) (EXFL) " 
+},
 {
  "id": "EXFM",
  "british": true,
-"label": "GOLDEN EAGLE WELLHEAD PLATFORM (United Kingdom) (EXFM) " },
+"label": "GOLDEN EAGLE WELLHEAD PLATFORM (United Kingdom) (EXFM) " 
+},
 {
  "id": "EXFN",
  "british": true,
-"label": "GOLDENEYE (United Kingdom) (EXFN) " },
+"label": "GOLDENEYE (United Kingdom) (EXFN) " 
+},
 {
  "id": "EXFP",
  "british": true,
-"label": "GUDRUN JACKET (United Kingdom) (EXFP) " },
+"label": "GUDRUN JACKET (United Kingdom) (EXFP) " 
+},
 {
  "id": "EXFT",
  "british": true,
-"label": "HOTON (United Kingdom) (EXFT) " },
+"label": "HOTON (United Kingdom) (EXFT) " 
+},
 {
  "id": "EXFU",
  "british": true,
-"label": "HYDE (United Kingdom) (EXFU) " },
+"label": "HYDE (United Kingdom) (EXFU) " 
+},
 {
  "id": "EXFV",
  "british": true,
-"label": "INDE AC (United Kingdom) (EXFV) " },
+"label": "INDE AC (United Kingdom) (EXFV) " 
+},
 {
  "id": "EXFW",
  "british": true,
-"label": "INDE AD (United Kingdom) (EXFW) " },
+"label": "INDE AD (United Kingdom) (EXFW) " 
+},
 {
  "id": "EXGL",
  "british": true,
-"label": "IVANHOE (AH001) (United Kingdom) (EXGL) " },
+"label": "IVANHOE (AH001) (United Kingdom) (EXGL) " 
+},
 {
  "id": "EXGM",
  "british": true,
-"label": "IVAR AASEN PLATFORM (United Kingdom) (EXGM) " },
+"label": "IVAR AASEN PLATFORM (United Kingdom) (EXGM) " 
+},
 {
  "id": "EXGO",
  "british": true,
-"label": "JACKDAW (United Kingdom) (EXGO) " },
+"label": "JACKDAW (United Kingdom) (EXGO) " 
+},
 {
  "id": "EXGP",
  "british": true,
-"label": "JACKY WELLHEAD PLATFORM  12/21C (United Kingdom) (EXGP) " },
+"label": "JACKY WELLHEAD PLATFORM  12/21C (United Kingdom) (EXGP) " 
+},
 {
  "id": "EXGQ",
  "british": true,
-"label": "JADE (United Kingdom) (EXGQ) " },
+"label": "JADE (United Kingdom) (EXGQ) " 
+},
 {
  "id": "EXGR",
  "british": true,
-"label": "JASMINE JLQ (United Kingdom) (EXGR) " },
+"label": "JASMINE JLQ (United Kingdom) (EXGR) " 
+},
 {
  "id": "EXGS",
  "british": true,
-"label": "JASMINE WELLHEAD PLATFORM (United Kingdom) (EXGS) " },
+"label": "JASMINE WELLHEAD PLATFORM (United Kingdom) (EXGS) " 
+},
 {
  "id": "EXGT", 
 "british": true,
-"label": "JUDY (United Kingdom) (EXGT) " },
+"label": "JUDY (United Kingdom) (EXGT) " 
+},
 {
  "id": "EXGU",
  "british": true,
-"label": "JUDY JRP (United Kingdom) (EXGU) " },
+"label": "JUDY JRP (United Kingdom) (EXGU) " 
+},
 {
  "id": "EXGZ",
  "british": true,
-"label": "KITTIWAKE (United Kingdom) (EXGZ) " },
+"label": "KITTIWAKE (United Kingdom) (EXGZ) " 
+},
 {
  "id": "EXHV",
  "british": true,
-"label": "MAERSK HIGHLANDER HDJU DRILLING RIG (United Kingdom) (EXHV) " },
+"label": "MAERSK HIGHLANDER HDJU DRILLING RIG (United Kingdom) (EXHV) " 
+},
 {
  "id": "EXHX",
  "british": true,
-"label": "MAUREEN A (United Kingdom) (EXHX) " },
+"label": "MAUREEN A (United Kingdom) (EXHX) " 
+},
 {
  "id": "EXHY",
  "british": true,
-"label": "MCP01 (United Kingdom) (EXHY) " },
+"label": "MCP01 (United Kingdom) (EXHY) " 
+},
 {
  "id": "EXHZ",
  "british": true,
-"label": "MILLER B (United Kingdom) (EXHZ) " },
+"label": "MILLER B (United Kingdom) (EXHZ) " 
+},
 {
  "id": "EXIE",
  "british": true,
-"label": "MONTROSE A (United Kingdom) (EXIE) " },
+"label": "MONTROSE A (United Kingdom) (EXIE) " 
+},
 {
  "id": "EXIF",
  "british": true,
-"label": "MONTROSE BLP PLATFORM (United Kingdom) (EXIF) " },
+"label": "MONTROSE BLP PLATFORM (United Kingdom) (EXIF) " 
+},
 {
  "id": "EXIG",
  "british": true,
-"label": "MUNGO (United Kingdom) (EXIG) " },
+"label": "MUNGO (United Kingdom) (EXIG) " 
+},
 {
  "id": "EXIL",
  "british": true,
-"label": "NELSON (United Kingdom) (EXIL) " },
+"label": "NELSON (United Kingdom) (EXIL) " 
+},
 {
  "id": "EXIN",
  "british": true,
-"label": "NORTH EVEREST (United Kingdom) (EXIN) " },
+"label": "NORTH EVEREST (United Kingdom) (EXIN) " 
+},
 {
  "id": "EXIU",
  "british": true,
-"label": "PIPER B (United Kingdom) (EXIU) " },
+"label": "PIPER B (United Kingdom) (EXIU) " 
+},
 {
  "id": "EXIV",
  "british": true,
-"label": "PRODUCTION (P) JACKET (United Kingdom) (EXIV) " },
+"label": "PRODUCTION (P) JACKET (United Kingdom) (EXIV) " 
+},
 {
  "id": "EXIW",
  "british": true,
-"label": "QUARTERS UTILITIES (QU) JACKET (United Kingdom) (EXIW) " },
+"label": "QUARTERS UTILITIES (QU) JACKET (United Kingdom) (EXIW) " 
+},
 {
  "id": "EXJJ",
  "british": true,
-"label": "SAFE CALEDONIA FLOATEL (United Kingdom) (EXJJ) " },
+"label": "SAFE CALEDONIA FLOATEL (United Kingdom) (EXJJ) " 
+},
 {
  "id": "EXJK", 
 "british": true,
-"label": "SALTIRE (United Kingdom) (EXJK) " },
+"label": "SALTIRE (United Kingdom) (EXJK) " 
+},
 {
  "id": "EXJN",
  "british": true,
-"label": "SCOTT JD (United Kingdom) (EXJN) " },
+"label": "SCOTT JD (United Kingdom) (EXJN) " 
+},
 {
  "id": "EXJO",
  "british": true,
@@ -39876,15 +39932,18 @@
 {
  "id": "EXVC",
  "british": true,
-"label": "Living Stone (Vessel) (United Kingdom) (EXVC) " },
+"label": "Living Stone (Vessel) (United Kingdom) (EXVC) " 
+},
 {
  "id": "EXVD",
  "british": true,
-"label": "Wind Orca (Vessel) (United Kingdom) (EXVD) " },
+"label": "Wind Orca (Vessel) (United Kingdom) (EXVD) " 
+},
 {
  "id": "EXVE",
  "british": true,
-"label": "Viking Neptun (Vessel) (United Kingdom) (EXVE) " },
+"label": "Viking Neptun (Vessel) (United Kingdom) (EXVE) " 
+},
 {
  "id": "EXVF",
  "british": true,
