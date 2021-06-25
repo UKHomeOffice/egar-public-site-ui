@@ -39161,150 +39161,188 @@
 {
  "id": "EXCD",
  "british": true,
-"label": "CLAYMORE CPP (United Kingdom) (EXCD) " },
-{ "
-id": "EXCE", "british": true,"label": "CLEETON CC (United Kingdom) (EXCE) " },
+"label": "CLAYMORE CPP (United Kingdom) (EXCD) " 
+},
+{ 
+"id": "EXCE", "british": true,
+"label": "CLEETON CC (United Kingdom) (EXCE) " 
+},
 { 
 "id": "EXCF", 
-"british": true,"
-label": "CLEETON PQ (United Kingdom) (EXCF) " },
+"british": true,
+"label": "CLEETON PQ (United Kingdom) (EXCF) " 
+},
 
 { 
 "id": "EXCG",
  "british": true,
-"label": "CLEETON WLTR (United Kingdom) (EXCG) " },
+"label": "CLEETON WLTR (United Kingdom) (EXCG) " 
+},
 {
  "id": "EXCO",
  "british": true,
-"label": "CLYDE (United Kingdom) (EXCO) " },
+"label": "CLYDE (United Kingdom) (EXCO) " 
+},
 { 
 "id": "EXCR", 
 "british": true,
-"label": "CULZEAN LIVING QTRS AND UTILITY (ULQ) (United Kingdom) (EXCR) " },
+"label": "CULZEAN LIVING QTRS AND UTILITY (ULQ) (United Kingdom) (EXCR) " 
+},
 { 
 "id": "EXCS", 
-"british": true,"
-label": "CULZEAN PROCESSING PLATFORM (CPF) (United Kingdom) (EXCS) " },
+"british": true,
+"label": "CULZEAN PROCESSING PLATFORM (CPF) (United Kingdom) (EXCS) " 
+},
 { 
 "id": "EXCT", 
-"british": true,"
-label": "CULZEAN WHP JACKET (United Kingdom) (EXCT) " },
+"british": true,
+"label": "CULZEAN WHP JACKET (United Kingdom) (EXCT) " 
+},
 {
  "id": "EXDA",
  "british": true,
-"label": "Deep Discoverer (Dive Vessel) (United Kingdom) (EXDA) " },
+"label": "Deep Discoverer (Dive Vessel) (United Kingdom) (EXDA) " 
+},
 {
  "id": "EXDB",
  "british": true,
-"label": "Boka Atlantis (Dive Vessel) (United Kingdom) (EXDB) " },
+"label": "Boka Atlantis (Dive Vessel) (United Kingdom) (EXDB) " 
+},
 {
  "id": "EXDC",
  "british": true,
-"label": "Boka Da Vinci (Dive Vessel) (United Kingdom) (EXDC) " },
+"label": "Boka Da Vinci (Dive Vessel) (United Kingdom) (EXDC) " 
+},
 {
  "id": "EXDD",
  "british": true,
-"label": "Boka Topaz (Dive Vessel) (United Kingdom) (EXDD) " },
+"label": "Boka Topaz (Dive Vessel) (United Kingdom) (EXDD) " 
+},
 {
  "id": "EXDE",
  "british": true,
-"label": "Boka Polaris (Dive Vessel) (United Kingdom) (EXDE) " },
+"label": "Boka Polaris (Dive Vessel) (United Kingdom) (EXDE) " 
+},
 {
  "id": "EXDF",
  "british": true,
-"label": "Seven Atlantic (Dive Vessel) (United Kingdom) (EXDF) " },
+"label": "Seven Atlantic (Dive Vessel) (United Kingdom) (EXDF) " 
+},
 {
  "id": "EXDG",
  "british": true,
-"label": "Seven Falcon (Dive Vessel) (United Kingdom) (EXDG) " },
+"label": "Seven Falcon (Dive Vessel) (United Kingdom) (EXDG) " 
+},
 {
  "id": "EXDH",
  "british": true,
-"label": "Seven Pegasus (Dive Vessel) (United Kingdom) (EXDH) " },
+"label": "Seven Pegasus (Dive Vessel) (United Kingdom) (EXDH) " 
+},
 {
  "id": "EXDI",
  "british": true,
-"label": "Seven Borealis (Dive Vessel) (United Kingdom) (EXDI) " },
+"label": "Seven Borealis (Dive Vessel) (United Kingdom) (EXDI) " 
+},
 {
  "id": "EXDJ",
  "british": true,
-"label": "Deep Arctic (Dive Vessel) (United Kingdom) (EXDJ) " },
+"label": "Deep Arctic (Dive Vessel) (United Kingdom) (EXDJ) " 
+},
 {
  "id": "EXDK",
  "british": true,
-"label": "Deep Explorer (Dive Vessel) (United Kingdom) (EXDK) " },
+"label": "Deep Explorer (Dive Vessel) (United Kingdom) (EXDK) " 
+},
 {
  "id": "EXEH",
  "british": true,
-"label": "EDVARD GREIG PLATFORM (United Kingdom) (EXEH) " },
+"label": "EDVARD GREIG PLATFORM (United Kingdom) (EXEH) " 
+},
 {
  "id": "EXEI",
  "british": true,
-"label": "EKOFISK (United Kingdom) (EXEI) " },
+"label": "EKOFISK (United Kingdom) (EXEI) " 
+},
 {
  "id": "EXEJ",
  "british": true,
-"label": "ELGIN A WHP (United Kingdom) (EXEJ) " },
+"label": "ELGIN A WHP (United Kingdom) (EXEJ) " 
+},
 {
  "id": "EXEK",
  "british": true,
-"label": "ELGIN B WHP (United Kingdom) (EXEK) " },
+"label": "ELGIN B WHP (United Kingdom) (EXEK) " 
+},
 {
  "id": "EXEL",
  "british": true,
-"label": "ELGIN PUQ (United Kingdom) (EXEL) " },
+"label": "ELGIN PUQ (United Kingdom) (EXEL) " 
+},
 {
  "id": "EXEO",
  "british": true,
-"label": "ERSKINE (United Kingdom) (EXEO) " },
+"label": "ERSKINE (United Kingdom) (EXEO) " 
+},
 {
  "id": "EXEP",
  "british": true,
-"label": "ETAP PDR (United Kingdom) (EXEP) " },
+"label": "ETAP PDR (United Kingdom) (EXEP) " 
+},
 {
  "id": "EXEQ",
  "british": true,
-"label": "ETAP QU (United Kingdom) (EXEQ) " },
+"label": "ETAP QU (United Kingdom) (EXEQ) " 
+},
 {
  "id": "EXES",
  "british": true,
-"label": "EXCALIBER EA (United Kingdom) (EXES) " },
+"label": "EXCALIBER EA (United Kingdom) (EXES) " 
+},
 {
  "id": "EXET",
  "british": true,
-"label": "FASP (United Kingdom) (EXET) " },
+"label": "FASP (United Kingdom) (EXET) " 
+},
 {
  "id": "EXEV",
  "british": true,
-"label": "FORTIES ALPHA (United Kingdom) (EXEV) " },
+"label": "FORTIES ALPHA (United Kingdom) (EXEV) " 
+},
 {
  "id": "EXEW",
  "british": true,
-"label": "FORTIES BRAVO (United Kingdom) (EXEW) " },
+"label": "FORTIES BRAVO (United Kingdom) (EXEW) " 
+},
 {
  "id": "EXEX",
  "british": true,
-"label": "FORTIES CHARLIE (United Kingdom) (EXEX) " },
+"label": "FORTIES CHARLIE (United Kingdom) (EXEX) " 
+},
 {
  "id": "EXEY",
  "british": true,
-"label": "FORTIES DELTA (United Kingdom) (EXEY) " },
+"label": "FORTIES DELTA (United Kingdom) (EXEY) " 
+},
 {
  "id": "EXEZ",
  "british": true,
-"label": "FORTIES ECHO (United Kingdom) (EXEZ) " },
+"label": "FORTIES ECHO (United Kingdom) (EXEZ) " 
+},
 {
  "id": "EXFA",
  "british": true,
-"label": "FORTIES UNITY (United Kingdom) (EXFA) " },
+"label": "FORTIES UNITY (United Kingdom) (EXFA) " 
+},
 {
  "id": "EXFB",
  "british": true,
-"label": "FRANKLIN WHP (United Kingdom) (EXFB) " },
+"label": "FRANKLIN WHP (United Kingdom) (EXFB) " 
+},
 {
  "id": "EXFD",
  "british": true,
-"label": "FULMAR A (United Kingdom) (EXFD) " },
+"label": "FULMAR A (United Kingdom) (EXFD) " 
+},
 {
  "id": "EXFE",
  "british": true,
@@ -39456,233 +39494,291 @@ label": "CULZEAN WHP JACKET (United Kingdom) (EXCT) " },
 {
  "id": "EXJO",
  "british": true,
-"label": "SCOTT JU (United Kingdom) (EXJO) " },
+"label": "SCOTT JU (United Kingdom) (EXJO) " 
+},
 {
  "id": "EXJT",
  "british": true,
-"label": "SHEARWATER A (United Kingdom) (EXJT) " },
+"label": "SHEARWATER A (United Kingdom) (EXJT) " 
+},
 {
  "id": "EXJU",
  "british": true,
-"label": "SHEARWATER C (United Kingdom) (EXJU) " },
+"label": "SHEARWATER C (United Kingdom) (EXJU) " 
+},
 {
  "id": "EXJW",
  "british": true,
-"label": "SLEIPNER R (United Kingdom) (EXJW) " },
+"label": "SLEIPNER R (United Kingdom) (EXJW) " 
+},
 {
  "id": "EXKH",
  "british": true,
-"label": "TARTAN A (United Kingdom) (EXKH) " },
+"label": "TARTAN A (United Kingdom) (EXKH) " 
+},
 {
  "id": "EXKK",
  "british": true,
-"label": "TIFFANY (United Kingdom) (EXKK) " },
+"label": "TIFFANY (United Kingdom) (EXKK) " 
+},
 {
  "id": "EXKN",
  "british": true,
-"label": "ULA DP (United Kingdom) (EXKN) " },
+"label": "ULA DP (United Kingdom) (EXKN) " 
+},
 {
  "id": "EXLI",
  "british": true,
-"label": "WELLHEAD (W) (United Kingdom) (EXLI) " },
+"label": "WELLHEAD (W) (United Kingdom) (EXLI) " 
+},
 {
  "id": "EXLK",
  "british": true,
-"label": "WEST FRANKLIN PLATFORM (United Kingdom) (EXLK) " },
+"label": "WEST FRANKLIN PLATFORM (United Kingdom) (EXLK) " 
+},
 {
  "id": "EXLL",
  "british": true,
-"label": "WEST FRANKLIN WHP (United Kingdom) (EXLL) " },
+"label": "WEST FRANKLIN WHP (United Kingdom) (EXLL) " 
+},
 {
  "id": "EXLU",
  "british": true,
-"label": "YORK PLATFORM (United Kingdom) (EXLU) " },
+"label": "YORK PLATFORM (United Kingdom) (EXLU) " 
+},
 {
  "id": "EXLV",
  "british": true,
-"label": "Balmoral (United Kingdom) (EXLV) " },
+"label": "Balmoral (United Kingdom) (EXLV) " 
+},
 {
  "id": "EXLW",
  "british": true,
-"label": "Beryl B (United Kingdom) (EXLW) " },
+"label": "Beryl B (United Kingdom) (EXLW) " 
+},
 {
  "id": "EXLX",
  "british": true,
-"label": "Bleo Holm (United Kingdom) (EXLX) " },
+"label": "Bleo Holm (United Kingdom) (EXLX) " 
+},
 {
  "id": "EXLY",
  "british": true,
-"label": "Bruce (United Kingdom) (EXLY) " },
+"label": "Bruce (United Kingdom) (EXLY) " 
+},
 {
  "id": "EXLZ",
  "british": true,
-"label": "BW Catcher (United Kingdom) (EXLZ) " },
+"label": "BW Catcher (United Kingdom) (EXLZ) " 
+},
 {
  "id": "EXMA",
  "british": true,
-"label": "Captain FPSO (United Kingdom) (EXMA) " },
+"label": "Captain FPSO (United Kingdom) (EXMA) " 
+},
 {
  "id": "EXMB",
  "british": true,
-"label": "Cormorant A (United Kingdom) (EXMB) " },
+"label": "Cormorant A (United Kingdom) (EXMB) " 
+},
 {
  "id": "EXMC",
  "british": true,
-"label": "Ensco 120 (United Kingdom) (EXMC) " },
+"label": "Ensco 120 (United Kingdom) (EXMC) " 
+},
 {
  "id": "EXMD",
  "british": true,
-"label": "Global Producer 3 (United Kingdom) (EXMD) " },
+"label": "Global Producer 3 (United Kingdom) (EXMD) " 
+},
 {
  "id": "EXME",
  "british": true,
-"label": "Gryphon FPSO (United Kingdom) (EXME) " },
+"label": "Gryphon FPSO (United Kingdom) (EXME) " 
+},
 {
  "id": "EXMF",
  "british": true,
-"label": "Harding (United Kingdom) (EXMF) " },
+"label": "Harding (United Kingdom) (EXMF) " 
+},
 {
  "id": "EXMG",
  "british": true,
-"label": "Heather (United Kingdom) (EXMG) " },
+"label": "Heather (United Kingdom) (EXMG) " 
+},
 {
  "id": "EXMH",
  "british": true,
-"label": "Magnus (United Kingdom) (EXMH) " },
+"label": "Magnus (United Kingdom) (EXMH) " 
+},
 {
  "id": "EXMI",
  "british": true,
-"label": "Ninian North (United Kingdom) (EXMI) " },
+"label": "Ninian North (United Kingdom) (EXMI) " 
+},
 {
  "id": "EXMJ",
  "british": true,
-"label": "Ninian Central (United Kingdom) (EXMJ) " },
+"label": "Ninian Central (United Kingdom) (EXMJ) " 
+},
 {
  "id": "EXMK",
  "british": true,
-"label": "Ninian South (United Kingdom) (EXMK) " },
+"label": "Ninian South (United Kingdom) (EXMK) " 
+},
 {
  "id": "EXML",
  "british": true,
-"label": "Noble Sam Hartley (United Kingdom) (EXML) " },
+"label": "Noble Sam Hartley (United Kingdom) (EXML) " 
+},
 {
  "id": "EXMM",
  "british": true,
-"label": "North Alwyn (United Kingdom) (EXMM) " },
+"label": "North Alwyn (United Kingdom) (EXMM) " 
+},
 {
  "id": "EXMN",
  "british": true,
-"label": "Prospector 5 (United Kingdom) (EXMN) " },
+"label": "Prospector 5 (United Kingdom) (EXMN) " 
+},
 {
  "id": "EXMO",
  "british": true,
-"label": "Solan (United Kingdom) (EXMO) " },
+"label": "Solan (United Kingdom) (EXMO) " 
+},
 {
  "id": "EXMP",
  "british": true,
-"label": "Tern (United Kingdom) (EXMP) " },
+"label": "Tern (United Kingdom) (EXMP) " 
+},
 {
  "id": "EXMQ",
  "british": true,
-"label": "Forties Unity Riser (United Kingdom) (EXMQ) " },
+"label": "Forties Unity Riser (United Kingdom) (EXMQ) " 
+},
 {
  "id": "EXMR",
  "british": true,
-"label": "Valaris 123 (United Kingdom) (EXMR) " },
+"label": "Valaris 123 (United Kingdom) (EXMR) " 
+},
 {
  "id": "EXMS",
  "british": true,
-"label": "Valaris Gorilla VI (United Kingdom) (EXMS) " },
+"label": "Valaris Gorilla VI (United Kingdom) (EXMS) " 
+},
 {
  "id": "EXMT",
  "british": true,
-"label": "Western Isles (United Kingdom) (EXMT) " },
+"label": "Western Isles (United Kingdom) (EXMT) " 
+},
 {
  "id": "EXMU",
  "british": true,
-"label": "Wilphoenix (United Kingdom) (EXMU) " },
+"label": "Wilphoenix (United Kingdom) (EXMU) " 
+},
 {
  "id": "EXMV",
  "british": true,
-"label": "MEARSK RESOLVE (United Kingdom) (EXMV) " },
+"label": "MEARSK RESOLVE (United Kingdom) (EXMV) " 
+},
 {
  "id": "EXMW",
  "british": true,
-"label": "K14C (United Kingdom) (EXMW) " },
+"label": "K14C (United Kingdom) (EXMW) " 
+},
 {
  "id": "EXMX",
  "british": true,
-"label": "K15A (United Kingdom) (EXMX) " },
+"label": "K15A (United Kingdom) (EXMX) " 
+},
 {
  "id": "EXMY",
  "british": true,
-"label": "K15B (United Kingdom) (EXMY) " },
+"label": "K15B (United Kingdom) (EXMY) " 
+},
 {
  "id": "EXMZ",
  "british": true,
-"label": "L2A (United Kingdom) (EXMZ) " },
+"label": "L2A (United Kingdom) (EXMZ) " 
+},
 {
  "id": "EXNA",
  "british": true,
-"label": "L9F (United Kingdom) (EXNA) " },
+"label": "L9F (United Kingdom) (EXNA) " 
+},
 {
  "id": "EXNB",
  "british": true,
-"label": "AWG1 (United Kingdom) (EXNB) " },
+"label": "AWG1 (United Kingdom) (EXNB) " 
+},
 {
  "id": "EXNC",
  "british": true,
-"label": "L13E (United Kingdom) (EXNC) " },
+"label": "L13E (United Kingdom) (EXNC) " 
+},
 {
  "id": "EXND",
  "british": true,
-"label": "L13C (United Kingdom) (EXND) " },
+"label": "L13C (United Kingdom) (EXND) " 
+},
 {
  "id": "EXNE",
  "british": true,
-"label": "K81 (United Kingdom) (EXNE) " },
+"label": "K81 (United Kingdom) (EXNE) " 
+},
 {
- "id": "EXNF", "british": true,"label": "K82 (United Kingdom) (EXNF) " },
+ "id": "EXNF", "british": true,"label": "K82 (United Kingdom) (EXNF) " 
+},
 {
  "id": "EXNG",
  "british": true,
-"label": "K83 (United Kingdom) (EXNG) " },
+"label": "K83 (United Kingdom) (EXNG) " 
+},
 {
  "id": "EXNH",
  "british": true,
-"label": "A12 (United Kingdom) (EXNH) " },
+"label": "A12 (United Kingdom) (EXNH) " 
+},
 {
  "id": "EXNI",
  "british": true,
-"label": "Glen Lyon FPSO (United Kingdom) (EXNI) " },
+"label": "Glen Lyon FPSO (United Kingdom) (EXNI) " 
+},
 {
  "id": "EXNJ",
  "british": true,
-"label": "Schiehallion FPSO (United Kingdom) (EXNJ) " },
+"label": "Schiehallion FPSO (United Kingdom) (EXNJ) " 
+},
 {
  "id": "EXNK",
  "british": true,
-"label": "Aoka Mizu FPSO (United Kingdom) (EXNK) " },
+"label": "Aoka Mizu FPSO (United Kingdom) (EXNK) " 
+},
 {
  "id": "EXNL",
  "british": true,
-"label": "Foinaven FPSO (United Kingdom) (EXNL) " },
+"label": "Foinaven FPSO (United Kingdom) (EXNL) " 
+},
 {
  "id": "EXNM",
  "british": true,
-"label": "Petrojarl (United Kingdom) (EXNM) " },
+"label": "Petrojarl (United Kingdom) (EXNM) " 
+},
 {
  "id": "EXNN",
  "british": true,
-"label": "Cormorant North (United Kingdom) (EXNN) " },
+"label": "Cormorant North (United Kingdom) (EXNN) " 
+},
 {
  "id": "EXNO",
  "british": true,
-"label": "Eider platform (United Kingdom) (EXNO) " },
+"label": "Eider platform (United Kingdom) (EXNO) " 
+},
 {
  "id": "EXNP",
  "british": true,
-"label": "Northern Producer FPSO (United Kingdom) (EXNP) " },
+"label": "Northern Producer FPSO (United Kingdom) (EXNP) " 
+},
 {
  "id": "EXNQ",
  "british": true,
@@ -39690,75 +39786,93 @@ label": "CULZEAN WHP JACKET (United Kingdom) (EXCT) " },
 {
  "id": "EXNR",
  "british": true,
-"label": "Haewene Brim FPSO (United Kingdom) (EXNR) " },
+"label": "Haewene Brim FPSO (United Kingdom) (EXNR) " 
+},
 {
  "id": "EXNS",
  "british": true,
-"label": "DAVY 30A (United Kingdom) (EXNS) " },
+"label": "DAVY 30A (United Kingdom) (EXNS) " 
+},
 {
  "id": "EXNT",
  "british": true,
-"label": "BLUE TERN (United Kingdom) (EXNT) " },
+"label": "BLUE TERN (United Kingdom) (EXNT) " 
+},
 {
  "id": "EXNU",
  "british": true,
-"label": "Haeva (United Kingdom) (EXNU) " },
+"label": "Haeva (United Kingdom) (EXNU) " 
+},
 {
  "id": "EXNV",
  "british": true,
-"label": "HEWETT 48-29B (United Kingdom) (EXNV) " },
+"label": "HEWETT 48-29B (United Kingdom) (EXNV) " 
+},
 {
  "id": "EXNW",
  "british": true,
-"label": "HEWETT 48-29C (United Kingdom) (EXNW) " },
+"label": "HEWETT 48-29C (United Kingdom) (EXNW) " 
+},
 {
  "id": "EXNX",
  "british": true,
-"label": "HEWETT 48-29Q (United Kingdom) (EXNX) " },
+"label": "HEWETT 48-29Q (United Kingdom) (EXNX) " 
+},
 {
  "id": "EXNY",
  "british": true,
-"label": "HEWETT 52-5A (United Kingdom) (EXNY) " },
+"label": "HEWETT 52-5A (United Kingdom) (EXNY) " 
+},
 {
  "id": "EXNZ",
  "british": true,
-"label": "Rough 3Bravo (Gas Platform)  (United Kingdom) (EXNZ) " },
+"label": "Rough 3Bravo (Gas Platform)  (United Kingdom) (EXNZ) " 
+},
 {
  "id": "EXOA",
  "british": true,
-"label": "Saipem 7000 (Crane Vessel) (United Kingdom) (EXOA) " },
+"label": "Saipem 7000 (Crane Vessel) (United Kingdom) (EXOA) " 
+},
 {
  "id": "EXOB",
  "british": true,
-"label": "Deep Energy (Cable Layer Vessel) (United Kingdom) (EXOB) " },
+"label": "Deep Energy (Cable Layer Vessel) (United Kingdom) (EXOB) " 
+},
 {
  "id": "EXOC",
  "british": true,
-"label": "Sea Installer (United Kingdom) (EXOC) " },
+"label": "Sea Installer (United Kingdom) (EXOC) " 
+},
 {
  "id": "EXSC",
  "british": true,
-"label": "Z01 (Substation) (United Kingdom) (EXSC) " },
+"label": "Z01 (Substation) (United Kingdom) (EXSC) " 
+},
 {
  "id": "EXSD",
  "british": true,
-"label": "Z11 (Substation) (United Kingdom) (EXSD) " },
+"label": "Z11 (Substation) (United Kingdom) (EXSD) " 
+},
 {
  "id": "EXSE",
  "british": true,
-"label": "Z12 (Substation) (United Kingdom) (EXSE) " },
+"label": "Z12 (Substation) (United Kingdom) (EXSE) " 
+},
 {
  "id": "EXSF",
  "british": true,
-"label": "Z13 (Substation) (United Kingdom) (EXSF) " },
+"label": "Z13 (Substation) (United Kingdom) (EXSF) " 
+},
 {
  "id": "EXVA", 
 "british": true,
-"label": "Edda Mistral (Vessel) (United Kingdom) (EXVA) " },
+"label": "Edda Mistral (Vessel) (United Kingdom) (EXVA) " 
+},
 {
  "id": "EXVB",
  "british": true,
-"label": "Innovation (Vessel) (United Kingdom) (EXVB) " },
+"label": "Innovation (Vessel) (United Kingdom) (EXVB) " 
+},
 {
  "id": "EXVC",
  "british": true,
