@@ -81,7 +81,7 @@ steps:
   - source common_lib
   - kd --timeout=6m --file kube/artifactory-secret.yml
   - kd --timeout=6m --file kube/public-site-network-policy.yml
-  - kd --timeout=6m --file kube/public-site-deployment.yml
+  - kd --timeout=12m --file kube/public-site-deployment.yml
   - kd --timeout=6m --file kube/public-site-service.yml
   - kd --timeout=6m --file kube/public-site-ingress.yml
   environment:
