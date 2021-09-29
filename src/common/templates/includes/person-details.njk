@@ -171,7 +171,7 @@
 
   <div class="{{ m.form_group_class('travelDocumentType', errors) }}">
     <label class="govuk-label govuk-label--m" for="travelDocumentType">{{ __('field_travel_document_type') }}</label>
-    {{ m.hint('travelDocumentType', __('field_travel_document_type_hint')) }}{{__('id_card_withdrawl_text_part')}}
+    {{ m.hint('travelDocumentType', __('field_travel_document_type_hint')) }} <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text_part')}} <a href=https://www.gov.uk>GOV.UK</a>. </span> </p>
     {{ m.error_message('travelDocumentType', errors, __) }}
     <select class="govuk-select" id="travelDocumentType" name="travelDocumentType">
     {% for document in documenttype %}

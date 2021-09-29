@@ -20,7 +20,7 @@ spec:
       containers:
         - name: public-site-proxy
           image: quay.io/ukhomeofficedigital/egar-nginx-proxy:v3.4.2
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -51,7 +51,7 @@ spec:
               value: 'FALSE'
         - name: public-site-avp
           image: quay.io/ukhomeofficedigital/docker-clamav-rest:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -72,7 +72,7 @@ spec:
               value: "60000"
         - name: public-site-av
           image: quay.io/ukhomeofficedigital/clamav:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -88,7 +88,7 @@ spec:
               containerPort: 3310
         - name: public-site
           image: quay.io/ukhomeofficedigital/egar-public-site-ui:{{ .TAGGED_VERSION }}
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
