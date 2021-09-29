@@ -27,8 +27,10 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-xl">{{__('section_count', 4, 8)}}</span>
       <h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
+      <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk>GOV.UK</a>. </span> </p>
       <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
       <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
+      
     </div>
     <div class="govuk-grid-column-full">
       {% if savedPeople | length %}
