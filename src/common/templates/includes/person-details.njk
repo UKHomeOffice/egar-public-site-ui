@@ -171,7 +171,7 @@
 
   <div class="{{ m.form_group_class('travelDocumentType', errors) }}">
     <label class="govuk-label govuk-label--m" for="travelDocumentType">{{ __('field_travel_document_type') }}</label>
-    {{ m.hint('travelDocumentType', __('field_travel_document_type_hint')) }}
+    {{ m.hint('travelDocumentType', __('field_travel_document_type_hint')) }}{{__('id_card_withdrawl_text_part')}}
     {{ m.error_message('travelDocumentType', errors, __) }}
     <select class="govuk-select" id="travelDocumentType" name="travelDocumentType">
     {% for document in documenttype %}

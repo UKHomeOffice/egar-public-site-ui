@@ -31,6 +31,7 @@
   {% endif %}
 
   <h1 class="govuk-heading-xl">{{ __('title_people') }}</h1>
+  <p class="govuk-body-l"><span style="background-color: #66ff66>{{__('id_card_withdrawl_text')}}</span></p>
 
   {% if cookie.getUserRole() != 'User' %}
 	  <p class="govuk-body-l">{{__('people_caption')}}</p>

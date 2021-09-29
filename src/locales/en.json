@@ -190,7 +190,7 @@
     "field_issuing_state": "Issuing state",
     "field_issuing_state_hint": "Type in or provide the 3 letter code for the issuing state, for example GBR.",
     "field_travel_document_type": "Travel document type",
-    "field_travel_document_type_hint": "This should be one of either: Passport, Identity Card or Other.",
+    "field_travel_document_type_hint": "This should be Passport or Other.",
     "field_travel_document_issuing_state": "Travel document issuing state",
     "field_travel_document_expiry_date": "Travel document expiry date",
     "form_save_and_add_to_gar": "Save and add to GAR",
@@ -421,5 +421,8 @@
     "organisation_created": "organisation_created",
 
     "covid_19_notification": "There are now new rules in place for people entering the UK. Find out more ",
-    "covid_19_notification_link": "https://www.gov.uk/uk-border-control"
+    "covid_19_notification_link": "https://www.gov.uk/uk-border-control",
+
+    "id_card_withdrawl_text": "From 1 October 2021, most EU, EEA and Swiss citizens will only be able to enter the UK using a valid passport. ID cards will no longer be accepted as a valid travel document for entry to the UK. Please check <a href=https://www.gov.uk>GOV.UK</a> for further details and exceptions.",
+    "id_card_withdrawl_text_part" : "ID cards will no longer be accepted as a valid travel document for entry to the UK. Please check <a href=https://www.gov.uk>GOV.UK</a> for further details and exceptions."
 }
