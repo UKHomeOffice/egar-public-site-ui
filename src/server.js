@@ -25,6 +25,7 @@ const PgSession = require('connect-pg-simple')(session);
 // Local dependencies
 const logger = require('./common/utils/logger')(__filename);
 const config = require('./common/config/index');
+const availability = require('./common/config/availability')
 const router = require('./app/router');
 const db = require('./common/utils/db');
 const noCache = require('./common/utils/no-cache');
@@ -114,7 +115,7 @@ function initialisExpressSession(app) {
 function initialiseGlobalMiddleware(app) {
   logger.info('Initalising global middleware');
 
-  if (config.ENABLE_UNAVAILABLE_PAGE.toLowerCase() === 'true') {
+  if (availability.ENABLE_UNAVAILABLE_PAGE.toLowerCase() === 'true') {
     logger.info('Enabling service unavailable middleware');
     const validRoutes = ['unavailable', 'public', 'javascripts', 'stylesheets'];
     app.use((req, res, next) => {
@@ -223,8 +224,6 @@ function initialiseTemplateEngine(app) {
   // nunjucksEnvironment.addGlobal('js_path', NODE_ENV === 'production' ? JAVASCRIPT_PATH : staticify.getVersionedPath('/javascripts/application.js'));
   nunjucksEnvironment.addGlobal('ga_id', GA_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
-
-  logger.info('Set global settings for nunjucks');
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
@@ -237,6 +236,11 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('MAX_EMAIL_LENGTH', config.MAX_EMAIL_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_ADDRESS_LINE_LENGTH', config.MAX_ADDRESS_LINE_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_TEXT_BOX_LENGTH', config.MAX_TEXT_BOX_LENGTH);
+  // Add unavailable page variables into nunjucks envrionment
+  nunjucksEnvironment.addGlobal('IS_PLANNED_MAINTENANCE', availability.IS_PLANNED_MAINTENANCE);
+  nunjucksEnvironment.addGlobal('MAINTENANCE_START_DATETIME', availability.MAINTENANCE_START_DATETIME);
+  nunjucksEnvironment.addGlobal('MAINTENANCE_END_DATETIME', availability.MAINTENANCE_END_DATETIME);
+  logger.info('Set global settings for nunjucks');
 }
 
 function initialisePublic(app) {

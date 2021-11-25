@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+{% include "header-pre-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -18,7 +18,6 @@
 
 {% block content %}
 
-
   {% import "common/templates/includes/macros.njk" as m %}
 
   {% if errors %}
@@ -26,26 +25,43 @@
   {% endif %}
   <div class="govuk-grid-row">
   	<div class="govuk-grid-column-two-thirds">
-
-     <h1 class="govuk-heading-xl">
+		 <h1 class="govuk-heading-xl">
+				Service Unavailable
+		 </h1>
+     <h2 class="govuk-heading-l">
         The Submit a General Aviation Report (GAR) service is currently unavailable.
-     </h1>
-
+     </h2>
+    {% if (IS_PLANNED_MAINTENANCE == "true") %}
      <div>
-       <p class="govuk-body-m">
-         Please submit your GAR using the following method:
-       </p>
-
         <p class="govuk-body-m">
-          Download the GAR template
-          <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/946913/GAR_Template_Updated_Dec_2020_v6.4_SDS.xlsx">here</a>
-          and fill in the details. Then submit the GAR by contacting
-          the National Co-ordination Unit directly at: <br> Telephone: +44 (0) 845 723 1110
+         This is due to a planned outage. The service will be unavailable between {{ MAINTENANCE_START_DATETIME }} UTC and {{ MAINTENANCE_END_DATETIME }} UTC, but available thereafter.
         </p>
+        <p class="govuk-body-m">
+          If you are required to submit a GAR during this period, please download and complete the required GAR form found <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/946913/GAR_Template_Updated_Dec_2020_v6.4_SDS.xlsx">here</a>.
+				</p>
+				<p class="govuk-body-m">
+					GAR forms should be submitted directly to the National Co-Ordination Unit (NCU) at <a href="mailto:ncu@hmrc.gov.uk">ncu@hmrc.gov.uk</a> as per the instructions on GOV.UK. Submissions will not be received direct from sGAR for the duration of this outage.
+				</p>
+				<p class="govuk-body-m">
+					We apologise for any inconvenience.
+				</p>
        <p class="govuk-body-m">
-
      </div>
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    </div>
+		{% else %}
+		<div>
+			 <p class="govuk-body-m">
+				 If you are required to submit a GAR for an imminent service, please download and complete the required GAR form found <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/946913/GAR_Template_Updated_Dec_2020_v6.4_SDS.xlsx">here</a>.
+			 </p>
+			 <p class="govuk-body-m">
+				 GAR forms should be submitted directly to the National Co-Ordination Unit (NCU) at <a href="mailto:ncu@hmrc.gov.uk">ncu@hmrc.gov.uk</a> as per the instructions on GOV.UK. Submissions will not be received direct from sGAR whilst the service is unavailable.
+			 </p>
+			 <p class="govuk-body-m">
+				 We apologise for any inconvenience.
+			 </p>
+			<p class="govuk-body-m">
+		</div>
+    {% endif %}
+     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  </div>
 
 {% endblock %}
