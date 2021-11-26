@@ -265,6 +265,21 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: USER_SURNAME_CHARACTER_COUNT
+            - name: IS_PLANNED_MAINTENANCE
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: IS_PLANNED_MAINTENANCE
+            - name: MAINTENANCE_START_DATETIME
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: MAINTENANCE_START_DATETIME
+            - name: MAINTENANCE_END_DATETIME
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: MAINTENANCE_END_DATETIME
           ports:
             - name: public-site-prt
               containerPort: 3000
