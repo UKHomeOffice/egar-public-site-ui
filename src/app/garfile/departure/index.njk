@@ -101,7 +101,7 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_hour')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureHour"
-                    name="departureHour" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'hour');"
+                    name="departureHour" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'hour');autoTab(departureHour, 'hour', departureMinute);"
                     value="{{ cookie.timeSlice('hour', cookie.getGarDepartureVoyage().departureTime) }}"
                     {{ 'aria-describedby=departureTime-error' if errors | containsError('departureTime') }}>
                 </div>
