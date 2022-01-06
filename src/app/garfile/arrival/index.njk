@@ -98,7 +98,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_hour')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalHour"
-                    name="arrivalHour" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'hour');"
+                    name="arrivalHour" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'hour');autoTab(arrivalHour, 'hour', arrivalMinute);"
                     value="{{cookie.timeSlice('hour', cookie.getGarArrivalVoyage().arrivalTime)}}"
                     {{ 'aria-describedby=arrivalTime-error' if errors | containsError('arrivalTime') }}>
                 </div>
