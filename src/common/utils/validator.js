@@ -161,28 +161,22 @@ function currentOrFutureDate(dObj) {
   const currDate = new Date();
   if (dObj.y < currDate.getFullYear()) {
     return false;
-  }
+  } 
+  if (dObj.y > currDate.getFullYear()) {
+    return true;
+  } 
   if (dObj.y === currDate.getFullYear()) {
     if (dObj.m < currDate.getMonth() + 1) {
       return false;
     }
-    if (dObj.y === currDate.getFullYear() + 1){
-      if (dObj.m === currDate.getMonth() + 1) {
-        if (dObj.d < currDate.getDate() + 1){
-          return false;
-        }
-      }
+    if (dObj.m > currDate.getMonth() + 1) {
+      return true;
     }
-    if (dObj.y === currDate.getFullYear() + 1){
-      if (dObj.m === currDate.getMonth() + 1) {
-        if (dObj.d === currDate.getDate() + 1) {
-          return dObj.d >= currDate.getDate();
-        }
-      }
+    if (dObj.m === currDate.getMonth() + 1) {
+      return dObj.d >= currDate.getDate();
     }
-      
-    }
-  return true;
+  }
+  return false;
 }
 
 function validYear(y) {
