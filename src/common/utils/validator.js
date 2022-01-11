@@ -166,10 +166,22 @@ function currentOrFutureDate(dObj) {
     if (dObj.m < currDate.getMonth() + 1) {
       return false;
     }
-    if (dObj.m === currDate.getMonth() + 1) {
-      return dObj.d >= currDate.getDate();
+    if (dObj.y === currDate.getFullYear() + 1){
+      if (dObj.m === currDate.getMonth() + 1) {
+        if (dObj.d < currDate.getDate() + 1){
+          return false;
+        }
+      }
     }
-  }
+    if (dObj.y === currDate.getFullYear() + 1){
+      if (dObj.m === currDate.getMonth() + 1) {
+        if (dObj.d === currDate.getDate() + 1) {
+          return dObj.d >= currDate.getDate();
+        }
+      }
+    }
+      
+    }
   return true;
 }
 
