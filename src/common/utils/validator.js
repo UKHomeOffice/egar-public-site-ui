@@ -165,14 +165,14 @@ function currentOrFutureDate(dObj) {
   if (dObj.y > currDate.getFullYear()) {
     return true;
   } 
-  if (dObj.y === currDate.getFullYear()) {
+  if (dObj.y == currDate.getFullYear()) {
     if (dObj.m < currDate.getMonth() + 1) {
       return false;
     }
     if (dObj.m > currDate.getMonth() + 1) {
       return true;
     }
-    if (dObj.m === currDate.getMonth() + 1) {
+    if (dObj.m == currDate.getMonth() + 1) {
       return dObj.d >= currDate.getDate();
     }
   }
