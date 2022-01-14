@@ -48,7 +48,6 @@ const timeMsg = 'Enter a real arrival time';
 const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places';
 const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places';
 const samePortMsg = 'Arrival port must be different to departure port';
-const notBritishMsg = 'Either the Arrival or Departure ports must be a British port';
 
 const buildValidations = (voyage) => {
   // Create validation input objs
@@ -129,7 +128,7 @@ module.exports = async (req, res) => {
   ]);
 
   validations.push([
-    new ValidationRule(airportValidation.isBritishAirport, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], notBritishMsg),
+    new ValidationRule(airportValidation.isBritishAirport, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], airportValidation.notBritishMsg),
   ]);
 
   validator.validateChains(validations)
