@@ -187,7 +187,7 @@ function isBritishAirport(airports){
     return true;  
 }
   else{
-    const britishAirports = airport_codes.filter(value => value.british).map(item => item.id);
+    const britishAirports = Object.values(airport_codes).filter(value => value.british).map(item => item.id);
     if (britishAirports.includes(airports[0]) || britishAirports.includes(airports[1])) {
       return true;
     }
