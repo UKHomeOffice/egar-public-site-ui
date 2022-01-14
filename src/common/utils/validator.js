@@ -1,5 +1,7 @@
 const countries = require('i18n-iso-countries');
 const moment = require('moment');
+const airport_codes = require('../../common/utils/airport_codes.json');
+
 
 const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
@@ -179,6 +181,20 @@ function currentOrFutureDate(dObj) {
   return false;
 }
 
+
+function isBritishAirport(airports){
+  if ((airports.includes(null) || airports.includes(undefined))) {
+    console.log("Values not provided or are null, please enter");
+  }
+  else{
+    const britishAirports = airport_codes.filter(value => value.british).map(item => item.id)
+    if (britishAirports.includes(airports[0]) || britishAirports.includes(airports[1])) {
+      console.log('true');
+    }
+  }
+  return false;
+}
+
 function validYear(y) {
   return y.length === 4;
 }
@@ -257,6 +273,7 @@ function onlySymbols(value) {
   }
   return true;
 }
+
 
 function email(value) {
   const regex = /^^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
