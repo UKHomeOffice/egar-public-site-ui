@@ -509,4 +509,5 @@ module.exports = {
   handleResponseError,
   sanitiseValue,
   autoTab,
+  isBritishAirport,
 };
