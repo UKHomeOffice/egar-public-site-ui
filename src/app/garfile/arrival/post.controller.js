@@ -125,10 +125,10 @@ module.exports = async (req, res) => {
 
   validations.push(
     [
-      new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg),]
-      [new ValidationRule(validator.isBritishAirport, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], notBritishMsg)]
+      [new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg)],
+      [new ValidationRule(validator.isBritishAirport, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], notBritishMsg)],
     
-  );
+  ]);
 
   validator.validateChains(validations)
     .then(() => {

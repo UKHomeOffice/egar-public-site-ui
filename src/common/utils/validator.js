@@ -183,13 +183,13 @@ function currentOrFutureDate(dObj) {
 
 
 function isBritishAirport(airports){
-  if ((airports.includes(null) || airports.includes(undefined))) {
-    console.log("Values not provided or are null, please enter");
-  }
+  if (airports.includes(null) || airports.includes(undefined)) {
+    return true;  
+}
   else{
     const britishAirports = airport_codes.filter(value => value.british).map(item => item.id)
     if (britishAirports.includes(airports[0]) || britishAirports.includes(airports[1])) {
-      console.log('true');
+      return true;
     }
   }
   return false;
