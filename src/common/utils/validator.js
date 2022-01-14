@@ -1,6 +1,6 @@
 const countries = require('i18n-iso-countries');
 const moment = require('moment');
-const airportCodes = require('../../common/utils/airport_codes.json');
+const airportCodes = require('./airport_codes.json');
 const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
@@ -179,12 +179,11 @@ function currentOrFutureDate(dObj) {
   return false;
 }
 
-
-function isBritishAirport(airports){
+function isBritishAirport(airports) {
   if (airports.includes(null) || airports.includes(undefined)) {
     return true;
   } else {
-    const britishAirports = Object.values(airportCodes).filter(value => value.british).map(item => item.id);
+    const britishAirports = airportCodes.filter(value => value.british).map(item => item.id);
     if (britishAirports.includes(airports[0]) || britishAirports.includes(airports[1])) {
       return true;
     }
