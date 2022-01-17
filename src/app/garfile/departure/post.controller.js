@@ -4,6 +4,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
+const airportValidation = require('../../../common/utils/airportValidation');
 
 const createValidationChains = (voyage) => {
 
@@ -119,6 +120,10 @@ module.exports = async (req, res) => {
       new ValidationRule(validator.notSameValues, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], __('field_same_departure_port_validation')),
     ],
   );
+
+  validations.push([
+    new ValidationRule(airportValidation.isBritishAirport, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], airportValidation.notBritishMsg),
+  ]);
 
   validator.validateChains(validations)
     .then(() => {

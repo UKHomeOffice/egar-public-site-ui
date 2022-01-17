@@ -261,8 +261,8 @@
 				</tr>
 			</thead>
 			<tbody class="govuk-table__body">
-      {% if supportingdocs.items | length %}
-        {% for file in supportingdocs.items %}
+      {% if garsupportingdocs.items | length %}
+        {% for file in garsupportingdocs.items %}
 				<tr class="govuk-table__row">
 					<td class="govuk-table__cell">{{file.fileName}}</td>
 					<td class="govuk-table__cell">{{file.size}}</td>

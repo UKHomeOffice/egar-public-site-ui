@@ -43,7 +43,7 @@ module.exports = (req, res) => {
     manifestFields,
     garfile: {},
     garpeople: {},
-    supportingdocs: {},
+    garsupportingdocs: {},
   };
 
   Promise.all([garDetails, garPeople, garDocs])
@@ -72,7 +72,7 @@ module.exports = (req, res) => {
         manifestFields,
         garfile: parsedGar,
         garpeople: parsedPeople,
-        supportingdocs: supportingDocuments,
+        garsupportingdocs: supportingDocuments,
       };
       renderContext.showChangeLinks = true;
       if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
