@@ -1,6 +1,6 @@
 const airportCodes = require('./airport_codes.json');
 
-const notBritishMsg = 'Either the Arrival or Departure ports must be a British port';
+const notBritishMsg = 'Either the Arrival or Departure port must be a UK port';
 
 function isBritishAirport(airports) {
   if (airports.includes(null) || airports.includes(undefined) || airports.includes('YYYY') || airports.includes('ZZZZ'))  {

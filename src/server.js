@@ -17,7 +17,7 @@ const nunjucks = require('nunjucks');
 const helmet = require('helmet');
 const _ = require('lodash');
 const cookieParser = require('cookie-parser');
-const uuid = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 const csrf = require('csurf');
 const ua = require('universal-analytics');
 const PgSession = require('connect-pg-simple')(session);
@@ -94,7 +94,7 @@ function initialisExpressSession(app) {
   app.use(cookieParser());
   app.use(session({
     name: 'sess_id',
-    genid: () => uuid(),
+    genid: () => uuidv4(),
     store: new PgSession({
       conString: config.PUBLIC_SITE_DB_CONNSTR,
       ttl: 60 * 60,
@@ -131,7 +131,7 @@ function initialiseGlobalMiddleware(app) {
     getVersionedPath: staticify.getVersionedPath,
   });
 
-  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'assets', 'images', 'favicon.ico')));
+  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
   app.use(compression());
   app.use(staticify.middleware);
 
@@ -245,7 +245,7 @@ function initialiseTemplateEngine(app) {
 
 function initialisePublic(app) {
   app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')));
-  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
+  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
   app.use('/utils', express.static(path.join(__dirname, '/common/utils/')));
