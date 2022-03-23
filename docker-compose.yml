@@ -6,7 +6,7 @@ services:
     image: postgres:10.4
     container_name: database
     env_file:
-      - .env.dev
+      - .env.local
     ports:
       - "5432:5432"
 
@@ -14,7 +14,7 @@ services:
     image: api
     container_name: api
     env_file:
-      - .env.dev
+      - .env.local
     depends_on:
       - database
     ports:
@@ -44,8 +44,9 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - .env.dev
+      - .env.local
     depends_on:
       - api
       - database
       - clamav-api
+
