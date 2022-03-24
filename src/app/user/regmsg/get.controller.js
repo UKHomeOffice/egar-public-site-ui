@@ -1,4 +1,4 @@
-const nanoid = require('nanoid/generate');
+const nanoid = require('nanoid');
 const tokenService = require('../../../common/services/create-token');
 const sendTokenService = require('../../../common/services/send-token');
 const tokenApi = require('../../../common/services/tokenApi');
@@ -13,6 +13,7 @@ module.exports = (req, res) => {
     // Generate a new token for the user
     const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
     const token = nanoid(alphabet, 13);
+    //const token = nanoid(13);
     const hashtoken = tokenService.generateHash(token);
 
     sendTokenService.send(cookie.getUserFirstName(), cookie.getUserEmail(), token)
@@ -36,3 +37,4 @@ module.exports = (req, res) => {
     res.render('app/user/regmsg/index', { cookie });
   }
 };
+

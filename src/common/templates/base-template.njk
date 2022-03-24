@@ -1,7 +1,12 @@
-{% from "components/skip-link/macro.njk" import govukSkipLink -%}
-{% from "components/header/macro.njk" import govukHeader -%}
-{% from "components/footer/macro.njk" import govukFooter -%}
-{% from "components/phase-banner/macro.njk" import govukPhaseBanner -%}
+{% from "govuk/components/skip-link/macro.njk" import govukSkipLink %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+
 
 {# specify absolute url for the static assets folder e.g. http://wwww.domain.com/assets #}
 {%- set assetUrl = assetUrl | default(assetPath) -%}
@@ -40,18 +45,78 @@
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     {% block bodyStart %}{% endblock %}
 
+  {% block cookie_message %}
+  <div class="govuk-cookie-banner " data-nosnippet role="region" id="main_cookie_banner" aria-label="Cookies on Submit a GAR" hidden> 
+  <div class="govuk-cookie-banner__message govuk-width-container" id="main_cookie_message">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">Cookies on Submit a GAR</h2>
+
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button" id="cookies_accept" onclick="accept_cookies()">
+        Accept analytics cookies
+      </button>
+      <button type="button" class="govuk-button" data-module="govuk-button" id="cookies_reject" onclick="reject_cookies()">
+        Reject analytics cookies
+      </button>
+      <a class="govuk-link" href="/cookies">View cookies</a>
+    </div>
+  </div>
+
+  <div class="govuk-cookie-banner__message govuk-width-container" id="cookies_accept_message" role="alert" hidden>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve accepted analytics cookies. You can <a class="govuk-link" href="/cookies">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-button-group">
+      <button class="govuk-button" id="hide_accept_message" data-module="govuk-button" onclick= "hide_message()">
+        Hide this message
+      </button>
+    </div>
+  </div>
+
+  <div class="govuk-cookie-banner__message govuk-width-container" id="cookies_reject_message" role="alert" hidden>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve rejected analytics cookies. You can <a class="govuk-link" href="/cookies">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-button-group">
+      <button class="govuk-button" id="hide_reject_message" data-module="govuk-button" onclick="hide_message()">
+        Hide this message
+      </button>
+    </div>
+  </div>
+</div>
+
+    {% endblock %}
+
     {% block skipLink %}
       {{ govukSkipLink({
         href: '#main-content',
         text: 'Skip to main content'
       }) }}
     {% endblock %}
-
-    {% block cookie_message %}
-    <div class="app-cookie-banner" style="display: none;">
-      <p class="app-cookie-banner__message govuk-body-s">Submit a GAR uses cookies to make the site simpler. <a href="/cookies">Find out more about cookies</a></p>
-    </div>
-    {% endblock %}
+    
 
     {% block header %}
       {{ govukHeader({}) }}
@@ -148,3 +213,4 @@
     <script src="/javascripts/cookie-banner.js"></script>
   </body>
 </html>
+
