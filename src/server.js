@@ -131,7 +131,7 @@ function initialiseGlobalMiddleware(app) {
     getVersionedPath: staticify.getVersionedPath,
   });
 
-  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
+  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'assets', 'images', 'favicon.ico')));
   app.use(compression());
   app.use(staticify.middleware);
 
@@ -245,7 +245,7 @@ function initialiseTemplateEngine(app) {
 
 function initialisePublic(app) {
   app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')));
-  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
+  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
   app.use('/utils', express.static(path.join(__dirname, '/common/utils/')));
