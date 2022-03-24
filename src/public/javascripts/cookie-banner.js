@@ -68,8 +68,8 @@ function reject_cookies(){
   setCookie('sgar_cookies_policy', false, 30);
 }
 
-function hide_message(clicked_id){
-  document.getElementById(clicked_id).style.display = "none";
+function hide_message(){
+  document.getElementById("main_cookie_banner").style.display = "none";
 }
 
 function change_cookie_preference(){

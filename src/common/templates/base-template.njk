@@ -4,6 +4,7 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 
 
@@ -44,9 +45,8 @@
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     {% block bodyStart %}{% endblock %}
 
-      {% block cookie_message %}
-    <form method="POST">
-  <div class="govuk-cookie-banner " data-nosnippet role="region" aria-label="Cookies on Submit a GAR" hidden> 
+  {% block cookie_message %}
+  <div class="govuk-cookie-banner " data-nosnippet role="region" id="main_cookie_banner" aria-label="Cookies on Submit a GAR" hidden> 
   <div class="govuk-cookie-banner__message govuk-width-container" id="main_cookie_message">
 
     <div class="govuk-grid-row">
@@ -83,7 +83,7 @@
     </div>
 
     <div class="govuk-button-group">
-      <button class="govuk-button" id="hide_accept_message" data-module="govuk-button" onclick= "hide_message(this.id)">
+      <button class="govuk-button" id="hide_accept_message" data-module="govuk-button" onclick= "hide_message()">
         Hide this message
       </button>
     </div>
@@ -101,14 +101,13 @@
     </div>
 
     <div class="govuk-button-group">
-      <button class="govuk-button" id="hide_reject_message" data-module="govuk-button" onclick="hide_message(this.id)" >
+      <button class="govuk-button" id="hide_reject_message" data-module="govuk-button" onclick="hide_message()">
         Hide this message
       </button>
     </div>
   </div>
 </div>
-<input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-</form>
+
     {% endblock %}
 
     {% block skipLink %}
@@ -212,6 +211,5 @@
     </script>
     <script src="/javascripts/table-multiselect.js"></script>
     <script src="/javascripts/cookie-banner.js"></script>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </body>
 </html>
