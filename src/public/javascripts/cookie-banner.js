@@ -31,7 +31,13 @@ function getCookie(name) {
 }
 
 function deleteCookie (name) {
+<<<<<<< HEAD
     console.log(window.location.hostname)
+=======
+  console.log("Running delete function");
+  console.log(window.location.hostname);
+  
+>>>>>>> 938e20a7dafb80f52cbf0ac46f16cf08eb1044e8
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=' + window.location.hostname + ';path=/';
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=.' + window.location.hostname + ';path=/';
@@ -74,12 +80,14 @@ function hide_message(){
 }
 
 function change_cookie_preference(){
+  console.log(window.location.hostname);
   if (document.getElementById('radio_cookies_accept').checked == true){
     setCookie('sgar_cookies_policy', true, 30);
     document.getElementById("preference_changed").removeAttribute('hidden');
     document.getElementById("preference_changed").focus();
   }
   else if (document.getElementById('radio_cookies_reject').checked == true){
+    console.log(window.location.hostname);
     setCookie('sgar_cookies_policy', false, 30);
     document.getElementById("preference_changed").removeAttribute('hidden');
     document.getElementById("preference_changed").focus();
