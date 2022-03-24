@@ -31,6 +31,7 @@ function getCookie(name) {
 }
 
 function deleteCookie (name) {
+    console.log(window.location.hostname);
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=' + window.location.hostname + ';path=/';
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=.' + window.location.hostname + ';path=/';
@@ -86,6 +87,7 @@ function change_cookie_preference(){
     deleteCookie('_gid');
     deleteCookie('_gat_gtag_UA + {{ ga_id }}');
     deleteCookie('_gat');
+    console.log(window.location.hostname);
 
   }
   
