@@ -406,10 +406,10 @@
     "how_cookies_are_used_2_table_row_1_name": "csrftoken",
     "how_cookies_are_used_2_table_row_1_purpose": "Contains a string of random characters that is required to perform actions and that an attacker cannot guess",
     "how_cookies_are_used_2_table_row_1_expires": "1 year",
-    "subheading_how_cookies_are_used_3": "Our introductory message",
-    "how_cookies_are_used_3_caption": "You may see a pop-up welcome message when you first visit Submit a GAR. We’ll store a cookie so that your computer knows you’ve seen it and knows not to show it again.",
-    "how_cookies_are_used_3_table_row_1_name": "seen_cookie_message",
-    "how_cookies_are_used_3_table_row_1_purpose": "Saves a message to let us know that you've seen our cookie message",
+    "subheading_how_cookies_are_used_3": "sGAR Cookie Policy",
+    "how_cookies_are_used_3_caption": "You will see a pop-up welcome message when you first visit Submit a GAR. We’ll ask whether or not you wish to accept or reject analytics cookies. The cookie will also tell your computer you’ve seen it and knows not to show it again.",
+    "how_cookies_are_used_3_table_row_1_name": "sgar_cookies_policy",
+    "how_cookies_are_used_3_table_row_1_purpose": "Tells us whether or not you have accepted or rejected analytic cookies.",
     "how_cookies_are_used_3_table_row_1_expires": "1 month",
     "subheading_how_cookies_are_used_4": "Session information",
     "how_cookies_are_used_4_caption": "In order to improve usability and retain information about your account and privileges, we store a unique identifier for each session.",
@@ -428,3 +428,4 @@
     "id_card_withdrawl_text": "From 1 October 2021, most EU, EEA and Swiss citizens will only be able to enter the UK using a valid passport. ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check",
     "id_card_withdrawl_text_part" : "ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check"
 }
+

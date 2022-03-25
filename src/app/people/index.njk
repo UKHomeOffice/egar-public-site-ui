@@ -1,25 +1,35 @@
 {% extends "base-template.njk" %}
-  {% import "common/templates/includes/macros.njk" as m %}
-  {% import "common/templates/includes/pagination.njk" as pagination %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/pagination.njk" as pagination %}
+
   {% block pageTitle %}
     Manage people | Submit a General Aviation Report (GAR)
   {% endblock %}
+
   {% set active = '/people' %}
+
   {% block header %}
     {% include "header-user.njk" %}
   {% endblock %}
+
   {% block beforeContent %}
     {% include "phase.njk" %}
   {% endblock %}
+
   {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+    
     {% if errors %}
       {% include "common/templates/includes/errors.njk" %}
     {% endif %}
+
     {% if successMsg %}
       {% include "common/templates/includes/success-action.njk" %}
     {% endif %}
+
+
     <h1 class="govuk-heading-xl">{{ __('title_people') }}</h1>
     <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
     {% if cookie.getUserRole() != 'User' %}
@@ -27,6 +37,7 @@
       <p class="govuk-body-m">{{__('person_search')}}</p>
     {% endif %}
     </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
           $(document).ready(function(){
