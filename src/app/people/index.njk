@@ -1,99 +1,134 @@
 {% extends "base-template.njk" %}
-
-{% import "common/templates/includes/macros.njk" as m %}
-{% import "common/templates/includes/pagination.njk" as pagination %}
-
-{% block pageTitle %}
-	Manage people | Submit a General Aviation Report (GAR)
-{% endblock %}
-
-{% set active = '/people' %}
-
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
-{% block content %}
-
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
-
-  {% if successMsg %}
-    {% include "common/templates/includes/success-action.njk" %}
-  {% endif %}
-
-  <h1 class="govuk-heading-xl">{{ __('title_people') }}</h1>
-  <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
-
-  {% if cookie.getUserRole() != 'User' %}
-	  <p class="govuk-body-l">{{__('people_caption')}}</p>
-  {% endif %}
+  {% import "common/templates/includes/macros.njk" as m %}
+  {% import "common/templates/includes/pagination.njk" as pagination %}
+  {% block pageTitle %}
+    Manage people | Submit a General Aviation Report (GAR)
+  {% endblock %}
+  {% set active = '/people' %}
+  {% block header %}
+    {% include "header-user.njk" %}
+  {% endblock %}
+  {% block beforeContent %}
+    {% include "phase.njk" %}
+  {% endblock %}
+  {% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    {% if errors %}
+      {% include "common/templates/includes/errors.njk" %}
+    {% endif %}
+    {% if successMsg %}
+      {% include "common/templates/includes/success-action.njk" %}
+    {% endif %}
+    <h1 class="govuk-heading-xl">{{ __('title_people') }}</h1>
+    <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
+    {% if cookie.getUserRole() != 'User' %}
+      <p class="govuk-body-l">{{__('people_caption')}}</p>
+      <p class="govuk-body-m">{{__('person_search')}}</p>
+    {% endif %}
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+          $(document).ready(function(){
+            $("#person-search").on("keyup", function() {
+              var value = $(this).val().toLowerCase();
+              $("#people_table_row tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              });
+            });
+          });
+        </script>
+    <div class="govuk-form-group" style="padding-left: 15px">
+      <input class="govuk-input govuk-input--width-20" id="person-search" name="person-search" type="text" placeholder="Search">
+    </div>
+    <div class="govuk-grid-column-full">
+      <p class="govuk-body-s">{{__('person_sort')}}</p>
+      <form id="people" action="/people" method="post">
+        <table class="govuk-table" id="people_table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" id="surname" scope="col">{{__('field_surname')}}</th>
+              <th class="govuk-table__header" id="given_name" scope="col">{{__('field_given_name')}}</th>
+              <th class="govuk-table__header" id="person_type" scope="col">{{__('field_person_type')}}</th>
+              {% if cookie.getUserRole() != 'User' %}
+              <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body" id="people_table_row">
+          {% if people | length %}
+            {% for person in people %}
+            <tr class="govuk-table__row">
+              {% if cookie.getUserRole() != 'User' %}
+                <td class="govuk-table__cell"><button id="edit-person-{{ loop.index }}" class="link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
+              {% else %}
+                <td class="govuk-table__cell">{{person.lastName}}</td>
+              {% endif %}
+              <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
+              <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+              {% if cookie.getUserRole() != 'User' %}
+                <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button></td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          {% else %}
+            {{ m.empty_table_message(__('people_no_records')) }}
+          {% endif %}
+          </tbody>
+        </table>
+        {# Pagination not possible until back end supports it #}
+        {# {{ pagination.build('people', pages, __)}} #}
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </form>
+    </div>
+    <script>
+    $(document).ready(function() {
+      $('th').each(function(col) {
+        $(this).hover(
+        function() { $(this).addClass('focus'); },
+        function() { $(this).removeClass('focus'); }
+      );
+    $(this).click(function() {
+      if ($(this).is('.asc')) {
+        $(this).removeClass('asc');
+        $(this).addClass('desc selected');
+        sortOrder = -1;
+      }
+      else {
+        $(this).addClass('asc selected');
+        $(this).removeClass('desc');
+        sortOrder = 1;
+      }
+      $(this).siblings().removeClass('asc selected');
+      $(this).siblings().removeClass('desc selected');
+      var arrData = $('table').find('tbody >tr:has(td)').get();
+      arrData.sort(function(a, b) {
+        var val1 = $(a).children('td').eq(col).text().toUpperCase();
+        var val2 = $(b).children('td').eq(col).text().toUpperCase();
+        if($.isNumeric(val1) && $.isNumeric(val2))
+        return sortOrder == 1 ? val1-val2 : val2-val1;
+        else
+            return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
+      });
+      $.each(arrData, function(index, row) {
+        $('tbody').append(row);
+      });
+    });
+      });
+    });
+    </script>
+    {% if cookie.getUserRole() != 'User' %}
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+    </div>
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-l">{{__('people_add')}}</h2>
+      <p class="govuk-body-l">{{__('people_add_caption')}}</p>
+      <a id="add-person" href="/people/add" role="button" draggable="false" class="govuk-button">{{__('title_add_person')}}</a>
+    </div>
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+    </div>
+    {% endif %}
   </div>
-  <div class="govuk-grid-column-full">
-    <form id="people" action="/people" method="post">
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_person_type')}}</th>
-            {% if cookie.getUserRole() != 'User' %}
-            <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
-            {% endif %}
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-        {% if people | length %}
-          {% for person in people %}
-          <tr class="govuk-table__row">
-            {% if cookie.getUserRole() != 'User' %}
-              <td class="govuk-table__cell"><button id="edit-person-{{ loop.index }}" class="link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
-            {% else %}
-              <td class="govuk-table__cell">{{person.lastName}}</td>
-            {% endif %}
-            <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
-            <td class="govuk-table__cell">{{person.peopleType.name}}</td>
-            {% if cookie.getUserRole() != 'User' %}
-              <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button></td>
-            {% endif %}
-          </tr>
-          {% endfor %}
-        {% else %}
-          {{ m.empty_table_message(__('people_no_records')) }}
-        {% endif %}
-        </tbody>
-      </table>
-      {# Pagination not possible until back end supports it #}
-      {# {{ pagination.build('people', pages, __)}} #}
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    </form>
-	</div>
-
-  {% if cookie.getUserRole() != 'User' %}
-
-	<div class="govuk-grid-column-full">
-		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-	</div>
-
-	<div class="govuk-grid-column-full">
-		<h2 class="govuk-heading-l">{{__('people_add')}}</h2>
-		<p class="govuk-body-l">{{__('people_add_caption')}}</p>
-
-		<a id="add-person" href="/people/add" role="button" draggable="false" class="govuk-button">{{__('title_add_person')}}</a>
-	</div>
-
-	<div class="govuk-grid-column-full">
-		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-	</div>
-  {% endif %}
-</div>
-
-{% endblock %}
+  {% endblock %}

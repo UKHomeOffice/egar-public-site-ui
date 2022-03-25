@@ -100,6 +100,8 @@
     "button_continue": "Continue",
 
     "section_count": "Section %s of %s",
+    "person_search": "Search for Names or Person type",
+    "person_sort": "Click table headers to sort alphabetically",
     "field_given_name": "Given name",
     "field_surname": "Surname",
     "field_day": "Day",
