@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-const { nanoid } = require('nanoid');
+const nanoid = require('nanoid/generate');
 const i18n = require('i18n');
 const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
@@ -28,8 +28,8 @@ module.exports = async (req, res) => {
     if (parsedResponse.message === 'Token has expired') {
       logger.info('Token expired, updating');
       const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
-      const alphabetToken = nanoid(alphabet, 13);
-      //const alphabetToken = nanoid(13);
+      //const alphabetToken = nanoid(alphabet, 13);
+      const alphabetToken = nanoid(13);
       const hashtoken = tokenService.generateHash(alphabetToken);
       // TODO: A Promise.all should wrap these two asynchronous calls to ensure
       // both the new token and email are sent otherwise users will not know if

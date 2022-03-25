@@ -1,4 +1,4 @@
-const { nanoid } = require('nanoid');
+const nanoid = require('nanoid/generate');
 
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
@@ -51,8 +51,8 @@ const createUser = (req, res, cookie) => {
 
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
-  const token = nanoid(alphabet, 13);
-  //const token = nanoid(13);
+  //const token = nanoid(alphabet, 13);
+  const token = nanoid(13);
   const hashtoken = tokenservice.generateHash(token);
 
   userCreateApi.post(fname, lname, usrname, cookie.getInviteUserToken())
