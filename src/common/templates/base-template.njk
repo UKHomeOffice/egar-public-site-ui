@@ -49,6 +49,12 @@
         text: 'Skip to main content'
       }) }}
     {% endblock %}
+
+    {% block cookie_message %}
+    <div class="app-cookie-banner" style="display: none;">
+      <p class="app-cookie-banner__message govuk-body-s">Submit a GAR uses cookies to make the site simpler. <a href="/cookies">Find out more about cookies</a></p>
+    </div>
+    {% endblock %}
     
 
     {% block header %}
