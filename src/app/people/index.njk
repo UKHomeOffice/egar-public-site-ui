@@ -20,7 +20,7 @@
   {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
+    
     {% if errors %}
       {% include "common/templates/includes/errors.njk" %}
     {% endif %}
@@ -36,6 +36,7 @@
       <p class="govuk-body-m">{{__('person_search')}}</p>
     {% endif %}
     </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
           $(document).ready(function(){
@@ -141,3 +142,4 @@
     {% endif %}
   </div>
   {% endblock %}
+
