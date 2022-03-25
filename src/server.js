@@ -17,7 +17,7 @@ const nunjucks = require('nunjucks');
 const helmet = require('helmet');
 const _ = require('lodash');
 const cookieParser = require('cookie-parser');
-const { v4: uuidv4 } = require('uuid');
+const uuid = require('uuid/v4');
 const csrf = require('csurf');
 const ua = require('universal-analytics');
 const PgSession = require('connect-pg-simple')(session);
@@ -94,7 +94,7 @@ function initialisExpressSession(app) {
   app.use(cookieParser());
   app.use(session({
     name: 'sess_id',
-    genid: () => uuidv4(),
+    genid: () => uuid(),
     store: new PgSession({
       conString: config.PUBLIC_SITE_DB_CONNSTR,
       ttl: 60 * 60,
