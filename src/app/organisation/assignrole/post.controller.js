@@ -1,4 +1,4 @@
-const nanoid = require('nanoid/generate');
+const { nanoid } = require('nanoid');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -19,6 +19,7 @@ module.exports = (req, res) => {
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
   const token = nanoid(alphabet, 13);
+  //const token = nanoid(13);
   const hashToken = tokenservice.generateHash(token);
   const inviterName = cookie.getUserFirstName();
   const firstName = cookie.getInviteUserFirstName();
@@ -70,3 +71,4 @@ module.exports = (req, res) => {
       res.render('app/organisation/assignrole/index', { cookie, roles, errors: err });
     });
 };
+
