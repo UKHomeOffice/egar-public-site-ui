@@ -100,8 +100,6 @@
     "button_continue": "Continue",
 
     "section_count": "Section %s of %s",
-    "person_search": "Search for Names or Person type",
-    "person_sort": "Click table headers to sort alphabetically",
     "field_given_name": "Given name",
     "field_surname": "Surname",
     "field_day": "Day",
@@ -428,4 +426,3 @@
     "id_card_withdrawl_text": "From 1 October 2021, most EU, EEA and Swiss citizens will only be able to enter the UK using a valid passport. ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check",
     "id_card_withdrawl_text_part" : "ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check"
 }
-
