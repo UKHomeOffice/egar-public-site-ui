@@ -7,7 +7,7 @@
 function loadAnalytics(){
   window.dataLayer = window.dataLayer || [];
   checkForCookie = getCookie('sgar_cookies_policy');
-  console.log(checkForCookie);
+  //console.log(checkForCookie);
   if (checkForCookie == 'true') {
     //enables GA if allowed
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -20,12 +20,11 @@ function loadAnalytics(){
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', '{{ ga_id }}');
-    console.log(getCookie('_ga'));
+    //console.log(getCookie({{ ga_id }}));
   }
   else{
     // Disable GA if not allowed
     window['ga-disable-UA-{{ ga_id }}'] = true;
-    console.log("GA disabled");
     //check if GA cookie is set and if so then delete
   }
 }

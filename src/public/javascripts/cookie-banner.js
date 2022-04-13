@@ -7,6 +7,8 @@ function setCookie(name, value, expiryDays) {
 
 var CONSENT_COOKIE_NAME = 'sgar_cookies_policy';
 var DEFAULT_COOKIE_CONSENT = 'false';
+var TRACKING_PREVIEW_ID = '131780282_1';
+var TRACKING_LIVE_ID = '131780282_3';
 
 
 function hasSeenCookie(cookieName) {
@@ -31,7 +33,6 @@ function getCookie(name) {
 }
 
 function deleteCookie (name) {
-    console.log(window.location.hostname);
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=' + window.location.hostname + ';path=/';
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=.' + window.location.hostname + ';path=/';
@@ -70,9 +71,11 @@ function reject_cookies(){
   setCookie('sgar_cookies_policy', false, 30);
   deleteCookie('_ga');
   deleteCookie('_gid');
-  deleteCookie('_gat_gtag_UA + {{ ga_id }}');
+  //deleteCookie('_gat_gtag_UA + {{ ga_id }}');
   deleteCookie('_gat');
-  console.log('_gat_gtag_UA + {{ ga_id }}');
+  deleteCookie('_gat_gtag_UA_' + TRACKING_LIVE_ID);
+  deleteCookie('_gat_gtag_UA_' + TRACKING_PREVIEW_ID);
+
 }
 
 function hide_message(){
@@ -94,8 +97,9 @@ function change_cookie_preference(){
     deleteCookie('_gid');
     deleteCookie('_gat_gtag_UA + {{ ga_id }}');
     deleteCookie('_gat');
-    console.log(window.location.hostname);
-    console.log('_gat_gtag_UA + {{ ga_id }}');
+    deleteCookie('_gat_gtag_UA_' + TRACKING_LIVE_ID);
+    deleteCookie('_gat_gtag_UA_' + TRACKING_PREVIEW_ID);
+
 
   }
   
