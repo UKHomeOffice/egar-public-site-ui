@@ -75,6 +75,7 @@ function reject_cookies(){
   deleteCookie('_gat');
   deleteCookie('_gat_gtag_UA_' + TRACKING_LIVE_ID);
   deleteCookie('_gat_gtag_UA_' + TRACKING_PREVIEW_ID);
+
 }
 
 function hide_message(){
