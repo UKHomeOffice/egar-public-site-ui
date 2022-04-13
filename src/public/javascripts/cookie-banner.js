@@ -72,6 +72,7 @@ function reject_cookies(){
   deleteCookie('_gid');
   deleteCookie('_gat_gtag_UA + {{ ga_id }}');
   deleteCookie('_gat');
+  console.log('_gat_gtag_UA + {{ ga_id }}');
 }
 
 function hide_message(){
@@ -94,6 +95,7 @@ function change_cookie_preference(){
     deleteCookie('_gat_gtag_UA + {{ ga_id }}');
     deleteCookie('_gat');
     console.log(window.location.hostname);
+    console.log('_gat_gtag_UA + {{ ga_id }}');
 
   }
   
