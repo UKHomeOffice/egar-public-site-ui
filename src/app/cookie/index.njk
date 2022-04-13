@@ -12,6 +12,7 @@
   {% include "header-pre-user.njk" %}
 {% endblock %}
 
+
 {% block beforeContent %}
   {% include "phase.njk" %}
 {% endblock %}
@@ -19,6 +20,21 @@
 {% block content %}
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
+
+  <div class="govuk-notification-banner govuk-notification-banner--success" id="preference_changed" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" tabindex="-1" hidden>
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Success
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <p class="govuk-notification-banner__heading">
+      You’ve set your cookie preferences. <a class="govuk-notification-banner__link" href="javascript:history.back()">Go back to the page you were looking at</a>.
+    </p>
+  </div>
+  </div>
+
+
 		<h1 class="govuk-heading-xl">{{__('title_cookies')}}</h1>
 
 		<p class="govuk-body-m">
@@ -126,6 +142,39 @@
           __('how_cookies_are_used_4_table_row_1_expires'))}}
       </tbody>
     </table>
+   <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            Do you want to accept analytics cookies?
+          </legend>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="radio_cookies_accept" name="analytics-cookies" type="radio" value="yes">
+              <label class="govuk-label govuk-radios__label" for="analytics-cookies">
+                Yes
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="radio_cookies_reject" name="analytics-cookies" type="radio" value="no" checked>
+              <label class="govuk-label govuk-radios__label" for="analytics-cookies-2">
+                No
+              </label>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button" data-module="govuk-button" onclick="change_cookie_preference()" >
+        Save cookie settings
+      </button>
+    </form>
+  </div>
+</div>
 	</div>
 </div>
+
+<script src="/javascripts/cookie-banner.js"></script>
 {% endblock %}
+
+
