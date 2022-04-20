@@ -528,5 +528,7 @@ module.exports = {
   isValidDepAndArrDate,
   handleResponseError,
   sanitiseValue,
+  passportExpiryDate,
+  birthDate,
   autoTab,
 };
