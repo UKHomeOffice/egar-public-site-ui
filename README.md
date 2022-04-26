@@ -163,6 +163,10 @@ Please note: `BASE_URL` needs to be set in both Drone Secrets and Kube Secrets.
 | COOKIE_SECURE_FLAG    | Set secure flag                | True     |
 | GA_ID                 | Goggle Analytics tg Id         | True     |
 
+
+# reserve this place for future comments..
+
+
 ## Setting Service Unavailable Page
 Setting `ENABLE_UNAVAILABLE_PAGE=true` will redirect all requests to the /unavailable page.
 
