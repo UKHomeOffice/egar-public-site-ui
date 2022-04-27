@@ -228,6 +228,39 @@ function realDateFromString(str) {
   return moment(str).isValid();
 }
 
+// This function will validate Passport Expiry date while uploading Gar Template
+function passportExpiryDate (value, element) {
+  const val = Date.parse(value);
+  if (isNaN(val))
+      return false;
+
+  const d = new Date(val);
+  const f = new Date();
+
+  f.setMonth(f.getMonth());
+  if (d < f) {
+      return false;
+  }
+  return true;
+}
+
+// This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
+function birthDate (value, element) {
+  const val = Date.parse(value);
+  if (isNaN(val))
+      return false;
+
+  const d = new Date(val);
+  const f = new Date();
+
+  f.setMonth(f.getMonth());
+  if (d > f) {
+      return false;
+  }
+  return true;
+}
+
+
 function validFlag(value) {
   if (value) {
     return true;
@@ -495,5 +528,7 @@ module.exports = {
   isValidDepAndArrDate,
   handleResponseError,
   sanitiseValue,
+  passportExpiryDate,
+  birthDate,
   autoTab,
 };
