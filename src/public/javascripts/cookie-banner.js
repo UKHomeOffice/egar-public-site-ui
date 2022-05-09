@@ -8,6 +8,7 @@ function setCookie(name, value, expiryDays) {
 var CONSENT_COOKIE_NAME = 'sgar_cookies_policy';
 var DEFAULT_COOKIE_CONSENT = 'false';
 var TRACKING_PREVIEW_ID = '131780282_1';
+var TRACKING_STAGING_ID = '131780282_2';
 var TRACKING_LIVE_ID = '131780282_3';
 
 

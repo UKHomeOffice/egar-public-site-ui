@@ -5,7 +5,6 @@ const i18n = require('i18n');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
-const airportValidation = require('../../../common/utils/airportValidation');
 
 
 function getVoyageFieldLabel(key) {
@@ -105,7 +104,6 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.dateOfBirth, `Enter a date of birth for ${name}`),
       new ValidationRule(validator.realDateFromString, '', crew.dateOfBirth, `Enter a valid date of birth for ${name}`),
-      new ValidationRule(validator.birthDate, '', crew.dateOfBirth, `Enter a valid date of birth for ${name}`),
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.placeOfBirth, `Enter a place of birth for ${name}`),
@@ -119,12 +117,8 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a Passport Expiry Date for ${name}`),
       new ValidationRule(validator.realDateFromString, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name}`),
-      new ValidationRule(validator.passportExpiryDate, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name}`),
     ]);
 
-    validationArr.push([
-      new ValidationRule(airportValidation.isBritishAirport, 'departurePort', [voyageObj.departurePort, voyageObj.arrivalPort], airportValidation.notBritishMsg),
-    ]);
 
     Object.keys(crew).forEach((key) => {
       if (typeof crew[key] === 'string' && !validator.isPrintable(crew[key])) {
