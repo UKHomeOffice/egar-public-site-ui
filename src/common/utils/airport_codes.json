@@ -3285,6 +3285,11 @@
     "label": "Stavanger Airport Sola (Norway) (ENZV / SVG)"
   },
   {
+    "id": "EG2A",
+    "british": true,
+    "label": "HINTON IN THE HEDGES WALLTREE FARM (United Kingdom) (EG2A)"
+  },
+  {
     "id": "EPBC",
     "british": false,
     "label": "Babice Airport (Poland) (EPBC)"
@@ -21402,7 +21407,7 @@
   {
     "id": "VLY",
     "british": true,
-    "label": "Anglesey Airport (United Kingdom) (EGOV / VLY)"
+    "label": "ANGLESEY  MAES AWYR MON  RAF VALLEY (United Kingdom) (EGOV / VLY)"
   },
   {
     "id": "BRR",
@@ -25407,7 +25412,7 @@
   {
     "id": "EGHN",
     "british": true,
-    "label": "Isle of Wight / Sandown Airport (United Kingdom) (EGHN)"
+    "label": "Isle of Wight  Sandown Airport (United Kingdom) (EGHN)"
   },
   {
     "id": "NVI",
@@ -38582,7 +38587,7 @@
   {
     "id": "EGDJ",
     "british": true,
-    "label": "UPAVON  (United Kingdom) (EGDJ )"
+    "label": "UPAVON  (United Kingdom) (EGDJ / UPV)"
   },
   {
     "id": "EGDN",
@@ -39954,7 +39959,145 @@
    "id": "EXVG",
    "british": true,
   "label": "Wind Osprey (Vessel) (United Kingdom) (EXVG) " 
+  },
+  {
+    "id": "X565",
+    "british": true,
+    "label": "MEADOW VIEW HAMSTREET (United Kingdom) (X565)"
+  },
+
+{
+    "id": "X566",
+    "british": true,
+    "label": "BURNT MILL FARM LENHAM (United Kingdom) (X566)"
+  },
+
+{
+    "id": "X567",
+    "british": true,
+    "label": "INCE CASTLE (United Kingdom) (X567)"
+  },
+
+{
+    "id": "X568",
+    "british": true,
+    "label": "CLADSWELL FARMHOUSE COOKHILL (United Kingdom) (X568)"
+  },
+
+{
+    "id": "X569",
+    "british": true,
+    "label": "FISHERWICK AIRFIELD (United Kingdom) (X569)"
+  },
+
+{
+    "id": "X570",
+    "british": true,
+    "label": "DIGGLE GREEN FARM (United Kingdom) (X570)"
+  },
+
+{
+    "id": "X571",
+    "british": true,
+    "label": "EASTER ROSSBURN FARM BLAIR DRUMMOND (United Kingdom) (X571)"
+  },
+
+{
+    "id": "X572",
+    "british": true,
+    "label": "WARRENWOOD MANOR STUD ESSENDON (United Kingdom) (X572)"
+  },
+
+{
+    "id": "X573",
+    "british": true,
+    "label": "BALLYMORRAN STRIP (United Kingdom) (X573)"
+  },
+
+{
+    "id": "X574",
+    "british": true,
+    "label": "PALACELANDS FARM SHIPLEY (United Kingdom) (X574)"
+  },
+
+{
+    "id": "X575",
+    "british": true,
+    "label": "SOUTHINGTON MILL HOUSE OVERTON (United Kingdom) (X575)"
+  },
+
+{
+    "id": "X576",
+    "british": true,
+    "label": "BALLYGAWLEY 12 GRANGE ROAD (United Kingdom) (X576)"
+  },
+
+{
+    "id": "X577",
+    "british": true,
+    "label": "WICKEN 7 LOWER ROAD (United Kingdom) (X577)"
+  },
+
+{
+    "id": "X578",
+    "british": true,
+    "label": "ELSTONE HOUSE (United Kingdom) (X578)"
+  },
+
+{
+    "id": "X579",
+    "british": true,
+    "label": "RAILWAY FARM LITTLE PLUMSTEAD (United Kingdom) (X579)"
+  },
+
+{
+    "id": "X580",
+    "british": true,
+    "label": "LAWN FARM (United Kingdom) (X580)"
+  },
+
+{
+    "id": "X581",
+    "british": true,
+    "label": "NORTH HILLS FARM RUSKINGTON (United Kingdom) (X581)"
+  },
+
+{
+    "id": "X582",
+    "british": true,
+    "label": "BULLACEBUSH FARM (United Kingdom) (X582)"
+  },
+
+{
+    "id": "X583",
+    "british": true,
+    "label": "CREATON CLAY COTTAGE (United Kingdom) (X583)"
+  },
+
+{
+    "id": "X584",
+    "british": true,
+    "label": "BLYTHE HALL LATHOM (United Kingdom) (X584)"
+  },
+
+{
+    "id": "X585",
+    "british": true,
+    "label": "STRUBBY NORTH (United Kingdom) (X585)"
+  },
+
+{
+    "id": "X586",
+    "british": true,
+    "label": "PLASSEY HOLIDAY PARK, RETAIL VILLAGE AND GOLF COURSE (United Kingdom) (X586)"
+  },
+
+{
+    "id": "X587",
+    "british": true,
+    "label": "CENTRAL HOUSE, WYTON (United Kingdom) (X587)"
   }
+
   ]
 
 

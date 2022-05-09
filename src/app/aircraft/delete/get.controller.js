@@ -25,7 +25,7 @@ module.exports = (req, res) => {
       return req.session.save(() => { res.redirect(redirectUrl); });
     }
     req.session.successHeader = 'Success';
-    req.session.successMsg = 'Craft deleted';
+    req.session.successMsg = 'Your aircraft has been deleted';
     return req.session.save(() => { res.redirect(redirectUrl); });
   }).catch((err) => {
     logger.error(err);
