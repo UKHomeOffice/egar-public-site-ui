@@ -2,12 +2,15 @@ const countries = require('i18n-iso-countries');
 const en = require('i18n-iso-countries/langs/en.json');
 const logger = require('./logger')(__filename);
 const airportList = require('./airport_codes.json');
+const airportList2 = require('./airport2_codes.json');
+
+
 /**
  * Utility function for generating the list of country codes in a format for this app.
  * This essentially means taking the more normally used alpha-2 (GB) code and country
  * pair and using instead alpha-3 (GBR) as the key.
  */
-const generateCountryList = () => {
+ const generateCountryList = () => {
   logger.info('Obtaining all countries and converting to alpha 3 codes');
   const alpha3List = [];
   countries.registerLocale(en);
@@ -20,6 +23,11 @@ const generateCountryList = () => {
 
   return alpha3List;
 };
+module.exports.airportList = airportList;
+module.exports.airportList2 = airportList2;
+exports.generateCountryList = generateCountryList; 
 
-exports.generateCountryList = generateCountryList;
-exports.airportList = airportList;
+
+
+
+

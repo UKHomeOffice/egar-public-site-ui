@@ -9,11 +9,11 @@ module.exports = (req, res) => {
   garApi.get(cookie.getGarId()).then((apiResponse) => {
     const parsedResponse = JSON.parse(apiResponse);
     if (parsedResponse.departurePort === 'ZZZZ') {
-      parsedResponse.departurePort = 'YYYY';
+        parsedResponse.departurePort = 'YYYY';
     }
     cookie.setGarDepartureVoyage(parsedResponse);
-
     return res.render('app/garfile/departure/index', { cookie });
+    
   }).catch((err) => {
     logger.error('Failed to get GAR details');
     logger.error(err);

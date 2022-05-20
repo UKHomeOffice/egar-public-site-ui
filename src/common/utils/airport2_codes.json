@@ -1,0 +1,36 @@
+[
+{
+    "id": ""
+},
+{
+    "id": "EGBK", "id2": "ORM",
+    "british": true,
+    "label": "NORTHAMPTON - SYWELL (United Kingdom) (EGBK / ORM)"
+},
+{
+    "id": "AYMD", "id2": "MAG",
+    "british": false,
+    "label": "Madang Airport (Papua New Guinea) (AYMD / MAG)"  
+},
+{
+    "id": "EGLL", "id2": "LHR",
+    "british": true,
+    "label": "London Heathrow Airport (United Kingdom) (EGLL / LHR)"
+},
+{
+    "id": "EGHQ", "id2": "NQY",
+    "british": true,
+    "label": "Newquay Cornwall Airport (United Kingdom) (EGHQ / NQY)"
+},
+{
+    "id": "EDQD", "id2": "BYU",
+    "british": false,
+    "label": "Bayreuth Airport (Germany) (EDQD / BYU)"
+},
+{
+    "id": "EBAW", "id2": "ANR",
+    "british": false,
+    "label": "Antwerp International Airport (Deurne) (Belgium) (EBAW / ANR)"
+}
+
+]

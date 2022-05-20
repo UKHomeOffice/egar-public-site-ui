@@ -3,7 +3,7 @@ const csv = require('csvtojson/v2');
 const fs = require('fs');
 const logger = require('./common/utils/logger')(__filename);
 
-const csvFile = './airports.dat';
+// const csvFile = './airports.dat';
 /**
  * A converter to take in an openflights.org data file (in CSV format) and converting
  * it into a JSON format that can be used by sGAR.
@@ -17,23 +17,24 @@ const csvFile = './airports.dat';
  *
  * So Kudos to openflights: https://openflights.org/data.html
  */
-csv({
-  headers: ['id', 'name', 'city', 'country', 'IATA', 'ICAO', 'lat', 'long', 'alt', 'utc', 'dst', 'tz', 'type', 'source'],
-  colParser: {
-    city: 'omit',
-    lat: 'omit',
-    long: 'omit',
-    alt: 'omit',
-    utc: 'omit',
-    dst: 'omit',
-    tz: 'omit',
-    type: 'omit',
-    source: 'omit',
-  },
-}).fromFile(csvFile).then((jsonResult) => {
-  const processedArray = [];
+//csv({
+  ///headers: ['id', 'name', 'city', 'country', 'IATA', 'ICAO', 'lat', 'long', 'alt', 'utc', 'dst', 'tz', 'type', 'source'],
+  //colParser: {
+  //  city: 'omit',
+  //  lat: 'omit',
+   // long: 'omit',
+   // alt: 'omit',
+   // utc: 'omit',
+   // dst: 'omit',
+   // tz: 'omit',
+   // type: 'omit',
+   // source: 'omit',
+ // },
+
+//}).fromFile(csvFile).then((jsonResult) => {
+  //const processedArray = [];
   jsonResult.forEach((row) => {
-    logger.info(`Processing row ${row.id} - ${row.name}`);
+    logger.info(`Processing row ${row.id} - ${row.ICAO}`);
     logger.info(`IATA: ${row.IATA}`);
     logger.info(`ICAO: ${row.ICAO}`);
     // Adding a flag to the row to signify whether the airport is in the UK
@@ -41,21 +42,27 @@ csv({
     const british = row.country === 'United Kingdom';
     const label = `${row.name} (${row.country}) `;
     let code = '(';
-    let hasIATA = false;
-    if (row.ICAO !== '\\N') {
+    let hasIATA = false; 
+    
+    if  (row.ICAO !== '\\N') {
       code += row.ICAO;
+    }
+    else if (row.IATA !== '\\N')
+    {
+      code += row.IATA;
     }
     // It is possible that IATA codes do not exist, which appear to be read as
     // a "\N" character so ignore those.
     if (row.IATA !== '\\N') {
       hasIATA = true;
-      if (row.ICAO !== '\\N') {
-        code += ' / ';
+    if (row.ICAO !== '\\N') {
+      code += ' / ';
       }
       code += row.IATA;
     }
-    code += ')';
-    processedArray.push({ british, id: hasIATA ? row.IATA : row.ICAO, label: label + code });
+    code += ')'
+    
+    processedArray.push({ british, id: hasIATA ? row.IATA: row.ICAO, label: label + code});
   });
   logger.info('Resulting output');
   logger.info(JSON.stringify(processedArray));
@@ -64,4 +71,4 @@ csv({
       logger.error('An error occurred while saving to JSON');
     }
   });
-});
+ 
