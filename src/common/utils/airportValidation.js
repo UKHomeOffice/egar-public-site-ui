@@ -15,6 +15,6 @@ function isBritishAirport(airports) {
 }
 
 module.exports = {
-  isBritishAirport,
+  isBritishAirport, 
   notBritishMsg,
 };
