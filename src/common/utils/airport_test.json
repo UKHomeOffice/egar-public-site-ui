@@ -7,6 +7,11 @@
     "british": true,
     "label": "NORTHAMPTON - SYWELL (United Kingdom) (EGBK / ORM)"
 },
+{   
+  "id": "URD",  "id2": "EDQE",
+  "british": false,   
+  "label": "Burg Feuerstein Airport (Germany) (EDQE / URD)"   
+},   
 {
     "id": "AYMD", "id2": "MAG",
     "british": false,
@@ -26,6 +31,11 @@
     "id": "EDQD", "id2": "BYU",
     "british": false,
     "label": "Bayreuth Airport (Germany) (EDQD / BYU)"
+},
+{
+    "id": "LHOY", "id2": "HOY",
+    "british": false,
+    "label": "Őcsény Airport (Hungary) (LHOY)"
 },
 {
     "id": "EBAW", "id2": "ANR",

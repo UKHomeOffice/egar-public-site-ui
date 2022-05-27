@@ -229,7 +229,7 @@ function initialiseTemplateEngine(app) {
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('countryList', autocompleteUtil.generateCountryList());
   nunjucksEnvironment.addGlobal('airportList', autocompleteUtil.airportList);
-  nunjucksEnvironment.addGlobal('airportList2', autocompleteUtil.airportList2);
+  //nunjucksEnvironment.addGlobal('airportList2', autocompleteUtil.airportList2);
   
   
   
