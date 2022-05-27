@@ -120,10 +120,10 @@ module.exports = async (req, res) => {
       new ValidationRule(validator.notSameValues, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], __('field_same_departure_port_validation')),
     ],
   );
-
-  validations.push([
-    new ValidationRule(airportValidation.isBritishAirport, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], airportValidation.notBritishMsg),
-  ]);
+// The entry below is a surplus as there's already same validation at the Arrival port section //
+ // validations.push([
+  //  new ValidationRule(airportValidation.isBritishAirport, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], airportValidation.notBritishMsg),
+ // ]);
 
   validator.validateChains(validations)
     .then(() => {
