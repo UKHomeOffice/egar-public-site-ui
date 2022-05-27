@@ -121,10 +121,11 @@ module.exports = async (req, res) => {
     ],
   );
 
-  validations.push([
-    new ValidationRule(airportValidation.isBritishAirport, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], airportValidation.notBritishMsg),
-  ]);
-
+  // The entry below is a surplus as there's already same validation at the Arrival port section //
+ // validations.push([
+  //  new ValidationRule(airportValidation.isBritishAirport, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], airportValidation.notBritishMsg),
+ // ]);
+ 
   validator.validateChains(validations)
     .then(() => {
       performAPICall(cookie, res, buttonClicked);
