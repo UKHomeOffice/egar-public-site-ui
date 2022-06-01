@@ -168,7 +168,7 @@ module.exports = (req, res) => {
           Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
             .then(() => {
               logger.info('Updated GAR with excel data');
-              req.session.save(() => res.redirect('/garfile/departure'));
+              req.session.save(() => res.redirect('/garfile/review'));
             })
             .catch((err) => {
               logger.error('Failed to update API with GAR information');
