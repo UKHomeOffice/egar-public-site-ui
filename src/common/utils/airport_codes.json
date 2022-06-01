@@ -1,3 +1,5 @@
+
+
 [
   {
     "id": "",
@@ -69,25 +71,25 @@
     "id": "EGS",
     "id2": "BIEG",
     "british": false,
-    "label": "Egilssta√∞ir Airport (Iceland) (BIEG / EGS)"
+    "label": "Egilsstaðir Airport (Iceland) (BIEG / EGS)"
   },
   {
     "id": "HFN",
     "id2": "BIHN",
     "british": false,
-    "label": "Hornafj√∂r√∞ur Airport (Iceland) (BIHN / HFN)"
+    "label": "Hornafjörður Airport (Iceland) (BIHN / HFN)"
   },
   {
     "id": "HZK",
     "id2": "BIHU",
     "british": false,
-    "label": "H√∫sav√≠k Airport (Iceland) (BIHU / HZK)"
+    "label": "Húsavík Airport (Iceland) (BIHU / HZK)"
   },
   {
     "id": "IFJ",
     "id2": "BIIS",
     "british": false,
-    "label": "Éçsafj√∂r√∞ur Airport (Iceland) (BIIS / IFJ)"
+    "label": "Ísafjörður Airport (Iceland) (BIIS / IFJ)"
   },
   {
     "id": "KEF",
@@ -99,7 +101,7 @@
     "id": "PFJ",
     "id2": "BIPA",
     "british": false,
-    "label": "Patreksfj√∂r√∞ur Airport (Iceland) (BIPA / PFJ)"
+    "label": "Patreksfjörður Airport (Iceland) (BIPA / PFJ)"
   },
   {
     "id": "RKV",
@@ -111,7 +113,7 @@
     "id": "SIJ",
     "id2": "BISI",
     "british": false,
-    "label": "Siglufj√∂r√∞ur Airport (Iceland) (BISI / SIJ)"
+    "label": "Siglufjörður Airport (Iceland) (BISI / SIJ)"
   },
   {
     "id": "VEY",
@@ -127,13 +129,13 @@
   },
   {
     "id": "CYAV",
-   
+    "id2": "CYAV",
     "british": false,
     "label": "Winnipeg / St. Andrews Airport (Canada) (CYAV)"
   },
   {
     "id": "CYAW",
-   
+    "id2": "CYAW",
     "british": false,
     "label": "Halifax / CFB Shearwater Heliport (Canada) (CYAW)"
   },
@@ -259,7 +261,7 @@
   },
   {
     "id": "CYDC",
-   
+    "id2": "CYDC",
     "british": false,
     "label": "Princeton Airport (Canada) (CYDC)"
   },
@@ -619,7 +621,7 @@
   },
   {
     "id": "CYPK",
-   
+    "id2": "CYPK",
     "british": false,
     "label": "Pitt Meadows Airport (Canada) (CYPK)"
   },
@@ -1261,13 +1263,13 @@
   },
   {
     "id": "DAAK",
-    "id2": "ria",
+    "id2": "DAAK",
     "british": false,
     "label": "Boufarik Airport (Algeria) (DAAK)"
   },
   {
     "id": "DAAN",
-    "id2": "ria",
+    "id2": "DAAN",
     "british": false,
     "label": "Reggane Airport (Algeria) (DAAN)"
   },
@@ -1279,7 +1281,7 @@
   },
   {
     "id": "DAAQ",
-   
+    "id2": "DAAQ",
     "british": false,
     "label": "Ain Oussera Airport (Algeria) (DAAQ)"
   },
@@ -1303,7 +1305,7 @@
   },
   {
     "id": "DAAZ",
-    "id2": "ria",
+    "id2": "DAAZ",
     "british": false,
     "label": "Relizane Airport (Algeria) (DAAZ)"
   },
@@ -1339,7 +1341,7 @@
   },
   {
     "id": "DAOE",
-   
+    "id2": "DAOE",
     "british": false,
     "label": "Bou Sfer Airport (Algeria) (DAOE)"
   },
@@ -1483,7 +1485,7 @@
   },
   {
     "id": "DGLW",
-    "id2": "ana",
+    "id2": "DGLW",
     "british": false,
     "label": "Wa Airport (Ghana) (DGLW)"
   },
@@ -1573,7 +1575,7 @@
   },
   {
     "id": "DNGU",
-    "id2": "ria",
+    "id2": "DNGU",
     "british": false,
     "label": "Gusau Airport (Nigeria) (DNGU)"
   },
@@ -1681,13 +1683,13 @@
   },
   {
     "id": "DRZD",
-    "id2": "ger",
+    "id2": "DRZD",
     "british": false,
     "label": "Dirkou Airport (Niger) (DRZD)"
   },
   {
     "id": "DRZF",
-    "id2": "ger",
+    "id2": "DRZF",
     "british": false,
     "label": "Diffa Airport (Niger) (DRZF)"
   },
@@ -1711,13 +1713,13 @@
   },
   {
     "id": "DTTB",
-   
+    "id2": "DTTB",
     "british": false,
     "label": "Sidi Ahmed Air Base (Tunisia) (DTTB)"
   },
   {
     "id": "DTTD",
-   
+    "id2": "DTTD",
     "british": false,
     "label": "Remada Air Base (Tunisia) (DTTD)"
   },
@@ -1735,7 +1737,7 @@
   },
   {
     "id": "DTTI",
-   
+    "id2": "DTTI",
     "british": false,
     "label": "Borj El Amri Airport (Tunisia) (DTTI)"
   },
@@ -1783,13 +1785,13 @@
   },
   {
     "id": "EBBE",
-   
+    "id2": "EBBE",
     "british": false,
     "label": "Beauvechain Air Base (Belgium) (EBBE)"
   },
   {
     "id": "EBBL",
-   
+    "id2": "EBBL",
     "british": false,
     "label": "Kleine Brogel Air Base (Belgium) (EBBL)"
   },
@@ -1801,7 +1803,7 @@
   },
   {
     "id": "EBBX",
-   
+    "id2": "EBBX",
     "british": false,
     "label": "Jehonville Air Base (Belgium) (EBBX)"
   },
@@ -1813,19 +1815,19 @@
   },
   {
     "id": "EBCV",
-   
+    "id2": "EBCV",
     "british": false,
     "label": "Chi√®vres Air Base (Belgium) (EBCV)"
   },
   {
     "id": "EBFN",
-   
+    "id2": "EBFN",
     "british": false,
     "label": "Koksijde Air Base (Belgium) (EBFN)"
   },
   {
     "id": "EBFS",
-   
+    "id2": "EBFS",
     "british": false,
     "label": "Florennes Air Base (Belgium) (EBFS)"
   },
@@ -2401,7 +2403,7 @@
   },
   {
     "id": "EDWF",
-   
+    "id2": "EDWF",
     "british": false,
     "label": "Leer-Papenburg Airport (Germany) (EDWF)"
   },
@@ -2431,7 +2433,7 @@
   },
   {
     "id": "EDXR",
-   
+    "id2": "EDXR",
     "british": false,
     "label": "Rendsburg-Schachtholm Airport (Germany) (EDXR)"
   },
@@ -2485,7 +2487,7 @@
   },
   {
     "id": "EFEU",
-   
+    "id2": "EFEU",
     "british": false,
     "label": "Eura Airport (Finland) (EFEU)"
   },
@@ -2509,13 +2511,13 @@
   },
   {
     "id": "EFHM",
-   
+    "id2": "EFHM",
     "british": false,
     "label": "Hameenkyro Airport (Finland) (EFHM)"
   },
   {
     "id": "EFHN",
-   
+    "id2": "EFHN",
     "british": false,
     "label": "Hanko Airport (Finland) (EFHN)"
   },
@@ -2527,13 +2529,13 @@
   },
   {
     "id": "EFIK",
-   
+    "id2": "EFIK",
     "british": false,
     "label": "Kiikala Airport (Finland) (EFIK)"
   },
   {
     "id": "EFIM",
-   
+    "id2": "EFIM",
     "british": false,
     "label": "Immola Airport (Finland) (EFIM)"
   },
@@ -2593,7 +2595,7 @@
   },
   {
     "id": "EFKM",
-   
+    "id2": "EFKM",
     "british": false,
     "label": "Kemijarvi Airport (Finland) (EFKM)"
   },
@@ -2635,7 +2637,7 @@
   },
   {
     "id": "EFME",
-   
+    "id2": "EFME",
     "british": false,
     "label": "Menkijarvi Airport (Finland) (EFME)"
   },
@@ -2647,7 +2649,7 @@
   },
   {
     "id": "EFNU",
-   
+    "id2": "EFNU",
     "british": false,
     "label": "Nummela Airport (Finland) (EFNU)"
   },
@@ -2659,7 +2661,7 @@
   },
   {
     "id": "EFPI",
-   
+    "id2": "EFPI",
     "british": false,
     "label": "Piikajarvi Airport (Finland) (EFPI)"
   },
@@ -2671,25 +2673,25 @@
   },
   {
     "id": "EFPU",
-   
+    "id2": "EFPU",
     "british": false,
     "label": "Pudasj√§rvi Airport (Finland) (EFPU)"
   },
   {
     "id": "EFPY",
-   
+    "id2": "EFPY",
     "british": false,
     "label": "Pyh√§salmi Airport (Finland) (EFPY)"
   },
   {
     "id": "EFRH",
-   
+    "id2": "EFRH",
     "british": false,
     "label": "Raahe Pattijoki Airport (Finland) (EFRH)"
   },
   {
     "id": "EFRN",
-   
+    "id2": "EFRN",
     "british": false,
     "label": "Rantasalmi Airport (Finland) (EFRN)"
   },
@@ -2701,7 +2703,7 @@
   },
   {
     "id": "EFRY",
-   
+    "id2": "EFRY",
     "british": false,
     "label": "Rayskala Airport (Finland) (EFRY)"
   },
@@ -2713,7 +2715,7 @@
   },
   {
     "id": "EFSE",
-   
+    "id2": "EFSE",
     "british": false,
     "label": "Selanpaa Airport (Finland) (EFSE)"
   },
@@ -2731,7 +2733,7 @@
   },
   {
     "id": "EFTS",
-   
+    "id2": "EFTS",
     "british": false,
     "label": "Teisko Airport (Finland) (EFTS)"
   },
@@ -2803,7 +2805,7 @@
   },
   {
     "id": "EGBG",
-   
+    "id2": "EGBG",
     "british": true,
     "label": "Leicester Airport (United Kingdom) (EGBG)"
   },
@@ -2815,7 +2817,7 @@
   },
   {
     "id": "EGBO",
-   
+    "id2": "EGBO",
     "british": true,
     "label": "Wolverhampton Halfpenny Green Airport (United Kingdom) (EGBO)"
   },
@@ -2827,13 +2829,13 @@
   },
   {
     "id": "EGBT",
-   
+    "id2": "EGBT",
     "british": true,
     "label": "Turweston Airport (United Kingdom) (EGBT)"
   },
   {
     "id": "EGBW",
-   
+    "id2": "EGBW",
     "british": true,
     "label": "Wellesbourne Mountford Airport (United Kingdom) (EGBW)"
   },
@@ -2845,13 +2847,13 @@
   },
   {
     "id": "EGCD",
-   
+    "id2": "EGCD",
     "british": true,
     "label": "Manchester Woodford Airport (United Kingdom) (EGCD)"
   },
   {
     "id": "EGDC",
-   
+    "id2": "EGDC",
     "british": true,
     "label": "Royal Marines Base Chivenor Airport (United Kingdom) (EGDC)"
   },
@@ -2869,19 +2871,19 @@
   },
   {
     "id": "EGDM",
-   
+    "id2": "EGDM",
     "british": true,
     "label": "MoD Boscombe Down Airport (United Kingdom) (EGDM)"
   },
   {
     "id": "EGDR",
-   
+    "id2": "EGDR",
     "british": true,
     "label": "RNAS Culdrose (United Kingdom) (EGDR)"
   },
   {
     "id": "EGDX",
-   
+    "id2": "EGDX",
     "british": true,
     "label": "MoD St. Athan (United Kingdom) (EGDX)"
   },
@@ -3241,7 +3243,7 @@
   },
   {
     "id": "EGSF",
-   
+    "id2": "EGSF",
     "british": true,
     "label": "Peterborough Business Airport (United Kingdom) (EGSF)"
   },
@@ -3259,19 +3261,19 @@
   },
   {
     "id": "EGSX",
-   
+    "id2": "EGSX",
     "british": true,
     "label": "North Weald Airport (United Kingdom) (EGSX)"
   },
   {
     "id": "EGSY",
-   
+    "id2": "EGSY",
     "british": true,
     "label": "Sheffield City Heliport (United Kingdom) (EGSY)"
   },
   {
     "id": "EGTC",
-   
+    "id2": "EGTC",
     "british": true,
     "label": "Cranfield Airport (United Kingdom) (EGTC)"
   },
@@ -3313,7 +3315,7 @@
   },
   {
     "id": "EGUW",
-   
+    "id2": "EGUW",
     "british": true,
     "label": "RAF Wattisham (United Kingdom) (EGUW)"
   },
@@ -3343,7 +3345,7 @@
   },
   {
     "id": "EGWC",
-   
+    "id2": "EGWC",
     "british": true,
     "label": "DCAE Cosford Air Base (United Kingdom) (EGWC)"
   },
@@ -3361,19 +3363,19 @@
   },
   {
     "id": "EGXD",
-   
+    "id2": "EGXD",
     "british": true,
     "label": "RAF Dishforth (United Kingdom) (EGXD)"
   },
   {
     "id": "EGXE",
-   
+    "id2": "EGXE",
     "british": true,
     "label": "Leeming Airport (United Kingdom) (EGXE)"
   },
   {
     "id": "EGXG",
-   
+    "id2": "EGXG",
     "british": true,
     "label": "Leeds East Airport (United Kingdom) (EGXG)"
   },
@@ -3385,7 +3387,7 @@
   },
   {
     "id": "EGXJ",
-   
+    "id2": "EGXJ",
     "british": true,
     "label": "RAF Cottesmore (United Kingdom) (EGXJ)"
   },
@@ -3397,7 +3399,7 @@
   },
   {
     "id": "EGXT",
-   
+    "id2": "EGXT",
     "british": true,
     "label": "RAF Wittering (United Kingdom) (EGXT)"
   },
@@ -3415,19 +3417,19 @@
   },
   {
     "id": "EGXZ",
-   
+    "id2": "EGXZ",
     "british": true,
     "label": "RAF Topcliffe (United Kingdom) (EGXZ)"
   },
   {
     "id": "EGYD",
-   
+    "id2": "EGYD",
     "british": true,
     "label": "RAF Cranwell (United Kingdom) (EGYD)"
   },
   {
     "id": "EGYE",
-   
+    "id2": "EGYE",
     "british": true,
     "label": "RAF Barkston Heath (United Kingdom) (EGYE)"
   },
@@ -3571,7 +3573,7 @@
   },
   {
     "id": "EIME",
-   
+    "id2": "EIME",
     "british": false,
     "label": "Casement Air Base (Ireland) (EIME)"
   },
@@ -3619,7 +3621,7 @@
   },
   {
     "id": "EKGH",
-   
+    "id2": "EKGH",
     "british": false,
     "label": "Gr√∏nholt Hiller√∏d Airport (Denmark) (EKGH)"
   },
@@ -3649,7 +3651,7 @@
   },
   {
     "id": "EKPB",
-   
+    "id2": "EKPB",
     "british": false,
     "label": "Krus√•-Padborg Airport (Denmark) (EKPB)"
   },
@@ -3691,7 +3693,7 @@
   },
   {
     "id": "EKVD",
-   
+    "id2": "EKVD",
     "british": false,
     "label": "Kolding Vamdrup Airfield (Denmark) (EKVD)"
   },
@@ -3703,7 +3705,7 @@
   },
   {
     "id": "EKVH",
-   
+    "id2": "EKVH",
     "british": false,
     "label": "Vesthimmerlands Flyveplads (Denmark) (EKVH)"
   },
@@ -3759,7 +3761,7 @@
     "id": "BOO",
     "id2": "ENBO",
     "british": false,
-    "label": "Bod√∏ Airport (Norway) (ENBO / BOO)"
+    "label": "Bodø Airport (Norway) (ENBO / BOO)"
   },
   {
     "id": "BGO",
@@ -3771,7 +3773,7 @@
     "id": "BJF",
     "id2": "ENBS",
     "british": false,
-    "label": "B√•tsfjord Airport (Norway) (ENBS / BJF)"
+    "label": "Båtsfjord Airport (Norway) (ENBS / BJF)"
   },
   {
     "id": "KRS",
@@ -3807,7 +3809,7 @@
     "id": "FRO",
     "id2": "ENFL",
     "british": false,
-    "label": "Flor√∏ Airport (Norway) (ENFL / FRO)"
+    "label": "Florø Airport (Norway) (ENFL / FRO)"
   },
   {
     "id": "OSL",
@@ -3835,7 +3837,7 @@
   },
   {
     "id": "ENKJ",
-   
+    "id2": "ENKJ",
     "british": false,
     "label": "Kjeller Airport (Norway) (ENKJ)"
   },
@@ -3861,7 +3863,7 @@
     "id": "MJF",
     "id2": "ENMS",
     "british": false,
-    "label": "Mosj√∏en Airport (Kj√¶rstad) (Norway) (ENMS / MJF)"
+    "label": "Mosjøen Airport (Kjærstad) (Norway) (ENMS / MJF)"
   },
   {
     "id": "LKL",
@@ -3885,7 +3887,7 @@
     "id": "RRS",
     "id2": "ENRO",
     "british": false,
-    "label": "R√∏ros Airport (Norway) (ENRO / RRS)"
+    "label": "Røros Airport (Norway) (ENRO / RRS)"
   },
   {
     "id": "RYG",
@@ -3915,13 +3917,13 @@
     "id": "SSJ",
     "id2": "ENST",
     "british": false,
-    "label": "Sandnessj√∏en Airport (Stokka) (Norway) (ENST / SSJ)"
+    "label": "Sandnessjøen Airport (Stokka) (Norway) (ENST / SSJ)"
   },
   {
     "id": "TOS",
     "id2": "ENTC",
     "british": false,
-    "label": "Troms√∏ Airport, (Norway) (ENTC / TOS)"
+    "label": "Tromsø Airport, (Norway) (ENTC / TOS)"
   },
   {
     "id": "TRF",
@@ -3933,7 +3935,7 @@
     "id": "TRD",
     "id2": "ENVA",
     "british": false,
-    "label": "Trondheim Airport V√¶rnes (Norway) (ENVA / TRD)"
+    "label": "Trondheim Airport Vaernes (Norway) (ENVA / TRD)"
   },
   {
     "id": "SVG",
@@ -3943,7 +3945,7 @@
   },
   {
     "id": "EPBC",
-   
+    "id2": "EPBC",
     "british": false,
     "label": "Babice Airport (Poland) (EPBC)"
   },
@@ -3951,17 +3953,17 @@
     "id": "GDN",
     "id2": "EPGD",
     "british": false,
-    "label": "Gda≈Ñsk Lech Wa≈Çƒôsa Airport (Poland) (EPGD / GDN)"
+    "label": "Gdańsk Lech Wałęsa Airport (Poland) (EPGD / GDN)"
   },
   {
     "id": "KRK",
     "id2": "EPKK",
     "british": false,
-    "label": "Krak√≥w John Paul II International Airport (Poland) (EPKK / KRK)"
+    "label": "Kraków John Paul II International Airport (Poland) (EPKK / KRK)"
   },
   {
     "id": "EPKM",
-   
+    "id2": "EPKM",
     "british": false,
     "label": "Muchowiec Airport (Poland) (EPKM)"
   },
@@ -3973,7 +3975,7 @@
   },
   {
     "id": "EPML",
-   
+    "id2": "EPML",
     "british": false,
     "label": "Mielec Airport (Poland) (EPML)"
   },
@@ -3981,19 +3983,19 @@
     "id": "POZ",
     "id2": "EPPO",
     "british": false,
-    "label": "Pozna≈Ñ-≈Åawica Airport (Poland) (EPPO / POZ)"
+    "label": "Poznań-Ławica Airport (Poland) (EPPO / POZ)"
   },
   {
     "id": "RZE",
     "id2": "EPRZ",
     "british": false,
-    "label": "Rzesz√≥w-Jasionka Airport (Poland) (EPRZ / RZE)"
+    "label": "Rzeszów-Jasionka Airport (Poland) (EPRZ / RZE)"
   },
   {
     "id": "SZZ",
     "id2": "EPSC",
     "british": false,
-    "label": "Szczecin-Goleni√≥w \"Solidarno≈õƒá\" Airport (Poland) (EPSC / SZZ)"
+    "label": "Szczecin-Goleniów \"Solidarność\" Airport (Poland) (EPSC / SZZ)"
   },
   {
     "id": "OSP",
@@ -4003,7 +4005,7 @@
   },
   {
     "id": "EPSN",
-   
+    "id2": "EPSN",
     "british": false,
     "label": "Swidwin Military Air Base (Poland) (EPSN)"
   },
@@ -4017,29 +4019,29 @@
     "id": "WRO",
     "id2": "EPWR",
     "british": false,
-    "label": "Copernicus Wroc≈Çaw Airport (Poland) (EPWR / WRO)"
+    "label": "Copernicus Wrocław Airport (Poland) (EPWR / WRO)"
   },
   {
     "id": "IEG",
     "id2": "EPZG",
     "british": false,
-    "label": "Zielona G√≥ra-Babimost Airport (Poland) (EPZG / IEG)"
+    "label": "Zielona Góra-Babimost Airport (Poland) (EPZG / IEG)"
   },
   {
     "id": "ESCF",
-   
+    "id2": "ESCF",
     "british": false,
     "label": "Malmen Air Base (Sweden) (ESCF)"
   },
   {
     "id": "ESCK",
-   
+    "id2": "ESCK",
     "british": false,
-    "label": "Br√•valla Air Base (Sweden) (ESCK)"
+    "label": "Bråvalla Air Base (Sweden) (ESCK)"
   },
   {
     "id": "ESCM",
-   
+    "id2": "ESCM",
     "british": false,
     "label": "Uppsala Airport (Sweden) (ESCM)"
   },
@@ -4051,9 +4053,9 @@
   },
   {
     "id": "ESFR",
-   
+    "id2": "ESFR",
     "british": false,
-    "label": "R√•da Air Base (Sweden) (ESFR)"
+    "label": "Råda Air Base (Sweden) (ESFR)"
   },
   {
     "id": "GOT",
@@ -4065,19 +4067,19 @@
     "id": "JKG",
     "id2": "ESGJ",
     "british": false,
-    "label": "J√∂nk√∂ping Airport (Sweden) (ESGJ / JKG)"
+    "label": "Jönköping Airport (Sweden) (ESGJ / JKG)"
   },
   {
     "id": "ESGK",
-   
+    "id2": "ESGK",
     "british": false,
-    "label": "Falk√∂ping Airport (Sweden) (ESGK)"
+    "label": "Falköping Airport (Sweden) (ESGK)"
   },
   {
     "id": "LDK",
     "id2": "ESGL",
     "british": false,
-    "label": "Lidk√∂ping-Hovby Airport (Sweden) (ESGL / LDK)"
+    "label": "Lidköping-Hovby Airport (Sweden) (ESGL / LDK)"
   },
   {
     "id": "GSE",
@@ -4089,29 +4091,29 @@
     "id": "KVB",
     "id2": "ESGR",
     "british": false,
-    "label": "Sk√∂vde Airport (Sweden) (ESGR / KVB)"
+    "label": "Skövde Airport (Sweden) (ESGR / KVB)"
   },
   {
     "id": "THN",
     "id2": "ESGT",
     "british": false,
-    "label": "Trollh√§ttan-V√§nersborg Airport (Sweden) (ESGT / THN)"
+    "label": "Trollhättan-V√§nersborg Airport (Sweden) (ESGT / THN)"
   },
   {
     "id": "ESIA",
-   
+    "id2": "ESIA",
     "british": false,
     "label": "Karlsborg Air Base (Sweden) (ESIA)"
   },
   {
     "id": "ESIB",
-   
+    "id2": "ESIB",
     "british": false,
-    "label": "S√•ten√§s Air Base (Sweden) (ESIB)"
+    "label": "Såtenäs Air Base (Sweden) (ESIB)"
   },
   {
     "id": "ESKB",
-   
+    "id2": "ESKB",
     "british": false,
     "label": "Barkarby Airport (Sweden) (ESKB)"
   },
@@ -4135,19 +4137,19 @@
   },
   {
     "id": "ESKV",
-   
+    "id2": "ESKV",
     "british": false,
     "label": "Arvika Airport (Sweden) (ESKV)"
   },
   {
     "id": "ESMA",
-   
+    "id2": "ESMA",
     "british": false,
     "label": "Emmaboda Airfield (Sweden) (ESMA)"
   },
   {
     "id": "ESMG",
-   
+    "id2": "ESMG",
     "british": false,
     "label": "Feringe Airport (Sweden) (ESMG)"
   },
@@ -4159,7 +4161,7 @@
   },
   {
     "id": "ESML",
-   
+    "id2": "ESML",
     "british": false,
     "label": "Landskrona Airport (Sweden) (ESML)"
   },
@@ -4171,7 +4173,7 @@
   },
   {
     "id": "ESMP",
-   
+    "id2": "ESMP",
     "british": false,
     "label": "Anderstorp Airport (Sweden) (ESMP)"
   },
@@ -4185,7 +4187,7 @@
     "id": "MMX",
     "id2": "ESMS",
     "british": false,
-    "label": "Malm√∂ Sturup Airport (Sweden) (ESMS / MMX)"
+    "label": "Malmö Sturup Airport (Sweden) (ESMS / MMX)"
   },
   {
     "id": "HAD",
@@ -4195,7 +4197,7 @@
   },
   {
     "id": "ESMV",
-   
+    "id2": "ESMV",
     "british": false,
     "label": "Hagshult Air Base (Sweden) (ESMV)"
   },
@@ -4203,17 +4205,17 @@
     "id": "VXO",
     "id2": "ESMX",
     "british": false,
-    "label": "V√§xj√∂ Kronoberg Airport (Sweden) (ESMX / VXO)"
+    "label": "Växjö Kronoberg Airport (Sweden) (ESMX / VXO)"
   },
   {
     "id": "ESNA",
-   
+    "id2": "ESNA",
     "british": false,
     "label": "Hallviken Airport (Sweden) (ESNA)"
   },
   {
     "id": "ESNC",
-   
+    "id2": "ESNC",
     "british": false,
     "label": "Hedlanda Airport (Sweden) (ESNC)"
   },
@@ -4227,7 +4229,7 @@
     "id": "GEV",
     "id2": "ESNG",
     "british": false,
-    "label": "G√§llivare Airport (Sweden) (ESNG / GEV)"
+    "label": "Gällivare Airport (Sweden) (ESNG / GEV)"
   },
   {
     "id": "HUV",
@@ -4237,7 +4239,7 @@
   },
   {
     "id": "ESNJ",
-   
+    "id2": "ESNJ",
     "british": false,
     "label": "Jokkmokk Airport (Sweden) (ESNJ)"
   },
@@ -4255,7 +4257,7 @@
   },
   {
     "id": "ESNM",
-   
+    "id2": "ESNM",
     "british": false,
     "label": "Optand Airport (Sweden) (ESNM)"
   },
@@ -4263,19 +4265,19 @@
     "id": "SDL",
     "id2": "ESNN",
     "british": false,
-    "label": "Sundsvall-H√§rn√∂sand Airport (Sweden) (ESNN / SDL)"
+    "label": "Sundsvall-Härnösand Airport (Sweden) (ESNN / SDL)"
   },
   {
     "id": "OER",
     "id2": "ESNO",
     "british": false,
-    "label": "Éñrnsk√∂ldsvik Airport (Sweden) (ESNO / OER)"
+    "label": "Örnsköldsvik Airport (Sweden) (ESNO / OER)"
   },
   {
     "id": "ESNP",
-   
+    "id2": "ESNP",
     "british": false,
-    "label": "Pite√• Airport (Sweden) (ESNP)"
+    "label": "Piteå Airport (Sweden) (ESNP)"
   },
   {
     "id": "KRN",
@@ -4285,7 +4287,7 @@
   },
   {
     "id": "ESNR",
-   
+    "id2": "ESNR",
     "british": false,
     "label": "Orsa Airport (Sweden) (ESNR)"
   },
@@ -4297,7 +4299,7 @@
   },
   {
     "id": "ESNT",
-   
+    "id2": "ESNT",
     "british": false,
     "label": "S√§ttna Airport (Sweden) (ESNT)"
   },
@@ -4305,7 +4307,7 @@
     "id": "UME",
     "id2": "ESNU",
     "british": false,
-    "label": "Ume√• Airport (Sweden) (ESNU / UME)"
+    "label": "Umeå Airport (Sweden) (ESNU / UME)"
   },
   {
     "id": "VHM",
@@ -4329,23 +4331,23 @@
     "id": "VST",
     "id2": "ESOW",
     "british": false,
-    "label": "Stockholm V√§ster√•s Airport (Sweden) (ESOW / VST)"
+    "label": "Stockholm Västerås Airport (Sweden) (ESOW / VST)"
   },
   {
     "id": "LLA",
     "id2": "ESPA",
     "british": false,
-    "label": "Lule√• Airport (Sweden) (ESPA / LLA)"
+    "label": "Luleå Airport (Sweden) (ESPA / LLA)"
   },
   {
     "id": "ESPE",
-   
+    "id2": "ESPE",
     "british": false,
     "label": "Vidsel Air Base (Sweden) (ESPE)"
   },
   {
     "id": "ESQO",
-   
+    "id2": "ESQO",
     "british": false,
     "label": "Arboga Airport (Sweden) (ESQO)"
   },
@@ -4377,19 +4379,19 @@
     "id": "GVX",
     "id2": "ESSK",
     "british": false,
-    "label": "G√§vle Sandviken Airport (Sweden) (ESSK / GVX)"
+    "label": "Gävle Sandviken Airport (Sweden) (ESSK / GVX)"
   },
   {
     "id": "LPI",
     "id2": "ESSL",
     "british": false,
-    "label": "Link√∂ping City Airport (Sweden) (ESSL / LPI)"
+    "label": "Linköping City Airport (Sweden) (ESSL / LPI)"
   },
   {
     "id": "NRK",
     "id2": "ESSP",
     "british": false,
-    "label": "Norrk√∂ping Airport (Sweden) (ESSP / NRK)"
+    "label": "Norrköping Airport (Sweden) (ESSP / NRK)"
   },
   {
     "id": "EKT",
@@ -4405,7 +4407,7 @@
   },
   {
     "id": "ESUK",
-   
+    "id2": "ESUK",
     "british": false,
     "label": "Kalixfors Airport (Sweden) (ESUK)"
   },
@@ -4429,7 +4431,7 @@
   },
   {
     "id": "ETHB",
-   
+    "id2": "ETHB",
     "british": false,
     "label": "B√ºckeburg Air Base (Germany) (ETHB)"
   },
@@ -4441,7 +4443,7 @@
   },
   {
     "id": "ETHE",
-   
+    "id2": "ETHE",
     "british": false,
     "label": "Rheine Bentlage Air Base (Germany) (ETHE)"
   },
@@ -4453,37 +4455,37 @@
   },
   {
     "id": "ETHL",
-   
+    "id2": "ETHL",
     "british": false,
     "label": "Laupheim Air Base (Germany) (ETHL)"
   },
   {
     "id": "ETHM",
-   
+    "id2": "ETHM",
     "british": false,
     "label": "Mendig Airfield (Germany) (ETHM)"
   },
   {
     "id": "ETHN",
-   
+    "id2": "ETHN",
     "british": false,
     "label": "Niederstetten Army Air Base (Germany) (ETHN)"
   },
   {
     "id": "ETHR",
-   
+    "id2": "ETHR",
     "british": false,
     "label": "Roth Airport (Germany) (ETHR)"
   },
   {
     "id": "ETHS",
-   
+    "id2": "ETHS",
     "british": false,
     "label": "Fassberg Air Base (Germany) (ETHS)"
   },
   {
     "id": "ETIC",
-   
+    "id2": "ETIC",
     "british": false,
     "label": "Grafenwohr Army Air Field (Germany) (ETIC)"
   },
@@ -4495,7 +4497,7 @@
   },
   {
     "id": "ETIH",
-   
+    "id2": "ETIH",
     "british": false,
     "label": "Hohenfels Army Air Field (Germany) (ETIH)"
   },
@@ -4513,7 +4515,7 @@
   },
   {
     "id": "ETND",
-   
+    "id2": "ETND",
     "british": false,
     "label": "Diepholz Air Base (Germany) (ETND)"
   },
@@ -4525,13 +4527,13 @@
   },
   {
     "id": "ETNH",
-   
+    "id2": "ETNH",
     "british": false,
     "label": "Hohn Air Base (Germany) (ETNH)"
   },
   {
     "id": "ETNJ",
-   
+    "id2": "ETNJ",
     "british": false,
     "label": "Jever Air Base (Germany) (ETNJ)"
   },
@@ -4543,7 +4545,7 @@
   },
   {
     "id": "ETNN",
-   
+    "id2": "ETNN",
     "british": false,
     "label": "N√∂rvenich Air Base (Germany) (ETNN)"
   },
@@ -4555,25 +4557,25 @@
   },
   {
     "id": "ETNT",
-   
+    "id2": "ETNT",
     "british": false,
     "label": "Wittmundhafen Airport (Germany) (ETNT)"
   },
   {
     "id": "ETNW",
-   
+    "id2": "ETNW",
     "british": false,
     "label": "Wunstorf Air Base (Germany) (ETNW)"
   },
   {
     "id": "ETOI",
-   
+    "id2": "ETOI",
     "british": false,
     "label": "Vilseck Army Air Field (Germany) (ETOI)"
   },
   {
     "id": "ETOR",
-   
+    "id2": "ETOR",
     "british": false,
     "label": "Coleman Army Air Field (Germany) (ETOR)"
   },
@@ -4585,19 +4587,19 @@
   },
   {
     "id": "ETSA",
-   
+    "id2": "ETSA",
     "british": false,
     "label": "Landsberg Lech Air Base (Germany) (ETSA)"
   },
   {
     "id": "ETSB",
-   
+    "id2": "ETSB",
     "british": false,
-    "label": "B√ºchel Air Base (Germany) (ETSB)"
+    "label": "Büchel Air Base (Germany) (ETSB)"
   },
   {
     "id": "ETSE",
-   
+    "id2": "ETSE",
     "british": false,
     "label": "Erding Airport (Germany) (ETSE)"
   },
@@ -4605,11 +4607,11 @@
     "id": "FEL",
     "id2": "ETSF",
     "british": false,
-    "label": "F√ºrstenfeldbruck Air Base (Germany) (ETSF / FEL)"
+    "label": "Fürstenfeldbruck Air Base (Germany) (ETSF / FEL)"
   },
   {
     "id": "ETSH",
-   
+    "id2": "ETSH",
     "british": false,
     "label": "Holzdorf Air Base (Germany) (ETSH)"
   },
@@ -4621,13 +4623,13 @@
   },
   {
     "id": "ETSL",
-   
+    "id2": "ETSL",
     "british": false,
     "label": "Lechfeld Air Base (Germany) (ETSL)"
   },
   {
     "id": "ETSN",
-   
+    "id2": "ETSN",
     "british": false,
     "label": "Neuburg AFB (Germany) (ETSN)"
   },
@@ -4651,7 +4653,7 @@
   },
   {
     "id": "FABB",
-   
+    "id2": "FABB",
     "british": false,
     "label": "Brakpan Airport (South Africa) (FABB)"
   },
@@ -4669,13 +4671,13 @@
   },
   {
     "id": "FABM",
-   
+    "id2": "FABM",
     "british": false,
     "label": "Bethlehem Airport (South Africa) (FABM)"
   },
   {
     "id": "FABO",
-   
+    "id2": "FABO",
     "british": false,
     "label": "Hendrik Potgieter Airport (South Africa) (FABO)"
   },
@@ -4687,7 +4689,7 @@
   },
   {
     "id": "FACV",
-   
+    "id2": "FACV",
     "british": false,
     "label": "Calvinia Airport (South Africa) (FACV)"
   },
@@ -4705,7 +4707,7 @@
   },
   {
     "id": "FAEO",
-   
+    "id2": "FAEO",
     "british": false,
     "label": "Ermelo Airport (South Africa) (FAEO)"
   },
@@ -4729,25 +4731,25 @@
   },
   {
     "id": "FAGR",
-   
+    "id2": "FAGR",
     "british": false,
     "label": "Graaff Reinet Airport (South Africa) (FAGR)"
   },
-  {
+{
     "id": "FAGT",
-   
+    "id2": "FAGT",
     "british": false,
     "label": "Grahamstown Airport (South Africa) (FAGT)"
   },
   {
     "id": "FAGY",
-   
+    "id2": "FAGY",
     "british": false,
     "label": "Greytown Airport (South Africa) (FAGY)"
   },
   {
     "id": "FAHA",
-   
+    "id2": "FAHA",
     "british": false,
     "label": "Harmony Airport (South Africa) (FAHA)"
   },
@@ -4765,7 +4767,7 @@
   },
   {
     "id": "FAHV",
-   
+    "id2": "FAHV",
     "british": false,
     "label": "Gariep Dam Airport (South Africa) (FAHV)"
   },
@@ -4789,11 +4791,13 @@
   },
   {
     "id": "FAKR",
+    "id2": "FAKR",
     "british": false,
     "label": "Krugersdorp Airport (South Africa) (FAKR)"
   },
   {
     "id": "FAKS",
+    "id2": "FAKS",
     "british": false,
     "label": "Kroonstad Airport (South Africa) (FAKS)"
   },
@@ -4817,11 +4821,13 @@
   },
   {
     "id": "FALI",
+    "id2": "FALI",
     "british": false,
     "label": "Lichtenburg Airport (South Africa) (FALI)"
   },
   {
     "id": "FALM",
+    "id2": "FALM",
     "british": false,
     "label": "Makhado Air Force Base Airport (South Africa) (FALM)"
   },
@@ -4839,6 +4845,7 @@
   },
   {
     "id": "FAMB",
+    "id2": "FAMB",
     "british": false,
     "label": "Middelburg Airport (South Africa) (FAMB)"
   },
@@ -4850,13 +4857,13 @@
   },
   {
     "id": "FAMI",
-   
+    "id2": "FAMI",
     "british": false,
     "label": "Marble Hall Airport (South Africa) (FAMI)"
   },
   {
     "id": "FAMJ",
-   
+    "id2": "FAMJ",
     "british": false,
     "label": "Majuba Power Station Airport (South Africa) (FAMJ)"
   },
@@ -4868,7 +4875,7 @@
   },
   {
     "id": "FAMS",
-   
+    "id2": "FAMS",
     "british": false,
     "label": "Morningside Farm Airport (South Africa) (FAMS)"
   },
@@ -4886,7 +4893,7 @@
   },
   {
     "id": "FANY",
-   
+    "id2": "FANY",
     "british": false,
     "label": "Nylstroom Airfield (South Africa) (FANY)"
   },
@@ -4922,7 +4929,7 @@
   },
   {
     "id": "FAPI",
-   
+    "id2": "FAPI",
     "british": false,
     "label": "Pietersburg Municipal Airport (South Africa) (FAPI)"
   },
@@ -4958,7 +4965,7 @@
   },
   {
     "id": "FAPY",
-   
+    "id2": "FAPY",
     "british": false,
     "label": "Parys Airport (South Africa) (FAPY)"
   },
@@ -4976,7 +4983,7 @@
   },
   {
     "id": "FARG",
-   
+    "id2": "FARG",
     "british": false,
     "label": "Rustenburg Airport (South Africa) (FARG)"
   },
@@ -5000,19 +5007,19 @@
   },
   {
     "id": "FASD",
-   
+    "id2": "FASD",
     "british": false,
     "label": "Saldanha /Vredenburg Airport (South Africa) (FASD)"
   },
   {
     "id": "FASI",
-   
+    "id2": "FASI",
     "british": false,
     "label": "Springs Airfield (South Africa) (FASI)"
   },
   {
     "id": "FASK",
-   
+    "id2": "FASK",
     "british": false,
     "label": "Swartkop Air Force Base (South Africa) (FASK)"
   },
@@ -5024,7 +5031,7 @@
   },
   {
     "id": "FASX",
-   
+    "id2": "FASX",
     "british": false,
     "label": "Hendrik Swellengrebel Airport (South Africa) (FASX)"
   },
@@ -5036,19 +5043,19 @@
   },
   {
     "id": "FATF",
-   
+    "id2": "FATF",
     "british": false,
     "label": "Tommys Field Airport (South Africa) (FATF)"
   },
   {
     "id": "FATP",
-   
+    "id2": "FATP",
     "british": false,
     "label": "New Tempe Airport (South Africa) (FATP)"
   },
   {
     "id": "FATT",
-   
+    "id2": "FATT",
     "british": false,
     "label": "Tutuka Power Station Airport (South Africa) (FATT)"
   },
@@ -6770,7 +6777,7 @@
   },
   {
     "id": "HLNF",
-   
+    "id2": "HLNF",
     "british": false,
     "label": "Ras Lanuf Oil Airport (Libya) (HLNF)"
   },
@@ -7130,7 +7137,7 @@
   },
   {
     "id": "LEGA",
-   
+    "id2": "LEGA",
     "british": false,
     "label": "Armilla Air Base (Spain) (LEGA)"
   },
@@ -7196,7 +7203,7 @@
   },
   {
     "id": "LEOC",
-   
+    "id2": "LEOC",
     "british": false,
     "label": "Oca√±a Airport (Spain) (LEOC)"
   },
@@ -7208,7 +7215,7 @@
   },
   {
     "id": "LERI",
-   
+    "id2": "LERI",
     "british": false,
     "label": "Alcantarilla Air Base (Spain) (LERI)"
   },
@@ -7232,13 +7239,13 @@
   },
   {
     "id": "LESB",
-   
+    "id2": "LESB",
     "british": false,
     "label": "Son Bonet Airport (Spain) (LESB)"
   },
   {
     "id": "LESL",
-   
+    "id2": "LESL",
     "british": false,
     "label": "San Luis Airport (Spain) (LESL)"
   },
@@ -7316,19 +7323,19 @@
   },
   {
     "id": "LFAG",
-   
+    "id2": "LFAG",
     "british": false,
     "label": "P√©ronne-Saint-Quentin Airport (France) (LFAG)"
   },
   {
     "id": "LFAI",
-   
+    "id2": "LFAI",
     "british": false,
     "label": "Nangis-Les Loges Airport (France) (LFAI)"
   },
   {
     "id": "LFAO",
-   
+    "id2": "LFAO",
     "british": false,
     "label": "Bagnoles-de-l'Orne-Couterne Airport (France) (LFAO)"
   },
@@ -7352,7 +7359,7 @@
   },
   {
     "id": "LFAY",
-   
+    "id2": "LFAY",
     "british": false,
     "label": "Amiens-Glisy Airport (France) (LFAY)"
   },
@@ -7364,7 +7371,7 @@
   },
   {
     "id": "LFBC",
-   
+    "id2": "LFBC",
     "british": false,
     "label": "Cazaux (BA 120) Air Base (France) (LFBC)"
   },
@@ -7382,7 +7389,7 @@
   },
   {
     "id": "LFBF",
-   
+    "id2": "LFBF",
     "british": false,
     "label": "Toulouse-Francazal (BA 101) Air Base (France) (LFBF)"
   },
@@ -7412,7 +7419,7 @@
   },
   {
     "id": "LFBM",
-   
+    "id2": "LFBM",
     "british": false,
     "label": "Mont-de-Marsan (BA 118) Air Base (France) (LFBM)"
   },
@@ -7478,13 +7485,13 @@
   },
   {
     "id": "LFCG",
-   
+    "id2": "LFCG",
     "british": false,
     "label": "Saint-Girons-Antichan Airport (France) (LFCG)"
   },
   {
     "id": "LFCH",
-   
+    "id2": "LFCH",
     "british": false,
     "label": "Arcachon-La Teste-de-Buch Airport (France) (LFCH)"
   },
@@ -7502,19 +7509,19 @@
   },
   {
     "id": "LFCL",
-   
+    "id2": "LFCL",
     "british": false,
     "label": "Toulouse-Lasbordes Airport (France) (LFCL)"
   },
   {
     "id": "LFCM",
-   
+    "id2": "LFCM",
     "british": false,
     "label": "Millau-Larzac Airfield (France) (LFCM)"
   },
   {
     "id": "LFCQ",
-   
+    "id2": "LFCQ",
     "british": false,
     "label": "Graulhet-Montdragon Airport (France) (LFCQ)"
   },
@@ -7526,13 +7533,13 @@
   },
   {
     "id": "LFCU",
-   
+    "id2": "LFCU",
     "british": false,
     "label": "Ussel-Thalamy Airport (France) (LFCU)"
   },
   {
     "id": "LFCW",
-   
+    "id2": "LFCW",
     "british": false,
     "label": "Villeneuve-sur-Lot Airport (France) (LFCW)"
   },
@@ -7544,13 +7551,13 @@
   },
   {
     "id": "LFCZ",
-   
+    "id2": "LFCZ",
     "british": false,
     "label": "Mimizan Airport (France) (LFCZ)"
   },
   {
     "id": "LFDA",
-   
+    "id2": "LFDA",
     "british": false,
     "label": "Aire-sur-l'Adour Airport (France) (LFDA)"
   },
@@ -7562,25 +7569,25 @@
   },
   {
     "id": "LFDH",
-   
+    "id2": "LFDH",
     "british": false,
     "label": "Auch-Lamothe Airport (France) (LFDH)"
   },
   {
     "id": "LFDI",
-   
+    "id2": "LFDI",
     "british": false,
     "label": "Libourne-Artigues-de-Lussac Airport (France) (LFDI)"
   },
   {
     "id": "LFDJ",
-   
+    "id2": "LFDJ",
     "british": false,
     "label": "Pamiers-Les Pujols Airport (France) (LFDJ)"
   },
   {
     "id": "LFDM",
-   
+    "id2": "LFDM",
     "british": false,
     "label": "Marmande-Virazeil Airport (France) (LFDM)"
   },
@@ -7592,31 +7599,31 @@
   },
   {
     "id": "LFED",
-   
+    "id2": "LFED",
     "british": false,
     "label": "Pontivy Airport (France) (LFED)"
   },
   {
     "id": "LFEH",
-   
+    "id2": "LFEH",
     "british": false,
     "label": "Aubigny-sur-N√®re Airport (France) (LFEH)"
   },
   {
     "id": "LFES",
-   
+    "id2": "LFES",
     "british": false,
     "label": "Guiscriff Scaer Airport (France) (LFES)"
   },
   {
     "id": "LFFI",
-   
+    "id2": "LFFI",
     "british": false,
     "label": "Ancenis Airport (France) (LFFI)"
   },
   {
     "id": "LFFN",
-   
+    "id2": "LFFN",
     "british": false,
     "label": "Brienne-le-Ch√¢teau Airport (France) (LFFN)"
   },
@@ -7628,7 +7635,7 @@
   },
   {
     "id": "LFGF",
-   
+    "id2": "LFGF",
     "british": false,
     "label": "Beaune-Challanges Airport (France) (LFGF)"
   },
@@ -7640,13 +7647,13 @@
   },
   {
     "id": "LFGK",
-   
+    "id2": "LFGK",
     "british": false,
     "label": "Joigny Airport (France) (LFGK)"
   },
   {
     "id": "LFGW",
-   
+    "id2": "LFGW",
     "british": false,
     "label": "Verdun-Le Rozelier Airfield (France) (LFGW)"
   },
@@ -7664,37 +7671,37 @@
   },
   {
     "id": "LFHQ",
-   
+    "id2": "LFHQ",
     "british": false,
     "label": "Saint-Flour-Coltines Airport (France) (LFHQ)"
   },
   {
     "id": "LFHS",
-   
+    "id2": "LFHS",
     "british": false,
     "label": "Bourg-Ceyz√©riat Airport (France) (LFHS)"
   },
   {
     "id": "LFHV",
-   
+    "id2": "LFHV",
     "british": false,
     "label": "Villefranche-Tarare Airport (France) (LFHV)"
   },
   {
     "id": "LFHY",
-   
+    "id2": "LFHY",
     "british": false,
     "label": "Moulins-Montbeugny Airport (France) (LFHY)"
   },
   {
     "id": "LFIF",
-   
+    "id2": "LFIF",
     "british": false,
     "label": "Saint-Affrique-Belmont Airport (France) (LFIF)"
   },
   {
     "id": "LFIG",
-   
+    "id2": "LFIG",
     "british": false,
     "label": "Cassagnes-B√©gonh√®s Airport (France) (LFIG)"
   },
@@ -7742,7 +7749,7 @@
   },
   {
     "id": "LFKT",
-   
+    "id2": "LFKT",
     "british": false,
     "label": "Corte Airport (France) (LFKT)"
   },
@@ -7772,13 +7779,13 @@
   },
   {
     "id": "LFLE",
-   
+    "id2": "LFLE",
     "british": false,
     "label": "Chamb√©ry-Challes-les-Eaux Airport (France) (LFLE)"
   },
   {
     "id": "LFLH",
-   
+    "id2": "LFLH",
     "british": false,
     "label": "Chalon-Champforgeuil Airport (France) (LFLH)"
   },
@@ -7796,7 +7803,7 @@
   },
   {
     "id": "LFLM",
-   
+    "id2": "LFLM",
     "british": false,
     "label": "M√¢con-Charnay Airport (France) (LFLM)"
   },
@@ -7826,7 +7833,7 @@
   },
   {
     "id": "LFLT",
-   
+    "id2": "LFLT",
     "british": false,
     "label": "Montlu√ßon-Dom√©rat Airport (France) (LFLT)"
   },
@@ -7862,13 +7869,13 @@
   },
   {
     "id": "LFMA",
-   
+    "id2": "LFMA",
     "british": false,
     "label": "Aix-en-Provence (BA 114) Airport (France) (LFMA)"
   },
   {
     "id": "LFMC",
-   
+    "id2": "LFMC",
     "british": false,
     "label": "Le Luc-Le Cannet Airport (France) (LFMC)"
   },
@@ -7886,7 +7893,7 @@
   },
   {
     "id": "LFMI",
-   
+    "id2": "LFMI",
     "british": false,
     "label": "Istres Le Tub√©/Istres Air Base (BA 125) Airport (France) (LFMI)"
   },
@@ -7928,7 +7935,7 @@
   },
   {
     "id": "LFMS",
-   
+    "id2": "LFMS",
     "british": false,
     "label": "Al√®s-Deaux Airport (France) (LFMS)"
   },
@@ -7952,13 +7959,13 @@
   },
   {
     "id": "LFMY",
-   
+    "id2": "LFMY",
     "british": false,
     "label": "Salon-de-Provence (BA 701) Air Base (France) (LFMY)"
   },
   {
     "id": "LFMZ",
-   
+    "id2": "LFMZ",
     "british": false,
     "label": "L√©zignan-Corbi√®res Airfield (France) (LFMZ)"
   },
@@ -7970,13 +7977,13 @@
   },
   {
     "id": "LFNH",
-   
+    "id2": "LFNH",
     "british": false,
     "label": "Carpentras Airport (France) (LFNH)"
   },
   {
     "id": "LFOA",
-   
+    "id2": "LFOA",
     "british": false,
     "label": "Avord (BA 702) Air Base (France) (LFOA)"
   },
@@ -7988,13 +7995,13 @@
   },
   {
     "id": "LFOC",
-   
+    "id2": "LFOC",
     "british": false,
     "label": "Ch√¢teaudun (BA 279) Air Base (France) (LFOC)"
   },
   {
     "id": "LFOD",
-   
+    "id2": "LFOD",
     "british": false,
     "label": "Saumur-Saint-Florent Airport (France) (LFOD)"
   },
@@ -8054,7 +8061,7 @@
   },
   {
     "id": "LFOZ",
-   
+    "id2": "LFOZ",
     "british": false,
     "label": "Orl√©ans-Saint-Denis-de-l'H√¥tel Airport (France) (LFOZ)"
   },
@@ -8078,13 +8085,13 @@
   },
   {
     "id": "LFPK",
-   
+    "id2": "LFPK",
     "british": false,
     "label": "Coulommiers-Voisins Airport (France) (LFPK)"
   },
   {
     "id": "LFPM",
-   
+    "id2": "LFPM",
     "british": false,
     "label": "Melun-Villaroche Air Base (France) (LFPM)"
   },
@@ -8114,19 +8121,19 @@
   },
   {
     "id": "LFQA",
-   
+    "id2": "LFQA",
     "british": false,
     "label": "Reims-Prunay Airport (France) (LFQA)"
   },
   {
     "id": "LFQB",
-   
+    "id2": "LFQB",
     "british": false,
     "label": "Troyes-Barberey Airport (France) (LFQB)"
   },
   {
     "id": "LFQC",
-   
+    "id2": "LFQC",
     "british": false,
     "label": "Lun√©ville-Croismare Airport (France) (LFQC)"
   },
@@ -8138,7 +8145,7 @@
   },
   {
     "id": "LFQF",
-   
+    "id2": "LFQF",
     "british": false,
     "label": "Autun-Bellevue Airport (France) (LFQF)"
   },
@@ -8150,7 +8157,7 @@
   },
   {
     "id": "LFQI",
-   
+    "id2": "LFQI",
     "british": false,
     "label": "Cambrai-√âpinoy (BA 103) Air Base (France) (LFQI)"
   },
@@ -8162,13 +8169,13 @@
   },
   {
     "id": "LFQM",
-   
+    "id2": "LFQM",
     "british": false,
     "label": "Besan√ßon-La V√®ze Airport (France) (LFQM)"
   },
   {
     "id": "LFQP",
-   
+    "id2": "LFQP",
     "british": false,
     "label": "Phalsbourg-Bourscheid Air Base (France) (LFQP)"
   },
@@ -8192,7 +8199,7 @@
   },
   {
     "id": "LFQW",
-   
+    "id2": "LFQW",
     "british": false,
     "label": "Vesoul-Frotey Airport (France) (LFQW)"
   },
@@ -8258,7 +8265,7 @@
   },
   {
     "id": "LFRL",
-   
+    "id2": "LFRL",
     "british": false,
     "label": "Lanv√©oc-Poulmic Air Base (France) (LFRL)"
   },
@@ -8324,7 +8331,7 @@
   },
   {
     "id": "LFSC",
-   
+    "id2": "LFSC",
     "british": false,
     "label": "Colmar-Meyenheim Air Base (France) (LFSC)"
   },
@@ -8348,19 +8355,19 @@
   },
   {
     "id": "LFSH",
-   
+    "id2": "LFSH",
     "british": false,
     "label": "Haguenau Airport (France) (LFSH)"
   },
   {
     "id": "LFSI",
-   
+    "id2": "LFSI",
     "british": false,
     "label": "Saint-Dizier-Robinson (BA 113) Air Base (France) (LFSI)"
   },
   {
     "id": "LFSM",
-   
+    "id2": "LFSM",
     "british": false,
     "label": "Montb√©liard-Courcelles Airfield (France) (LFSM)"
   },
@@ -8372,13 +8379,13 @@
   },
   {
     "id": "LFSO",
-   
+    "id2": "LFSO",
     "british": false,
     "label": "Nancy-Ochey (BA 133) Air Base (France) (LFSO)"
   },
   {
     "id": "LFSP",
-   
+    "id2": "LFSP",
     "british": false,
     "label": "Pontarlier Airport (France) (LFSP)"
   },
@@ -8396,13 +8403,13 @@
   },
   {
     "id": "LFSX",
-   
+    "id2": "LFSX",
     "british": false,
     "label": "Luxeuil-Saint-Sauveur (BA 116) Air Base (France) (LFSX)"
   },
   {
     "id": "LFTF",
-   
+    "id2": "LFTF",
     "british": false,
     "label": "Cuers-Pierrefeu Airport (France) (LFTF)"
   },
@@ -8432,13 +8439,13 @@
   },
   {
     "id": "LFXA",
-   
+    "id2": "LFXA",
     "british": false,
     "label": "Amb√©rieu Air Base (BA 278) (France) (LFXA)"
   },
   {
     "id": "LFYD",
-   
+    "id2": "LFYD",
     "british": false,
     "label": "Damblain Airport (France) (LFYD)"
   },
@@ -8462,7 +8469,7 @@
   },
   {
     "id": "LGAX",
-   
+    "id2": "LGAX",
     "british": false,
     "label": "Alexandria Airport (Greece) (LGAX)"
   },
@@ -8474,7 +8481,7 @@
   },
   {
     "id": "LGEL",
-   
+    "id2": "LGEL",
     "british": false,
     "label": "Elefsis Airport (Greece) (LGEL)"
   },
@@ -8522,7 +8529,7 @@
   },
   {
     "id": "LGKM",
-   
+    "id2": "LGKM",
     "british": false,
     "label": "Amigdhaleon Airport (Greece) (LGKM)"
   },
@@ -8582,7 +8589,7 @@
   },
   {
     "id": "LGMG",
-   
+    "id2": "LGMG",
     "british": false,
     "label": "Megara Airport (Greece) (LGMG)"
   },
@@ -8726,7 +8733,7 @@
   },
   {
     "id": "LHNY",
-   
+    "id2": "LHNY",
     "british": false,
     "label": "Ny√≠regyh√°za Airport (Hungary) (LHNY)"
   },
@@ -8750,7 +8757,7 @@
   },
   {
     "id": "LIBA",
-   
+    "id2": "LIBA",
     "british": false,
     "label": "Amendola Air Base (Italy) (LIBA)"
   },
@@ -8798,7 +8805,7 @@
   },
   {
     "id": "LIBV",
-   
+    "id2": "LIBV",
     "british": false,
     "label": "Gioia Del Colle Air Base (Italy) (LIBV)"
   },
@@ -8830,11 +8837,11 @@
     "id": "PMO",
     "id2": "LICJ",
     "british": false,
-    "label": "Falcone ÄìBorsellino Airport (Italy) (LICJ / PMO)"
+    "label": "Falcone‚ÄìBorsellino Airport (Italy) (LICJ / PMO)"
   },
   {
     "id": "LICP",
-   
+    "id2": "LICP",
     "british": false,
     "label": "Palermo-Boccadifalco Airport (Italy) (LICP)"
   },
@@ -8850,7 +8857,7 @@
     "british": false,
     "label": "Vincenzo Florio Airport Trapani-Birgi (Italy) (LICT / TPS)"
   },
-  {
+{
     "id": "NSY",
     "id2": "LICZ",
     "british": false,
@@ -8888,13 +8895,13 @@
   },
   {
     "id": "LIMA",
-   
+    "id2": "LIMA",
     "british": false,
     "label": "Torino-Aeritalia Airport (Italy) (LIMA)"
   },
   {
     "id": "LIMB",
-   
+    "id2": "LIMB",
     "british": false,
     "label": "Milano-Bresso Airfield (Italy) (LIMB)"
   },
@@ -8936,7 +8943,7 @@
   },
   {
     "id": "LIMN",
-   
+    "id2": "LIMN",
     "british": false,
     "label": "Cameri Air Base [MIL] (Italy) (LIMN)"
   },
@@ -8948,7 +8955,7 @@
   },
   {
     "id": "LIMS",
-   
+    "id2": "LIMS",
     "british": false,
     "label": "Piacenza San Damiano Air Base (Italy) (LIMS)"
   },
@@ -8972,7 +8979,7 @@
   },
   {
     "id": "LIPC",
-   
+    "id2": "LIPC",
     "british": false,
     "label": "Cervia Air Base (Italy) (LIPC)"
   },
@@ -8990,7 +8997,7 @@
   },
   {
     "id": "LIPI",
-   
+    "id2": "LIPI",
     "british": false,
     "label": "Rivolto Air Base (Italy) (LIPI)"
   },
@@ -9002,13 +9009,13 @@
   },
   {
     "id": "LIPL",
-   
+    "id2": "LIPL",
     "british": false,
     "label": "Ghedi Air Base (Italy) (LIPL)"
   },
   {
     "id": "LIPN",
-   
+    "id2": "LIPN",
     "british": false,
     "label": "Verona-Boscomantico Airport (Italy) (LIPN)"
   },
@@ -9032,7 +9039,7 @@
   },
   {
     "id": "LIPS",
-   
+    "id2": "LIPS",
     "british": false,
     "label": "Istrana Air Base (Italy) (LIPS)"
   },
@@ -9074,7 +9081,7 @@
   },
   {
     "id": "LIRE",
-   
+    "id2": "LIRE",
     "british": false,
     "label": "Pratica Di Mare Air Base (Italy) (LIRE)"
   },
@@ -9086,7 +9093,7 @@
   },
   {
     "id": "LIRG",
-   
+    "id2": "LIRG",
     "british": false,
     "label": "Guidonia Air Base (Italy) (LIRG)"
   },
@@ -9104,7 +9111,7 @@
   },
   {
     "id": "LIRM",
-   
+    "id2": "LIRM",
     "british": false,
     "label": "Grazzanise Air Base (Italy) (LIRM)"
   },
@@ -9134,13 +9141,13 @@
   },
   {
     "id": "LIRU",
-   
+    "id2": "LIRU",
     "british": false,
     "label": "Urbe Airport (Italy) (LIRU)"
   },
   {
     "id": "LIRV",
-   
+    "id2": "LIRV",
     "british": false,
     "label": "Viterbo Airport (Italy) (LIRV)"
   },
@@ -9152,7 +9159,7 @@
   },
   {
     "id": "LJCE",
-   
+    "id2": "LJCE",
     "british": false,
     "label": "Cerklje Airport (Slovenia) (LJCE)"
   },
@@ -9176,7 +9183,7 @@
   },
   {
     "id": "LJSG",
-   
+    "id2": "LJSG",
     "british": false,
     "label": "Slovenj Gradec Airport (Slovenia) (LJSG)"
   },
@@ -9200,13 +9207,13 @@
   },
   {
     "id": "LKHV",
-   
+    "id2": "LKHV",
     "british": false,
     "label": "Ho≈ôovice Airport (Czech Republic) (LKHV)"
   },
   {
     "id": "LKKB",
-   
+    "id2": "LKKB",
     "british": false,
     "label": "Kbely Air Base (Czech Republic) (LKKB)"
   },
@@ -9242,7 +9249,7 @@
   },
   {
     "id": "LKNA",
-   
+    "id2": "LKNA",
     "british": false,
     "label": "N√°mƒõ≈°≈• Air Base (Czech Republic) (LKNA)"
   },
@@ -9296,13 +9303,13 @@
   },
   {
     "id": "LLEK",
-    "id2": "ael",
+    "id2": "LLEK",
     "british": false,
     "label": "Tel Nof Air Base (Israel) (LLEK)"
   },
   {
     "id": "LLES",
-    "id2": "ael",
+    "id2": "LLES",
     "british": false,
     "label": "Ein Shemer Airfield (Israel) (LLES)"
   },
@@ -9428,7 +9435,7 @@
   },
   {
     "id": "LOXZ",
-   
+    "id2": "LOXZ",
     "british": false,
     "label": "Hinterstoisser Air Base (Austria) (LOXZ)"
   },
@@ -9464,7 +9471,7 @@
   },
   {
     "id": "LPCO",
-   
+    "id2": "LPCO",
     "british": false,
     "label": "Aerodromo Municipal de Coimbra (Portugal) (LPCO)"
   },
@@ -9476,7 +9483,7 @@
   },
   {
     "id": "LPCV",
-   
+    "id2": "LPCV",
     "british": false,
     "label": "Coimbra Hospital Cov√µes Heliport (Portugal) (LPCV)"
   },
@@ -9716,7 +9723,7 @@
   },
   {
     "id": "LSGC",
-   
+    "id2": "LSGC",
     "british": false,
     "label": "Les Eplatures Airport (Switzerland) (LSGC)"
   },
@@ -9728,7 +9735,7 @@
   },
   {
     "id": "LSGK",
-   
+    "id2": "LSGK",
     "british": false,
     "label": "Saanen Airport (Switzerland) (LSGK)"
   },
@@ -9740,13 +9747,13 @@
   },
   {
     "id": "LSMA",
-   
+    "id2": "LSMA",
     "british": false,
     "label": "Alpnach Air Base (Switzerland) (LSMA)"
   },
   {
     "id": "LSMD",
-   
+    "id2": "LSMD",
     "british": false,
     "label": "D√ºbendorf Air Base (Switzerland) (LSMD)"
   },
@@ -9758,19 +9765,19 @@
   },
   {
     "id": "LSMF",
-   
+    "id2": "LSMF",
     "british": false,
     "label": "Mollis Airport (Switzerland) (LSMF)"
   },
   {
     "id": "LSMM",
-   
+    "id2": "LSMM",
     "british": false,
     "label": "Meiringen Airport (Switzerland) (LSMM)"
   },
   {
     "id": "LSMP",
-   
+    "id2": "LSMP",
     "british": false,
     "label": "Payerne Air Base (Switzerland) (LSMP)"
   },
@@ -9878,7 +9885,7 @@
   },
   {
     "id": "LTAO",
-    "id2": "key",
+    "id2": "LTAO",
     "british": false,
     "label": "Malatya Tulga Airport (Turkey) (LTAO)"
   },
@@ -9908,7 +9915,7 @@
   },
   {
     "id": "LTAV",
-   
+    "id2": "LTAV",
     "british": false,
     "label": "Sivrihisar Airport (Turkey) (LTAV)"
   },
@@ -9968,13 +9975,13 @@
   },
   {
     "id": "LTBM",
-    "id2": "key",
+    "id2": "LTBM",
     "british": false,
     "label": "Isparta Airport (Turkey) (LTBM)"
   },
   {
     "id": "LTBN",
-    "id2": "key",
+    "id2": "LTBN",
     "british": false,
     "label": "K√ºtahya Airport (Turkey) (LTBN)"
   },
@@ -10070,7 +10077,7 @@
   },
   {
     "id": "LTFB",
-   
+    "id2": "LTFB",
     "british": false,
     "label": "Sel√ßuk Efes Airport (Turkey) (LTFB)"
   },
@@ -10136,7 +10143,7 @@
   },
   {
     "id": "LYVR",
-   
+    "id2": "LYVR",
     "british": false,
     "label": "Vr≈°ac International Airport (Serbia) (LYVR)"
   },
@@ -10154,15 +10161,15 @@
   },
   {
     "id": "LZMC",
-    "id2": "kia",
+    "id2": "LZMC",
     "british": false,
-    "label": "Kuchy≈àa Air Base (Slovakia) (LZMC)"
+    "label": "Kuchyňa Air Base (Slovakia) (LZMC)"
   },
   {
     "id": "PZY",
     "id2": "LZPP",
     "british": false,
-    "label": "Pie≈°≈•any Airport (Slovakia) (LZPP / PZY)"
+    "label": "Piešťany Airport (Slovakia) (LZPP / PZY)"
   },
   {
     "id": "SLD",
@@ -10172,9 +10179,9 @@
   },
   {
     "id": "LZTN",
-    "id2": "kia",
+    "id2": "LZTN",
     "british": false,
-    "label": "Trenƒç√≠n Airport (Slovakia) (LZTN)"
+    "label": "Trenčín Airport (Slovakia) (LZTN)"
   },
   {
     "id": "TAT",
@@ -10898,13 +10905,13 @@
   },
   {
     "id": "MREC",
-   
+    "id2": "MREC",
     "british": false,
     "label": "El Carmen de Siquirres Airport (Costa Rica) (MREC)"
   },
   {
     "id": "MRFI",
-   
+    "id2": "MRFI",
     "british": false,
     "label": "Finca 10 / Nuevo Palmar Sur Airport (Costa Rica) (MRFI)"
   },
@@ -10952,7 +10959,7 @@
   },
   {
     "id": "MRPD",
-   
+    "id2": "MRPD",
     "british": false,
     "label": "Pandora Airport (Costa Rica) (MRPD)"
   },
@@ -10970,7 +10977,7 @@
   },
   {
     "id": "MRSG",
-   
+    "id2": "MRSG",
     "british": false,
     "label": "Santa Clara De Guapiles Airport (Costa Rica) (MRSG)"
   },
@@ -10988,7 +10995,7 @@
   },
   {
     "id": "MSSS",
-   
+    "id2": "MSSS",
     "british": false,
     "label": "Ilopango International Airport (El Salvador) (MSSS)"
   },
@@ -11132,7 +11139,7 @@
   },
   {
     "id": "MUSA",
-   
+    "id2": "MUSA",
     "british": false,
     "label": "San Antonio De Los Banos Airport (Cuba) (MUSA)"
   },
@@ -11144,7 +11151,7 @@
   },
   {
     "id": "MUSL",
-   
+    "id2": "MUSL",
     "british": false,
     "label": "Joaqu√≠n de Ag√ºero Airport (Cuba) (MUSL)"
   },
@@ -11768,13 +11775,13 @@
   },
   {
     "id": "NZRU",
-   
+    "id2": "NZRU",
     "british": false,
     "label": "Waiouru Airport (New Zealand) (NZRU)"
   },
   {
     "id": "NZSP",
-   
+    "id2": "NZSP",
     "british": false,
     "label": "South Pole Station Airport (Antarctica) (NZSP)"
   },
@@ -11804,7 +11811,7 @@
   },
   {
     "id": "NZWD",
-   
+    "id2": "NZWD",
     "british": false,
     "label": "Williams Field (Antarctica) (NZWD)"
   },
@@ -11816,7 +11823,7 @@
   },
   {
     "id": "NZWG",
-   
+    "id2": "NZWG",
     "british": false,
     "label": "Wigram Airport (New Zealand) (NZWG)"
   },
@@ -11840,7 +11847,7 @@
   },
   {
     "id": "NZWP",
-   
+    "id2": "NZWP",
     "british": false,
     "label": "RNZAF Base Auckland-Whenuapai (New Zealand) (NZWP)"
   },
@@ -11906,7 +11913,7 @@
   },
   {
     "id": "OASG",
-   
+    "id2": "OASG",
     "british": false,
     "label": "Sheberghan Airport (Afghanistan) (OASG)"
   },
@@ -11924,7 +11931,7 @@
   },
   {
     "id": "OBBS",
-   
+    "id2": "OBBS",
     "british": false,
     "label": "Sheik Isa Air Base (Bahrain) (OBBS)"
   },
@@ -11954,7 +11961,7 @@
   },
   {
     "id": "OEBQ",
-   
+    "id2": "OEBQ",
     "british": false,
     "label": "Abqaiq Airport (Saudi Arabia) (OEBQ)"
   },
@@ -12002,7 +12009,7 @@
   },
   {
     "id": "OEJF",
-   
+    "id2": "OEJF",
     "british": false,
     "label": "King Faisal Naval Base (Saudi Arabia) (OEJF)"
   },
@@ -12038,25 +12045,25 @@
   },
   {
     "id": "OEPC",
-   
+    "id2": "OEPC",
     "british": false,
     "label": "Pump Station 3 Airport (Saudi Arabia) (OEPC)"
   },
   {
     "id": "OEPF",
-   
+    "id2": "OEPF",
     "british": false,
     "label": "Pump Station 6 Airport (Saudi Arabia) (OEPF)"
   },
   {
     "id": "OEPJ",
-   
+    "id2": "OEPJ",
     "british": false,
     "label": "Pump Station 10 Airport (Saudi Arabia) (OEPJ)"
   },
   {
     "id": "OERB",
-   
+    "id2": "OERB",
     "british": false,
     "label": "Rabigh Airport (Saudi Arabia) (OERB)"
   },
@@ -12074,7 +12081,7 @@
   },
   {
     "id": "OERM",
-   
+    "id2": "OERM",
     "british": false,
     "label": "Ras Mishab Airport (Saudi Arabia) (OERM)"
   },
@@ -12086,7 +12093,7 @@
   },
   {
     "id": "OERT",
-   
+    "id2": "OERT",
     "british": false,
     "label": "Ras Tanura Airport (Saudi Arabia) (OERT)"
   },
@@ -12116,13 +12123,13 @@
   },
   {
     "id": "OETH",
-   
+    "id2": "OETH",
     "british": false,
     "label": "Thumamah Airport (Saudi Arabia) (OETH)"
   },
   {
     "id": "OETN",
-   
+    "id2": "OETN",
     "british": false,
     "label": "Ras Tanajib Airport (Saudi Arabia) (OETN)"
   },
@@ -12170,7 +12177,7 @@
   },
   {
     "id": "OIAI",
-   
+    "id2": "OIAI",
     "british": false,
     "label": "Shahid Asyaee Airport (Iran) (OIAI)"
   },
@@ -12206,13 +12213,13 @@
   },
   {
     "id": "OIBH",
-   
+    "id2": "OIBH",
     "british": false,
     "label": "Bastak Airport (Iran) (OIBH)"
   },
   {
     "id": "OIBI",
-   
+    "id2": "OIBI",
     "british": false,
     "label": "Asaloyeh Airport (Iran) (OIBI)"
   },
@@ -12266,7 +12273,7 @@
   },
   {
     "id": "OIFH",
-   
+    "id2": "OIFH",
     "british": false,
     "label": "Shahid Vatan Pour Air Base (Iran) (OIFH)"
   },
@@ -12284,7 +12291,7 @@
   },
   {
     "id": "OIFP",
-   
+    "id2": "OIFP",
     "british": false,
     "label": "Badr Air Base (Iran) (OIFP)"
   },
@@ -12302,25 +12309,25 @@
   },
   {
     "id": "OIIA",
-   
+    "id2": "OIIA",
     "british": false,
     "label": "Ghazvin Azadi Airport (Iran) (OIIA)"
   },
   {
     "id": "OIIC",
-   
+    "id2": "OIIC",
     "british": false,
     "label": "Kushke Nosrat Airport (Iran) (OIIC)"
   },
   {
     "id": "OIID",
-   
+    "id2": "OIID",
     "british": false,
     "label": "Doshan Tappeh Air Base (Iran) (OIID)"
   },
   {
     "id": "OIIG",
-   
+    "id2": "OIIG",
     "british": false,
     "label": "Ghale Morghi Airport (Iran) (OIIG)"
   },
@@ -12338,7 +12345,7 @@
   },
   {
     "id": "OIIM",
-   
+    "id2": "OIIM",
     "british": false,
     "label": "Naja Airport (Iran) (OIIM)"
   },
@@ -12368,7 +12375,7 @@
   },
   {
     "id": "OIKQ",
-   
+    "id2": "OIKQ",
     "british": false,
     "label": "Dayrestan Airport (Iran) (OIKQ)"
   },
@@ -12692,7 +12699,7 @@
   },
   {
     "id": "OPLH",
-   
+    "id2": "OPLH",
     "british": false,
     "label": "Walton Airport (Pakistan) (OPLH)"
   },
@@ -12722,7 +12729,7 @@
   },
   {
     "id": "OPMR",
-   
+    "id2": "OPMR",
     "british": false,
     "label": "Masroor Air Base (Pakistan) (OPMR)"
   },
@@ -12740,7 +12747,7 @@
   },
   {
     "id": "OPOK",
-   
+    "id2": "OPOK",
     "british": false,
     "label": "Okara Cantonment Airstrip (Pakistan) (OPOK)"
   },
@@ -12764,7 +12771,7 @@
   },
   {
     "id": "OPQS",
-   
+    "id2": "OPQS",
     "british": false,
     "label": "Qasim Airport (Pakistan) (OPQS)"
   },
@@ -12782,13 +12789,13 @@
   },
   {
     "id": "OPRN",
-   
+    "id2": "OPRN",
     "british": false,
     "label": "Benazir Bhutto International Airport (Pakistan) (OPRN)"
   },
   {
     "id": "OPRS",
-   
+    "id2": "OPRS",
     "british": false,
     "label": "Risalpur Air Base (Pakistan) (OPRS)"
   },
@@ -12980,13 +12987,13 @@
   },
   {
     "id": "RCDC",
-   
+    "id2": "RCDC",
     "british": false,
     "label": "Pingtung South Airport (Taiwan) (RCDC)"
   },
   {
     "id": "RCDI",
-   
+    "id2": "RCDI",
     "british": false,
     "label": "Longtan Air Base (Taiwan) (RCDI)"
   },
@@ -13046,7 +13053,7 @@
   },
   {
     "id": "RCQS",
-   
+    "id2": "RCQS",
     "british": false,
     "label": "Chihhang Air Base (Taiwan) (RCQS)"
   },
@@ -13118,7 +13125,7 @@
   },
   {
     "id": "RJBK",
-   
+    "id2": "RJBK",
     "british": false,
     "label": "Kohnan Airport (Japan) (RJBK)"
   },
@@ -13142,7 +13149,7 @@
   },
   {
     "id": "RJCJ",
-   
+    "id2": "RJCJ",
     "british": false,
     "label": "Chitose Air Base (Japan) (RJCJ)"
   },
@@ -13160,7 +13167,7 @@
   },
   {
     "id": "RJCT",
-   
+    "id2": "RJCT",
     "british": false,
     "label": "Tokachi Airport (Japan) (RJCT)"
   },
@@ -13188,7 +13195,7 @@
     "british": false,
     "label": "Tsushima Airport (Japan) (RJDT / TSJ)"
   },
-  {
+{
     "id": "MBE",
     "id2": "RJEB",
     "british": false,
@@ -13214,7 +13221,7 @@
   },
   {
     "id": "RJFA",
-   
+    "id2": "RJFA",
     "british": false,
     "label": "Ashiya Airport (Japan) (RJFA)"
   },
@@ -13256,7 +13263,7 @@
   },
   {
     "id": "RJFN",
-   
+    "id2": "RJFN",
     "british": false,
     "label": "Nyutabaru Airport (Japan) (RJFN)"
   },
@@ -13286,13 +13293,13 @@
   },
   {
     "id": "RJFY",
-   
+    "id2": "RJFY",
     "british": false,
     "label": "Kanoya Airport (Japan) (RJFY)"
   },
   {
     "id": "RJFZ",
-   
+    "id2": "RJFZ",
     "british": false,
     "label": "Tsuiki Air Field (Japan) (RJFZ)"
   },
@@ -13328,7 +13335,7 @@
   },
   {
     "id": "RJNH",
-   
+    "id2": "RJNH",
     "british": false,
     "label": "Hamamatsu Airport (Japan) (RJNH)"
   },
@@ -13352,7 +13359,7 @@
   },
   {
     "id": "RJNY",
-   
+    "id2": "RJNY",
     "british": false,
     "label": "Shizuhama Airport (Japan) (RJNY)"
   },
@@ -13376,7 +13383,7 @@
   },
   {
     "id": "RJOF",
-   
+    "id2": "RJOF",
     "british": false,
     "label": "Hofu Airport (Japan) (RJOF)"
   },
@@ -13424,13 +13431,13 @@
   },
   {
     "id": "RJOY",
-   
+    "id2": "RJOY",
     "british": false,
     "label": "Yao Airport (Japan) (RJOY)"
   },
   {
     "id": "RJOZ",
-   
+    "id2": "RJOZ",
     "british": false,
     "label": "Ozuki Airport (Japan) (RJOZ)"
   },
@@ -13484,7 +13491,7 @@
   },
   {
     "id": "RJST",
-   
+    "id2": "RJST",
     "british": false,
     "label": "Matsushima Air Base (Japan) (RJST)"
   },
@@ -13496,7 +13503,7 @@
   },
   {
     "id": "RJTE",
-   
+    "id2": "RJTE",
     "british": false,
     "label": "Tateyama Airport (Japan) (RJTE)"
   },
@@ -13508,19 +13515,19 @@
   },
   {
     "id": "RJTJ",
-   
+    "id2": "RJTJ",
     "british": false,
     "label": "Iruma Air Base (Japan) (RJTJ)"
   },
   {
     "id": "RJTK",
-   
+    "id2": "RJTK",
     "british": false,
     "label": "Kisarazu Airport (Japan) (RJTK)"
   },
   {
     "id": "RJTL",
-   
+    "id2": "RJTL",
     "british": false,
     "label": "Shimofusa Airport (Japan) (RJTL)"
   },
@@ -13532,7 +13539,7 @@
   },
   {
     "id": "RJTR",
-   
+    "id2": "RJTR",
     "british": false,
     "label": "Kastner Army Heliport (Japan) (RJTR)"
   },
@@ -13658,7 +13665,7 @@
   },
   {
     "id": "RODE",
-   
+    "id2": "RODE",
     "british": false,
     "label": "Ie Shima Auxiliary Air Base (Japan) (RODE)"
   },
@@ -13718,7 +13725,7 @@
   },
   {
     "id": "ROTM",
-   
+    "id2": "ROTM",
     "british": false,
     "label": "Futenma Marine Corps Air Station (Japan) (ROTM)"
   },
@@ -14156,9 +14163,9 @@
   },
   {
     "id": "SATO",
-    "id2": "ina",
+    "id2": "SATO",
     "british": false,
-    "label": "Ober√° Airport (Argentina) (SATO)"
+    "label": "Oberá Airport (Argentina) (SATO)"
   },
   {
     "id": "RCQ",
@@ -14210,7 +14217,7 @@
   },
   {
     "id": "SAWB",
-   
+    "id2": "SAWB",
     "british": false,
     "label": "Marambio Base (Antarctica) (SAWB)"
   },
@@ -14288,7 +14295,7 @@
   },
   {
     "id": "SAZI",
-    "id2": "ina",
+    "id2": "SAZI",
     "british": false,
     "label": "Bolivar Airport (Argentina) (SAZI)"
   },
@@ -14386,13 +14393,13 @@
     "id": "ARU",
     "id2": "SBAU",
     "british": false,
-    "label": "Ara√ßatuba Airport (Brazil) (SBAU / ARU)"
+    "label": "Araçatuba Airport (Brazil) (SBAU / ARU)"
   },
   {
     "id": "BEL",
     "id2": "SBBE",
     "british": false,
-    "label": "Val de Cans/J√∫lio Cezar Ribeiro International Airport (Brazil) (SBBE / BEL)"
+    "label": "Val-de-Cans-Júlio Cezar Ribeiro International Airport (Brazil) (SBBE / BEL)"
   },
   {
     "id": "BGX",
@@ -14440,7 +14447,7 @@
     "id": "BPG",
     "id2": "SBBW",
     "british": false,
-    "label": "Barra do Gar√ßas Airport (Brazil) (SBBW / BPG)"
+    "label": "Barra do Garças Airport (Brazil) (SBBW / BPG)"
   },
   {
     "id": "CAC",
@@ -14500,7 +14507,7 @@
     "id": "CMG",
     "id2": "SBCR",
     "british": false,
-    "label": "Corumb√° International Airport (Brazil) (SBCR / CMG)"
+    "label": "Corumbá International Airport  (Brazil) (SBCR / CMG)"
   },
   {
     "id": "CWB",
@@ -14554,7 +14561,7 @@
     "id": "SBES",
     "id2": "SBES",
     "british": false,
-    "label": "S√£o Pedro da Aldeia Airport (Brazil) (SBES)"
+    "label": "Sao Pedro da Aldeia Airport (Brazil) (SBES)"
   },
   {
     "id": "IGU",
@@ -14566,7 +14573,7 @@
     "id": "FLN",
     "id2": "SBFL",
     "british": false,
-    "label": "Herc√≠lio Luz International Airport (Brazil) (SBFL / FLN)"
+    "label": "Hercílio Luz International Airport (Brazil) (SBFL / FLN)"
   },
   {
     "id": "FEN",
@@ -14590,13 +14597,13 @@
     "id": "GIG",
     "id2": "SBGL",
     "british": false,
-    "label": "Rio Gale√£o ‚Äì Tom Jobim International Airport (Brazil) (SBGL / GIG)"
+    "label": "Galeão-Antonio Carlos Jobim International Airport (Brazil) (SBGL / GIG)"
   },
   {
     "id": "GJM",
     "id2": "SBGM",
     "british": false,
-    "label": "Guajar√°-Mirim Airport (Brazil) (SBGM / GJM)"
+    "label": "Guajará-Mirim Airport (Brazil) (SBGM / GJM)"
   },
   {
     "id": "GYN",
@@ -14614,13 +14621,13 @@
     "id": "GRU",
     "id2": "SBGR",
     "british": false,
-    "label": "Guarulhos - Governador Andr√© Franco Montoro International Airport (Brazil) (SBGR / GRU)"
+    "label": "Guarulhos - Governador André Franco Montoro International Airport (Brazil) (SBGR / GRU)"
   },
   {
     "id": "GUJ",
     "id2": "SBGW",
     "british": false,
-    "label": "Guaratinguet√° Airport (Brazil) (SBGW / GUJ)"
+    "label": "Guaratinguetá Airport (Brazil) (SBGW / GUJ)"
   },
   {
     "id": "ATM",
@@ -14668,7 +14675,7 @@
     "id": "SBJC",
     "id2": "SBJC",
     "british": false,
-    "label": "Bel√©m/Brigadeiro Prot√°sio de Oliveira Airport (Brazil) (SBJC)"
+    "label": "Protásio de Oliveira Airport (Brazil) (SBJC)"
   },
   {
     "id": "JDF",
@@ -14734,7 +14741,7 @@
     "id": "MAB",
     "id2": "SBMA",
     "british": false,
-    "label": "Jo√£o Correa da Rocha Airport (Brazil) (SBMA / MAB)"
+    "label": "João Correa da Rocha Airport (Brazil) (SBMA / MAB)"
   },
   {
     "id": "MEU",
@@ -14746,13 +14753,13 @@
     "id": "MGF",
     "id2": "SBMG",
     "british": false,
-    "label": "Regional de Maring√° - S√≠lvio Nane Junior Airport (Brazil) (SBMG / MGF)"
+    "label": "Regional de Maringa - Sílvio Name Júnior Regional Airport  (Brazil) (SBMG / MGF)"
   },
   {
     "id": "MOC",
     "id2": "SBMK",
     "british": false,
-    "label": "M√°rio Ribeiro Airport (Brazil) (SBMK / MOC)"
+    "label": "Mário Ribeiro Airport  (Brazil) (SBMK / MOC)"
   },
   {
     "id": "PLL",
@@ -14788,7 +14795,7 @@
     "id": "MNX",
     "id2": "SBMY",
     "british": false,
-    "label": "Manicor√© Airport (Brazil) (SBMY / MNX)"
+    "label": "Manicoré Airport   (Brazil) (SBMY / MNX)"
   },
   {
     "id": "NVT",
@@ -14800,13 +14807,13 @@
     "id": "GEL",
     "id2": "SBNM",
     "british": false,
-    "label": "Santo √Çngelo Airport (Brazil) (SBNM / GEL)"
+    "label": "Santo Ângelo Airport (Brazil) (SBNM / GEL)"
   },
   {
     "id": "NAT",
     "id2": "SBSG",
     "british": false,
-    "label": "Governador Alu√≠zio Alves International Airport (Brazil) (SBSG / NAT)"
+    "label": "Governador Aluízio Alves International Airport (Brazil) (SBSG / NAT)"
   },
   {
     "id": "OYK",
@@ -14824,13 +14831,13 @@
     "id": "PHB",
     "id2": "SBPB",
     "british": false,
-    "label": "Prefeito Doutor Jo√£o Silva Filho Airport (Brazil) (SBPB / PHB)"
+    "label": "Prefeito Doutor João Silva Filho Airport (Brazil) (SBPB / PHB)"
   },
   {
     "id": "POO",
     "id2": "SBPC",
     "british": false,
-    "label": "Po√ßos de Caldas - Embaixador Walther Moreira Salles Airport (Brazil) (SBPC / POO)"
+    "label": "Poços de Caldas - Embaixador Walther Moreira Salles Airport (Brazil) (SBPC / POO)"
   },
   {
     "id": "PFB",
@@ -14842,7 +14849,7 @@
     "id": "PET",
     "id2": "SBPK",
     "british": false,
-    "label": "Jo√£o Sim√µes Lopes Neto International Airport (Brazil) (SBPK / PET)"
+    "label": "João Simões Lopes Neto International Airport (Brazil) (SBPK / PET)"
   },
   {
     "id": "PNZ",
@@ -14860,7 +14867,7 @@
     "id": "PMG",
     "id2": "SBPP",
     "british": false,
-    "label": "Ponta Por√£ Airport (Brazil) (SBPP / PMG)"
+    "label": "Ponta Porã Airport (Brazil) (SBPP / PMG)"
   },
   {
     "id": "PVH",
@@ -14872,7 +14879,7 @@
     "id": "RBR",
     "id2": "SBRB",
     "british": false,
-    "label": "Pl√°cido de Castro Airport (Brazil) (SBRB / RBR)"
+    "label": "Plácido de Castro Airport (Brazil) (SBRB / RBR)"
   },
   {
     "id": "REC",
@@ -14932,7 +14939,7 @@
     "id": "SSA",
     "id2": "SBSV",
     "british": false,
-    "label": "Deputado Luiz Eduardo Magalh√£es International Airport (Brazil) (SBSV / SSA)"
+    "label": "Deputado Luiz Eduardo Magalhães International Airport (Brazil) (SBSV / SSA)"
   },
   {
     "id": "TMT",
@@ -14950,25 +14957,25 @@
     "id": "TFF",
     "id2": "SBTF",
     "british": false,
-    "label": "Tef√© Airport (Brazil) (SBTF / TFF)"
+    "label": "Tefé Airport (Brazil) (SBTF / TFF)"
   },
   {
     "id": "TRQ",
     "id2": "SBTK",
     "british": false,
-    "label": "Tarauac√° Airport (Brazil) (SBTK / TRQ)"
+    "label": "Tarauacá  Airport (Brazil) (SBTK / TRQ)"
   },
   {
     "id": "TEC",
     "id2": "SBTL",
     "british": false,
-    "label": "Tel√™maco Borba Airport (Brazil) (SBTL / TEC)"
+    "label": "Telêmaco Borba Airport (Brazil) (SBTL / TEC)"
   },
   {
     "id": "SBTS",
     "id2": "SBTS",
     "british": false,
-    "label": "Tiri√≥s Airport (Brazil) (SBTS)"
+    "label": "Tiriós Airport (Brazil) (SBTS)"
   },
   {
     "id": "TBT",
@@ -14980,13 +14987,13 @@
     "id": "TUR",
     "id2": "SBTU",
     "british": false,
-    "label": "Tucuru√≠ Airport (Brazil) (SBTU / TUR)"
+    "label": "Tucuruí Airport (Brazil) (SBTU / TUR)"
   },
   {
     "id": "SJL",
     "id2": "SBUA",
     "british": false,
-    "label": "S√£o Gabriel da Cachoeira Airport (Brazil) (SBUA / SJL)"
+    "label": "São Gabriel da Cachoeira Airport (Brazil) (SBUA / SJL)"
   },
   {
     "id": "PAV",
@@ -15004,13 +15011,13 @@
     "id": "UDI",
     "id2": "SBUL",
     "british": false,
-    "label": "Ten. Cel. Aviador C√©sar Bombonato Airport (Brazil) (SBUL / UDI)"
+    "label": "Ten. Cel. Aviador César Bombonato Airport (Brazil) (SBUL / UDI)"
   },
   {
     "id": "UBA",
     "id2": "SBUR",
     "british": false,
-    "label": "M√°rio de Almeida Franco Airport (Brazil) (SBUR / UBA)"
+    "label": "Mário de Almeida Franco Airport (Brazil) (SBUR / UBA)"
   },
   {
     "id": "VAG",
@@ -15056,7 +15063,7 @@
   },
   {
     "id": "SCBQ",
-   
+    "id2": "SCBQ",
     "british": false,
     "label": "El Bosque Airport (Chile) (SCBQ)"
   },
@@ -15106,7 +15113,7 @@
     "id": "ANF",
     "id2": "SCFA",
     "british": false,
-    "label": "Andr√©s Sabella G√°lvez International Airport (Chile) (SCFA / ANF)"
+    "label": "Andrés Sabella Gálvez International Airport (Chile) (SCFA / ANF)"
   },
   {
     "id": "WPR",
@@ -15118,19 +15125,19 @@
     "id": "FFU",
     "id2": "SCFT",
     "british": false,
-    "label": "Futaleuf√∫ Airport (Chile) (SCFT / FFU)"
+    "label": "Futaleufú Airport (Chile) (SCFT / FFU)"
   },
   {
     "id": "LSQ",
     "id2": "SCGE",
     "british": false,
-    "label": "Mar√≠a Dolores Airport (Chile) (SCGE / LSQ)"
+    "label": "María Dolores Airport (Chile) (SCGE / LSQ)"
   },
   {
     "id": "WPU",
     "id2": "SCGZ",
     "british": false,
-    "label": "Guardiamarina Za√±artu Airport (Chile) (SCGZ / WPU)"
+    "label": "Guardiamarina Zañartu Airport (Chile) (SCGZ / WPU)"
   },
   {
     "id": "CCP",
@@ -15148,7 +15155,7 @@
     "id": "ZOS",
     "id2": "SCJO",
     "british": false,
-    "label": "Ca√±al Bajo Carlos - Hott Siebert Airport (Chile) (SCJO / ZOS)"
+    "label": "Cañal Bajo Carlos - Hott Siebert Airport (Chile) (SCJO / ZOS)"
   },
   {
     "id": "VLR",
@@ -15176,9 +15183,9 @@
   },
   {
     "id": "SCTB",
-   
+    "id2": "SCTB",
     "british": false,
-    "label": "Eulogio S√°nchez Airport (Chile) (SCTB)"
+    "label": "Eulogio Sánchez Airport (Chile) (SCTB)"
   },
   {
     "id": "PZS",
@@ -15208,11 +15215,11 @@
     "id": "ATF",
     "id2": "SEAM",
     "british": false,
-    "label": "Chacho√°n Airport (Ecuador) (SEAM / ATF)"
+    "label": "Chachoán Airport (Ecuador) (SEAM / ATF)"
   },
   {
     "id": "SECM",
-   
+    "id2": "SECM",
     "british": false,
     "label": "Hacienda Clementina Airport (Ecuador) (SECM)"
   },
@@ -15238,29 +15245,29 @@
     "id": "GYE",
     "id2": "SEGU",
     "british": false,
-    "label": "Jos√© Joaqu√≠n de Olmedo International Airport (Ecuador) (SEGU / GYE)"
+    "label": "José Joaquín de Olmedo International Airport (Ecuador) (SEGU / GYE)"
   },
   {
     "id": "SEGZ",
-   
+    "id2": "SEGZ",
     "british": false,
     "label": "Gualaquiza Airport (Ecuador) (SEGZ)"
   },
   {
     "id": "SEIB",
-   
+    "id2": "SEIB",
     "british": false,
     "label": "Atahualpa Airport (Ecuador) (SEIB)"
   },
   {
     "id": "SEKK",
-   
+    "id2": "SEKK",
     "british": false,
     "label": "Km 192 Airport (Ecuador) (SEKK)"
   },
   {
     "id": "SELJ",
-   
+    "id2": "SELJ",
     "british": false,
     "label": "Hacienda La Julia Airport (Ecuador) (SELJ)"
   },
@@ -15290,7 +15297,7 @@
   },
   {
     "id": "SEMO",
-   
+    "id2": "SEMO",
     "british": false,
     "label": "El Carmen Airport (Ecuador) (SEMO)"
   },
@@ -15302,13 +15309,13 @@
   },
   {
     "id": "SEMX",
-   
+    "id2": "SEMX",
     "british": false,
     "label": "Maragrosa Airport (Ecuador) (SEMX)"
   },
   {
     "id": "SEPS",
-   
+    "id2": "SEPS",
     "british": false,
     "label": "Amable Calle Gutierrez Airport (Ecuador) (SEPS)"
   },
@@ -15320,7 +15327,7 @@
   },
   {
     "id": "SEQE",
-   
+    "id2": "SEQE",
     "british": false,
     "label": "Quevedo Airport (Ecuador) (SEQE)"
   },
@@ -15332,7 +15339,7 @@
   },
   {
     "id": "SERB",
-   
+    "id2": "SERB",
     "british": false,
     "label": "Chimborazo Airport (Ecuador) (SERB)"
   },
@@ -15350,19 +15357,19 @@
   },
   {
     "id": "SESD",
-   
+    "id2": "SESD",
     "british": false,
     "label": "Santo Domingo de Los Colorados Airport (Ecuador) (SESD)"
   },
   {
     "id": "SETA",
-   
+    "id2": "SETA",
     "british": false,
     "label": "Taura Airport (Ecuador) (SETA)"
   },
   {
     "id": "SETE",
-   
+    "id2": "SETE",
     "british": false,
     "label": "Mayor Galo Torres Airport (Ecuador) (SETE)"
   },
@@ -15518,7 +15525,7 @@
   },
   {
     "id": "SKGY",
-   
+    "id2": "SKGY",
     "british": false,
     "label": "Guaymaral Airport (Colombia) (SKGY)"
   },
@@ -15652,7 +15659,7 @@
     "id": "MDE",
     "id2": "SKRG",
     "british": false,
-    "label": "Jose Maria C√≥rdova International Airport (Colombia) (SKRG / MDE)"
+    "label": "Jose Maria Córdova International Airport (Colombia) (SKRG / MDE)"
   },
   {
     "id": "RCH",
@@ -15670,7 +15677,7 @@
     "id": "SMR",
     "id2": "SKSM",
     "british": false,
-    "label": "Sim√≥n Bol√≠var International Airport (Colombia) (SKSM / SMR)"
+    "label": "Simón Bolívar International Airport (Colombia) (SKSM / SMR)"
   },
   {
     "id": "ADZ",
@@ -15700,19 +15707,19 @@
     "id": "UIB",
     "id2": "SKUI",
     "british": false,
-    "label": "El Cara√±o Airport (Colombia) (SKUI / UIB)"
+    "label": "El Caraño Airport (Colombia) (SKUI / UIB)"
   },
   {
     "id": "ULQ",
     "id2": "SKUL",
     "british": false,
-    "label": "Heriberto G√≠l Mart√≠nez Airport (Colombia) (SKUL / ULQ)"
+    "label": "Heriberto Gíl Martínez Airport (Colombia) (SKUL / ULQ)"
   },
   {
     "id": "VUP",
     "id2": "SKVP",
     "british": false,
-    "label": "Alfonso L√≥pez Pumarejo Airport (Colombia) (SKVP / VUP)"
+    "label": "Alfonso López Pumarejo Airport (Colombia) (SKVP / VUP)"
   },
   {
     "id": "VVC",
@@ -15742,7 +15749,7 @@
     "id": "CIJ",
     "id2": "SLCO",
     "british": false,
-    "label": "Capit√°n An√≠bal Arab Airport (Bolivia) (SLCO / CIJ)"
+    "label": "Capitán Aníbal Arab Airport (Bolivia) (SLCO / CIJ)"
   },
   {
     "id": "LPB",
@@ -15766,7 +15773,7 @@
     "id": "PSZ",
     "id2": "SLPS",
     "british": false,
-    "label": "Capit√°n Av. Salvador Ogaya G. airport (Bolivia) (SLPS / PSZ)"
+    "label": "Capitán Av. Salvador Ogaya G. airport (Bolivia) (SLPS / PSZ)"
   },
   {
     "id": "SBL",
@@ -15796,7 +15803,7 @@
     "id": "VLM",
     "id2": "SLVM",
     "british": false,
-    "label": "Teniente Coronel Rafael Pab√≥n Airport (Bolivia) (SLVM / VLM)"
+    "label": "Teniente Coronel Rafael Pabón Airport (Bolivia) (SLVM / VLM)"
   },
   {
     "id": "VVI",
@@ -15830,7 +15837,7 @@
   },
   {
     "id": "SPAB",
-   
+    "id2": "SPAB",
     "british": false,
     "label": "Huancabamba Airport (Peru) (SPAB)"
   },
@@ -15842,9 +15849,9 @@
   },
   {
     "id": "SPAY",
-   
+    "id2": "SPAY",
     "british": false,
-    "label": "Teniente General Gerardo P√©rez Pinedo Airport (Peru) (SPAY)"
+    "label": "Teniente General Gerardo Pérez Pinedo Airport (Peru) (SPAY)"
   },
   {
     "id": "IBP",
@@ -15866,13 +15873,13 @@
   },
   {
     "id": "SPEP",
-   
+    "id2": "SPEP",
     "british": false,
     "label": "Puerto Esperanza Airport (Peru) (SPEP)"
   },
   {
     "id": "SPEQ",
-   
+    "id2": "SPEQ",
     "british": false,
     "label": "Cesar Torke Podesta Airport (Peru) (SPEQ)"
   },
@@ -15932,7 +15939,7 @@
   },
   {
     "id": "SPLP",
-   
+    "id2": "SPLP",
     "british": false,
     "label": "Las Palmas Air Base (Peru) (SPLP)"
   },
@@ -15950,7 +15957,7 @@
   },
   {
     "id": "SPOL",
-   
+    "id2": "SPOL",
     "british": false,
     "label": "Collique Airport (Peru) (SPOL)"
   },
@@ -15970,13 +15977,13 @@
     "id": "AQP",
     "id2": "SPQU",
     "british": false,
-    "label": "Rodr√≠guez Ball√≥n International Airport (Peru) (SPQU / AQP)"
+    "label": "Rodríguez Ballón International Airport (Peru) (SPQU / AQP)"
   },
   {
     "id": "SPRM",
-   
+    "id2": "SPRM",
     "british": false,
-    "label": "Capit√°n FAP Leonardo Alvari√±o Herr Airport (Peru) (SPRM)"
+    "label": "Capitán FAP Leonardo Alvari√±o Herr Airport (Peru) (SPRM)"
   },
   {
     "id": "TRU",
@@ -15988,7 +15995,7 @@
     "id": "PIO",
     "id2": "SPSO",
     "british": false,
-    "label": "Capit√°n FAP Ren√°n El√≠as Olivera International Airport (Peru) (SPSO / PIO)"
+    "label": "Capitán FAP Renán Elías Olivera International Airport (Peru) (SPSO / PIO)"
   },
   {
     "id": "TPP",
@@ -16012,7 +16019,7 @@
     "id": "PIU",
     "id2": "SPUR",
     "british": false,
-    "label": "Capit√°n FAP Guillermo Concha Iberico International Airport (Peru) (SPUR / PIU)"
+    "label": "Capitán FAP Guillermo Concha Iberico International Airport (Peru) (SPUR / PIU)"
   },
   {
     "id": "TYL",
@@ -16028,7 +16035,7 @@
   },
   {
     "id": "SUAA",
-    "id2": "uay",
+    "id2": "SUAA",
     "british": false,
     "label": "Angel S Adami Airport (Uruguay) (SUAA)"
   },
@@ -16064,7 +16071,7 @@
   },
   {
     "id": "SVAT",
-    "id2": "ela",
+    "id2": "SVAT",
     "british": false,
     "label": "San Fernando de Atabapo Airport (Venezuela) (SVAT)"
   },
@@ -16072,7 +16079,7 @@
     "id": "BLA",
     "id2": "SVBC",
     "british": false,
-    "label": "General Jos√© Antonio Anzoategui International Airport (Venezuela) (SVBC / BLA)"
+    "label": "General José Antonio Anzoategui International Airport (Venezuela) (SVBC / BLA)"
   },
   {
     "id": "BNS",
@@ -16082,7 +16089,7 @@
   },
   {
     "id": "SVBL",
-    "id2": "ela",
+    "id2": "SVBL",
     "british": false,
     "label": "El Libertador Airbase (Venezuela) (SVBL)"
   },
@@ -16156,7 +16163,7 @@
     "id": "SVCZ",
     "id2": "SVCZ",
     "british": false,
-    "label": "Capit√°n Manuel R√≠os Airbase (Venezuela) (SVCZ)"
+    "label": "Capitán Manuel Ríos Airbase (Venezuela) (SVCZ)"
   },
   {
     "id": "EOR",
@@ -16246,13 +16253,13 @@
     "id": "CCS",
     "id2": "SVMI",
     "british": false,
-    "label": "Sim√≥n Bol√≠var International Airport (Venezuela) (SVMI / CCS)"
+    "label": "Simón Bolívar International Airport (Venezuela) (SVMI / CCS)"
   },
   {
     "id": "MUN",
     "id2": "SVMT",
     "british": false,
-    "label": "Matur√≠n Airport (Venezuela) (SVMT / MUN)"
+    "label": "Maturín Airport (Venezuela) (SVMT / MUN)"
   },
   {
     "id": "PYH",
@@ -16408,13 +16415,13 @@
     "id": "SFG",
     "id2": "TFFG",
     "british": false,
-    "label": "L'Esp√©rance Airport (Guadeloupe) (TFFG / SFG)"
+    "label": "L'Espérance Airport (Guadeloupe) (TFFG / SFG)"
   },
   {
     "id": "PTP",
     "id2": "TFFR",
     "british": false,
-    "label": "Pointe-√†-Pitre Le Raizet (Guadeloupe) (TFFR / PTP)"
+    "label": "Pointe-à-Pitre Le Raizet (Guadeloupe) (TFFR / PTP)"
   },
   {
     "id": "GND",
@@ -17256,7 +17263,7 @@
     "british": false,
     "label": "Stung Treng Airport (Cambodia) (VDST / TNX)"
   },
-  {
+{
     "id": "IXV",
     "id2": "VEAN",
     "british": false,
@@ -17924,6 +17931,7 @@
   },
   {
     "id": "VOTX",
+    "id2": "VOTX",
     "british": false,
     "label": "Tambaram Air Force Station (India) (VOTX)"
   },
@@ -17937,7 +17945,7 @@
     "id": "MLE",
     "id2": "VRMM",
     "british": false,
-    "label": "Mal√© International Airport (Maldives) (VRMM / MLE)"
+    "label": "Malé International Airport (Maldives) (VRMM / MLE)"
   },
   {
     "id": "DMK",
@@ -17953,6 +17961,7 @@
   },
   {
     "id": "VTBL",
+    "id2": "VTBL",
     "british": false,
     "label": "Khok Kathiam Airport (Thailand) (VTBL)"
   },
@@ -17964,6 +17973,7 @@
   },
   {
     "id": "VTBW",
+    "id2": "VTBW",
     "british": false,
     "label": "Watthana Nakhon Airport (Thailand) (VTBW)"
   },
@@ -17993,11 +18003,13 @@
   },
   {
     "id": "VTPL",
+    "id2": "VTPL",
     "british": false,
     "label": "Sak Long Airport (Thailand) (VTPL)"
   },
   {
     "id": "VTPN",
+    "id2": "VTPN",
     "british": false,
     "label": "Nakhon Sawan Airport (Thailand) (VTPN)"
   },
@@ -18009,13 +18021,13 @@
   },
   {
     "id": "VTPY",
-   
+    "id2": "VTPY",
     "british": false,
     "label": "Khunan Phumipol Airport (Thailand) (VTPY)"
   },
   {
     "id": "VTSA",
-   
+    "id2": "VTSA",
     "british": false,
     "label": "Khoun Khan Airport (Thailand) (VTSA)"
   },
@@ -18051,6 +18063,7 @@
   },
   {
     "id": "VTSN",
+    "id2": "VTSN",
     "british": false,
     "label": "Cha Eian Airport (Thailand) (VTSN)"
   },
@@ -18104,12 +18117,13 @@
   },
   {
     "id": "VTUN",
-   
+    "id2": "VTUN",
     "british": false,
     "label": "Khorat Airport (Thailand) (VTUN)"
   },
   {
     "id": "VTUR",
+    "id2": "VTUR",
     "british": false,
     "label": "Rob Muang Airport (Thailand) (VTUR)"
   },
@@ -18121,13 +18135,13 @@
   },
   {
     "id": "VVGL",
-    "id2": "nam",
+    "id2": "VVGL",
     "british": false,
     "label": "Gia Lam Air Base (Vietnam) (VVGL)"
   },
   {
     "id": "VVKP",
-    "id2": "nam",
+    "id2": "VVKP",
     "british": false,
     "label": "Kep Air Base (Vietnam) (VVKP)"
   },
@@ -18169,7 +18183,7 @@
   },
   {
     "id": "VYAS",
-    "id2": "rma",
+    "id2": "VYAS",
     "british": false,
     "label": "Anisakan Airport (Burma) (VYAS)"
   },
@@ -18181,7 +18195,7 @@
   },
   {
     "id": "VYCI",
-    "id2": "rma",
+    "id2": "VYCI",
     "british": false,
     "label": "Coco Island Airport (Burma) (VYCI)"
   },
@@ -18217,6 +18231,7 @@
   },
   {
     "id": "VYLY",
+    "id2": "VYLY",
     "british": false,
     "label": "Lanywa Airport (Burma) (VYLY)"
   },
@@ -18252,7 +18267,7 @@
   },
   {
     "id": "VYNP",
-    "id2": "rma",
+    "id2": "VYNP",
     "british": false,
     "label": "Nampong Air Base (Burma) (VYNP)"
   },
@@ -18282,7 +18297,7 @@
   },
   {
     "id": "VYST",
-    "id2": "rma",
+    "id2": "VYST",
     "british": false,
     "label": "Shante Air Base (Burma) (VYST)"
   },
@@ -18306,6 +18321,7 @@
   },
   {
     "id": "VYTO",
+    "id2": "VYTO",
     "british": false,
     "label": "Taungoo Airport (Burma) (VYTO)"
   },
@@ -18605,7 +18621,7 @@
   },
   {
     "id": "WMAP",
-   
+    "id2": "WMAP",
     "british": false,
     "label": "Kluang Airport (Malaysia) (WMAP)"
   },
@@ -18641,7 +18657,7 @@
   },
   {
     "id": "WMKF",
-   
+    "id2": "WMKF",
     "british": false,
     "label": "Simpang Airport (Malaysia) (WMKF)"
   },
@@ -18707,7 +18723,7 @@
   },
   {
     "id": "WSAG",
-    "id2": "ore",
+    "id2": "WSAG",
     "british": false,
     "label": "Sembawang Air Base (Singapore) (WSAG)"
   },
@@ -18839,7 +18855,7 @@
   },
   {
     "id": "YMES",
-   
+    "id2": "YMES",
     "british": false,
     "label": "RAAF Base East Sale (Australia) (YMES)"
   },
@@ -18869,7 +18885,7 @@
   },
   {
     "id": "YMPC",
-   
+    "id2": "YMPC",
     "british": false,
     "label": "RAAF Williams, Point Cook Base (Australia) (YMPC)"
   },
@@ -18881,7 +18897,7 @@
   },
   {
     "id": "YPED",
-   
+    "id2": "YPED",
     "british": false,
     "label": "RAAF Base Edinburgh (Australia) (YPED)"
   },
@@ -18923,7 +18939,7 @@
   },
   {
     "id": "YPPF",
-   
+    "id2": "YPPF",
     "british": false,
     "label": "Adelaide Parafield Airport (Australia) (YPPF)"
   },
@@ -19265,7 +19281,7 @@
   },
   {
     "id": "PAWT",
-   
+    "id2": "PAWT",
     "british": false,
     "label": "Wainwright Air Station (United States) (PAWT)"
   },
@@ -19301,7 +19317,7 @@
   },
   {
     "id": "PACL",
-   
+    "id2": "PACL",
     "british": false,
     "label": "Clear Airport (United States) (PACL)"
   },
@@ -19409,7 +19425,7 @@
   },
   {
     "id": "KNXP",
-   
+    "id2": "KNXP",
     "british": false,
     "label": "Twentynine Palms (Self) Airport (United States) (KNXP)"
   },
@@ -19523,7 +19539,7 @@
   },
   {
     "id": "KNOW",
-   
+    "id2": "KNOW",
     "british": false,
     "label": "Port Angeles Cgas Airport (United States) (KNOW)"
   },
@@ -19733,7 +19749,7 @@
   },
   {
     "id": "KNID",
-   
+    "id2": "KNID",
     "british": false,
     "label": "China Lake Naws (Armitage Field) Airport (United States) (KNID)"
   },
@@ -19799,7 +19815,7 @@
   },
   {
     "id": "KRBM",
-   
+    "id2": "KRBM",
     "british": false,
     "label": "Robinson Army Air Field (United States) (KRBM)"
   },
@@ -19835,7 +19851,7 @@
   },
   {
     "id": "KHRT",
-   
+    "id2": "KHRT",
     "british": false,
     "label": "Hurlburt Field (United States) (KHRT)"
   },
@@ -19991,7 +20007,7 @@
   },
   {
     "id": "KMKO",
-   
+    "id2": "KMKO",
     "british": false,
     "label": "Muskogee-Davis Regional Airport (United States) (KMKO)"
   },
@@ -20093,7 +20109,7 @@
   },
   {
     "id": "KMLT",
-   
+    "id2": "KMLT",
     "british": false,
     "label": "Millinocket Municipal Airport (United States) (KMLT)"
   },
@@ -20123,7 +20139,7 @@
   },
   {
     "id": "KGTB",
-   
+    "id2": "KGTB",
     "british": false,
     "label": "Wheeler Sack Army Air Field (United States) (KGTB)"
   },
@@ -20429,7 +20445,7 @@
   },
   {
     "id": "KNSI",
-   
+    "id2": "KNSI",
     "british": false,
     "label": "San Nicolas Island Nolf Airport (United States) (KNSI)"
   },
@@ -20483,7 +20499,7 @@
   },
   {
     "id": "KSPB",
-   
+    "id2": "KSPB",
     "british": false,
     "label": "Scappoose Industrial Airpark (United States) (KSPB)"
   },
@@ -20645,7 +20661,7 @@
   },
   {
     "id": "KRIU",
-   
+    "id2": "KRIU",
     "british": false,
     "label": "Rancho Murieta Airport (United States) (KRIU)"
   },
@@ -20723,13 +20739,13 @@
   },
   {
     "id": "KNKT",
-   
+    "id2": "KNKT",
     "british": false,
     "label": "Cherry Point MCAS /Cunningham Field/ (United States) (KNKT)"
   },
   {
     "id": "KSBO",
-   
+    "id2": "KSBO",
     "british": false,
     "label": "Emanuel County Airport (United States) (KSBO)"
   },
@@ -20999,7 +21015,7 @@
   },
   {
     "id": "KINJ",
-   
+    "id2": "KINJ",
     "british": false,
     "label": "Hillsboro Municipal Airport (United States) (KINJ)"
   },
@@ -21029,7 +21045,7 @@
   },
   {
     "id": "KNCA",
-   
+    "id2": "KNCA",
     "british": false,
     "label": "New River MCAS /H/ /Mccutcheon Fld/ Airport (United States) (KNCA)"
   },
@@ -21359,7 +21375,7 @@
   },
   {
     "id": "KPNM",
-   
+    "id2": "KPNM",
     "british": false,
     "label": "Princeton Municipal Airport (United States) (KPNM)"
   },
@@ -21377,7 +21393,7 @@
   },
   {
     "id": "KCHD",
-   
+    "id2": "KCHD",
     "british": false,
     "label": "Chandler Municipal Airport (United States) (KCHD)"
   },
@@ -21443,7 +21459,7 @@
   },
   {
     "id": "KZUN",
-   
+    "id2": "KZUN",
     "british": false,
     "label": "Black Rock Airport (United States) (KZUN)"
   },
@@ -21785,7 +21801,7 @@
   },
   {
     "id": "KNYG",
-   
+    "id2": "KNYG",
     "british": false,
     "label": "Quantico MCAF /Turner field (United States) (KNYG)"
   },
@@ -21869,7 +21885,7 @@
   },
   {
     "id": "KNMM",
-   
+    "id2": "KNMM",
     "british": false,
     "label": "Meridian Naval Air Station (United States) (KNMM)"
   },
@@ -22085,7 +22101,7 @@
   },
   {
     "id": "KMMV",
-   
+    "id2": "KMMV",
     "british": false,
     "label": "Mc Minnville Municipal Airport (United States) (KMMV)"
   },
@@ -22145,7 +22161,7 @@
   },
   {
     "id": "WARI",
-   
+    "id2": "WARI",
     "british": false,
     "label": "Iswahyudi Airport (Indonesia) (WARI)"
   },
@@ -22157,7 +22173,7 @@
   },
   {
     "id": "WICB",
-   
+    "id2": "WICB",
     "british": false,
     "label": "Budiarto Airport (Indonesia) (WICB)"
   },
@@ -22487,7 +22503,7 @@
   },
   {
     "id": "EYKS",
-   
+    "id2": "EYKS",
     "british": false,
     "label": "S. Darius and S. Girƒónas Airfield (Lithuania) (EYKS)"
   },
@@ -22511,13 +22527,13 @@
   },
   {
     "id": "UDYE",
-   
+    "id2": "UDYE",
     "british": false,
     "label": "Erebuni Airport (Armenia) (UDYE)"
   },
   {
     "id": "UDLS",
-   
+    "id2": "UDLS",
     "british": false,
     "label": "Stepanavan Airport (Armenia) (UDLS)"
   },
@@ -22631,7 +22647,7 @@
   },
   {
     "id": "OYBA",
-    "id2": "men",
+    "id2": "OYBA",
     "british": false,
     "label": "Al Badie Airport (Yemen) (OYBA)"
   },
@@ -23069,7 +23085,7 @@
   },
   {
     "id": "XS46",
-   
+    "id2": "XS46",
     "british": false,
     "label": "Port O'Connor Private Heliport (United States) (XS46)"
   },
@@ -23135,9 +23151,9 @@
   },
   {
     "id": "EKSS",
-   
+    "id2": "EKSS",
     "british": false,
-    "label": "Sams√∏ Airport (Denmark) (EKSS)"
+    "label": "Samsø Airport (Denmark) (EKSS)"
   },
   {
     "id": "XKH",
@@ -23159,7 +23175,7 @@
   },
   {
     "id": "ZLIC",
-    "id2": "ina",
+    "id2": "ZLIC",
     "british": false,
     "label": "Yinchuan Airport (China) (ZLIC)"
   },
@@ -23291,7 +23307,7 @@
   },
   {
     "id": "CAQ3",
-   
+    "id2": "CAQ3",
     "british": false,
     "label": "Coal Harbour Seaplane Base (Canada) (CAQ3)"
   },
@@ -23301,7 +23317,7 @@
     "british": false,
     "label": "Yaoqiang Airport (China) (ZSJN / TNA)"
   },
-  {
+{
     "id": "CZX",
     "id2": "ZSCG",
     "british": false,
@@ -23593,7 +23609,7 @@
     "id": "AAH",
     "id2": "EDKA",
     "british": false,
-    "label": "Aachen-Merzbr√ºck Airport (Germany) (EDKA / AAH)"
+    "label": "Aachen-Merzbrück Airport (Germany) (EDKA / AAH)"
   },
   {
     "id": "FKB",
@@ -23885,7 +23901,7 @@
   },
   {
     "id": "YHYN",
-   
+    "id2": "YHYN",
     "british": false,
     "label": "Hayman Island Heliport (Australia) (YHYN)"
   },
@@ -23921,7 +23937,7 @@
   },
   {
     "id": "KLHX",
-   
+    "id2": "KLHX",
     "british": false,
     "label": "La Junta Municipal Airport (United States) (KLHX)"
   },
@@ -24239,7 +24255,7 @@
   },
   {
     "id": "LFFE",
-   
+    "id2": "LFFE",
     "british": false,
     "label": "Enghien Moisselles Airfield (France) (LFFE)"
   },
@@ -24281,7 +24297,7 @@
   },
   {
     "id": "SCHA",
-   
+    "id2": "SCHA",
     "british": false,
     "label": "Chamonate Airport (Chile) (SCHA)"
   },
@@ -24335,7 +24351,7 @@
   },
   {
     "id": "BIBA",
-   
+    "id2": "BIBA",
     "british": false,
     "label": "Bakki Airport (Iceland) (BIBA)"
   },
@@ -24611,7 +24627,7 @@
   },
   {
     "id": "UNCC",
-   
+    "id2": "UNCC",
     "british": false,
     "label": "Novosibirsk North Airport (Russia) (UNCC)"
   },
@@ -25121,7 +25137,7 @@
   },
   {
     "id": "CYAX",
-   
+    "id2": "CYAX",
     "british": false,
     "label": "Lac Du Bonnet Airport (Canada) (CYAX)"
   },
@@ -25289,7 +25305,7 @@
   },
   {
     "id": "CYSG",
-   
+    "id2": "CYSG",
     "british": false,
     "label": "St Georges Airport (Canada) (CYSG)"
   },
@@ -25543,7 +25559,7 @@
     "id": "CBH",
     "id2": "DAOR",
     "british": false,
-    "label": "B√©char Boudghene Ben Ali Lotfi Airport (Algeria) (DAOR / CBH)"
+    "label": "Béchar Boudghene Ben Ali Lotfi Airport (Algeria) (DAOR / CBH)"
   },
   {
     "id": "BMW",
@@ -25573,19 +25589,19 @@
     "id": "HEI",
     "id2": "EDXB",
     "british": false,
-    "label": "Heide-B√ºsum Airport (Germany) (EDXB / HEI)"
+    "label": "Heide-Büsum Airport (Germany) (EDXB / HEI)"
   },
   {
     "id": "HGL",
     "id2": "EDXH",
     "british": false,
-    "label": "Helgoland-D√ºne Airport (Germany) (EDXH / HGL)"
+    "label": "Helgoland-Düne Airport (Germany) (EDXH / HGL)"
   },
   {
     "id": "SJY",
     "id2": "EFSI",
     "british": false,
-    "label": "Sein√§joki Airport (Finland) (EFSI / SJY)"
+    "label": "Seinäjoki Airport (Finland) (EFSI / SJY)"
   },
   {
     "id": "NQT",
@@ -25685,7 +25701,7 @@
   },
   {
     "id": "EIWT",
-   
+    "id2": "EIWT",
     "british": false,
     "label": "Weston Airport (Ireland) (EIWT)"
   },
@@ -25705,25 +25721,25 @@
     "id": "OSY",
     "id2": "ENNM",
     "british": false,
-    "label": "Namsos H√∏knes√∏ra Airport (Norway) (ENNM / OSY)"
+    "label": "Namsos Høknesøra Airport (Norway) (ENNM / OSY)"
   },
   {
     "id": "MQN",
     "id2": "ENRA",
     "british": false,
-    "label": "Mo i Rana Airport, R√∏ssvoll (Norway) (ENRA / MQN)"
+    "label": "Mo i Rana Airport, Røssvoll (Norway) (ENRA / MQN)"
   },
   {
     "id": "RVK",
     "id2": "ENRM",
     "british": false,
-    "label": "R√∏rvik Airport, Ryum (Norway) (ENRM / RVK)"
+    "label": "Rørvik Airport, Ryum (Norway) (ENRM / RVK)"
   },
   {
     "id": "RET",
     "id2": "ENRS",
     "british": false,
-    "label": "R√∏st Airport (Norway) (ENRS / RET)"
+    "label": "Røst Airport (Norway) (ENRS / RET)"
   },
   {
     "id": "SDN",
@@ -25741,25 +25757,25 @@
     "id": "SVJ",
     "id2": "ENSH",
     "british": false,
-    "label": "Svolv√¶r Helle Airport (Norway) (ENSH / SVJ)"
+    "label": "Svolvær Helle Airport (Norway) (ENSH / SVJ)"
   },
   {
     "id": "SOJ",
     "id2": "ENSR",
     "british": false,
-    "label": "S√∏rkjosen Airport (Norway) (ENSR / SOJ)"
+    "label": "Sørkjosen Airport (Norway) (ENSR / SOJ)"
   },
   {
     "id": "VAW",
     "id2": "ENSS",
     "british": false,
-    "label": "Vard√∏ Airport, Svartnes (Norway) (ENSS / VAW)"
+    "label": "Vardø Airport, Svartnes (Norway) (ENSS / VAW)"
   },
   {
     "id": "VRY",
     "id2": "ENVR",
     "british": false,
-    "label": "V√¶r√∏y Heliport (Norway) (ENVR / VRY)"
+    "label": "Værøy Heliport (Norway) (ENVR / VRY)"
   },
   {
     "id": "BZG",
@@ -25771,13 +25787,13 @@
     "id": "LCJ",
     "id2": "EPLL",
     "british": false,
-    "label": "Å√≥d≈∫ W≈Çadys≈Çaw Reymont Airport (Poland) (EPLL / LCJ)"
+    "label": "Łódź Władysław Reymont Airport (Poland) (EPLL / LCJ)"
   },
   {
     "id": "OSD",
     "id2": "ESNZ",
     "british": false,
-    "label": "ÉÖre √ñstersund Airport (Sweden) (ESNZ / OSD)"
+    "label": "Åre Östersund Airport (Sweden) (ESNZ / OSD)"
   },
   {
     "id": "HFS",
@@ -25883,7 +25899,7 @@
   },
   {
     "id": "KSLI",
-   
+    "id2": "KSLI",
     "british": false,
     "label": "Los Alamitos Army Air Field (Zambia) (KSLI)"
   },
@@ -25949,7 +25965,7 @@
   },
   {
     "id": "FMNJ",
-    "id2": "car",
+    "id2": "FMNJ",
     "british": false,
     "label": "Ambanja Airport (Madagascar) (FMNJ)"
   },
@@ -25967,7 +25983,7 @@
   },
   {
     "id": "KTTS",
-    "id2": "car",
+    "id2": "KTTS",
     "british": false,
     "label": "Nasa Shuttle Landing Facility Airport (Madagascar) (KTTS)"
   },
@@ -26203,7 +26219,7 @@
     "id": "SFL",
     "id2": "GVSF",
     "british": false,
-    "label": "S√£o Filipe Airport (Cape Verde) (GVSF / SFL)"
+    "label": "São Filipe Airport (Cape Verde) (GVSF / SFL)"
   },
   {
     "id": "BCO",
@@ -26597,7 +26613,7 @@
   },
   {
     "id": "KIO",
-    "id2": "(Q51",
+    "id2": "Q51",
     "british": false,
     "label": "Kili Airport (Marshall Islands) (Q51 / KIO)"
   },
@@ -26851,19 +26867,19 @@
     "id": "PEV",
     "id2": "LHPP",
     "british": false,
-    "label": "P√©cs-Pog√°ny Airport (Hungary) (LHPP / PEV)"
+    "label": "Pécs-Pogány Airport (Hungary) (LHPP / PEV)"
   },
   {
     "id": "LHPR",
-   
+    "id2": "LHPR",
     "british": false,
-    "label": "Gy≈ër-P√©r International Airport (Hungary) (LHPR)"
+    "label": "Győr-Pér International Airport (Hungary) (LHPR)"
   },
   {
     "id": "SOB",
     "id2": "LHSM",
     "british": false,
-    "label": "S√°rmell√©k International Airport (Hungary) (LHSM / SOB)"
+    "label": "Sármellék International Airport (Hungary) (LHSM / SOB)"
   },
   {
     "id": "AOT",
@@ -26905,49 +26921,49 @@
     "id": "SFQ",
     "id2": "LTCH",
     "british": false,
-    "label": "ûanlƒ±urfa Airport (Turkey) (LTCH / SFQ)"
+    "label": "Şanlıurfa Airport (Turkey) (LTCH / SFQ)"
   },
   {
     "id": "KCM",
     "id2": "LTCN",
     "british": false,
-    "label": "Kahramanmara≈ü Airport (Turkey) (LTCN / KCM)"
+    "label": "Kahramanmaraş Airport (Turkey) (LTCN / KCM)"
   },
   {
     "id": "AJI",
     "id2": "LTCO",
     "british": false,
-    "label": "Aƒürƒ± Airport (Turkey) (LTCO / AJI)"
+    "label": "Ağrı Airport (Turkey) (LTCO / AJI)"
   },
   {
     "id": "ADF",
     "id2": "LTCP",
     "british": false,
-    "label": "Adƒ±yaman Airport (Turkey) (LTCP / ADF)"
+    "label": "Adıyaman Airport (Turkey) (LTCP / ADF)"
   },
   {
     "id": "ISE",
     "id2": "LTFC",
     "british": false,
-    "label": "S√ºleyman Demirel International Airport (Turkey) (LTFC / ISE)"
+    "label": "Süleyman Demirel International Airport (Turkey) (LTFC / ISE)"
   },
   {
     "id": "EDO",
     "id2": "LTFD",
     "british": false,
-    "label": "Balƒ±kesir K√∂rfez Airport (Turkey) (LTFD / EDO)"
+    "label": "Balıkesir Körfez Airport (Turkey) (LTFD / EDO)"
   },
   {
     "id": "SZF",
     "id2": "LTFH",
     "british": false,
-    "label": "Samsun √áar≈üamba Airport (Turkey) (LTFH / SZF)"
+    "label": "Samsun Çarşamba Airport (Turkey) (LTFH / SZF)"
   },
   {
     "id": "ILZ",
     "id2": "LZZI",
     "british": false,
-    "label": "Ωilina Airport (Slovakia) (LZZI / ILZ)"
+    "label": "Žilina Airport (Slovakia) (LZZI / ILZ)"
   },
   {
     "id": "GDT",
@@ -26971,7 +26987,7 @@
     "id": "AZS",
     "id2": "MDCY",
     "british": false,
-    "label": "Saman√° El Catey International Airport (Dominican Republic) (MDCY / AZS)"
+    "label": "Samaná El Catey International Airport (Dominican Republic) (MDCY / AZS)"
   },
   {
     "id": "JBQ",
@@ -26993,7 +27009,7 @@
   },
   {
     "id": "UTK",
-    "id2": "(03N",
+    "id2": "03N",
     "british": false,
     "label": "Utirik Airport (Marshall Islands) (03N / UTK)"
   },
@@ -27077,7 +27093,7 @@
   },
   {
     "id": "MRCV",
-   
+    "id2": "MRCV",
     "british": false,
     "label": "Cabo Velas Airport (Costa Rica) (MRCV)"
   },
@@ -27102,7 +27118,7 @@
   {
     "id": "JEE",
     "id2": "MTJE",
-    "british": false,
+    "british": Jérémie,
     "label": "J√©r√©mie Airport (Haiti) (MTJE / JEE)"
   },
   {
@@ -27113,7 +27129,7 @@
   },
   {
     "id": "MUOC",
-   
+    "id2": "MUOC",
     "british": false,
     "label": "Cayo Coco Airport (Cuba) (MUOC)"
   },
@@ -27521,7 +27537,7 @@
   },
   {
     "id": "OEDW",
-   
+    "id2": "OEDW",
     "british": false,
     "label": "Dawadmi Domestic Airport (Saudi Arabia) (OEDW)"
   },
@@ -27681,7 +27697,7 @@
     "british": false,
     "label": "Sehwan Sharif Airport (Pakistan) (OPSN / SYW)"
   },
-  {
+{
     "id": "TUK",
     "id2": "OPTU",
     "british": false,
@@ -28139,7 +28155,7 @@
   },
   {
     "id": "SKGZ",
-   
+    "id2": "SKGZ",
     "british": false,
     "label": "La Jagua Airport (Colombia) (SKGZ)"
   },
@@ -28217,7 +28233,7 @@
   },
   {
     "id": "SPBC",
-   
+    "id2": "SPBC",
     "british": false,
     "label": "Caballococha Airport (Peru) (SPBC)"
   },
@@ -28247,9 +28263,9 @@
   },
   {
     "id": "SUPE",
-    "id2": "uay",
+    "id2": "SUPE",
     "british": false,
-    "label": "El Jag√ºel / Punta del Este Airport (Uruguay) (SUPE)"
+    "label": "El Jagüel / Punta del Este Airport (Uruguay) (SUPE)"
   },
   {
     "id": "MYC",
@@ -28547,7 +28563,7 @@
   },
   {
     "id": "URMG",
-   
+    "id2": "URMG",
     "british": false,
     "label": "Khankala Air Base (Russia) (URMG)"
   },
@@ -30305,7 +30321,7 @@
   },
   {
     "id": "EPSD",
-   
+    "id2": "EPSD",
     "british": false,
     "label": "Szczecin-DƒÖbie Airport (Poland) (EPSD)"
   },
@@ -30559,7 +30575,7 @@
     "id": "LOAV",
     "id2": "LOAV",
     "british": false,
-    "label": "V√∂slau Airport (Austria) (LOAV)"
+    "label": "Vöslau Airport (Austria) (LOAV)"
   },
   {
     "id": "EDHE",
@@ -30791,7 +30807,7 @@
   },
   {
     "id": "SPCH",
-   
+    "id2": "SPCH",
     "british": false,
     "label": "Tocache Airport (Peru) (SPCH)"
   },
@@ -30973,7 +30989,7 @@
     "id": "MSR",
     "id2": "LTCK",
     "british": false,
-    "label": "Mu≈ü Airport (Turkey) (LTCK / MSR)"
+    "label": "Muş Airport (Turkey) (LTCK / MSR)"
   },
   {
     "id": "NOP",
@@ -30985,13 +31001,13 @@
     "id": "TEQ",
     "id2": "LTBU",
     "british": false,
-    "label": "Tekirdaƒü √áorlu Airport (Turkey) (LTBU / TEQ)"
+    "label": "Tekirdaƒü Çorlu Airport (Turkey) (LTBU / TEQ)"
   },
   {
     "id": "YEI",
     "id2": "LTBR",
     "british": false,
-    "label": "Bursa Yeni≈üehir Airport (Turkey) (LTBR / YEI)"
+    "label": "Bursa Yenişehir Airport (Turkey) (LTBR / YEI)"
   },
   {
     "id": "LSS",
@@ -31061,13 +31077,13 @@
   },
   {
     "id": "EDWM",
-   
+    "id2": "EDWM",
     "british": false,
-    "label": "Weser-W√ºmme Airport (Germany) (EDWM)"
+    "label": "Weser-Wümme Airport (Germany) (EDWM)"
   },
   {
     "id": "LOAG",
-   
+    "id2": "LOAG",
     "british": false,
     "label": "Krems Airport (Austria) (LOAG)"
   },
@@ -31121,25 +31137,25 @@
   },
   {
     "id": "LSTA",
-   
+    "id2": "LSTA",
     "british": false,
     "label": "Raron Airport (Switzerland) (LSTA)"
   },
   {
     "id": "UMMB",
-   
+    "id2": "UMMB",
     "british": false,
     "label": "Borovaya Airfield (Belarus) (UMMB)"
   },
   {
     "id": "LSPA",
-   
+    "id2": "LSPA",
     "british": false,
     "label": "Amlikon Glider Airport (Switzerland) (LSPA)"
   },
   {
     "id": "LSZT",
-   
+    "id2": "LSZT",
     "british": false,
     "label": "Lommis Airfield (Switzerland) (LSZT)"
   },
@@ -31151,7 +31167,7 @@
   },
   {
     "id": "KBMQ",
-   
+    "id2": "KBMQ",
     "british": false,
     "label": "Burnet Municipal Kate Craddock Field (Kenya) (KBMQ)"
   },
@@ -31163,7 +31179,7 @@
   },
   {
     "id": "EDAS",
-   
+    "id2": "EDAS",
     "british": false,
     "label": "Flugplatz Finsterwalde/Heinrichsruh (Germany) (EDAS)"
   },
@@ -31193,7 +31209,7 @@
   },
   {
     "id": "KMQT",
-   
+    "id2": "KMQT",
     "british": false,
     "label": "Marquette Airport (United States) (KMQT)"
   },
@@ -31205,19 +31221,19 @@
   },
   {
     "id": "EDLD",
-   
+    "id2": "EDLD",
     "british": false,
     "label": "Dinslaken/Schwarze Heide Airport (Germany) (EDLD)"
   },
   {
     "id": "EDVI",
-   
+    "id2": "EDVI",
     "british": false,
     "label": "H√∂xter-Holzminden Airport (Germany) (EDVI)"
   },
   {
     "id": "RJAN",
-   
+    "id2": "RJAN",
     "british": false,
     "label": "Niijima Airport (Japan) (RJAN)"
   },
@@ -31247,7 +31263,7 @@
   },
   {
     "id": "EKKL",
-   
+    "id2": "EKKL",
     "british": false,
     "label": "Kalundborg Airport (Denmark) (EKKL)"
   },
@@ -31259,19 +31275,19 @@
   },
   {
     "id": "YBUU",
-   
+    "id2": "YBUU",
     "british": false,
     "label": "Bungle Bungle Airport (Australia) (YBUU)"
   },
   {
     "id": "LKSZ",
-   
+    "id2": "LKSZ",
     "british": false,
-    "label": "Sazen√° Airport (Czech Republic) (LKSZ)"
+    "label": "Sazená Airport (Czech Republic) (LKSZ)"
   },
   {
     "id": "FVSV",
-   
+    "id2": "FVSV",
     "british": false,
     "label": "Spray View Airport (Zimbabwe) (FVSV)"
   },
@@ -31279,7 +31295,7 @@
     "id": "MVA",
     "id2": "BIRL",
     "british": false,
-    "label": "Reykjahl√≠√∞ Airport (Iceland) (BIRL / MVA)"
+    "label": "Reykjahlíð Airport (Iceland) (BIRL / MVA)"
   },
   {
     "id": "QSA",
@@ -31307,7 +31323,7 @@
   },
   {
     "id": "KGEO",
-   
+    "id2": "KGEO",
     "british": false,
     "label": "Brown County Airport (United States) (KGEO)"
   },
@@ -31355,13 +31371,13 @@
   },
   {
     "id": "LOWZ",
-    "id2": "ria",
+    "id2": "LOWZ",
     "british": false,
     "label": "Zell Am See Airport (Austria) (LOWZ)"
   },
   {
     "id": "YAMB",
-   
+    "id2": "YAMB",
     "british": false,
     "label": "RAAF Base Amberley (Australia) (YAMB)"
   },
@@ -31373,7 +31389,7 @@
   },
   {
     "id": "YLVT",
-   
+    "id2": "YLVT",
     "british": false,
     "label": "RAAF Williams, Laverton Base (Australia) (YLVT)"
   },
@@ -31397,7 +31413,7 @@
   },
   {
     "id": "UKLT",
-    "id2": "ine",
+    "id2": "UKLT",
     "british": false,
     "label": "Ternopil International Airport (Ukraine) (UKLT)"
   },
@@ -31415,7 +31431,7 @@
   },
   {
     "id": "EDXP",
-   
+    "id2": "EDXP",
     "british": false,
     "label": "Harle Airport (Germany) (EDXP)"
   },
@@ -31427,7 +31443,7 @@
   },
   {
     "id": "YPEA",
-   
+    "id2": "YPEA",
     "british": false,
     "label": "RAAF Base Pearce (Australia) (YPEA)"
   },
@@ -31475,7 +31491,7 @@
   },
   {
     "id": "LSPN",
-   
+    "id2": "LSPN",
     "british": false,
     "label": "Triengen Airport (Switzerland) (LSPN)"
   },
@@ -31487,7 +31503,7 @@
   },
   {
     "id": "LSZK",
-   
+    "id2": "LSZK",
     "british": false,
     "label": "Speck-Fehraltorf Airport (Switzerland) (LSZK)"
   },
@@ -31523,25 +31539,25 @@
   },
   {
     "id": "UIIR",
-   
+    "id2": "UIIR",
     "british": false,
     "label": "Irkutsk Northwest Airport (Russia) (UIIR)"
   },
   {
     "id": "UHHT",
-   
+    "id2": "UHHT",
     "british": false,
     "label": "Khabarovsk Airport (Russia) (UHHT)"
   },
   {
     "id": "UHKD",
-   
+    "id2": "UHKD",
     "british": false,
     "label": "Dzemgi Airport (Russia) (UHKD)"
   },
   {
     "id": "UIIB",
-   
+    "id2": "UIIB",
     "british": false,
     "label": "Belaya Air Base (Russia) (UIIB)"
   },
@@ -31703,7 +31719,7 @@
   },
   {
     "id": "EHVK",
-    "id2": "nds",
+    "id2": "EHVK",
     "british": false,
     "label": "Volkel Air Base (Netherlands) (EHVK)"
   },
@@ -31721,7 +31737,7 @@
   },
   {
     "id": "LSZP",
-   
+    "id2": "LSZP",
     "british": false,
     "label": "Biel-Kappelen Airport (Switzerland) (LSZP)"
   },
@@ -31775,19 +31791,19 @@
   },
   {
     "id": "KDED",
-   
+    "id2": "KDED",
     "british": false,
     "label": "Deland Municipal Sidney H Taylor Field (United States) (KDED)"
   },
   {
     "id": "7FL4",
-   
+    "id2": "7FL4",
     "british": false,
     "label": "Haller Airpark (United States) (7FL4)"
   },
   {
     "id": "SLPA",
-   
+    "id2": "SLPA",
     "british": false,
     "label": "Palmar Airport (Peru) (SLPA)"
   },
@@ -31805,7 +31821,7 @@
   },
   {
     "id": "KMLD",
-   
+    "id2": "KMLD",
     "british": false,
     "label": "Malad City Airport (United States) (KMLD)"
   },
@@ -31829,7 +31845,7 @@
   },
   {
     "id": "LSZF",
-   
+    "id2": "LSZF",
     "british": false,
     "label": "Birrfeld Airport (Switzerland) (LSZF)"
   },
@@ -31895,7 +31911,7 @@
   },
   {
     "id": "KIKV",
-   
+    "id2": "KIKV",
     "british": false,
     "label": "Ankeny Regional Airport (United States) (KIKV)"
   },
@@ -31907,7 +31923,7 @@
   },
   {
     "id": "KNGP",
-   
+    "id2": "KNGP",
     "british": false,
     "label": "Corpus Christi Naval Air Station/Truax Field (United States) (KNGP)"
   },
@@ -31953,7 +31969,7 @@
     "british": false,
     "label": "Bagram Air Base (Afghanistan) (OAIX / OAI)"
   },
-  {
+{
     "id": "AKH",
     "id2": "OEPS",
     "british": false,
@@ -31967,13 +31983,13 @@
   },
   {
     "id": "LHPA",
-   
+    "id2": "LHPA",
     "british": false,
-    "label": "P√°pa Air Base (Hungary) (LHPA)"
+    "label": "Pápa Air Base (Hungary) (LHPA)"
   },
   {
     "id": "KNDZ",
-   
+    "id2": "KNDZ",
     "british": false,
     "label": "Whiting Field Naval Air Station South Airport (Germany) (KNDZ)"
   },
@@ -32369,7 +32385,7 @@
   },
   {
     "id": "YGAT",
-   
+    "id2": "YGAT",
     "british": false,
     "label": "Gatton Campus Airport (Australia) (YGAT)"
   },
@@ -32381,7 +32397,7 @@
   },
   {
     "id": "EDTN",
-   
+    "id2": "EDTN",
     "british": false,
     "label": "Nabern/Teck Airport (Germany) (EDTN)"
   },
@@ -32411,7 +32427,7 @@
   },
   {
     "id": "PAFE",
-   
+    "id2": "PAFE",
     "british": false,
     "label": "Kake Airport (United States) (PAFE)"
   },
@@ -32701,7 +32717,7 @@
     "id": "IGB",
     "id2": "SAVJ",
     "british": false,
-    "label": "Cabo F.A.A. H. R. Bord√≥n Airport (Argentina) (SAVJ / IGB)"
+    "label": "Cabo F.A.A. H. R. Bordón Airport (Argentina) (SAVJ / IGB)"
   },
   {
     "id": "NCN",
@@ -32729,13 +32745,13 @@
   },
   {
     "id": "PAHV",
-   
+    "id2": "PAHV",
     "british": false,
     "label": "Healy River Airport (United States) (PAHV)"
   },
   {
     "id": "PAQC",
-   
+    "id2": "PAQC",
     "british": false,
     "label": "Klawock Seaplane Base (United States) (PAQC)"
   },
@@ -32855,7 +32871,7 @@
   },
   {
     "id": "CYJM",
-   
+    "id2": "CYJM",
     "british": false,
     "label": "Fort St James Airport (Canada) (CYJM)"
   },
@@ -32873,7 +32889,7 @@
   },
   {
     "id": "CYJQ",
-   
+    "id2": "CYJQ",
     "british": false,
     "label": "Denny Island Airport (Canada) (CYJQ)"
   },
@@ -32885,13 +32901,13 @@
   },
   {
     "id": "MM52",
-    "id2": "ico",
+    "id2": "MM52",
     "british": false,
     "label": "Camaguey-Campo Cuatro Milpas Airport (Mexico) (MM52)"
   },
   {
     "id": "MMSL",
-    "id2": "ico",
+    "id2": "MMSL",
     "british": false,
     "label": "Cabo San Lucas International Airport (Mexico) (MMSL)"
   },
@@ -32941,7 +32957,7 @@
     "id": "COZ",
     "id2": "MDCZ",
     "british": false,
-    "label": "Constanza - Expedici√≥n 14 de Junio National Airport (Dominican Republic) (MDCZ / COZ)"
+    "label": "Constanza - Expedición 14 de Junio National Airport (Dominican Republic) (MDCZ / COZ)"
   },
   {
     "id": "NEG",
@@ -32953,7 +32969,7 @@
     "id": "NRR",
     "id2": "TJRV",
     "british": false,
-    "label": "Jos√© Aponte de la Torre Airport (Puerto Rico) (TJRV / NRR)"
+    "label": "José Aponte de la Torre Airport (Puerto Rico) (TJRV / NRR)"
   },
   {
     "id": "SPB",
@@ -32993,13 +33009,13 @@
   },
   {
     "id": "SMAF",
-   
+    "id2": "SMAF",
     "british": false,
     "label": "Afobakka Airstrip (Suriname) (SMAF)"
   },
   {
     "id": "SMDU",
-   
+    "id2": "SMDU",
     "british": false,
     "label": "Alalapadu Airstrip (Suriname) (SMDU)"
   },
@@ -33011,13 +33027,13 @@
   },
   {
     "id": "SMLA",
-   
+    "id2": "SMLA",
     "british": false,
     "label": "Lawa Anapaike Airstrip (Suriname) (SMLA)"
   },
   {
     "id": "SMPT",
-   
+    "id2": "SMPT",
     "british": false,
     "label": "Apetina Airstrip (Suriname) (SMPT)"
   },
@@ -33029,19 +33045,19 @@
   },
   {
     "id": "SMKA",
-   
+    "id2": "SMKA",
     "british": false,
     "label": "Kabalebo Airport (Suriname) (SMKA)"
   },
   {
     "id": "SMKE",
-   
+    "id2": "SMKE",
     "british": false,
     "label": "Kayser Airport (Suriname) (SMKE)"
   },
   {
     "id": "SMSM",
-   
+    "id2": "SMSM",
     "british": false,
     "label": "Kwamalasoemoetoe Airport (Suriname) (SMSM)"
   },
@@ -33065,13 +33081,13 @@
   },
   {
     "id": "SMSK",
-   
+    "id2": "SMSK",
     "british": false,
     "label": "Sarakreek Airstrip (Suriname) (SMSK)"
   },
   {
     "id": "SMSI",
-   
+    "id2": "SMSI",
     "british": false,
     "label": "Sipaliwini Airport (Suriname) (SMSI)"
   },
@@ -33095,7 +33111,7 @@
   },
   {
     "id": "MRCA",
-   
+    "id2": "MRCA",
     "british": false,
     "label": "Codela Airport (Costa Rica) (MRCA)"
   },
@@ -33113,7 +33129,7 @@
   },
   {
     "id": "SYAP",
-    "id2": "ana",
+    "id2": "SYAP",
     "british": false,
     "label": "Apoteri Airport (Guyana) (SYAP)"
   },
@@ -33479,7 +33495,7 @@
   },
   {
     "id": "LSGE",
-   
+    "id2": "LSGE",
     "british": false,
     "label": "Ecuvillens Airport (Switzerland) (LSGE)"
   },
@@ -33551,13 +33567,13 @@
   },
   {
     "id": "EEKU",
-   
+    "id2": "EEKU",
     "british": false,
     "label": "Kihnu Airfield (Estonia) (EEKU)"
   },
   {
     "id": "EERU",
-   
+    "id2": "EERU",
     "british": false,
     "label": "Ruhnu Airfield (Estonia) (EERU)"
   },
@@ -33587,7 +33603,7 @@
   },
   {
     "id": "LFEC",
-   
+    "id2": "LFEC",
     "british": false,
     "label": "Ouessant Airport (France) (LFEC)"
   },
@@ -33607,11 +33623,11 @@
     "id": "SAK",
     "id2": "BIKR",
     "british": false,
-    "label": "Sau√∞√°rkr√≥kur Airport (Iceland) (BIKR / SAK)"
+    "label": "Sauðárkrókur Airport (Iceland) (BIKR / SAK)"
   },
   {
     "id": "BISF",
-   
+    "id2": "BISF",
     "british": false,
     "label": "Selfoss Airport (Iceland) (BISF)"
   },
@@ -33623,7 +33639,7 @@
   },
   {
     "id": "UAAT",
-   
+    "id2": "UAAT",
     "british": false,
     "label": "Ak Bashat Airport (Kazakhstan) (UAAT)"
   },
@@ -33647,7 +33663,7 @@
   },
   {
     "id": "UHMW",
-   
+    "id2": "UHMW",
     "british": false,
     "label": "Severo-Evensk Airport (Russia) (UHMW)"
   },
@@ -33671,37 +33687,37 @@
   },
   {
     "id": "UIUN",
-   
+    "id2": "UIUN",
     "british": false,
     "label": "Nizhneangarsk Airport (Russia) (UIUN)"
   },
   {
     "id": "UNIW",
-   
+    "id2": "UNIW",
     "british": false,
     "label": "Vanavara Airport (Russia) (UNIW)"
   },
   {
     "id": "UERA",
-   
+    "id2": "UERA",
     "british": false,
     "label": "Aykhal Airport (Russia) (UERA)"
   },
   {
     "id": "USSK",
-   
+    "id2": "USSK",
     "british": false,
     "label": "Uktus Airport (Russia) (USSK)"
   },
   {
     "id": "UNIB",
-   
+    "id2": "UNIB",
     "british": false,
     "label": "Baykit Airport (Russia) (UNIB)"
   },
   {
     "id": "UNBI",
-   
+    "id2": "UNBI",
     "british": false,
     "label": "Biysk Airport (Russia) (UNBI)"
   },
@@ -33755,7 +33771,7 @@
   },
   {
     "id": "EGHT",
-   
+    "id2": "EGHT",
     "british": true,
     "label": "Tresco Heliport (United Kingdom) (EGHT)"
   },
@@ -33905,19 +33921,19 @@
   },
   {
     "id": "EDFW",
-   
+    "id2": "EDFW",
     "british": false,
-    "label": "W√ºrzburg-Schenkenturm Airport (Germany) (EDFW)"
+    "label": "Würzburg-Schenkenturm Airport (Germany) (EDFW)"
   },
   {
     "id": "LPAV",
     "id2": "LPAV",
     "british": false,
-    "label": "S√£o Jacinto Airport (Portugal) (LPAV)"
+    "label": "São Jacinto Airport (Portugal) (LPAV)"
   },
   {
     "id": "ETNP",
-   
+    "id2": "ETNP",
     "british": false,
     "label": "Hopsten Air Base (Germany) (ETNP)"
   },
@@ -34073,7 +34089,7 @@
   },
   {
     "id": "YWKS",
-   
+    "id2": "YWKS",
     "british": false,
     "label": "Wilkins Runway (Antarctica) (YWKS)"
   },
@@ -34097,7 +34113,7 @@
   },
   {
     "id": "KRIF",
-   
+    "id2": "KRIF",
     "british": false,
     "label": "Richfield Municipal Airport (United States) (KRIF)"
   },
@@ -34265,7 +34281,7 @@
   },
   {
     "id": "UUBD",
-   
+    "id2": "UUBD",
     "british": false,
     "label": "Dyagilevo Air Base (Russia) (UUBD)"
   },
@@ -34391,7 +34407,7 @@
   },
   {
     "id": "LSPV",
-   
+    "id2": "LSPV",
     "british": false,
     "label": "Wangen-Lachen Airport (Switzerland) (LSPV)"
   },
@@ -34451,13 +34467,13 @@
   },
   {
     "id": "LSZJ",
-   
+    "id2": "LSZJ",
     "british": false,
     "label": "Courtelary Airport (Switzerland) (LSZJ)"
   },
   {
     "id": "EPKO",
-   
+    "id2": "EPKO",
     "british": false,
     "label": "Lotnisko Korne (Poland) (EPKO)"
   },
@@ -34475,7 +34491,7 @@
   },
   {
     "id": "PAWR",
-   
+    "id2": "PAWR",
     "british": false,
     "label": "Whittier Airport (United States) (PAWR)"
   },
@@ -34493,7 +34509,7 @@
   },
   {
     "id": "KNUC",
-   
+    "id2": "KNUC",
     "british": false,
     "label": "San Clemente Island Naval Auxiliary Landing Field (United States) (KNUC)"
   },
@@ -34529,31 +34545,31 @@
   },
   {
     "id": "ULAE",
-   
+    "id2": "ULAE",
     "british": false,
     "label": "Mezen Airport (Russia) (ULAE)"
   },
   {
     "id": "ULAH",
-   
+    "id2": "ULAH",
     "british": false,
     "label": "Vaskovo Airport (Russia) (ULAH)"
   },
   {
     "id": "KRYY",
-   
+    "id2": "KRYY",
     "british": false,
     "label": "Cobb County-Mc Collum Field (United States) (KRYY)"
   },
   {
     "id": "LOXT",
-   
+    "id2": "LOXT",
     "british": false,
     "label": "Brumowski  Air Base (Austria) (LOXT)"
   },
   {
     "id": "K4U9",
-   
+    "id2": "K4U9",
     "british": false,
     "label": "Dell Flight Strip (United States) (K4U9)"
   },
@@ -34565,49 +34581,49 @@
   },
   {
     "id": "K6S0",
-   
+    "id2": "K6S0",
     "british": false,
     "label": "Big Timber Airport (United States) (K6S0)"
   },
   {
     "id": "KBIV",
-   
+    "id2": "KBIV",
     "british": false,
     "label": "Tulip City Airport (United States) (KBIV)"
   },
   {
     "id": "EGLD",
-   
+    "id2": "EGLD",
     "british": true,
     "label": "Denham Aerodrome (United Kingdom) (EGLD)"
   },
   {
     "id": "EGLW",
-   
+    "id2": "EGLW",
     "british": true,
     "label": "London Heliport (United Kingdom) (EGLW)"
   },
   {
     "id": "LIPV",
-   
+    "id2": "LIPV",
     "british": false,
     "label": "Venice-Lido Airport (Italy) (LIPV)"
   },
   {
     "id": "EECL",
-   
+    "id2": "EECL",
     "british": false,
     "label": "Tallinn Linnahall Heliport (Estonia) (EECL)"
   },
   {
     "id": "EFHE",
-   
+    "id2": "EFHE",
     "british": false,
     "label": "Hernesaari Heliport (Finland) (EFHE)"
   },
   {
     "id": "EDRI",
-   
+    "id2": "EDRI",
     "british": false,
     "label": "Linkenheim Airport (Germany) (EDRI)"
   },
@@ -34649,7 +34665,7 @@
   },
   {
     "id": "UUOS",
-   
+    "id2": "UUOS",
     "british": false,
     "label": "Stary Oskol Airport (Russia) (UUOS)"
   },
@@ -34661,13 +34677,13 @@
   },
   {
     "id": "KIDL",
-   
+    "id2": "KIDL",
     "british": false,
     "label": "Indianola Municipal Airport (United States) (KIDL)"
   },
   {
     "id": "UNKM",
-   
+    "id2": "UNKM",
     "british": false,
     "label": "Cheremshanka Airport (Russia) (UNKM)"
   },
@@ -34685,7 +34701,7 @@
   },
   {
     "id": "EGLM",
-   
+    "id2": "EGLM",
     "british": true,
     "label": "White Waltham Airfield (United Kingdom) (EGLM)"
   },
@@ -34697,7 +34713,7 @@
   },
   {
     "id": "KPCW",
-   
+    "id2": "KPCW",
     "british": false,
     "label": "Carl R Keller Field (United States) (KPCW)"
   },
@@ -34709,7 +34725,7 @@
   },
   {
     "id": "KRID",
-   
+    "id2": "KRID",
     "british": false,
     "label": "Richmond Municipal Airport (United States) (KRID)"
   },
@@ -34733,7 +34749,7 @@
   },
   {
     "id": "EBEN",
-   
+    "id2": "EBEN",
     "british": false,
     "label": "Engels heliport (Germany) (EBEN)"
   },
@@ -34745,7 +34761,7 @@
   },
   {
     "id": "ESSE",
-   
+    "id2": "ESSE",
     "british": false,
     "label": "Sk√•-Edeby Airport (Germany) (ESSE)"
   },
@@ -34763,7 +34779,7 @@
   },
   {
     "id": "CCW3",
-   
+    "id2": "CCW3",
     "british": false,
     "label": "Waterville / Kings County Municipal Airport (Canada) (CCW3)"
   },
@@ -34775,13 +34791,13 @@
   },
   {
     "id": "EBKW",
-   
+    "id2": "EBKW",
     "british": false,
     "label": "Westkapelle heliport (Belgium) (EBKW)"
   },
   {
     "id": "YRED",
-   
+    "id2": "YRED",
     "british": false,
     "label": "Redcliffe Airport (Australia) (YRED)"
   },
@@ -34793,25 +34809,25 @@
   },
   {
     "id": "EPMB",
-   
+    "id2": "EPMB",
     "british": false,
     "label": "Malbork Military Air Base (Poland) (EPMB)"
   },
   {
     "id": "EPLK",
-   
+    "id2": "EPLK",
     "british": false,
     "label": "Lask Military Air Base (Poland) (EPLK)"
   },
   {
     "id": "EPMI",
-   
+    "id2": "EPMI",
     "british": false,
     "label": "Miroslawiec Military Air Base (Poland) (EPMI)"
   },
   {
     "id": "EPKS",
-   
+    "id2": "EPKS",
     "british": false,
     "label": "Krzesiny Military Air Base (Poland) (EPKS)"
   },
@@ -34925,7 +34941,7 @@
   },
   {
     "id": "KGKY",
-   
+    "id2": "KGKY",
     "british": false,
     "label": "Arlington Municipal Airport (United States) (KGKY)"
   },
@@ -34961,7 +34977,7 @@
   },
   {
     "id": "EDAW",
-   
+    "id2": "EDAW",
     "british": false,
     "label": "Roitzschjora Airfield (Germany) (EDAW)"
   },
@@ -34979,7 +34995,7 @@
   },
   {
     "id": "KBUY",
-   
+    "id2": "KBUY",
     "british": false,
     "label": "Burlington Alamance Regional Airport (United States) (KBUY)"
   },
@@ -35003,7 +35019,7 @@
   },
   {
     "id": "EHDP",
-    "id2": "nds",
+    "id2": "EHDP",
     "british": false,
     "label": "De Peel Air Base (Netherlands) (EHDP)"
   },
@@ -35045,7 +35061,7 @@
   },
   {
     "id": "YPID",
-   
+    "id2": "YPID",
     "british": false,
     "label": "Phillip Island Airport (Australia) (YPID)"
   },
@@ -35081,13 +35097,13 @@
   },
   {
     "id": "LFGC",
-   
+    "id2": "LFGC",
     "british": false,
     "label": "Strasbourg Neuhof Airfield (France) (LFGC)"
   },
   {
     "id": "EDRN",
-   
+    "id2": "EDRN",
     "british": false,
     "label": "Nannhausen Airport (Germany) (EDRN)"
   },
@@ -35111,15 +35127,15 @@
   },
   {
     "id": "EDLM",
-   
+    "id2": "EDLM",
     "british": false,
-    "label": "Marl-Loem√ºhle Airfield (Germany) (EDLM)"
+    "label": "Marl-Loemühle Airfield (Germany) (EDLM)"
   },
   {
     "id": "ESNF",
-   
+    "id2": "ESNF",
     "british": false,
-    "label": "F√§rila Air Base (Sweden) (ESNF)"
+    "label": "Färila Air Base (Sweden) (ESNF)"
   },
   {
     "id": "LHA",
@@ -35146,8 +35162,8 @@
     "label": "Springfield-Beckley Municipal Airport (United States) (KSGH / SGH)"
   },
   {
-    "id": "\\N",
-    "id2": "aldi",
+    "id": "MSI",
+    "id2": "SIAM",
     "british": false,
     "label": "Sun Island Resort and SPA (Maldives) ()"
   },
@@ -35177,7 +35193,7 @@
   },
   {
     "id": "EDNR",
-   
+    "id2": "EDNR",
     "british": false,
     "label": "Regensburg-Oberhub Airport (Germany) (EDNR)"
   },
@@ -35195,13 +35211,13 @@
   },
   {
     "id": "2XS8",
-   
+    "id2": "2XS8",
     "british": false,
     "label": "Benson Airstrip (United States) (2XS8)"
   },
   {
     "id": "K2I3",
-   
+    "id2": "K2I3",
     "british": false,
     "label": "Rough River State Park Airport (United States) (K2I3)"
   },
@@ -35231,7 +35247,7 @@
   },
   {
     "id": "KTKI",
-   
+    "id2": "KTKI",
     "british": false,
     "label": "Collin County Regional At Mc Kinney Airport (United States) (KTKI)"
   },
@@ -35267,7 +35283,7 @@
   },
   {
     "id": "NZIR",
-   
+    "id2": "NZIR",
     "british": false,
     "label": "McMurdo Station Ice Runway (Antarctica) (NZIR)"
   },
@@ -35315,7 +35331,7 @@
   },
   {
     "id": "1AZ0",
-   
+    "id2": "1AZ0",
     "british": false,
     "label": "Mobile Airport (United States) (1AZ0)"
   },
@@ -35327,7 +35343,7 @@
   },
   {
     "id": "KE63",
-   
+    "id2": "KE63",
     "british": false,
     "label": "Gila Bend Municipal Airport (United States) (KE63)"
   },
@@ -35393,13 +35409,13 @@
   },
   {
     "id": "EDML",
-   
+    "id2": "EDML",
     "british": false,
     "label": "Landshut Airport (Germany) (EDML)"
   },
   {
     "id": "EDHF",
-   
+    "id2": "EDHF",
     "british": false,
     "label": "Itzehoe/Hungriger Wolf Airport (Germany) (EDHF)"
   },
@@ -35423,7 +35439,7 @@
   },
   {
     "id": "CYGE",
-   
+    "id2": "CYGE",
     "british": false,
     "label": "Golden Airport (Canada) (CYGE)"
   },
@@ -35441,25 +35457,25 @@
   },
   {
     "id": "EDBT",
-   
+    "id2": "EDBT",
     "british": false,
     "label": "Allstedt Airport (Germany) (EDBT)"
   },
   {
     "id": "SCIC",
-   
+    "id2": "SCIC",
     "british": false,
     "label": "General Freire Airport (Chile) (SCIC)"
   },
   {
     "id": "EDVP",
-   
+    "id2": "EDVP",
     "british": false,
     "label": "Peine-Eddesse Airport (Germany) (EDVP)"
   },
   {
     "id": "KHDO",
-   
+    "id2": "KHDO",
     "british": false,
     "label": "South Texas Regional Airport at Hondo (United States) (KHDO)"
   },
@@ -35477,7 +35493,7 @@
   },
   {
     "id": "PALH",
-   
+    "id2": "PALH",
     "british": false,
     "label": "Lake Hood Airport (United States) (PALH)"
   },
@@ -35495,7 +35511,7 @@
   },
   {
     "id": "EDCY",
-   
+    "id2": "EDCY",
     "british": false,
     "label": "Spremberg-Welzow Airport (Germany) (EDCY)"
   },
@@ -35513,7 +35529,7 @@
   },
   {
     "id": "KFZG",
-   
+    "id2": "KFZG",
     "british": false,
     "label": "Fitzgerald Municipal Airport (United States) (KFZG)"
   },
@@ -35525,13 +35541,13 @@
   },
   {
     "id": "SCFX",
-   
+    "id2": "SCFX",
     "british": false,
     "label": "Isla San Felix Airport (Chile) (SCFX)"
   },
   {
     "id": "OESB",
-   
+    "id2": "OESB",
     "british": false,
     "label": "Shaibah Airport (Saudi Arabia) (OESB)"
   },
@@ -35579,127 +35595,127 @@
   },
   {
     "id": "EDXQ",
-   
+    "id2": "EDXQ",
     "british": false,
     "label": "Rotenburg (W√ºmme) Airport (Germany) (EDXQ)"
   },
   {
     "id": "EDKN",
-   
+    "id2": "EDKN",
     "british": false,
-    "label": "Wipperf√ºrth-Neye Airport (Germany) (EDKN)"
+    "label": "Wipperfürth-Neye Airport (Germany) (EDKN)"
   },
   {
     "id": "EDWO",
-   
+    "id2": "EDWO",
     "british": false,
-    "label": "Osnabr√ºck-Atterheide Airport (Germany) (EDWO)"
+    "label": "Osnabrück-Atterheide Airport (Germany) (EDWO)"
   },
   {
     "id": "EDCB",
-   
+    "id2": "EDCB",
     "british": false,
     "label": "Flugplatz Ballenstedt (Germany) (EDCB)"
   },
   {
     "id": "EDHM",
-   
+    "id2": "EDHM",
     "british": false,
     "label": "Flugplatz Hartenholm (Germany) (EDHM)"
   },
   {
     "id": "EDWQ",
-   
+    "id2": "EDWQ",
     "british": false,
     "label": "Ganderkesee Atlas Airfield (Germany) (EDWQ)"
   },
   {
     "id": "EDXI",
-   
+    "id2": "EDXI",
     "british": false,
     "label": "Nienburg-Holzbalge Airport (Germany) (EDXI)"
   },
   {
     "id": "EDWC",
-   
+    "id2": "EDWC",
     "british": false,
     "label": "Damme Airfield (Germany) (EDWC)"
   },
   {
     "id": "EDLB",
-   
+    "id2": "EDLB",
     "british": false,
     "label": "Borkenberge Airport (Germany) (EDLB)"
   },
   {
     "id": "EDCO",
-   
+    "id2": "EDCO",
     "british": false,
     "label": "Obermehler-Schlotheim Airport (Germany) (EDCO)"
   },
   {
     "id": "EDVH",
-   
+    "id2": "EDVH",
     "british": false,
     "label": "Hodenhagen Airport (Germany) (EDVH)"
   },
   {
     "id": "EDHB",
-   
+    "id2": "EDHB",
     "british": false,
     "label": "Grube Airport (Germany) (EDHB)"
   },
   {
     "id": "EKTD",
-   
+    "id2": "EKTD",
     "british": false,
-    "label": "T√∏nder Airport (Denmark) (EKTD)"
+    "label": "Tønder Airport (Denmark) (EKTD)"
   },
   {
     "id": "EDVC",
-   
+    "id2": "EDVC",
     "british": false,
     "label": "Celle-Arloh Airport (Germany) (EDVC)"
   },
   {
     "id": "EDVU",
-   
+    "id2": "EDVU",
     "british": false,
     "label": "Uelzen Airport (Germany) (EDVU)"
   },
   {
     "id": "EDLH",
-   
+    "id2": "EDLH",
     "british": false,
     "label": "Hamm-Lippewiesen Airport (Germany) (EDLH)"
   },
   {
     "id": "EDOJ",
-   
+    "id2": "EDOJ",
     "british": false,
-    "label": "L√ºsse Airport (Germany) (EDOJ)"
+    "label": "Lüsse Airport (Germany) (EDOJ)"
   },
   {
     "id": "EDVY",
-   
+    "id2": "EDVY",
     "british": false,
     "label": "Porta Westfalica Airport (Germany) (EDVY)"
   },
   {
     "id": "EDKO",
-   
+    "id2": "EDKO",
     "british": false,
     "label": "Brilon/Hochsauerlandkreis Airfield (Germany) (EDKO)"
   },
   {
     "id": "EDVW",
-   
+    "id2": "EDVW",
     "british": false,
     "label": "Hameln-Pyrmont Airport (Germany) (EDVW)"
   },
   {
     "id": "EDXN",
-   
+    "id2": "EDXN",
     "british": false,
     "label": "Nordholz-Spieka Airfield (Germany) (EDXN)"
   },
@@ -35711,39 +35727,39 @@
   },
   {
     "id": "EDXM",
-   
+    "id2": "EDXM",
     "british": false,
     "label": "St. Michaelisdonn Airport (Germany) (EDXM)"
   },
   {
     "id": "EDVS",
-   
+    "id2": "EDVS",
     "british": false,
-    "label": "Salzgitter-Dr√ºtte Airport (Germany) (EDVS)"
+    "label": "Salzgitter-Drütte Airport (Germany) (EDVS)"
   },
   {
     "id": "EDWK",
-   
+    "id2": "EDWK",
     "british": false,
-    "label": "Karlsh√∂fen Airport (Germany) (EDWK)"
+    "label": "Karlshöfen Airport (Germany) (EDWK)"
   },
   {
     "id": "EDWH",
-   
+    "id2": "EDWH",
     "british": false,
     "label": "Oldenburg-Hatten Airfield (Germany) (EDWH)"
   },
   {
     "id": "EDVR",
-   
+    "id2": "EDVR",
     "british": false,
     "label": "Rinteln Airport (Germany) (EDVR)"
   },
   {
     "id": "EDLT",
-   
+    "id2": "EDLT",
     "british": false,
-    "label": "M√ºnster-Telgte Airport (Germany) (EDLT)"
+    "label": "Münster-Telgte Airport (Germany) (EDLT)"
   },
   {
     "id": "PSH",
@@ -35753,45 +35769,45 @@
   },
   {
     "id": "EDHC",
-   
+    "id2": "EDHC",
     "british": false,
-    "label": "L√ºchow-Rehbeck Airport (Germany) (EDHC)"
+    "label": "Lüchow-Rehbeck Airport (Germany) (EDHC)"
   },
   {
     "id": "EDCL",
-   
+    "id2": "EDCL",
     "british": false,
     "label": "Klietz/Scharlibbe Airport (Germany) (EDCL)"
   },
   {
     "id": "EDBG",
-   
+    "id2": "EDBG",
     "british": false,
     "label": "Burg Airport (Germany) (EDBG)"
   },
   {
     "id": "KCKF",
-   
+    "id2": "KCKF",
     "british": false,
     "label": "Crisp County Cordele Airport (United States) (KCKF)"
   },
   {
     "id": "KOMN",
-   
+    "id2": "KOMN",
     "british": false,
     "label": "Ormond Beach Municipal Airport (United States) (KOMN)"
   },
   {
     "id": "EDRA",
-   
+    "id2": "EDRA",
     "british": false,
     "label": "Bad Neuenahr-Ahrweiler Airfield (Germany) (EDRA)"
   },
   {
     "id": "EDRF",
-   
+    "id2": "EDRF",
     "british": false,
-    "label": "Bad D√ºrkheim Airport (Germany) (EDRF)"
+    "label": "Bad Dürkheim Airport (Germany) (EDRF)"
   },
   {
     "id": "TTD",
@@ -35807,19 +35823,19 @@
   },
   {
     "id": "NK39",
-   
+    "id2": "NK39",
     "british": false,
     "label": "One Police Plaza Heliport (United States) (NK39)"
   },
   {
     "id": "EDKL",
-   
+    "id2": "EDKL",
     "british": false,
     "label": "Leverkusen Airport (Germany) (EDKL)"
   },
   {
     "id": "EDRV",
-   
+    "id2": "EDRV",
     "british": false,
     "label": "Wershofen/Eifel Airfield (Germany) (EDRV)"
   },
@@ -35837,13 +35853,13 @@
   },
   {
     "id": "KBDN",
-   
+    "id2": "KBDN",
     "british": false,
     "label": "Bend Municipal Airport (United States) (KBDN)"
   },
   {
     "id": "K62S",
-   
+    "id2": "K62S",
     "british": false,
     "label": "Christmas Valley Airport (United States) (K62S)"
   },
@@ -35933,19 +35949,19 @@
   },
   {
     "id": "UUDG",
-   
+    "id2": "UUDG",
     "british": false,
     "label": "Bolshoye Gryzlovo Airfield (Russia) (UUDG)"
   },
   {
     "id": "KCVX",
-   
+    "id2": "KCVX",
     "british": false,
     "label": "Charlevoix Municipal Airport (United States) (KCVX)"
   },
   {
     "id": "EKMS",
-    "id2": "nds",
+    "id2": "EKMS",
     "british": false,
     "label": "Mykines Heliport (Faroe Islands) (EKMS)"
   },
@@ -35957,13 +35973,13 @@
   },
   {
     "id": "EHSE",
-    "id2": "nds",
+    "id2": "EHSE",
     "british": false,
     "label": "Seppe Airfield (Netherlands) (EHSE)"
   },
   {
     "id": "LSTS",
-   
+    "id2": "LSTS",
     "british": false,
     "label": "St Stephan Airport (Switzerland) (LSTS)"
   },
@@ -35975,13 +35991,13 @@
   },
   {
     "id": "LRBG",
-   
+    "id2": "LRBG",
     "british": false,
     "label": "IAR Gimbav Heliport (Romania) (LRBG)"
   },
   {
     "id": "KXFL",
-   
+    "id2": "KXFL",
     "british": false,
     "label": "Flagler Executive Airport (United States) (KXFL)"
   },
@@ -35999,7 +36015,7 @@
   },
   {
     "id": "LILY",
-   
+    "id2": "LILY",
     "british": false,
     "label": "Como (Idroscalo - Water Ad) Hidroport (Italy) (LILY)"
   },
@@ -36071,7 +36087,7 @@
   },
   {
     "id": "KSPZ",
-   
+    "id2": "KSPZ",
     "british": false,
     "label": "Silver Springs Airport (United States) (KSPZ)"
   },
@@ -36311,7 +36327,7 @@
   },
   {
     "id": "KDQH",
-   
+    "id2": "KDQH",
     "british": false,
     "label": "Douglas Municipal Airport (United States) (KDQH)"
   },
@@ -36323,7 +36339,7 @@
   },
   {
     "id": "KTAN",
-   
+    "id2": "KTAN",
     "british": false,
     "label": "Taunton Municipal King Field (United States) (KTAN)"
   },
@@ -36353,7 +36369,7 @@
   },
   {
     "id": "KIJD",
-   
+    "id2": "KIJD",
     "british": false,
     "label": "Windham Airport (United States) (KIJD)"
   },
@@ -36371,7 +36387,7 @@
   },
   {
     "id": "KGHG",
-   
+    "id2": "KGHG",
     "british": false,
     "label": "Marshfield Municipal George Harlow Field (United States) (KGHG)"
   },
@@ -36401,25 +36417,25 @@
   },
   {
     "id": "KFIT",
-   
+    "id2": "KFIT",
     "british": false,
     "label": "Fitchburg Municipal Airport (United States) (KFIT)"
   },
   {
     "id": "20GA",
-   
+    "id2": "20GA",
     "british": false,
     "label": "Earl L. Small Jr. Field/Stockmar Airport (United States) (20GA)"
   },
   {
     "id": "KVPC",
-   
+    "id2": "KVPC",
     "british": false,
     "label": "Cartersville Airport (United States) (KVPC)"
   },
   {
     "id": "KPYP",
-   
+    "id2": "KPYP",
     "british": false,
     "label": "Centre-Piedmont-Cherokee County Regional Airport (United States) (KPYP)"
   },
@@ -36437,7 +36453,7 @@
   },
   {
     "id": "KDKX",
-   
+    "id2": "KDKX",
     "british": false,
     "label": "Knoxville Downtown Island Airport (United States) (KDKX)"
   },
@@ -36449,7 +36465,7 @@
   },
   {
     "id": "KJYL",
-   
+    "id2": "KJYL",
     "british": false,
     "label": "Plantation Airpark (United States) (KJYL)"
   },
@@ -36461,7 +36477,7 @@
   },
   {
     "id": "KCTJ",
-   
+    "id2": "KCTJ",
     "british": false,
     "label": "West Georgia Regional O V Gray Field (United States) (KCTJ)"
   },
@@ -36473,7 +36489,7 @@
   },
   {
     "id": "KMLJ",
-   
+    "id2": "KMLJ",
     "british": false,
     "label": "Baldwin County Regional Airport (United States) (KMLJ)"
   },
@@ -36485,7 +36501,7 @@
   },
   {
     "id": "KFFC",
-   
+    "id2": "KFFC",
     "british": false,
     "label": "Peachtree City Falcon Field (United States) (KFFC)"
   },
@@ -36503,7 +36519,7 @@
   },
   {
     "id": "KUDG",
-   
+    "id2": "KUDG",
     "british": false,
     "label": "Darlington County Airport (United States) (KUDG)"
   },
@@ -36533,7 +36549,7 @@
   },
   {
     "id": "GA04",
-   
+    "id2": "GA04",
     "british": false,
     "label": "Mallards Landing Airport (United States) (GA04)"
   },
@@ -48070,3 +48086,4 @@
     "label": "CENTRAL HOUSE, WYTON (United Kingdom) (X587)"
   }
 ]
+  
