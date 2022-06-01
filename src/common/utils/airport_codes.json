@@ -27118,8 +27118,8 @@
   {
     "id": "JEE",
     "id2": "MTJE",
-    "british": Jérémie,
-    "label": "J√©r√©mie Airport (Haiti) (MTJE / JEE)"
+    "british": false,
+    "label": "Jérémie Airport (Haiti) (MTJE / JEE)"
   },
   {
     "id": "PAX",
