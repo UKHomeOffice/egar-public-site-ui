@@ -1,11 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 
 const i18n = require('i18n');
-
+const airportValidation = require('../../../common/utils/airportValidation');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
-
 
 function getVoyageFieldLabel(key) {
   switch (key) {
@@ -42,17 +41,18 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
   const validationArr = [
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalPort, 'Enter a value for the arrival port')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departurePort, 'Enter a value for the departure port')],
+    [new ValidationRule(airportValidation.isBritishAirport, '',[voyageObj.departurePort, voyageObj.arrivalPort], airportValidation.notBritishMsg)],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalTime, 'Enter a value for the arrival time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureTime, 'Enter a value for the departure time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalDate, 'Enter a value for the arrival date')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureDate, 'Enter a value for the departure date')],
     [
-      new ValidationRule(validator.notEmpty, '', voyageObj.registration, 'Enter the registration of the craft'),
-      new ValidationRule(validator.isValidRegistrationLength, '', voyageObj.registration, `Aircraft registration must be ${MAX_REGISTRATION_LENGTH} characters or less`),
+     new ValidationRule(validator.notEmpty, '', voyageObj.registration, 'Enter the registration of the craft'),
+     new ValidationRule(validator.isValidRegistrationLength, '', voyageObj.registration, `Aircraft registration must be ${MAX_REGISTRATION_LENGTH} characters or less`),
     ],
     [
-      new ValidationRule(validator.notEmpty, '', voyageObj.craftType, 'Enter the type of the craft'),
-      new ValidationRule(validator.isValidStringLength, '', voyageObj.craftType, `Aircraft type must be ${MAX_STRING_LENGTH} characters or less`),
+     new ValidationRule(validator.notEmpty, '', voyageObj.craftType, 'Enter the type of the craft'),
+     new ValidationRule(validator.isValidStringLength, '', voyageObj.craftType, `Aircraft type must be ${MAX_STRING_LENGTH} characters or less`),
     ],
     [new ValidationRule(validator.notEmpty, '', voyageObj.craftBase, 'Enter the aircraft home port / location of the craft')],
     [new ValidationRule(validator.notSameValues, '', [voyageObj.arrivalPort, voyageObj.departurePort], 'Arrival port must be different to departure port')],
@@ -73,14 +73,13 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       ]);
     }
   });
-
   const manifest = crewArr.concat(passengersArr);
   manifest.forEach((crew) => {
     const crewLabel = i18n.__('validator_api_uploadgar_people_type_crew');
     const passengerLabel = i18n.__('validator_api_uploadgar_people_type_passenger');
     const peopleType = crew.peopleType === 'Crew' ? crewLabel : passengerLabel;
     const name = i18n.__('validator_api_uploadgar_person_type_person_name', { peopleType, firstName: crew.firstName, lastName: crew.lastName });
-
+   
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentType, `Enter a valid document type for ${name}`)]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${name}`)]);
     validationArr.push([
@@ -89,7 +88,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.documentNumber, `Enter a document number for ${name}`),
-      new ValidationRule(validator.isValidStringLength, '', crew.documentNumber, `Travel document number for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isValidStringLength, '', crew.documentNumber, `Travel document number for ${name} must be ${MAX_STRING_LENGTH} characters or less`), 
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.lastName, `Enter a surname for ${peopleType} ${crew.firstName}`),
@@ -120,8 +119,6 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       new ValidationRule(validator.realDateFromString, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name}`),
       new ValidationRule(validator.passportExpiryDate, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name}`),
     ]);
-
-
     Object.keys(crew).forEach((key) => {
       if (typeof crew[key] === 'string' && !validator.isPrintable(crew[key])) {
         const fieldLabel = getCrewFieldLabel(key);
@@ -131,6 +128,5 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       }
     });
   });
-
   return validationArr;
 };

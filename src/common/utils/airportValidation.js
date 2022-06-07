@@ -7,9 +7,13 @@ function isBritishAirport(airports) {
     return true;
   } else {
     const britishAirports = airportCodes.filter(item => item.british).map(item => item.id);
+    const britishAirports2 = airportCodes.filter(item => item.british).map(item => item.id2);
     if (britishAirports.includes(airports[0]) || britishAirports.includes(airports[1])) {
       return true;
     }
+    if (britishAirports2.includes(airports[0]) || britishAirports2.includes(airports[1])) {
+      return true;
+  }
   }
   return false;
 }
