@@ -45,8 +45,8 @@ const portCodeMsg = 'The arrival airport code must be entered';
 const futureDateMsg = 'Arrival date must be today or in the future';
 const realDateMsg = 'Enter a real arrival date';
 const timeMsg = 'Enter a real arrival time';
-const latitudeMsg = 'Value entered is incorrect. Enter latitude to 4 decimal places';
-const longitudeMsg = 'Value entered is incorrect. Enter longitude to 4 decimal places';
+const latitudeMsg = 'Value entered is incorrect. Enter latitude to 6 decimal places';
+const longitudeMsg = 'Value entered is incorrect. Enter longitude to 6 decimal places';
 const samePortMsg = 'Arrival port must be different to departure port';
 
 const buildValidations = (voyage) => {
@@ -77,6 +77,12 @@ const buildValidations = (voyage) => {
   // Define latitude validations
   const arrivalLongValidation = [new ValidationRule(validator.longitude, 'arrivalLong', voyage.arrivalLong, longitudeMsg)];
 
+   //Define latitude/longitude direction and non-empty validations
+   const arrivalLatDirectionValidation = [new ValidationRule(validator.notEmpty, 'arrivalLatDirection', voyage.arrivalLatDirection, __('field_latitude_direction'))];
+   const arrivalLongDirectionValidation = [new ValidationRule(validator.notEmpty, 'arrivalLongDirection', voyage.arrivalLongDirection, __('field_longitude_direction'))];
+   const arrivalLatDirectionInvalid = [new ValidationRule(validator.invalidLatDirection, 'arrivalLatDirection', voyage.arrivalLatDirection, __('field_latitude_value'))];
+   const arrivalLongDirectionInvalid = [new ValidationRule(validator.invalidLongDirection, 'arrivalLongDirection', voyage.arrivalLongDirection, __('field_longitude_value'))];
+
   const validations = [
     [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, realDateMsg)],
     [new ValidationRule(validator.currentOrFutureDate, 'arrivalDate', arriveDateObj, futureDateMsg)],
@@ -89,6 +95,10 @@ const buildValidations = (voyage) => {
     validations.push(
       arrivalLatValidation,
       arrivalLongValidation,
+      arrivalLatDirectionValidation,
+      arrivalLongDirectionValidation,
+      arrivalLatDirectionInvalid,
+      arrivalLongDirectionInvalid
     );
   } else if (voyage.portChoice) {
     // if not just add port validation
@@ -111,6 +121,28 @@ module.exports = async (req, res) => {
   delete voyage.buttonClicked;
   if (voyage.portChoice === 'No') {
     voyage.arrivalPort = 'ZZZZ';
+    logger.debug("Testing arrival Lat and Long values...");
+    
+    if (voyage.arrivalLatDirection.toUpperCase() == 'S'){
+      const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes/60) + parseFloat((voyage.arrivalSeconds/3600).toFixed(6)));
+      voyage.arrivalLat = '-' + parseFloat(convertedLat).toFixed(6);
+    }
+    else{
+      const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes/60) + parseFloat((voyage.arrivalSeconds/3600).toFixed(6)));
+      voyage.arrivalLat = parseFloat(convertedLat).toFixed(6);
+    }
+    
+    if (voyage.arrivalLongDirection.toUpperCase() == 'W'){
+      const convertedLong = parseFloat(voyage.arrivalLongDegrees) + parseFloat((voyage.arrivalLongMinutes/60) + parseFloat((voyage.arrivalLongSeconds/3600).toFixed(6)));
+      voyage.arrivalLong = '-' + parseFloat(convertedLong).toFixed(6);
+    }
+    else{
+      const convertedLong = parseFloat(voyage.arrivalLongDegrees) + parseFloat((voyage.arrivalLongMinutes/60) + parseFloat((voyage.arrivalLongSeconds/3600).toFixed(6)));
+      voyage.arrivalLong = parseFloat(convertedLong).toFixed(6);
+    }
+
+    logger.debug(voyage.arrivalLat);
+    logger.debug(voyage.arrivalLong);
   } else {
     // If 'Yes' is selected then clear the coordinate values
     voyage.arrivalLat = '';
