@@ -311,12 +311,12 @@ function validatePortCoords(portObj) {
 }
 
 function latitude(value) {
-  const regex = /^-?([1-8]?[0-9]\.{1}\d{4}$|90\.{1}0{4}$)/;
+  const regex = /^-?([1-8]?[0-9]\.{1}\d{6}$|90\.{1}0{6}$)/;
   return regex.test(value);
 }
 
 function longitude(value) {
-  const regex = /^-?((([1]?[0-7][0-9]|[1-9]?[0-9])\.{1}\d{4}$)|[1]?[1-8][0]\.{1}0{4}$)/;
+  const regex = /^-?((([1]?[0-7][0-9]|[1-9]?[0-9])\.{1}\d{6}$)|[1]?[1-8][0]\.{1}0{6}$)/;
   return regex.test(value);
 }
 
@@ -486,6 +486,57 @@ function autoTab(field1, dayMonthOrYear, field2) {
  	}
 }
 
+function sanitiseValue1(input, type) {
+  const regex = (type === 'seconds') ? /^\d{0,3}(\.\d{0,4})?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
+
+  return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
+
+}
+
+function sanitiseValue2(input, type) {
+  const regex = (type === 'minutes') ? /^\d{0,2}?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
+
+  return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
+
+}
+
+function autoTab1(field1, degreesMinutesOrSeconds, field2) {
+
+  let len = (degreesMinutesOrSeconds === 'minutes') ? 2 : 3;
+
+  let field1Value = sanitiseValue2(field1.value, degreesMinutesOrSeconds);
+
+  if (field1Value.length == len) {
+    field2.focus();
+ 	}
+}
+
+  function invalidLatDirection(value){
+    value = value.toUpperCase();
+    if ( ['S', 'N'].includes(value)){
+      return true;
+    }
+    else{
+      return false;
+    }
+
+  }
+
+  function invalidLongDirection(value){
+    value = value.toUpperCase();
+    if ( ['W', 'E'].includes(value)){
+      return true;
+    }
+    else{
+      return false;
+    }
+
+  }
+
+
+
+
+
 module.exports = {
   notEmpty,
   validName,
@@ -531,4 +582,9 @@ module.exports = {
   passportExpiryDate,
   birthDate,
   autoTab,
+  autoTab1,
+  sanitiseValue1,
+  invalidLatDirection,
+  invalidLongDirection,
+  sanitiseValue2,
 };

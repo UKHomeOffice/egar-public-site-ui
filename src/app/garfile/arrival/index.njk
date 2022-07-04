@@ -166,16 +166,41 @@
                   <label class="govuk-label" for="arrivalLat">{{__('field_latitude')}}</label>
                   {{ m.hint('arrivalLatitude', __('field_latitude_hint')) }}
                   {{ m.error_message('arrivalLat', errors, __) }}
-                  <input class="govuk-input govuk-input--width-10" id="arrivalLat" name="arrivalLat" autocomplete="off" type="text"
-                    value="{{ cookie.getGarArrivalVoyage().arrivalLat }}" aria-describedby="arrivalCoordinates-hint arrivalLatitude-hint{{ ' arrivalLat-error' if errors | containsError('arrivalLat')}}"/>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalDegrees"
+                name="arrivalDegrees" type="text" maxLength=3 onKeyup="value = sanitiseValue1(this.value, 'degrees');" value="{{ cookie.getGarArrivalVoyage().arrivalDegrees }}">
+
+                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMinutes"
+                name="arrivalMinutes" type="text" maxLength=2 onKeyup="value = sanitiseValue2(this.value, 'minutes'); autoTab1(arrivalMinutes, 'minutes', arrivalSeconds);" 
+                value="{{ cookie.getGarArrivalVoyage().arrivalMinutes }}">
+
+
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalSeconds"
+                name="arrivalSeconds" type="text" maxLength=8 onKeyup="value = sanitiseValue1(this.value, 'seconds');" value="{{ cookie.getGarArrivalVoyage().arrivalSeconds }}">
+
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalLatDirection"
+                name="arrivalLatDirection" type="text" maxLength=1 value="{{ cookie.getGarArrivalVoyage().arrivalLatDirection }}" >
                 </div>
 
                 <div class="govuk-form-group {{ m.form_group_class('arrivalLong', errors) }}">
                   <label class="govuk-label" for="arrivalLong">{{__('field_longitude')}}</label>
                   {{ m.hint('arrivalLongitude', __('field_longitude_hint')) }}
                   {{ m.error_message('arrivalLong', errors, __) }}
-                  <input class="govuk-input govuk-input--width-10" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text"
-                    value="{{ cookie.getGarArrivalVoyage().arrivalLong }}" aria-describedby="arrivalCoordinates-hint arrivalLongitude-hint{{ ' arrivalLong-error' if errors | containsError('arrivalLong') }}"/>
+
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalLongDegrees"
+                name="arrivalLongDegrees" type="text" maxLength=3 onKeyup="value = sanitiseValue1(this.value, 'degrees');" value="{{ cookie.getGarArrivalVoyage().arrivalLongDegrees }}">
+
+                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalLongMinutes"
+                name="arrivalLongMinutes" type="text" maxLength=2 onKeyup="value = sanitiseValue1(this.value, 'minutes'); autoTab1(arrivalLongMinutes, 'minutes', arrivalLongSeconds);" 
+                value="{{ cookie.getGarArrivalVoyage().arrivalLongMinutes }}" >
+
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalLongSeconds"
+                name="arrivalLongSeconds" type="text" maxLength=8 onKeyup="value = sanitiseValue1(this.value, 'seconds');" value="{{ cookie.getGarArrivalVoyage().arrivalLongSeconds }}" >
+
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalLongDirection"
+                name="arrivalLongDirection" type="text" maxLength=1 value="{{ cookie.getGarArrivalVoyage().arrivalLongDirection }}" >
+
+                  <!--<input class="govuk-input govuk-input--width-10" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text"
+                    value="{{ cookie.getGarArrivalVoyage().arrivalLong }}" aria-describedby="arrivalCoordinates-hint arrivalLongitude-hint{{ ' arrivalLong-error' if errors | containsError('arrivalLong') }}"/>-->
                 </div>
                 {# End arrival coords #}
               </div>
