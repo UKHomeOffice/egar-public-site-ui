@@ -11,7 +11,7 @@
 
 The following depends on a `.env.dev` file in the root of this project with
 the required environment variables. To obtain it please contact repository administrator.
-
+# Please make sure you got the .env.dev file in you local dev laptop! ##
 This will start local instances of:
 - Database (used for both Frontend and Backend)
 - API (you need a local copy of `api` docker image loaded,
