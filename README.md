@@ -189,4 +189,8 @@ export TAGGED_VERSION='docker-tag'                          # The docker image t
 export BASE_URL='internal url'                              # The internal url. Please refer to drone secrets.
 export BASE_URL_SERVICE='www.egar-sit.homeoffice.gov.uk'    # The external url. Please refer to drone secrets.
 ```
-The easiest is to have a file called `.idea` with all the above variables defined in it which will be included automatically in the `deploy_app` and the `destroy_app` scripts; the file `.idea` will not be tracked by git.
+The easiest is to have a file called `.idea` with all the above variables defined in it which will be included automatically in the `deploy_app` and the `destroy_app` scripts; the file `.idea` will not be tracked by git
+
+# Additional comments can be listed below.....#######
+# If necessary in future * #####
+.
