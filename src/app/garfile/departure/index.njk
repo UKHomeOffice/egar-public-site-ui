@@ -4,7 +4,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	{{__('error_prefix') if errors}} Create GAR | Departure | {{__('title')}}
+  {{__('error_prefix') if errors}} Create GAR | Departure | {{__('title')}}
 {% endblock %}
 
 {% set active = '/home' %}
@@ -21,7 +21,7 @@
 {% block content %}
 
   <div class="govuk-grid-row">
-	  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds">
       {% if errors %}
         {% include "common/templates/includes/errors.njk" %}
       {% endif %}
@@ -174,8 +174,22 @@
                   </span>
 
                   {{ m.error_message('departureLat', errors, __) }}
-                  <input class="govuk-input govuk-input--width-10" id="departureLat" name="departureLat" autocomplete="off" type="text"
-                    value="{{ cookie.getGarDepartureVoyage().departureLat }}" aria-describedby="departureCoordinates-hint departureLatitude-hint{{ ' departureLat-error' if errors | containsError('departureLat')}}"/>
+                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureDegrees"
+                name="departureDegrees" type="text" maxLength=3 onKeyup="value = sanitiseValue1(this.value, 'degrees');" value="{{ cookie.getGarDepartureVoyage().departureDegrees }}">
+
+                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMinutes"
+                name="departureMinutes" type="text" maxLength=2 onKeyup="value = sanitiseValue2(this.value, 'minutes'); autoTab1(departureMinutes, 'minutes', departureSeconds);" value="{{ cookie.getGarDepartureVoyage().departureMinutes }}">
+
+
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureSeconds"
+                name="departureSeconds" type="text" maxLength=8 onKeyup="value = sanitiseValue1(this.value, 'seconds');" value="{{ cookie.getGarDepartureVoyage().departureSeconds }}">
+
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLatDirection"
+                name="departureLatDirection" type="text" maxLength=1 value="{{ cookie.getGarDepartureVoyage().departureLatDirection }}" >
+                
+
+                  <!--<input class="govuk-input govuk-input--width-10" id="departureLat" name="departureLat" autocomplete="off" type="text"
+                    value="{{ cookie.getGarDepartureVoyage().departureLat }}" aria-describedby="departureCoordinates-hint departureLatitude-hint{{ ' departureLat-error' if errors | containsError('departureLat')}}"/>-->
                 </div>
 
                 <div class="govuk-form-group {{ m.form_group_class('departureLong', errors) }}">
@@ -186,8 +200,21 @@
                     {{__('field_longitude_hint')}}
                   </span>
                   {{ m.error_message('departureLong', errors, __) }}
-                  <input class="govuk-input govuk-input--width-10" id="departureLong" name="departureLong" autocomplete="off" type="text"
-                    value="{{ cookie.getGarDepartureVoyage().departureLong }}" aria-describedby="departureCoordinates-hint departureLongitude-hint{{ ' departureLong-error' if errors | containsError('departureLong') }}"/>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLongDegrees"
+                name="departureLongDegrees" type="text" maxLength=3 onKeyup="value = sanitiseValue1(this.value, 'degrees');" value="{{ cookie.getGarDepartureVoyage().departureLongDegrees }}">
+
+                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLongMinutes"
+                name="departureLongMinutes" type="text" maxLength=2 onKeyup="value = sanitiseValue2(this.value, 'minutes'); autoTab1(departureLongMinutes, 'minutes', departureLongSeconds);" value="{{ cookie.getGarDepartureVoyage().departureLongMinutes }}" >
+
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureLongSeconds"
+                name="departureLongSeconds" type="text" maxLength=8 onKeyup="value = sanitiseValue1(this.value, 'seconds');" value="{{ cookie.getGarDepartureVoyage().departureLongSeconds }}" >
+
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLongDirection"
+                name="departureLongDirection" type="text" maxLength=1 value="{{ cookie.getGarDepartureVoyage().departureLongDirection }}" >
+                
+                
+                  <!--<input class="govuk-input govuk-input--width-10" id="departureLong" name="departureLong" autocomplete="off" type="text"
+                    value="{{ cookie.getGarDepartureVoyage().departureLong }}" aria-describedby="departureCoordinates-hint departureLongitude-hint{{ ' departureLong-error' if errors | containsError('departureLong') }}"/>-->
                 </div>
                 {# End departure coords #}
               </div>

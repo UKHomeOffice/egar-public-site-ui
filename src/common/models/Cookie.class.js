@@ -1,3 +1,5 @@
+const logger = require("../utils/logger");
+
 /*
  *
  */
@@ -97,6 +99,14 @@ class Cookie {
           arrivalPort: null,
           arrivalLong: null,
           arrivalLat: null,
+          arrivalDegrees: null,
+          arrivalMinutes: null,
+          arrivalSeconds: null,
+          arrivalLongDegrees: null,
+          arrivalLongMinutes: null,
+          arrivalLongSeconds: null,
+          arrivalLatDirection: null,
+          arrivalLongDirection: null,
         },
         voyageDeparture: {
           departureDate: null,
@@ -104,6 +114,15 @@ class Cookie {
           departurePort: null,
           departureLong: null,
           departureLat: null,
+          departureDegrees: null,
+          departureMinutes: null,
+          departureSeconds: null,
+          departureLatDirection: null,
+          departureLongDegrees: null,
+          departureLongMinutes: null,
+          departureLongSeconds: null,
+          departureLongDirection: null,
+
         },
         voyage: {
           departureDate: null,
@@ -111,11 +130,27 @@ class Cookie {
           departurePort: null,
           departureLat: null,
           departureLong: null,
+          departureDegrees: null,
+          departureMinutes: null,
+          departureSeconds: null,
+          departureLatDirection: null,
+          departureLongDegrees: null,
+          departureLongMinutes: null,
+          departureLongSeconds: null,
+          departureLongDirection: null,
           arrivalDate: null,
           arrivalTime: null,
           arrivalPort: null,
           arrivalLong: null,
           arrivalLat: null,
+          arrivalDegrees: null,
+          arrivalMinutes: null,
+          arrivalSeconds: null,
+          arrivalLongDegrees: null,
+          arrivalLongMinutes: null,
+          arrivalLongSeconds: null,
+          arrivalLatDirection: null,
+          arrivalLongDirection: null,
         },
         manifest: [],
         tempAddPersonId: null,
@@ -198,6 +233,14 @@ class Cookie {
     this.session.gar.voyageArrival.arrivalPort = voyageObj.arrivalPort;
     this.session.gar.voyageArrival.arrivalLong = voyageObj.arrivalLong;
     this.session.gar.voyageArrival.arrivalLat = voyageObj.arrivalLat;
+    this.session.gar.voyageArrival.arrivalDegrees = voyageObj.arrivalDegrees;
+    this.session.gar.voyageArrival.arrivalMinutes = voyageObj.arrivalMinutes;
+    this.session.gar.voyageArrival.arrivalSeconds = voyageObj.arrivalSeconds;
+    this.session.gar.voyageArrival.arrivalLatDirection = voyageObj.arrivalLatDirection;
+    this.session.gar.voyageArrival.arrivalLongDegrees = voyageObj.arrivalLongDegrees;
+    this.session.gar.voyageArrival.arrivalLongMinutes = voyageObj.arrivalLongMinutes;
+    this.session.gar.voyageArrival.arrivalLongSeconds = voyageObj.arrivalLongSeconds;
+    this.session.gar.voyageArrival.arrivalLongDirection = voyageObj.arrivalLongDirection;
   }
 
   getGarArrivalVoyage() {
@@ -210,14 +253,24 @@ class Cookie {
         voyageObj.departureMonth, voyageObj.departureYear);
       this.session.gar.voyageDeparture.departureTime = this.generateTime(voyageObj.departureHour,
         voyageObj.departureMinute);
+      // this.session.gar.voyageDeparture.departureLat = this.generateLatitude(voyageObj.departureDegrees, 
+      //   voyageObj.departureMinutes, voyageObj.departureSeconds);
     } else {
       // get it from the api
       this.session.gar.voyageDeparture.departureDate = voyageObj.departureDate;
       this.session.gar.voyageDeparture.departureTime = voyageObj.departureTime;
     }
     this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
-    this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
     this.session.gar.voyageDeparture.departureLat = voyageObj.departureLat;
+    this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
+    this.session.gar.voyageDeparture.departureDegrees = voyageObj.departureDegrees;
+    this.session.gar.voyageDeparture.departureMinutes = voyageObj.departureMinutes;
+    this.session.gar.voyageDeparture.departureSeconds = voyageObj.departureSeconds;
+    this.session.gar.voyageDeparture.departureLatDirection = voyageObj.departureLatDirection;
+    this.session.gar.voyageDeparture.departureLongDegrees = voyageObj.departureLongDegrees;
+    this.session.gar.voyageDeparture.departureLongMinutes = voyageObj.departureLongMinutes;
+    this.session.gar.voyageDeparture.departureLongSeconds = voyageObj.departureLongSeconds;
+    this.session.gar.voyageDeparture.departureLongDirection = voyageObj.departureLongDirection;
   }
 
   getGarDepartureVoyage() {
@@ -247,9 +300,22 @@ class Cookie {
     this.session.gar.voyage.departurePort = voyageObj.departurePort;
     this.session.gar.voyage.departureLat = voyageObj.departureLat;
     this.session.gar.voyage.departureLong = voyageObj.departureLong;
+    this.session.gar.voyage.departureDegrees = voyageObj.departureDegrees;
+    this.session.gar.voyage.departureMinutes = voyageObj.departureMinutes;
+    this.session.gar.voyage.departureSeconds = voyageObj.departureSeconds;
+    this.session.gar.voyage.departureLatDirection = voyageObj.departureLatDirection;
+    this.session.gar.voyage.departureLongDirection = voyageObj.departureLongDirection;
     this.session.gar.voyage.arrivalPort = voyageObj.arrivalPort;
     this.session.gar.voyage.arrivalLong = voyageObj.arrivalLong;
     this.session.gar.voyage.arrivalLat = voyageObj.arrivalLat;
+    this.session.gar.voyage.arrivalDegrees = voyageObj.arrivalDegrees;
+    this.session.gar.voyage.arrivalMinutes = voyageObj.arrivalMinutes;
+    this.session.gar.voyage.arrivalSeconds = voyageObj.arrivalSeconds;
+    this.session.gar.voyage.arrivalLatDirection = voyageObj.arrivalLatDirection;
+    this.session.gar.voyage.arrivalLongDegrees = voyageObj.arrivalLongDegrees;
+    this.session.gar.voyage.arrivalLongMinutes = voyageObj.arrivalLongMinutes;
+    this.session.gar.voyage.arrivalLongSeconds = voyageObj.arrivalLongSeconds;
+    this.session.gar.voyage.arrivalLongDirection = voyageObj.arrivalLongDirection;
   }
 
   setGarVoyageFromFile(departureDate, departureTime, departurePort, arrivalDate, arrivalPort, arrivalTime) {
@@ -618,6 +684,17 @@ class Cookie {
     return `${h}:${m}`;
   }
 
+  // generateLatitude(degrees, minutes, seconds){
+  //   const latDeg = degrees == null ? '' : degrees;
+  //   const latMin = minutes == null ? '' : minutes;
+  //   const latSec = seconds == null ? '' : seconds;
+  //   const convertedLat = parseFloat(latDeg) + parseFloat((latMin/60) + parseFloat((latSec/3600).toFixed(6)));
+  //   let converted = parseFloat(convertedLat).toFixed(6);
+
+  //   return converted;
+
+  // }
+
   dateSlice(dateType, date) {
     let dateValue = '';
     switch (dateType.toLowerCase()) {
@@ -656,6 +733,9 @@ class Cookie {
     }
     return timeValue;
   }
+
 }
+
+
 
 module.exports = Cookie;

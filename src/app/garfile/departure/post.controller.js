@@ -24,6 +24,7 @@ const createValidationChains = (voyage) => {
     m: voyage.departureMinute,
   };
 
+
   // Define port validations
   const departurePortValidation = [
     new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, __('field_departure_port_code_validation')),
@@ -32,8 +33,15 @@ const createValidationChains = (voyage) => {
   // Define latitude validations
   const departureLatValidation = [new ValidationRule(validator.latitude, 'departureLat', voyage.departureLat, __('field_latitude_validation'))];
 
+  //Define latitude direction
+  const departureLatDirectionValidation = [new ValidationRule(validator.notEmpty, 'departureLatDirection', voyage.departureLatDirection, __('field_latitude_direction'))];
+  const departureLongDirectionValidation = [new ValidationRule(validator.notEmpty, 'departureLongDirection', voyage.departureLongDirection, __('field_longitude_direction'))];
+  const departureLatDirectionInvalid = [new ValidationRule(validator.invalidLatDirection, 'departureLatDirection', voyage.departureLatDirection, __('field_latitude_value'))];
+  const departureLongDirectionInvalid = [new ValidationRule(validator.invalidLongDirection, 'departureLongDirection', voyage.departureLongDirection, __('field_longitude_value'))];
+ 
+
   // Define latitude validations
-  const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, __('field_longitude_validation'))];
+  const departureLongValidation = [new ValidationRule(validator.longitude, 'depatureLong', voyage.departureLong, __('field_longitude_validation'))];
 
   const validations = [
     [new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation'))],
@@ -47,6 +55,10 @@ const createValidationChains = (voyage) => {
     validations.push(
       departureLatValidation,
       departureLongValidation,
+      departureLatDirectionValidation,
+      departureLongDirectionValidation,
+      departureLatDirectionInvalid,
+      departureLongDirectionInvalid,
     );
   } else if (voyage.portChoice) {
     // if not just add port validation
@@ -103,6 +115,28 @@ module.exports = async (req, res) => {
   // TODO: Update this once the intended 'unknown' port code is discovered.
   if (voyage.departurePort === 'ZZZZ' || voyage.portChoice === 'No') {
     voyage.departurePort = 'YYYY';
+    logger.debug("Testing departure Lat and Long values...");
+    
+    if (voyage.departureLatDirection.toUpperCase() == 'S'){
+      const convertedLat = parseFloat(voyage.departureDegrees) + parseFloat((voyage.departureMinutes/60) + parseFloat((voyage.departureSeconds/3600).toFixed(6)));
+      voyage.departureLat = '-' + parseFloat(convertedLat).toFixed(6);
+    }
+    else{
+      const convertedLat = parseFloat(voyage.departureDegrees) + parseFloat((voyage.departureMinutes/60) + parseFloat((voyage.departureSeconds/3600).toFixed(6)));
+      voyage.departureLat = parseFloat(convertedLat).toFixed(6);
+    }
+    
+    if (voyage.departureLongDirection.toUpperCase() == 'W'){
+      const convertedLong = parseFloat(voyage.departureLongDegrees) + parseFloat((voyage.departureLongMinutes/60) + parseFloat((voyage.departureLongSeconds/3600).toFixed(6)));
+      voyage.departureLong = '-' + parseFloat(convertedLong).toFixed(6);
+    }
+    else{
+      const convertedLong = parseFloat(voyage.departureLongDegrees) + parseFloat((voyage.departureLongMinutes/60) + parseFloat((voyage.departureLongSeconds/3600).toFixed(6)));
+      voyage.departureLong = parseFloat(convertedLong).toFixed(6);
+    }
+
+    logger.debug(voyage.departureLat);
+    logger.debug(voyage.departureLong);
   } else {
     // If 'Yes' is selected then clear the coordinate values
     voyage.departureLat = '';
