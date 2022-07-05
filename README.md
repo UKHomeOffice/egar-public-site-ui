@@ -46,6 +46,17 @@ Don't forget to update your email address in the INSERT command (White Listing c
 INSERT INTO "WhiteList" ("email", "createdAt", "updatedAt") VALUES ('your@email.com', current_timestamp, current_timestamp);
 ```
 
+```
+Local sGAR setup:
+
+1. Try to register account
+2. It creates a user despite failing in the "users" database
+3. UPDATE users SET state = 'verified' where email = 'john@xyz.com';
+4. Whitelist email: 
+	a. INSERT INTO "WhiteList" ("email", "createdAt", "updatedAt") VALUES ('john@xyz.com', current_timestamp, current_timestamp);
+5. SELECT * FROM "UserSession"; - Gives you the MFA token to log in with
+```
+
 To stop containers without cleaning data:
 ```
 docker-compose stop
