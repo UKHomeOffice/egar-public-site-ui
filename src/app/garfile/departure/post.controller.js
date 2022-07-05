@@ -46,7 +46,7 @@ const createValidationChains = (voyage) => {
   const validations = [
     [new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation'))],
     [new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, __('field_departure_date_validation'))],
-    [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, __('field_departure_real_time_validation'))],
+    [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, __('_real_time_validation'))],
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
   ];
 

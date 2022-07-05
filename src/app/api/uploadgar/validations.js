@@ -46,6 +46,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureTime, 'Enter a value for the departure time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalDate, 'Enter a value for the arrival date')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureDate, 'Enter a value for the departure date')],
+    [new ValidationRule(validator.futureDepartDate, '', voyageObj.departureDate, 'Please enter current or future departure date')],
     [
      new ValidationRule(validator.notEmpty, '', voyageObj.registration, 'Enter the registration of the craft'),
      new ValidationRule(validator.isValidRegistrationLength, '', voyageObj.registration, `Aircraft registration must be ${MAX_REGISTRATION_LENGTH} characters or less`),
@@ -55,6 +56,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
      new ValidationRule(validator.isValidStringLength, '', voyageObj.craftType, `Aircraft type must be ${MAX_STRING_LENGTH} characters or less`),
     ],
     [new ValidationRule(validator.notEmpty, '', voyageObj.craftBase, 'Enter the aircraft home port / location of the craft')],
+    // Added validations below so that users can't enter past date as a departure in their gar template //
     [new ValidationRule(validator.notSameValues, '', [voyageObj.arrivalPort, voyageObj.departurePort], 'Arrival port must be different to departure port')],
   ];
 
