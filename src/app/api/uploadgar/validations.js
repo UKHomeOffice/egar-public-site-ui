@@ -56,7 +56,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
      new ValidationRule(validator.isValidStringLength, '', voyageObj.craftType, `Aircraft type must be ${MAX_STRING_LENGTH} characters or less`),
     ],
     [new ValidationRule(validator.notEmpty, '', voyageObj.craftBase, 'Enter the aircraft home port / location of the craft')],
-    // Added validations below so that users can't enter past date as a departure in their gar template //
+    // *** Added validations below so that users can't enter past date as a departure in their gar template ***//
     [new ValidationRule(validator.notSameValues, '', [voyageObj.arrivalPort, voyageObj.departurePort], 'Arrival port must be different to departure port')],
   ];
 
