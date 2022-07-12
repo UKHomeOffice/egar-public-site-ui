@@ -237,11 +237,14 @@ function passportExpiryDate (value, element) {
   const d = new Date(val);
   const f = new Date();
 
-  f.setMonth(f.getMonth());
-  if (d < f) {
-      return false;
-  }
+  if (d > f) {
   return true;
+}
+
+if (f.toDateString() == d.toDateString()){
+  return true;
+}
+return false;
 }
 
 // This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
@@ -269,13 +272,16 @@ function futureDepartDate (value, element) {
   const d = new Date(val);
   const f = new Date();
 
-  f.setMonth(f.getMonth());
-  if (d < f) {
-      return false;
+  if (d > f) {
+    return true;
   }
-  return true;
-}
 
+  if (f.toDateString() == d.toDateString()){
+    return true;
+  }
+  
+  return false;
+}
 
 function validFlag(value) {
   if (value) {
