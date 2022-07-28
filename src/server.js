@@ -21,7 +21,7 @@ const uuid = require('uuid/v4');
 const csrf = require('csurf');
 const ua = require('universal-analytics');
 const PgSession = require('connect-pg-simple')(session);
-const moment = require('moment')
+
 
 
 // Local dependencies
@@ -34,8 +34,7 @@ const noCache = require('./common/utils/no-cache');
 const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
-const { DATEONLY } = require('sequelize');
-const { now } = require('lodash');
+
 
 
 // Global constants
