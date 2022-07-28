@@ -64,6 +64,7 @@
            <th class="govuk-table__header" id="surname" scope="col">{{__('field_surname')}}</th>
             <th class="govuk-table__header" id="given_name" scope="col">{{__('field_given_name')}}</th>
             <th class="govuk-table__header" id="person_type" scope="col">{{__('field_person_type')}}</th>
+            <th class="govuk-table__header" id="document_expiry_date" scope="col">{{__('field_document_expiry_date')}}</th>
             {% if cookie.getUserRole() != 'User' %}
             <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
             {% endif %}
@@ -80,6 +81,7 @@
             {% endif %}
             <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
             <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+            <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
             {% if cookie.getUserRole() != 'User' %}
               <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button></td>
             {% endif %}

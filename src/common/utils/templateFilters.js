@@ -14,5 +14,13 @@ const containsError = (array, value) => {
   return result.length > 0;
 };
 
+const expiryDate = () => {
+  checkDate = new Date();
+  checkDateExpiry = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  return checkDateExpiry;  
+};
+
 exports.uncamelCase = uncamelCase;
 exports.containsError = containsError;
+exports.expiryDate = expiryDate;
+

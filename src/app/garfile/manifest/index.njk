@@ -1,6 +1,9 @@
 {% extends "base-template.njk" %}
 
+
 {% import "common/templates/includes/macros.njk" as m %}
+
+
 
 {% block pageTitle %}
 	Create GAR | Manifest
@@ -22,6 +25,8 @@
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
+
+
 <div class="govuk-grid-row">
   <form action="/garfile/manifest" method="post">
     <div class="govuk-grid-column-two-thirds">
@@ -30,6 +35,7 @@
       <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
       <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
       <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
+
       
     </div>
     <div class="govuk-grid-column-full">
@@ -53,6 +59,7 @@
             <th class="govuk-table__header">{{__('field_surname')}}</th>
             <th class="govuk-table__header">{{__('field_given_name')}}</th>
             <th class="govuk-table__header">{{__('field_person_type_short')}}</th>
+            <th class="govuk-table__header">{{__('field_document_expiry_date')}}</th>
           </tr>
           </thead>
           <tbody class="govuk-table__body">
@@ -70,11 +77,12 @@
               <td class="govuk-table__cell">{{person.lastName}}</td>
               <td class="govuk-table__cell">{{person.firstName}}</td>
               <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+              <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
             </tr>
             {% endfor %}
           {% else %}
             {{ m.empty_table_message(__('people_no_records')) }}
-          {% endif %}
+            {% endif %}
         </tbody>
       </table>
     </div>
@@ -102,7 +110,8 @@
             <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_document_number')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_document_expiry_date')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
             <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
@@ -115,14 +124,22 @@
             <tr class="govuk-table__row row-error" id="person-{{loop.index0}}">
           {% else %}
             <tr class="govuk-table__row" id="person-{{loop.index0}}">
-          {% endif %}
+             <tr>   
+                 {% if person.documentExpiryDate.toString() < expiryDate.toString() %}
+                <script> document.getElementById("expired").style.display = "block" </script> 
+               <h3  class="govuk-heading-s" id="expired" style="color:red" hidden>Please be advised your passport below has expired! Travelling on an expired passport can incur a penalty.</h3>
+                <tr style="color:red; font-weight: bold; background-color:aliceblue"> 
+                 {% endif %}
+                 {% endif %}
             <td class="govuk-table__cell">{{person.lastName}}</td>
             <td class="govuk-table__cell">{{person.firstName}}</td>
             <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
             <td class="govuk-table__cell">{{person.documentNumber}}</td>
+            <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
             <td class="govuk-table__cell">{{person.nationality | upper}}</td>
             <td class="govuk-table__cell">{{person.peopleType.name}}</td>
             <td class="govuk-table__cell">
+              
               <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
             </td>
           </tr>
@@ -151,10 +168,6 @@
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
                           <td class="govuk-table__cell">{{person.issuingState | upper }}</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">{{__('field_travel_document_expiry_date')}}</td>
-                          <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
                         </tr>
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell" colspan="7">
@@ -208,3 +221,4 @@
 </div>
 
 {% endblock %}
+ 
