@@ -22,6 +22,8 @@ const csrf = require('csurf');
 const ua = require('universal-analytics');
 const PgSession = require('connect-pg-simple')(session);
 
+
+
 // Local dependencies
 const logger = require('./common/utils/logger')(__filename);
 const config = require('./common/config/index');
@@ -33,13 +35,14 @@ const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 
+
+
 // Global constants
 const oneYear = 86400000 * 365;
 const PORT = (process.env.PORT || 3000);
 const { NODE_ENV } = process.env;
 const GA_ID = (process.env.GA_ID || '');
 const BASE_URL = (process.env.BASE_URL || '');
-
 const visitor = ua(GA_ID);
 const COOKIE_SECRET = (process.env.COOKIE_SECRET || '');
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
@@ -210,9 +213,11 @@ function initialiseTemplateEngine(app) {
     noCache: NODE_ENV !== 'production', // Never use a cache and recompile templates each time (server-side)
   };
   logger.info('Set template engine');
-
+   
   // Initialise nunjucks environment
   const nunjucksEnvironment = nunjucks.configure(APP_VIEWS, nunjucksConfiguration);
+  
+  // nunjucksEnvironment.addFilter('date, nunjucksDate');
 
   // Set view engine
   app.set('view engine', 'njk');
@@ -226,11 +231,14 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
+  nunjucksEnvironment.addFilter('expiryDate', nunjucksFilters.expiryDate);
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('countryList', autocompleteUtil.generateCountryList());
   nunjucksEnvironment.addGlobal('airportList', autocompleteUtil.airportList);
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
+  // nunjucksEnvironment.addGlobal("toDate", toDate());
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
   nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_EMAIL_LENGTH', config.MAX_EMAIL_LENGTH);
