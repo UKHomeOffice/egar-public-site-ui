@@ -192,7 +192,7 @@
 
     "heading_travel_document_details": "Travel document details",
     "caption_travel_document_details": "Provide the details of the person’s travel document that you want to add. Details should be as displayed on the travel document.",
-    "field_document_number": "Document number",
+    "field_travel_document_number": "Document number",
     "field_document_expiry_date": "Document expiry date",
     "field_document_expiry_date_hint": "For example Day 22 Month 05 Year ",
     "field_issuing_state": "Issuing state",

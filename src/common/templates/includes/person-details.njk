@@ -116,7 +116,7 @@
   <p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
 
   <div class="govuk-form-group {{ m.form_group_class('travelDocumentNumber', errors) }}">
-    <label class="govuk-label govuk-label--m" for="travelDocumentNumber">{{ __('field_document_number') }}</label>
+    <label class="govuk-label govuk-label--m" for="travelDocumentNumber">{{ __('field_travel_document_number') }}</label>
     {{ m.error_message('travelDocumentNumber', errors, __) }}
     <input id="travelDocumentNumber" name="travelDocumentNumber" class="govuk-input govuk-input--width-20" type="text"
       maxlength="{{ MAX_STRING_LENGTH }}" value="{{person.documentNumber or req.body.travelDocumentNumber}}"
