@@ -171,6 +171,7 @@
     "label_manifest_further_personal_details": "Further personal details",
     "further_information_for": "Further information for %s %s",
     "total_persons_on_board": "Total persons on board",
+    "expired_passport_warning": "Travelling on an expired passport may incur a penalty",
 
     "title_edit_person": "Edit Person Details",
     "heading_edit_person": "Edit a person",
@@ -337,7 +338,7 @@
     "create_organisation_caption_1": "Creating an organisation enables you to collaborate with other users on creating and submitting GARs.",
     "create_organisation_caption_2": "There is no restriction on who can create an organisation and you retain full control over which users belong to, and can submit GARs on behalf of, your organisation.",
     "assistive_warning": "Warning ",
-    "create_organisation_warning": "Creating an organisation will not transfer any GARs you have already drafted or submitted personally. If you would like to retain access to these, please register a new account and create your organisation using this. Alternatively to retain access to these GARs, register a new account with a different email address from this one.",
+    "create_organisation_warning": "Creating an organisation will not transfer any GARs, People or Aircraft, you have already drafted, saved, or submitted personally. If you would like to retain access to these, please register a new account and create your organisation using this. Alternatively to retain access to these GARs, register a new account with a different email address from this one.",
     "create_organisation_caption_3": "Please provide the following information to create an organisation.",
 
     "title_organisation": "Organisation",

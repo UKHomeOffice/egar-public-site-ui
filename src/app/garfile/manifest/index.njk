@@ -26,6 +26,7 @@
   {% endif %}
 
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <div class="govuk-grid-row">
   <form action="/garfile/manifest" method="post">
@@ -36,13 +37,29 @@
       <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
       <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
 
-      
+  <script>
+  $(document).ready(function(){
+    $("#person-search").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#people_table_row tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
+
+
     </div>
     <div class="govuk-grid-column-full">
+      <p class="govuk-body-l">{{__('people_caption')}}</p>
+      <p class="govuk-body-m">{{__('person_search')}}</p>
+      <input class="govuk-input govuk-input--width-20" id="person-search" name="person-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+      <p class="govuk-body-s" style="margin-bottom: 10px">{{__('person_sort')}}</p>
+      <form id="people" action="/people" method="post">
       {% if savedPeople | length %}
-        <table class="table-clickable govuk-table">
+        <table class="table-clickable govuk-table" id="people_table">
       {% else %}
-        <table class="govuk-table">
+        <table class="govuk-table" id="people_table" >
       {% endif %}
           <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -62,7 +79,7 @@
             <th class="govuk-table__header">{{__('field_document_expiry_date')}}</th>
           </tr>
           </thead>
-          <tbody class="govuk-table__body">
+          <tbody class="govuk-table__body" id="people_table_row">
           {% if savedPeople | length %}
             {% for person in savedPeople %}
             <tr class="govuk-table__row">
@@ -86,6 +103,19 @@
         </tbody>
       </table>
     </div>
+
+    <script>
+  $(document).ready(function(){
+    $("#manifest-search").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#manifest_table_row tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
+
+
     <div class="govuk-grid-column-two-thirds">
       <button id="addToManifest" type="submit" name="buttonClicked" value="Add to GAR" class="govuk-button">{{__('button_add_to_gar')}}</button>
     </div>
@@ -102,41 +132,47 @@
     <div class="govuk-grid-column-two-thirds">
       <h2 class="govuk-heading-l">{{__('heading_current_manifest')}}</h2>
       <p class="govuk-body-l">{{__('current_manifest_caption')}}</p>
+      <p class="govuk-body-m">Search for people on the manifest</p>
+      <input class="govuk-input govuk-input--width-20" id="manifest-search" name="manifest-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+      <p class="govuk-body-m"><mark>{{__('expired_passport_warning')}}</mark></p>
     </div>
     <div class="govuk-grid-column-full">
-      <table class="govuk-table">
+      <table class="govuk-table" id="manifest_table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_document_number')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_document_expiry_date')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_document_expiry_date')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_gender')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_birth_place')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
             <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body">
+        <tbody class="govuk-table__body " id="manifest_table_row">
         {% if manifest.items | length %}
           {% for person in manifest.items %}
           {% if manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople) %}
             <tr class="govuk-table__row row-error" id="person-{{loop.index0}}">
           {% else %}
             <tr class="govuk-table__row" id="person-{{loop.index0}}">
-             <tr>   
-                 {% if person.documentExpiryDate.toString() < expiryDate.toString() %}
-                <script> document.getElementById("expired").style.display = "block" </script> 
-               <h3  class="govuk-heading-s" id="expired" style="color:red" hidden>Please be advised your passport below has expired! Travelling on an expired passport can incur a penalty.</h3>
-                <tr style="color:red; font-weight: bold; background-color:aliceblue"> 
-                 {% endif %}
-                 {% endif %}
+            {% if person.documentExpiryDate.toString() < expiryDate.toString()  %}
+              <h3  class="govuk-heading-s" id="expired" style="color:red" hidden>Please be advised, {{person.firstName}}  {{person.lastName}}'s passport has expired </h3>
+              <script> document.getElementById("expired").style.display = "block" </script>
+              <tr style="color:red; font-weight: bold; background-color:aliceblue">
+            {% endif %}
+          {% endif %}
             <td class="govuk-table__cell">{{person.lastName}}</td>
             <td class="govuk-table__cell">{{person.firstName}}</td>
             <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.nationality | upper}}</td>
             <td class="govuk-table__cell">{{person.documentNumber}}</td>
             <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
-            <td class="govuk-table__cell">{{person.nationality | upper}}</td>
+            <td class="govuk-table__cell">{{person.gender}}</td>
+            <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
             <td class="govuk-table__cell">{{person.peopleType.name}}</td>
             <td class="govuk-table__cell">
               
@@ -153,14 +189,6 @@
                   <div class="panel panel-border-narrow" id="details-content-{{ loop.index }}" aria-hidden="true">
                     <table class="govuk-table" width="100%">
                       <tbody class="govuk-table__body">
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">{{__('field_gender')}}</td>
-                          <td class="govuk-table__cell">{{person.gender}}</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">{{__('field_birth_place')}}</td>
-                          <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
-                        </tr>
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
                           <td class="govuk-table__cell">{{person.documentType}}</td>
@@ -199,6 +227,7 @@
 
         <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
       </div>
+      
 
     {# Start buttons #}
       <input id="continue" type="submit" class="govuk-button" 
@@ -218,6 +247,43 @@
     </form>
     {# End buttons #}
 	  </div>
+
+    <script>
+      $(document).ready(function() {
+      $('#people_table th').each(function(col) {
+        $(this).hover(
+        function() { $(this).addClass('focus'); },
+        function() { $(this).removeClass('focus'); }
+      );
+    $(this).click(function() {
+      if ($(this).is('.asc')) {
+        $(this).removeClass('asc');
+        $(this).addClass('desc selected');
+        sortOrder = -1;
+      }
+      else {
+        $(this).addClass('asc selected');
+        $(this).removeClass('desc');
+        sortOrder = 1;
+      }
+      $(this).siblings().removeClass('asc selected');
+      $(this).siblings().removeClass('desc selected');
+      var arrData = $('#people_table').find('tbody >tr:has(td)').get();
+      arrData.sort(function(a, b) {
+        var val1 = $(a).children('td').eq(col).text().toUpperCase();
+        var val2 = $(b).children('td').eq(col).text().toUpperCase();
+        if($.isNumeric(val1) && $.isNumeric(val2))
+        return sortOrder == 1 ? val1-val2 : val2-val1;
+        else
+            return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
+      });
+      $.each(arrData, function(index, row) {
+        $('#people_table tbody').append(row);
+      });
+    });
+      });
+    });
+  </script>
 </div>
 
 {% endblock %}

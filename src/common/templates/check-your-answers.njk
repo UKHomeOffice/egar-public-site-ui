@@ -100,6 +100,7 @@
       <div class="app-check-your-answers__contents">
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
           {{__('heading_manifest_details')}}
+          <p class="govuk-body-s" style="white-space: nowrap;"><mark>{{__('expired_passport_warning')}}</mark></p>
         </dt>
         {% if showChangeLinks %}
         <dd style="border-bottom: none;" class="app-check-your-answers__change">
@@ -120,8 +121,11 @@
             <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_document_expiry_date')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_gender')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_birth_place')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
           </tr>
         </thead>
@@ -129,12 +133,15 @@
         {% if garpeople.items | length %}
           {% for person in garpeople.items%}
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell">{{person.lastName}}</td>
-              <td class="govuk-table__cell">{{person.firstName}}</td>
-              <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
-              <td class="govuk-table__cell">{{person.documentNumber}}</td>
-              <td class="govuk-table__cell">{{person.nationality | upper}}</td>
-              <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+            <td class="govuk-table__cell">{{person.lastName}}</td>
+            <td class="govuk-table__cell">{{person.firstName}}</td>
+            <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.nationality | upper}}</td>
+            <td class="govuk-table__cell">{{person.documentNumber}}</td>
+            <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+            <td class="govuk-table__cell">{{person.gender}}</td>
+            <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.peopleType.name}}</td>
             </tr>
             <tr class="govuk-table__row">
               <td class="govuk-table__cell" colspan="6">
@@ -147,24 +154,12 @@
                       <table class="govuk-table">
                         <tbody class="govuk-table__body">
                           <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">{{__('field_gender')}}</td>
-                            <td class="govuk-table__cell">{{person.gender}}</td>
-                          </tr>
-                          <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">{{__('field_birth_place')}}</td>
-                            <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
-                          </tr>
-                          <tr class="govuk-table__row">
                             <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
                             <td class="govuk-table__cell">{{person.documentType}}</td>
                           </tr>
                           <tr class="govuk-table__row">
                             <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
                             <td class="govuk-table__cell">{{person.issuingState | upper}}</td>
-                          </tr>
-                          <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">{{__('field_travel_document_expiry_date')}}</td>
-                            <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
                           </tr>
                         </tbody>
                       </table>
