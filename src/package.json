@@ -21,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "accessible-autocomplete": "^1.6.2",
+    "accessible-autocomplete": "^2.0.4",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "clamav.js": "^0.12.0",

@@ -1,3 +1,4 @@
+
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
@@ -9,7 +10,7 @@
 {% set active = '/home' %}
 
 {% block header %}
-  {% include "common/templates/includes/header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -70,34 +71,36 @@
     </div>
     <div class="govuk-grid-column-full">
       <div class="govuk-tabs" data-module="tabs">
-        <ul class="govuk-tabs__list">
-          <li class="govuk-tabs__list-item">
-            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft">
-              {{__('tab_gar_draft', draftGars.length)}}
-            </a>
-          </li>
-          <li class="govuk-tabs__list-item">
-            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-submitted">
-              {{__('tab_gar_submitted', submittedGars.length)}}
-            </a>
-          </li>
-          <li class="govuk-tabs__list-item">
-            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-cancelled">
-              {{__('tab_gar_cancelled', cancelledGars.length)}}
-            </a>
-          </li>
-        </ul>
-    {% macro gar_summary_table(name, gars) %}
+        <ul class="govuk-tabs__list"> 
+          <li class="govuk-tabs__list-item"> 
+            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft"> 
+              {{__('tab_gar_draft', draftGars.length)}} 
+            </a> 
+          </li> 
+          <li class="govuk-tabs__list-item"> 
+           <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-submitted"> 
+              {{__('tab_gar_submitted', submittedGars.length)}} 
+            </a> 
+          </li> 
+          <li class="govuk-tabs__list-item"> 
+           <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-cancelled"> 
+              {{__('tab_gar_cancelled', cancelledGars.length)}} 
+           </a> 
+          </li> 
+        </ul> 
+   {% macro gar_summary_table(name, gars) %} 
       <section class="govuk-tabs__panel" id="gars-{{ name }}">
         <table class="govuk-table">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">{{__('field_aircraft_registration')}}</th>
-              <th class="govuk-table__header" scope="col">{{__('field_departure_date')}}</th>
-              <th class="govuk-table__header" scope="col">{{__('field_departure_time')}}</th>
-              <th class="govuk-table__header" scope="col">{{__('field_departure_port')}}</th>
-              <th class="govuk-table__header" scope="col">{{__('field_arrival_port')}}</th>
-              <th class="govuk-table__header" scope="col">{{__('field_submission_reference')}}</th>
+              <th class="govuk-table__header" scope="col">{{__('field_aircraft_registration')}}</th> 
+              <th class="govuk-table__header" scope="col" width="150">{{__('field_created_date')}}</th>
+              <th class="govuk-table__header" scope="col" width="150">{{__('field_departure_date')}}</th> 
+              <th class="govuk-table__header" scope="col">{{__('field_departure_time')}}</th> 
+              <th class="govuk-table__header" scope="col">{{__('field_departure_port')}}</th> 
+              <th class="govuk-table__header" scope="col">{{__('field_arrival_port')}}</th> 
+              <th class="govuk-table__header" scope="col"></th> 
+              <th class="govuk-table__header" scope="col">{{__('field_submission_reference')}}</th>  
             </tr>
           </thead>
           <tbody class="govuk-table__body">
@@ -105,17 +108,19 @@
             {% for gar in gars %}
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                {% if gar.registration === null %}
-                  <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
+               {% if gar.registration === null %} 
+                  <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button> 
                 {% else %}
-                  <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
-                {% endif %}
+                  <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button> 
+                {% endif %} 
                 </td>
-                <td class="govuk-table__cell">{{ gar.departureDate }}</td>
-                <td class="govuk-table__cell">{{ gar.departureTime }}</td>
-                <td class="govuk-table__cell">{{ __('value_port_code_zzzz') if gar.departurePort == 'YYYY' else gar.departurePort | upper }}</td>
-                <td class="govuk-table__cell">{{ __('value_port_code_zzzz') if gar.arrivalPort == 'ZZZZ' else gar.arrivalPort | upper }}</td>
-                <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell">{{ m.gar_id_screen_reader(gar.garId) }}</td>
+                <td class="govuk-table__cell">{{ gar.createdDate | truncate(11, true, "") }}</td>
+                <td class="govuk-table__cell">{{ gar.departureDate }}</td> 
+                <td class="govuk-table__cell">{{ gar.departureTime }}</td> 
+                <td class="govuk-table__cell">{{ __('value_port_code_zzzz') if gar.departurePort == 'YYYY' else gar.departurePort | upper }}</td>  
+                <td class="govuk-table__cell">{{ __('value_port_code_zzzz') if gar.arrivalPort == 'ZZZZ' else gar.arrivalPort | upper }}</td> 
+                <td class="govuk-table__cell"></td>    
+                <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell">{{ m.gar_id_screen_reader(gar.garId) }}</td> 
               </tr>
             {% endfor %}
           {% else %}
@@ -136,13 +141,15 @@
           </ul>
         </nav> #}
       </section>
-    {% endmacro %}
-      {{ gar_summary_table('draft', draftGars) }}
-      {{ gar_summary_table('submitted', submittedGars) }}
-      {{ gar_summary_table('cancelled', cancelledGars) }}
+       {% endmacro %}                          
+     {{ gar_summary_table('draft', draftGars) }} 
+     {{ gar_summary_table('submitted', submittedGars) }} 
+     {{ gar_summary_table('cancelled', cancelledGars) }}  
+      
     </div>
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </div>
 </div>
 
 {% endblock %}
+
