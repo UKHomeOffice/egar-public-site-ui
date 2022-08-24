@@ -43,6 +43,7 @@ const garView = require('./garfile/view');
 const garCancel = require('./garfile/cancel');
 const garsubmitsucess = require('./garfile/submit/success');
 const garsubmitfailure = require('./garfile/submit/failure');
+const printmanifest = require('./garfile/printmanifest');
 
 // Saved entities
 const people = require('./people');
@@ -131,4 +132,5 @@ module.exports.bind = (app) => {
   app.use(cookies.router);
   app.use(help.router);
   app.use(unavailable.router);
+  app.use(printmanifest.router);
 };

@@ -24,15 +24,19 @@
     </div>
 
     {% include "check-your-answers.njk" %}
-
     <div class="govuk-grid-column-two-thirds">
       {% if garfile.status.name === 'Draft' %}
         <a id="submit-gar" class="govuk-button" href="/garfile/review">{{__('button_submit_this_gar')}}</a>
+        <a id="display-manifest" class="govuk-button" href="/garfile/printmanifest">Print GAR</a>
+
       {% endif %}
       {% if garfile.status.name !== 'Cancelled' %}
         <p class="govuk-body-m">
           <a id="cancel-gar" href="/garfile/cancel">
             <button class="govuk-button" id="cancel-gar" type="submit">{{__('title_cancel_gar')}}</button>
+            {% if garfile.status.name === 'Submitted' %}
+              <a id="display-manifest" class="govuk-button" href="/garfile/printmanifest">Print GAR</a>
+            {% endif %}
           </a>
         </p>
       {% endif %}

@@ -1,5 +1,5 @@
 [
-	{ "id": "0", "name": "Admin" ,"description": "Full administration capabilities over the organisation, its saved entities and its  users. Full GAR submission and management capabilities."},
-	{ "id": "1", "name": "Manager" , "description": "Partial administration capabilities over the organisation, its saved entities and its users. Full GAR submission and management capabilities"},
-	{ "id": "2", "name": "User" , "description": "Basic GAR submission and management capabilities"}
+	{ "id": "0", "name": "Admin" ,"description": "An Admin can create, edit, submit or cancel a GAR. An Admin can create, edit and delete people or aircraft. An Admin has full control over the organisation, they can invite, edit or demote users from an organisation."},
+	{ "id": "1", "name": "Manager" , "description": "A manager is able to create, edit, submit or cancel a GAR. A manager can create, edit and delete people or aircraft. A manager can invite, edit or promote users, but cannot promote a user to admin or demote an admin."},
+	{ "id": "2", "name": "User" , "description": "A user can create, edit, submit or cancel a GAR. A user can create, edit and delete people or aircraft. A user has no ability to edit or view an organisation"}
 ]

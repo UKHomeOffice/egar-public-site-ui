@@ -43,11 +43,11 @@
       </script>
 
     <h1 class="govuk-heading-xl">{{__('title_aircraft')}}</h1>
-    {% if cookie.getUserRole() != 'User' %}
+    {# {% if cookie.getUserRole() != 'User' %} #}
       <p class="govuk-body-l">{{__('aircraft_caption')}}</p>
       <p class="govuk-body-m">Search for aircraft </p>
       <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
-    {% endif %}
+    {# {% endif %} #}
   </div>
 
   
@@ -60,25 +60,25 @@
             <th class="govuk-table__header" scope="col">{{__('field_aircraft_registration')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_aircraft_type')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_aircraft_base')}}</th>
-            {% if cookie.getUserRole() != 'User' %}
+            {# {% if cookie.getUserRole() != 'User' %} #}
             <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
-            {% endif %}
+            {# {% endif %} #}
           </tr>
         </thead>
         <tbody class="govuk-table__body" id="aircraft_table_row" >
         {% if savedCrafts.items | length %}
           {% for craft in savedCrafts.items %}
           <tr class="govuk-table__row">
-            {% if cookie.getUserRole() != 'User' %}
+            {# {% if cookie.getUserRole() != 'User' %} #}
             <td class="govuk-table__cell" scope="row"><button id="edit_craft_{{ loop.index }}" class="govuk-link btn-link" name="editCraft" value="{{ craft.craftId }}">{{ craft.registration }}</button></th>
-            {% else %}
+            {# {% else %}
             <td class="govuk-table__cell">{{ craft.registration }}</td>
-            {% endif %}
+            {% endif %} #}
             <td class="govuk-table__cell">{{ craft.craftType }}</td>
             <td class="govuk-table__cell">{{ craft.craftBase | upper }}</td>
-            {% if cookie.getUserRole() != 'User' %}
+            {# {% if cookie.getUserRole() != 'User' %} #}
             <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-link btn-link" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
-            {% endif %}
+            {# {% endif %} #}
           </tr>
           {% endfor %}
         {% else %}
@@ -93,7 +93,7 @@
     </form>
 	</div>
 
-  {% if cookie.getUserRole() != 'User' %}
+  {# {% if cookie.getUserRole() != 'User' %} #}
     <div class="govuk-grid-column-full">
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
     </div>
@@ -107,7 +107,7 @@
     <div class="govuk-grid-column-full">
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
     </div>
-  {% endif %}
+  {# {% endif %} #}
   	<script>
     $(document).ready(function() {
       $('th').each(function(col) {
