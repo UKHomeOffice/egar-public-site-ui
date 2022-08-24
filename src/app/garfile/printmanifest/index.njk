@@ -1,0 +1,162 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Print Manifest
+{% endblock %}
+
+{% set active = '/home' %}
+
+{% block header %}
+  {% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+  <a href="/garfile/view" class="govuk-back-link">{{__('nav_back')}}</a>
+{% endblock %}
+
+{% block content %}
+
+<style type="text/css" media="print">
+@media print {
+    header, footer  {
+      display:none;
+    }
+
+  #display-manifest {
+    display:none;
+  }
+
+  .govuk-phase-banner{
+    display:none;
+  }
+
+  .govuk-back-link{
+    display:none;
+  }
+  }
+  </style>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl" id="pageTitle">Print GAR</h1>
+    </div>
+
+<a id="display-manifest" class="govuk-button" onclick="printMyGar()">Print GAR</a>
+<div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" width="40%">GAR ID</th>
+          <th class="govuk-table__header" width="30%">Departure Date & Time</th>
+          <th class="govuk-table__header" width="30%">Arrival Date & Time</th>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body" id="printGAR">
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" id="garID_title">{{ cookie.getGarId() }}</td>
+              <td class="govuk-table__cell">{{ garfile.departureDate }}  {{ garfile.departureTime }}</td>
+              <td class="govuk-table__cell">{{ garfile.arrivalDate }}  {{ garfile.arrivalTime }}</td>
+      
+            </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" width="40%">{{__('field_aircraft_registration')}}</th>
+          <th class="govuk-table__header" width="30%">{{__('field_departure_port')}}</th>
+          <th class="govuk-table__header" width="30%">{{__('field_arrival_port')}}</th>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body" id="printGAR">
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">{{ garfile.registration }}</td>
+              <td class="govuk-table__cell">{{ garfile.departurePort }}</td>
+              <td class="govuk-table__cell">{{ garfile.arrivalPort }}</td>
+      
+            </tr>
+        </tbody>
+      </table>
+    </div>
+
+  <div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_document_expiry_date')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_gender')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_birth_place')}}</th>
+            <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body ">
+          {% if garpeople.items | length %}
+            {% for person in garpeople.items %}
+            <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{person.lastName}}</td>
+            <td class="govuk-table__cell">{{person.firstName}}</td>
+            <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.nationality | upper}}</td>
+            <td class="govuk-table__cell">{{person.documentNumber}}</td>
+            <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+            <td class="govuk-table__cell">{{person.gender}}</td>
+            <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+          </tr>
+          </tr>
+            {% endfor %}
+          {% endif %}
+          </tr>
+        </tbody>
+      </table>
+  </div>
+
+  <div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" width="40%">Responsible Person Details</th>
+          <th class="govuk-table__header" width="30%">Customs</th>
+          <th class="govuk-table__header" width="30%">Reason for Visit</th>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body" id="printGAR">
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" >{{ garfile.responsibleGivenName }}</td>
+              <td class="govuk-table__cell" >{{ garfile.prohibitedGoods }}</td>
+              <td class="govuk-table__cell" >{{ garfile.visitReason }}</td></tr>
+            <tr class="govuk-table__row" >
+              <td class="govuk-table__cell">{{ garfile.responsibleSurname }}</td>
+              </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" >{{ garfile.responsibleContactNo }}</td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+
+<script>
+    function printMyGar(){
+      document.title=document.getElementById("garID_title").textContent;
+      window.print();
+   }
+</script>
+
+{% endblock %}
+ 
+    
