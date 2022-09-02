@@ -27,7 +27,7 @@
   <h1 class="govuk-heading-xl">{{__('nav_bar_organisation')}}</h1>
   <p class="govuk-body-l">{{__('organisation_caption')}}</p>
 
-  <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
+  {# <form id="organisation" action="/organisation" class="form-group" method="post" role="form" > #}
 
 		<dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 1em;">
 			<div class="app-check-your-answers__contents" style="border-bottom: none;">
@@ -38,7 +38,7 @@
 					{{cookie.getOrganisationName()}}
 				</dd>
 		</dl>
-    <button id="edit-organisation" type="submit" class="govuk-button" name="editOrg" value="{{cookie.getOrganisationId()}}">{{__('title_edit_organisation')}}</button>
+    <a id="edit-organisation" type="submit" class="govuk-button" name="editOrg" href="/organisation/editorganisation" value="{{cookie.getOrganisationId()}}">{{__('title_edit_organisation')}}</a>
 	</div>
 	<div class="govuk-grid-column-full">
 		<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
@@ -70,7 +70,7 @@
 		<p class="govuk-body-m">Search for people within the organisation,  {{ cookie.getOrganisationName() }}</p>
       <input class="govuk-input govuk-input--width-20" id="organisation-search" name="organisation-search" type="text" placeholder="Search" style="margin-bottom: 10px">
 	</div>
-
+  <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
 	<div class="govuk-grid-column-full">
 		<h1 class="govuk-heading-l">{{__('title_organisation_users')}}</h1>
 		<p class="govuk-body-l">{{__('organisations_users_caption')}}</p>
@@ -89,7 +89,7 @@
           {% for user in orgUsers.items %}
           <tr class="govuk-table__row">
             {% if user.email != cookie.getUserEmail() %}
-            <td class="govuk-table__cell"><button id="edit_user_{{ loop.index }}" class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}">{{ user.lastName }}</button></td>
+            <td class="govuk-table__cell"><button id="edit_user_{{ loop.index }}" class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}">{{ user.lastName }}</a></td>
             {% else %}
             <td class="govuk-table__cell">{{ user.lastName }}</td>
             {% endif %}
