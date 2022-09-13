@@ -24,6 +24,11 @@
   	{% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
+{% if successMsg %}
+      {% include "common/templates/includes/success-action.njk" %}
+    {% endif %}
+
+ 
   <h1 class="govuk-heading-xl">{{__('nav_bar_organisation')}}</h1>
   <p class="govuk-body-l">{{__('organisation_caption')}}</p>
 
@@ -82,6 +87,7 @@
 					<th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
 					<th class="govuk-table__header" scope="col">{{__('field_email')}}</th>
 					<th class="govuk-table__header" scope="col">{{__('field_role')}}</th>
+          <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>    
 				</tr>
 			</thead>
 			<tbody class="govuk-table__body" id="organisation_table_row">
@@ -96,6 +102,13 @@
             <td class="govuk-table__cell" scope="row">{{ user.firstName }}</th>
             <td class="govuk-table__cell">{{ user.email }}</td>
             <td class="govuk-table__cell">{{ user.role.name }}</td>
+            {% if (cookie.getUserRole() == ('Admin')) and (user.role.name != 'Admin') %}  
+            <td class="govuk-table__cell"><button id="delete_user_{{ loop.index }}" class="govuk-link btn-link" name="deleteUser" value="{{user.email}}">{{ __('table_delete') }}</button></td> 
+           {% else %} 
+            {% if (cookie.getUserRole() == ('Manager')) and (user.role.name != 'Manager') and (user.role.name != 'Admin') %}
+            <td class="govuk-table__cell"><button id="delete_user_{{ loop.index }}" class="govuk-link btn-link" name="deleteUser" value="{{user.email}}">{{ __('table_delete') }}</button></td>   
+             {% endif %} 
+            {% endif %} 
           </tr>
           {% endfor %}
         {% else %}
@@ -143,7 +156,5 @@
     });
     </script>
 </div>
-
-
 
 {% endblock %}

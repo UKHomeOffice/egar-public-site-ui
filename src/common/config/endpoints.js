@@ -25,8 +25,8 @@ const endpoints = {
     logger.debug(`Calling updateUserData endpoint ${endpoint}`);
     return endpoint;
   },
-  deleteUser(email) {
-    const endpoint = new URL(`${API_VERSION}/user/${email}`, BASE_URL).href;
+  deleteUser(userId, email) {
+    const endpoint = new URL(`${API_VERSION}/user/${userId, email}`, BASE_URL).href;
     logger.debug(`Calling deleteUserData endpoint ${endpoint}`);
     return endpoint;
   },

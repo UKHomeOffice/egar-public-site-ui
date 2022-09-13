@@ -4,7 +4,10 @@ const orgApi = require('../../common/services/organisationApi');
 const logger = require('../../common/utils/logger')(__filename);
 
 module.exports = (req, res) => {
+  logger.debug('In organisation get controller');
   const cookie = new CookieModel(req);
+  const errMSg = { message: 'Failed to get orgusers' };
+  
 
   orgApi.getUsers(cookie.getOrganisationId())
     .then((values) => {

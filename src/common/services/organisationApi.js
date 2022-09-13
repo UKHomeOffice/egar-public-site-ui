@@ -130,4 +130,20 @@ module.exports = {
       });
     });
   },
+  deleteUser(userId, email) {
+    return new Promise((resolve, reject) => {
+      request.delete({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.deleteUser(userId, email),
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call delete user endpoint');
+          reject(error);
+          return;
+        }
+        logger.debug('Successfully called delete user/person endpoint');
+        resolve(body);
+      });
+    });
+  },
 };
