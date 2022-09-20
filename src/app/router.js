@@ -72,6 +72,7 @@ const orginvitesuccess = require('./organisation/invitesuccess');
 const editorganisation = require('./organisation/editorganisation');
 const orgassignrole = require('./organisation/assignrole');
 const orgEditUsers = require('./organisation/editusers');
+const deleteUser = require('./organisation/delete');
 
 // Export
 module.exports.bind = (app) => {
@@ -100,6 +101,7 @@ module.exports.bind = (app) => {
   app.use(orgassignrole.router);
   app.use(verifyInvite.router);
   app.use(orgEditUsers.router);
+  app.use(deleteUser.router);
   app.use(usersavedcraftedit.router);
   app.use(userSavedCraftDelete.router);
   app.use(usersavedcraftadd.router);
