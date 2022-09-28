@@ -26,8 +26,6 @@ module.exports = (req, res) => {
     documentTypeOther: `${req.body.travelDocumentType}` + " - " + req.body.travelDocumentOther,
   };
 
-  logger.info(person.documentTypeOther);
-  logger.info(person.documentType);
 
   if (person.documentType == 'Other'){
       person.documentType = person.documentTypeOther;
