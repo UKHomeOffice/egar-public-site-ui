@@ -23,7 +23,13 @@ module.exports = (req, res) => {
     issuingState: _.toUpper(req.body.issuingState),
     documentExpiryDate: `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`,
     dateOfBirth: `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`,
+    documentTypeOther: `${req.body.travelDocumentType}` + " - " + req.body.travelDocumentOther,
   };
+
+  if (person.documentType == 'Other'){
+    person.documentType = person.documentTypeOther;
+    logger.info(person.documentType);
+  }
 
   cookie.updateEditPerson(person);
 

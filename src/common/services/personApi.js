@@ -17,6 +17,7 @@ module.exports = {
    * documentExpiryDate,
    * peopleType,
    * issuingState,
+   * documentTypeOther,
    *
    * @param {String} userId userId of user saving the person
    * @param {Object} person person Object
@@ -33,6 +34,7 @@ module.exports = {
     const { documentExpiryDate } = person;
     const { peopleType } = person;
     const { issuingState } = person;
+    const { documentTypeOther } = person;
 
     return new Promise((resolve, reject) => {
       request.post({
@@ -50,6 +52,7 @@ module.exports = {
           documentExpiryDate,
           peopleType,
           issuingState,
+          documentTypeOther,
         }),
       }, (error, _response, body) => {
         if (error) {
@@ -135,6 +138,7 @@ module.exports = {
     const { documentExpiryDate } = person;
     const { peopleType } = person;
     const { issuingState } = person;
+    const { documentTypeOther } = person;
 
     return new Promise((resolve, reject) => {
       request.put({
@@ -152,6 +156,7 @@ module.exports = {
           documentExpiryDate,
           peopleType,
           issuingState,
+          documentTypeOther,
         }),
       }, (error, _response, body) => {
         if (error) {

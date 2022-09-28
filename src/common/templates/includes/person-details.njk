@@ -173,7 +173,7 @@
     <label class="govuk-label govuk-label--m" for="travelDocumentType">{{ __('field_travel_document_type') }}</label>
     {{ m.hint('travelDocumentType', __('field_travel_document_type_hint')) }} <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text_part')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
     {{ m.error_message('travelDocumentType', errors, __) }}
-    <select class="govuk-select" id="travelDocumentType" name="travelDocumentType">
+    <select class="govuk-select" id="travelDocumentType" name="travelDocumentType" onchange="checkDocumentType()">
     {% for document in documenttype %}
       {% if document.documenttype  == person['documentType'] or document.documenttype == req.body.travelDocumentType %}
         <option selected="true">{{document.documenttype}}</option>
@@ -184,6 +184,22 @@
     </select>
   </div>
 
+    {% if person.documentType  === 'Other' %}
+      <div class="{{ m.form_group_class('travelDocumentOther', errors) }}" id="travelDocumentOtherDiv" >
+      {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
+      <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
+      maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentTypeOther or req.body.documentTypeOther }}">
+      </div>
+    {% else %} 
+      <div class="{{ m.form_group_class('travelDocumentOther', errors) }}" id="travelDocumentOtherDiv" hidden>
+      {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
+      <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
+      maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentTypeOther or req.body.documentTypeOther }}">
+      </div>
+    {% endif %}
+
+  
+
 <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
 <script type="text/javascript" src="/utils/validator.js"></script>
 <script type="text/javascript">
@@ -193,4 +209,21 @@
   accessibleAutocomplete.enhanceSelectElement({
     selectElement: document.querySelector('#issuingState')
   });
+
+  function checkDocumentType(){
+    if (document.getElementById('travelDocumentType').value == 'Other'){
+      document.getElementById('travelDocumentOtherDiv').style.display = 'block';
+    }
+    else{
+      document.getElementById('travelDocumentOtherDiv').style.display = 'none';
+    }
+    
+  }
+
+   function checkDocumentNotEmpty(){
+    if(document.getElementById('travelDocumentOther').value == ''){
+      alert("Document type needs to be input");
+      }
+
+  } 
 </script>

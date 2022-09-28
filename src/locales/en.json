@@ -200,6 +200,7 @@
     "field_issuing_state_hint": "Type in or provide the 3 letter code for the issuing state, for example GBR.",
     "field_travel_document_type": "Travel document type",
     "field_travel_document_type_hint": "This should be Passport or Other.",
+    "field_travel_document_type_other": "Please input what document type you are using.",
     "field_travel_document_issuing_state": "Travel document issuing state",
     "field_travel_document_expiry_date": "Travel document expiry date",
     "form_save_and_add_to_gar": "Save and add to GAR",

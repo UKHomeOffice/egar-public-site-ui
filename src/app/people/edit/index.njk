@@ -42,6 +42,10 @@
 
       {% include "person-details.njk" %}
 
+      <script>
+        document.getElementById("travelDocumentType").addEventListener("load", checkDocumentType());
+      </script>
+
       <div class="govuk-form-group">
         <input id="save-and-exit" class="govuk-button" type="submit"
           name="buttonClicked"
@@ -57,3 +61,5 @@
   </div>
 </div>
 {% endblock %}
+
+
