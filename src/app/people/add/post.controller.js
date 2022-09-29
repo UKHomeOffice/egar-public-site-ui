@@ -23,12 +23,20 @@ module.exports = (req, res) => {
     issuingState: _.toUpper(req.body.issuingState),
     documentExpiryDate: `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`,
     dateOfBirth: `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`,
+    documentTypeOther: `${req.body.travelDocumentType}` + " - " + req.body.travelDocumentOther,
   };
+
+
+  if (person.documentType == 'Other'){
+      person.documentType = person.documentTypeOther;
+      logger.info(person.documentType);
+    }
+    
 
   // Validate chains
   validator.validateChains(validations.validations(req))
     .then(() => {
-      // call the API to update the data base and then
+      // call the API to update the database and then
       personApi.create(cookie.getUserDbId(), person).then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
