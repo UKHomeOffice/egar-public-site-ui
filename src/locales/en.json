@@ -289,7 +289,7 @@
     "people_add": "Add a new person",
     "garfile_people_add": "Add a new person to the GAR",
     "people_add_caption": "Add the details of people that you regularly add to GARs.",
-
+    "field_created_date_time": "Person added date",
     "title_add_person": "Add a person",
     "add_person_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
 
