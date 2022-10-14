@@ -291,7 +291,7 @@ steps:
   pull: if-not-exists
   image: plugins/slack
   settings:
-    channel: egar-notifications
+    channel: sgar-dev
     template: "*Deployment* {{repo.name}} FAILED*    Author: {{build.author}}    Duration: {{since job.started}}    Job: <{{build.link}}|#{{build.number}}>\n"
     username: Drone
   environment:
