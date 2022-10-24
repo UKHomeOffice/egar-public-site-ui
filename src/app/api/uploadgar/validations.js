@@ -40,7 +40,9 @@ function getCrewFieldLabel(key) { //NOSONAR
 module.exports.validations = (voyageObj, crewArr, passengersArr) => {
   const validationArr = [
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalPort, 'Enter a value for the arrival port')],
+    [new ValidationRule(validator.preventZ, '', voyageObj.arrivalPort, 'Arrival port cannot be ZZZZ or YYYY')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departurePort, 'Enter a value for the departure port')],
+    [new ValidationRule(validator.preventZ, '', voyageObj.departurePort, 'Departure port cannot be ZZZZ or YYYY')],
     [new ValidationRule(airportValidation.isBritishAirport, '',[voyageObj.departurePort, voyageObj.arrivalPort], airportValidation.notBritishMsg)],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalTime, 'Enter a value for the arrival time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureTime, 'Enter a value for the departure time')],

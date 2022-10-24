@@ -411,6 +411,8 @@ function isValidFileMime(fileName, mimeType) {
     png: ['image/png', 'image/x-citrix-png', 'image/x-png'],
     pdf: ['application/pdf'],
     gif: ['image/gif'],
+    docx: ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+    doc: ['application/msword'],
   };
   const fileExtension = fileName.split('.').slice(-1).pop();
   if (fileTypeObj[fileExtension]) {
@@ -555,6 +557,12 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
 
   }
 
+  function preventZ(value){
+    if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy"){
+      return false;
+    }
+    return true;
+  }
 
 
 
@@ -610,4 +618,5 @@ module.exports = {
   invalidLatDirection,
   invalidLongDirection,
   sanitiseValue2,
+  preventZ,
 };
