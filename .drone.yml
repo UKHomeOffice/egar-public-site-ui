@@ -5,16 +5,16 @@ type: kubernetes
 
 services:
 - name: docker
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:19.03.12-rc2
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
 
 steps:
 - name: Build
   pull: if-not-exists
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:19.03.12-rc2
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
   commands:
   # Wait for the docker service to be up
   - echo "Checking for docker availability."
-  - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
+  - n=0; while [ "$n" -lt 60 ] && ! docker stats --no-stream >/dev/null 2>&1; do n=$(( n + 1 )); sleep 1; done
   - echo "echo docker now available."
   - docker build -t egar_ui-public-site:$${DRONE_COMMIT} .
   settings:
@@ -46,7 +46,7 @@ steps:
 
 - name: Push Image to Quay.io
   pull: if-not-exists
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:19.03.12-rc2
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
   environment:
     DOCKER_PASSWORD:
       from_secret: DOCKER_PASSWORD
@@ -140,7 +140,7 @@ steps:
 
 - name: End to End tests
   pull: if-not-exists
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:19.03.12-rc2
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
   commands:
   - source db_creds
   - "docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER}  -e PROTOCOL=$${E2E_PROTOCOL} -e BASE_URL=$${E2E_BASE_URL} -e E2E_SMTP_SERVER=$${E2E_SMTP_SERVER} -e E2E_SMTP_PORT=$${E2E_SMTP_PORT} -e E2E_INDIVIDUAL_USER_USERNAME=$${E2E_INDIVIDUAL_USER_USERNAME} -e E2E_INDIVIDUAL_USER_PASSWORD=$${E2E_INDIVIDUAL_USER_PASSWORD} -e E2E_ORGANISATION_USER_USERNAME=$${E2E_ORGANISATION_USER_USERNAME} -e E2E_ORGANISATION_USER_PASSWORD=$${E2E_ORGANISATION_USER_PASSWORD} -e E2E_FRONT_END_DB_HOST=$${E2E_FRONT_END_DB_HOST} -e E2E_FRONT_END_DB_NAME=$${E2E_FRONT_END_DB_NAME} -e E2E_FRONT_END_DB_USER=$E2E_FRONT_END_DB_USER -e E2E_FRONT_END_DB_PASSWORD=$E2E_FRONT_END_DB_PASSWORD -e E2E_BACK_END_DB_HOST=$${E2E_BACK_END_DB_HOST} -e E2E_BACK_END_DB_NAME=$${E2E_BACK_END_DB_NAME} -e E2E_BACK_END_DB_USER=$E2E_BACK_END_DB_USER -e E2E_BACK_END_DB_PASSWORD=$E2E_BACK_END_DB_PASSWORD quay.io/ukhomeofficedigital/egar-e2e-test:latest\n"
@@ -287,19 +287,40 @@ steps:
       include:
       - production
 
-- name: Notify Slack on Failure
+- name: Notify Slack
   pull: if-not-exists
   image: plugins/slack
   settings:
-    channel: sgar-dev
-    template: "*Deployment* {{repo.name}} FAILED*    Author: {{build.author}}    Duration: {{since job.started}}    Job: <{{build.link}}|#{{build.number}}>\n"
-    username: Drone
+      channel: sgar-dev
+      webhook: 
+        from_secret: SLACK_WEBHOOK
+      template: >
+        {{#success build.status}}
+          *Deployment* {{repo.name}} - *SUCCESS*
+          Author: {{build.author}}
+          Job: <{{build.link}}|#{{build.number}}>
+          Duration: {{since job.started}}
+          Message: {{build.message}}
+        {{else}}
+          *Deployment* {{repo.name}} - *FAILURE*
+          Author: {{build.author}}
+          Job: <{{build.link}}|#{{build.number}}>
+          Duration: {{since job.started}}
+          Message: {{build.message}}
+        {{/success}}
   environment:
     SLACK_WEBHOOK:
       from_secret: SLACK_WEBHOOK
+
   when:
-    status:
-    - failure
+      branch:
+      - master
+      event:
+      - push
+      target:
+        exclude:
+        - production
+      status: [ success, failure ]
 
 trigger:
   branch:

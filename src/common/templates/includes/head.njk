@@ -19,7 +19,7 @@ function loadAnalytics(){
     ga('send', 'pageview');
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', '{{ ga_id }}');
+    gtag('config', '{{ ga_id }}', { 'anonymize_ip': true });
     //console.log(getCookie({{ ga_id }}));
   }
   else{
