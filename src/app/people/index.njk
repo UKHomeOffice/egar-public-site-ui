@@ -77,19 +77,15 @@
         {% if people | length %}
           {% for person in people %}
           <tr class="govuk-table__row">
-             {% if cookie.getUserRole() != 'User' %} 
-              <td class="govuk-table__cell"><button id="edit-person-{{ loop.index }}" class="link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
-              {% else %} 
-              <td class="govuk-table__cell">{{person.lastName}}</td>
-              {% endif %} 
-            <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
-            <td class="govuk-table__cell">{{person.peopleType.name}}</td>
-            <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
-            <td class="govuk-table__cell">{{person.createdDateTime | truncate(11, true, "")}}</td>
-            {#  {% if cookie.getUserRole() != 'User' %} #}
-            <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button></td>
-            {#   {% endif %} #}
-           {# <td class="govuk-table__cell"></td> #}
+          <td class="govuk-table__cell"><button id="edit-person-{{ loop.index }}" class="link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
+          <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
+          <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+          <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+          <td class="govuk-table__cell">{{person.createdDateTime | truncate(11, true, "")}}</td>
+          {#  {% if cookie.getUserRole() != 'User' %} #}
+          <td class="govuk-table__cell "><button class="link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button></td>
+          {#   {% endif %} #}
+          {# <td class="govuk-table__cell"></td> #}
           </tr>
           {% endfor %}
         {% else %}
