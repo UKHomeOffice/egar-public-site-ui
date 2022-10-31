@@ -8126,6 +8126,12 @@
     "label": "Reims-Prunay Airport (France) (LFQA)"
   },
   {
+    "id": "LFPI",
+    "id2": "LFPI",
+    "british": false,
+    "label": "Issy les Moulineaux Heliport (France) (LFPI)"
+  },
+  {
     "id": "LFQB",
     "id2": "LFQB",
     "british": false,
