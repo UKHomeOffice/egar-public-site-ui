@@ -77,11 +77,7 @@
         {% if people | length %}
           {% for person in people %}
           <tr class="govuk-table__row">
-             {% if cookie.getUserRole() != 'User' %} 
-              <td class="govuk-table__cell"><button id="edit-person-{{ loop.index }}" class="link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
-              {% else %} 
-              <td class="govuk-table__cell">{{person.lastName}}</td>
-              {% endif %} 
+            <td class="govuk-table__cell"><button id="edit-person-{{ loop.index }}" class="link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a></td>
             <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
             <td class="govuk-table__cell">{{person.peopleType.name}}</td>
             <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
