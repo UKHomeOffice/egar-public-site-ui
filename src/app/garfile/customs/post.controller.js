@@ -5,26 +5,44 @@ const validations = require('./validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
-const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options');
+const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options.json');
+const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
+const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
   req.body.goodsDeclaration = _.trim(req.body.goodsDeclaration);
+  req.body.baggageDeclaration = _.trim(req.body.baggageDeclaration);
+  req.body.fixedBasedOperatorAnswer = _.trim(req.body.fixedBasedOperatorAnswer);
+  req.body.operatorAnswer = _.trim(req.body.operatorAnswer);
+  req.body.supportingInformationAnswer = _.trim(req.body.supportingInformationAnswer);
+  req.body.passengerTravellingReason = _.trim(req.body.passengerTravellingReason);
 
   const customs = {
     prohibitedGoods: req.body.prohibitedGoods,
     goodsDeclaration: (req.body.prohibitedGoods === 'Yes' ? req.body.goodsDeclaration : ''),
+    baggage: req.body.baggage,
+    baggageDeclaration: (req.body.baggage === 'Yes' ? req.body.baggageDeclaration : ''),
     freeCirculation: req.body.freeCirculation,
     visitReason: req.body.visitReason,
+    fixedBasedOperator: req.body.fixedBasedOperator,
+    fixedBasedOperatorAnswer: (req.body.fixedBasedOperator === 'Fixed Based Operator' ? req.body.fixedBasedOperatorAnswer : ''),
+    operatorAnswer: (req.body.fixedBasedOperator === 'Operator' ? req.body.operatorAnswer : ''),
+    supportingInformation: req.body.supportingInformation,
+    supportingInformationAnswer: (req.body.supportingInformation === 'Yes' ? req.body.supportingInformationAnswer : ''),
+    passengerTravellingReason: req.body.passengerTravellingReason,
+    passengerTravellingReasonAnswer: (req.body.passengerTravellingReason === 'Yes' ? req.body.passengerTravellingReasonAnswer : '')
   };
 
   const context = {
     freeCirculationOptions,
     reasonForVisitOptions,
     prohibitedGoodsOptions,
+    baggageOptions,
+    fixedBasedOperatorOptions,
     cookie,
     gar: customs,
   };
