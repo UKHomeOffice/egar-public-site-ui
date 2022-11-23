@@ -1,9 +1,11 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
-const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options');
+const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options.json');
+const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
+const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 
 module.exports = (req, res) => {
   logger.info('In get controller for prohibited goods');
@@ -15,6 +17,8 @@ module.exports = (req, res) => {
     freeCirculationOptions,
     reasonForVisitOptions,
     prohibitedGoodsOptions,
+    baggageOptions,
+    fixedBasedOperatorOptions,
     cookie,
   };
 

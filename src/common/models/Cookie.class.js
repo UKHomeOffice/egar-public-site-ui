@@ -167,6 +167,17 @@ class Cookie {
         prohibitedGoods: null,
         goodsDeclaration: null,
         prohibitedGoodsList: [],
+        baggage: null,
+        baggageDeclaration: null,
+        baggageList: [],
+        passengerTravellingReason: null,
+        passengerTravellingReasonList: [],
+        fixedBasedOperator: null,
+        fixedBasedOperatorAnswer: null,
+        fixedBasedOperatorList: [],
+        operatorAnswer: null,
+        supportingInformation: null,
+        supportingInformationList: [],
         supportingDocument: [],
       };
     }
@@ -370,6 +381,94 @@ class Cookie {
 
   setGarProhibitedGoodsList(pgl) {
     this.session.gar.manifest.push(pgl);
+  }
+
+  getGarBaggage() {
+    return this.session.gar.baggage;
+  }
+
+  setGarBaggage(b) {
+    this.session.gar.baggage = b;
+  }
+
+  getBaggageDeclaration() {
+    return this.session.gar.baggageDeclaration;
+  }
+
+  setBaggageDeclaration(bd) {
+    this.session.gar.baggageDeclaration = bd;
+  }
+
+  getGarBaggageList() {
+    return this.session.gar.BaggageList;
+  }
+
+  setGarBaggageList(bl) {
+    this.session.gar.manifest.push(bl);
+  }
+
+  getGarpassengerTravellingReason() {
+    return this.session.gar.passengerTravellingReason;
+  }
+  
+  setGarpassengerTravellingReason(ptr) {
+   this.session.gar.passengerTravellingReason = ptr;
+  }
+      
+  getGarpassengerTravellingReasonList() {
+    return this.session.gar.passengerTravellingReasonList;
+  }
+      
+ setGarpassengerTravellingReasonList(ptrl) {
+   this.session.gar.manifest.push(ptrl);
+  }
+
+  getGarfixedBasedOperator() {
+  return this.session.gar.fixedBasedOperator;
+  }
+
+  setGarfixedBasedOperator(fbo) {
+    this.session.gar.fixedBasedOperator = fbo;
+  }
+
+  getfixedBasedOperatorAnswer() {
+    return this.session.gar.fixedBasedOperatorAnswer;
+  }
+
+  setfixedBasedOperatorAnswer(fboa) {
+    this.session.gar.fixedBasedOperatorAnswer = fboa;
+  }
+
+  getGarfixedBasedOperatorList() {
+    return this.session.gar.OperatorList;
+  }
+
+  setGarfixedBasedOperatorList(fbol) {
+    this.session.gar.manifest.push(fbol);
+  }
+
+  getOperatorAnswer() {
+    return this.session.gar.OperatorAnswer;
+  }
+
+  setOperatorAnswer(oa) {
+    this.session.gar.OperatorAnswer = oa;
+  }
+
+  getGarSupportingInformation() {
+  return this.session.gar.SupportingInformation;
+  }
+
+  setGarSupportingInformation(si) {
+    this.session.gar.SupportingInformation = si;
+  }
+
+  getGarSupportingInformationList() {
+    return this.session.gar.SupportingInformationList;
+  }
+
+  setGarSupportingInformationList(sil) {
+    this.session.gar.manifest.push(sil);
   }
 
   setGarResponsiblePerson(person) {

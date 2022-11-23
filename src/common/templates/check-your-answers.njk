@@ -229,7 +229,20 @@
       {% if garfile.prohibitedGoods === 'Yes' %}
         {{ check_your_answers_row(__('field_goods_declaration'), garfile.goodsDeclaration | truncate(50)) }}
       {% endif %}
+      {{ check_your_answers_row(__('field_baggage'), garfile.baggage) }}
+      {% if garfile.baggage === 'Yes' %}
+        {{ check_your_answers_row(__('field_baggage_declaration'), garfile.baggageDeclaration | truncate(50)) }}
+      {% endif %}
+      {{ check_your_answers_row(__('passenger_travelling_reason'), garfile.passengerTravellingReason | truncate(50)) }}
       {{ check_your_answers_row(__('field_visit_reason_question'), garfile.visitReason | uncamelCase) }}
+      {{ check_your_answers_row(__('field_fbo_question'), garfile.fixedBasedOperator) }}
+      {% if garfile.fixedBasedOperator === 'Fixed Based Operator' %}
+        {{ check_your_answers_row(__('field_fbo_option'), garfile.fixedBasedOperatorAnswer | truncate(50)) }}
+      {% endif %}
+      {% if garfile.fixedBasedOperator === 'Operator' %}
+        {{ check_your_answers_row(__('field_operator_option'), garfile.operatorAnswer | truncate(50)) }}
+      {% endif %}
+      {{ check_your_answers_row(__('field_supporting_information_review'), garfile.supportingInformation | truncate(50)) }}
     </dl>
 
     <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
