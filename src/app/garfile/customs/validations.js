@@ -55,7 +55,7 @@ module.exports.validations = (req) => {
   if (baggage === 'Yes') {
     validations[3].push(new ValidationRule(validator.notEmpty, 'baggageDeclaration', baggageDeclaration, 'Please enter baggage declaration details'));
   }
-  if (fixedBasedOperator === 'FixedBasedOperator') {
+  if (fixedBasedOperator === 'Fixed Based Operator') {
     validations[7].push(new ValidationRule(validator.notEmpty, 'fixedBasedOperatorAnswer', fixedBasedOperatorAnswer, 'Please enter Name and base location'));
   }
   if (fixedBasedOperator === 'Operator') {
