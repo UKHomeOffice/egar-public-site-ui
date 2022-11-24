@@ -36,7 +36,7 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.notEmpty, 'visitReason', visitReason, 'Select a reason for visit'),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'fixedBasedOperator', fixedBasedOperator, 'Select a value for baggage declaration'),
+      new ValidationRule(validator.notEmpty, 'fixedBasedOperator', fixedBasedOperator, 'Select a value for operator question'),
     ],
     [
       new ValidationRule(validator.validTextLength, 'fixedBasedOperatorAnswer', { value: fixedBasedOperatorAnswer, maxLength: MAX_TEXT_BOX_LENGTH - 100 }, `Fixed based operator details must be ${MAX_TEXT_BOX_LENGTH - 100} characters or less`),
