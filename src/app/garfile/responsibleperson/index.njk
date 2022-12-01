@@ -110,7 +110,32 @@
                 id="responsiblePostcode" name="responsiblePostcode" type="text"
                 value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}"/>
             </div>
-          </fieldset>
+
+          <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
+          <label class="govuk-label govuk-label--m" for="fixedBasedOperator">{{__('field_fbo_question')}}</label>  
+
+          <div class="govuk-radios govuk-radio--conditional" data-module="radios">
+          {% for choice in fixedBasedOperatorOptions %}
+            <div class="govuk-radios__item">
+              <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="fixedBasedOperator" value="{{choice.value}}"
+                aria-labelledby="fixedBasedOperator-label-{{ loop.index }}"
+                {{ "data-aria-controls=conditional-fixedBasedOperatorAnswer" if choice.value === 'Other' }}
+                {{ "checked" if choice.value == gar.fixedBasedOperator }}>
+              <label id="fixedBasedOperator-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
+            </div>
+            {% if choice.value == 'Other' %}
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-fixedBasedOperatorAnswer">
+              <div class="govuk-form-group">
+                <textarea class="govuk-textarea" id="fixedBasedOperatorAnswer" name="fixedBasedOperatorAnswer"
+                  rows="3" aria-describedby="fixedBasedOperator-hint"
+                  maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.fixedBasedOperatorAnswer}}</textarea>
+              </div>
+            </div>
+          {% endif %}
+          {% endfor %}
+          </div>              
+          </div> 
+          </fieldset>    
         </div>
 
       {# Start buttons #}
@@ -118,6 +143,7 @@
       </form>
       {{ m.exit_without_saving(csrfToken, __) }}
       {# End buttons #}
+      </div>
     </div>
     <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
     <script type="text/javascript">

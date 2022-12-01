@@ -9,15 +9,13 @@ const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited
 const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
-const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
+const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
   req.body.goodsDeclaration = _.trim(req.body.goodsDeclaration);
   req.body.baggageDeclaration = _.trim(req.body.baggageDeclaration);
-  req.body.fixedBasedOperatorAnswer = _.trim(req.body.fixedBasedOperatorAnswer);
-  req.body.operatorAnswer = _.trim(req.body.operatorAnswer);
   req.body.supportingInformationAnswer = _.trim(req.body.supportingInformationAnswer);
   req.body.passengerTravellingReason = _.trim(req.body.passengerTravellingReason);
 
@@ -28,13 +26,11 @@ module.exports = (req, res) => {
     baggageDeclaration: (req.body.baggage === 'Yes' ? req.body.baggageDeclaration : ''),
     freeCirculation: req.body.freeCirculation,
     visitReason: req.body.visitReason,
-    fixedBasedOperator: req.body.fixedBasedOperator,
-    fixedBasedOperatorAnswer: (req.body.fixedBasedOperator === 'Fixed Based Operator' ? req.body.fixedBasedOperatorAnswer : ''),
-    operatorAnswer: (req.body.fixedBasedOperator === 'Operator' ? req.body.operatorAnswer : ''),
     supportingInformation: req.body.supportingInformation,
     supportingInformationAnswer: (req.body.supportingInformation === 'Yes' ? req.body.supportingInformationAnswer : ''),
     passengerTravellingReason: req.body.passengerTravellingReason,
-    passengerTravellingReasonAnswer: (req.body.passengerTravellingReason === 'Yes' ? req.body.passengerTravellingReasonAnswer : '')
+    passengerTravellingReasonAnswer: (req.body.passengerTravellingReason === 'Yes' ? req.body.passengerTravellingReasonAnswer : ''),
+    intentionValue: req.body.intentionValue,
   };
 
   const context = {
@@ -42,10 +38,12 @@ module.exports = (req, res) => {
     reasonForVisitOptions,
     prohibitedGoodsOptions,
     baggageOptions,
-    fixedBasedOperatorOptions,
+    intentionValueOptions,
     cookie,
     gar: customs,
   };
+
+  logger.debug(req.body.prohibitedGoods)
 
   const { buttonClicked } = req.body;
 
