@@ -5,7 +5,7 @@ const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited
 const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
-const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
+const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
 
 module.exports = (req, res) => {
   logger.info('In get controller for prohibited goods');
@@ -18,7 +18,7 @@ module.exports = (req, res) => {
     reasonForVisitOptions,
     prohibitedGoodsOptions,
     baggageOptions,
-    fixedBasedOperatorOptions,
+    intentionValueOptions,
     cookie,
   };
 
@@ -33,4 +33,6 @@ module.exports = (req, res) => {
       context.errors = [{ message: 'Problems retrieving GAR' }];
       res.render('app/garfile/customs/index', context);
     });
+
+
 };

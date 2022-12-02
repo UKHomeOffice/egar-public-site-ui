@@ -1,11 +1,16 @@
+const _ = require('lodash');
+
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
+const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
+
+  req.body.fixedBasedOperatorAnswer = _.trim(req.body.fixedBasedOperatorAnswer);
 
   const responsiblePerson = {
     responsibleGivenName: req.body.responsibleGivenName,
@@ -16,6 +21,9 @@ module.exports = (req, res) => {
     responsibleTown: req.body.responsibleTown,
     responsibleCounty: req.body.responsibleCounty,
     responsiblePostcode: req.body.responsiblePostcode,
+    fixedBasedOperator: req.body.fixedBasedOperator,
+    fixedBasedOperatorAnswer: (req.body.fixedBasedOperator === 'Other' ? req.body.fixedBasedOperatorAnswer : ''),
+    fixedBasedOperatorOptions,
   };
 
   const { buttonClicked } = req.body;
@@ -28,7 +36,7 @@ module.exports = (req, res) => {
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             // API returned error
             res.render('app/garfile/responsibleperson/index', {
-              cookie, errors: [parsedResponse],
+              cookie, fixedBasedOperatorOptions, errors: [parsedResponse],
             });
             return;
           }
@@ -45,7 +53,7 @@ module.exports = (req, res) => {
           logger.error('API failed to update GAR');
           logger.error(JSON.stringify(err));
           res.render('app/garfile/responsibleperson/index', {
-            cookie, errors: [{ message: 'Failed to add to GAR' }],
+            cookie, fixedBasedOperatorOptions, errors: [{ message: 'Failed to add to GAR' }],
           });
         });
     })
@@ -53,7 +61,7 @@ module.exports = (req, res) => {
       logger.info('GAR responsible person validation failed');
       cookie.setGarResponsiblePerson(responsiblePerson);
       res.render('app/garfile/responsibleperson/index', {
-        req, cookie, errors: err,
+        req, cookie, fixedBasedOperatorOptions, errors: err,
       });
     });
 };

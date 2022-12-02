@@ -10,10 +10,8 @@ module.exports.validations = (req) => {
     baggageDeclaration,
     passengerTravellingReason,
     visitReason,
-    fixedBasedOperator,
-    fixedBasedOperatorAnswer,
     supportingInformation,
-    operatorAnswer,
+    intentionValue,
   } = req.body;
 
   const validations = [
@@ -36,16 +34,10 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.notEmpty, 'visitReason', visitReason, 'Select a reason for visit'),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'fixedBasedOperator', fixedBasedOperator, 'Select a value for operator question'),
-    ],
-    [
-      new ValidationRule(validator.validTextLength, 'fixedBasedOperatorAnswer', { value: fixedBasedOperatorAnswer, maxLength: MAX_TEXT_BOX_LENGTH - 100 }, `Fixed based operator details must be ${MAX_TEXT_BOX_LENGTH - 100} characters or less`),
-    ],
-    [
-      new ValidationRule(validator.validTextLength, 'operatorAnswer', { value: operatorAnswer, maxLength: MAX_TEXT_BOX_LENGTH - 100 }, `operator details must be ${MAX_TEXT_BOX_LENGTH - 100} characters or less`),
-    ],
-    [
       new ValidationRule(validator.notEmpty, 'supportingInformation', { value: supportingInformation, maxLength: MAX_TEXT_BOX_LENGTH - 50 }, `Supporting information must be ${MAX_TEXT_BOX_LENGTH - 50} characters or less`),
+    ],
+    [
+      new ValidationRule(validator.notEmpty, 'intentionValue', intentionValue, 'Select a value for customs declaration'),
     ],
   ];
 
@@ -54,12 +46,6 @@ module.exports.validations = (req) => {
   }
   if (baggage === 'Yes') {
     validations[3].push(new ValidationRule(validator.notEmpty, 'baggageDeclaration', baggageDeclaration, 'Please enter baggage declaration details'));
-  }
-  if (fixedBasedOperator === 'Fixed Based Operator') {
-    validations[7].push(new ValidationRule(validator.notEmpty, 'fixedBasedOperatorAnswer', fixedBasedOperatorAnswer, 'Please enter Name and base location'));
-  }
-  if (fixedBasedOperator === 'Operator') {
-    validations[8].push(new ValidationRule(validator.notEmpty, 'operatorAnswer', operatorAnswer, 'Please enter Name of Operator'));
   }
   return validations;
 };
