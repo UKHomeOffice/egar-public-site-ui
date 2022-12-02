@@ -37,7 +37,7 @@
       <div class="govuk-form-group {{ m.form_group_class('intentionValue', errors) }}" id="intentionValue">
         <fieldset class="govuk-fieldset" aria-describedby="intentionValue-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <p class="govuk-body-m">{{__('field_prohibited_goods_2')}}<a href=https://www.gov.uk/government/publications/travelling-to-the-uk>Travelling to the UK (opens in new tab)</a>{{__('field_prohibited_goods_3')}}<a href=https://www.gov.uk/guidance/bringing-commercial-goods-into-great-britainin-your-baggage>Merchandise in Baggage link (opens in new tab)</a></p>
+            <p class="govuk-body-m">{{__('field_prohibited_goods_2')}}<a href=https://www.gov.uk/government/publications/travelling-to-the-uk target="_blank">Travelling to the UK (opens in new tab) </a>{{__('field_prohibited_goods_3')}}<a href=https://www.gov.uk/guidance/bringing-commercial-goods-into-great-britainin-your-baggage target="_blank">Merchandise in Baggage link (opens in new tab)</a></p>
             {{ m.error_message('intentionValue', errors, __) }}
             <h2 class="govuk-fieldset__heading">{{__('field_intention')}}</h2>
           </legend>
@@ -91,7 +91,7 @@
             {% if choice.value == 'Yes' %}
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-goodsDeclaration">
               <div class="govuk-form-group">
-                <span id="allowances-hint" class="govuk-hint">{{__('field_allowances_hint')}}<a href=https://www.gov.uk/bringing-goods-into-uk-personal-use> Overview - GOV.UK (www.gov.uk) </a></span>
+                <span id="allowances-hint" class="govuk-hint">{{__('field_allowances_hint')}}<a href=https://www.gov.uk/bringing-goods-into-uk-personal-use target="_blank"> Overview - GOV.UK (www.gov.uk) </a></span>
                 <label class="govuk-label" for="goodsDeclaration">{{__('field_goods_declaration_label')}}</label>
                 <textarea class="govuk-textarea" id="goodsDeclaration" name="goodsDeclaration" placeholder="e.g. Firearms"
                   rows="5" aria-describedby="prohibitedGoods-hint"
@@ -126,7 +126,7 @@
               {% if choice.value == 'Yes' %}
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-baggageDeclaration">
                 <div class="govuk-form-group">
-                  <span id="baggage-hint" class="govuk-hint">{{__('field_baggage_hint')}}<a href= https://www.gov.uk/government/publications/travelling-to-the-uk>Travelling to the UK - GOV.UK (www.gov.uk)</a> </span>
+                  <span id="baggage-hint" class="govuk-hint">{{__('field_baggage_hint')}}<a href= https://www.gov.uk/government/publications/travelling-to-the-uk target="_blank">Travelling to the UK - GOV.UK (www.gov.uk) </a> </span>
                   <label class="govuk-label" for="baggageDeclaration">{{__('field_goods_declaration_label')}}</label>
                   <textarea class="govuk-textarea" id="baggageDeclaration" name="baggageDeclaration"
                     rows="5" aria-describedby="baggage-hint"
