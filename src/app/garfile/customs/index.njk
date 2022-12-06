@@ -92,18 +92,18 @@
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-goodsDeclaration">
               <div class="govuk-form-group">
                 <span id="allowances-hint" class="govuk-hint">{{__('field_allowances_hint')}}<a href=https://www.gov.uk/bringing-goods-into-uk-personal-use target="_blank"> Overview - GOV.UK (www.gov.uk) </a></span>
-                <label class="govuk-label" for="goodsDeclaration">{{__('field_goods_declaration_label')}}</label>
-                <textarea class="govuk-textarea" id="goodsDeclaration" name="goodsDeclaration" placeholder="e.g. Firearms"
+                <label class="govuk-label" for="goodsDeclaration">{{__('field_goods_declaration_label_150')}}</label>
+                <textarea class="govuk-textarea" id="goodsDeclaration" name="goodsDeclaration" placeholder="e.g. alcohol or tobacco"
                   rows="5" aria-describedby="prohibitedGoods-hint"
                   maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.goodsDeclaration}}</textarea>
               </div>
             </div>
             {% endif %} 
           {% endfor %}
-          {% if gar.prohibitedGoods == 'Yes' or gar.prohibitedGoods == 'No' or gar.prohibitedGoods == "Don't Know" %}
+          {# {% if gar.prohibitedGoods == 'Yes' or gar.prohibitedGoods == 'No' or gar.prohibitedGoods == "Don't Know" %}
           {% else %}
           <script>document.getElementById("No").checked = true;</script> 
-          {% endif %}
+          {% endif %} #}
           </div>
         </fieldset>
       </div>
@@ -127,18 +127,18 @@
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-baggageDeclaration">
                 <div class="govuk-form-group">
                   <span id="baggage-hint" class="govuk-hint">{{__('field_baggage_hint')}}<a href= https://www.gov.uk/government/publications/travelling-to-the-uk target="_blank">Travelling to the UK - GOV.UK (www.gov.uk) </a> </span>
-                  <label class="govuk-label" for="baggageDeclaration">{{__('field_goods_declaration_label')}}</label>
-                  <textarea class="govuk-textarea" id="baggageDeclaration" name="baggageDeclaration"
+                  <label class="govuk-label" for="baggageDeclaration">{{__('field_goods_declaration_label_150')}}</label>
+                  <textarea class="govuk-textarea" id="baggageDeclaration" name="baggageDeclaration" placeholder="e.g. firearms"
                     rows="5" aria-describedby="baggage-hint"
                     maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.baggageDeclaration}}</textarea>
                 </div>
               </div>
             {% endif %}   
           {% endfor %}
-          {% if gar.baggage == 'Yes' or gar.baggage == 'No' or gar.baggage == "Don't Know" %}
+          {# {% if gar.baggage == 'Yes' or gar.baggage == 'No' or gar.baggage == "Don't Know" %}
           {% else %}
           <script>document.getElementById("No ").checked = true;</script> 
-          {% endif %}
+          {% endif %} #}
           </div>
         </fieldset>
       </div>
@@ -229,7 +229,8 @@
 
           <div class="govuk-radios govuk-radios" id="conditional-supportingInformation">
             <div class="govuk-form-group">
-              <textarea class="govuk-textarea" id="supportingInformation" name="supportingInformation" placeholder="e.g. Animal onboard, unaccompanied minor onboard"
+              <label class="govuk-label" for="supportingInformation">{{__('field_supporting_information_label')}}</label>
+              <textarea class="govuk-textarea" id="supportingInformation" name="supportingInformation" placeholder="e.g. Unaccompanied minor travelling, animal onboard"
               rows="5" aria-describedby="supportingInformation-hint"
               maxlength="{{ MAX_TEXT_BOX_LENGTH - 50 }}">{{gar.supportingInformation}}</textarea>
             </div>
