@@ -23,14 +23,12 @@ module.exports = (req, res) => {
     issuingState: _.toUpper(req.body.issuingState),
     documentExpiryDate: `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`,
     dateOfBirth: `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`,
-    documentTypeOther: `${req.body.travelDocumentType}` + " - " + req.body.travelDocumentOther,
+    documentDesc: req.body.travelDocumentOther,
   };
 
+    logger.info(person.documentType);
+    logger.info(person.documentDesc);
 
-  if (person.documentType == 'Other'){
-      person.documentType = person.documentTypeOther;
-      logger.info(person.documentType);
-    }
     
 
   // Validate chains

@@ -188,13 +188,13 @@
       <div class="{{ m.form_group_class('travelDocumentOther', errors) }}" id="travelDocumentOtherDiv" >
       {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
       <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
-      maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentTypeOther or req.body.documentTypeOther }}">
+      maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
       </div>
     {% else %} 
       <div class="{{ m.form_group_class('travelDocumentOther', errors) }}" id="travelDocumentOtherDiv" hidden>
       {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
       <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
-      maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentTypeOther or req.body.documentTypeOther }}">
+      maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
       </div>
     {% endif %}
 

@@ -751,7 +751,7 @@ class Cookie {
     this.session.editPerson.dateOfBirth = person.dateOfBirth;
     this.session.editPerson.gender = person.gender;
     this.session.editPerson.issuingState = person.issuingState;
-    this.session.editPerson.documentTypeOther = person.documentTypeOther;
+    this.session.editPerson.documentDesc = person.documentDesc;
   }
 
   setEditCraft(craft) {

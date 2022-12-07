@@ -146,6 +146,8 @@
     "field_port_choice_message": "Select whether the port code is known",
     "field_departure_port_code_validation": "The departure airport code must be entered",
     "field_departure_date_validation": "Please enter Departure, today or in the future",
+    "field_departure_date_too_far_in_future": "Departure date cannot be more than 1 month in the future",
+    "field_arrival_date_too_far_in_future": "Arrival date cannot be more than 1 month in the future",
     "field_departure_real_date_validation": "Enter a real departure date",
     "field_departure_real_time_validation": "Enter a real departure time",
     "field_latitude_validation": "Value entered is incorrect. Enter latitude to 6 decimal places",
@@ -463,5 +465,6 @@
     "covid_19_notification_link": "https://www.gov.uk/uk-border-control",
 
     "id_card_withdrawl_text": "From 1 October 2021, most EU, EEA and Swiss citizens will only be able to enter the UK using a valid passport. ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check",
-    "id_card_withdrawl_text_part" : "ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check"
+    "id_card_withdrawl_text_part" : "ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check",
+    "button_add_to_people" : "Add to People"
 }
