@@ -46304,10 +46304,10 @@
     "label": "BICESTER (United Kingdom) (EGDD)"
   },
   {
-    "id": "EGDJ",
+    "id": "UPV",
     "id2": "EGDJ",
     "british": true,
-    "label": "UPAVON (United Kingdom) (EGDJ )"
+    "label": "UPAVON (United Kingdom) (EGDJ / UPV)"
   },
   {
     "id": "EGDN",
@@ -46358,10 +46358,10 @@
     "label": "WHALSAY (United Kingdom) (EGEH / WHS)"
   },
   {
-    "id": "EGEI",
+    "id": "SKL",
     "id2": "EGEI",
     "british": true,
-    "label": "BROADFORD - ISLE OF SKYE (United Kingdom) (EGEI)"
+    "label": "BROADFORD - ISLE OF SKYE (United Kingdom) (EGEI / SKL)"
   },
   {
     "id": "EGFA",
@@ -46838,10 +46838,10 @@
     "label": "RAF SYERSTON (United Kingdom) (EGXY)"
   },
   {
-    "id": "EGYC",
+    "id": "CLF",
     "id2": "EGYC",
     "british": true,
-    "label": "RAF COLTISHALL (United Kingdom) (EGYC)"
+    "label": "RAF COLTISHALL (United Kingdom) (EGYC / CLF)"
   },
   {
     "id": "EGYJ",
@@ -46892,10 +46892,10 @@
     "label": "ANDREW (United Kingdom) (EXAK) "
   },
   {
-    "id": "EXAN",
-    "id2": "EXAN",
+    "id": "EGQR",
+    "id2": "EGQR",
     "british": true,
-    "label": "ARBROATH (United Kingdom) (EXAN) "
+    "label": "ARBROATH (United Kingdom) (EGQR) "
   },
   {
     "id": "EXAO",
@@ -48091,6 +48091,204 @@
     "id2": "X587",
     "british": true,
     "label": "CENTRAL HOUSE, WYTON (United Kingdom) (X587)"
+  },
+  {
+    "id": "EIRE",
+    "id2": "EIRE",
+    "british": false,
+    "label": "ABBEYFEALE (Ireland) (EIRE)"
+  },
+  {
+    "id": "EIAB",
+    "id2": "EIAB",
+    "british": false,
+    "label": "ABBEYSHRULE (Ireland) (EIAB)"
+  },
+  {
+    "id": "EIAH",
+    "id2": "EIAH",
+    "british": false,
+    "label": "ANDONA (Ireland) (EIAH)"
+  },
+  {
+    "id": "EIMH",
+    "id2": "EIMH",
+    "british": false,
+    "label": "ATHBOY (Ireland) (EIMH)"
+  },
+  {
+    "id": "EIBB",
+    "id2": "EIBB",
+    "british": false,
+    "label": "BALLYBOUGHAL (Ireland) (EIBB)"
+  },
+  {
+    "id": "BLY",
+    "id2": "EIBT",
+    "british": false,
+    "label": "BELMULLET (Ireland) (EIBT / BLY)"
+  },
+  {
+    "id": "EIBR",
+    "id2": "EIBR",
+    "british": false,
+    "label": "BIRR (Ireland) (EIBR)"
+  },
+  {
+    "id": "EICL",
+    "id2": "EICL",
+    "british": false,
+    "label": "CLONBULLOGUE (Ireland) (EICL)"
+  },
+  {
+    "id": "COL",
+    "id2": "EGEL",
+    "british": true,
+    "label": "COLL (United Kingdom) (EGEL / COL)"
+  },
+  {
+    "id": "EICN",
+    "id2": "EICN",
+    "british": false,
+    "label": "COONAGH (Ireland) (EICN)"
+  },
+  {
+    "id": "EIDG",
+    "id2": "EIDG",
+    "british": false,
+    "label": "DOLLYS GROVE (Ireland) (EIDG)"
+  },
+  {
+    "id": "EIER",
+    "id2": "EIER",
+    "british": false,
+    "label": "ERINAGH (Ireland) (EIER)"
+  },
+  {
+    "id": "FOA",
+    "id2": "FOA",
+    "british": true,
+    "label": "FOULA (United Kingdom) (FOA)"
+  },
+  {
+    "id": "EGMA",
+    "id2": "EGMA",
+    "british": true,
+    "label": "FOWLMERE (United Kingdom) (EGMA)"
+  },
+  {
+    "id": "EIGM",
+    "id2": "EIGM",
+    "british": false,
+    "label": "GORMANSTON (Ireland) (EIGM)"
+  },
+  {
+    "id": "EIGN",
+    "id2": "EIGN",
+    "british": false,
+    "label": "GOWRAN GRANGE / DUBLIN GLIDING CLUB (Ireland) (EIGN)"
+  },
+  {
+    "id": "EIIF",
+    "id2": "EIIF",
+    "british": false,
+    "label": "ILAS FIELD / TAGHMON (Ireland) (EIIF)"
+  },
+  {
+    "id": "ULL",
+    "id2": "ULL",
+    "british": true,
+    "label": "ISLE OF MULL / GLENFORSA (United Kingdom) (ULL)"
+  },
+  {
+    "id": "KKY",
+    "id2": "EIKK",
+    "british": false,
+    "label": "KILKENNY (Ireland) (EIKK / KKY)"
+  },
+  {
+    "id": "EIKI",
+    "id2": "EIKI",
+    "british": false,
+    "label": "KILLENAULE (Ireland) (EIKI)"
+  },
+  {
+    "id": "EIKH",
+    "id2": "EIKH",
+    "british": false,
+    "label": "KILRUSH (Ireland) (EIKH)"
+  },
+  {
+    "id": "EIKB",
+    "id2": "EIKB",
+    "british": false,
+    "label": "KYLEBRACK HELIPORT (Ireland) (EIKB)"
+  },
+  {
+    "id": "LTR",
+    "id2": "EILT",
+    "british": false,
+    "label": "LETTERKENNY (Ireland) (EILT / LTR)"
+  },
+  {
+    "id": "EIMY",
+    "id2": "EIMY",
+    "british": false,
+    "label": "MOYNE (Ireland) (EIMY)"
+  },
+  {
+    "id": "EIMP",
+    "id2": "EIMP",
+    "british": false,
+    "label": "MULLINGAR / MILLTOWNPASS (Ireland) (EIMP)"
+  },
+  {
+    "id": "EIHH",
+    "id2": "EIHH",
+    "british": false,
+    "label": "NAVAN (Ireland) (EIHH)"
+  },
+  {
+    "id": "PSV",
+    "id2": "PSV",
+    "british": true,
+    "label": "PAPA STOUR (United Kingdom) (PSV)"
+  },
+  {
+    "id": "EIIH",
+    "id2": "EIIH",
+    "british": false,
+    "label": "PORTLAOISE / MIDLAND HELIPORT (Ireland) (EIIH)"
+  },
+  {
+    "id": "EIPT",
+    "id2": "EIPT",
+    "british": false,
+    "label": "POWERSCOURT (Ireland) (EIPT)"
+  },
+  {
+    "id": "EGXB",
+    "id2": "EGXB",
+    "british": true,
+    "label": "RAF BINBROOK (United Kingdom) (EGXB)"
+  },
+  {
+    "id": "EIRT",
+    "id2": "EIRT",
+    "british": false,
+    "label": "RATHCOOLE (Ireland) (EIRT)"
+  },
+  {
+    "id": "EISP",
+    "id2": "EISP",
+    "british": false,
+    "label": "SPANISH POINT (Ireland) (EISP)"
+  },
+  {
+    "id": "EITM",
+    "id2": "EITM",
+    "british": false,
+    "label": "TRIM (Ireland) (EITM)"
   }
 
 ]

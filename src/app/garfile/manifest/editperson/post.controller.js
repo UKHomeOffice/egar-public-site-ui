@@ -27,6 +27,7 @@ module.exports = (req, res) => {
     peopleType: req.body.personType,
     documentNumber: req.body.travelDocumentNumber,
     documentType: req.body.travelDocumentType,
+    documentDesc: req.body.travelDocumentOther,
     issuingState: _.toUpper(req.body.issuingState),
     documentExpiryDate: expiryDate,
     garPeopleId: req.body.garPeopleId,
