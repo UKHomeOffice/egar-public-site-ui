@@ -33,8 +33,6 @@ module.exports.validations = (garfile, garpeople) => {
     ],
     // Customs screen validations
     [
-      new ValidationRule(validator.notEmpty, 'customs', prohibitedGoods, 'Customs Declaration question not answered'),
-      new ValidationRule(validator.notEmpty, 'customs', baggage, 'Baggage Declaration question not answered'),
       new ValidationRule(validator.notEmpty, 'customs', visitReason, 'Visit Reason question not answered'),
     ],
   ];

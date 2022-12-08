@@ -1,9 +1,6 @@
 {% extends "base-template.njk" %}
 
-
 {% import "common/templates/includes/macros.njk" as m %}
-
-
 
 {% block pageTitle %}
 	Create GAR | Manifest
@@ -25,8 +22,12 @@
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
+{% if successMsg %}
+      {% include "common/templates/includes/success-action.njk" %}
+    {% endif %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
 
 <div class="govuk-grid-row">
   <form action="/garfile/manifest" method="post">
@@ -37,6 +38,8 @@
       <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
       <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
 
+   
+   
   <script>
   $(document).ready(function(){
     $("#person-search").on("keyup", function() {
@@ -108,7 +111,7 @@
   $(document).ready(function(){
     $("#manifest-search").on("keyup", function() {
       var value = $(this).val().toLowerCase();
-      $("#manifest_table_row tr").filter(function() {
+      $("#"manifestTable_row tr").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
       });
@@ -135,11 +138,24 @@
       <p class="govuk-body-m">Search for people on the manifest</p>
       <input class="govuk-input govuk-input--width-20" id="manifest-search" name="manifest-search" type="text" placeholder="Search" style="margin-bottom: 10px">
       <p class="govuk-body-m"><mark>{{__('expired_passport_warning')}}</mark></p>
+      <p><span style="background: green">{{__('adding_person_to_people')}}</span></p>
     </div>
     <div class="govuk-grid-column-full">
-      <table class="govuk-table" id="manifest_table">
+      <table class="govuk-table" id="manifestTable">
         <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
+        {# New Entry below ///////////////////////////////////////////////////// #} 
+            <tr class="govuk-table__row" id="manifestTable_row"> 
+             <thead class="govuk-table__head">
+            <tr class="govuk-table__row"> 
+            {% if manifest.items | length %}  
+             <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
+            <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}">
+              &nbsp;    
+              </label>    
+            <div>   
+              {% endif %} 
+            </th>               
+            {# New Entry above///////////////////////////////////////////////////// #}  
             <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
@@ -152,7 +168,7 @@
             <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body " id="manifest_table_row">
+        <tbody class="govuk-table__body " id=""manifestTable_row">
         {% if manifest.items | length %}
           {% for person in manifest.items %}
           {% if manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople) %}
@@ -164,7 +180,18 @@
               <script> document.getElementById("expired").style.display = "block" </script>
               <tr style="color:red; font-weight: bold; background-color:aliceblue">
             {% endif %}
+          {#          ###################                                   #}  
+            <tr class="govuk-table__row"> 
+           <div class="govuk-radios">
+           <td class="govuk-table__cell"> 
+           <div class="govuk-radios govuk-radios--inline">         
+          <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="person-{{loop.index0}}" name="garPeopleId" type="radio" value="{{person.garPeopleId}}"> 
+          <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}"></label>        
+           </div>
+          {#          ###################                                   #} 
           {% endif %}
+            
             <td class="govuk-table__cell">{{person.lastName}}</td>
             <td class="govuk-table__cell">{{person.firstName}}</td>
             <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
@@ -175,10 +202,9 @@
             <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
             <td class="govuk-table__cell">{{person.peopleType.name}}</td>
             <td class="govuk-table__cell">
-              
               <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
             </td>
-          </tr>
+          </tr> 
           <tr class="govuk-table__row">
             <td class="govuk-table__cell" colspan="7">
               <div>
@@ -227,8 +253,9 @@
 
         <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
       </div>
-      
 
+    <button id="garPeopleId" type="submit" name="buttonClicked" value="Add to PEOPLE" class="govuk-button">{{__('button_add_to_people')}}</button>
+    
     {# Start buttons #}
       <input id="continue" type="submit" class="govuk-button" 
         name="buttonClicked"
@@ -236,6 +263,7 @@
         onclick="sendAnalytics(event, 'GAR Manifest - Continue', 'click')">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
+      
     <form id="cancel-form" action="/garfile/view" method="post">
       <p class="govuk-body-m">
         <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
@@ -247,8 +275,9 @@
     </form>
     {# End buttons #}
 	  </div>
+</div>
 
-    <script>
+     <script>
       $(document).ready(function() {
       $('#people_table th').each(function(col) {
         $(this).hover(
@@ -280,7 +309,7 @@
       $.each(arrData, function(index, row) {
         $('#people_table tbody').append(row);
       });
-    });
+      });
       });
     });
   </script>
