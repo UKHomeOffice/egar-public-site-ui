@@ -16,13 +16,7 @@ module.exports.validations = (req) => {
 
   const validations = [
     [
-      new ValidationRule(validator.notEmpty, 'prohibitedGoods', prohibitedGoods, 'Select a value for customs declaration'),
-    ],
-    [
       new ValidationRule(validator.validTextLength, 'goodsDeclaration', { value: goodsDeclaration, maxLength: MAX_TEXT_BOX_LENGTH - 100 }, `Declaration details must be ${MAX_TEXT_BOX_LENGTH - 100} characters or less`),
-    ],
-    [
-      new ValidationRule(validator.notEmpty, 'baggage', baggage, 'Select a value for baggage declaration'),
     ],
     [
       new ValidationRule(validator.validTextLength, 'baggageDeclaration', { value: baggageDeclaration, maxLength: MAX_TEXT_BOX_LENGTH - 100 }, `Baggage details must be ${MAX_TEXT_BOX_LENGTH - 100} characters or less`),
@@ -41,11 +35,11 @@ module.exports.validations = (req) => {
     ],
   ];
 
-  if (prohibitedGoods === 'Yes') {
-    validations[1].push(new ValidationRule(validator.notEmpty, 'goodsDeclaration', goodsDeclaration, 'Please enter customs declaration details'));
+  if (intentionValue ==='Yes' && prohibitedGoods === 'Yes') {
+    validations[0].push(new ValidationRule(validator.notEmpty, 'goodsDeclaration', goodsDeclaration, 'Please enter customs declaration details'));
   }
-  if (baggage === 'Yes') {
-    validations[3].push(new ValidationRule(validator.notEmpty, 'baggageDeclaration', baggageDeclaration, 'Please enter baggage declaration details'));
+  if (intentionValue ==='Yes' && baggage === 'Yes') {
+    validations[1].push(new ValidationRule(validator.notEmpty, 'baggageDeclaration', baggageDeclaration, 'Please enter baggage declaration details'));
   }
   return validations;
 };

@@ -18,7 +18,6 @@ module.exports = {
    * peopleType,
    * issuingState,
    * documentDescription,
-  // * createdDateTime,
    * @param {String} userId userId of user saving the person
    * @param {Object} person person Object
    */
