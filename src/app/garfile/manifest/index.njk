@@ -111,7 +111,7 @@
   $(document).ready(function(){
     $("#manifest-search").on("keyup", function() {
       var value = $(this).val().toLowerCase();
-      $("#"manifestTable_row tr").filter(function() {
+      $("#manifestTable_row tr").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
       });
@@ -138,10 +138,10 @@
       <p class="govuk-body-m">Search for people on the manifest</p>
       <input class="govuk-input govuk-input--width-20" id="manifest-search" name="manifest-search" type="text" placeholder="Search" style="margin-bottom: 10px">
       <p class="govuk-body-m"><mark>{{__('expired_passport_warning')}}</mark></p>
-      <p><span style="background: green">{{__('adding_person_to_people')}}</span></p>
+      <p><span style="background-color:#77DD77;">{{__('adding_person_to_people')}}</span></p>
     </div>
     <div class="govuk-grid-column-full">
-      <table class="govuk-table" id="manifestTable">
+      <table class="govuk-table" id="manifest_table">
         <thead class="govuk-table__head">
         {# New Entry below ///////////////////////////////////////////////////// #} 
             <tr class="govuk-table__row" id="manifestTable_row"> 
@@ -168,7 +168,7 @@
             <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body " id=""manifestTable_row">
+        <tbody class="govuk-table__body " id="manifestTable_row">
         {% if manifest.items | length %}
           {% for person in manifest.items %}
           {% if manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople) %}
