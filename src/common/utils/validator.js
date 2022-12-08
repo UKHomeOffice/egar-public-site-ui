@@ -179,18 +179,18 @@ function currentOrFutureDate(dObj) {
   return false;
 }
 
-function dateTooFarInFuture(dObj){
-  if (dObj === null || dObj === undefined) return false;
+// function dateTooFarInFuture(dObj){
+//   if (dObj === null || dObj === undefined) return false;
 
-  var nextMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, (new Date().getDate() + 1));
-  var providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
+//   var nextMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, (new Date().getDate() + 1));
+//   var providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
 
-  return numericDateElements(dObj)
-    && validDay(dObj.d, dObj.m, dObj.y)
-    && validMonth(dObj.m)
-    && validYear(dObj.y)
-    && providedDate < nextMonth;
-}
+//   return numericDateElements(dObj)
+//     && validDay(dObj.d, dObj.m, dObj.y)
+//     && validMonth(dObj.m)
+//     && validYear(dObj.y)
+//     && providedDate < nextMonth;
+// }
 
 function validYear(y) {
   return y.length === 4;
@@ -632,5 +632,5 @@ module.exports = {
   invalidLongDirection,
   sanitiseValue2,
   preventZ,
-  dateTooFarInFuture,
+  //dateTooFarInFuture,
 };
