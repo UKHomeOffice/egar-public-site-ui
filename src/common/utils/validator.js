@@ -192,9 +192,9 @@ function currentOrFutureDate(dObj) {
 //     && providedDate < nextMonth;
 // }
 
-// function validYear(y) {
-//   return y.length === 4;
-// }
+function validYear(y) {
+  return y.length === 4;
+}
 
 const numericDateElements = dObj => isNumeric(dObj.d)
   && isNumeric(dObj.m)
