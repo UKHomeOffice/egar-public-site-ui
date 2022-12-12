@@ -256,7 +256,7 @@
     "passenger_travelling_reason_hint": "This information can help Border Force process your arrival (Max characters: 250)",
     "passenger_travelling_reason_placeholder": "e.g. details if resident in the UK or coming for business visit, tourism and details of duration for short-term visit would be useful. If various passengers on board coming for separate reasons, then if easier a document can be attached on page 7 detailing the reasons.",
     "passenger_travelling_reason_review": "Reason for Travelling to the UK",
-    "field_fbo_question": "In submitting a GAR for this flight are you the",
+    "field_fbo_question": "In submitting a GAR for this are you one of the following:",
     "field_fbo_question_review": "Who is submitting the GAR",
     "field_supporting_information_question": "Please add any further information about your arrival, if relevant for Border Force consideration.",
     "field_supporting_information_review": "Further information for consideration",
