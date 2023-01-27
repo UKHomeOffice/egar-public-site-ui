@@ -134,8 +134,8 @@
                         <td class="govuk-table__cell">{{ gar.createdDate | truncate(11, true, "") }}</td>
                         <td class="govuk-table__cell">{{ gar.departureDate }}</td>
                         <td class="govuk-table__cell">{{ gar.departureTime }}</td>
-                        <td class="govuk-table__cell">{{ __('value_port_code_zzzz') if gar.departurePort == 'YYYY' else gar.departurePort | upper }}</td>
-                        <td class="govuk-table__cell">{{ __('value_port_code_zzzz') if gar.arrivalPort == 'ZZZZ' else gar.arrivalPort | upper }}</td>
+                        <td class="govuk-table__cell">{{gar.departurePort | upper }}</td>
+                        <td class="govuk-table__cell">{{gar.arrivalPort | upper }}</td>
                         <td class="govuk-table__cell"></td>
                         <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell" style="word-break:break-all;">{{ m.gar_id_screen_reader(gar.garId) }}</td>
                       </tr>

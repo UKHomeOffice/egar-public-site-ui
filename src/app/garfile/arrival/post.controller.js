@@ -92,7 +92,7 @@ const buildValidations = (voyage) => {
   ];
 
   // Check if port code is ZZZZ as then need to validate lat/long
-  if (arrivePortObj.portCode.toUpperCase() === 'ZZZZ') {
+  if (arrivePortObj.portCode.length > 4) {
     validations.push(
       arrivalLatValidation,
       arrivalLongValidation,
@@ -121,9 +121,8 @@ module.exports = async (req, res) => {
   const voyage = req.body;
   delete voyage.buttonClicked;
   if (voyage.portChoice === 'No') {
-    voyage.arrivalPort = 'ZZZZ';
     logger.debug("Testing arrival Lat and Long values...");
-    
+
     if (voyage.arrivalLatDirection.toUpperCase() == 'S'){
       const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes/60) + parseFloat((voyage.arrivalSeconds/3600).toFixed(6)));
       voyage.arrivalLat = '-' + parseFloat(convertedLat).toFixed(6);
@@ -144,11 +143,15 @@ module.exports = async (req, res) => {
 
     logger.debug(voyage.arrivalLat);
     logger.debug(voyage.arrivalLong);
+    const combinedCoordinates = voyage.arrivalLat.toString() + " " + voyage.arrivalLong.toString();
+    voyage.arrivalPort = combinedCoordinates;
+    logger.debug(voyage.arrivalPort);
   } else {
     // If 'Yes' is selected then clear the coordinate values
     voyage.arrivalLat = '';
     voyage.arrivalLong = '';
     voyage.arrivalPort = _.toUpper(voyage.arrivalPort);
+    logger.debug(voyage.arrivalPort);
   }
   cookie.setGarArrivalVoyage(voyage);
 

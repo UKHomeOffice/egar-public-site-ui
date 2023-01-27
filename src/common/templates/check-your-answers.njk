@@ -22,7 +22,7 @@
     {% endmacro %}
 
     {% macro check_your_answers_row_port_code(id, label, value) %}
-      {% if value =='ZZZZ' or value =='YYYY' %}
+      {% if value.length > 4 %}
         {# Hide the row #}
       {% else %}
         <div class="app-check-your-answers__contents">

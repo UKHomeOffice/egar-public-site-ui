@@ -130,25 +130,41 @@
         <thead class="govuk-table__head">
           <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header" width="40%">Responsible Person Details</th>
-          <th class="govuk-table__header" width="30%">Customs</th>
-          <th class="govuk-table__header" width="30%">Reason for Visit</th>
+          <th class="govuk-table__header" width="40%">Responsible Person Name</th>
+          <th class="govuk-table__header" width="30%">Contact Number</th>
+          <th class="govuk-table__header" width="30%">Person Submitting GAR</th>
         </tr>
         </thead>
         <tbody class="govuk-table__body" id="printGAR">
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell" >{{ garfile.responsibleGivenName }}</td>
-              <td class="govuk-table__cell" >{{ garfile.prohibitedGoods }}</td>
-              <td class="govuk-table__cell" >{{ garfile.visitReason }}</td></tr>
-            <tr class="govuk-table__row" >
-              <td class="govuk-table__cell">{{ garfile.responsibleSurname }}</td>
-              </tr>
-            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" >{{ garfile.responsibleGivenName }} {{ garfile.responsibleSurname }}</td>
               <td class="govuk-table__cell" >{{ garfile.responsibleContactNo }}</td>
+              <td class="govuk-table__cell" >{{ garfile.fixedBasedOperator }}</td>
             </tr>
         </tbody>
       </table>
     </div>
+
+    <div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" width="40%">Customs Intention</th>
+          <th class="govuk-table__header" width="30%">Passenger Travelling Reason</th>
+          <th class="govuk-table__header" width="30%">Visit Reason</th>
+          </tr>
+          </thead>
+          <tbody class="govuk-table__body" id="printGAR">
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" >{{ garfile.intentionValue }}</td>
+              <td class="govuk-table__cell" >{{ garfile.passengerTravellingReason }}</td>
+              <td class="govuk-table__cell" >{{ garfile.visitReason }}</td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+          
 
 <script>
     function printMyGar(){

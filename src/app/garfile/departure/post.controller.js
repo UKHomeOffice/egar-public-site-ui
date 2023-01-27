@@ -52,7 +52,7 @@ const createValidationChains = (voyage) => {
   ];
 
   // Check if port code is ZZZZ then need to validate lat/long and display req zzzz message
-  if (departPortObj.portCode.toUpperCase() === 'YYYY') {
+  if (departPortObj.portCode.length > 4) {
     validations.push(
       departureLatValidation,
       departureLongValidation,
@@ -114,8 +114,7 @@ module.exports = async (req, res) => {
   const voyage = req.body;
   delete voyage.buttonClicked;
   // TODO: Update this once the intended 'unknown' port code is discovered.
-  if (voyage.departurePort === 'ZZZZ' || voyage.portChoice === 'No') {
-    voyage.departurePort = 'YYYY';
+  if (voyage.portChoice === 'No') {
     logger.debug("Testing departure Lat and Long values...");
     
     if (voyage.departureLatDirection.toUpperCase() == 'S'){
@@ -138,6 +137,9 @@ module.exports = async (req, res) => {
 
     logger.debug(voyage.departureLat);
     logger.debug(voyage.departureLong);
+    const combinedCoordinates = voyage.departureLat.toString() + " " + voyage.departureLong.toString();
+    voyage.departurePort = combinedCoordinates;
+    logger.debug(voyage.departurePort);
   } else {
     // If 'Yes' is selected then clear the coordinate values
     voyage.departureLat = '';
