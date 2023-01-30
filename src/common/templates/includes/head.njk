@@ -14,16 +14,18 @@ function loadAnalytics(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.g4.com/g4.js','g4');
-    g4('set', 'tracking', false);
+    window['ga-disable-UA-{{ g4_id }}'] = false;
     g4('create', '{{ g4_id }}', 'auto');
+    g4('set', 'tracking', false);
     g4('send', 'pageview');
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', '{{ g4_id }}', { 'anonymize_ip': true });
-    //console.log(getCookie({{ ga_id }}));
+    //console.log(getCookie({{ g4_id }}));
   }
   else{
     // Disable GA if not allowed
+    window['ga-disable-UA-{{ g4_id }}'] = true;
     g4('set', 'tracking', false);
     //check if GA cookie is set and if so then delete
   }

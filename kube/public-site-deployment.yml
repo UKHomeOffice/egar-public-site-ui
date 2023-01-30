@@ -235,11 +235,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: COOKIE_SECURE_FLAG
-            - name: GA_ID
+            - name: G4_ID
               valueFrom:
                 secretKeyRef:
                   name: environment
-                  key: GA_ID
+                  key: G4_ID
             - name: NOTIFY_NOT_REGISTERED_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
