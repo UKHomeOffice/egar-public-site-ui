@@ -5,6 +5,7 @@ function setCookie(name, value, expiryDays) {
   document.cookie = name + "=" + value + ";" + expires + ";path=/";
 };
 
+//Google Analytics tracking IDs
 var CONSENT_COOKIE_NAME = 'sgar_cookies_policy';
 var DEFAULT_COOKIE_CONSENT = 'false';
 var TRACKING_PREVIEW_ID = '346778350';
