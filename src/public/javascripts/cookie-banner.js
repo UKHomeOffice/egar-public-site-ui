@@ -8,7 +8,7 @@ function setCookie(name, value, expiryDays) {
 //Google Analytics tracking IDs
 var CONSENT_COOKIE_NAME = 'sgar_cookies_policy';
 var DEFAULT_COOKIE_CONSENT = 'false';
-var TRACKING_PREVIEW_ID = '346778350';
+var TRACKING_PREVIEW_ID = '131780282_1';
 var TRACKING_STAGING_ID = '131780282_2';
 var TRACKING_LIVE_ID = '131780282_3';
 
@@ -71,7 +71,7 @@ function reject_cookies(){
   document.getElementById("cookies_reject_message").style.display = "block";
   document.getElementById("main_cookie_message").style.display = "none";
   setCookie('sgar_cookies_policy', false, 30);
-  deleteCookie('_g4');
+  deleteCookie('_ga');
   deleteCookie('_gid');
   //deleteCookie('_gat_gtag_UA + {{ g4_id }}');
   deleteCookie('_gat');
@@ -97,7 +97,7 @@ function change_cookie_preference(){
     setCookie('sgar_cookies_policy', false, 30);
     document.getElementById("preference_changed").removeAttribute('hidden');
     document.getElementById("preference_changed").focus();
-    deleteCookie('_g4');
+    deleteCookie('_ga');
     deleteCookie('_gid');
     deleteCookie('_gat_gtag_UA + {{ g4_id }}');
     deleteCookie('_gat');

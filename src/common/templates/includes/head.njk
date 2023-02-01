@@ -13,23 +13,22 @@ function loadAnalytics(){
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.g4.com/g4.js','g4');
-    window['ga-disable-UA-{{ g4_id }}'] = false;
-    g4('create', '{{ g4_id }}', 'auto');
-    g4('set', 'tracking', false);
-    g4('send', 'pageview');
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    window['ga-disable-UA-{{ ga_id }}'] = false;
+    ga('create', '{{ ga_id }}', 'auto');
+    ga('send', 'pageview');
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', '{{ g4_id }}', { 'anonymize_ip': true });
-    //console.log(getCookie({{ g4_id }}));
+    gtag('config', '{{ ga_id }}', { 'anonymize_ip': true });
+    //console.log(getCookie({{ ga_id }}));
   }
   else{
     // Disable GA if not allowed
-    window['ga-disable-UA-{{ g4_id }}'] = true;
-    g4('set', 'tracking', false);
+    window['ga-disable-UA-{{ ga_id }}'] = true;
+
     //check if GA cookie is set and if so then delete
   }
 }
 loadAnalytics();
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ g4_id }}"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id }}"></script>
