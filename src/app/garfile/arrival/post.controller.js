@@ -91,6 +91,7 @@ const buildValidations = (voyage) => {
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, portChoiceMsg)],
   ];
 
+
   // Check if port code is greater than 4 as then need to validate lat/long
   if (arrivePortObj.portCode.length > 4) {
     validations.push(
@@ -141,17 +142,20 @@ module.exports = async (req, res) => {
       voyage.arrivalLong = parseFloat(convertedLong).toFixed(6);
     }
 
-    // logger.debug(voyage.arrivalLat);
-    // logger.debug(voyage.arrivalLong);
+
+    logger.debug(voyage.arrivalLat);
+    logger.debug(voyage.arrivalLong);
     const combinedCoordinates = voyage.arrivalLat.toString() + " " + voyage.arrivalLong.toString();
     voyage.arrivalPort = combinedCoordinates;
-    // logger.debug(voyage.arrivalPort);
+    logger.debug(voyage.arrivalPort);
+
   } else {
     // If 'Yes' is selected then clear the coordinate values
     voyage.arrivalLat = '';
     voyage.arrivalLong = '';
     voyage.arrivalPort = _.toUpper(voyage.arrivalPort);
-    //logger.debug(voyage.arrivalPort);
+    logger.debug(voyage.arrivalPort);
+
   }
   cookie.setGarArrivalVoyage(voyage);
 
