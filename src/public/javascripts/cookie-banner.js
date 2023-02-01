@@ -73,7 +73,7 @@ function reject_cookies(){
   setCookie('sgar_cookies_policy', false, 30);
   deleteCookie('_ga');
   deleteCookie('_gid');
-  //deleteCookie('_gat_gtag_UA + {{ g4_id }}');
+  //deleteCookie('_gat_gtag_UA + {{ ga_id }}');
   deleteCookie('_gat');
   deleteCookie('_gat_gtag_UA_' + TRACKING_LIVE_ID);
   deleteCookie('_gat_gtag_UA_' + TRACKING_PREVIEW_ID);
@@ -99,7 +99,7 @@ function change_cookie_preference(){
     document.getElementById("preference_changed").focus();
     deleteCookie('_ga');
     deleteCookie('_gid');
-    deleteCookie('_gat_gtag_UA + {{ g4_id }}');
+    deleteCookie('_gat_gtag_UA + {{ ga_id }}');
     deleteCookie('_gat');
     deleteCookie('_gat_gtag_UA_' + TRACKING_LIVE_ID);
     deleteCookie('_gat_gtag_UA_' + TRACKING_PREVIEW_ID);

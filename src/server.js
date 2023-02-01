@@ -41,9 +41,9 @@ const nunjucksFilters = require('./common/utils/templateFilters.js');
 const oneYear = 86400000 * 365;
 const PORT = (process.env.PORT || 3000);
 const { NODE_ENV } = process.env;
-const G4_ID = (process.env.G4_ID || '');
+const GA_ID = (process.env.GA_ID || '');
 const BASE_URL = (process.env.BASE_URL || '');
-const visitor = ua(G4_ID);
+const visitor = ua(GA_ID);
 const COOKIE_SECRET = (process.env.COOKIE_SECRET || '');
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
@@ -227,7 +227,7 @@ function initialiseTemplateEngine(app) {
   // if it's not production we want to re-evaluate the assets on each file change
   // nunjucksEnvironment.addGlobal('css_path', NODE_ENV === 'production' ? CSS_PATH : staticify.getVersionedPath('/stylesheets/application.min.css'));
   // nunjucksEnvironment.addGlobal('js_path', NODE_ENV === 'production' ? JAVASCRIPT_PATH : staticify.getVersionedPath('/javascripts/application.js'));
-  nunjucksEnvironment.addGlobal('g4_id', G4_ID);
+  nunjucksEnvironment.addGlobal('ga_id', GA_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
