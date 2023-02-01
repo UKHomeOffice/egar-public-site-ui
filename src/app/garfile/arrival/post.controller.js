@@ -91,7 +91,7 @@ const buildValidations = (voyage) => {
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, portChoiceMsg)],
   ];
 
-  // Check if port code is ZZZZ as then need to validate lat/long
+  // Check if port code is greater than 4 as then need to validate lat/long
   if (arrivePortObj.portCode.length > 4) {
     validations.push(
       arrivalLatValidation,
@@ -141,17 +141,17 @@ module.exports = async (req, res) => {
       voyage.arrivalLong = parseFloat(convertedLong).toFixed(6);
     }
 
-    logger.debug(voyage.arrivalLat);
-    logger.debug(voyage.arrivalLong);
+    // logger.debug(voyage.arrivalLat);
+    // logger.debug(voyage.arrivalLong);
     const combinedCoordinates = voyage.arrivalLat.toString() + " " + voyage.arrivalLong.toString();
     voyage.arrivalPort = combinedCoordinates;
-    logger.debug(voyage.arrivalPort);
+    // logger.debug(voyage.arrivalPort);
   } else {
     // If 'Yes' is selected then clear the coordinate values
     voyage.arrivalLat = '';
     voyage.arrivalLong = '';
     voyage.arrivalPort = _.toUpper(voyage.arrivalPort);
-    logger.debug(voyage.arrivalPort);
+    //logger.debug(voyage.arrivalPort);
   }
   cookie.setGarArrivalVoyage(voyage);
 
@@ -163,9 +163,14 @@ module.exports = async (req, res) => {
     new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg),
   ]);
 
-  validations.push([
-    new ValidationRule(airportValidation.isBritishAirport, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], airportValidation.notBritishMsg),
-  ]);
+  if (voyage.arrivalPort.length <= 4 && JSON.parse(gar).departurePort.length <= 4){
+    //logger.debug(voyage.arrivalPort);
+    //logger.debug(JSON.parse(gar).departurePort);
+    validations.push([
+      new ValidationRule(airportValidation.isBritishAirport, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], airportValidation.notBritishMsg),
+    ]);
+  }
+  
 
   validator.validateChains(validations)
     .then(() => {
