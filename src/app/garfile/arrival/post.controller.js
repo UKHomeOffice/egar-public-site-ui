@@ -124,7 +124,7 @@ module.exports = async (req, res) => {
   if (voyage.portChoice === 'No') {
     logger.debug("Testing arrival Lat and Long values...");
 
-    if (voyage.arrivalLatDirection.toUpperCase() == 'S'){
+    if (voyage.arrivalLatDirection && voyage.arrivalLatDirection.toUpperCase() == 'S'){
       const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes/60) + parseFloat((voyage.arrivalSeconds/3600).toFixed(6)));
       voyage.arrivalLat = '-' + parseFloat(convertedLat).toFixed(6);
     }
@@ -133,7 +133,7 @@ module.exports = async (req, res) => {
       voyage.arrivalLat = parseFloat(convertedLat).toFixed(6);
     }
     
-    if (voyage.arrivalLongDirection.toUpperCase() == 'W'){
+    if (voyage.arrivalLongDirection && voyage.arrivalLongDirection.toUpperCase() == 'W'){
       const convertedLong = parseFloat(voyage.arrivalLongDegrees) + parseFloat((voyage.arrivalLongMinutes/60) + parseFloat((voyage.arrivalLongSeconds/3600).toFixed(6)));
       voyage.arrivalLong = '-' + parseFloat(convertedLong).toFixed(6);
     }
@@ -175,14 +175,16 @@ module.exports = async (req, res) => {
     ]);
   }
   
-
+console.log('about to call validateChains');
   validator.validateChains(validations)
     .then(() => {
+      console.log('Calling performAPICall');
       performAPICall(cookie, buttonClicked, res);
     })
     .catch((err) => {
+      console.log(err);
       logger.info('GAR arrival validation failed');
-      logger.debug(JSON.stringify(err));
+      //logger.debug(JSON.stringify(err));
       res.render('app/garfile/arrival/index', {
         cookie,
         errors: err,

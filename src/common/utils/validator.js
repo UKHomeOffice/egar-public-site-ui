@@ -243,6 +243,8 @@ function realDateFromString(str) {
 
 // This function will validate Passport Expiry date while uploading Gar Template
 function passportExpiryDate (value, element) {
+
+  console.log('In passportExpiryDate value = ' + value);
   const val = Date.parse(value);
   if (isNaN(val))
       return false;
@@ -278,6 +280,7 @@ function birthDate (value, element) {
 
 // This function will validate departure date while uploading Gar Template
 function futureDepartDate (value, element) {
+  console.log('In utureDepartDate value = ' + value);
   const val = Date.parse(value);
   if (isNaN(val))
       return false;
@@ -549,6 +552,7 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
 }
 
   function invalidLatDirection(value){
+    value = value || '';
     value = value.toUpperCase();
     if ( ['S', 'N'].includes(value)){
       return true;
@@ -560,6 +564,7 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
   }
 
   function invalidLongDirection(value){
+    value = value || '';
     value = value.toUpperCase();
     if ( ['W', 'E'].includes(value)){
       return true;

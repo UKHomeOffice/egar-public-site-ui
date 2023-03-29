@@ -69,7 +69,7 @@ describe('Aircraft Delete Get Controller', () => {
       callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.eq('Success');
-        expect(req.session.successMsg).to.eq('Craft deleted');
+        expect(req.session.successMsg).to.eq('Your aircraft has been deleted');
         expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
@@ -129,7 +129,7 @@ describe('Aircraft Delete Get Controller', () => {
       callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.eq('Success');
-        expect(req.session.successMsg).to.eq('Craft deleted');
+        expect(req.session.successMsg).to.eq('Your aircraft has been deleted');
         expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
