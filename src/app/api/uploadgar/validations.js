@@ -120,8 +120,8 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a Passport Expiry Date for ${name}`),
-      new ValidationRule(validator.realDateFromString, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name}`),
-      new ValidationRule(validator.passportExpiryDate, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name}`),
+      new ValidationRule(validator.realDateFromString, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name} instead of ${crew.documentExpiryDate}`),
+      new ValidationRule(validator.passportExpiryDate, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name} instead of ${crew.documentExpiryDate}`),
     ]);
     Object.keys(crew).forEach((key) => {
       if (typeof crew[key] === 'string' && !validator.isPrintable(crew[key])) {

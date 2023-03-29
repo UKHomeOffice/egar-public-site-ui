@@ -163,6 +163,8 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
+      
+
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk')]);
@@ -180,6 +182,7 @@ describe('API upload GAR post controller', () => {
 
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
+
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(validator.validISOCountryLength, '', 'ISSUING STATE', 'Enter a valid document issuing state for crew member James Kirk. Must be a ISO 3166 country code'),
           new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk'),
@@ -291,7 +294,7 @@ describe('API upload GAR post controller', () => {
           expect(req.session.failureMsg).to.be.undefined;
           expect(req.session.failureIdentifier).to.be.undefined;
           expect(req.session.save).to.have.been.called;
-          expect(res.redirect).to.have.been.calledWith('/garfile/departure');
+          expect(res.redirect).to.have.been.calledWith('/garfile/review');
         });
     });
 
@@ -319,42 +322,26 @@ describe('API upload GAR post controller', () => {
           expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
           expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
             people: [{
-              documentTypeOther: 'Biochip',
-              issuingState: 'USA',
+              dateOfBirth: '1965-10-13',
+              documentDesc: 'Biochip',
+              documentExpiryDate: '2033-02-28',
               documentNumber: 'Document Number',
-              lastName: 'Kirk',
+              documentType: 'Other',
               firstName: 'James',
               gender: 'Male',
-              dateOfBirth: '1965-10-13',
-              placeOfBirth: 'Place of Birth',
-              nationality: 'USA',
-              documentExpiryDate: '2033-02-28',
-              peopleType: 'Crew',
-              documentType: 'Other',
-            }],
-          });
-          expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
-            people: [{
-              documentTypeOther: 'Federation Card',
               issuingState: 'USA',
-              documentNumber: 'Document Number',
-              lastName: 'Chekov',
-              firstName: 'Pavel',
-              gender: 'Male',
-              dateOfBirth: '1975-10-31',
+              lastName: 'Kirk',
+              nationality: 'USA',
+              peopleType: 'Crew',
               placeOfBirth: 'Place of Birth',
-              nationality: 'RUS',
-              documentExpiryDate: '2023-06-01',
-              peopleType: 'Passenger',
-              documentType: 'Other',
             }],
           });
           expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
-            arrivalPort: 'Arrival Port',
+            arrivalPort: 'BFS',
             arrivalDate: 'Arrival Date',
             arrivalTime: 'Arrival Time',
             departurePort: 'Departure Port',
-            departureDate: 'Departure Date',
+            departureDate: '2033-02-28',
             departureTime: 'Departure Time',
             registration: 'Registration',
             craftType: 'Craft Type',
@@ -362,10 +349,26 @@ describe('API upload GAR post controller', () => {
             freeCirculation: 'FreeCirculation',
             visitReason: 'VisitReason',
           });
+          expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
+            people: [{
+              dateOfBirth: '1975-10-31',
+              documentDesc: 'Federation Card',
+              documentExpiryDate: '2023-06-01',
+              documentNumber: 'Document Number',
+              documentType: 'Other',
+              firstName: 'Pavel',
+              gender: 'Male',
+              issuingState: 'USA',
+              lastName: 'Chekov',
+              nationality: 'RUS',
+              peopleType: 'Passenger',
+              placeOfBirth: 'Place of Birth',
+            }],
+          });
           expect(req.session.failureMsg).to.be.undefined;
           expect(req.session.failureIdentifier).to.be.undefined;
           expect(req.session.save).to.have.been.called;
-          expect(res.redirect).to.have.been.calledWith('/garfile/departure');
+          expect(res.redirect).to.have.been.calledWith('/garfile/review');
         });
     });
   });
