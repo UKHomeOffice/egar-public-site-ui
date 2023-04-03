@@ -163,8 +163,6 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      
-
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk')]);
@@ -182,7 +180,6 @@ describe('API upload GAR post controller', () => {
 
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
-
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(validator.validISOCountryLength, '', 'ISSUING STATE', 'Enter a valid document issuing state for crew member James Kirk. Must be a ISO 3166 country code'),
           new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk'),
