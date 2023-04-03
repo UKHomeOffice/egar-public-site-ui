@@ -26,14 +26,6 @@
     </select>
   </div>
 
-  <div class="{{ m.form_group_class('birthplace', errors) }}">
-    <label class="govuk-label govuk-label--m" for="birthplace">{{ __('field_birth_place') }}</label>
-    {{ m.error_message('birthplace', errors, __) }}
-    <input class="govuk-input govuk-input--width-30" id="birthplace" name="birthplace" autocomplete="off" type="text"
-      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}"
-      {{ 'aria-describedby=birthplace-error' if errors | containsError('birthplace') }}>
-  </div>
-
   <!-- Date of birth -->
   <div class="{{ m.form_group_class('dob', errors) }}">
     <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
@@ -46,7 +38,7 @@
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="dobDay">{{ __('field_date_day') }}</label>
-            <input id="dobDay" name="dobDay" class="govuk-input govuk-date-input__input govuk-input--width-2" 
+            <input id="dobDay" name="dobDay" class="govuk-input govuk-date-input__input govuk-input--width-2"
             type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'day');autoTab(dobDay, 'day', dobMonth);"
              value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}" >
           </div>
@@ -54,7 +46,7 @@
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label" for="dobMonth">{{ __('field_date_month') }}</label>
-            <input id="dobMonth" name="dobMonth" class="govuk-input govuk-date-input__input govuk-input--width-2" 
+            <input id="dobMonth" name="dobMonth" class="govuk-input govuk-date-input__input govuk-input--width-2"
             type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'month');autoTab(dobMonth, 'month', dobYear);"
             value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}" >
           </div>
@@ -89,6 +81,14 @@
         {% endfor %}
       </div>
     </fieldset>
+  </div>
+
+  <div class="{{ m.form_group_class('birthplace', errors) }}">
+    <label class="govuk-label govuk-label--m" for="birthplace">{{ __('field_birth_place') }}</label>
+    {{ m.error_message('birthplace', errors, __) }}
+    <input class="govuk-input govuk-input--width-30" id="birthplace" name="birthplace" autocomplete="off" type="text"
+      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}"
+      {{ 'aria-describedby=birthplace-error' if errors | containsError('birthplace') }}>
   </div>
 
   <div class="{{ m.form_group_class('personType', errors) }}" id="personType">
@@ -134,7 +134,7 @@
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryDay">{{ __('field_date_day') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay" 
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay"
             type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'day');autoTab(expiryDay, 'day', expiryMonth);"
             value="{{ cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay'] }}" >
           </div>
@@ -142,7 +142,7 @@
         <div class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label class="govuk-label govuk-date-input__label" for="expiryMonth">{{ __('field_date_month') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth" 
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth"
             type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'month');autoTab(expiryMonth, 'month', expiryYear);"
             value="{{ cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}" >
           </div>
@@ -190,7 +190,7 @@
       <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
       maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
       </div>
-    {% else %} 
+    {% else %}
       <div class="{{ m.form_group_class('travelDocumentOther', errors) }}" id="travelDocumentOtherDiv" hidden>
       {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
       <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
@@ -198,7 +198,7 @@
       </div>
     {% endif %}
 
-  
+
 
 <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
 <script type="text/javascript" src="/utils/validator.js"></script>
@@ -217,6 +217,6 @@
     else{
       document.getElementById('travelDocumentOtherDiv').style.display = 'none';
     }
-    
+
   }
 </script>
