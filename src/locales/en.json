@@ -189,7 +189,7 @@
     "field_date_day": "Day",
     "field_date_month": "Month",
     "field_date_year": "Year",
-    "field_gender": "Gender",
+    "field_gender": "Sex",
     "field_person_type": "Person type",
     "field_person_type_short": "Type",
     "field_person_type_hint": "For example Captain, Crew or Passenger. First Officer / Co-Pilot should be identified as Crew.",
