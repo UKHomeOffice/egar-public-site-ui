@@ -95,7 +95,6 @@ describe('Arrival Post Controller', () => {
     it('should fail for empty port code', () => {
       req.body.portChoice = 'Yes';
       req.body.arrivalPort = '';
-      
       const cookie = new CookieModel(req);
 
       sinon.stub(garApi, 'get').resolves(apiResponse);

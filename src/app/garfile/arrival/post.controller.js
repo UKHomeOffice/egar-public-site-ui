@@ -175,16 +175,14 @@ module.exports = async (req, res) => {
     ]);
   }
   
-console.log('about to call validateChains');
+
   validator.validateChains(validations)
     .then(() => {
-      console.log('Calling performAPICall');
       performAPICall(cookie, buttonClicked, res);
     })
     .catch((err) => {
-      console.log(err);
       logger.info('GAR arrival validation failed');
-      //logger.debug(JSON.stringify(err));
+      logger.debug(JSON.stringify(err));
       res.render('app/garfile/arrival/index', {
         cookie,
         errors: err,
