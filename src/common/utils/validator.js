@@ -217,7 +217,7 @@ function currentOrFutureDate(dObj) {
   return false;
 }
 
-function dateTooFarInFuture(dObj) {
+function dateNotTooFarInFuture(dObj) {
   if (dObj === null || dObj === undefined) return false;
 
   const now = new Date();
@@ -687,5 +687,5 @@ module.exports = {
   invalidLongDirection,
   sanitiseValue2,
   preventZ,
-  dateTooFarInFuture,
+  dateNotTooFarInFuture,
 };
