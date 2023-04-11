@@ -53,5 +53,3 @@ services:
       - ./src/app:/public-site/app
       - ./src/common:/public-site/common
       - ./src/locales:/public-site/locales
-
-
