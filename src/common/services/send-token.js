@@ -16,8 +16,6 @@ module.exports = {
    * @param {String} token
    * @returns {Boolean}
    */
-  // problem, the notify_token_template_id is not available in dev, for a reason.
-  // can recreate the template, for interesting purposes. To do.
   send(firstName, email, notifyToken) {
     return new Promise((resolve, reject) => {
       notifyClient
