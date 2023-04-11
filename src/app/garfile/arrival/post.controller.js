@@ -124,22 +124,23 @@ module.exports = async (req, res) => {
   if (voyage.portChoice === 'No') {
     logger.debug('Testing arrival Lat and Long values...');
 
-    if (voyage.arrivalLatDirection && voyage.arrivalLatDirection.toUpperCase() == 'S') {
-      const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes / 60) + parseFloat((voyage.arrivalSeconds / 3600).toFixed(6)));
-      voyage.arrivalLat = `-${parseFloat(convertedLat).toFixed(6)}`;
-    } else {
-      const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes / 60) + parseFloat((voyage.arrivalSeconds / 3600).toFixed(6)));
+    if (voyage.arrivalLatDirection && voyage.arrivalLatDirection.toUpperCase() == 'S'){
+      const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes/60) + parseFloat((voyage.arrivalSeconds/3600).toFixed(6)));
+      voyage.arrivalLat = '-' + parseFloat(convertedLat).toFixed(6);
+    }
+    else{
+      const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes/60) + parseFloat((voyage.arrivalSeconds/3600).toFixed(6)));
       voyage.arrivalLat = parseFloat(convertedLat).toFixed(6);
     }
-
-    if (voyage.arrivalLongDirection && voyage.arrivalLongDirection.toUpperCase() == 'W') {
-      const convertedLong = parseFloat(voyage.arrivalLongDegrees) + parseFloat((voyage.arrivalLongMinutes / 60) + parseFloat((voyage.arrivalLongSeconds / 3600).toFixed(6)));
-      voyage.arrivalLong = `-${parseFloat(convertedLong).toFixed(6)}`;
-    } else {
-      const convertedLong = parseFloat(voyage.arrivalLongDegrees) + parseFloat((voyage.arrivalLongMinutes / 60) + parseFloat((voyage.arrivalLongSeconds / 3600).toFixed(6)));
+    
+    if (voyage.arrivalLongDirection && voyage.arrivalLongDirection.toUpperCase() == 'W'){
+      const convertedLong = parseFloat(voyage.arrivalLongDegrees) + parseFloat((voyage.arrivalLongMinutes/60) + parseFloat((voyage.arrivalLongSeconds/3600).toFixed(6)));
+      voyage.arrivalLong = '-' + parseFloat(convertedLong).toFixed(6);
+    }
+    else{
+      const convertedLong = parseFloat(voyage.arrivalLongDegrees) + parseFloat((voyage.arrivalLongMinutes/60) + parseFloat((voyage.arrivalLongSeconds/3600).toFixed(6)));
       voyage.arrivalLong = parseFloat(convertedLong).toFixed(6);
     }
-
 
     logger.debug(voyage.arrivalLat);
     logger.debug(voyage.arrivalLong);

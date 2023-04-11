@@ -24,13 +24,22 @@ describe('Arrival Post Controller', () => {
       body: {
         portChoice: 'No',
         arrivalPort: 'LHR',
-        arrivalLat: '45.1000',
-        arrivalLong: '12.1000',
+        arrivalLat: '45.100000',
+        arrivalDegrees: 45,
+        arrivalMinutes: 6,
+        arrivalSeconds: 0,
+        arrivalLongDegrees: 12,
+        arrivalLongMinutes: 5,
+        arrivalLongSeconds: 60,
+        arrivalLong: '12.100000',
         arrivalDay: '30',
         arrivalMonth: '5',
-        arrivalYear: '2022',
+        arrivalYear: '2024',
         arrivalHour: '15',
         arrivalMinute: '00',
+        arrivalLongDirection: 'E',
+        arrivalLatDirection: 'N',
+
       },
       session: {
         gar: {
@@ -61,6 +70,7 @@ describe('Arrival Post Controller', () => {
         arrivalPort: 'LHR',
         arrivalLong: '',
         arrivalLat: '',
+        departurePort: 'BFS'
       });
     });
 
@@ -109,6 +119,12 @@ describe('Arrival Post Controller', () => {
         req.body.arrivalPort = 'ZZZZ';
         delete req.body.arrivalLong;
         delete req.body.arrivalLat;
+        delete req.body.arrivalDegrees;
+        delete req.body.arrivalMinutes;
+        delete req.body.arrivalSeconds;
+        delete req.body.arrivalLongDegrees;
+        delete req.body.arrivalLongMinutes;
+        delete req.body.arrivalLongSeconds;
         const cookie = new CookieModel(req);
 
         sinon.stub(garApi, 'get').resolves(apiResponse);
@@ -124,8 +140,8 @@ describe('Arrival Post Controller', () => {
           expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
             cookie,
             errors: [
-              new ValidationRule(validator.latitude, 'arrivalLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
-              new ValidationRule(validator.longitude, 'arrivalLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
+              new ValidationRule(validator.latitude, 'arrivalLat', "NaN", 'Value entered is incorrect. Enter latitude to 6 decimal places'),
+              new ValidationRule(validator.longitude, 'arrivalLong', "NaN", 'Value entered is incorrect. Enter longitude to 6 decimal places'),
             ],
           });
         });
