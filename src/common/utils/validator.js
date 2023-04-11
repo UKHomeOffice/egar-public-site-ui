@@ -549,6 +549,7 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
 }
 
   function invalidLatDirection(value){
+    value = value || '';
     value = value.toUpperCase();
     if ( ['S', 'N'].includes(value)){
       return true;
@@ -560,6 +561,7 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
   }
 
   function invalidLongDirection(value){
+    value = value || '';
     value = value.toUpperCase();
     if ( ['W', 'E'].includes(value)){
       return true;
