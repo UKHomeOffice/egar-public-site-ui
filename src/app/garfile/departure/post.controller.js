@@ -117,7 +117,7 @@ module.exports = async (req, res) => {
   if (voyage.portChoice === 'No') {
     logger.debug("Testing departure Lat and Long values...");
     
-    if (voyage.departureLatDirection.toUpperCase() == 'S'){
+    if (voyage.departureLatDirection && voyage.departureLatDirection.toUpperCase() == 'S') {
       const convertedLat = parseFloat(voyage.departureDegrees) + parseFloat((voyage.departureMinutes/60) + parseFloat((voyage.departureSeconds/3600).toFixed(6)));
       voyage.departureLat = '-' + parseFloat(convertedLat).toFixed(6);
     }
@@ -126,7 +126,7 @@ module.exports = async (req, res) => {
       voyage.departureLat = parseFloat(convertedLat).toFixed(6);
     }
     
-    if (voyage.departureLongDirection.toUpperCase() == 'W'){
+    if (voyage.departureLatDirection && voyage.departureLongDirection.toUpperCase() == 'W'){
       const convertedLong = parseFloat(voyage.departureLongDegrees) + parseFloat((voyage.departureLongMinutes/60) + parseFloat((voyage.departureLongSeconds/3600).toFixed(6)));
       voyage.departureLong = '-' + parseFloat(convertedLong).toFixed(6);
     }
