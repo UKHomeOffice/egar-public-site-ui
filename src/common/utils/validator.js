@@ -221,14 +221,26 @@ function dateNotTooFarInFuture(dObj) {
   if (dObj === null || dObj === undefined) return false;
 
   const now = new Date();
-  var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, (now.getDate()));
-  var providedDate = dObj instanceof Date ? dObj : new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
+  var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
-  return numericDateElements(dObj)
-    && validDay(dObj.d, dObj.m, dObj.y)
-    && validMonth(dObj.m)
-    && validYear(dObj.y)
-    && providedDate < nextMonth;
+
+  let providedDate;
+
+  if (dObj instanceof Date) {
+    providedDate = dObj;
+  } else {
+
+    if (!(numericDateElements(dObj)
+      && validDay(dObj.d, dObj.m, dObj.y)
+      && validMonth(dObj.m)
+      && validYear(dObj.y))) {
+      return false;
+    }
+
+    providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
+  }
+
+  return providedDate <= nextMonth;
 }
 
 function validYear(y) {
