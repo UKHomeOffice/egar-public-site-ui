@@ -7,7 +7,7 @@ module.exports.validations = (req) => {
   const expiryDateObj = { d: req.body.expiryDay, m: req.body.expiryMonth, y: req.body.expiryYear };
   const docTypeOther = req.body.travelDocumentType;
 
-  if (docTypeOther == 'Other') {
+  if (docTypeOther === 'Other') {
     return [
       [
         new ValidationRule(validator.bornAfter1900, 'dob', dobObj, 'Enter a real date of birth'),
@@ -27,8 +27,7 @@ module.exports.validations = (req) => {
         new ValidationRule(validator.notEmpty, 'nationality', req.body.nationality, 'Enter the nationality of the person'),
       ],
       [
-        new ValidationRule(validator.notEmpty, 'birthplace', req.body.birthplace, 'Enter the place of birth of the person'),
-        new ValidationRule(validator.isValidStringLength, 'birthplace', req.body.birthplace, `Place of birth must be ${MAX_STRING_LENGTH} characters or less`),
+        new ValidationRule(validator.isValidOptionalStringLength, 'birthplace', req.body.birthplace, `Place of birth must be ${MAX_STRING_LENGTH} characters or less`),
       ],
       [
         new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select the type of person'),
@@ -71,8 +70,7 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.notEmpty, 'nationality', req.body.nationality, 'Enter the nationality of the person'),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'birthplace', req.body.birthplace, 'Enter the place of birth of the person'),
-      new ValidationRule(validator.isValidStringLength, 'birthplace', req.body.birthplace, `Place of birth must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isValidOptionalStringLength, 'birthplace', req.body.birthplace, `Place of birth must be ${MAX_STRING_LENGTH} characters or less`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select the type of person'),

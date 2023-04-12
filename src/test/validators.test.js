@@ -32,6 +32,34 @@ function genTimeObj(h, m) {
 }
 
 describe('Validator', () => {
+  it('Should return true when input has leading space', () => {
+    expect(validator.hasLeadingSpace(' aa')).to.be.true;
+  });
+
+  it('Should return false when input has trailing space', () => {
+    expect(validator.hasLeadingSpace('aa ')).to.be.false;
+  });
+
+  it('Should return false when input has no leading space', () => {
+    expect(validator.hasLeadingSpace('aa')).to.be.false;
+  });
+
+  it('Should return true when input has only symbols', () => {
+    expect(validator.hasOnlySymbols('!!£')).to.be.true;
+  });
+
+  it('Should return false when input has symbols and alphabets', () => {
+    expect(validator.hasOnlySymbols('a.a')).to.be.false;
+  });
+
+  it('Should return false when input starts with a symbol', () => {
+    expect(validator.hasOnlySymbols('!aa')).to.be.false;
+  });
+
+  it('Should return false when input ends with a symbol', () => {
+    expect(validator.hasOnlySymbols('aa$')).to.be.false;
+  });
+
   it('Should return false when numeric inputs are not', () => {
     expect(validator.isNumeric('aa')).to.be.false;
     expect(validator.isNumeric('true')).to.be.false;
@@ -48,6 +76,16 @@ describe('Validator', () => {
 
   it('Should return true when string does not contain "\\n"', () => {
     expect(validator.isPrintable('John Doe')).to.be.true;
+  });
+
+  it('Should return true when fields are empty', () => {
+    expect(validator.isEmpty(null)).to.be.true;
+    expect(validator.isEmpty(undefined)).to.be.true;
+    expect(validator.isEmpty('')).to.be.true;
+  });
+
+  it('Should return false when fields are not empty', () => {
+    expect(validator.isEmpty('World Wide Web')).to.be.false;
   });
 
   it('Should return false when fields are empty', () => {
@@ -303,15 +341,16 @@ describe('Validator', () => {
   });
 
   // Latitude tests
-  it('Should return true for a valid latitude - 4 dp', () => {
-    expect(validator.latitude('51.9576')).to.be.true;
-    expect(validator.latitude('1.9576')).to.be.true;
-    expect(validator.latitude('-51.9576')).to.be.true;
-    expect(validator.latitude('90.0000')).to.be.true;
-    expect(validator.latitude('-90.0000')).to.be.true;
+  it('Should return true for a valid latitude - 6 dp', () => {
+    expect(validator.latitude('51.957681')).to.be.true;
+    expect(validator.latitude('1.957624')).to.be.true;
+    expect(validator.latitude('-51.957612')).to.be.true;
+    expect(validator.latitude('90.000000')).to.be.true;
+    expect(validator.latitude('-90.000000')).to.be.true;
   });
 
-  it('Should return false for an invalid latitude - 4 dp', () => {
+  it('Should return false for an invalid latitude - 6 dp', () => {
+    expect(validator.latitude('51.9537')).to.be.false;
     expect(validator.latitude('51.95377')).to.be.false;
     expect(validator.latitude('51.953')).to.be.false;
     expect(validator.latitude('51.95')).to.be.false;
@@ -322,15 +361,16 @@ describe('Validator', () => {
   });
 
   // Longitude tests
-  it('Should return true for a valid longitude - 4 dp', () => {
-    expect(validator.longitude('-1.2456')).to.be.true;
-    expect(validator.longitude('1.9576')).to.be.true;
-    expect(validator.longitude('12.9576')).to.be.true;
-    expect(validator.longitude('180.0000')).to.be.true;
-    expect(validator.longitude('-180.0000')).to.be.true;
+  it('Should return true for a valid longitude - 6 dp', () => {
+    expect(validator.longitude('-1.245623')).to.be.true;
+    expect(validator.longitude('1.957667')).to.be.true;
+    expect(validator.longitude('12.957689')).to.be.true;
+    expect(validator.longitude('180.000000')).to.be.true;
+    expect(validator.longitude('-180.000000')).to.be.true;
   });
 
-  it('Should return false for an invalid longitude - 4 dp', () => {
+  it('Should return false for an invalid longitude - 6 dp', () => {
+    expect(validator.longitude('-1.2456')).to.be.false;
     expect(validator.longitude('-1.24563')).to.be.false;
     expect(validator.longitude('-1.245')).to.be.false;
     expect(validator.longitude('-1.24')).to.be.false;
@@ -381,6 +421,41 @@ describe('Validator', () => {
   it('Should return false when string is longer than MAX_STRING_LENGTH', () => {
     const thirtysix = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDd';
     expect(validator.isValidStringLength(thirtysix)).to.be.false;
+  });
+
+  it('Shoud return true when an optional string is less than or equal to MAX_STRING_LENGTH', () => {
+    const thirtyfive = 'AAAAAaaaa BBBBBbbbb CCCCCccccc';
+    expect(validator.isValidOptionalStringLength(thirtyfive)).to.be.true;
+  });
+
+  it('Should return false when an optional string is longer than MAX_STRING_LENGTH', () => {
+    const thirtysix = 'AAAAAaaaa BBBBBbbbb CCCCCcccc DDDDDd';
+    expect(validator.isValidOptionalStringLength(thirtysix)).to.be.false;
+  });
+
+  it('Should return true when an optional string is undefined', () => {
+    const undefinedString = undefined ;
+    expect(validator.isValidOptionalStringLength(undefinedString)).to.be.true;
+  });
+
+  it('Should return true when an optional string is null', () => {
+    const nullString = null ;
+    expect(validator.isValidOptionalStringLength(nullString)).to.be.true;
+  });
+
+  it('Should return true when an optional string is null', () => {
+    const emptyString = '' ;
+    expect(validator.isValidOptionalStringLength(emptyString)).to.be.true;
+  });
+
+  it('Should return false when an optional string has only Symbols', () => {
+    const onlySymbols = '$$' ;
+    expect(validator.isValidOptionalStringLength(onlySymbols)).to.be.false;
+  });
+
+  it('Should return false when an optional string has leading spaces', () => {
+    const leadingSpaces = ' London' ;
+    expect(validator.isValidOptionalStringLength(leadingSpaces)).to.be.false;
   });
 
   it('Should return true when registration is less than or equal to MAX_REGISTRATION_LENGTH', () => {
@@ -505,12 +580,12 @@ describe('Validator', () => {
     beforeEach(function() {
       currentDay = new Date().getDate();
       //months are 0 to 11 so adding 1 to it for the normal representation of 1 to 12
-      currentMonthStr = (new Date().getMonth() + 1).toString(); 
+      currentMonthStr = (new Date().getMonth() + 1).toString();
       currentYearStr = (new Date().getFullYear()).toString();
     });
 
     it('Should pass if the provided day is in future -- next day', () => {
-      var currentDate = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );   
+      var currentDate = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );
       expect(validator.realDateInFuture(currentDate)).to.be.true;
     });
 
@@ -537,7 +612,7 @@ describe('Validator', () => {
   });
 
   describe('bornAfter1900', () => {
-    
+
     var currentDay, currentMonthStr, currentYearStr;
     beforeEach(function() {
       currentDay = new Date().getDate();
@@ -609,7 +684,7 @@ describe('Validator', () => {
     });
 
     it('Should fail if the provided day is in future -- next day', () => {
-      var date = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );   
+      var date = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );
       expect(validator.bornAfter1900(date)).to.be.false;
     });
 

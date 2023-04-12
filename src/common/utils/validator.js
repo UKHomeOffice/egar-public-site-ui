@@ -8,22 +8,60 @@ const genderValues = require('../seeddata/egar_gender_choice.json');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 
-function notEmpty(value) {
+/**
+ * Check if the string has leading spaces
+ * @param {String} value
+ * @return {boolean}
+ */
+function hasLeadingSpace(value) {
+  return (/^\s/.test(value));
+}
+
+/**
+ * Check if the string has only symbols
+ * @param {String} value
+ * @return {boolean}
+ */
+function hasOnlySymbols(value) {
+  return (/^[^a-zA-Z0-9]+$/.test(value));
+}
+
+/**
+ * Check if the string is empty, null or undefined.
+ * @param {String} value
+ * @return {boolean}
+ */
+function isEmpty(value) {
   if (value === undefined) {
-    return false;
+    return true;
   }
   if (value === null) {
-    return false;
+    return true;
   }
   if (value === '') {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Check if the string is not empty, does not start with a space and does not contain only symbols.
+ * @param {String} value
+ * @return {boolean}
+ */
+function notEmpty(value) {
+  // check for null, undefined or empty
+  if (isEmpty(value)) {
     return false;
   }
+
   // check for space at start
-  if (/^\s/.test(value)) {
+  if (hasLeadingSpace(value)) {
     return false;
   }
+
   // check for only symbols
-  if (/^[^a-zA-Z0-9]+$/.test(value)) {
+  if (hasOnlySymbols(value)) {
     return false;
   }
   return true;
@@ -292,7 +330,7 @@ function futureDepartDate (value, element) {
   if (f.toDateString() == d.toDateString()){
     return true;
   }
-  
+
   return false;
 }
 
@@ -454,6 +492,18 @@ function isValidStringLength(value) {
 }
 
 /**
+ * Check if the string length is within the limit for optional strings.
+ * @param {String} value
+ * @return {boolean}
+ */
+function isValidOptionalStringLength(value) {
+  return isEmpty(value)
+    || (!hasLeadingSpace(value)
+      && !hasOnlySymbols(value)
+      && value.length <= MAX_STRING_LENGTH);
+}
+
+/**
  * Check if aricraft registration length is within the limit
  * @param {String} value
  * @return {Bool}
@@ -580,9 +630,10 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
   }
 
 
-
-
 module.exports = {
+  hasOnlySymbols,
+  hasLeadingSpace,
+  isEmpty,
   notEmpty,
   validName,
   validFirstNameLength,
@@ -619,6 +670,7 @@ module.exports = {
   isValidFileMime,
   validTextLength,
   isValidStringLength,
+  isValidOptionalStringLength,
   isValidEmailLength,
   isValidRegistrationLength,
   isValidDepAndArrDate,
