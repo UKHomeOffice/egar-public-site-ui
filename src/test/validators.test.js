@@ -822,13 +822,23 @@ describe.only('Validator', () => {
     const clock = sinon.useFakeTimers(new Date(2023, 04, 11).getTime());
     let actualResult;
 
-    it('Should reject a date further than one month in the future', () => {
+    it('Should reject a date further than one month in the future in object format', () => {
       actualResult = validator.dateNotTooFarInFuture({ d: 1, m: 1, y: 2024 });
       expect(actualResult).to.equal(false);
     });
 
-    it('Should accept a date within one month in the future', () => {
+    it('Should accept a date within one month in the future in object format', () => {
       actualResult = validator.dateNotTooFarInFuture({ d: 11, m: 5, y: 2023 });
+      expect(actualResult).to.equal(false);
+    });
+
+    it('Should reject a date further than one month in the future in date format', () => {
+      actualResult = validator.dateNotTooFarInFuture(new Date(2024, 0, 1));
+      expect(actualResult).to.equal(false);
+    });
+
+    it('Should accept a date within one month in the future in date format', () => {
+      actualResult = validator.dateNotTooFarInFuture(new Date(2023, 4, 11));
       expect(actualResult).to.equal(false);
     });
 

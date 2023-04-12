@@ -222,7 +222,7 @@ function dateNotTooFarInFuture(dObj) {
 
   const now = new Date();
   var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, (now.getDate()));
-  var providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
+  var providedDate = dObj instanceof Date ? dObj : new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
 
   return numericDateElements(dObj)
     && validDay(dObj.d, dObj.m, dObj.y)
