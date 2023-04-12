@@ -31,7 +31,8 @@ function genTimeObj(h, m) {
   };
 }
 
-describe.only('Validator', () => {
+describe('Validator', () => {
+
   it('Should return true when input has leading space', () => {
     expect(validator.hasLeadingSpace(' aa')).to.be.true;
   });
@@ -454,8 +455,8 @@ describe.only('Validator', () => {
   });
 
   it('Should return false when an optional string has leading spaces', () => {
-    const onlySymbols = ' London';
-    expect(validator.isValidOptionalStringLength(onlySymbols)).to.be.false;
+    const leadingSpaces = ' London';
+    expect(validator.isValidOptionalStringLength(leadingSpaces)).to.be.false;
   });
 
   it('Should return true when registration is less than or equal to MAX_REGISTRATION_LENGTH', () => {

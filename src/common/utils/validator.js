@@ -635,13 +635,13 @@ function invalidLongDirection(value) {
 
 }
 
+
 function preventZ(value) {
   if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy") {
     return false;
   }
   return true;
 }
-
 
 module.exports = {
   hasOnlySymbols,
