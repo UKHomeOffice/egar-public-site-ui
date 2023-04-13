@@ -217,6 +217,12 @@ function currentOrFutureDate(dObj) {
   return false;
 }
 
+
+/**
+ * Check that supplied date is within an acceptable range (currently within 1 month from Date.now())
+ * @param {Object} dObjh Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
+ * * @returns {Bool} Date is within acceptable range
+ */
 function dateNotTooFarInFuture(dObj) {
   if (dObj === null || dObj === undefined) return false;
 
