@@ -74,7 +74,9 @@ docker-compose stop node
 docker-compose up --build -d node
 ```
 
-To run unit tests you need to execute:
+To run unit tests you need to execute. 
+
+(You will also need to rebuild the Docker container by changing `RUN npm install --production` to `RUN npm install` otherwise the dev libraries for running unit tests will not be installed):
 ```
 docker-compose exec -t node sh -c "cd test/ && npm test"
 
