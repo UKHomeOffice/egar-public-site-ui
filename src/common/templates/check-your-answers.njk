@@ -222,6 +222,8 @@
         </dd>
       </div>
       {{ check_your_answers_row(__('field_contact_details'), garfile.responsibleContactNo) }}
+      {{ check_your_answers_row(__('field_email'), garfile.responsibleEmail ) }}
+
       {% if garfile.fixedBasedOperator != 'Other' %}
         {{ check_your_answers_row(__('field_fbo_question'), garfile.fixedBasedOperator) }}
       {% endif %}

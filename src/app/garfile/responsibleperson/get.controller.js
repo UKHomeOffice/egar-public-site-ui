@@ -18,10 +18,13 @@ module.exports = (req, res) => {
     .then((apiResponse) => {
       const gar = JSON.parse(apiResponse);
 
+      logger.debug(`gar : ${JSON.stringify(gar)}`);
+
       const responsiblePerson = {
         responsibleGivenName: gar.responsibleGivenName,
         responsibleSurname: gar.responsibleSurname,
         responsibleAddressLine1: gar.responsibleAddressLine1,
+        responsibleEmail: gar.responsibleEmail,
         responsibleAddressLine2: gar.responsibleAddressLine2,
         responsibleTown: gar.responsibleTown,
         responsiblePostcode: gar.responsiblePostcode,
@@ -32,6 +35,7 @@ module.exports = (req, res) => {
      
       context.gar = gar;
       cookie.setGarResponsiblePerson(responsiblePerson);
+      logger.debug(`context : ${JSON.stringify(context)}`);
       res.render('app/garfile/responsibleperson/index', context);
     })
     .catch((err) => {

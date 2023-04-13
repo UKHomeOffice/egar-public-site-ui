@@ -16,6 +16,7 @@ module.exports = (req, res) => {
     responsibleGivenName: req.body.responsibleGivenName,
     responsibleSurname: req.body.responsibleSurname,
     responsibleContactNo: req.body.responsibleContactNo,
+    responsibleEmail: req.body.responsibleEmail,
     responsibleAddressLine1: req.body.responsibleAddressLine1,
     responsibleAddressLine2: req.body.responsibleAddressLine2,
     responsibleTown: req.body.responsibleTown,
