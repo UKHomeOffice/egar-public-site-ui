@@ -12,6 +12,7 @@ module.exports.validations = (req) => {
     responsibleSurname,
     responsibleContactNo,
     responsibleAddressLine1,
+    responsibleEmail,
     responsibleAddressLine2,
     responsibleTown,
     responsibleCounty,
@@ -29,6 +30,7 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.validIntlPhone, 'responsibleContactNo', responsibleContactNo, i18n.__('validator_contact_number')),
     ],
+    [new ValidationRule(validator.email, 'responsibleEmail', responsibleEmail, 'Please enter a valid email address')],
     [
       new ValidationRule(validator.notEmpty, 'responsibleAddressLine1', responsibleAddressLine1, 'Enter address line 1 of the responsible person'),
     ],

@@ -22,6 +22,7 @@ module.exports = (req, res) => {
         responsibleGivenName: gar.responsibleGivenName,
         responsibleSurname: gar.responsibleSurname,
         responsibleAddressLine1: gar.responsibleAddressLine1,
+        responsibleEmail: gar.responsibleEmail,
         responsibleAddressLine2: gar.responsibleAddressLine2,
         responsibleTown: gar.responsibleTown,
         responsiblePostcode: gar.responsiblePostcode,
@@ -32,6 +33,7 @@ module.exports = (req, res) => {
      
       context.gar = gar;
       cookie.setGarResponsiblePerson(responsiblePerson);
+
       res.render('app/garfile/responsibleperson/index', context);
     })
     .catch((err) => {
