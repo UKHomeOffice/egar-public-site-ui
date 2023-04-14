@@ -36,7 +36,7 @@ class Manifest {
           isValid = false;
           this._recordValidationErr(this.manifest.indexOf(person));
         }
-        if (!validations.notEmpty(person[key])) {
+        if (!key.toLowerCase().includes('placeofbirth') && !validations.notEmpty(person[key])) {
           isValid = false;
           this._recordValidationErr(this.manifest.indexOf(person));
         }

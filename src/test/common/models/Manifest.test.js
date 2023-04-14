@@ -146,4 +146,54 @@ describe('ManifestModel', () => {
     manifest.validate();
     expect(manifest.genErrValidations()).to.have.length(1);
   });
+
+  it('Should return true if place of Birth is not present for a passenger', () => {
+    const singlePassenger = JSON.stringify({
+      items: [
+        {
+          dateOfBirth: '1994-06-22',
+          documentExpiryDate: '2023-06-22',
+          documentNumber: '1283',
+          documentType: 'Identity Card',
+          firstName: 'James',
+          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+          gender: 'Male',
+          issuingState: 'PTA',
+          lastName: 'Smith',
+          nationality: 'PTA',
+          peopleType: {
+            name: 'Passenger',
+          },
+          placeOfBirth: '',
+        },
+      ],
+    });
+    const manifest = new Manifest(singlePassenger);
+    expect(manifest.validate()).to.be.true;
+  });
+
+  it('Should return true if place of Birth is not present for a crew', () => {
+    const singleCrew = JSON.stringify({
+      items: [
+        {
+          dateOfBirth: '1994-06-22',
+          documentExpiryDate: '2023-06-22',
+          documentNumber: '1283',
+          documentType: 'Identity Card',
+          firstName: 'James',
+          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+          gender: 'Male',
+          issuingState: 'PTA',
+          lastName: 'Smith',
+          nationality: 'PTA',
+          peopleType: {
+            name: 'Crew',
+          },
+          placeOfBirth: '',
+        },
+      ],
+    });
+    const manifest = new Manifest(singleCrew);
+    expect(manifest.validateCaptainCrew()).to.be.true;
+  });
 });

@@ -8,22 +8,60 @@ const genderValues = require('../seeddata/egar_gender_choice.json');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 
-function notEmpty(value) {
+/**
+ * Check if the string has leading spaces
+ * @param {String} value
+ * @return {boolean}
+ */
+function hasLeadingSpace(value) {
+  return (/^\s/.test(value));
+}
+
+/**
+ * Check if the string has only symbols
+ * @param {String} value
+ * @return {boolean}
+ */
+function hasOnlySymbols(value) {
+  return (/^[^a-zA-Z0-9]+$/.test(value));
+}
+
+/**
+ * Check if the string is empty, null or undefined.
+ * @param {String} value
+ * @return {boolean}
+ */
+function isEmpty(value) {
   if (value === undefined) {
-    return false;
+    return true;
   }
   if (value === null) {
-    return false;
+    return true;
   }
   if (value === '') {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Check if the string is not empty, does not start with a space and does not contain only symbols.
+ * @param {String} value
+ * @return {boolean}
+ */
+function notEmpty(value) {
+  // check for null, undefined or empty
+  if (isEmpty(value)) {
     return false;
   }
+
   // check for space at start
-  if (/^\s/.test(value)) {
+  if (hasLeadingSpace(value)) {
     return false;
   }
+
   // check for only symbols
-  if (/^[^a-zA-Z0-9]+$/.test(value)) {
+  if (hasOnlySymbols(value)) {
     return false;
   }
   return true;
@@ -179,18 +217,37 @@ function currentOrFutureDate(dObj) {
   return false;
 }
 
-// function dateTooFarInFuture(dObj){
-//   if (dObj === null || dObj === undefined) return false;
 
-//   var nextMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, (new Date().getDate() + 1));
-//   var providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
+/**
+ * Check that supplied date is within an acceptable range (currently within 1 month from Date.now())
+ * @param {Object} dObjh Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
+ * * @returns {Bool} Date is within acceptable range
+ */
+function dateNotTooFarInFuture(dObj) {
+  if (dObj === null || dObj === undefined) return false;
 
-//   return numericDateElements(dObj)
-//     && validDay(dObj.d, dObj.m, dObj.y)
-//     && validMonth(dObj.m)
-//     && validYear(dObj.y)
-//     && providedDate < nextMonth;
-// }
+  const now = new Date();
+  var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+
+
+  let providedDate;
+
+  if (dObj instanceof Date) {
+    providedDate = dObj;
+  } else {
+
+    if (!(numericDateElements(dObj)
+      && validDay(dObj.d, dObj.m, dObj.y)
+      && validMonth(dObj.m)
+      && validYear(dObj.y))) {
+      return false;
+    }
+
+    providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
+  }
+
+  return providedDate <= nextMonth;
+}
 
 function validYear(y) {
   return y.length === 4;
@@ -242,45 +299,45 @@ function realDateFromString(str) {
 }
 
 // This function will validate Passport Expiry date while uploading Gar Template
-function passportExpiryDate (value, element) {
+function passportExpiryDate(value, element) {
   const val = Date.parse(value);
   if (isNaN(val))
-      return false;
+    return false;
 
   const d = new Date(val);
   const f = new Date();
 
   if (d > f) {
-  return true;
-}
+    return true;
+  }
 
-if (f.toDateString() == d.toDateString()){
-  return true;
-}
-return false;
+  if (f.toDateString() == d.toDateString()) {
+    return true;
+  }
+  return false;
 }
 
 // This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
-function birthDate (value, element) {
+function birthDate(value, element) {
   const val = Date.parse(value);
   if (isNaN(val))
-      return false;
+    return false;
 
   const d = new Date(val);
   const f = new Date();
 
   f.setMonth(f.getMonth());
   if (d > f) {
-      return false;
+    return false;
   }
   return true;
 }
 
 // This function will validate departure date while uploading Gar Template
-function futureDepartDate (value, element) {
+function futureDepartDate(value, element) {
   const val = Date.parse(value);
   if (isNaN(val))
-      return false;
+    return false;
 
   const d = new Date(val);
   const f = new Date();
@@ -289,10 +346,10 @@ function futureDepartDate (value, element) {
     return true;
   }
 
-  if (f.toDateString() == d.toDateString()){
+  if (f.toDateString() == d.toDateString()) {
     return true;
   }
-  
+
   return false;
 }
 
@@ -454,6 +511,18 @@ function isValidStringLength(value) {
 }
 
 /**
+ * Check if the string length is within the limit for optional strings.
+ * @param {String} value
+ * @return {boolean}
+ */
+function isValidOptionalStringLength(value) {
+  return isEmpty(value)
+    || (!hasLeadingSpace(value)
+      && !hasOnlySymbols(value)
+      && value.length <= MAX_STRING_LENGTH);
+}
+
+/**
  * Check if aricraft registration length is within the limit
  * @param {String} value
  * @return {Bool}
@@ -520,7 +589,7 @@ function autoTab(field1, dayMonthOrYear, field2) {
 
   if (field1Value.length == len) {
     field2.focus();
- 	}
+  }
 }
 
 function sanitiseValue1(input, type) {
@@ -545,42 +614,45 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
 
   if (field1Value.length == len) {
     field2.focus();
- 	}
+  }
 }
 
-  function invalidLatDirection(value){
-    value = value.toUpperCase();
-    if ( ['S', 'N'].includes(value)){
-      return true;
-    }
-    else{
-      return false;
-    }
-
-  }
-
-  function invalidLongDirection(value){
-    value = value.toUpperCase();
-    if ( ['W', 'E'].includes(value)){
-      return true;
-    }
-    else{
-      return false;
-    }
-
-  }
-
-  function preventZ(value){
-    if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy"){
-      return false;
-    }
+function invalidLatDirection(value) {
+  value = value || '';
+  value = value.toUpperCase();
+  if (['S', 'N'].includes(value)) {
     return true;
   }
+  else {
+    return false;
+  }
+
+}
+
+function invalidLongDirection(value) {
+  value = value || '';
+  value = value.toUpperCase();
+  if (['W', 'E'].includes(value)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+
+}
 
 
-
+function preventZ(value) {
+  if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy") {
+    return false;
+  }
+  return true;
+}
 
 module.exports = {
+  hasOnlySymbols,
+  hasLeadingSpace,
+  isEmpty,
   notEmpty,
   validName,
   validFirstNameLength,
@@ -617,6 +689,7 @@ module.exports = {
   isValidFileMime,
   validTextLength,
   isValidStringLength,
+  isValidOptionalStringLength,
   isValidEmailLength,
   isValidRegistrationLength,
   isValidDepAndArrDate,
@@ -632,5 +705,5 @@ module.exports = {
   invalidLongDirection,
   sanitiseValue2,
   preventZ,
-  //dateTooFarInFuture,
+  dateNotTooFarInFuture,
 };

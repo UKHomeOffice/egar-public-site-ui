@@ -12,6 +12,8 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const emailService = require('../../../common/services/sendEmail');
 const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
+const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
+const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
@@ -67,15 +69,25 @@ describe('GAR Customs Post Controller', () => {
         freeCirculationOptions,
         reasonForVisitOptions,
         prohibitedGoodsOptions,
+        baggageOptions,
+        intentionValueOptions,
         cookie,
         gar: {
+          baggage: undefined,
+          baggageDeclaration: '',
           prohibitedGoods: 'Yes',
           goodsDeclaration: 'Duty Free',
+          intentionValue: undefined,
+          passengerTravellingReason: '',
+          passengerTravellingReasonAnswer: '',
+          supportingInformation: undefined,
+          supportingInformationAnswer: '',
           freeCirculation: 0,
           visitReason: '',
         },
         errors: [
           new ValidationRule(validator.notEmpty, 'visitReason', '', 'Select a reason for visit'),
+          new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Select a value for customs declaration')
         ],
       });
     });
@@ -94,6 +106,7 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.not.have.been.called;
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
+        baggageOptions,
         freeCirculationOptions,
         reasonForVisitOptions,
         prohibitedGoodsOptions,

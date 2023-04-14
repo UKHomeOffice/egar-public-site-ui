@@ -11,6 +11,8 @@ const garApi = require('../../../common/services/garApi');
 const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
+const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
+const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
 
 const controller = require('../../../app/garfile/customs/get.controller');
 
@@ -50,6 +52,8 @@ describe('GAR Customs Get Controller', () => {
         freeCirculationOptions,
         reasonForVisitOptions,
         prohibitedGoodsOptions,
+        baggageOptions,
+        intentionValueOptions,
         errors: [{ message: 'Problems retrieving GAR' }],
       });
     });
@@ -69,6 +73,8 @@ describe('GAR Customs Get Controller', () => {
       freeCirculationOptions,
       reasonForVisitOptions,
       prohibitedGoodsOptions,
+      baggageOptions,
+      intentionValueOptions,
       gar: {
         id: 'GAR1-ID',
       },
