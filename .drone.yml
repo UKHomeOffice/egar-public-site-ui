@@ -35,7 +35,6 @@ steps:
   when:
     event:
     - push
-    - pull_request
     target:
       exclude:
       - production
@@ -329,7 +328,7 @@ steps:
   image: plugins/slack
   settings:
       channel: sgar-dev
-      webhook: 
+      webhook:
         from_secret: SLACK_WEBHOOK
       template: >
         {{#success build.status}}
