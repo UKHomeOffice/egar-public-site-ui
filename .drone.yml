@@ -3,22 +3,35 @@ kind: pipeline
 name: default
 type: kubernetes
 
-services:
-- name: docker
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
+
+platform:
+  os: linux
+  arch: amd64
+
 
 steps:
-- name: Build
+- name: build_and_push
   pull: if-not-exists
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_REGISTRY_URL:
+      from_secret: DOCKER_REGISTRY_URL
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
   commands:
   # Wait for the docker service to be up
   - echo "Checking for docker availability."
   - n=0; while [ "$n" -lt 60 ] && ! docker stats --no-stream >/dev/null 2>&1; do n=$(( n + 1 )); sleep 1; done
   - echo "echo docker now available."
+  - docker login -u="$${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} $${DOCKER_REGISTRY_URL}
   - docker build -t egar_ui-public-site:$${DRONE_COMMIT} .
+  - docker tag egar_ui-public-site:$${DRONE_COMMIT} $${DOCKER_REGISTRY_URL}/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+  - docker push quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
   settings:
     group: build-stage
+
   when:
     event:
     - push
@@ -44,29 +57,53 @@ steps:
 #    - push
 #    - pull_request
 
-- name: Push Image to Quay.io
-  pull: if-not-exists
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
+- name: scan-newly-built-image
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
+  pull: always
+  failure: ignore
   environment:
-    DOCKER_PASSWORD:
-      from_secret: DOCKER_PASSWORD
-    DOCKER_USERNAME:
-      from_secret: DOCKER_USERNAME
-    DOCKER_REGISTRY_URL:
-      from_secret: DOCKER_REGISTRY_URL
-  commands:
-  - docker login -u="$${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} $${DOCKER_REGISTRY_URL}
-  - docker tag egar_ui-public-site:$${DRONE_COMMIT} $${DOCKER_REGISTRY_URL}/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
-  - docker push quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+    IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:${DRONE_COMMIT}
+    TOLERATE: high
   when:
-    branch:
-    - master
-    - hotfix/*
     event:
     - push
-    target:
-      exclude:
-      - production
+
+  depends_on:
+  - build_and_push
+
+services:
+  - name: docker
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+  - name: anchore-submission-server
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
+    pull: always
+    commands:
+      - /run.sh server
+
+volumes:
+  - name: dockersock
+    temp: {}
+
+
+---
+kind: pipeline
+name: deploy-image
+type: kubernetes
+
+
+platform:
+ os: linux
+ arch: amd64
+
+services:
+- name: docker
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+
+volumes:
+- name: dockersock
+  temp: {}
+
+steps:
 
 - name: Deploy to SIT
   pull: if-not-exists

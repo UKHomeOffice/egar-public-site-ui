@@ -17,7 +17,7 @@ if [[ -r ./.idea ]]; then
 fi
 
 if [[ ! -r $THIS_DIR/common_lib ]]; then
-  echo "Faile to access the common library $THIS_DIR/common_lib." >&2
+  echo "Failed to access the common library $THIS_DIR/common_lib." >&2
   exit 1
 fi
 source $THIS_DIR/common_lib

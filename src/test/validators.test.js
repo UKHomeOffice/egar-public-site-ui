@@ -857,4 +857,3 @@ describe('Validator', () => {
       clock.restore();
     });
   });
-});
