@@ -163,6 +163,7 @@ class Cookie {
           responsibleCounty: null,
           responsiblePostcode: null,
           responsibleContactNo: null,
+          responsibleEmail: null,
         },
         fixedBasedOperator: null,
         fixedBasedOperatorAnswer: null,
@@ -489,6 +490,7 @@ class Cookie {
     this.session.gar.responsiblePerson.responsiblePostcode = person.responsiblePostcode;
     this.session.gar.responsiblePerson.responsibleCounty = person.responsibleCounty;
     this.session.gar.responsiblePerson.responsibleContactNo = person.responsibleContactNo;
+    this.session.gar.responsiblePerson.responsibleEmail = person.responsibleEmail;
   }
 
   getGarResponsiblePerson() {

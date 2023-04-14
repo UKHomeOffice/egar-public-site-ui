@@ -130,15 +130,17 @@
         <thead class="govuk-table__head">
           <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header" width="40%">Responsible Person Name</th>
-          <th class="govuk-table__header" width="30%">Contact Number</th>
-          <th class="govuk-table__header" width="30%">Person Submitting GAR</th>
+          <th class="govuk-table__header" width="25%">Responsible Person Name</th>
+          <th class="govuk-table__header" width="25%">Contact Number</th>
+          <th class="govuk-table__header" width="25%">{{ __('field_email') }}</th>
+          <th class="govuk-table__header" width="25%">Person Submitting GAR</th>
         </tr>
         </thead>
         <tbody class="govuk-table__body" id="printGAR">
             <tr class="govuk-table__row">
               <td class="govuk-table__cell" >{{ garfile.responsibleGivenName }} {{ garfile.responsibleSurname }}</td>
               <td class="govuk-table__cell" >{{ garfile.responsibleContactNo }}</td>
+              <td class="govuk-table__cell" >{{ garfile.responsibleEmail }}</td>
               <td class="govuk-table__cell" >{{ garfile.fixedBasedOperator }}</td>
             </tr>
         </tbody>

@@ -16,6 +16,7 @@ const garResponsiblePersonPartial = {
   responsibleGivenName: 'Joe',
   responsibleSurname: 'Pike',
   responsibleContactNo: '08078953493',
+  responsibleEmail: 'fake@test.com',
   responsibleAddressLine1: 'Buckingham Palace',
   responsibleAddressLine2: 'Buckingham Palace Road',
   responsibleTown: 'London',
