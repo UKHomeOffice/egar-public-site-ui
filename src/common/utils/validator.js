@@ -217,18 +217,37 @@ function currentOrFutureDate(dObj) {
   return false;
 }
 
-// function dateTooFarInFuture(dObj){
-//   if (dObj === null || dObj === undefined) return false;
 
-//   var nextMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, (new Date().getDate() + 1));
-//   var providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
+/**
+ * Check that supplied date is within an acceptable range (currently within 1 month from Date.now())
+ * @param {Object} dObjh Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
+ * * @returns {Bool} Date is within acceptable range
+ */
+function dateNotTooFarInFuture(dObj) {
+  if (dObj === null || dObj === undefined) return false;
 
-//   return numericDateElements(dObj)
-//     && validDay(dObj.d, dObj.m, dObj.y)
-//     && validMonth(dObj.m)
-//     && validYear(dObj.y)
-//     && providedDate < nextMonth;
-// }
+  const now = new Date();
+  var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+
+
+  let providedDate;
+
+  if (dObj instanceof Date) {
+    providedDate = dObj;
+  } else {
+
+    if (!(numericDateElements(dObj)
+      && validDay(dObj.d, dObj.m, dObj.y)
+      && validMonth(dObj.m)
+      && validYear(dObj.y))) {
+      return false;
+    }
+
+    providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
+  }
+
+  return providedDate <= nextMonth;
+}
 
 function validYear(y) {
   return y.length === 4;
@@ -280,45 +299,10 @@ function realDateFromString(str) {
 }
 
 // This function will validate Passport Expiry date while uploading Gar Template
-function passportExpiryDate (value, element) {
+function passportExpiryDate(value, element) {
   const val = Date.parse(value);
   if (isNaN(val))
-      return false;
-
-  const d = new Date(val);
-  const f = new Date();
-
-  if (d > f) {
-  return true;
-}
-
-if (f.toDateString() == d.toDateString()){
-  return true;
-}
-return false;
-}
-
-// This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
-function birthDate (value, element) {
-  const val = Date.parse(value);
-  if (isNaN(val))
-      return false;
-
-  const d = new Date(val);
-  const f = new Date();
-
-  f.setMonth(f.getMonth());
-  if (d > f) {
-      return false;
-  }
-  return true;
-}
-
-// This function will validate departure date while uploading Gar Template
-function futureDepartDate (value, element) {
-  const val = Date.parse(value);
-  if (isNaN(val))
-      return false;
+    return false;
 
   const d = new Date(val);
   const f = new Date();
@@ -327,7 +311,42 @@ function futureDepartDate (value, element) {
     return true;
   }
 
-  if (f.toDateString() == d.toDateString()){
+  if (f.toDateString() == d.toDateString()) {
+    return true;
+  }
+  return false;
+}
+
+// This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
+function birthDate(value, element) {
+  const val = Date.parse(value);
+  if (isNaN(val))
+    return false;
+
+  const d = new Date(val);
+  const f = new Date();
+
+  f.setMonth(f.getMonth());
+  if (d > f) {
+    return false;
+  }
+  return true;
+}
+
+// This function will validate departure date while uploading Gar Template
+function futureDepartDate(value, element) {
+  const val = Date.parse(value);
+  if (isNaN(val))
+    return false;
+
+  const d = new Date(val);
+  const f = new Date();
+
+  if (d > f) {
+    return true;
+  }
+
+  if (f.toDateString() == d.toDateString()) {
     return true;
   }
 
@@ -570,7 +589,7 @@ function autoTab(field1, dayMonthOrYear, field2) {
 
   if (field1Value.length == len) {
     field2.focus();
- 	}
+  }
 }
 
 function sanitiseValue1(input, type) {
@@ -595,40 +614,40 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
 
   if (field1Value.length == len) {
     field2.focus();
- 	}
+  }
 }
 
-  function invalidLatDirection(value){
-    value = value || '';
-    value = value.toUpperCase();
-    if ( ['S', 'N'].includes(value)){
-      return true;
-    }
-    else{
-      return false;
-    }
-
-  }
-
-  function invalidLongDirection(value){
-    value = value || '';
-    value = value.toUpperCase();
-    if ( ['W', 'E'].includes(value)){
-      return true;
-    }
-    else{
-      return false;
-    }
-
-  }
-
-  function preventZ(value){
-    if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy"){
-      return false;
-    }
+function invalidLatDirection(value) {
+  value = value || '';
+  value = value.toUpperCase();
+  if (['S', 'N'].includes(value)) {
     return true;
   }
+  else {
+    return false;
+  }
 
+}
+
+function invalidLongDirection(value) {
+  value = value || '';
+  value = value.toUpperCase();
+  if (['W', 'E'].includes(value)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+
+}
+
+
+function preventZ(value) {
+  if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy") {
+    return false;
+  }
+  return true;
+}
 
 module.exports = {
   hasOnlySymbols,
@@ -686,5 +705,5 @@ module.exports = {
   invalidLongDirection,
   sanitiseValue2,
   preventZ,
-  //dateTooFarInFuture,
+  dateNotTooFarInFuture,
 };

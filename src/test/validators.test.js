@@ -32,6 +32,7 @@ function genTimeObj(h, m) {
 }
 
 describe('Validator', () => {
+
   it('Should return true when input has leading space', () => {
     expect(validator.hasLeadingSpace(' aa')).to.be.true;
   });
@@ -434,27 +435,27 @@ describe('Validator', () => {
   });
 
   it('Should return true when an optional string is undefined', () => {
-    const undefinedString = undefined ;
+    const undefinedString = undefined;
     expect(validator.isValidOptionalStringLength(undefinedString)).to.be.true;
   });
 
   it('Should return true when an optional string is null', () => {
-    const nullString = null ;
+    const nullString = null;
     expect(validator.isValidOptionalStringLength(nullString)).to.be.true;
   });
 
   it('Should return true when an optional string is null', () => {
-    const emptyString = '' ;
+    const emptyString = '';
     expect(validator.isValidOptionalStringLength(emptyString)).to.be.true;
   });
 
   it('Should return false when an optional string has only Symbols', () => {
-    const onlySymbols = '$$' ;
+    const onlySymbols = '$$';
     expect(validator.isValidOptionalStringLength(onlySymbols)).to.be.false;
   });
 
   it('Should return false when an optional string has leading spaces', () => {
-    const leadingSpaces = ' London' ;
+    const leadingSpaces = ' London';
     expect(validator.isValidOptionalStringLength(leadingSpaces)).to.be.false;
   });
 
@@ -577,7 +578,7 @@ describe('Validator', () => {
   describe('realDateInFuture', () => {
 
     var currentDay, currentMonthStr, currentYearStr;
-    beforeEach(function() {
+    beforeEach(function () {
       currentDay = new Date().getDate();
       //months are 0 to 11 so adding 1 to it for the normal representation of 1 to 12
       currentMonthStr = (new Date().getMonth() + 1).toString();
@@ -585,7 +586,7 @@ describe('Validator', () => {
     });
 
     it('Should pass if the provided day is in future -- next day', () => {
-      var currentDate = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );
+      var currentDate = genDateObj((currentDay + 1).toString(), currentMonthStr, currentYearStr);
       expect(validator.realDateInFuture(currentDate)).to.be.true;
     });
 
@@ -614,7 +615,7 @@ describe('Validator', () => {
   describe('bornAfter1900', () => {
 
     var currentDay, currentMonthStr, currentYearStr;
-    beforeEach(function() {
+    beforeEach(function () {
       currentDay = new Date().getDate();
       //months are 0 to 11 so adding 1 to it for the normal representation of 1 to 12
       currentMonthStr = (new Date().getMonth() + 1).toString();
@@ -684,7 +685,7 @@ describe('Validator', () => {
     });
 
     it('Should fail if the provided day is in future -- next day', () => {
-      var date = genDateObj( (currentDay + 1).toString(), currentMonthStr, currentYearStr );
+      var date = genDateObj((currentDay + 1).toString(), currentMonthStr, currentYearStr);
       expect(validator.bornAfter1900(date)).to.be.false;
     });
 
@@ -814,6 +815,46 @@ describe('Validator', () => {
       actualResult = validator.sanitiseValue(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
+    });
+  });
+
+  describe('Too far in the future tests', () => {
+
+    //const clock = sinon.useFakeTimers(new Date(2020, 04, 11).getTime());
+    let clock;
+    
+    before(() => {
+      clock = sinon.useFakeTimers({
+        now: new Date(2023, 03, 11),
+        shouldAdvanceTime: false,
+        toFake: ["Date"],
+      });
+    })
+
+    let actualResult;
+
+    it('Should reject a date further than one month in the future in object format', () => {
+      actualResult = validator.dateNotTooFarInFuture({ d: '1', m: '1', y: '2024' });
+      expect(actualResult).to.equal(false);
+    });
+
+    it('Should accept a date within one month in the future in object format', () => {
+      actualResult = validator.dateNotTooFarInFuture({ d: '11', m: '5', y: '2023' });
+      expect(actualResult).to.equal(true);
+    });
+
+    it('Should reject a date further than one month in the future in date format', () => {
+      actualResult = validator.dateNotTooFarInFuture(new Date(2024, 0, 1));
+      expect(actualResult).to.equal(false);
+    });
+
+    it('Should accept a date within one month in the future in date format', () => {
+      actualResult = validator.dateNotTooFarInFuture(new Date(2023, 4, 11));
+      expect(actualResult).to.equal(true);
+    });
+
+    after(()=>{
+      clock.restore();
     });
   });
 });
