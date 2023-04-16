@@ -197,6 +197,7 @@ function validGender(value) {
 
 function currentOrFutureDate(dObj) {
   const currDate = new Date();
+
   if (dObj.y < currDate.getFullYear()) {
     return false;
   }
@@ -552,7 +553,7 @@ function isValidDateTime(dateTimeStr, dateTimeFormat = 'YYYY-MM-DD HH:mm:ss') {
 
 /**
  * Verify that Arrival Date is after Departure Date
- * @param {Object} voyageDateObject { depatureDate: 'yyyy-MM-dd', departureTiem: 'HH:mm:ss', arrivalDate: 'yyyy-MM-dd' arrivalTime: 'HH:mm:ss' }
+ * @param {Object} voyageDateObject { departureDate: 'yyyy-MM-dd', departureTime: 'HH:mm:ss', arrivalDate: 'yyyy-MM-dd' arrivalTime: 'HH:mm:ss' }
  * @returns {Bool}
  */
 function isValidDepAndArrDate(voyageDateTimeObject) {
