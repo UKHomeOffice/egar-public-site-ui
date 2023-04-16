@@ -27,9 +27,16 @@ i18n.configure({
 
 describe('Arrival Post Controller', () => {
   let req; let res;
+  let clock;
 
   beforeEach(() => {
     chai.use(sinonChai);
+
+    clock = sinon.useFakeTimers({
+      now: new Date('2022-05-11 GMT'),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
 
     req = {
       body: {
@@ -45,7 +52,7 @@ describe('Arrival Post Controller', () => {
         arrivalLong: '12.100000',
         arrivalDay: '30',
         arrivalMonth: '5',
-        arrivalYear: '2024',
+        arrivalYear: '2022',
         arrivalHour: '15',
         arrivalMinute: '00',
         arrivalLongDirection: 'E',
@@ -69,6 +76,7 @@ describe('Arrival Post Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   describe('validation chains', () => {
@@ -126,6 +134,27 @@ describe('Arrival Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
           cookie,
           errors: [new ValidationRule(validator.notEmpty, 'arrivalPort', '', 'The arrival airport code must be entered')],
+        });
+      });
+    });
+
+    it('should fail if arrival date too far in the future', () => {
+      req.body.arrivalYear = '2024';
+      const cookie = new CookieModel(req);
+
+      sinon.stub(garApi, 'get').resolves(apiResponse);
+      sinon.stub(garApi, 'patch');
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
+        expect(garApi.patch).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
+          cookie,
+          errors: [new ValidationRule(validator.dateNotTooFarInFuture, 'arrivalDate', { d: "30", m: "5", y: "2024" }, 'Arrival date cannot be more than 1 month in the future')],
         });
       });
     });
