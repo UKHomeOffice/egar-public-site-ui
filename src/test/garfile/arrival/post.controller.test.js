@@ -14,6 +14,17 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 
 const controller = require('../../../app/garfile/arrival/post.controller');
 
+const i18n = require('i18n');
+const path = require('path');
+
+i18n.configure({
+  locales: ['en'],
+  directory: path.join(__dirname, '../../../locales'),
+  objectNotation: true,
+  defaultLocale: 'en',
+  register: global,
+});
+
 describe('Arrival Post Controller', () => {
   let req; let res;
 
@@ -82,14 +93,19 @@ describe('Arrival Post Controller', () => {
       sinon.stub(garApi, 'get').resolves(apiResponse);
       sinon.stub(garApi, 'patch');
 
-      await controller(req, res);
+      const callController = async () => {
+        await controller(req, res);
+      };
 
-      expect(garApi.get).to.have.been.called;
-      expect(garApi.patch).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/arrival/index', {
-        cookie,
-        errors: [new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known')],
+      callController().then(() => {
+        expect(garApi.get).to.have.been.called;
+        expect(garApi.patch).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/arrival/index', {
+          cookie,
+          errors: [new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known')],
+        });
       });
+
     });
 
     it('should fail for empty port code', () => {
@@ -165,7 +181,15 @@ describe('Arrival Post Controller', () => {
     it('should return an error message if api rejects', () => {
       const cookie = new CookieModel(req);
       sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject');
+      sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject', () => {
+        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
+          cookie,
+          errors: [{
+            message: 'Failed to add to GAR',
+          }],
+        });
+      });
+
       const callController = async () => {
         await controller(req, res);
       };
@@ -173,12 +197,6 @@ describe('Arrival Post Controller', () => {
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
         expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [{
-            message: 'Failed to add to GAR',
-          }],
-        });
       });
     });
 
