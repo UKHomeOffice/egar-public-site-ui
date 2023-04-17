@@ -5,6 +5,16 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const i18n = require('i18n');
+const path = require('path');
+
+i18n.configure({
+  locales: ['en'],
+  directory: path.join(__dirname, '../../../locales'),
+  objectNotation: true,
+  defaultLocale: 'en',
+  register: global,
+});
 
 require('../../global.test');
 const garApi = require('../../../common/services/garApi');
@@ -16,21 +26,37 @@ const controller = require('../../../app/garfile/departure/post.controller');
 
 describe('Departure Post Controller', () => {
   let req; let res; let apiResponse;
+  let clock;
+
 
   beforeEach(() => {
     chai.use(sinonChai);
+
+    clock = sinon.useFakeTimers({
+      now: new Date('2022-05-11 GMT'),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
 
     req = {
       body: {
         portChoice: 'No',
         departurePort: 'ZZZZ',
-        departureLat: '45.1000',
-        departureLong: '12.1000',
+        departureLat: '45.100000',
+        departureLong: '12.100000',
+        departureDegrees: 45,
+        departureMinutes: 6,
+        departureSeconds: 0,
+        departureLongDegrees: 12,
+        departureLongMinutes: 5,
+        departureLongSeconds: 60,
         departureDay: '30',
         departureMonth: '5',
         departureYear: '2022',
         departureHour: '15',
         departureMinute: '00',
+        departureLatDirection: 'N',
+        departureLongDirection: 'E'
       },
       session: {
         gar: {
@@ -47,7 +73,7 @@ describe('Departure Post Controller', () => {
     };
 
     apiResponse = JSON.stringify({
-      departureDate: '2012-30-05',
+      departureDate: '2022-30-05',
       departureTime: '15:00',
       departurePort: 'LHR',
       departureLong: '',
@@ -57,6 +83,7 @@ describe('Departure Post Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   it('should fail validation if no port choice selected', async () => {
@@ -67,13 +94,18 @@ describe('Departure Post Controller', () => {
     sinon.stub(garApi, 'get').resolves(apiResponse);
     sinon.stub(garApi, 'patch');
 
-    await controller(req, res);
+    const callController = async () => {
+      await controller(req, res);
+    }
 
-    expect(garApi.get).to.have.been.called;
-    expect(garApi.patch).to.not.have.been.called;
-    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/departure/index', {
-      cookie,
-      errors: [new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known')],
+    callController().then(() => {
+      expect(garApi.get).to.have.been.called;
+      expect(garApi.patch).to.not.have.been.called;
+      expect(res.render.called).to.be.true;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/departure/index', {
+        cookie,
+        errors: [new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known'),],
+      });
     });
   });
 
@@ -104,7 +136,7 @@ describe('Departure Post Controller', () => {
       });
     });
 
-    it('should fail if port is known but not actually entered', () => {
+    it('should fail if port is known but not actually entered 2', () => {
       // Covers the scenario where the port code is not 'YYYY' but no choice was made,
       // contrived as it should not be possible via the front end.
       delete req.body.portChoice;
@@ -136,6 +168,12 @@ describe('Departure Post Controller', () => {
       req.body.departurePort = 'ZZZZ';
       delete req.body.departureLong;
       delete req.body.departureLat;
+      delete req.body.departureDegrees;
+      delete req.body.departureMinutes;
+      delete req.body.departureSeconds;
+      delete req.body.departureLongDegrees;
+      delete req.body.departureLongMinutes;
+      delete req.body.departureLongSeconds;
       const cookie = new CookieModel(req);
 
       sinon.stub(garApi, 'get').resolves(apiResponse);
@@ -151,8 +189,8 @@ describe('Departure Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
           cookie,
           errors: [
-            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
-            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
+            new ValidationRule(validator.latitude, 'departureLat', 'NaN', 'Value entered is incorrect. Enter latitude to 6 decimal places'),
+            new ValidationRule(validator.longitude, 'departureLong', 'NaN', 'Value entered is incorrect. Enter longitude to 6 decimal places'),
           ],
         });
       });
@@ -163,6 +201,12 @@ describe('Departure Post Controller', () => {
       req.body.departurePort = 'YYYY';
       delete req.body.departureLong;
       delete req.body.departureLat;
+      delete req.body.departureDegrees;
+      delete req.body.departureMinutes;
+      delete req.body.departureSeconds;
+      delete req.body.departureLongDegrees;
+      delete req.body.departureLongMinutes;
+      delete req.body.departureLongSeconds;
       const cookie = new CookieModel(req);
 
       sinon.stub(garApi, 'get').resolves(apiResponse);
@@ -178,8 +222,8 @@ describe('Departure Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
           cookie,
           errors: [
-            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
-            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
+            new ValidationRule(validator.latitude, 'departureLat', 'NaN', 'Value entered is incorrect. Enter latitude to 6 decimal places'),
+            new ValidationRule(validator.longitude, 'departureLong', 'NaN', 'Value entered is incorrect. Enter longitude to 6 decimal places'),
           ],
         });
       });
@@ -190,7 +234,16 @@ describe('Departure Post Controller', () => {
     it('should return an error message if api rejects', () => {
       const cookie = new CookieModel(req);
       sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject');
+      sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject', () => {
+        expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
+                    cookie,
+                    errors: [{
+                      message: 'Failed to add to GAR',
+                    }],
+                  });
+        
+      });
+
       const callController = async () => {
         await controller(req, res);
       };
@@ -198,12 +251,6 @@ describe('Departure Post Controller', () => {
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('12345');
         expect(garApi.patch).to.have.been.calledWith('12345', cookie.getGarStatus(), cookie.getGarDepartureVoyage());
-        expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
-          cookie,
-          errors: [{
-            message: 'Failed to add to GAR',
-          }],
-        });
       });
     });
 

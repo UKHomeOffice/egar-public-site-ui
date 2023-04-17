@@ -48,8 +48,11 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureTime, 'Enter a value for the departure time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalDate, 'Enter a value for the arrival date')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureDate, 'Enter a value for the departure date')],
+    [new ValidationRule(validator.dateNotInPast, '', voyageObj.departureDate, __('field_departure_date_too_far_in_future'))],
+    [new ValidationRule(validator.dateNotInPast, '', voyageObj.arrivalDate, __('field_arrival_date_too_far_in_future'))],
     [new ValidationRule(validator.dateNotTooFarInFuture, '', voyageObj.departureDate, __('field_departure_date_too_far_in_future'))],
-    [new ValidationRule(validator.futureDepartDate, '', voyageObj.departureDate, 'Please enter current or future departure date')],
+    [new ValidationRule(validator.dateNotTooFarInFuture, '', voyageObj.arrivalDate, __('field_arrival_date_too_far_in_future'))],
+    
     [
       new ValidationRule(validator.notEmpty, '', voyageObj.registration, 'Enter the registration of the craft'),
       new ValidationRule(validator.isValidRegistrationLength, '', voyageObj.registration, `Aircraft registration must be ${MAX_REGISTRATION_LENGTH} characters or less`),
@@ -106,9 +109,9 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a sex for ${name}`)]);
     validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid sex for ${name}`)]);
     validationArr.push([
-      new ValidationRule(validator.notEmpty, '', crew.dateOfBirth, `Enter a date of birth for ${name}. (Cell format should be Date not General).`),
-      new ValidationRule(validator.realDateFromString, '', crew.dateOfBirth, `Enter a valid date of birth for ${name}. (Cell format should be Date not General).`),
-      new ValidationRule(validator.birthDate, '', crew.dateOfBirth, `Enter a valid date of birth for ${name}. (Cell format should be Date not General).`),
+      new ValidationRule(validator.notEmpty, '', crew.dateOfBirth, `Enter a date of birth for ${name}. (Check cell is in Date not General format).`),
+      new ValidationRule(validator.realDateFromString, '', crew.dateOfBirth, `Enter a valid date of birth for ${name}. (Check cell is in Date not General format. Read GAR Guidance tab)`),
+      new ValidationRule(validator.birthDate, '', crew.dateOfBirth, `Enter a valid date of birth for ${name}. (Check cell is in Date not General format. Read GAR Guidance tab)`),
     ]);
     validationArr.push([
       new ValidationRule(validator.isValidOptionalStringLength, '', crew.placeOfBirth, `Place of birth for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
@@ -119,9 +122,9 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       new ValidationRule(validator.validISO3Country, '', crew.nationality, `Enter a valid nationality for ${name}. Must be a ISO 3166 country code`),
     ]);
     validationArr.push([
-      new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a Passport Expiry Date for ${name}. (Cell format should be Date not General).`),
-      new ValidationRule(validator.realDateFromString, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name}. (Cell format should be Date not General).`),
-      new ValidationRule(validator.passportExpiryDate, '', crew.documentExpiryDate, `Enter a valid Passport Expiry Date for ${name}. (Cell format should be Date not General).`),
+      new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a Travel Document expiry date for ${name}. (Check cell is in Date not General format).`),
+      new ValidationRule(validator.realDateFromString, '', crew.documentExpiryDate, `Enter a valid Travel Document expiry date for ${name}. (Check cell is in Date not General format. Read GAR Guidance tab)`),
+      new ValidationRule(validator.passportExpiryDate, '', crew.documentExpiryDate, `Enter a valid Travel Document expiry date for ${name}. (Check cell is in Date not General format. Read GAR Guidance tab)`),
     ]);
     Object.keys(crew).forEach((key) => {
       if (typeof crew[key] === 'string' && !validator.isPrintable(crew[key])) {

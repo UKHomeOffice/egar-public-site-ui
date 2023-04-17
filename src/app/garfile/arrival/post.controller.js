@@ -86,6 +86,7 @@ const buildValidations = (voyage) => {
   const validations = [
     [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, realDateMsg)],
     [new ValidationRule(validator.currentOrFutureDate, 'arrivalDate', arriveDateObj, futureDateMsg)],
+    [new ValidationRule(validator.dateNotTooFarInFuture, 'arrivalDate', arriveDateObj, __('field_arrival_date_validation'))],
     [new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, timeMsg)],
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, portChoiceMsg)],
   ];
