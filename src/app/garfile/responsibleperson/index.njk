@@ -122,7 +122,8 @@
 
               <input class="govuk-input govuk-input--width-10"
                 id="responsiblePostcode" name="responsiblePostcode" type="text"
-                value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}"/>
+                value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}"
+                maxlength="{{ MAX_EMAIL_LENGTH }}"/>
             </div>
 
           <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
