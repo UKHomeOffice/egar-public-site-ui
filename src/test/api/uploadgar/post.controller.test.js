@@ -250,6 +250,25 @@ describe('API upload GAR post controller', () => {
       });
     });
 
+    it.only('should return error if arrival date in the past', async () => {
+      sinon.spy(req.session, 'save');
+      const data = getValidWorkbook();
+      data.Sheets.Valid1.D3.v = '2010-07-30';
+
+      sinon.stub(XLSX, 'read').returns(data);
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.dateNotInPast, '', '2010-07-30',  'Please enter current or future arrival date'),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
   });
 
   describe('api calls', () => {
