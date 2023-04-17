@@ -18,6 +18,15 @@ module.exports.validations = (req) => {
     responsibleCounty,
   } = req.body;
 
+  const optionalEmailRule = responsibleEmail ? [
+    new ValidationRule(
+      validator.email,
+      'responsibleEmail',
+      responsibleEmail,
+      'Please enter a valid email address'
+    ),
+  ] : [];
+
   return [
     [
       new ValidationRule(validator.notEmpty, 'responsibleGivenName', responsibleGivenName, 'Enter a given name for the responsible person'),
@@ -30,7 +39,7 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.validIntlPhone, 'responsibleContactNo', responsibleContactNo, i18n.__('validator_contact_number')),
     ],
-    [new ValidationRule(validator.email, 'responsibleEmail', responsibleEmail, 'Please enter a valid email address')],
+    optionalEmailRule,
     [
       new ValidationRule(validator.notEmpty, 'responsibleAddressLine1', responsibleAddressLine1, 'Enter address line 1 of the responsible person'),
     ],
