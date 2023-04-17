@@ -41,12 +41,12 @@ const createValidationChains = (voyage) => {
  
 
   // Define latitude validations
-  const departureLongValidation = [new ValidationRule(validator.longitude, 'depatureLong', voyage.departureLong, __('field_longitude_validation'))];
+  const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, __('field_longitude_validation'))];
 
   const validations = [
     [new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation'))],
     [new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, __('field_departure_date_validation'))],
-    [new ValidationRule(validator.dateNotTooFarInFuture, 'departureDate', departDateObj, __('field_departure_date_too_far_in_future'))],
+    [new ValidationRule(validator.dateNotTooFarInFuture, 'departureDate', departDateObj, 'Departure date cannot be more than 1 month in the future')],
     [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, __('field_departure_real_time_validation'))],
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
   ];

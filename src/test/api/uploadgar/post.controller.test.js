@@ -14,15 +14,32 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const createGarApi = require('../../../common/services/createGarApi.js');
 const garApi = require('../../../common/services/garApi');
 
+const path = require('path');
+
+i18n.configure({
+  locales: ['en'],
+  directory: path.join(__dirname, '../../../locales'),
+  objectNotation: true,
+  defaultLocale: 'en',
+  register: global,
+});
+
 const controller = require('../../../app/api/uploadgar/post.controller');
 const { getInvalidWorkbook, getValidWorkbook } = require('./workbook-data');
 
 describe('API upload GAR post controller', () => {
   let req; let res;
   let incorrectWorkbook;
+  let clock;
 
   beforeEach(() => {
     chai.use(sinonChai);
+
+    clock = sinon.useFakeTimers({
+      now: new Date('2022-05-11 GMT'),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
 
     incorrectWorkbook = {
       SheetNames: ['Sheet1'],
@@ -79,6 +96,7 @@ describe('API upload GAR post controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   it('return message if not file sent', async () => {
@@ -170,7 +188,7 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it('return message if invalid', async () => {
+    it('should return message if invalid', async () => {
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(getInvalidWorkbook());
 
@@ -187,6 +205,66 @@ describe('API upload GAR post controller', () => {
           new ValidationRule(validator.validISOCountryLength, '', 'ISSUING STATE', 'Enter a valid document issuing state for passenger Pavel Chekov. Must be a ISO 3166 country code'),
           new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for passenger Pavel Chekov'),
           new ValidationRule(validator.validISOCountryLength, '', 'NATIONALITY', 'Enter a valid nationality for passenger Pavel Chekov. Must be a ISO 3166 country code'),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
+
+    it('should return error if departure date too far in advance', async () => {
+      sinon.spy(req.session, 'save');
+      const data = getValidWorkbook();
+      data.Sheets.Valid1.D4.v = '2022-07-30';
+
+      sinon.stub(XLSX, 'read').returns(data);
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.dateNotTooFarInFuture, '', '2022-07-30', 'Departure date must at least be today and cannot be more than 1 month in the future'),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
+
+    it('should return error if arrival date too far in advance', async () => {
+      sinon.spy(req.session, 'save');
+      const data = getValidWorkbook();
+      data.Sheets.Valid1.D3.v = '2022-07-30';
+
+      sinon.stub(XLSX, 'read').returns(data);
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.dateNotTooFarInFuture, '', '2022-07-30', 'Arrival date must at least be today and cannot be more than 1 month in the future'),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
+
+    it('should return error if arrival date in the past', async () => {
+      sinon.spy(req.session, 'save');
+      const data = getValidWorkbook();
+      data.Sheets.Valid1.D3.v = '2010-07-30';
+
+      sinon.stub(XLSX, 'read').returns(data);
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.dateNotInPast, '', '2010-07-30',  'Arrival date must at least be today and cannot be more than 1 month in the future'),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
@@ -335,10 +413,10 @@ describe('API upload GAR post controller', () => {
           });
           expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
             arrivalPort: 'BFS',
-            arrivalDate: 'Arrival Date',
+            arrivalDate: '2022-05-31',
             arrivalTime: 'Arrival Time',
             departurePort: 'Departure Port',
-            departureDate: '2033-02-28',
+            departureDate: '2022-05-30',
             departureTime: 'Departure Time',
             registration: 'Registration',
             craftType: 'Craft Type',

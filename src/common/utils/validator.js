@@ -197,6 +197,7 @@ function validGender(value) {
 
 function currentOrFutureDate(dObj) {
   const currDate = new Date();
+
   if (dObj.y < currDate.getFullYear()) {
     return false;
   }
@@ -224,29 +225,51 @@ function currentOrFutureDate(dObj) {
  * * @returns {Bool} Date is within acceptable range
  */
 function dateNotTooFarInFuture(dObj) {
-  if (dObj === null || dObj === undefined) return false;
-
   const now = new Date();
-  var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+  const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+  const providedDate = getDateFromDynamicInput(dObj);
 
+  return Boolean(providedDate && providedDate <= nextMonth);
+}
+
+/**
+ * Normalises and returns various supplied date objects / formats
+ * @param {Object} input Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
+ * * @returns {Date} js Date or null if cannot parse
+ */
+function getDateFromDynamicInput(input) {
+
+  if (input === null || input === undefined) return null;//we don't have anything to work with
 
   let providedDate;
 
-  if (dObj instanceof Date) {
-    providedDate = dObj;
-  } else {
+  if (input instanceof Date) {//if it's a Date return as is.
+    providedDate = input;
+  }
+  else if (input instanceof String || typeof input === 'string') {//if it is a string literal or object, parse if possible.
+    providedDate = Date.parse(input);
 
-    if (!(numericDateElements(dObj)
-      && validDay(dObj.d, dObj.m, dObj.y)
-      && validMonth(dObj.m)
-      && validYear(dObj.y))) {
-      return false;
+    if (isNaN(providedDate)) {
+      providedDate = null;
     }
-
-    providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
+  }
+  else if (input.hasOwnProperty('d')) { // if it is an eGAR UI date object, validate properties and parse
+    if (numericDateElements(input)
+      && validDay(input.d, input.m, input.y)
+      && validMonth(input.m)
+      && validYear(input.y)) {
+        providedDate = new Date(input.y + '-' + input.m + '-' + input.d);
+    }
+    else{
+      providedDate = null;
+    }
+  }
+  else {//we've got something but we don't  know what it is. this is likely a calling error rather than data error.
+    logger.error('Unrecognised date input:' + input);
+    providedDate = null;
   }
 
-  return providedDate <= nextMonth;
+  return providedDate;
 }
 
 function validYear(y) {
@@ -334,7 +357,7 @@ function birthDate(value, element) {
 }
 
 // This function will validate departure date while uploading Gar Template
-function futureDepartDate(value, element) {
+function dateNotInPast(value, element) {
   const val = Date.parse(value);
   if (isNaN(val))
     return false;
@@ -552,7 +575,7 @@ function isValidDateTime(dateTimeStr, dateTimeFormat = 'YYYY-MM-DD HH:mm:ss') {
 
 /**
  * Verify that Arrival Date is after Departure Date
- * @param {Object} voyageDateObject { depatureDate: 'yyyy-MM-dd', departureTiem: 'HH:mm:ss', arrivalDate: 'yyyy-MM-dd' arrivalTime: 'HH:mm:ss' }
+ * @param {Object} voyageDateObject { departureDate: 'yyyy-MM-dd', departureTime: 'HH:mm:ss', arrivalDate: 'yyyy-MM-dd' arrivalTime: 'HH:mm:ss' }
  * @returns {Bool}
  */
 function isValidDepAndArrDate(voyageDateTimeObject) {
@@ -697,7 +720,7 @@ module.exports = {
   sanitiseValue,
   passportExpiryDate,
   birthDate,
-  futureDepartDate,
+  dateNotInPast,
   autoTab,
   autoTab1,
   sanitiseValue1,
