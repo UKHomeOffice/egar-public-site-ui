@@ -148,7 +148,7 @@
     "field_departure_date_validation": "Please enter Departure, today or in the future",
     "field_arrival_date_validation": "Please enter Arrival, today or in the future",
     "field_departure_date_too_far_in_future": "Departure date cannot be more than 1 month in the future",
-    "field_arrival_date_too_far_in_future": "Arrival date cannot be more than 1 month in the future",
+    "field_arrival_date_too_far_in_future": "Arrival date must at least be today and cannot be more than 1 month in the future",
     "field_departure_real_date_validation": "Enter a real departure date",
     "field_departure_real_time_validation": "Enter a real departure time",
     "field_latitude_validation": "Value entered is incorrect. Enter latitude to 6 decimal places",
@@ -330,7 +330,7 @@
 
     "organisation_no_records": "There are no organisation members",
 
-    "validator_msg_voyage_dates": "Arrival time must be after departure time",
+    "validator_msg_voyage_dates": "Arrival date/time cannot be after the Departure date/time",
 
     "title_gar_summary": "GAR summary",
     "change_prefix": "Change ",

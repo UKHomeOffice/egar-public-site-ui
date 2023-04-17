@@ -250,7 +250,7 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it.only('should return error if arrival date in the past', async () => {
+    it('should return error if arrival date in the past', async () => {
       sinon.spy(req.session, 'save');
       const data = getValidWorkbook();
       data.Sheets.Valid1.D3.v = '2010-07-30';
