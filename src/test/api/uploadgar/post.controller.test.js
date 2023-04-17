@@ -244,7 +244,7 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.dateNotTooFarInFuture, '', '2022-07-30', 'Arrival date cannot be more than 1 month in the future'),
+          new ValidationRule(validator.dateNotTooFarInFuture, '', '2022-07-30', 'Arrival date must at least be today and cannot be more than 1 month in the future'),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
@@ -264,7 +264,7 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.dateNotInPast, '', '2010-07-30',  'Please enter current or future arrival date'),
+          new ValidationRule(validator.dateNotInPast, '', '2010-07-30',  'Arrival date must at least be today and cannot be more than 1 month in the future'),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });

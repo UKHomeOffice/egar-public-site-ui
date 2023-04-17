@@ -49,7 +49,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalDate, 'Enter a value for the arrival date')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureDate, 'Enter a value for the departure date')],
     [new ValidationRule(validator.dateNotInPast, '', voyageObj.departureDate, 'Please enter current or future departure date')],
-    [new ValidationRule(validator.dateNotInPast, '', voyageObj.arrivalDate, 'Arrival date must atleast be today and cannot be more than 1 month in the future')],
+    [new ValidationRule(validator.dateNotInPast, '', voyageObj.arrivalDate, 'Arrival date must at least be today and cannot be more than 1 month in the future')],
     [new ValidationRule(validator.dateNotTooFarInFuture, '', voyageObj.departureDate, __('field_departure_date_too_far_in_future'))],
     [new ValidationRule(validator.dateNotTooFarInFuture, '', voyageObj.arrivalDate, __('field_arrival_date_too_far_in_future'))],
     
