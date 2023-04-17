@@ -69,7 +69,8 @@
               value="{{ cookie.getGarResponsiblePerson().responsibleEmail }}"
               aria-describedby="responsibleEmail-hint{{ 
                 ' responsibleEmail-error' if errors | containsError('responsibleEmail') 
-              }}">
+              }}"
+              maxlength="{{ MAX_EMAIL_LENGTH }}">
           </div>
 
           <fieldset class="govuk-fieldset">
@@ -122,8 +123,7 @@
 
               <input class="govuk-input govuk-input--width-10"
                 id="responsiblePostcode" name="responsiblePostcode" type="text"
-                value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}"
-                maxlength="{{ MAX_EMAIL_LENGTH }}"/>
+                value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}"/>
             </div>
 
           <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
