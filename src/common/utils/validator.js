@@ -229,7 +229,7 @@ function dateNotTooFarInFuture(dObj) {
   const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
   const providedDate = getDateFromDynamicInput(dObj);
 
-  return providedDate && providedDate <= nextMonth;
+  return Boolean(providedDate && providedDate <= nextMonth);
 }
 
 /**

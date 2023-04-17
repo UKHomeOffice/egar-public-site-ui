@@ -43,7 +43,6 @@ const performAPICall = (cookie, buttonClicked, res) => {
 const portChoiceMsg = 'Select whether the port code is known';
 const portCodeMsg = 'The arrival airport code must be entered';
 const futureDateMsg = 'Arrival date must be today or in the future';
-const tooFarDateMsg = 'Arrival date cannot be more than 1 month in the future';
 const realDateMsg = 'Enter a real arrival date';
 const timeMsg = 'Enter a real arrival time';
 const latitudeMsg = 'Value entered is incorrect. Enter latitude to 6 decimal places';
@@ -87,7 +86,7 @@ const buildValidations = (voyage) => {
   const validations = [
     [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, realDateMsg)],
     [new ValidationRule(validator.currentOrFutureDate, 'arrivalDate', arriveDateObj, futureDateMsg)],
-    [new ValidationRule(validator.dateNotTooFarInFuture, 'arrivalDate', arriveDateObj, tooFarDateMsg)],
+    [new ValidationRule(validator.dateNotTooFarInFuture, 'arrivalDate', arriveDateObj, __('field_arrival_date_validation'))],
     [new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, timeMsg)],
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, portChoiceMsg)],
   ];
