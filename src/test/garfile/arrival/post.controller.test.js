@@ -159,6 +159,27 @@ describe('Arrival Post Controller', () => {
       });
     });
 
+    it('should fail if arrival date in the past', () => {
+      req.body.arrivalYear = '2010';
+      const cookie = new CookieModel(req);
+
+      sinon.stub(garApi, 'get').resolves(apiResponse);
+      sinon.stub(garApi, 'patch');
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
+        expect(garApi.patch).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
+          cookie,
+          errors: [new ValidationRule(validator.currentOrFutureDate, 'arrivalDate', { d: "30", m: "5", y: "2010" }, 'Please enter Arrival, today or in the future')],
+        });
+      });
+    });
+
     describe('port codes and co-ordinates', () => {
       it('should fail if port is ZZZZ and no longitude or latitude', () => {
         req.body.arrivalPort = 'ZZZZ';

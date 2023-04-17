@@ -146,6 +146,7 @@
     "field_port_choice_message": "Select whether the port code is known",
     "field_departure_port_code_validation": "The departure airport code must be entered",
     "field_departure_date_validation": "Please enter Departure, today or in the future",
+    "field_arrival_date_validation": "Please enter Arrival, today or in the future",
     "field_departure_date_too_far_in_future": "Departure date cannot be more than 1 month in the future",
     "field_arrival_date_too_far_in_future": "Arrival date cannot be more than 1 month in the future",
     "field_departure_real_date_validation": "Enter a real departure date",
