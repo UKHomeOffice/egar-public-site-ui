@@ -217,7 +217,7 @@
     "responsible_person_caption": "Provide the details of the person responsible for this flight. By default, this is the owner, agent or captain.",
     "field_contact_number": "Contact telephone number",
     "field_contact_number_hint": "Include international dialling code, for example 44.",
-    "responsible_email_hint": "Add the email address of the responsible person",
+    "responsible_email_hint": "Add the email address of the responsible person (optional)",
     "validator_contact_number": "Enter a telephone number with international dialling code, no symbols and no spaces",
     "field_house_number": "House number / building and street ",
     "field_line_1_of_2": "line 1 of 2",
