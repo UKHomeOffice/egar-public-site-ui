@@ -357,7 +357,7 @@ function birthDate(value, element) {
 }
 
 // This function will validate departure date while uploading Gar Template
-function futureDepartDate(value, element) {
+function dateNotInPast(value, element) {
   const val = Date.parse(value);
   if (isNaN(val))
     return false;
@@ -720,7 +720,7 @@ module.exports = {
   sanitiseValue,
   passportExpiryDate,
   birthDate,
-  futureDepartDate,
+  dateNotInPast,
   autoTab,
   autoTab1,
   sanitiseValue1,
