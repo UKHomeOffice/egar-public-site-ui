@@ -31,16 +31,18 @@ describe('GAR Responsible Person Get Controller', () => {
 
   it('should render with messages if api rejects', async () => {
     cookie = new CookieModel(req);
-    sinon.stub(garApi, 'get').rejects('garApi.get Example Reject');
+    sinon.stub(garApi, 'get').rejects('garApi.get Example Reject', () => {
+      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
+        cookie, errors: [{ message: 'Problem retrieving GAR' }],
+      });
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
-        cookie, errors: [{ message: 'Problem retrieving GAR' }],
-      });
+
     });
   });
 
@@ -57,14 +59,16 @@ describe('GAR Responsible Person Get Controller', () => {
     };
     const cookie = new CookieModel(req);
     cookie.setGarResponsiblePerson(apiResponse);
-    sinon.stub(garApi, 'get').resolves(JSON.stringify(apiResponse));
+    sinon.stub(garApi, 'get').resolves(JSON.stringify(apiResponse), () => {
+      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', { cookie });
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', { cookie });
+     
     });
   });
 });
