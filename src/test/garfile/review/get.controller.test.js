@@ -123,7 +123,8 @@ describe('GAR Review Get Controller', () => {
           }, 'Arrival time must be after departure time'),
           new ValidationRule(validator.notEmpty, 'aircraft', undefined, 'Aircraft registration must be completed'),
           new ValidationRule(validator.notEmpty, 'responsiblePerson', undefined, 'Responsible person details must be completed'),
-          new ValidationRule(validator.notEmpty, 'customs', undefined, 'Customs declaration questions not answered'),
+          new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
+          new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
         ],
       });
     });
@@ -144,6 +145,7 @@ describe('GAR Review Get Controller', () => {
       prohibitedGoods: 'No',
       freeCirculation: 'No',
       visitReason: 'No',
+      intentionValue: 'Yes'
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -164,18 +166,17 @@ describe('GAR Review Get Controller', () => {
         cookie,
         manifestFields,
         garfile: {
-          registration: 'Z-AFTC',
-          departureDate: '2012-12-13',
-          departureTime: '15:03:00',
-          arrivalDate: '2012-12-14',
-          arrivalTime: '16:04:00',
-          status: {
-            name: 'draft',
-          },
-          responsibleGivenName: 'James',
-          prohibitedGoods: 'No',
-          freeCirculation: 'No',
-          visitReason: 'No',
+          arrivalDate: "2012-12-14",
+          arrivalTime: "16:04:00",
+          departureDate: "2012-12-13",
+          departureTime: "15:03:00",
+          freeCirculation: "No",
+          intentionValue: "Yes",
+          prohibitedGoods: "No",
+          registration: "Z-AFTC",
+          responsibleGivenName: "James",
+          status: { name: "draft" },
+          visitReason: "No"
         },
         garpeople: {
           items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
@@ -196,6 +197,7 @@ describe('GAR Review Get Controller', () => {
       departureTime: '15:04:00',
       arrivalDate: '2012-12-14',
       arrivalTime: '08:17:00',
+      intentionValue: "Yes",
       status: {
         name: 'draft',
       },
@@ -221,18 +223,17 @@ describe('GAR Review Get Controller', () => {
         cookie,
         manifestFields,
         garfile: {
-          registration: 'Z-AFTC',
-          departureDate: '2012-12-13',
-          departureTime: '15:04:00',
-          arrivalDate: '2012-12-14',
-          arrivalTime: '08:17:00',
-          status: {
-            name: 'draft',
-          },
-          responsibleGivenName: 'James',
-          prohibitedGoods: 'No',
-          freeCirculation: 'No',
-          visitReason: 'No',
+          arrivalDate: "2012-12-14",
+          arrivalTime: "08:17:00",
+          departureDate: "2012-12-13",
+          departureTime: "15:04:00",
+          freeCirculation: "No",
+          intentionValue: "Yes",
+          prohibitedGoods: "No",
+          registration: "Z-AFTC",
+          responsibleGivenName: "James",
+          status: { name: "draft" },
+          visitReason: "No"
         },
         garpeople: {
           items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
