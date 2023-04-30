@@ -5,6 +5,8 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const i18n = require('i18n');
+const path = require('path');
 
 require('../../global.test');
 const craftApi = require('../../../common/services/craftApi');
@@ -21,6 +23,14 @@ describe('GAR Craft Post Controller', () => {
 
   beforeEach(() => {
     chai.use(sinonChai);
+    
+    i18n.configure({
+      locales: ['en'],
+      directory: path.join(__dirname, '../../../locales'),
+      objectNotation: true,
+      defaultLocale: 'en',
+      register: global,
+    });
 
     req = {
       body: {
