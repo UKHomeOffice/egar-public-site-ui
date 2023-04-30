@@ -4,6 +4,9 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const availability = require('../../common/config/availability');
+
+availability.ENABLE_UNAVAILABLE_PAGE = 'TRUE';
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
