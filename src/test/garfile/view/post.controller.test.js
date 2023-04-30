@@ -146,7 +146,7 @@ describe('GAR view post controller', () => {
         manifestFields,
         garfile: {},
         garpeople: {},
-        supportingdocs: {},
+        garsupportingdocs: {},
         errors: [{ message: 'Failed to get GAR information' }],
       });
     });
@@ -189,7 +189,7 @@ describe('GAR view post controller', () => {
             { id: 'PERSON-2', firstName: 'Serena' },
           ],
         },
-        supportingdocs: {
+        garsupportingdocs: {
           items: [
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
           ],
@@ -236,7 +236,7 @@ describe('GAR view post controller', () => {
             { id: 'PERSON-2', firstName: 'Serena' },
           ],
         },
-        supportingdocs: {
+        garsupportingdocs: {
           items: [
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
           ],
@@ -284,7 +284,7 @@ describe('GAR view post controller', () => {
             { id: 'PERSON-2', firstName: 'Serena' },
           ],
         },
-        supportingdocs: {
+        garsupportingdocs: {
           items: [
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
           ],
@@ -366,7 +366,7 @@ describe('GAR view post controller', () => {
             { id: 'PERSON-2', firstName: 'Serena' },
           ],
         },
-        supportingdocs: {
+        garsupportingdocs: {
           items: [
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
           ],
@@ -413,7 +413,7 @@ describe('GAR view post controller', () => {
             { id: 'PERSON-2', firstName: 'Serena' },
           ],
         },
-        supportingdocs: {
+        garsupportingdocs: {
           items: [
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
           ],
