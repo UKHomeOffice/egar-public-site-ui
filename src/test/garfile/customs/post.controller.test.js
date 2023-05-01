@@ -33,6 +33,7 @@ describe('GAR Customs Post Controller', () => {
         goodsDeclaration: 'Duty Free',
         freeCirculation: 0,
         visitReason: 2,
+        intentionValue: 'Yes'
       },
       session: {
         gar: {
@@ -57,6 +58,7 @@ describe('GAR Customs Post Controller', () => {
 
   it('should error on validation', () => {
     req.body.visitReason = '';
+    delete req.body.intentionValue;
     const cookie = new CookieModel(req);
     const callController = async () => {
       await controller(req, res);
@@ -106,16 +108,24 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.not.have.been.called;
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
-        baggageOptions,
         freeCirculationOptions,
         reasonForVisitOptions,
         prohibitedGoodsOptions,
+        intentionValueOptions,
+        baggageOptions,
         cookie,
         gar: {
-          prohibitedGoods: 'Yes',
-          goodsDeclaration: '',
+          baggage: undefined,
+          baggageDeclaration: '',
           freeCirculation: 0,
-          visitReason: 2,
+          goodsDeclaration: '',
+          intentionValue: 'Yes',
+          passengerTravellingReason: '',
+          passengerTravellingReasonAnswer: '',
+          prohibitedGoods: "Yes",
+          supportingInformation: undefined,
+          supportingInformationAnswer: '',
+          visitReason: 2
         },
         errors: [
           new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
@@ -140,12 +150,21 @@ describe('GAR Customs Post Controller', () => {
         freeCirculationOptions,
         reasonForVisitOptions,
         prohibitedGoodsOptions,
+        baggageOptions,
+        intentionValueOptions,
         cookie,
         gar: {
-          prohibitedGoods: 'Yes',
-          goodsDeclaration: '',
+          baggage: undefined,
+          baggageDeclaration: '',
           freeCirculation: 0,
-          visitReason: 2,
+          goodsDeclaration: '',
+          intentionValue: 'Yes',
+          passengerTravellingReason: '',
+          passengerTravellingReasonAnswer: '',
+          prohibitedGoods: "Yes",
+          supportingInformation: undefined,
+          supportingInformationAnswer: '',
+          visitReason: 2
         },
         errors: [
           new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
@@ -164,21 +183,37 @@ describe('GAR Customs Post Controller', () => {
 
     callController().then().then(() => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        prohibitedGoods: 'Yes',
-        goodsDeclaration: 'Duty Free',
+        baggage: undefined,
+        baggageDeclaration: '',
         freeCirculation: 0,
-        visitReason: 2,
+        goodsDeclaration: "Duty Free",
+        intentionValue: "Yes",
+        passengerTravellingReason: '',
+        passengerTravellingReasonAnswer: '',
+        prohibitedGoods: "Yes",
+        supportingInformation: undefined,
+        supportingInformationAnswer:  '',
+        visitReason: 2
       });
       expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
-        prohibitedGoodsOptions,
         freeCirculationOptions,
         reasonForVisitOptions,
+        prohibitedGoodsOptions,
+        baggageOptions,
+        intentionValueOptions,
         cookie,
         gar: {
-          prohibitedGoods: 'Yes',
-          goodsDeclaration: 'Duty Free',
+          baggage: undefined,
+          baggageDeclaration: '',
           freeCirculation: 0,
-          visitReason: 2,
+          goodsDeclaration: "Duty Free",
+          intentionValue: "Yes",
+          passengerTravellingReason: '',
+          passengerTravellingReasonAnswer: '',
+          prohibitedGoods: "Yes",
+          supportingInformation: undefined,
+          supportingInformationAnswer: '',
+          visitReason: 2
         },
         errors: [{ message: 'Failed to save customs information. Try again' }],
       });
@@ -197,21 +232,37 @@ describe('GAR Customs Post Controller', () => {
 
     callController().then(() => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        prohibitedGoods: 'Yes',
-        goodsDeclaration: 'Duty Free',
+        baggage: undefined,
+        baggageDeclaration: '',
         freeCirculation: 0,
-        visitReason: 2,
+        goodsDeclaration: "Duty Free",
+        intentionValue: "Yes",
+        passengerTravellingReason: '',
+        passengerTravellingReasonAnswer: '',
+        prohibitedGoods: "Yes",
+        supportingInformation: undefined,
+        supportingInformationAnswer: '',
+        visitReason: 2
       });
       expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
         prohibitedGoodsOptions,
         freeCirculationOptions,
         reasonForVisitOptions,
+        intentionValueOptions,
+        baggageOptions,
         cookie,
         gar: {
-          prohibitedGoods: 'Yes',
-          goodsDeclaration: 'Duty Free',
+          baggage: undefined,
+          baggageDeclaration: '',
           freeCirculation: 0,
-          visitReason: 2,
+          goodsDeclaration: "Duty Free",
+          intentionValue: "Yes",
+          passengerTravellingReason: '',
+          passengerTravellingReasonAnswer: '',
+          prohibitedGoods: "Yes",
+          supportingInformation: undefined,
+          supportingInformationAnswer: '',
+          visitReason: 2
         },
         errors: [{ message: 'GAR not found' }],
       });
@@ -228,10 +279,17 @@ describe('GAR Customs Post Controller', () => {
     callController().then(() => {
       expect(req.body.buttonClicked).to.be.undefined;
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        prohibitedGoods: 'Yes',
-        goodsDeclaration: 'Duty Free',
+        baggage: undefined,
+        baggageDeclaration: '',
         freeCirculation: 0,
-        visitReason: 2,
+        goodsDeclaration: "Duty Free",
+        intentionValue: "Yes",
+        passengerTravellingReason: '',
+        passengerTravellingReasonAnswer: '',
+        prohibitedGoods: "Yes",
+        supportingInformation: undefined,
+        supportingInformationAnswer: '',
+        visitReason: 2
       });
       expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
     });
@@ -248,10 +306,17 @@ describe('GAR Customs Post Controller', () => {
     callController().then(() => {
       expect(req.body.buttonClicked).to.eq('Save and continue');
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        prohibitedGoods: 'Yes',
-        goodsDeclaration: 'Duty Free',
+        baggage: undefined,
+        baggageDeclaration:'',
         freeCirculation: 0,
-        visitReason: 2,
+        goodsDeclaration: "Duty Free",
+        intentionValue: "Yes",
+        passengerTravellingReason: '',
+        passengerTravellingReasonAnswer: '',
+        prohibitedGoods: "Yes",
+        supportingInformation: undefined,
+        supportingInformationAnswer: '',
+        visitReason: 2
       });
       expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
     });
@@ -269,10 +334,17 @@ describe('GAR Customs Post Controller', () => {
     callController().then(() => {
       expect(req.body.buttonClicked).to.eq('Save and continue');
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        prohibitedGoods: 'No',
-        goodsDeclaration: '',
+        baggage: undefined,
+        baggageDeclaration: '',
         freeCirculation: 0,
-        visitReason: 2,
+        goodsDeclaration: '',
+        intentionValue: "Yes",
+        passengerTravellingReason: '',
+        passengerTravellingReasonAnswer: '',
+        prohibitedGoods: "No",
+        supportingInformation: undefined,
+        supportingInformationAnswer: '',
+        visitReason: 2
       });
       expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
     });
@@ -290,10 +362,17 @@ describe('GAR Customs Post Controller', () => {
     callController().then(() => {
       expect(req.body.buttonClicked).to.eq('Save and continue');
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        prohibitedGoods: 'adFnjKekNnveAiej1324mk',
-        goodsDeclaration: '',
+        baggage: undefined,
+        baggageDeclaration: '',
         freeCirculation: 0,
-        visitReason: 2,
+        goodsDeclaration: '',
+        intentionValue: "Yes",
+        passengerTravellingReason: '',
+        passengerTravellingReasonAnswer: '',
+        prohibitedGoods: "adFnjKekNnveAiej1324mk",
+        supportingInformation: undefined,
+        supportingInformationAnswer:  '',
+        visitReason: 2
       });
       expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
     });
@@ -312,10 +391,17 @@ describe('GAR Customs Post Controller', () => {
     callController().then(() => {
       expect(req.body.buttonClicked).to.eq('Save and continue');
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        prohibitedGoods: 'No',
-        goodsDeclaration: '',
+        baggage: undefined,
+        baggageDeclaration: '',
         freeCirculation: 0,
-        visitReason: 2,
+        goodsDeclaration: '',
+        intentionValue: "Yes",
+        passengerTravellingReason: '',
+        passengerTravellingReasonAnswer: '',
+        prohibitedGoods: "No",
+        supportingInformation: undefined,
+        supportingInformationAnswer:  '',
+        visitReason: 2
       });
       expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
     });
@@ -333,10 +419,17 @@ describe('GAR Customs Post Controller', () => {
 
     callController().then(() => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
+        baggage: undefined,
+        baggageDeclaration: '',
         prohibitedGoods: 'Yes',
         goodsDeclaration: 'a',
         freeCirculation: 0,
         visitReason: 2,
+        intentionValue: "Yes",
+        passengerTravellingReason: '',
+        passengerTravellingReasonAnswer: '',
+        supportingInformation: undefined,
+        supportingInformationAnswer:  '',
       });
       expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
     });

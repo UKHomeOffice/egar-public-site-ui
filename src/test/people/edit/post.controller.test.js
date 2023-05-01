@@ -40,6 +40,7 @@ describe('Person Edit Post Controller', () => {
         personType: 'Captain',
         travelDocumentNumber: '1234567890',
         travelDocumentType: 'Passport',
+        travelDocumentOther: 'Id Card',
         issuingState: 'usa',
         expiryYear: '2150',
         expiryMonth: '05',
@@ -69,6 +70,7 @@ describe('Person Edit Post Controller', () => {
       documentType: req.body.travelDocumentType,
       issuingState: 'USA', // Check it upper cases it
       documentExpiryDate: '2150-05-04',
+      documentDesc: req.body.travelDocumentOther,
     };
 
     personApiStub = sinon.stub(personApi, 'update');

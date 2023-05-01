@@ -40,6 +40,7 @@ describe('Person Add Post Controller', () => {
         personType: 'Captain',
         travelDocumentNumber: '1234567890',
         travelDocumentType: 'Passport',
+        travelDocumentOther: 'Id Card',
         issuingState: 'usa',
         expiryYear: '2150',
         expiryMonth: '05',
@@ -59,15 +60,16 @@ describe('Person Add Post Controller', () => {
     person = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      gender: req.body.gender,
-      dateOfBirth: '1937-06-07',
-      placeOfBirth: req.body.birthplace,
       nationality: 'USA', // Check it upper cases it
+      placeOfBirth: req.body.birthplace,
+      gender: req.body.gender,
       peopleType: req.body.personType,
       documentNumber: req.body.travelDocumentNumber,
       documentType: req.body.travelDocumentType,
       issuingState: 'USA', // Check it upper cases it
-      documentExpiryDate: '2150-05-04',
+      documentExpiryDate: `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`,
+      dateOfBirth: `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`,
+      documentDesc: req.body.travelDocumentOther,
     };
 
     personApiStub = sinon.stub(personApi, 'create');

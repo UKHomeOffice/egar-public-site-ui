@@ -4,6 +4,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -31,6 +32,11 @@ describe('GAR Responsible Person Get Controller', () => {
 
   it('should render with messages if api rejects', async () => {
     cookie = new CookieModel(req);
+    const context = {
+      fixedBasedOperatorOptions,
+      cookie,
+    };
+
     sinon.stub(garApi, 'get').rejects('garApi.get Example Reject');
 
     const callController = async () => {
@@ -38,8 +44,9 @@ describe('GAR Responsible Person Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
-        cookie, errors: [{ message: 'Problem retrieving GAR' }],
+      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index',
+        context, {
+        errors: [{ message: 'Problem retrieving GAR' }],
       });
     });
   });
@@ -57,6 +64,13 @@ describe('GAR Responsible Person Get Controller', () => {
     };
     const cookie = new CookieModel(req);
     cookie.setGarResponsiblePerson(apiResponse);
+
+    const context = {
+      fixedBasedOperatorOptions,
+      cookie,
+      gar: apiResponse
+    };
+
     sinon.stub(garApi, 'get').resolves(JSON.stringify(apiResponse));
 
     const callController = async () => {
@@ -64,7 +78,7 @@ describe('GAR Responsible Person Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', { cookie });
+      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', context);
     });
   });
 });

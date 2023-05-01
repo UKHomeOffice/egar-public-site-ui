@@ -70,6 +70,7 @@ describe('Manifest Edit Person Post Controller', () => {
       issuingState: 'USA', // Check it upper cases it
       documentExpiryDate: '2150-05-04',
       garPeopleId: req.body.garPeopleId,
+      documentDesc: undefined,
     };
   });
 

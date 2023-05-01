@@ -151,7 +151,8 @@ describe('GAR Review Post Controller', () => {
           }, 'Arrival time must be after departure time'),
           new ValidationRule(validator.notEmpty, 'aircraft', undefined, 'Aircraft registration must be completed'),
           new ValidationRule(validator.notEmpty, 'responsiblePerson', undefined, 'Responsible person details must be completed'),
-          new ValidationRule(validator.notEmpty, 'customs', undefined, 'Customs declaration questions not answered'),
+          new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
+          new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
           new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
         ],
       });
@@ -198,7 +199,8 @@ describe('GAR Review Post Controller', () => {
           }, 'Arrival time must be after departure time'),
           new ValidationRule(validator.notEmpty, 'aircraft', undefined, 'Aircraft registration must be completed'),
           new ValidationRule(validator.notEmpty, 'responsiblePerson', undefined, 'Responsible person details must be completed'),
-          new ValidationRule(validator.notEmpty, 'customs', undefined, 'Customs declaration questions not answered'),
+          new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
+          new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
           new ValidationRule(validator.valuetrue, 'resolveError', '', 'Resolve manifest errors before submitting'),
           new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
         ],
@@ -222,6 +224,7 @@ describe('GAR Review Post Controller', () => {
         prohibitedGoods: 'No',
         freeCirculation: 'No',
         visitReason: 'No',
+        intentionValue: 'No'
       }));
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
@@ -256,6 +259,7 @@ describe('GAR Review Post Controller', () => {
         prohibitedGoods: 'No',
         freeCirculation: 'No',
         visitReason: 'No',
+        intentionValue: 'No'
       }));
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
@@ -298,6 +302,7 @@ describe('GAR Review Post Controller', () => {
         prohibitedGoods: 'No',
         freeCirculation: 'No',
         visitReason: 'No',
+        intentionValue: 'No'
       }));
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
@@ -341,6 +346,7 @@ describe('GAR Review Post Controller', () => {
         prohibitedGoods: 'No',
         freeCirculation: 'No',
         visitReason: 'No',
+        intentionValue: 'No'
       }));
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
