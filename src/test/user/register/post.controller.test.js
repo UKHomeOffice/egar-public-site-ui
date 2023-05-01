@@ -193,8 +193,8 @@ describe('User Register Post Controller', () => {
 
   it('should fail validation on invalid first name or last name length', async () => {
 
-    const maxFirstNameLength = process.env.USER_FIRST_NAME_CHARACTER_COUNT;
-    const maxSurnameLength = process.env.USER_SURNAME_CHARACTER_COUNT;
+    const maxFirstNameLength = config.USER_FIRST_NAME_CHARACTER_COUNT;
+    const maxSurnameLength = config.USER_SURNAME_CHARACTER_COUNT;
 
     const fName = stringGen(maxFirstNameLength + 1)
     const lName = stringGen(maxSurnameLength + 1)
