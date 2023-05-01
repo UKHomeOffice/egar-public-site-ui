@@ -12,6 +12,19 @@ const tokenService = require('../../../common/services/create-token');
 const tokenApi = require('../../../common/services/tokenApi');
 const userApi = require('../../../common/services/userManageApi');
 const settings = require('../../../common/config/index');
+const ValidationRule = require('../../../common/models/ValidationRule.class');
+const validator = require('../../../common/utils/validator');
+
+const i18n = require('i18n');
+const path = require('path');
+
+i18n.configure({
+  locales: ['en'],
+  directory: path.join(__dirname, '../../../locales'),
+  objectNotation: true,
+  defaultLocale: 'en',
+  register: global,
+});
 
 const controller = require('../../../app/verify/mfa/post.controller');
 
@@ -59,16 +72,18 @@ describe('Verify MFA Post Controller', () => {
     settings.MFA_TOKEN_LENGTH = 20;
     const cookie = new CookieModel(emptyReq);
 
-    try {
+    const callController = async () => {
       await controller(emptyReq, res);
-    } catch (err) {
+    };
+
+    callController(emptyReq, res).then(() => {
       expect(tokenApi.validateMfaToken).to.not.have.been.called;
       expect(tokenApi.updateMfaToken).to.not.have.been.called;
       expect(sessionSaveStub).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactlyExactly('app/verify/mfa/index', {
-        cookie, mfaTokenLength: 20, errors: [{ identifier: 'mfaCode', value: '', message: 'Enter your code' }],
+      expect(res.render).to.have.been.calledOnceWithExactly('app/verify/mfa/index', {
+        cookie, mfaTokenLength: 20, errors: [new ValidationRule(validator.notEmpty, 'mfaCode', '', 'Enter your code')],
       });
-    }
+    });
   });
 
   it('should render page with message when token api rejects', async () => {
