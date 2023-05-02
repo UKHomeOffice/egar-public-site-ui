@@ -130,11 +130,11 @@ module.exports = {
       });
     });
   },
-  deleteUser(userId, email) {
+  deleteUser(email) {
     return new Promise((resolve, reject) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.deleteUser(userId, email),
+        url: endpoints.deleteUser(email),
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call delete user endpoint');

@@ -17,7 +17,7 @@ exports.SESSION_PARSER_SECRET = process.env.SESSION_PARSER_SECRET || '3169n$*IND
 
 // API settings
 exports.API_BASE = process.env.API_BASE || 'http://localhost:5000';
-exports.API_VERSION = process.env.API_VERSION;
+exports.API_VERSION = process.env.API_VERSION || 'v0.2.0';
 
 // Misc settings
 exports.CORRELATION_HEADER = process.env.CORRELATION_HEADER_NAME || 'x-request-id';
