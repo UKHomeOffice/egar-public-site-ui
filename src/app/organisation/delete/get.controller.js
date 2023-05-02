@@ -12,7 +12,7 @@ module.exports = (req, res) => {
     res.redirect('/organisation');
     return;
   }
-  organisationApi.deleteUser(cookie.getUserDbId(), userId)
+  organisationApi.deleteUser(userId)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
