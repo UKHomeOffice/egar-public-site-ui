@@ -434,4 +434,5 @@ describe('GAR Customs Post Controller', () => {
       expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
     });
   });
+
 });

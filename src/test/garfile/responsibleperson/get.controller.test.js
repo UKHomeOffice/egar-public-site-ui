@@ -32,6 +32,7 @@ describe('GAR Responsible Person Get Controller', () => {
 
   it('should render with messages if api rejects', async () => {
     cookie = new CookieModel(req);
+
     const context = {
       fixedBasedOperatorOptions,
       cookie,
@@ -81,4 +82,5 @@ describe('GAR Responsible Person Get Controller', () => {
       expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', context);
     });
   });
+
 });
