@@ -158,10 +158,10 @@
     </fieldset>
   </div>
 
-  <div class="{{ m.form_group_class(issuingState, errors) }}">
+  <div class="{{ m.form_group_class('issuingState', errors) }}">
     <label id="issuingState-label" class="govuk-label govuk-label--m" for="issuingState">{{ __('field_issuing_state') }}</label>
     {{ m.hint('issuingState', __('field_issuing_state_hint')) }}
-    {{ m.error_message(issuingState, errors, __) }}
+    {{ m.error_message('issuingState', errors, __) }}
     <select class="govuk-select" id="issuingState" name="issuingState" value="{{ (person.issuingState or req.body.issuingState)}}"  aria-labelledby="issuingState-label"  aria-describedby="issuingState-hint">
       {% for country in countryList|sort(attribute='label') %}
         <option value="{{ country.code }}" {{ 'selected=selected' if (person.issuingState or req.body.issuingState) == country.code }}>{{ country.label }}</option>
