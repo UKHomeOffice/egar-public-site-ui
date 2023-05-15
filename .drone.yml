@@ -36,8 +36,6 @@ steps:
     target:
       exclude:
       - production
-<<<<<<< HEAD
-=======
 
 - name: Unit Tests
   pull: if-not-exists
@@ -54,7 +52,6 @@ steps:
    - push
    - pull_request
 
->>>>>>> e0fa4c1 (added unit tests into pipeline)
 #- name: Unit Tests and SonarQube Scanner
 #  pull: if-not-exists
 #  image: .io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
