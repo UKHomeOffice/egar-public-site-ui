@@ -595,10 +595,11 @@ describe('Validator', () => {
       expect(validator.realDateInFuture(currentDate)).to.be.false;
     });
 
-    it('should fail if the provided day is yesterday', () => {
-      var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
-      expect(validator.realDateInFuture(previousDay)).to.be.false;
-    });
+    // //commented out as: 1) yesterday implementation fails on 1st of each month 2) the test does not offer much over other ones
+    // it('should fail if the provided day is yesterday', () => {
+    //   var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
+    //   expect(validator.realDateInFuture(previousDay)).to.be.false;
+    // });
 
     it('should fail if the provided day is old date -- 14/12/2007', () => {
       expect(validator.realDateInFuture(genDateObj('14', '12', '2007'))).to.be.false;
@@ -679,10 +680,11 @@ describe('Validator', () => {
       expect(validator.bornAfter1900(currentDate)).to.be.true;
     });
 
-    it('should pass if the provided day is yesterday', () => {
-      var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
-      expect(validator.bornAfter1900(previousDay)).to.be.true;
-    });
+    // //commented out as: 1) yesterday implementation fails on 1st of each month 2) the test does not offer much over other ones
+    // it('should pass if the provided day is yesterday', () => {
+    //   var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
+    //   expect(validator.bornAfter1900(previousDay)).to.be.true;
+    // });
 
     it('Should fail if the provided day is in future -- next day', () => {
       var date = genDateObj((currentDay + 1).toString(), currentMonthStr, currentYearStr);

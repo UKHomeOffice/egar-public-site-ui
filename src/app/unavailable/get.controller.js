@@ -1,12 +1,10 @@
 const navUtil = require('../../common/utils/nav');
-const availability = require('../../common/config/availability')
+const availability = require('../../common/config/availability');
 
-if (availability.ENABLE_UNAVAILABLE_PAGE.toLowerCase() === 'false') {
-  module.exports = (req, res) => {
-    res.redirect('/welcome/index');
-  };
-} else {
-  module.exports = (req, res) => {
+module.exports = (req, res) => {
+  if (availability.ENABLE_UNAVAILABLE_PAGE.toLowerCase() === 'false') {
+    res.redirect('/welcome/index')
+  } else {
     navUtil.simpleGetRender(req, res, 'app/unavailable/index');
   };
 }

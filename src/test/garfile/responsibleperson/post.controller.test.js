@@ -20,7 +20,7 @@ const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_
 
 i18n.configure({
   locales: ['en'],
-  directory: path.join(__dirname, '/locales'),
+  directory: path.join(__dirname, '../../../locales'),
   objectNotation: true,
   defaultLocale: 'en',
   register: global,
@@ -106,41 +106,40 @@ describe('GAR Responsible Person Post Controller', () => {
     });
   });
 
-  //TODO
-  // it('should render error message if api rejects', () => {
-  //   cookie = new CookieModel(req);
-  //   cookie.setGarResponsiblePerson(req.body);
-  //   sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject', () => {
-  //     expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
-  //       cookie,
-  //       errors: [{
-  //         message: 'Failed to add to GAR',
-  //       }],
-  //     });
-  //   });
+  it('should render error message if api rejects', () => {
+    cookie = new CookieModel(req);
+    cookie.setGarResponsiblePerson(req.body);
+    sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject');
 
-  //   const callController = async () => {
-  //     await controller(req, res);
-  //   };
+    const callController = async () => {
+      await controller(req, res);
+    };
 
-  //   callController().then().then(() => {
-  //     expect(garApi.patch).to.have.been.calledWith('123456', 'Draft', {
-  //       responsibleGivenName: 'Jean-Luc',
-  //       responsibleSurname: 'Picard',
-  //       responsibleAddressLine1: 'Enterprise',
-  //       responsibleAddressLine2: 'United Federation of Planets',
-  //       responsibleTown: 'Alpha Quadrant',
-  //       responsiblePostcode: 'NCC-1701D',
-  //       responsibleCounty: 'Earth',
-  //       responsibleEmail: undefined,
-  //       responsibleContactNo: '1234567890',
-  //       fixedBasedOperator: undefined,
-  //       fixedBasedOperatorAnswer: '',
-  //       fixedBasedOperatorOptions
-  //     });
-  //     expect(res.redirect).to.not.have.been.called;
-  //   });
-  // });
+    callController().then().then(() => {
+      expect(garApi.patch).to.have.been.calledWith('123456', 'Draft', {
+        responsibleGivenName: 'Jean-Luc',
+        responsibleSurname: 'Picard',
+        responsibleAddressLine1: 'Enterprise',
+        responsibleAddressLine2: 'United Federation of Planets',
+        responsibleTown: 'Alpha Quadrant',
+        responsiblePostcode: 'NCC-1701D',
+        responsibleCounty: 'Earth',
+        responsibleEmail: undefined,
+        responsibleContactNo: '1234567890',
+        fixedBasedOperator: undefined,
+        fixedBasedOperatorAnswer: '',
+        fixedBasedOperatorOptions
+      });
+      expect(res.redirect).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
+        cookie,
+        fixedBasedOperatorOptions,
+        errors: [{
+          message: 'Failed to add to GAR',
+        }],
+      });
+    });
+  });
 
   it('should display the error message if api returns one', () => {
     cookie = new CookieModel(req);
