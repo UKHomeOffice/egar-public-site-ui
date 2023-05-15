@@ -39,7 +39,7 @@ steps:
 
 - name: Unit Tests
   pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
+  image: node:14-alpine3.15
   commands:
   - export NOTIFY_API_KEY=dummy
   - cd src
