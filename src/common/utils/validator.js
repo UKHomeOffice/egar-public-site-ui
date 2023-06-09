@@ -666,6 +666,7 @@ function invalidLongDirection(value) {
 
 
 function preventZ(value) {
+  value = value || '';
   if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy") {
     return false;
   }
