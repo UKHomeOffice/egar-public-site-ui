@@ -250,6 +250,26 @@ describe('API upload GAR post controller', () => {
       });
     });
 
+    it.only('should not throw error if arrival port is empty', async () => {
+      sinon.spy(req.session, 'save');
+      const data = getValidWorkbook();
+      data.Sheets.Valid1.B3.v = null;
+
+      sinon.stub(XLSX, 'read').returns(data);
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.notEmpty, '', null,  'Enter a value for the arrival port'),
+        ]);
+      });
+    });
+
     it('should return error if arrival date in the past', async () => {
       sinon.spy(req.session, 'save');
       const data = getValidWorkbook();
