@@ -1844,6 +1844,12 @@
     "label": "Liège Airport (Belgium) (EBLG / LGG)"
   },
   {
+    "id": "EBMB",
+    "id2": "EBMB",
+    "british": false,
+    "label": "Melsbroek Air Base (Belgium) (EBMB)"
+  },
+  {
     "id": "OST",
     "id2": "EBOS",
     "british": false,
