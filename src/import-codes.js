@@ -63,7 +63,7 @@ csv({
       code += row.IATA;
     }
     code += ')';
-    processedArray.push({ british, id: hasIATA ? id2: hasIATA ? row.IATA : row.ICAO, label: label + code });
+    processedArray.push({ british, id: hasIATA ? row.IATA : row.ICAO, id2: row.ICAO, label: label + code });
   });
   logger.info('Resulting output');
   logger.info(JSON.stringify(processedArray));
