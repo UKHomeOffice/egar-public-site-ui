@@ -251,13 +251,19 @@
       {{ check_your_answers_row(__('field_intention_review'), garfile.intentionValue) }}
       {% if garfile.intentionValue === 'Yes' %}
         {{ check_your_answers_row(__('field_prohibited_goods_review'), garfile.prohibitedGoods) }}
-      {% if garfile.prohibitedGoods === 'Yes' %}
-        {{ check_your_answers_row(__('field_goods_declaration_review'), garfile.goodsDeclaration | truncate(50)) }}
-      {% endif %}
-      {{ check_your_answers_row(__('field_baggage_review'), garfile.baggage) }}
-      {% if garfile.baggage === 'Yes' %}
-        {{ check_your_answers_row(__('field_baggage_declaration_review'), garfile.baggageDeclaration | truncate(50)) }}
-      {% endif %}
+        {% if garfile.prohibitedGoods === 'Yes' %}
+          {{ check_your_answers_row(__('field_goods_declaration_review'), garfile.goodsDeclaration | truncate(50)) }}
+        {% endif %}
+
+        {{ check_your_answers_row(__('field_baggage_review'), garfile.baggage) }}
+        {% if garfile.baggage === 'Yes' %}
+          {{ check_your_answers_row(__('field_baggage_declaration_review'), garfile.baggageDeclaration | truncate(50)) }}
+        {% endif %}
+
+        {{ check_your_answers_row(__('field_continental_shelf_review'), garfile.contentialShelf | truncate(50)) }}
+        {% if garfile.contentialShelf === 'Yes' %}
+          {{ check_your_answers_row(__('field_continental_shelf_declaration_review'), garfile.contentialShelfDeclaration | truncate(50)) }}
+        {% endif %}
       {% endif %}
       {% if garfile.passengerTravellingReason != "" %}
         {{ check_your_answers_row(__('passenger_travelling_reason_review'), garfile.passengerTravellingReason | truncate(50)) }}

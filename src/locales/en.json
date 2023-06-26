@@ -419,5 +419,7 @@
 	"id_card_withdrawl_text_part": "ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check",
 	"homepage_banner_text": "The GA Consultation: Advance information requirements for international General Aviation flights has launched and will be open until 16 June 2023. Please use this link if you would like to respond: ",
 	"field_continental_shelf_question": "Are the goods you intend to declare eligible for the UK Continental Shelf declaration by conduct process?",
-	"field_continental_shelf_hint": "Goods eligible for declaration for the UK Continental Shelf : "
+	"field_continental_shelf_hint": "Goods eligible for declaration for the UK Continental Shelf : ",
+	"field_continental_shelf_review": "Intention to make contential shelf declaration",
+	"field_continental_shelf_declaration_review": "Contential shelf goods details"
 }
