@@ -171,7 +171,7 @@ class Cookie {
         prohibitedGoods: null,
         goodsDeclaration: null,
         contentialShelf: null,
-        contentialShelfDecleration: null,
+        contentialShelfDeclaration: null,
         prohibitedGoodsList: [],
         baggage: null,
         baggageDeclaration: null,
