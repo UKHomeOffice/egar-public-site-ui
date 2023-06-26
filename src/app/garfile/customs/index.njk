@@ -102,8 +102,13 @@
               <div class="govuk-form-group">
                 <span id="allowances-hint" class="govuk-hint">{{__('field_allowances_hint')}}<a href=https://www.gov.uk/bringing-goods-into-uk-personal-use target="_blank"> Overview - GOV.UK (www.gov.uk) </a></span>
                 <label class="govuk-label" for="goodsDeclaration">{{__('field_goods_declaration_label_150')}}</label>
-                <textarea class="govuk-textarea" id="goodsDeclaration" name="goodsDeclaration" placeholder="e.g. alcohol or tobacco"
-                  rows="5" aria-describedby="prohibitedGoods-hint"
+                <textarea 
+                  class="govuk-textarea" 
+                  id="goodsDeclaration" 
+                  name="goodsDeclaration" 
+                  placeholder="e.g. alcohol or tobacco"
+                  rows="5" 
+                  aria-describedby="prohibitedGoods-hint"
                   maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.goodsDeclaration}}</textarea>
               </div>
             </div>
@@ -185,9 +190,7 @@
                     placeholder="e.g. Rig Essentials (food, drink, medical supplies, newspapers, sanitary items) "
                     rows="5" 
                     aria-describedby="contentialShelf-hint"
-                    maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">
-                    {{gar.contentialShelfDeclaration}}
-                  </textarea>
+                    maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.contentialShelfDeclaration}}</textarea>
                 </div>
               </div>
               {% endif %} 
