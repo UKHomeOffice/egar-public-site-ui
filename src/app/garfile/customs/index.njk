@@ -70,13 +70,13 @@
           console.log("show");
           document.getElementById('prohibitedGoods').style.display = 'block';
           document.getElementById('baggage').style.display = 'block';
-          document.getElementById('contentialShelf').style.display = 'block';
+          document.getElementById('continentalShelf').style.display = 'block';
         }
         else {
           console.log("hide");
           document.getElementById('prohibitedGoods').style.display = 'none';
           document.getElementById('baggage').style.display = 'none';
-          document.getElementById('contentialShelf').style.display = 'none';
+          document.getElementById('continentalShelf').style.display = 'none';
         }
       }
       </script>
@@ -154,40 +154,40 @@
         </fieldset>
       </div>
 
-       <div class="govuk-form-group {{ m.form_group_class('contentialShelf', errors) }}" id="contentialShelf" hidden>
-        <fieldset class="govuk-fieldset" aria-describedby="contential-shelf-hint">
+       <div class="govuk-form-group {{ m.form_group_class('continentalShelf', errors) }}" id="continentalShelf" hidden>
+        <fieldset class="govuk-fieldset" aria-describedby="continental-shelf-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            {{ m.error_message('contentialShelf', errors, __) }}
+            {{ m.error_message('continentalShelf', errors, __) }}
             <h2 class="govuk-fieldset__heading">{{__('field_continental_shelf_question')}}</h2>
           </legend>
 
           <div class="govuk-radios govuk-radio--conditional" data-module="radios">
-            {% for choice in contentialShelfOptions %}
+            {% for choice in continentalShelfOptions %}
               <div class="govuk-radios__item">
-                <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="contentialShelf" value="{{choice.value}}"
-                  aria-labelledby="contentialShelf-label-{{ loop.index }}"
-                  {{ "data-aria-controls=conditional-contentialShelfDeclaration" if choice.value === 'Yes' }}
-                  {{ "checked" if choice.value == gar.contentialShelf }}>
-                <label id="contentialShelf-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
+                <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="continentalShelf" value="{{choice.value}}"
+                  aria-labelledby="continentalShelf-label-{{ loop.index }}"
+                  {{ "data-aria-controls=conditional-continentalShelfDeclaration" if choice.value === 'Yes' }}
+                  {{ "checked" if choice.value == gar.continentalShelf }}>
+                <label id="continentalShelf-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
               </div>
               {% if choice.value == 'Yes' %}
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contentialShelfDeclaration">
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-continentalShelfDeclaration">
                 <div class="govuk-form-group">
                   <span id="continental_shelf-hint" class="govuk-hint">
                     {{__('field_continental_shelf_hint')}}
                     <a href=https://www.gov.uk/guidance/moving-goods-between-the-uk-and-the-uk-continental-shelf target="_blank">Moving goods between the UK and the UK Continental Shelf - GOV.UK (www.gov.uk) </a>
                   </span>
-                  <label class="govuk-label" for="contentialShelfDeclaration">
+                  <label class="govuk-label" for="continentalShelfDeclaration">
                     {{__('field_goods_declaration_label_150')}}
                   </label>
                   <textarea 
                     class="govuk-textarea" 
-                    id="contentialShelfDeclaration" 
-                    name="contentialShelfDeclaration" 
+                    id="continentalShelfDeclaration" 
+                    name="continentalShelfDeclaration" 
                     placeholder="e.g. Rig Essentials (food, drink, medical supplies, newspapers, sanitary items) "
                     rows="5" 
-                    aria-describedby="contentialShelf-hint"
-                    maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.contentialShelfDeclaration}}</textarea>
+                    aria-describedby="continentalShelf-hint"
+                    maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.continentalShelfDeclaration}}</textarea>
                 </div>
               </div>
               {% endif %} 

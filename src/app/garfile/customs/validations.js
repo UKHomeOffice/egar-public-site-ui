@@ -12,8 +12,8 @@ module.exports.validations = (req) => {
     visitReason,
     supportingInformation,
     intentionValue,
-    contentialShelf,
-    contentialShelfDeclaration,
+    continentalShelf,
+    continentalShelfDeclaration,
   } = req.body;
 
   const validations = [
@@ -24,7 +24,7 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.validTextLength, 'baggageDeclaration', { value: baggageDeclaration, maxLength: MAX_TEXT_BOX_LENGTH - 100 }, `Baggage details must be ${MAX_TEXT_BOX_LENGTH - 100} characters or less`),
     ],
     [
-      new ValidationRule(validator.validTextLength, 'contentialShelfDeclaration', { value: contentialShelfDeclaration, maxLength: MAX_TEXT_BOX_LENGTH - 100 }, `Contential shelf details must be ${MAX_TEXT_BOX_LENGTH - 100} characters or less`),
+      new ValidationRule(validator.validTextLength, 'continentalShelfDeclaration', { value: continentalShelfDeclaration, maxLength: MAX_TEXT_BOX_LENGTH - 100 }, `Continental shelf details must be ${MAX_TEXT_BOX_LENGTH - 100} characters or less`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'passengerTravellingReason', { value: passengerTravellingReason, maxLength: MAX_TEXT_BOX_LENGTH }, `Passenger travelling reason must be ${MAX_TEXT_BOX_LENGTH } characters or less`),
@@ -46,8 +46,8 @@ module.exports.validations = (req) => {
   if (intentionValue === 'Yes' && baggage === 'Yes') {
     validations[1].push(new ValidationRule(validator.notEmpty, 'baggageDeclaration', baggageDeclaration, 'Please enter baggage declaration details'));
   }
-  if (intentionValue === 'Yes' && contentialShelf === 'Yes') {
-    validations[2].push(new ValidationRule(validator.notEmpty, 'contentialShelfDeclaration', contentialShelfDeclaration, 'Please enter contential shelf declaration details'));
+  if (intentionValue === 'Yes' && continentalShelf === 'Yes') {
+    validations[2].push(new ValidationRule(validator.notEmpty, 'continentalShelfDeclaration', continentalShelfDeclaration, 'Please enter continental shelf declaration details'));
   }
   return validations;
 };
