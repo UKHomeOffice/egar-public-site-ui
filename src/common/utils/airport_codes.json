@@ -1844,6 +1844,12 @@
     "label": "Liège Airport (Belgium) (EBLG / LGG)"
   },
   {
+    "id": "EBMB",
+    "id2": "EBMB",
+    "british": false,
+    "label": "Melsbroek Air Base (Belgium) (EBMB)"
+  },
+  {
     "id": "OST",
     "id2": "EBOS",
     "british": false,
@@ -46247,7 +46253,13 @@
     "id": "EGCA",
     "id2": "EGCA",
     "british": true,
-    "label": "COAL ASTON - BENTLEY FARM (United Kingdom) (EGCA)"
+    "label": "Coal Aston Airfield / Apperknowle Airstrip (United Kingdom) (EGCA)"
+  },
+  {
+    "id": "COAL ASTON - BENTLEY FARM",
+    "id2": "COAL ASTON - BENTLEY FARM",
+    "british": true,
+    "label": "COAL ASTON - BENTLEY FARM (United Kingdom)"
   },
   {
     "id": "EGCG",
