@@ -170,8 +170,8 @@ class Cookie {
         fixedBasedOperatorList: [],
         prohibitedGoods: null,
         goodsDeclaration: null,
-        contentialShelf: null,
-        contentialShelfDeclaration: null,
+        continentalShelf: null,
+        continentalShelfDeclaration: null,
         prohibitedGoodsList: [],
         baggage: null,
         baggageDeclaration: null,
@@ -403,20 +403,20 @@ class Cookie {
     this.session.gar.goodsDeclaration = dd;
   }
 
-  getContentialShelf() {
-    return this.session.gar.contentialShelf;
+  getContinentalShelf() {
+    return this.session.gar.continentalShelf;
   }
 
-  setContentialShelf(contentialShelf) {
-    this.session.gar.contentialShelf = contentialShelf;
+  setContinentalShelf(continentalShelf) {
+    this.session.gar.continentalShelf = continentalShelf;
   }
 
-  getContentialShelfDeclaration() {
-    return this.session.gar.contentialShelfDeclaration;
+  getContinentalShelfDeclaration() {
+    return this.session.gar.continentalShelfDeclaration;
   }
 
-  setContentialShelfDeclaration(contentialShelfDeclaration) {
-    this.session.gar.contentialShelfDeclaration = contentialShelfDeclaration;
+  setContinentalShelfDeclaration(continentalShelfDeclaration) {
+    this.session.gar.continentalShelfDeclaration = continentalShelfDeclaration;
   }
 
   getGarProhibitedGoodsList() {

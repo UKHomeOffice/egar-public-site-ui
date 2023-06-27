@@ -260,9 +260,9 @@
           {{ check_your_answers_row(__('field_baggage_declaration_review'), garfile.baggageDeclaration | truncate(50)) }}
         {% endif %}
 
-        {{ check_your_answers_row(__('field_continental_shelf_review'), garfile.contentialShelf | truncate(50)) }}
-        {% if garfile.contentialShelf === 'Yes' %}
-          {{ check_your_answers_row(__('field_continental_shelf_declaration_review'), garfile.contentialShelfDeclaration | truncate(50)) }}
+        {{ check_your_answers_row(__('field_continental_shelf_review'), garfile.continentalShelf ) }}
+        {% if garfile.continentalShelf === 'Yes' %}
+          {{ check_your_answers_row(__('field_continental_shelf_declaration_review'), garfile.continentalShelfDeclaration | truncate(50)) }}
         {% endif %}
       {% endif %}
       {% if garfile.passengerTravellingReason != "" %}

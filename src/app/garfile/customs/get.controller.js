@@ -6,7 +6,7 @@ const baggageOptions = require('../../../common/seeddata/egar_baggage_options.js
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
 const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
-const contentialShelfOptions = require('../../../common/seeddata/egar_contential_shelf_options.json');
+const continentalShelfOptions = require('../../../common/seeddata/egar_continental_shelf_options.json');
 
 module.exports = (req, res) => {
   logger.info('In get controller for prohibited goods');
@@ -20,7 +20,7 @@ module.exports = (req, res) => {
     prohibitedGoodsOptions,
     baggageOptions,
     intentionValueOptions,
-    contentialShelfOptions,
+    continentalShelfOptions,
     cookie,
   };
 
