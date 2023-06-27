@@ -91,7 +91,12 @@
           <div class="govuk-radios govuk-radio--conditional" data-module="radios">
           {% for choice in prohibitedGoodsOptions %}
             <div class="govuk-radios__item">
-              <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="prohibitedGoods" value="{{choice.value}}"
+              <input 
+                id="{{choice.option}}" 
+                class="govuk-radios__input" 
+                type="radio" 
+                name="prohibitedGoods" 
+                value="{{choice.value}}"
                 aria-labelledby="prohibitedGoods-label-{{ loop.index }}"
                 {{ "data-aria-controls=conditional-goodsDeclaration" if choice.value === 'Yes' }}
                 {{ "checked" if choice.value == gar.prohibitedGoods }}>
@@ -114,10 +119,6 @@
             </div>
             {% endif %} 
           {% endfor %}
-          {# {% if gar.prohibitedGoods == 'Yes' or gar.prohibitedGoods == 'No' or gar.prohibitedGoods == "Don't Know" %}
-          {% else %}
-          <script>document.getElementById("No").checked = true;</script> 
-          {% endif %} #}
           </div>
         </fieldset>
       </div>
@@ -149,10 +150,6 @@
               </div>
             {% endif %}   
           {% endfor %}
-          {# {% if gar.baggage == 'Yes' or gar.baggage == 'No' or gar.baggage == "Don't Know" %}
-          {% else %}
-          <script>document.getElementById("No ").checked = true;</script> 
-          {% endif %} #}
           </div>
         </fieldset>
       </div>
@@ -195,10 +192,6 @@
               </div>
               {% endif %} 
             {% endfor %}
-            {# {% if gar.contentialShelf == 'Yes' or gar.contentialShelf == 'No' or gar.contentialShelf == "Don't Know" %}
-            {% else %}
-            <script>document.getElementById("No").checked = true;</script> 
-            {% endif %} #}
           </div>
         </fieldset>
       </div>
