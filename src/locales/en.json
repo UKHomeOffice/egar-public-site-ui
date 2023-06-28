@@ -228,7 +228,7 @@
 
     "heading_customs": "Customs",
     "caption_customs": "You don’t have to provide this information, but doing so may assist Border Force to process your flight more quickly.",
-    "field_intention": "Is it the intention of anyone on the aircraft to make a customs declaration upon arrival into the United Kingdom?",
+    "field_intention": "Is it the intention of anyone on the aircraft to make a customs declaration upon arrival into the United Kingdom? This should include any goods eligible for the Continental Shelf declaration by conduct process.",
     "field_intention_review": "Intention to make a customs declarations",
     "field_prohibited_goods": "Intention to make prohibited/restricted goods declaration",
     "field_prohibited_goods_2": "You will be required to make a customs declaration, if for example anyone on the aircraft has goods over their duty free allowance, has large quantities of cash or is carrying firearms. More information available at ",
