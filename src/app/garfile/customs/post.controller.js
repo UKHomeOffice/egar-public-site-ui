@@ -24,6 +24,8 @@ module.exports = (req, res) => {
     goodsDeclaration: (req.body.prohibitedGoods === 'Yes' ? req.body.goodsDeclaration : ''),
     baggage: req.body.baggage,
     baggageDeclaration: (req.body.baggage === 'Yes' ? req.body.baggageDeclaration : ''),
+    continentalShelf: req.body.continentalShelf,
+    continentalShelfDeclaration: (req.body.continentalShelf === 'Yes' ? req.body.continentalShelfDeclaration : ''),
     freeCirculation: req.body.freeCirculation,
     visitReason: req.body.visitReason,
     supportingInformation: req.body.supportingInformation,
