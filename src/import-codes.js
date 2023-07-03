@@ -18,7 +18,6 @@ const csvFile = './airports.dat';
  * So Kudos to openflights: https://openflights.org/data.html
  */
 csv({
-  noheader:true,
   headers: ['id', 'name', 'city', 'country', 'IATA', 'ICAO', 'lat', 'long', 'alt', 'utc', 'dst', 'tz', 'type', 'source'],
   colParser: {
     city: 'omit',
@@ -32,13 +31,7 @@ csv({
     source: 'omit',
   },
 }).fromFile(csvFile).then((jsonResult) => {
-  const processedArray = [  {
-    "id": "",
-    "id2": "",
-    "british": false,
-    "label": ""
-  }];
-
+  const processedArray = [];
   jsonResult.forEach((row) => {
     logger.info(`Processing row ${row.id} - ${row.name}`);
     logger.info(`Processing row ${row.id2} - ${row.name}`);
@@ -63,7 +56,7 @@ csv({
       code += row.IATA;
     }
     code += ')';
-    processedArray.push({ british, id: hasIATA ? row.IATA : row.ICAO, id2: row.ICAO, label: label + code });
+    processedArray.push({ british, id: hasIATA ? id2: hasIATA ? row.IATA : row.ICAO, label: label + code });
   });
   logger.info('Resulting output');
   logger.info(JSON.stringify(processedArray));

@@ -1844,12 +1844,6 @@
     "label": "Liège Airport (Belgium) (EBLG / LGG)"
   },
   {
-    "id": "EBMB",
-    "id2": "EBMB",
-    "british": false,
-    "label": "Melsbroek Air Base (Belgium) (EBMB)"
-  },
-  {
     "id": "OST",
     "id2": "EBOS",
     "british": false,
@@ -42663,7 +42657,7 @@
   },
   {
     "id": "LAKV",
-    "id2": "LAKV", 
+    "id2": "LAKV",
     "british": false,
     "label": "Kucove Air Base (Albania) (LAKV)"
   },
@@ -46527,7 +46521,7 @@
   },
   {
     "id": "EGND",
-    "id2": "EGND", 
+    "id2": "EGND",
     "british": true,
     "label": "CROSLAND MOOR - HUDDERSFIELD (United Kingdom) (EGND)"
   },
@@ -47979,7 +47973,7 @@
   },
   {
     "id": "CLADSWELL FARMHOUSE COOKHILL (X568)",
-    "id2": "X568", 
+    "id2": "X568",
     "british": true,
     "label": "CLADSWELL FARMHOUSE COOKHILL (United Kingdom) (X568)"
   },
@@ -48091,7 +48085,7 @@
     "british": true,
     "label": "PLASSEY HOLIDAY PARK, RETAIL VILLAGE AND GOLF COURSE (United Kingdom) (X586)"
   },
-  
+
   {
     "id": "CENTRAL HOUSE, WYTON (X587)",
     "id2": "X587",
@@ -48298,4 +48292,3 @@
   }
 
 ]
-  
