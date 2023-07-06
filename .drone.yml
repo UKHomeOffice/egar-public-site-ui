@@ -107,6 +107,8 @@ steps:
   - export TAGGED_VERSION=$${DRONE_COMMIT}
   - export KUBE_SERVER=$${DEV_KUBE_SERVER}
   - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
+  - export BASE_URL=$${DEV_BASE_URL}
+  - export BASE_URL_SERVICE=$${DEV_URL_SERVICE}
   - source common_lib
   - kd --timeout=6m --file kube/artifactory-secret.yml
   - kd --timeout=6m --file kube/public-site-network-policy.yml
@@ -118,10 +120,14 @@ steps:
     INSECURE_SKIP_TLS_VERIFY: true
     KUBE_NAMESPACE: egar-dev
     NODE_ENV: development
+    SIT_BASE_URL:
+      from_secret: SIT_BASE_URL
     SIT_KUBE_SERVER:
       from_secret: DEV_KUBE_SERVER
-    SIT_KUBE_TOKEN:
+    DEV_KUBE_TOKEN:
       from_secret: DEV_KUBE_TOKEN
+    BASE_URL_SERVICE:
+      from_secret: DEV_URL_SERVICE
   when:
     event:
     - tag
