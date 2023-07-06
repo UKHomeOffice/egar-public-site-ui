@@ -55,6 +55,7 @@ steps:
 #- name: Unit Tests and SonarQube Scanner
 #  pull: if-not-exists
 #  image: .io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
+#  image: .io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
 #  commands:
 #  - export NOTIFY_API_KEY=dummy
 #  - cd src
@@ -173,6 +174,7 @@ steps:
   - kd --timeout=12m --file kube/public-site-deployment.yml
   - kd --timeout=6m --file kube/public-site-service.yml
   - kd --timeout=6m --file kube/public-site-ingress.yml
+
   environment:
     INGRESS_CLASS: nginx-internal
     INSECURE_SKIP_TLS_VERIFY: true
