@@ -107,6 +107,7 @@ steps:
   image: quay.io/ukhomeofficedigital/kd
   commands:
   - export TAGGED_VERSION=$${DRONE_COMMIT}
+  - export KUBE_ARTIFACTORY_APP_SECRET=$${SIT_KUBE_ARTIFACTORY_APP_SECRET}
   - export KUBE_SERVER=$${DEV_KUBE_SERVER}
   - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
   - export BASE_URL=$${SIT_BASE_URL}
