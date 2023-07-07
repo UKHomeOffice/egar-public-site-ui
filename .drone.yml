@@ -129,6 +129,13 @@ steps:
     BASE_URL_SERVICE:
       from_secret: DEV_URL_SERVICE
   when:
+<<<<<<< HEAD
+=======
+    branch:
+    - master
+    - hotfix/*
+    - develop
+>>>>>>> e626c70 (env var fixed this will now deploy on develop)
     event:
     - tag
     ref:
