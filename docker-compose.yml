@@ -40,7 +40,7 @@ services:
   node:
     build: .
     container_name: node
-    command: sh -c 'sleep 5 && node start'
+    command: sh -c 'sleep 5 && npm install nodemon && npm run dev'
     ports:
       - "3000:3000"
     env_file:
@@ -53,3 +53,4 @@ services:
       - ./src/app:/public-site/app
       - ./src/common:/public-site/common
       - ./src/locales:/public-site/locales
+      # - ./src/node_modules:/public-site/node_modules
