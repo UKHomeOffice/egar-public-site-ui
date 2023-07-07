@@ -175,6 +175,7 @@ steps:
     branch:
     - master
     - hotfix/*
+    - amg/feature/*
     event:
     - push
     target:
@@ -204,6 +205,7 @@ steps:
     branch:
     - master
     - hotfix/*
+    - amg/feature/*
     event:
     - push
     target:
@@ -246,6 +248,7 @@ steps:
     branch:
     - master
     - hotfix/*
+    - amg/hotfix/*
     event:
     - push
     target:
@@ -353,6 +356,7 @@ steps:
     branch:
     - master
     - hotfix/*
+    - amg/feature/*    
     event:
     - promote
     target:
