@@ -4,6 +4,7 @@
   "description": "Electronic Gar Site",
   "main": "index.js",
   "scripts": {
+    "dev": "./node_modules/nodemon/bin/nodemon.js start.js",
     "test": "nyc --reporter=lcov mocha --recursive",
     "test-drone": "nyc --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --recursive"
   },
