@@ -133,7 +133,7 @@ steps:
     branch:
     - master
     - hotfix/*
-    - feature/*
+    - develop
     event:
     - push
     target:
