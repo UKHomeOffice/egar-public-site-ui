@@ -1,0 +1,23 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	{{__('error_prefix') if errors}} Create GAR | Review
+{% endblock %}
+
+{% set active = '/home' %}
+
+{# {% block header %}
+  {% include "header-user.njk" %}
+{% endblock %} #}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+  <a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
+{% endblock %}
+
+{% block content %}
+
+<h1>AMG</h1>
+{% endblock content %}
