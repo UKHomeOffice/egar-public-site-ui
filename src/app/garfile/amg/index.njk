@@ -18,14 +18,20 @@
 {% endblock %}
 
 {% block content %}
-
-<h1>AMG</h1>
-<pre>
-{{garpeople | dump}}
-</pre>
-<ul>
-  {% for person in garpeople.items %}
-  <li>{{person.firstName}} {{person.lastName}}</li>
-  {% endfor %}
-</ul>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
+    <div id="pane">
+      {% include "app/garfile/amg/pane.njk" %}
+    </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  
+<script>
+  $(function(){
+    setInterval(function(){
+      $('#pane').load('/garfile/amg?template=pane');
+    }, 5000);
+  })
+</script>
 {% endblock content %}

@@ -368,6 +368,8 @@
     "submit_gar_caption": "By submitting this General Aviation Report you are confirming that, to the best of your knowledge, the information you are providing is correct and you have the explicit permission of the persons named in this report to submit information on their behalf.",
     "review_gar_submit": "Accept and submit GAR",
     "review_gar_exit": "Exit without submitting",
+
+    "title_submit_gar_amg" : "Your passengers' permission to travel is being reviewed",
     
     "create_organisation_caption_1": "Creating an organisation enables you to collaborate with other users on creating and submitting GARs.",
     "create_organisation_caption_2": "There is no restriction on who can create an organisation and you retain full control over which users belong to, and can submit GARs on behalf of, your organisation.",
