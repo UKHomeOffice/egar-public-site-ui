@@ -3,21 +3,29 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	{{__('error_prefix') if errors}} Create GAR | Review
+{{__('error_prefix') if errors}} Create GAR | Review
 {% endblock %}
 
 {% set active = '/home' %}
 
-{# {% block header %}
-  {% include "header-user.njk" %}
-{% endblock %} #}
+{% block header %}
+{% include "header-user.njk" %}
+{% endblock %}
 
 {% block beforeContent %}
-  {% include "phase.njk" %}
-  <a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
+{% include "phase.njk" %}
+<a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
 
 <h1>AMG</h1>
+<pre>
+{{garpeople | dump}}
+</pre>
+<ul>
+  {% for person in garpeople.items %}
+  <li>{{person.firstName}} {{person.lastName}}</li>
+  {% endfor %}
+</ul>
 {% endblock content %}

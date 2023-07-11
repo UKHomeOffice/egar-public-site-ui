@@ -118,13 +118,13 @@ module.exports = (req, res) => {
     };
 
     validator.validateChains(validations).then(() => {
-      res.render('app/garfile/amg/index');
+      res.redirect('/garfile/amg');
       //performAPICall(garId, cookie, req, res);
     }).catch((err) => {
       logger.info('Failed to submit incomplete GAR - validation failed');
       logger.debug(JSON.stringify(err));
       renderObj.errors = err;
-      res.render('app/garfile/review/index', renderObj);
+      res.render('app/garfile/review', renderObj);
     });
   }).catch((err) => {
     logger.error('Error retrieving GAR for review');
