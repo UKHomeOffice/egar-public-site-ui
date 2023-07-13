@@ -7,9 +7,9 @@ metadata:
     name: public-site-svc
 spec:
   selector:
-    name: public-site-svc
+    app.kubernetes.io/name: public-site-svc
   type: ClusterIP
   ports:
-    - name: public-prxy-prt
-      port: 10443
+    - protocol: TCP
+      port: 80
       targetPort: 10443
