@@ -17,8 +17,9 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: public-site-svc
-          servicePort: public-prxy-prt
+          service: 
+            name: public-site-svc
+            port: public-prxy-prt
         path: /
   tls:
   - hosts:
