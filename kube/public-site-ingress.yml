@@ -22,7 +22,7 @@ spec:
           service: 
             name: public-site-svc
             port:
-              number: public-prxy-prt
+              number: 10443
   tls:
   - hosts:
     - {{ .BASE_URL }}
