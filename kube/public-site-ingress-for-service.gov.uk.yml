@@ -13,11 +13,16 @@ metadata:
     ingress.kubernetes.io/rewrite-target: "/new"
     ingress.kubernetes.io/proxy-body-size: "20m"
 spec:
+  tls:
+  - hosts:
+      - {{ .BASE_URL }}
+    secretName: public-site-tls-cmio
   rules:
-  - http:
+  - host: {{ .BASE_URL }}
+    http:
       paths:
       - path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service: 
             name: public-site-svc
