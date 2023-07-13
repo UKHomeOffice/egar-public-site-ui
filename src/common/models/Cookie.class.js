@@ -170,8 +170,6 @@ class Cookie {
         fixedBasedOperatorList: [],
         prohibitedGoods: null,
         goodsDeclaration: null,
-        continentalShelf: null,
-        continentalShelfDeclaration: null,
         prohibitedGoodsList: [],
         baggage: null,
         baggageDeclaration: null,
@@ -401,22 +399,6 @@ class Cookie {
 
   setGoodsDeclaration(dd) {
     this.session.gar.goodsDeclaration = dd;
-  }
-
-  getContinentalShelf() {
-    return this.session.gar.continentalShelf;
-  }
-
-  setContinentalShelf(continentalShelf) {
-    this.session.gar.continentalShelf = continentalShelf;
-  }
-
-  getContinentalShelfDeclaration() {
-    return this.session.gar.continentalShelfDeclaration;
-  }
-
-  setContinentalShelfDeclaration(continentalShelfDeclaration) {
-    this.session.gar.continentalShelfDeclaration = continentalShelfDeclaration;
   }
 
   getGarProhibitedGoodsList() {
