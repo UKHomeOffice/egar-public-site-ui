@@ -12,11 +12,10 @@ metadata:
     ingress.kubernetes.io/proxy-body-size: "20m"
     cert-manager.io/enabled: "true"
 spec:
-  ingressClassName: nginx
   tls:
-   - hosts:
-     - {{ .BASE_URL }}
-     secretName: public-site-tls-cmio
+  - hosts:
+      - {{ .BASE_URL }}
+    secretName: public-site-tls-cmio
   rules:
   - host: {{ .BASE_URL }}
     http:
