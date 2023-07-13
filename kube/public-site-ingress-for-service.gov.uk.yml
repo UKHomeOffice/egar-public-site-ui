@@ -13,16 +13,15 @@ metadata:
     cert-manager.io/enabled: "true"
 spec:
   rules:
-  - host: {{ .BASE_URL }}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service: 
-            name: public-site-svc
-            port:
-              number: 10443
+    - http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service: 
+              name: public-site-svc
+              port:
+                number: 10443
   tls:
   - hosts:
     - {{ .BASE_URL_SERVICE }}
