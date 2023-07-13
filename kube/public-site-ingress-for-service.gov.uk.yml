@@ -6,12 +6,12 @@ metadata:
   labels:
     cert-manager.io/solver: http01
   annotations:
-    kubernetes.io/ingress.class: "nginx-external"
     ingress.kubernetes.io/force-ssl-redirect: "true"
     ingress.kubernetes.io/backend-protocol: "HTTPS"
     ingress.kubernetes.io/proxy-body-size: "20m"
     cert-manager.io/enabled: "true"
 spec:
+  ingressClassName: "nginx-external"
   tls:
   - hosts:
     - {{ .BASE_URL }}
