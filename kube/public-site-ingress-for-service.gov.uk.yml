@@ -1,5 +1,5 @@
 ---
-apiVersion: networking/v1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: service-site-ingress
@@ -13,13 +13,8 @@ metadata:
     ingress.kubernetes.io/rewrite-target: "/new"
     ingress.kubernetes.io/proxy-body-size: "20m"
 spec:
-  tls:
-  - hosts:
-    - {{ .BASE_URL }}
-    secretName: public-site-tls-cmio
   rules:
-  - host: {{ .BASE_URL }}
-    http:
+  - http:
       paths:
       - path: /
         pathType: ImplementationSpecific
