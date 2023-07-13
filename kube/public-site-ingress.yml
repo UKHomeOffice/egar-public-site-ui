@@ -13,8 +13,9 @@ metadata:
     ingress.kubernetes.io/proxy-body-size: "20m"
 spec:
   rules:
-    - http:
-        paths:
+  - host: {{ .BASE_URL }}
+    http:
+      paths:
         - path: /
           pathType: Prefix
           backend:
@@ -24,5 +25,5 @@ spec:
                 number: 10443
   tls:
   - hosts:
-    - {{ .BASE_URL }}
+      - {{ .BASE_URL }}
     secretName: public-site-tls-cmio
