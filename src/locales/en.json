@@ -95,7 +95,7 @@
     "field_submission_reference": "Submission reference",
     "value_aircraft_registration_null": "TBD",
     "value_port_code_zzzz": "N/A",
-   
+
     "heading_how_to_create": "How would you like to create a GAR?",
     "how_to_create_caption": "You have the option to create a GAR using our online web form, or by uploading a pre-populated template file. Please select how you would like to create your GAR to proceed.",
     "button_continue": "Continue",
@@ -228,7 +228,7 @@
 
     "heading_customs": "Customs",
     "caption_customs": "You don’t have to provide this information, but doing so may assist Border Force to process your flight more quickly.",
-    "field_intention": "Is it the intention of anyone on the aircraft to make a customs declaration upon arrival into the United Kingdom?",
+    "field_intention": "Is it the intention of anyone on the aircraft to make a customs declaration upon arrival into the United Kingdom? This should include any goods eligible for the Continental Shelf declaration by conduct process.",
     "field_intention_review": "Intention to make a customs declarations",
     "field_prohibited_goods": "Intention to make prohibited/restricted goods declaration",
     "field_prohibited_goods_2": "You will be required to make a customs declaration, if for example anyone on the aircraft has goods over their duty free allowance, has large quantities of cash or is carrying firearms. More information available at ",
@@ -335,7 +335,7 @@
     "title_gar_summary": "GAR summary",
     "change_prefix": "Change ",
     "button_submit_this_gar": "Submit this GAR",
-     
+
     "field_created_date": "Created date",
 
     "heading_supporting_documents": "Would you like to upload any supporting documentation to your GAR?",
@@ -368,7 +368,7 @@
     "submit_gar_caption": "By submitting this General Aviation Report you are confirming that, to the best of your knowledge, the information you are providing is correct and you have the explicit permission of the persons named in this report to submit information on their behalf.",
     "review_gar_submit": "Accept and submit GAR",
     "review_gar_exit": "Exit without submitting",
-    
+
     "create_organisation_caption_1": "Creating an organisation enables you to collaborate with other users on creating and submitting GARs.",
     "create_organisation_caption_2": "There is no restriction on who can create an organisation and you retain full control over which users belong to, and can submit GARs on behalf of, your organisation.",
     "assistive_warning": "Warning ",
@@ -392,7 +392,7 @@
     "invite_user_surname_hint": "Enter the surname of the user.",
     "invite_user_email_hint": "Enter the email of the user.",
     "invite_user_cemail_hint": "Confirm the email of the user.",
-    
+
     "heading_invite_sent": "Invitation sent",
     "heading_what_happens_next": "What happens next",
     "what_happens_next_caption": "We have sent the user an email that contains an invitation link. This link will remain valid for 12 hours. The user will need to click the link in the email to complete the account registration process.",
@@ -417,7 +417,7 @@
     "heading_delete_account": "Delete account",
     "delete_account_caption": "Delete this account and any organisation listed in it.",
     "form_delete_this_account": "Delete this account",
-    
+
     "title_cookies": "Cookies",
     "cookies_caption": "This service puts small files (known as 'cookies') onto your computer to collect information about how you browse the site.",
     "heading_cookies_use_list": "Cookies are used to:",
@@ -470,5 +470,9 @@
 
     "id_card_withdrawl_text": "From 1 October 2021, most EU, EEA and Swiss citizens will only be able to enter the UK using a valid passport. ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check",
     "id_card_withdrawl_text_part" : "ID cards will no longer be accepted as a valid travel document for entry to the UK. For further details and exceptions, please check",
-    "homepage_banner_text" : "The GA Consultation: Advance information requirements for international General Aviation flights has launched and will be open until 16 June 2023. Please use this link if you would like to respond: "
+    "homepage_banner_text" : "The GA Consultation: Advance information requirements for international General Aviation flights has launched and will be open until 16 June 2023. Please use this link if you would like to respond: ",
+	"field_continental_shelf_question": "Are the goods you intend to declare eligible for the UK Continental Shelf declaration by conduct process?",
+	"field_continental_shelf_hint": "Goods eligible for declaration for the UK Continental Shelf : ",
+	"field_continental_shelf_review": "Intention to make continental shelf declaration",
+	"field_continental_shelf_declaration_review": "Continental shelf goods details"
 }

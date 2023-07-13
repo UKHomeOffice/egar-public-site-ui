@@ -49,7 +49,6 @@ INSERT INTO "WhiteList" ("email", "createdAt", "updatedAt") VALUES ('your@email.
 
 ```
 Local sGAR setup:
-
 1. Try to register account
 2. It creates a user despite failing in the "users" database
 3. UPDATE users SET state = 'verified' where email = 'john@xyz.com';
