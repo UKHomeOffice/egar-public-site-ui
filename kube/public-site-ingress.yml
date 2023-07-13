@@ -16,11 +16,13 @@ spec:
   - host: {{ .BASE_URL }}
     http:
       paths:
-      - backend:
+      - path: /
+        pathType: Prefix
+        backend:
           service: 
             name: public-site-svc
-            port: public-prxy-prt
-        path: /
+            port:
+              number: public-prxy-prt
   tls:
   - hosts:
     - {{ .BASE_URL }}
