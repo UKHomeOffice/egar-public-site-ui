@@ -15,7 +15,7 @@ metadata:
 spec:
   tls:
   - hosts:
-      - {{ .BASE_URL }}
+    - {{ .BASE_URL }}
     secretName: public-site-tls-cmio
   rules:
   - host: {{ .BASE_URL }}
