@@ -134,6 +134,7 @@ steps:
     branch:
     - master
     - hotfix/*
+    - feature/*
     - develop
 >>>>>>> e626c70 (env var fixed this will now deploy on develop)
     event:
