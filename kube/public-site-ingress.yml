@@ -21,11 +21,10 @@ spec:
     http:
       paths:
       - path: /
-        pathType: Prefix
+        pathType: backend
         backend:
           service: 
             name: public-site-svc
             port:
               number: 10443
 
-              
