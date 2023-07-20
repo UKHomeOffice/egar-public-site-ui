@@ -36,22 +36,6 @@ steps:
     target:
       exclude:
       - production
-
-- name: Unit Tests
-  pull: if-not-exists
-  image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
-  commands:
-  - export NOTIFY_API_KEY=dummy
-  - cd src
-  - npm install
-  - npm run test-drone
-  settings:
-   group: build-stage
-  when:
-   event:
-   - push
-   - pull_request
-
 #- name: Unit Tests and SonarQube Scanner
 #  pull: if-not-exists
 #  image: .io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
@@ -144,7 +128,7 @@ steps:
       from_secret: DEV_KUBE_ARTIFACTORY_APP_SECRET
     DEV_KUBE_SERVER:
       from_secret: DEV_KUBE_SERVER
-    DEV_KUBE_TOKEN:
+    SIT_KUBE_TOKEN:
       from_secret: DEV_KUBE_TOKEN
     DEV_URL_SERVICE:
       from_secret: DEV_URL_SERVICE
