@@ -36,22 +36,6 @@ steps:
     target:
       exclude:
       - production
-
-- name: Unit Tests
-  pull: if-not-exists
-  image: node:14-alpine3.15
-  commands:
-  - export NOTIFY_API_KEY=dummy
-  - cd src
-  - npm install
-  - npm run test-drone
-  settings:
-   group: build-stage
-  when:
-   event:
-   - push
-   - pull_request
-
 #- name: Unit Tests and SonarQube Scanner
 #  pull: if-not-exists
 #  image: .io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
@@ -123,9 +107,8 @@ steps:
   - export TAGGED_VERSION=$${DRONE_COMMIT}
   - export KUBE_SERVER=$${DEV_KUBE_SERVER}
   - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
-  - export BASE_URL=$${DEV_BASE_URL}
-  - export BASE_URL_SERVICE=$${DEV_URL_SERVICE}
   - source common_lib
+  - kd --timeout=6m --file kube/artifactory-secret.yml
   - kd --timeout=6m --file kube/public-site-network-policy.yml
   - kd --timeout=12m --file kube/public-site-deployment.yml
   - kd --timeout=6m --file kube/public-site-service.yml
@@ -135,22 +118,16 @@ steps:
     INSECURE_SKIP_TLS_VERIFY: true
     KUBE_NAMESPACE: egar-dev
     NODE_ENV: development
-    DEV_BASE_URL:
-      from_secret: DEV_BASE_URL
-    DEV_KUBE_SERVER:
+    SIT_KUBE_SERVER:
       from_secret: DEV_KUBE_SERVER
-    DEV_KUBE_TOKEN:
+    SIT_KUBE_TOKEN:
       from_secret: DEV_KUBE_TOKEN
-    BASE_URL_SERVICE:
-      from_secret: DEV_URL_SERVICE
   when:
-    branch:
-    - master
-    - hotfix/*
-    - feature/*
-    - develop
     event:
-    - push
+    - tag
+    ref:
+    - refs/tags/snapshot*
+    - refs/tags/snapshot*
     target:
       exclude:
       - production
