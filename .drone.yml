@@ -3,11 +3,9 @@ kind: pipeline
 name: default
 type: kubernetes
 
-
 platform:
   os: linux
   arch: amd64
-
 
 steps:
 - name: build_and_push
@@ -38,6 +36,25 @@ steps:
     target:
       exclude:
       - production
+<<<<<<< HEAD
+=======
+
+- name: Unit Tests
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
+  commands:
+  - export NOTIFY_API_KEY=dummy
+  - cd src
+  - npm install
+  - npm run test-drone
+  settings:
+   group: build-stage
+  when:
+   event:
+   - push
+   - pull_request
+
+>>>>>>> e0fa4c1 (added unit tests into pipeline)
 #- name: Unit Tests and SonarQube Scanner
 #  pull: if-not-exists
 #  image: .io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
