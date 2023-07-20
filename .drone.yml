@@ -132,11 +132,13 @@ steps:
     BASE_URL_SERVICE:
       from_secret: DEV_URL_SERVICE
   when:
+    branch:
+    - master
+    - hotfix/*
+    - develop
+    - feature/*
     event:
-    - tag
-    ref:
-    - refs/tags/snapshot*
-    - refs/tags/snapshot*
+    - push
     target:
       exclude:
       - production
