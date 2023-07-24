@@ -8,7 +8,7 @@ module.exports = (req, res) => {
 
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
-  const template = req.query.template==='pane' ? 'app/garfile/amg/pane' : 'app/garfile/amg/index';
+  const template = req.query.template==='pane' ? 'app/garfile/amg/departure/pane' : 'app/garfile/amg/departure/index';
 
   Promise.all([
     garApi.get(garId),
@@ -33,6 +33,6 @@ module.exports = (req, res) => {
   }).catch((err) => {
     logger.error('Error retrieving GAR for amg');
     logger.error(JSON.stringify(err));
-    res.render('app/garfile/amg/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
+    res.render('app/garfile/amg/departure/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
   });
 };
