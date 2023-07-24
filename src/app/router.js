@@ -44,7 +44,8 @@ const garCancel = require('./garfile/cancel');
 const garsubmitsucess = require('./garfile/submit/success');
 const garsubmitfailure = require('./garfile/submit/failure');
 const printmanifest = require('./garfile/printmanifest');
-const amg  = require('./garfile/amg');
+const amgcheckin  = require('./garfile/amg/checkin');
+const amgdeparture  = require('./garfile/amg/departure');
 
 // Saved entities
 const people = require('./people');
@@ -140,5 +141,6 @@ module.exports.bind = (app) => {
   app.use(unavailable.router);
   app.use(printmanifest.router);
   //
-  app.use(amg.router);
+  app.use(amgcheckin.router);
+  app.use(amgdeparture.router);
 };

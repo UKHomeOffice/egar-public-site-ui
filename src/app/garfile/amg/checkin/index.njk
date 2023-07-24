@@ -32,7 +32,7 @@
     </div>
 
     <div id="pane">
-      {% include "app/garfile/amg/pane.njk" %}
+      {% include "app/garfile/amg/checkin/pane.njk" %}
     </div>
   </div>
 </div>
@@ -40,7 +40,7 @@
 <script>
   $(function () {
     setInterval(function () {
-      $('#pane').load('/garfile/amg?template=pane');
+      $('#pane').load('/garfile/amg/checkin?template=pane');
     }, 5000);
   })
 </script>
