@@ -369,7 +369,10 @@
     "review_gar_submit": "Accept and submit GAR",
     "review_gar_exit": "Exit without submitting",
 
-    "title_submit_gar_amg" : "Your passengers' permission to travel is being reviewed",
+    "submit_gar_to_amg": "Submit GAR for passenger check" ,
+    "title_submit_gar_amg" : "Passenger Check",
+    "amg_check_caption" : "Each person in your journey will now be checked for permission to travel.",
+    "amg_check_warning" : "You will be able to continue once all passengers display they have been given permission to travel, indicated by a green disc.",
     
     "create_organisation_caption_1": "Creating an organisation enables you to collaborate with other users on creating and submitting GARs.",
     "create_organisation_caption_2": "There is no restriction on who can create an organisation and you retain full control over which users belong to, and can submit GARs on behalf of, your organisation.",
