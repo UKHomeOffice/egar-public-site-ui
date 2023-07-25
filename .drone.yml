@@ -36,10 +36,25 @@ steps:
     target:
       exclude:
       - production
+
+- name: Unit Tests
+  pull: if-not-exists
+  image: node:14-alpine3.15
+  commands:
+  - export NOTIFY_API_KEY=dummy
+  - cd src
+  - npm install
+  - npm run test-drone
+  settings:
+   group: build-stage
+  when:
+   event:
+   - push
+   - pull_request
+
 #- name: Unit Tests and SonarQube Scanner
 #  pull: if-not-exists
-#  image: .io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
-#  image: .io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
+#  image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
 #  commands:
 #  - export NOTIFY_API_KEY=dummy
 #  - cd src
@@ -144,7 +159,7 @@ steps:
 
 - name: Deploy to SIT
   pull: if-not-exists
-  image: .io/ukhomeofficedigital/kd
+  image: quay.io/ukhomeofficedigital/kd
   commands:
   - export TAGGED_VERSION=$${DRONE_COMMIT}
   - export KUBE_ARTIFACTORY_APP_SECRET=$${SIT_KUBE_ARTIFACTORY_APP_SECRET}
@@ -158,7 +173,6 @@ steps:
   - kd --timeout=12m --file kube/public-site-deployment.yml
   - kd --timeout=6m --file kube/public-site-service.yml
   - kd --timeout=6m --file kube/public-site-ingress.yml
-
   environment:
     INGRESS_CLASS: nginx-internal
     INSECURE_SKIP_TLS_VERIFY: true
@@ -178,7 +192,6 @@ steps:
     branch:
     - master
     - hotfix/*
-    - develop
     event:
     - push
     target:
@@ -208,7 +221,6 @@ steps:
     branch:
     - master
     - hotfix/*
-    - develop
     event:
     - push
     target:
@@ -251,7 +263,6 @@ steps:
     branch:
     - master
     - hotfix/*
-    - develop
     event:
     - push
     target:
@@ -313,7 +324,6 @@ steps:
     branch:
     - master
     - hotfix/*
-    - develop
     event:
     - push
     target:
