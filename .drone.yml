@@ -121,24 +121,22 @@ steps:
     INSECURE_SKIP_TLS_VERIFY: true
     KUBE_NAMESPACE: egar-dev
     NODE_ENV: development
-    SIT_BASE_URL:
-      from_secret: SIT_BASE_URL
+    DEV_BASE_URL:
+      from_secret: DEV_BASE_URL
     DEV_KUBE_ARTIFACTORY_APP_SECRET:
       from_secret: DEV_KUBE_ARTIFACTORY_APP_SECRET
-    SIT_KUBE_SERVER:
+    DEV_KUBE_SERVER:
       from_secret: DEV_KUBE_SERVER
     DEV_KUBE_TOKEN:
       from_secret: DEV_KUBE_TOKEN
-    BASE_URL_SERVICE:
+    DEV_URL_SERVICE:
       from_secret: DEV_URL_SERVICE
   when:
     branch:
-    - master
-    - hotfix/*
     - develop
     - feature/*
     event:
-    - push
+    - tag
     target:
       exclude:
       - production
