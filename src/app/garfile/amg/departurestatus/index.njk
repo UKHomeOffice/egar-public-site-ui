@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-{{__('error_prefix') if errors}} Create GAR | Passenger Check
+{{__('error_prefix') if errors}} Create GAR | Passenger Confirmation
 {% endblock %}
 
 {% set active = '/home' %}
@@ -21,18 +21,18 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
-    <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
-    <p class="govuk-body-l">{{__('amg_check_caption')}}</p>
+    <h1 class="govuk-heading-xl">{{__('title_amg_departure_status')}}</h1>
+    <p class="govuk-body-l">{{__('amg_departure_status_caption')}}</p>
 
-    <div class="govuk-warning-text">
+    {# <div class="govuk-warning-text">
       <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
       <strong class="govuk-warning-text__text">
         <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('amg_check_warning')}}
       </strong>
-    </div>
+    </div> #}
 
     <div id="pane">
-      {% include "app/garfile/amg/checkin/pane.njk" %}
+      {% include "app/garfile/amg/departurestatus/pane.njk" %}
     </div>
   </div>
 </div>
@@ -40,12 +40,12 @@
 <script>
   $(function () {
     setInterval(function () {
-      $('#pane').load('/garfile/amg/checkin?template=pane');
+      $('#pane').load('/garfile/amg/departurestatus?template=pane');
     }, 5000);
   })
 </script>
 
-<form action="/garfile/amg/checkin" method="post" class="form">
+{# <form action="/garfile/amg/checkin" method="post" class="form">
   <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
   <p class="govuk-body-m">{{__('submit_gar_caption')}}</p>
   <input id='review-submit' type="submit" class="govuk-button" value="{{__('amg_check_form_submit')}}">
@@ -56,6 +56,6 @@
     {{__('review_gar_exit')}}
   </button>
   <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-</form>
+</form> #}
 
 {% endblock content %}

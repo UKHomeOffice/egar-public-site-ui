@@ -369,10 +369,17 @@
     "review_gar_submit": "Accept and submit GAR for passenger check",
     "review_gar_exit": "Exit without submitting",
 
-    "submit_gar_to_amg": "Submit GAR" ,
+    "amg_check_form_submit": "Submit GAR" ,
     "title_submit_gar_amg" : "Passenger Check",
     "amg_check_caption" : "Each person in your journey will now be checked for permission to travel.",
     "amg_check_warning" : "You will be able to continue once all passengers have permission to travel confirmed, indicated by a green disc.",
+
+    "title_amg_departure_confirmation" : "Departure Confirmation",
+    "amg_departure_confirmation_caption" :  "Please indicate which people departed with the craft. If any person listed in the GAR did not travel, uncheck them before submitting.",
+    "amg_departure_confirmation_submit" : "Submit Departure Confirmation",
+
+    "title_amg_departure_status" : "Passenger Departure Confirmation",
+    "amg_departure_status_caption" : "You let us know which people were on your flight. When we have successfully recorded this information each person will display a green disc and this GAR will be complete.",
 
     "create_organisation_caption_1": "Creating an organisation enables you to collaborate with other users on creating and submitting GARs.",
     "create_organisation_caption_2": "There is no restriction on who can create an organisation and you retain full control over which users belong to, and can submit GARs on behalf of, your organisation.",

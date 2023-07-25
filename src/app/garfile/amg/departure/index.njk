@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-{{__('error_prefix') if errors}} Create GAR | Review
+{{__('error_prefix') if errors}} Create GAR | Passenger Confirmation
 {% endblock %}
 
 {% set active = '/home' %}
@@ -12,43 +12,50 @@
 {% include "header-user.njk" %}
 {% endblock %}
 
-{% block beforeContent %}
+{# {% block beforeContent %}
 {% include "phase.njk" %}
 <a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
-{% endblock %}
+{% endblock %} #}
 
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
-    <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
-    <p class="govuk-body-l">{{__('amg_check_caption')}}</p>
+    <h1 class="govuk-heading-xl">{{__('title_amg_departure_confirmation')}}</h1>
+    <p class="govuk-body-l">{{__('amg_departure_confirmation_caption')}}</p>
 
-    <div class="govuk-warning-text">
+    {# <div class="govuk-warning-text">
       <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
       <strong class="govuk-warning-text__text">
         <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('amg_check_warning')}}
       </strong>
-    </div>
-
-    <div id="pane">
-      {% include "app/garfile/amg/checkin/pane.njk" %}
-    </div>
+    </div> #}
   </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-  $(function () {
-    setInterval(function () {
-      $('#pane').load('/garfile/amg/departure?template=pane');
-    }, 5000);
-  })
-</script>
 
-<form action="/garfile/review" method="post" class="form">
+
+<form action="/garfile/amg/departure" method="post" class="form">
   <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
-  <p class="govuk-body-m">{{__('submit_gar_caption')}}</p>
-  <input id='review-submit' type="submit" class="govuk-button" value="{{__('submit_gar_to_amg')}}">
+  {# <p class="govuk-body-m">{{__('submit_gar_caption')}}</p> #}
+
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header">Person</th>
+        <th class="govuk-table__header">Departed</th>
+      </tr>
+    </thead>
+    {% for person in garpeople.items %}
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">{{person.firstName}} {{person.lastName}}</td>
+      <td class="govuk-table__cell">
+        <input type="checkbox" value="{{person.id}}" checked="checked">
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <input id='review-submit' type="submit" class="govuk-button" value="{{__('amg_departure_confirmation_submit')}}">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 </form>
 <form id="cancel-form" action="/garfile/view" method="post" role="form">
