@@ -1,26 +1,30 @@
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: service-site-ingress
   labels:
     cert-manager.io/solver: http01
   annotations:
-    kubernetes.io/ingress.class: "nginx-external"
-    ingress.kubernetes.io/force-ssl-redirect: "true"
-    ingress.kubernetes.io/backend-protocol: "HTTPS"
-    ingress.kubernetes.io/proxy-body-size: "20m"
     cert-manager.io/enabled: "true"
+    ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.class: "nginx-internal"
+    ingress.kubernetes.io/rewrite-target: "/new"
+    ingress.kubernetes.io/proxy-body-size: "20m"
 spec:
-  rules:
-  - host: {{ .BASE_URL_SERVICE }}
-    http:
-      paths:
-      - backend:
-          serviceName: public-site-svc
-          servicePort: public-prxy-prt
-        path: /
   tls:
   - hosts:
-    - {{ .BASE_URL_SERVICE }}
-    secretName: service-site-tls-cmio
+    - {{ .BASE_URL }}
+    secretName: public-site-tls-cmio
+  rules:
+  - host: {{ .BASE_URL }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: public-site-svc
+            port:
+              number: 10443

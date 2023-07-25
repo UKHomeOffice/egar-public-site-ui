@@ -48295,18 +48295,7 @@
     "id2": "EITM",
     "british": false,
     "label": "TRIM (Ireland) (EITM)"
-  },
-  {
-    "id": "A349",
-    "id2": "A349",
-    "british": true,
-    "label": "SCHOOL FARM / WEST DEAN (United Kingdom) (A349)"
-  },
-  {
-    "id": "E190",
-    "id2": "E190",
-    "british": true,
-    "label": "NORTH ELMHAM / NEW LANE FARM (United Kingdom) (E190)"
   }
+
 ]
   
