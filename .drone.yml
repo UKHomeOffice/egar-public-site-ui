@@ -200,7 +200,7 @@ steps:
 
 - name: Get_the_Dynamic_DB_creds
   pull: if-not-exists
-  image: .io/ukhomeofficedigital/kd
+  image: quay.io/ukhomeofficedigital/kd
   commands:
   - export KUBE_SERVER=$${SIT_KUBE_SERVER}
   - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
