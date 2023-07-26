@@ -2,14 +2,20 @@
 
 {% if (data == 'green') %}
 {% set statuscolour = 'green' %}
+{% set statustitle = 'This passenger has permission to travel' %}
+{% set statustext = 'Permission' %}
 {% elif (data == 'amber') %}
 {% set statuscolour = 'amber' %}
+{% set statustitle = 'This passenger is still waiting for permission to travel' %}
+{% set statustext = 'Pending' %}
 {% else %}
 {% set statuscolour = 'red' %}
+{% set statustitle = 'There was a problem requesting permission to travel for this passenger' %}
+{% set statustext = 'Error' %}
 {% endif %}
-
-
-<div style="display: inline-block; width: 1em; height: 1em; background-color: {{statuscolour}}; border-radius: 50%;">
+<div>
+  <div class="status-disc {{statuscolour}}" title="{{statustitle}}"></div>
+  <small>{{statustext}}</small>
 </div>
 {% endmacro %}
 

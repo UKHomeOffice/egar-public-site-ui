@@ -1,15 +1,18 @@
-{% macro status(data) %}
+{% macro status(data, travelled) %}
 
 {% if (data == 'green') %}
 {% set statuscolour = 'green' %}
+{% set statustitle = ['This passenger has been recorded as having ', '' if travelled else 'not ' , 'embarked with the craft'] | join %}
 {% elif (data == 'amber') %}
 {% set statuscolour = 'amber' %}
+{% set statustitle = 'This passenger is still being recorded ' %}
 {% else %}
 {% set statuscolour = 'red' %}
+{% set statustitle = 'There was a problem recording whether this passenger embarked with the craft ' %}
 {% endif %}
 
 
-<div style="display: inline-block; width: 1em; height: 1em; background-color: {{statuscolour}}; border-radius: 50%; border: 1px solid black;">
+<div class="status-disc {{statuscolour}}" title="{{statustitle}}">
 </div>
 {% endmacro %}
 
@@ -17,14 +20,16 @@
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header">Person</th>
+      <th class="govuk-table__header">Departed</th>
       <th class="govuk-table__header">Confirmed</th>
     </tr>
   </thead>
   {% for person in garpeople.items %}
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">{{person.firstName}} {{person.lastName}}</td>
+    <td class="govuk-table__cell">Y</td>
     <td class="govuk-table__cell">
-      {{status('green')}}
+      {{status('green', true)}}
     </td>
   </tr>
   {% endfor %}
