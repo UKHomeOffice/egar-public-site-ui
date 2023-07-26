@@ -149,7 +149,7 @@ steps:
       from_secret: DEV_URL_SERVICE
   when:
     branch:
-    - develop
+    - dev
     - feature/*
     event:
     - tag
