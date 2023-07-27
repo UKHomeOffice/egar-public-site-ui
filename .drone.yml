@@ -116,6 +116,46 @@ volumes:
   temp: {}
 
 steps:
+- name: Deploy to DEV
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/kd
+  commands:
+  - export TAGGED_VERSION=$${DRONE_COMMIT}
+  - export KUBE_SERVER=$${DEV_KUBE_SERVER}
+  - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
+  - export BASE_URL=$${DEV_BASE_URL}
+  - export BASE_URL_SERVICE=$${DEV_URL_SERVICE}
+  - export KUBE_ARTIFACTORY_APP_SECRET=$${DEV_KUBE_ARTIFACTORY_APP_SECRET}
+  - source common_lib
+  - kd --timeout=6m --file kube/artifactory-secret.yml
+  - kd --timeout=6m --file kube/public-site-network-policy.yml
+  - kd --timeout=12m --file kube/public-site-deployment.yml
+  - kd --timeout=6m --file kube/public-site-service.yml
+  - kd --timeout=6m --file kube/public-site-ingress.yml
+  environment:
+    INGRESS_CLASS: nginx-internal
+    INSECURE_SKIP_TLS_VERIFY: true
+    KUBE_NAMESPACE: egar-dev
+    NODE_ENV: development
+    DEV_BASE_URL:
+      from_secret: DEV_BASE_URL
+    DEV_KUBE_ARTIFACTORY_APP_SECRET:
+      from_secret: DEV_KUBE_ARTIFACTORY_APP_SECRET
+    DEV_KUBE_SERVER:
+      from_secret: DEV_KUBE_SERVER
+    DEV_KUBE_TOKEN:
+      from_secret: DEV_KUBE_TOKEN
+    DEV_URL_SERVICE:
+      from_secret: DEV_URL_SERVICE
+  when:
+    branch:
+    - dev
+    - feature/*
+    event:
+    - tag
+    target:
+      exclude:
+      - production
 
 - name: Deploy to SIT
   pull: if-not-exists
@@ -330,6 +370,7 @@ steps:
     branch:
     - master
     - hotfix/*
+    - amg/hotfix/*    
     event:
     - promote
     target:

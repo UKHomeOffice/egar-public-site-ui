@@ -1,5 +1,5 @@
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: service-site-ingress
@@ -12,15 +12,18 @@ metadata:
     ingress.kubernetes.io/proxy-body-size: "20m"
     cert-manager.io/enabled: "true"
 spec:
+  tls:
+  - hosts:
+    - {{ .BASE_URL_SERVICE }}
+    secretName: public-site-tls-cmio
   rules:
   - host: {{ .BASE_URL_SERVICE }}
     http:
       paths:
-      - backend:
-          serviceName: public-site-svc
-          servicePort: public-prxy-prt
-        path: /
-  tls:
-  - hosts:
-    - {{ .BASE_URL_SERVICE }}
-    secretName: service-site-tls-cmio
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: public-site-svc
+            port:
+              number: 10443
