@@ -101,6 +101,7 @@
     "button_continue": "Continue",
 
     "section_count": "Section %s of %s",
+    "confirmation_count": "Confirmation %s of %s",
     "person_search": "Search for Names or Person type",
     "person_sort": "Click table headers to sort alphabetically",
     "field_given_name": "Given name",
@@ -375,11 +376,11 @@
     "amg_check_warning" : "You will be able to continue once all passengers have permission to travel confirmed, indicated by a green disc.",
 
     "title_amg_departure_confirmation" : "Departure Confirmation",
-    "amg_departure_confirmation_caption" :  "Please indicate which people departed with the craft. If any person listed in the GAR did not travel, uncheck them before submitting.",
+    "amg_departure_confirmation_caption" :  "After the craft departs, please select any people included in the GAR who did not leave with it.",
     "amg_departure_confirmation_submit" : "Submit Departure Confirmation",
 
     "title_amg_departure_status" : "Passenger Departure Confirmation",
-    "amg_departure_status_caption" : "Thank you for letting us know which people were on your flight. When we have successfully recorded this information each person will display a green disc and this GAR will be complete.",
+    "amg_departure_status_caption" : "Thank you for letting us know which people were on your flight. When each person is 'Confirmed' this GAR will be complete.",
     "amg_departure_status_warning" : "If these departures are not all confirmed by a green disc after a few hours, or if any display red, you might need to contact Border Force to resolve the GAR.",
     
 
