@@ -143,7 +143,7 @@ steps:
       from_secret: DEV_KUBE_ARTIFACTORY_APP_SECRET
     DEV_KUBE_SERVER:
       from_secret: DEV_KUBE_SERVER
-    SIT_KUBE_TOKEN:
+    DEV_KUBE_TOKEN:
       from_secret: DEV_KUBE_TOKEN
     DEV_URL_SERVICE:
       from_secret: DEV_URL_SERVICE

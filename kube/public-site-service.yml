@@ -11,5 +11,5 @@ spec:
   type: ClusterIP
   ports:
     - protocol: TCP
-      port: 80
+      port: 10443
       targetPort: 10443
