@@ -70,6 +70,7 @@ spec:
               value: "localhost"
             - name: TIMEOUT
               value: "60000"
+              
         - name: public-site-av
           image: quay.io/ukhomeofficedigital/clamav:latest
           imagePullPolicy: IfNotPresent
@@ -291,7 +292,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthcheck
-              port: public-site-prt
+              port: 10443
               scheme: HTTP
             initialDelaySeconds: 5
             periodSeconds: 300
