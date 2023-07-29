@@ -125,6 +125,11 @@ const endpoints = {
     logger.debug(`Calling get GAR endpoint ${endpoint}`);
     return endpoint;
   },
+  postGarPassengerConfirmations(garId){
+    const endpoint = new URL(`${API_VERSION}/gar/${garId}/confirmation`, BASE_URL).href;
+    logger.debug(`Calling post GAR passenger confirmations endpoint ${endpoint}`);
+    return endpoint;
+  },
   postFile(garId) {
     const endpoint = new URL(`${API_VERSION}/gar/${garId}`, BASE_URL).href;
     logger.debug(`Calling get GAR endpoint ${endpoint}`);
