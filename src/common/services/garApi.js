@@ -150,7 +150,7 @@ module.exports = {
    * @param {String[]} exceptions uuids of garpeople that did not depart
    * @returns {Promise} resolves with API response.
    */
-    updateGarPerson(garId, exceptions) {
+    postGarPassengerConfirmations(garId, exceptions) {
       return new Promise((resolve, reject) => {
         request.post({
           headers: { 'content-type': 'application/json' },
