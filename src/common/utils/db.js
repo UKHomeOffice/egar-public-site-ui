@@ -7,6 +7,7 @@ const sequelize = new Sequelize(config.PUBLIC_SITE_DBNAME,
     host: config.PUBLIC_SITE_DBHOST,
     port: config.PUBLIC_SITE_DBPORT,
     dialect: 'postgres',
+    ssl: true,
     pool: {
       max: 5,
       min: 0,
