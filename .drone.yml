@@ -37,20 +37,20 @@ steps:
       exclude:
       - production
 
-# - name: Unit Tests
-#   pull: if-not-exists
-#   image: node:14-alpine3.15
-#   commands:
-#   - export NOTIFY_API_KEY=dummy
-#   - cd src
-#   - npm install
-#   - npm run test-drone
-#   settings:
-#    group: build-stage
-#   when:
-#    event:
-#    - push
-#    - pull_request
+- name: Unit Tests
+  pull: if-not-exists
+  image: node:14-alpine3.15
+  commands:
+  - export NOTIFY_API_KEY=dummy
+  - cd src
+  - npm install
+  - npm run test-drone
+  settings:
+   group: build-stage
+  when:
+   event:
+   - push
+   - pull_request
 
 #- name: Unit Tests and SonarQube Scanner
 #  pull: if-not-exists
