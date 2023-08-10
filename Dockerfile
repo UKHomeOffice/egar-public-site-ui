@@ -29,5 +29,5 @@ WORKDIR /public-site/
 
 #RUN npm install
 RUN npm install --production
-RUN npm update
+RUN npm audit fix
 CMD ["node", "start"]
