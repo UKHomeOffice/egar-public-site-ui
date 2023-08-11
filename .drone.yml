@@ -43,8 +43,7 @@ steps:
   commands:
   - export NOTIFY_API_KEY=dummy
   - cd src
-  - npm install
-  - npm update
+  - npm install npm@latest -g
   - npm run test-drone
   settings:
    group: build-stage
