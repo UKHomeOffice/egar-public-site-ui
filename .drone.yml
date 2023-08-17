@@ -52,45 +52,28 @@ steps:
    - push
    - pull_request
 
-#- name: Unit Tests and SonarQube Scanner
-#  pull: if-not-exists
-#  image: quay.io/ukhomeofficedigital/sonar-scanner-node:9fed2b90853321ac9a9c3da548a180f22c5dc4cb
-#  commands:
-#  - export NOTIFY_API_KEY=dummy
-#  - cd src
-#  - npm install
-#  - npm run test-drone
-#  - cd ..
-#  - sonar-scanner -Dsonar.projectVersion=$${DRONE_BUILD_NUMBER}
-#  settings:
-#    group: build-stage
-#  when:
-#    event:
-#    - push
-#    - pull_request
 
-- name: scan-newly-built-image
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
+- name: scan-image
   pull: always
-  failure: ignore
-  environment:
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
+  resources: 
+    limits:
+      cpu: 1000
+      memory: 1024Mi
+  environment: 
     IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:${DRONE_COMMIT}
     TOLERATE: high
+    IGNORE_UNFIXED: true
   when:
     event:
     - push
-
   depends_on:
   - build_and_push
 
 services:
   - name: docker
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-  - name: anchore-submission-server
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
-    pull: always
-    commands:
-      - /run.sh server
+
 
 volumes:
   - name: dockersock
