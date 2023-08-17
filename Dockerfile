@@ -28,5 +28,5 @@ EXPOSE 3000
 WORKDIR /public-site/
 
 #RUN npm install
-RUN npm install npm@latest -g --production
+RUN npm install --production
 CMD ["node", "start"]
