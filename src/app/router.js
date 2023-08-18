@@ -45,6 +45,11 @@ const garsubmitsucess = require('./garfile/submit/success');
 const garsubmitfailure = require('./garfile/submit/failure');
 const printmanifest = require('./garfile/printmanifest');
 
+//amg
+const amgcheckin  = require('./garfile/amg/checkin');
+const amgdeparture  = require('./garfile/amg/departure');
+const amgdeparturestatus  = require('./garfile/amg/departurestatus');
+
 // Saved entities
 const people = require('./people');
 const peopleAdd = require('./people/add');
@@ -73,6 +78,7 @@ const editorganisation = require('./organisation/editorganisation');
 const orgassignrole = require('./organisation/assignrole');
 const orgEditUsers = require('./organisation/editusers');
 const deleteUser = require('./organisation/delete');
+
 
 // Export
 module.exports.bind = (app) => {
@@ -135,4 +141,9 @@ module.exports.bind = (app) => {
   app.use(help.router);
   app.use(unavailable.router);
   app.use(printmanifest.router);
+  //
+  app.use(amgcheckin.router);
+  app.use(amgdeparture.router);
+  app.use(amgdeparturestatus.router);
+
 };

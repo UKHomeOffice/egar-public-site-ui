@@ -53,3 +53,18 @@ services:
       - ./src/app:/public-site/app
       - ./src/common:/public-site/common
       - ./src/locales:/public-site/locales
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:latest
+    environment: 
+      - AWS_DEFAULT_REGION=us-east-1
+      - EDGE_PORT=4566
+      - SERVICES=s3,sqs
+      - DEBUG=1
+      - LS_LOG=trace
+    ports: 
+      - '4566-4583:4566-4583'
+    volumes: 
+      - "${TEMPDIR:-/tmp/localstack}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./localstack/start.sh:/etc/localstack/init/ready.d/start.sh"

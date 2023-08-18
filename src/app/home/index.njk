@@ -93,6 +93,11 @@
                 {{__('tab_gar_cancelled', cancelledGars.length)}}
               </a>
             </li>
+            <li class="govuk-tabs__list-item">
+              <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-departure">
+                {{__('tab_gar_departure', departureCheckGars.length)}}
+              </a>
+            </li>
           </ul>
           <form id="signform2" action="/garfile/view" method="post" role="form">
           {% macro gar_summary_table(name, gars) %}
@@ -214,7 +219,7 @@
           {{ gar_summary_table('draft', draftGars) }}
           {{ gar_summary_table('submitted', submittedGars) }}
           {{ gar_summary_table('cancelled', cancelledGars) }}
-
+          {{ gar_summary_table('departure', departureCheckGars) }}
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       </div>

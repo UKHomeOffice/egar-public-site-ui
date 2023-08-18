@@ -1,23 +1,52 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
-const CookieModel = require('../../../common/models/Cookie.class');
-const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const { Manifest } = require('../../../common/models/Manifest.class');
-const emailService = require('../../../common/services/sendEmail');
-const config = require('../../../common/config');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
+const logger = require('../../../../common/utils/logger')(__filename);
+const garApi = require('../../../../common/services/garApi');
+const CookieModel = require('../../../../common/models/Cookie.class');
+const manifestFields = require('../../../../common/seeddata/gar_manifest_fields.json');
+const { Manifest } = require('../../../../common/models/Manifest.class');
+const emailService = require('../../../../common/services/sendEmail');
+const config = require('../../../../common/config');
+const ValidationRule = require('../../../../common/models/ValidationRule.class');
+const validator = require('../../../../common/utils/validator');
 const validationList = require('./validations');
 
 const performAPICall = (garId, cookie, req, res) => {
-  garApi.submitGARForCheckin (garId)
+  garApi.patch(garId, 'Submitted', {})
     .then((apiResponse) => {
-      logger.info('Submiited GAR people to AMG checkin');
-      res.redirect('/garfile/amg/checkin');
+      logger.info('Received response from API');
+      const parsedResponse = JSON.parse(apiResponse);
+      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+        // API has returned an error so return a message for the user
+        const submitError = {
+          message: 'An error has occurred. Try again later',
+          identifier: '',
+        };
+        req.session.submiterrormessage.push(submitError);
+        logger.error('API has returned an unexpected response');
+        logger.error(parsedResponse.message);
+        req.session.save(() => res.redirect('/garfile/review'));
+        return;
+      }
+
+      logger.info('Successfully submitted GAR');
+      cookie.setGarStatus('Submitted');
+      emailService.send(config.NOTIFY_GAR_SUBMISSION_TEMPLATE_ID, cookie.getUserEmail(), {
+        firstName: cookie.getUserFirstName(),
+        garId: cookie.getGarId(),
+      }).then(() => {
+        res.render('app/garfile/submit/success/index', {
+          cookie,
+        });
+      }).catch(() => {
+        logger.error('Error occurred invoking emailService, but GAR has been submitted');
+        res.render('app/garfile/submit/success/index', {
+          cookie,
+          errors: [{ message: 'There was an issue sending a confirmation email, but the GAR should be submitted' }],
+        });
+      });
     }).catch((err) => {
-      logger.error('Api failed to submit GAR people for AMG checkin');
+      logger.error('Api failed to update GAR');
       logger.error(err);
-      res.render('app/garfile/review', {
+      res.render('app/garfile/submit/failure/index', {
         cookie,
       });
     });
@@ -46,7 +75,7 @@ const buildValidations = (garfile, garpeople, manifest) => {
 };
 
 module.exports = (req, res) => {
-  logger.debug('In garfile / review post controller');
+  logger.debug('In garfile/amg/checkin post controller');
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
 
@@ -89,13 +118,12 @@ module.exports = (req, res) => {
     };
 
     validator.validateChains(validations).then(() => {
-      
       performAPICall(garId, cookie, req, res);
     }).catch((err) => {
       logger.info('Failed to submit incomplete GAR - validation failed');
       logger.debug(JSON.stringify(err));
       renderObj.errors = err;
-      res.render('app/garfile/review', renderObj);
+      res.render('app/garfile/review/index', renderObj);
     });
   }).catch((err) => {
     logger.error('Error retrieving GAR for review');

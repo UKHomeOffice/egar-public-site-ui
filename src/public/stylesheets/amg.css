@@ -1,0 +1,20 @@
+.status-disc{
+    display: inline-block; 
+    width: 1em; 
+    height: 1em; 
+    border-radius: 50%; 
+    border: 1px solid black;
+}
+
+.status-disc.green{
+    background-color: green; 
+}
+
+
+.status-disc.amber{
+    background-color: amber; 
+}
+
+.status-disc.red{
+    background-color: red; 
+}
