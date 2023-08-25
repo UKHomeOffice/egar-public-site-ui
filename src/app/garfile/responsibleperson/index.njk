@@ -110,7 +110,7 @@
                 value="{{cookie.getGarResponsiblePerson().responsibleCounty}}"
                 aria-labelledby="responsibleCountry-label">
                 {% for country in countryList | sort(attribute = 'label') %}
-                  <option value="{{ country.label }}"
+                  <option value="{{ country.code }}"
                     {{ 'selected=selected' if cookie.getGarResponsiblePerson().responsibleCounty == country.label }}>{{ country.label }}</option>
                 {% endfor %}
               </select>
