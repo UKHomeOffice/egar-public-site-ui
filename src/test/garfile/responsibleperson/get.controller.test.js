@@ -59,7 +59,7 @@ describe('GAR Responsible Person Get Controller', () => {
       responsibleAddressLine2: 'United Federation of Planets',
       responsibleTown: 'Alpha Quadrant',
       responsiblePostcode: 'NCC-1701D',
-      responsibleCounty: 'Earth',
+      responsibleCounty: 'GBR',
       responsibleContactNo: '1234567890',
     };
     const cookie = new CookieModel(req);
