@@ -11,12 +11,16 @@ services:
       - "5432:5432"
 
   api:
-    image: api
+    build:
+      dockerfile: Dockerfile
+      context: ../data-access-api
     container_name: api
     env_file:
       - .env.dev
     depends_on:
       - database
+    volumes:
+      - "../data-access-api:/code"
     ports:
       - "5000:5000"
 
@@ -53,3 +57,9 @@ services:
       - ./src/app:/public-site/app
       - ./src/common:/public-site/common
       - ./src/locales:/public-site/locales
+      - ./src/public:/public-site/public
+      - ./src/test:/public-site/test
+      - ./src/gruntfile.js:/public-site/gruntfile.js
+      - ./src/server.js:/public-site/server.js
+      - ./src/start.js:/public-site/start.js
+      - ./src/package.json:/public-site/package.json
