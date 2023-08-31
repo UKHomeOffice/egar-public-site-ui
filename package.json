@@ -1,0 +1,24 @@
+{
+  "name": "egar-public-site-ui",
+  "version": "1.0.0",
+  "description": "## Requirements - docker - docker-compose - node - npm - your email added to GOV Notify Dev whitelist by repository administrator",
+  "main": ".eslintrc.js",
+  "dependencies": {
+    "sequelize": "^6.32.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UKHomeOffice/egar-public-site-ui.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UKHomeOffice/egar-public-site-ui/issues"
+  },
+  "homepage": "https://github.com/UKHomeOffice/egar-public-site-ui#readme"
+}

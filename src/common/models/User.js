@@ -30,3 +30,23 @@ module.exports = (sequelize, DataTypes) => {
 
   return UserModel;
 };
+
+javascript
+   // models/User.js (Sequelize v6)
+
+   const { DataTypes } = require('sequelize');
+
+   module.exports = (sequelize) => {
+     const User = sequelize.define('User', {
+       username: {
+         type: DataTypes.STRING,
+         allowNull: false
+       },
+       email: {
+         type: DataTypes.STRING,
+         allowNull: false
+       }
+     });
+
+     return User;
+   };
