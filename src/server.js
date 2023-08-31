@@ -71,8 +71,8 @@ function initialiseDb() {
     try {
       logger.info('Syncing db');
       db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-      db.sequelize.import('./common/models/UserSessions');
-      db.sequelize.import('./common/models/Session');
+    //  db.sequelize.import('./common/models/UserSessions');
+   //   db.sequelize.import('./common/models/Session');
       db.sequelize.sync()
         .then(() => {
           logger.debug('Successfully created tables');
@@ -213,10 +213,10 @@ function initialiseTemplateEngine(app) {
     noCache: NODE_ENV !== 'production', // Never use a cache and recompile templates each time (server-side)
   };
   logger.info('Set template engine');
-   
+
   // Initialise nunjucks environment
   const nunjucksEnvironment = nunjucks.configure(APP_VIEWS, nunjucksConfiguration);
-  
+
   // nunjucksEnvironment.addFilter('date, nunjucksDate');
 
   // Set view engine
