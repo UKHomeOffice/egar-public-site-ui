@@ -26,7 +26,7 @@ module.exports = (req, res) => {
           const draftGars = garList.filter(gar => gar.status.name === 'Draft');
           const submittedGars = garList.filter(gar => gar.status.name === 'Submitted');
           const cancelledGars = garList.filter(gar => gar.status.name === 'Cancelled');
-          const departureCheckGars = garList.filter(gar => gar.status.name === 'DepartureCheck');
+          const departureCheckGars = garList.filter(gar => gar.status.name === 'StatusCheckComplete');
           res.render('app/home/index', {
             cookie,
             userSession,
