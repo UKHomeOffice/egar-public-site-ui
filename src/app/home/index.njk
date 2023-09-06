@@ -95,7 +95,7 @@
             </li>
             <li class="govuk-tabs__list-item">
               <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-departure">
-                {{__('tab_gar_departure', departureCheckGars.length)}}
+                {{__('tab_gar_departure', completeGars.length)}}
               </a>
             </li>
           </ul>
@@ -132,7 +132,7 @@
                         <td class="govuk-table__cell">
                           {% if gar.registration === null %}
                             <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
-                          {% elif gar.status.name === 'StatusCheckComplete' %}
+                          {% elif gar.status.name === 'Submitted' %}
                             <a href="/garfile/amg/departure/?garid={{ gar.garId }}">{{ gar.registration }}</a>
                           {% else %}
                             <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
@@ -221,7 +221,7 @@
           {{ gar_summary_table('draft', draftGars) }}
           {{ gar_summary_table('submitted', submittedGars) }}
           {{ gar_summary_table('cancelled', cancelledGars) }}
-          {{ gar_summary_table('departure', departureCheckGars) }}
+          {{ gar_summary_table('complete', completeGars) }}
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       </div>
