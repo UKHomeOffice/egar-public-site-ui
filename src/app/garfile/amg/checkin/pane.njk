@@ -1,10 +1,10 @@
 {% macro status(data) %}
 
-{% if (data == 'green') %}
+{% if (data == 'Granted') %}
 {% set statuscolour = 'green' %}
 {% set statustitle = 'This passenger has permission to travel' %}
 {% set statustext = 'Permission' %}
-{% elif (data == 'amber') %}
+{% elif (data == 'Pending') %}
 {% set statuscolour = 'amber' %}
 {% set statustitle = 'This passenger is still waiting for permission to travel' %}
 {% set statustext = 'Pending' %}
@@ -30,7 +30,7 @@
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">{{person.firstName}} {{person.lastName}}</td>
     <td class="govuk-table__cell">
-      {{status('green')}}
+      {{status(person.status.name)}}
     </td>
   </tr>
   {% endfor %}
