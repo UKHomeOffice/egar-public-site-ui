@@ -52,7 +52,6 @@ steps:
    - push
    - pull_request
 
-
 - name: scan-image
   pull: always
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
@@ -73,7 +72,6 @@ steps:
 services:
   - name: docker
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-
 
 volumes:
   - name: dockersock
@@ -400,5 +398,4 @@ trigger:
     exclude:
     - wip*
     - WIP*
-#comment to trigger build
 ...
