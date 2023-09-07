@@ -8,7 +8,7 @@ module.exports = (req, res) => {
 
   const cookie = new CookieModel(req);
 
-  let { garId } = req.query;
+  let  garId = req.query.garid;
   
   if (garId === undefined) {
     garId = cookie.getGarId();
