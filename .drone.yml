@@ -118,7 +118,7 @@ steps:
 
 depends_on:
   - BuildImage
-  
+
 trigger:
   event:
     - tag
@@ -374,3 +374,4 @@ trigger:
   target:
     include:
       - production
+
