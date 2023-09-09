@@ -95,6 +95,7 @@ steps:
       - export BASE_URL_SERVICE=$${DEV_URL_SERVICE}
       - export KUBE_ARTIFACTORY_APP_SECRET=$${DEV_KUBE_ARTIFACTORY_APP_SECRET}
       - source ./ops/common_lib
+      - source ./ops/notprod_values
       - kd --timeout=6m --file ops/kube/artifactory-secret.yml
       - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
       - kd --timeout=12m --file ops/kube/public-site-deployment.yml
@@ -143,6 +144,7 @@ steps:
       - export BASE_URL=$${SIT_BASE_URL}
       - export BASE_URL_SERVICE=$${SIT_BASE_URL_SERVICE}
       - source ./ops/common_lib
+      - source ./ops/notprod_values
       - kd --timeout=6m --file ops/kube/artifactory-secret.yml
       - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
       - kd --timeout=12m --file ops/kube/public-site-deployment.yml
@@ -246,6 +248,7 @@ steps:
       - export BASE_URL=$${STAGING_BASE_URL}
       - export BASE_URL_SERVICE=$${STAGING_BASE_URL_SERVICE}
       - source ./ops/common_lib
+      - source ./ops/notprod_values
       - kd --timeout=6m --file ops/kube/artifactory-secret.yml
       - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
       - kd --timeout=6m --file ops/kube/public-site-deployment.yml
@@ -303,6 +306,7 @@ steps:
       - export BASE_URL=$${PRODUCTION_BASE_URL}
       - export BASE_URL_SERVICE=$${PRODUCTION_BASE_URL_SERVICE}
       - source ./ops/common_lib
+      - source ./ops/prod_values
       - kd --timeout=6m --file ops/kube/artifactory-secret.yml
       - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
       - kd --timeout=6m --file ops/kube/public-site-deployment.yml

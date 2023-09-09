@@ -1,0 +1,2 @@
+#values for prod deployments
+export NUM_REPLICAS=3 
