@@ -63,6 +63,7 @@ services:
 volumes:
   - name: dockersock
     temp: {}
+
 trigger:
       event:
         - push
@@ -112,8 +113,7 @@ trigger:
   event:
     - tag
   ref:
-    - refs/tags/snapshot* #feature branch testing i.e snapshot_amg_uichanges
-    - refs/tags/release* #dev testing i.e release_dev_amgbranch
+    - refs/tags/release*
 
 ---
 kind: pipeline
@@ -210,6 +210,19 @@ steps:
         from_secret: E2E_SMTP_PORT
       E2E_SMTP_SERVER:
         from_secret: E2E_SMTP_SERVER
+
+services:
+  - name: docker
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+  - name: anchore-submission-server
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
+    pull: always
+    commands:
+      - /run.sh server
+
+volumes:
+  - name: dockersock
+    temp: {}
 
 trigger:
   branch:
