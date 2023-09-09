@@ -75,14 +75,6 @@ platform:
   os: linux
   arch: amd64
 
-services:
-  - name: docker
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-
-volumes:
-  - name: dockersock
-    temp: {}
-
 steps:
   - name: Deploy to DEV
     pull: if-not-exists
