@@ -268,34 +268,17 @@ steps:
         from_secret: STAGING_KUBE_SERVER
       STAGING_KUBE_TOKEN:
         from_secret: STAGING_KUBE_TOKEN
-    when:
-      branch:
-        - master
-        - hotfix/*
-      event:
-        - promote
-      target:
-        exclude:
-          - production
-        include:
-          - staging
-
-  - name: Mock Performance Tests
-    pull: if-not-exists
-    image: docker:17.09.0-ce
-    commands:
-      - echo "TODO - Load/performance tests"
-    when:
-      branch:
-        - master
-        - hotfix/*
-      event:
-        - push
-      target:
-        exclude:
-          - production
-        include:
-          - staging
+trigger:
+  branch:
+    - master
+    - hotfix/*
+  event:
+    - promote
+  target:
+    exclude:
+      - production
+    include:
+      - staging
 
 ---
 
