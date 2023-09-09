@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: BuildImage
+name: Build Image
 type: kubernetes
 
 platform:
@@ -30,7 +30,7 @@ steps:
     settings:
       group: build-stage
 
-  - name: run_unit_tests
+  - name: Unit Tests
     pull: if-not-exists
     image: node:14-alpine3.15
     commands:
@@ -68,7 +68,7 @@ trigger:
         - pull_request
 ---
 kind: pipeline
-name: DevDeployment
+name: Dev Deployment
 type: kubernetes
 
 platform:
@@ -84,7 +84,7 @@ volumes:
     temp: {}
 
 steps:
-  - name: deploy_to_dev
+  - name: Deploy to DEV
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -115,10 +115,6 @@ steps:
         from_secret: DEV_KUBE_TOKEN
       DEV_URL_SERVICE:
         from_secret: DEV_URL_SERVICE
-
-depends_on:
-  - BuildImage
-  
 trigger:
   event:
     - tag
@@ -128,7 +124,7 @@ trigger:
 
 ---
 kind: pipeline
-name: SITDeployment
+name: SIT Deployment
 type: kubernetes
 
 platform:
@@ -136,7 +132,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: deploy_to_sit
+  - name: Deploy to SIT
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -168,7 +164,7 @@ steps:
       SIT_KUBE_TOKEN:
         from_secret: SIT_KUBE_TOKEN
 
-  - name: get_dymanic_db_creds
+  - name: Get_the_Dynamic_DB_creds
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -188,7 +184,7 @@ steps:
       SIT_KUBE_TOKEN:
         from_secret: SIT_KUBE_TOKEN
 
-  - name: end_to_end_tests
+  - name: End to End tests
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
     commands:
@@ -221,9 +217,6 @@ steps:
       E2E_SMTP_SERVER:
         from_secret: E2E_SMTP_SERVER
 
-depends_on:
-  - BuildImage
-
 trigger:
   branch:
     - master
@@ -233,7 +226,7 @@ trigger:
 ---
 
 kind: pipeline
-name: StagingDeployment
+name: Staging Deployment
 type: kubernetes
 
 platform:
@@ -241,7 +234,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: deploy_to_staging
+  - name: Deploy to Staging
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -276,9 +269,6 @@ steps:
       STAGING_KUBE_TOKEN:
         from_secret: STAGING_KUBE_TOKEN
 
-depends_on:
-  - BuildImage
-
 trigger:
   branch:
     - master
@@ -294,7 +284,7 @@ trigger:
 ---
 
 kind: pipeline
-name: ProdDeployment
+name: Prod Deployment
 type: kubernetes
 
 platform:
@@ -302,7 +292,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: deploy_to_production
+  - name: Deploy to Production
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -337,7 +327,7 @@ steps:
       PRODUCTION_KUBE_TOKEN:
         from_secret: PRODUCTION_KUBE_TOKEN
 
-  - name: notify_slack
+  - name: Notify Slack
     pull: if-not-exists
     image: plugins/slack
     settings:
@@ -361,10 +351,6 @@ steps:
     environment:
       SLACK_WEBHOOK:
         from_secret: SLACK_WEBHOOK
-
-depends_on:
-  - BuildImage
-
 trigger:
   branch:
     - master
