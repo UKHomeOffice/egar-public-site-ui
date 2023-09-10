@@ -1,9 +1,9 @@
 {% macro status(data, travelled) %}
 
-{% if (data == 'green') %}
+{% if (data == 'Granted') %}
 {% set statuscolour = 'green' %}
 {% set statustitle = ['This passenger has been recorded as having ', '' if travelled else 'not ' , 'embarked with the craft'] | join %}
-{% elif (data == 'amber') %}
+{% elif (data == 'Pending') %}
 {% set statuscolour = 'amber' %}
 {% set statustitle = 'This passenger is still being recorded ' %}
 {% else %}
@@ -29,7 +29,7 @@
     <td class="govuk-table__cell">{{person.firstName}} {{person.lastName}}</td>
     <td class="govuk-table__cell">Y</td>
     <td class="govuk-table__cell">
-      {{status('green', true)}}
+      {{status({{status(person.amg_departure_status.name)}}, true)}}
     </td>
   </tr>
   {% endfor %}
