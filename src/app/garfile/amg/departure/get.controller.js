@@ -8,13 +8,14 @@ module.exports = (req, res) => {
 
   const cookie = new CookieModel(req);
 
-  let { garId } = req.body;
+  let  garId = req.query.garid;
   
   if (garId === undefined) {
     garId = cookie.getGarId();
   }
 
-  cookie.setGarId(req.query.garid);
+  cookie.setGarId(garId);
+  
   const template = req.query.template === 'pane' ? 'app/garfile/amg/departure/pane' : 'app/garfile/amg/departure/index';
 
   Promise.all([

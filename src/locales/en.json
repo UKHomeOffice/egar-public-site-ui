@@ -85,7 +85,7 @@
     "tab_gar_cancelled": "Cancelled (%s)",
     "gar_cancelled_no_records": "There are no cancelled GARs",
 
-    "tab_gar_departure": "Departure (%s)",
+    "tab_gar_departure": "Complete (%s)",
     "gar_departure_no_records": "There are no GARs awaiting departure confirmation",
 
     "field_submission_reference": "Submission reference",
