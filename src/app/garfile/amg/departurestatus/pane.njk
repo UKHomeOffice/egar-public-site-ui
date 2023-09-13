@@ -1,6 +1,6 @@
 {% macro status(data, travelled) %}
 
-{% if (data == 'Granted') %}
+{% if (data == 'Complete') %}
 {% set statuscolour = 'green' %}
 {% set statustitle = ['This passenger has been recorded as having ', '' if travelled else 'not ' , 'embarked with the craft'] | join %}
 {% elif (data == 'Pending') %}
