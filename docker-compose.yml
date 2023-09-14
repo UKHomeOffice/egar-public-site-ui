@@ -3,7 +3,7 @@ version: '3'
 services:
 
   database:
-    image: postgres:10.4
+    image: postgres:14
     container_name: database
     env_file:
       - .env.dev
@@ -11,12 +11,16 @@ services:
       - "5432:5432"
 
   api:
-    image: api
+    build:
+      dockerfile: Dockerfile
+      context: ../api
     container_name: api
     env_file:
       - .env.dev
     depends_on:
       - database
+    volumes:
+      - "../api:/code"
     ports:
       - "5000:5000"
 
@@ -43,6 +47,8 @@ services:
     command: sh -c 'sleep 5 && npm install nodemon && npm run dev'
     ports:
       - "3000:3000"
+      - "9229:9229"
+      - "9230:9230"
     env_file:
       - .env.dev
     depends_on:
@@ -53,18 +59,9 @@ services:
       - ./src/app:/public-site/app
       - ./src/common:/public-site/common
       - ./src/locales:/public-site/locales
-  localstack:
-    container_name: localstack
-    image: localstack/localstack:latest
-    environment: 
-      - AWS_DEFAULT_REGION=us-east-1
-      - EDGE_PORT=4566
-      - SERVICES=s3,sqs
-      - DEBUG=1
-      - LS_LOG=trace
-    ports: 
-      - '4566-4583:4566-4583'
-    volumes: 
-      - "${TEMPDIR:-/tmp/localstack}:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./localstack/start.sh:/etc/localstack/init/ready.d/start.sh"
+      - ./src/public:/public-site/public
+      - ./src/test:/public-site/test
+      - ./src/gruntfile.js:/public-site/gruntfile.js
+      - ./src/server.js:/public-site/server.js
+      - ./src/start.js:/public-site/start.js
+      - ./src/package.json:/public-site/package.json

@@ -21,8 +21,9 @@ const performAPICall = (cookie, res, exceptions) => {
 };
 
 module.exports = (req, res) => {
-    const { exceptions } = req.body;
+    const exceptions = req.body.exceptions === undefined ? [] : req.body.exceptions;
     const cookie = new CookieModel(req);
+
 
     logger.debug("Exceptions");
     logger.debug(exceptions)
