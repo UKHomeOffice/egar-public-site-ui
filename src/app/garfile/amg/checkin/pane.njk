@@ -1,6 +1,6 @@
 {% macro status(data) %}
 
-{% if (data == 'Granted') %}
+{% if (data == 'Complete') %}
 {% set statuscolour = 'green' %}
 {% set statustitle = 'This passenger has permission to travel' %}
 {% set statustext = 'Permission' %}
@@ -27,7 +27,7 @@
     </tr>
   </thead>
   {% for person in garpeople.items %}
-  <pre>{{person | dump(2)}}</pre>
+  {# <pre>{{person | dump(2)}}</pre> #}
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">{{person.firstName}} {{person.lastName}}</td>
     <td class="govuk-table__cell">
