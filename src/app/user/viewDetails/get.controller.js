@@ -7,6 +7,7 @@ module.exports = (req, res) => {
   logger.debug('In user / viewDetails get controller');
   const cookie = new CookieModel(req);
   const userId = cookie.getUserDbId();
+  //TODO getCrafts is not used --> i don't think it is used.
   Promise.all([craftApi.getCrafts(userId), personApi.getPeople(userId, 'individual')])
     .then((values) => {
       const savedCrafts = JSON.parse(values[0]);
