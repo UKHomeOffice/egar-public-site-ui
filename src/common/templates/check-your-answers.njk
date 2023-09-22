@@ -101,7 +101,7 @@
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
           {{__('heading_manifest_details')}}
           <p class="govuk-body-s" style="white-space: nowrap;"><mark>{{__('expired_passport_warning')}}</mark></p>
-
+            {% if showChangeLinks %}
             <html>
               <head>
                  <p><b>Click</b>
@@ -115,7 +115,7 @@
                <head>
              </body>
             </html>
-
+          {% endif %}
         </dt>
         {% if showChangeLinks %}
         <dd style="border-bottom: none;" class="app-check-your-answers__change">
