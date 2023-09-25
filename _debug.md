@@ -76,3 +76,8 @@ it is there but, blank --> understand waht is being sent and if that is the issu
     - try the responsible gar people again, to see if the 400 come sup, or it is a fluke.
     - another 400 patch --> try and recreate it done, get logs of the errors and co.
     // {'responsibleCountryLabel': ['Not a valid string.']}
+    I hypothesis that it is from element returning a { code: str; label: string; } --> returnign this rather than a valid string, else it would be undefiend --> I can cast that a string.
+    either way, it return s astring rather than not a string.
+    - if i am right, the the 400 will stop, since a valid stirng is returned and the database will ahve the new value.
+    - if I am wrong, then it will not.
+    - it seems to work the app as well --> udnerstand garfile so I can catch any bug before landing.
