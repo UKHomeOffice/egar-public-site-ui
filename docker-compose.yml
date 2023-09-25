@@ -1,9 +1,8 @@
 version: '3'
 
 services:
-
   database:
-    image: postgres:14
+    image: postgres:10.4
     container_name: database
     env_file:
       - .env.dev
@@ -11,9 +10,7 @@ services:
       - "5432:5432"
 
   api:
-    build:
-      dockerfile: Dockerfile
-      context: ../data-access-api
+    image: api
     container_name: api
     env_file:
       - .env.dev
