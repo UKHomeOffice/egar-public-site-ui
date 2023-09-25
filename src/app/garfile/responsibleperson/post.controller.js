@@ -6,6 +6,8 @@ const validations = require('./validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
+const autoCompleteUtil = require('../../../common/utils/autocomplete')
+
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -21,6 +23,7 @@ module.exports = (req, res) => {
     responsibleAddressLine2: req.body.responsibleAddressLine2,
     responsibleTown: req.body.responsibleTown,
     responsibleCounty: req.body.responsibleCounty,
+    responsibleCountryLabel: autoCompleteUtil.generateCountryList().find(country => country.code === req.body.responsibleCounty),
     responsiblePostcode: req.body.responsiblePostcode,
     fixedBasedOperator: req.body.fixedBasedOperator,
     fixedBasedOperatorAnswer: (req.body.fixedBasedOperator === 'Other' ? req.body.fixedBasedOperatorAnswer : ''),
