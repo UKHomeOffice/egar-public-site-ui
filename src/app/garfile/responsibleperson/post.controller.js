@@ -13,7 +13,7 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
   req.body.fixedBasedOperatorAnswer = _.trim(req.body.fixedBasedOperatorAnswer);
-  const responsibleCountry = autoCompleteUtil.generateCountryList()
+  const responsibleCountry = autoCompleteUtil.countryList
     .find(country => country.code === req.body.responsibleCounty)
 
   const responsiblePerson = {

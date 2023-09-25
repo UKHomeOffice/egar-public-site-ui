@@ -22,4 +22,5 @@ const generateCountryList = () => {
 };
 
 exports.generateCountryList = generateCountryList;
+exports.countryList = generateCountryList();
 exports.airportList = airportList;
