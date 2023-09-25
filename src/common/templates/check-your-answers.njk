@@ -217,7 +217,7 @@
         <dd class="app-check-your-answers__answer">
           {{garfile.responsibleAddressLine1}} <br>
           {{garfile.responsibleAddressLine2}} <br>
-          {{garfile.responsibleCountryLabel}} <br>
+          {{ garfile.responsibleCounty if not garfile.responsibleCountryLabel else garfile.responsibleCountryLabel }} <br>
           {{garfile.responsiblePostcode}} <br>
         </dd>
       </div>
