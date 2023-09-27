@@ -61,7 +61,6 @@ steps:
       memory: 1024Mi
   environment: 
     IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:${DRONE_COMMIT}
-    TOLERATE: high
     IGNORE_UNFIXED: true
   when:
     event:
@@ -398,5 +397,3 @@ trigger:
     exclude:
     - wip*
     - WIP*
-# comment to trigger build
-...

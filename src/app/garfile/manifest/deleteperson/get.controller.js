@@ -20,7 +20,8 @@ module.exports = (req, res) => {
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        req.session.errMsg = deleteErr;
+        logger.debug(`Api returned: ${parsedResponse.message}`);
+        req.session.errMsg = parsedResponse;
         return res.redirect('/garfile/manifest');
       }
       req.session.successMsg = 'Person removed from GAR';

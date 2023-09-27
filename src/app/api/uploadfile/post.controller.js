@@ -115,6 +115,7 @@ module.exports = (req, res) => {
                   // API returned error
                   logger.debug('Api returned message key');
                   logger.debug(JSON.stringify(parsedResponse));
+                  req.session.errMsg = parsedResponse;
                   res.redirect('/garfile/supportingdocuments?query=e');
                   return;
                 }
