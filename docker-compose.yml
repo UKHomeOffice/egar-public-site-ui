@@ -13,14 +13,14 @@ services:
   api:
     build:
       dockerfile: Dockerfile
-      context: ../data-access-api
+      context: ../api
     container_name: api
     env_file:
       - .env.dev
     depends_on:
       - database
     volumes:
-      - "../data-access-api:/code"
+      - "../api:/code"
     ports:
       - "5000:5000"
 

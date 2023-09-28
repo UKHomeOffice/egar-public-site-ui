@@ -68,28 +68,25 @@ const APP_VIEWS = [
 
 function initialiseDb() {
   return new Promise((resolve, reject) => {
-    try {
-      logger.info('Syncing db');
-      db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-    //  db.sequelize.import('./common/models/UserSessions');
-   //   db.sequelize.import('./common/models/Session');
-      db.sequelize.sync()
-        .then(() => {
-          logger.debug('Successfully created tables');
-        })
-        .then(() => db.sequelize.query(
-          'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; '
-          + 'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
-        ))
-        .then(() => {
-          logger.debug('Successfully added session table constraints');
-          resolve();
-        });
-    } catch (e) {
-      logger.error('Failed to sync db');
-      logger.error(e);
-      reject(e);
-    }
+    logger.info('Syncing db');
+    db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+    // TODO: should be done via migration files --> sync is too flexible.
+    db.sequelize.sync()
+      .then(() => {
+        logger.debug('Successfully created tables');
+      })
+      .then(() => db.sequelize.query(
+        'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; '
+        + 'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
+      ))
+      .then(() => {
+        logger.debug('Successfully added session table constraints');
+        resolve();
+      }).catch((e) => {
+        logger.error('Failed to sync db');
+        logger.error(e);
+        reject(e);
+      });
   });
 }
 
@@ -289,16 +286,21 @@ function initialise() {
   // sessions which talk to the DB are executed, so all other init calls
   // performed after initialiseDb
   async function prepDb() {
-    await initialiseDb();
-    initialisExpressSession(unconfiguredApp);
-    initialiseProxy(unconfiguredApp);
-    initialiseI18n(unconfiguredApp);
-    initialiseGlobalMiddleware(unconfiguredApp);
-    initialiseTemplateEngine(unconfiguredApp);
-    initialiseRoutes(unconfiguredApp);
-    initialisePublic(unconfiguredApp);
-    initialiseErrorHandling(unconfiguredApp);
-    logger.info('Initialised app: ');
+    try {
+      await initialiseDb();
+      initialisExpressSession(unconfiguredApp);
+      initialiseProxy(unconfiguredApp);
+      initialiseI18n(unconfiguredApp);
+      initialiseGlobalMiddleware(unconfiguredApp);
+      initialiseTemplateEngine(unconfiguredApp);
+      initialiseRoutes(unconfiguredApp);
+      initialisePublic(unconfiguredApp);
+      initialiseErrorHandling(unconfiguredApp);
+      logger.info('Initialised app: ');
+    } catch(e) {
+      logger.error("Prepping the database failed.")
+      logger.error(e);
+    }
   }
   prepDb();
 
