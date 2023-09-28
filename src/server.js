@@ -19,7 +19,6 @@ const _ = require('lodash');
 const cookieParser = require('cookie-parser');
 const uuid = require('uuid/v4');
 const csrf = require('csurf');
-const ua = require('universal-analytics');
 const PgSession = require('connect-pg-simple')(session);
 
 
@@ -43,7 +42,6 @@ const PORT = (process.env.PORT || 3000);
 const { NODE_ENV } = process.env;
 const G4_ID = (process.env.G4_ID || '');
 const BASE_URL = (process.env.BASE_URL || '');
-const visitor = ua(G4_ID);
 const COOKIE_SECRET = (process.env.COOKIE_SECRET || '');
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
