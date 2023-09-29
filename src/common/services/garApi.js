@@ -1,6 +1,7 @@
 const request = require('request');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
+const autocompleteUtil = require('../utils/autocomplete');
 
 module.exports = {
 
@@ -48,8 +49,11 @@ module.exports = {
           reject(error);
           return;
         }
-        logger.debug('Successfully called GAR get endpoint');
-        resolve(body);
+        
+        let gar = JSON.parse(body);
+        gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCounty);
+
+        resolve(JSON.stringify(gar));
       });
     });
   },

@@ -2,7 +2,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const autocompleteUtil = require('../../../common/utils/autocomplete');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -77,10 +76,7 @@ module.exports = (req, res) => {
       renderContext = {
         cookie,
         manifestFields,
-        garfile: {
-          ...parsedGar,
-          responsibleCounty: autocompleteUtil.getCountryFromCode(parsedGar.responsibleCounty),
-        },
+        garfile: parsedGar,
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
       }; 

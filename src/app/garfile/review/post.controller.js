@@ -112,10 +112,7 @@ module.exports = (req, res) => {
     const renderObj = {
       cookie,
       manifestFields,
-      garfile: {
-        ...garfile,
-        responsibleCounty: autocompleteUtil.getCountryFromCode(garfile.responsibleCounty),
-      },
+      garfile,
       garpeople,
       garsupportingdocs,
       showChangeLinks: true,
