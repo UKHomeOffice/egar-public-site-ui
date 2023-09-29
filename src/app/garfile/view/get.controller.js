@@ -2,6 +2,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
+const autocompleteUtil = require('../../../common/utils/autocomplete');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -31,7 +32,6 @@ module.exports = (req, res) => {
     const cookie = new CookieModel(req);
     logger.debug('In garfile/view get controller');
     
-  
     const context = { cookie };
 
     let { garId } = req.body;
@@ -77,10 +77,13 @@ module.exports = (req, res) => {
       renderContext = {
         cookie,
         manifestFields,
-        garfile: parsedGar,
+        garfile: {
+          ...parsedGar,
+          responsibleCounty: autocompleteUtil.getCountryFromCode(parsedGar.responsibleCounty),
+        },
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
-      };
+      }; 
       renderContext.showChangeLinks = true;
       if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
         renderContext.showChangeLinks = false;

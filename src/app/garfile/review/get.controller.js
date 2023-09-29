@@ -4,6 +4,7 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
 const garApi = require('../../../common/services/garApi');
 const validator = require('../../../common/utils/validator');
 const validationList = require('./validations');
+const autocompleteUtil = require('../../../common/utils/autocomplete');
 
 module.exports = (req, res) => {
   logger.debug('In garfile / review get controller');
@@ -28,7 +29,10 @@ module.exports = (req, res) => {
     const renderObj = {
       cookie,
       manifestFields,
-      garfile,
+      garfile: {
+        ...garfile,
+        responsibleCounty: autocompleteUtil.getCountryFromCode(garfile.responsibleCounty),
+      },
       garpeople,
       garsupportingdocs,
       showChangeLinks: true,

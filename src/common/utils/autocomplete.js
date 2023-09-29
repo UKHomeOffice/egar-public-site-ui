@@ -21,6 +21,22 @@ const generateCountryList = () => {
   return alpha3List;
 };
 
-exports.generateCountryList = generateCountryList;
-exports.countryList = generateCountryList();
-exports.airportList = airportList;
+const countryList = generateCountryList();
+
+/**
+ * get the country label from a country code
+ * @param  {String} countryCode
+ */
+function getCountryFromCode(countryCode) {
+  const countryFromCode = countryList.find(country => country.code === countryCode);
+ logger.debug(JSON.stringify(countryFromCode));
+ logger.debug(countryCode);
+  return countryFromCode.label || countryCode;
+}
+
+module.exports = {
+  generateCountryList,
+  getCountryFromCode,
+  countryList,
+  airportList,
+};
