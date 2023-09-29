@@ -8,7 +8,6 @@ const config = require('../../../common/config');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const validationList = require('./validations');
-const autocompleteUtil = require('../../../common/utils/autocomplete');
 
 const performAPICall = (garId, cookie, req, res) => {
   garApi.patch(garId, 'Submitted', {})

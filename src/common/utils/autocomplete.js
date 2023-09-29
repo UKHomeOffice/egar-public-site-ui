@@ -29,9 +29,7 @@ const countryList = generateCountryList();
  */
 function getCountryFromCode(countryCode) {
   const countryFromCode = countryList.find(country => country.code === countryCode);
- logger.debug(JSON.stringify(countryFromCode));
- logger.debug(countryCode);
-  return countryFromCode.label || countryCode;
+  return countryFromCode === undefined ? countryCode : countryFromCode.label;
 }
 
 module.exports = {

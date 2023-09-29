@@ -49,7 +49,7 @@ module.exports = {
           reject(error);
           return;
         }
-        
+        logger.debug('Successfully called GAR get endpoint');
         let gar = JSON.parse(body);
         gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCounty);
 
