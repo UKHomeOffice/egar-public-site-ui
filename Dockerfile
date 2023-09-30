@@ -1,4 +1,4 @@
-FROM quay.io/ukhomeofficedigital/egar-node-8:latest
+FROM node:14-alpine3.15
 
 RUN apk update \
     && apk upgrade --update-cache --available \

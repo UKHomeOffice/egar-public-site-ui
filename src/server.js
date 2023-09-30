@@ -67,9 +67,11 @@ const APP_VIEWS = [
 function initialiseDb() {
   return new Promise((resolve, reject) => {
     logger.info('Syncing db');
-    db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-    // TODO: should be done via migration files --> sync is too flexible.
-    db.sequelize.sync()
+    db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
+      .then(() => {
+        // TODO: should be done via migration files --> sync is too flexible.
+        db.sequelize.sync();
+      })
       .then(() => {
         logger.debug('Successfully created tables');
       })
@@ -80,7 +82,8 @@ function initialiseDb() {
       .then(() => {
         logger.debug('Successfully added session table constraints');
         resolve();
-      }).catch((e) => {
+      })
+      .catch((e) => {
         logger.error('Failed to sync db');
         logger.error(e);
         reject(e);
@@ -275,17 +278,37 @@ function initialiseErrorHandling(app) {
  * @return app
  */
 function initialise() {
+  logger.debug('1: App stuff');
+
   const unconfiguredApp = express();
   unconfiguredApp.disable('x-powered-by');
   unconfiguredApp.use(helmet.noCache());
   unconfiguredApp.use(helmet.frameguard());
+  logger.debug('2: App stuff');
+
 
   // DB calls are asynchronous, need them executed before aspects like
   // sessions which talk to the DB are executed, so all other init calls
   // performed after initialiseDb
   async function prepDb() {
     try {
-      await initialiseDb();
+      logger.debug('3: App stuff');
+      // await initialiseDb();
+      logger.info('Syncing db');
+      const extension = await db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+      logger.debug(extension)
+      logger.debug('Extension created');
+      // TODO: should be done via migration files --> sync is too flexible.
+      const sync = await db.sequelize.sync();
+      logger.debug(sync)
+      logger.debug('Successfully created tables');
+      const private_key  = await db.sequelize.query(
+        'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; '
+        + 'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
+      );
+      logger.debug(private_key)
+      logger.debug('Successfully added session table constraints');
+      logger.debug('4: App stuff');
       initialisExpressSession(unconfiguredApp);
       initialiseProxy(unconfiguredApp);
       initialiseI18n(unconfiguredApp);
@@ -307,6 +330,7 @@ function initialise() {
 
 function listen() {
   const app = initialise();
+  logger.debug(`5: App string representation: ${app.toString()}`);
   app.listen(PORT);
   logger.info('App initialised');
   logger.info(`Listening on port ${PORT}`);
@@ -316,7 +340,9 @@ function listen() {
  * Starts app after ensuring DB is up
  */
 function start() {
+  logger.debug('0: App start up');
   listen();
+  logger.debug('X: App is "started"');
 }
 
 /**

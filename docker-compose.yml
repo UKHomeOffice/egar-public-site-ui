@@ -11,12 +11,16 @@ services:
       - "5432:5432"
 
   api:
-    image: api
+    build:
+      dockerfile: Dockerfile
+      context: ../api
     container_name: api
     env_file:
       - .env.dev
     depends_on:
       - database
+    volumes:
+      - "../api:/code"
     ports:
       - "5000:5000"
 
