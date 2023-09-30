@@ -258,9 +258,9 @@ function getDateFromDynamicInput(input) {
       && validDay(input.d, input.m, input.y)
       && validMonth(input.m)
       && validYear(input.y)) {
-        providedDate = new Date(input.y + '-' + input.m + '-' + input.d);
+      providedDate = new Date(input.y + '-' + input.m + '-' + input.d);
     }
-    else{
+    else {
       providedDate = null;
     }
   }
