@@ -162,10 +162,13 @@ describe('GAR Customs Post Controller', () => {
         prohibitedGoodsOptions,
         baggageOptions,
         intentionValueOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
           baggageDeclaration: '',
+          continentalShelf: 'No',
+          continentalShelfDeclaration: '',
           freeCirculation: 0,
           goodsDeclaration: '',
           intentionValue: 'Yes',
