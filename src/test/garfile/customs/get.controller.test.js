@@ -77,6 +77,7 @@ describe('GAR Customs Get Controller', () => {
       prohibitedGoodsOptions,
       baggageOptions,
       intentionValueOptions,
+      continentalShelfOptions,
       gar: {
         id: 'GAR1-ID',
       },
