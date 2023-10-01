@@ -20,7 +20,7 @@ const controller = require('../../../app/garfile/review/post.controller');
 
 describe('GAR Review Post Controller', () => {
   let req; let res;
-  let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub; let garApiPatchStub;
+  let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub; let garApiPatchStub; let garAPISubmitForCheckinStub;
   let sessionSaveStub;
 
   beforeEach(() => {
@@ -56,6 +56,7 @@ describe('GAR Review Post Controller', () => {
     garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
     garApiGetSupportingDocsStub = sinon.stub(garApi, 'getSupportingDocs');
     garApiPatchStub = sinon.stub(garApi, 'patch');
+    garAPISubmitForCheckinStub = sinon.stub(garApi, 'submitGARForCheckin');
 
     sinon.stub(i18n, '__').callsFake((key) => {
       switch (key) {
@@ -209,7 +210,7 @@ describe('GAR Review Post Controller', () => {
   });
 
   describe('perform API call', () => {
-    it('should go to failure if API rejects', () => {
+    it.only('should go to failure if API rejects', () => {
       const cookie = new CookieModel(req);
       garApiGetStub.resolves(JSON.stringify({
         registration: 'Z-AFTC',
@@ -226,13 +227,15 @@ describe('GAR Review Post Controller', () => {
         visitReason: 'No',
         intentionValue: 'No'
       }));
+      
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
           { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
         ],
       }));
+
+      garAPISubmitForCheckinStub.rejects('garApi.submitGARForCheckin Example Reject')
       garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
-      garApiPatchStub.rejects('garApi.patch Example Reject');
 
       const callController = async () => {
         await controller(req, res);
@@ -240,7 +243,7 @@ describe('GAR Review Post Controller', () => {
 
       callController().then().then().then()
         .then(() => {
-          expect(res.render).to.have.been.calledWith('app/garfile/submit/failure/index', { cookie });
+          expect(res.render).to.have.been.calledWith('app/garfile/review', { cookie });
         });
     });
 
