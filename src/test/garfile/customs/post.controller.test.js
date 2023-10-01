@@ -379,7 +379,7 @@ describe('GAR Customs Post Controller', () => {
     });
   });
 
-  it.only('should set goodsDeclaration=empty string if prohibitedGoods=random string', () => {
+  it('should set goodsDeclaration=empty string if prohibitedGoods=random string', () => {
     req.body.buttonClicked = 'Save and continue';
     req.body.prohibitedGoods = 'adFnjKekNnveAiej1324mk';
     garApiPatchStub.resolves(JSON.stringify({}));
