@@ -333,6 +333,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration:'',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         goodsDeclaration: "Duty Free",
         intentionValue: "Yes",
