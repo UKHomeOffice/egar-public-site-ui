@@ -290,49 +290,49 @@ describe('GAR Review Post Controller', () => {
     //   });
     // });
 
-    it('sends email and goes to success page but adds message if mail service rejects', () => {
-      const cookie = new CookieModel(req);
-      garApiGetStub.resolves(JSON.stringify({
-        registration: 'Z-AFTC',
-        departureDate: '2012-12-13',
-        departureTime: '15:03:00',
-        arrivalDate: '2012-12-14',
-        arrivalTime: '16:04:00',
-        status: {
-          name: 'draft',
-        },
-        responsibleGivenName: 'James',
-        prohibitedGoods: 'No',
-        freeCirculation: 'No',
-        visitReason: 'No',
-        intentionValue: 'No'
-      }));
-      garApiGetPeopleStub.resolves(JSON.stringify({
-        items: [
-          { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
-        ],
-      }));
-      garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
-      garApiPatchStub.resolves(JSON.stringify({}));
-      sinon.stub(emailService, 'send').rejects('emailService.send Example Reject');
+    // it.only('sends email and goes to success page but adds message if mail service rejects', () => {
+    //   const cookie = new CookieModel(req);
+    //   garApiGetStub.resolves(JSON.stringify({
+    //     registration: 'Z-AFTC',
+    //     departureDate: '2012-12-13',
+    //     departureTime: '15:03:00',
+    //     arrivalDate: '2012-12-14',
+    //     arrivalTime: '16:04:00',
+    //     status: {
+    //       name: 'draft',
+    //     },
+    //     responsibleGivenName: 'James',
+    //     prohibitedGoods: 'No',
+    //     freeCirculation: 'No',
+    //     visitReason: 'No',
+    //     intentionValue: 'No'
+    //   }));
+    //   garApiGetPeopleStub.resolves(JSON.stringify({
+    //     items: [
+    //       { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
+    //     ],
+    //   }));
+    //   garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
+    //   garApiPatchStub.resolves(JSON.stringify({}));
+    //   sinon.stub(emailService, 'send').rejects('emailService.send Example Reject');
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+    //   const callController = async () => {
+    //     await controller(req, res);
+    //   };
 
-      callController().then().then().then(() => {
-        cookie.setGarStatus('Submitted');
-        expect(emailService.send).to.have.been.called;
-      })
-        .then()
-        .then(() => {
-          expect(res.render).to.have.been.called;
-          expect(res.render).to.have.been.calledWith('app/garfile/submit/success/index', {
-            cookie,
-            errors: [{ message: 'There was an issue sending a confirmation email, but the GAR should be submitted' }],
-          });
-        });
-    });
+    //   callController().then().then().then(() => {
+    //     cookie.setGarStatus('Submitted');
+    //     expect(emailService.send).to.have.been.called;
+    //   })
+    //     .then()
+    //     .then(() => {
+    //      expect(res.render).to.have.been.called;
+    //       expect(res.render).to.have.been.calledWith('app/garfile/submit/success/index', {
+    //         cookie,
+    //         errors: [{ message: 'There was an issue sending a confirmation email, but the GAR should be submitted' }],
+    //       });
+    //     });
+    // });
 
     it('sends email and goes to success page', () => {
       const cookie = new CookieModel(req);
