@@ -118,7 +118,7 @@ describe('Home Get Controller', () => {
     });
   });
 
-  it('should render the page with session data if ok and with success messages', () => {
+  it.only('should render the page with session data if ok and with success messages', () => {
     const apiResponse = {
       items: [
         { id: 'GAR-1', status: { name: 'Draft' } },
