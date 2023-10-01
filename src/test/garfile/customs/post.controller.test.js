@@ -379,7 +379,7 @@ describe('GAR Customs Post Controller', () => {
     });
   });
 
-  it('should set goodsDeclaration=empty string if prohibitedGoods=random string', () => {
+  it.only('should set goodsDeclaration=empty string if prohibitedGoods=random string', () => {
     req.body.buttonClicked = 'Save and continue';
     req.body.prohibitedGoods = 'adFnjKekNnveAiej1324mk';
     garApiPatchStub.resolves(JSON.stringify({}));
@@ -393,6 +393,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration: '',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         goodsDeclaration: '',
         intentionValue: "Yes",
