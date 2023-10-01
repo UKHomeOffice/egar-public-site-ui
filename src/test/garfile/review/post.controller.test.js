@@ -210,7 +210,7 @@ describe('GAR Review Post Controller', () => {
   });
 
   describe('perform API call', () => {
-    it.only('should go to failure if API rejects', () => {
+    it('should go to failure if API rejects', () => {
       const cookie = new CookieModel(req);
       garApiGetStub.resolves(JSON.stringify({
         registration: 'Z-AFTC',
@@ -227,7 +227,7 @@ describe('GAR Review Post Controller', () => {
         visitReason: 'No',
         intentionValue: 'No'
       }));
-      
+
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
           { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
