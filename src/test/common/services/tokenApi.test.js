@@ -51,6 +51,7 @@ describe('UserSessions', () => {
     this.clock('2019-04-01');
   });
 
+  // TODO: failing test here. look into this
   it('Should create a usersession entry', (done) => {
     tokenApiProxy.setMfaToken('myemail@email.com', 87654321, true)
       .then(() => {

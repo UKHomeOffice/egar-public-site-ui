@@ -15,6 +15,7 @@ const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reaso
 const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
+const continentalShelfOptions = require('../../../common/seeddata/egar_continental_shelf_options.json');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 
@@ -30,6 +31,9 @@ describe('GAR Customs Post Controller', () => {
     req = {
       body: {
         prohibitedGoods: 'Yes',
+        baggageDeclaration: 'Firearms',
+        continentalShelf: undefined,
+        continentalShelfDeclaration: '',
         goodsDeclaration: 'Duty Free',
         freeCirculation: 0,
         visitReason: 2,
@@ -73,6 +77,7 @@ describe('GAR Customs Post Controller', () => {
         prohibitedGoodsOptions,
         baggageOptions,
         intentionValueOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
@@ -82,6 +87,8 @@ describe('GAR Customs Post Controller', () => {
           intentionValue: undefined,
           passengerTravellingReason: '',
           passengerTravellingReasonAnswer: '',
+          continentalShelf: undefined,
+          continentalShelfDeclaration: '',
           supportingInformation: undefined,
           supportingInformationAnswer: '',
           freeCirculation: 0,
@@ -113,6 +120,7 @@ describe('GAR Customs Post Controller', () => {
         prohibitedGoodsOptions,
         intentionValueOptions,
         baggageOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
@@ -122,6 +130,8 @@ describe('GAR Customs Post Controller', () => {
           intentionValue: 'Yes',
           passengerTravellingReason: '',
           passengerTravellingReasonAnswer: '',
+          continentalShelf: undefined,
+          continentalShelfDeclaration: '',
           prohibitedGoods: "Yes",
           supportingInformation: undefined,
           supportingInformationAnswer: '',
@@ -152,6 +162,7 @@ describe('GAR Customs Post Controller', () => {
         prohibitedGoodsOptions,
         baggageOptions,
         intentionValueOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
@@ -161,6 +172,8 @@ describe('GAR Customs Post Controller', () => {
           intentionValue: 'Yes',
           passengerTravellingReason: '',
           passengerTravellingReasonAnswer: '',
+          continentalShelf: undefined,
+          continentalShelfDeclaration: '',
           prohibitedGoods: "Yes",
           supportingInformation: undefined,
           supportingInformationAnswer: '',
@@ -190,6 +203,8 @@ describe('GAR Customs Post Controller', () => {
         intentionValue: "Yes",
         passengerTravellingReason: '',
         passengerTravellingReasonAnswer: '',
+        continentalShelf: undefined,
+        continentalShelfDeclaration: '',
         prohibitedGoods: "Yes",
         supportingInformation: undefined,
         supportingInformationAnswer:  '',
@@ -201,6 +216,7 @@ describe('GAR Customs Post Controller', () => {
         prohibitedGoodsOptions,
         baggageOptions,
         intentionValueOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
@@ -210,6 +226,8 @@ describe('GAR Customs Post Controller', () => {
           intentionValue: "Yes",
           passengerTravellingReason: '',
           passengerTravellingReasonAnswer: '',
+          continentalShelf: undefined,
+          continentalShelfDeclaration: '',
           prohibitedGoods: "Yes",
           supportingInformation: undefined,
           supportingInformationAnswer: '',
@@ -239,6 +257,8 @@ describe('GAR Customs Post Controller', () => {
         intentionValue: "Yes",
         passengerTravellingReason: '',
         passengerTravellingReasonAnswer: '',
+        continentalShelf: undefined,
+        continentalShelfDeclaration: '',
         prohibitedGoods: "Yes",
         supportingInformation: undefined,
         supportingInformationAnswer: '',
@@ -250,6 +270,7 @@ describe('GAR Customs Post Controller', () => {
         reasonForVisitOptions,
         intentionValueOptions,
         baggageOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
@@ -259,6 +280,8 @@ describe('GAR Customs Post Controller', () => {
           intentionValue: "Yes",
           passengerTravellingReason: '',
           passengerTravellingReasonAnswer: '',
+          continentalShelf: undefined,
+          continentalShelfDeclaration: '',
           prohibitedGoods: "Yes",
           supportingInformation: undefined,
           supportingInformationAnswer: '',
@@ -284,6 +307,8 @@ describe('GAR Customs Post Controller', () => {
         freeCirculation: 0,
         goodsDeclaration: "Duty Free",
         intentionValue: "Yes",
+        continentalShelf: undefined,
+        continentalShelfDeclaration: '',
         passengerTravellingReason: '',
         passengerTravellingReasonAnswer: '',
         prohibitedGoods: "Yes",
@@ -313,6 +338,8 @@ describe('GAR Customs Post Controller', () => {
         intentionValue: "Yes",
         passengerTravellingReason: '',
         passengerTravellingReasonAnswer: '',
+        continentalShelf: undefined,
+        continentalShelfDeclaration: '',
         prohibitedGoods: "Yes",
         supportingInformation: undefined,
         supportingInformationAnswer: '',
@@ -341,6 +368,8 @@ describe('GAR Customs Post Controller', () => {
         intentionValue: "Yes",
         passengerTravellingReason: '',
         passengerTravellingReasonAnswer: '',
+        continentalShelf: undefined,
+        continentalShelfDeclaration: '',
         prohibitedGoods: "No",
         supportingInformation: undefined,
         supportingInformationAnswer: '',
@@ -369,6 +398,8 @@ describe('GAR Customs Post Controller', () => {
         intentionValue: "Yes",
         passengerTravellingReason: '',
         passengerTravellingReasonAnswer: '',
+        continentalShelf: undefined,
+        continentalShelfDeclaration: '',
         prohibitedGoods: "adFnjKekNnveAiej1324mk",
         supportingInformation: undefined,
         supportingInformationAnswer:  '',
@@ -398,6 +429,8 @@ describe('GAR Customs Post Controller', () => {
         intentionValue: "Yes",
         passengerTravellingReason: '',
         passengerTravellingReasonAnswer: '',
+        continentalShelf: undefined,
+        continentalShelfDeclaration: '',
         prohibitedGoods: "No",
         supportingInformation: undefined,
         supportingInformationAnswer:  '',
@@ -428,6 +461,8 @@ describe('GAR Customs Post Controller', () => {
         intentionValue: "Yes",
         passengerTravellingReason: '',
         passengerTravellingReasonAnswer: '',
+        continentalShelf: undefined,
+        continentalShelfDeclaration: '',
         supportingInformation: undefined,
         supportingInformationAnswer:  '',
       });
