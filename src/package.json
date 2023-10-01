@@ -36,7 +36,6 @@
     "file-type": "^12.1.0",
     "gen-uuid": "0.0.1",
     "govuk-frontend": "^4.0.1",
-    "govuk_frontend_toolkit": "^7.6.0",
     "helmet": "^3.13.0",
     "i18n": "^0.8.3",
     "i18n-iso-countries": "^4.3.0",
@@ -76,8 +75,6 @@
     "eslint": "^5.6.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.18.0",
-    "grunt": "^1.0.3",
-    "grunt-browserify": "^5.3.0",
     "mocha": "10.2.0",
     "nock": "^10.0.0",
     "node-test": "^1.2.4",
@@ -87,6 +84,6 @@
     "sequelize-test-helpers": "^1.1.2",
     "sinon": "16.0.0",
     "sinon-chai": "^3.3.0",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2" 
   }
 }
