@@ -45,13 +45,12 @@ const dbStub = {
 describe('UserSessions', () => {
   const tokenApiProxy = proxyquire('../../../common/services/tokenApi', { '../utils/db': dbStub });
 
-  beforeEach(() => {
+  before(() => {
     chai.use(sinonChai);
     this.clock = date => sinon.useFakeTimers(new Date(date));
     this.clock('2019-04-01');
   });
 
-  // TODO: failing test here. look into this
   it('Should create a usersession entry', (done) => {
     tokenApiProxy.setMfaToken('myemail@email.com', 87654321, true)
       .then(() => {
@@ -60,6 +59,7 @@ describe('UserSessions', () => {
       });
   });
 
+  // TODO: failing test here. look into this
   it('setMfaToken rejects', () => {
     createStub.rejects(new Error('Test'));
     const callSetToken = async () => {
