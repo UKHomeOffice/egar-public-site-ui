@@ -118,7 +118,7 @@ describe('Home Get Controller', () => {
     });
   });
 
-  it.only('should render the page with session data if ok and with success messages', () => {
+  it('should render the page with session data if ok and with success messages', () => {
     const apiResponse = {
       items: [
         { id: 'GAR-1', status: { name: 'Draft' } },
@@ -162,6 +162,7 @@ describe('Home Get Controller', () => {
           { id: 'GAR-6', status: { name: 'Submitted' } },
         ],
         cancelledGars: [{ id: 'GAR-3', status: { name: 'Cancelled' } }],
+        completeGars: []
       });
     });
   });
