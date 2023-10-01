@@ -180,7 +180,7 @@ describe('GAR Review Post Controller', () => {
     };
 
     callController().then().then().then(() => {
-      expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
+      expect(res.render).to.have.been.calledWith('app/garfile/review', {
         cookie,
         manifestFields,
         garfile: {
