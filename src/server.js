@@ -37,15 +37,12 @@ const nunjucksFilters = require('./common/utils/templateFilters.js');
 
 
 // Global constants
-const oneYear = 86400000 * 365;
 const PORT = (process.env.PORT || 3000);
 const { NODE_ENV } = process.env;
 const G4_ID = (process.env.G4_ID || '');
 const BASE_URL = (process.env.BASE_URL || '');
-const COOKIE_SECRET = (process.env.COOKIE_SECRET || '');
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
-const publicCaching = { maxAge: oneYear };
 
 // Set Cookie secure flag depending on environment variable
 let secureFlag = false;
@@ -278,37 +275,17 @@ function initialiseErrorHandling(app) {
  * @return app
  */
 function initialise() {
-  logger.debug('1: App stuff');
-
   const unconfiguredApp = express();
   unconfiguredApp.disable('x-powered-by');
   unconfiguredApp.use(helmet.noCache());
   unconfiguredApp.use(helmet.frameguard());
-  logger.debug('2: App stuff');
-
 
   // DB calls are asynchronous, need them executed before aspects like
   // sessions which talk to the DB are executed, so all other init calls
   // performed after initialiseDb
   async function prepDb() {
     try {
-      logger.debug('3: App stuff');
-      // await initialiseDb();
-      logger.info('Syncing db');
-      const extension = await db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-      logger.debug(extension)
-      logger.debug('Extension created');
-      // TODO: should be done via migration files --> sync is too flexible.
-      const sync = await db.sequelize.sync();
-      logger.debug(sync)
-      logger.debug('Successfully created tables');
-      const private_key  = await db.sequelize.query(
-        'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; '
-        + 'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
-      );
-      logger.debug(private_key)
-      logger.debug('Successfully added session table constraints');
-      logger.debug('4: App stuff');
+      await initialiseDb();
       initialisExpressSession(unconfiguredApp);
       initialiseProxy(unconfiguredApp);
       initialiseI18n(unconfiguredApp);
@@ -330,7 +307,6 @@ function initialise() {
 
 function listen() {
   const app = initialise();
-  logger.debug(`5: App string representation: ${app.toString()}`);
   app.listen(PORT);
   logger.info('App initialised');
   logger.info(`Listening on port ${PORT}`);
@@ -340,9 +316,7 @@ function listen() {
  * Starts app after ensuring DB is up
  */
 function start() {
-  logger.debug('0: App start up');
   listen();
-  logger.debug('X: App is "started"');
 }
 
 /**
