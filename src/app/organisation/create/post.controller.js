@@ -28,7 +28,7 @@ module.exports = (req, res) => {
           res.render('app/organisation/create/index', { cookie, errors: error });
         } else {
           // Successful. Set org name, id & user role in cookie
-          cookie.setOrganisationName(responseObj.organisation.name);
+          cookie.setOrganisationName(responseObj.organisation.organisationName);
           cookie.setOrganisationId(responseObj.organisation.organisationId);
           cookie.setUserRole(responseObj.role.name);
           res.render('app/organisation/createsuccess/index', { cookie });

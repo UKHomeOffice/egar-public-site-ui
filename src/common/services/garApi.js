@@ -15,6 +15,7 @@ module.exports = {
   patch(garId, status, partial) {
     const reqBody = partial;
     reqBody.status = status;
+    logger.info(JSON.stringify(reqBody))
     return new Promise((resolve, reject) => {
       request.patch({
         headers: { 'content-type': 'application/json' },
