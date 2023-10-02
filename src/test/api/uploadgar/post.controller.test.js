@@ -250,7 +250,7 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it.only('should not throw error if arrival port is empty', async () => {
+    it('should not throw error if arrival port is empty', async () => {
       sinon.spy(req.session, 'save');
       const data = getValidWorkbook();
       data.Sheets.Valid1.B3.v = null;
