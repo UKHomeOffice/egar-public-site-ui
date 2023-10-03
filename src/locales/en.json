@@ -436,5 +436,28 @@
     "field_continental_shelf_question": "Are the goods you intend to declare eligible for the UK Continental Shelf declaration by conduct process?",
     "field_continental_shelf_hint": "Goods eligible for declaration for the UK Continental Shelf : ",
     "field_continental_shelf_review": "Intention to make continental shelf declaration",
-    "field_continental_shelf_declaration_review": "Continental shelf goods details"
+    "field_continental_shelf_declaration_review": "Continental shelf goods details",
+
+
+    "amg_status_check_response_code_0A": "VALID PERMISSION TO TRAVEL FOUND",
+    "amg_status_check_response_code_0B": "CONDUCT MANUAL CHECK TO DETERMINE PERMISSION",
+    "amg_status_check_response_code_0Z": "CONDUCT MANUAL CHECK TO DETERMINE PERMISSION",
+    "amg_status_check_response_code_2Z": "SELECTEE REFER TO STANDARD OPERATING PROCEDURES FOR UK",
+    "amg_status_check_response_code_0P": "CONDUCT MANUAL CHECK TO DETERMINE PERMISSION",
+
+    "amg_status_check_response_code_1Z": "DO NOT BOARD REFER TO STANDARD OPERATING PROCEDURES FOR UK",
+
+    "amg_status_check_response_code_0T": "SYSTEM TIME OUT REFER TO TIMEOUT PROCEDURE",
+    "amg_status_check_response_code_4Z": "INSUFFICIENT DATA ATTRIBUTES",
+
+    "amg_status_check_response_code_0U": "MANUALLY CHECK TRAVEL PERMISSION AND TEST RESULT",
+    "amg_status_check_response_code_0V": "MANUALLY CHECK TRAVEL PERMISSION AND VACCINATION STATUS",
+    "amg_status_check_response_code_0Y": "MANUALLY CHECK TRAVEL PERMISSION VACCINATION STATUS AND TEST RESULT",
+    "amg_status_check_response_code_0F": "MANUALLY CHECK TRAVEL PERMISSION AND HEALTH EXEMPTION",
+    "amg_status_check_response_code_0G": "MANUALLY CHECK TRAVEL PERMISSION AND HEALTH REQUIREMENTS",
+    "amg_status_check_response_code_0H": "MANUALLY CHECK HEALTH REQUIREMENTS",
+    "amg_status_check_response_code_0I": "MANUALLY CHECK TEST RESULT",
+    "amg_status_check_response_code_0J": "MANUALLY CHECK VACCINATION STATUS",
+    "amg_status_check_response_code_0K": "MANUALLY CHECK VACCINATION STATUS AND TEST RESULT",
+    "amg_status_check_response_code_0Q": "MANUALLY CHECK HEALTH EXEMPTION"
 }
