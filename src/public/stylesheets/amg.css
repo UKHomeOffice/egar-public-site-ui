@@ -3,7 +3,7 @@
     width: 1em; 
     height: 1em; 
     border-radius: 50%; 
-    border: 3px solid black;
+    border: 2px solid black;
 }
 
 .status-disc.green{
@@ -20,4 +20,25 @@
 
 .status-disc.red{
     background-color: red; 
+}
+
+.status-disc.black{
+    background-color: black; 
+}
+
+.status-disc > *{
+    display: none;
+    position:relative;
+}
+
+.status-disc:hover > *{
+    display:block;
+    position:absolute;
+    padding:1px 3px;
+    font-size: smaller;
+    border:2px solid black;
+    border-radius: 3px;
+    background-color: white;
+    width:10em;
+
 }
