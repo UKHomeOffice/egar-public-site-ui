@@ -1,10 +1,14 @@
-{% macro status(data) %}
+{% macro status(data, code) %}
 
-  {% if (data == 'Complete') %}
-    {% set statuscolour = 'green' %}
+  {% if (data === 'Complete') %}
+    {% if (code === '0A' ) %}
+      {% set statuscolour = 'green' %}
+    {% else %}
+      {% set statuscolour = 'green caveat' %}
+    {% endif %}
     {% set statustitle = 'This passenger has permission to travel' %}
     {% set statustext = 'Permission' %}
-  {% elif (data == 'Pending') %}
+  {% elif (data === 'Pending') %}
     {% set statuscolour = 'amber' %}
     {% set statustitle = 'This passenger is still waiting for permission to travel' %}
     {% set statustext = 'Pending' %}
@@ -13,14 +17,12 @@
     {% set statustitle = 'There was a problem requesting permission to travel for this passenger' %}
     {% set statustext = 'Error' %}
   {% endif %}
+
+
   <div>
     <div class="status-disc {{statuscolour}}" title="{{statustitle}}"></div>
     <small>{{statustext}}</small>
   </div>
-{% endmacro %}
-
-{% macro response_code(code) %}
-  <small>{{__('amg_status_check_response_code_' + code)}}</small>
 {% endmacro %}
 
 <table class="govuk-table">
@@ -36,10 +38,10 @@
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">{{person.firstName}} {{person.lastName}}</td>
     <td class="govuk-table__cell">
-      {{status(person.amgCheckinStatus.name)}}
+      {{status(person.amgCheckinStatus.name, person.amgCheckinResponseCode)}}
     </td>
     <td class="govuk-table__cell">
-      {{response_code(person.amgCheckinResponseCode)}}
+      {{__('amg_status_check_response_code_' + person.amgCheckinResponseCode)}}
     </td>
   </tr>
   {% endfor %}
