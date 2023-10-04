@@ -20,9 +20,8 @@
 {% endmacro %}
 
 {% macro response_code(code) %}
-  <small>{{__(['amg_status_check_response_code_', code] | join )}}</small>
+  <small>{{__('amg_status_check_response_code_' + code)}}</small>
 {% endmacro %}
-
 
 <table class="govuk-table">
   <thead class="govuk-table__head">
