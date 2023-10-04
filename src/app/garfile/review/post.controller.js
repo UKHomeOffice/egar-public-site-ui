@@ -17,7 +17,7 @@ const performAPICall = (garId, cookie, req, res) => {
     }).catch((err) => {
       logger.error('Api failed to submit GAR people for AMG checkin');
       logger.error(err);
-      res.render('app/garfile/review', {
+      res.render('app/garfile/review/index.njk', {
         cookie,
       });
     });
@@ -95,7 +95,7 @@ module.exports = (req, res) => {
       logger.info('Failed to submit incomplete GAR - validation failed');
       logger.debug(JSON.stringify(err));
       renderObj.errors = err;
-      res.render('app/garfile/review', renderObj);
+      res.render('app/garfile/review/index', renderObj);
     });
   }).catch((err) => {
     logger.error('Error retrieving GAR for review');

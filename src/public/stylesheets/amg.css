@@ -3,13 +3,16 @@
     width: 1em; 
     height: 1em; 
     border-radius: 50%; 
-    border: 1px solid black;
+    border: 3px solid black;
 }
 
 .status-disc.green{
     background-color: green; 
 }
 
+.status-disc.green.caveat{
+    border-color: red;
+}
 
 .status-disc.amber{
     background-color: #FFBF00; 

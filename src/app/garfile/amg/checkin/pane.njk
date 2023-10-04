@@ -1,22 +1,28 @@
-{% macro status(data) %}
+{% macro status(data, code) %}
 
-{% if (data == 'Complete') %}
-{% set statuscolour = 'green' %}
-{% set statustitle = 'This passenger has permission to travel' %}
-{% set statustext = 'Permission' %}
-{% elif (data == 'Pending') %}
-{% set statuscolour = 'amber' %}
-{% set statustitle = 'This passenger is still waiting for permission to travel' %}
-{% set statustext = 'Pending' %}
-{% else %}
-{% set statuscolour = 'red' %}
-{% set statustitle = 'There was a problem requesting permission to travel for this passenger' %}
-{% set statustext = 'Error' %}
-{% endif %}
-<div>
-  <div class="status-disc {{statuscolour}}" title="{{statustitle}}"></div>
-  <small>{{statustext}}</small>
-</div>
+  {% if (data === 'Complete') %}
+    {% if (code === '0A' ) %}
+      {% set statuscolour = 'green' %}
+    {% else %}
+      {% set statuscolour = 'green caveat' %}
+    {% endif %}
+    {% set statustitle = 'This passenger has permission to travel' %}
+    {% set statustext = 'Permission' %}
+  {% elif (data === 'Pending') %}
+    {% set statuscolour = 'amber' %}
+    {% set statustitle = 'This passenger is still waiting for permission to travel' %}
+    {% set statustext = 'Pending' %}
+  {% else %}
+    {% set statuscolour = 'red' %}
+    {% set statustitle = 'There was a problem requesting permission to travel for this passenger' %}
+    {% set statustext = 'Error' %}
+  {% endif %}
+
+
+  <div>
+    <div class="status-disc {{statuscolour}}" title="{{statustitle}}"></div>
+    <small>{{statustext}}</small>
+  </div>
 {% endmacro %}
 
 <table class="govuk-table">
@@ -24,6 +30,7 @@
     <tr class="govuk-table__row">
       <th class="govuk-table__header">Person</th>
       <th class="govuk-table__header">Status</th>
+      <th class="govuk-table__header">Response Text</th>
     </tr>
   </thead>
   {% for person in garpeople.items %}
@@ -31,7 +38,10 @@
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">{{person.firstName}} {{person.lastName}}</td>
     <td class="govuk-table__cell">
-      {{status(person.amg_checkin_status_id.name)}}
+      {{status(person.amgCheckinStatus.name, person.amgCheckinResponseCode)}}
+    </td>
+    <td class="govuk-table__cell">
+      {{__('amg_status_check_response_code_' + person.amgCheckinResponseCode)}}
     </td>
   </tr>
   {% endfor %}

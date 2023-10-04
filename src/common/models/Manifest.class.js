@@ -41,6 +41,14 @@ class Manifest {
           return null;
         }
 
+        if (
+          key === "amgCheckinResponseCode" || 
+          key === "amgDepartureResponseCode" ||
+          key === "amgHasDeparted"
+        ) {
+          return null;
+        }
+
         if (key.toLowerCase().includes('placeofbirth') ) {
           return null;
         }
