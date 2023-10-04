@@ -12,20 +12,23 @@
     {% else %}
       {% set statuscolour = 'green caveat' %}
     {% endif %}
+
     {% set statustitle = __('amg_status_check_response_code_' + person.amgCheckinResponseCode) %}
 
   {% elif(status === 'Pending') %}
     {% set statuscolour = 'amber' %}
-    {% set statustitle = 'Passenger is still waiting for permission to travel' %}
+    {% set statustitle = 'Permission to travel pending' %}
   {% else %}
     {% set statuscolour = 'black' %}
     {% set statustitle = 'There was a problem requesting permission to travel for this passenger' %}
   {% endif %}
 
+  {% set statustitle = statustitle | upper %}
+
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">
       <div>
-        <div class="status-disc {{statuscolour}}" title="{{statustitle}}">
+        <div class="status-disc {{statuscolour}}">
           <div class="govuk-template">{{statustitle}}</div>
         </div>
       </div>

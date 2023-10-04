@@ -1,9 +1,10 @@
 .status-disc{
+    position:relative;
     display: inline-block; 
     width: 1em; 
     height: 1em; 
     border-radius: 50%; 
-    border: 2px solid black;
+    border: 2px solid rgba(0,0,0, 0.125);
 }
 
 .status-disc.green{
@@ -27,18 +28,24 @@
 }
 
 .status-disc > *{
-    display: none;
-    position:relative;
-}
-
-.status-disc:hover > *{
-    display:block;
+    z-index: 10;
     position:absolute;
-    padding:1px 3px;
+    visibility:hidden;
+    top:.5em;
+    left:1em;
+    padding:2px 3px;
     font-size: smaller;
-    border:2px solid black;
+    border:2px solid #333;
     border-radius: 3px;
     background-color: white;
     width:10em;
+    filter: drop-shadow(-3px 3px 7px #c2c2c2);
+    opacity: 0;
+    transition: opacity .3s ease; 
+    background: linear-gradient(45deg, #e0e0e0, #f0f0f0);
+}
 
+.status-disc:hover > *{
+    visibility: visible;
+    opacity: 1;
 }
