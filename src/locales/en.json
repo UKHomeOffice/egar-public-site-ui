@@ -453,5 +453,6 @@
 	"amg_status_check_response_code_0J": "MANUALLY CHECK VACCINATION STATUS",
 	"amg_status_check_response_code_0K": "MANUALLY CHECK VACCINATION STATUS AND TEST RESULT",
 	"amg_status_check_response_code_0Q": "MANUALLY CHECK HEALTH EXEMPTION",
-	"gar_complete_no_records": "gar_complete_no_records"
+	"gar_complete_no_records": "gar_complete_no_records",
+	"amg_status_check_response_code_": "amg_status_check_response_code_"
 }
