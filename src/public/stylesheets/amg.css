@@ -10,6 +10,9 @@
     background-color: green; 
 }
 
+.status-disc.green.caveat{
+    border-color: red;
+}
 
 .status-disc.amber{
     background-color: #FFBF00; 
