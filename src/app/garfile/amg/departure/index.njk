@@ -3,13 +3,13 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-{{__('error_prefix') if errors}} Create GAR | Passenger Confirmation
+  {{__('error_prefix') if errors}} Create GAR | Passenger Confirmation
 {% endblock %}
 
 {% set active = '/home' %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {# {% block beforeContent %}
@@ -18,51 +18,51 @@
 {% endblock %} #}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-xl">{{__('confirmation_count', 1, 2)}}</span>
-    <h1 class="govuk-heading-xl">{{__('title_amg_departure_confirmation')}}</h1>
-    <p class="govuk-body-l">{{__('amg_departure_confirmation_caption')}}</p>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-xl">{{__('confirmation_count', 1, 2)}}</span>
+      <h1 class="govuk-heading-xl">{{__('title_amg_departure_confirmation')}}</h1>
+      <p class="govuk-body-l">{{__('amg_departure_confirmation_caption')}}</p>
 
-    {# <div class="govuk-warning-text">
+      {# <div class="govuk-warning-text">
       <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
       <strong class="govuk-warning-text__text">
         <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('amg_check_warning')}}
       </strong>
     </div> #}
+    </div>
   </div>
-</div>
 
+  <form action="/garfile/amg/departure" method="post" class="form">
+    <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
+    {# <p class="govuk-body-m">{{__('submit_gar_caption')}}</p> #}
 
-<form action="/garfile/amg/departure" method="post" class="form">
-  <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
-  {# <p class="govuk-body-m">{{__('submit_gar_caption')}}</p> #}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header">Person</th>
+          <th class="govuk-table__header">Did Not Depart</th>
+        </tr>
+      </thead>
+      {% for person in garpeople.items %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{person.firstName}}
+            {{person.lastName}}</td>
+          <td class="govuk-table__cell">
+            <input type="checkbox" name="exceptions[]" value="{{person.garPeopleId}}"/>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
 
-  <table class="govuk-table">
-    <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th class="govuk-table__header">Person</th>
-        <th class="govuk-table__header">Did Not Depart</th>
-      </tr>
-    </thead>
-    {% for person in garpeople.items %}
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell">{{person.firstName}} {{person.lastName}}</td>
-      <td class="govuk-table__cell">
-        <input type="checkbox" name="exceptions[]" value="{{person.garPeopleId}}"/>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
-
-  <input id='review-submit' type="submit" class="govuk-button" value="{{__('amg_departure_confirmation_submit')}}">
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-</form>
-<form id="cancel-form" action="/garfile/view" method="post" role="form">
-  <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-    {{__('review_gar_exit')}}
-  </button>
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-</form>
+    <input id='review-submit' type="submit" class="govuk-button" value="{{__('amg_departure_confirmation_submit')}}">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  </form>
+  <form id="cancel-form" action="/garfile/view" method="post" role="form">
+    <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+      {{__('review_gar_exit')}}
+    </button>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  </form>
 
 {% endblock content %}

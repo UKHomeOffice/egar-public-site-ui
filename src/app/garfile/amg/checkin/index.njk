@@ -3,13 +3,13 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-{{__('error_prefix') if errors}} Create GAR | Passenger Check
+  {{__('error_prefix') if errors}} Create GAR | Passenger Check
 {% endblock %}
 
 {% set active = '/home' %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {# {% block beforeContent %}
@@ -18,44 +18,31 @@
 {% endblock %} #}
 
 {% block content %}
-<link rel="stylesheet" href="/stylesheets/amg.css"/>
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
-    <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
-    <p class="govuk-body-l">{{__('amg_check_caption')}}</p>
+  <link rel="stylesheet" href="/stylesheets/amg.css"/>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
+      <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
+      <p class="govuk-body-l">{{__('amg_check_caption')}}</p>
 
-    <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('amg_check_warning')}}
-      </strong>
-    </div>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('amg_check_warning')}}
+        </strong>
+      </div>
 
-    <div id="pane">
-      {% include "app/garfile/amg/checkin/pane.njk" %}
+      <div id="pane">
+        {% include "app/garfile/amg/checkin/pane.njk" %}
+      </div>
     </div>
   </div>
-</div>
-<script>
-  $(function () {
-    setInterval(function () {
-      $('#pane').load('/garfile/amg/checkin?template=pane');
-    }, 5000);
-  })
-</script>
 
-<form action="/garfile/amg/checkin" method="post" class="form">
-  <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
-  <p class="govuk-body-m">{{__('submit_gar_caption')}}</p>
-  <input id='review-submit' type="submit" class="govuk-button" value="{{__('amg_check_form_submit')}}">
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-</form>
-<form id="cancel-form" action="/garfile/view" method="post" role="form">
-  <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-    {{__('review_gar_exit')}}
-  </button>
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-</form>
-
+  <script>
+    $(function () {
+      setInterval(function () {
+        $('#pane').load('/garfile/amg/checkin?template=pane');
+      }, 5000);
+    })
+  </script>
 {% endblock content %}
