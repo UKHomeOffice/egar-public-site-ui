@@ -1,36 +1,46 @@
-{% macro status(data, travelled) %}
+{% macro statusRow(person) %}
 
-{% if (data == 'Complete') %}
-{% set statuscolour = 'green' %}
-{% set statustitle = ['This passenger has been recorded as having ', '' if travelled else 'not ' , 'embarked with the craft'] | join %}
-{% elif (data == 'Pending') %}
-{% set statuscolour = 'amber' %}
-{% set statustitle = 'This passenger is still being recorded ' %}
-{% else %}
-{% set statuscolour = 'red' %}
-{% set statustitle = 'There was a problem recording whether this passenger embarked with the craft ' %}
-{% endif %}
+  {% set status = person.amgDepartureStatus.name %}
 
+  {% if (status == 'Complete') %}
+    {% set statuscolour = 'green' %}
+    {% set statustitle = ['This passenger has been recorded as having ',
+      '' if travelled else 
+        'not ',
+        'embarked with the craft'] | join %}
+  {% elif(status == 'Pending') %}
+    {% set statuscolour = 'amber' %}
+    {% set statustitle = 'Pending' %}
+  {% else %}
+    {% set statuscolour = 'red' %}
+    {% set statustitle = 'There was a problem recording whether this passenger embarked with the craft ' %}
+  {% endif %}
 
-<div class="status-disc {{statuscolour}}" title="{{statustitle}}">
-</div>
+  <tr class="govuk-table__row">
+    <td class="govuk-table__cell">
+      <div class="status-disc {{statuscolour}}" title="{{statustitle}}"></div>
+    </td>
+    <td class="govuk-table__cell">
+      {{status}}</td>
+    <td class="govuk-table__cell">
+      {{person.firstName}}
+      {{person.lastName}}</td>
+    <td class="govuk-table__cell">{{'Y' if person.amgHasDeparted else 'N'}}</td>
+  </tr>
+
 {% endmacro %}
 
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
+      <th class="govuk-table__header" style="width:10%;"></th>
+      <th class="govuk-table__header">Status</th>
       <th class="govuk-table__header">Person</th>
       <th class="govuk-table__header">Departed</th>
-      <th class="govuk-table__header">Confirmed</th>
     </tr>
   </thead>
   {% for person in garpeople.items %}
-  <tr class="govuk-table__row">
-    <td class="govuk-table__cell">{{person.firstName}} {{person.lastName}}</td>
-    <td class="govuk-table__cell">Y</td>
-    <td class="govuk-table__cell">
-      {{status(person.amgDepartureStatus.name, true)}}
-    </td>
-  </tr>
+    {# <pre>{{person | dump(2)}}</pre> #}
+    {{statusRow(person)}}
   {% endfor %}
 </table>

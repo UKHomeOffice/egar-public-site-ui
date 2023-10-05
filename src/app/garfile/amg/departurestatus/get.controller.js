@@ -33,6 +33,6 @@ module.exports = (req, res) => {
   }).catch((err) => {
     logger.error('Error retrieving GAR for amg');
     logger.error(JSON.stringify(err));
-    res.render('app/garfile/amg/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
+    res.render('app/home/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
   });
 };
