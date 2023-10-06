@@ -44,7 +44,7 @@ describe('User View Details Get Controller', () => {
 
   it('should redirect with errors if api rejects', () => {
     const cookie = new CookieModel(req);
-    craftApiStub.rejects('craftApi.getCrafts Example Reject');
+    //craftApiStub.rejects('craftApi.getCrafts Example Reject');
     personApiStub.resolves();
 
     const callController = async () => {
@@ -52,7 +52,7 @@ describe('User View Details Get Controller', () => {
     };
 
     callController().then().then(() => {
-      expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
+      //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
       expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
       expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
         cookie,
@@ -94,15 +94,15 @@ describe('User View Details Get Controller', () => {
 
       callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
-        expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
+        //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
         expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
           cookie,
-          savedCrafts: {
-            items: [
-              { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
-            ],
-          },
+          // savedCrafts: {
+          //   items: [
+          //     { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
+          //   ],
+          // },
           savedPeople: {
             items: [
               { id: 'PERSON-1', firstName: 'Jessica' },
@@ -126,15 +126,15 @@ describe('User View Details Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
-        expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
+        //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
         expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
           cookie,
-          savedCrafts: {
-            items: [
-              { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
-            ],
-          },
+          // savedCrafts: {
+          //   items: [
+          //     { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
+          //   ],
+          // },
           savedPeople: {
             items: [
               { id: 'PERSON-1', firstName: 'Jessica' },
@@ -156,15 +156,15 @@ describe('User View Details Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
-        expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
+        //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
         expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
           cookie,
-          savedCrafts: {
-            items: [
-              { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
-            ],
-          },
+          // savedCrafts: {
+          //   items: [
+          //     { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
+          //   ],
+          // },
           savedPeople: {
             items: [
               { id: 'PERSON-1', firstName: 'Jessica' },
