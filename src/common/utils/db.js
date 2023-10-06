@@ -15,12 +15,14 @@ const sequelize = new Sequelize(config.PUBLIC_SITE_DBNAME,
     },
   });
 
-sequelize.import('../models/UserSessions');
-sequelize.import('../models/WhiteList');
+//sequelize.import('../models/UserSessions');
+//sequelize.import('../models/WhiteList');
 
 module.exports.Sequelize = Sequelize;
 module.exports.sequelize = sequelize;
 module.exports.UserSessions = require('../models/UserSessions')(sequelize, Sequelize);
 module.exports.WhiteList = require('../models/WhiteList')(sequelize, Sequelize);
+module.exports.Session = require('../models/Session')(sequelize, Sequelize);
+
 
 module.exports.op = Sequelize.Op;

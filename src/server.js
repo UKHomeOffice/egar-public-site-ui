@@ -19,7 +19,6 @@ const _ = require('lodash');
 const cookieParser = require('cookie-parser');
 const uuid = require('uuid/v4');
 const csrf = require('csurf');
-const ua = require('universal-analytics');
 const PgSession = require('connect-pg-simple')(session);
 
 
@@ -43,7 +42,6 @@ const PORT = (process.env.PORT || 3000);
 const { NODE_ENV } = process.env;
 const G4_ID = (process.env.G4_ID || '');
 const BASE_URL = (process.env.BASE_URL || '');
-const visitor = ua(G4_ID);
 const COOKIE_SECRET = (process.env.COOKIE_SECRET || '');
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
@@ -68,28 +66,25 @@ const APP_VIEWS = [
 
 function initialiseDb() {
   return new Promise((resolve, reject) => {
-    try {
-      logger.info('Syncing db');
-      db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-      db.sequelize.import('./common/models/UserSessions');
-      db.sequelize.import('./common/models/Session');
-      db.sequelize.sync()
-        .then(() => {
-          logger.debug('Successfully created tables');
-        })
-        .then(() => db.sequelize.query(
-          'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; '
-          + 'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
-        ))
-        .then(() => {
-          logger.debug('Successfully added session table constraints');
-          resolve();
-        });
-    } catch (e) {
-      logger.error('Failed to sync db');
-      logger.error(e);
-      reject(e);
-    }
+    logger.info('Syncing db');
+    db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+    // TODO: should be done via migration files --> sync is too flexible.
+    db.sequelize.sync()
+      .then(() => {
+        logger.debug('Successfully created tables');
+      })
+      .then(() => db.sequelize.query(
+        'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; '
+        + 'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
+      ))
+      .then(() => {
+        logger.debug('Successfully added session table constraints');
+        resolve();
+      }).catch((e) => {
+        logger.error('Failed to sync db');
+        logger.error(e);
+        reject(e);
+      });
   });
 }
 
@@ -213,10 +208,10 @@ function initialiseTemplateEngine(app) {
     noCache: NODE_ENV !== 'production', // Never use a cache and recompile templates each time (server-side)
   };
   logger.info('Set template engine');
-   
+
   // Initialise nunjucks environment
   const nunjucksEnvironment = nunjucks.configure(APP_VIEWS, nunjucksConfiguration);
-  
+
   // nunjucksEnvironment.addFilter('date, nunjucksDate');
 
   // Set view engine
@@ -289,16 +284,21 @@ function initialise() {
   // sessions which talk to the DB are executed, so all other init calls
   // performed after initialiseDb
   async function prepDb() {
-    await initialiseDb();
-    initialisExpressSession(unconfiguredApp);
-    initialiseProxy(unconfiguredApp);
-    initialiseI18n(unconfiguredApp);
-    initialiseGlobalMiddleware(unconfiguredApp);
-    initialiseTemplateEngine(unconfiguredApp);
-    initialiseRoutes(unconfiguredApp);
-    initialisePublic(unconfiguredApp);
-    initialiseErrorHandling(unconfiguredApp);
-    logger.info('Initialised app: ');
+    try {
+      await initialiseDb();
+      initialisExpressSession(unconfiguredApp);
+      initialiseProxy(unconfiguredApp);
+      initialiseI18n(unconfiguredApp);
+      initialiseGlobalMiddleware(unconfiguredApp);
+      initialiseTemplateEngine(unconfiguredApp);
+      initialiseRoutes(unconfiguredApp);
+      initialisePublic(unconfiguredApp);
+      initialiseErrorHandling(unconfiguredApp);
+      logger.info('Initialised app: ');
+    } catch(e) {
+      logger.error("Prepping the database failed.")
+      logger.error(e);
+    }
   }
   prepDb();
 

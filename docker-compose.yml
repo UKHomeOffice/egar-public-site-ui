@@ -58,3 +58,4 @@ services:
       - ./src/server.js:/public-site/server.js
       - ./src/start.js:/public-site/start.js
       - ./src/package.json:/public-site/package.json
+

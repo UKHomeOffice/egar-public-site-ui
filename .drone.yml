@@ -397,4 +397,3 @@ trigger:
     exclude:
     - wip*
     - WIP*
-...
