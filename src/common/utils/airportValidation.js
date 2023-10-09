@@ -49,7 +49,7 @@ function isBritishAirport(airportCode) {
 
 function isJourneyUKInbound(departureCode, arrivalCode) {
 
-  if (!departureCode || !arrivalCode) {
+  if (!isAnAirportCode(departureCode) || !isAnAirportCode(arrivalCode)) {
     return true;
   }
 
@@ -59,6 +59,20 @@ function isJourneyUKInbound(departureCode, arrivalCode) {
   return !departureAirfield.british && arrivalAirfield.british;
   //TODO implement Crown Dependency logic
 
+}
+
+function isAnAirportCode(airportCode) {
+  //if airportCode is: null, undefined, empty string, return false
+  if (!airportCode) {
+    return false;
+  }
+
+  //if airportCode is one of the magic strings, return false
+  if (['YYYY', 'ZZZZ'].includes(airportCode)) {
+    return false;
+  }
+
+  return true;
 }
 
 module.exports = {
