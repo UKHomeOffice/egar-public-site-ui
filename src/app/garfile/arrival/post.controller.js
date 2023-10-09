@@ -168,7 +168,7 @@ module.exports = async (req, res) => {
     // logger.debug(voyage.arrivalPort);
     // logger.debug(JSON.parse(gar).departurePort);
     validations.push([
-      new ValidationRule(airportValidation.isBritishAirport, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], airportValidation.notBritishMsg),
+      new ValidationRule(airportValidation.includesOneBritishAirport, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], airportValidation.notBritishMsg),
     ]);
   }
 

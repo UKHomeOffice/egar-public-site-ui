@@ -43,7 +43,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     [new ValidationRule(validator.preventZ, '', voyageObj.arrivalPort, 'Add ICAO/IATA or Latitude/Longitude Co-ordinates for the location')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departurePort, 'Enter a value for the departure port')],
     [new ValidationRule(validator.preventZ, '', voyageObj.departurePort, 'Add ICAO/IATA or Latitude/Longitude Co-ordinates for the location')],
-    [new ValidationRule(airportValidation.isBritishAirport, '', [voyageObj.departurePort, voyageObj.arrivalPort], airportValidation.notBritishMsg)],
+    [new ValidationRule(airportValidation.includesOneBritishAirport, '', [voyageObj.departurePort, voyageObj.arrivalPort], airportValidation.notBritishMsg)],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalTime, 'Enter a value for the arrival time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureTime, 'Enter a value for the departure time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalDate, 'Enter a value for the arrival date')],
