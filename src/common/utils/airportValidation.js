@@ -47,8 +47,23 @@ function isBritishAirport(airportCode) {
   return airport.british;
 }
 
+function isJourneyUKInbound(departureCode, arrivalCode) {
+
+  if (!departureCode || !arrivalCode) {
+    return true;
+  }
+
+  const departureAirfield = findAirportForCode(departureCode);
+  const arrivalAirfield = findAirportForCode(arrivalCode);
+
+  return !departureAirfield.british && arrivalAirfield.british;
+  //TODO implement Crown Dependency logic
+
+}
+
 module.exports = {
   includesOneBritishAirport,
   notBritishMsg,
-  isBritishAirport
+  isBritishAirport,
+  isJourneyUKInbound
 };
