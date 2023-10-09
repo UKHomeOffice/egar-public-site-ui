@@ -60,7 +60,7 @@
 <form action="/garfile/amg/checkin" method="post" class="form">
   <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
   <p class="govuk-body-m">{{__('submit_gar_caption')}}</p>
-  <input id='review-submit' type="submit" {% 'disabled' if garfile.status.name != 'StatusCheckComplete' %} class="govuk-button" value="{{__('amg_check_form_submit')}}">
+  <input id='review-submit' type="submit" {{ 'disabled' if garfile.status.name != 'StatusCheckComplete' }} class="govuk-button" value="{{__('amg_check_form_submit')}}">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 </form>
 
