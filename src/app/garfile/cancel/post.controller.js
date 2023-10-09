@@ -7,11 +7,14 @@ const config = require('../../../common/config');
 module.exports = (req, res) => {
   logger.debug('In garfile / cancel get controller');
   const cookie = new CookieModel(req);
+  const isCancelled = true
 
   garApi.getPeople(cookie.getGarId())
     .then((res) => {
       const garpeople = JSON.parse(res).items;
       const VALID_PERMISSION_TO_TRAVEL = "0A";
+
+      logger.debug(`Garpeople: ${JSON.stringify(garpeople)}`)
 
       const passengersToRaiseException = garpeople
         .filter(garperson => garperson.amgCheckinResponseCode === VALID_PERMISSION_TO_TRAVEL)
@@ -20,7 +23,16 @@ module.exports = (req, res) => {
       return passengersToRaiseException;
     })
     .then((passengersToRaiseException) => {
-      return garApi.postGarPassengerConfirmations(cookie.getGarId(), passengersToRaiseException)
+      if (passengersToRaiseException.length === 0) {
+        return null
+      }
+      
+      garApi.postGarPassengerConfirmations(
+        cookie.getGarId(), 
+        passengersToRaiseException,
+        isCancelled
+      );
+    })
     .then(() => {
       garApi.patch(cookie.getGarId(), 'Cancelled', {})
         .then(() => {
@@ -47,14 +59,13 @@ module.exports = (req, res) => {
       });
     })
     .catch((err) => {
-        logger.error('Api failed to post GAR exceptions');
-        logger.error(err);
-        res.render('app/home', {
-            cookie,
-            errors: [{
-                message: 'Failed to post GAR confirmation|exceptions',
-            }],
-        });
+      logger.error('Api failed to post GAR exceptions');
+      logger.error(err);
+      res.render('app/home', {
+          cookie,
+          errors: [{
+              message: 'Failed to post GAR confirmation|exceptions',
+          }],
       });
     });
 };
