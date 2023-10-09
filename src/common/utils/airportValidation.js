@@ -19,7 +19,7 @@ function includesOneBritishAirport(airports) {
 }
 
 function findAirportForCode(airportCode) {
-  if (!airportCode) {
+  if (!isAnAirportCode(airportCode)) {
     return null;
   }
 
@@ -49,33 +49,19 @@ function isBritishAirport(airportCode) {
 
 function isJourneyUKInbound(departureCode, arrivalCode) {
 
-  let arrivalAirfield = null;
-  let departureAirfield = null;
+  const arrivalAirfield = findAirportForCode(arrivalCode);
+  const departureAirfield =  findAirportForCode(departureCode);
 
-  if (isAnAirportCode(arrivalCode)) {
-    arrivalAirfield = findAirportForCode(arrivalCode);
-  }
-
-  if (isAnAirportCode(departureCode)) {
-    departureAirfield = findAirportForCode(departureCode);
-  }
-
-  console.log(departureAirfield);
-  console.log(arrivalAirfield);
-  
   if (departureAirfield && isAirportBritishOrCrownDependency(departureAirfield)) {
     return false;// we know departure and is within UK
   }
-
 
   if (arrivalAirfield && !isAirportBritishOrCrownDependency(arrivalAirfield)) {
     return false;// we know arrival airfield and not in UK
   }
 
-
   return true;//both unkown; don't know arrival but departure outside UK; don't know departure but arrival in UK
 }
-
 
 function isAirportBritishOrCrownDependency(airport) {
   return airport.british || airport.crownDependency;
