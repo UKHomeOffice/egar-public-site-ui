@@ -40,8 +40,8 @@ describe('Airport Validation - UK Inbound Tests', () => {
         expect(airportValidation.isJourneyUKInbound('', '')).to.eq(true);
     });
 
-    it('should indicate UK Inbound when departure is UK but arrival null', () => {
-        expect(airportValidation.isJourneyUKInbound('LGW', null)).to.eq(true);
+    it('should not indicate UK Inbound when departure is UK but arrival null', () => {
+        expect(airportValidation.isJourneyUKInbound('LGW', null)).to.eq(false);
     });
 
     it('should indicate UK Inbound when departure is null but arrival UK', () => {
@@ -52,8 +52,8 @@ describe('Airport Validation - UK Inbound Tests', () => {
         expect(airportValidation.isJourneyUKInbound('LAX', null)).to.eq(true);
     });
 
-    it('should indicate UK Inbound when departure is null but arrival not UK', () => {
-        expect(airportValidation.isJourneyUKInbound(null, 'LAX')).to.eq(true);
+    it('should not indicate UK Inbound when departure is null but arrival not UK', () => {
+        expect(airportValidation.isJourneyUKInbound(null, 'LAX')).to.eq(false);
     });
 
     it('should indicate UK Inbound when departure is not british and arrival in UK', () => {
