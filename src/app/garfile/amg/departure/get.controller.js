@@ -7,6 +7,8 @@ module.exports = (req, res) => {
   logger.debug('In garfile / amg get controller');
 
   const cookie = new CookieModel(req);
+  const garId = cookie.getGarId();
+  
   const template = req.query.template === 'pane' ? 'app/garfile/amg/departure/pane' : 'app/garfile/amg/departure/index';
 
   Promise.all([
@@ -15,7 +17,6 @@ module.exports = (req, res) => {
   ]).then((apiResponse) => {
     const garfile = JSON.parse(apiResponse[0]);
     const garpeople = JSON.parse(apiResponse[1]);
-
 
     const renderObj = {
       cookie,
