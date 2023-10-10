@@ -25,7 +25,7 @@ module.exports = (req, res) => {
   ]).then((apiResponse) => {
     const garfile = JSON.parse(apiResponse[0]);
     const garpeople = JSON.parse(apiResponse[1]);
-    const garsupportingdocs = JSON.parse(apiResponse[2]);
+
 
     const renderObj = {
       cookie,
