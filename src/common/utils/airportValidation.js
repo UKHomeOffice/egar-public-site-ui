@@ -50,9 +50,6 @@ function isBritishAirport(airportCode) {
 
 function isJourneyUKInbound(departureCode, arrivalCode) {
 
-  logger.error(`departureCode#${departureCode}#`);
-  logger.error(`arrivalCode#${arrivalCode}#`);
-
   const arrivalAirfield = findAirportForCode(arrivalCode);
   const departureAirfield =  findAirportForCode(departureCode);
 
