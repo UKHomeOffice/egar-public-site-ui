@@ -1,5 +1,5 @@
 const airportCodes = require('./airport_codes.json');
-const logger = require('logger')(__filename);
+const logger = require('./logger')(__filename);
 
 const notBritishMsg = 'Either the Arrival or Departure port must be a UK port';
 
