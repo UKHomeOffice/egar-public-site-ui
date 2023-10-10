@@ -20,8 +20,7 @@ module.exports = (req, res) => {
 
   Promise.all([
     garApi.get(garId),
-    garApi.getPeople(garId),
-    garApi.getSupportingDocs(garId),
+    garApi.getPeople(garId)
   ]).then((apiResponse) => {
     const garfile = JSON.parse(apiResponse[0]);
     const garpeople = JSON.parse(apiResponse[1]);
@@ -32,7 +31,6 @@ module.exports = (req, res) => {
       manifestFields,
       garfile,
       garpeople,
-      garsupportingdocs,
       showChangeLinks: true,
     };
 

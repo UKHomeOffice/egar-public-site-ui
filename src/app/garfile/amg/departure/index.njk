@@ -12,24 +12,12 @@
   {% include "header-user.njk" %}
 {% endblock %}
 
-{# {% block beforeContent %}
-{% include "phase.njk" %}
-<a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
-{% endblock %} #}
-
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-xl">{{__('confirmation_count', 1, 2)}}</span>
       <h1 class="govuk-heading-xl">{{__('title_amg_departure_confirmation')}}</h1>
       <p class="govuk-body-l">{{__('amg_departure_confirmation_caption')}}</p>
-
-      {# <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('amg_check_warning')}}
-      </strong>
-    </div> #}
     </div>
   </div>
 
