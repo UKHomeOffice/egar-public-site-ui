@@ -172,14 +172,13 @@ module.exports = {
    * @param {String[]} exceptions uuids of garpeople that did not depart
    * @returns {Promise} resolves with API response.
    */
-    postGarPassengerConfirmations(garId, exceptions, isCancelled = false) {
+    postGarPassengerConfirmations(garId, exceptions) {
       return new Promise((resolve, reject) => {
         request.post({
           headers: { 'content-type': 'application/json' },
           url: endpoints.postGarPassengerConfirmations(garId),
           body: JSON.stringify({
-            exceptions: exceptions,
-            isCancelled
+            exceptions: exceptions
           }),
         }, (error, _response, body) => {
           if (error) {
