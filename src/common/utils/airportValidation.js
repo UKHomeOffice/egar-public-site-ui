@@ -1,4 +1,5 @@
 const airportCodes = require('./airport_codes.json');
+const logger = require('logger')(__filename);
 
 const notBritishMsg = 'Either the Arrival or Departure port must be a UK port';
 
@@ -48,6 +49,9 @@ function isBritishAirport(airportCode) {
 }
 
 function isJourneyUKInbound(departureCode, arrivalCode) {
+
+  logger.error(`departureCode#${departureCode}#`);
+  logger.error(`arrivalCode#${arrivalCode}#`);
 
   const arrivalAirfield = findAirportForCode(arrivalCode);
   const departureAirfield =  findAirportForCode(departureCode);
