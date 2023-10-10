@@ -12,12 +12,8 @@ module.exports = (req, res) => {
   garApi.getPeople(cookie.getGarId())
     .then((res) => {
       const garpeople = JSON.parse(res).items;
-      const VALID_PERMISSION_TO_TRAVEL = "0A";
-
-      logger.debug(`Garpeople: ${JSON.stringify(garpeople)}`)
-
       const passengersToRaiseException = garpeople
-        .filter(garperson => garperson.amgCheckinResponseCode === VALID_PERMISSION_TO_TRAVEL)
+        .filter(garperson => garperson.amgCheckinResponseCode !== null)
         .map(garperson => garperson.garPeopleId);
 
       return passengersToRaiseException;
@@ -25,13 +21,13 @@ module.exports = (req, res) => {
     .then((passengersToRaiseException) => {
       if (passengersToRaiseException.length === 0) {
         return null
+      } else {
+        garApi.postGarPassengerConfirmations(
+          cookie.getGarId(), 
+          passengersToRaiseException,
+          isCancelled
+        );
       }
-      
-      garApi.postGarPassengerConfirmations(
-        cookie.getGarId(), 
-        passengersToRaiseException,
-        isCancelled
-      );
     })
     .then(() => {
       garApi.patch(cookie.getGarId(), 'Cancelled', {})
