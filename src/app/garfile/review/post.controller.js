@@ -9,9 +9,10 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
+const { log } = require('winston');
 
 const performAPICallAMG = (garId, cookie, req, res) => {
-  garApi.submitGARForCheckin (garId)
+  garApi.submitGARForCheckin(garId)
     .then((apiResponse) => {
       logger.info('Submiited GAR people to AMG checkin');
       res.redirect('/garfile/amg/checkin');
@@ -141,10 +142,15 @@ module.exports = (req, res) => {
         - Journey is coming into UK but no status check: Send to AMG/UPT
         - Journey is coming into UK and status check: Submit GAR
       */
-      if(airportValidation.isJourneyUKInbound(garfile) && garfile.status.name !== 'StatusCheckComplete'){
+     logger.error('Status: ' + garfile.status.name);
+     logger.error('isJourneyUKInbound: ' + airportValidation.isJourneyUKInbound(garfile));
+
+      if (airportValidation.isJourneyUKInbound(garfile) && garfile.status.name !== 'StatusCheckComplete') {
+        logger.error('about to run performAPICallAMG');
         performAPICallAMG(garId, cookie, req, res);
       }
-      else{
+      else {
+        logger.error('about to run performAPICall');
         performAPICall(garId, cookie, req, res);
       }
     }).catch((err) => {
