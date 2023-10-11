@@ -117,6 +117,7 @@ describe('GAR Review Get Controller', () => {
         },
         garsupportingdocs: {},
         showChangeLinks: true,
+        isJourneyUkInbound: true,
         errors: [
           new ValidationRule(validator.isValidDepAndArrDate, 'departure', {
             arrivalDate: undefined, arrivalTime: undefined, departureDate: undefined, departureTime: undefined,
@@ -185,6 +186,7 @@ describe('GAR Review Get Controller', () => {
           message: 'GAR not found',
         },
         showChangeLinks: true,
+        isJourneyUkInbound: true
       });
     });
   });
@@ -240,6 +242,7 @@ describe('GAR Review Get Controller', () => {
         },
         garsupportingdocs: {},
         showChangeLinks: true,
+        isJourneyUkInbound: true
       });
     });
   });

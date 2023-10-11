@@ -1,4 +1,5 @@
 const logger = require('../../../common/utils/logger')(__filename);
+const airportValidation = require('../../../common/utils/airportValidation');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
@@ -73,13 +74,21 @@ module.exports = (req, res) => {
         garfile: parsedGar,
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
+        showChangeLinks: true
       };
-      renderContext.showChangeLinks = true;
-      if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
+
+
+      if (parsedGar.status.name === 'Submitted' || parsedGar.status.name === 'Cancelled') {
         renderContext.showChangeLinks = false;
       }
-      logger.info('Rendering GAR review page');
-      res.render('app/garfile/view/index', renderContext);
+
+      if (airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort) && parsedGar.status.name === 'Submitted') {
+        res.redirect('/garfile/amg/departure');
+      }
+      else {
+        logger.info('Rendering GAR review page');
+        res.render('app/garfile/view/index', renderContext);
+      }
     })
     .catch((err) => {
       logger.error('Failed to get GAR information');

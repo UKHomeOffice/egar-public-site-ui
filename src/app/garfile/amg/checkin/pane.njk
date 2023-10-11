@@ -28,9 +28,7 @@
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">
       <div>
-        <div class="status-disc {{statuscolour}}">
-          <div class="govuk-template">{{statustitle}}</div>
-        </div>
+        <div class="status-disc {{statuscolour}}"></div>
       </div>
     </td>
     <td class="govuk-table__cell">{{person.firstName}}
@@ -57,7 +55,7 @@
   {% endfor %}
 </table>
 
-<form action="/garfile/amg/checkin" method="post" class="form">
+<form action="/garfile/review" method="post" class="form">
   <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
   <p class="govuk-body-m">{{__('submit_gar_caption')}}</p>
   <input id='review-submit' type="submit" {{ 'disabled' if garfile.status.name != 'StatusCheckComplete' }} class="govuk-button" value="{{__('amg_check_form_submit')}}">

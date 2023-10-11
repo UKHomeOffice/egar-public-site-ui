@@ -1,4 +1,5 @@
 const airportCodes = require('./airport_codes.json');
+const logger = require('./logger')(__filename);
 
 const notBritishMsg = 'Either the Arrival or Departure port must be a UK port';
 
@@ -19,7 +20,7 @@ function includesOneBritishAirport(airports) {
 }
 
 function findAirportForCode(airportCode) {
-  if (!airportCode) {
+  if (!isAnAirportCode(airportCode)) {
     return null;
   }
 
@@ -49,16 +50,36 @@ function isBritishAirport(airportCode) {
 
 function isJourneyUKInbound(departureCode, arrivalCode) {
 
-  if (!departureCode || !arrivalCode) {
-    return true;
+  const arrivalAirfield = findAirportForCode(arrivalCode);
+  const departureAirfield =  findAirportForCode(departureCode);
+
+  if (departureAirfield && isAirportBritishOrCrownDependency(departureAirfield)) {
+    return false;// we know departure and is within UK
   }
 
-  const departureAirfield = findAirportForCode(departureCode);
-  const arrivalAirfield = findAirportForCode(arrivalCode);
+  if (arrivalAirfield && !isAirportBritishOrCrownDependency(arrivalAirfield)) {
+    return false;// we know arrival airfield and not in UK
+  }
 
-  return !departureAirfield.british && arrivalAirfield.british;
-  //TODO implement Crown Dependency logic
+  return true;//both unkown; don't know arrival but departure outside UK; don't know departure but arrival in UK
+}
 
+function isAirportBritishOrCrownDependency(airport) {
+  return airport.british || airport.crownDependency;
+}
+
+function isAnAirportCode(airportCode) {
+  //if airportCode is: null, undefined, empty string, return false
+  if (!airportCode) {
+    return false;
+  }
+
+  //if airportCode is one of the magic strings, return false
+  if (['YYYY', 'ZZZZ'].includes(airportCode)) {
+    return false;
+  }
+
+  return true;
 }
 
 module.exports = {
