@@ -132,8 +132,6 @@
                         <td class="govuk-table__cell">
                           {% if gar.registration === null %}
                             <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
-                          {% elif gar.status.name === 'Submitted' %}
-                            <a href="/garfile/amg/departure/?garid={{ gar.garId }}">{{ gar.registration }}</a>
                           {% else %}
                             <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
                           {% endif %}

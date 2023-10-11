@@ -3,6 +3,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
 const validator = require('../../../common/utils/validator');
+const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
 
 module.exports = (req, res) => {
@@ -24,6 +25,8 @@ module.exports = (req, res) => {
     const garsupportingdocs = JSON.parse(apiResponse[2]);
     validator.handleResponseError(garsupportingdocs);
 
+    const isJourneyUkInbound = airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort);
+
     const validations = validationList.validations(garfile, garpeople);
     const renderObj = {
       cookie,
@@ -32,6 +35,7 @@ module.exports = (req, res) => {
       garpeople,
       garsupportingdocs,
       showChangeLinks: true,
+      isJourneyUkInbound
     };
 
     validator.validateChains(validations)

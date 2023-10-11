@@ -7,32 +7,22 @@ module.exports = (req, res) => {
   logger.debug('In garfile / amg get controller');
 
   const cookie = new CookieModel(req);
-
-  let  garId = req.query.garid;
-  
-  if (garId === undefined) {
-    garId = cookie.getGarId();
-  }
-
-  cookie.setGarId(garId);
+  const garId = cookie.getGarId();
   
   const template = req.query.template === 'pane' ? 'app/garfile/amg/departure/pane' : 'app/garfile/amg/departure/index';
 
   Promise.all([
     garApi.get(garId),
-    garApi.getPeople(garId),
-    garApi.getSupportingDocs(garId),
+    garApi.getPeople(garId)
   ]).then((apiResponse) => {
     const garfile = JSON.parse(apiResponse[0]);
     const garpeople = JSON.parse(apiResponse[1]);
-    const garsupportingdocs = JSON.parse(apiResponse[2]);
 
     const renderObj = {
       cookie,
       manifestFields,
       garfile,
       garpeople,
-      garsupportingdocs,
       showChangeLinks: true,
     };
 

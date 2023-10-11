@@ -12,11 +12,6 @@
   {% include "header-user.njk" %}
 {% endblock %}
 
-{# {% block beforeContent %}
-{% include "phase.njk" %}
-<a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
-{% endblock %} #}
-
 {% block content %}
   <link rel="stylesheet" href="/stylesheets/amg.css"/>
   <div class="govuk-grid-row">
@@ -40,8 +35,15 @@
 
   <script>
     $(function () {
-      setInterval(function () {
-        $('#pane').load('/garfile/amg/checkin?template=pane');
+      window.myinterval = setInterval(function () {
+        $.get('/garfile/amg/checkin?template=pane', null, function (data) {
+          const html = $(data);
+          if(!html.find('#review-submit').prop('disabled')){
+            clearInterval(window.myinterval);
+          }
+          $('#pane').html($(data));
+        });
+
       }, 5000);
     })
   </script>
