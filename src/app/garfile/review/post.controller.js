@@ -9,7 +9,6 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
-const { log } = require('winston');
 
 const performAPICallAMG = (garId, cookie, req, res) => {
   garApi.submitGARForCheckin(garId)
@@ -144,11 +143,9 @@ module.exports = (req, res) => {
       */
      
       if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && garfile.status.name !== 'StatusCheckComplete') {
-        logger.error('about to run performAPICallAMG');
         performAPICallAMG(garId, cookie, req, res);
       }
       else {
-        logger.error('about to run performAPICall');
         performAPICall(garId, cookie, req, res);
       }
     }).catch((err) => {
