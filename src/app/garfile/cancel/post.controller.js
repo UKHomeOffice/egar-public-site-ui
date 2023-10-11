@@ -7,6 +7,7 @@ const config = require('../../../common/config');
 module.exports = (req, res) => {
   logger.debug('In garfile / cancel get controller');
   const cookie = new CookieModel(req);
+  const isCancelled = true;
 
   garApi.patch(cookie.getGarId(), 'Cancelled', {})
     .then(() => {
@@ -29,9 +30,11 @@ module.exports = (req, res) => {
         if (passengersToRaiseException.length === 0) {
           return null
         } else {
+          
           garApi.postGarPassengerConfirmations(
             cookie.getGarId(), 
-            passengersToRaiseException
+            passengersToRaiseException,
+            isCancelled
           );
         }
       })
