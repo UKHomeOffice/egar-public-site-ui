@@ -77,18 +77,12 @@ module.exports = (req, res) => {
         showChangeLinks: true
       };
 
-
       if (parsedGar.status.name === 'Submitted' || parsedGar.status.name === 'Cancelled') {
         renderContext.showChangeLinks = false;
       }
 
-      if (airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort) && parsedGar.status.name === 'Submitted') {
-        res.redirect('/garfile/amg/departure');
-      }
-      else {
-        logger.info('Rendering GAR review page');
-        res.render('app/garfile/view/index', renderContext);
-      }
+      logger.info('Rendering GAR review page');
+      res.render('app/garfile/view/index', renderContext);
     })
     .catch((err) => {
       logger.error('Failed to get GAR information');

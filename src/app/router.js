@@ -47,8 +47,6 @@ const printmanifest = require('./garfile/printmanifest');
 
 //amg
 const amgcheckin  = require('./garfile/amg/checkin');
-const amgdeparture  = require('./garfile/amg/departure');
-const amgdeparturestatus  = require('./garfile/amg/departurestatus');
 
 // Saved entities
 const people = require('./people');
@@ -143,7 +141,4 @@ module.exports.bind = (app) => {
   app.use(printmanifest.router);
   //
   app.use(amgcheckin.router);
-  app.use(amgdeparture.router);
-  app.use(amgdeparturestatus.router);
-
 };
