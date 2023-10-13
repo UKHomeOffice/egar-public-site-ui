@@ -17,6 +17,8 @@ module.exports = (req, res) => {
   const birthdate = `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`;
   const expiryDate = `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`;
 
+    
+    // egar_saved_people_travel_document_type.json' { "id": "3", "documenttype": "Other"}
   const person = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,

@@ -1,6 +1,7 @@
 [
     { "id": "0", "documenttype": "" },
-    { "id": "1", "documenttype": "Identity Card" },
-    { "id": "2", "documenttype": "Passport" },
-    { "id": "3", "documenttype": "Other"}
+    { "id": "1", "documenttype": "Identity Card - A" },
+    { "id": "4", "documenttype":"Identity Card - C" },
+    { "id": "5", "documenttype": "Identity Card - I" },
+    { "id": "2", "documenttype": "Passport" }
 ]
