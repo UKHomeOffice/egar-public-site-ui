@@ -108,6 +108,8 @@ module.exports = (req, res) => {
     const manifest = new Manifest(responseValues[1]);
     validator.handleResponseError(garpeople);
 
+    const statuscheck = Boolean(req.body.statuscheck);
+
     const garsupportingdocs = JSON.parse(responseValues[2]);
     validator.handleResponseError(garsupportingdocs);
 
@@ -142,7 +144,8 @@ module.exports = (req, res) => {
         - Journey is coming into UK and status check: Submit GAR
       */
      
-      if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && garfile.status.name !== 'StatusCheckComplete') {
+      if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && !statuscheck) 
+       {
         performAPICallAMG(garId, cookie, req, res);
       }
       else {
