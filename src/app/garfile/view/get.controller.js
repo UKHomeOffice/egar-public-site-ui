@@ -31,7 +31,6 @@ module.exports = (req, res) => {
     const cookie = new CookieModel(req);
     logger.debug('In garfile/view get controller');
     
-  
     const context = { cookie };
 
     let { garId } = req.body;
@@ -80,7 +79,7 @@ module.exports = (req, res) => {
         garfile: parsedGar,
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
-      };
+      }; 
       renderContext.showChangeLinks = true;
       if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
         renderContext.showChangeLinks = false;
