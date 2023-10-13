@@ -144,7 +144,8 @@ module.exports = (req, res) => {
         - Journey is coming into UK and status check: Submit GAR
       */
      
-      if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && statuscheck /*garfile.status.name !== 'StatusCheckComplete'*/) {
+      if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && !statuscheck) 
+       {
         performAPICallAMG(garId, cookie, req, res);
       }
       else {
