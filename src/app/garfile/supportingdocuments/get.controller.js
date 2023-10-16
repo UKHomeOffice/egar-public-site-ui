@@ -21,7 +21,8 @@ module.exports = (req, res) => {
       let error = null;
       switch (req.query.query) {
         case 'e': // Error returned
-          error = [{ identifier: 'file', message: 'File not uploaded. There was an error in scanning the file. Please try again' }];
+          error = [req.session.errMsg];
+          delete req.session.errMsg;
           break;
         case 'v': // Virus detected
           error = [{ message: 'File cannot be uploaded. The file has a virus' }];
