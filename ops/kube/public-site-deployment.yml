@@ -49,6 +49,44 @@ spec:
               value: '20'
             - name: STATSD_METRICS
               value: 'FALSE'
+        - name: public-site-avp
+          image: quay.io/ukhomeofficedigital/docker-clamav-rest:1.0.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
+            requests:
+              memory: "2048Mi"
+              cpu: "2000m"
+          ports:
+            - name: public-avp-prt
+              containerPort: 8080
+          env:
+            - name: CLAMD_HOST
+              value: "localhost"
+            - name: TIMEOUT
+              value: "60000"
+              
+        - name: public-site-av
+          image: quay.io/ukhomeofficedigital/clamav:latest
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
+            requests:
+              memory: "2048Mi"
+              cpu: "2000m"
+          ports:
+            - name: public-av-prt
+              containerPort: 3310
         - name: public-site
           image: quay.io/ukhomeofficedigital/egar-public-site-ui:{{ .TAGGED_VERSION }}
           imagePullPolicy: IfNotPresent
