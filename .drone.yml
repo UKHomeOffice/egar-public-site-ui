@@ -114,6 +114,54 @@ trigger:
     - tag
   ref:
     - refs/tags/release*
+---
+kind: pipeline
+name: Test Deployment
+type: kubernetes
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: Deploy to Test
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/kd
+    commands:
+      - export TAGGED_VERSION=$${DRONE_COMMIT}
+      - export KUBE_SERVER=$${TEST_KUBE_SERVER}
+      - export KUBE_TOKEN=$${TEST_KUBE_TOKEN}
+      - export BASE_URL=$${TEST_BASE_URL}
+      # - export BASE_URL_SERVICE=$${DEV_URL_SERVICE}
+      - export KUBE_ARTIFACTORY_APP_SECRET=$${TEST_KUBE_ARTIFACTORY_APP_SECRET}
+      - source ./ops/common_lib
+      - source ./ops/notprod_values
+      - kd --timeout=6m --file ops/kube/artifactory-secret.yml
+      - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
+      - kd --timeout=12m --file ops/kube/public-site-deployment.yml
+      - kd --timeout=6m --file ops/kube/public-site-service.yml
+      - kd --timeout=6m --file ops/kube/public-site-ingress.yml
+    environment:
+      INGRESS_CLASS: nginx-internal
+      INSECURE_SKIP_TLS_VERIFY: true
+      KUBE_NAMESPACE: egar-test
+      NODE_ENV: testing
+      TEST_BASE_URL:
+        from_secret: TEST_BASE_URL
+      TEST_KUBE_ARTIFACTORY_APP_SECRET:
+      #DELIBERATE - getting this from dev value to avoid duplicating. may need to review these tokens.
+        from_secret: DEV_KUBE_ARTIFACTORY_APP_SECRET
+      TEST_KUBE_SERVER:
+        from_secret: TEST_KUBE_SERVER
+      TEST_KUBE_TOKEN:
+        from_secret: TEST_KUBE_TOKEN
+      # DEV_URL_SERVICE:
+      #   from_secret: DEV_URL_SERVICE
+trigger:
+  event:
+    - tag
+  ref:
+    - refs/tags/deploy-test*
 
 ---
 kind: pipeline
