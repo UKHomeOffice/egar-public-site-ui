@@ -38,9 +38,9 @@
       window.myinterval = setInterval(function () {
         $.get('/garfile/amg/checkin?template=pane', null, function (data) {
           const html = $(data);
-          if(!html.find('#review-submit').prop('disabled')){
+          /*if(!html.find('#review-submit').prop('disabled')){
             clearInterval(window.myinterval);
-          }
+          }*/
           $('#pane').html($(data));
         });
 
