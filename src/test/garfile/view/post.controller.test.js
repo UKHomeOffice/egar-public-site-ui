@@ -331,7 +331,7 @@ describe('GAR view post controller', () => {
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-124', organisationId: 'ORG-123',
+      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-124', organisationId: 'ORG-123', departurePort: 'LGW', arrivalPort: 'LAX'
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -358,7 +358,7 @@ describe('GAR view post controller', () => {
         manifestFields,
         showChangeLinks: false,
         garfile: {
-          garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' },
+          garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, departurePort: 'LGW', arrivalPort: 'LAX'
         },
         garpeople: {
           items: [
@@ -380,7 +380,7 @@ describe('GAR view post controller', () => {
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-123',
+      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-123', departurePort: 'LGW', arrivalPort: 'LAX'
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -406,7 +406,7 @@ describe('GAR view post controller', () => {
         cookie,
         manifestFields,
         showChangeLinks: false,
-        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' } },
+        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' } , departurePort: 'LGW', arrivalPort: 'LAX'},
         garpeople: {
           items: [
             { id: 'PERSON-1', firstName: 'Simona' },

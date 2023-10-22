@@ -133,8 +133,226 @@ steps:
     - feature/*
     event:
     - tag
-    target:
-      exclude:
+  ref:
+    - refs/tags/release*
+---
+kind: pipeline
+name: Test Deployment
+type: kubernetes
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: Deploy to Test
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/kd
+    commands:
+      - export TAGGED_VERSION=$${DRONE_COMMIT}
+      - export KUBE_SERVER=$${TEST_KUBE_SERVER}
+      - export KUBE_TOKEN=$${TEST_KUBE_TOKEN}
+      - export BASE_URL=$${TEST_BASE_URL}
+      # - export BASE_URL_SERVICE=$${DEV_URL_SERVICE}
+      - export KUBE_ARTIFACTORY_APP_SECRET=$${TEST_KUBE_ARTIFACTORY_APP_SECRET}
+      - source ./ops/common_lib
+      - source ./ops/notprod_values
+      - kd --timeout=6m --file ops/kube/artifactory-secret.yml
+      - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
+      - kd --timeout=12m --file ops/kube/public-site-deployment.yml
+      - kd --timeout=6m --file ops/kube/public-site-service.yml
+      - kd --timeout=6m --file ops/kube/public-site-ingress.yml
+    environment:
+      INGRESS_CLASS: nginx-internal
+      INSECURE_SKIP_TLS_VERIFY: true
+      KUBE_NAMESPACE: egar-test
+      NODE_ENV: testing
+      TEST_BASE_URL:
+        from_secret: TEST_BASE_URL
+      TEST_KUBE_ARTIFACTORY_APP_SECRET:
+      #DELIBERATE - getting this from dev value to avoid duplicating. may need to review these tokens.
+        from_secret: DEV_KUBE_ARTIFACTORY_APP_SECRET
+      TEST_KUBE_SERVER:
+        from_secret: TEST_KUBE_SERVER
+      TEST_KUBE_TOKEN:
+        from_secret: TEST_KUBE_TOKEN
+      # DEV_URL_SERVICE:
+      #   from_secret: DEV_URL_SERVICE
+trigger:
+  event:
+    - tag
+  ref:
+    - refs/tags/deploy-test*
+
+---
+kind: pipeline
+name: SIT Deployment
+type: kubernetes
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: Deploy to SIT
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/kd
+    commands:
+      - export TAGGED_VERSION=$${DRONE_COMMIT}
+      - export KUBE_ARTIFACTORY_APP_SECRET=$${SIT_KUBE_ARTIFACTORY_APP_SECRET}
+      - export KUBE_SERVER=$${SIT_KUBE_SERVER}
+      - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
+      - export BASE_URL=$${SIT_BASE_URL}
+      - export BASE_URL_SERVICE=$${SIT_BASE_URL_SERVICE}
+      - source ./ops/common_lib
+      - source ./ops/notprod_values
+      - kd --timeout=6m --file ops/kube/artifactory-secret.yml
+      - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
+      - kd --timeout=12m --file ops/kube/public-site-deployment.yml
+      - kd --timeout=6m --file ops/kube/public-site-service.yml
+      - kd --timeout=6m --file ops/kube/public-site-ingress.yml
+    environment:
+      INGRESS_CLASS: nginx-internal
+      INSECURE_SKIP_TLS_VERIFY: true
+      KUBE_NAMESPACE: egar-sit
+      NODE_ENV: sit
+      SIT_BASE_URL:
+        from_secret: SIT_BASE_URL
+      SIT_BASE_URL_SERVICE:
+        from_secret: SIT_BASE_URL_SERVICE
+      SIT_KUBE_ARTIFACTORY_APP_SECRET:
+        from_secret: SIT_KUBE_ARTIFACTORY_APP_SECRET
+      SIT_KUBE_SERVER:
+        from_secret: SIT_KUBE_SERVER
+      SIT_KUBE_TOKEN:
+        from_secret: SIT_KUBE_TOKEN
+
+  - name: Get_the_Dynamic_DB_creds
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/kd
+    commands:
+      - export KUBE_SERVER=$${SIT_KUBE_SERVER}
+      - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
+      - echo "export E2E_FRONT_END_DB_USER=$(kd run get secret appdbcreds --template={{.data.FRONTENDDBUSER}} | base64 -d)" > db_creds
+      - echo "export E2E_FRONT_END_DB_PASSWORD=$(kd run get secret appdbcreds --template={{.data.FRONTENDDBPASSWORD}} | base64 -d)" >> db_creds
+      - echo "export E2E_BACK_END_DB_USER=$(kd run get secret appdbcreds --template={{.data.BACKENDDBUSER}} | base64 -d)" >> db_creds
+      - echo "export E2E_BACK_END_DB_PASSWORD=$(kd run get secret appdbcreds --template={{.data.BACKENDDBPASSWORD}} | base64 -d)" >> db_creds
+    environment:
+      INGRESS_CLASS: nginx-internal
+      INSECURE_SKIP_TLS_VERIFY: true
+      KUBE_NAMESPACE: egar-sit
+      NODE_ENV: sit
+      SIT_KUBE_SERVER:
+        from_secret: SIT_KUBE_SERVER
+      SIT_KUBE_TOKEN:
+        from_secret: SIT_KUBE_TOKEN
+
+  - name: End to End tests
+    pull: if-not-exists
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
+    commands:
+      - source db_creds
+      - "docker run --rm -t --name e2e-test_${DRONE_BUILD_NUMBER}  -e PROTOCOL=$${E2E_PROTOCOL} -e BASE_URL=$${E2E_BASE_URL} -e E2E_SMTP_SERVER=$${E2E_SMTP_SERVER} -e E2E_SMTP_PORT=$${E2E_SMTP_PORT} -e E2E_INDIVIDUAL_USER_USERNAME=$${E2E_INDIVIDUAL_USER_USERNAME} -e E2E_INDIVIDUAL_USER_PASSWORD=$${E2E_INDIVIDUAL_USER_PASSWORD} -e E2E_ORGANISATION_USER_USERNAME=$${E2E_ORGANISATION_USER_USERNAME} -e E2E_ORGANISATION_USER_PASSWORD=$${E2E_ORGANISATION_USER_PASSWORD} -e E2E_FRONT_END_DB_HOST=$${E2E_FRONT_END_DB_HOST} -e E2E_FRONT_END_DB_NAME=$${E2E_FRONT_END_DB_NAME} -e E2E_FRONT_END_DB_USER=$E2E_FRONT_END_DB_USER -e E2E_FRONT_END_DB_PASSWORD=$E2E_FRONT_END_DB_PASSWORD -e E2E_BACK_END_DB_HOST=$${E2E_BACK_END_DB_HOST} -e E2E_BACK_END_DB_NAME=$${E2E_BACK_END_DB_NAME} -e E2E_BACK_END_DB_USER=$E2E_BACK_END_DB_USER -e E2E_BACK_END_DB_PASSWORD=$E2E_BACK_END_DB_PASSWORD quay.io/ukhomeofficedigital/egar-e2e-test:latest\n"
+      - rm db_creds
+    environment:
+      E2E_BACK_END_DB_HOST:
+        from_secret: E2E_BACK_END_DB_HOST
+      E2E_BACK_END_DB_NAME:
+        from_secret: E2E_BACK_END_DB_NAME
+      E2E_BASE_URL:
+        from_secret: E2E_BASE_URL
+      E2E_FRONT_END_DB_HOST:
+        from_secret: E2E_FRONT_END_DB_HOST
+      E2E_FRONT_END_DB_NAME:
+        from_secret: E2E_FRONT_END_DB_NAME
+      E2E_INDIVIDUAL_USER_PASSWORD:
+        from_secret: E2E_INDIVIDUAL_USER_PASSWORD
+      E2E_INDIVIDUAL_USER_USERNAME:
+        from_secret: E2E_INDIVIDUAL_USER_USERNAME
+      E2E_ORGANISATION_USER_PASSWORD:
+        from_secret: E2E_ORGANISATION_USER_PASSWORD
+      E2E_ORGANISATION_USER_USERNAME:
+        from_secret: E2E_ORGANISATION_USER_USERNAME
+      E2E_PROTOCOL:
+        from_secret: E2E_PROTOCOL
+      E2E_SMTP_PORT:
+        from_secret: E2E_SMTP_PORT
+      E2E_SMTP_SERVER:
+        from_secret: E2E_SMTP_SERVER
+
+services:
+  - name: docker
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+  - name: anchore-submission-server
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
+    pull: always
+    commands:
+      - /run.sh server
+
+volumes:
+  - name: dockersock
+    temp: {}
+
+trigger:
+  branch:
+    - master
+    - hotfix/*
+  event:
+    - push
+---
+
+kind: pipeline
+name: Staging Deployment
+type: kubernetes
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: Deploy to Staging
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/kd
+    commands:
+      - export TAGGED_VERSION=$${DRONE_COMMIT}
+      - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
+      - export KUBE_ARTIFACTORY_APP_SECRET=$${STAGING_KUBE_ARTIFACTORY_APP_SECRET}
+      - export KUBE_SERVER=$${STAGING_KUBE_SERVER}
+      - export KUBE_TOKEN=$${STAGING_KUBE_TOKEN}
+      - export BASE_URL=$${STAGING_BASE_URL}
+      - export BASE_URL_SERVICE=$${STAGING_BASE_URL_SERVICE}
+      - source ./ops/common_lib
+      - source ./ops/notprod_values
+      - kd --timeout=6m --file ops/kube/artifactory-secret.yml
+      - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
+      - kd --timeout=6m --file ops/kube/public-site-deployment.yml
+      - kd --timeout=6m --file ops/kube/public-site-service.yml
+      - kd --timeout=6m --file ops/kube/public-site-ingress.yml
+    environment:
+      DOCKER_REGISTRY_URL:
+        from_secret: DOCKER_REGISTRY_URL
+      INGRESS_CLASS: nginx-external
+      INSECURE_SKIP_TLS_VERIFY: true
+      KUBE_NAMESPACE: egar-staging
+      NODE_ENV: staging
+      STAGING_BASE_URL:
+        from_secret: STAGING_BASE_URL
+      STAGING_BASE_URL_SERVICE:
+        from_secret: STAGING_BASE_URL_SERVICE
+      STAGING_KUBE_ARTIFACTORY_APP_SECRET:
+        from_secret: STAGING_KUBE_ARTIFACTORY_APP_SECRET
+      STAGING_KUBE_SERVER:
+        from_secret: STAGING_KUBE_SERVER
+      STAGING_KUBE_TOKEN:
+        from_secret: STAGING_KUBE_TOKEN
+trigger:
+  branch:
+    - master
+    - hotfix/*
+  event:
+    - promote
+  target:
+    exclude:
       - production
 
 - name: Deploy to SIT
@@ -394,6 +612,10 @@ steps:
 
 trigger:
   branch:
-    exclude:
-    - wip*
-    - WIP*
+    - master
+    - hotfix/*
+  event:
+    - promote
+  target:
+    include:
+      - production

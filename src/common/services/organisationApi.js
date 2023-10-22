@@ -58,6 +58,7 @@ module.exports = {
     });
   },
 
+  //TODO: I don't think this endpoint is even used. To double check.
   /**
    * Calls get organisation API endpoint and returns organisation details.
    *

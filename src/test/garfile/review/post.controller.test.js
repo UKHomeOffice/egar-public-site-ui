@@ -240,7 +240,7 @@ describe('GAR Review Post Controller', () => {
 
       callController().then().then().then()
         .then(() => {
-          expect(res.render).to.have.been.calledWith('app/garfile/submit/failure/index', { cookie });
+          expect(res.render).to.have.been.calledWith('app/garfile/review/index.njk', { cookie });
         });
     });
 

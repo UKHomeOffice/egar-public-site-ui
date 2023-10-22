@@ -7,7 +7,52 @@ const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
+const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
+
+const performAPICallAMG = (garId, cookie, req, res) => {
+  garApi.submitGARForCheckin(garId)
+    .then((apiResponse) => {
+      logger.info('Received response from API');
+      const parsedResponse = JSON.parse(apiResponse);
+      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+        // API has returned an error so return a message for the user
+        const submitError = {
+          message: 'An error has occurred. Try again later',
+          identifier: '',
+        };
+        req.session.submiterrormessage.push(submitError);
+        logger.error('API has returned an unexpected response');
+        logger.error(parsedResponse.message);
+        req.session.save(() => res.redirect('/garfile/review'));
+        return;
+      }
+
+      logger.info('Successfully submitted GAR');
+      cookie.setGarStatus('Submitted');
+      emailService.send(config.NOTIFY_GAR_SUBMISSION_TEMPLATE_ID, cookie.getUserEmail(), {
+        firstName: cookie.getUserFirstName(),
+        garId: cookie.getGarId(),
+      }).then(() => {
+        res.render('app/garfile/submit/success/index', {
+          cookie,
+        });
+      }).catch(() => {
+        logger.error('Error occurred invoking emailService, but GAR has been submitted');
+        res.render('app/garfile/submit/success/index', {
+          cookie,
+          errors: [{ message: 'There was an issue sending a confirmation email, but the GAR should be submitted' }],
+        });
+      });
+    }).catch((err) => {
+      logger.error('Api failed to update GAR');
+      logger.error(err);
+      res.render('app/garfile/review/index.njk', {
+        cookie,
+      });
+    });
+};
+
 
 const performAPICall = (garId, cookie, req, res) => {
   garApi.patch(garId, 'Submitted', {})
@@ -92,6 +137,8 @@ module.exports = (req, res) => {
     const manifest = new Manifest(responseValues[1]);
     validator.handleResponseError(garpeople);
 
+    const statuscheck = Boolean(req.body.statuscheck);
+
     const garsupportingdocs = JSON.parse(responseValues[2]);
     validator.handleResponseError(garsupportingdocs);
 
@@ -118,7 +165,21 @@ module.exports = (req, res) => {
     };
 
     validator.validateChains(validations).then(() => {
-      performAPICall(garId, cookie, req, res);
+      /*
+        when we reach this point, if it is a journey coming into the UK we send them to AMG/UPT, otherwise we submit the GAR.
+        when the UPT process is complete it sends them back here with status=StatusCheckComplete and at that stage we allow them to submit the GAR.
+        - Journey is not coming into UK from outside: Submit GAR
+        - Journey is coming into UK but no status check: Send to AMG/UPT
+        - Journey is coming into UK and status check: Submit GAR
+      */
+     
+      if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && !statuscheck) 
+       {
+        performAPICallAMG(garId, cookie, req, res);
+      }
+      else {
+        performAPICall(garId, cookie, req, res);
+      }
     }).catch((err) => {
       logger.info('Failed to submit incomplete GAR - validation failed');
       logger.debug(JSON.stringify(err));

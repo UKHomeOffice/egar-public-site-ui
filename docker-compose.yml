@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-
   database:
     image: postgres:10.4
     container_name: database
@@ -13,14 +12,14 @@ services:
   api:
     build:
       dockerfile: Dockerfile
-      context: ../api
+      context: ../data-access-api
     container_name: api
     env_file:
       - .env.dev
     depends_on:
       - database
     volumes:
-      - "../api:/code"
+      - "../data-access-api:/code"
     ports:
       - "5000:5000"
 

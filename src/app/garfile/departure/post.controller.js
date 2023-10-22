@@ -160,7 +160,7 @@ module.exports = async (req, res) => {
 
   // The entry below is a surplus as there's already same validation at the Arrival port section //
  // validations.push([
-  //  new ValidationRule(airportValidation.isBritishAirport, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], airportValidation.notBritishMsg),
+  //  new ValidationRule(airportValidation.includesOneBritishAirport, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], airportValidation.notBritishMsg),
  // ]);
  
   validator.validateChains(validations)

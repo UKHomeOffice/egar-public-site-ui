@@ -1,6 +1,7 @@
 const request = require('request');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
+const autocompleteUtil = require('../utils/autocomplete');
 
 module.exports = {
 
@@ -15,6 +16,7 @@ module.exports = {
   patch(garId, status, partial) {
     const reqBody = partial;
     reqBody.status = status;
+    logger.info(JSON.stringify(reqBody))
     return new Promise((resolve, reject) => {
       request.patch({
         headers: { 'content-type': 'application/json' },
@@ -49,7 +51,10 @@ module.exports = {
           return;
         }
         logger.debug('Successfully called GAR get endpoint');
-        resolve(body);
+        let gar = JSON.parse(body);
+        gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCounty);
+
+        resolve(JSON.stringify(gar));
       });
     });
   },
@@ -140,6 +145,57 @@ module.exports = {
       });
     });
   },
+
+    /**
+   * Submits GARPeople for AMG checkin
+   *
+   * @param {String} garId the id of the gar the person is associated with
+   * @returns {Promise} resolves with API response.
+   */
+    submitGARForCheckin(garId) {
+      return new Promise((resolve, reject) => {
+        request.post({
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.submitGARForCheckin(garId),
+        }, (error, _response, body) => {
+          if (error) {
+            logger.error('Failed call passenger checkin endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called passenger checkin endpoint');
+          resolve(body);
+        });
+      });
+    },
+
+    /**
+   * Submits data about whether passengers left with the craft or not.
+   *
+   * @param {String} garId the id of the gar the person is associated with
+   * @param {String[]} exceptions uuids of garpeople that did not depart
+   * @returns {Promise} resolves with API response.
+   */
+    postGarPassengerConfirmations(garId, exceptions, isCancelled = false) {
+      return new Promise((resolve, reject) => {
+        request.post({
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.postGarPassengerConfirmations(garId),
+          body: JSON.stringify({
+            exceptions: exceptions,
+            isCancelled
+          }),
+        }, (error, _response, body) => {
+          if (error) {
+            logger.error('Failed call passenger confirmation endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called passenger confirmation endpoint');
+          resolve(body);
+        });
+      });
+    },
 
   /**
    * Updates the details of a person on a GAR.
