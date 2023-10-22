@@ -33,7 +33,6 @@ describe('GAR Submit Success Get Controller', () => {
 
     await controller(req, res);
 
-    // Sic: sucess instead of success
-    expect(res.render).to.have.been.calledWith('app/garfile/submit/sucess/index', { cookie });
+    expect(res.render).to.have.been.calledWith('app/garfile/submit/success/index', { cookie });
   });
 });

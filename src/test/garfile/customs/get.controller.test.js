@@ -38,7 +38,6 @@ describe('GAR Customs Get Controller', () => {
     sinon.restore();
   });
 
-  // TODO: look into this issue.
   it('should render with an error message if api rejects', () => {
     sinon.stub(garApi, 'get').rejects('garApi.get Example Reject');
     cookie = new CookieModel(req);

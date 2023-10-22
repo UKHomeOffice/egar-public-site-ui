@@ -59,7 +59,6 @@ describe('UserSessions', () => {
       });
   });
 
-  // TODO: failing test here. look into this
   it('setMfaToken rejects', () => {
     createStub.rejects(new Error('Test'));
     const callSetToken = async () => {

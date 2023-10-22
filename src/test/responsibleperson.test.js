@@ -20,7 +20,7 @@ const garResponsiblePersonPartial = {
   responsibleAddressLine1: 'Buckingham Palace',
   responsibleAddressLine2: 'Buckingham Palace Road',
   responsibleTown: 'London',
-  responsibleCounty: 'London',
+  responsibleCounty: 'GBR',
   responsiblePostcode: 'SW111A',
 };
 
