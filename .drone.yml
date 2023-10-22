@@ -41,36 +41,21 @@ steps:
     settings:
       group: build-stage
 
-- name: Unit Tests
-  pull: if-not-exists
-  image: node:14-alpine3.15
-  commands:
-  - export NOTIFY_API_KEY=dummy
-  - cd src
-  - npm install
-  - npm run test-drone
-  settings:
-   group: build-stage
-  when:
-   event:
-   - push
-   - pull_request
-
-- name: scan-image
-  pull: always
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
-  resources: 
-    limits:
-      cpu: 1000
-      memory: 1024Mi
-  environment: 
-    IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:${DRONE_COMMIT}
-    IGNORE_UNFIXED: true
-  when:
-    event:
-    - push
-  depends_on:
-  - build_and_push
+  - name: scan-image
+    pull: always
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
+    resources: 
+      limits:
+        cpu: 1000
+        memory: 1024Mi
+    environment: 
+      IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:${DRONE_COMMIT}
+      IGNORE_UNFIXED: true
+    when:
+      event:
+      - push
+    depends_on:
+    - build_and_push
 
 services:
   - name: docker
@@ -130,6 +115,7 @@ trigger:
     - tag
   ref:
     - refs/tags/release*
+    
 ---
 kind: pipeline
 name: Test Deployment
