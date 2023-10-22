@@ -11,6 +11,7 @@ const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
 
 const performAPICallAMG = (garId, cookie, req, res) => {
+  logger.info('Test: AMG called.');
   garApi.submitGARForCheckin(garId)
     .then((apiResponse) => {
       logger.info('Received response from API');
@@ -55,6 +56,7 @@ const performAPICallAMG = (garId, cookie, req, res) => {
 
 
 const performAPICall = (garId, cookie, req, res) => {
+  logger.info('Test: Patch called.');
   garApi.patch(garId, 'Submitted', {})
     .then((apiResponse) => {
       logger.info('Received response from API');

@@ -56,7 +56,7 @@ describe('GAR Review Post Controller', () => {
     garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
     garApiGetSupportingDocsStub = sinon.stub(garApi, 'getSupportingDocs');
     garApiPatchStub = sinon.stub(garApi, 'patch');
-    // garApiSubmitGARForCheckinStub = sinon.stub(garApi, 'submitGARForCheckin');
+    garApiSubmitGARForCheckinStub = sinon.stub(garApi, 'submitGARForCheckin');
 
     sinon.stub(i18n, '__').callsFake((key) => {
       switch (key) {
@@ -218,6 +218,8 @@ describe('GAR Review Post Controller', () => {
         departureTime: '15:03:00',
         arrivalDate: '2012-12-14',
         arrivalTime: '16:04:00',
+        arrivalPort: 'LHR',
+        departurePort: "LGW",
         status: {
           name: 'draft',
         },
@@ -239,9 +241,8 @@ describe('GAR Review Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then().then().then()
-        .then(() => {
-          expect(res.render).to.have.been.calledWith('app/garfile/review/index.njk', { cookie });
+      callController().then().then().then().then(() => {
+          expect(res.render).to.have.been.calledWith('app/garfile/submit/failure/index', { cookie });
         });
     });
 
@@ -253,6 +254,8 @@ describe('GAR Review Post Controller', () => {
         departureTime: '15:03:00',
         arrivalDate: '2012-12-14',
         arrivalTime: '16:04:00',
+        arrivalPort:'LTN',
+        departurePort: 'LGW',
         status: {
           name: 'draft',
         },
@@ -297,6 +300,8 @@ describe('GAR Review Post Controller', () => {
         departureTime: '15:03:00',
         arrivalDate: '2012-12-14',
         arrivalTime: '16:04:00',
+        arrivalPort:'LTN',
+        departurePort: 'LGW',
         status: {
           name: 'draft',
         },
@@ -341,6 +346,8 @@ describe('GAR Review Post Controller', () => {
         departureTime: '15:03:00',
         arrivalDate: '2012-12-14',
         arrivalTime: '16:04:00',
+        arrivalPort:'LTN',
+        departurePort: 'LGW',
         status: {
           name: 'draft',
         },
