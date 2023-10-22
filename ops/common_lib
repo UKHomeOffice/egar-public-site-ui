@@ -1,0 +1,2 @@
+# Common lib to be included in different utilities
+export APP_NAME='public-site'

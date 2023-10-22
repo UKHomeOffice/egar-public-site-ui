@@ -9,7 +9,7 @@ spec:
     matchLabels:
       name: {{ .APP_NAME }}-svc
       service: {{ .APP_NAME }}-svc
-  replicas: 3
+  replicas: {{.NUM_REPLICAS}}
   revisionHistoryLimit: 10
   template:
     metadata:
@@ -70,6 +70,7 @@ spec:
               value: "localhost"
             - name: TIMEOUT
               value: "60000"
+              
         - name: public-site-av
           image: quay.io/ukhomeofficedigital/clamav:latest
           imagePullPolicy: IfNotPresent
