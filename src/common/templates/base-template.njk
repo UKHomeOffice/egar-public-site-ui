@@ -22,7 +22,11 @@
     {# Stack overflow suggests this might help for Edge and issues with empty referer #}
     <meta name="referrer" content="origin-when-cross-origin" />
     
-
+    <script
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+      crossorigin="anonymous">
+    </script>
 
 
   <link href="/stylesheets/application.min.css" rel="stylesheet" />
@@ -183,11 +187,6 @@
   GOVUKFrontend.initAll();
   </script>
 
-    <script
-      src="https://code.jquery.com/jquery-1.12.4.min.js"
-      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-      crossorigin="anonymous">
-    </script>
     <script src="/javascripts/jquery.disableAutoFill.min.js"></script>
     <script>
       $("#page-form").disableAutoFill(
