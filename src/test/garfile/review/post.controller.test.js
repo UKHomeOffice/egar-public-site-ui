@@ -56,6 +56,7 @@ describe('GAR Review Post Controller', () => {
     garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
     garApiGetSupportingDocsStub = sinon.stub(garApi, 'getSupportingDocs');
     garApiPatchStub = sinon.stub(garApi, 'patch');
+    // garApiSubmitGARForCheckinStub = sinon.stub(garApi, 'submitGARForCheckin');
 
     sinon.stub(i18n, '__').callsFake((key) => {
       switch (key) {
@@ -277,12 +278,13 @@ describe('GAR Review Post Controller', () => {
       callController().then().then().then(() => {
         cookie.setGarStatus('Submitted');
         expect(emailService.send).to.not.have.been.called;
-
-        expect(sessionSaveStub).to.have.been.called;
         expect(req.session.submiterrormessage).to.eql([{
           message: 'An error has occurred. Try again later',
           identifier: '',
         }]);
+
+        expect(sessionSaveStub).to.have.been.called;
+        
         expect(res.redirect).to.have.been.calledWith('/garfile/review');
       });
     });
