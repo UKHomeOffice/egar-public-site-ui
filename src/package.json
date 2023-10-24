@@ -54,7 +54,7 @@
     "nyc": "^14.1.1",
     "path": "^0.12.7",
     "pg": "8.11.3",
-    "request": "^2.88.0",
+    "request": "2.88.2",
     "require-dir": "^1.0.0",
     "sequelize": "6.33.0",
     "serve-favicon": "^2.5.0",
