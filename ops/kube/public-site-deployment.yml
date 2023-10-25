@@ -295,4 +295,4 @@ spec:
               port: 10443
               scheme: HTTPS
             initialDelaySeconds: 5
-            periodSeconds: 5
+            periodSeconds: 300
