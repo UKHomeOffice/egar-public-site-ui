@@ -291,8 +291,8 @@ spec:
               containerPort: 3000
           livenessProbe:
             httpGet:
+              host: {{ .BASE_URL }}
               path: /healthcheck
-              port: 10443
-              scheme: HTTP
+              scheme: HTTPS
             initialDelaySeconds: 5
-            periodSeconds: 300
+            periodSeconds: 5
