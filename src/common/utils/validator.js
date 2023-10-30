@@ -666,7 +666,7 @@ function invalidLongDirection(value) {
 
 function isAlphanumeric(input) {
   // Use a regular expression to match only alphanumeric characters
-  var alphanumericRegex = /^[a-zA-Z0-9]+$/;
+  const alphanumericRegex = /^[a-zA-Z0-9]+$/;
   return alphanumericRegex.test(input);
 }
 
