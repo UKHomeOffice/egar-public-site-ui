@@ -26,6 +26,7 @@ i18n.configure({
 
 const controller = require('../../../app/api/uploadgar/post.controller');
 const { getInvalidWorkbook, getValidWorkbook } = require('./workbook-data');
+const logger = require('../../../common/utils/logger');
 
 describe('API upload GAR post controller', () => {
   let req; let res;
@@ -183,7 +184,9 @@ describe('API upload GAR post controller', () => {
 
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
-        expect(req.session.failureMsg).to.eql([new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk')]);
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk')
+        ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
     });
@@ -420,7 +423,7 @@ describe('API upload GAR post controller', () => {
               dateOfBirth: '1965-10-13',
               documentDesc: 'Biochip',
               documentExpiryDate: '2033-02-28',
-              documentNumber: 'Document Number',
+              documentNumber: 'DocumentNumber',
               documentType: 'Other',
               firstName: 'James',
               gender: 'Male',
@@ -449,7 +452,7 @@ describe('API upload GAR post controller', () => {
               dateOfBirth: '1975-10-31',
               documentDesc: 'Federation Card',
               documentExpiryDate: '2023-06-01',
-              documentNumber: 'Document Number',
+              documentNumber: 'DocumentNumber',
               documentType: 'Other',
               firstName: 'Pavel',
               gender: 'Male',

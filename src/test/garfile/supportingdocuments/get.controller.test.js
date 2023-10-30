@@ -77,6 +77,10 @@ describe('GAR Supporting Documents Get Controller', () => {
 
   it('should return an error if query is set to e', () => {
     req.query = { query: 'e' };
+    req.session.errMsg = { 
+      identifier: 'file', 
+      message: 'File not uploaded. There was an error in scanning the file. Please try again' 
+    }
     const cookie = new CookieModel(req);
     sinon.stub(garApi, 'getSupportingDocs').resolves(JSON.stringify(apiResponse));
 
@@ -89,7 +93,10 @@ describe('GAR Supporting Documents Get Controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
         cookie,
         supportingDoc: apiResponse,
-        errors: [{ identifier: 'file', message: 'File not uploaded. There was an error in scanning the file. Please try again' }],
+        errors: [{ 
+          identifier: 'file', 
+          message: 'File not uploaded. There was an error in scanning the file. Please try again' 
+        }],
       });
     });
   });
