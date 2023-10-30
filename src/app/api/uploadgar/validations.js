@@ -97,6 +97,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.documentNumber, `Enter a document number for ${name}`),
       new ValidationRule(validator.isValidStringLength, '', crew.documentNumber, `Travel document number for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlphanumeric, '', crew.documentNumber, `Travel document number for ${name} must consistent only of Alphanumeric characters e.g. a-z, A-Z and 0-9. Special characters and spaces are not allowed e.g. $ % ! ' '`),
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.lastName, `Enter a surname for ${peopleType} ${crew.firstName}`),
