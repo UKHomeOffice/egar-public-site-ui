@@ -114,7 +114,6 @@ describe('Home Get Controller', () => {
           { id: 'GAR-6', status: { name: 'Submitted' } },
         ],
         cancelledGars: [{ id: 'GAR-3', status: { name: 'Cancelled' } }],
-        completeGars: []
       });
     });
   });
@@ -163,7 +162,6 @@ describe('Home Get Controller', () => {
           { id: 'GAR-6', status: { name: 'Submitted' } },
         ],
         cancelledGars: [{ id: 'GAR-3', status: { name: 'Cancelled' } }],
-        completeGars: []
       });
     });
   });

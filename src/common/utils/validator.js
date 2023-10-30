@@ -664,6 +664,12 @@ function invalidLongDirection(value) {
 
 }
 
+function isAlphanumeric(input) {
+  // Use a regular expression to match only alphanumeric characters
+  const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+  return alphanumericRegex.test(input);
+}
+
 
 function preventZ(value) {
   value = value || '';
@@ -730,4 +736,5 @@ module.exports = {
   sanitiseValue2,
   preventZ,
   dateNotTooFarInFuture,
+  isAlphanumeric
 };
