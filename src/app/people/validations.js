@@ -38,6 +38,7 @@ module.exports.validations = (req) => {
       [
         new ValidationRule(validator.notEmpty, 'travelDocumentNumber', req.body.travelDocumentNumber, 'Enter the travel document number'),
         new ValidationRule(validator.isValidStringLength, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number must be ${MAX_STRING_LENGTH} characters or less`),
+        new ValidationRule(validator.isAlphanumeric, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number consistent only of Alphanumeric characters e.g. a-z, A-Z and 0-9. No special characters are allowed e.g. $ % !`),
       ],
       [
         new ValidationRule(validator.notEmpty, 'travelDocumentType', req.body.travelDocumentType, 'Select the travel document type'),
@@ -81,6 +82,7 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.notEmpty, 'travelDocumentNumber', req.body.travelDocumentNumber, 'Enter the travel document number'),
       new ValidationRule(validator.isValidStringLength, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlphanumeric, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number consistent only of Alphanumeric characters e.g. a-z, A-Z and 0-9. Special characters and spaces are not allowed e.g. $ % ! ' '`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'travelDocumentType', req.body.travelDocumentType, 'Select the travel document type'),
