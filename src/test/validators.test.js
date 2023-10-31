@@ -866,4 +866,20 @@ describe('Validator', () => {
       clock.restore();
     });
   });
+
+  describe('Universal Permission to Travel validators to check', () => {
+      it('Validate Alpha string whilst invalidates incorrect ones', () => {
+        const plainString = "Aaron";
+        expect(validator.isAlpha(plainString)).to.eql(true);
+
+        const stringWithSpace = "Aaron Adam";
+        expect(validator.isAlpha(stringWithSpace)).to.eql(true);
+
+        const stringWithSpaceAndDash = "Aaron Adam-Kingsbottom";
+        expect(validator.isAlpha(stringWithSpaceAndDash)).to.eql(true);
+
+        const stringWithNumberInIt = "Aaron Adam-Kingsbottom 3rd";
+        expect(validator.isAlpha(stringWithNumberInIt)).to.eql(false);
+    })
+  })
 });
