@@ -31,6 +31,13 @@ function genTimeObj(h, m) {
   };
 }
 
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+
 describe('Validator', () => {
 
   it('Should return true when input has leading space', () => {
@@ -586,7 +593,13 @@ describe('Validator', () => {
     });
 
     it('Should pass if the provided day is in future -- next day', () => {
-      var currentDate = genDateObj((currentDay + 1).toString(), currentMonthStr, currentYearStr);
+      let futureDate = addDays(new Date(), 1);
+      
+      currentDay = futureDate.getDate().toString();
+      currentMonthStr = (futureDate.getMonth() + 1).toString();
+      currentYearStr = (futureDate.getFullYear()).toString();
+
+      var currentDate = genDateObj(currentDay, currentMonthStr, currentYearStr);
       expect(validator.realDateInFuture(currentDate)).to.be.true;
     });
 
@@ -594,12 +607,6 @@ describe('Validator', () => {
       var currentDate = genDateObj((currentDay).toString(), currentMonthStr, currentYearStr)
       expect(validator.realDateInFuture(currentDate)).to.be.false;
     });
-
-    // //commented out as: 1) yesterday implementation fails on 1st of each month 2) the test does not offer much over other ones
-    // it('should fail if the provided day is yesterday', () => {
-    //   var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
-    //   expect(validator.realDateInFuture(previousDay)).to.be.false;
-    // });
 
     it('should fail if the provided day is old date -- 14/12/2007', () => {
       expect(validator.realDateInFuture(genDateObj('14', '12', '2007'))).to.be.false;
