@@ -67,7 +67,7 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
       new ValidationRule(validator.isValidStringLength, 'lastName', req.body.lastName, `Surname must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAlpha, 'firstName', req.body.firstName, `Surname must not contain special characters or numbers`),
+      new ValidationRule(validator.isAlpha, 'lastName', req.body.lastName, `Surname must not contain special characters or numbers`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'nationality', req.body.nationality, 'Enter the nationality of the person'),
