@@ -881,5 +881,40 @@ describe('Validator', () => {
         const stringWithNumberInIt = "Aaron Adam-Kingsbottom 3rd";
         expect(validator.isAlpha(stringWithNumberInIt)).to.eql(false);
     })
+
+    it('Validate Address string whilst invalidates incorrect ones', () => {
+      // Optional valid streets
+      const blankOptionalStreet = '';
+      expect(validator.isAddressValidCharacters(blankOptionalStreet)).to.eql(true);
+
+      const nullOptionalStreet = null;
+      expect(validator.isAddressValidCharacters(nullOptionalStreet)).to.eql(true);
+
+      const undefinedOptionalStreet = undefined;
+      expect(validator.isAddressValidCharacters(undefinedOptionalStreet)).to.eql(true);
+
+      // Valid streets
+      const streetNameWithASpace = "Homestead Road";
+      expect(validator.isAddressValidCharacters(streetNameWithASpace)).to.eql(true);
+
+      const streetNameWithADash = "Fuller-spark Drive";
+      expect(validator.isAddressValidCharacters(streetNameWithADash)).to.eql(true);
+
+      const streetNameWithAnapostrophe = "Pullman's Lane";
+      expect(validator.isAddressValidCharacters(streetNameWithAnapostrophe)).to.eql(true);
+
+      const houseNumber = "18";
+      expect(validator.isAddressValidCharacters(houseNumber)).to.eql(true);
+
+      const postcode = "SE1 9BG";
+      expect(validator.isAddressValidCharacters(postcode)).to.eql(true);
+
+      // invalid streets
+      const unicodeCharacterStreet = "Bräut street"
+      expect(validator.isAddressValidCharacters(unicodeCharacterStreet)).to.eql(false);
+
+      const specialCharacterStreet = "$$$ road";
+      expect(validator.isAddressValidCharacters(specialCharacterStreet)).to.eql(false);
+    })
   })
 });

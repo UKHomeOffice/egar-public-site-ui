@@ -673,6 +673,11 @@ function isAlpha(input) {
   return alphaRegex.test(input);
 }
 
+function isAddressValidCharacters(input) {
+  const addressRegex = /^[a-z\s\'\-\d]+$/i;
+  return isEmpty(input) || addressRegex.test(input);
+}
+
 function preventZ(value) {
   value = value || '';
   if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy") {
@@ -739,5 +744,6 @@ module.exports = {
   preventZ,
   dateNotTooFarInFuture,
   isAlphanumeric,
-  isAlpha
+  isAlpha,
+  isAddressValidCharacters
 };
