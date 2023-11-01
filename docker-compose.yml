@@ -2,7 +2,7 @@ version: '3'
 
 services:
   database:
-    image: postgres:10.4
+    image: postgres:14
     container_name: database
     env_file:
       - .env.dev
@@ -54,7 +54,6 @@ services:
       - ./src/locales:/public-site/locales
       - ./src/public:/public-site/public
       - ./src/test:/public-site/test
-      - ./src/gruntfile.js:/public-site/gruntfile.js
       - ./src/server.js:/public-site/server.js
       - ./src/start.js:/public-site/start.js
       - ./src/package.json:/public-site/package.json

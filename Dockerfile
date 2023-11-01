@@ -1,4 +1,4 @@
-FROM quay.io/ukhomeofficedigital/egar-node-8:latest
+FROM node:18-alpine3.18
 
 RUN apk update \
     && apk upgrade --update-cache --available \
@@ -13,7 +13,6 @@ COPY src/common /public-site/common
 COPY src/locales /public-site/locales
 COPY src/public /public-site/public
 COPY src/test /public-site/test
-COPY src/gruntfile.js /public-site/
 COPY src/server.js /public-site/
 COPY src/start.js /public-site/
 COPY src/package.json /public-site/
