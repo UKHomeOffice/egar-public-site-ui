@@ -15,8 +15,6 @@ const sequelize = new Sequelize(config.PUBLIC_SITE_DBNAME,
     },
   });
 
-//sequelize.import('../models/UserSessions');
-//sequelize.import('../models/WhiteList');
 
 module.exports.Sequelize = Sequelize;
 module.exports.sequelize = sequelize;
