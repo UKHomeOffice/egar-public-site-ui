@@ -37,15 +37,12 @@ const nunjucksFilters = require('./common/utils/templateFilters.js');
 
 
 // Global constants
-const oneYear = 86400000 * 365;
 const PORT = (process.env.PORT || 3000);
 const { NODE_ENV } = process.env;
 const G4_ID = (process.env.G4_ID || '');
 const BASE_URL = (process.env.BASE_URL || '');
-const COOKIE_SECRET = (process.env.COOKIE_SECRET || '');
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
-const publicCaching = { maxAge: oneYear };
 
 // Set Cookie secure flag depending on environment variable
 let secureFlag = false;
@@ -67,9 +64,11 @@ const APP_VIEWS = [
 function initialiseDb() {
   return new Promise((resolve, reject) => {
     logger.info('Syncing db');
-    db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-    // TODO: should be done via migration files --> sync is too flexible.
-    db.sequelize.sync()
+    db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
+      .then(() => {
+        // TODO: should be done via migration files --> sync is too flexible.
+        db.sequelize.sync();
+      })
       .then(() => {
         logger.debug('Successfully created tables');
       })
@@ -80,7 +79,8 @@ function initialiseDb() {
       .then(() => {
         logger.debug('Successfully added session table constraints');
         resolve();
-      }).catch((e) => {
+      })
+      .catch((e) => {
         logger.error('Failed to sync db');
         logger.error(e);
         reject(e);
