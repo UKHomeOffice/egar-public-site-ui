@@ -122,7 +122,7 @@
             <div class="govuk-form-group {{ m.form_group_class('responsiblePostcode', errors) }}">
               <label class="govuk-label" for="responsiblePostcode">{{__('field_postcode')}}</label>
 
-              {# {{ m.error_message('responsiblePostcode', errors, __) }} #}
+              {{ m.error_message('responsiblePostcode', errors, __) }}
 
               <input class="govuk-input govuk-input--width-10"
                 id="responsiblePostcode" name="responsiblePostcode" type="text"
