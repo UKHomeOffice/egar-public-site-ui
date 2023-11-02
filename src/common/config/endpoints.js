@@ -161,7 +161,8 @@ const endpoints = {
     return url;
   },
   userSearch(email) {
-    const endpoint = new URL(`${API_VERSION}/user/search?email=${email}`, BASE_URL).href;
+    
+    const endpoint = new URL(`${API_VERSION}/user/search?email=${encodeURIComponent(email)}`, BASE_URL).href;
     logger.debug(`Calling user search endpoint ${endpoint}`);
     return endpoint;
   },

@@ -82,7 +82,7 @@ describe('Person Delete Get Controller', () => {
 
     callController().then(() => {
       expect(garApiStub).to.have.been.calledWith('9001', 'DELETE-PERSON-ID');
-      expect(req.session.errMsg).to.eql({ message: 'Failed to delete GAR person. Try again' });
+      expect(req.session.errMsg).to.eql({ message: 'Person id not found' });
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
     });
   });

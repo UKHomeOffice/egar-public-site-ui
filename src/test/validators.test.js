@@ -31,6 +31,13 @@ function genTimeObj(h, m) {
   };
 }
 
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+
 describe('Validator', () => {
 
   it('Should return true when input has leading space', () => {
@@ -586,7 +593,13 @@ describe('Validator', () => {
     });
 
     it('Should pass if the provided day is in future -- next day', () => {
-      var currentDate = genDateObj((currentDay + 1).toString(), currentMonthStr, currentYearStr);
+      let futureDate = addDays(new Date(), 1);
+      
+      currentDay = futureDate.getDate().toString();
+      currentMonthStr = (futureDate.getMonth() + 1).toString();
+      currentYearStr = (futureDate.getFullYear()).toString();
+
+      var currentDate = genDateObj(currentDay, currentMonthStr, currentYearStr);
       expect(validator.realDateInFuture(currentDate)).to.be.true;
     });
 
@@ -594,12 +607,6 @@ describe('Validator', () => {
       var currentDate = genDateObj((currentDay).toString(), currentMonthStr, currentYearStr)
       expect(validator.realDateInFuture(currentDate)).to.be.false;
     });
-
-    // //commented out as: 1) yesterday implementation fails on 1st of each month 2) the test does not offer much over other ones
-    // it('should fail if the provided day is yesterday', () => {
-    //   var previousDay = genDateObj((currentDay - 1).toString(), currentMonthStr, currentYearStr)
-    //   expect(validator.realDateInFuture(previousDay)).to.be.false;
-    // });
 
     it('should fail if the provided day is old date -- 14/12/2007', () => {
       expect(validator.realDateInFuture(genDateObj('14', '12', '2007'))).to.be.false;
@@ -859,4 +866,56 @@ describe('Validator', () => {
       clock.restore();
     });
   });
+
+  describe('Universal Permission to Travel validators to check', () => {
+      it('Validate Alpha string whilst invalidates incorrect ones', () => {
+        const plainString = "Aaron";
+        expect(validator.isAlpha(plainString)).to.eql(true);
+
+        const stringWithSpace = "Aaron Adam";
+        expect(validator.isAlpha(stringWithSpace)).to.eql(true);
+
+        const stringWithSpaceAndDash = "Aaron Adam-Kingsbottom";
+        expect(validator.isAlpha(stringWithSpaceAndDash)).to.eql(true);
+
+        const stringWithNumberInIt = "Aaron Adam-Kingsbottom 3rd";
+        expect(validator.isAlpha(stringWithNumberInIt)).to.eql(false);
+    })
+
+    it('Validates optional unprovided addresses which are valid', () => { 
+      const blankOptionalStreet = '';
+      expect(validator.isAddressValidCharacters(blankOptionalStreet)).to.eql(true);
+
+      const nullOptionalStreet = null;
+      expect(validator.isAddressValidCharacters(nullOptionalStreet)).to.eql(true);
+
+      const undefinedOptionalStreet = undefined;
+      expect(validator.isAddressValidCharacters(undefinedOptionalStreet)).to.eql(true);
+    });
+
+    it('Validates Addresses which are valid', () => {
+      const streetNameWithASpace = "Homestead Road";
+      expect(validator.isAddressValidCharacters(streetNameWithASpace)).to.eql(true);
+
+      const streetNameWithADash = "Fuller-spark Drive";
+      expect(validator.isAddressValidCharacters(streetNameWithADash)).to.eql(true);
+
+      const streetNameWithAnapostrophe = "Pullman's Lane";
+      expect(validator.isAddressValidCharacters(streetNameWithAnapostrophe)).to.eql(true);
+
+      const houseNumber = "18";
+      expect(validator.isAddressValidCharacters(houseNumber)).to.eql(true);
+
+      const postcode = "SE1 9BG";
+      expect(validator.isAddressValidCharacters(postcode)).to.eql(true);
+    })
+
+    it('Invalidates Addresses which are invalid', () => { 
+      const unicodeCharacterStreet = "Bräut street"
+      expect(validator.isAddressValidCharacters(unicodeCharacterStreet)).to.eql(false);
+
+      const specialCharacterStreet = "$$$ road";
+      expect(validator.isAddressValidCharacters(specialCharacterStreet)).to.eql(false);
+    });
+  })
 });
