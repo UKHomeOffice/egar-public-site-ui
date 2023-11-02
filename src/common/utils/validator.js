@@ -288,7 +288,6 @@ function realDate(dObj) {
     && validYear(dObj.y);
 }
 
-
 function bornAfter1900(dObj) {
   if (dObj === null || dObj === undefined) return false;
 
@@ -665,11 +664,19 @@ function invalidLongDirection(value) {
 }
 
 function isAlphanumeric(input) {
-  // Use a regular expression to match only alphanumeric characters
   const alphanumericRegex = /^[a-zA-Z0-9]+$/;
   return alphanumericRegex.test(input);
 }
 
+function isAlpha(input) {
+  const alphaRegex = /^[a-z\s\'\-]+$/i;
+  return alphaRegex.test(input);
+}
+
+function isAddressValidCharacters(input) {
+  const addressRegex = /^[a-z\s\'\-\d]+$/i;
+  return isEmpty(input) || addressRegex.test(input);
+}
 
 function preventZ(value) {
   value = value || '';
@@ -736,5 +743,7 @@ module.exports = {
   sanitiseValue2,
   preventZ,
   dateNotTooFarInFuture,
-  isAlphanumeric
+  isAlphanumeric,
+  isAlpha,
+  isAddressValidCharacters
 };
