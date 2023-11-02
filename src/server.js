@@ -65,19 +65,9 @@ function initialiseDb() {
   return new Promise((resolve, reject) => {
     logger.info('Syncing db');
     db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
-      .then(() => {
-        // TODO: should be done via migration files --> sync is too flexible.
-        db.sequelize.sync();
-      })
+      .then(() => db.sequelize.sync())
       .then(() => {
         logger.debug('Successfully created tables');
-      })
-      .then(() => db.sequelize.query(
-        'ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey"; '
-        + 'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;'
-      ))
-      .then(() => {
-        logger.debug('Successfully added session table constraints');
         resolve();
       })
       .catch((e) => {
