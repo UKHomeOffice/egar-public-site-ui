@@ -18,6 +18,7 @@ const sequelize = new Sequelize(config.PUBLIC_SITE_DBNAME,
 
 module.exports.Sequelize = Sequelize;
 module.exports.sequelize = sequelize;
+
 module.exports.UserSessions = require('../models/UserSessions')(sequelize, Sequelize);
 module.exports.WhiteList = require('../models/WhiteList')(sequelize, Sequelize);
 module.exports.Session = require('../models/Session')(sequelize, Sequelize);
