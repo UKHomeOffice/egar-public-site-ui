@@ -45,7 +45,7 @@ const dbStub = {
 describe('UserSessions', () => {
   const tokenApiProxy = proxyquire('../../../common/services/tokenApi', { '../utils/db': dbStub });
 
-  beforeEach(() => {
+  before(() => {
     chai.use(sinonChai);
     this.clock = date => sinon.useFakeTimers(new Date(date));
     this.clock('2019-04-01');
