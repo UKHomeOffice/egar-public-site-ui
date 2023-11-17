@@ -15,6 +15,7 @@ spec:
   tls:
   - hosts:
     - public-site.dev-external.egar-notprod.homeoffice.gov.uk
+    - public-site.sit-external.egar-notprod.homeoffice.gov.uk
     secretName: public-site-tls-cmio
   rules:
   - host: public-site.dev-external.egar-notprod.homeoffice.gov.uk
@@ -27,5 +28,14 @@ spec:
             name: public-site-svc
             port:
               number: 10443
-
+  - host: public-site.sit-external.egar-notprod.homeoffice.gov.uk
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service: 
+            name: public-site-svc
+            port:
+              number: 10443
               
