@@ -191,6 +191,7 @@
 	"field_travel_document_issuing_state": "Travel document issuing state",
 	"field_travel_document_expiry_date": "Travel document expiry date",
 	"form_save_and_add_to_gar": "Save and add to GAR",
+	"field_upt_response" : "UPT Response",
 	"heading_responsible_person_details": "Responsible person details",
 	"field_address": "Address",
 	"field_contact_details": "Contact details",
