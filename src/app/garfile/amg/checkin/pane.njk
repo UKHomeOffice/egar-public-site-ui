@@ -13,7 +13,8 @@
       {% set statuscolour = 'green caveat' %}
     {% endif %}
 
-    {% set statustitle = __('amg_status_check_response_code_' + person.amgCheckinResponseCode) %}
+    {% set statustitle = __('amg_status_check_response_code_' + person.amgCheckinResponseCode)if person.amgCheckinResponseCode else 
+      '' %}
 
   {% elif(status === 'Pending') %}
     {% set statuscolour = 'amber' %}
@@ -33,15 +34,29 @@
     </td>
     <td class="govuk-table__cell">{{person.firstName}}
       {{person.lastName}}</td>
-    <td class="govuk-table__cell">
+    <td class="govuk-table__cell" style="position:relative;">
       {{statustitle}}
+      {% if code == '1Z' or code | first == '0' %}
+        <div class="upt-hover">
+          {% if code == '1Z' %}
+          Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
+        {% elif(code === '0A') %}
+            The Home Office can find a valid permission to travel for the person. Pilots, operators and agents are not required to check visas, but Passport or Travel Document checks still apply. They must check that the passport or travel document presented is genuine and valid, and that the person is the rightful holder.
+            <br/><br/>For more information on checking passports and travel documents click here  <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
+          {% else %}
+            Pilots, operators and agents are required to check visas for Visa Nationals. Passport or Travel Document checks apply for all passengers. They must check that the passport or travel document presented is genuine and valid, and that the person is the rightful holder.
+            <br/><br/>For more information on checking passports and travel documents click here <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
+            Follow this link to check visa requirements <a href="https://www.gov.uk/check-uk-visa">Check if you need a UK visa - GOV.UK (www.gov.uk)</a>
+          {% endif %}
+        </div>
+      {% endif %}
     </td>
   </tr>
 
 {% endmacro %}
 
 {# <pre>{{garfile | dump(2)}}</pre> #}
-<table class="govuk-table">
+<table class="govuk-table" id="upt-responses">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header" style="width:20%;">Status</th>
