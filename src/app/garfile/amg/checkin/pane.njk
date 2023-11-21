@@ -36,9 +36,9 @@
       {{person.lastName}}</td>
     <td class="govuk-table__cell" style="position:relative;">
       {{statustitle}}
-      {% if code == '1Z' or code | first == '0' %}
+      {% if code === '1Z' or code | first === '0' %}
         <div class="upt-hover">
-          {% if code == '1Z' %}
+          {% if code === '1Z' %}
           Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
         {% elif(code === '0A') %}
             The Home Office can find a valid permission to travel for the person. Pilots, operators and agents are not required to check visas, but Passport or Travel Document checks still apply. They must check that the passport or travel document presented is genuine and valid, and that the person is the rightful holder.
