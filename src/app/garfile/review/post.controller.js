@@ -24,8 +24,7 @@ const performAPICallAMG = (garId, cookie, req, res) => {
     });
 };
 
-
-const performAPICall = (garId, cookie, req, res) => {
+const performAPICall = (garId, cookie, req, res, isJourneyUKInbound) => {
   garApi.patch(garId, 'Submitted', {})
     .then((apiResponse) => {
       logger.info('Received response from API');
@@ -49,9 +48,14 @@ const performAPICall = (garId, cookie, req, res) => {
         firstName: cookie.getUserFirstName(),
         garId: cookie.getGarId(),
       }).then(() => {
-        res.render('app/garfile/submit/success/index', {
-          cookie,
-        });
+        if (isJourneyUKInbound) {
+          performAPICallAMG(garId, cookie, req, res);
+        }
+        else {
+          res.render('app/garfile/submit/success/index', {
+            cookie,
+          });
+        }
       }).catch(() => {
         logger.error('Error occurred invoking emailService, but GAR has been submitted');
         res.render('app/garfile/submit/success/index', {
@@ -108,8 +112,6 @@ module.exports = (req, res) => {
     const manifest = new Manifest(responseValues[1]);
     validator.handleResponseError(garpeople);
 
-    const statuscheck = Boolean(req.body.statuscheck);
-
     const garsupportingdocs = JSON.parse(responseValues[2]);
     validator.handleResponseError(garsupportingdocs);
 
@@ -136,21 +138,10 @@ module.exports = (req, res) => {
     };
 
     validator.validateChains(validations).then(() => {
-      /*
-        when we reach this point, if it is a journey coming into the UK we send them to AMG/UPT, otherwise we submit the GAR.
-        when the UPT process is complete it sends them back here with status=StatusCheckComplete and at that stage we allow them to submit the GAR.
-        - Journey is not coming into UK from outside: Submit GAR
-        - Journey is coming into UK but no status check: Send to AMG/UPT
-        - Journey is coming into UK and status check: Submit GAR
-      */
-     
-      if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && !statuscheck) 
-       {
-        performAPICallAMG(garId, cookie, req, res);
-      }
-      else {
-        performAPICall(garId, cookie, req, res);
-      }
+      const isJourneyUKInbound = airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort);
+
+      performAPICall(garId, cookie, req, res);
+
     }).catch((err) => {
       logger.info('Failed to submit incomplete GAR - validation failed');
       logger.debug(JSON.stringify(err));

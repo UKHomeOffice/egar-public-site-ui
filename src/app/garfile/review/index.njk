@@ -32,19 +32,12 @@
 
       {% include "check-your-answers.njk" %}
 
-      {% if isJourneyUkInbound%}
-        <form action="/garfile/review" method="post" class="form">
-          <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
-          <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit_amg')}}">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-        </form>
-      {% else %}
-        <form action="/garfile/review" method="post" class="form">
-          <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
-          <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit')}}">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-        </form>
-      {% endif %}
+      <form action="/garfile/review" method="post" class="form">
+        <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
+        <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit')}}">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      </form>
+      
       <form id="cancel-form" action="/garfile/view" method="post" role="form">
         <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
           {{__('review_gar_exit')}}

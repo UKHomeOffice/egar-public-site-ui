@@ -25,8 +25,6 @@ module.exports = (req, res) => {
     const garsupportingdocs = JSON.parse(apiResponse[2]);
     validator.handleResponseError(garsupportingdocs);
 
-    const isJourneyUkInbound = airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort);
-
     const validations = validationList.validations(garfile, garpeople);
     const renderObj = {
       cookie,
@@ -34,8 +32,7 @@ module.exports = (req, res) => {
       garfile,
       garpeople,
       garsupportingdocs,
-      showChangeLinks: true,
-      isJourneyUkInbound
+      showChangeLinks: true
     };
 
     validator.validateChains(validations)
