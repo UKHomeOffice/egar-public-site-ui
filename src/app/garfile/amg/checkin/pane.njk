@@ -36,7 +36,7 @@
       {{person.lastName}}</td>
     <td class="govuk-table__cell" style="position:relative;">
       {{statustitle}}
-      {% if code | length and (code === '1Z' or code | first === '0') %}
+      {% if code | length and(code === '1Z' or code | first === '0') %}
         <div class="upt-hover">
           {% if code === '1Z' %}
           Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
@@ -55,6 +55,7 @@
 
 {% endmacro %}
 
+
 {# <pre>{{garfile | dump(2)}}</pre> #}
 <table class="govuk-table" id="upt-responses">
   <thead class="govuk-table__head">
@@ -64,6 +65,18 @@
       <th class="govuk-table__header">Permission to Travel</th>
     </tr>
   </thead>
+  {% if statusCheckComplete %}
+      <tr class="govuk-table__row">
+      <td class="govuk-table__cell"></td>
+      <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
+    </tr>
+  {% else %}
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell"><div id="spinner" title="loading..." class="status-disc spinner"></div></td>
+      <td class="govuk-table__cell" colspan="2" style="opacity:.5;">Awaiting Permission to Travel responses...</td>
+    </tr>  
+  {% endif %}
+
   {% for person in garpeople.items %}
     {# <pre>{{person | dump(2)}}</pre> #}
     {{statusRow(person)}}
