@@ -36,7 +36,7 @@
       {{person.lastName}}</td>
     <td class="govuk-table__cell" style="position:relative;">
       {{statustitle}}
-      {% if code === '1Z' or code | first === '0' %}
+      {% if code | length and (code === '1Z' or code | first === '0') %}
         <div class="upt-hover">
           {% if code === '1Z' %}
           Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
