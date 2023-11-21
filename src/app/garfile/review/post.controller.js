@@ -140,7 +140,7 @@ module.exports = (req, res) => {
     validator.validateChains(validations).then(() => {
       const isJourneyUKInbound = airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort);
 
-      performAPICall(garId, cookie, req, res);
+      performAPICall(garId, cookie, req, res, isJourneyUKInbound);
 
     }).catch((err) => {
       logger.info('Failed to submit incomplete GAR - validation failed');
