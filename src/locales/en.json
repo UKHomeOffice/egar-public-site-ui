@@ -334,7 +334,6 @@
 	"amg_check_form_submit": "Submit GAR",
 	"title_submit_gar_amg": "Passenger Check",
 	"amg_check_caption": "Each person in your journey will now be checked for permission to travel.",
-	"amg_check_warning": "You do not need to wait for this process to complete before submitting your GAR.",
 	"title_amg_departure_confirmation": "Departure Confirmation",
 	"heading_departure_confirmation": "Select Passengers",
 	"amg_departure_confirmation_caption": "After the craft departs, please select any passengers who did not travel.",
