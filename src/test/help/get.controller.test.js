@@ -17,6 +17,7 @@ describe('Help Get Controller', () => {
 
     req = {
       session: {},
+      query: {},
     };
     res = {
       render: sinon.spy(),
