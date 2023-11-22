@@ -5,85 +5,110 @@ Create GAR | Start
 {% endblock %}
 
 {% block head %}
-  {% include "head.njk" %}
+	{% include "head.njk" %}
 {% endblock %}
 
 {% block header %}
-{% include "header-pre-user.njk" %}
+	{% include "header-pre-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-{% include "phase.njk" %}
+	{% include "phase.njk" %}
 {% endblock %}
 
 {% block content %}
 
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
+	<p class="govuk-body-l">
+		<span style="background-color: #00ffff">
+			{{__('homepage_banner_text')}}<br/>
+			<a href="{{__('upt_guidance_link')}}">Guidance on examining identity documents (publishing.service.gov.uk)</a>. </span>
+	</p>
 
-		<h1 class="govuk-heading-xl">{{__('title')}}</h1>
+	<div class="govuk-grid-row">
+		<div class="govuk-grid-column-two-thirds">
 
-		<p class="govuk-body-l">{{__('welcome_caption')}}</p>
+			<h1 class="govuk-heading-xl">{{__('title')}}</h1>
 
-		<ul class="govuk-list govuk-list--bullet">
-			<li>{{__('welcome_caption_list_1')}}{# Submit a GAR #}</li>
-			<li>{{__('welcome_caption_list_2')}}{# View or cancel a GAR and edit draft GARs #}</li>
-			<li>{{__('welcome_caption_list_3')}}{# Add, remove or manage people on your flight #}</li>
-		</ul>
+			<p class="govuk-body-l">{{__('welcome_caption')}}</p>
 
-		<a id="start_now" href="/login" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">
-      {{__('button_start_now')}}
-    </a>
-
-		<div class="govuk-tabs" data-module="tabs">
-			<h2 class="govuk-tabs__title">
-				Contents
-			</h2>
-
-			<ul class="govuk-tabs__list">
-				<li class="govuk-tabs__list-item">
-					<a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#more-information">
-						{{__('welcome_tab_1')}}{# More information #}
-					</a>
+			<ul class="govuk-list govuk-list--bullet">
+				<li>{{__('welcome_caption_list_1')}}
+					{# Submit a GAR #}
 				</li>
-				<li class="govuk-tabs__list-item">
-					<a class="govuk-tabs__tab" href="#other-ways">
-						{{__('welcome_tab_2')}}{# Other ways to submit a GAR #}
-					</a>
+				<li>{{__('welcome_caption_list_2')}}
+					{# View or cancel a GAR and edit draft GARs #}
+				</li>
+				<li>{{__('welcome_caption_list_3')}}
+					{# Add, remove or manage people on your flight #}
 				</li>
 			</ul>
 
-			<section class="govuk-tabs__panel" id="more-information">
-				<h2 class="govuk-heading-s">{{__('welcome_tab_1_content_caption')}}</h2>{# You’ll need the following: #}
+			<a id="start_now" href="/login" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">
+				{{__('button_start_now')}}
+			</a>
 
-				<ul class="govuk-list govuk-list--bullet">
-					<li>{{__('welcome_tab_1_content_list_1')}}</li>{# Aircraft details (including registration number and base) #}
-					<li>{{__('welcome_tab_1_content_list_2')}}</li>{# Arrival and departure details (date, location and scheduled times) #}
-          <li>{{__('welcome_tab_1_content_list_3')}}</li>{# Captain, crew and passenger details (including travel document information and UK visiting address) #}
-					<li>{{__('welcome_tab_1_content_list_4')}}</li>{# Name and telephone number of the person responsible for goods on board #}
-					<li>{{__('welcome_tab_1_content_list_6')}}<a href="{{__('covid_19_notification_link')}}" target="_blank">here</a></li>
+			<div class="govuk-tabs" data-module="tabs">
+				<h2 class="govuk-tabs__title">
+				Contents
+			</h2>
+
+				<ul class="govuk-tabs__list">
+					<li class="govuk-tabs__list-item">
+						<a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#more-information">
+							{{__('welcome_tab_1')}}
+							{# More information #}
+						</a>
+					</li>
+					<li class="govuk-tabs__list-item">
+						<a class="govuk-tabs__tab" href="#other-ways">
+							{{__('welcome_tab_2')}}
+							{# Other ways to submit a GAR #}
+						</a>
+					</li>
 				</ul>
-			</section>
 
-			<section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="other-ways">
-				<h3 class="govuk-heading-s">{{__('welcome_tab_2_content_heading_1')}}</h3>{# By email #}
-        <p>
-          {{__('welcome_tab_2_content_1_block_1_1')}}<a href="{{__('gar_form_link')}}" target="_blank">{{__('welcome_tab_2_content_1_block_1_2')}}</a>{{__('welcome_tab_2_content_1_block_1_3')}}<a href="mailto:ncu@hmrc.gov.uk">{{__('welcome_tab_2_content_1_block_1_4')}}</a>{{__('welcome_tab_2_content_1_block_1_5')}}
-        </p>
-				{# <p>Send the <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights"
+				<section class="govuk-tabs__panel" id="more-information">
+					<h2 class="govuk-heading-s">{{__('welcome_tab_1_content_caption')}}</h2>
+					{# You’ll need the following: #}
+
+					<ul class="govuk-list govuk-list--bullet">
+						<li>{{__('welcome_tab_1_content_list_1')}}</li>
+						{# Aircraft details (including registration number and base) #}
+						<li>{{__('welcome_tab_1_content_list_2')}}</li>
+						{# Arrival and departure details (date, location and scheduled times) #}
+						<li>{{__('welcome_tab_1_content_list_3')}}</li>
+						{# Captain, crew and passenger details (including travel document information and UK visiting address) #}
+						<li>{{__('welcome_tab_1_content_list_4')}}</li>
+						{# Name and telephone number of the person responsible for goods on board #}
+						<li>{{__('welcome_tab_1_content_list_6')}}
+							<a href="{{__('covid_19_notification_link')}}" target="_blank">here</a>
+						</li>
+					</ul>
+				</section>
+
+				<section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="other-ways">
+					<h3 class="govuk-heading-s">{{__('welcome_tab_2_content_heading_1')}}</h3>
+					{# By email #}
+					<p>
+						{{__('welcome_tab_2_content_1_block_1_1')}}
+						<a href="{{__('gar_form_link')}}" target="_blank">{{__('welcome_tab_2_content_1_block_1_2')}}</a>{{__('welcome_tab_2_content_1_block_1_3')}}
+						<a href="mailto:ncu@hmrc.gov.uk">{{__('welcome_tab_2_content_1_block_1_4')}}</a>{{__('welcome_tab_2_content_1_block_1_5')}}
+					</p>
+					{# <p>Send the <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights"
 						target="_blank">General Aviation Report form</a>, to the <a href="mailto:ncu@hmrc.gov.uk">national
 						co-ordination unit (NCU)</a> to send to Border Force or the police.</p> #}
 
-        <p>{{__('welcome_tab_2_content_1_block_2')}}</p>
-				{# <p>You should title your email: ‘GAR, airfield registration, name of airfield, postcode of airfield (if
+					<p>{{__('welcome_tab_2_content_1_block_2')}}</p>
+					{# <p>You should title your email: ‘GAR, airfield registration, name of airfield, postcode of airfield (if
 					known)’. Please check the attached guidance in the Related Content section before completing and submitting
 					the GAR form.</p> #}
 
-				<h3 class="govuk-heading-s">{{__('welcome_tab_2_content_heading_2')}}</h3>{# By Phone - In an emergency only #}
-				<p>{{__('welcome_tab_2_content_2_block_1')}}</p>{# +44 (0) 300 123 2012 #}
-			</section>
+					<h3 class="govuk-heading-s">{{__('welcome_tab_2_content_heading_2')}}</h3>
+					{# By Phone - In an emergency only #}
+					<p>{{__('welcome_tab_2_content_2_block_1')}}</p>
+					{# +44 (0) 300 123 2012 #}
+				</section>
+			</div>
 		</div>
 	</div>
-</div>
 {% endblock %}
-
