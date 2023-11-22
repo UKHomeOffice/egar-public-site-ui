@@ -19,6 +19,8 @@ module.exports = (req, res) => {
     const garpeople = JSON.parse(apiResponse[1]);
     const garsupportingdocs = JSON.parse(apiResponse[2]);
 
+    const statusCheckComplete = garpeople.items.every(x => x.amgCheckinStatus.name === 'Complete');
+
     const renderObj = {
       cookie,
       manifestFields,
@@ -26,6 +28,7 @@ module.exports = (req, res) => {
       garpeople,
       garsupportingdocs,
       showChangeLinks: true,
+      statusCheckComplete,
     };
 
     res.render(template, renderObj);
@@ -33,6 +36,6 @@ module.exports = (req, res) => {
   }).catch((err) => {
     logger.error('Error retrieving GAR for amg');
     logger.error(JSON.stringify(err));
-    res.render('app/garfile/amg/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
+    res.render('app/garfile/amg/checkin/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
   });
 };
