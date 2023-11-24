@@ -79,7 +79,9 @@
 
   {% for person in garpeople.items %}
     {# <pre>{{person | dump(2)}}</pre> #}
-    {{statusRow(person)}}
+    {% if person.peopleType.name === "Passenger" %}
+      {{statusRow(person)}}
+    {% endif %}
   {% endfor %}
 </table>
 

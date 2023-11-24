@@ -18,8 +18,10 @@ module.exports = (req, res) => {
     const garfile = JSON.parse(apiResponse[0]);
     const garpeople = JSON.parse(apiResponse[1]);
     const garsupportingdocs = JSON.parse(apiResponse[2]);
-
-    const statusCheckComplete = garpeople.items.every(x => x.amgCheckinStatus.name === 'Complete');
+    
+    const statusCheckComplete = garpeople.items
+      .filter(garperson => garperson.peopleType.name === "Passenger")
+      .every(garperson => garperson.amgCheckinStatus.name === 'Complete');
 
     const renderObj = {
       cookie,
