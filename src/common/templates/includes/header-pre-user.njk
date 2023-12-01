@@ -16,6 +16,16 @@
     </div>
     <div class="govuk-header__content">
       <a href="/" class="govuk-header__link govuk-header__link--service-name">{{__('title')}}</a>
+            {% macro nav_link(id, href, label) %}
+        <li id="nav-{{ id }}-li" class="govuk-header__navigation-item{{ ' govuk-header__navigation-item--active' if active == href}}">
+          <a id="nav-{{ id }}" class="govuk-header__link" href="{{ href }} ">{{ label }}</a>
+        </li>
+      {% endmacro %}
+      <nav>
+        <ul id="navigation" class="govuk-header__navigation" aria-label="Top Level Navigation">
+          {{ nav_link('upt-help', '/help', __('nav_bar_upt-help')) }}
+        </ul>
+      </nav>
     </div>
   </div>
 </header>
