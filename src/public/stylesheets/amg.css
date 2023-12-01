@@ -1,28 +1,41 @@
-.status-disc{
-    position:relative;
-    display: inline-block; 
-    width: 1em; 
-    height: 1em; 
-    border-radius: 50%; 
-    border: 2px solid rgba(0,0,0, 0.125);
+.status-disc {
+    position: relative;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-left: .5em;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.125);
 }
 
-.status-disc.green{
-    background-color: green; 
+.status-disc.green {
+    background-color: green;
 }
 
-.status-disc.green.caveat{
-    border-color: red;
+.status-disc.blue {
+    background-color: #44b0d4;
 }
 
-.status-disc.amber{
-    background-color: #FFBF00; 
+.status-disc.amber {
+    background-color: #FFBF00;
 }
 
-.status-disc.red{
-    background-color: red; 
+.status-disc.red {
+    background-color: red;
 }
 
-.status-disc.black{
-    background-color: black; 
+.status-disc.black {
+    background-color: black;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    border: 2px solid #ccc;
+    border-top-color: #999;
+    animation: spinner 0.6s linear infinite;
 }
