@@ -18,7 +18,6 @@ module.exports = (req, res) => {
 
   orgApi.getUsers(cookie.getOrganisationId())
     .then((values) => {
-      //TODO if no items --> analyse this
       const orgUsers = JSON.parse(values).items.map((orgUser) => {
         const isEditable = userPermissions > permissionLevels[orgUser.role.name];
         return { ...orgUser, isEditable };
