@@ -4,7 +4,6 @@ const orgApi = require('../../common/services/organisationApi');
 const logger = require('../../common/utils/logger')(__filename);
 
 permissionLevels = {
-  'Individual': 0, 
   'User': 0, 
   'Manager': 1, 
   'Admin': 2
