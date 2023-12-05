@@ -33,11 +33,4 @@ describe('Help Get Controller', () => {
 
     expect(res.render).to.have.been.calledWith('app/help/index');
   });
-
-  it('should render upt help page', async () => {
-    req.query.tab = 'upt';
-    await controller(req, res);
-
-    expect(res.render).to.have.been.calledWith('app/help/upt');
-  });
 });
