@@ -83,7 +83,7 @@
   {% endif %}
 
   {% for passenger in passengers %}
-    <pre>{{person | dump(2)}}</pre>
+    {# <pre>{{passenger | dump(2)}}</pre> #}
     {{statusRow(passenger)}}
   {% endfor %}
 </table>
