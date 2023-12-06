@@ -3,11 +3,11 @@ const CookieModel = require('../../common/models/Cookie.class');
 const orgApi = require('../../common/services/organisationApi');
 const logger = require('../../common/utils/logger')(__filename);
 
-permissionLevels = {
+const permissionLevels = {
   'User': 0, 
   'Manager': 1, 
   'Admin': 2
-}
+};
 
 module.exports = (req, res) => {
   logger.debug('In organisation get controller');
@@ -22,8 +22,6 @@ module.exports = (req, res) => {
         return { ...orgUser, isEditable };
       });
       cookie.setOrganisationUsers(orgUsers);
-
-      logger.info(`cookie email: ${cookie.getUserEmail()}`);
 
       if (req.session.errMsg) {
         const { errMsg } = req.session;
