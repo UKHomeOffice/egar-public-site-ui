@@ -441,11 +441,11 @@
 	"field_continental_shelf_review": "Intention to make continental shelf declaration",
 	"field_continental_shelf_declaration_review": "Continental shelf goods details",
 	"amg_status_check_response_code_0A": "Valid permission to travel",
-	"amg_status_check_response_code_0B": "Conduct manual check to determine permission",
-	"amg_status_check_response_code_0Z": "Conduct manual check to determine permission",
+	"amg_status_check_response_code_0B": "Authority to carry granted",
+	"amg_status_check_response_code_0Z": "Authority to carry granted",
 	"amg_status_check_response_code_2Z": "SELECTEE REFER TO STANDARD OPERATING PROCEDURES FOR UK",
-	"amg_status_check_response_code_0P": "Conduct manual check to determine permission",
-	"amg_status_check_response_code_1Z": "DO NOT BOARD refer to Authority to Carry Guidance for GA",
+	"amg_status_check_response_code_0P": "Authority to carry granted",
+	"amg_status_check_response_code_1Z": "Authority to carry refused. DO NOT BOARD.",
 	"amg_status_check_response_code_0T": "System time out - Refer to Timeout Procedure",
 	"amg_status_check_response_code_4Z": "Insufficient data attributes",
 	"amg_status_check_response_code_0U": "MANUALLY CHECK TRAVEL PERMISSION AND TEST RESULT",
@@ -458,5 +458,6 @@
 	"amg_status_check_response_code_0J": "MANUALLY CHECK VACCINATION STATUS",
 	"amg_status_check_response_code_0K": "MANUALLY CHECK VACCINATION STATUS AND TEST RESULT",
 	"amg_status_check_response_code_0Q": "MANUALLY CHECK HEALTH EXEMPTION",
-	"gar_complete_no_records": "gar_complete_no_records"
+	"gar_complete_no_records": "gar_complete_no_records",
+	"": ""
 }

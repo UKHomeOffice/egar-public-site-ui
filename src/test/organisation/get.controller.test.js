@@ -21,7 +21,12 @@ describe('Organisation Get Controller', () => {
     req = {
       body: {},
       session: {
-        org: { i: 'ORG-ID-1' },
+        org: { 
+          i: 'ORG-ID-1'
+        },
+        u: {
+          rl: "User"
+        }
       },
     };
 
@@ -58,8 +63,8 @@ describe('Organisation Get Controller', () => {
 
     const apiResponse = {
       items: [
-        { id: 'USER-1', firstName: 'Jessica' },
-        { id: 'USER-2', firstName: 'Trish' },
+        { id: 'USER-1', firstName: 'Jessica', role: { name: "Admin" } },
+        { id: 'USER-2', firstName: 'Trish', role: { name: "Manager" }  },
       ],
     };
 
@@ -82,12 +87,10 @@ describe('Organisation Get Controller', () => {
         expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1');
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
           cookie,
-          orgUsers: {
-            items: [
-              { id: 'USER-1', firstName: 'Jessica' },
-              { id: 'USER-2', firstName: 'Trish' },
-            ],
-          },
+          orgUsers: [
+            { id: 'USER-1', firstName: 'Jessica', role: { name: "Admin" }, isEditable: false },
+            { id: 'USER-2', firstName: 'Trish', role: { name: "Manager" }, isEditable: false },
+          ],
           errors: [{ message: 'Example error message' }],
         });
       });
@@ -108,12 +111,10 @@ describe('Organisation Get Controller', () => {
         expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1');
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
           cookie,
-          orgUsers: {
-            items: [
-              { id: 'USER-1', firstName: 'Jessica' },
-              { id: 'USER-2', firstName: 'Trish' },
-            ],
-          },
+          orgUsers: [
+            { id: 'USER-1', firstName: 'Jessica', role: { name: "Admin" }, isEditable: false },
+            { id: 'USER-2', firstName: 'Trish', role: { name: "Manager" }, isEditable: false },
+          ],
           successHeader: 'Successful header',
           successMsg: 'Example success message',
         });
@@ -132,12 +133,10 @@ describe('Organisation Get Controller', () => {
         expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1');
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
           cookie,
-          orgUsers: {
-            items: [
-              { id: 'USER-1', firstName: 'Jessica' },
-              { id: 'USER-2', firstName: 'Trish' },
-            ],
-          },
+          orgUsers: [
+            { id: 'USER-1', firstName: 'Jessica', role: { name: "Admin" }, isEditable: false },
+            { id: 'USER-2', firstName: 'Trish', role: { name: "Manager" }, isEditable: false },
+          ],
         });
       });
     });

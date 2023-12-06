@@ -27,5 +27,4 @@ spec:
             name: public-site-svc
             port:
               number: 10443
-
               
