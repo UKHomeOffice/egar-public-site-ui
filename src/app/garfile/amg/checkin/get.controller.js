@@ -18,16 +18,18 @@ module.exports = (req, res) => {
     const garfile = JSON.parse(apiResponse[0]);
     const garpeople = JSON.parse(apiResponse[1]);
     const garsupportingdocs = JSON.parse(apiResponse[2]);
-    
-    const statusCheckComplete = garpeople.items
+
+    const passengers = garpeople.items
       .filter(garperson => garperson.peopleType.name === "Passenger")
-      .every(garperson => garperson.amgCheckinStatus.name === 'Complete');
+    
+    const statusCheckComplete = passengers
+      .every(passenger => passenger.amgCheckinStatus.name === 'Complete');
 
     const renderObj = {
       cookie,
       manifestFields,
       garfile,
-      garpeople,
+      passengers,
       garsupportingdocs,
       showChangeLinks: true,
       statusCheckComplete,
