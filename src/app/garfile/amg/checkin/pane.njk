@@ -63,12 +63,12 @@
 {% endmacro %}
 
 {# <pre>{{garfile | dump(2)}}</pre> #}
-<table class="govuk-table" id="upt-responses">
+<table class="govuk-table" id="upt-responses" style="table-layout: fixed;">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header" style="width:10%;">Status</th>
       <th class="govuk-table__header" style="width:30%;">Passenger</th>
-      <th class="govuk-table__header">Permission to Travel</th>
+      <th class="govuk-table__header" style="width:60%;">Permission to Travel</th>
     </tr>
   </thead>
   {% if statusCheckComplete %}
