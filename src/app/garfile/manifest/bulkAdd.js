@@ -30,7 +30,6 @@ function getgarPeopleIds(garPeopleId, garId) {
       element.peopleType = person.peopleType.name;
     });
     resolve(garPeople);
-    console.log(garPeople);
    }).catch((err) => {
      logger.info(err);
      reject(err);
