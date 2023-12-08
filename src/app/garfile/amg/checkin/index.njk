@@ -34,14 +34,26 @@
   </div>
 
   <script>
-    $(function () {
+   $(function () {
       window.myinterval = setInterval(function () {
+        const permissionDetails = () => Array.from(document.getElementsByClassName('permission-details'));
+        const permissionDetailsState = permissionDetails().map(el => el.open);
+
+        console.log(permissionDetails())
+        console.log(permissionDetailsState)
+
         $.get('/garfile/amg/checkin?template=pane', null, function (data) {
           const html = $(data);
-          if(!html.find('#spinner').length){
+          if (!html.find('#spinner').length) {
             clearInterval(window.myinterval);
           }
+
           $('#pane').html($(data));
+
+          permissionDetails().forEach((el, index) => {
+            
+            el.toggleAttribute("open", permissionDetailsState[index])
+          })
         });
 
       }, 3000);
