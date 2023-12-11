@@ -21,11 +21,17 @@ module.exports = (req, res) => {
 
     const statusCheckComplete = garpeople.items.every(x => x.amgCheckinStatus.name === 'Complete');
 
+    const passengers = garpeople.items.sort((garperson, b) => {
+      const ORDER_FIRST = -1;
+      const KEEP_ORDER = 0;
+      return garperson.amgCheckinResponseCode === "1Z" ? ORDER_FIRST : KEEP_ORDER;
+    })
+
     const renderObj = {
       cookie,
       manifestFields,
       garfile,
-      garpeople,
+      passengers,
       garsupportingdocs,
       showChangeLinks: true,
       statusCheckComplete,
