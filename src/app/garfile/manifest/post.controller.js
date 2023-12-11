@@ -38,7 +38,6 @@ module.exports = (req, res) => {
         logger.debug('Found person(s) to add to people');
        manifestUtil.getgarPeopleIds(req.body.garPeopleId, cookie.getGarId())
        .then((selectedPeople) => {
-        console.log(selectedPeople);
      const person = selectedPeople.reduce(function(element) {
      return ({firstName: element.firstName, lastName: element.lastName, dateOfBirth: element.dateOfBirth, documentNumber: element.documentNumber, documentExpiryDate: element.documentExpiryDate, documentType: element.documentType, nationality: element.nationality, gender: element.gender, issuingState: element.issuingState, placeOfBirth: element.placeOfBirth, peopleType: element.peopleType});
      });
