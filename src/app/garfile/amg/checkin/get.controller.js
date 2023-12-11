@@ -1,6 +1,7 @@
 const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
 const manifestFields = require('../../../../common/seeddata/gar_manifest_fields.json');
+const travelPermissionCodes = require('../../../../common/utils/travel_permission_codes.json');
 const garApi = require('../../../../common/services/garApi');
 
 module.exports = (req, res) => {
@@ -24,7 +25,7 @@ module.exports = (req, res) => {
     const passengers = garpeople.items.sort((garperson, b) => {
       const ORDER_FIRST = -1;
       const KEEP_ORDER = 0;
-      return garperson.amgCheckinResponseCode === "1Z" ? ORDER_FIRST : KEEP_ORDER;
+      return garperson.amgCheckinResponseCode === travelPermissionCodes["NO_BOARD"] ? ORDER_FIRST : KEEP_ORDER;
     })
 
     const renderObj = {
