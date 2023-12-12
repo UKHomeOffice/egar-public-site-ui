@@ -33,9 +33,6 @@ steps:
   when:
     event:
     - push
-    target:
-      exclude:
-      - production
 
 - name: Unit Tests
   pull: if-not-exists
@@ -76,12 +73,10 @@ volumes:
   - name: dockersock
     temp: {}
 
-
 ---
 kind: pipeline
 name: deploy-image
 type: kubernetes
-
 
 platform:
  os: linux
@@ -133,9 +128,6 @@ steps:
     - feature/*
     event:
     - tag
-    target:
-      exclude:
-      - production
 
 - name: Deploy to SIT
   pull: if-not-exists
@@ -174,9 +166,6 @@ steps:
     - hotfix/*
     event:
     - push
-    target:
-      exclude:
-      - production
 
 - name: Get_the_Dynamic_DB_creds
   pull: if-not-exists
@@ -350,7 +339,6 @@ steps:
     branch:
     - master
     - hotfix/*
-    - amg/hotfix/*    
     event:
     - promote
     target:
