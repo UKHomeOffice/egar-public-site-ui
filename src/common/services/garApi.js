@@ -2,6 +2,7 @@ const request = require('request');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 const autocompleteUtil = require('../utils/autocomplete');
+const travelPermissionCodes = require('../utils/travel_permission_codes.json');
 
 module.exports = {
 
@@ -76,7 +77,16 @@ module.exports = {
           return;
         }
         logger.debug('Successfully called GAR people endpoint');
-        resolve(body);
+        const garpeople = JSON.parse(body);
+        const prioritySortedGarPeople = garpeople.items.sort((garperson, b) => {
+          const ORDER_FIRST = -1;
+          const KEEP_ORDER = 0;
+          return garperson.amgCheckinResponseCode === travelPermissionCodes["NO_BOARD"] ? ORDER_FIRST : KEEP_ORDER;
+        });
+        resolve(JSON.stringify({
+          ...garpeople,
+          items: prioritySortedGarPeople
+        }));
       });
     });
   },
