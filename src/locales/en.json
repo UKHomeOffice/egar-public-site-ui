@@ -492,8 +492,10 @@
 	"content_non_accessible_reason_caption": "The content listed below is non-accessible for the following reasons.",
 	"link_to_external_site_caption": "Some links to external sites open in a new tab with no warning.",
 	"password_fields_caption": "Password fields do not allow a user to view and check the entry.",
-	"content_tested_compliant_caption": "All content tested is compliant with the WCAG guidelines to the best of our knowledge. If you find areas in the site that're inaccessible, please contact us via",
+	"content_tested_compliant_caption": "All content tested is compliant with the WCAG guidelines to the best of our knowledge. If you find areas in the site that are inaccessible, please contact us via",
 	"disproportionate_burden_caption": "At this time, we have not made any disproportionate burden claims.",
-	"content_not_in_scope_caption": "At this time, we have not identified any content that's not within scope of the accessibility regulations.",
+	"content_not_in_scope_caption": "At this time, we have not identified any content that's not within the scope of the accessibility regulations.",
+	"prepared_date_caption": "This statement was prepared on 7 December 2023. It was last reviewed on 12 December 2023.",
+	"last_tested_date_caption": "This website was last tested on 10 November 2023. The test was carried out by the internal Quality Assurance team.",
 	"": ""
 }
