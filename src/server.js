@@ -33,8 +33,7 @@ const noCache = require('./common/utils/no-cache');
 const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
-
-
+const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 
 // Global constants
 const PORT = (process.env.PORT || 3000);
@@ -214,6 +213,7 @@ function initialiseTemplateEngine(app) {
   // nunjucksEnvironment.addGlobal('js_path', NODE_ENV === 'production' ? JAVASCRIPT_PATH : staticify.getVersionedPath('/javascripts/application.js'));
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
+  nunjucksEnvironment.addGlobal('travelPermissionCodes', travelPermissionCodes)
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
   nunjucksEnvironment.addFilter('expiryDate', nunjucksFilters.expiryDate);
