@@ -17,6 +17,7 @@ describe('Accessibility Get Controller', () => {
 
     req = {
       session: {},
+      query: {},
     };
     res = {
       render: sinon.spy(),
