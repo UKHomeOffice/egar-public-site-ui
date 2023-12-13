@@ -28,7 +28,7 @@ describe('Accessibility Get Controller', () => {
     sinon.restore();
   });
 
-  it('should render the appropriate page', async () => {
+  it('should render the main accessibility page', async () => {
     await controller(req, res);
 
     expect(res.render).to.have.been.calledWith('app/accessibility/index');
