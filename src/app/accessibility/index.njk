@@ -19,22 +19,9 @@
 {% block content %}
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-  <div class="govuk-notification-banner govuk-notification-banner--success" id="preference_changed" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" tabindex="-1" hidden>
-  <div class="govuk-notification-banner__header">
-    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-      Success
-    </h2>
-  </div>
-  <div class="govuk-notification-banner__content">
-    <p class="govuk-notification-banner__heading">
-      You’ve set your cookie preferences. <a class="govuk-notification-banner__link" href="javascript:history.back()">Go back to the page you were looking at</a>.
-    </p>
-  </div>
-  </div>
-
 		<h1 class="govuk-heading-xl">{{__('title_accessibility_statement')}}</h1>
-
-		<p class="govuk-body-m">
+		
+    <p class="govuk-body-m">
       {{__('accessibility_statement_caption')}}
       <a href="/" target="_self">{{__('title')}}</a>
     </p>
@@ -93,6 +80,7 @@
         <li>{{__('password_fields_caption')}}</li>
       </ul>
     </p>
+    
     <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement8')}}</h2>
       <p class="govuk-body-m">{{__('content_tested_compliant_caption')}}
         <a href="mailto:GARSupport@Homeoffice.gov.uk">GARSupport@Homeoffice.gov.uk</a>
@@ -111,10 +99,6 @@
     <p class="govuk-body-m">{{__('last_tested_date_caption')}}</p>
   </div>
 </div>
-	</div>
-</div>
-
-<script src="/javascripts/cookie-banner.js"></script>
 {% endblock %}
 
 
