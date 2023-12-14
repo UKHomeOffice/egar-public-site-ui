@@ -25,12 +25,10 @@ module.exports.validations = (garfile, garpeople) => {
     const peopleType = crew.peopleType === 'Crew' ? crewLabel : passengerLabel;
     const name = i18n.__('validator_api_uploadgar_person_type_person_name', { peopleType, firstName: crew.firstName, lastName: crew.lastName });
     validationArr.push([
-      new ValidationRule(validator.isAlpha, '', crew.lastName, `Surname for ${name} must not contain special characters or numbers, 
-      you may also remove/update the special characters by going to Edit a person page.`),
+      new ValidationRule(validator.isAlpha, '', crew.lastName, `Surname for ${name} must not contain special characters or numbers.`),
     ]);
     validationArr.push([
-      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given name for ${name} must not contain special characters or numbers,
-      you may also remove/update the special characters by going to Edit a person page.`),
+      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given name for ${name} must not contain special characters or numbers.`),
     ]);
   });
 
