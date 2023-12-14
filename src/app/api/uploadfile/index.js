@@ -17,7 +17,7 @@ router.post(paths.index, (req, res, next) => {
   upload(req, res, (err) => {
     if (err) {
       logger.info('File rejected due to size at multer level');
-      res.redirect('/garfile/supportingdocuments?query=limit');
+      return res.redirect('/garfile/supportingdocuments?query=limit');
     }
     next(err);
   });
