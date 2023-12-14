@@ -61,7 +61,7 @@ describe('GarService', () => {
       .get(`/gar/${garId}/people?page=1&per_page=10000`)
       .reply(200, {
         status: { name: 'Draft' },
-        people: [],
+        items: [],
       });
 
     nock(BASE_URL)
@@ -142,7 +142,7 @@ describe('GarService', () => {
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         expect(typeof parsedResponse).to.equal('object');
-        expect(parsedResponse).to.have.keys(['status', 'people']);
+        expect(parsedResponse).to.have.keys(['status', 'items']);
         done();
       });
   });
