@@ -1,6 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/banners.njk" as b %}
 
 {% block pageTitle %}
   {{__('error_prefix') if errors}} Create GAR | Arrival | {{__('title')}}
@@ -204,7 +205,7 @@
                 </div>
                 {# End arrival coords #}
               </div>
-            </div>
+              {{ b.coa_designation_regulation_change(false) }}
           </fieldset>
         </div>
 
