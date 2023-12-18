@@ -1,3 +1,5 @@
+{% import "common/templates/includes/banners.njk" as b %}
+
   <div class="govuk-grid-column-full">
     <dl id="departure" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">
@@ -13,6 +15,7 @@
         {% endif %}
       </div>
     </dl>
+            {{ b.coa_designation_regulation_change(true) }}
   
     {% macro check_your_answers_row(label, value) %}
       <div class="app-check-your-answers__contents">
@@ -67,6 +70,7 @@
         {% endif %}
       </div>
     </dl>
+    {{ b.coa_designation_regulation_change(false) }}
 
     <dl class="app-check-your-answers app-check-your-answers--short">
       {{ check_your_answers_row(__('field_arrival_date'), garfile.arrivalDate) }}
