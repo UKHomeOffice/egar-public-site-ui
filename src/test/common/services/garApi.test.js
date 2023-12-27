@@ -60,21 +60,23 @@ describe('GarService', () => {
     nock(BASE_URL)
       .get(`/gar/${garId}/people?page=1&per_page=10000`)
       .reply(200, {
-        "status": { name: 'Draft' },
-        "items": [],
         "_meta": {
           "page": 1,
-          "perPage": 1000,
+          "perPage": 100,
           "totalPages": 1,
-          "totalItems": 3
+          "totalItems": 4
         },
         "_links": {
-          "currentPage": "/v0.2.0/gar/78d5c48f-e824-4774-bc0e-768df3d75bbc/people?page=1&per_page=1000",
+          "currentPage": "/v0.2.0/gar/f8ff8083-26cf-48d2-82c1-64eec0fecbb3/people?page=1&per_page=100",
           "next": null,
           "prev": null
         },
-        "garId": "78d5c48f-e824-4774-bc0e-768df3d75bbc",
-      });
+        "garId": "f8ff8083-26cf-48d2-82c1-64eec0fecbb3",
+        "status": {
+          "name": "Draft"
+        },
+        "items": [],
+    });
 
     nock(BASE_URL)
       .patch(`/gar/${garId}`, garPeoplePartial)
