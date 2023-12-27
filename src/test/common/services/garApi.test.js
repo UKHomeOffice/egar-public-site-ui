@@ -60,8 +60,20 @@ describe('GarService', () => {
     nock(BASE_URL)
       .get(`/gar/${garId}/people?page=1&per_page=10000`)
       .reply(200, {
-        status: { name: 'Draft' },
-        people: [],
+        "status": { name: 'Draft' },
+        "items": [],
+        "_meta": {
+          "page": 1,
+          "perPage": 1000,
+          "totalPages": 1,
+          "totalItems": 3
+        },
+        "_links": {
+          "currentPage": "/v0.2.0/gar/78d5c48f-e824-4774-bc0e-768df3d75bbc/people?page=1&per_page=1000",
+          "next": null,
+          "prev": null
+        },
+        "garId": "78d5c48f-e824-4774-bc0e-768df3d75bbc",
       });
 
     nock(BASE_URL)
@@ -142,7 +154,7 @@ describe('GarService', () => {
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         expect(typeof parsedResponse).to.equal('object');
-        expect(parsedResponse).to.have.keys(['status', 'people']);
+        expect(parsedResponse).to.include.all.keys(['status', 'items']);
         done();
       });
   });
