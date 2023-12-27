@@ -10,7 +10,7 @@ GAR | Help
 
 
 {% block header %}
-  {% if cookie.getUserDbId() %}
+  {% if isLoggedIn %}
     {% include "header-user.njk" %}
   {% else %}
     {% include "header-pre-user.njk" %}
