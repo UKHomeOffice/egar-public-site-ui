@@ -10,16 +10,11 @@ GAR | Help
 
 
 {% block header %}
-<<<<<<< HEAD
-  {% include "header-pre-user.njk" %}
-  {% include "header-pre-user.njk" %}
-=======
   {% if isLoggedIn %}
     {% include "header-user.njk" %}
   {% else %}
     {% include "header-pre-user.njk" %}
   {% endif %}
->>>>>>> dev
 {% endblock %}
 
 
