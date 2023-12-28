@@ -8,10 +8,20 @@ GAR | Help
   {% include "head.njk" %}
 {% endblock %}
 
+
 {% block header %}
+<<<<<<< HEAD
   {% include "header-pre-user.njk" %}
   {% include "header-pre-user.njk" %}
+=======
+  {% if isLoggedIn %}
+    {% include "header-user.njk" %}
+  {% else %}
+    {% include "header-pre-user.njk" %}
+  {% endif %}
+>>>>>>> dev
 {% endblock %}
+
 
 {% block beforeContent %}
   {% include "phase.njk" %}

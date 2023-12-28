@@ -78,14 +78,15 @@ module.exports = {
         }
         logger.debug('Successfully called GAR people endpoint');
         const garpeople = JSON.parse(body);
-        const prioritySortedGarPeople = garpeople.items.sort((garperson, b) => {
-          const ORDER_FIRST = -1;
-          const KEEP_ORDER = 0;
-          return garperson.amgCheckinResponseCode === travelPermissionCodes["NO_BOARD"] ? ORDER_FIRST : KEEP_ORDER;
-        });
+
+        const noBoardPassengers = garpeople.items
+          .filter((garperson) => garperson.amgCheckinResponseCode === travelPermissionCodes["NO_BOARD"]);
+        const restOfPassengers = garpeople.items
+          .filter((garperson) => garperson.amgCheckinResponseCode !== travelPermissionCodes["NO_BOARD"]);
+
         resolve(JSON.stringify({
           ...garpeople,
-          items: prioritySortedGarPeople
+          items: [...noBoardPassengers, ...restOfPassengers]
         }));
       });
     });
