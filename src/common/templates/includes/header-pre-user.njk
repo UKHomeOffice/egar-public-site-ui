@@ -16,7 +16,9 @@
     </div>
     <div class="govuk-header__content">
       <a href="/" class="govuk-header__link govuk-header__link--service-name">{{__('title')}}</a>
-            {% macro nav_link(id, href, label) %}
+      <button type="button" role="button" class="govuk-header__menu-button js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
+      
+      {% macro nav_link(id, href, label) %}
         <li id="nav-{{ id }}-li" class="govuk-header__navigation-item{{ ' govuk-header__navigation-item--active' if active == href}}">
           <a id="nav-{{ id }}" class="govuk-header__link" href="{{ href }} ">{{ label }}</a>
         </li>
