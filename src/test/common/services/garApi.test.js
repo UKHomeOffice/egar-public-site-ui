@@ -60,9 +60,23 @@ describe('GarService', () => {
     nock(BASE_URL)
       .get(`/gar/${garId}/people?page=1&per_page=10000`)
       .reply(200, {
-        status: { name: 'Draft' },
-        people: [],
-      });
+        "_meta": {
+          "page": 1,
+          "perPage": 100,
+          "totalPages": 1,
+          "totalItems": 4
+        },
+        "_links": {
+          "currentPage": "/v0.2.0/gar/f8ff8083-26cf-48d2-82c1-64eec0fecbb3/people?page=1&per_page=100",
+          "next": null,
+          "prev": null
+        },
+        "garId": "f8ff8083-26cf-48d2-82c1-64eec0fecbb3",
+        "status": {
+          "name": "Draft"
+        },
+        "items": [],
+    });
 
     nock(BASE_URL)
       .patch(`/gar/${garId}`, garPeoplePartial)
@@ -142,7 +156,7 @@ describe('GarService', () => {
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         expect(typeof parsedResponse).to.equal('object');
-        expect(parsedResponse).to.have.keys(['status', 'people']);
+        expect(parsedResponse).to.include.all.keys(['status', 'items']);
         done();
       });
   });

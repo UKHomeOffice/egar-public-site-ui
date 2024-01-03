@@ -8,9 +8,15 @@ GAR | Help
   {% include "head.njk" %}
 {% endblock %}
 
+
 {% block header %}
-  {% include "header-pre-user.njk" %}
+  {% if isLoggedIn %}
+    {% include "header-user.njk" %}
+  {% else %}
+    {% include "header-pre-user.njk" %}
+  {% endif %}
 {% endblock %}
+
 
 {% block beforeContent %}
   {% include "phase.njk" %}
