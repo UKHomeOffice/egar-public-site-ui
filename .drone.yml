@@ -148,7 +148,6 @@ steps:
       - kd --timeout=12m --file ops/kube/public-site-deployment.yml
       - kd --timeout=6m --file ops/kube/public-site-service.yml
       - kd --timeout=6m --file ops/kube/public-site-ingress.yml
-      - kd --timeout=6m --file ops/kube/public-site-ingress-for-service.gov.uk.yml
     environment:
       INGRESS_CLASS: nginx-internal
       INSECURE_SKIP_TLS_VERIFY: true
