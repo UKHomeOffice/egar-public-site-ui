@@ -94,6 +94,7 @@ steps:
       - export KUBE_ARTIFACTORY_APP_SECRET=$${DEV_KUBE_ARTIFACTORY_APP_SECRET}
       - source ./ops/common_lib
       - source ./ops/notprod_values
+      - kd --timeout=6m --file ops/kube/public-site-ingress-for-service.gov.uk.yml
       - kd --timeout=6m --file ops/kube/artifactory-secret.yml
       - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
       - kd --timeout=12m --file ops/kube/public-site-deployment.yml
