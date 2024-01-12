@@ -472,7 +472,8 @@
 	"sub_title_accessibility_statement8": "Non-compliance with the accessibility regulations",
 	"sub_title_accessibility_statement9": "Disproportionate burden",
 	"sub_title_accessibility_statement10": "Content that's not within the scope of the accessibility regulations",
-	"sub_title_accessibility_statement11": "Preparation of this accessibility statement",
+	"sub_title_accessibility_statement11": "What we're doing to improve accessibility",
+	"sub_title_accessibility_statement12": "Preparation of this accessibility statement",
 	"accessibility_statement_caption": "This accessibility statement applies to the service at ",
 	"website_run_by_statement_caption": "This website is run by Border Force. We want as many people as possible to be able to use this website. For example, that means you should be able to:",
 	"zoom_to_caption": "Zoom in up to 200% without the text spilling off the screen",
@@ -498,5 +499,10 @@
 	"content_not_in_scope_caption": "At this time, we have not identified any content that's not within the scope of the accessibility regulations.",
 	"prepared_date_caption": "This statement was prepared on 7 December 2023. It was last reviewed on 12 December 2023.",
 	"last_tested_date_caption": "This website was last tested on 10 November 2023. The test was carried out by the internal Quality Assurance team.",
+	"improve_accessibility_steps_caption": "Our plan below describes how and when we plan to improve the accessibility of this service:",
+	"improve_accessibility_step1_caption": "We will train our staff to create accessible services.",
+	"improve_accessibility_step2_caption": "We will implement automated and manual accessibility testing in our development process.",
+	"improve_accessibility_step3_caption": "We will conduct user research and testing with users who have access needs.",
+	"improve_accessibility_step4_caption": "We will put in place alternative arrangements for those who need them and be willing to make additional adjustments if these are not enough.",
 	"": ""
 }
