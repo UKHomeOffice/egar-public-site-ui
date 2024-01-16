@@ -723,7 +723,7 @@ class Cookie {
     this.setUserVerified(apiResponse.state);
 
     if (apiResponse.organisation !== null) {
-      this.setOrganisationName(apiResponse.organisation.name);
+      this.setOrganisationName(apiResponse.organisation.organisationName);
       this.setOrganisationId(apiResponse.organisation.organisationId);
     }
   }

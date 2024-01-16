@@ -33,7 +33,7 @@ module.exports = (req, res) => {
             successHeader,
             draftGars,
             submittedGars,
-            cancelledGars,
+            cancelledGars
           });
         })
         .catch((err) => {

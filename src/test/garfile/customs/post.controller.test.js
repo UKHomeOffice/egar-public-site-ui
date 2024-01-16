@@ -15,6 +15,8 @@ const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reaso
 const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
+const continentalShelfOptions = require('../../../common/seeddata/egar_continental_shelf_options.json');
+
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 
@@ -29,8 +31,10 @@ describe('GAR Customs Post Controller', () => {
 
     req = {
       body: {
+        continentalShelf: 'No',
         prohibitedGoods: 'Yes',
         goodsDeclaration: 'Duty Free',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         visitReason: 2,
         intentionValue: 'Yes'
@@ -73,10 +77,13 @@ describe('GAR Customs Post Controller', () => {
         prohibitedGoodsOptions,
         baggageOptions,
         intentionValueOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
           baggageDeclaration: '',
+          continentalShelf: 'No',
+          continentalShelfDeclaration: '',
           prohibitedGoods: 'Yes',
           goodsDeclaration: 'Duty Free',
           intentionValue: undefined,
@@ -113,10 +120,13 @@ describe('GAR Customs Post Controller', () => {
         prohibitedGoodsOptions,
         intentionValueOptions,
         baggageOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
           baggageDeclaration: '',
+          continentalShelf: 'No',
+          continentalShelfDeclaration: '',
           freeCirculation: 0,
           goodsDeclaration: '',
           intentionValue: 'Yes',
@@ -152,10 +162,13 @@ describe('GAR Customs Post Controller', () => {
         prohibitedGoodsOptions,
         baggageOptions,
         intentionValueOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
           baggageDeclaration: '',
+          continentalShelf: 'No',
+          continentalShelfDeclaration: '',
           freeCirculation: 0,
           goodsDeclaration: '',
           intentionValue: 'Yes',
@@ -185,6 +198,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration: '',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         goodsDeclaration: "Duty Free",
         intentionValue: "Yes",
@@ -201,10 +216,13 @@ describe('GAR Customs Post Controller', () => {
         prohibitedGoodsOptions,
         baggageOptions,
         intentionValueOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
           baggageDeclaration: '',
+          continentalShelf: 'No',
+          continentalShelfDeclaration: '',
           freeCirculation: 0,
           goodsDeclaration: "Duty Free",
           intentionValue: "Yes",
@@ -234,6 +252,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration: '',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         goodsDeclaration: "Duty Free",
         intentionValue: "Yes",
@@ -250,10 +270,13 @@ describe('GAR Customs Post Controller', () => {
         reasonForVisitOptions,
         intentionValueOptions,
         baggageOptions,
+        continentalShelfOptions,
         cookie,
         gar: {
           baggage: undefined,
           baggageDeclaration: '',
+          continentalShelf: 'No',
+          continentalShelfDeclaration: '',
           freeCirculation: 0,
           goodsDeclaration: "Duty Free",
           intentionValue: "Yes",
@@ -281,6 +304,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration: '',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         goodsDeclaration: "Duty Free",
         intentionValue: "Yes",
@@ -308,6 +333,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration:'',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         goodsDeclaration: "Duty Free",
         intentionValue: "Yes",
@@ -336,6 +363,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration: '',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         goodsDeclaration: '',
         intentionValue: "Yes",
@@ -364,6 +393,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration: '',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         goodsDeclaration: '',
         intentionValue: "Yes",
@@ -393,6 +424,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration: '',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         freeCirculation: 0,
         goodsDeclaration: '',
         intentionValue: "Yes",
@@ -421,6 +454,8 @@ describe('GAR Customs Post Controller', () => {
       expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
         baggage: undefined,
         baggageDeclaration: '',
+        continentalShelf: 'No',
+        continentalShelfDeclaration: '',
         prohibitedGoods: 'Yes',
         goodsDeclaration: 'a',
         freeCirculation: 0,

@@ -1,23 +1,21 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const craftApi = require('../../../common/services/craftApi');
 const personApi = require('../../../common/services/personApi');
 
 module.exports = (req, res) => {
   logger.debug('In user / viewDetails get controller');
   const cookie = new CookieModel(req);
   const userId = cookie.getUserDbId();
-  Promise.all([craftApi.getCrafts(userId), personApi.getPeople(userId, 'individual')])
-    .then((values) => {
-      const savedCrafts = JSON.parse(values[0]);
-      const savedPeople = JSON.parse(values[1]);
-      cookie.setSavedCraft(savedCrafts);
+
+  Promise.all([personApi.getPeople(userId, 'individual')])
+    .then(([people]) => {
+      const savedPeople = JSON.parse(people);
 
       if (req.session.errMsg) {
         const { errMsg } = req.session;
         delete req.session.errMsg;
         return res.render('app/user/viewDetails/index', {
-          cookie, savedCrafts, savedPeople, errors: [errMsg],
+          cookie, savedPeople, errors: [errMsg],
         });
       }
       if (req.session.successMsg) {
@@ -25,10 +23,10 @@ module.exports = (req, res) => {
         delete req.session.successHeader;
         delete req.session.successMsg;
         return res.render('app/user/viewDetails/index', {
-          cookie, savedCrafts, savedPeople, successHeader, successMsg,
+          cookie, savedPeople, successHeader, successMsg,
         });
       }
-      return res.render('app/user/viewDetails/index', { cookie, savedCrafts, savedPeople });
+      return res.render('app/user/viewDetails/index', { cookie, savedPeople });
     })
     .catch((err) => {
       logger.error('There was an error fetching craft / people data for an individual');

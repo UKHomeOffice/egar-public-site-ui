@@ -1,0 +1,59 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+  {{__('error_prefix') if errors}} Create GAR | Passenger Check
+{% endblock %}
+
+{% set active = '/home' %}
+
+{% block header %}
+  {% include "header-user.njk" %}
+{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" href="/stylesheets/amg.css"/>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
+      <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
+      <p class="govuk-body-l">{{__('amg_check_caption')}}</p>
+
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('amg_check_warning')}}
+        </strong>
+      </div>
+
+      <div id="pane">
+        {% include "app/garfile/amg/checkin/pane.njk" %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+   $(function () {
+      window.myinterval = setInterval(function () {
+        const permissionDetails = () => Array.from(document.getElementsByClassName('permission-details'));
+        const permissionDetailsState = permissionDetails().map(el => el.open);
+        
+        $.get('/garfile/amg/checkin?template=pane', null, function (data) {
+          const html = $(data);
+          if (!html.find('#spinner').length) {
+            clearInterval(window.myinterval);
+          }
+
+          $('#pane').html($(data));
+
+          permissionDetails().forEach((el, index) => {
+            
+            el.toggleAttribute("open", permissionDetailsState[index])
+          })
+        });
+
+      }, 3000);
+    })
+  </script>
+{% endblock content %}

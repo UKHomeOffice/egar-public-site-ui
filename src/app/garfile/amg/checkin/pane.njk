@@ -1,0 +1,108 @@
+{% macro statusRow(person) %}
+
+  {% set status = person.amgCheckinStatus.name %}
+  {% set checkin_code = person.amgCheckinResponseCode %}
+
+  {% if (status === 'Complete') %}
+    {% if (checkin_code === travelPermissionCodes.VALID) %}
+      {% set statuscolour = 'green' %}
+    {% elif(checkin_code === travelPermissionCodes.NO_BOARD) %}
+      {% set statuscolour = 'red' %}
+      {% set statustitle = 'This passenger may not travel' %}
+    {% else %}
+      {% set statuscolour = 'blue' %}
+    {% endif %}
+
+    {% set statustitle = __('amg_status_check_response_code_' + checkin_code) if checkin_code else '' %}
+
+  {% elif(status === 'Pending') %}
+    {% set statuscolour = 'amber' %}
+    {% set statustitle = 'Permission to travel pending' %}
+  {% else %}
+    {% set statuscolour = 'black' %}
+    {% set statustitle = 'There was a problem requesting permission to travel for this passenger' %}
+  {% endif %}
+
+  {% set statustitle = statustitle %}
+
+  <tr class="govuk-table__row">
+    <td class="govuk-table__cell">
+      <div>
+        <div class="status-disc {{statuscolour}}" title="{{statustitle}}"></div>
+      </div>
+    </td>
+    <td class="govuk-table__cell">{{person.firstName}}
+      {{person.lastName}}</td>
+    <td class="govuk-table__cell">
+      <details class="govuk-details permission-details" data-module="govuk-details">
+        <summary class="govuk-details__summary" aria-controls="details-content-general-support" aria-expanded="false" title="Checking Passport / Travel Documents">
+          <span class="govuk-details__summary-text">{{statustitle}}</span>
+        </summary>
+        <div class="govuk-details__text" id="details-content-general-support" aria-hidden="true">
+          {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === '0') %}
+            {% if checkin_code === travelPermissionCodes.NO_BOARD %}
+              Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
+            {% elif(checkin_code === travelPermissionCodes.VALID) %}
+              The Home Office can find a valid permission to travel for the person. Pilots, operators and agents are not required to check visas, but Passport or Travel Document checks still apply. They must check that the passport or travel document presented is genuine and valid, and that the person is the rightful holder.
+              <br/><br/>For more information on checking passports and travel documents click here  <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
+            {% else %}
+              Pilots, operators and agents are required to check visas for Visa Nationals. Passport or Travel Document checks apply for all passengers. They must check that the passport or travel document presented is genuine and valid, and that the person is the rightful holder.
+              <br/><br/>For more information on checking passports and travel documents click here <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
+              Follow this link to check visa requirements <a href="https://www.gov.uk/check-uk-visa">Check if you need a UK visa - GOV.UK (www.gov.uk)</a>
+            {% endif %}
+          {% else %}
+            There was an error processing the permission to travel for this person.
+            <br/><br />Please contact <a href="/help">Support</a> or email <a href="uptqueries@homeoffice.gov.uk">uptqueries@homeoffice.gov.uk</a> about the issue.
+          {% endif %}
+        </div>
+      </details>
+    </td>
+  </tr>
+
+{% endmacro %}
+
+{# <pre>{{garfile | dump(2)}}</pre> #}
+<table class="govuk-table" id="upt-responses" style="table-layout: fixed;">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" style="width:15%;">Status</th>
+      <th class="govuk-table__header" style="width:35%;">Passenger</th>
+      <th class="govuk-table__header" style="width:50%;">Permission to Travel</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    {% if statusCheckComplete %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell"></td>
+        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
+      </tr>
+    {% else %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          <div id="spinner" title="loading..." class="status-disc spinner"></div>
+        </td>
+        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">Awaiting Permission to Travel responses...</td>
+      </tr>
+    {% endif %}
+
+    {% for person in garpeople.items %}
+      {# <pre>{{person | dump(2)}}</pre> #}
+      {{statusRow(person)}}
+    {% endfor %}
+  </tbody>
+</table>
+
+<form action="/garfile/review" method="post" class="form">
+  <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
+  <p class="govuk-body-m">{{__('submit_gar_caption')}}</p>
+  <input id='review-submit' type="submit" class="govuk-button" value="{{__('amg_check_form_submit')}}">
+  <input type="hidden" name="statuscheck" value="true"/>
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+</form>
+
+<form id="cancel-form" action="/garfile/view" method="post" role="form">
+  <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+    {{__('review_gar_exit')}}
+  </button>
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+</form>

@@ -22,7 +22,11 @@
     {# Stack overflow suggests this might help for Edge and issues with empty referer #}
     <meta name="referrer" content="origin-when-cross-origin" />
     
-
+    <script
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+      crossorigin="anonymous">
+    </script>
 
 
   <link href="/stylesheets/application.min.css" rel="stylesheet" />
@@ -157,6 +161,11 @@
                   Cookies
                 </a>
               </li>
+              <li class="govuk-footer__inline-list-item">
+                <a class="govuk-footer__link" href="/accessibility">
+                  Accessibility Statement 
+                </a>
+              </li>
             </ul>
 
             <svg role="presentation" focusable="false" class="govuk-footer__licence-logo" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 483.2 195.7" height="17" width="41">
@@ -183,11 +192,7 @@
   GOVUKFrontend.initAll();
   </script>
 
-    <script
-      src="https://code.jquery.com/jquery-1.12.4.min.js"
-      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-      crossorigin="anonymous">
-    </script>
+
     <script src="/javascripts/jquery.disableAutoFill.min.js"></script>
     <script>
       $("#page-form").disableAutoFill(

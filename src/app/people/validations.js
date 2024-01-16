@@ -38,6 +38,7 @@ module.exports.validations = (req) => {
       [
         new ValidationRule(validator.notEmpty, 'travelDocumentNumber', req.body.travelDocumentNumber, 'Enter the travel document number'),
         new ValidationRule(validator.isValidStringLength, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number must be ${MAX_STRING_LENGTH} characters or less`),
+        new ValidationRule(validator.isAlphanumeric, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number must be alphanumeric only.`),
       ],
       [
         new ValidationRule(validator.notEmpty, 'travelDocumentType', req.body.travelDocumentType, 'Select the travel document type'),
@@ -61,10 +62,12 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter the given name of the person'),
       new ValidationRule(validator.isValidStringLength, 'firstName', req.body.firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlpha, 'firstName', req.body.firstName, `Given name must not contain special characters or numbers`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
       new ValidationRule(validator.isValidStringLength, 'lastName', req.body.lastName, `Surname must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlpha, 'lastName', req.body.lastName, `Surname must not contain special characters or numbers`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'nationality', req.body.nationality, 'Enter the nationality of the person'),
@@ -81,6 +84,7 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.notEmpty, 'travelDocumentNumber', req.body.travelDocumentNumber, 'Enter the travel document number'),
       new ValidationRule(validator.isValidStringLength, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlphanumeric, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number must be alphanumeric only.`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'travelDocumentType', req.body.travelDocumentType, 'Select the travel document type'),

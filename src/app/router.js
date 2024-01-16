@@ -45,6 +45,9 @@ const garsubmitsucess = require('./garfile/submit/success');
 const garsubmitfailure = require('./garfile/submit/failure');
 const printmanifest = require('./garfile/printmanifest');
 
+//amg
+const amgcheckin  = require('./garfile/amg/checkin');
+
 // Saved entities
 const people = require('./people');
 const peopleAdd = require('./people/add');
@@ -56,6 +59,7 @@ const error = require('./error');
 const cookies = require('./cookie');
 const help = require('./help');
 const unavailable = require('./unavailable');
+const accessibility = require('./accessibility');
 
 // veirfy registeruser
 const verifyregisteruser = require('./verify/registeruser');
@@ -73,6 +77,7 @@ const editorganisation = require('./organisation/editorganisation');
 const orgassignrole = require('./organisation/assignrole');
 const orgEditUsers = require('./organisation/editusers');
 const deleteUser = require('./organisation/delete');
+
 
 // Export
 module.exports.bind = (app) => {
@@ -133,6 +138,9 @@ module.exports.bind = (app) => {
   app.use(peopleDelete.router);
   app.use(cookies.router);
   app.use(help.router);
+  app.use(accessibility.router)
   app.use(unavailable.router);
   app.use(printmanifest.router);
+  //
+  app.use(amgcheckin.router);
 };

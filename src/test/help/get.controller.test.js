@@ -17,6 +17,7 @@ describe('Help Get Controller', () => {
 
     req = {
       session: {},
+      query: {},
     };
     res = {
       render: sinon.spy(),
@@ -27,7 +28,7 @@ describe('Help Get Controller', () => {
     sinon.restore();
   });
 
-  it('should render the appropriate page', async () => {
+  it('should render main help page', async () => {
     await controller(req, res);
 
     expect(res.render).to.have.been.calledWith('app/help/index');

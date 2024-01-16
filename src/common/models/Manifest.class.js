@@ -31,12 +31,34 @@ class Manifest {
   validate() {
     let isValid = true;
     this.manifest.forEach((person) => {
+      if (person["documentType"] === "Other" && !validations.notEmpty(person["documentDesc"])) {
+          isValid = false;
+          this._recordValidationErr(this.manifest.indexOf(person));
+      }
+
       Object.keys(person).forEach((key) => {
+        if (key === "documentDesc") {
+          return null;
+        }
+
+        if (
+          key === "amgCheckinResponseCode" || 
+          key === "amgDepartureResponseCode" ||
+          key === "amgHasDeparted"
+        ) {
+          return null;
+        }
+
+        if (key.toLowerCase().includes('placeofbirth') ) {
+          return null;
+        }
+
         if (key.toLowerCase().includes('date') && !validations.realDate(Manifest._constructDateObj(person[key]))) {
           isValid = false;
           this._recordValidationErr(this.manifest.indexOf(person));
         }
-        if (!key.toLowerCase().includes('placeofbirth') && !validations.notEmpty(person[key])) {
+
+        if (!validations.notEmpty(person[key])) {
           isValid = false;
           this._recordValidationErr(this.manifest.indexOf(person));
         }
@@ -83,6 +105,7 @@ class Manifest {
   }
 
   static _constructDateObj(date) {
+    logger.info(`date pased in ${date}`)
     if (date === null) return date;
     const dateArr = date.split('-');
     return { y: dateArr[0], m: dateArr[1], d: dateArr[2] };

@@ -43,7 +43,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     [new ValidationRule(validator.preventZ, '', voyageObj.arrivalPort, 'Add ICAO/IATA or Latitude/Longitude Co-ordinates for the location')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departurePort, 'Enter a value for the departure port')],
     [new ValidationRule(validator.preventZ, '', voyageObj.departurePort, 'Add ICAO/IATA or Latitude/Longitude Co-ordinates for the location')],
-    [new ValidationRule(airportValidation.isBritishAirport, '', [voyageObj.departurePort, voyageObj.arrivalPort], airportValidation.notBritishMsg)],
+    [new ValidationRule(airportValidation.includesOneBritishAirport, '', [voyageObj.departurePort, voyageObj.arrivalPort], airportValidation.notBritishMsg)],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalTime, 'Enter a value for the arrival time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureTime, 'Enter a value for the departure time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalDate, 'Enter a value for the arrival date')],
@@ -97,14 +97,17 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.documentNumber, `Enter a document number for ${name}`),
       new ValidationRule(validator.isValidStringLength, '', crew.documentNumber, `Travel document number for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlphanumeric, '', crew.documentNumber, `Travel document number for ${name} must be alphanumeric only.`),
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.lastName, `Enter a surname for ${peopleType} ${crew.firstName}`),
       new ValidationRule(validator.isValidStringLength, '', crew.lastName, `Surname for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlpha, '', crew.lastName, `Surname for ${name}  must not contain special characters or numbers`),
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.firstName, `Enter a given name for ${peopleType} ${crew.lastName}`),
       new ValidationRule(validator.isValidStringLength, '', crew.firstName, `Given name for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given name for ${name}  must not contain special characters or numbers`),
     ]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a sex for ${name}`)]);
     validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid sex for ${name}`)]);

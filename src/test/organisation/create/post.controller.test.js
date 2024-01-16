@@ -110,7 +110,7 @@ describe('Organisation Create Post Controller', () => {
     cookie = new CookieModel(req);
 
     orgApiStub.resolves(JSON.stringify({
-      organisation: { name: 'New Evil Empire From API', organisationId: 'NEW-ORG-ID-123' },
+      organisation: { organisationName: 'New Evil Empire From API', organisationId: 'NEW-ORG-ID-123' },
       role: { name: 'Admin' },
     }));
 

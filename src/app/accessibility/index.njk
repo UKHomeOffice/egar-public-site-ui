@@ -1,0 +1,115 @@
+{% extends "base-template.njk" %}
+
+{% block pageTitle %}
+  GAR | Accessibility Statement
+{% endblock %}
+
+{% block head %}
+  {% include "head.njk" %}
+{% endblock %}
+
+{% block header %}
+  {% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		<h1 class="govuk-heading-xl">{{__('title_accessibility_statement')}}</h1>
+		
+    <p class="govuk-body-m">
+      {{__('accessibility_statement_caption')}}
+      <a href="/" target="_self">{{__('title')}}</a>
+    </p>
+
+    <p class="govuk-body-m">{{__('website_run_by_statement_caption')}}</p>
+    <p class="govuk-body-m">
+      <ul class="govuk-list govuk-list--bullet">
+        <li>{{__('zoom_to_caption')}}</li>
+        <li>{{__('navigate_most_of_website_caption')}}</li>
+        <li>{{__('navigate_speech_recog_caption')}}</li>
+        <li>{{__('listen_most_of_website_caption')}}</li>
+      </ul>
+    </p>
+    <p class="govuk-body-m">
+      {{__('website_text_simple_caption')}}
+      <a href="https://mcmw.abilitynet.org.uk/" target="_blank">AbilityNet</a>&nbsp;{{__('advice_making_easier_caption')}}
+    </p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement1')}}</h2>
+    <p class="govuk-body-m">{{__('some_part_not_accessible_caption')}}</p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement2')}}</h2>
+    <p class="govuk-body-m">{{__('need_information_on_website_caption')}}
+      <a href="mailto:GARSupport@Homeoffice.gov.uk">GARSupport@Homeoffice.gov.uk</a>
+    </p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement3')}}</h2>
+    <p class="govuk-body-m">{{__('improve_accessibility_caption')}}<a href="mailto:GARSupport@Homeoffice.gov.uk">GARSupport@Homeoffice.gov.uk</a></p>
+    <p class="govuk-body-m">
+      <a href="https://www.w3.org/WAI/teach-advocate/contact-inaccessible-websites/" target="_blank">Read tips on contacting organisations about inaccessible websites.</a>
+    </p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement4')}}</h2>
+    <p class="govuk-body-m">{{__('equality_and_humar_right_caption1')}}<a href ="https://www.equalityadvisoryservice.com" target="_blank">
+      Equality Advisory and Support Service (EASS).</a>
+    </p>
+    <p class="govuk-body-m">{{__('equality_and_humar_right_caption2')}}
+      <a href="https://www.equalityni.org/Home" target="_blank">Equalities Commission for Northern Ireland</a>
+      {{__('equality_and_humar_right_caption3')}}
+    </p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement5')}}</h2>
+    <p class="govuk-body-m">{{__('homeoffice_committed_to_caption')}}</p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement6')}}</h2>
+    <p class="govuk-body-m">{{__('partial_compliant_caption')}}
+      <a href="https://www.w3.org/TR/WCAG21/" target="_blank">Web Content Accessibility Guidelines version 2.1</a>
+      {{__('aa_standard_no_compliances_caption')}}
+    </p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement7')}}</h2>
+    <p class="govuk-body-m">{{__('content_non_accessible_reason_caption')}}</p>
+    <p class="govuk-body-m">
+      <ul class="govuk-list govuk-list--bullet">
+        <li>{{__('link_to_external_site_caption')}}</li>
+        <li>{{__('password_fields_caption')}}</li>
+      </ul>
+    </p>
+    
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement8')}}</h2>
+      <p class="govuk-body-m">{{__('content_tested_compliant_caption')}}
+        <a href="mailto:GARSupport@Homeoffice.gov.uk">GARSupport@Homeoffice.gov.uk</a>
+      </p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement9')}}</h2>
+    <p class="govuk-body-m">{{__('disproportionate_burden_caption')}}</p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement10')}}</h2>
+    <p class="govuk-body-m">{{__('content_not_in_scope_caption')}}</p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement11')}}</h2>
+    <p class="govuk-body-m">{{__('improve_accessibility_steps_caption')}}</p>
+    <p class="govuk-body-m">
+      <ul class="govuk-list govuk-list--bullet">
+        <li>{{__('improve_accessibility_step1_caption')}}</li>
+        <li>{{__('improve_accessibility_step2_caption')}}</li>
+        <li>{{__('improve_accessibility_step3_caption')}}</li>
+        <li>{{__('improve_accessibility_step4_caption')}}</li>
+      </ul>
+    </p>
+
+    <h2 class="govuk-heading-m">{{__('sub_title_accessibility_statement12')}}</h2>
+    <p class="govuk-body-m">
+      </p>
+    <p class="govuk-body-m">{{__('prepared_date_caption')}}</p>
+    <p class="govuk-body-m">{{__('last_tested_date_caption')}}</p>
+  </div>
+</div>
+{% endblock %}
+
+
