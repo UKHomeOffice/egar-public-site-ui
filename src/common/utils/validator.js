@@ -678,6 +678,11 @@ function isAddressValidCharacters(input) {
   return isEmpty(input) || addressRegex.test(input);
 }
 
+function isPostCodeValidCharacters(input) {
+  const addressRegex = /^[a-z\s\-\d]+$/i;
+  return isEmpty(input) || addressRegex.test(input);
+}
+
 function preventZ(value) {
   value = value || '';
   if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy") {
@@ -745,5 +750,6 @@ module.exports = {
   dateNotTooFarInFuture,
   isAlphanumeric,
   isAlpha,
-  isAddressValidCharacters
+  isAddressValidCharacters,
+  isPostCodeValidCharacters
 };

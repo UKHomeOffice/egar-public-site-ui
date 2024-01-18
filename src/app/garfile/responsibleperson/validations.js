@@ -59,7 +59,7 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(validator.validTextLength, 'responsiblePostcode', { value: responsiblePostcode, maxLength: MAX_POSTCODE_LENGTH }, `Postcode must be ${MAX_POSTCODE_LENGTH} characters or less`),
-      new ValidationRule(validator.isAddressValidCharacters, 'responsiblePostcode', responsiblePostcode, `Postcode must not contain special characters such as $ % or ä`),
+      new ValidationRule(validator.isPostCodeValidCharacters, 'responsiblePostcode', responsiblePostcode, `Postcode must not contain special characters such as $ % ' or ä`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'responsibleCounty', responsibleCounty, 'Enter a country for the responsible person'),
