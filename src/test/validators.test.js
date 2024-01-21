@@ -916,6 +916,15 @@ describe('Validator', () => {
 
       const specialCharacterStreet = "$$$ road";
       expect(validator.isAddressValidCharacters(specialCharacterStreet)).to.eql(false);
+    })
+    
+    it('Validate postcode containing invalid chars', () => { 
+      const unicodeCharacterStreet = "Bräut street"
+      expect(validator.isPostCodeValidCharacters(unicodeCharacterStreet)).to.eql(false);
+
+      const specialCharacterStreet = "LA'SW";
+      expect(validator.isPostCodeValidCharacters(specialCharacterStreet)).to.eql(false);
+
     });
   })
 });
