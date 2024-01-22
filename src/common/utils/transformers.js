@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 function transformPerson(personObj) {
   const copyPersonObj = personObj;
   if (Object.prototype.hasOwnProperty.call(personObj, 'peopleType')) {
@@ -14,7 +12,7 @@ function transformPerson(personObj) {
  * @returns {String} Undefined if undefined input else the string title case'd
  */
 function titleCase(str) {
-  if (str === undefined || !_.isString(str)) {
+  if (typeof str !== "string") {
     return str;
   }
   return str.split(' ')
@@ -23,9 +21,10 @@ function titleCase(str) {
 }
 
 function upperCamelCase(str) {
-  if (str === undefined) {
+  if (typeof str !== "string") {
     return str;
   }
+
   return str.split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase())
     .join('');
@@ -78,7 +77,7 @@ function unknownToUnspecified(aGender) {
 }
 
 function toUpper(aStr) {
-  return aStr === undefined ? undefined : _.toUpper(aStr);
+  return typeof aStr !== "string" ? aStr : aStr.toUpperCase();
 }
 
 module.exports = {
