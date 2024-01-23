@@ -4,7 +4,7 @@ const endpoints = require('../config/endpoints');
 const autocompleteUtil = require('../utils/autocomplete');
 const travelPermissionCodes = require('../utils/travel_permission_codes.json');
 
-function getRequestErrorMessage(_response, body) {
+function getResponseErrorMessage(_response, body) {
   const responseErrorMessage = JSON.stringify({
     statusCode: _response.statusCode,
     statusMessage: _response.statusMessage,
@@ -41,7 +41,7 @@ module.exports = {
         }
 
         if (_response.statusCode >= 400) {
-          const responseErrorMessage = getRequestErrorMessage(_response, body)
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
           logger.error(`garApi.patch request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
@@ -71,7 +71,7 @@ module.exports = {
         }
 
         if (_response.statusCode >= 400) {
-          const responseErrorMessage = getRequestErrorMessage(_response, body)
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
           logger.error(`garApi.get request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
@@ -104,7 +104,7 @@ module.exports = {
         }
 
         if (_response.statusCode >= 400) {
-          const responseErrorMessage = getRequestErrorMessage(_response, body)
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
           logger.error(`garApi.getPeople request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
@@ -147,7 +147,7 @@ module.exports = {
         }
 
         if (_response.statusCode >= 400) {
-          const responseErrorMessage = getRequestErrorMessage(_response, body)
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
           logger.error(`garApi.getGars request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
@@ -178,7 +178,7 @@ module.exports = {
         }
 
         if (_response.statusCode >= 400) {
-          const responseErrorMessage = getRequestErrorMessage(_response, body)
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
           logger.error(`garApi.getSupportingDocs request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
@@ -203,7 +203,7 @@ module.exports = {
         }
 
         if (_response.statusCode >= 400) {
-          const responseErrorMessage = getRequestErrorMessage(_response, body)
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
           logger.error(`garApi.deleteGarSupportingDoc request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
@@ -234,7 +234,7 @@ module.exports = {
           }
           
           if (_response.statusCode >= 400) {
-            const responseErrorMessage = getRequestErrorMessage(_response, body);
+            const responseErrorMessage = getResponseErrorMessage(_response, body);
             logger.error(`garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
@@ -270,7 +270,7 @@ module.exports = {
           }
 
           if (_response.statusCode >= 400) {
-            const responseErrorMessage = getRequestErrorMessage(_response, body);
+            const responseErrorMessage = getResponseErrorMessage(_response, body);
             logger.error(`garApi.postGarPassengerConfirmations request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
@@ -306,7 +306,7 @@ module.exports = {
         }
 
         if (_response.statusCode >= 400) {
-          const responseErrorMessage = getRequestErrorMessage(_response, body);
+          const responseErrorMessage = getResponseErrorMessage(_response, body);
           logger.error(`garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
@@ -342,7 +342,7 @@ module.exports = {
         }
 
         if (_response.statusCode >= 400) {
-          const responseErrorMessage = getRequestErrorMessage(_response, body);
+          const responseErrorMessage = getResponseErrorMessage(_response, body);
           logger.error(`garApi.deleteGarPerson request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
