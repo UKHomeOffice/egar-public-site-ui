@@ -29,6 +29,18 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = JSON.stringify({
+            statusCode: _response.statusCode,
+            statusMessage: _response.statusMessage,
+            body
+          });
+          logger.error(`garApi.patch request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called GAR put endpoint');
         resolve(body);
       });
@@ -135,6 +147,18 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = JSON.stringify({
+            statusCode: _response.statusCode,
+            statusMessage: _response.statusMessage,
+            body
+          });
+          logger.error(`garApi.getGars request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called get GARs endpoint');
         resolve(body);
       });
@@ -187,6 +211,18 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = JSON.stringify({
+            statusCode: _response.statusCode,
+            statusMessage: _response.statusMessage,
+            body
+          });
+          logger.error(`garApi.deleteGarSupportingDoc request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called delete gar supporting document endpoint');
         resolve(body);
       });
@@ -210,6 +246,18 @@ module.exports = {
             reject(error);
             return;
           }
+          
+          if (_response.statusCode >= 400) {
+            const responseErrorMessage = JSON.stringify({
+              statusCode: _response.statusCode,
+              statusMessage: _response.statusMessage,
+              body
+            });
+            logger.error(`garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`);
+            resolve(body);
+            return;
+          }
+          
           logger.debug('Successfully called passenger checkin endpoint');
           resolve(body);
         });
@@ -238,6 +286,18 @@ module.exports = {
             reject(error);
             return;
           }
+
+          if (_response.statusCode >= 400) {
+            const responseErrorMessage = JSON.stringify({
+              statusCode: _response.statusCode,
+              statusMessage: _response.statusMessage,
+              body
+            });
+            logger.error(`garApi.postGarPassengerConfirmations request was not successful : ${responseErrorMessage}`);
+            resolve(body);
+            return;
+          }
+          
           logger.debug('Successfully called passenger confirmation endpoint');
           resolve(body);
         });
@@ -266,6 +326,18 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = JSON.stringify({
+            statusCode: _response.statusCode,
+            statusMessage: _response.statusMessage,
+            body
+          });
+          logger.error(`garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called update garperson endpoint');
         resolve(body);
       });
@@ -294,6 +366,18 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = JSON.stringify({
+            statusCode: _response.statusCode,
+            statusMessage: _response.statusMessage,
+            body
+          });
+          logger.error(`garApi.deleteGarPerson request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called update garperson endpoint');
         resolve(body);
       });
