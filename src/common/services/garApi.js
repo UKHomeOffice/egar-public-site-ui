@@ -42,7 +42,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body)
-          logger.error(`garApi.patch request was not successful : ${responseErrorMessage}`);
+          logger.error(`${garId} garApi.patch request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }
@@ -72,7 +72,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body)
-          logger.error(`garApi.get request was not successful : ${responseErrorMessage}`);
+          logger.error(`${garId} garApi.get request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }
@@ -105,7 +105,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body)
-          logger.error(`garApi.getPeople request was not successful : ${responseErrorMessage}`);
+          logger.error(`${garId} garApi.getPeople request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }
@@ -148,7 +148,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body)
-          logger.error(`garApi.getGars request was not successful : ${responseErrorMessage}`);
+          logger.error(`${userId} garApi.getGars request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }
@@ -179,7 +179,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body)
-          logger.error(`garApi.getSupportingDocs request was not successful : ${responseErrorMessage}`);
+          logger.error(`${garId} garApi.getSupportingDocs request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }
@@ -204,7 +204,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body)
-          logger.error(`garApi.deleteGarSupportingDoc request was not successful : ${responseErrorMessage}`);
+          logger.error(`${garId} ${garSupportingDocId} garApi.deleteGarSupportingDoc request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }
@@ -235,7 +235,7 @@ module.exports = {
           
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`);
+            logger.error(`${garId} garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -271,7 +271,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`garApi.postGarPassengerConfirmations request was not successful : ${responseErrorMessage}`);
+            logger.error(`${garId} garApi.postGarPassengerConfirmations request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -307,7 +307,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body);
-          logger.error(`garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
+          logger.error(`${garId} garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }
@@ -343,7 +343,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body);
-          logger.error(`garApi.deleteGarPerson request was not successful : ${responseErrorMessage}`);
+          logger.error(`${garId} ${garPersonId} garApi.deleteGarPerson request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }
