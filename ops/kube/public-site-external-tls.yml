@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: public-site-external
+spec:
+  commonName: {{ .PUBLIC_SITE_EXTERNAL_URL }}
+  dnsNames:
+  - {{ .PUBLIC_SITE_EXTERNAL_URL }}
+  issuerRef:
+    kind: ClusterIssuer
+    # @Note: we support letsencrypt-prod and letsencrypt-staging (use the latter to test your cert-manager related manifests)
+    name: letsencrypt-prod
+  secretName: public-site-external-tls
