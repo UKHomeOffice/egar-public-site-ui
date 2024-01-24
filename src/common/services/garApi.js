@@ -4,6 +4,16 @@ const endpoints = require('../config/endpoints');
 const autocompleteUtil = require('../utils/autocomplete');
 const travelPermissionCodes = require('../utils/travel_permission_codes.json');
 
+function getResponseErrorMessage(_response, body) {
+  const responseErrorMessage = JSON.stringify({
+    statusCode: _response.statusCode,
+    statusMessage: _response.statusMessage,
+    body
+  });
+
+  return responseErrorMessage;
+}
+
 module.exports = {
 
   /**
@@ -29,6 +39,14 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
+          logger.error(`${garId} garApi.patch request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called GAR put endpoint');
         resolve(body);
       });
@@ -51,6 +69,14 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
+          logger.error(`${garId} garApi.get request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called GAR get endpoint');
         let gar = JSON.parse(body);
         gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCounty);
@@ -76,6 +102,14 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
+          logger.error(`${garId} garApi.getPeople request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called GAR people endpoint');
         const garpeople = JSON.parse(body);
 
@@ -111,6 +145,14 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
+          logger.error(`${userId} garApi.getGars request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called get GARs endpoint');
         resolve(body);
       });
@@ -128,12 +170,20 @@ module.exports = {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getSupportingDoc(garId),
-      }, (error, response, body) => {
+      }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call GAR get supporting documents API endpoint');
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
+          logger.error(`${garId} garApi.getSupportingDocs request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+        
         logger.debug('Successfully called supporting documents endpoint');
         resolve(body);
       });
@@ -151,6 +201,14 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
+          logger.error(`${garId} ${garSupportingDocId} garApi.deleteGarSupportingDoc request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called delete gar supporting document endpoint');
         resolve(body);
       });
@@ -174,6 +232,14 @@ module.exports = {
             reject(error);
             return;
           }
+          
+          if (_response.statusCode >= 400) {
+            const responseErrorMessage = getResponseErrorMessage(_response, body);
+            logger.error(`${garId} garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`);
+            resolve(body);
+            return;
+          }
+          
           logger.debug('Successfully called passenger checkin endpoint');
           resolve(body);
         });
@@ -202,6 +268,14 @@ module.exports = {
             reject(error);
             return;
           }
+
+          if (_response.statusCode >= 400) {
+            const responseErrorMessage = getResponseErrorMessage(_response, body);
+            logger.error(`${garId} garApi.postGarPassengerConfirmations request was not successful : ${responseErrorMessage}`);
+            resolve(body);
+            return;
+          }
+          
           logger.debug('Successfully called passenger confirmation endpoint');
           resolve(body);
         });
@@ -230,6 +304,14 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body);
+          logger.error(`${garId} garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called update garperson endpoint');
         resolve(body);
       });
@@ -258,6 +340,14 @@ module.exports = {
           reject(error);
           return;
         }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body);
+          logger.error(`${garId} ${garPersonId} garApi.deleteGarPerson request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
         logger.debug('Successfully called update garperson endpoint');
         resolve(body);
       });
