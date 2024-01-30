@@ -11,6 +11,7 @@ metadata:
     ingress.kubernetes.io/force-ssl-redirect: "true"
     ingress.kubernetes.io/backend-protocol: "HTTPS"
     ingress.kubernetes.io/proxy-body-size: "20m"
+    ingress.kubernetes.io/ssl-prefer-server-ciphers: "true"
     ingress.kubernetes.io/ssl-ciphers: '!aNULL:!EXPORT56:TLSv1.3:TLSv1.2:+HIGH'
     ingress.kubernetes.io/ssl-protocols: TLSv1.2 TLSv1.3
 spec:
