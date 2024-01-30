@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: public-site-internal
+  name: public-site-internal-tls
 spec:
   commonName: {{ .PUBLIC_SITE_INTERNAL_URL }}
   dnsNames:

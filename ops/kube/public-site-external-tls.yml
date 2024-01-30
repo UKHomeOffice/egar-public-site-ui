@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: public-site-external
+  name: public-site-external-tls
 spec:
   commonName: {{ .PUBLIC_SITE_EXTERNAL_URL }}
   dnsNames:
