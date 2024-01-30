@@ -48,11 +48,12 @@ steps:
   - name: scan-image
     pull: always
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
-    resources: 
+    failure: ignore
+    resources:
       limits:
         cpu: 1000
         memory: 1024Mi
-    environment: 
+    environment:
       IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:${DRONE_COMMIT}
       IGNORE_UNFIXED: true
     when:
@@ -120,7 +121,7 @@ trigger:
     - tag
   ref:
     - refs/tags/release*
-    
+
 ---
 kind: pipeline
 name: Test Deployment
@@ -425,4 +426,101 @@ trigger:
   target:
     include:
       - production
-      
+
+---
+kind: pipeline
+name: CRON Scanning
+type: kubernetes
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: build_and_push_cron
+    pull: if-not-exists
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
+    environment:
+      DOCKER_PASSWORD:
+        from_secret: DOCKER_PASSWORD
+      DOCKER_REGISTRY_URL:
+        from_secret: DOCKER_REGISTRY_URL
+      DOCKER_USERNAME:
+        from_secret: DOCKER_USERNAME
+    commands:
+      # Wait for the docker service to be up
+      - echo "Checking for docker availability."
+      - n=0; while [ "$n" -lt 60 ] && ! docker stats --no-stream >/dev/null 2>&1; do n=$(( n + 1 )); sleep 1; done
+      - echo "echo docker now available."
+      - docker login -u="$${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} $${DOCKER_REGISTRY_URL}
+      - docker build -t egar_ui-public-site:$${DRONE_COMMIT} .
+      - docker tag egar_ui-public-site:$${DRONE_COMMIT} $${DOCKER_REGISTRY_URL}/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+      - docker push quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+    settings:
+      group: build-stage
+
+  - name: scan-image-cron
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
+    resources:
+      limits:
+        cpu: 1000
+        memory: 1024Mi
+    environment:
+      IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+    when:
+      event:
+      - cron
+      depends_on: build_and_push_cron
+      cron:
+      - scheduled_vulnerability_scan
+
+  - name: Notify Slack CRON
+    pull: if-not-exists
+    image: plugins/slack
+    settings:
+      channel: sgar-dev
+      webhook:
+        from_secret: SLACK_WEBHOOK
+      template: >
+        {{#success build.status}}
+          *Image Security Scan* CRON Job has {{build.status}}
+          Author: {{build.author}}
+          Job: <{{build.link}}|#{{build.number}}>
+          Duration: {{since job.started}}
+          Message: {{build.message}}
+        {{else}}
+          *Image Security Scan* CRON Job has {{build.status}}
+          *Deployment* {{repo.name}} - *FAILURE*
+          Author: {{build.author}}
+          Job: <{{build.link}}|#{{build.number}}>
+          Duration: {{since job.started}}
+          Message: {{build.message}}
+          Event:
+        {{/success}}
+    environment:
+      SLACK_WEBHOOK:
+        from_secret: SLACK_WEBHOOK
+
+services:
+  - name: docker
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+
+volumes:
+  - name: dockersock
+    temp: {}
+
+trigger:
+  branch:
+    - master
+  event:
+    - cron
+  cron:
+        - scheduled_vulnerability_scan
+  target:
+      exclude:
+        - production
+
+
+
+
+
