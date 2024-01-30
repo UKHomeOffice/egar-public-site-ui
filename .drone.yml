@@ -140,7 +140,7 @@ steps:
       - export TAGGED_VERSION=$${DRONE_COMMIT}
       - export KUBE_SERVER=$${TEST_KUBE_SERVER}
       - export KUBE_TOKEN=$${TEST_KUBE_TOKEN}
-      - export PUBLIC_SITE_EXTERNAL_URL=$${TEST_URL_SERVICE}
+      - export PUBLIC_SITE_INTERNAL_URL=$${TEST_BASE_URL}
       - export KUBE_ARTIFACTORY_APP_SECRET=$${TEST_KUBE_ARTIFACTORY_APP_SECRET}
       - source ./ops/common_lib
       - source ./ops/notprod_values
