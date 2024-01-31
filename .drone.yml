@@ -267,7 +267,10 @@ steps:
         from_secret: E2E_SMTP_PORT
       E2E_SMTP_SERVER:
         from_secret: E2E_SMTP_SERVER
-
+services:
+  - name: docker
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+      
 volumes:
   - name: dockersock
     temp: {}
