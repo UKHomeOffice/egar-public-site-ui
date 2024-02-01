@@ -12,9 +12,12 @@ metadata:
     ingress.kubernetes.io/backend-protocol: "HTTPS"
     ingress.kubernetes.io/proxy-body-size: "20m"
     # Elliptic Curve Diffie Hellman for perfect forward secrecy.
+    # - That is the 'EECDH+' part of the cipher string
     # No Cipher-Block-Chaining (CBC) ciphers as these are considered insecure 
+    # - that is '!SHA1:!SHA256:!SHA384' part of the cipher string.
+    # - From this post: https://security.stackexchange.com/questions/166484/how-to-disable-cbc-mode-ciphers
     # - https://security.stackexchange.com/questions/210072/why-does-ssl-labs-now-consider-cbc-suites-weak
-    ingress.kubernetes.io/ssl-ciphers: '!aNULL:!EXPORT56:!CBC:EECDH+TLSv1.2+HIGH'
+    ingress.kubernetes.io/ssl-ciphers: '!aNULL:!EXPORT56:!SHA1:!SHA256:!SHA384:EECDH+TLSv1.2+HIGH'
     ingress.kubernetes.io/ssl-prefer-server-ciphers: "true"
     ingress.kubernetes.io/ssl-protocols: TLSv1.2 TLSv1.3
 spec:
