@@ -199,7 +199,7 @@ For the above scripts to work, the following variables must be existing in the s
 export KUBE_NAMESPACE='target-namespace'                    # The target namespace
 
 export TAGGED_VERSION='docker-tag'                          # The docker image tag as found in the quay io
-export BASE_URL='internal url'                              # The internal url. Please refer to drone secrets.
-export BASE_URL_SERVICE='www.egar-sit.homeoffice.gov.uk'    # The external url. Please refer to drone secrets.
+export PUBLIC_SITE_EXTERNAL_URL='www.egar-sit.homeoffice.gov.uk' # The external url. Please refer to drone secrets.
+export PUBLIC_SITE_INTERNAL_URL='internal url'              # The internal url. Please refer to drone secrets.
 ```
 The easiest is to have a file called `.idea` with all the above variables defined in it which will be included automatically in the `deploy_app` and the `destroy_app` scripts; the file `.idea` will not be tracked by git.

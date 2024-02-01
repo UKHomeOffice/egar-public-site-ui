@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: public-site-internal-tls
+  labels:
+    # @Note: this label tells the cluster issuer to use the DNS01 Route53 solver instead of the default HTTP01 solver
+    cert-manager.io/solver: route53
+spec:
+  secretName: public-site-internal-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: {{ .PUBLIC_SITE_INTERNAL_URL }}
+  dnsNames:
+  - {{ .PUBLIC_SITE_INTERNAL_URL }}

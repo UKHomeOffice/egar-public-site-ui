@@ -6,18 +6,20 @@ metadata:
   labels:
     cert-manager.io/solver: route53
   annotations:
-    cert-manager.io/enabled: "true"
-    ingress.kubernetes.io/backend-protocol: "HTTPS"
-    ingress.kubernetes.io/force-ssl-redirect: "true"
     kubernetes.io/ingress.class: "nginx-internal"
+    cert-manager.io/enabled: "true"
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    ingress.kubernetes.io/backend-protocol: "HTTPS"
     ingress.kubernetes.io/proxy-body-size: "20m"
+    ingress.kubernetes.io/ssl-ciphers: '!aNULL:!EXPORT56:TLSv1.3:TLSv1.2:+HIGH'
+    ingress.kubernetes.io/ssl-protocols: TLSv1.2 TLSv1.3
 spec:
   tls:
   - hosts:
-    - {{ .BASE_URL }}
-    secretName: public-site-tls-cmio
+    - {{ .PUBLIC_SITE_INTERNAL_URL }}
+    secretName: public-site-internal-tls
   rules:
-  - host: {{ .BASE_URL }}
+  - host: {{ .PUBLIC_SITE_INTERNAL_URL }}
     http:
       paths:
       - path: /
