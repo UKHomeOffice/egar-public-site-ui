@@ -11,7 +11,7 @@ metadata:
     ingress.kubernetes.io/force-ssl-redirect: "true"
     ingress.kubernetes.io/backend-protocol: "HTTPS"
     ingress.kubernetes.io/proxy-body-size: "20m"
-    # Elliptic Curve Diffie Hellman for perfect forward secrecy.
+    # Ephereal Elliptic Curve Diffie Hellman  for perfect forward secrecy.
     # - That is the 'EECDH+' part of the cipher string
     # No Cipher-Block-Chaining (CBC) ciphers as these are considered insecure 
     # - that is '!SHA1:!SHA256:!SHA384' part of the cipher string.
