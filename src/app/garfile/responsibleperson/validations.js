@@ -36,8 +36,8 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(validator.notEmpty, 'responsibleSurname', responsibleSurname, 'Enter a surname for the responsible person'),
-      new ValidationRule(validator.isValidStringLength, 'responsibleSurname', responsibleSurname, `Surname must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAlpha, 'responsibleSurname', responsibleSurname, `Surname must not contain special characters or numbers`),
+      new ValidationRule(validator.isValidStringLength, 'responsibleSurname', responsibleSurname, `Surname must be ${MAX_STRING_LENGTH} characters, apostrephes or less`),
+      new ValidationRule(validator.isAlpha, 'responsibleSurname', responsibleSurname, `Surname must not contain special characters, apostrephes or numbers`),
     ],
     [
       new ValidationRule(validator.validIntlPhone, 'responsibleContactNo', responsibleContactNo, i18n.__('validator_contact_number')),
