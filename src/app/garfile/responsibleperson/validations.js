@@ -46,16 +46,16 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.notEmpty, 'responsibleAddressLine1', responsibleAddressLine1, 'Enter address line 1 of the responsible person'),
       new ValidationRule(validator.isValidStringLength, 'responsibleAddressLine1', responsibleAddressLine1, `Address line 1 must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAddressValidCharacters, 'responsibleAddressLine1', responsibleAddressLine1, `Address line 1 must not contain special characters such as $ % or ä`),
+      new ValidationRule(validator.isAddressValidCharacters, 'responsibleAddressLine1', responsibleAddressLine1, `Address line 1 must not contain special characters such as $ % ' or ä`),
     ],
     [
       new ValidationRule(validator.isValidStringLength, 'responsibleAddressLine2', responsibleAddressLine2, `Address line 2 must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAddressValidCharacters, 'responsibleAddressLine2', responsibleAddressLine2, `Address line 2 must not contain special characters such as $ % or ä`),
+      new ValidationRule(validator.isAddressValidCharacters, 'responsibleAddressLine2', responsibleAddressLine2, `Address line 2 must not contain special characters such as $ % ' or ä`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'responsibleTown', responsibleTown, 'Enter a town or city for the responsible person'),
       new ValidationRule(validator.isValidStringLength, 'responsibleTown', responsibleTown, `Town or city must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAddressValidCharacters, 'responsibleTown', responsibleTown, `Town or city must not contain special characters such as $ % or ä`),
+      new ValidationRule(validator.isAddressValidCharacters, 'responsibleTown', responsibleTown, `Town or city must not contain special characters such as $ % ' or ä`),
     ],
     [
       new ValidationRule(validator.validTextLength, 'responsiblePostcode', { value: responsiblePostcode, maxLength: MAX_POSTCODE_LENGTH }, `Postcode must be ${MAX_POSTCODE_LENGTH} characters or less`),
