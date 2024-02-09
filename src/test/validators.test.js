@@ -880,6 +880,10 @@ describe('Validator', () => {
 
         const stringWithNumberInIt = "Aaron Adam-Kingsbottom 3rd";
         expect(validator.isAlpha(stringWithNumberInIt)).to.eql(false);
+
+        const stringWithSingleQuote = "Aaron O'Kingsbottom";
+        expect(validator.isAlpha(stringWithSingleQuote)).to.eql(false);
+
     })
 
     it('Validates optional unprovided addresses which are valid', () => { 
@@ -901,13 +905,10 @@ describe('Validator', () => {
       expect(validator.isAddressValidCharacters(streetNameWithADash)).to.eql(true);
 
       const streetNameWithAnapostrophe = "Pullman's Lane";
-      expect(validator.isAddressValidCharacters(streetNameWithAnapostrophe)).to.eql(true);
+      expect(validator.isAddressValidCharacters(streetNameWithAnapostrophe)).to.eql(false);
 
       const houseNumber = "18";
       expect(validator.isAddressValidCharacters(houseNumber)).to.eql(true);
-
-      const postcode = "SE1 9BG";
-      expect(validator.isAddressValidCharacters(postcode)).to.eql(true);
     })
 
     it('Invalidates Addresses which are invalid', () => { 
@@ -924,6 +925,9 @@ describe('Validator', () => {
 
       const specialCharacterStreet = "LA'SW";
       expect(validator.isPostCodeValidCharacters(specialCharacterStreet)).to.eql(false);
+
+      const postcode = "SE1 9BG";
+      expect(validator.isPostCodeValidCharacters(postcode)).to.eql(true);
 
     });
   })
