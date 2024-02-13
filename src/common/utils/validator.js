@@ -195,29 +195,31 @@ function validGender(value) {
   return validValues.includes(value);
 }
 
-function currentOrFutureDate(dObj) {
+/**
+ * Checks that the supplied date is not a past date
+ * @param {Object} dObjh Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
+ * @returns {Boolean} true if not past date, false if past date
+ */
+function currentOrPastDate(dObj) {
   const currDate = new Date();
+  const currMonth = currDate.getMonth() + 1;
 
-  if (dObj.y < currDate.getFullYear()) {
-    return false;
-  }
-  if (dObj.y > currDate.getFullYear()) {
-    return true;
-  }
-  if (dObj.y == currDate.getFullYear()) {
-    if (dObj.m < currDate.getMonth() + 1) {
+  if(![dObj.d,dObj.m,dObj.y].includes('')) {//ensures no fields are empty to avoid duplicate error messages
+    if (dObj.y < currDate.getFullYear()) {
       return false;
     }
-    if (dObj.m > currDate.getMonth() + 1) {
-      return true;
-    }
-    if (dObj.m == currDate.getMonth() + 1) {
-      return dObj.d >= currDate.getDate();
+    if (dObj.y == currDate.getFullYear()) {
+      if (dObj.m < currMonth) {
+        return false;
+      }
+      if (dObj.m == currMonth) {
+        return dObj.d >= currDate.getDate();
+      }
     }
   }
-  return false;
-}
 
+  return true;
+}
 
 /**
  * Check that supplied date is within an acceptable range (currently within 1 month from Date.now())
@@ -715,7 +717,7 @@ module.exports = {
   realDateInFuture,
   bornAfter1900,
   realDateFromString,
-  currentOrFutureDate,
+  currentOrPastDate,
   validTime,
   validFlag,
   validPort,

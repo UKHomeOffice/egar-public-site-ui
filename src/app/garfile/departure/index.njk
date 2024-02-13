@@ -134,8 +134,18 @@
             <div class="govuk-radios govuk-radios--conditional" data-module="radios">
               <div class="govuk-radios__item">
                 <input id="portChoiceCode" name="portChoice" class="govuk-radios__input"
-                  type="radio" value="Yes"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort != undefined and cookie.getGarDepartureVoyage().departurePort != 'YYYY'}}
-                  data-aria-controls="portChoiceCodeContainer" aria-labelledby="portChoiceCode-label">
+                  type="radio"
+                  value="Yes"
+                    {% set IATA_CODE_LENGTH = 3 %}
+                    {% set ICAO_CODE_LENGTH = 4 %}
+                    {{
+                        'checked' if cookie.getGarDepartureVoyage().departurePort === ''
+                        or cookie.getGarDepartureVoyage().departurePort.length === IATA_CODE_LENGTH
+                        or cookie.getGarDepartureVoyage().departurePort.length === ICAO_CODE_LENGTH
+                    }}
+                  data-aria-controls="portChoiceCodeContainer"
+                  aria-labelledby="portChoiceCode-label"
+                >
                 <label id="portChoiceCode-label" class="govuk-label govuk-radios__label" for="portChoiceCode">{{__('field_choice_yes')}}</label>
               </div>
               <div id="portChoiceCodeContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
@@ -157,8 +167,24 @@
                 </div>
                 <div class="govuk-radios__item">
                   <input id="portChoiceCoordinates" name="portChoice" class="govuk-radios__input"
-                type="radio" value="No"{{ ' checked' if cookie.getGarDepartureVoyage().departurePort == 'YYYY'}}
-                data-aria-controls="portChoiceCoordinatesContainer" aria-labelledby="portChoiceCoordinates-label">
+                  type="radio"
+                  value="No"
+                    {# Valid coordinates have a length of 12. e.g. LAT: "51 28 12.0720 N" and LONG: "0 27 15.4620 W" #}
+                    {% set LAT_LONG_LENGTH = 12 %}
+                    {#
+                      The coordinates section has 8 input fields; if a user submits an empty input field then
+                      Not-A-Number (NaN) will be returned because user input is converted to a floating-point
+                      number with parseFloat().
+                    #}
+                    {% set NOT_A_NUMBER = 'NaN' %}
+                    {{
+                        'checked' if cookie.getGarDepartureVoyage().departurePort != undefined
+                        and (cookie.getGarDepartureVoyage().departurePort.length >= LAT_LONG_LENGTH
+                        or cookie.getGarDepartureVoyage().departurePort.includes(NOT_A_NUMBER))
+                    }}
+                  data-aria-controls="portChoiceCoordinatesContainer"
+                  aria-labelledby="portChoiceCoordinates-label"
+                >
                   <label id="portChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="portChoiceCoordinates">{{__('field_choice_no')}}</label>
                 </div>
                 <div id="portChoiceCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
@@ -187,8 +213,6 @@
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLatDirection"
                 name="departureLatDirection" type="text" maxLength=1 value="{{ cookie.getGarDepartureVoyage().departureLatDirection }}" >
 
-                    <!--<input class="govuk-input govuk-input--width-10" id="departureLat" name="departureLat" autocomplete="off" type="text"
-                    value="{{ cookie.getGarDepartureVoyage().departureLat }}" aria-describedby="departureCoordinates-hint departureLatitude-hint{{ ' departureLat-error' if errors | containsError('departureLat')}}"/>-->
                   </div>
 
                   <div class="govuk-form-group {{ m.form_group_class('departureLong', errors) }}">
@@ -211,8 +235,6 @@
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLongDirection"
                 name="departureLongDirection" type="text" maxLength=1 value="{{ cookie.getGarDepartureVoyage().departureLongDirection }}" >
 
-                    <!--<input class="govuk-input govuk-input--width-10" id="departureLong" name="departureLong" autocomplete="off" type="text"
-                    value="{{ cookie.getGarDepartureVoyage().departureLong }}" aria-describedby="departureCoordinates-hint departureLongitude-hint{{ ' departureLong-error' if errors | containsError('departureLong') }}"/>-->
                   </div>
                   {# End departure coords #}
                 </div>
