@@ -28,6 +28,7 @@ const createValidationChains = (voyage) => {
   // Define port validations
   const departurePortValidation = [
     new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, __('field_departure_port_code_validation')),
+    new ValidationRule(validator.isValidAirportCode, 'departurePort', voyage.departurePort, 'Departure port should be an ICAO or IATA code')
   ];
 
   // Define latitude validations
