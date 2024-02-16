@@ -8,10 +8,10 @@ module.exports = {
     Sheets: {
       Sheet1: {
         C1: { v: '     GENERAL AVIATION REPORT (GAR) -  January 2015' },
-        B3: { v: 'BFS' },
+        B3: { v: 'BFS' }, // Arrival Port
         D3: { v: '2022-05-31' },
         F3: { w: 'Arrival Time' },
-        B4: { v: 'Departure Port' },
+        B4: { v: 'LGW' }, // Departure Port
         D4: { v: '2022-05-30' },
         F4: { w: 'Departure Time' },
         B5: { w: 'Registration' },
@@ -54,10 +54,10 @@ module.exports = {
     Sheets: {
       Valid1: {
         C1: { v: '     GENERAL AVIATION REPORT (GAR) -  January 2015' },
-        B3: { v: 'BFS' },
+        B3: { v: 'BFS' }, // Arrival Port
         D3: { v: '2022-05-31' },
         F3: { w: 'Arrival Time' },
-        B4: { v: 'Departure Port' },
+        B4: { v: 'LGW' }, // Departure Port
         D4: { v: '2022-05-30' },
         F4: { w: 'Departure Time' },
         B5: { w: 'Registration' },
