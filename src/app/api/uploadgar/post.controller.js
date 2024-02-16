@@ -62,10 +62,10 @@ const checkFileIsGAR = (req, res, worksheet) => {
 
 // Define cell configurations for ExcelParser and parse from file read into memory
 const cellMap = {
-  arrivalPort: { location: 'B3' },
+  arrivalPort: { location: 'B3', transform: [transformers.trimWhitespace] },
   arrivalDate: { location: 'D3' },
   arrivalTime: { location: 'F3', raw: true },
-  departurePort: { location: 'B4' },
+  departurePort: { location: 'B4', transform: [transformers.trimWhitespace] },
   departureDate: { location: 'D4' },
   departureTime: { location: 'F4', raw: true },
   registration: { location: 'B5', raw: true },

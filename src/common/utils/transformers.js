@@ -80,6 +80,10 @@ function toUpper(aStr) {
   return typeof aStr !== "string" ? aStr : aStr.toUpperCase();
 }
 
+function trimWhitespace(aStr) {
+  return typeof aStr !== "string" ? aStr : aStr.trim();
+}
+
 module.exports = {
   transformPerson,
   titleCase,
@@ -89,4 +93,5 @@ module.exports = {
   docTypeOrUndefined,
   unknownToUnspecified,
   toUpper,
+  trimWhitespace
 };
