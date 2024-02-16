@@ -669,12 +669,12 @@ function isAlphanumeric(input) {
 }
 
 function isAlpha(input) {
-  const alphaRegex = /^[a-z\s\'\-]+$/i;
+  const alphaRegex = /^[a-z\s\-]+$/i;
   return alphaRegex.test(input);
 }
 
 function isAddressValidCharacters(input) {
-  const addressRegex = /^[a-z\s\'\-\d]+$/i;
+  const addressRegex = /^[a-z\s\-\d]+$/i;
   return isEmpty(input) || addressRegex.test(input);
 }
 
