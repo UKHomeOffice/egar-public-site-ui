@@ -930,5 +930,16 @@ describe('Validator', () => {
       expect(validator.isPostCodeValidCharacters(postcode)).to.eql(true);
 
     });
+
+    it('Validates airport code list accurate detects codes which are in and not in the list', ()  => {
+      expect(validator.isValidAirportCode('LGW')).to.eql(true);
+      expect(validator.isValidAirportCode('EGXJ')).to.eql(true);
+      expect(validator.isValidAirportCode('LAX')).to.eql(true);
+      expect(validator.isValidAirportCode('EHWO')).to.eql(true);
+
+      expect(validator.isValidAirportCode('Not An airport code')).to.eql(false);
+      expect(validator.isValidAirportCode('12345')).to.eql(false);
+
+    })
   })
 });

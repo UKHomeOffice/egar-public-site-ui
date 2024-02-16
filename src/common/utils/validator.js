@@ -7,6 +7,7 @@ const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
+const { airportCodeList } = require('../../common/utils/autocomplete');
 
 /**
  * Check if the string has leading spaces
@@ -691,6 +692,15 @@ function preventZ(value) {
   return true;
 }
 
+/**
+ * Verify that airport code is accurate
+ * @param {String} airportCode expected to be an  IATA (length 3) or ICAO (length 4) orcode
+ * @returns {Bool}
+ */
+function isValidAirportCode(airportCode) {
+  return airportCodeList.includes(airportCode);
+}
+
 module.exports = {
   hasOnlySymbols,
   hasLeadingSpace,
@@ -751,5 +761,6 @@ module.exports = {
   isAlphanumeric,
   isAlpha,
   isAddressValidCharacters,
-  isPostCodeValidCharacters
+  isPostCodeValidCharacters,
+  isValidAirportCode
 };
