@@ -4,7 +4,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const airportValidation = require('../../../common/utils/airportValidation');
+//const airportValidation = require('../../../common/utils/airportValidation');
 
 const createValidationChains = (voyage) => {
 
@@ -113,7 +113,6 @@ module.exports = async (req, res) => {
   // Define voyage
   const voyage = req.body;
   delete voyage.buttonClicked;
-  // TODO: Update this once the intended 'unknown' port code is discovered.
   if (voyage.portChoice === 'No') {
     logger.debug("Testing departure Lat and Long values...");
     

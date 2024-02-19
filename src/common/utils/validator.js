@@ -204,17 +204,23 @@ function currentOrPastDate(dObj) {
   const currDate = new Date();
   const currMonth = currDate.getMonth() + 1;
 
-  if(![dObj.d,dObj.m,dObj.y].includes('')) {//ensures no fields are empty to avoid duplicate error messages
-    if (dObj.y < currDate.getFullYear()) {
+  /*
+    Returns true if all dates fields are empty to avoid duplicate error messages being displayed.
+    The dateNotTooFarInFuture function will cover this error.
+  */
+  if([dObj.d,dObj.m,dObj.y].includes('')) {
+    return true;
+  }
+
+  if (dObj.y < currDate.getFullYear()) {
+    return false;
+  }
+  if (dObj.y == currDate.getFullYear()) {
+    if (dObj.m < currMonth) {
       return false;
     }
-    if (dObj.y == currDate.getFullYear()) {
-      if (dObj.m < currMonth) {
-        return false;
-      }
-      if (dObj.m == currMonth) {
-        return dObj.d >= currDate.getDate();
-      }
+    if (dObj.m == currMonth) {
+      return dObj.d >= currDate.getDate();
     }
   }
 
