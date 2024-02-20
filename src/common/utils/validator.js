@@ -91,16 +91,16 @@ function valuetrue(value) {
 }
 
 function daysInMonth(m, y) {
-  switch (m - 1) {
-    case 1:
-      return (y % 4 === 0 && y % 100) || y % 400 === 0 ? 29 : 28;
-    case 8:
-    case 3:
-    case 5:
-    case 10:
-      return 30;
+  switch (m) {
+    case '2':
+      return (y % 4 === 0 && y % 100 !== 0) || (y % 100 === 0 && y % 400 === 0) ? '29' : '28';
+    case '4':
+    case '6':
+    case '9':
+    case '11':
+      return '30';
     default:
-      return 31;
+      return '31';
   }
 }
 
@@ -117,17 +117,24 @@ function isPrintable(value) {
   return !value.includes('\n');
 }
 
-// validday
 function validDay(d, m, y) {
   if (isNumeric(d)) {
-    return m >= 0 && m <= 12 && d > 0 && d <= daysInMonth(m, y);
+    return validMonth(m) && (d >= 1 && d <= daysInMonth(m, y));
   }
   return false;
 }
 
 function validMonth(m) {
   if (isNumeric(m)) {
-    return m >= 0 && m <= 12;
+    return m >= 1 && m <= 12;
+  }
+  return false;
+}
+
+function validYear(y) {
+  if (isNumeric(y)) {
+    // return /^[1-9][0-9]{3}?$/gm.test(y); // Matches 4 digit years between 1000 and 9999
+    return 1000 >= y && y <= 9999;
   }
   return false;
 }
@@ -196,7 +203,7 @@ function validGender(value) {
 }
 
 /**
- * Checks that the supplied date is not a past date
+ * Checks that a valid supplied date is not a past date
  * @param {Object} dObjh Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
  * @returns {Boolean} true if not past date, false if past date
  */
@@ -209,6 +216,14 @@ function currentOrPastDate(dObj) {
     The dateNotTooFarInFuture function will cover this error.
   */
   if([dObj.d,dObj.m,dObj.y].includes('')) {
+    return true;
+  }
+
+  /*
+    Returns true if supplied dates are invalid to avoid duplicate error messages being displayed.
+    The dateNotTooFarInFuture function will cover this error.
+  */
+  if(validDay(dObj.d, dObj.m, dObj.y) === false || validMonth(dObj.m) === false || validYear(dObj.y) === false){
     return true;
   }
 
@@ -278,10 +293,6 @@ function getDateFromDynamicInput(input) {
   }
 
   return providedDate;
-}
-
-function validYear(y) {
-  return y.length === 4;
 }
 
 const numericDateElements = dObj => isNumeric(dObj.d)
