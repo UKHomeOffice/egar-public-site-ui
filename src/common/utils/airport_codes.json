@@ -3369,13 +3369,6 @@
     "label": "RNAS Culdrose (United Kingdom) (EGDR)"
   },
   {
-    "id": "EGDX",
-    "id2": "EGDX",
-    "british": true,
-    "crownDependency": false,
-    "label": "MoD St. Athan (United Kingdom) (EGDX)"
-  },
-  {
     "id": "YEO",
     "id2": "EGDY",
     "british": true,
@@ -3815,13 +3808,6 @@
     "british": true,
     "crownDependency": false,
     "label": "North Weald Airport (United Kingdom) (EGSX)"
-  },
-  {
-    "id": "EGSY",
-    "id2": "EGSY",
-    "british": true,
-    "crownDependency": false,
-    "label": "Sheffield City Heliport (United Kingdom) (EGSY)"
   },
   {
     "id": "EGTC",

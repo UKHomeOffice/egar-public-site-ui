@@ -52,7 +52,7 @@ module.exports = (req, res) => {
         }
       }).catch((err) => {
         logger.error('There was a problem with calling the API');
-        logger.error(JSON.stringify(err));
+        logger.error(err);
         res.render('app/people/edit/index', {
           cookie, req, persontype, documenttype, genderchoice, errors: [{ message: 'An error occurred. Please try again' }],
         });
@@ -60,7 +60,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error('There was a problem with adding person to saved people');
-      logger.error(JSON.stringify(err));
+      logger.error(err);
       res.render('app/people/edit/index', {
         cookie, req, persontype, documenttype, genderchoice, errors: err,
       });

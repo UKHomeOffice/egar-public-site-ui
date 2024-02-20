@@ -17,7 +17,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error('Invite Users Organisation postcontroller - There was a problem inviting a user');
-      logger.error(JSON.stringify(err));
+      logger.error(err);
       res.render('app/organisation/inviteusers/index', {
         cookie, fname, lname, email, errors: err,
       });

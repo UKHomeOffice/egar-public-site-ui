@@ -46,7 +46,7 @@ module.exports = (req, res) => {
           }
         }).catch((err) => {
           logger.error('Unexpected error from GAR API when adding new person to the manifest');
-          logger.error(JSON.stringify(err));
+          logger.error(err);
           res.render('app/garfile/manifest/addnewperson/index', {
             req, cookie, person, persontype, documenttype, genderchoice, errors: [{ message: 'Error adding a new person. Try again later' }],
           });
