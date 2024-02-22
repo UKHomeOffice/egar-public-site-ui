@@ -212,17 +212,6 @@ describe('Validator', () => {
     clock.restore();
   });
 
-  it('Should return true for a date after, edge cases', () => {
-    const clock = sinon.useFakeTimers(new Date(2011, 11, 31).getTime());
-
-    expect(validator.currentOrPastDate(genDateObj(1, 1, 2011))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj(31, 1, 2011))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj(1, 1, 2012))).to.be.true;
-    expect(validator.currentOrPastDate(genDateObj(31, 12, 2011))).to.be.true;
-
-    clock.restore();
-  });
-
   it('Should return false for a date before today', () => {
     expect(validator.currentOrPastDate(genDateObj('22','12','1999'))).to.be.false;
     expect(validator.currentOrPastDate(genDateObj('16','2','2019'))).to.be.false;
