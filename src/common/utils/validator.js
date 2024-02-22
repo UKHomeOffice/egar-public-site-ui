@@ -91,17 +91,8 @@ function valuetrue(value) {
 }
 
 function daysInMonth(m, y) {
-  switch (m) {
-    case '2':
-      return (y % 4 === 0 && y % 100 !== 0) || (y % 100 === 0 && y % 400 === 0) ? '29' : '28';
-    case '4':
-    case '6':
-    case '9':
-    case '11':
-      return '30';
-    default:
-      return '31';
-  }
+  const lastDayOfMonth = new Date(y, m, 0);
+  return lastDayOfMonth.getDate();
 }
 
 function isNumeric(input) {
@@ -133,8 +124,7 @@ function validMonth(m) {
 
 function validYear(y) {
   if (isNumeric(y)) {
-    // return /^[1-9][0-9]{3}?$/gm.test(y); // Matches 4 digit years between 1000 and 9999
-    return 1000 >= y && y <= 9999;
+    return (y.length === 4) && (y >= 1000 && y <= 9999);
   }
   return false;
 }
