@@ -69,6 +69,7 @@ const buildValidations = (voyage) => {
   // Define port validations
   const arrivalPortValidation = [
     new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, portCodeMsg),
+    new ValidationRule(validator.isValidAirportCode, 'arrivalPort', voyage.arrivalPort, 'Arrival port should be an ICAO or IATA code')
   ];
 
   // Define latitude validations

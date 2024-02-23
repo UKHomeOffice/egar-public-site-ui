@@ -32,9 +32,31 @@ function getCountryFromCode(countryCode) {
   return countryFromCode === undefined ? countryCode : countryFromCode.label;
 }
 
+/**
+ * generate list of airport codes from the airport list
+ * @param {Array<Object>}
+ * @returns {Array<String>} List of airport codes
+ */
+function listOfAirportCodes(airportList) {
+  const airportCodes = [];
+
+  airportList.forEach((airport) => {
+    const iataCode = airport.id
+    const icaoCode = airport.id2;
+    airportCodes.push(iataCode);
+    airportCodes.push(icaoCode);
+  });
+
+  return airportCodes
+}
+
+const airportCodeList = listOfAirportCodes(airportList);
+
+
 module.exports = {
   generateCountryList,
   getCountryFromCode,
   countryList,
   airportList,
+  airportCodeList
 };

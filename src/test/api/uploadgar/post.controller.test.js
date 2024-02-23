@@ -268,6 +268,7 @@ describe('API upload GAR post controller', () => {
 
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.isValidAirportCode, '', null, 'Arrival port should be an ICAO or IATA code'),
           new ValidationRule(validator.notEmpty, '', null,  'Enter a value for the arrival port'),
         ]);
       });
@@ -438,7 +439,7 @@ describe('API upload GAR post controller', () => {
             arrivalPort: 'BFS',
             arrivalDate: '2022-05-31',
             arrivalTime: 'Arrival Time',
-            departurePort: 'Departure Port',
+            departurePort: 'LGW',
             departureDate: '2022-05-30',
             departureTime: 'Departure Time',
             registration: 'Registration',
