@@ -44,8 +44,10 @@ const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
 
 // Set Cookie secure flag depending on environment variable
-let secureFlag = true;
-
+let secureFlag = false;
+if (process.env.COOKIE_SECURE_FLAG === 'true') {
+  secureFlag = true;
+}
 logger.debug('Secure Flag for Cookie set to:');
 logger.debug(secureFlag);
 // Define app views
