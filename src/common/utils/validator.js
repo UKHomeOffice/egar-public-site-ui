@@ -100,6 +100,7 @@ function isNumeric(input) {
   if (typeof input === "string") {
     return (input - parseFloat(input) + 1) >= 0;
   }
+  return false;
 }
 
 /**
