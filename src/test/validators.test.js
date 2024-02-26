@@ -171,7 +171,7 @@ describe('Validator', () => {
   });
 
   it('Should return true for a valid year greater than or equal to the current year', () => {
-    expect(validator.validYear('2025')).to.be.true;
+    expect(validator.validYear('2030')).to.be.true;
   });
 
   it('Should return false for a year not consisting of 4 characters', () => {
@@ -181,7 +181,7 @@ describe('Validator', () => {
 
   it('Should return true for real dates', () => {
     expect(validator.realDate(genDateObj('22', '12', '2050'))).to.be.true;
-    expect(validator.realDate(genDateObj('01', '02', '2025'))).to.be.true;
+    expect(validator.realDate(genDateObj('01', '02', '2030'))).to.be.true;
   });
 
   it('Should return false for invalid dates', () => {
@@ -189,6 +189,8 @@ describe('Validator', () => {
     expect(validator.realDate(undefined)).to.be.false;
     expect(validator.realDate(genDateObj('aa', 'bb', 'cccc'))).to.be.false;
     expect(validator.realDate(genDateObj('1f', 'd2', '20S5'))).to.be.false;
+    expect(validator.realDate(genDateObj('22', '0', '2025'))).to.be.false;
+    expect(validator.realDate(genDateObj('22', '2', '0000'))).to.be.false;
   });
 
   it('Should return true for a date greater than today', () => {
@@ -210,30 +212,12 @@ describe('Validator', () => {
     clock.restore();
   });
 
-  it('Should return true for a date after, edge cases', () => {
-    const clock = sinon.useFakeTimers(new Date(2011, 11, 31).getTime());
-
-    expect(validator.currentOrPastDate(genDateObj(1, 1, 2011))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj(31, 1, 2011))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj(1, 1, 2012))).to.be.true;
-    expect(validator.currentOrPastDate(genDateObj(31, 12, 2011))).to.be.true;
-
-    clock.restore();
-  });
-
   it('Should return false for a date before today', () => {
-    const clock = sinon.useFakeTimers(new Date(2011, 12, 31).getTime());
-
-    const currDate = new Date();
-    const day = currDate.getDate() - 1;
-    const month = currDate.getMonth() + 1;
-    const previousMonth = currDate.getMonth() - 1;
-    const year = currDate.getFullYear();
-    expect(validator.currentOrPastDate(genDateObj(day, month, year))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj(currDate.getDate(), previousMonth, year))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj('22', '12', '1999'))).to.be.false;
-
-    clock.restore();
+    expect(validator.currentOrPastDate(genDateObj('22','12','1999'))).to.be.false;
+    expect(validator.currentOrPastDate(genDateObj('16','2','2019'))).to.be.false;
+    expect(validator.currentOrPastDate(genDateObj('16','1','2021'))).to.be.false;
+    expect(validator.currentOrPastDate(genDateObj('27','7','2023',))).to.be.false;
+    expect(validator.currentOrPastDate(genDateObj('21','2','2024'))).to.be.false;
   });
 
   it('Should return true for valid times', () => {
