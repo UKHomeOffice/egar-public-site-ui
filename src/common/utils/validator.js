@@ -96,8 +96,9 @@ function daysInMonth(m, y) {
 }
 
 function isNumeric(input) {
-  // Essentially jQuery's implementation...
-  return (input - parseFloat(input) + 1) >= 0;
+  if (typeof input === "string") {
+    return (input - parseFloat(input) + 1) >= 0;
+  }
 }
 
 /**
