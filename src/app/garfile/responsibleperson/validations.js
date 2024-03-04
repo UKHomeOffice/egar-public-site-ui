@@ -19,15 +19,6 @@ module.exports.validations = (req) => {
     responsiblePostcode
   } = req.body;
 
-  const optionalEmailRule = responsibleEmail ? [
-    new ValidationRule(
-      validator.email, 'responsibleEmail', responsibleEmail, 'Please enter a valid email address'
-    ),
-    new ValidationRule(
-      validator.isValidEmailLength, 'responsibleEmail', responsibleEmail, `Email must be ${MAX_EMAIL_LENGTH} characters or less`
-    ),
-  ] : [];
-
   return [
     [
       new ValidationRule(validator.notEmpty, 'responsibleGivenName', responsibleGivenName, 'Enter a given name for the responsible person'),
@@ -42,7 +33,17 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.validIntlPhone, 'responsibleContactNo', responsibleContactNo, i18n.__('validator_contact_number')),
     ],
-    optionalEmailRule,
+    [
+      new ValidationRule(
+        validator.notEmpty, 'responsibleEmail', responsibleEmail, 'Your must enter an email for the responsible person'
+      ),
+      new ValidationRule(
+        validator.email, 'responsibleEmail', responsibleEmail, 'Please enter a valid email address'
+      ),
+      new ValidationRule(
+        validator.isValidEmailLength, 'responsibleEmail', responsibleEmail, `Email must be ${MAX_EMAIL_LENGTH} characters or less`
+      ),
+    ],
     [
       new ValidationRule(validator.notEmpty, 'responsibleAddressLine1', responsibleAddressLine1, 'Enter address line 1 of the responsible person'),
       new ValidationRule(validator.isValidStringLength, 'responsibleAddressLine1', responsibleAddressLine1, `Address line 1 must be ${MAX_STRING_LENGTH} characters or less`),
