@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -18,7 +18,6 @@
 
 {% block content %}
 
-
   {% import "common/templates/includes/macros.njk" as m %}
 
   {% if errors %}
@@ -26,42 +25,27 @@
   {% endif %}
 
   <div class="govuk-grid-row">
-      <div class="govuk-panel govuk-panel--confirmation">
-        <h1 class="govuk-panel__title">
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
           GAR submitted
-        </h1>
-        <div class="govuk-panel__body">
-          Your reference number is
-        <br><strong>{{cookie.getGarId()}}</strong>
-        </div>
-      </div>
+      </h1>
 
-       <p class="govuk-body-m">
-         We have sent a confirmation email to {{cookie.getUserEmail()}}
-       </p>
-
-       <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span> 
-          New: when the craft departs, you need to let Border Force know if anyone in the GAR did not not travel with it.<br />
-          This can be done from the <a href="/home">Manage GAR</a> page in the 'Departure' tab.
-        </strong>
-      </div>
-
-       <h2 class="govuk-heading-m">
-         What happens next
-       </h2>
-
-       <p class="govuk-body-m">
+      <p class="govuk-body-m">
          We've sent your GAR to Border Force.
        </p>
+    </div>
 
-       <p class="govuk-body-m">
-         If you need to make any changes to this GAR you will need to submit another GAR
-         with the new information and cancel this one. This can be done on the <a href="/home">Manage GAR</a> page.
+    <p class="govuk-body-m">
+         We will send you a confirmation email to {{cookie.getUserEmail()}} that will contain your Border Force receipt.
+         This receipt will also be available on the <a href="/home#gars-submitted">Manage GAR</a> page.
        </p>
-       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-     </div>
 
- {% endblock %}
+    <p class="govuk-body-m">
+             If you need to make any changes to this GAR you will need to submit another GAR with the new information and cancel this one.
+         GARs can be cancelled on the <a href="/home#gars-submitted">Manage GAR</a> page.
+    </p>
+
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  </div>
+
+{% endblock %}
