@@ -67,46 +67,45 @@
     </div>
   </div>
 
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {# <form id="signform2" action="/garfile/view" method="post" role="form"> #}
-        <h1 class="govuk-heading-l">{{__('heading_manage_gars')}}</h1>
-        <p class="govuk-body-l">{{__('manage_gars_caption')}}</p>
-      </div>
-      <div class="govuk-grid-column-full">
-        <div class="govuk-tabs" data-module="tabs">
-          <ul class="govuk-tabs__list">
-            <li class="govuk-tabs__list-item">
-              <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft">
-                {{__('tab_gar_draft', draftGars.length)}}
-              </a>
-            </li>
-            <li class="govuk-tabs__list-item">
-              <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-submitted">
-                {{__('tab_gar_submitted', submittedGars.length)}}
-              </a>
-            </li>
-            <li class="govuk-tabs__list-item">
-              <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-cancelled">
-                {{__('tab_gar_cancelled', cancelledGars.length)}}
-              </a>
-            </li>
-          </ul>
-          <form id="signform2" action="/garfile/view" method="post" role="form">
+      <h1 class="govuk-heading-l">{{__('heading_manage_gars')}}</h1>
+      <p class="govuk-body-l">{{__('manage_gars_caption')}}</p>
+    </div>
+    <div class="govuk-grid-column-full">
+      <div class="govuk-tabs" data-module="tabs">
+        <ul class="govuk-tabs__list">
+          <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft">
+              {{__('tab_gar_draft', draftGars.length)}}
+            </a>
+          </li>
+          <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-submitted">
+              {{__('tab_gar_submitted', submittedGars.length)}}
+            </a>
+          </li>
+          <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-cancelled">
+              {{__('tab_gar_cancelled', cancelledGars.length)}}
+            </a>
+          </li>
+        </ul>
+        <form id="signform2" action="/garfile/view" method="post" role="form">
           {% macro gar_summary_table(name, gars) %}
             <section class="govuk-tabs__panel" id="gars-{{ name }}">
               <table class="govuk-table" id="sortGAR">
                 {% set total_gars = draftGars.length + submittedGars.length + cancelledGars.length %}
                 {% set gars_remaining = 1000 - total_gars %}
                 <details class="govuk-details" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                  <span class="govuk-details__summary-text" style="color:#000033">Total GARs: {{total_gars}} - You have {{gars_remaining}} left</span>
-                 </summary>
-               <div class="govuk-details__text">
+                  <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text" style="color:#000033">Total GARs: {{total_gars}} - You have {{gars_remaining}} left</span>
+                  </summary>
+                  <div class="govuk-details__text">
                 Only 1000 GARs are displayed at a time, if you have more than 1000 GARs then they are displayed on a first in first out basis.
                 </div>
-                </details> 
+                </details>
                 <thead class="govuk-table__head" >
                   <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="col">{{__('field_aircraft_registration')}}</th>
@@ -136,7 +135,11 @@
                         <td class="govuk-table__cell">{{gar.departurePort | upper }}</td>
                         <td class="govuk-table__cell">{{gar.arrivalPort | upper }}</td>
                         <td class="govuk-table__cell"></td>
-                        <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell" style="word-break:break-all;">{{gar.cbp_id }}</td>
+                        <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell" >
+                          <small>
+                            <code>{{m.gar_id_screen_reader(gar.cbp_id) if gar.cbp_id else ''}}</code>
+                          </small>
+                        </td>
                       </tr>
                     {% endfor %}
                   {% else %}
@@ -144,8 +147,8 @@
                   {% endif %}
                 </tbody>
               </table>
-                <script>
-                  $(document).on("click", "table thead tr th:not(.no-sort)", function () {
+              <script>
+                $(document).on("click", "table thead tr th:not(.no-sort)", function () {
                   var table = $(this).parents("table");
                   var rows = $(this)
                     .parents("table")
@@ -194,8 +197,8 @@
                     .eq(index)
                     .text();
                 }
-                </script>
-               
+              </script>
+
               {# <nav role="navigation" aria-label="Pagination">
           <div class="pagination__summary">Showing 101 &ndash; 150 of 246 results</div>
           <ul class="pagination">
