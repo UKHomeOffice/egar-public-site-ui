@@ -303,7 +303,7 @@
 	"add_person_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
 	"manifest_no_records": "There are no people on the manifest",
 	"organisation_no_records": "There are no organisation members",
-	"validator_msg_voyage_dates": "Arrival date/time cannot be after the Departure date/time",
+	"validator_msg_voyage_dates": "Arrival date/time cannot be before the Departure date/time",
 	"title_gar_summary": "GAR summary",
 	"change_prefix": "Change ",
 	"button_submit_this_gar": "Submit this GAR",

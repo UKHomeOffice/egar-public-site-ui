@@ -47,7 +47,7 @@ module.exports = {
           return;
         }
 
-        logger.debug('Successfully called GAR put endpoint');
+        logger.debug('Successfully called GAR patch endpoint');
         resolve(body);
       });
     });
