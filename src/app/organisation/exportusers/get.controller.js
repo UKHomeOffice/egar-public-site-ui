@@ -21,7 +21,7 @@ const writeUsersAsCSVtoResponse = (res, orgUsers, orgName) => {
 }
 
 module.exports = (req, res) => {
-    logger.debug('In organisation get controller');
+    logger.debug('In organisation export users get controller');
     const cookie = new CookieModel(req);
     const errMSg = { message: 'Failed to get orgusers' };
 

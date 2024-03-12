@@ -53,6 +53,7 @@ const people = require('./people');
 const peopleAdd = require('./people/add');
 const peopleEdit = require('./people/edit');
 const peopleDelete = require('./people/delete');
+const peopleExport = require('./people/export')
 
 // Misc dependency
 const error = require('./error');
@@ -138,6 +139,7 @@ module.exports.bind = (app) => {
   app.use(peopleAdd.router);
   app.use(peopleEdit.router);
   app.use(peopleDelete.router);
+  app.use(peopleExport.router);
   app.use(cookies.router);
   app.use(help.router);
   app.use(accessibility.router)
