@@ -3,8 +3,6 @@ const garApi = require('../../../common/services/garApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const { Manifest } = require('../../../common/models/Manifest.class');
-const emailService = require('../../../common/services/sendEmail');
-const config = require('../../../common/config');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
@@ -28,8 +26,10 @@ const performAPICallAMG = (garId, cookie, req, res) => {
 const performAPICall = (garId, cookie, req, res) => {
   garApi.patch(garId, 'Submitted', {})
     .then((apiResponse) => {
+
       logger.info('Received response from API');
       const parsedResponse = JSON.parse(apiResponse);
+
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
         // API has returned an error so return a message for the user
         const submitError = {
@@ -44,21 +44,13 @@ const performAPICall = (garId, cookie, req, res) => {
       }
 
       logger.info('Successfully submitted GAR');
+
       cookie.setGarStatus('Submitted');
-      emailService.send(config.NOTIFY_GAR_SUBMISSION_TEMPLATE_ID, cookie.getUserEmail(), {
-        firstName: cookie.getUserFirstName(),
-        garId: cookie.getGarId(),
-      }).then(() => {
-        res.render('app/garfile/submit/success/index', {
-          cookie,
-        });
-      }).catch(() => {
-        logger.error('Error occurred invoking emailService, but GAR has been submitted');
-        res.render('app/garfile/submit/success/index', {
-          cookie,
-          errors: [{ message: 'There was an issue sending a confirmation email, but the GAR should be submitted' }],
-        });
+
+      res.render('app/garfile/submit/success/index', {
+        cookie,
       });
+
     }).catch((err) => {
       logger.error('Api failed to update GAR');
       logger.error(err);
@@ -143,9 +135,8 @@ module.exports = (req, res) => {
         - Journey is coming into UK but no status check: Send to AMG/UPT
         - Journey is coming into UK and status check: Submit GAR
       */
-     
-      if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && !statuscheck) 
-       {
+
+      if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && !statuscheck) {
         performAPICallAMG(garId, cookie, req, res);
       }
       else {

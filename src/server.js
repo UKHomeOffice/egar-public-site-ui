@@ -44,10 +44,8 @@ const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
 
 // Set Cookie secure flag depending on environment variable
-let secureFlag = false;
-if (process.env.COOKIE_SECURE_FLAG === 'true') {
-  secureFlag = true;
-}
+let secureFlag = process.env.COOKIE_SECURE_FLAG === 'true';
+
 logger.debug('Secure Flag for Cookie set to:');
 logger.debug(secureFlag);
 // Define app views
@@ -92,6 +90,7 @@ function initialisExpressSession(app) {
     cookie: {
       secure: secureFlag,
       httpOnly: true,
+      sameSite: true,
       maxAge: 60 * 60 * 1000,
     },
   }));
@@ -145,7 +144,7 @@ function initialiseGlobalMiddleware(app) {
     const token = req.csrfToken();
     res.locals._csrf = token;
     // This might be needed, but leaving it in for now...
-    res.cookie('XSRF-TOKEN', token, { httpOnly: true, secure: secureFlag });
+    res.cookie('XSRF-TOKEN', token, { httpOnly: true, secure: secureFlag, sameSite: true });
 
     // Previously, local development required the disabling of CSRF token handling
     // The below adds the csrfToken to the res.render function which should hopefully

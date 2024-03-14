@@ -43,6 +43,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
         responsibleContactNo: '1234567890',
+        responsibleEmail: 'test@test.com'
       },
       session: {
         gar: { id: '123456', status: 'Draft', responsiblePerson: {} },
@@ -56,6 +57,30 @@ describe('GAR Responsible Person Post Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  it('should render with validations messages if email is empty', async () => {
+    req.body.responsibleEmail = '';
+    cookie = new CookieModel(req);
+    cookie.setGarResponsiblePerson(req.body);
+    sinon.stub(garApi, 'patch');
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApi.patch).to.not.have.been.called;
+      expect(res.redirect).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
+        req,
+        cookie,
+        fixedBasedOperatorOptions,
+        errors: [
+          new ValidationRule(validator.notEmpty, 'responsibleEmail', '', 'Your must enter an email for the responsible person'),
+        ],
+      });
+    });
   });
 
   it('should render with validations messages if given name is empty', async () => {
@@ -124,7 +149,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleEmail: undefined,
+        responsibleEmail: 'test@test.com',
         responsibleContactNo: '1234567890',
         fixedBasedOperator: undefined,
         fixedBasedOperatorAnswer: '',
@@ -161,7 +186,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
         responsibleContactNo: '1234567890',
-        responsibleEmail: undefined,
+        responsibleEmail: 'test@test.com',
         fixedBasedOperator: undefined,
         fixedBasedOperatorAnswer: '',
         fixedBasedOperatorOptions
@@ -196,7 +221,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
         responsibleContactNo: '1234567890',
-        responsibleEmail: undefined,
+        responsibleEmail: 'test@test.com',
         fixedBasedOperator: undefined,
         fixedBasedOperatorAnswer: '',
         fixedBasedOperatorOptions
@@ -226,7 +251,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
         responsibleContactNo: '1234567890',
-        responsibleEmail: undefined,
+        responsibleEmail: 'test@test.com',
         fixedBasedOperator: undefined,
         fixedBasedOperatorAnswer: '',
         fixedBasedOperatorOptions

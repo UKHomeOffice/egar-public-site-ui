@@ -175,7 +175,7 @@ describe('Arrival Post Controller', () => {
         expect(garApi.patch).to.not.have.been.called;
         expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
           cookie,
-          errors: [new ValidationRule(validator.currentOrFutureDate, 'arrivalDate', { d: "30", m: "5", y: "2010" }, 'Arrival date must be today and cannot be more than 1 month in the future')],
+          errors: [new ValidationRule(validator.currentOrPastDate, 'arrivalDate', { d: "30", m: "5", y: "2010" }, 'Arrival date must be today and cannot be more than 1 month in the future')],
         });
       });
     });
