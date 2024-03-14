@@ -31,7 +31,7 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('There was a problem updating the organisation');
-          logger.error(JSON.stringify(err));
+          logger.error(err);
           res.render('app/organisation/editorganisation/index', { cookie, orgName, errors: [err] });
         });
     })

@@ -52,7 +52,7 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('API failed to update GAR');
-          logger.error(JSON.stringify(err));
+          logger.error(err);
           res.render('app/garfile/responsibleperson/index', {
             cookie, fixedBasedOperatorOptions, errors: [{ message: 'Failed to add to GAR' }],
           });
