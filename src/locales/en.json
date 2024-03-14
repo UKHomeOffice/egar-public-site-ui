@@ -329,6 +329,13 @@
 	"heading_cancel_gar": "Are you sure you want to cancel this GAR?",
 	"cancel_gar_caption": "You will need to ensure that a new GAR is submitted if this flight takes place.",
 	"form_exit_without_cancelling": "Exit without cancelling",
+
+	"title_amend_gar": "Amend GAR",
+	"heading_amend_gar": "Are you sure you want to amend this GAR?",
+	"amend_gar_caption": "You will need to ensure that the amended GAR is re-submitted if this flight takes place.",
+	"form_exit_without_amending": "Exit without amending",
+
+
 	"form_exit": "Exit",
 	"title_review_gar": "Check all the information provided before submitting your GAR",
 	"heading_submit_gar": "Submit your GAR",
