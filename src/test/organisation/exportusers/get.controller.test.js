@@ -67,10 +67,7 @@ describe('Organisation Export User Controller', () => {
       orgApiStub.resolves(JSON.stringify(apiResponse));
     });
 
-    it.only('should display success message if set', () => {
-      req.session.successHeader = 'Successful header';
-      req.session.successMsg = 'Example success message';
-
+    it('should display success message if set', () => {
       const callController = async () => {
         await controller(req, res);
       };
