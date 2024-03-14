@@ -18,10 +18,11 @@ const writePeopleAsCSVtoResponse = (res, people) => {
 }
 
 module.exports = (req, res) => {
-    logger.debug('In people export get controller');
     const cookie = new CookieModel(req);
+    const userId = cookie.getUserDbId();
+    logger.debug(`In people export get controller, user ${userId} is exporting data.`);
 
-    personApi.getPeople(cookie.getUserDbId(), 'individual')
+    personApi.getPeople(userId, 'individual')
         .then((values) => {
 
             const people = JSON.parse(values).map((person) => {
