@@ -3369,6 +3369,13 @@
     "label": "RNAS Culdrose (United Kingdom) (EGDR)"
   },
   {
+    "id": "EGDX",
+    "id2": "EGDX",
+    "british": true,
+    "crownDependency": false,
+    "label": "MoD St. Athan (United Kingdom) (EGDX)"
+  },
+  {
     "id": "YEO",
     "id2": "EGDY",
     "british": true,
