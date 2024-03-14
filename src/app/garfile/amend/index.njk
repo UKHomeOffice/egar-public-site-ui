@@ -1,0 +1,43 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	{{__('title_cancel_gar')}}
+{% endblock %}
+
+{% set active = '/home' %}
+
+{% block header %}
+  {% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">
+    {{__('heading_amend_gar')}}
+  </h1>
+  <p class="govuk-body-m">
+    {{__('amend_gar_caption')}}
+  </p>
+  <br>
+  <form action="/garfile/amend" method="post">
+    <button id="amend-gar" class="govuk-button" type="submit">{{__('title_amend_gar')}}</button>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  </form>
+  <form id="amend-form" action="/garfile/view" method="post" role="form">
+    <p class="govuk-body-m">
+      <button type="submit" id="exit-without-amending" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+        {{__('form_exit_without_amending')}}
+      </button>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    </p>
+  </form>
+{% endblock %}
