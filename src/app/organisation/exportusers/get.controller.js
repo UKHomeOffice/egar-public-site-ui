@@ -12,6 +12,7 @@ const writeUsersAsCSVtoResponse = (res, orgUsers, orgName) => {
 
     const orgSlug = orgName.replace(/[^A-z]/, '-')
     const dateSlug = new Date().toISOString().slice(0,10);
+
     res.setHeader('Content-disposition', 'attachment; filename=' + orgSlug + '-users-' + dateSlug + '.csv');
     res.setHeader('Content-Type', 'text/csv');
     
@@ -26,6 +27,7 @@ module.exports = (req, res) => {
 
     orgApi.getUsers(cookie.getOrganisationId())
         .then((values) => {
+            
             const orgUsers = JSON.parse(values).items.map((orgUser) => {
 
                 return [orgUser.userId, orgUser.firstName, orgUser.lastName, orgUser.email, orgUser.role.name, orgUser.state];
