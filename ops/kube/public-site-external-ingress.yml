@@ -21,7 +21,7 @@ metadata:
     ingress.kubernetes.io/ssl-prefer-server-ciphers: "true"
     ingress.kubernetes.io/ssl-protocols: TLSv1.2 TLSv1.3
     ingress.kubernetes.io/configuration-snippet: |
-      more_set_headers "Strict-Transport-Security: max-age=63072000; includeSubDomains";
+      more_set_headers "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload";
 spec:
   tls:
   - hosts:
