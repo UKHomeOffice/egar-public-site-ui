@@ -155,9 +155,9 @@
                     aria-labelledby="arrivalPort-label"
                     aria-describedby="arrivalPort-hint{{ ' arrivalPort-error' if errors | containsError('arrivalPort') }}">
                     {% for airport in airportList | sort(attribute = 'label') %}
-                   <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id }} 
-                    or
-                   <option value="{{ airport.id2 }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id2 }}>{{ airport.label }}</option>
+                      <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id }} 
+                        or
+                      <option value="{{ airport.id2 }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id2 }}>{{ airport.label }}</option>
                     {% endfor %}
                   </select>
                 </div>
