@@ -21,7 +21,9 @@ const uuid = require('uuid/v4');
 const csrf = require('csurf');
 const PgSession = require('connect-pg-simple')(session);
 
-
+const { URL } = require('url');
+const settings = require('./common/config/index.js');
+const { API_BASE, API_VERSION } = settings;
 
 // Local dependencies
 const logger = require('./common/utils/logger')(__filename);
@@ -260,6 +262,16 @@ function initialiseErrorHandling(app) {
   logger.info('Initialised error handling');
 }
 
+const apiBaseUrl = new URL(API_VERSION, API_BASE).href;
+const cspEndpoint = new URL(`${API_VERSION}/csp-report`, apiBaseUrl).href;
+function initCSPReporting(req, res, next) {
+  
+  res.setHeader('Reporting-Endpoints', `csp-endpoint="${cspEndpoint}"`);
+  res.setHeader('Content-Security-Policy', "default-src 'self'; report-to csp-endpoint");
+
+  next();
+}
+
 /**
  * Configures app
  * @return app
@@ -269,6 +281,8 @@ function initialise() {
   unconfiguredApp.disable('x-powered-by');
   unconfiguredApp.use(helmet.noCache());
   unconfiguredApp.use(helmet.frameguard());
+  unconfiguredApp.use(initCSPReporting);
+
 
   // DB calls are asynchronous, need them executed before aspects like
   // sessions which talk to the DB are executed, so all other init calls
