@@ -158,7 +158,7 @@
                    <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id }} 
                     or
                    <option value="{{ airport.id2 }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id2 }}>{{ airport.label }}</option>
-                    {% endfor %}  
+                    {% endfor %}
                   </select>
                 </div>
               </div>
@@ -167,27 +167,12 @@
                   type="radio"
                   value="No"
                     {#
-                      In some instances when a user submits an empty input field e.g. Latitude: [] [28] [] [],
-                      Not-A-Number (NaN) will be returned because user input is converted to a floating-point number
-                      with parseFloat().
-                    #}
-
-                    {% set DECIMAL_POINT = '.' %}
-                    {% set NOT_A_NUMBER = 'NaN' %}
-                    {#
-                      If both LAT and LONG values exist.  The "No" port choice will be selected if both the LAT and LONG
-                      values contain a decimal point or either the LAT or LONG values are NaN.
+                      Note: Both cookie.getGarArrivalVoyage().arrivalLat and cookie.getGarArrivalVoyage().arrivalLong
+                      are set to empty string when the 'Yes' radio button is clicked.
                     #}
                     {{
-                        'checked' if cookie.getGarArrivalVoyage().arrivalPort != undefined
-                                    and (
-                                          cookie.getGarArrivalVoyage().arrivalLat.includes(DECIMAL_POINT)
-                                          and cookie.getGarArrivalVoyage().arrivalLong.includes(DECIMAL_POINT)
-                                          or (
-                                            cookie.getGarArrivalVoyage().arrivalLat == NOT_A_NUMBER
-                                            or cookie.getGarArrivalVoyage().arrivalLong == NOT_A_NUMBER
-                                          )
-                                    )
+                      'checked' if (cookie.getGarArrivalVoyage().arrivalLat != undefined or cookie.getGarArrivalVoyage().arrivalLong != undefined)
+                                  and (cookie.getGarArrivalVoyage().arrivalLat !== '' and cookie.getGarArrivalVoyage().arrivalLong !== '')
                     }}
                   data-aria-controls="portChoiceCoordinatesContainer"
                   aria-labelledby="portChoiceCoordinates-label"
