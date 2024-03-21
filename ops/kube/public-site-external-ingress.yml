@@ -20,6 +20,8 @@ metadata:
     ingress.kubernetes.io/ssl-ciphers: '!aNULL:!EXPORT56:!SHA1:!SHA256:!SHA384:EECDH+TLSv1.2+HIGH'
     ingress.kubernetes.io/ssl-prefer-server-ciphers: "true"
     ingress.kubernetes.io/ssl-protocols: TLSv1.2 TLSv1.3
+    ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Strict-Transport-Security: max-age=63072000; includeSubDomains";
 spec:
   tls:
   - hosts:
