@@ -45,7 +45,7 @@ spec:
             - name: ENABLE_UUID_PARAM
               value: "FALSE"
             - name: ADD_NGINX_SERVER_CFG
-              value: "add_header Strict-Transport-Security \"max-age=31536000; includeSubDomains\" always;"
+              value: "add_header Strict-Transport-Security \"max-age=999931536000; includeSubDomains\" always;"
             - name: CLIENT_MAX_BODY_SIZE
               value: '20'
             - name: STATSD_METRICS
