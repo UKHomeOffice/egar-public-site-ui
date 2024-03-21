@@ -332,7 +332,7 @@
 
 	"title_amend_gar": "Amend GAR",
 	"heading_amend_gar": "Are you sure you want to amend this GAR?",
-	"amend_gar_caption": "You will need to ensure that the amended GAR is re-submitted if this flight takes place.",
+	"amend_gar_caption": "After you've amended the GAR you will be able to submit the new changes.",
 	"form_exit_without_amending": "Exit without amending",
 
 

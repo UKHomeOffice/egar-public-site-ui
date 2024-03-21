@@ -9,59 +9,13 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const isCancelled = true
 
-  garApi.getPeople(cookie.getGarId())
-    .then((res) => {
-      const garpeople = JSON.parse(res).items;
-      const passengersToRaiseException = garpeople
-        .filter(garperson => garperson.amgCheckinResponseCode !== null)
-        .map(garperson => garperson.garPeopleId);
-
-      return passengersToRaiseException;
-    })
-    .then((passengersToRaiseException) => {
-      if (passengersToRaiseException.length === 0) {
-        return null
-      } else {
-        garApi.postGarPassengerConfirmations(
-          cookie.getGarId(), 
-          passengersToRaiseException,
-          isCancelled
-        );
-      }
-    })
+  garApi.patch(cookie.getGarId(), 'Draft', {})
     .then(() => {
-      garApi.patch(cookie.getGarId(), 'Draft', {})
-        .then(() => {
-          emailService.send(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, cookie.getUserEmail(), {
-            firstName: cookie.getUserFirstName(),
-            garId: cookie.getGarId(),
-          }).then(() => {
-            req.session.successMsg = 'The GAR has been successfully cancelled, you may now amend it and resubmit it.';
-            req.session.successHeader = 'Cancellation Confirmation';
-            req.session.save(() => {
-              res.redirect('/home');
-            });
-          }).catch(() => {
-            req.session.successMsg = 'The GAR has been successfully cancelled, but there was a problem with sending the email. You may now amend it and resubmit it.';
-            req.session.successHeader = 'Cancellation Confirmation';
-            req.session.save(() => {
-              res.redirect('/home');
-            });
-          });
-        })
-      .catch((err) => {
-        logger.error(err);
-        res.render('app/garfile/amend', { cookie, error: [{ message: 'Failed to cancel GAR' }] });
+
+      req.session.successMsg = 'You may now amend the GAR and resubmit it.';
+      req.session.successHeader = 'GAR Amendment';
+      req.session.save(() => {
+        res.redirect('/garfile/view');
       });
     })
-    .catch((err) => {
-      logger.error('Api failed to post GAR exceptions');
-      logger.error(err);
-      res.render('app/home', {
-          cookie,
-          errors: [{
-              message: 'Failed to post GAR confirmation|exceptions',
-          }],
-      });
-    });
 };

@@ -22,9 +22,16 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">{{__('title_gar_summary')}}</h1>
     </div>
+    
+    <div class="govuk-grid-column-two-thirds">
+      {% if successMsg %}
+        {% include "common/templates/includes/success-action.njk" %}
+      {% endif %}
+    </div>
 
     {% include "check-your-answers.njk" %}
     <div class="govuk-grid-column-two-thirds">
+
       {% if garfile.status.name === 'Draft' %}
         <a id="submit-gar" class="govuk-button" href="/garfile/review">{{__('button_submit_this_gar')}}</a>
         <a id="display-manifest" class="govuk-button" href="/garfile/printmanifest">Print GAR</a>
