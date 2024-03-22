@@ -55,13 +55,13 @@ module.exports = (req, res) => {
             res.redirect('/organisation/invite/success');
           }).catch((err) => {
             logger.error('Govnotify failed to send an email');
-            logger.error(JSON.stringify(err));
+            logger.error(err);
             res.render('app/organisation/assignrole/index', { cookie, roles, errors: [{ message: 'Could not send an invitation email, try again later.' }] });
           });
         })
         .catch((err) => {
           logger.error('Error setting the invite token');
-          logger.error(JSON.stringify(err));
+          logger.error(err);
           res.render('app/organisation/assignrole/index', { cookie, roles, errors: [err] });
         });
     })

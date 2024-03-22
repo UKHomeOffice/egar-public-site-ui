@@ -53,6 +53,7 @@ const people = require('./people');
 const peopleAdd = require('./people/add');
 const peopleEdit = require('./people/edit');
 const peopleDelete = require('./people/delete');
+const peopleExport = require('./people/export')
 
 // Misc dependency
 const error = require('./error');
@@ -77,6 +78,7 @@ const editorganisation = require('./organisation/editorganisation');
 const orgassignrole = require('./organisation/assignrole');
 const orgEditUsers = require('./organisation/editusers');
 const deleteUser = require('./organisation/delete');
+const exportusers = require('./organisation/exportusers')
 
 
 // Export
@@ -106,6 +108,7 @@ module.exports.bind = (app) => {
   app.use(orgassignrole.router);
   app.use(verifyInvite.router);
   app.use(orgEditUsers.router);
+  app.use(exportusers.router)
   app.use(deleteUser.router);
   app.use(usersavedcraftedit.router);
   app.use(userSavedCraftDelete.router);
@@ -136,6 +139,7 @@ module.exports.bind = (app) => {
   app.use(peopleAdd.router);
   app.use(peopleEdit.router);
   app.use(peopleDelete.router);
+  app.use(peopleExport.router);
   app.use(cookies.router);
   app.use(help.router);
   app.use(accessibility.router)

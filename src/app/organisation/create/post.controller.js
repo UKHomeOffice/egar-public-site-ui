@@ -36,7 +36,7 @@ module.exports = (req, res) => {
       })
       .catch((err) => {
         logger.error('Failed to create organisation');
-        logger.error(JSON.stringify(err));
+        logger.error(err);
         res.render('app/organisation/create/index', { cookie, errors: [err] });
       });
   })
