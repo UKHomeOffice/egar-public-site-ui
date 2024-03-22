@@ -1,5 +1,3 @@
-console.log("hello world")
-
 function setCookie(name, value, expiryDays) {
   const currDate = new Date();
   currDate.setTime(currDate.getTime() + (expiryDays*24*60*60*1000));
