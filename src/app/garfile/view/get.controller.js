@@ -72,6 +72,9 @@ module.exports = (req, res) => {
       // Maybe not necessary but delete the ids as the template does not need them
       delete parsedGar.userId;
       delete parsedGar.organisationId;
+      const { successMsg, successHeader } = req.session;
+      delete req.session.successHeader;
+      delete req.session.successMsg;
 
       renderContext = {
         cookie,
@@ -79,6 +82,8 @@ module.exports = (req, res) => {
         garfile: parsedGar,
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
+        successMsg,
+        successHeader
       }; 
       renderContext.showChangeLinks = true;
       if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {

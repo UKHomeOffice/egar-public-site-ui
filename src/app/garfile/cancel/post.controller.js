@@ -5,7 +5,7 @@ const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 
 module.exports = (req, res) => {
-  logger.debug('In garfile / cancel get controller');
+  logger.debug('In garfile / cancel post controller');
   const cookie = new CookieModel(req);
   const isCancelled = true
 
