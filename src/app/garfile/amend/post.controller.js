@@ -7,7 +7,6 @@ const config = require('../../../common/config');
 module.exports = (req, res) => {
   logger.debug('In garfile / amend post controller');
   const cookie = new CookieModel(req);
-  const isCancelled = true
 
   garApi.patch(cookie.getGarId(), 'Draft', {})
     .then(() => {
