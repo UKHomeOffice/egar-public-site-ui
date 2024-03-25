@@ -285,7 +285,7 @@
       });
 
       departureMonth.addEventListener("keyup", (e) => {
-        e.target.value = sanitiseValue(e.target.value 'month');
+        e.target.value = sanitiseValue(e.target.value, 'month');
         autoTab(departureMonth, 'month', departureYear);
         showWarningText();
       });
@@ -332,17 +332,18 @@
         e.target.value = sanitiseValue1(e.target.value , 'seconds');
       })
 
-      function showWarningText() {      
-        const departureDate = new Date(
-          Number(departureDay).value,
-          Number(departureMonth).value - 1,
-          Number(departureYear).value,
-          Number(departureHour).value,
-          Number(departureMinute).value,
-        );
-        const today = new Date()
+      function showWarningText() {  
         const TWO_HOURS = 60 * 60 * 1000 * 2;
+        const today = new Date()
         const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
+
+        const departureDate = new Date(
+          Number(departureYear.value),
+          Number(departureMonth.value) - 1,
+          Number(departureDay.value),
+          Number(departureHour.value),
+          Number(departureMinute.value),
+        );
 
         twoHourWarningText.hidden = twoHoursPriorDepartureDate.getTime() < departureDate.getTime();
       }      
