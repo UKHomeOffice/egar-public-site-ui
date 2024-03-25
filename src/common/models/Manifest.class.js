@@ -105,7 +105,7 @@ class Manifest {
   }
 
   static _constructDateObj(date) {
-    logger.info(`date pased in ${date}`)
+    //logger.info(`date pased in ${date}`)
     if (date === null) return date;
     const dateArr = date.split('-');
     return { y: dateArr[0], m: dateArr[1], d: dateArr[2] };

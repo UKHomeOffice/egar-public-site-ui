@@ -166,39 +166,24 @@
                     aria-describedby="departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}">
                     {% for airport in airportList | sort(attribute = 'label') %}
                       <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == airport.id }}
-                    or
-                   <option value="{{ airport.id2 }}" {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == airport.id2 }}>{{ airport.label }}</option>
-                      {% endfor %}
-                    </select>
+                        or
+                      <option value="{{ airport.id2 }}" {{ 'selected=selected' if cookie.getGarDepartureVoyage().departurePort == airport.id2 }}>{{ airport.label }}</option>
+                    {% endfor %}
+                  </select>
                   </div>
                 </div>
                 <div class="govuk-radios__item">
                   <input id="portChoiceCoordinates" name="portChoice" class="govuk-radios__input"
                   type="radio"
                   value="No"
-                    {#
-                      In some instances when a user submits an empty input field e.g. Latitude: [] [28] [] [],
-                      Not-A-Number (NaN) will be returned because user input is converted to a floating-point number
-                      with parseFloat().
-                    #}
-
-                    {% set DECIMAL_POINT = '.' %}
-                    {% set NOT_A_NUMBER = 'NaN' %}
-                    {#
-                      If both LAT and LONG values exist.  The "No" port choice will be selected if both the LAT and LONG
-                      values contain a decimal point or either the LAT or LONG values are NaN.
-                    #}
-                    {{
-                        'checked' if cookie.getGarDepartureVoyage().departurePort != undefined
-                                    and (
-                                          cookie.getGarDepartureVoyage().departureLat.includes(DECIMAL_POINT)
-                                          and cookie.getGarDepartureVoyage().departureLong.includes(DECIMAL_POINT)
-                                          or (
-                                            cookie.getGarDepartureVoyage().departureLat == NOT_A_NUMBER
-                                            or cookie.getGarDepartureVoyage().departureLong == NOT_A_NUMBER
-                                          )
-                                    )
-                    }}
+                  {#
+                      Note: Both cookie.getGarDepartureVoyage().departureLat and cookie.getGarDepartureVoyage().departureLong
+                      are set to empty string when the 'Yes' radio button is clicked.
+                  #}
+                  {{
+                      'checked' if (cookie.getGarDepartureVoyage().departureLat != undefined or cookie.getGarDepartureVoyage().departureLong != undefined)
+                                  and (cookie.getGarDepartureVoyage().departureLat !== '' and cookie.getGarDepartureVoyage().departureLong !== '')
+                  }}
                   data-aria-controls="portChoiceCoordinatesContainer"
                   aria-labelledby="portChoiceCoordinates-label"
                 >
