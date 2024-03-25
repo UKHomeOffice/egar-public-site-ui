@@ -256,11 +256,6 @@
     <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
     <script type="text/javascript" src="/utils/validator.js"></script>
     <script type="text/javascript">
-      accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#departurePort'), minLength: 2});
-      document
-        .getElementById("departurePort")
-        .setAttribute('aria-describedby', 'departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}');
-
       const twoHourWarningText = document.getElementById("twoHourWarningText");
       const departureDay = document.getElementById("departureDay");
       const departureMonth = document.getElementById("departureMonth");
@@ -277,7 +272,27 @@
       const departureLongMinutes = document.getElementById("departureLongMinutes");
       const departureLongSeconds = document.getElementById("departureLongSeconds");
 
-      
+      function showWarningText() {  
+        const TWO_HOURS = 60 * 60 * 1000 * 2;
+        const today = new Date()
+        const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
+
+        const departureDate = new Date(
+          Number(departureYear.value),
+          Number(departureMonth.value) - 1,
+          Number(departureDay.value),
+          Number(departureHour.value),
+          Number(departureMinute.value),
+        );
+
+        twoHourWarningText.hidden = twoHoursPriorDepartureDate.getTime() < departureDate.getTime();
+      }    
+
+    accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#departurePort'), minLength: 2});
+      document
+        .getElementById("departurePort")
+        .setAttribute('aria-describedby', 'departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}');
+
       departureDay.addEventListener("keyup", (e) => {
         e.target.value = sanitiseValue(e.target.value, 'day');
         autoTab(departureDay, 'day', departureMonth);
@@ -330,23 +345,7 @@
         
       departureLongSeconds.addEventListener("keyup", (e) => {
         e.target.value = sanitiseValue1(e.target.value , 'seconds');
-      })
-
-      function showWarningText() {  
-        const TWO_HOURS = 60 * 60 * 1000 * 2;
-        const today = new Date()
-        const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
-
-        const departureDate = new Date(
-          Number(departureYear.value),
-          Number(departureMonth.value) - 1,
-          Number(departureDay.value),
-          Number(departureHour.value),
-          Number(departureMinute.value),
-        );
-
-        twoHourWarningText.hidden = twoHoursPriorDepartureDate.getTime() < departureDate.getTime();
-      }      
+      })  
     </script>
 
   {% endblock %}
