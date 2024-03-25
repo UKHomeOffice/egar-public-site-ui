@@ -49,7 +49,7 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_day')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureDay"
-                name="departureDay" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'day');autoTab(departureDay, 'day', departureMonth);showWarningText();"
+                name="departureDay" type="text" maxLength=2
                 value="{{ cookie.dateSlice('day', cookie.getGarDepartureVoyage().departureDate) }}"
                 {{ 'aria-describedby=departureDate-error' if errors | containsError('departureDate') }}>
                 </div>
@@ -62,7 +62,7 @@
                   </label>
                   <span id="departure-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMonth"
-                    name="departureMonth" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'month');autoTab(departureMonth, 'month', departureYear);showWarningText();"
+                    name="departureMonth" type="text" maxLength=2
                     value="{{ cookie.dateSlice('month', cookie.getGarDepartureVoyage().departureDate) }}"
                     aria-describedby="{{ 'departureDate-error ' if errors | containsError('departureDate') }}departure-month-hint">
                 </div>
@@ -74,7 +74,7 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_year')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureYear"
-                    name="departureYear" type="text" maxLength=4  onKeyup="value = sanitiseValue(this.value, 'year');showWarningText();"
+                    name="departureYear" type="text" maxLength=4
                     value="{{ cookie.dateSlice('year', cookie.getGarDepartureVoyage().departureDate) }}"
                     {{ 'aria-describedby=departureDate-error' if errors | containsError('departureDate') }}>
                 </div>
@@ -102,7 +102,7 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_hour')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureHour"
-                    name="departureHour" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'hour');autoTab(departureHour, 'hour', departureMinute);showWarningText();"
+                    name="departureHour" type="text" maxLength=2
                     value="{{ cookie.timeSlice('hour', cookie.getGarDepartureVoyage().departureTime) }}"
                     {{ 'aria-describedby=departureTime-error' if errors | containsError('departureTime') }}>
                 </div>
@@ -114,7 +114,7 @@
                     <span class="govuk-visually-hidden">{{__('field_departure_hint')}}</span>{{__('field_minute')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMinute"
-                    name="departureMinute"  type="text" maxLength=2  onKeyup="value = sanitiseValue(this.value, 'minute');showWarningText();"
+                    name="departureMinute"  type="text" maxLength=2
                     value="{{ cookie.timeSlice('minute', cookie.getGarDepartureVoyage().departureTime) }}"
                     {{ 'aria-describedby=departureTime-error' if errors | containsError('departureTime') }}>
                 </div>
@@ -204,13 +204,13 @@
 
                     {{ m.error_message('departureLat', errors, __) }}
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureDegrees"
-                name="departureDegrees" type="text" maxLength=3 onKeyup="value = sanitiseValue1(this.value, 'degrees');" value="{{ cookie.getGarDepartureVoyage().departureDegrees }}">
+                name="departureDegrees" type="text" maxLength=3 value="{{ cookie.getGarDepartureVoyage().departureDegrees }}">
 
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureMinutes"
-                name="departureMinutes" type="text" maxLength=2 onKeyup="value = sanitiseValue2(this.value, 'minutes'); autoTab1(departureMinutes, 'minutes', departureSeconds);" value="{{ cookie.getGarDepartureVoyage().departureMinutes }}">
+                name="departureMinutes" type="text" maxLength=2 value="{{ cookie.getGarDepartureVoyage().departureMinutes }}">
 
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureSeconds"
-                name="departureSeconds" type="text" maxLength=8 onKeyup="value = sanitiseValue1(this.value, 'seconds');" value="{{ cookie.getGarDepartureVoyage().departureSeconds }}">
+                name="departureSeconds" type="text" maxLength=8 value="{{ cookie.getGarDepartureVoyage().departureSeconds }}">
 
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLatDirection"
                 name="departureLatDirection" type="text" maxLength=1 value="{{ cookie.getGarDepartureVoyage().departureLatDirection }}" >
@@ -226,13 +226,13 @@
                     </span>
                     {{ m.error_message('departureLong', errors, __) }}
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLongDegrees"
-                name="departureLongDegrees" type="text" maxLength=3 onKeyup="value = sanitiseValue1(this.value, 'degrees');" value="{{ cookie.getGarDepartureVoyage().departureLongDegrees }}">
+                name="departureLongDegrees" type="text" maxLength=3 value="{{ cookie.getGarDepartureVoyage().departureLongDegrees }}">
 
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLongMinutes"
-                name="departureLongMinutes" type="text" maxLength=2 onKeyup="value = sanitiseValue2(this.value, 'minutes'); autoTab1(departureLongMinutes, 'minutes', departureLongSeconds);" value="{{ cookie.getGarDepartureVoyage().departureLongMinutes }}" >
+                name="departureLongMinutes" type="text" maxLength=2 value="{{ cookie.getGarDepartureVoyage().departureLongMinutes }}" >
 
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="departureLongSeconds"
-                name="departureLongSeconds" type="text" maxLength=8 onKeyup="value = sanitiseValue1(this.value, 'seconds');" value="{{ cookie.getGarDepartureVoyage().departureLongSeconds }}" >
+                name="departureLongSeconds" type="text" maxLength=8 value="{{ cookie.getGarDepartureVoyage().departureLongSeconds }}" >
 
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="departureLongDirection"
                 name="departureLongDirection" type="text" maxLength=1 value="{{ cookie.getGarDepartureVoyage().departureLongDirection }}" >
@@ -261,38 +261,88 @@
         .getElementById("departurePort")
         .setAttribute('aria-describedby', 'departurePort-hint{{ ' departurePort-error' if errors | containsError('departurePort') }}');
 
+      const twoHourWarningText = document.getElementById("twoHourWarningText");
+      const departureDay = document.getElementById("departureDay");
+      const departureMonth = document.getElementById("departureMonth");
+      const departureYear = document.getElementById("departureYear");
+
+      const departureHour = document.getElementById("departureHour");
+      const departureMinute = document.getElementById("departureMinute");
+
+      const departureDegrees = document.getElementById("departureDegrees");
+      const departureMinutes = document.getElementById("departureMinutes");
+      const departureSeconds = document.getElementById("departureSeconds");
+
+      const departureLongDegrees = document.getElementById("departureLongDegrees");
+      const departureLongMinutes = document.getElementById("departureLongMinutes");
+      const departureLongSeconds = document.getElementById("departureLongSeconds");
+
+      
+      departureDay.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue(e.target.value, 'day');
+        autoTab(departureDay, 'day', departureMonth);
+        showWarningText();
+      });
+
+      departureMonth.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue(e.target.value 'month');
+        autoTab(departureMonth, 'month', departureYear);
+        showWarningText();
+      });
+
+      departureYear.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue(e.target.value, 'year')
+        showWarningText();
+      });  
+
+      departureHour.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue(e.target.value, 'hour');
+        autoTab(departureHour, 'hour', departureMinute);
+        showWarningText();
+      });
+
+      departureMinute.addEventListener("keyup", (e) => {
+       e.target.value = sanitiseValue(e.target.value, 'minute');
+       showWarningText();
+      });
+
+      departureDegrees.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue1(e.target.value, 'degrees');
+      });
+
+      departureMinutes.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue2(e.target.value, 'minutes');
+        autoTab1(departureMinutes, 'minutes', departureSeconds);
+      });
+
+      departureSeconds.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue1(e.target.value, 'seconds');
+      });
+
+      departureLongDegrees.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue1(e.target.value, 'degrees');
+      });
+
+      departureLongMinutes.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue2(e.target.value, 'minutes');
+        autoTab1(departureLongMinutes, 'minutes', departureLongSeconds);
+      })
+        
+      departureLongSeconds.addEventListener("keyup", (e) => {
+        e.target.value = sanitiseValue1(e.target.value , 'seconds');
+      })
 
       function showWarningText() {      
-        const twoHourWarningText = document.getElementById("twoHourWarningText");
-
-        const departureDay = Number(document.getElementById("departureDay").value);
-        const departureMonth = Number(document.getElementById("departureMonth").value) - 1;
-        const departureYear = Number(document.getElementById("departureYear").value);
-
-        const departureHour = Number(document.getElementById("departureHour").value);
-        const departureMinute = Number(document.getElementById("departureMinute").value);
-
         const departureDate = new Date(
-          departureYear, 
-          departureMonth,
-          departureDay,
-          departureHour,
-          departureMinute
+          Number(departureDay).value,
+          Number(departureMonth).value - 1,
+          Number(departureYear).value,
+          Number(departureHour).value,
+          Number(departureMinute).value,
         );
         const today = new Date()
         const TWO_HOURS = 60 * 60 * 1000 * 2;
         const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
-
-        console.log("hods", {
-          twoHoursPriorDepartureDate,
-          departureDate,
-          twoHourWarningText,
-          departureYear, 
-          departureMonth,
-          departureDay,
-          departureDay,
-          departureHour
-      })
 
         twoHourWarningText.hidden = twoHoursPriorDepartureDate.getTime() < departureDate.getTime();
       }      
