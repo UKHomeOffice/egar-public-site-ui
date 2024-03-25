@@ -24,13 +24,11 @@
 {% macro submit_buttons(analyticsPage, csrfToken, __) %}
   <input id="save-and-continue" class="govuk-button" type="submit"
     name="buttonClicked"
-    value="{{__('form_save_and_continue')}}"
-    onclick="sendAnalytics(event, '{{ analyticsPage }} - Save and Continue', 'click')">
+    value="{{__('form_save_and_continue')}}">
   <p class="govuk-body-m">
     <input id="save-and-come-back" class="disableAutoFillSubmit govuk-button govuk-button--secondary" type="submit"
       name="buttonClicked"
-      value="{{__('form_save_and_come_back')}}"
-      onclick="sendAnalytics(event, '{{ analyticsPage }} - Save and Exit', 'click')">
+      value="{{__('form_save_and_come_back')}}">
   </p>
   
   <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
