@@ -206,7 +206,7 @@ function currentOrPastDate(dObj) {
 
   /*
     Returns true if all dates fields are empty to avoid duplicate error messages being displayed.
-    The dateNotTooFarInFuture function will cover this error.
+    The dateNotMoreThanMonthInFuture function will cover this error.
   */
   if([dObj.d,dObj.m,dObj.y].includes('')) {
     return true;
@@ -214,7 +214,7 @@ function currentOrPastDate(dObj) {
 
   /*
     Returns true if supplied dates are invalid to avoid duplicate error messages being displayed.
-    The dateNotTooFarInFuture function will cover this error.
+    The dateNotMoreThanMonthInFuture function will cover this error.
   */
   if(validDay(dObj.d, dObj.m, dObj.y) === false || validMonth(dObj.m) === false || validYear(dObj.y) === false){
     return true;
@@ -240,12 +240,29 @@ function currentOrPastDate(dObj) {
  * @param {Object} dObjh Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
  * * @returns {Bool} Date is within acceptable range
  */
-function dateNotTooFarInFuture(dObj) {
+function dateNotMoreThanMonthInFuture(dObj) {
   const now = new Date();
   const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
   const providedDate = getDateFromDynamicInput(dObj);
 
+  // logger.info(`month providedDate: ${providedDate.toJSON()}`);
+  // logger.info(`month nextMonth: ${nextMonth.toJSON()}`);
+
   return Boolean(providedDate && providedDate <= nextMonth);
+}
+
+function dateNotMoreThanTwoDaysInFuture(dObj) {
+  const now = new Date();
+  const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
+  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS);
+
+  const providedDate = getDateFromDynamicInput(dObj);
+
+  // logger.info(`2 days providedDate: ${providedDate.toJSON()}`);
+  // logger.info(`2 days maxDepartureDate: ${maxDepartureDate.toJSON()}`);
+
+
+  return Boolean(providedDate && providedDate <= maxDepartureDate);
 }
 
 /**
@@ -768,10 +785,11 @@ module.exports = {
   invalidLongDirection,
   sanitiseValue2,
   preventZ,
-  dateNotTooFarInFuture,
+  dateNotMoreThanMonthInFuture,
   isAlphanumeric,
   isAlpha,
   isAddressValidCharacters,
   isPostCodeValidCharacters,
-  isValidAirportCode
+  isValidAirportCode,
+  dateNotMoreThanTwoDaysInFuture
 };

@@ -4,6 +4,8 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
+const logger = require('../common/utils/logger')(__filename);
+
 require('./global.test');
 
 const validator = require('../common/utils/validator');
@@ -815,10 +817,11 @@ describe('Validator', () => {
 
     //const clock = sinon.useFakeTimers(new Date(2020, 04, 11).getTime());
     let clock;
+    const APRIL = 3;
     
-    before(() => {
+    beforeEach(() => {
       clock = sinon.useFakeTimers({
-        now: new Date(2023, 03, 11),
+        now: new Date(2023, APRIL, 11),
         shouldAdvanceTime: false,
         toFake: ["Date"],
       });
@@ -827,26 +830,47 @@ describe('Validator', () => {
     let actualResult;
 
     it('Should reject a date further than one month in the future in object format', () => {
-      actualResult = validator.dateNotTooFarInFuture({ d: '1', m: '1', y: '2024' });
+      actualResult = validator.dateNotMoreThanMonthInFuture({ d: '1', m: '1', y: '2024' });
       expect(actualResult).to.equal(false);
     });
 
     it('Should accept a date within one month in the future in object format', () => {
-      actualResult = validator.dateNotTooFarInFuture({ d: '11', m: '5', y: '2023' });
+      actualResult = validator.dateNotMoreThanMonthInFuture({ d: '11', m: '5', y: '2023' });
       expect(actualResult).to.equal(true);
     });
 
     it('Should reject a date further than one month in the future in date format', () => {
-      actualResult = validator.dateNotTooFarInFuture(new Date(2024, 0, 1));
+      actualResult = validator.dateNotMoreThanMonthInFuture(new Date(2024, 0, 1));
       expect(actualResult).to.equal(false);
     });
 
     it('Should accept a date within one month in the future in date format', () => {
-      actualResult = validator.dateNotTooFarInFuture(new Date(2023, 4, 11));
+      actualResult = validator.dateNotMoreThanMonthInFuture(new Date(2023, 4, 11));
       expect(actualResult).to.equal(true);
     });
 
-    after(()=>{
+    it('Should allow a date within two days in the future', () => {
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture({ d: '13', m: '4', y: '2023' });
+      expect(actualResult).to.equal(true);
+    });
+
+    it('Should reject a date within two days in the future - day', () => {
+      logger.info(`Start: ${new Date().toJSON()}`);
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture({ d: '14', m: '4', y: '2023' });
+      expect(actualResult).to.equal(false);
+    });
+
+    it('Should reject a date within two days in the future - month', () => {
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture({ d: '12', m: '5', y: '2023' });
+      expect(actualResult).to.equal(false);
+    });
+
+    it('Should reject a date within two days in the future - year', () => {
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture({ d: '12', m: '4', y: '2024' });
+      expect(actualResult).to.equal(false);
+    });
+
+    afterEach(()=>{
       clock.restore();
     });
   });
