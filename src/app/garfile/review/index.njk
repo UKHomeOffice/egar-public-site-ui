@@ -17,6 +17,7 @@
   <a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
+
 {% block content %}
   {# <pre>{{garfile | dump(2)}}</pre> #}
   {# <pre>{{isJourneyUkInbound | dump(2)}}</pre> #}
@@ -53,9 +54,8 @@
       </form>
     </div>
   </div>
-{% endblock %}
 
-  <dialog id="confirmWarnedDepartureDialog">
+    <dialog id="confirmWarnedDepartureDialog">
     <p class="govuk-error-message">
       {{ __('field_departure_date_2_hours_prior') }}
     </p>
@@ -79,21 +79,22 @@
     const departureDate = document.getElementById("departureDate");
     const departureTime = document.getElementById("departureTime");
 
-    /*const submitGarForm = document.getElementById("submitGarForm");
-    const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');*/
-
+    const submitGarForm = document.getElementById("submitGarForm");
+    const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
+    console.log({ 
+      departureDate: departureDate.value, 
+      departureTime: departureTime.value
+    })
+    
     setTimeout(() => {
-      console.log({ 
-        departureDate: departureDate.value, 
-        departureTime: departureTime.value
-      })
+      
       twoHourWarningText.hidden = isTwoHoursPriorDeparture({ 
         departureDate: departureDate.value, 
         departureTime: departureTime.value
       });
     }, 500)
 
-    /* submitGarForm.addEventListener("submit", (e) => {
+    submitGarForm.addEventListener("submit", (e) => {
       if (!isTwoHoursPriorDeparture({ 
         departureDate: departureDate.value, 
         departureTime: departureTime.value
@@ -103,6 +104,8 @@
       }
     });
 
-    continueWithWarnedDate.addEventListener("click", (e) => submitGarForm.submit()); */
+    continueWithWarnedDate.addEventListener("click", (e) => submitGarForm.submit());
 
   </script>
+{% endblock %}
+

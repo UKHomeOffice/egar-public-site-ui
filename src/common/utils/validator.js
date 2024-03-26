@@ -277,6 +277,8 @@ function isTwoHoursPriorDeparture(voyageDateTimeObject) {
   return Boolean(departureDateTime && twoHoursPriorDepartureDate.getTime() < departureDateTime);
 }    
 
+
+
 /**
  * Normalises and returns various supplied date objects / formats
  * @param {Object} input Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
