@@ -37,7 +37,7 @@ describe('API upload GAR post controller', () => {
     chai.use(sinonChai);
 
     clock = sinon.useFakeTimers({
-      now: new Date('2022-05-11 GMT'),
+      now: new Date('2022-05-29 GMT'),
       shouldAdvanceTime: false,
       toFake: ["Date"],
     });
@@ -227,7 +227,7 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.dateNotMoreThanMonthInFuture, '', '2022-07-30', 'Departure date must be today and cannot be more than 1 month in the future'),
+          new ValidationRule(validator.dateNotMoreThanTwoDaysInFuture, '', '2022-07-30', __('field_departure_date_too_far_in_future')),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
