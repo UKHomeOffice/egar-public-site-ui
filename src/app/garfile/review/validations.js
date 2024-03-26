@@ -34,7 +34,6 @@ module.exports.validations = (garfile, garpeople) => {
 
   validationArr.push([
     new ValidationRule(validator.isValidDepAndArrDate, 'departure', voyageDateTimeObj, voyageDateMsg),
-    new ValidationRule(validator.isTwoHoursPriorDeparture, 'departure', voyageDateTimeObj, i18n.__('field_departure_date_2_hours_prior')),
   ]);
   validationArr.push([
     new ValidationRule(validator.notEmpty, 'aircraft', registration, registrationMsg),

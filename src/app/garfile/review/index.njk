@@ -33,13 +33,13 @@
       {% include "check-your-answers.njk" %}
 
       {% if isJourneyUkInbound%}
-        <form action="/garfile/review" method="post" class="form">
+        <form id="submitGarForm" action="/garfile/review" method="post" class="form">
           <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
           <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit_amg')}}">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         </form>
       {% else %}
-        <form action="/garfile/review" method="post" class="form">
+        <form id="submitGarForm" action="/garfile/review" method="post" class="form">
           <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
           <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit')}}">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
@@ -54,3 +54,55 @@
     </div>
   </div>
 {% endblock %}
+
+  <dialog id="confirmWarnedDepartureDialog">
+    <p class="govuk-error-message">
+      {{ __('field_departure_date_2_hours_prior') }}
+    </p>
+    <p>
+      sGAR will allow you to submit the GAR, but it is not recommended.
+    </p>
+    <form method="dialog">
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+        Close and fix departure date
+      </button>
+    </form>
+    <button id="continueWithWarnedDate" type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+      Continue with warned departure date
+    </button>
+  </dialog>
+
+  <script type="text/javascript" src="/utils/validator.js"></script>
+  <script type="text/javascript">
+    const twoHourWarningText = document.getElementById("twoHourWarningText");
+
+    const departureDate = document.getElementById("departureDate");
+    const departureTime = document.getElementById("departureTime");
+
+    /*const submitGarForm = document.getElementById("submitGarForm");
+    const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');*/
+
+    setTimeout(() => {
+      console.log({ 
+        departureDate: departureDate.value, 
+        departureTime: departureTime.value
+      })
+      twoHourWarningText.hidden = isTwoHoursPriorDeparture({ 
+        departureDate: departureDate.value, 
+        departureTime: departureTime.value
+      });
+    }, 500)
+
+    /* submitGarForm.addEventListener("submit", (e) => {
+      if (!isTwoHoursPriorDeparture({ 
+        departureDate: departureDate.value, 
+        departureTime: departureTime.value
+      })) {
+        e.preventDefault();
+        document.getElementById("confirmWarnedDepartureDialog").showModal();
+      }
+    });
+
+    continueWithWarnedDate.addEventListener("click", (e) => submitGarForm.submit()); */
+
+  </script>
