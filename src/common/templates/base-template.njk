@@ -24,7 +24,7 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-
+  <link href="/stylesheets/custom.css" rel="stylesheet" />
   <link href="/stylesheets/application.min.css" rel="stylesheet" />
   <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet"/>
 
@@ -189,13 +189,7 @@
   </script>
 
 
-    <script src="/javascripts/jquery.disableAutoFill.min.js"></script>
     <script>
-      $("#page-form").disableAutoFill(
-        {
-          randomizeInputName: true,
-        }
-      );
       $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function(eventObj) {
         $("<input />")
           .attr("type", "hidden")

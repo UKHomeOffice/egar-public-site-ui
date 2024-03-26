@@ -252,7 +252,22 @@
         {# End buttons #}
       </div>
     </div>
-
+    <dialog id="confirmWarnedDepartureDialog">
+      <p class="govuk-error-message">
+        Departure Date & time must be <u>2 hours</u> prior to the aircraft’s expected departure for or from the United Kingdom.
+      </p>
+      <p>
+        sGAR will allow you to submit the GAR, but it is not recommended.
+      </p>
+      <form method="dialog">
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+          Close and fix departure date
+        </button>
+      </form>
+      <button id="continueWithWarnedDate" type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+        Continue with warned departure date
+      </button>
+    </dialog>
     <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
     <script type="text/javascript" src="/utils/validator.js"></script>
     <script type="text/javascript">
@@ -273,16 +288,9 @@
       const departureLongSeconds = document.getElementById("departureLongSeconds");
 
       const pageForm = document.getElementById('page-form');
+      const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
 
-      console.log(pageForm)
-
-      pageForm.addEventListener("submit", (e) => {
-        alert(0);
-        e.preventDefault();
-        alert(1)
-      });
-
-      function showWarningText() {  
+      function isTwoHoursPriorDeparture() {  
         const TWO_HOURS = 60 * 60 * 1000 * 2;
         const today = new Date()
         const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
@@ -295,8 +303,17 @@
           Number(departureMinute.value),
         );
 
-        twoHourWarningText.hidden = twoHoursPriorDepartureDate.getTime() < departureDate.getTime();
+        return twoHoursPriorDepartureDate.getTime() < departureDate.getTime();
       }    
+
+      pageForm.addEventListener("submit", (e) => {
+        if (!isTwoHoursPriorDeparture()) {
+          e.preventDefault();
+          document.getElementById("confirmWarnedDepartureDialog").showModal();
+        }
+      });
+
+      continueWithWarnedDate.addEventListener("click", (e) => pageForm.submit());
 
     accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#departurePort'), minLength: 2});
       document
@@ -306,29 +323,29 @@
       departureDay.addEventListener("keyup", (e) => {
         e.target.value = sanitiseValue(e.target.value, 'day');
         autoTab(departureDay, 'day', departureMonth);
-        showWarningText();
+        twoHourWarningText.hidden = isTwoHoursPriorDeparture();
       });
 
       departureMonth.addEventListener("keyup", (e) => {
         e.target.value = sanitiseValue(e.target.value, 'month');
         autoTab(departureMonth, 'month', departureYear);
-        showWarningText();
+        twoHourWarningText.hidden = isTwoHoursPriorDeparture();
       });
 
       departureYear.addEventListener("keyup", (e) => {
         e.target.value = sanitiseValue(e.target.value, 'year')
-        showWarningText();
+        twoHourWarningText.hidden = isTwoHoursPriorDeparture();
       });  
 
       departureHour.addEventListener("keyup", (e) => {
         e.target.value = sanitiseValue(e.target.value, 'hour');
         autoTab(departureHour, 'hour', departureMinute);
-        showWarningText();
+        twoHourWarningText.hidden = isTwoHoursPriorDeparture();
       });
 
       departureMinute.addEventListener("keyup", (e) => {
        e.target.value = sanitiseValue(e.target.value, 'minute');
-       showWarningText();
+       twoHourWarningText.hidden = isTwoHoursPriorDeparture();
       });
 
       departureDegrees.addEventListener("keyup", (e) => {
