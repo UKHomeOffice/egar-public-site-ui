@@ -126,7 +126,7 @@
           <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
           <strong class="govuk-warning-text__text">
             <span class="govuk-visually-hidden">Warning</span>
-              Departure Date & time must be <u>2 hours</u> prior to the aircraft’s expected departure for or from the United Kingdom.
+              {{ __('field_departure_date_2_hours_prior') }}
           </strong>
         </div>
         {# End departure time #}
@@ -254,7 +254,7 @@
     </div>
     <dialog id="confirmWarnedDepartureDialog">
       <p class="govuk-error-message">
-        Departure Date & time must be <u>2 hours</u> prior to the aircraft’s expected departure for or from the United Kingdom.
+        {{ __('field_departure_date_2_hours_prior') }}
       </p>
       <p>
         sGAR will allow you to submit the GAR, but it is not recommended.

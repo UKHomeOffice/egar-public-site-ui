@@ -265,6 +265,18 @@ function dateNotMoreThanTwoDaysInFuture(dObj) {
   return Boolean(providedDate && providedDate <= maxDepartureDate);
 }
 
+function isTwoHoursPriorDeparture(voyageDateTimeObject) {  
+  const TWO_HOURS = 60 * 60 * 1000 * 2;
+  const today = new Date()
+  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
+
+  const { departureDate, departureTime } = voyageDateTimeObject;
+  const depDateTimeStr = `${departureDate}T${departureTime}`;
+  const departureDateTime = Date.parse(depDateTimeStr);
+
+  return Boolean(departureDateTime && twoHoursPriorDepartureDate.getTime() < departureDateTime);
+}    
+
 /**
  * Normalises and returns various supplied date objects / formats
  * @param {Object} input Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
@@ -791,5 +803,6 @@ module.exports = {
   isAddressValidCharacters,
   isPostCodeValidCharacters,
   isValidAirportCode,
-  dateNotMoreThanTwoDaysInFuture
+  dateNotMoreThanTwoDaysInFuture,
+  isTwoHoursPriorDeparture
 };
