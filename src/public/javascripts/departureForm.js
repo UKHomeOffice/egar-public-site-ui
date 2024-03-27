@@ -23,24 +23,17 @@ let departureFormSubmitter = undefined;
 
 dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
 
-function hideAllDepartureDateWarningMessages() {
-  return null;
-}
+const departureDate = new Date(
+  Number(departureYear.value),
+  Number(departureMonth.value) - 1,
+  Number(departureDay.value),
+  Number(departureHour.value),
+  Number(departureMinutes.value)
+)
 
-function isTwoHoursPriorDeparture() {  
-  const TWO_HOURS = 60 * 60 * 1000 * 2;
-  const today = new Date()
-  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
-
-  const departureDate = new Date(
-    Number(departureYear.value),
-    Number(departureMonth.value) - 1,
-    Number(departureDay.value),
-    Number(departureHour.value),
-    Number(departureMinute.value),
-  );
-
-  return twoHoursPriorDepartureDate.getTime() < departureDate.getTime();
+function showDepartureDateWarningMessages(providedDate) {
+  twoHourWarningText.hidden = isTwoHoursPriorDeparture(providedDate);
+  fortyEightHourWarningText.hidden = dateNotMoreThanTwoDaysInFuture(providedDate);
 }
 
 setTimeout(() => {
@@ -48,12 +41,7 @@ setTimeout(() => {
     return false;
   }
 
-  twoHourWarningText.hidden = isTwoHoursPriorDeparture();
-  fortyEightHourWarningText.hidden = dateNotMoreThanTwoDaysInFuture(new Date(
-    Number(departureYear.value),
-    Number(departureMonth.value) - 1,
-    Number(departureDay.value),
-  ));
+  showDepartureDateWarningMessages(departureDate);
 }, 500)
 
 
@@ -65,13 +53,20 @@ pageForm.addEventListener("submit", (e) => {
     departureHour.value,
     departureMinute.value
   ].includes('')) {
-    return false;
+    return true;
   }
-  if (!isTwoHoursPriorDeparture() && departureFormSubmitter === undefined) {
-    e.preventDefault();
-    departureFormSubmitter = e.submitter;
-    confirmWarnedDepartureDialog.showModal();
+
+  if (departureFormSubmitter) {
+    return true;
   }
+  
+  if (isTwoHoursPriorDeparture(departureDate) && dateNotMoreThanTwoDaysInFuture(departureDate)) {
+    return true;
+  }
+
+  e.preventDefault();
+  departureFormSubmitter = e.submitter;
+  confirmWarnedDepartureDialog.showModal();
 });
 
 confirmWarnedDepartureDialog.addEventListener("close", (e) => {
@@ -81,33 +76,32 @@ continueWithWarnedDate.addEventListener("click", (e) => {
     pageForm.requestSubmit(departureFormSubmitter);
 });
 
-
 departureDay.addEventListener("keyup", (e) => {
   e.target.value = sanitiseValue(e.target.value, 'day');
   autoTab(departureDay, 'day', departureMonth);
-  twoHourWarningText.hidden = isTwoHoursPriorDeparture();
+  showDepartureDateWarningMessages(departureDate);
 });
 
 departureMonth.addEventListener("keyup", (e) => {
   e.target.value = sanitiseValue(e.target.value, 'month');
   autoTab(departureMonth, 'month', departureYear);
-  twoHourWarningText.hidden = isTwoHoursPriorDeparture();
+  showDepartureDateWarningMessages(departureDate);
 });
 
 departureYear.addEventListener("keyup", (e) => {
   e.target.value = sanitiseValue(e.target.value, 'year')
-  twoHourWarningText.hidden = isTwoHoursPriorDeparture();
+  showDepartureDateWarningMessages(departureDate);
 });  
 
 departureHour.addEventListener("keyup", (e) => {
   e.target.value = sanitiseValue(e.target.value, 'hour');
   autoTab(departureHour, 'hour', departureMinute);
-  twoHourWarningText.hidden = isTwoHoursPriorDeparture();
+  showDepartureDateWarningMessages(departureDate);
 });
 
 departureMinute.addEventListener("keyup", (e) => {
- e.target.value = sanitiseValue(e.target.value, 'minute');
- twoHourWarningText.hidden = isTwoHoursPriorDeparture();
+  e.target.value = sanitiseValue(e.target.value, 'minute');
+  showDepartureDateWarningMessages(departureDate);
 });
 
 departureDegrees.addEventListener("keyup", (e) => {

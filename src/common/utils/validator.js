@@ -256,23 +256,16 @@ function dateNotMoreThanTwoDaysInFuture(providedDate) {
   const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
   const maxDepartureDate = new Date(now.getTime() + TWO_DAYS);
 
-
   return Boolean(providedDate && providedDate.getTime() <= maxDepartureDate.getTime());
 }
 
-function isTwoHoursPriorDeparture(voyageDateTimeObject) {  
+function isTwoHoursPriorDeparture(providedDate) {  
   const TWO_HOURS = 60 * 60 * 1000 * 2;
   const today = new Date()
   const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
 
-  const { departureDate, departureTime } = voyageDateTimeObject;
-  const depDateTimeStr = `${departureDate}T${departureTime}`;
-  const departureDateTime = Date.parse(depDateTimeStr);
-
-  return Boolean(departureDateTime && twoHoursPriorDepartureDate.getTime() < departureDateTime);
+  return Boolean(providedDate && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime());
 }    
-
-
 
 /**
  * Normalises and returns various supplied date objects / formats
