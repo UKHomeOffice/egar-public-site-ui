@@ -19,6 +19,8 @@ const confirmWarnedDepartureDialog = document.getElementById("confirmWarnedDepar
 const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
 let departureFormSubmitter = undefined;
 
+dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
+
 function isTwoHoursPriorDeparture() {  
   const TWO_HOURS = 60 * 60 * 1000 * 2;
   const today = new Date()

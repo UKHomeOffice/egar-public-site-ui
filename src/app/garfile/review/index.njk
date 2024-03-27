@@ -81,10 +81,9 @@
 
     const submitGarForm = document.getElementById("submitGarForm");
     const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
-    console.log({ 
-      departureDate: departureDate.value, 
-      departureTime: departureTime.value
-    })
+    const confirmWarnedDepartureDialog = document.getElementById("confirmWarnedDepartureDialog")
+
+    dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
     
     setTimeout(() => {
       twoHourWarningText.hidden = isTwoHoursPriorDeparture({ 
@@ -99,7 +98,7 @@
         departureTime: departureTime.value
       })) {
         e.preventDefault();
-        document.getElementById("confirmWarnedDepartureDialog").showModal();
+        confirmWarnedDepartureDialog.showModal();
       }
     });
 
