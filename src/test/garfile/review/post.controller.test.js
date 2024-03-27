@@ -7,6 +7,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const moment = require("moment");
 
 require('../../global.test');
 const garApi = require('../../../common/services/garApi');
@@ -118,6 +119,12 @@ describe('GAR Review Post Controller', () => {
 
   it('should not submit GAR when validation errors', () => {
     const cookie = new CookieModel(req);
+    const departDateObj = {
+      d: undefined,
+      m: undefined,
+      y: undefined,
+    };
+
     garApiGetStub.resolves(JSON.stringify({
       status: {
         name: 'draft',
@@ -154,6 +161,8 @@ describe('GAR Review Post Controller', () => {
           new ValidationRule(validator.notEmpty, 'responsiblePerson', undefined, 'Responsible person details must be completed'),
           new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
           new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
+          new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation')),
+          new ValidationRule(validator.dateNotTooFarInFuture, 'departureDate', departDateObj, __('field_departure_date_too_far_in_future')),
           new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
         ],
       });
@@ -162,6 +171,12 @@ describe('GAR Review Post Controller', () => {
 
   it('should not submit GAR when validation errors, with manifest issues', () => {
     const cookie = new CookieModel(req);
+    const departDateObj = {
+      d: undefined,
+      m: undefined,
+      y: undefined,
+    };
+
     sinon.stub(Manifest.prototype, 'validate').returns(false);
     garApiGetStub.resolves(JSON.stringify({
       status: {
@@ -202,6 +217,8 @@ describe('GAR Review Post Controller', () => {
           new ValidationRule(validator.notEmpty, 'responsiblePerson', undefined, 'Responsible person details must be completed'),
           new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
           new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
+          new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation')),
+          new ValidationRule(validator.dateNotTooFarInFuture, 'departureDate', departDateObj, __('field_departure_date_too_far_in_future')),
           new ValidationRule(validator.valuetrue, 'resolveError', '', 'Resolve manifest errors before submitting'),
           new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
         ],
@@ -212,12 +229,20 @@ describe('GAR Review Post Controller', () => {
   describe('perform API call', () => {
     it('should go to failure if API rejects', () => {
       const cookie = new CookieModel(req);
+      
+      const THREE_HOURS = 60 * 60 * 1000 * 3;
+      const FOUR_HOURS = 60 * 60 * 1000 * 10;
+      const today = new Date()
+      const threeHourDate = moment.utc(new Date(today.getTime() + THREE_HOURS));
+      const fourHoursDate = moment.utc(new Date(today.getTime() + FOUR_HOURS));
+
+
       garApiGetStub.resolves(JSON.stringify({
         registration: 'Z-AFTC',
-        departureDate: '2012-12-13',
-        departureTime: '15:03:00',
-        arrivalDate: '2012-12-14',
-        arrivalTime: '16:04:00',
+        departureDate: threeHourDate.format("YYYY-MM-DD"),
+        departureTime: threeHourDate.format("HH:mm:ss"),
+        arrivalDate: fourHoursDate.format("YYYY-MM-DD"),
+        arrivalTime: fourHoursDate.format("HH:mm:ss"),
         status: {
           name: 'draft',
         },
