@@ -264,7 +264,13 @@
           Close and fix departure date
         </button>
       </form>
-      <button id="continueWithWarnedDate" type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+      <button 
+        id="continueWithWarnedDate" 
+        type="button" 
+        class="govuk-button govuk-button--secondary" 
+        data-module="govuk-button"
+        name="buttonClicked"
+        value="">
         Continue with warned departure date
       </button>
     </dialog>
@@ -288,7 +294,9 @@
       const departureLongSeconds = document.getElementById("departureLongSeconds");
 
       const pageForm = document.getElementById('page-form');
+      const confirmWarnedDepartureDialog = document.getElementById("confirmWarnedDepartureDialog")
       const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
+      let departureFormSubmitter = undefined;
 
       function isTwoHoursPriorDeparture() {  
         const TWO_HOURS = 60 * 60 * 1000 * 2;
@@ -304,16 +312,21 @@
         );
 
         return twoHoursPriorDepartureDate.getTime() < departureDate.getTime();
-      }    
+      }
+
 
       pageForm.addEventListener("submit", (e) => {
-        if (!isTwoHoursPriorDeparture()) {
+        if (!isTwoHoursPriorDeparture() && departureFormSubmitter === undefined) {
           e.preventDefault();
-          document.getElementById("confirmWarnedDepartureDialog").showModal();
+          departureFormSubmitter = e.submitter;
+          confirmWarnedDepartureDialog.showModal();
         }
       });
 
-      continueWithWarnedDate.addEventListener("click", (e) => pageForm.submit());
+      confirmWarnedDepartureDialog.addEventListener("close", (e) => {
+        departureFormSubmitter = undefined;
+      });
+      continueWithWarnedDate.addEventListener("click", (e) => pageForm.requestSubmit(departureFormSubmitter));
 
     accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#departurePort'), minLength: 2});
       document
