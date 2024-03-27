@@ -39,6 +39,15 @@ function isTwoHoursPriorDeparture() {
 
 
 pageForm.addEventListener("submit", (e) => {
+  if ([
+    departureYear.value, 
+    departureMonth.value,
+    departureDay.value,
+    departureHour.value,
+    departureMinute.value
+  ].includes('')) {
+    return false;
+  }
   if (!isTwoHoursPriorDeparture() && departureFormSubmitter === undefined) {
     e.preventDefault();
     departureFormSubmitter = e.submitter;

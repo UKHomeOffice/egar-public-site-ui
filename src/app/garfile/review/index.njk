@@ -86,16 +86,24 @@
     dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
     
     setTimeout(() => {
+      if ([departureDate.textContent, departureTime.textContent].includes('')) {
+        return false;
+      }
+      
       twoHourWarningText.hidden = isTwoHoursPriorDeparture({ 
-        departureDate: departureDate.value, 
-        departureTime: departureTime.value
+        departureDate: departureDate.textContent, 
+        departureTime: departureTime.textContent
       });
     }, 500)
 
     submitGarForm.addEventListener("submit", (e) => {
+      if ([departureDate.textContent, departureTime.textContent].includes('')) {
+        return false;
+      }
+
       if (!isTwoHoursPriorDeparture({ 
-        departureDate: departureDate.value, 
-        departureTime: departureTime.value
+        departureDate: departureDate.textContent, 
+        departureTime: departureTime.textContent
       })) {
         e.preventDefault();
         confirmWarnedDepartureDialog.showModal();

@@ -875,6 +875,67 @@ describe('Validator', () => {
     });
   });
 
+  describe('Is date at least over 2 hours', () => {
+    let clock;
+    const MARCH = 2;
+    
+    beforeEach(() => {
+      clock = sinon.useFakeTimers({
+        now: new Date(2023, MARCH, 27, 14, 15),
+        shouldAdvanceTime: false,
+        toFake: ["Date"],
+      });
+    })
+
+    it('Works on a valid by a day date', () => {
+      const dates = { 
+        departureDate: "2023-03-28", 
+        departureTime: "11:00"
+      }
+      expect(validator.isTwoHoursPriorDeparture(dates)).to.equal(true);
+    });
+
+    it('Works on a invalid date a day behind', () => {
+      const dates = { 
+        departureDate: "2023-03-26", 
+        departureTime: "14:15"
+      }
+      expect(validator.isTwoHoursPriorDeparture(dates)).to.equal(false);
+    });
+
+    it('Same day but 2 hour prior date is valid', () => {
+      const validByHourDate = { 
+        departureDate: "2023-03-27", 
+        departureTime: "17:15"
+      }
+      expect(validator.isTwoHoursPriorDeparture(validByHourDate)).to.equal(true);
+
+      const validByMinuteDate = { 
+        departureDate: "2023-03-27", 
+        departureTime: "16:16"
+      }
+      expect(validator.isTwoHoursPriorDeparture(validByMinuteDate)).to.equal(true);
+    }); 
+
+    it('Same day but not 2 hour prior date is inaccurate', () => {
+      const invalidByHourDate = { 
+        departureDate: "2023-03-27", 
+        departureTime: "15:15"
+      }
+      expect(validator.isTwoHoursPriorDeparture(invalidByHourDate)).to.equal(false);
+
+      const invalidByMinuteDate = { 
+        departureDate: "2023-03-27", 
+        departureTime: "16:14"
+      }
+      expect(validator.isTwoHoursPriorDeparture(invalidByMinuteDate)).to.equal(false);
+    });    
+
+    afterEach(()=>{
+      clock.restore();
+    });
+  });
+
   describe('Universal Permission to Travel validators to check', () => {
       it('Validate Alpha string whilst invalidates incorrect ones', () => {
         const plainString = "Aaron";
