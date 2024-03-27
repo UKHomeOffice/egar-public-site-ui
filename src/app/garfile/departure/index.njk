@@ -252,10 +252,11 @@
         {# End buttons #}
       </div>
     </div>
-    <dialog id="confirmWarnedDepartureDialog">
-      <p class="govuk-error-message">
-        {{ __('field_departure_date_2_hours_prior') }}
-      </p>
+    <dialog id="confirmWarnedDepartureDialog" class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-error-message">
+        Warning
+      </h2>
+      <p>{{ __('field_departure_date_2_hours_prior') }}</p>
       <p>
         sGAR will allow you to submit the GAR, but it is not recommended.
       </p>
