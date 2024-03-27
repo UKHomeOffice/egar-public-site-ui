@@ -9,6 +9,9 @@ username
 password
 token
 
+./src/public/stylesheets/dialog-polyfill.css
+./src/public/javascripts/dialog-polyfill.js
+
 # ---------------------------------------------------------------------
 # Languages
 # ---------------------------------------------------------------------
