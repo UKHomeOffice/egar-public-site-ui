@@ -73,7 +73,6 @@ const buildValidations = (garfile, garpeople, manifest) => {
   validations.push(
     [new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation'))],
     [new ValidationRule(validator.currentOrPastDate, 'departureDate', departDateObj, __('field_departure_date_too_far_in_future'))],
-    [new ValidationRule(validator.dateNotMoreThanTwoDaysInFuture, 'departureDate', departDateObj, __('field_departure_date_too_far_in_future'))],
   );
 
   // Manifest specific validations does not using generic mechanism, so wrapped in

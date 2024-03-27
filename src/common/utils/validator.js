@@ -251,18 +251,13 @@ function dateNotMoreThanMonthInFuture(dObj) {
   return Boolean(providedDate && providedDate <= nextMonth);
 }
 
-function dateNotMoreThanTwoDaysInFuture(dObj) {
+function dateNotMoreThanTwoDaysInFuture(providedDate) {
   const now = new Date();
   const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
   const maxDepartureDate = new Date(now.getTime() + TWO_DAYS);
 
-  const providedDate = getDateFromDynamicInput(dObj);
 
-  // logger.info(`2 days providedDate: ${providedDate.toJSON()}`);
-  // logger.info(`2 days maxDepartureDate: ${maxDepartureDate.toJSON()}`);
-
-
-  return Boolean(providedDate && providedDate <= maxDepartureDate);
+  return Boolean(providedDate && providedDate.getTime() <= maxDepartureDate.getTime());
 }
 
 function isTwoHoursPriorDeparture(voyageDateTimeObject) {  

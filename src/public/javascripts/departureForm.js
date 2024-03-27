@@ -44,21 +44,16 @@ function isTwoHoursPriorDeparture() {
 }
 
 setTimeout(() => {
-  const dateObject = {
-    y: Number(departureYear.value),
-    m: Number(departureMonth.value) - 1,
-    d: Number(departureDay.value),
-  };
-
   if ([departureDate.textContent, departureTime.textContent].includes('')) {
     return false;
   }
 
-  if (isTwoHoursPriorDeparture()) {
-    twoHourWarningText.hidden = false;
-  } else if (dateNotMoreThanTwoDaysInFuture(dateObject)) {
-    fortyEightHourWarningText.hidden = false;
-  }
+  twoHourWarningText.hidden = isTwoHoursPriorDeparture();
+  fortyEightHourWarningText.hidden = dateNotMoreThanTwoDaysInFuture(new Date(
+    Number(departureYear.value),
+    Number(departureMonth.value) - 1,
+    Number(departureDay.value),
+  ));
 }, 500)
 
 
