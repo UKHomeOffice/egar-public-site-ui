@@ -59,44 +59,62 @@
 
   <script type="text/javascript" src="/utils/validator.js"></script>
   <script type="text/javascript">
-    const twoHourWarningText = document.getElementById("twoHourWarningText");
+    const submitGarForm = document.getElementById("submitGarForm");
+    const confirmWarnedDepartureDialog = document.getElementById("confirmWarnedDepartureDialog")
+    const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
+
+    const twoHourWarningTexts = Array.from(document.getElementsByClassName("twoHourWarningText"));
+    const fortyEightHourWarningTexts = Array.from(document.getElementsByClassName("fortyEightHourWarningText"));
 
     const departureDate = document.getElementById("departureDate");
-    const departureTime = document.getElementById("departureTime");
+    const departureTimeText = document.getElementById("departureTime");
 
-    const submitGarForm = document.getElementById("submitGarForm");
-    const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
-    const confirmWarnedDepartureDialog = document.getElementById("confirmWarnedDepartureDialog")
+    let departureFormSubmitter = undefined;
 
     dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
-    
+
+    const fullDepartureDate = new Date(Date.parse(`${departureDate.textContent}T${departureTime.textContent}`));
+
+    function showDepartureDateWarningMessages(providedDate) {
+      twoHourWarningTexts.forEach($element => $element.hidden = isTwoHoursPriorDeparture(providedDate));
+      fortyEightHourWarningTexts.forEach($element => $element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate));
+    }
+
     setTimeout(() => {
       if ([departureDate.textContent, departureTime.textContent].includes('')) {
         return false;
       }
-      
-      twoHourWarningText.hidden = isTwoHoursPriorDeparture({ 
-        departureDate: departureDate.textContent, 
-        departureTime: departureTime.textContent
-      });
+
+      showDepartureDateWarningMessages(fullDepartureDate);
     }, 500)
+
 
     submitGarForm.addEventListener("submit", (e) => {
       if ([departureDate.textContent, departureTime.textContent].includes('')) {
-        return false;
+        return true;
       }
 
-      if (!isTwoHoursPriorDeparture({ 
-        departureDate: departureDate.textContent, 
-        departureTime: departureTime.textContent
-      })) {
-        e.preventDefault();
-        confirmWarnedDepartureDialog.showModal();
+      if (departureFormSubmitter) {
+        return true;
       }
+      
+      if (isTwoHoursPriorDeparture(fullDepartureDate) && dateNotMoreThanTwoDaysInFuture(fullDepartureDate)) {
+        return true;
+      }
+
+      e.preventDefault();
+      departureFormSubmitter = e.submitter;
+      showDepartureDateWarningMessages(fullDepartureDate);
+      confirmWarnedDepartureDialog.showModal();
+      
     });
 
-    continueWithWarnedDate.addEventListener("click", (e) => submitGarForm.submit());
-
+    confirmWarnedDepartureDialog.addEventListener("close", (e) => {
+      departureFormSubmitter = undefined;
+    });
+    continueWithWarnedDate.addEventListener("click", (e) => {
+      submitGarForm.requestSubmit(departureFormSubmitter);
+    });
   </script>
 {% endblock %}
 
