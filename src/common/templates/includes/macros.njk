@@ -49,6 +49,13 @@
         {{ __('field_departure_date_2_hours_prior') }}
     </strong>
   </div>
+  <div class="govuk-warning-text" id="fortyEightHourWarningText" hidden>
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-visually-hidden">Warning</span>
+        {{ __('field_departure_date_too_far_in_future') }}
+    </strong>
+  </div>
 {% endmacro %}
 
 

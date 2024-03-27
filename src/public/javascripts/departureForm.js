@@ -1,4 +1,3 @@
-const twoHourWarningText = document.getElementById("twoHourWarningText");
 const departureDay = document.getElementById("departureDay");
 const departureMonth = document.getElementById("departureMonth");
 const departureYear = document.getElementById("departureYear");
@@ -15,11 +14,18 @@ const departureLongMinutes = document.getElementById("departureLongMinutes");
 const departureLongSeconds = document.getElementById("departureLongSeconds");
 
 const pageForm = document.getElementById('page-form');
+const twoHourWarningText = document.getElementById("twoHourWarningText");
+const fortyEightHourWarningText = document.getElementById("fortyEightHourWarningText");
 const confirmWarnedDepartureDialog = document.getElementById("confirmWarnedDepartureDialog")
 const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
+const departureDateWarningMessages = document.getElementsByClassName("departureDateWarningMessages");
 let departureFormSubmitter = undefined;
 
 dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
+
+function hideAllDepartureDateWarningMessages() {
+  return null;
+}
 
 function isTwoHoursPriorDeparture() {  
   const TWO_HOURS = 60 * 60 * 1000 * 2;
@@ -38,11 +44,21 @@ function isTwoHoursPriorDeparture() {
 }
 
 setTimeout(() => {
+  const dateObject = {
+    y: Number(departureYear.value),
+    m: Number(departureMonth.value) - 1,
+    d: Number(departureDay.value),
+  };
+
   if ([departureDate.textContent, departureTime.textContent].includes('')) {
     return false;
   }
-  
-  twoHourWarningText.hidden = isTwoHoursPriorDeparture();
+
+  if (isTwoHoursPriorDeparture()) {
+    twoHourWarningText.hidden = false;
+  } else if (dateNotMoreThanTwoDaysInFuture(dateObject)) {
+    fortyEightHourWarningText.hidden = false;
+  }
 }, 500)
 
 
