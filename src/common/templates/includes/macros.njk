@@ -15,6 +15,32 @@
 	{% endfor %}
 {% endmacro %}
 
+{% macro departure_warning_dialog(__) %}
+    <dialog id="confirmWarnedDepartureDialog" class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-error-message">
+        Warning
+      </h2>
+      <p>{{ __('field_departure_date_2_hours_prior') }}</p>
+      <p>
+        sGAR will allow you to submit the GAR, but it is not recommended.
+      </p>
+      <form method="dialog">
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+          Close and fix departure date
+        </button>
+      </form>
+      <button 
+        id="continueWithWarnedDate" 
+        type="button" 
+        class="govuk-button govuk-button--secondary" 
+        data-module="govuk-button"
+        name="buttonClicked"
+        value="">
+        Continue with warned departure date
+      </button>
+    </dialog>
+{% endmacro %}
+
 {% macro empty_table_message(message) %}
 <tr class="govuk-table__row">
   <caption class="govuk-inset-text" style="caption-side:bottom">{{ message }}</caption>
