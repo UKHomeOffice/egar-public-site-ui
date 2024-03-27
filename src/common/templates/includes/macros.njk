@@ -17,10 +17,12 @@
 
 {% macro departure_warning_dialog(__) %}
     <dialog id="confirmWarnedDepartureDialog" class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-error-message">
+      <h2 class="govuk-error-message ">
         Warning
       </h2>
-      <p>{{ __('field_departure_date_2_hours_prior') }}</p>
+      <p class="twoHourWarningText">{{ __('field_departure_date_2_hours_prior') }}</p>
+      <p class="fortyEightHourWarningText">{{ __('field_departure_date_too_far_in_future') }}</p>
+
       <p>
         sGAR will allow you to submit the GAR, but it is not recommended.
       </p>
@@ -42,14 +44,14 @@
 {% endmacro %}
 
 {% macro departure_warning_message(__) %}
-  <div class="govuk-warning-text" id="twoHourWarningText" hidden>
+  <div class="govuk-warning-text twoHourWarningText" hidden>
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
       <span class="govuk-visually-hidden">Warning</span>
         {{ __('field_departure_date_2_hours_prior') }}
     </strong>
   </div>
-  <div class="govuk-warning-text" id="fortyEightHourWarningText" hidden>
+  <div class="govuk-warning-text fortyEightHourWarningText" hidden>
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
       <span class="govuk-visually-hidden">Warning</span>

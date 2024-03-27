@@ -14,11 +14,12 @@ const departureLongMinutes = document.getElementById("departureLongMinutes");
 const departureLongSeconds = document.getElementById("departureLongSeconds");
 
 const pageForm = document.getElementById('page-form');
-const twoHourWarningText = document.getElementById("twoHourWarningText");
-const fortyEightHourWarningText = document.getElementById("fortyEightHourWarningText");
 const confirmWarnedDepartureDialog = document.getElementById("confirmWarnedDepartureDialog")
 const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
-const departureDateWarningMessages = document.getElementsByClassName("departureDateWarningMessages");
+
+const twoHourWarningTexts = Array.from(document.getElementsByClassName("twoHourWarningText"));
+const fortyEightHourWarningTexts = Array.from(document.getElementsByClassName("fortyEightHourWarningText"));
+
 let departureFormSubmitter = undefined;
 
 dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
@@ -32,8 +33,8 @@ const departureDate = new Date(
 )
 
 function showDepartureDateWarningMessages(providedDate) {
-  twoHourWarningText.hidden = isTwoHoursPriorDeparture(providedDate);
-  fortyEightHourWarningText.hidden = dateNotMoreThanTwoDaysInFuture(providedDate);
+  twoHourWarningTexts.forEach($element => $element.hidden = isTwoHoursPriorDeparture(providedDate));
+  fortyEightHourWarningTexts.forEach($element => $element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate));
 }
 
 setTimeout(() => {
@@ -66,7 +67,9 @@ pageForm.addEventListener("submit", (e) => {
 
   e.preventDefault();
   departureFormSubmitter = e.submitter;
+  showDepartureDateWarningMessages(departureDate);
   confirmWarnedDepartureDialog.showModal();
+  
 });
 
 confirmWarnedDepartureDialog.addEventListener("close", (e) => {
