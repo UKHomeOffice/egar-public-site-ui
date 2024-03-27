@@ -56,13 +56,7 @@
       {{ check_your_answers_row_coordinates('departureCoordinates', __('field_departure_coordinates'), garfile.departureLat, garfile.departureLong, __) }}
     </dl>
 
-    <div class="govuk-warning-text" id="twoHourWarningText" hidden>
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-visually-hidden">Warning</span>
-          {{ __('field_departure_date_2_hours_prior') }}
-      </strong>
-    </div>
+    {{ m.departure_warning_message(__)}}
 
     <dl id="arrival" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">

@@ -37,6 +37,14 @@ function isTwoHoursPriorDeparture() {
   return twoHoursPriorDepartureDate.getTime() < departureDate.getTime();
 }
 
+setTimeout(() => {
+  if ([departureDate.textContent, departureTime.textContent].includes('')) {
+    return false;
+  }
+  
+  twoHourWarningText.hidden = isTwoHoursPriorDeparture();
+}, 500)
+
 
 pageForm.addEventListener("submit", (e) => {
   if ([

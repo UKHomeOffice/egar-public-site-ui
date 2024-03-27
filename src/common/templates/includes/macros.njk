@@ -41,6 +41,18 @@
     </dialog>
 {% endmacro %}
 
+{% macro departure_warning_message(__) %}
+  <div class="govuk-warning-text" id="twoHourWarningText" hidden>
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-visually-hidden">Warning</span>
+        {{ __('field_departure_date_2_hours_prior') }}
+    </strong>
+  </div>
+{% endmacro %}
+
+
+
 {% macro empty_table_message(message) %}
 <tr class="govuk-table__row">
   <caption class="govuk-inset-text" style="caption-side:bottom">{{ message }}</caption>
