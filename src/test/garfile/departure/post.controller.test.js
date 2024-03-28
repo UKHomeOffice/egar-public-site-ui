@@ -33,7 +33,7 @@ describe('Departure Post Controller', () => {
     chai.use(sinonChai);
 
     clock = sinon.useFakeTimers({
-      now: new Date('2022-05-11 GMT'),
+      now: new Date('2022-05-29 GMT'),
       shouldAdvanceTime: false,
       toFake: ["Date"],
     });

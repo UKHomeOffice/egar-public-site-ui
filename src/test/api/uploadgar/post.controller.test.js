@@ -37,7 +37,7 @@ describe('API upload GAR post controller', () => {
     chai.use(sinonChai);
 
     clock = sinon.useFakeTimers({
-      now: new Date('2022-05-11 GMT'),
+      now: new Date('2022-05-29 GMT'),
       shouldAdvanceTime: false,
       toFake: ["Date"],
     });
@@ -213,26 +213,6 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it('should return error if departure date too far in advance', async () => {
-      sinon.spy(req.session, 'save');
-      const data = getValidWorkbook();
-      data.Sheets.Valid1.D4.v = '2022-07-30';
-
-      sinon.stub(XLSX, 'read').returns(data);
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(req.session.save).to.have.been.called;
-        expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.dateNotTooFarInFuture, '', '2022-07-30', 'Departure date must be today and cannot be more than 1 month in the future'),
-        ]);
-        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
-      });
-    });
-
     it('should return error if arrival date too far in advance', async () => {
       sinon.spy(req.session, 'save');
       const data = getValidWorkbook();
@@ -247,7 +227,7 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.dateNotTooFarInFuture, '', '2022-07-30', 'Arrival date must be today and cannot be more than 1 month in the future'),
+          new ValidationRule(validator.dateNotMoreThanMonthInFuture, '', '2022-07-30', 'Arrival date must be today and cannot be more than 1 month in the future'),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
