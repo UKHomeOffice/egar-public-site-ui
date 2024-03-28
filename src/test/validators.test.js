@@ -850,23 +850,23 @@ describe('Validator', () => {
     });
 
     it('Should allow a date within two days in the future', () => {
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture({ d: '13', m: '4', y: '2023' });
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2023, APRIL, 13));
       expect(actualResult).to.equal(true);
     });
 
     it('Should reject a date within two days in the future - day', () => {
-      logger.info(`Start: ${new Date().toJSON()}`);
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture({ d: '14', m: '4', y: '2023' });
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2023, APRIL, 14));
       expect(actualResult).to.equal(false);
     });
 
     it('Should reject a date within two days in the future - month', () => {
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture({ d: '12', m: '5', y: '2023' });
+      const MAY = 4;
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2023, MAY, 12));
       expect(actualResult).to.equal(false);
     });
 
     it('Should reject a date within two days in the future - year', () => {
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture({ d: '12', m: '4', y: '2024' });
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2024, APRIL, 12));
       expect(actualResult).to.equal(false);
     });
 
@@ -888,46 +888,26 @@ describe('Validator', () => {
     })
 
     it('Works on a valid by a day date', () => {
-      const dates = { 
-        departureDate: "2023-03-28", 
-        departureTime: "11:00"
-      }
-      expect(validator.isTwoHoursPriorDeparture(dates)).to.equal(true);
+      expect(validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 28, 11, 0))).to.equal(true);
     });
 
     it('Works on a invalid date a day behind', () => {
-      const dates = { 
-        departureDate: "2023-03-26", 
-        departureTime: "14:15"
-      }
-      expect(validator.isTwoHoursPriorDeparture(dates)).to.equal(false);
+      expect(validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 26, 14, 15))).to.equal(false);
     });
 
     it('Same day but 2 hour prior date is valid', () => {
-      const validByHourDate = { 
-        departureDate: "2023-03-27", 
-        departureTime: "17:15"
-      }
+      const validByHourDate = new Date(2023, MARCH, 27, 17, 15);
       expect(validator.isTwoHoursPriorDeparture(validByHourDate)).to.equal(true);
 
-      const validByMinuteDate = { 
-        departureDate: "2023-03-27", 
-        departureTime: "16:16"
-      }
+      const validByMinuteDate = new Date(2023, MARCH, 27, 16, 16);
       expect(validator.isTwoHoursPriorDeparture(validByMinuteDate)).to.equal(true);
     }); 
 
     it('Same day but not 2 hour prior date is inaccurate', () => {
-      const invalidByHourDate = { 
-        departureDate: "2023-03-27", 
-        departureTime: "15:15"
-      }
+      const invalidByHourDate = new Date(2023, MARCH, 27, 15, 15);
       expect(validator.isTwoHoursPriorDeparture(invalidByHourDate)).to.equal(false);
 
-      const invalidByMinuteDate = { 
-        departureDate: "2023-03-27", 
-        departureTime: "16:14"
-      }
+      const invalidByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
       expect(validator.isTwoHoursPriorDeparture(invalidByMinuteDate)).to.equal(false);
     });    
 

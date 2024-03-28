@@ -245,9 +245,6 @@ function dateNotMoreThanMonthInFuture(dObj) {
   const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
   const providedDate = getDateFromDynamicInput(dObj);
 
-  // logger.info(`month providedDate: ${providedDate.toJSON()}`);
-  // logger.info(`month nextMonth: ${nextMonth.toJSON()}`);
-
   return Boolean(providedDate && providedDate <= nextMonth);
 }
 
@@ -256,6 +253,10 @@ function dateNotMoreThanTwoDaysInFuture(providedDate) {
   const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
   const maxDepartureDate = new Date(now.getTime() + TWO_DAYS);
 
+  if (!(providedDate instanceof Date)) {
+    return false;
+  }
+
   return Boolean(providedDate && providedDate.getTime() <= maxDepartureDate.getTime());
 }
 
@@ -263,6 +264,10 @@ function isTwoHoursPriorDeparture(providedDate) {
   const TWO_HOURS = 60 * 60 * 1000 * 2;
   const today = new Date()
   const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
+
+  if (!(providedDate instanceof Date)) {
+    return false;
+  }
 
   return Boolean(providedDate && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime());
 }    
