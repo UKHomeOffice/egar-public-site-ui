@@ -42,15 +42,23 @@ function showDepartureDateWarningMessages(providedDate) {
 }
 
 setTimeout(() => {
-  if ([departureDate().textContent, departureTime.textContent].includes('')) {
-    return false;
-  }
+    // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
+    if ([
+      departureYear.value, 
+      departureMonth.value,
+      departureDay.value,
+      departureHourTime.value,
+      departureMinuteTime.value
+    ].includes('')) {
+      return undefined;
+    }
 
   showDepartureDateWarningMessages(departureDate());
 }, 500)
 
 
 pageForm.addEventListener("submit", (e) => {
+    // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
   if ([
     departureYear.value, 
     departureMonth.value,
@@ -58,15 +66,15 @@ pageForm.addEventListener("submit", (e) => {
     departureHourTime.value,
     departureMinuteTime.value
   ].includes('')) {
-    return true;
+    return undefined;
   }
 
   if (departureFormSubmitter) {
-    return true;
+    return undefined;
   }
   
   if (isTwoHoursPriorDeparture(departureDate()) && dateNotMoreThanTwoDaysInFuture(departureDate())) {
-    return true;
+    return undefined;
   }
 
   e.preventDefault();

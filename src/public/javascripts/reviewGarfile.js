@@ -20,8 +20,9 @@ function showDepartureDateWarningMessages(providedDate) {
 }
 
 setTimeout(() => {
+    // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
   if ([departureDate.textContent, departureTime.textContent].includes('')) {
-    return false;
+    return undefined;
   }
 
   showDepartureDateWarningMessages(fullDepartureDate);
@@ -29,16 +30,17 @@ setTimeout(() => {
 
 
 submitGarForm.addEventListener("submit", (e) => {
+    // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
   if ([departureDate.textContent, departureTime.textContent].includes('')) {
-    return true;
+    return undefined;
   }
 
   if (departureFormSubmitter) {
-    return true;
+    return undefined;
   }
   
   if (isTwoHoursPriorDeparture(fullDepartureDate) && dateNotMoreThanTwoDaysInFuture(fullDepartureDate)) {
-    return true;
+    return undefined;
   }
 
   e.preventDefault();
