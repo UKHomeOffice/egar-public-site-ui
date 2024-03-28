@@ -2,8 +2,8 @@ const departureDay = document.getElementById("departureDay");
 const departureMonth = document.getElementById("departureMonth");
 const departureYear = document.getElementById("departureYear");
 
-const departureHour = document.getElementById("departureHour");
-const departureMinute = document.getElementById("departureMinute");
+const departureHourTime = document.getElementById("departureHour");
+const departureMinuteTime = document.getElementById("departureMinute");
 
 const departureDegrees = document.getElementById("departureDegrees");
 const departureMinutes = document.getElementById("departureMinutes");
@@ -24,25 +24,29 @@ let departureFormSubmitter = undefined;
 
 dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
 
-const departureDate = new Date(
-  Number(departureYear.value),
-  Number(departureMonth.value) - 1,
-  Number(departureDay.value),
-  Number(departureHour.value),
-  Number(departureMinutes.value)
-)
+const departureDate =  () => {
+  return new Date(
+    Number(departureYear.value),
+    Number(departureMonth.value) - 1,
+    Number(departureDay.value),
+    Number(departureHourTime.value),
+    Number(departureMinuteTime.value)
+  )
+};
+  
 
 function showDepartureDateWarningMessages(providedDate) {
+  console.log(providedDate);
   twoHourWarningTexts.forEach($element => $element.hidden = isTwoHoursPriorDeparture(providedDate));
   fortyEightHourWarningTexts.forEach($element => $element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate));
 }
 
 setTimeout(() => {
-  if ([departureDate.textContent, departureTime.textContent].includes('')) {
+  if ([departureDate().textContent, departureTime.textContent].includes('')) {
     return false;
   }
 
-  showDepartureDateWarningMessages(departureDate);
+  showDepartureDateWarningMessages(departureDate());
 }, 500)
 
 
@@ -51,8 +55,8 @@ pageForm.addEventListener("submit", (e) => {
     departureYear.value, 
     departureMonth.value,
     departureDay.value,
-    departureHour.value,
-    departureMinute.value
+    departureHourTime.value,
+    departureMinuteTime.value
   ].includes('')) {
     return true;
   }
@@ -61,13 +65,13 @@ pageForm.addEventListener("submit", (e) => {
     return true;
   }
   
-  if (isTwoHoursPriorDeparture(departureDate) && dateNotMoreThanTwoDaysInFuture(departureDate)) {
+  if (isTwoHoursPriorDeparture(departureDate()) && dateNotMoreThanTwoDaysInFuture(departureDate())) {
     return true;
   }
 
   e.preventDefault();
   departureFormSubmitter = e.submitter;
-  showDepartureDateWarningMessages(departureDate);
+  showDepartureDateWarningMessages(departureDate());
   confirmWarnedDepartureDialog.showModal();
   
 });
@@ -82,29 +86,29 @@ continueWithWarnedDate.addEventListener("click", (e) => {
 departureDay.addEventListener("keyup", (e) => {
   e.target.value = sanitiseValue(e.target.value, 'day');
   autoTab(departureDay, 'day', departureMonth);
-  showDepartureDateWarningMessages(departureDate);
+  showDepartureDateWarningMessages(departureDate());
 });
 
 departureMonth.addEventListener("keyup", (e) => {
   e.target.value = sanitiseValue(e.target.value, 'month');
   autoTab(departureMonth, 'month', departureYear);
-  showDepartureDateWarningMessages(departureDate);
+  showDepartureDateWarningMessages(departureDate());
 });
 
 departureYear.addEventListener("keyup", (e) => {
   e.target.value = sanitiseValue(e.target.value, 'year')
-  showDepartureDateWarningMessages(departureDate);
+  showDepartureDateWarningMessages(departureDate());
 });  
 
-departureHour.addEventListener("keyup", (e) => {
+departureHourTime.addEventListener("keyup", (e) => {
   e.target.value = sanitiseValue(e.target.value, 'hour');
-  autoTab(departureHour, 'hour', departureMinute);
-  showDepartureDateWarningMessages(departureDate);
+  autoTab(departureHourTime, 'hour', departureMinuteTime);
+  showDepartureDateWarningMessages(departureDate());
 });
 
-departureMinute.addEventListener("keyup", (e) => {
+departureMinuteTime.addEventListener("keyup", (e) => {
   e.target.value = sanitiseValue(e.target.value, 'minute');
-  showDepartureDateWarningMessages(departureDate);
+  showDepartureDateWarningMessages(departureDate());
 });
 
 departureDegrees.addEventListener("keyup", (e) => {
