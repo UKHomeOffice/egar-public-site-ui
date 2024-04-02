@@ -250,8 +250,8 @@ function dateNotMoreThanMonthInFuture(dObj) {
 
 function dateNotMoreThanTwoDaysInFuture(providedDate) {
   const now = new Date();
-  const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
-  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS);
+  const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
+  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS_MILLISECONDS);
 
   if (!(providedDate instanceof Date)) {
     return false;
@@ -261,9 +261,9 @@ function dateNotMoreThanTwoDaysInFuture(providedDate) {
 }
 
 function isTwoHoursPriorDeparture(providedDate) {  
-  const TWO_HOURS = 60 * 60 * 1000 * 2;
+  const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
   const today = new Date()
-  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS);
+  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
 
   if (!(providedDate instanceof Date)) {
     return false;

@@ -22,7 +22,7 @@
       </h2>
       <p class="twoHourWarningText">{{ __('field_departure_date_2_hours_prior') }}</p>
       <p class="fortyEightHourWarningText">{{ __('field_departure_date_too_far_in_future') }}</p>
-      
+
       <form method="dialog">
         <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
           Close and fix departure date
@@ -68,11 +68,11 @@
 {% macro submit_buttons(analyticsPage, csrfToken, __) %}
   <input id="save-and-continue" class="govuk-button" type="submit"
     name="buttonClicked"
-    value="{{__('form_save_and_continue')}}">
+    value="{{ __('form_save_and_continue') }}">
   <p class="govuk-body-m">
     <input id="save-and-come-back" class="disableAutoFillSubmit govuk-button govuk-button--secondary" type="submit"
       name="buttonClicked"
-      value="{{__('form_save_and_come_back')}}">
+      value="{{ __('form_save_and_come_back') }}">
   </p>
   
   <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
