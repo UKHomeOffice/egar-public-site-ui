@@ -20,8 +20,14 @@
       <h2 class="govuk-error-message govuk-!-font-size-36">
         Warning
       </h2>
-      <p class="twoHourWarningText">{{ __('field_departure_date_2_hours_prior') }}</p>
-      <p class="fortyEightHourWarningText">{{ __('field_departure_date_too_far_in_future') }}</p>
+      <div class="twoHourWarningText">
+        <p>{{ __('field_departure_date_2_hours_prior_1') }}</p>
+        <p>{{ __('field_departure_date_2_hours_prior_2') }}</p>
+      </div>
+      <div class="fortyEightHourWarningText">
+        <p>{{ __('field_departure_date_too_far_in_future_1') }}</p>
+        <p>{{ __('field_departure_date_too_far_in_future_2') }}</p>
+      </div>
 
       <form method="dialog">
         <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
@@ -45,14 +51,16 @@
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
       <span class="govuk-visually-hidden">Warning</span>
-        {{ __('field_departure_date_2_hours_prior') }}
+      <p>{{ __('field_departure_date_2_hours_prior_1') }}</p>
+      <p>{{ __('field_departure_date_2_hours_prior_2') }}</p>
     </strong>
   </div>
   <div class="govuk-warning-text fortyEightHourWarningText" hidden>
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
       <span class="govuk-visually-hidden">Warning</span>
-        {{ __('field_departure_date_too_far_in_future') }}
+        <p>{{ __('field_departure_date_too_far_in_future_1') }}</p>
+        <p>{{ __('field_departure_date_too_far_in_future_2') }}</p>
     </strong>
   </div>
 {% endmacro %}

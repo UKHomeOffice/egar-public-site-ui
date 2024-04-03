@@ -140,8 +140,10 @@
 	"field_departure_date_validation": "Please enter Departure, today or in the future",
 	"field_arrival_date_validation": "Please enter Arrival, today or in the future",
 	"field_departure_date_should_not_be_in_the_past": "Departure date should not be in the past.",
-	"field_departure_date_2_hours_prior": "Continuing with this submission will mean you are not complying with the timing requirements specified in the General Aviation (Persons on Board, Flight Information and Civil Penalties) Regulations 2024 and you may be liable for a civil penalty of up to £10,000. Information about the flight and persons on board must be submitted no later than 2 hours prior to the aircraft’s expected departure to or from the United Kingdom.",
-	"field_departure_date_too_far_in_future": "Continuing with this submission will mean you are not complying with the timing requirements specified in the General Aviation (Persons on Board, Flight Information and Civil Penalties) Regulations 2024 and you may be liable for a civil penalty of up to £10,000. Information about the flight and persons on board must be submitted no earlier than 48 hours prior to the aircraft’s expected departure to or from the United Kingdom",
+	"field_departure_date_2_hours_prior_1": "Continuing with this submission will mean you are not complying with the timing requirements specified in the General Aviation (Persons on Board, Flight Information and Civil Penalties) Regulations 2024 and you may be liable for a civil penalty of up to £10,000.",
+	"field_departure_date_2_hours_prior_2": "Information about the flight and persons on board must be submitted no later than 2 hours prior to the aircraft’s expected departure to or from the United Kingdom.",
+	"field_departure_date_too_far_in_future_1": "Continuing with this submission will mean you are not complying with the timing requirements specified in the General Aviation (Persons on Board, Flight Information and Civil Penalties) Regulations 2024 and you may be liable for a civil penalty of up to £10,000.",
+	"field_departure_date_too_far_in_future_2": "Information about the flight and persons on board must be submitted no earlier than 48 hours prior to the aircraft’s expected departure to or from the United Kingdom.",
 	"field_arrival_date_too_far_in_future": "Arrival date must be today and cannot be more than 1 month in the future",
 	"field_departure_real_date_validation": "Enter a real departure date",
 	"field_departure_real_time_validation": "Enter a real departure time",
@@ -331,13 +333,10 @@
 	"heading_cancel_gar": "Are you sure you want to cancel this GAR?",
 	"cancel_gar_caption": "You will need to ensure that a new GAR is submitted if this flight takes place.",
 	"form_exit_without_cancelling": "Exit without cancelling",
-
 	"title_amend_gar": "Amend GAR",
 	"heading_amend_gar": "Are you sure you want to amend this GAR?",
 	"amend_gar_caption": "After you've amended the GAR you will be able to submit the new changes.",
 	"form_exit_without_amending": "Exit without amending",
-
-
 	"form_exit": "Exit",
 	"title_review_gar": "Check all the information provided before submitting your GAR",
 	"heading_submit_gar": "Submit your GAR",
@@ -514,5 +513,7 @@
 	"improve_accessibility_step2_caption": "We will implement automated and manual accessibility testing in our development process.",
 	"improve_accessibility_step3_caption": "We will conduct user research and testing with users who have access needs.",
 	"improve_accessibility_step4_caption": "We will put in place alternative arrangements for those who need them and be willing to make additional adjustments if these are not enough.",
-	"": ""
+	"": "",
+	"field_departure_date_2_hours_prior": "field_departure_date_2_hours_prior",
+	"field_departure_date_too_far_in_future": "field_departure_date_too_far_in_future"
 }
