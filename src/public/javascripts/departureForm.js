@@ -92,55 +92,55 @@ continueWithWarnedDate.addEventListener("click", (e) => {
 });
 
 departureDay.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue(e.target.value, 'day');
+  e.target.value = sanitiseDateOrTime(e.target.value, 'day');
   autoTab(departureDay, 'day', departureMonth);
   showDepartureDateWarningMessages(departureDate());
 });
 
 departureMonth.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue(e.target.value, 'month');
+  e.target.value = sanitiseDateOrTime(e.target.value, 'month');
   autoTab(departureMonth, 'month', departureYear);
   showDepartureDateWarningMessages(departureDate());
 });
 
 departureYear.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue(e.target.value, 'year')
+  e.target.value = sanitiseDateOrTime(e.target.value, 'year')
   showDepartureDateWarningMessages(departureDate());
 });  
 
 departureHourTime.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue(e.target.value, 'hour');
+  e.target.value = sanitiseDateOrTime(e.target.value, 'hour');
   autoTab(departureHourTime, 'hour', departureMinuteTime);
   showDepartureDateWarningMessages(departureDate());
 });
 
 departureMinuteTime.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue(e.target.value, 'minute');
+  e.target.value = sanitiseDateOrTime(e.target.value, 'minute');
   showDepartureDateWarningMessages(departureDate());
 });
 
 departureDegrees.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue1(e.target.value, 'degrees');
+  e.target.value = sanitiseCoordinateDegreesOrSeconds(e.target.value, 'degrees');
 });
 
 departureMinutes.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue2(e.target.value, 'minutes');
+  e.target.value = sanitiseCoordinateMinutes(e.target.value, 'minutes');
   autoTab1(departureMinutes, 'minutes', departureSeconds);
 });
 
 departureSeconds.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue1(e.target.value, 'seconds');
+  e.target.value = sanitiseCoordinateDegreesOrSeconds(e.target.value, 'seconds');
 });
 
 departureLongDegrees.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue1(e.target.value, 'degrees');
+  e.target.value = sanitiseCoordinateDegreesOrSeconds(e.target.value, 'degrees');
 });
 
 departureLongMinutes.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue2(e.target.value, 'minutes');
+  e.target.value = sanitiseCoordinateMinutes(e.target.value, 'minutes');
   autoTab1(departureLongMinutes, 'minutes', departureLongSeconds);
 });
   
 departureLongSeconds.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseValue1(e.target.value , 'seconds');
+  e.target.value = sanitiseCoordinateDegreesOrSeconds(e.target.value , 'seconds');
 });

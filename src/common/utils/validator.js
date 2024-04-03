@@ -633,7 +633,7 @@ function handleResponseError(parsedApiResponse) {
   }
 }
 
-function sanitiseValue(input, type) {
+function sanitiseDateOrTime(input, type) {
   const regex = (type === 'year') ? '[0-9]{1,4}' : '[0-9]{1,2}';
 
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
@@ -643,21 +643,21 @@ function autoTab(field1, dayMonthOrYear, field2) {
 
   let len = (dayMonthOrYear === 'year') ? 4 : 2;
 
-  let field1Value = sanitiseValue(field1.value, dayMonthOrYear);
+  let field1Value = sanitiseDateOrTime(field1.value, dayMonthOrYear);
 
   if (field1Value.length == len) {
     field2.focus();
   }
 }
 
-function sanitiseValue1(input, type) {
+function sanitiseCoordinateDegreesOrSeconds(input, type) {
   const regex = (type === 'seconds') ? /^\d{0,3}(\.\d{0,4})?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
 
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
 
 }
 
-function sanitiseValue2(input, type) {
+function sanitiseCoordinateMinutes(input, type) {
   const regex = (type === 'minutes') ? /^\d{0,2}?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
 
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
@@ -668,7 +668,7 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
 
   let len = (degreesMinutesOrSeconds === 'minutes') ? 2 : 3;
 
-  let field1Value = sanitiseValue2(field1.value, degreesMinutesOrSeconds);
+  let field1Value = sanitiseCoordinateMinutes(field1.value, degreesMinutesOrSeconds);
 
   if (field1Value.length == len) {
     field2.focus();
@@ -781,16 +781,16 @@ module.exports = {
   isValidRegistrationLength,
   isValidDepAndArrDate,
   handleResponseError,
-  sanitiseValue,
+  sanitiseDateOrTime,
   passportExpiryDate,
   birthDate,
   dateNotInPast,
   autoTab,
   autoTab1,
-  sanitiseValue1,
+  sanitiseCoordinateDegreesOrSeconds,
   invalidLatDirection,
   invalidLongDirection,
-  sanitiseValue2,
+  sanitiseCoordinateMinutes,
   preventZ,
   dateNotMoreThanMonthInFuture,
   isAlphanumeric,

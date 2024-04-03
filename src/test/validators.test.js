@@ -713,7 +713,7 @@ describe('Validator', () => {
       type = 'day';
 
       expectedResult = '1';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -723,7 +723,7 @@ describe('Validator', () => {
       type = 'day';
 
       expectedResult = '23';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -734,7 +734,7 @@ describe('Validator', () => {
       type = 'month';
 
       expectedResult = '3';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -744,7 +744,7 @@ describe('Validator', () => {
       type = 'month';
 
       expectedResult = '20';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -755,7 +755,7 @@ describe('Validator', () => {
       type = 'year';
 
       expectedResult = '2017';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -765,7 +765,7 @@ describe('Validator', () => {
       type = 'year';
 
       expectedResult = '2016';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -776,7 +776,7 @@ describe('Validator', () => {
       type = 'hour';
 
       expectedResult = '15';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -786,7 +786,7 @@ describe('Validator', () => {
       type = 'hour';
 
       expectedResult = '46';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -797,7 +797,7 @@ describe('Validator', () => {
       type = 'minute';
 
       expectedResult = '42';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -807,7 +807,7 @@ describe('Validator', () => {
       type = 'minute';
 
       expectedResult = '52';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
