@@ -19,14 +19,14 @@ function showDepartureDateWarningMessages(providedDate) {
   fortyEightHourWarningTexts.forEach($element => $element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate));
 }
 
-setTimeout(() => {
-    // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
+window.addEventListener("load", () => {
+  // So it does not show warning message when is not filled
   if ([departureDate.textContent, departureTime.textContent].includes('')) {
     return undefined;
   }
 
   showDepartureDateWarningMessages(fullDepartureDate);
-}, 500)
+})
 
 
 submitGarForm.addEventListener("submit", (e) => {
