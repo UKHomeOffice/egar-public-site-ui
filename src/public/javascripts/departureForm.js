@@ -50,7 +50,7 @@ setTimeout(() => {
       departureHourTime.value,
       departureMinuteTime.value
     ].includes('')) {
-      return undefined;
+      return;
     }
 
   showDepartureDateWarningMessages(departureDate());
@@ -66,15 +66,15 @@ pageForm.addEventListener("submit", (e) => {
     departureHourTime.value,
     departureMinuteTime.value
   ].includes('')) {
-    return undefined;
+    return;
   }
 
   if (departureFormSubmitter) {
-    return undefined;
+    return;
   }
   
   if (isTwoHoursPriorDeparture(departureDate()) && dateNotMoreThanTwoDaysInFuture(departureDate())) {
-    return undefined;
+    return;
   }
 
   e.preventDefault();
