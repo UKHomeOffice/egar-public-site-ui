@@ -17,10 +17,10 @@
     </dl>
             {{ b.coa_designation_regulation_change(true) }}
   
-    {% macro check_your_answers_row(label, value) %}
+    {% macro check_your_answers_row(label, value, id="") %}
       <div class="app-check-your-answers__contents">
         <dt class="app-check-your-answers__question">{{ label }}</dt>
-        <dd class="app-check-your-answers__answer">{{ value }}</dd>
+        <dd id="{{ id }}" class="app-check-your-answers__answer">{{ value }}</dd>
       </div>
     {% endmacro %}
 
@@ -50,11 +50,13 @@
     {% endmacro %}
 
     <dl class="app-check-your-answers app-check-your-answers--short">
-      {{ check_your_answers_row(__('field_departure_date'), garfile.departureDate) }}
-      {{ check_your_answers_row(__('field_departure_time'), garfile.departureTime) }}
+      {{ check_your_answers_row(__('field_departure_date'), garfile.departureDate, id="departureDate") }}
+      {{ check_your_answers_row(__('field_departure_time'), garfile.departureTime, id="departureTime") }}
       {{ check_your_answers_row_port_code('departurePort', __('field_departure_port'), garfile.departurePort) }}
       {{ check_your_answers_row_coordinates('departureCoordinates', __('field_departure_coordinates'), garfile.departureLat, garfile.departureLong, __) }}
     </dl>
+
+    {{ m.departure_warning_message(__) }}
 
     <dl id="arrival" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
       <div class="app-check-your-answers__contents">

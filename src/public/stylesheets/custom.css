@@ -1,0 +1,9 @@
+::backdrop {
+    background: black;
+    opacity: 0.5;
+}
+
+.warning-button {
+    background: #b10e1e !important; 
+    color: white !important;
+}

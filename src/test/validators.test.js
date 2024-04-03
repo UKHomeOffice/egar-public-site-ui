@@ -4,6 +4,8 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
+const logger = require('../common/utils/logger')(__filename);
+
 require('./global.test');
 
 const validator = require('../common/utils/validator');
@@ -711,7 +713,7 @@ describe('Validator', () => {
       type = 'day';
 
       expectedResult = '1';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -721,7 +723,7 @@ describe('Validator', () => {
       type = 'day';
 
       expectedResult = '23';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -732,7 +734,7 @@ describe('Validator', () => {
       type = 'month';
 
       expectedResult = '3';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -742,7 +744,7 @@ describe('Validator', () => {
       type = 'month';
 
       expectedResult = '20';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -753,7 +755,7 @@ describe('Validator', () => {
       type = 'year';
 
       expectedResult = '2017';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -763,7 +765,7 @@ describe('Validator', () => {
       type = 'year';
 
       expectedResult = '2016';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -774,7 +776,7 @@ describe('Validator', () => {
       type = 'hour';
 
       expectedResult = '15';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -784,7 +786,7 @@ describe('Validator', () => {
       type = 'hour';
 
       expectedResult = '46';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -795,7 +797,7 @@ describe('Validator', () => {
       type = 'minute';
 
       expectedResult = '42';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -805,7 +807,7 @@ describe('Validator', () => {
       type = 'minute';
 
       expectedResult = '52';
-      actualResult = validator.sanitiseValue(testValue, type);
+      actualResult = validator.sanitiseDateOrTime(testValue, type);
 
       expect(expectedResult).to.equal(actualResult);
     });
@@ -815,10 +817,11 @@ describe('Validator', () => {
 
     //const clock = sinon.useFakeTimers(new Date(2020, 04, 11).getTime());
     let clock;
+    const APRIL = 3;
     
-    before(() => {
+    beforeEach(() => {
       clock = sinon.useFakeTimers({
-        now: new Date(2023, 03, 11),
+        now: new Date(2023, APRIL, 11),
         shouldAdvanceTime: false,
         toFake: ["Date"],
       });
@@ -827,26 +830,88 @@ describe('Validator', () => {
     let actualResult;
 
     it('Should reject a date further than one month in the future in object format', () => {
-      actualResult = validator.dateNotTooFarInFuture({ d: '1', m: '1', y: '2024' });
+      actualResult = validator.dateNotMoreThanMonthInFuture({ d: '1', m: '1', y: '2024' });
       expect(actualResult).to.equal(false);
     });
 
     it('Should accept a date within one month in the future in object format', () => {
-      actualResult = validator.dateNotTooFarInFuture({ d: '11', m: '5', y: '2023' });
+      actualResult = validator.dateNotMoreThanMonthInFuture({ d: '11', m: '5', y: '2023' });
       expect(actualResult).to.equal(true);
     });
 
     it('Should reject a date further than one month in the future in date format', () => {
-      actualResult = validator.dateNotTooFarInFuture(new Date(2024, 0, 1));
+      actualResult = validator.dateNotMoreThanMonthInFuture(new Date(2024, 0, 1));
       expect(actualResult).to.equal(false);
     });
 
     it('Should accept a date within one month in the future in date format', () => {
-      actualResult = validator.dateNotTooFarInFuture(new Date(2023, 4, 11));
+      actualResult = validator.dateNotMoreThanMonthInFuture(new Date(2023, 4, 11));
       expect(actualResult).to.equal(true);
     });
 
-    after(()=>{
+    it('Should allow a date within two days in the future', () => {
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2023, APRIL, 13));
+      expect(actualResult).to.equal(true);
+    });
+
+    it('Should reject a date within two days in the future - day', () => {
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2023, APRIL, 14));
+      expect(actualResult).to.equal(false);
+    });
+
+    it('Should reject a date within two days in the future - month', () => {
+      const MAY = 4;
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2023, MAY, 12));
+      expect(actualResult).to.equal(false);
+    });
+
+    it('Should reject a date within two days in the future - year', () => {
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2024, APRIL, 12));
+      expect(actualResult).to.equal(false);
+    });
+
+    afterEach(()=>{
+      clock.restore();
+    });
+  });
+
+  describe('Is date at least over 2 hours', () => {
+    let clock;
+    const MARCH = 2;
+    
+    beforeEach(() => {
+      clock = sinon.useFakeTimers({
+        now: new Date(2023, MARCH, 27, 14, 15),
+        shouldAdvanceTime: false,
+        toFake: ["Date"],
+      });
+    })
+
+    it('Works on a valid by a day date', () => {
+      expect(validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 28, 11, 0))).to.equal(true);
+    });
+
+    it('Works on a invalid date a day behind', () => {
+      expect(validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 26, 14, 15))).to.equal(false);
+    });
+
+    it('Same day but 2 hour prior date is valid', () => {
+      const validByHourDate = new Date(2023, MARCH, 27, 17, 15);
+      expect(validator.isTwoHoursPriorDeparture(validByHourDate)).to.equal(true);
+
+      const validByMinuteDate = new Date(2023, MARCH, 27, 16, 16);
+      expect(validator.isTwoHoursPriorDeparture(validByMinuteDate)).to.equal(true);
+    }); 
+
+    it('Same day but not 2 hour prior date is inaccurate', () => {
+      const invalidByHourDate = new Date(2023, MARCH, 27, 15, 15);
+      expect(validator.isTwoHoursPriorDeparture(invalidByHourDate)).to.equal(false);
+
+      const invalidByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
+      expect(validator.isTwoHoursPriorDeparture(invalidByMinuteDate)).to.equal(false);
+    });    
+
+    afterEach(()=>{
       clock.restore();
     });
   });

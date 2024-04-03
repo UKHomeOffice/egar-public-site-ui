@@ -24,9 +24,10 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-
-  <link href="/stylesheets/application.min.css" rel="stylesheet" />
-  <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet"/>
+    <link href="/stylesheets/custom.css" rel="stylesheet" />
+    <link href="/stylesheets/application.min.css" rel="stylesheet" />
+    <link href="/stylesheets/dialog-polyfill.css" rel="stylesheet" type="text/css" />
+    <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet" />
 
     {% block headIcons %}
       <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="{{ assetPath | default('/assets') }}/images/favicon.ico" type="image/x-icon" />
@@ -41,6 +42,7 @@
     {# The default og:image is added below head so that scrapers see any custom metatags first, and this is just a fallback #}
     {# image url needs to be absolute e.g. http://wwww.domain.com/.../govuk-opengraph-image.png #}
     <meta property="og:image" content="{{ assetUrl | default('/assets') }}/images/govuk-opengraph-image.png">
+    <script src="/javascripts/dialog-polyfill.js"></script>
   </head>
 
   <body class="govuk-template__body {{ bodyClasses }}">
@@ -189,13 +191,7 @@
   </script>
 
 
-    <script src="/javascripts/jquery.disableAutoFill.min.js"></script>
     <script>
-      $("#page-form").disableAutoFill(
-        {
-          randomizeInputName: true,
-        }
-      );
       $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function(eventObj) {
         $("<input />")
           .attr("type", "hidden")

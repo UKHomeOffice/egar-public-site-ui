@@ -206,7 +206,7 @@ function currentOrPastDate(dObj) {
 
   /*
     Returns true if all dates fields are empty to avoid duplicate error messages being displayed.
-    The dateNotTooFarInFuture function will cover this error.
+    The dateNotMoreThanMonthInFuture function will cover this error.
   */
   if([dObj.d,dObj.m,dObj.y].includes('')) {
     return true;
@@ -214,7 +214,7 @@ function currentOrPastDate(dObj) {
 
   /*
     Returns true if supplied dates are invalid to avoid duplicate error messages being displayed.
-    The dateNotTooFarInFuture function will cover this error.
+    The dateNotMoreThanMonthInFuture function will cover this error.
   */
   if(validDay(dObj.d, dObj.m, dObj.y) === false || validMonth(dObj.m) === false || validYear(dObj.y) === false){
     return true;
@@ -240,13 +240,37 @@ function currentOrPastDate(dObj) {
  * @param {Object} dObjh Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
  * * @returns {Bool} Date is within acceptable range
  */
-function dateNotTooFarInFuture(dObj) {
+function dateNotMoreThanMonthInFuture(dObj) {
   const now = new Date();
   const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
   const providedDate = getDateFromDynamicInput(dObj);
 
-  return Boolean(providedDate && providedDate <= nextMonth);
+  return Boolean(providedDate) && providedDate <= nextMonth;
 }
+
+function dateNotMoreThanTwoDaysInFuture(providedDate) {
+  const now = new Date();
+  const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
+  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS_MILLISECONDS);
+
+  if (!(providedDate instanceof Date)) {
+    return false;
+  }
+
+  return Boolean(providedDate) && providedDate.getTime() <= maxDepartureDate.getTime();
+}
+
+function isTwoHoursPriorDeparture(providedDate) {  
+  const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
+  const today = new Date()
+  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
+
+  if (!(providedDate instanceof Date)) {
+    return false;
+  }
+
+  return Boolean(providedDate) && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime();
+}    
 
 /**
  * Normalises and returns various supplied date objects / formats
@@ -609,7 +633,7 @@ function handleResponseError(parsedApiResponse) {
   }
 }
 
-function sanitiseValue(input, type) {
+function sanitiseDateOrTime(input, type) {
   const regex = (type === 'year') ? '[0-9]{1,4}' : '[0-9]{1,2}';
 
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
@@ -619,21 +643,21 @@ function autoTab(field1, dayMonthOrYear, field2) {
 
   let len = (dayMonthOrYear === 'year') ? 4 : 2;
 
-  let field1Value = sanitiseValue(field1.value, dayMonthOrYear);
+  let field1Value = sanitiseDateOrTime(field1.value, dayMonthOrYear);
 
   if (field1Value.length == len) {
     field2.focus();
   }
 }
 
-function sanitiseValue1(input, type) {
+function sanitiseCoordinateDegreesOrSeconds(input, type) {
   const regex = (type === 'seconds') ? /^\d{0,3}(\.\d{0,4})?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
 
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
 
 }
 
-function sanitiseValue2(input, type) {
+function sanitiseCoordinateMinutes(input, type) {
   const regex = (type === 'minutes') ? /^\d{0,2}?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
 
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
@@ -644,7 +668,7 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
 
   let len = (degreesMinutesOrSeconds === 'minutes') ? 2 : 3;
 
-  let field1Value = sanitiseValue2(field1.value, degreesMinutesOrSeconds);
+  let field1Value = sanitiseCoordinateMinutes(field1.value, degreesMinutesOrSeconds);
 
   if (field1Value.length == len) {
     field2.focus();
@@ -757,21 +781,23 @@ module.exports = {
   isValidRegistrationLength,
   isValidDepAndArrDate,
   handleResponseError,
-  sanitiseValue,
+  sanitiseDateOrTime,
   passportExpiryDate,
   birthDate,
   dateNotInPast,
   autoTab,
   autoTab1,
-  sanitiseValue1,
+  sanitiseCoordinateDegreesOrSeconds,
   invalidLatDirection,
   invalidLongDirection,
-  sanitiseValue2,
+  sanitiseCoordinateMinutes,
   preventZ,
-  dateNotTooFarInFuture,
+  dateNotMoreThanMonthInFuture,
   isAlphanumeric,
   isAlpha,
   isAddressValidCharacters,
   isPostCodeValidCharacters,
-  isValidAirportCode
+  isValidAirportCode,
+  dateNotMoreThanTwoDaysInFuture,
+  isTwoHoursPriorDeparture
 };
