@@ -11,6 +11,7 @@ module.exports = {
    * @returns {Promise} returns response body when resolved.
    */
   create(organisationName, userId) {
+    logger.info(`User ${userId} creating organisation`);
     return new Promise((resolve, reject) => {
       request.post({
         headers: { 'content-type': 'application/json' },
