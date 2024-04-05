@@ -16,20 +16,12 @@
 {% endmacro %}
 
 {% macro departure_warning_message(__) %}
-  <div class="govuk-warning-text twoHourWarningText">
+  <div class="govuk-warning-text">
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
       <span class="govuk-visually-hidden">Warning</span>
-      <p>{{ __('departure_date_2_hours_prior__civil_penalty') }}</p>
-      <p>{{ __('departure_date_2_hours_prior__flight_requirements') }}</p>
-    </strong>
-  </div>
-  <div class="govuk-warning-text fortyEightHourWarningText">
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-visually-hidden">Warning</span>
-        <p>{{ __('departure_date_too_far_in_future__civil_penalty') }}</p>
-        <p>{{ __('departure_date_too_far_in_future__flight_requirements') }}</p>
+      <p>{{ __('departure_date_hours_prior__flight_requirements') }}</p>
+      <p>{{ __('departure_date_hours_prior__civil_penalty') }}</p>
     </strong>
   </div>
 {% endmacro %}
