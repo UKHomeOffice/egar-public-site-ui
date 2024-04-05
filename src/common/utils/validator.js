@@ -11,6 +11,18 @@ const { airportCodeList } = require('../../common/utils/autocomplete');
 
 /**
  * Check if the string has leading spaces
+ * @param {Date} value
+ * @return {Date}
+ */
+function convertDateToUTC(date) {
+  const UTCOffsetMinutes = new Date().getTimezoneOffset();
+  const UTCOffsetMilliseconds = UTCOffsetMinutes * 60 * 1000;
+
+  return new Date(date.getTime() + UTCOffsetMilliseconds);
+}
+
+/**
+ * Check if the string has leading spaces
  * @param {String} value
  * @return {boolean}
  */
@@ -249,9 +261,9 @@ function dateNotMoreThanMonthInFuture(dObj) {
 }
 
 function dateNotMoreThanTwoDaysInFuture(providedDate) {
-  const now = new Date();
+  const now = convertDateToUTC(new Date());
   const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
-  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS_MILLISECONDS);
+  const maxDepartureDate = convertDateToUTC(new Date(now.getTime() + TWO_DAYS_MILLISECONDS));
 
   if (!(providedDate instanceof Date)) {
     return false;
@@ -262,8 +274,8 @@ function dateNotMoreThanTwoDaysInFuture(providedDate) {
 
 function isTwoHoursPriorDeparture(providedDate) {  
   const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
-  const today = new Date()
-  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
+  const today = convertDateToUTC(new Date())
+  const twoHoursPriorDepartureDate = convertDateToUTC(new Date(today.getTime() + TWO_HOURS_MILLISECONDS));
 
   if (!(providedDate instanceof Date)) {
     return false;
@@ -799,5 +811,6 @@ module.exports = {
   isPostCodeValidCharacters,
   isValidAirportCode,
   dateNotMoreThanTwoDaysInFuture,
-  isTwoHoursPriorDeparture
+  isTwoHoursPriorDeparture,
+  convertDateToUTC
 };

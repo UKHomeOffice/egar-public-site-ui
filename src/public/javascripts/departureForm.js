@@ -25,18 +25,19 @@ let departureFormSubmitter = undefined;
 dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
 
 const departureDate =  () => {
-  return new Date(
-    Number(departureYear.value),
-    Number(departureMonth.value) - 1,
-    Number(departureDay.value),
-    Number(departureHourTime.value),
-    Number(departureMinuteTime.value)
+  return convertDateToUTC(
+    new Date(
+      Number(departureYear.value),
+      Number(departureMonth.value) - 1,
+      Number(departureDay.value),
+      Number(departureHourTime.value),
+      Number(departureMinuteTime.value)
+    )
   )
 };
   
 
 function showDepartureDateWarningMessages(providedDate) {
-  console.log(providedDate);
   twoHourWarningTexts.forEach($element => $element.hidden = isTwoHoursPriorDeparture(providedDate));
   fortyEightHourWarningTexts.forEach($element => $element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate));
 }
