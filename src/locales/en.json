@@ -139,7 +139,7 @@
 	"field_departure_date_validation": "Please enter Departure, today or in the future",
 	"field_arrival_date_validation": "Please enter Arrival, today or in the future",
 	"field_departure_date_should_not_be_in_the_past": "Departure date should not be in the past.",
-	"departure_date_hours_prior__flight_requirements": "International GA flights that are arriving in or departing from the UK will be required to be submit information online about the flight and persons on board (both passengers and crew), no earlier than 48 hours and no later than 2 hours prior to the expected time of departure.",
+	"departure_date_hours_prior__flight_requirements": "International GA flights that are arriving in or departing from the UK will be required to submit information online about the flight and persons on board (both passengers and crew), no earlier than 48 hours and no later than 2 hours prior to the expected time of departure.",
 	"departure_date_hours_prior__civil_penalty": "Failing to comply with these regulations may result in a civil penalty of up to £10,000 per breach.",
 	"field_arrival_date_too_far_in_future": "Arrival date must be today and cannot be more than 1 month in the future",
 	"field_departure_real_date_validation": "Enter a real departure date",
