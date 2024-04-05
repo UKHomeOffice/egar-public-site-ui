@@ -15,39 +15,8 @@
 	{% endfor %}
 {% endmacro %}
 
-{% macro departure_warning_dialog(__) %}
-    <dialog id="confirmWarnedDepartureDialog" class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-error-message govuk-!-font-size-36">
-        Warning
-      </h2>
-      <div class="twoHourWarningText">
-        <p>{{ __('departure_date_2_hours_prior__civil_penalty') }}</p>
-        <p>{{ __('departure_date_2_hours_prior__flight_requirements') }}</p>
-      </div>
-      <div class="fortyEightHourWarningText">
-        <p>{{ __('departure_date_too_far_in_future__civil_penalty') }}</p>
-        <p>{{ __('departure_date_too_far_in_future__flight_requirements') }}</p>
-      </div>
-
-      <form method="dialog">
-        <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
-          Close and fix departure date
-        </button>
-      </form>
-      <button 
-        id="continueWithWarnedDate" 
-        type="button" 
-        class="govuk-button warning-button"
-        data-module="govuk-button"
-        name="buttonClicked"
-        value="">
-        Continue with warned departure date
-      </button>
-    </dialog>
-{% endmacro %}
-
 {% macro departure_warning_message(__) %}
-  <div class="govuk-warning-text twoHourWarningText" hidden>
+  <div class="govuk-warning-text twoHourWarningText">
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
       <span class="govuk-visually-hidden">Warning</span>
@@ -55,7 +24,7 @@
       <p>{{ __('departure_date_2_hours_prior__flight_requirements') }}</p>
     </strong>
   </div>
-  <div class="govuk-warning-text fortyEightHourWarningText" hidden>
+  <div class="govuk-warning-text fortyEightHourWarningText">
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
       <span class="govuk-visually-hidden">Warning</span>
@@ -64,8 +33,6 @@
     </strong>
   </div>
 {% endmacro %}
-
-
 
 {% macro empty_table_message(message) %}
 <tr class="govuk-table__row">
