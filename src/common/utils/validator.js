@@ -268,12 +268,11 @@ function dateNotMoreThanTwoDaysInFuture(providedDate) {
     return false;
   }
 
-  const utcProvideDate = convertDateToUTC(providedDate);
   const now = convertDateToUTC(new Date());
   const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
-  const maxDepartureDate = convertDateToUTC(new Date(now.getTime() + TWO_DAYS_MILLISECONDS));
+  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS_MILLISECONDS);
 
-  return Boolean(utcProvideDate) && utcProvideDate.getTime() <= maxDepartureDate.getTime();
+  return Boolean(providedDate) && providedDate.getTime() <= maxDepartureDate.getTime();
 }
 
 /**
@@ -285,12 +284,11 @@ function isTwoHoursPriorDeparture(providedDate) {
     return false;
   }
 
-  const utcProvideDate = convertDateToUTC(providedDate);
+  const today = convertDateToUTC(new Date());
   const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
-  const today = convertDateToUTC(new Date())
-  const twoHoursPriorDepartureDate = convertDateToUTC(new Date(today.getTime() + TWO_HOURS_MILLISECONDS));
+  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
 
-  return Boolean(utcProvideDate) && utcProvideDate.getTime() >= twoHoursPriorDepartureDate.getTime();
+  return Boolean(providedDate) && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime();
 }    
 
 /**
