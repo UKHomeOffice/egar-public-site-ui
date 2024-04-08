@@ -36,6 +36,11 @@
         <p class="govuk-body-m">
          This is due to a planned outage. The service will be unavailable between {{ MAINTENANCE_START_DATETIME }} UTC and {{ MAINTENANCE_END_DATETIME }} UTC, but available thereafter.
         </p>
+
+							<p class="govuk-body-m">
+         This is due to a planned outage. The service will be unavailable between {{ MAINTENANCE_START_DATETIME }} UTC and {{ MAINTENANCE_END_DATETIME }} UTC, but available thereafter.
+        </p>
+
         <p class="govuk-body-m">
           If you are required to submit a GAR during this period, please download and complete the required GAR form found on <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights" target="_blank" rel="noopener noreferrer">{{__('gar_form_link_text')}}</a>.
 				</p>
@@ -49,6 +54,9 @@
      </div>
     {% else %}
 		<div>
+							<p class="govuk-body-m">
+         This is due to a planned outage. The service will be unavailable between {{ MAINTENANCE_START_DATETIME }} UTC and {{ MAINTENANCE_END_DATETIME }} UTC, but available thereafter.
+        </p>
 			 <p class="govuk-body-m">
 				 If you are required to submit a GAR for an imminent service, please download and complete the required GAR form found on <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights" target="_blank" rel="noopener noreferrer">{{__('gar_form_link_text')}}</a>.
 			 </p>
