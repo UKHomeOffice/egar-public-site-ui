@@ -10,8 +10,7 @@ const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList } = require('../../common/utils/autocomplete');
 
 /**
- * Check if the string has leading spaces
- * @param {Date} value
+ * @param {Date} date
  * @return {Date}
  */
 function convertDateToUTC(date) {
@@ -260,6 +259,10 @@ function dateNotMoreThanMonthInFuture(dObj) {
   return Boolean(providedDate) && providedDate <= nextMonth;
 }
 
+/**
+ * @param {Date} providedDate
+ * @return {Boolean}
+ */
 function dateNotMoreThanTwoDaysInFuture(providedDate) {
   const now = convertDateToUTC(new Date());
   const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
@@ -272,6 +275,10 @@ function dateNotMoreThanTwoDaysInFuture(providedDate) {
   return Boolean(providedDate) && providedDate.getTime() <= maxDepartureDate.getTime();
 }
 
+/**
+ * @param {Date} providedDate
+ * @return {Boolean}
+ */
 function isTwoHoursPriorDeparture(providedDate) {  
   const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
   const today = convertDateToUTC(new Date())
