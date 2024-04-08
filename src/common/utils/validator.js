@@ -264,31 +264,33 @@ function dateNotMoreThanMonthInFuture(dObj) {
  * @return {Boolean}
  */
 function dateNotMoreThanTwoDaysInFuture(providedDate) {
-  const now = convertDateToUTC(new Date());
-  const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
-  const maxDepartureDate = convertDateToUTC(new Date(now.getTime() + TWO_DAYS_MILLISECONDS));
-
   if (!(providedDate instanceof Date)) {
     return false;
   }
 
-  return Boolean(providedDate) && providedDate.getTime() <= maxDepartureDate.getTime();
+  const utcProvideDate = convertDateToUTC(providedDate);
+  const now = convertDateToUTC(new Date());
+  const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
+  const maxDepartureDate = convertDateToUTC(new Date(now.getTime() + TWO_DAYS_MILLISECONDS));
+
+  return Boolean(utcProvideDate) && utcProvideDate.getTime() <= maxDepartureDate.getTime();
 }
 
 /**
  * @param {Date} providedDate
  * @return {Boolean}
  */
-function isTwoHoursPriorDeparture(providedDate) {  
-  const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
-  const today = convertDateToUTC(new Date())
-  const twoHoursPriorDepartureDate = convertDateToUTC(new Date(today.getTime() + TWO_HOURS_MILLISECONDS));
-
+function isTwoHoursPriorDeparture(providedDate) {
   if (!(providedDate instanceof Date)) {
     return false;
   }
 
-  return Boolean(providedDate) && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime();
+  const utcProvideDate = convertDateToUTC(providedDate);
+  const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
+  const today = convertDateToUTC(new Date())
+  const twoHoursPriorDepartureDate = convertDateToUTC(new Date(today.getTime() + TWO_HOURS_MILLISECONDS));
+
+  return Boolean(utcProvideDate) && utcProvideDate.getTime() >= twoHoursPriorDepartureDate.getTime();
 }    
 
 /**

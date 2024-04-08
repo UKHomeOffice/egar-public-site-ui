@@ -25,15 +25,13 @@ let departureFormSubmitter = undefined;
 dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
 
 const departureDate =  () => {
-  return convertDateToUTC(
-    new Date(
-      Number(departureYear.value),
-      Number(departureMonth.value) - 1,
-      Number(departureDay.value),
-      Number(departureHourTime.value),
-      Number(departureMinuteTime.value)
-    )
-  )
+  return new Date(
+    Number(departureYear.value),
+    Number(departureMonth.value) - 1,
+    Number(departureDay.value),
+    Number(departureHourTime.value),
+    Number(departureMinuteTime.value)
+  );
 };
   
 
