@@ -1,6 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 const logger = require('../../common/utils/logger')(__filename);
-const validations = require('../utils/validator');
+const validations = require('../../app/people/validations');
+const validator = require('../../common/utils/validator');
 
 class Manifest {
   /**
@@ -28,43 +29,23 @@ class Manifest {
    * Validate Manifest data cannot be empty and cannot have invalid dates
    * @returns {Bool} true if valid, else false
    */
-  validate() {
-    let isValid = true;
-    this.manifest.forEach((person) => {
-      if (person["documentType"] === "Other" && !validations.notEmpty(person["documentDesc"])) {
-          isValid = false;
-          this._recordValidationErr(this.manifest.indexOf(person));
-      }
-
-      Object.keys(person).forEach((key) => {
-        if (key === "documentDesc") {
-          return null;
-        }
-
-        if (
-          key === "amgCheckinResponseCode" || 
-          key === "amgDepartureResponseCode" ||
-          key === "amgHasDeparted"
-        ) {
-          return null;
-        }
-
-        if (key.toLowerCase().includes('placeofbirth') ) {
-          return null;
-        }
-
-        if (key.toLowerCase().includes('date') && !validations.realDate(Manifest._constructDateObj(person[key]))) {
-          isValid = false;
-          this._recordValidationErr(this.manifest.indexOf(person));
-        }
-
-        if (!validations.notEmpty(person[key])) {
-          isValid = false;
-          this._recordValidationErr(this.manifest.indexOf(person));
-        }
-      });
+  async validate() {
+    const validatingPeople = new Promise((resolve) => {
+      resolve(
+        this.manifest.forEach(async (person) => {
+          try {
+            const req = Object.create({ body: person });
+            await validator.validateChains(validations.validations(req))
+          } catch (e) {
+            this._recordValidationErr(this.manifest.indexOf(person));
+          }
+        })
+      );
     });
-    return isValid;
+
+    await validatingPeople;
+
+    return this.invalidPeople.length === 0;
   }
 
   validateCaptainCrew() {
