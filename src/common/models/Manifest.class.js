@@ -30,23 +30,23 @@ class Manifest {
    * @returns {Bool} true if valid, else false
    */
   async validate() {
-    const validatingPeople = new Promise((resolve) => {
-      resolve(
-        this.manifest.forEach(async (person) => {
-          const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
-          const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
-          
-          person.dobYear = birtDateObject.y;
-          person.dobMonth = birtDateObject.m;
-          person.dobDay = birtDateObject.d;
+    const validatingPeople = Promise.allSettled(
+        this.manifest.map(async (person) => {
+          try {
+            const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
+            const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
+            
+            person.dobYear = birtDateObject.y;
+            person.dobMonth = birtDateObject.m;
+            person.dobDay = birtDateObject.d;
 
-          person.expiryYear = expiryDateObject.y;
-          person.expiryMonth = expiryDateObject.m;
-          person.expiryDay = expiryDateObject.d;
+            person.expiryYear = expiryDateObject.y;
+            person.expiryMonth = expiryDateObject.m;
+            person.expiryDay = expiryDateObject.d;
 
-          person.personType = person.peopleType.name;
-          person.travelDocumentNumber = person.documentNumber;
-          person.travelDocumentType = person.documentType;
+            person.personType = person.peopleType.name;
+            person.travelDocumentNumber = person.documentNumber;
+            person.travelDocumentType = person.documentType;
           // {
           //   firstName: 'Benjamin',
           //   lastName: 'Sisko',
@@ -62,16 +62,15 @@ class Manifest {
           //   garPeopleId: '9002',
           // }
 
-          try {
-            const req = Object.create({ body: person });
-            await validator.validateChains(validations.validations(req))
+            const req = { body: person };
+            logger.info(JSON.stringify({ req }))
+            return await validator.validateChains(validations.validations(req));
           } catch (err) {
             logger.error(JSON.stringify(err))
             this._recordValidationErr(this.manifest.indexOf(person));
           }
         })
       );
-    });
 
     await validatingPeople;
 
