@@ -24,12 +24,13 @@ class Manifest {
       throw err;
     }
   }
-
+  
   /**
    * Validate Manifest data cannot be empty and cannot have invalid dates
    * @returns {Bool} true if valid, else false
    */
   async validate() {
+    logger.info(`this.manifest: ${JSON.stringify(this.manifest)}`);
     const validatingPeople = Promise.allSettled(
         this.manifest.map(async (person) => {
           try {
