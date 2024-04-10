@@ -47,7 +47,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_day')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalDay"
-                    name="arrivalDay"  type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'day');autoTab(arrivalDay, 'day', arrivalMonth);"
+                    name="arrivalDay"  type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'day');autoTab(arrivalDay, 'day', arrivalMonth);"
                     value="{{cookie.dateSlice('day', cookie.getGarArrivalVoyage().arrivalDate)}}"
                     {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
                 </div>
@@ -60,7 +60,7 @@
                   </label>
                   <span id="arrival-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMonth"
-                    name="arrivalMonth" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'month');autoTab(arrivalMonth, 'month', arrivalYear);" 
+                    name="arrivalMonth" type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'month');autoTab(arrivalMonth, 'month', arrivalYear);" 
                     value="{{cookie.dateSlice('month', cookie.getGarArrivalVoyage().arrivalDate)}}"
                     aria-describedby="{{ 'arrivalDate-error ' if errors | containsError('arrivalDate') }}arrival-month-hint">
                   </div>
@@ -72,7 +72,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_year')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalYear"
-                    name="arrivalYear" type="text" maxLength=4  onKeyup="value = sanitiseValue(this.value, 'year');"
+                    name="arrivalYear" type="text" maxLength=4  onKeyup="value = sanitiseDateOrTime(this.value, 'year');"
                     value="{{cookie.dateSlice('year', cookie.getGarArrivalVoyage().arrivalDate)}}"
                     {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
                 </div>
@@ -99,7 +99,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_hour')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalHour"
-                    name="arrivalHour" type="text" maxLength=2 onKeyup="value = sanitiseValue(this.value, 'hour');autoTab(arrivalHour, 'hour', arrivalMinute);"
+                    name="arrivalHour" type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'hour');autoTab(arrivalHour, 'hour', arrivalMinute);"
                     value="{{cookie.timeSlice('hour', cookie.getGarArrivalVoyage().arrivalTime)}}"
                     {{ 'aria-describedby=arrivalTime-error' if errors | containsError('arrivalTime') }}>
                 </div>
@@ -111,7 +111,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_minute')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMinute"
-                    name="arrivalMinute" type="text" maxLength=2  onKeyup="value = sanitiseValue(this.value, 'minute');"
+                    name="arrivalMinute" type="text" maxLength=2  onKeyup="value = sanitiseDateOrTime(this.value, 'minute');"
                     value="{{cookie.timeSlice('minute', cookie.getGarArrivalVoyage().arrivalTime)}}"
                     {{ 'aria-describedby=arrivalTime-error' if errors | containsError('arrivalTime') }}>
                 </div>
@@ -131,8 +131,18 @@
             <div class="govuk-radios govuk-radios--conditional" data-module="radios">
               <div class="govuk-radios__item">
                 <input id="portChoiceCode" name="portChoice" class="govuk-radios__input"
-                  type="radio" value="Yes"{{ ' checked' if cookie.getGarArrivalVoyage().arrivalPort != undefined and cookie.getGarArrivalVoyage().arrivalPort != 'ZZZZ'}}
-                  data-aria-controls="portChoiceCodeContainer" aria-labelledby="portChoiceCode-label">
+                  type="radio"
+                  value="Yes"
+                    {% set IATA_CODE_LENGTH = 3 %}
+                    {% set ICAO_CODE_LENGTH = 4 %}
+                    {{
+                        'checked' if cookie.getGarArrivalVoyage().arrivalPort === ''
+                                    or cookie.getGarArrivalVoyage().arrivalPort.length === IATA_CODE_LENGTH
+                                    or cookie.getGarArrivalVoyage().arrivalPort.length === ICAO_CODE_LENGTH
+                    }}
+                  data-aria-controls="portChoiceCodeContainer"
+                  aria-labelledby="portChoiceCode-label"
+                >
                 <label id="portChoiceCode-label" class="govuk-label govuk-radios__label" for="portChoiceCode">{{__('field_choice_yes')}}</label>
               </div>
               <div id="portChoiceCodeContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
@@ -145,17 +155,28 @@
                     aria-labelledby="arrivalPort-label"
                     aria-describedby="arrivalPort-hint{{ ' arrivalPort-error' if errors | containsError('arrivalPort') }}">
                     {% for airport in airportList | sort(attribute = 'label') %}
-                   <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id }} 
-                    or
-                   <option value="{{ airport.id2 }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id2 }}>{{ airport.label }}</option>
-                    {% endfor %}  
+                      <option value="{{ airport.id }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id }} 
+                        or
+                      <option value="{{ airport.id2 }}" {{ 'selected=selected' if cookie.getGarArrivalVoyage().arrivalPort == airport.id2 }}>{{ airport.label }}</option>
+                    {% endfor %}
                   </select>
                 </div>
               </div>
               <div class="govuk-radios__item">
                 <input id="portChoiceCoordinates" name="portChoice" class="govuk-radios__input"
-                type="radio" value="No"{{ ' checked' if cookie.getGarArrivalVoyage().arrivalPort == 'ZZZZ'}}
-                data-aria-controls="portChoiceCoordinatesContainer" aria-labelledby="portChoiceCoordinates-label">
+                  type="radio"
+                  value="No"
+                    {#
+                      Note: Both cookie.getGarArrivalVoyage().arrivalLat and cookie.getGarArrivalVoyage().arrivalLong
+                      are set to empty string when the 'Yes' radio button is clicked.
+                    #}
+                    {{
+                      'checked' if (cookie.getGarArrivalVoyage().arrivalLat != undefined or cookie.getGarArrivalVoyage().arrivalLong != undefined)
+                                  and (cookie.getGarArrivalVoyage().arrivalLat !== '' and cookie.getGarArrivalVoyage().arrivalLong !== '')
+                    }}
+                  data-aria-controls="portChoiceCoordinatesContainer"
+                  aria-labelledby="portChoiceCoordinates-label"
+                >
                 <label id="portChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="portChoiceCoordinates">{{__('field_choice_no')}}</label>
               </div>
               <div id="portChoiceCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
@@ -168,15 +189,15 @@
                   {{ m.hint('arrivalLatitude', __('field_latitude_hint')) }}
                   {{ m.error_message('arrivalLat', errors, __) }}
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalDegrees"
-                name="arrivalDegrees" type="text" maxLength=3 onKeyup="value = sanitiseValue1(this.value, 'degrees');" value="{{ cookie.getGarArrivalVoyage().arrivalDegrees }}">
+                name="arrivalDegrees" type="text" maxLength=3 onKeyup="value = sanitiseCoordinateDegreesOrSeconds(this.value, 'degrees');" value="{{ cookie.getGarArrivalVoyage().arrivalDegrees }}">
 
                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMinutes"
-                name="arrivalMinutes" type="text" maxLength=2 onKeyup="value = sanitiseValue2(this.value, 'minutes'); autoTab1(arrivalMinutes, 'minutes', arrivalSeconds);" 
+                name="arrivalMinutes" type="text" maxLength=2 onKeyup="value = sanitiseCoordinateMinutes(this.value, 'minutes'); autoTab1(arrivalMinutes, 'minutes', arrivalSeconds);" 
                 value="{{ cookie.getGarArrivalVoyage().arrivalMinutes }}">
 
 
                 <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalSeconds"
-                name="arrivalSeconds" type="text" maxLength=8 onKeyup="value = sanitiseValue1(this.value, 'seconds');" value="{{ cookie.getGarArrivalVoyage().arrivalSeconds }}">
+                name="arrivalSeconds" type="text" maxLength=8 onKeyup="value = sanitiseCoordinateDegreesOrSeconds(this.value, 'seconds');" value="{{ cookie.getGarArrivalVoyage().arrivalSeconds }}">
 
                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalLatDirection"
                 name="arrivalLatDirection" type="text" maxLength=1 value="{{ cookie.getGarArrivalVoyage().arrivalLatDirection }}" >
@@ -188,20 +209,18 @@
                   {{ m.error_message('arrivalLong', errors, __) }}
 
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalLongDegrees"
-                name="arrivalLongDegrees" type="text" maxLength=3 onKeyup="value = sanitiseValue1(this.value, 'degrees');" value="{{ cookie.getGarArrivalVoyage().arrivalLongDegrees }}">
+                name="arrivalLongDegrees" type="text" maxLength=3 onKeyup="value = sanitiseCoordinateDegreesOrSeconds(this.value, 'degrees');" value="{{ cookie.getGarArrivalVoyage().arrivalLongDegrees }}">
 
                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalLongMinutes"
-                name="arrivalLongMinutes" type="text" maxLength=2 onKeyup="value = sanitiseValue1(this.value, 'minutes'); autoTab1(arrivalLongMinutes, 'minutes', arrivalLongSeconds);" 
+                name="arrivalLongMinutes" type="text" maxLength=2 onKeyup="value = sanitiseCoordinateDegreesOrSeconds(this.value, 'minutes'); autoTab1(arrivalLongMinutes, 'minutes', arrivalLongSeconds);" 
                 value="{{ cookie.getGarArrivalVoyage().arrivalLongMinutes }}" >
 
                 <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalLongSeconds"
-                name="arrivalLongSeconds" type="text" maxLength=8 onKeyup="value = sanitiseValue1(this.value, 'seconds');" value="{{ cookie.getGarArrivalVoyage().arrivalLongSeconds }}" >
+                name="arrivalLongSeconds" type="text" maxLength=8 onKeyup="value = sanitiseCoordinateDegreesOrSeconds(this.value, 'seconds');" value="{{ cookie.getGarArrivalVoyage().arrivalLongSeconds }}" >
 
                 <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalLongDirection"
                 name="arrivalLongDirection" type="text" maxLength=1 value="{{ cookie.getGarArrivalVoyage().arrivalLongDirection }}" >
 
-                  <!--<input class="govuk-input govuk-input--width-10" id="arrivalLong" name="arrivalLong" autocomplete="off" type="text"
-                    value="{{ cookie.getGarArrivalVoyage().arrivalLong }}" aria-describedby="arrivalCoordinates-hint arrivalLongitude-hint{{ ' arrivalLong-error' if errors | containsError('arrivalLong') }}"/>-->
                 </div>
                 {# End arrival coords #}
               </div>

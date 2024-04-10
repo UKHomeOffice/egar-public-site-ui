@@ -25,7 +25,7 @@ const exceedFileLimit = (fileSize, garId) => {
       resolve(((fileSize + total) > MAX_SIZE));
     }).catch((err) => {
       logger.error('Unknown error whilst determining GAR supporting documents file sizes');
-      logger.error(JSON.stringify(err));
+      logger.error(err);
       reject(err);
     });
   });
@@ -133,7 +133,7 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('Error occurred attempting to scan the file');
-          logger.error(JSON.stringify(err));
+          logger.error(err);
           res.redirect('/garfile/supportingdocuments?query=e');
         });
     })

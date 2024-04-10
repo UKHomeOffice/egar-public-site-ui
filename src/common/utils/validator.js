@@ -7,6 +7,7 @@ const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
+const { airportCodeList } = require('../../common/utils/autocomplete');
 
 /**
  * Check if the string has leading spaces
@@ -91,22 +92,15 @@ function valuetrue(value) {
 }
 
 function daysInMonth(m, y) {
-  switch (m - 1) {
-    case 1:
-      return (y % 4 === 0 && y % 100) || y % 400 === 0 ? 29 : 28;
-    case 8:
-    case 3:
-    case 5:
-    case 10:
-      return 30;
-    default:
-      return 31;
-  }
+  const lastDayOfMonth = new Date(y, m, 0);
+  return lastDayOfMonth.getDate();
 }
 
 function isNumeric(input) {
-  // Essentially jQuery's implementation...
-  return (input - parseFloat(input) + 1) >= 0;
+  if (typeof input === "string") {
+    return (input - parseFloat(input) + 1) >= 0;
+  }
+  return false;
 }
 
 /**
@@ -117,17 +111,23 @@ function isPrintable(value) {
   return !value.includes('\n');
 }
 
-// validday
 function validDay(d, m, y) {
   if (isNumeric(d)) {
-    return m >= 0 && m <= 12 && d > 0 && d <= daysInMonth(m, y);
+    return validMonth(m) && (d >= 1 && d <= daysInMonth(m, y));
   }
   return false;
 }
 
 function validMonth(m) {
   if (isNumeric(m)) {
-    return m >= 0 && m <= 12;
+    return m >= 1 && m <= 12;
+  }
+  return false;
+}
+
+function validYear(y) {
+  if (isNumeric(y)) {
+    return (y.length === 4) && (y >= 1000 && y <= 9999);
   }
   return false;
 }
@@ -195,42 +195,82 @@ function validGender(value) {
   return validValues.includes(value);
 }
 
-function currentOrFutureDate(dObj) {
+/**
+ * Checks that a valid supplied date is not a past date
+ * @param {Object} dObjh Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
+ * @returns {Boolean} true if not past date, false if past date
+ */
+function currentOrPastDate(dObj) {
   const currDate = new Date();
+  const currMonth = currDate.getMonth() + 1;
+
+  /*
+    Returns true if all dates fields are empty to avoid duplicate error messages being displayed.
+    The dateNotMoreThanMonthInFuture function will cover this error.
+  */
+  if([dObj.d,dObj.m,dObj.y].includes('')) {
+    return true;
+  }
+
+  /*
+    Returns true if supplied dates are invalid to avoid duplicate error messages being displayed.
+    The dateNotMoreThanMonthInFuture function will cover this error.
+  */
+  if(validDay(dObj.d, dObj.m, dObj.y) === false || validMonth(dObj.m) === false || validYear(dObj.y) === false){
+    return true;
+  }
 
   if (dObj.y < currDate.getFullYear()) {
     return false;
   }
-  if (dObj.y > currDate.getFullYear()) {
-    return true;
-  }
   if (dObj.y == currDate.getFullYear()) {
-    if (dObj.m < currDate.getMonth() + 1) {
+    if (dObj.m < currMonth) {
       return false;
     }
-    if (dObj.m > currDate.getMonth() + 1) {
-      return true;
-    }
-    if (dObj.m == currDate.getMonth() + 1) {
+    if (dObj.m == currMonth) {
       return dObj.d >= currDate.getDate();
     }
   }
-  return false;
-}
 
+  return true;
+}
 
 /**
  * Check that supplied date is within an acceptable range (currently within 1 month from Date.now())
  * @param {Object} dObjh Date - can be js Date object or the {d:,m:,y} type object that is used in the UI
  * * @returns {Bool} Date is within acceptable range
  */
-function dateNotTooFarInFuture(dObj) {
+function dateNotMoreThanMonthInFuture(dObj) {
   const now = new Date();
   const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
   const providedDate = getDateFromDynamicInput(dObj);
 
-  return Boolean(providedDate && providedDate <= nextMonth);
+  return Boolean(providedDate) && providedDate <= nextMonth;
 }
+
+function dateNotMoreThanTwoDaysInFuture(providedDate) {
+  const now = new Date();
+  const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
+  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS_MILLISECONDS);
+
+  if (!(providedDate instanceof Date)) {
+    return false;
+  }
+
+  return Boolean(providedDate) && providedDate.getTime() <= maxDepartureDate.getTime();
+}
+
+function isTwoHoursPriorDeparture(providedDate) {  
+  const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
+  const today = new Date()
+  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
+
+  if (!(providedDate instanceof Date)) {
+    return false;
+  }
+
+  return Boolean(providedDate) && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime();
+}    
 
 /**
  * Normalises and returns various supplied date objects / formats
@@ -270,10 +310,6 @@ function getDateFromDynamicInput(input) {
   }
 
   return providedDate;
-}
-
-function validYear(y) {
-  return y.length === 4;
 }
 
 const numericDateElements = dObj => isNumeric(dObj.d)
@@ -597,7 +633,7 @@ function handleResponseError(parsedApiResponse) {
   }
 }
 
-function sanitiseValue(input, type) {
+function sanitiseDateOrTime(input, type) {
   const regex = (type === 'year') ? '[0-9]{1,4}' : '[0-9]{1,2}';
 
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
@@ -607,21 +643,21 @@ function autoTab(field1, dayMonthOrYear, field2) {
 
   let len = (dayMonthOrYear === 'year') ? 4 : 2;
 
-  let field1Value = sanitiseValue(field1.value, dayMonthOrYear);
+  let field1Value = sanitiseDateOrTime(field1.value, dayMonthOrYear);
 
   if (field1Value.length == len) {
     field2.focus();
   }
 }
 
-function sanitiseValue1(input, type) {
+function sanitiseCoordinateDegreesOrSeconds(input, type) {
   const regex = (type === 'seconds') ? /^\d{0,3}(\.\d{0,4})?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
 
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
 
 }
 
-function sanitiseValue2(input, type) {
+function sanitiseCoordinateMinutes(input, type) {
   const regex = (type === 'minutes') ? /^\d{0,2}?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
 
   return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
@@ -632,7 +668,7 @@ function autoTab1(field1, degreesMinutesOrSeconds, field2) {
 
   let len = (degreesMinutesOrSeconds === 'minutes') ? 2 : 3;
 
-  let field1Value = sanitiseValue2(field1.value, degreesMinutesOrSeconds);
+  let field1Value = sanitiseCoordinateMinutes(field1.value, degreesMinutesOrSeconds);
 
   if (field1Value.length == len) {
     field2.focus();
@@ -669,12 +705,12 @@ function isAlphanumeric(input) {
 }
 
 function isAlpha(input) {
-  const alphaRegex = /^[a-z\s\'\-]+$/i;
+  const alphaRegex = /^[a-z\s\-]+$/i;
   return alphaRegex.test(input);
 }
 
 function isAddressValidCharacters(input) {
-  const addressRegex = /^[a-z\s\'\-\d]+$/i;
+  const addressRegex = /^[a-z\s\-\d]+$/i;
   return isEmpty(input) || addressRegex.test(input);
 }
 
@@ -689,6 +725,15 @@ function preventZ(value) {
     return false;
   }
   return true;
+}
+
+/**
+ * Verify that airport code is accurate
+ * @param {String} airportCode expected to be an  IATA (length 3) or ICAO (length 4) orcode
+ * @returns {Bool}
+ */
+function isValidAirportCode(airportCode) {
+  return airportCodeList.includes(airportCode);
 }
 
 module.exports = {
@@ -715,7 +760,7 @@ module.exports = {
   realDateInFuture,
   bornAfter1900,
   realDateFromString,
-  currentOrFutureDate,
+  currentOrPastDate,
   validTime,
   validFlag,
   validPort,
@@ -736,20 +781,23 @@ module.exports = {
   isValidRegistrationLength,
   isValidDepAndArrDate,
   handleResponseError,
-  sanitiseValue,
+  sanitiseDateOrTime,
   passportExpiryDate,
   birthDate,
   dateNotInPast,
   autoTab,
   autoTab1,
-  sanitiseValue1,
+  sanitiseCoordinateDegreesOrSeconds,
   invalidLatDirection,
   invalidLongDirection,
-  sanitiseValue2,
+  sanitiseCoordinateMinutes,
   preventZ,
-  dateNotTooFarInFuture,
+  dateNotMoreThanMonthInFuture,
   isAlphanumeric,
   isAlpha,
   isAddressValidCharacters,
-  isPostCodeValidCharacters
+  isPostCodeValidCharacters,
+  isValidAirportCode,
+  dateNotMoreThanTwoDaysInFuture,
+  isTwoHoursPriorDeparture
 };

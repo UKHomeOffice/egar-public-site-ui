@@ -4,7 +4,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const airportValidation = require('../../../common/utils/airportValidation');
+//const airportValidation = require('../../../common/utils/airportValidation');
 
 const createValidationChains = (voyage) => {
 
@@ -28,6 +28,7 @@ const createValidationChains = (voyage) => {
   // Define port validations
   const departurePortValidation = [
     new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, __('field_departure_port_code_validation')),
+    new ValidationRule(validator.isValidAirportCode, 'departurePort', voyage.departurePort, 'Departure port should be an ICAO or IATA code')
   ];
 
   // Define latitude validations
@@ -45,8 +46,7 @@ const createValidationChains = (voyage) => {
 
   const validations = [
     [new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation'))],
-    [new ValidationRule(validator.currentOrFutureDate, 'departureDate', departDateObj, __('field_departure_date_too_far_in_future'))],
-    [new ValidationRule(validator.dateNotTooFarInFuture, 'departureDate', departDateObj, __('field_departure_date_too_far_in_future'))],
+    [new ValidationRule(validator.currentOrPastDate, 'departureDate', departDateObj, __('field_departure_date_should_not_be_in_the_past'))],
     [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, __('field_departure_real_time_validation'))],
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
   ];
@@ -113,7 +113,6 @@ module.exports = async (req, res) => {
   // Define voyage
   const voyage = req.body;
   delete voyage.buttonClicked;
-  // TODO: Update this once the intended 'unknown' port code is discovered.
   if (voyage.portChoice === 'No') {
     logger.debug("Testing departure Lat and Long values...");
     

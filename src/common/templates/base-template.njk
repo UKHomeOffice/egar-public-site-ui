@@ -24,9 +24,8 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-
-  <link href="/stylesheets/application.min.css" rel="stylesheet" />
-  <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet"/>
+    <link href="/stylesheets/application.min.css" rel="stylesheet" />
+    <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet" />
 
     {% block headIcons %}
       <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="{{ assetPath | default('/assets') }}/images/favicon.ico" type="image/x-icon" />
@@ -189,13 +188,7 @@
   </script>
 
 
-    <script src="/javascripts/jquery.disableAutoFill.min.js"></script>
     <script>
-      $("#page-form").disableAutoFill(
-        {
-          randomizeInputName: true,
-        }
-      );
       $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function(eventObj) {
         $("<input />")
           .attr("type", "hidden")

@@ -69,6 +69,7 @@ const buildValidations = (voyage) => {
   // Define port validations
   const arrivalPortValidation = [
     new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, portCodeMsg),
+    new ValidationRule(validator.isValidAirportCode, 'arrivalPort', voyage.arrivalPort, 'Arrival port should be an ICAO or IATA code')
   ];
 
   // Define latitude validations
@@ -85,8 +86,8 @@ const buildValidations = (voyage) => {
 
   const validations = [
     [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, realDateMsg)],
-    [new ValidationRule(validator.currentOrFutureDate, 'arrivalDate', arriveDateObj, __('field_arrival_date_too_far_in_future'))],
-    [new ValidationRule(validator.dateNotTooFarInFuture, 'arrivalDate', arriveDateObj, __('field_arrival_date_too_far_in_future'))],
+    [new ValidationRule(validator.currentOrPastDate, 'arrivalDate', arriveDateObj, __('field_arrival_date_too_far_in_future'))],
+    [new ValidationRule(validator.dateNotMoreThanMonthInFuture, 'arrivalDate', arriveDateObj, __('field_arrival_date_too_far_in_future'))],
     [new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, timeMsg)],
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, portChoiceMsg)],
   ];

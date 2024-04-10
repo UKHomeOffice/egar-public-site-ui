@@ -43,13 +43,13 @@ module.exports = (req, res) => {
         res.render('app/garfile/review/index', renderObj);
       }).catch((err) => {
         logger.info('GAR review validation failed');
-        logger.debug(JSON.stringify(err));
+        logger.debug(err);
         renderObj.errors = err;
         res.render('app/garfile/review/index', renderObj);
       });
   }).catch((err) => {
     logger.error('Error retrieving GAR for review');
-    logger.error(JSON.stringify(err));
+    logger.error(err);
     res.render('app/garfile/review/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
   });
 };

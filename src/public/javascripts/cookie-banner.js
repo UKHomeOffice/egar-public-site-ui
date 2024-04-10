@@ -2,7 +2,7 @@ function setCookie(name, value, expiryDays) {
   const currDate = new Date();
   currDate.setTime(currDate.getTime() + (expiryDays*24*60*60*1000));
   const expires = "expires="+ currDate.toUTCString();
-  document.cookie = name + "=" + value + ";" + expires + ";path=/";
+  document.cookie = `${name}=${value};${expires};path=/;secure;samesite=strict`;
 };
 
 //Google Analytics tracking IDs

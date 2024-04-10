@@ -39,8 +39,10 @@ function getCrewFieldLabel(key) { //NOSONAR
 
 module.exports.validations = (voyageObj, crewArr, passengersArr) => {
   const validationArr = [
+    [new ValidationRule(validator.isValidAirportCode, '', voyageObj.arrivalPort, 'Arrival port should be an ICAO or IATA code')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalPort, 'Enter a value for the arrival port')],
     [new ValidationRule(validator.preventZ, '', voyageObj.arrivalPort, 'Add ICAO/IATA or Latitude/Longitude Co-ordinates for the location')],
+    [new ValidationRule(validator.isValidAirportCode, '', voyageObj.departurePort, 'Departure port should be an ICAO or IATA code')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departurePort, 'Enter a value for the departure port')],
     [new ValidationRule(validator.preventZ, '', voyageObj.departurePort, 'Add ICAO/IATA or Latitude/Longitude Co-ordinates for the location')],
     [new ValidationRule(airportValidation.includesOneBritishAirport, '', [voyageObj.departurePort, voyageObj.arrivalPort], airportValidation.notBritishMsg)],
@@ -48,10 +50,9 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureTime, 'Enter a value for the departure time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalDate, 'Enter a value for the arrival date')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureDate, 'Enter a value for the departure date')],
-    [new ValidationRule(validator.dateNotInPast, '', voyageObj.departureDate, __('field_departure_date_too_far_in_future'))],
+    [new ValidationRule(validator.dateNotInPast, '', voyageObj.departureDate, __('field_departure_date_should_not_be_in_the_past'))],
     [new ValidationRule(validator.dateNotInPast, '', voyageObj.arrivalDate, __('field_arrival_date_too_far_in_future'))],
-    [new ValidationRule(validator.dateNotTooFarInFuture, '', voyageObj.departureDate, __('field_departure_date_too_far_in_future'))],
-    [new ValidationRule(validator.dateNotTooFarInFuture, '', voyageObj.arrivalDate, __('field_arrival_date_too_far_in_future'))],
+    [new ValidationRule(validator.dateNotMoreThanMonthInFuture, '', voyageObj.arrivalDate, __('field_arrival_date_too_far_in_future'))],
     
     [
       new ValidationRule(validator.notEmpty, '', voyageObj.registration, 'Enter the registration of the craft'),
@@ -102,12 +103,12 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.lastName, `Enter a surname for ${peopleType} ${crew.firstName}`),
       new ValidationRule(validator.isValidStringLength, '', crew.lastName, `Surname for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAlpha, '', crew.lastName, `Surname for ${name}  must not contain special characters or numbers`),
+      new ValidationRule(validator.isAlpha, '', crew.lastName, `Surname for ${name}  must not contain special characters, apostrophes or numbers`),
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.firstName, `Enter a given name for ${peopleType} ${crew.lastName}`),
       new ValidationRule(validator.isValidStringLength, '', crew.firstName, `Given name for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given name for ${name}  must not contain special characters or numbers`),
+      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given name for ${name}  must not contain special characters, apostrophes or numbers`),
     ]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a sex for ${name}`)]);
     validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid sex for ${name}`)]);

@@ -41,6 +41,7 @@ const garreview = require('./garfile/review');
 const garupload = require('./garfile/garupload');
 const garView = require('./garfile/view');
 const garCancel = require('./garfile/cancel');
+const garAmend = require('./garfile/amend');
 const garsubmitsucess = require('./garfile/submit/success');
 const garsubmitfailure = require('./garfile/submit/failure');
 const printmanifest = require('./garfile/printmanifest');
@@ -53,6 +54,7 @@ const people = require('./people');
 const peopleAdd = require('./people/add');
 const peopleEdit = require('./people/edit');
 const peopleDelete = require('./people/delete');
+const peopleExport = require('./people/export')
 
 // Misc dependency
 const error = require('./error');
@@ -77,6 +79,7 @@ const editorganisation = require('./organisation/editorganisation');
 const orgassignrole = require('./organisation/assignrole');
 const orgEditUsers = require('./organisation/editusers');
 const deleteUser = require('./organisation/delete');
+const exportusers = require('./organisation/exportusers')
 
 
 // Export
@@ -106,6 +109,7 @@ module.exports.bind = (app) => {
   app.use(orgassignrole.router);
   app.use(verifyInvite.router);
   app.use(orgEditUsers.router);
+  app.use(exportusers.router)
   app.use(deleteUser.router);
   app.use(usersavedcraftedit.router);
   app.use(userSavedCraftDelete.router);
@@ -127,6 +131,7 @@ module.exports.bind = (app) => {
   app.use(garManage.router);
   app.use(garView.router);
   app.use(garCancel.router);
+  app.use(garAmend.router);
   app.use(garsubmitfailure.router);
   app.use(garsubmitsucess.router);
   app.use(verifyMfa.router);
@@ -136,6 +141,7 @@ module.exports.bind = (app) => {
   app.use(peopleAdd.router);
   app.use(peopleEdit.router);
   app.use(peopleDelete.router);
+  app.use(peopleExport.router);
   app.use(cookies.router);
   app.use(help.router);
   app.use(accessibility.router)

@@ -47,7 +47,7 @@ module.exports = {
           return;
         }
 
-        logger.debug('Successfully called GAR put endpoint');
+        logger.debug('Successfully called GAR patch endpoint');
         resolve(body);
       });
     });
@@ -77,10 +77,10 @@ module.exports = {
           return;
         }
 
-        logger.debug('Successfully called GAR get endpoint');
         let gar = JSON.parse(body);
         gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCounty);
 
+        logger.debug('Successfully called GAR get endpoint');
         resolve(JSON.stringify(gar));
       });
     });
@@ -110,7 +110,6 @@ module.exports = {
           return;
         }
 
-        logger.debug('Successfully called GAR people endpoint');
         const garpeople = JSON.parse(body);
 
         const noBoardPassengers = garpeople.items
@@ -118,6 +117,7 @@ module.exports = {
         const restOfPassengers = garpeople.items
           .filter((garperson) => garperson.amgCheckinResponseCode !== travelPermissionCodes["NO_BOARD"]);
 
+        logger.debug('Successfully called GAR people endpoint');
         resolve(JSON.stringify({
           ...garpeople,
           items: [...noBoardPassengers, ...restOfPassengers]

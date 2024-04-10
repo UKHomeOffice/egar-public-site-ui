@@ -3817,13 +3817,6 @@
     "label": "North Weald Airport (United Kingdom) (EGSX)"
   },
   {
-    "id": "EGSY",
-    "id2": "EGSY",
-    "british": true,
-    "crownDependency": false,
-    "label": "Sheffield City Heliport (United Kingdom) (EGSY)"
-  },
-  {
     "id": "EGTC",
     "id2": "EGTC",
     "british": true,
