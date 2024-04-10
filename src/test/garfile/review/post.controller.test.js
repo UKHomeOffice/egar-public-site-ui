@@ -107,7 +107,7 @@ describe('GAR Review Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
+    callController().then().then().then(() => {
       expect(sessionSaveStub).to.have.been.called;
       expect(req.session.submiterrormessage).to.eql([{
         message: 'This GAR has already been submitted',
@@ -139,7 +139,8 @@ describe('GAR Review Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then().then(() => {
+    callController().then().then().then().then().then().then(() => {
+      expect(res.render).to.have.been.called;
       expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
         cookie,
         manifestFields,
@@ -194,7 +195,7 @@ describe('GAR Review Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then().then(() => {
+    callController().then().then().then().then().then().then(() => {
       expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
         cookie,
         manifestFields,
@@ -253,7 +254,22 @@ describe('GAR Review Post Controller', () => {
 
       garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
-          { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
+          {
+            dateOfBirth: '1994-06-22',
+            documentExpiryDate: '2023-06-22',
+            documentNumber: '1283',
+            documentType: 'Identity Card',
+            firstName: 'James',
+            garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+            gender: 'Male',
+            issuingState: 'PTA',
+            lastName: 'Smith',
+            nationality: 'PTA',
+            peopleType: {
+              name: 'Crew',
+            },
+            placeOfBirth: 'PTA',
+          },
         ],
       }));
 
@@ -264,8 +280,8 @@ describe('GAR Review Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then().then().then()
-        .then(() => {
+      callController().then().then().then().then().then().then(() => {
+          expect(res.render).to.have.been.called;
           expect(res.render).to.have.been.calledWith('app/garfile/review/index.njk', { cookie });
         });
     });

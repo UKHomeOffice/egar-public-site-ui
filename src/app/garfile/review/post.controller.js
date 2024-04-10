@@ -60,7 +60,7 @@ const performAPICall = (garId, cookie, req, res) => {
     });
 };
 
-const buildValidations = (garfile, garpeople, manifest) => {
+const buildValidations = async (garfile, garpeople, manifest) => {
   const validations = validationList.validations(garfile, garpeople);
   const departureDateParts = garfile.departureDate ? garfile.departureDate.split('-') : [,,];
   const departDateObj = {
@@ -77,7 +77,7 @@ const buildValidations = (garfile, garpeople, manifest) => {
 
   // Manifest specific validations does not using generic mechanism, so wrapped in
   // an uninformative message for now
-  if (!manifest.validate()) {
+  if (await !manifest.validate()) {
     const validateFailMsg = 'Resolve manifest errors before submitting';
     validations.push([
       new ValidationRule(validator.valuetrue, 'resolveError', '', validateFailMsg),
@@ -104,7 +104,7 @@ module.exports = (req, res) => {
     garApi.get(garId),
     garApi.getPeople(garId),
     garApi.getSupportingDocs(garId),
-  ]).then((responseValues) => {
+  ]).then(async (responseValues) => {
     const garfile = JSON.parse(responseValues[0]);
     validator.handleResponseError(garfile);
 
@@ -117,7 +117,7 @@ module.exports = (req, res) => {
     const garsupportingdocs = JSON.parse(responseValues[2]);
     validator.handleResponseError(garsupportingdocs);
 
-    const validations = buildValidations(garfile, garpeople, manifest);
+    const validations = await buildValidations(garfile, garpeople, manifest);
 
     if (garfile.status.name.toLowerCase() === 'submitted') {
       const submitError = {
