@@ -60,15 +60,16 @@ module.exports = (req, res) => {
   } else if (req.body.buttonClicked === 'Continue') {
     // Perform manifest validation then redirect to next section
     garApi.getPeople(cookie.getGarId())
-      .then((apiResponse) => {
+      .then(async (apiResponse) => {
         const manifest = new Manifest(apiResponse);
-        if (manifest.validate()) {
+        if (await manifest.validate()) {
           res.redirect('/garfile/responsibleperson');
           return;
         }
         logger.info('Manifest validation failed, redirecting with error msg');
         req.session.manifestErr = manifest.genErrValidations();
         req.session.manifestInvalidPeople = manifest.invalidPeople;
+    
         res.redirect('/garfile/manifest');
       })
       .catch((err) => {

@@ -47,20 +47,6 @@ class Manifest {
             person.personType = person.peopleType.name;
             person.travelDocumentNumber = person.documentNumber;
             person.travelDocumentType = person.documentType;
-          // {
-          //   firstName: 'Benjamin',
-          //   lastName: 'Sisko',
-          //   gender: 'Male',
-          //
-          //   birthplace: 'New Orleans',
-          //   nationality: 'usa',
-          //   personType: 'Captain',
-          //   travelDocumentNumber: '1234567890',
-          //   travelDocumentType: 'Passport',
-          //   issuingState: 'usa',
-          //   
-          //   garPeopleId: '9002',
-          // }
 
             const req = { body: person };
             logger.info(JSON.stringify({ req }))

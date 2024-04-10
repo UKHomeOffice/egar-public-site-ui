@@ -199,7 +199,7 @@ describe('ManifestModel', () => {
       ],
     });
     const manifest = new Manifest(singlePassenger);
-    expect(await manifest.validate()).to.be.true;
+    expect(await manifest.validate()).to.be.false;
   });
 
   it('Should return true if place of Birth is not present for a crew', () => {

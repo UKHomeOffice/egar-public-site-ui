@@ -6,6 +6,8 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
+const logger = require('../../../common/utils/logger')(__filename);
+
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
@@ -224,7 +226,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
+    callController().then().then().then(() => {
       expect(garApi.getPeople).to.have.been.calledWith('9001');
       expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
 
@@ -233,7 +235,6 @@ describe('Manifest Post Controller', () => {
         { message: 'Click the edit link of the person(s) with the errors to edit and correct their details.', identifier: 'person-1' },
       ]);
       expect(req.session.manifestInvalidPeople).to.eql(['person-0', 'person-1']);
-
       expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
     });
   });
@@ -254,7 +255,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
+    callController().then().then().then(() => {
       expect(garApi.getPeople).to.have.been.calledWith('9001');
       expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
       expect(req.session.manifestErr).to.be.undefined;
