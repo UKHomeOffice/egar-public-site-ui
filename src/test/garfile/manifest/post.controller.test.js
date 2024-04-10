@@ -245,8 +245,38 @@ describe('Manifest Post Controller', () => {
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
       items: [
-        { firstName: 'James', lastName: 'Kirk' },
-        { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
+        {
+          dateOfBirth: '1994-06-22',
+          documentExpiryDate: '2100-06-22',
+          documentNumber: '1283',
+          documentType: 'Identity Card',
+          firstName: 'James',
+          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+          gender: 'Male',
+          issuingState: 'PTA',
+          lastName: 'Smith',
+          nationality: 'PTA',
+          peopleType: {
+            name: 'Captain',
+          },
+          placeOfBirth: 'PTA',
+        },
+        {
+          dateOfBirth: '1994-06-22',
+          documentExpiryDate: '2100-06-22',
+          documentNumber: '1283',
+          documentType: 'Identity Card',
+          firstName: 'James',
+          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+          gender: 'Male',
+          issuingState: 'PTA',
+          lastName: 'Smith',
+          nationality: 'PTA',
+          peopleType: {
+            name: 'Captain',
+          },
+          placeOfBirth: 'PTA',
+        }
       ],
     }));
     sinon.stub(manifestUtil, 'getDetailsByIds');
@@ -255,11 +285,12 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then().then(() => {
+    callController().then().then().then().then(() => {
       expect(garApi.getPeople).to.have.been.calledWith('9001');
       expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
       expect(req.session.manifestErr).to.be.undefined;
       expect(req.session.manifestInvalidPeople).to.be.undefined;
+      expect(res.redirect).to.have.been.called;
       expect(res.redirect).to.have.been.calledWith('/garfile/responsibleperson');
     });
   });
@@ -271,8 +302,38 @@ describe('Manifest Post Controller', () => {
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
       items: [
-        { firstName: 'James', lastName: 'Kirk' },
-        { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
+        {
+          dateOfBirth: '1994-06-22',
+          documentExpiryDate: '2100-06-22',
+          documentNumber: '1283',
+          documentType: 'Identity Card',
+          firstName: 'James',
+          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+          gender: 'Male',
+          issuingState: 'PTA',
+          lastName: 'Smith',
+          nationality: 'PTA',
+          peopleType: {
+            name: 'Captain',
+          },
+          placeOfBirth: 'PTA',
+        },
+        {
+          dateOfBirth: '1994-06-22',
+          documentExpiryDate: '2100-06-22',
+          documentNumber: '1283',
+          documentType: 'Identity Card',
+          firstName: 'James',
+          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+          gender: 'Male',
+          issuingState: 'PTA',
+          lastName: 'Smith',
+          nationality: 'PTA',
+          peopleType: {
+            name: 'Captain',
+          },
+          placeOfBirth: 'PTA',
+        }
       ],
     }));
     sinon.stub(manifestUtil, 'getDetailsByIds');
@@ -281,7 +342,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
+    callController().then().then().then().then(() => {
       expect(garApi.getPeople).to.have.been.calledWith('9001');
       expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
       expect(req.session.manifestErr).to.be.undefined;

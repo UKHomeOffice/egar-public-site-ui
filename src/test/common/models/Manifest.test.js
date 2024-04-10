@@ -177,7 +177,7 @@ describe('ManifestModel', () => {
     expect(manifest.genErrValidations()).to.have.length(1);
   });
 
-  it('Should return true if place of Birth is not present for a passenger', async () => {
+  it('Should return false if place of Birth is not present for a passenger', async () => {
     const singlePassenger = JSON.stringify({
       items: [
         {
