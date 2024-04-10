@@ -77,7 +77,9 @@ const buildValidations = async (garfile, garpeople, manifest) => {
 
   // Manifest specific validations does not using generic mechanism, so wrapped in
   // an uninformative message for now
-  if (await !manifest.validate()) {
+  const isManifestValid = await manifest.validate();
+
+  if (!isManifestValid) {
     const validateFailMsg = 'Resolve manifest errors before submitting';
     validations.push([
       new ValidationRule(validator.valuetrue, 'resolveError', '', validateFailMsg),

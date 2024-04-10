@@ -49,16 +49,16 @@ class Manifest {
             person.travelDocumentType = person.documentType;
 
             const req = { body: person };
-            logger.info(JSON.stringify({ req }))
             return await validator.validateChains(validations.validations(req));
           } catch (err) {
-            logger.error(JSON.stringify(err))
             this._recordValidationErr(this.manifest.indexOf(person));
           }
         })
       );
 
     await validatingPeople;
+
+    logger.info(`this.invalidPeople: ${JSON.stringify(this.invalidPeople)}`);
 
     return this.invalidPeople.length === 0;
   }
