@@ -2,15 +2,35 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
+const sinon = require('sinon');
 
 require('../../global.test');
 const { Manifest } = require('../../../common/models/Manifest.class');
+
+// {
+//   firstName: 'Benjamin',
+//   lastName: 'Sisko',
+//   gender: 'Male',
+//   dobYear: '1937',
+//   dobMonth: '06',
+//   dobDay: '07',
+//   birthplace: 'New Orleans',
+//   nationality: 'usa',
+//   personType: 'Captain',
+//   travelDocumentNumber: '1234567890',
+//   travelDocumentType: 'Passport',
+//   issuingState: 'usa',
+//   expiryYear: '2150',
+//   expiryMonth: '05',
+//   expiryDay: '04',
+//   garPeopleId: '9002',
+// }
 
 const apiResponse = JSON.stringify({
   items: [
     {
       dateOfBirth: '1994-06-22',
-      documentExpiryDate: '2023-06-22',
+      documentExpiryDate: '2100-06-22',
       documentNumber: '1283',
       documentType: 'Identity Card',
       firstName: 'James',
@@ -28,6 +48,16 @@ const apiResponse = JSON.stringify({
 });
 
 describe('ManifestModel', () => {
+  const APRIL = 3;
+    
+  beforeEach(() => {
+    clock = sinon.useFakeTimers({
+      now: new Date(2024, APRIL, 11),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
+  });
+
   it('Should generate valid manifest data from a valid API response', () => {
     const manifest = new Manifest(apiResponse);
     expect(manifest.manifest).to.have.length(1);
@@ -195,5 +225,9 @@ describe('ManifestModel', () => {
     });
     const manifest = new Manifest(singleCrew);
     expect(manifest.validateCaptainCrew()).to.be.true;
+  });
+
+  afterEach(()=>{
+    clock.restore();
   });
 });

@@ -33,10 +33,40 @@ class Manifest {
     const validatingPeople = new Promise((resolve) => {
       resolve(
         this.manifest.forEach(async (person) => {
+          const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
+          const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
+          
+          person.dobYear = birtDateObject.y;
+          person.dobMonth = birtDateObject.m;
+          person.dobDay = birtDateObject.d;
+
+          person.expiryYear = expiryDateObject.y;
+          person.expiryMonth = expiryDateObject.m;
+          person.expiryDay = expiryDateObject.d;
+
+          person.personType = person.peopleType.name;
+          person.travelDocumentNumber = person.documentNumber;
+          person.travelDocumentType = person.documentType;
+          // {
+          //   firstName: 'Benjamin',
+          //   lastName: 'Sisko',
+          //   gender: 'Male',
+          //
+          //   birthplace: 'New Orleans',
+          //   nationality: 'usa',
+          //   personType: 'Captain',
+          //   travelDocumentNumber: '1234567890',
+          //   travelDocumentType: 'Passport',
+          //   issuingState: 'usa',
+          //   
+          //   garPeopleId: '9002',
+          // }
+
           try {
             const req = Object.create({ body: person });
             await validator.validateChains(validations.validations(req))
-          } catch (e) {
+          } catch (err) {
+            logger.error(JSON.stringify(err))
             this._recordValidationErr(this.manifest.indexOf(person));
           }
         })
