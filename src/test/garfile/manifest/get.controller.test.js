@@ -76,36 +76,36 @@ describe('Manifest Get Controller', () => {
     let personApiStub; let garApiStub;
 
     beforeEach(() => {
-      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify([
-        { firstName: 'James', lastName: 'Kirk' },
-        { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
-      ]));
-      garApiStub = sinon.stub(garApi, 'getPeople').resolves(JSON.stringify([
-        { firstName: 'Montgomery', lastName: 'Scott' },
-      ]));
+      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify({ 
+        items: [
+            { firstName: 'James', lastName: 'Kirk' },
+            { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
+        ]
+      }));
+      garApiStub = sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({ 
+        items: [
+          { firstName: 'Montgomery', lastName: 'Scott' }
+        ]
+      }));
     });
 
     it('should render with errMsg populated', async () => {
       req.session.errMsg = { message: 'Example Error Message' };
       cookie = new CookieModel(req);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController().then(() => {
-        expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
-        expect(garApiStub).to.have.been.calledWith('9001');
-        expect(req.session.errMsg).to.be.undefined;
-        expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
-          cookie,
-          savedPeople: [
-            { firstName: 'James', lastName: 'Kirk' },
-            { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
-          ],
-          manifest: [{ firstName: 'Montgomery', lastName: 'Scott' }],
-          errors: [{ message: 'Example Error Message' }],
-        });
+      expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
+      expect(garApiStub).to.have.been.calledWith('9001');
+      expect(req.session.errMsg).to.be.undefined;
+      expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
+        cookie,
+        savedPeople: { items: [
+          { firstName: 'James', lastName: 'Kirk' },
+          { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
+        ] },
+        manifest: { items: [{ firstName: 'Montgomery', lastName: 'Scott' }] },
+        errors: [{ message: 'Example Error Message' }],
       });
     });
 
@@ -126,11 +126,11 @@ describe('Manifest Get Controller', () => {
         expect(req.session.manifestInvalidPeople).to.be.undefined;
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
-          savedPeople: [
+          savedPeople: { items: [
             { firstName: 'James', lastName: 'Kirk' },
             { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
-          ],
-          manifest: [{ firstName: 'Montgomery', lastName: 'Scott' }],
+          ] },
+          manifest: { items: [{ firstName: 'Montgomery', lastName: 'Scott' }] },
           manifestInvalidPeople: [{ firstName: 'Jean-Luc', lastName: 'Picard' }],
           errors: [{ message: 'Wrong era' }],
         });

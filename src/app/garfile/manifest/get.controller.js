@@ -22,18 +22,6 @@ module.exports = async (req, res) => {
     const manifestData = new Manifest(values[1]);
     const isValidManifest = await manifestData.validate();
 
-      if (!isValidManifest) {
-        logger.info('Manifest validation failed, redirecting with error msg');
-    
-        return res.render('app/garfile/manifest/index', { 
-          cookie, 
-          savedPeople, 
-          manifest, 
-          manifestInvalidPeople: manifestData.invalidPeople, 
-          errors: manifestData.genErrValidations()
-        });
-      }
-
       if (req.session.errMsg) {
         const { errMsg } = req.session;
         delete req.session.errMsg;
@@ -45,6 +33,18 @@ module.exports = async (req, res) => {
         delete req.session.manifestErr;
         delete req.session.manifestInvalidPeople;
         return res.render('app/garfile/manifest/index', { cookie, savedPeople, manifest, manifestInvalidPeople, errors: manifestErr });
+      }
+
+      if (!isValidManifest) {
+        logger.info('Manifest validation failed, redirecting with error msg');
+    
+        return res.render('app/garfile/manifest/index', { 
+          cookie, 
+          savedPeople, 
+          manifest, 
+          manifestInvalidPeople: manifestData.invalidPeople, 
+          errors: manifestData.genErrValidations()
+        });
       }
 
       if (req.session.successMsg) {
