@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
+const logger = require('../../common/utils/logger')(__filename);
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
@@ -128,44 +129,37 @@ describe('People Get Controller', () => {
       });
     });
 
-    it('should include success message if set in the session', () => {
+    it('should include success message if set in the session', async () => {
       req.session.successMsg = 'Example Success Message';
       req.session.successHeader = 'Successful Header';
       const cookie = new CookieModel(req);
       sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(apiResponse));
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+      
+      await controller(req, res);
 
-      callController().then(() => {
-          expect(req.session.successMsg).to.be.undefined;
-          expect(req.session.successHeader).to.be.undefined;
-          expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
-          expect(res.render).to.have.been.calledWith('app/people/index', {
-            cookie, people: apiResponse, successHeader: 'Successful Header', successMsg: 'Example Success Message',
-          });
+      expect(req.session.successMsg).to.be.undefined;
+      expect(req.session.successHeader).to.be.undefined;
+      expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
+      expect(res.render).to.have.been.calledWith('app/people/index', {
+        cookie, people: apiResponse, successHeader: 'Successful Header', successMsg: 'Example Success Message',
       });
     });
 
-    it('should render the page as appropriate', () => {
+    it('should render the page as appropriate', async () => {
       const cookie = new CookieModel(req);
       sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(apiResponse));
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController().then(() => {
-        setTimeout(() => {
-        expect(req.session.errMsg).to.be.undefined;
-        expect(req.session.successMsg).to.be.undefined;
-        expect(req.session.successHeader).to.be.undefined;
-        expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
-        expect(res.render).to.have.been.calledWith('app/people/index', {
-          cookie, people: apiResponse,
-        });
-      });
+      logger.info(12345)
+      expect(req.session.errMsg).to.be.undefined;
+      expect(req.session.successMsg).to.be.undefined;
+      expect(req.session.successHeader).to.be.undefined;
+      expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
+      expect(res.render).to.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/people/index', {
+        cookie, people: apiResponse,
       });
     });
   });
