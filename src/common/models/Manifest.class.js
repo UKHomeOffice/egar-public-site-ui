@@ -52,6 +52,7 @@ class Manifest {
             const req = { body: person };
             return await validator.validateChains(validations.validations(req));
           } catch (err) {
+            logger.error(`manifest.validate: ${JSON.stringify(err)}`);
             this._recordValidationErr(this.manifest.indexOf(person));
           }
         })

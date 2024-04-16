@@ -13,10 +13,17 @@ const personApi = require('../../common/services/personApi');
 const controller = require('../../app/people/get.controller');
 
 describe('People Get Controller', () => {
-  let req; let res;
+  let req; let res; let clock;
+  const APRIL = 3;
+
 
   beforeEach(() => {
     chai.use(sinonChai);
+    clock = sinon.useFakeTimers({
+      now: new Date(2023, APRIL, 11),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
 
     req = {
       session: {
@@ -30,6 +37,7 @@ describe('People Get Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   it('should render with error if api rejects', () => {
@@ -69,10 +77,36 @@ describe('People Get Controller', () => {
   describe('api returns people', () => {
     const apiResponse = [
       {
-        personId: '1', peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk',
+        dateOfBirth: '1994-06-22',
+        documentExpiryDate: '2023-06-22',
+        documentNumber: '1283',
+        documentType: 'Identity Card',
+        firstName: 'James',
+        garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+        gender: 'Male',
+        issuingState: 'PTA',
+        lastName: 'Smith',
+        nationality: 'GBR',
+        peopleType: {
+          name: 'Crew',
+        },
+        placeOfBirth: 'PTA',
       },
       {
-        personId: '2', peopleType: { name: 'Crew' }, firstName: 'S\'chn T\'gai', lastName: 'Spock',
+        dateOfBirth: '1994-06-22',
+        documentExpiryDate: '2023-06-22',
+        documentNumber: '1283',
+        documentType: 'Identity Card',
+        firstName: 'James',
+        garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+        gender: 'Male',
+        issuingState: 'PTA',
+        lastName: 'Smith',
+        nationality: 'GBR',
+        peopleType: {
+          name: 'Crew',
+        },
+        placeOfBirth: 'PTA',
       },
     ];
 
@@ -105,12 +139,12 @@ describe('People Get Controller', () => {
       };
 
       callController().then(() => {
-        expect(req.session.successMsg).to.be.undefined;
-        expect(req.session.successHeader).to.be.undefined;
-        expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
-        expect(res.render).to.have.been.calledWith('app/people/index', {
-          cookie, people: apiResponse, successHeader: 'Successful Header', successMsg: 'Example Success Message',
-        });
+          expect(req.session.successMsg).to.be.undefined;
+          expect(req.session.successHeader).to.be.undefined;
+          expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
+          expect(res.render).to.have.been.calledWith('app/people/index', {
+            cookie, people: apiResponse, successHeader: 'Successful Header', successMsg: 'Example Success Message',
+          });
       });
     });
 
@@ -123,6 +157,7 @@ describe('People Get Controller', () => {
       };
 
       callController().then(() => {
+        setTimeout(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
@@ -130,6 +165,7 @@ describe('People Get Controller', () => {
         expect(res.render).to.have.been.calledWith('app/people/index', {
           cookie, people: apiResponse,
         });
+      });
       });
     });
   });

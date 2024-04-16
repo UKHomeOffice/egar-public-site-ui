@@ -42,10 +42,16 @@ module.exports = (req, res) => {
     
       } 
 
+      logger.info("gods of war")
+
       if (req.session.successMsg) {
+        logger.info("gods of war 0")
+
         const { successMsg, successHeader } = req.session;
         delete req.session.successHeader;
         delete req.session.successMsg;
+        logger.info("gods of war 1")
+
         return res.render('app/people/index', {
           cookie, people, successHeader, successMsg,
         });

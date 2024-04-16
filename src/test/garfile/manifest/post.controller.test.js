@@ -255,7 +255,7 @@ describe('Manifest Post Controller', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Captain',
           },
@@ -271,7 +271,7 @@ describe('Manifest Post Controller', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Captain',
           },
@@ -312,7 +312,7 @@ describe('Manifest Post Controller', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Captain',
           },
@@ -328,7 +328,7 @@ describe('Manifest Post Controller', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Captain',
           },

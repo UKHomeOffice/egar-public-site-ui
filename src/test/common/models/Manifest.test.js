@@ -38,7 +38,7 @@ const apiResponse = JSON.stringify({
       gender: 'Male',
       issuingState: 'PTA',
       lastName: 'Smith',
-      nationality: 'PTA',
+      nationality: 'GBR',
       peopleType: {
         name: 'Captain',
       },
@@ -100,7 +100,7 @@ describe('ManifestModel', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Crew',
           },
@@ -125,7 +125,7 @@ describe('ManifestModel', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Passenger',
           },
@@ -190,7 +190,7 @@ describe('ManifestModel', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Passenger',
           },
@@ -215,7 +215,7 @@ describe('ManifestModel', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Crew',
           },
