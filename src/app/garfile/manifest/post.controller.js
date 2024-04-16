@@ -75,7 +75,7 @@ module.exports = (req, res) => {
             req.session.manifestErr = manifest.genErrValidations();
             req.session.manifestInvalidPeople = manifest.invalidPeople;
         
-            await res.redirect('/garfile/manifest');
+            res.redirect('/garfile/manifest');
           }
         } catch (err) {
           logger.error(JSON.stringify(err));
