@@ -70,6 +70,14 @@ describe('Validator', () => {
     expect(validator.hasOnlySymbols('aa$')).to.be.false;
   });
 
+  it('Should return false when a horizontal tab present in the input', () => {
+    expect(validator.containTabs('tab name')).to.be.false;
+  });
+
+  it('Should return false when a input starts with a tab', () => {
+    expect(validator.containTabs('  name')).to.be.false;
+  });
+
   it('Should return false when numeric inputs are not', () => {
     expect(validator.isNumeric('aa')).to.be.false;
     expect(validator.isNumeric('true')).to.be.false;
