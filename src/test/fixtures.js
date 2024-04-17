@@ -40,7 +40,7 @@ const garPeople = () => {
     return [
         {
             dateOfBirth: '1994-06-22',
-            documentExpiryDate: '2023-06-22',
+            documentExpiryDate: '2100-06-22',
             documentNumber: '1283',
             documentType: 'Passport',
             firstName: 'Montgomery',
@@ -50,7 +50,7 @@ const garPeople = () => {
             lastName: 'Scott',
             nationality: 'GBR',
             peopleType: {
-            name: 'Crew',
+              name: 'Crew',
             },
             placeOfBirth: 'PTA',
         },
