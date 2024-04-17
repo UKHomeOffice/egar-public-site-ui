@@ -31,12 +31,11 @@ module.exports = async (req, res) => {
     if (!isValidPeople) {
       logger.error(`User ${cookie.getUserDbId()} users are invalid`);
       logger.info('Manifest validation failed, redirecting with error msg');
-      req.session.manifestErr = manifest.genErrValidations();
 
       return res.render('app/people/index', { 
         cookie, 
         people, 
-        errors: req.session.manifestErr, 
+        errors: manifest.genErrValidations(), 
         manifestInvalidPeople: manifest.invalidPeople
       });
   
