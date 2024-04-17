@@ -18,6 +18,7 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
 const emailService = require('../../../common/services/sendEmail');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const controller = require('../../../app/garfile/review/post.controller');
+const { garPeople } = require('../../fixtures');
 
 describe('GAR Review Post Controller', () => {
   let req; let res; let clock;
@@ -260,24 +261,7 @@ describe('GAR Review Post Controller', () => {
       }));
 
       garApiGetPeopleStub.resolves(JSON.stringify({
-        items: [
-          {
-            dateOfBirth: '1994-06-22',
-            documentExpiryDate: '2023-06-22',
-            documentNumber: '1283',
-            documentType: 'Identity Card',
-            firstName: 'James',
-            garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
-            gender: 'Male',
-            issuingState: 'PTA',
-            lastName: 'Smith',
-            nationality: 'GBR',
-            peopleType: {
-              name: 'Crew',
-            },
-            placeOfBirth: 'PTA',
-          },
-        ],
+        items: garPeople(),
       }));
 
       garAPISubmitForCheckinStub.rejects('garApi.submitGARForCheckin Example Reject')
