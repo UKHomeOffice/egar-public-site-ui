@@ -22,6 +22,10 @@ module.exports = async (req, res) => {
     const manifestData = new Manifest(values[1]);
     const isValidManifest = await manifestData.validate();
 
+    logger.info(`Session: ${JSON.stringify(req.session)}`);
+    logger.info(`req.session.errMsg: ${req.session.errMsg}`);
+    logger.info(`req.session.manifestErr: ${req.session.manifestErr}`);
+
       if (req.session.errMsg) {
         const { errMsg } = req.session;
         delete req.session.errMsg;
