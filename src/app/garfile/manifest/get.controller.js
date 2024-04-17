@@ -18,13 +18,13 @@ module.exports = async (req, res) => {
   try {
     const values = await Promise.all([getSavedPeople, getManifest]);
     const savedPeople = JSON.parse(values[0]);
+
+    const savedPeopleManifest = new Manifest(JSON.stringify({ items: savedPeople }));
     const manifest = JSON.parse(values[1]);
     const manifestData = new Manifest(values[1]);
-    const isValidManifest = await manifestData.validate();
 
-    logger.info(`Session: ${JSON.stringify(req.session)}`);
-    logger.info(`req.session.errMsg: ${req.session.errMsg}`);
-    logger.info(`req.session.manifestErr: ${req.session.manifestErr}`);
+    const isSavedPeopleManifest = await savedPeopleManifest.validate();
+    const isValidManifest = await manifestData.validate();
 
       if (req.session.errMsg) {
         const { errMsg } = req.session;
@@ -37,6 +37,18 @@ module.exports = async (req, res) => {
         delete req.session.manifestErr;
         delete req.session.manifestInvalidPeople;
         return res.render('app/garfile/manifest/index', { cookie, savedPeople, manifest, manifestInvalidPeople, errors: manifestErr });
+      }
+
+      if (!isSavedPeopleManifest) {
+        logger.info(' saved people Manifest validation failed, redirecting with error msg');
+
+        return res.render('app/garfile/manifest/index', { 
+          cookie, 
+          savedPeople, 
+          manifest, 
+          manifestInvalidSavedPeople: savedPeopleManifest.invalidPeople, 
+          errors: savedPeopleManifest.genErrValidations()
+        });
       }
 
       if (!isValidManifest) {

@@ -62,6 +62,7 @@
       {% else %}
         <table class="govuk-table" id="people_table" >
       {% endif %}
+
           <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
@@ -83,7 +84,11 @@
           <tbody class="govuk-table__body" id="people_table_row">
           {% if savedPeople | length %}
             {% for person in savedPeople %}
-            <tr class="govuk-table__row">
+            {% if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
+              <tr class="govuk-table__row row-error" id="person-{{loop.index0}}">
+            {% else %}
+              <tr class="govuk-table__row" id="person-{{loop.index0}}">
+            {% endif %}
               <td class="govuk-table__cell multiple-choice--hod">
                 <div class="govuk-checkboxes__item">
                 <input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="savedPerson-{{loop.index0}}" name="personId" value="{{person.personId}}">
