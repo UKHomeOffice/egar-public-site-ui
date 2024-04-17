@@ -5,6 +5,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const { garPeople } = require('../../fixtures');
 
 const logger = require('../../../common/utils/logger')(__filename);
 
@@ -244,40 +245,7 @@ describe('Manifest Post Controller', () => {
     cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
-      items: [
-        {
-          dateOfBirth: '1994-06-22',
-          documentExpiryDate: '2100-06-22',
-          documentNumber: '1283',
-          documentType: 'Identity Card',
-          firstName: 'James',
-          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
-          gender: 'Male',
-          issuingState: 'PTA',
-          lastName: 'Smith',
-          nationality: 'GBR',
-          peopleType: {
-            name: 'Captain',
-          },
-          placeOfBirth: 'PTA',
-        },
-        {
-          dateOfBirth: '1994-06-22',
-          documentExpiryDate: '2100-06-22',
-          documentNumber: '1283',
-          documentType: 'Identity Card',
-          firstName: 'James',
-          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
-          gender: 'Male',
-          issuingState: 'PTA',
-          lastName: 'Smith',
-          nationality: 'GBR',
-          peopleType: {
-            name: 'Captain',
-          },
-          placeOfBirth: 'PTA',
-        }
-      ],
+      items: garPeople(),
     }));
     sinon.stub(manifestUtil, 'getDetailsByIds');
 
@@ -301,40 +269,7 @@ describe('Manifest Post Controller', () => {
     cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
-      items: [
-        {
-          dateOfBirth: '1994-06-22',
-          documentExpiryDate: '2100-06-22',
-          documentNumber: '1283',
-          documentType: 'Identity Card',
-          firstName: 'James',
-          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
-          gender: 'Male',
-          issuingState: 'PTA',
-          lastName: 'Smith',
-          nationality: 'GBR',
-          peopleType: {
-            name: 'Captain',
-          },
-          placeOfBirth: 'PTA',
-        },
-        {
-          dateOfBirth: '1994-06-22',
-          documentExpiryDate: '2100-06-22',
-          documentNumber: '1283',
-          documentType: 'Identity Card',
-          firstName: 'James',
-          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
-          gender: 'Male',
-          issuingState: 'PTA',
-          lastName: 'Smith',
-          nationality: 'GBR',
-          peopleType: {
-            name: 'Captain',
-          },
-          placeOfBirth: 'PTA',
-        }
-      ],
+      items: garPeople(),
     }));
     sinon.stub(manifestUtil, 'getDetailsByIds');
 
