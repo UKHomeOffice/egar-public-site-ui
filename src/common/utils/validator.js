@@ -807,5 +807,6 @@ module.exports = {
   isPostCodeValidCharacters,
   isValidAirportCode,
   dateNotMoreThanTwoDaysInFuture,
-  isTwoHoursPriorDeparture
+  isTwoHoursPriorDeparture,
+  containTabs
 };
