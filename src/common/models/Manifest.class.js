@@ -24,6 +24,25 @@ class Manifest {
       throw err;
     }
   }
+
+  static turnPersonToRequest (person) {
+    const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
+    const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
+    
+    person.dobYear = birtDateObject.y;
+    person.dobMonth = birtDateObject.m;
+    person.dobDay = birtDateObject.d;
+
+    person.expiryYear = expiryDateObject.y;
+    person.expiryMonth = expiryDateObject.m;
+    person.expiryDay = expiryDateObject.d;
+
+    person.personType = person.peopleType.name;
+    person.travelDocumentNumber = person.documentNumber;
+    person.travelDocumentType = person.documentType;
+
+    return { body: person };
+  }
   
   /**
    * Validate Manifest data cannot be empty and cannot have invalid dates
@@ -34,22 +53,7 @@ class Manifest {
     const validatingPeople = Promise.allSettled(
         this.manifest.map(async (person) => {
           try {
-            const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
-            const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
-            
-            person.dobYear = birtDateObject.y;
-            person.dobMonth = birtDateObject.m;
-            person.dobDay = birtDateObject.d;
-
-            person.expiryYear = expiryDateObject.y;
-            person.expiryMonth = expiryDateObject.m;
-            person.expiryDay = expiryDateObject.d;
-
-            person.personType = person.peopleType.name;
-            person.travelDocumentNumber = person.documentNumber;
-            person.travelDocumentType = person.documentType;
-
-            const req = { body: person };
+            const req = Manifest.turnPersonToRequest(person);
             return await validator.validateChains(validations.validations(req));
           } catch (err) {
             logger.error(`manifest.validate: ${JSON.stringify(err)}`);

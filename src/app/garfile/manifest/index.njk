@@ -54,6 +54,16 @@
     <div class="govuk-grid-column-full">
       <p class="govuk-body-l">{{__('people_caption')}}</p>
       <p class="govuk-body-m">{{__('person_search')}}</p>
+      {% if manifestInvalidSavedPeople %}
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-visually-hidden">Warning</span>
+          The outlined saved people have invalid information. 
+          Please fix them in the <a href="/people">people</a> section.
+        </strong>
+      </div>
+      {% endif %}
       <input class="govuk-input govuk-input--width-20" id="person-search" name="person-search" type="text" placeholder="Search" style="margin-bottom: 10px">
       <p class="govuk-body-s" style="margin-bottom: 10px">{{__('person_sort')}}</p>
       <form id="people" action="/people" method="post">
@@ -91,7 +101,14 @@
             {% endif %}
               <td class="govuk-table__cell multiple-choice--hod">
                 <div class="govuk-checkboxes__item">
-                <input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="savedPerson-{{loop.index0}}" name="personId" value="{{person.personId}}">
+                <input 
+                  type="checkbox" 
+                  class="govuk-checkboxes__input jsCheckbox" 
+                  id="savedPerson-{{loop.index0}}" 
+                  name="personId" 
+                  value="{{person.personId}}"
+                  {{ "disabled" if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople)  }}
+                >
                 <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
                   &nbsp;
                 </label>

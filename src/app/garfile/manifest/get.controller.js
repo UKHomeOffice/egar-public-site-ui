@@ -47,7 +47,6 @@ module.exports = async (req, res) => {
           savedPeople, 
           manifest, 
           manifestInvalidSavedPeople: savedPeopleManifest.invalidPeople, 
-          errors: savedPeopleManifest.genErrValidations()
         });
       }
 
