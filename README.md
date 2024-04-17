@@ -203,3 +203,4 @@ export PUBLIC_SITE_EXTERNAL_URL='www.egar-sit.homeoffice.gov.uk' # The external 
 export PUBLIC_SITE_INTERNAL_URL='internal url'              # The internal url. Please refer to drone secrets.
 ```
 The easiest is to have a file called `.idea` with all the above variables defined in it which will be included automatically in the `deploy_app` and the `destroy_app` scripts; the file `.idea` will not be tracked by git.
+
