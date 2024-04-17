@@ -6,6 +6,7 @@ const logger = require('../../common/utils/logger')(__filename);
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const { savedPeople } = require('../fixtures');
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
@@ -76,40 +77,7 @@ describe('People Get Controller', () => {
   });
 
   describe('api returns people', () => {
-    const apiResponse = [
-      {
-        dateOfBirth: '1994-06-22',
-        documentExpiryDate: '2023-06-22',
-        documentNumber: '1283',
-        documentType: 'Identity Card',
-        firstName: 'James',
-        garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
-        gender: 'Male',
-        issuingState: 'PTA',
-        lastName: 'Smith',
-        nationality: 'GBR',
-        peopleType: {
-          name: 'Crew',
-        },
-        placeOfBirth: 'PTA',
-      },
-      {
-        dateOfBirth: '1994-06-22',
-        documentExpiryDate: '2023-06-22',
-        documentNumber: '1283',
-        documentType: 'Identity Card',
-        firstName: 'James',
-        garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
-        gender: 'Male',
-        issuingState: 'PTA',
-        lastName: 'Smith',
-        nationality: 'GBR',
-        peopleType: {
-          name: 'Crew',
-        },
-        placeOfBirth: 'PTA',
-      },
-    ];
+    const apiResponse = savedPeople();
 
     it('should include error messages if set in the session', () => {
       req.session.errMsg = { message: 'Example Error Message' };
