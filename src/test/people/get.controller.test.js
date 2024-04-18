@@ -2,7 +2,6 @@
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
-const logger = require('../../common/utils/logger')(__filename);
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
@@ -120,7 +119,6 @@ describe('People Get Controller', () => {
 
       await controller(req, res);
 
-      logger.info(12345)
       expect(req.session.errMsg).to.be.undefined;
       expect(req.session.successMsg).to.be.undefined;
       expect(req.session.successHeader).to.be.undefined;
