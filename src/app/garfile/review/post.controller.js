@@ -119,7 +119,6 @@ module.exports = (req, res) => {
     const garsupportingdocs = JSON.parse(responseValues[2]);
     validator.handleResponseError(garsupportingdocs);
 
-    logger.info(0)
     const validations = await buildValidations(garfile, garpeople, manifest);
 
     if (garfile.status.name.toLowerCase() === 'submitted') {
@@ -143,8 +142,6 @@ module.exports = (req, res) => {
     };
 
     validator.validateChains(validations).then(() => {
-    logger.info(1)
-
       /*
         when we reach this point, if it is a journey coming into the UK we send them to AMG/UPT, otherwise we submit the GAR.
         when the UPT process is complete it sends them back here with status=StatusCheckComplete and at that stage we allow them to submit the GAR.
@@ -154,17 +151,12 @@ module.exports = (req, res) => {
       */
 
       if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && !statuscheck) {
-    logger.info(2)
-
         performAPICallAMG(garId, cookie, req, res);
       }
       else {
-    logger.info(3)
-
         performAPICall(garId, cookie, req, res);
       }
     }).catch((err) => {
-    logger.info(4)
 
       logger.info('Failed to submit incomplete GAR - validation failed');
       logger.debug(JSON.stringify(err));
