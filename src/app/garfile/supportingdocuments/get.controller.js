@@ -33,6 +33,9 @@ module.exports = (req, res) => {
         case 'limit':
           error = [{ message: 'File size exceeds total limit' }];
           break;
+        case 'number':
+          error = [{message: 'Total number of files exceeds the limit' }];
+          break;
         case 'deletefailed':
           error = [{ message: 'Failed to delete document. Try again' }];
           break;

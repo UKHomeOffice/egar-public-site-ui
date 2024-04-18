@@ -313,7 +313,7 @@
 	"supporting_documents_caption": "You don’t have to provide any supporting documentation, but doing so may assist Border Force to process your flight more quickly.",
 	"supporting_documents_warning": "Supporting documentation may include firearms certificates / licences, firearms serial numbers or remote clearance forms.",
 	"supporting_documents_list_1": "The maximum size for the entire GAR submission cannot exceed 8MB.",
-	"supporting_documents_list_2": "You can upload as many supporting documents as you wish within this size limit.",
+	"supporting_documents_list_2": "You can upload up to 10 files within this size limit",
 	"supporting_documents_list_3": "The following file types can be uploaded: PDF, JPG, JPEG, PNG, GIF, DOC, DOCX.",
 	"heading_upload_file": "Upload a file",
 	"button_upload_file": "Upload selected file",
