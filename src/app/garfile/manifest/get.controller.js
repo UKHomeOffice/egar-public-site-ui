@@ -16,62 +16,86 @@ module.exports = async (req, res) => {
   const getManifest = garApi.getPeople(garId);
 
   try {
-    const values = await Promise.all([getSavedPeople, getManifest]);
-    const savedPeople = JSON.parse(values[0]);
+    const [savedPeopleJson, garpeopleJson] = await Promise.all([getSavedPeople, getManifest]);
 
+    const savedPeople = JSON.parse(savedPeopleJson);
     const savedPeopleManifest = new Manifest(JSON.stringify({ items: savedPeople }));
-    const manifest = JSON.parse(values[1]);
-    const manifestData = new Manifest(values[1]);
 
-    const isSavedPeopleManifest = await savedPeopleManifest.validate();
-    const isValidManifest = await manifestData.validate();
+    const garpeople = JSON.parse(garpeopleJson);
+    const garPeopleManifest = new Manifest(garpeopleJson);
+
+    const isValidSavedPeople = await savedPeopleManifest.validate();
+    const isValidGarPeople = await garPeopleManifest.validate();
 
       if (req.session.errMsg) {
         const { errMsg } = req.session;
         delete req.session.errMsg;
-        return res.render('app/garfile/manifest/index', { cookie, savedPeople, manifest, errors: [errMsg] });
+        return res.render('app/garfile/manifest/index', { 
+          cookie, 
+          savedPeople, 
+          manifest: garpeople, 
+          errors: [errMsg] 
+        });
       }
 
       if (req.session.manifestErr) {
         const { manifestErr, manifestInvalidPeople } = req.session;
         delete req.session.manifestErr;
         delete req.session.manifestInvalidPeople;
-        return res.render('app/garfile/manifest/index', { cookie, savedPeople, manifest, manifestInvalidPeople, errors: manifestErr });
+        return res.render('app/garfile/manifest/index', { 
+          cookie, 
+          savedPeople, 
+          manifest: garpeople, 
+          manifestInvalidPeople, 
+          errors: manifestErr 
+        });
       }
 
-      if (!isSavedPeopleManifest) {
+      if (!isValidSavedPeople) {
         logger.info(' saved people Manifest validation failed, redirecting with error msg');
 
         return res.render('app/garfile/manifest/index', { 
           cookie, 
           savedPeople, 
-          manifest, 
+          manifest: garpeople, 
           manifestInvalidSavedPeople: savedPeopleManifest.invalidPeople, 
         });
       }
 
-      if (!isValidManifest) {
+      if (!isValidGarPeople) {
         logger.info('Manifest validation failed, redirecting with error msg');
     
         return res.render('app/garfile/manifest/index', { 
           cookie, 
           savedPeople, 
-          manifest, 
-          manifestInvalidPeople: manifestData.invalidPeople, 
-          errors: manifestData.genErrValidations()
+          manifest: garpeople, 
+          manifestInvalidPeople: garPeopleManifest.invalidPeople, 
+          errors: garPeopleManifest.genErrValidations()
         });
       }
 
       if (req.session.successMsg) {
         const { successMsg } = req.session;
         delete req.session.successMsg;
-        return res.render('app/garfile/manifest/index', { cookie, savedPeople, manifest, successMsg });
+        return res.render('app/garfile/manifest/index', { 
+          cookie, 
+          savedPeople, 
+          manifest: garpeople, 
+          successMsg 
+        });
       }
-      return res.render('app/garfile/manifest/index', { cookie, savedPeople, manifest });
+      return res.render('app/garfile/manifest/index', { 
+        cookie, 
+        savedPeople, 
+        manifest: garpeople 
+      });
     } catch(err) {
       // Get savedpeople / manifest failed
       logger.error('Failed to add person to GAR');
       logger.error(err);
-      res.render('app/garfile/manifest/index', { cookie, errors: [{ message: 'Failed to get manifest data' }] });
+      res.render('app/garfile/manifest/index', { 
+        cookie, 
+        errors: [{ message: 'Failed to get manifest data' }] 
+      });
     };
 };
