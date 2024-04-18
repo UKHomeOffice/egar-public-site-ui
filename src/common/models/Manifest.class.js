@@ -50,22 +50,18 @@ class Manifest {
    * @returns {Bool} true if valid, else false
    */
   async validate() {
-    logger.info(`this.manifest: ${JSON.stringify(this.manifest)}`);
     const validatingPeople = Promise.allSettled(
         this.manifest.map(async (person) => {
           try {
             const req = Manifest.turnPersonToRequest(person);
             return await validator.validateChains(validations.validations(req));
           } catch (err) {
-            logger.error(`manifest.validate: ${JSON.stringify(err)}`);
             this._recordValidationErr(this.manifest.indexOf(person));
           }
         })
       );
 
     await validatingPeople;
-
-    logger.info(`this.invalidPeople: ${JSON.stringify(this.invalidPeople)}`);
 
     return this.invalidPeople.length === 0;
   }

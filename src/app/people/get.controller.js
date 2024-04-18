@@ -12,8 +12,6 @@ module.exports = async (req, res) => {
     const response = await personApi.getPeople(cookie.getUserDbId(), 'individual')
     const people = JSON.parse(response);
     const manifest = new Manifest(JSON.stringify({ items: people }));
-
-    logger.info(`people: ${JSON.stringify(people)}`)
     
     if (people.message) {
       logger.info('Failed to get saved people');
