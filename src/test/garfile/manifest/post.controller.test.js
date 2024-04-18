@@ -7,7 +7,6 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const { garPeople } = require('../../fixtures');
 
-const logger = require('../../../common/utils/logger')(__filename);
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
