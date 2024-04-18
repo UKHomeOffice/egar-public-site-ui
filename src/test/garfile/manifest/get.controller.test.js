@@ -46,6 +46,7 @@ describe('Manifest Get Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   it('should return an error if person api rejects', () => {
@@ -84,9 +85,7 @@ describe('Manifest Get Controller', () => {
     let personApiStub; let garApiStub;
 
     beforeEach(() => {
-      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify({ 
-        items: savedPeople()
-      }));
+      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(savedPeople()));
       garApiStub = sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({ 
         items: garPeople()
       }));
@@ -103,7 +102,7 @@ describe('Manifest Get Controller', () => {
       expect(req.session.errMsg).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie,
-        savedPeople: { items: savedPeople() },
+        savedPeople: savedPeople(),
         manifest: { items: garPeople() },
         errors: [{ message: 'Example Error Message' }],
       });
@@ -126,7 +125,7 @@ describe('Manifest Get Controller', () => {
         expect(req.session.manifestInvalidPeople).to.be.undefined;
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
-          savedPeople: { items: savedPeople() },
+          savedPeople: savedPeople(),
           manifest: { items: garPeople() },
           manifestInvalidPeople: [{ firstName: 'Jean-Luc', lastName: 'Picard' }],
           errors: [{ message: 'Wrong era' }],
@@ -145,7 +144,7 @@ describe('Manifest Get Controller', () => {
       expect(req.session.successMsg).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie,
-        savedPeople: { items: savedPeople() },
+        savedPeople: savedPeople(),
         manifest: { items: garPeople() },
         successMsg: 'All present captain',
       });
@@ -163,7 +162,7 @@ describe('Manifest Get Controller', () => {
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
-          savedPeople: { items: savedPeople() },
+          savedPeople: savedPeople(),
           manifest: { items: garPeople() },
         });
       });

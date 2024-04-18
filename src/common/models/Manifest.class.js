@@ -25,7 +25,8 @@ class Manifest {
     }
   }
 
-  static turnPersonToRequest (person) {
+  static turnPersonToRequest (inputtedPerson) {
+    const person = structuredClone(inputtedPerson);
     const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
     const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
     

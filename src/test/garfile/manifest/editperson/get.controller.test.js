@@ -5,6 +5,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const { garPeople } = require('../../../fixtures');
 
 require('../../../global.test');
 const garApi = require('../../../../common/services/garApi');
@@ -18,7 +19,7 @@ describe('Manifest Edit Person Get Controller', () => {
     chai.use(sinonChai);
 
     apiResponse = {
-      items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],
+      items: garPeople(),
     };
 
     // Example request and response objects with appropriate spies

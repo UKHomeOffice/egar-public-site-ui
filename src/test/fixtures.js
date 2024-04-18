@@ -44,7 +44,7 @@ const garPeople = () => {
             documentNumber: '1283',
             documentType: 'Passport',
             firstName: 'Montgomery',
-            garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+            garPeopleId: 1,
             gender: 'Male',
             issuingState: 'PTA',
             lastName: 'Scott',
