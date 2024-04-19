@@ -127,6 +127,7 @@ describe('Manifest Get Controller', () => {
           cookie,
           savedPeople: savedPeople(),
           manifest: { items: garPeople() },
+          manifestInvalidSavedPeople: [],
           manifestInvalidPeople: [{ firstName: 'Jean-Luc', lastName: 'Picard' }],
           errors: [{ message: 'Wrong era' }],
         });
