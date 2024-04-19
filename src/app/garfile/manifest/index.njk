@@ -95,9 +95,9 @@
           {% if savedPeople | length %}
             {% for person in savedPeople %}
             {% if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
-              <tr class="govuk-table__row row-error" id="person-{{loop.index0}}">
+              <tr class="govuk-table__row row-error" id="savedPersonRow-{{loop.index0}}">
             {% else %}
-              <tr class="govuk-table__row" id="person-{{loop.index0}}">
+              <tr class="govuk-table__row" id="savedPerson-{{loop.index0}}">
             {% endif %}
               <td class="govuk-table__cell multiple-choice--hod">
                 <div class="govuk-checkboxes__item">
