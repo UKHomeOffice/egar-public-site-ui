@@ -51405,9 +51405,9 @@
   {
     "id": "EGCS",
     "id2": "EGCS",
-    "british": false,
+    "british": true,
     "crownDependency": false,
-    "label": "Sturgate Airfield (Hungary) (EGCS)"
+    "label": "Sturgate Airfield (EGCS)"
   },
   {
     "id": "NIS",
