@@ -45,32 +45,24 @@ module.exports = async (req, res) => {
         return res.render('app/garfile/manifest/index', { 
           cookie, 
           savedPeople, 
+          manifestInvalidSavedPeople: savedPeopleManifest.invalidPeople,
           manifest: garpeople, 
           manifestInvalidPeople, 
           errors: manifestErr 
         });
       }
 
-      if (!isValidSavedPeople) {
-        logger.info(' saved people Manifest validation failed, redirecting with error msg');
-
-        return res.render('app/garfile/manifest/index', { 
-          cookie, 
-          savedPeople, 
-          manifest: garpeople, 
-          manifestInvalidSavedPeople: savedPeopleManifest.invalidPeople, 
-        });
-      }
-
-      if (!isValidGarPeople) {
+      if (!isValidGarPeople || !isValidSavedPeople) {
         logger.info('Manifest validation failed, redirecting with error msg');
+        const invalidGarPeople = garPeopleManifest.genErrValidations();
     
         return res.render('app/garfile/manifest/index', { 
           cookie, 
           savedPeople, 
           manifest: garpeople, 
           manifestInvalidPeople: garPeopleManifest.invalidPeople, 
-          errors: garPeopleManifest.genErrValidations()
+          manifestInvalidSavedPeople: savedPeopleManifest.invalidPeople,
+          errors: invalidGarPeople.length ? invalidGarPeople : undefined
         });
       }
 
