@@ -159,6 +159,38 @@ describe('API upload file post controller', () => {
         expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=limit');
       });
     });
+
+    it('should redirect with number parameter if number of files more than 10', () => {
+      req.file.size = 1000000;
+
+      garApiGetDocsStub.resolves(JSON.stringify({
+        items: [
+          { fileName: 'FILE1.doc', size: '1KB' },
+          { fileName: 'FILE2.doc', size: '1KB' },
+          { fileName: 'FILE3.doc', size: '1KB' },
+          { fileName: 'FILE4.doc', size: '1KB' },
+          { fileName: 'FILE5.doc', size: '1KB' },
+          { fileName: 'FILE6.doc', size: '1KB' },
+          { fileName: 'FILE7.doc', size: '1KB' },
+          { fileName: 'FILE8.doc', size: '1KB' },
+          { fileName: 'FILE9.doc', size: '1KB' },
+          { fileName: 'FILE10.doc', size: '1KB' },
+          { fileName: 'FILE11.doc', size: '1KB' },
+        ],
+      }));
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
+        expect(garApiDeleteDocsStub).to.not.have.been.called;
+        expect(clamAVServiceStub).to.not.have.been.called;
+        expect(fileUploadApiStub).to.not.have.been.called;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=number');
+      });
+    });
   });
 
   it('should redirect with invalid parameter for unexpected file types', () => {
