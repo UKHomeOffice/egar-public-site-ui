@@ -193,6 +193,60 @@ describe('API upload file post controller', () => {
     });
   });
 
+  describe('valid files less than max number', () => {
+
+    it('should redirect without any parameter when number of files less than the max number (10)', () => {
+      // Create form data for ClamAV
+    formData = {
+      name: req.file.originalname,
+      file: {
+        value: req.file.buffer, // Upload the  file in the multi-part post
+        options: {
+          filename: req.file.originalname,
+        },
+      },
+    };
+
+      // Set the first four bytes of the buffer to convince fileType library it is a PDF
+    req.file.buffer.writeUInt8(0x25, 0);
+    req.file.buffer.writeUInt8(0x50, 1);
+    req.file.buffer.writeUInt8(0x44, 2);
+    req.file.buffer.writeUInt8(0x46, 3);
+
+    garApiGetDocsStub.resolves(JSON.stringify({
+      items: [
+        { fileName: 'FILE1.doc', size: '1K' },
+        { fileName: 'FILE1.doc', size: '1K' },
+        { fileName: 'FILE1.doc', size: '1K' },
+        { fileName: 'FILE1.doc', size: '1K' },
+        { fileName: 'FILE1.doc', size: '1K' },
+        { fileName: 'FILE1.doc', size: '1K' },
+        { fileName: 'FILE1.doc', size: '1K' },
+        { fileName: 'FILE1.doc', size: '1K' },
+        { fileName: 'FILE1.doc', size: '1K' }
+      ],
+      }));
+      clamAVServiceStub.resolves(true);
+      fileUploadApiStub.resolves(JSON.stringify({}));
+      
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then().then().then(() => {
+        expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
+        expect(garApiDeleteDocsStub).to.not.have.been.called;
+        expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
+        expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
+          originalname: 'test-gar.pdf',
+          buffer: req.file.buffer,
+          size: 10000,
+        });
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
+      });
+    });
+  });
+
   it('should redirect with invalid parameter for unexpected file types', () => {
     garApiGetDocsStub.resolves(JSON.stringify({
       items: [
