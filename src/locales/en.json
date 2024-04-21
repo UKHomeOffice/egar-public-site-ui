@@ -205,7 +205,7 @@
 	"field_contact_number": "Contact telephone number",
 	"field_contact_number_hint": "Include international dialling code, for example 44.",
 	"responsible_email_hint": "Add the email address of the responsible person",
-	"validator_contact_number": "Enter a telephone number with international dialling code, no symbols and no spaces",
+	"validator_contact_number": "Enter a UK telephone number or an international number starting with either '00' or '+'. Symbols and spaces should not be entered.",
 	"field_house_number": "House number / building and street ",
 	"field_line_1_of_2": "line 1 of 2",
 	"field_line_2_of_2": "Building and street line 2 of 2",
