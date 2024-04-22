@@ -143,6 +143,7 @@
 	"departure_date_2_hours_prior__flight_requirements": "Information about the flight and persons on board must be submitted no later than 2 hours prior to the aircraft’s expected departure to or from the United Kingdom.",
 	"departure_date_too_far_in_future__civil_penalty": "Continuing with this submission will mean you are not complying with the timing requirements specified in the General Aviation (Persons on Board, Flight Information and Civil Penalties) Regulations 2024 and you may be liable for a civil penalty of up to £10,000.",
 	"departure_date_too_far_in_future__flight_requirements": "Information about the flight and persons on board must be submitted no earlier than 48 hours prior to the aircraft’s expected departure to or from the United Kingdom.",
+	"note_about_utc_and_daylight_saving_hours": "Note: Coordinated Universal Time (UTC) timezone ignores the UK daylight saving time, so the UTC time maybe 1 hour less than the time displayed in the UK.",
 	"field_arrival_date_too_far_in_future": "Arrival date must be today and cannot be more than 1 month in the future",
 	"field_departure_real_date_validation": "Enter a real departure date",
 	"field_departure_real_time_validation": "Enter a real departure time",

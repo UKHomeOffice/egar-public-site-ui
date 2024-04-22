@@ -19,6 +19,7 @@ const continueWithWarnedDate = document.getElementById('continueWithWarnedDate')
 
 const twoHourWarningTexts = Array.from(document.getElementsByClassName("twoHourWarningText"));
 const fortyEightHourWarningTexts = Array.from(document.getElementsByClassName("fortyEightHourWarningText"));
+const daylightSavingWarningTexts = Array.from(document.getElementsByClassName("daylightSavingWarning"));
 
 let departureFormSubmitter = undefined;
 
@@ -31,12 +32,11 @@ const departureDate =  () => {
     Number(departureDay.value),
     Number(departureHourTime.value),
     Number(departureMinuteTime.value)
-  )
+  );
 };
   
 
 function showDepartureDateWarningMessages(providedDate) {
-  console.log(providedDate);
   twoHourWarningTexts.forEach($element => $element.hidden = isTwoHoursPriorDeparture(providedDate));
   fortyEightHourWarningTexts.forEach($element => $element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate));
 }
@@ -52,7 +52,7 @@ window.addEventListener("load", () => {
     ].includes('')) {
       return;
     }
-
+    
   showDepartureDateWarningMessages(departureDate());
 })
 

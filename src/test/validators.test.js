@@ -888,12 +888,19 @@ describe('Validator', () => {
     const MARCH = 2;
     
     beforeEach(() => {
+      process.env.TZ = 'UTC';
+      
       clock = sinon.useFakeTimers({
         now: new Date(2023, MARCH, 27, 14, 15),
         shouldAdvanceTime: false,
         toFake: ["Date"],
       });
-    })
+    });
+
+    afterEach(()=>{
+      process.env.TZ = 'UTC';
+      clock.restore();
+    });
 
     it('Works on a valid by a day date', () => {
       expect(validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 28, 11, 0))).to.equal(true);
@@ -909,6 +916,13 @@ describe('Validator', () => {
 
       const validByMinuteDate = new Date(2023, MARCH, 27, 16, 16);
       expect(validator.isTwoHoursPriorDeparture(validByMinuteDate)).to.equal(true);
+
+      process.env.TZ = 'America/Los_Angeles'; // 5 hours and 30 minute offset
+      const validInTimezoneByHourDate = new Date(2023, MARCH, 27, 15, 15);
+      expect(validator.isTwoHoursPriorDeparture(validInTimezoneByHourDate)).to.equal(false);
+
+      const validInTimezoneByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
+      expect(validator.isTwoHoursPriorDeparture(validInTimezoneByMinuteDate)).to.equal(false);
     }); 
 
     it('Same day but not 2 hour prior date is inaccurate', () => {
@@ -917,10 +931,56 @@ describe('Validator', () => {
 
       const invalidByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
       expect(validator.isTwoHoursPriorDeparture(invalidByMinuteDate)).to.equal(false);
-    });    
 
-    afterEach(()=>{
-      clock.restore();
+      process.env.TZ = 'Asia/Kolkata'; // 5 hours and 30 minute offset
+      const invalidInTimezoneByHourDate = new Date(2023, MARCH, 27, 15, 15);
+      expect(validator.isTwoHoursPriorDeparture(invalidInTimezoneByHourDate)).to.equal(false);
+
+      const invalidInTimezoneByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
+      expect(validator.isTwoHoursPriorDeparture(invalidInTimezoneByMinuteDate)).to.equal(false);
+    });
+
+    it('Confirm that the timezone offset is converted to UTC', () => {
+      process.env.TZ = 'Asia/Kolkata'; // 5 hours and 30 minute offset
+      const mumbaiTime = new Date(2023, MARCH, 27, 15, 15);
+      
+      expect(mumbaiTime.getUTCFullYear()).to.equal(2023);
+      expect(mumbaiTime.getMonth()).to.equal(MARCH);
+      expect(mumbaiTime.getDate()).to.equal(27);
+
+      expect(mumbaiTime.getHours()).to.equal(15);
+      expect(mumbaiTime.getMinutes()).to.equal(15);
+
+      const utcEquivalentTime = validator.convertDateToUTC(mumbaiTime);
+
+      expect(utcEquivalentTime.getUTCFullYear()).to.equal(2023);
+      expect(utcEquivalentTime.getMonth()).to.equal(MARCH);
+      expect(utcEquivalentTime.getDate()).to.equal(27);
+
+      expect(utcEquivalentTime.getHours()).to.equal(9);
+      expect(utcEquivalentTime.getMinutes()).to.equal(45);
+    });
+
+
+    it('Confirm that the timezone offset is converted to UTC', () => {
+      process.env.TZ = 'America/Los_Angeles'; // -7 hours
+      const sanFranciscoTime = new Date(2023, MARCH, 27, 20, 15);
+      
+      expect(sanFranciscoTime.getUTCFullYear()).to.equal(2023);
+      expect(sanFranciscoTime.getMonth()).to.equal(MARCH);
+      expect(sanFranciscoTime.getDate()).to.equal(27);
+
+      expect(sanFranciscoTime.getHours()).to.equal(20);
+      expect(sanFranciscoTime.getMinutes()).to.equal(15);
+
+      const utcEquivalentTime = validator.convertDateToUTC(sanFranciscoTime);
+
+      expect(utcEquivalentTime.getUTCFullYear()).to.equal(2023);
+      expect(utcEquivalentTime.getMonth()).to.equal(MARCH);
+      expect(utcEquivalentTime.getDate()).to.equal(28);
+
+      expect(utcEquivalentTime.getHours()).to.equal(3);
+      expect(utcEquivalentTime.getMinutes()).to.equal(15);
     });
   });
 
