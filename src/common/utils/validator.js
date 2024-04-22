@@ -38,6 +38,10 @@ function hasOnlySymbols(value) {
   return (/^[^a-zA-Z0-9]+$/.test(value));
 }
 
+function containTabs(value) {
+  return /\t+/.test(value);
+}
+
 /**
  * Check if the string is empty, null or undefined.
  * @param {String} value
@@ -74,6 +78,10 @@ function notEmpty(value) {
 
   // check for only symbols
   if (hasOnlySymbols(value)) {
+    return false;
+  }
+
+  if(containTabs(value)) {
     return false;
   }
   return true;
@@ -819,5 +827,6 @@ module.exports = {
   isValidAirportCode,
   dateNotMoreThanTwoDaysInFuture,
   isTwoHoursPriorDeparture,
-  convertDateToUTC
+  convertDateToUTC,
+  containTabs
 };
