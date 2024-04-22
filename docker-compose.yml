@@ -24,13 +24,11 @@ services:
       - "5000:5000"
 
   clamav:
-    image: quay.io/ukhomeofficedigital/clamav:v1.6.1
+    image: quay.io/ukhomeofficedigital/acp-clamav
     container_name: clamav
-    ports:
-      - "3310:3310"
 
   clamav-api:
-    image: quay.io/ukhomeofficedigital/docker-clamav-rest:1.0.0
+    image: quay.io/ukhomeofficedigital/acp-clamav-http
     container_name: clamav-api
     environment:
       - CLAMD_HOST=clamav
