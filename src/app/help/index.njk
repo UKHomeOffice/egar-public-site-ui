@@ -8,7 +8,6 @@ GAR | Help
   {% include "head.njk" %}
 {% endblock %}
 
-
 {% block header %}
   {% if isLoggedIn %}
     {% include "header-user.njk" %}
@@ -16,7 +15,6 @@ GAR | Help
     {% include "header-pre-user.njk" %}
   {% endif %}
 {% endblock %}
-
 
 {% block beforeContent %}
   {% include "phase.njk" %}
@@ -154,7 +152,10 @@ GAR | Help
         </summary>
         <div class="govuk-details__text" id="details-content-response-messages" aria-hidden="true">
           <p class="govuk-body-m">
-            We are introducing Response Messages to sGAR from January 2024. These messages will confirm whether an individual has a valid permission to travel or if you need to conduct a manual check for a visa. Every time you submit data for an individual via sGAR we will return a response. The response will be displayed on the sGAR service. From January 2024 you will see one of the following responses for each passenger.
+            We are introducing Response Messages to sGAR from January 2024. These messages apply to UK inbound journeys and will confirm whether an individual has a valid permission to travel to the UK or if you need to conduct a manual check for a visa. </p>
+          <p class="govuk-body-m">
+            Whenever you submit data for an individual travelling on a flight coming to the UK using sGAR we will return a response; the response will be displayed on the sGAR service.</p>
+          <p class="govuk-body-m"> From January 2024 you will see one of the following responses for each UK inbound passenger.
           </p>
           <p class="govuk-body-m">
             <strong>
