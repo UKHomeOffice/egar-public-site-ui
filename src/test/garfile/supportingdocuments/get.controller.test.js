@@ -51,6 +51,7 @@ describe('GAR Supporting Documents Get Controller', () => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
         cookie,
+        max_num_files: 8,
         errors: [{ message: 'There was a problem getting GAR supporting documents information' }],
       });
     });
