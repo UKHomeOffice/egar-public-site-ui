@@ -195,7 +195,7 @@ describe('API upload file post controller', () => {
 
   describe('valid files less than max number', () => {
 
-    it('should redirect without any parameter when number of files less than the max number (10)', () => {
+    it('should redirect without any parameter when number of files less than the max number', () => {
       // Create form data for ClamAV
     formData = {
       name: req.file.originalname,
@@ -215,8 +215,6 @@ describe('API upload file post controller', () => {
 
     garApiGetDocsStub.resolves(JSON.stringify({
       items: [
-        { fileName: 'FILE1.doc', size: '1K' },
-        { fileName: 'FILE1.doc', size: '1K' },
         { fileName: 'FILE1.doc', size: '1K' },
         { fileName: 'FILE1.doc', size: '1K' },
         { fileName: 'FILE1.doc', size: '1K' },
