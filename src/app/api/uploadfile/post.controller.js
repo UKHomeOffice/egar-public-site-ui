@@ -6,6 +6,7 @@ const garApi = require('../../../common/services/garApi');
 const transformers = require('../../../common/utils/transformers');
 const clamAVService = require('../../../common/services/clamAVService');
 const uploadFile = require('../../../common/services/fileUploadApi');
+const config = require('../../../common/config/index');
 const { isValidFileMime } = require('../../../common/utils/validator');
 
 const exceedFileNumSizeLimit = (fileSize, garId) => {
@@ -15,7 +16,7 @@ const exceedFileNumSizeLimit = (fileSize, garId) => {
     //check max number of files not more than 10.
     // Check if fileSize + total >= MAX_SIZE
     const MAX_SIZE = (1024 ** 2) * 8;
-    const MAX_NUM = 10;
+    const MAX_NUM = config.MAX_NUM_FILES;
     garApi.getSupportingDocs(garId).then((gars) => {
       let total = 0;
       const parsedGars = JSON.parse(gars);
