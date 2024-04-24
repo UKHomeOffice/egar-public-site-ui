@@ -53,17 +53,12 @@
     <div class="govuk-grid-column-full">
       {% if manifestInvalidSavedPeople %}
       <div>
-        
+        <p class="govuk-error-message">
+          {{ __('saved_people_are_invalid__info') }}
+        </p>
         {% for person in savedPeople %}
           {% if (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
             <ul class="govuk-list govuk-list--bullet">
-              <div class="govuk-warning-text" id="invalid-saved-people-warning">
-                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                <strong class="govuk-warning-text__text">
-                  <span class="govuk-visually-hidden">Warning</span>
-                  {{ __('saved_people_are_invalid__info') }}
-                </strong>
-              </div>
               <li>
                 <button 
                   id="edit-person-{{ loop.index }}" 
@@ -71,9 +66,8 @@
                   title="Edit details for {{ person.firstName }} {{ person.lastName }}" 
                   name="editSavedPerson" 
                   value="{{person.personId}}">
-                  Edit {{person.lastName}}, 
+                  {{person.lastName}}, 
                   {{person.firstName}}, 
-                  {{person.nationality}}, 
                   {{person.peopleType.name}}, 
                   {{person.documentExpiryDate}}
                 </button>
@@ -209,8 +203,7 @@
         <tbody class="govuk-table__body " id="manifestTable_row">
         {% if manifest.items | length %}
           {% for person in manifest.items %}
-          {% set isGarPersonInvalid = (manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople)) %}
-          {% if isGarPersonInvalid %}
+          {% if (manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople)) %}
             <tr class="govuk-table__row govuk-form-group govuk-form-group--error" id="person-{{loop.index0}}">
             <td class="govuk-table__cell"></td>
           {% else %}
