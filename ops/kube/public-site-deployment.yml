@@ -250,6 +250,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: MAINTENANCE_END_DATETIME
+            - name: MAX_NUM_FILES
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: MAX_NUM_FILES  
           ports:
             - name: public-site-prt
               containerPort: 3000

@@ -10,6 +10,17 @@ const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList } = require('../../common/utils/autocomplete');
 
 /**
+ * @param {Date} date
+ * @return {Date}
+ */
+function convertDateToUTC(date) {
+  const UTCOffsetMinutes = new Date().getTimezoneOffset();
+  const UTCOffsetMilliseconds = UTCOffsetMinutes * 60 * 1000;
+
+  return new Date(date.getTime() + UTCOffsetMilliseconds);
+}
+
+/**
  * Check if the string has leading spaces
  * @param {String} value
  * @return {boolean}
@@ -256,26 +267,34 @@ function dateNotMoreThanMonthInFuture(dObj) {
   return Boolean(providedDate) && providedDate <= nextMonth;
 }
 
+/**
+ * @param {Date} providedDate
+ * @return {Boolean}
+ */
 function dateNotMoreThanTwoDaysInFuture(providedDate) {
-  const now = new Date();
-  const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
-  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS_MILLISECONDS);
-
   if (!(providedDate instanceof Date)) {
     return false;
   }
+
+  const now = convertDateToUTC(new Date());
+  const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
+  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS_MILLISECONDS);
 
   return Boolean(providedDate) && providedDate.getTime() <= maxDepartureDate.getTime();
 }
 
-function isTwoHoursPriorDeparture(providedDate) {  
-  const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
-  const today = new Date()
-  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
-
+/**
+ * @param {Date} providedDate
+ * @return {Boolean}
+ */
+function isTwoHoursPriorDeparture(providedDate) {
   if (!(providedDate instanceof Date)) {
     return false;
   }
+
+  const today = convertDateToUTC(new Date());
+  const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
+  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
 
   return Boolean(providedDate) && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime();
 }    
@@ -820,5 +839,6 @@ module.exports = {
   isValidAirportCode,
   dateNotMoreThanTwoDaysInFuture,
   isTwoHoursPriorDeparture,
+  convertDateToUTC,
   containTabs
 };
