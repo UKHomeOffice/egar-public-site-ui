@@ -42,7 +42,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleContactNo: '1234567890',
+        responsibleContactNo: '001234567890',
         responsibleEmail: 'test@test.com'
       },
       session: {
@@ -77,7 +77,7 @@ describe('GAR Responsible Person Post Controller', () => {
         cookie,
         fixedBasedOperatorOptions,
         errors: [
-          new ValidationRule(validator.notEmpty, 'responsibleEmail', '', 'Your must enter an email for the responsible person'),
+          new ValidationRule(validator.notEmpty, 'responsibleEmail', '', 'You must enter an email for the responsible person'),
         ],
       });
     });
@@ -150,7 +150,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
         responsibleEmail: 'test@test.com',
-        responsibleContactNo: '1234567890',
+        responsibleContactNo: '001234567890',
         fixedBasedOperator: undefined,
         fixedBasedOperatorAnswer: '',
         fixedBasedOperatorOptions
@@ -185,7 +185,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleContactNo: '1234567890',
+        responsibleContactNo: '001234567890',
         responsibleEmail: 'test@test.com',
         fixedBasedOperator: undefined,
         fixedBasedOperatorAnswer: '',
@@ -220,7 +220,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleContactNo: '1234567890',
+        responsibleContactNo: '001234567890',
         responsibleEmail: 'test@test.com',
         fixedBasedOperator: undefined,
         fixedBasedOperatorAnswer: '',
@@ -250,7 +250,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleContactNo: '1234567890',
+        responsibleContactNo: '001234567890',
         responsibleEmail: 'test@test.com',
         fixedBasedOperator: undefined,
         fixedBasedOperatorAnswer: '',
