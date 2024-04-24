@@ -10,7 +10,10 @@ module.exports = (req, res) => {
   const { buttonClicked } = req.body;
 
   logger.debug('In garfile / manifest post controller');
-  if (req.body.editPersonId) {
+  if (req.body.editSavedPerson) {
+    req.session.editPersonId = req.body.editSavedPerson;
+    req.session.save(() => res.redirect('/people/edit'));
+  } else if (req.body.editPersonId) {
     req.session.editPersonId = req.body.editPersonId;
     req.session.save(() => res.redirect('/garfile/manifest/editperson'));
   } else if (req.body.deletePersonId) {
