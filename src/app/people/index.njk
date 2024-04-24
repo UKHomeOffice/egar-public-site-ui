@@ -81,12 +81,13 @@
         <tbody class="govuk-table__body" id="people_table_row">
           {% if people | length %}
             {% for person in people %}
-    {% if manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople) %}
-                  <tr class="govuk-table__row row-error" id="person-{{loop.index0}}">
+            {% set isPeopleInvalid = manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople)%}
+              {% if isPeopleInvalid %}
+                <tr class="govuk-table__row govuk-form-group govuk-form-group--error" id="person-{{loop.index0}}">
               {% else %}
                 <tr class="govuk-table__row" id="person-{{loop.index0}}">
               {% endif %}
-                <td class="govuk-table__cell">
+                <td class="govuk-table__cell" style="{{ "padding-left: 10px" if isPeopleInvalid }}">
                   <button id="edit-person-{{ loop.index }}" class="govuk-link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a>
                 </td>
                 <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
