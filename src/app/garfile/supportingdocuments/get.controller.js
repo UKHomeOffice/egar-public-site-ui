@@ -12,7 +12,7 @@ module.exports = (req, res) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
         const error = [{ message: parsedResponse.message }];
-        res.render('app/garfile/supportingdocuments/index', { cookie, errors: error });
+        res.render('app/garfile/supportingdocuments/index', { cookie, max_num_files, errors: error });
         return;
       }
       // No error, check the query.query parameter
