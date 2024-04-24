@@ -63,3 +63,6 @@ exports.NODE_TLS_REJECT_UNAUTHORIZED = 1;
 exports.MFA_TOKEN_LENGTH = parseInt(process.env.NOTIFY_MFA_TOKEN_LENGTH, 10) || 8;
 exports.MFA_TOKEN_EXPIRY = parseInt(process.env.NOTIFY_MFA_TOKEN_TTL, 10) || 5;
 exports.MFA_TOKEN_MAX_ATTEMPTS = parseInt(process.env.NOTIFY_MFA_TOKEN_MAX_ATTEMPTS, 10) || 5;
+
+//MAX NUMBER OF FILES
+exports.MAX_NUM_FILES = parseInt(process.env.MAX_NUM_FILES, 10) || 8;
