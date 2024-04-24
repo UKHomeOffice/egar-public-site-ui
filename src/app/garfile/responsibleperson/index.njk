@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-  {{__('error_prefix') if errors}} Create GAR | Responsible person | {{__('title')}}
+  {{ __('error_prefix') if errors }} Create GAR | Responsible person | {{ __('title') }}
 {% endblock %}
 
 {% set active = '/home' %}
@@ -14,7 +14,7 @@
 
 {% block beforeContent %}
   {% include "phase.njk" %}
-  <a href="/garfile/manifest" class="govuk-back-link">{{__('nav_back')}}</a>
+  <a href="/garfile/manifest" class="govuk-back-link">{{ __('nav_back') }}</a>
 {% endblock %}
 
 {% block content %}
@@ -26,41 +26,41 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="page-form" action="/garfile/responsibleperson" autocomplete="off" class="form-group"
       method="post" role="form">
-        <span class="govuk-caption-xl">{{__('section_count', 5, 9)}}</span>
-        <h1 class="govuk-heading-xl">{{__('heading_responsible_person')}}</h1>
-        <p class="govuk-body-l">{{__('responsible_person_caption')}} </p>
+        <span class="govuk-caption-xl">{{ __('section_count', 5, 9) }}</span>
+        <h1 class="govuk-heading-xl">{{ __('heading_responsible_person') }}</h1>
+        <p class="govuk-body-l">{{ __('responsible_person_caption') }} </p>
         <div class="govuk-form-group {{ m.form_group_class('responsiblePerson', errors) }}">
           <div class="govuk-form-group {{ m.form_group_class('responsibleGivenName', errors) }}">
-            <label class="govuk-label govuk-label--m" for="responsibleGivenName">{{__('field_given_name')}}</label>
+            <label class="govuk-label govuk-label--m" for="responsibleGivenName">{{ __('field_given_name') }}</label>
             {{ m.error_message('responsibleGivenName', errors, __) }}
             <input class="govuk-input govuk-input--width-30"
               id="responsibleGivenName" name="responsibleGivenName"  type="text" maxlength="{{ MAX_STRING_LENGTH }}"
-              value="{{cookie.getGarResponsiblePerson().responsibleGivenName}}"
+              value="{{ cookie.getGarResponsiblePerson().responsibleGivenName }}"
               {{ 'aria-describedby=responsibleGivenName-error' if errors | containsError('responsibleGivenName') }}>
           </div>
 
           <div class="govuk-form-group {{ m.form_group_class('responsibleSurname', errors) }}">
-            <label class="govuk-label govuk-label--m" for="responsibleSurname">{{__('field_surname')}}</label>
+            <label class="govuk-label govuk-label--m" for="responsibleSurname">{{ __('field_surname') }}</label>
             {{ m.error_message('responsibleSurname', errors, __) }}
             <input class="govuk-input govuk-input--width-30"
               id="responsibleSurname" name="responsibleSurname" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
-              value="{{cookie.getGarResponsiblePerson().responsibleSurname}}"
+              value="{{  cookie.getGarResponsiblePerson().responsibleSurname}}"
               {{ 'aria-describedby=responsibleSurname-error' if errors | containsError('responsibleSurname') }}>
           </div>
 
           <div class="govuk-form-group govuk-!-margin-bottom-6 {{ m.form_group_class('responsibleContactNo', errors) }}">
-            <label class="govuk-label govuk-label--m" for="responsibleContactNo">{{__('field_contact_number')}}</label>
-            <span id="responsibleContactNo-hint" class="govuk-hint">{{__('field_contact_number_hint')}}</span>
+            <label class="govuk-label govuk-label--m" for="responsibleContactNo">{{ __('field_contact_number') }}</label>
+            <span id="responsibleContactNo-hint" class="govuk-hint">{{ __('field_contact_number_hint') }}</span>
             {{ m.error_message('responsibleContactNo', errors, __) }}
             <input class="govuk-input govuk-input--width-20"
               id="responsibleContactNo" name="responsibleContactNo" type="text"
-              value="{{cookie.getGarResponsiblePerson().responsibleContactNo}}"
+              value="{{ cookie.getGarResponsiblePerson().responsibleContactNo }}"
               aria-describedby="responsibleContactNo-hint{{ ' responsibleContactNo-error' if errors | containsError('responsibleContactNo') }}">
           </div>
 
           <div class="govuk-form-group govuk-!-margin-bottom-6">
-            <label class="govuk-label govuk-label--m" for="responsibleEmail">{{__('field_email')}}</label>
-            <span id="responsibleEmail-hint" class="govuk-hint">{{__('responsible_email_hint')}}</span>
+            <label class="govuk-label govuk-label--m" for="responsibleEmail">{{ __('field_email') }}</label>
+            <span id="responsibleEmail-hint" class="govuk-hint">{{ __('responsible_email_hint') }}</span>
 
             {{ m.error_message('responsibleEmail', errors, __) }}
 
@@ -74,43 +74,43 @@
           </div>
 
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{__('field_address')}}</legend>
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ __('field_address') }}</legend>
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine1', errors) }}">
-              <label class="govuk-label" for="responsibleAddressLine1">{{__('field_house_number')}}<span class="govuk-visually-hidden">{{__('field_line_1_of_2')}}</span></label>
+              <label class="govuk-label" for="responsibleAddressLine1">{{ __('field_house_number') }}<span class="govuk-visually-hidden">{{ __('field_line_1_of_2') }}</span></label>
               {{ m.error_message('responsibleAddressLine1', errors, __) }}
               <input class="govuk-input"
                 id="responsibleAddressLine1" name="responsibleAddressLine1" type="text"
-                value="{{cookie.getGarResponsiblePerson().responsibleAddressLine1}}"
+                value="{{ cookie.getGarResponsiblePerson().responsibleAddressLine1 }}"
                 maxlength="{{ MAX_STRING_LENGTH }}"
                 {{ 'aria-describedby=responsibleAddressLine1-error' if errors | containsError('responsibleAddressLine1') }}>
             </div>
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine2', errors) }}">
-              <label class="govuk-label" for="responsibleAddressLine2"><span class="govuk-visually-hidden">{{__('field_line_2_of_2')}}</span></label>
+              <label class="govuk-label" for="responsibleAddressLine2"><span class="govuk-visually-hidden">{{ __('field_line_2_of_2') }}</span></label>
               {{ m.error_message('responsibleAddressLine2', errors, __) }}
               <input class="govuk-input"
                 id="responsibleAddressLine2" name="responsibleAddressLine2" type="text"
-                value="{{cookie.getGarResponsiblePerson().responsibleAddressLine2}}"
+                value="{{ cookie.getGarResponsiblePerson().responsibleAddressLine2 }}"
                 maxlength="{{ MAX_STRING_LENGTH }}"
                 {{ 'aria-describedby=responsibleAddressLine2-error' if errors | containsError('responsibleAddressLine2') }}>
             </div>
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleTown', errors) }}">
-              <label class="govuk-label" for="responsibleTown">{{__('field_town')}}</label>
+              <label class="govuk-label" for="responsibleTown">{{ __('field_town') }}</label>
               {{ m.error_message('responsibleTown', errors, __) }}
               <input class="govuk-input"
                 id="responsibleTown" name="responsibleTown" type="text"
-                value="{{cookie.getGarResponsiblePerson().responsibleTown}}"
+                value="{{ cookie.getGarResponsiblePerson().responsibleTown }}"
                 maxlength="{{ MAX_STRING_LENGTH }}"
                 {{ 'aria-describedby=responsibleTown-error' if errors | containsError('responsibleTown') }}>
             </div>
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleCounty', errors) }}">
-              <label id="responsibleCountry-label" class="govuk-label" for="responsibleCounty">{{__('field_address_country')}}</label>
+              <label id="responsibleCountry-label" class="govuk-label" for="responsibleCounty">{{ __('field_address_country') }}</label>
               {{ m.error_message('responsibleCounty', errors, __) }}
               <select class="govuk-select" id="responsibleCounty" name="responsibleCounty"
-                value="{{cookie.getGarResponsiblePerson().responsibleCounty}}"
+                value="{{ cookie.getGarResponsiblePerson().responsibleCounty }}"
                 aria-labelledby="responsibleCountry-label">
                 {% for country in countryList | sort(attribute = 'label') %}
                   <option value="{{ country.code }}"
@@ -120,30 +120,33 @@
             </div>
 
             <div class="govuk-form-group {{ m.form_group_class('responsiblePostcode', errors) }}">
-              <label class="govuk-label" for="responsiblePostcode">{{__('field_postcode')}}</label>
+              <label class="govuk-label" for="responsiblePostcode">{{ __('field_postcode') }}</label>
 
               {{ m.error_message('responsiblePostcode', errors, __) }}
 
               <input class="govuk-input govuk-input--width-10"
                 id="responsiblePostcode" name="responsiblePostcode" type="text"
-                value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}"
+                value="{{ cookie.getGarResponsiblePerson().responsiblePostcode }}"
                 maxlength="{{ MAX_POSTCODE_LENGTH }}"
               />
             </div>
           </fieldset>
 
           <fieldset class="govuk-fieldset" style="background-color:pink;">
-
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{__('field_fbo_question')}}</legend>
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ __('field_fbo_question') }}</legend>
 
             <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
               <div class="govuk-radios govuk-radio--conditional" data-module="radios">
 
+                {# {% if cookie.getGarfixedBasedOperator() != undefined %}
+                  cookie.setGarfixedBasedOperator("Operator")
+                {% endif %} #}
                 {% for choice in fixedBasedOperatorOptions %}
                   <div class="govuk-radios__item">
                     <input id="{{ choice.option }}" class="govuk-radios__input" type="radio" name="fixedBasedOperator"
                       value="{{ choice.value }}" aria-labelledby="fixedBasedOperator-label-{{ loop.index }}"
-                      {{ "checked" if choice.value === gar.fixedBasedOperator }}
+                      {{ cookie.setGarfixedBasedOperator(choice.value) }}
+                      {{ "checked" if choice.value === cookie.getGarfixedBasedOperator() }}
                       {{ "data-aria-controls=conditional-fixedBasedOperatorAnswer" if choice.value === 'Other' }}>
                     <label id="fixedBasedOperator-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{ choice.option }}">{{ choice.option }}</label>
                   </div>
@@ -152,9 +155,9 @@
                     <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-fixedBasedOperatorAnswer">
                       <div class="govuk-form-group">
                         <textarea class="govuk-textarea" id="fixedBasedOperatorAnswer" name="fixedBasedOperatorAnswer"
-                          rows="3" aria-describedby="fixedBasedOperator-hint" placeholder="Please specify your role."
+                          rows="3" aria-describedby="fixedBasedOperator-hint" placeholder="{{ __('field_fbo_textarea_placeholder') }}"
                           maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}"
-                        >{{ gar.fixedBasedOperatorAnswer }}</textarea>
+                        ></textarea>
                       </div>
                     </div>
                   {% endif %}

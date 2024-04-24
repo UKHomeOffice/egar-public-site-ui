@@ -364,7 +364,7 @@ class Cookie {
   }
 
   getGarfixedBasedOperator() {
-  return this.session.gar.fixedBasedOperator;
+    return this.session.gar.fixedBasedOperator;
   }
 
   setGarfixedBasedOperator(fbo) {
