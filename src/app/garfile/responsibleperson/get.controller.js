@@ -30,7 +30,7 @@ module.exports = (req, res) => {
         responsibleContactNo: gar.responsibleContactNo,
       };
 
-     
+
       context.gar = gar;
       cookie.setGarResponsiblePerson(responsiblePerson);
 

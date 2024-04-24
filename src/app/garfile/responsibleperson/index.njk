@@ -73,7 +73,7 @@
               maxlength="{{ MAX_EMAIL_LENGTH }}">
           </div>
 
-          <fieldset class="govuk-fieldset" style="background-color:powderblue;">
+          <fieldset class="govuk-fieldset govuk-!-margin-bottom-6" style="background-color:powderblue;">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{__('field_address')}}</legend>
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine1', errors) }}">
@@ -107,7 +107,7 @@
             </div>
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleCounty', errors) }}">
-              <label id="responsibleCountry-label" class="govuk-label govuk-label--m" for="responsibleCounty">{{__('field_address_country')}}</label>
+              <label id="responsibleCountry-label" class="govuk-label" for="responsibleCounty">{{__('field_address_country')}}</label>
               {{ m.error_message('responsibleCounty', errors, __) }}
               <select class="govuk-select" id="responsibleCounty" name="responsibleCounty"
                 value="{{cookie.getGarResponsiblePerson().responsibleCounty}}"
@@ -130,9 +130,13 @@
                 maxlength="{{ MAX_POSTCODE_LENGTH }}"
               />
             </div>
+          </fieldset>
 
-            <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator" style="background-color:pink;">
-              <label class="govuk-label govuk-label--m" for="fixedBasedOperator">{{__('field_fbo_question')}}</label>
+          <fieldset class="govuk-fieldset" style="background-color:pink;">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{__('field_fbo_question')}}</legend>
+
+            <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
               <div class="govuk-radios govuk-radio--conditional" data-module="radios">
 
                 {% for choice in fixedBasedOperatorOptions %}
@@ -148,9 +152,9 @@
                     <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-fixedBasedOperatorAnswer">
                       <div class="govuk-form-group">
                         <textarea class="govuk-textarea" id="fixedBasedOperatorAnswer" name="fixedBasedOperatorAnswer"
-                          rows="3" aria-describedby="fixedBasedOperator-hint"
-                          maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.fixedBasedOperatorAnswer}}
-                        </textarea>
+                          rows="3" aria-describedby="fixedBasedOperator-hint" placeholder="Please specify your role."
+                          maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}"
+                        ></textarea>
                       </div>
                     </div>
                   {% endif %}
