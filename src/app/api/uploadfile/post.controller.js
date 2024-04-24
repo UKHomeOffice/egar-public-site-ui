@@ -21,7 +21,7 @@ const exceedFileNumSizeLimit = (fileSize, garId) => {
       let total = 0;
       const parsedGars = JSON.parse(gars);
       if(parsedGars.items.length>=MAX_NUM){
-        logger.info(`Number of supporting docs exceeds the limit gar:${garId}`);
+        logger.info(`Number of supporting docs exceeds the limit: ${MAX_NUM}, gar:${garId}`);
         resolve('EXCEEDS_MAX_NUMBER');
       }
       // Get total size from gars.items.size
