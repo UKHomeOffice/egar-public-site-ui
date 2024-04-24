@@ -212,6 +212,7 @@
           {% set isGarPersonInvalid = (manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople)) %}
           {% if isGarPersonInvalid %}
             <tr class="govuk-table__row govuk-form-group govuk-form-group--error" id="person-{{loop.index0}}">
+            <td class="govuk-table__cell"></td>
           {% else %}
             <tr class="govuk-table__row" id="person-{{loop.index0}}">
             {% if person.documentExpiryDate.toString() < expiryDate.toString()  %}
