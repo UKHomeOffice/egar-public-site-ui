@@ -39,7 +39,7 @@
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             <p class="govuk-body-m">
               {{__('field_prohibited_goods_2')}}
-              <a href=https://www.gov.uk/government/publications/travelling-to-the-uk target="_blank">Travelling to the UK (opens in new tab) </a>  
+              <a href=https://www.gov.uk/government/publications/travelling-to-the-uk target="_blank">Travelling to the UK (opens in new tab) </a>
               ,
               <a href=https://www.gov.uk/guidance/bringing-commercial-goods-into-great-britainin-your-baggage target="_blank">Merchandise in Baggage link(opens in new tab) </a>
               {{__('field_prohibited_goods_3')}}
@@ -52,18 +52,18 @@
           <div class="govuk-radios govuk-radio--conditional" data-module="radios">
           {% for choice in intentionValueOptions %}
             <div class="govuk-radios__item">
-              <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="intentionValue" value="{{choice.value}}" 
+              <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="intentionValue" value="{{choice.value}}"
                 aria-labelledby="intentionValue-label-{{ loop.index }}"
                 {{ "checked" if choice.value == gar.intentionValue }} onchange=hide()>
               <label id="intentionValue-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
-            </div> 
-          {% endfor %}  
+            </div>
+          {% endfor %}
           {% if gar.intentionValue == 'Yes' %}
           <img src onerror=hide()>
           {% endif %}
           </div>
         </fieldset>
-      </div> 
+      </div>
       <script>
       function hide() {
         if (document.getElementById('Yes  ').checked) {
@@ -89,11 +89,11 @@
           <div class="govuk-radios govuk-radio--conditional" data-module="radios">
           {% for choice in prohibitedGoodsOptions %}
             <div class="govuk-radios__item">
-              <input 
-                id="{{choice.option}}" 
-                class="govuk-radios__input" 
-                type="radio" 
-                name="prohibitedGoods" 
+              <input
+                id="{{choice.option}}"
+                class="govuk-radios__input"
+                type="radio"
+                name="prohibitedGoods"
                 value="{{choice.value}}"
                 aria-labelledby="prohibitedGoods-label-{{ loop.index }}"
                 {{ "data-aria-controls=conditional-goodsDeclaration" if choice.value === 'Yes' }}
@@ -105,26 +105,26 @@
               <div class="govuk-form-group">
                 <span id="allowances-hint" class="govuk-hint">{{__('field_allowances_hint')}}<a href=https://www.gov.uk/bringing-goods-into-uk-personal-use target="_blank"> Overview - GOV.UK (www.gov.uk) </a></span>
                 <label class="govuk-label" for="goodsDeclaration">{{__('field_goods_declaration_label_150')}}</label>
-                <textarea 
-                  class="govuk-textarea" 
-                  id="goodsDeclaration" 
-                  name="goodsDeclaration" 
+                <textarea
+                  class="govuk-textarea"
+                  id="goodsDeclaration"
+                  name="goodsDeclaration"
                   placeholder="e.g. alcohol or tobacco"
-                  rows="5" 
+                  rows="5"
                   aria-describedby="prohibitedGoods-hint"
                   maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.goodsDeclaration}}</textarea>
               </div>
             </div>
-            {% endif %} 
+            {% endif %}
           {% endfor %}
           </div>
         </fieldset>
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('baggage', errors) }}" id="baggage" hidden>
-        <fieldset class="govuk-fieldset" aria-describedby="baggage-hint"> 
+        <fieldset class="govuk-fieldset" aria-describedby="baggage-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h2 class="govuk-fieldset__heading">{{__('field_baggage_question')}}</h2>  
+          <h2 class="govuk-fieldset__heading">{{__('field_baggage_question')}}</h2>
           </legend>
 
           <div class="govuk-radios govuk-radio--conditional" data-module="radios">
@@ -146,13 +146,13 @@
                     maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.baggageDeclaration}}</textarea>
                 </div>
               </div>
-            {% endif %}   
+            {% endif %}
           {% endfor %}
           </div>
         </fieldset>
       </div>
 
-       <div class="govuk-form-group {{ m.form_group_class('continentalShelf', errors) }}" id="continentalShelf" hidden>
+      <div class="govuk-form-group {{ m.form_group_class('continentalShelf', errors) }}" id="continentalShelf" hidden>
         <fieldset class="govuk-fieldset" aria-describedby="continental-shelf-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             {{ m.error_message('continentalShelf', errors, __) }}
@@ -178,28 +178,27 @@
                   <label class="govuk-label" for="continentalShelfDeclaration">
                     {{__('field_goods_declaration_label_150')}}
                   </label>
-                  <textarea 
-                    class="govuk-textarea" 
-                    id="continentalShelfDeclaration" 
-                    name="continentalShelfDeclaration" 
+                  <textarea
+                    class="govuk-textarea"
+                    id="continentalShelfDeclaration"
+                    name="continentalShelfDeclaration"
                     placeholder="e.g. Rig Essentials (food, drink, medical supplies, newspapers, sanitary items) "
-                    rows="5" 
+                    rows="5"
                     aria-describedby="continentalShelf-hint"
                     maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.continentalShelfDeclaration}}</textarea>
                 </div>
               </div>
-              {% endif %} 
+              {% endif %}
             {% endfor %}
           </div>
         </fieldset>
       </div>
 
-
       <div class="govuk-form-group {{ m.form_group_class('passengerTravellingReasonAnswer', errors) }}" id="passengerTravellingReasonAnswer">
-        <fieldset class="govuk-fieldset" aria-describedby="passengerTravellingReasonAnswer-hint"> 
+        <fieldset class="govuk-fieldset" aria-describedby="passengerTravellingReasonAnswer-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h2 class="govuk-fieldset__heading">{{__('passenger_travelling_reason')}}</h2>  
-         </legend>
+            <h2 class="govuk-fieldset__heading">{{__('passenger_travelling_reason')}}</h2>
+          </legend>
 
       <div class="govuk-radios govuk-radios" id="conditional-passengerTravellingReason">
             <div class="govuk-form-group">
@@ -232,52 +231,11 @@
         </fieldset>
       </div>
 
-      {# <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
-        <fieldset class="govuk-fieldset" aria-describedby="fixedBasedOperator-hint"> 
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h2 class="govuk-fieldset__heading">{{__('field_fbo_question')}}</h2>  
-          </legend>
-
-          <div class="govuk-radios govuk-radio--conditional" data-module="radios">
-          {% for choice in fixedBasedOperatorOptions %}
-            <div class="govuk-radios__item">
-              <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="fixedBasedOperator" value="{{choice.value}}"
-                aria-labelledby="fixedBasedOperator-label-{{ loop.index }}"
-                {{ "data-aria-controls=conditional-fixedBasedOperatorAnswer" if choice.value === 'Fixed Based Operator' }}
-                {{ "data-aria-controls=conditional-operatorAnswer" if choice.value === 'Operator' }}
-                {{ "checked" if choice.value == gar.fixedBasedOperator }}>
-              <label id="fixedBasedOperator-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
-            </div>
-            {% if choice.value == 'Operator' %}
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-operatorAnswer">
-              <div class="govuk-form-group">
-                 <span id="baggage-hint" class="govuk-hint">{{__('field_operator_label')}}</span>
-                <textarea class="govuk-textarea" id="operatorAnswer" name="operatorAnswer" 
-                  rows="3" aria-describedby="operator-hint"
-                  maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.operatorAnswer}}</textarea>
-              </div>
-            </div>
-            {% endif %}
-            {% if choice.value == 'Fixed Based Operator' %}
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-fixedBasedOperatorAnswer">
-              <div class="govuk-form-group">
-                <span id="baggage-hint" class="govuk-hint">{{__('field_fbo_label')}}</span>
-                <textarea class="govuk-textarea" id="fixedBasedOperatorAnswer" name="fixedBasedOperatorAnswer"
-                  rows="3" aria-describedby="fixedBasedOperator-hint"
-                  maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.fixedBasedOperatorAnswer}}</textarea>
-              </div>
-            </div>
-          </div>     
-            {% endif %}
-          {% endfor %}
-        </fieldset>
-      </div> #}
-
       <div class="govuk-form-group {{ m.form_group_class('supportingInformationAnswer', errors) }}" id="supportingInformationAnswer">
-        <fieldset class="govuk-fieldset" aria-describedby="supportingInformationAnswer-hint"> 
+        <fieldset class="govuk-fieldset" aria-describedby="supportingInformationAnswer-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h2 class="govuk-fieldset__heading">{{__('field_supporting_information_question')}}</h2>  
-         </legend>
+            <h2 class="govuk-fieldset__heading">{{__('field_supporting_information_question')}}</h2>
+          </legend>
 
           <div class="govuk-radios govuk-radios" id="conditional-supportingInformation">
             <div class="govuk-form-group">
@@ -290,8 +248,6 @@
         </fieldset>
       </div>
 
-    
-    
     {# Start buttons #}
       {{ m.submit_buttons('GAR Customs', csrfToken, __) }}
     </form>

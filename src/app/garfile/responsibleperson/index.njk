@@ -67,13 +67,13 @@
             <input class="govuk-input govuk-input--width-20"
               id="responsibleEmail" name="responsibleEmail" type="email"
               value="{{ cookie.getGarResponsiblePerson().responsibleEmail }}"
-              aria-describedby="responsibleEmail-hint{{ 
-                ' responsibleEmail-error' if errors | containsError('responsibleEmail') 
+              aria-describedby="responsibleEmail-hint{{
+                ' responsibleEmail-error' if errors | containsError('responsibleEmail')
               }}"
               maxlength="{{ MAX_EMAIL_LENGTH }}">
           </div>
 
-          <fieldset class="govuk-fieldset govuk-!-margin-bottom-6" style="background-color:powderblue;">
+          <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{__('field_address')}}</legend>
 
             <div class="govuk-form-group {{ m.form_group_class('responsibleAddressLine1', errors) }}">
@@ -141,11 +141,11 @@
 
                 {% for choice in fixedBasedOperatorOptions %}
                   <div class="govuk-radios__item">
-                    <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="fixedBasedOperator" value="{{choice.value}}"
-                      aria-labelledby="fixedBasedOperator-label-{{ loop.index }}"
+                    <input id="{{ choice.option }}" class="govuk-radios__input" type="radio" name="fixedBasedOperator"
+                      value="{{ choice.value }}" aria-labelledby="fixedBasedOperator-label-{{ loop.index }}"
                       {{ "checked" if choice.value === gar.fixedBasedOperator }}
                       {{ "data-aria-controls=conditional-fixedBasedOperatorAnswer" if choice.value === 'Other' }}>
-                    <label id="fixedBasedOperator-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{choice.option}}">{{choice.option}}</label>
+                    <label id="fixedBasedOperator-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{ choice.option }}">{{ choice.option }}</label>
                   </div>
 
                   {% if choice.value == 'Other' %}
@@ -154,7 +154,7 @@
                         <textarea class="govuk-textarea" id="fixedBasedOperatorAnswer" name="fixedBasedOperatorAnswer"
                           rows="3" aria-describedby="fixedBasedOperator-hint" placeholder="Please specify your role."
                           maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}"
-                        ></textarea>
+                        >{{ gar.fixedBasedOperatorAnswer }}</textarea>
                       </div>
                     </div>
                   {% endif %}
