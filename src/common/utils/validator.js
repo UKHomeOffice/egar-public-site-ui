@@ -478,9 +478,18 @@ function longitude(value) {
   return regex.test(value);
 }
 
-// very basic min 5 and max 20 numbers
+/*
+This function tries to allow:
+Local UK numbers beginning 0 e.g. 01225123456 or 07777777777
+International numbers beginning either + or 00
+Spaces, hyphens, brackets and anything other than numbers are rejected.
+The number is not validated beyond these requirements.
+Min and max lengths depend on format: 
+-UK numbers and international numnbers starting + can range 9-34 chars
+-International numbers starting 00 10-15
+These lengths are a bit arbitrary.
+*/
 function validIntlPhone(value) {
-  //const regex = /^[0-9]{5,20}$/;
   const regex =  /^(\+|00?)[1-9][0-9]{7,32}$/;
 
 
