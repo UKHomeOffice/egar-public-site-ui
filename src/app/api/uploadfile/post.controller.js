@@ -10,7 +10,7 @@ const config = require('../../../common/config/index');
 const { isValidFileMime } = require('../../../common/utils/validator');
 
 const exceedFileNumSizeLimit = (fileSize, garId) => {
-  logger.debug('Entering exceed file number & size limit function');
+  logger.debug(`Entering exceed file number & size limit function, max size 8MB max number:${config.MAX_NUM_FILES}`);
   return new Promise((resolve, reject) => {
     // Get supporting docs and add file size
     //check max number of files not more than 10.
