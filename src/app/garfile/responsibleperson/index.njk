@@ -32,6 +32,7 @@
         <div class="govuk-form-group {{ m.form_group_class('responsiblePerson', errors) }}">
           <div class="govuk-form-group {{ m.form_group_class('responsibleGivenName', errors) }}">
             <label class="govuk-label govuk-label--m" for="responsibleGivenName">{{__('field_given_name')}}</label>
+            {{ m.hint('firstName', __('field_given_name_hint')) }}
             {{ m.error_message('responsibleGivenName', errors, __) }}
             <input class="govuk-input govuk-input--width-30"
               id="responsibleGivenName" name="responsibleGivenName"  type="text" maxlength="{{ MAX_STRING_LENGTH }}"
