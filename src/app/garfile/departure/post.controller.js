@@ -34,13 +34,6 @@ const createValidationChains = (voyage) => {
   // Define latitude validations
   const departureLatValidation = [new ValidationRule(validator.latitude, 'departureLat', voyage.departureLat, __('field_latitude_validation'))];
 
-  //Define latitude direction
-  const departureLatDirectionValidation = [new ValidationRule(validator.notEmpty, 'departureLatDirection', voyage.departureLatDirection, __('field_latitude_direction'))];
-  const departureLongDirectionValidation = [new ValidationRule(validator.notEmpty, 'departureLongDirection', voyage.departureLongDirection, __('field_longitude_direction'))];
-  const departureLatDirectionInvalid = [new ValidationRule(validator.invalidLatDirection, 'departureLatDirection', voyage.departureLatDirection, __('field_latitude_value'))];
-  const departureLongDirectionInvalid = [new ValidationRule(validator.invalidLongDirection, 'departureLongDirection', voyage.departureLongDirection, __('field_longitude_value'))];
- 
-
   // Define latitude validations
   const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, __('field_longitude_validation'))];
 
@@ -52,14 +45,10 @@ const createValidationChains = (voyage) => {
   ];
 
   // Check if port code is ZZZZ then need to validate lat/long and display req zzzz message
-  if (departPortObj.portCode.length > 4) {
+  if (voyage.portChoice === 'No') {
     validations.push(
       departureLatValidation,
       departureLongValidation,
-      departureLatDirectionValidation,
-      departureLongDirectionValidation,
-      departureLatDirectionInvalid,
-      departureLongDirectionInvalid,
     );
   } else if (voyage.portChoice) {
     // if not just add port validation
@@ -115,30 +104,10 @@ module.exports = async (req, res) => {
   delete voyage.buttonClicked;
   if (voyage.portChoice === 'No') {
     logger.debug("Testing departure Lat and Long values...");
-    
-    if (voyage.departureLatDirection && voyage.departureLatDirection.toUpperCase() == 'S') {
-      const convertedLat = parseFloat(voyage.departureDegrees) + parseFloat((voyage.departureMinutes/60) + parseFloat((voyage.departureSeconds/3600).toFixed(6)));
-      voyage.departureLat = '-' + parseFloat(convertedLat).toFixed(6);
-    }
-    else{
-      const convertedLat = parseFloat(voyage.departureDegrees) + parseFloat((voyage.departureMinutes/60) + parseFloat((voyage.departureSeconds/3600).toFixed(6)));
-      voyage.departureLat = parseFloat(convertedLat).toFixed(6);
-    }
-    
-    if (voyage.departureLatDirection && voyage.departureLongDirection.toUpperCase() == 'W'){
-      const convertedLong = parseFloat(voyage.departureLongDegrees) + parseFloat((voyage.departureLongMinutes/60) + parseFloat((voyage.departureLongSeconds/3600).toFixed(6)));
-      voyage.departureLong = '-' + parseFloat(convertedLong).toFixed(6);
-    }
-    else{
-      const convertedLong = parseFloat(voyage.departureLongDegrees) + parseFloat((voyage.departureLongMinutes/60) + parseFloat((voyage.departureLongSeconds/3600).toFixed(6)));
-      voyage.departureLong = parseFloat(convertedLong).toFixed(6);
-    }
 
-    logger.debug(voyage.departureLat);
-    logger.debug(voyage.departureLong);
-    const combinedCoordinates = voyage.departureLat.toString() + " " + voyage.departureLong.toString();
+    const combinedCoordinates = voyage.departureLat + " " + voyage.departureLong;
     voyage.departurePort = combinedCoordinates;
-    logger.debug(voyage.departurePort);
+    logger.debug("Departure port: " + voyage.departurePort);
   } else {
     // If 'Yes' is selected then clear the coordinate values
     voyage.departureLat = '';
@@ -157,11 +126,6 @@ module.exports = async (req, res) => {
     ],
   );
 
-  // The entry below is a surplus as there's already same validation at the Arrival port section //
- // validations.push([
-  //  new ValidationRule(airportValidation.includesOneBritishAirport, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], airportValidation.notBritishMsg),
- // ]);
- 
   validator.validateChains(validations)
     .then(() => {
       performAPICall(cookie, res, buttonClicked);

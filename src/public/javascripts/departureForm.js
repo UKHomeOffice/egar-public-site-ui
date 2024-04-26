@@ -5,14 +5,6 @@ const departureYear = document.getElementById("departureYear");
 const departureHourTime = document.getElementById("departureHour");
 const departureMinuteTime = document.getElementById("departureMinute");
 
-const departureDegrees = document.getElementById("departureDegrees");
-const departureMinutes = document.getElementById("departureMinutes");
-const departureSeconds = document.getElementById("departureSeconds");
-
-const departureLongDegrees = document.getElementById("departureLongDegrees");
-const departureLongMinutes = document.getElementById("departureLongMinutes");
-const departureLongSeconds = document.getElementById("departureLongSeconds");
-
 const pageForm = document.getElementById('page-form');
 const confirmWarnedDepartureDialog = document.getElementById("confirmWarnedDepartureDialog")
 const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
@@ -117,30 +109,4 @@ departureHourTime.addEventListener("keyup", (e) => {
 departureMinuteTime.addEventListener("keyup", (e) => {
   e.target.value = sanitiseDateOrTime(e.target.value, 'minute');
   showDepartureDateWarningMessages(departureDate());
-});
-
-departureDegrees.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseCoordinateDegreesOrSeconds(e.target.value, 'degrees');
-});
-
-departureMinutes.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseCoordinateMinutes(e.target.value, 'minutes');
-  autoTab1(departureMinutes, 'minutes', departureSeconds);
-});
-
-departureSeconds.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseCoordinateDegreesOrSeconds(e.target.value, 'seconds');
-});
-
-departureLongDegrees.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseCoordinateDegreesOrSeconds(e.target.value, 'degrees');
-});
-
-departureLongMinutes.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseCoordinateMinutes(e.target.value, 'minutes');
-  autoTab1(departureLongMinutes, 'minutes', departureLongSeconds);
-});
-  
-departureLongSeconds.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseCoordinateDegreesOrSeconds(e.target.value , 'seconds');
 });

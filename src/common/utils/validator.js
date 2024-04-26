@@ -473,19 +473,7 @@ function email(value) {
   return regex.test(value);
 }
 
-/**
- * Returns true if valid portcode given.
- * Returns false if ZZZZ or YYYY entered without coords.
- * @param {Object} portObj contains keys [portCode, lat, long]
- * @returns {Boolean} true if valid port, false if zzzz without coords
- */
-function validatePortCoords(portObj) {
-  const portCode = portObj.portCode.toUpperCase();
-  if (portCode === 'ZZZZ' || portCode === 'YYYY') {
-    return ((portObj.lat !== '') && (portObj.long !== ''));
-  }
-  return true;
-}
+
 
 function latitude(value) {
   const regex = /^-?([1-8]?[0-9]\.{1}\d{6}$|90\.{1}0{6}$)/;
@@ -689,54 +677,6 @@ function autoTab(field1, dayMonthOrYear, field2) {
   }
 }
 
-function sanitiseCoordinateDegreesOrSeconds(input, type) {
-  const regex = (type === 'seconds') ? /^\d{0,3}(\.\d{0,4})?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
-
-  return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
-
-}
-
-function sanitiseCoordinateMinutes(input, type) {
-  const regex = (type === 'minutes') ? /^\d{0,2}?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
-
-  return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
-
-}
-
-function autoTab1(field1, degreesMinutesOrSeconds, field2) {
-
-  let len = (degreesMinutesOrSeconds === 'minutes') ? 2 : 3;
-
-  let field1Value = sanitiseCoordinateMinutes(field1.value, degreesMinutesOrSeconds);
-
-  if (field1Value.length == len) {
-    field2.focus();
-  }
-}
-
-function invalidLatDirection(value) {
-  value = value || '';
-  value = value.toUpperCase();
-  if (['S', 'N'].includes(value)) {
-    return true;
-  }
-  else {
-    return false;
-  }
-
-}
-
-function invalidLongDirection(value) {
-  value = value || '';
-  value = value.toUpperCase();
-  if (['W', 'E'].includes(value)) {
-    return true;
-  }
-  else {
-    return false;
-  }
-
-}
 
 function isAlphanumeric(input) {
   const alphanumericRegex = /^[a-zA-Z0-9]+$/;
@@ -794,7 +734,6 @@ module.exports = {
   onlySymbols,
   validateChains,
   genValidations,
-  validatePortCoords,
   realDate,
   realDateInFuture,
   bornAfter1900,
@@ -825,11 +764,8 @@ module.exports = {
   birthDate,
   dateNotInPast,
   autoTab,
-  autoTab1,
-  sanitiseCoordinateDegreesOrSeconds,
-  invalidLatDirection,
-  invalidLongDirection,
-  sanitiseCoordinateMinutes,
+
+  
   preventZ,
   dateNotMoreThanMonthInFuture,
   isAlphanumeric,
