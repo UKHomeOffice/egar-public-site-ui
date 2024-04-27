@@ -36,6 +36,7 @@ module.exports = (req, res) => {
       registration: req.body.craftReg,
       craftType: req.body.craftType,
       craftBase: req.body.craftBase,
+      portChoice: req.body.portChoice,
     };
 
     cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase);

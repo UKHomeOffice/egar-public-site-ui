@@ -26,7 +26,7 @@ describe('Aircraft Edit Post Controller', () => {
         craftId: 'ABCDEFGH',
         craftReg: 'G-ABCD',
         craftType: 'Hondajet',
-        craftBase: 'lhr',
+        craftBasePort: 'LHR',
       },
       session: {},
     };
@@ -57,7 +57,7 @@ describe('Aircraft Edit Post Controller', () => {
   it('should return error messages if validation errors', () => {
     req.body.craftReg = '';
     req.body.craftType = '';
-    req.body.craftBase = '';
+    req.body.craftBasePort = '';
     const cookie = new CookieModel(req);
     const callController = async () => {
       await controller(req, res);
@@ -69,7 +69,7 @@ describe('Aircraft Edit Post Controller', () => {
         errors: [
           new ValidationRule(validator.notEmpty, 'craftReg', '', 'Enter a registration'),
           new ValidationRule(validator.notEmpty, 'craftType', '', 'Enter an aircraft type'),
-          new ValidationRule(validator.notEmpty, 'craftBase', '', 'Enter an aircraft home port / location'),
+          new ValidationRule(validator.notEmpty, 'craftBasePort', '', 'Enter an aircraft home port / location'),
         ],
       });
     });

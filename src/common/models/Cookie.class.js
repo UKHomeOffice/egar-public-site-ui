@@ -1,4 +1,4 @@
-const logger = require("../utils/logger");
+const logger = require("../utils/logger")(__filename);
 
 /*
  *
@@ -19,6 +19,7 @@ class Cookie {
     this.initialise();
     this.initialiseGar();
   }
+
 
   initialise() {
     // Initialise org
@@ -216,7 +217,7 @@ class Cookie {
     this.session.gar.voyageArrival.arrivalPort = voyageObj.arrivalPort;
     this.session.gar.voyageArrival.arrivalLong = voyageObj.arrivalLong;
     this.session.gar.voyageArrival.arrivalLat = voyageObj.arrivalLat;
-    this.session.gar.voyageArrival.arrivalPortChoice =  voyageObj.portChoice || "Yes";
+    this.session.gar.voyageArrival.arrivalPortChoice = voyageObj.portChoice || "Yes";
   }
 
   getGarArrivalVoyage() {
@@ -237,7 +238,7 @@ class Cookie {
     this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
     this.session.gar.voyageDeparture.departureLat = voyageObj.departureLat;
     this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
-    this.session.gar.voyageDeparture.departurePortChoice =  voyageObj.portChoice || "Yes";
+    this.session.gar.voyageDeparture.departurePortChoice = voyageObj.portChoice || "Yes";
   }
 
   getGarDepartureVoyage() {
@@ -303,7 +304,7 @@ class Cookie {
   }
 
   getGarfixedBasedOperator() {
-  return this.session.gar.fixedBasedOperator;
+    return this.session.gar.fixedBasedOperator;
   }
 
   setGarfixedBasedOperator(fbo) {
@@ -393,21 +394,21 @@ class Cookie {
   getGarpassengerTravellingReason() {
     return this.session.gar.passengerTravellingReason;
   }
-  
+
   setGarpassengerTravellingReason(ptr) {
-   this.session.gar.passengerTravellingReason = ptr;
+    this.session.gar.passengerTravellingReason = ptr;
   }
-      
+
   getGarpassengerTravellingReasonList() {
     return this.session.gar.passengerTravellingReasonList;
   }
-      
- setGarpassengerTravellingReasonList(ptrl) {
-   this.session.gar.manifest.push(ptrl);
+
+  setGarpassengerTravellingReasonList(ptrl) {
+    this.session.gar.manifest.push(ptrl);
   }
 
   getGarSupportingInformation() {
-  return this.session.gar.supportingInformation;
+    return this.session.gar.supportingInformation;
   }
 
   setGarSupportingInformation(si) {
@@ -423,7 +424,7 @@ class Cookie {
   }
 
   getGarIntentionValue() {
-  return this.session.gar.intentionValue;
+    return this.session.gar.intentionValue;
   }
 
   setGarIntentionValue(iv) {
@@ -713,14 +714,54 @@ class Cookie {
     this.session.editPerson.documentDesc = person.documentDesc;
   }
 
+  parseCraftBase(craftBase) {
+    const craftBasePort = craftBase.match(/^[A-Z]{3,4}$/);
+    const craftBaseLatLong = craftBase.match(/^[\+\-]?[\d.]+ [\+\-]?[\d.]+$/);
+
+    if (craftBasePort && craftBaseLatLong) {
+      throw 'Both craft base port and lat/long found. Supply one or other';
+    }
+
+    if (!(craftBasePort || craftBaseLatLong)) {
+      throw 'At least one of base port or lat/long must be defined';
+    }
+
+    if (craftBasePort) {
+      this.session.editCraft.craftBasePort = craftBasePort[0];
+      this.session.editCraft.portChoice = 'Yes';
+    }
+
+    if (craftBaseLatLong) {
+      const [craftBaseLat, craftBaseLong] = craftBaseLatLong[0].split(' ');
+      this.session.editCraft.craftBaseLat = craftBaseLat;
+      this.session.editCraft.craftBaseLong = craftBaseLong;
+      this.session.editCraft.portChoice = 'No';
+    }
+  };
+
+  reduceCraftBase(craftBasePort, craftBaseLat, craftBaseLong) {
+
+    if (craftBasePort && (craftBaseLat || craftBaseLong)) {
+      throw 'Both port and lat/long supplied for craft base. Supply port or lat/long'
+    }
+
+    if (craftBasePort) {
+      return craftBasePort;
+    }
+
+    return `${craftBaseLat} ${craftBaseLong}`;
+  };
+
   setEditCraft(craft) {
     this.session.editCraft = craft;
+    this.parseCraftBase(this.session.editCraft.craftBase);
   }
 
   updateEditCraft(reg, type, base) {
     this.session.editCraft.registration = reg;
     this.session.editCraft.craftType = type;
     this.session.editCraft.craftBase = base;
+    this.parseCraftBase(this.session.editCraft.craftBase);
   }
 
   clearEditCraft() {

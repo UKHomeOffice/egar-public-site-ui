@@ -44,16 +44,14 @@ const createValidationChains = (voyage) => {
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
   ];
 
-  // Check if port code is ZZZZ then need to validate lat/long and display req zzzz message
-  if (voyage.portChoice === 'No') {
+  if (voyage.portChoice === 'Yes') {
+    validations.push(
+      departurePortValidation,
+    );
+  } else if (voyage.portChoice) {
     validations.push(
       departureLatValidation,
       departureLongValidation,
-    );
-  } else if (voyage.portChoice) {
-    // if not just add port validation
-    validations.push(
-      departurePortValidation,
     );
   }
 

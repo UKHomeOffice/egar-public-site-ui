@@ -14,6 +14,7 @@ module.exports = (req, res) => {
     .then((apiResponse) => {
       const editCraft = JSON.parse(apiResponse);
       cookie.setEditCraft(editCraft);
+
       return res.render('app/aircraft/edit/index', { cookie });
     })
     .catch((err) => {
