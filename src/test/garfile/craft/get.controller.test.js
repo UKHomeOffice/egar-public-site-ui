@@ -145,7 +145,7 @@ describe('GAR Craft Get Controller', () => {
 
       callController().then(() => {
         expect(cookie.getGarCraft()).to.eql({
-          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', freeCirculation: undefined, visitReason: undefined,
+          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', freeCirculation: undefined, visitReason: undefined,craftBasePort:"EGLL",portChoice:"Yes"
         });
         expect(cookie.getSavedCraft()).to.eql({
           items: [
@@ -252,7 +252,7 @@ describe('GAR Craft Get Controller', () => {
 
       callController().then(() => {
         expect(cookie.getGarCraft()).to.eql({
-          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', freeCirculation: undefined, visitReason: undefined,
+          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', freeCirculation: undefined, visitReason: undefined, craftBasePort :"EGLL", portChoice:"Yes"
         });
         expect(cookie.getSavedCraft()).to.eql({
           items: [

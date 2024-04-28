@@ -34,7 +34,7 @@ describe('GAR Craft Post Controller', () => {
 
     req = {
       body: {
-        craftReg: 'G-ABCD',
+        registration: 'G-ABCD',
         craftType: 'Gulfstream',
         craftBasePort: 'LHR',
         portChoice: 'Yes'
@@ -124,7 +124,7 @@ describe('GAR Craft Post Controller', () => {
       garApiPatchStub = sinon.stub(garApi, 'patch');
     });
 
-    it.only('should return errors on validation', () => {
+    it('should return errors on validation', () => {
       req.body.craftBasePort = '';
       cookie = new CookieModel(req);
 
@@ -137,12 +137,13 @@ describe('GAR Craft Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
           cookie,
           errors: [
-            new ValidationRule(validator.notEmpty, 'craftBasePort', undefined, 'Enter an aircraft home port / location'),
+            new ValidationRule(validator.notEmpty, 'craftBasePort', '', 'Enter an aircraft home port / location'),
           ],
         });
       });
     });
 
+    
     it('should return an error if api rejects', () => {
       cookie = new CookieModel(req);
       garApiPatchStub.rejects('garApi.patch Example Reject');

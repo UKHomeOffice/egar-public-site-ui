@@ -25,7 +25,7 @@ describe('Aircraft Add Post Controller', () => {
     // Example response object with appropriate spies
     req = {
       body: {
-        craftReg: 'G-ABCD',
+        registration: 'G-ABCD',
         craftType: 'Gulfstream',
         craftBasePort: 'LHR',
       },
@@ -60,11 +60,11 @@ describe('Aircraft Add Post Controller', () => {
 
   describe('validation chains', () => {
     it('should return message when registration is empty', () => {
-      req.body.craftReg = '';
-      const rule = new ValidationRule(validator.notEmpty, 'craftReg', '', 'Enter a registration');
+      req.body.registration = '';
+      const rule = new ValidationRule(validator.notEmpty, 'registration', '', 'Enter a registration');
       const cookie = new CookieModel(req);
       const craftObj = {
-        craftReg: '', 
+        registration: '', 
         craftType: 'Gulfstream', 
         craftBasePort: 'LHR', 
         craftBaseLat: undefined, 
@@ -88,7 +88,7 @@ describe('Aircraft Add Post Controller', () => {
       const rule = new ValidationRule(validator.notEmpty, 'craftType', '', 'Enter an aircraft type');
       const cookie = new CookieModel(req);
       const craftObj = {
-        craftReg: 'G-ABCD', 
+        registration: 'G-ABCD', 
         craftType: '', 
         craftBasePort: 'LHR', 
         craftBaseLat: undefined, 
@@ -114,7 +114,7 @@ describe('Aircraft Add Post Controller', () => {
       const cookie = new CookieModel(req);
 
       const craftObj = {
-        craftReg: 'G-ABCD', 
+        registration: 'G-ABCD', 
         craftType: 'Gulfstream', 
         craftBasePort: '', 
         craftBaseLat: undefined, 
@@ -158,7 +158,7 @@ describe('Aircraft Add Post Controller', () => {
       craftApiStub.resolves('Example return');
 
       const craftObj = {
-        craftReg: 'G-ABCD', 
+        registration: 'G-ABCD', 
         craftType: 'Gulfstream', 
         craftBasePort: 'LHR', 
         craftBaseLat: undefined, 
@@ -183,7 +183,7 @@ describe('Aircraft Add Post Controller', () => {
       craftApiStub.resolves('Something containing DETAIL:  Key (registration) ');
 
       const craftObj = {
-        craftReg: 'G-ABCD', 
+        registration: 'G-ABCD', 
         craftType: 'Gulfstream', 
         craftBasePort: 'LHR', 
         craftBaseLat: undefined, 

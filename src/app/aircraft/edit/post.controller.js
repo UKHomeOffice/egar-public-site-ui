@@ -12,12 +12,11 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  const { craftReg, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes'} = req.body;
+  const { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes'} = req.body;
   const { craftId } = cookie.getEditCraft();
   
-  // Define a validation chain for user registeration fields
   const craftObj = {
-    craftReg,
+    registration,
     craftType,
     craftBasePort,
     craftBaseLat,
@@ -25,17 +24,27 @@ module.exports = (req, res) => {
     portChoice
   };
 
+  if (portChoice === 'Yes'){
+
+    delete craftObj.craftBaseLat;
+    delete craftObj.craftBaseLong;
+  } else {
+    delete craftObj.craftBasePort;
+  }
+
+
+
   const validationChain = craftValidations.validations(craftObj);
 
   // Validate chains
   validator.validateChains(validationChain)
     .then(() => {
 
-      const craftBase = cookie.reduceCraftBase(craftBasePort, craftBaseLat, craftBaseLong);
-      cookie.updateEditCraft(craftReg, craftType, craftBase);
+      const craftBase = cookie.reduceCraftBase(craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong);
+      cookie.updateEditCraft(registration, craftType, craftBase);
 
       // call the API to update craft
-      craftApi.update(craftReg, craftType, craftBase, cookie.getUserDbId(), craftId)
+      craftApi.update(registration, craftType, craftBase, cookie.getUserDbId(), craftId)
         .then((apiResponse) => {
           try {
             const parsedResponse = JSON.parse(apiResponse);

@@ -129,7 +129,6 @@ describe('Departure Post Controller', () => {
     });
 
     it('should fail if port is known but not actually entered 2', () => {
-      // Covers the scenario where the port code is not 'YYYY' but no choice was made,
       // contrived as it should not be possible via the front end.
       delete req.body.portChoice;
       delete req.body.departurePort;
@@ -151,12 +150,14 @@ describe('Departure Post Controller', () => {
           cookie,
           errors: [
             new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known'),
+            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
+            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
           ],
         });
       });
     });
 
-    it('should fail if port is ZZZZ and no longitude or latitude', () => {
+    it('should fail if port is ZZZZ and no longitude or latitude 2', () => {
       req.body.departurePort = 'ZZZZ';
       delete req.body.departureLong;
       delete req.body.departureLat;
@@ -175,8 +176,8 @@ describe('Departure Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
           cookie,
           errors: [
-            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 6 decimal places'),
-            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 6 decimal places'),
+            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
+            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
           ],
         });
       });
@@ -202,8 +203,8 @@ describe('Departure Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
           cookie,
           errors: [
-            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 6 decimal places'),
-            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 6 decimal places'),
+            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
+            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
           ],
         });
       });

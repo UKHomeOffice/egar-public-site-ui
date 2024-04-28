@@ -48,7 +48,7 @@ const createValidationChains = (voyage) => {
     validations.push(
       departurePortValidation,
     );
-  } else if (voyage.portChoice) {
+  } else {
     validations.push(
       departureLatValidation,
       departureLongValidation,
@@ -100,18 +100,17 @@ module.exports = async (req, res) => {
   // Define voyage
   const voyage = req.body;
   delete voyage.buttonClicked;
-  if (voyage.portChoice === 'No') {
+  if (voyage.portChoice === 'Yes') {
+    delete voyage.departureLat;
+    delete voyage.departureLong;
+    voyage.departurePort = _.toUpper(voyage.departurePort);
+  } else {
     logger.debug("Testing departure Lat and Long values...");
-
     const combinedCoordinates = voyage.departureLat + " " + voyage.departureLong;
     voyage.departurePort = combinedCoordinates;
     logger.debug("Departure port: " + voyage.departurePort);
-  } else {
-    // If 'Yes' is selected then clear the coordinate values
-    voyage.departureLat = '';
-    voyage.departureLong = '';
-    voyage.departurePort = _.toUpper(voyage.departurePort);
   }
+
   cookie.setGarDepartureVoyage(voyage);
 
   const validations = createValidationChains(voyage);

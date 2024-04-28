@@ -196,9 +196,11 @@ class Cookie {
     this.session.gar.craft.craftBase = craftBase;
     this.session.gar.craft.freeCirculation = freeCirculation;
     this.session.gar.craft.visitReason = visitReason;
+    this.parseCraftBase(this.session.gar.craft);
   }
 
   getGarCraft() {
+    logger.info(JSON.stringify(this.session.gar.craft));
     return this.session.gar.craft;
   }
 
@@ -217,7 +219,7 @@ class Cookie {
     this.session.gar.voyageArrival.arrivalPort = voyageObj.arrivalPort;
     this.session.gar.voyageArrival.arrivalLong = voyageObj.arrivalLong;
     this.session.gar.voyageArrival.arrivalLat = voyageObj.arrivalLat;
-    this.session.gar.voyageArrival.arrivalPortChoice = voyageObj.portChoice || "Yes";
+    this.session.gar.voyageArrival.arrivalPortChoice = voyageObj.portChoice || (voyageObj.arrivalLat || voyageObj.arrivalLong) ? 'No' : 'Yes';
   }
 
   getGarArrivalVoyage() {
@@ -238,7 +240,8 @@ class Cookie {
     this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
     this.session.gar.voyageDeparture.departureLat = voyageObj.departureLat;
     this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
-    this.session.gar.voyageDeparture.departurePortChoice = voyageObj.portChoice || "Yes";
+    this.session.gar.voyageDeparture.departurePortChoice = voyageObj.portChoice || (voyageObj.departureLat || voyageObj.departureLong) ? 'No' : 'Yes';
+    
   }
 
   getGarDepartureVoyage() {
@@ -714,28 +717,28 @@ class Cookie {
     this.session.editPerson.documentDesc = person.documentDesc;
   }
 
-  parseCraftBase(craftBase) {
-    const craftBasePort = craftBase.match(/^[A-Z]{3,4}$/);
-    const craftBaseLatLong = craftBase.match(/^[\+\-]?[\d.]+ [\+\-]?[\d.]+$/);
+  parseCraftBase(destination) {
 
-    if (craftBasePort && craftBaseLatLong) {
-      throw 'Both craft base port and lat/long found. Supply one or other';
+    if(!destination.craftBase){
+      destination.portChoice = 'Yes';
+      return;
     }
 
-    if (!(craftBasePort || craftBaseLatLong)) {
-      throw 'At least one of base port or lat/long must be defined';
-    }
+    const craftBasePort = destination.craftBase.match(/^[A-Z]{3,4}$/);
+    const craftBaseLatLong = destination.craftBase.match(/^[\+\-]?[\d.]+ [\+\-]?[\d.]+$/);
 
     if (craftBasePort) {
-      this.session.editCraft.craftBasePort = craftBasePort[0];
-      this.session.editCraft.portChoice = 'Yes';
+      destination.craftBasePort = craftBasePort[0];
+      destination.portChoice = 'Yes';
+      return;
     }
 
     if (craftBaseLatLong) {
       const [craftBaseLat, craftBaseLong] = craftBaseLatLong[0].split(' ');
-      this.session.editCraft.craftBaseLat = craftBaseLat;
-      this.session.editCraft.craftBaseLong = craftBaseLong;
-      this.session.editCraft.portChoice = 'No';
+      destination.craftBaseLat = craftBaseLat;
+      destination.craftBaseLong = craftBaseLong;
+      destination.portChoice = 'No';
+      return;
     }
   };
 
@@ -754,14 +757,14 @@ class Cookie {
 
   setEditCraft(craft) {
     this.session.editCraft = craft;
-    this.parseCraftBase(this.session.editCraft.craftBase);
+    this.parseCraftBase(this.session.editCraft);
   }
 
   updateEditCraft(reg, type, base) {
     this.session.editCraft.registration = reg;
     this.session.editCraft.craftType = type;
     this.session.editCraft.craftBase = base;
-    this.parseCraftBase(this.session.editCraft.craftBase);
+    this.parseCraftBase(this.session.editCraft);
   }
 
   clearEditCraft() {
