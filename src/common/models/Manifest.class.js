@@ -1,6 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 const logger = require('../../common/utils/logger')(__filename);
-const validations = require('../utils/validator');
+const validations = require('../../app/people/validations');
+const validator = require('../../common/utils/validator');
 
 class Manifest {
   /**
@@ -24,47 +25,45 @@ class Manifest {
     }
   }
 
+  static turnPersonToRequest (inputtedPerson) {
+    const person = structuredClone(inputtedPerson);
+    const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
+    const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
+    
+    person.dobYear = birtDateObject.y;
+    person.dobMonth = birtDateObject.m;
+    person.dobDay = birtDateObject.d;
+
+    person.expiryYear = expiryDateObject.y;
+    person.expiryMonth = expiryDateObject.m;
+    person.expiryDay = expiryDateObject.d;
+
+    person.personType = person.peopleType.name;
+    person.travelDocumentNumber = person.documentNumber;
+    person.travelDocumentType = person.documentType;
+
+    return { body: person };
+  }
+  
   /**
    * Validate Manifest data cannot be empty and cannot have invalid dates
    * @returns {Bool} true if valid, else false
    */
-  validate() {
-    let isValid = true;
-    this.manifest.forEach((person) => {
-      if (person["documentType"] === "Other" && !validations.notEmpty(person["documentDesc"])) {
-          isValid = false;
-          this._recordValidationErr(this.manifest.indexOf(person));
-      }
+  async validate() {
+    const validatingPeople = Promise.allSettled(
+        this.manifest.map(async (person) => {
+          try {
+            const req = Manifest.turnPersonToRequest(person);
+            return await validator.validateChains(validations.validations(req));
+          } catch (err) {
+            this._recordValidationErr(this.manifest.indexOf(person));
+          }
+        })
+      );
 
-      Object.keys(person).forEach((key) => {
-        if (key === "documentDesc") {
-          return null;
-        }
+    await validatingPeople;
 
-        if (
-          key === "amgCheckinResponseCode" || 
-          key === "amgDepartureResponseCode" ||
-          key === "amgHasDeparted"
-        ) {
-          return null;
-        }
-
-        if (key.toLowerCase().includes('placeofbirth') ) {
-          return null;
-        }
-
-        if (key.toLowerCase().includes('date') && !validations.realDate(Manifest._constructDateObj(person[key]))) {
-          isValid = false;
-          this._recordValidationErr(this.manifest.indexOf(person));
-        }
-
-        if (!validations.notEmpty(person[key])) {
-          isValid = false;
-          this._recordValidationErr(this.manifest.indexOf(person));
-        }
-      });
-    });
-    return isValid;
+    return this.invalidPeople.length === 0;
   }
 
   validateCaptainCrew() {

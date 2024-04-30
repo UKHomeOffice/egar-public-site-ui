@@ -4,8 +4,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
-const logger = require('../common/utils/logger')(__filename);
-
 require('./global.test');
 
 const validator = require('../common/utils/validator');

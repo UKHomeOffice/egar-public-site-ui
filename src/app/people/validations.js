@@ -25,6 +25,7 @@ module.exports.validations = (req) => {
       ],
       [
         new ValidationRule(validator.notEmpty, 'nationality', req.body.nationality, 'Enter the nationality of the person'),
+        new ValidationRule(validator.validISO3Country, 'nationality', req.body.nationality, 'Enter a valid nationality for the person, it must be a ISO 3166 country code.'),
       ],
       [
         new ValidationRule(validator.isValidOptionalStringLength, 'birthplace', req.body.birthplace, `Place of birth must be ${MAX_STRING_LENGTH} characters or less`),
@@ -71,6 +72,7 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(validator.notEmpty, 'nationality', req.body.nationality, 'Enter the nationality of the person'),
+      new ValidationRule(validator.validISO3Country, 'nationality', req.body.nationality, 'Enter a valid nationality for the person, it must be a ISO 3166 country code.'),
     ],
     [
       new ValidationRule(validator.isValidOptionalStringLength, 'birthplace', req.body.birthplace, `Place of birth must be ${MAX_STRING_LENGTH} characters or less`),

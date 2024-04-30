@@ -51,16 +51,40 @@
   </div>
 
     <div class="govuk-grid-column-full">
+      {% if manifestInvalidSavedPeople %}
+        <p class="govuk-error-message">
+          {{ __('saved_people_are_invalid__info') }}
+        </p>
+        {% for person in savedPeople %}
+          {% if (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
+            <ul class="govuk-list govuk-list--bullet">
+                <li>
+                  <button 
+                    id="edit-person-{{ loop.index }}" 
+                    class="govuk-link btn-link" 
+                    title="Edit details for {{ person.firstName }} {{ person.lastName }}" 
+                    name="editSavedPerson" 
+                    value="{{person.personId}}">
+                    {{person.lastName}}, 
+                    {{person.firstName}}, 
+                    {{person.peopleType.name}}, 
+                    {{person.documentExpiryDate}}
+                  </button>
+                </li>
+              </ul>
+            {% endif %}
+          {% endfor %}
+      {% endif %}
       <p class="govuk-body-l">{{__('people_caption')}}</p>
       <p class="govuk-body-m">{{__('person_search')}}</p>
-      <input class="govuk-input govuk-input--width-20" id="person-search" name="person-search" type="text" placeholder="Search" style="margin-bottom: 10px">
-      <p class="govuk-body-s" style="margin-bottom: 10px">{{__('person_sort')}}</p>
       <form id="people" action="/people" method="post">
       {% if savedPeople | length %}
         <table class="table-clickable govuk-table" id="people_table">
       {% else %}
         <table class="govuk-table" id="people_table" >
       {% endif %}
+          <input class="govuk-input govuk-input--width-20" id="person-search" name="person-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+          <p class="govuk-body-s" style="margin-bottom: 10px">{{__('person_sort')}}</p>
           <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
@@ -82,20 +106,29 @@
           <tbody class="govuk-table__body" id="people_table_row">
           {% if savedPeople | length %}
             {% for person in savedPeople %}
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell multiple-choice--hod">
-                <div class="govuk-checkboxes__item">
-                <input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="savedPerson-{{loop.index0}}" name="personId" value="{{person.personId}}">
-                <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
-                  &nbsp;
-                </label>
-                </div>
-              </td>
-              <td class="govuk-table__cell">{{person.lastName}}</td>
-              <td class="govuk-table__cell">{{person.firstName}}</td>
-              <td class="govuk-table__cell">{{person.peopleType.name}}</td>
-              <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
-            </tr>
+              {% if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
+              {% else %}
+                <tr class="govuk-table__row" id="savedPerson-{{loop.index0}}">
+                  <td class="govuk-table__cell multiple-choice--hod">
+                    <div class="govuk-checkboxes__item">
+                    <input 
+                      type="checkbox" 
+                      class="govuk-checkboxes__input jsCheckbox" 
+                      id="savedPerson-{{loop.index0}}" 
+                      name="personId" 
+                      value="{{person.personId}}"
+                    >
+                    <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
+                      &nbsp;
+                    </label>
+                    </div>
+                  </td>
+                  <td class="govuk-table__cell">{{person.lastName}}</td>
+                  <td class="govuk-table__cell">{{person.firstName}}</td>
+                  <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+                  <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+                </tr>
+              {% endif %}
             {% endfor %}
           {% else %}
             {{ m.empty_table_message(__('people_no_records')) }}
@@ -168,8 +201,9 @@
         <tbody class="govuk-table__body " id="manifestTable_row">
         {% if manifest.items | length %}
           {% for person in manifest.items %}
-          {% if manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople) %}
-            <tr class="govuk-table__row row-error" id="person-{{loop.index0}}">
+          {% if (manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople)) %}
+            <tr class="govuk-table__row govuk-form-group govuk-form-group--error" id="person-{{loop.index0}}">
+            <td class="govuk-table__cell"></td>
           {% else %}
             <tr class="govuk-table__row" id="person-{{loop.index0}}">
             {% if person.documentExpiryDate.toString() < expiryDate.toString()  %}
@@ -181,15 +215,15 @@
             <tr class="govuk-table__row"> 
            <div class="govuk-radios">
            <td class="govuk-table__cell"> 
-           <div class="govuk-radios govuk-radios--inline">         
-          <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="person-{{loop.index0}}" name="garPeopleId" type="radio" value="{{person.garPeopleId}}"> 
-          <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}"></label>        
-           </div>
+            <div class="govuk-radios govuk-radios--inline">         
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="person-{{loop.index0}}" name="garPeopleId" type="radio" value="{{person.garPeopleId}}"> 
+              <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}"></label>        
+            </div>
           {#          ###################                                   #} 
           {% endif %}
             
-            <td class="govuk-table__cell">{{person.lastName}}</td>
+            <td class="govuk-table__cell" style="{{ "padding-left: 10px" if isGarPersonInvalid }}">{{person.lastName}}</td>
             <td class="govuk-table__cell">{{person.firstName}}</td>
             <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
             <td class="govuk-table__cell">{{person.nationality | upper}}</td>
