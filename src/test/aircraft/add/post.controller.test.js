@@ -67,8 +67,8 @@ describe('Aircraft Add Post Controller', () => {
         registration: '', 
         craftType: 'Gulfstream', 
         craftBasePort: 'LHR', 
-        craftBaseLat: undefined, 
-        craftBaseLong: undefined,
+        craftBaseLat: null, 
+        craftBaseLong: null,
         portChoice: 'Yes'
       };
       const callController = async () => {
@@ -91,8 +91,8 @@ describe('Aircraft Add Post Controller', () => {
         registration: 'G-ABCD', 
         craftType: '', 
         craftBasePort: 'LHR', 
-        craftBaseLat: undefined, 
-        craftBaseLong: undefined,
+        craftBaseLat: null, 
+        craftBaseLong: null,
         portChoice: 'Yes'
       };
 
@@ -117,8 +117,8 @@ describe('Aircraft Add Post Controller', () => {
         registration: 'G-ABCD', 
         craftType: 'Gulfstream', 
         craftBasePort: '', 
-        craftBaseLat: undefined, 
-        craftBaseLong: undefined,
+        craftBaseLat: null, 
+        craftBaseLong: null,
         portChoice: 'Yes'
       };
 
@@ -161,8 +161,8 @@ describe('Aircraft Add Post Controller', () => {
         registration: 'G-ABCD', 
         craftType: 'Gulfstream', 
         craftBasePort: 'LHR', 
-        craftBaseLat: undefined, 
-        craftBaseLong: undefined,
+        craftBaseLat: null, 
+        craftBaseLong: null,
         portChoice: 'Yes'
       };
 
@@ -186,8 +186,8 @@ describe('Aircraft Add Post Controller', () => {
         registration: 'G-ABCD', 
         craftType: 'Gulfstream', 
         craftBasePort: 'LHR', 
-        craftBaseLat: undefined, 
-        craftBaseLong: undefined,
+        craftBaseLat: null, 
+        craftBaseLong: null,
         portChoice: 'Yes'
       };
 
