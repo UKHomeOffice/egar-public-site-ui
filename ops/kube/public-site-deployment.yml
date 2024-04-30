@@ -55,6 +55,7 @@ spec:
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
+            readOnlyRootFilesystem: true
           resources:
             limits:
               memory: "4096Mi"
