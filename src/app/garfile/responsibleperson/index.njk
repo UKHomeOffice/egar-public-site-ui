@@ -138,17 +138,13 @@
             <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
               <div class="govuk-radios govuk-radio--conditional" data-module="radios">
 
-                {# {% if cookie.getGarfixedBasedOperator() != undefined %}
-                  cookie.setGarfixedBasedOperator("Operator")
-                {% endif %} #}
                 {% for choice in fixedBasedOperatorOptions %}
                   <div class="govuk-radios__item">
                     <input id="{{ choice.option }}" class="govuk-radios__input" type="radio" name="fixedBasedOperator"
                       value="{{ choice.value }}" aria-labelledby="fixedBasedOperator-label-{{ loop.index }}"
-                      {{ cookie.setGarfixedBasedOperator(choice.value) }}
-                      {{ "checked" if choice.value === cookie.getGarfixedBasedOperator() }}
+                      {{ "checked" if cookie.getGarResponsiblePerson().fixedBasedOperator === choice.value }}
                       {{ "data-aria-controls=conditional-fixedBasedOperatorAnswer" if choice.value === 'Other' }}>
-                    <label id="fixedBasedOperator-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{ choice.option }}">{{ choice.option }}</label>
+                    <label id="fixedBasedOperator-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{ choice.option }}" >{{ choice.option }}</label>
                   </div>
 
                   {% if choice.value == 'Other' %}
@@ -166,7 +162,6 @@
               </div>
             </div>
           </fieldset>
-        </div>
 
         {# Start buttons #}
         {{ m.submit_buttons('GAR Responsible Persons', csrfToken, __) }}

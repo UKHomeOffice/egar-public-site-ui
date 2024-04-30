@@ -509,6 +509,8 @@ class Cookie {
     this.session.gar.responsiblePerson.responsibleCounty = person.responsibleCounty;
     this.session.gar.responsiblePerson.responsibleContactNo = person.responsibleContactNo;
     this.session.gar.responsiblePerson.responsibleEmail = person.responsibleEmail;
+    this.session.gar.responsiblePerson.fixedBasedOperator = person.fixedBasedOperator;
+    this.session.gar.responsiblePerson.fixedBasedOperatorAnswer = person.fixedBasedOperatorAnswer;
   }
 
   getGarResponsiblePerson() {
