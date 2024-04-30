@@ -62,7 +62,7 @@ const performAPICall = (garId, cookie, req, res) => {
 
 const buildValidations = async (garfile, garpeople, manifest) => {
   const validations = validationList.validations(garfile, garpeople);
-  const departureDateParts = garfile.departureDate ? garfile.departureDate.split('-') : [,,];
+  const departureDateParts = garfile.departureDate ? garfile.departureDate.split('-') : [];
   const departDateObj = {
     d: departureDateParts[2],
     m: departureDateParts[1],
