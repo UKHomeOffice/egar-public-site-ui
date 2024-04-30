@@ -14,7 +14,8 @@ docker compose up -d --build
 
 This should build both the data-access-api and egar-public-site-ui.
 
-To see updated on the frontend, just reload the page.
+On development:
+- To see updated on the frontend, just reload the page.
 
 ## Unit tests
 
