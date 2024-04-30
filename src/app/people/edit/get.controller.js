@@ -31,10 +31,10 @@ module.exports = async (req, res) => {
       } 
 
       const requestToValidate = Manifest.turnPersonToRequest(parsedResponse);
+      cookie.setEditPerson(parsedResponse);
 
       validator.validateChains(validations.validations(requestToValidate))
         .then(() => {
-          cookie.setEditPerson(parsedResponse);
           return res.render('app/people/edit/index', {
             cookie, persontype, documenttype, genderchoice, person: parsedResponse,
           });
