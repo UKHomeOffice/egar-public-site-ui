@@ -67,15 +67,16 @@ module.exports = (req, res) => {
         try {
           const manifest = new Manifest(apiResponse);
           const isValid = await manifest.validate();
+          
           if (isValid) {
             return res.redirect('/garfile/responsibleperson');
-          } else {
-            logger.info('Manifest validation failed, redirecting with error msg');
-            req.session.manifestErr = manifest.genErrValidations();
-            req.session.manifestInvalidPeople = manifest.invalidPeople;
-        
-            return res.redirect('/garfile/manifest');
-          }
+          } 
+
+          logger.info('Manifest validation failed, redirecting with error msg');
+          req.session.manifestErr = manifest.genErrValidations();
+          req.session.manifestInvalidPeople = manifest.invalidPeople;
+      
+          return res.redirect('/garfile/manifest');
         } catch (err) {
           logger.error(JSON.stringify(err));
         }
