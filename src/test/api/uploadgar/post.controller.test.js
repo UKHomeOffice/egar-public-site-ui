@@ -26,7 +26,6 @@ i18n.configure({
 
 const controller = require('../../../app/api/uploadgar/post.controller');
 const { getInvalidWorkbook, getValidWorkbook } = require('./workbook-data');
-const logger = require('../../../common/utils/logger');
 
 describe('API upload GAR post controller', () => {
   let req; let res;

@@ -2,32 +2,27 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
+const sinon = require('sinon');
+const { garPeople } = require('../../fixtures');
 
 require('../../global.test');
 const { Manifest } = require('../../../common/models/Manifest.class');
 
 const apiResponse = JSON.stringify({
-  items: [
-    {
-      dateOfBirth: '1994-06-22',
-      documentExpiryDate: '2023-06-22',
-      documentNumber: '1283',
-      documentType: 'Identity Card',
-      firstName: 'James',
-      garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
-      gender: 'Male',
-      issuingState: 'PTA',
-      lastName: 'Smith',
-      nationality: 'PTA',
-      peopleType: {
-        name: 'Captain',
-      },
-      placeOfBirth: 'PTA',
-    },
-  ],
+  items: garPeople(),
 });
 
 describe('ManifestModel', () => {
+  const APRIL = 3;
+    
+  beforeEach(() => {
+    clock = sinon.useFakeTimers({
+      now: new Date(2024, APRIL, 11),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
+  });
+
   it('Should generate valid manifest data from a valid API response', () => {
     const manifest = new Manifest(apiResponse);
     expect(manifest.manifest).to.have.length(1);
@@ -47,9 +42,9 @@ describe('ManifestModel', () => {
     }
   });
 
-  it('Should validate a valid manifest', () => {
+  it('Should validate a valid manifest', async () => {
     const manifest = new Manifest(apiResponse);
-    expect(manifest.validate()).to.be.true;
+    expect(await manifest.validate()).to.be.true;
   });
 
   it('Should return true for captain crew for a valid manifest', () => {
@@ -59,24 +54,7 @@ describe('ManifestModel', () => {
 
   it('Should return true for captain crew for a single crew manifest', () => {
     const singleCrew = JSON.stringify({
-      items: [
-        {
-          dateOfBirth: '1994-06-22',
-          documentExpiryDate: '2023-06-22',
-          documentNumber: '1283',
-          documentType: 'Identity Card',
-          firstName: 'James',
-          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
-          gender: 'Male',
-          issuingState: 'PTA',
-          lastName: 'Smith',
-          nationality: 'PTA',
-          peopleType: {
-            name: 'Crew',
-          },
-          placeOfBirth: 'PTA',
-        },
-      ],
+      items: garPeople(),
     });
     const manifest = new Manifest(singleCrew);
     expect(manifest.validateCaptainCrew()).to.be.true;
@@ -95,7 +73,7 @@ describe('ManifestModel', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Passenger',
           },
@@ -115,39 +93,39 @@ describe('ManifestModel', () => {
     expect(manifest.validateCaptainCrew()).to.be.false;
   });
 
-  it('Should not validate a manifest with missing data', () => {
+  it('Should not validate a manifest with missing data', async () => {
     const response = JSON.stringify({ items: [{ firstName: null, lastName: '' }] });
     const manifest = new Manifest(response);
-    expect(manifest.validate()).to.be.false;
+    expect(await manifest.validate()).to.be.false;
   });
 
-  it('Should not validate a manifest with a null date', () => {
+  it('Should not validate a manifest with a null date', async () => {
     const response = JSON.stringify({ items: [{ dateOfBirth: null }] });
     const manifest = new Manifest(response);
-    expect(manifest.validate()).to.be.false;
+    expect(await manifest.validate()).to.be.false;
   });
 
-  it('Should not validate a manifest with an invalid date', () => {
+  it('Should not validate a manifest with an invalid date', async () => {
     const response = JSON.stringify({ items: [{ dateOfBirth: '94-06-22' }] });
     const manifest = new Manifest(response);
-    expect(manifest.validate()).to.be.false;
+    expect(await manifest.validate()).to.be.false;
   });
 
-  it('Should generate an array of validation errors', () => {
+  it('Should generate an array of validation errors', async () => {
     const response = JSON.stringify({ items: [{ firstName: null }] });
     const manifest = new Manifest(response);
-    manifest.validate();
+    await manifest.validate();
     expect(manifest.genErrValidations()).to.have.length(1);
   });
 
-  it('Should generate a single error if two fields are missing', () => {
+  it('Should generate a single error if two fields are missing', async () => {
     const response = JSON.stringify({ items: [{ firstName: null, lastName: '' }] });
     const manifest = new Manifest(response);
-    manifest.validate();
+    await manifest.validate();
     expect(manifest.genErrValidations()).to.have.length(1);
   });
 
-  it('Should return true if place of Birth is not present for a passenger', () => {
+  it('Should return false if place of Birth is not present for a passenger', async () => {
     const singlePassenger = JSON.stringify({
       items: [
         {
@@ -160,7 +138,7 @@ describe('ManifestModel', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Passenger',
           },
@@ -169,7 +147,7 @@ describe('ManifestModel', () => {
       ],
     });
     const manifest = new Manifest(singlePassenger);
-    expect(manifest.validate()).to.be.true;
+    expect(await manifest.validate()).to.be.false;
   });
 
   it('Should return true if place of Birth is not present for a crew', () => {
@@ -185,7 +163,7 @@ describe('ManifestModel', () => {
           gender: 'Male',
           issuingState: 'PTA',
           lastName: 'Smith',
-          nationality: 'PTA',
+          nationality: 'GBR',
           peopleType: {
             name: 'Crew',
           },
@@ -195,5 +173,9 @@ describe('ManifestModel', () => {
     });
     const manifest = new Manifest(singleCrew);
     expect(manifest.validateCaptainCrew()).to.be.true;
+  });
+
+  afterEach(()=>{
+    clock.restore();
   });
 });

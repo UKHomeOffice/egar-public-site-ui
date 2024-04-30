@@ -5,6 +5,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const { savedPeople } = require('../../fixtures');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -17,13 +18,17 @@ const controller = require('../../../app/people/edit/get.controller');
 
 describe('Person Edit Get Controller', () => {
   let req; let res; let personApiStub; let apiResponse;
+  let clock; const APRIL = 3;
 
   beforeEach(() => {
     chai.use(sinonChai);
+    clock = sinon.useFakeTimers({
+      now: new Date(2023, APRIL, 11),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
 
-    apiResponse = {
-      firstName: 'Julian', lastName: 'Bashir',
-    };
+    apiResponse = savedPeople()[0];
 
     req = {
       session: {
@@ -41,6 +46,7 @@ describe('Person Edit Get Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   it('should redirect back if no editPersonId', () => {
@@ -91,22 +97,19 @@ describe('Person Edit Get Controller', () => {
     });
   });
 
-  it('should render edit page if ok', () => {
+  it('should render edit page if ok', async () => {
     req.session.editPersonId = 'EDIT-PERSON-ID';
     cookie = new CookieModel(req);
 
     personApiStub.resolves(JSON.stringify(apiResponse));
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(personApiStub).to.have.been.calledWith('343', 'EDIT-PERSON-ID');
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/people/edit/index', {
-        cookie, persontype, documenttype, genderchoice, person: apiResponse,
-      });
+    await controller(req, res);
+  
+    expect(personApiStub).to.have.been.calledWith('343', 'EDIT-PERSON-ID');
+    expect(res.redirect).to.not.have.been.called;
+    expect(res.render).to.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/people/edit/index', {
+      cookie, persontype, documenttype, genderchoice, person: apiResponse,
     });
   });
 });

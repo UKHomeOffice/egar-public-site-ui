@@ -10,7 +10,10 @@ module.exports = (req, res) => {
   const { buttonClicked } = req.body;
 
   logger.debug('In garfile / manifest post controller');
-  if (req.body.editPersonId) {
+  if (req.body.editSavedPerson) {
+    req.session.editPersonId = req.body.editSavedPerson;
+    req.session.save(() => res.redirect('/people/edit'));
+  } else if (req.body.editPersonId) {
     req.session.editPersonId = req.body.editPersonId;
     req.session.save(() => res.redirect('/garfile/manifest/editperson'));
   } else if (req.body.deletePersonId) {
@@ -60,16 +63,23 @@ module.exports = (req, res) => {
   } else if (req.body.buttonClicked === 'Continue') {
     // Perform manifest validation then redirect to next section
     garApi.getPeople(cookie.getGarId())
-      .then((apiResponse) => {
-        const manifest = new Manifest(apiResponse);
-        if (manifest.validate()) {
-          res.redirect('/garfile/responsibleperson');
-          return;
+      .then(async (apiResponse) => {
+        try {
+          const manifest = new Manifest(apiResponse);
+          const isValid = await manifest.validate();
+          
+          if (isValid) {
+            return res.redirect('/garfile/responsibleperson');
+          } 
+
+          logger.info('Manifest validation failed, redirecting with error msg');
+          req.session.manifestErr = manifest.genErrValidations();
+          req.session.manifestInvalidPeople = manifest.invalidPeople;
+      
+          return res.redirect('/garfile/manifest');
+        } catch (err) {
+          logger.error(JSON.stringify(err));
         }
-        logger.info('Manifest validation failed, redirecting with error msg');
-        req.session.manifestErr = manifest.genErrValidations();
-        req.session.manifestInvalidPeople = manifest.invalidPeople;
-        res.redirect('/garfile/manifest');
       })
       .catch((err) => {
         logger.error('Failed to get manifest');
