@@ -62,7 +62,23 @@
             value="{{ craftObj.craftType }}">
         </div>
 
-        {{ l.location(__('field_aircraft_base'), (craftObj.portChoice === 'Yes' or craftObj.portChoice is undefined), craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong, 'craftBase', errors, __) }}
+        {% set legendLabel = __('field_aircraft_base')%}
+        {% set warningMessage = undefined%}
+        {% set isPortChoice = (craftObj.portChoice === 'Yes' or craftObj.portChoice is undefined)%}
+        {% set portCode = craftObj.craftBasePort%}
+        {% set lat = craftObj.craftBaseLat%}
+        {% set long = craftObj.craftBaseLong%}
+        {% set prefix = 'craftBase'%}
+
+        {{ l.location(legendLabel, 
+                      warningMessage, 
+                      isPortChoice, 
+                      portCode, 
+                      lat, 
+                      long, 
+                      prefix, 
+                      errors, 
+                      __) }}
 
         <div class="govuk-form-group">
           <input id="add-and-exit" class="govuk-button" type="submit"

@@ -1,9 +1,9 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
-{% macro location(legendLabel, isPortChoice, portCode, lat, long, prefix, errors, __) %}
+{% macro location(legendLabel, warningMessage, isPortChoice, portCode, lat, long, prefix, errors, __) %}
 
     {# legendLabel:string html for legend contents#}
-    {# legendHint:string text for legend hint#}
+    {# warningMessage:string text for any port warning hint#}
     {# isPortChoice:bool -  is the location a port:true, or lat/long:false #}
     {# portCode:string - the IATA or ICAO port code, if used  #}
     {# lat:string - latitude in decimal  #}
@@ -36,6 +36,7 @@
                     {{lat_long(lat, long, prefix, errors, __)}}
                 </div>
             </div>
+            {{warningMessage}}
         </fieldset>
     </div>
 

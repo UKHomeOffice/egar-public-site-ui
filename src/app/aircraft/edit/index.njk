@@ -27,7 +27,7 @@
 
 {% block content %}
 
-{% set craft = cookie.getEditCraft() %}
+  {% set craft = cookie.getEditCraft() %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -57,7 +57,23 @@
             value="{{craft.craftType}}">
         </div>
 
-        {{ l.location(__('field_aircraft_base'), (craft.portChoice === 'Yes' or craft.portChoice is undefined), craft.craftBasePort, craft.craftBaseLat, craft.craftBaseLong, 'craftBase', errors, __) }}
+        {% set legendLabel = __('field_aircraft_base')%}
+        {% set warningMessage = undefined%}
+        {% set isPortChoice = (craft.portChoice === 'Yes' or craft.portChoice is undefined)%}
+        {% set portCode = craft.craftBasePort%}
+        {% set lat = craft.craftBaseLat%}
+        {% set long = craft.craftBaseLong%}
+        {% set prefix = 'craftBase'%}
+
+        {{ l.location(legendLabel, 
+                      warningMessage, 
+                      isPortChoice, 
+                      portCode, 
+                      lat, 
+                      long, 
+                      prefix, 
+                      errors, 
+                      __) }}
 
         <div class="govuk-form-group">
           <input id="save-and-exit" class="govuk-button" type="submit"

@@ -145,7 +145,7 @@ describe('Arrival Post Controller', () => {
         expect(garApi.patch).to.not.have.been.called;
         expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
           cookie,
-          errors: [new ValidationRule(validator.dateNotMoreThanMonthInFuture, 'arrivalDate', { d: "30", m: "5", y: "2024" }, 'Arrival date must be within a month from now')],
+          errors: [new ValidationRule(validator.dateNotMoreThanMonthInFuture, 'arrivalDate', { d: "30", m: "5", y: "2024" }, 'Arrival date must be in the future and within a month from now')],
         });
       });
     });
@@ -166,7 +166,7 @@ describe('Arrival Post Controller', () => {
         expect(garApi.patch).to.not.have.been.called;
         expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
           cookie,
-          errors: [new ValidationRule(validator.currentOrPastDate, 'arrivalDate', { d: "30", m: "5", y: "2010" }, 'Arrival date must be within a month from now')],
+          errors: [new ValidationRule(validator.currentOrPastDate, 'arrivalDate', { d: "30", m: "5", y: "2010" }, 'Arrival date must be in the future and within a month from now')],
         });
       });
     });

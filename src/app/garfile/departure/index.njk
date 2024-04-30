@@ -125,10 +125,31 @@
             </div>
           </fieldset>
         </div>
+
+
+        
+        
         {{ m.departure_warning_message(__)}}
-        {# End departure time #}
-        {{l.location('<h2 class="govuk-fieldset__heading">' + __('field_port_choice_departure') + '</h2>', (departure.departurePortChoice === 'Yes'), departure.departurePort, departure.departureLat, departure.departureLong, 'departure', errors, __)}}
-        {# {{ b.coa_designation_regulation_change(false) }} #}
+
+
+        {% set legendLabel = ['<h2 class="govuk-fieldset__heading">', __('field_port_choice_departure'), '</h2>'] | join %}
+        {% set warningMessage = b.coa_designation_regulation_change(true)%}
+        {% set isPortChoice = (departure.departurePortChoice === 'Yes') %}
+        {% set portCode = departure.departurePort%}
+        {% set lat = departure.departureLat%}
+        {% set long = departure.departureLong%}
+        {% set prefix = 'departure'%}
+
+        {{ l.location(legendLabel, 
+                      warningMessage, 
+                      isPortChoice, 
+                      portCode, 
+                      lat, 
+                      long, 
+                      prefix, 
+                      errors, 
+                      __) }}
+        
         {# Start buttons #}
         {{ m.submit_buttons('GAR Departure', csrfToken, __) }}
       </form>

@@ -122,7 +122,24 @@
         </div>
         {# End arrival time #}
 
-        {{l.location('<h2 class="govuk-fieldset__heading">' + __('field_port_choice_arrival') + '</h2>', (arrival.arrivalPortChoice === 'Yes'), arrival.arrivalPort, arrival.arrivalLat, arrival.arrivalLong, 'arrival', errors, __)}}
+
+        {% set legendLabel = ['<h2 class="govuk-fieldset__heading">', __('field_port_choice_arrival'), '</h2>'] | join %}
+        {% set warningMessage = b.coa_designation_regulation_change(false)%}
+        {% set isPortChoice = (arrival.arrivalPortChoice === 'Yes')%}
+        {% set portCode = arrival.arrivalPort%}
+        {% set lat = arrival.arrivalLat%}
+        {% set long = arrival.arrivalLong%}
+        {% set prefix = 'arrival'%}
+
+        {{ l.location(legendLabel, 
+                      warningMessage, 
+                      isPortChoice, 
+                      portCode, 
+                      lat, 
+                      long, 
+                      prefix, 
+                      errors, 
+                      __) }}
 
         {# Start buttons #}
         {{ m.submit_buttons('GAR Arrival', csrfToken, __) }}
