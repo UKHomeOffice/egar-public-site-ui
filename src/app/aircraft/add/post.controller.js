@@ -13,9 +13,16 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  const { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes'} = req.body;
+  let { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes'} = req.body;
   
-  
+  if(portChoice === 'Yes'){
+    craftBaseLat = null;
+    craftBaseLong = null;
+  }
+  else{
+    craftBasePort = null;
+  }
+
   // Define a validation chain for user registeration fields
   const craftObj = {
     registration,
@@ -25,6 +32,8 @@ module.exports = (req, res) => {
     craftBaseLong,
     portChoice
   };
+
+
 
   const validationChain = craftValidations.validations(craftObj);
 

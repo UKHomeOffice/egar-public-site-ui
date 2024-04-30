@@ -53,10 +53,10 @@
             {% endfor %}
         </select>
         <script type="text/javascript">
-            accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#departurePort'), minLength: 2});
+            accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#{{ prefix }}Port'), minLength: 2});
             document
                 .getElementById("{{ prefix }}Port")
-                .setAttribute('aria-describedby', 'departurePort-hint{{ ' ' + prefix + 'Port-error' if errors | containsError(prefix + 'Port') }}');
+                .setAttribute('aria-describedby', '{{ prefix }}Port-hint{{ ' ' + prefix + 'Port-error' if errors | containsError(prefix + 'Port') }}');
         </script>
     </div>
 
