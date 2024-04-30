@@ -167,7 +167,7 @@
 	"caption_manifest_person_details": "Provide the details of the person you want to add to the manifest. Details should be as displayed on the travel document.",
 	"heading_current_manifest": "Current manifest",
 	"current_manifest_caption": "People currently on the manifest of this GAR",
-	"label_manifest_further_personal_details": "Further personal details",
+	"label_manifest_further_personal_details": "Travel Document Details",
 	"further_information_for": "Further information for %s %s",
 	"total_persons_on_board": "Total persons on board",
 	"expired_passport_warning": "Travelling on an expired passport may incur a penalty",
