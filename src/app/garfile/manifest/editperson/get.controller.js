@@ -20,9 +20,7 @@ module.exports = async (req, res) => {
   try {
     const apiResponse = await garApi.getPeople(cookie.getGarId());
     const parsedResponse = JSON.parse(apiResponse).items;
-    const person = parsedResponse.find((garPerson) => {
-      return garPerson.garPeopleId === personId;
-    });
+    const person = parsedResponse.find((garPerson) => garPerson.garPeopleId === personId);
 
     logger.info(JSON.stringify(person));
     const requestToValidate = Manifest.turnPersonToRequest(person);

@@ -52,31 +52,29 @@
 
     <div class="govuk-grid-column-full">
       {% if manifestInvalidSavedPeople %}
-      <div>
         <p class="govuk-error-message">
           {{ __('saved_people_are_invalid__info') }}
         </p>
         {% for person in savedPeople %}
           {% if (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
             <ul class="govuk-list govuk-list--bullet">
-              <li>
-                <button 
-                  id="edit-person-{{ loop.index }}" 
-                  class="govuk-link btn-link" 
-                  title="Edit details for {{ person.firstName }} {{ person.lastName }}" 
-                  name="editSavedPerson" 
-                  value="{{person.personId}}">
-                  {{person.lastName}}, 
-                  {{person.firstName}}, 
-                  {{person.peopleType.name}}, 
-                  {{person.documentExpiryDate}}
-                </button>
+                <li>
+                  <button 
+                    id="edit-person-{{ loop.index }}" 
+                    class="govuk-link btn-link" 
+                    title="Edit details for {{ person.firstName }} {{ person.lastName }}" 
+                    name="editSavedPerson" 
+                    value="{{person.personId}}">
+                    {{person.lastName}}, 
+                    {{person.firstName}}, 
+                    {{person.peopleType.name}}, 
+                    {{person.documentExpiryDate}}
+                  </button>
                 </li>
-            </ul>
-          {% endif %}
-        {% endfor %}
+              </ul>
+            {% endif %}
+          {% endfor %}
       {% endif %}
-      </div>
       <p class="govuk-body-l">{{__('people_caption')}}</p>
       <p class="govuk-body-m">{{__('person_search')}}</p>
       <form id="people" action="/people" method="post">
