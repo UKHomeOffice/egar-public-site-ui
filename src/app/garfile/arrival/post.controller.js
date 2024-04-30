@@ -102,12 +102,10 @@ module.exports = async (req, res) => {
   delete voyage.buttonClicked;
 
   if (voyage.portChoice === 'Yes') {
-    delete voyage.arrivalLat;
-    delete voyage.arrivalLong;
+    voyage.arrivalLat = '';
+    voyage.arrivalLong = '';
   } else {
-    delete voyage.arrivalPort;
-    const combinedCoordinates = `${voyage.arrivalLat} ${voyage.arrivalLong}`;
-    voyage.arrivalPort = combinedCoordinates;
+    voyage.arrivalPort = `${voyage.arrivalLat} ${voyage.arrivalLong}`;
   }
   cookie.setGarArrivalVoyage(voyage);
 

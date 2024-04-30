@@ -4,19 +4,34 @@ const logger = require('./logger')(__filename);
 const notBritishMsg = 'Either the Arrival or Departure port must be a UK port';
 
 function includesOneBritishAirport(airports) {
-  if (airports.includes(null) || airports.includes(undefined) || airports.includes('YYYY') || airports.includes('ZZZZ')) {
+
+
+  if(!airports.every(airport => Boolean(airport))){
     return true;
-  } else {
-    const britishAirports = airportCodes.filter(item => item.british).map(item => item.id);
-    const britishAirports2 = airportCodes.filter(item => item.british).map(item => item.id2);
-    if (britishAirports.includes(airports[0]) || britishAirports.includes(airports[1])) {
-      return true;
-    }
-    if (britishAirports2.includes(airports[0]) || britishAirports2.includes(airports[1])) {
-      return true;
-    }
   }
-  return false;
+  if(!airports.every(airport => airport.match(/^[A-Z]{3,4}$/) )){
+    //we can only check with airports codes (IATA, ICAO). If our airports are lat/long then we do not apply this restriction.
+    return true;
+  }
+
+  const airport0 = findAirportForCode(airports[0]);
+  const airport1 = findAirportForCode(airports[1]);
+
+  return airport0.british || airport1.british;
+  
+  // if (airports.includes(null) || airports.includes(undefined) || airports.includes('YYYY') || airports.includes('ZZZZ')) {
+  //   return true;
+  // } else {
+  //   const britishAirports = airportCodes.filter(item => item.british).map(item => item.id);
+  //   const britishAirports2 = airportCodes.filter(item => item.british).map(item => item.id2);
+  //   if (britishAirports.includes(airports[0]) || britishAirports.includes(airports[1])) {
+  //     return true;
+  //   }
+  //   if (britishAirports2.includes(airports[0]) || britishAirports2.includes(airports[1])) {
+  //     return true;
+  //   }
+  // }
+  // return false;
 }
 
 function findAirportForCode(airportCode) {
@@ -51,7 +66,7 @@ function isBritishAirport(airportCode) {
 function isJourneyUKInbound(departureCode, arrivalCode) {
 
   const arrivalAirfield = findAirportForCode(arrivalCode);
-  const departureAirfield =  findAirportForCode(departureCode);
+  const departureAirfield = findAirportForCode(departureCode);
 
   if (departureAirfield && isAirportBritishOrCrownDependency(departureAirfield)) {
     return false;// we know departure and is within UK

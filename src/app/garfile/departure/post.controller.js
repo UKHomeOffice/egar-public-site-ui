@@ -101,14 +101,10 @@ module.exports = async (req, res) => {
   const voyage = req.body;
   delete voyage.buttonClicked;
   if (voyage.portChoice === 'Yes') {
-    delete voyage.departureLat;
-    delete voyage.departureLong;
-    voyage.departurePort = _.toUpper(voyage.departurePort);
+     voyage.departureLat = '';
+     voyage.departureLong = '';
   } else {
-    logger.debug("Testing departure Lat and Long values...");
-    const combinedCoordinates = voyage.departureLat + " " + voyage.departureLong;
-    voyage.departurePort = combinedCoordinates;
-    logger.debug("Departure port: " + voyage.departurePort);
+    voyage.departurePort = voyage.departureLat + " " + voyage.departureLong;
   }
 
   cookie.setGarDepartureVoyage(voyage);

@@ -36,10 +36,17 @@ module.exports = (req, res) => {
       registration: req.body.registration,
       craftType: req.body.craftType,
       portChoice: req.body.portChoice,
-      craftBasePort: req.body.craftBasePort,
-      craftBaseLat: req.body.craftBaseLat,
-      craftBaseLong: req.body.craftBaseLong,
+      
+
     };
+
+    if(req.body.portChoice === 'Yes'){
+      craftObj.craftBasePort = req.body.craftBasePort;
+    }
+    else{
+      craftObj.craftBaseLat = req.body.craftBaseLat;
+      craftObj.craftBaseLong = req.body.craftBaseLong;
+    }
 
 
     const validations = validationList.validations(craftObj);

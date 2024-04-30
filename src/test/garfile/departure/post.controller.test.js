@@ -122,7 +122,7 @@ describe('Departure Post Controller', () => {
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/departure/index', {
           cookie,
           errors: [
-            new ValidationRule(validator.notEmpty, 'departurePort', '', 'The departure airport code must be entered'),
+            new ValidationRule(validator.notEmpty, 'departurePort', undefined, 'The departure airport code must be entered'),
           ],
         });
       });
