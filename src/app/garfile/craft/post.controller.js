@@ -36,27 +36,25 @@ module.exports = (req, res) => {
       registration: req.body.registration,
       craftType: req.body.craftType,
       portChoice: req.body.portChoice,
-      
-
     };
 
-    if(req.body.portChoice === 'Yes'){
+    if (craftObj.portChoice === 'Yes') {
       craftObj.craftBasePort = req.body.craftBasePort;
     }
-    else{
+    else {
       craftObj.craftBaseLat = req.body.craftBaseLat;
       craftObj.craftBaseLong = req.body.craftBaseLong;
     }
 
-
+    craftObj.craftBase = cookie.reduceCraftBase(craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong);
+    cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase, craftObj.portChoice);
     const validations = validationList.validations(craftObj);
 
     validator.validateChains(validations)
       .then(() => {
-        const craftBase = cookie.reduceCraftBase(craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong);
-        cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftBase);
 
-        garApi.patch(cookie.getGarId(), cookie.getGarStatus(), {registration: craftObj.registration, craftType: craftObj.craftType, craftBase})
+
+        garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { registration: craftObj.registration, craftType: craftObj.craftType, craftBase: craftObj.craftBase })
           .then((apiResponse) => {
             const parsedResponse = JSON.parse(apiResponse);
             if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -66,7 +64,7 @@ module.exports = (req, res) => {
               return;
             }
             // Successful
-            cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftBase);
+            cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase);
             if (buttonClicked === 'Save and continue') {
               res.redirect('/garfile/manifest');
             } else {

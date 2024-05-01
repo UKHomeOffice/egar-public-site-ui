@@ -116,7 +116,7 @@
 
             {% set legendLabel = __('field_aircraft_base')%}
             {% set warningMessage = undefined%}
-            {% set isPortChoice = (craft.portChoice === 'Yes' or craft.portChoice is undefined)%}
+            {% set isPortChoice = (craft.portChoice === 'Yes')%}
             {% set portCode = craft.craftBasePort%}
             {% set lat = craft.craftBaseLat%}
             {% set long = craft.craftBaseLong%}
