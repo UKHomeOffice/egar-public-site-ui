@@ -209,7 +209,7 @@
 	"field_contact_number": "Contact telephone number",
 	"field_contact_number_hint": "Include international dialling code, for example 44.",
 	"responsible_email_hint": "Add the email address of the responsible person",
-	"validator_contact_number": "Enter a telephone number with international dialling code, no symbols and no spaces",
+	"validator_contact_number": "Enter a UK telephone number or an international number starting with either '00' or '+'. Symbols and spaces should not be entered.",
 	"field_house_number": "House number / building and street ",
 	"field_line_1_of_2": "line 1 of 2",
 	"field_line_2_of_2": "Building and street line 2 of 2",
@@ -318,8 +318,9 @@
 	"supporting_documents_caption": "You don’t have to provide any supporting documentation, but doing so may assist Border Force to process your flight more quickly.",
 	"supporting_documents_warning": "Supporting documentation may include firearms certificates / licences, firearms serial numbers or remote clearance forms.",
 	"supporting_documents_list_1": "The maximum size for the entire GAR submission cannot exceed 8MB.",
-	"supporting_documents_list_2": "You can upload as many supporting documents as you wish within this size limit.",
+	"supporting_documents_list_2": "You can upload up to",
 	"supporting_documents_list_3": "The following file types can be uploaded: PDF, JPG, JPEG, PNG, GIF, DOC, DOCX.",
+	"supporting_documents_list_4": "files within this size limit",
 	"heading_upload_file": "Upload a file",
 	"button_upload_file": "Upload selected file",
 	"heading_uploaded_files": "Uploaded documents",
@@ -516,6 +517,5 @@
 	"improve_accessibility_step3_caption": "We will conduct user research and testing with users who have access needs.",
 	"improve_accessibility_step4_caption": "We will put in place alternative arrangements for those who need them and be willing to make additional adjustments if these are not enough.",
 	"": "",
-	"field_departure_date_2_hours_prior": "field_departure_date_2_hours_prior",
-	"field_departure_date_too_far_in_future": "field_departure_date_too_far_in_future"
+	"saved_people_are_invalid__info": "Please fix invalid saved people listed below:"
 }

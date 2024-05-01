@@ -33,17 +33,13 @@ describe('People Post Controller', () => {
     sinon.restore();
   });
 
-  it('should just redirect back if body has nothing set', () => {
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(req.session.deletePersonId).to.be.undefined;
-      expect(req.session.editPersonId).to.be.undefined;
-      expect(sessionSaveStub).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/people');
-    });
+  it('should just redirect back if body has nothing set', async () => {
+    await controller(req, res);
+    
+    expect(req.session.deletePersonId).to.be.undefined;
+    expect(req.session.editPersonId).to.be.undefined;
+    expect(sessionSaveStub).to.not.have.been.called;
+    expect(res.redirect).to.have.been.calledWith('/people');
   });
 
   it('should redirect to delete if body has deletePerson', () => {

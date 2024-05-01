@@ -35,7 +35,7 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(
-        validator.notEmpty, 'responsibleEmail', responsibleEmail, 'Your must enter an email for the responsible person'
+        validator.notEmpty, 'responsibleEmail', responsibleEmail, 'You must enter an email for the responsible person'
       ),
       new ValidationRule(
         validator.email, 'responsibleEmail', responsibleEmail, 'Please enter a valid email address'

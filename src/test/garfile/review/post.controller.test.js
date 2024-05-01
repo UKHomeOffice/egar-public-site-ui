@@ -18,14 +18,21 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
 const emailService = require('../../../common/services/sendEmail');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const controller = require('../../../app/garfile/review/post.controller');
+const { garPeople } = require('../../fixtures');
 
 describe('GAR Review Post Controller', () => {
-  let req; let res;
+  let req; let res; let clock;
+  const APRIL = 3;
   let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub; let garApiPatchStub; let garAPISubmitForCheckinStub;
   let sessionSaveStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
+    clock = sinon.useFakeTimers({
+      now: new Date(2023, APRIL, 11),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
 
     req = {
       body: {
@@ -71,6 +78,7 @@ describe('GAR Review Post Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   it('should do nothing if retrieving a gar causes an issue', () => {
@@ -107,7 +115,7 @@ describe('GAR Review Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
+    callController().then().then().then().then(() => {
       expect(sessionSaveStub).to.have.been.called;
       expect(req.session.submiterrormessage).to.eql([{
         message: 'This GAR has already been submitted',
@@ -139,7 +147,8 @@ describe('GAR Review Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then().then(() => {
+    callController().then().then().then().then().then().then(() => {
+      expect(res.render).to.have.been.called;
       expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
         cookie,
         manifestFields,
@@ -194,7 +203,7 @@ describe('GAR Review Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then().then(() => {
+    callController().then().then().then().then().then().then(() => {
       expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
         cookie,
         manifestFields,
@@ -252,9 +261,7 @@ describe('GAR Review Post Controller', () => {
       }));
 
       garApiGetPeopleStub.resolves(JSON.stringify({
-        items: [
-          { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
-        ],
+        items: garPeople(),
       }));
 
       garAPISubmitForCheckinStub.rejects('garApi.submitGARForCheckin Example Reject')
@@ -264,8 +271,8 @@ describe('GAR Review Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then().then().then()
-        .then(() => {
+      callController().then().then().then().then().then().then().then().then().then(() => {
+          expect(res.render).to.have.been.called;
           expect(res.render).to.have.been.calledWith('app/garfile/review/index.njk', { cookie });
         });
     });

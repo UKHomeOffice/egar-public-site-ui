@@ -4,8 +4,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
-const logger = require('../common/utils/logger')(__filename);
-
 require('./global.test');
 
 const validator = require('../common/utils/validator');
@@ -328,18 +326,50 @@ describe('Validator', () => {
       });
   });
 
-  it('Should return true when a + and min 5 max 20 digits no spaces', () => {
-    expect(validator.validIntlPhone('12345')).to.be.true;
-    expect(validator.validIntlPhone('1234544')).to.be.true;
-    expect(validator.validIntlPhone('12233445566778899112')).to.be.true;
+  it('Should allow local UK mobile numbers', () => {
+    expect(validator.validIntlPhone('07973111111')).to.be.true;
   });
 
-  it('Should return false when less than 5 max more than 20 digits has letters or spaces', () => {
-    expect(validator.validIntlPhone('1234')).to.be.false;
-    expect(validator.validIntlPhone('122334455667788991123')).to.be.false;
-    expect(validator.validIntlPhone('+123475')).to.be.false;
-    expect(validator.validIntlPhone('1234x5')).to.be.false;
-    expect(validator.validIntlPhone('1234 5')).to.be.false;
+  it('Should allow local UK landline numbers', () => {
+    expect(validator.validIntlPhone('01223123456')).to.be.true;
+  });
+
+  it('Should allow UK mobile numbers with plus prefix', () => {
+    expect(validator.validIntlPhone('+44123450284')).to.be.true;
+  });
+
+  it('Should allow UK mobile numbers with double zero prefix', () => {
+    expect(validator.validIntlPhone('0044123450284')).to.be.true;
+  });
+
+  it('Should allow international UK landline numbers with plus prefix ', () => {
+    expect(validator.validIntlPhone('+441223123456')).to.be.true;
+  });
+
+  it('Should allow US landline numbers in international format ', () => {
+    expect(validator.validIntlPhone('01017182222222')).to.be.true;
+  });
+  
+
+
+  it('Should reject numbers beginning double zeros that are less than 10 characters ', () => {
+    expect(validator.validIntlPhone('001234567')).to.be.false;
+  });
+
+  it('Should reject numbers that do not begin with one of: 0, 00, +', () => {
+    expect(validator.validIntlPhone('8812345678')).to.be.false;
+  });
+
+  it('Should reject numbers with spaces', () => {
+    expect(validator.validIntlPhone('88 12345678')).to.be.false;
+  });
+
+  it('Should reject numbers with hyphens', () => {
+    expect(validator.validIntlPhone('0044-12345678')).to.be.false;
+  });
+
+  it('Should reject numbers with periods', () => {
+    expect(validator.validIntlPhone('0044.12345678')).to.be.false;
   });
 
   // Latitude tests

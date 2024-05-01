@@ -60,9 +60,9 @@ const performAPICall = (garId, cookie, req, res) => {
     });
 };
 
-const buildValidations = (garfile, garpeople, manifest) => {
+const buildValidations = async (garfile, garpeople, manifest) => {
   const validations = validationList.validations(garfile, garpeople);
-  const departureDateParts = garfile.departureDate ? garfile.departureDate.split('-') : [,,];
+  const departureDateParts = garfile.departureDate ? garfile.departureDate.split('-') : [];
   const departDateObj = {
     d: departureDateParts[2],
     m: departureDateParts[1],
@@ -77,7 +77,9 @@ const buildValidations = (garfile, garpeople, manifest) => {
 
   // Manifest specific validations does not using generic mechanism, so wrapped in
   // an uninformative message for now
-  if (!manifest.validate()) {
+  const isManifestValid = await manifest.validate();
+
+  if (!isManifestValid) {
     const validateFailMsg = 'Resolve manifest errors before submitting';
     validations.push([
       new ValidationRule(validator.valuetrue, 'resolveError', '', validateFailMsg),
@@ -104,7 +106,7 @@ module.exports = (req, res) => {
     garApi.get(garId),
     garApi.getPeople(garId),
     garApi.getSupportingDocs(garId),
-  ]).then((responseValues) => {
+  ]).then(async (responseValues) => {
     const garfile = JSON.parse(responseValues[0]);
     validator.handleResponseError(garfile);
 
@@ -117,7 +119,7 @@ module.exports = (req, res) => {
     const garsupportingdocs = JSON.parse(responseValues[2]);
     validator.handleResponseError(garsupportingdocs);
 
-    const validations = buildValidations(garfile, garpeople, manifest);
+    const validations = await buildValidations(garfile, garpeople, manifest);
 
     if (garfile.status.name.toLowerCase() === 'submitted') {
       const submitError = {
@@ -155,6 +157,7 @@ module.exports = (req, res) => {
         performAPICall(garId, cookie, req, res);
       }
     }).catch((err) => {
+
       logger.info('Failed to submit incomplete GAR - validation failed');
       logger.debug(JSON.stringify(err));
       renderObj.errors = err;

@@ -5,6 +5,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const { savedPeople, garPeople } = require('../../fixtures');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -14,10 +15,17 @@ const garApi = require('../../../common/services/garApi');
 const controller = require('../../../app/garfile/manifest/get.controller');
 
 describe('Manifest Get Controller', () => {
-  let req; let res;
+  let req; let res; let clock;
+  const APRIL = 3;
+
 
   beforeEach(() => {
     chai.use(sinonChai);
+    clock = sinon.useFakeTimers({
+      now: new Date(2023, APRIL, 11),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
 
     apiResponse = {
       items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],
@@ -38,6 +46,7 @@ describe('Manifest Get Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   it('should return an error if person api rejects', () => {
@@ -76,36 +85,26 @@ describe('Manifest Get Controller', () => {
     let personApiStub; let garApiStub;
 
     beforeEach(() => {
-      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify([
-        { firstName: 'James', lastName: 'Kirk' },
-        { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
-      ]));
-      garApiStub = sinon.stub(garApi, 'getPeople').resolves(JSON.stringify([
-        { firstName: 'Montgomery', lastName: 'Scott' },
-      ]));
+      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(savedPeople()));
+      garApiStub = sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({ 
+        items: garPeople()
+      }));
     });
 
     it('should render with errMsg populated', async () => {
       req.session.errMsg = { message: 'Example Error Message' };
       cookie = new CookieModel(req);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController().then(() => {
-        expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
-        expect(garApiStub).to.have.been.calledWith('9001');
-        expect(req.session.errMsg).to.be.undefined;
-        expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
-          cookie,
-          savedPeople: [
-            { firstName: 'James', lastName: 'Kirk' },
-            { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
-          ],
-          manifest: [{ firstName: 'Montgomery', lastName: 'Scott' }],
-          errors: [{ message: 'Example Error Message' }],
-        });
+      expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
+      expect(garApiStub).to.have.been.calledWith('9001');
+      expect(req.session.errMsg).to.be.undefined;
+      expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
+        cookie,
+        savedPeople: savedPeople(),
+        manifest: { items: garPeople() },
+        errors: [{ message: 'Example Error Message' }],
       });
     });
 
@@ -126,11 +125,9 @@ describe('Manifest Get Controller', () => {
         expect(req.session.manifestInvalidPeople).to.be.undefined;
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
-          savedPeople: [
-            { firstName: 'James', lastName: 'Kirk' },
-            { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
-          ],
-          manifest: [{ firstName: 'Montgomery', lastName: 'Scott' }],
+          savedPeople: savedPeople(),
+          manifest: { items: garPeople() },
+          manifestInvalidSavedPeople: [],
           manifestInvalidPeople: [{ firstName: 'Jean-Luc', lastName: 'Picard' }],
           errors: [{ message: 'Wrong era' }],
         });
@@ -141,23 +138,16 @@ describe('Manifest Get Controller', () => {
       req.session.successMsg = 'All present captain';
       cookie = new CookieModel(req);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
-        expect(garApiStub).to.have.been.calledWith('9001');
-        expect(req.session.successMsg).to.be.undefined;
-        expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
-          cookie,
-          savedPeople: [
-            { firstName: 'James', lastName: 'Kirk' },
-            { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
-          ],
-          manifest: [{ firstName: 'Montgomery', lastName: 'Scott' }],
-          successMsg: 'All present captain',
-        });
+      await controller(req, res);
+  
+      expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
+      expect(garApiStub).to.have.been.calledWith('9001');
+      expect(req.session.successMsg).to.be.undefined;
+      expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
+        cookie,
+        savedPeople: savedPeople(),
+        manifest: { items: garPeople() },
+        successMsg: 'All present captain',
       });
     });
 
@@ -173,11 +163,8 @@ describe('Manifest Get Controller', () => {
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
-          savedPeople: [
-            { firstName: 'James', lastName: 'Kirk' },
-            { firstName: 'S\'chn T\'gai', lastName: 'Spock' },
-          ],
-          manifest: [{ firstName: 'Montgomery', lastName: 'Scott' }],
+          savedPeople: savedPeople(),
+          manifest: { items: garPeople() },
         });
       });
     });
