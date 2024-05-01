@@ -2,6 +2,7 @@
 
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
+{% import "common/templates/includes/location.njk" as l %}
 
 {% block pageTitle %}
   {{__('error_prefix') if errors}} Create GAR | Aircraft
@@ -24,8 +25,6 @@
     {% if errors %}
       {% include "common/templates/includes/errors.njk" %}
     {% endif %}
-
-    <script></script>
 
     <form id="previous_aircraft" action="/garfile/craft" autocomplete="off" class="form-group" method="post" role="form">
       <div class="govuk-grid-column-two-thirds">
@@ -51,9 +50,7 @@
             {% if cookie
               .getSavedCraft()
               .items | length %}
-              {% for craft in cookie
-                .getSavedCraft()
-                .items %}
+              {% for craft in cookie.getSavedCraft().items %}
                 <tr class="govuk-table__row">
                   <div class="govuk-radios">
                     <td class="govuk-table__cell">
@@ -90,11 +87,11 @@
             </div>
           {% endif %}
 
+          {% set craft = cookie.getGarCraft() %}
+
           <div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
             <h2 class="govuk-heading-l">{{__('aircraft_add')}}</h2>
-            {% if not cookie
-              .getGarCraft()
-              .registration %}
+            {% if not craft.registration %}
               <p class="govuk-body-l">{{__('aircraft_add_caption_garfile')}}</p>
             {% endif %}
             <div class="govuk-form-group {{ m.form_group_class('registration', errors) }}">
@@ -103,7 +100,7 @@
               {{ m.error_message('registration', errors, __) }}
               <input id="registration" name="registration" class="govuk-input govuk-input--width-10" autocomplete="off"
           type="text" maxlength="{{ MAX_REGISTRATION_LENGTH }}"
-          value="{{cookie.getGarCraft().registration}}"
+          value="{{craft.registration}}"
           aria-describedby="registration-hint{{ ' registration-error' if errors | containsError('registration') }}">
             </div>
 
@@ -113,87 +110,27 @@
               {{ m.error_message('craftType', errors, __) }}
               <input id="craftType" name="craftType" class="govuk-input govuk-input--width-20" autocomplete="off"
           type="text" maxlength="{{ MAX_STRING_LENGTH }}"
-          value="{{cookie.getGarCraft().craftType}}"
+          value="{{craft.craftType}}"
           aria-describedby="craftType-hint{{ ' craftType-error' if errors | containsError('craftType') }}">
             </div>
 
-        <div class="{{ m.form_group_class('portChoice', errors) }}">
-          <fieldset class="govuk-fieldset" aria-describedby="portChoice-hint">
-            <legend class="govuk-fieldset__legend">{{__('field_aircraft_base')}}</legend>
-            <span id="portChoice-hint" class="govuk-hint">{{__('field_aircraft_base_hint')}}</span>
-            {{ m.error_message('portChoice', errors, __) }}
-            <div class="govuk-radios govuk-radios--conditional" data-module="radios">
-              <div class="govuk-radios__item">
-                <input id="portChoiceCode" name="portChoice" class="govuk-radios__input"
-                  type="radio"
-                  value="Yes" 
-                  {{'checked' if cookie.getGarCraft().portChoice  === 'Yes'}}
-                  data-aria-controls="portChoiceCodeContainer"
-                  aria-labelledby="portChoiceCode-label"
-                >
-                <label id="portChoiceCode-label" class="govuk-label govuk-radios__label" for="portChoiceCode">{{__('field_choice_yes')}}</label>
-              </div>
-              <div id="portChoiceCodeContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
-                <div class="{{ m.form_group_class('craftBase', errors) }}">
-                  <label id="departurePort-label" class="govuk-label" for="departurePort">{{__('field_port_code')}}</label>
-                  {{ m.hint('departurePort', __('field_port_hint')) }}
-                  {{ m.error_message('craftBasePort', errors, __) }}
-                  <select id="craftBasePort" name="craftBasePort" class="govuk-select" 
-                    value="{{ craftObj.craftBasePort }}"
-                    aria-labelledby="craftBasePort-label"
-                    aria-describedby="craftBasePort-hint{{ ' craftBasePort-error' if errors | containsError('craftBasePort') }}">
-                    {% for airport in airportList | sort(attribute = 'label') %}
-                      <option value="{{ airport.id | upper}}" {{ 'selected=selected' if cookie.getGarCraft().craftBasePort in [airport.id, airport.id2] }}>{{ airport.label }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-              <div class="govuk-radios__item">
-                <input id="portChoiceCoordinates" name="portChoice" class="govuk-radios__input"
-                  type="radio"
-                  value="No"
-                  {{ 'checked' if cookie.getGarCraft().portChoice  === 'No'}}
-                  data-aria-controls="portChoiceCoordinatesContainer"
-                  aria-labelledby="portChoiceCoordinates-label"
-                >
-                <label id="portChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="portChoiceCoordinates">{{__('field_choice_no')}}</label>
-              </div>
-              <div id="portChoiceCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
-                <div class="govuk-form-group">
-                  {{ m.hint('craftBaseCoordinates', __('field_coordinate_hint')) }}
-                </div>
-                {# Start departure coords #}
-                <div class="govuk-form-group {{ m.form_group_class('craftBaseLat', errors) }}">
-                  <label class="govuk-label" for="craftBaseLat">
-                    {{__('field_latitude')}}
-                  </label>
-                  <span id="departureLatitude-hint" class="govuk-hint">
-                    {{__('field_latitude_hint')}}
-                  </span>
+            {% set legendLabel = __('field_aircraft_base')%}
+            {% set warningMessage = undefined%}
+            {% set isPortChoice = (craft.portChoice === 'Yes' or craft.portChoice is undefined)%}
+            {% set portCode = craft.craftBasePort%}
+            {% set lat = craft.craftBaseLat%}
+            {% set long = craft.craftBaseLong%}
+            {% set prefix = 'craftBase'%}
 
-                  {{ m.error_message('craftBaseLat', errors, __) }}
-
-                  <input class="govuk-input govuk-date-input__input govuk-input--width-20" id="craftBaseLat" name="craftBaseLat" type="number" step="0.000001" max="90" min="-90" value="{{ cookie.getGarCraft().craftBaseLat }}">
-                </div>
-
-                <div class="govuk-form-group {{ m.form_group_class('craftBaseLong', errors) }}">
-                  <label class="govuk-label" for="craftBaseLong">
-                    {{__('field_longitude')}}
-                  </label>
-                  <span id="craftBaseLongitude-hint" class="govuk-hint">
-                    {{__('field_longitude_hint')}}
-                  </span>
-                  {{ m.error_message('craftBaseLong', errors, __) }}
-
-                  <input class="govuk-input govuk-date-input__input govuk-input--width-20" id="craftBaseLong" name="craftBaseLong" type="text" step="0.000001" max="180" min="-180" value="{{ cookie.getGarCraft().craftBaseLong }}">
-
-                </div>
-                {# End departure coords #}
-              </div>
-            </div>
-          </fieldset>
-        </div>
-
+            {{ l.location(legendLabel, 
+                      warningMessage, 
+                      isPortChoice, 
+                      portCode, 
+                      lat, 
+                      long, 
+                      prefix, 
+                      errors, 
+                      __) }}
             {# Start buttons #}
           </div>
           {{ m.submit_buttons('Add craft to GAR', csrfToken, __) }}
@@ -205,14 +142,4 @@
       </div>
 
     </div>
-  <script type="text/javascript">
-
-    accessibleAutocomplete.enhanceSelectElement({
-      selectElement: document.querySelector('#craftBasePort'), minLength: 2,
-      //inputClasses: 'govuk-input govuk-date-input__input govuk-input--width-20'
-    });
-    document
-      .getElementById("craftBasePort")
-      .setAttribute('aria-describedby', 'craftBasePort-hint{{ ' craftBasePort-error' if errors | containsError('craftBasePort') }}');
-  </script>
   {% endblock %}
