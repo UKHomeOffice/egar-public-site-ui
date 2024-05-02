@@ -1,38 +1,47 @@
 ## Submit a GAR
 
+## Prerequisites
+- Clone the `data-access-api`repo in the same parent folder and set up environment variables as explained in the `data-access-api` READMe.md.
+
 ## Requirements
 - docker and docker compose.
 - `.env.dev` (ask a developer to give you them).
 
 ## Run the application
 
-1. Git clone the `data-access-api` repo in the same folder.
-Run the following:
+1. Run the following:
 ```sh
 docker compose up -d --build
 ```
 
-This should build both the data-access-api and egar-public-site-ui.
+This should build both the `data-access-api` and `egar-public-site-ui`.
 
-On development:
-- To see updated on the frontend, just reload the page.
+- To see changes on the frontend, just reload the page.
 
 ## Unit tests
 
-Run the following
+Run the below to access the node container, which will have all the installed dependencies, so you can run the npm test script.
 ```sh
 docker exec  -it node sh
-# get into the node container
+
+# Now run the test script
 npm run test
 ```
 
 ## Access the database
 
-Run the following:
+Run the following to access the database so you can run SQL commands. 
 ```sh
 docker exec -it database sh
-# get into the node container shell
+
+# Log into postgres with the following command
 psql -U user -d egar
 # RUN you sql commands after wards
 ```
 
+## Other repositories
+
+In general you don't need to run `gateway-api` and `data-integr-cbp`, unless:
+
+- You want to mock submitting a GAR to CBP 
+- If you are mocking a flight from a foreign country to the UK and need check their UPT status
