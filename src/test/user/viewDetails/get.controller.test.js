@@ -73,7 +73,7 @@ describe('User View Details Get Controller', () => {
 
     const craftApiResponse = {
       items: [
-        { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
+        { registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
       ],
     };
 
@@ -100,7 +100,7 @@ describe('User View Details Get Controller', () => {
           cookie,
           // savedCrafts: {
           //   items: [
-          //     { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
+          //     { registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
           //   ],
           // },
           savedPeople: {
@@ -132,7 +132,7 @@ describe('User View Details Get Controller', () => {
           cookie,
           // savedCrafts: {
           //   items: [
-          //     { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
+          //     { registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
           //   ],
           // },
           savedPeople: {
@@ -162,7 +162,7 @@ describe('User View Details Get Controller', () => {
           cookie,
           // savedCrafts: {
           //   items: [
-          //     { craftReg: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
+          //     { registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
           //   ],
           // },
           savedPeople: {

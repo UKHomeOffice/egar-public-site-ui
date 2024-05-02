@@ -18,38 +18,31 @@
 {% endblock %}
 
 {% block content %}
+
+  <script type="text/javascript"  src="/javascripts/garManifest.js"></script>
+
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
-{% if successMsg %}
-      {% include "common/templates/includes/success-action.njk" %}
-    {% endif %}
+  {% if successMsg %}
+    {% include "common/templates/includes/success-action.njk" %}
+  {% endif %}
 
+  <div class="govuk-grid-row">
+    <form action="/garfile/manifest" method="post">
+      <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
+        <h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
+        <p class="govuk-body-l">
+          <span style="background-color: #66ff66">
+            {{__('id_card_withdrawl_text')}}
+            <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span>
+        </p>
+        <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
+        <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
 
-<div class="govuk-grid-row">
-  <form action="/garfile/manifest" method="post">
-    <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
-      <h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
-      <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
-      <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
-      <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
-
-   
-   
-  <script>
-  $(document).ready(function(){
-    $("#person-search").on("keyup", function() {
-      var value = $(this).val().toLowerCase();
-      $("#people_table_row tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-      });
-    });
-  </script>
-  </div>
-
+      </div>
     <div class="govuk-grid-column-full">
       {% if manifestInvalidSavedPeople and (manifestInvalidSavedPeople | length) > 0 %}
         <p class="govuk-error-message">
@@ -74,277 +67,247 @@
               </ul>
             {% endif %}
           {% endfor %}
-      {% endif %}
-      <p class="govuk-body-l">{{__('people_caption')}}</p>
-      <p class="govuk-body-m">{{__('person_search')}}</p>
-      <form id="people" action="/people" method="post">
-      {% if savedPeople | length %}
-        <table class="table-clickable govuk-table" id="people_table">
-      {% else %}
-        <table class="govuk-table" id="people_table" >
-      {% endif %}
-          <input class="govuk-input govuk-input--width-20" id="person-search" name="person-search" type="text" placeholder="Search" style="margin-bottom: 10px">
-          <p class="govuk-body-s" style="margin-bottom: 10px">{{__('person_sort')}}</p>
-          <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
-              {% if savedPeople | length %}
-              <div class="govuk-checkboxes__item">
-                <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
-                <label class="govuk-label govuk-checkboxes__label" for="radio-all">
+        {% endif %}
+        <p class="govuk-body-l">{{__('people_caption')}}</p>
+        <p class="govuk-body-m">{{__('person_search')}}</p>
+        <form id="people" action="/people" method="post">
+          {% if savedPeople | length %}
+            <table class="table-clickable govuk-table" id="people_table">
+            {% else %}
+              <table class="govuk-table" id="people_table" >
+              {% endif %}
+              <input class="govuk-input govuk-input--width-20" id="person-search" name="person-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+              <p class="govuk-body-s" style="margin-bottom: 10px">{{__('person_sort')}}</p>
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
+                    {% if savedPeople | length %}
+                      <div class="govuk-checkboxes__item">
+                        <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
+                        <label class="govuk-label govuk-checkboxes__label" for="radio-all">
                   &nbsp;
                 </label>
-              </div>
-              {% endif %}
-            </th>
-            <th class="govuk-table__header">{{__('field_surname')}}</th>
-            <th class="govuk-table__header">{{__('field_given_name')}}</th>
-            <th class="govuk-table__header">{{__('field_person_type_short')}}</th>
-            <th class="govuk-table__header">{{__('field_document_expiry_date')}}</th>
-          </tr>
-          </thead>
-          <tbody class="govuk-table__body" id="people_table_row">
-          {% if savedPeople | length %}
-            {% for person in savedPeople %}
-              {% if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
-              {% else %}
-                <tr class="govuk-table__row" id="savedPerson-{{loop.index0}}">
-                  <td class="govuk-table__cell multiple-choice--hod">
-                    <div class="govuk-checkboxes__item">
-                    <input 
+                      </div>
+                    {% endif %}
+                  </th>
+                  <th class="govuk-table__header">{{__('field_surname')}}</th>
+                  <th class="govuk-table__header">{{__('field_given_name')}}</th>
+                  <th class="govuk-table__header">{{__('field_person_type_short')}}</th>
+                  <th class="govuk-table__header">{{__('field_document_expiry_date')}}</th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body" id="people_table_row">
+                {% if savedPeople | length %}
+                  {% for person in savedPeople %}
+                    {% if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
+                    {% else %}
+                      <tr class="govuk-table__row" id="savedPerson-{{loop.index0}}">
+                        <td class="govuk-table__cell multiple-choice--hod">
+                          <div class="govuk-checkboxes__item">
+                            <input 
                       type="checkbox" 
                       class="govuk-checkboxes__input jsCheckbox" 
                       id="savedPerson-{{loop.index0}}" 
                       name="personId" 
                       value="{{person.personId}}"
                     >
-                    <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
+                            <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
                       &nbsp;
                     </label>
-                    </div>
-                  </td>
-                  <td class="govuk-table__cell">{{person.lastName}}</td>
-                  <td class="govuk-table__cell">{{person.firstName}}</td>
-                  <td class="govuk-table__cell">{{person.peopleType.name}}</td>
-                  <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
-                </tr>
-              {% endif %}
-            {% endfor %}
-          {% else %}
-            {{ m.empty_table_message(__('people_no_records')) }}
-            {% endif %}
-        </tbody>
-      </table>
-    </div>
+                          </div>
+                        </td>
+                        <td class="govuk-table__cell">{{person.lastName}}</td>
+                        <td class="govuk-table__cell">{{person.firstName}}</td>
+                        <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+                        <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                {% else %}
+                  {{ m.empty_table_message(__('people_no_records')) }}
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
 
-    <script>
-  $(document).ready(function(){
-    $("#manifest-search").on("keyup", function() {
-      var value = $(this).val().toLowerCase();
-      $("#manifestTable_row tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-      });
-    });
-  </script>
-
-
-    <div class="govuk-grid-column-two-thirds">
-      <button id="addToManifest" type="submit" name="buttonClicked" value="Add to GAR" class="govuk-button">{{__('button_add_to_gar')}}</button>
-    </div>
-    <div class="govuk-grid-column-full">
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    </div>
-    <div class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-heading-l">{{__('heading_manifest_new_people')}}</h2>
-      <p class="govuk-body-m"><a href="/garfile/manifest/addnewperson">{{__('garfile_people_add')}}</a></p>
-    </div>
-    <div class="govuk-grid-column-full">
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    </div>
-    <div class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-heading-l">{{__('heading_current_manifest')}}</h2>
-      <p class="govuk-body-l">{{__('current_manifest_caption')}}</p>
-      <p class="govuk-body-m">Search for people on the manifest</p>
-      <input class="govuk-input govuk-input--width-20" id="manifest-search" name="manifest-search" type="text" placeholder="Search" style="margin-bottom: 10px">
-      <p class="govuk-body-m"><mark>{{__('expired_passport_warning')}}</mark></p>
-      <p><span style="background-color:#77DD77;">{{__('adding_person_to_people')}}</span></p>
-    </div>
-    <div class="govuk-grid-column-full">
-      <table class="govuk-table" id="manifest_table">
-        <thead class="govuk-table__head">
-        {# New Entry below ///////////////////////////////////////////////////// #} 
-            <tr class="govuk-table__row" id="manifestTable_row"> 
-             <thead class="govuk-table__head">
-            <tr class="govuk-table__row"> 
-            {% if manifest.items | length %}  
-             <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
-            <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}">
+          <div class="govuk-grid-column-two-thirds">
+            <button id="addToManifest" type="submit" name="buttonClicked" value="Add to GAR" class="govuk-button">{{__('button_add_to_gar')}}</button>
+          </div>
+          <div class="govuk-grid-column-full">
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+          </div>
+          <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-l">{{__('heading_manifest_new_people')}}</h2>
+            <p class="govuk-body-m">
+              <a href="/garfile/manifest/addnewperson" class="govuk-button">{{__('garfile_people_add')}}</a>
+            </p>
+          </div>
+          <div class="govuk-grid-column-full">
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+          </div>
+          <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-l">{{__('heading_current_manifest')}}</h2>
+            <p class="govuk-body-l">{{__('current_manifest_caption')}}</p>
+            <p class="govuk-body-m">Search for people on the manifest</p>
+            <input class="govuk-input govuk-input--width-20" id="manifest-search" name="manifest-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+            <p class="govuk-body-m">
+              <mark>{{__('expired_passport_warning')}}</mark>
+            </p>
+            <p>
+              <span style="background-color:#77DD77;">{{__('adding_person_to_people')}}</span></p>
+          </div>
+          <div class="govuk-grid-column-full">
+            <table class="govuk-table" id="manifest_table">
+              <thead class="govuk-table__head">
+                {# New Entry below ///////////////////////////////////////////////////// #}
+                <tr class="govuk-table__row">
+                  {% if manifest.items | length %}
+                    <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
+                    <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}">
               &nbsp;    
-              </label>    
-            <div>   
-              {% endif %} 
-            </th>               
-            {# New Entry above///////////////////////////////////////////////////// #}  
-            <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_travel_document_number')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_document_expiry_date')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_gender')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_birth_place')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
-            <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body " id="manifestTable_row">
-        {% if manifest.items | length %}
-          {% for person in manifest.items %}
-          {% if (manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople)) %}
-            <tr class="govuk-table__row govuk-form-group govuk-form-group--error" id="person-{{loop.index0}}">
-            <td class="govuk-table__cell"></td>
-          {% else %}
-            <tr class="govuk-table__row" id="person-{{loop.index0}}">
-            {% if person.documentExpiryDate.toString() < expiryDate.toString()  %}
-              <h3  class="govuk-heading-s" id="expired" style="color:red" hidden>Please be advised, {{person.firstName}}  {{person.lastName}}'s passport has expired </h3>
-              <script> document.getElementById("expired").style.display = "block" </script>
-              <tr style="color:red; font-weight: bold; background-color:aliceblue">
-            {% endif %}
-          {#          ###################                                   #}  
-            <tr class="govuk-table__row"> 
-           <div class="govuk-radios">
-           <td class="govuk-table__cell"> 
-            <div class="govuk-radios govuk-radios--inline">         
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="person-{{loop.index0}}" name="garPeopleId" type="radio" value="{{person.garPeopleId}}"> 
-              <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}"></label>        
-            </div>
-          {#          ###################                                   #} 
-          {% endif %}
-            
-            <td class="govuk-table__cell" style="{{ "padding-left: 10px" if isGarPersonInvalid }}">{{person.lastName}}</td>
-            <td class="govuk-table__cell">{{person.firstName}}</td>
-            <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
-            <td class="govuk-table__cell">{{person.nationality | upper}}</td>
-            <td class="govuk-table__cell">{{person.documentNumber}}</td>
-            <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
-            <td class="govuk-table__cell">{{person.gender}}</td>
-            <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
-            <td class="govuk-table__cell">{{person.peopleType.name}}</td>
-            <td class="govuk-table__cell">
-              <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
-            </td>
-          </tr> 
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell" colspan="7">
-              <div>
-                <details role="group">
-                  <summary role="button" aria-controls="details-content-{{ loop.index }}" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
-                    <span id="further-information-{{ loop.index }}" class="summary">{{__('label_manifest_further_personal_details')}}</span>
-                  </summary>
-                  <div class="panel panel-border-narrow" id="details-content-{{ loop.index }}" aria-hidden="true">
-                    <table class="govuk-table" width="100%">
-                      <tbody class="govuk-table__body">
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
-                          <td class="govuk-table__cell">{{person.documentType}}</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
-                          <td class="govuk-table__cell">{{person.issuingState | upper }}</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                          <td class="govuk-table__cell" colspan="7">
-                            <button id="delete-person-{{ loop.index }}" class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">{{__('table_delete')}}</button>
+              </label>
+                    <div>
+                    {% endif %}
+                  </th>
+                  {# New Entry above///////////////////////////////////////////////////// #}
+                  <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('field_gender')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('field_birth_place')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body " id="manifestTable_row">
+                {% if manifest.items | length %}
+                  {% for person in manifest.items %}
+                    {% if (manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople)) %}
+                      <tr class="govuk-table__row govuk-form-group govuk-form-group--error" id="person-{{loop.index0}}">
+                        <td class="govuk-table__cell"></td>
+                      {% else %}
+                        <tr class="govuk-table__row" id="person-{{loop.index0}}">
+                          {% if person
+                            .documentExpiryDate
+                            .toString() < expiryDate
+                            .toString() %}
+                            <h3  class="govuk-heading-s" id="expired" style="color:red" hidden>Please be advised, {{person.firstName}}
+                              {{person.lastName}}'s passport has expired </h3>
+                            <script>
+                              document
+                                .getElementById("expired")
+                                .style
+                                .display = "block"
+                            </script>
+                            <tr style="color:red; font-weight: bold; background-color:aliceblue">
+                            {% endif %}
+                            {#          ###################                                   #}
+                            <tr class="govuk-table__row">
+                              <div class="govuk-radios">
+                                <td class="govuk-table__cell">
+                                  <div class="govuk-radios govuk-radios--inline">
+                                    <div class="govuk-radios__item">
+                                      <input class="govuk-radios__input" id="person-{{loop.index0}}" name="garPeopleId" type="radio" value="{{person.garPeopleId}}">
+                                      <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}"></label>
+                                    </div>
+                                    {#          ###################                                   #}
+                                  {% endif %}
+
+                                  <td class="govuk-table__cell" style="{{ "padding-left: 10px" if isGarPersonInvalid }}">{{person.lastName}}</td>
+                                  <td class="govuk-table__cell">{{person.firstName}}</td>
+                                  <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+                                  <td class="govuk-table__cell">{{person.nationality | upper}}</td>
+                                  <td class="govuk-table__cell">{{person.gender}}</td>
+                                  <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
+                                  <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+                                  <td class="govuk-table__cell">
+                                    <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
+                                  </td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                  <td class="govuk-table__cell" colspan="9">
+                                    <div>
+                                      <details role="group">
+                                        <summary role="button" aria-controls="details-content-{{ loop.index }}" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
+                                          <span id="further-information-{{ loop.index }}" class="summary">{{__('label_manifest_further_personal_details')}}</span>
+                                        </summary>
+                                        <div class="panel panel-border-narrow" id="details-content-{{ loop.index }}" aria-hidden="true">
+                                          <table class="govuk-table" width="100%">
+                                            <tbody class="govuk-table__body">
+                                              <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
+                                                <td class="govuk-table__cell">{{person.documentType}}</td>
+                                              </tr>
+                                              <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
+                                                <td class="govuk-table__cell">{{person.issuingState | upper }}</td>
+                                              </tr>
+
+                                              <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">{{__('field_travel_document_number')}}</td>
+                                                <td class="govuk-table__cell">{{ person.documentNumber }}</td>
+                                              </tr>
+
+                                              <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
+                                                <td class="govuk-table__cell">{{ person.documentExpiryDate }}</td>
+                                              </tr>
+
+                                              <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell" colspan="2">
+                                                  <button id="delete-person-{{ loop.index }}" class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">{{__('table_delete')}}</button>
+                                                </td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </details>
+                                    </div>
+                                  </td>
+                                </tr>
+                              {% endfor %}
+                            </div>
                           </td>
                         </tr>
-                      </tbody>
-                    </table>
+                      {% else %}
+                        {{ m.empty_table_message(__('manifest_no_records')) }}
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="totalPersonsOnBoard">
+                      {{__('total_persons_on_board')}}
+                    </label>
+
+                    <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
                   </div>
-                </details>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-              </div>
-            </td>
-          </tr>
-        {% else %}
-          {{ m.empty_table_message(__('manifest_no_records')) }}
-        {% endif %}
-        </tbody>
-      </table>
-    </div>
-    <div class="govuk-grid-column-two-thirds">
-      <div class="govuk-form-group">
-        <label class="govuk-label" for="totalPersonsOnBoard">
-          {{__('total_persons_on_board')}}
-        </label>
 
-        <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
-      </div>
+                  <button id="garPeopleId" type="submit" name="buttonClicked" value="Add to PEOPLE" class="govuk-button">{{__('button_add_to_people')}}</button>
 
-    <button id="garPeopleId" type="submit" name="buttonClicked" value="Add to PEOPLE" class="govuk-button">{{__('button_add_to_people')}}</button>
-    
-    {# Start buttons #}
-      <input id="continue" type="submit" class="govuk-button" 
+                  {# Start buttons #}
+                  <input id="continue" type="submit" class="govuk-button" 
         name="buttonClicked"
         value="{{__('button_continue')}}"
         onclick="sendAnalytics(event, 'GAR Manifest - Continue', 'click')">
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    </form>
-      
-    <form id="cancel-form" action="/garfile/view" method="post">
-      <p class="govuk-body-m">
-        <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
+                  <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                </form>
+
+                <form id="cancel-form" action="/garfile/view" method="post">
+                  <p class="govuk-body-m">
+                    <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
           onclick="sendAnalytics(event, 'GAR Manifest - Exit', 'click')">
-          {{__('form_exit')}}
-        </button>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-      </p>
-    </form>
-    {# End buttons #}
-	  </div>
-</div>
+                      {{__('form_exit')}}
+                    </button>
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                  </p>
+                </form>
+                {# End buttons #}
+              </div>
+            </div>
 
-     <script>
-      $(document).ready(function() {
-      $('#people_table th').each(function(col) {
-        $(this).hover(
-        function() { $(this).addClass('focus'); },
-        function() { $(this).removeClass('focus'); }
-      );
-    $(this).click(function() {
-      if ($(this).is('.asc')) {
-        $(this).removeClass('asc');
-        $(this).addClass('desc selected');
-        sortOrder = -1;
-      }
-      else {
-        $(this).addClass('asc selected');
-        $(this).removeClass('desc');
-        sortOrder = 1;
-      }
-      $(this).siblings().removeClass('asc selected');
-      $(this).siblings().removeClass('desc selected');
-      var arrData = $('#people_table').find('tbody >tr:has(td)').get();
-      arrData.sort(function(a, b) {
-        var val1 = $(a).children('td').eq(col).text().toUpperCase();
-        var val2 = $(b).children('td').eq(col).text().toUpperCase();
-        if($.isNumeric(val1) && $.isNumeric(val2))
-        return sortOrder == 1 ? val1-val2 : val2-val1;
-        else
-            return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
-      });
-      $.each(arrData, function(index, row) {
-        $('#people_table tbody').append(row);
-      });
-      });
-      });
-    });
-  </script>
-</div>
+          </div>
 
-{% endblock %}
- 
+        {% endblock %}

@@ -1,40 +1,42 @@
 {% macro form_group_class(identifier, errors) %}
-	{% set class = 'govuk-form-group' %}
-	{% for error in errors %}
-		{% if error.identifier == identifier %}
-			{% set class = 'govuk-form-group govuk-form-group--error' %}
-		{% endif %}
-	{% endfor %}
-{{class}}{% endmacro %}
+  {% set class = 'govuk-form-group' %}
+  {% for error in errors %}
+    {% if error.identifier == identifier %}
+      {% set class = 'govuk-form-group govuk-form-group--error' %}
+    {% endif %}
+  {% endfor %}
+  {{class}}
+{% endmacro %}
 
 {% macro error_message(identifier, errors, __) %}
-	{% for error in errors %}
-		{% if error.identifier == identifier %}
-			<p id="{{ identifier }}-error" class="govuk-error-message"><span class="govuk-visually-hidden">{{__('error_prefix')}}</span>{{error.message}}</p>
-		{% endif %}
-	{% endfor %}
+  {% for error in errors %}
+    {% if error.identifier == identifier %}
+      <p id="{{ identifier }}-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">{{__('error_prefix')}}</span>{{error.message}}</p>
+    {% endif %}
+  {% endfor %}
 {% endmacro %}
 
 {% macro departure_warning_dialog(__) %}
-    <dialog id="confirmWarnedDepartureDialog" class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-error-message govuk-!-font-size-36">
+  <dialog id="confirmWarnedDepartureDialog" class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-error-message govuk-!-font-size-36">
         Warning
       </h2>
-      <div class="twoHourWarningText">
-        <p>{{ __('departure_date_2_hours_prior__civil_penalty') }}</p>
-        <p>{{ __('departure_date_2_hours_prior__flight_requirements') }}</p>
-      </div>
-      <div class="fortyEightHourWarningText">
-        <p>{{ __('departure_date_too_far_in_future__civil_penalty') }}</p>
-        <p>{{ __('departure_date_too_far_in_future__flight_requirements') }}</p>
-      </div>
+    <div class="twoHourWarningText">
+      <p>{{ __('departure_date_2_hours_prior__civil_penalty') }}</p>
+      <p>{{ __('departure_date_2_hours_prior__flight_requirements') }}</p>
+    </div>
+    <div class="fortyEightHourWarningText">
+      <p>{{ __('departure_date_too_far_in_future__civil_penalty') }}</p>
+      <p>{{ __('departure_date_too_far_in_future__flight_requirements') }}</p>
+    </div>
 
-      <form method="dialog">
-        <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
+    <form method="dialog">
+      <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
           Close and fix departure date
         </button>
-      </form>
-      <button 
+    </form>
+    <button 
         id="continueWithWarnedDate" 
         type="button" 
         class="govuk-button warning-button"
@@ -43,7 +45,7 @@
         value="">
         Continue with warned departure date
       </button>
-    </dialog>
+  </dialog>
 {% endmacro %}
 
 {% macro departure_warning_message(__) %}
@@ -60,19 +62,17 @@
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
       <span class="govuk-visually-hidden">Warning</span>
-        <p>{{ __('departure_date_too_far_in_future__civil_penalty') }}</p>
-        <p>{{ __('departure_date_too_far_in_future__flight_requirements') }}</p>
-        <p>{{ __('note_about_utc_and_daylight_saving_hours') }}</p>
+      <p>{{ __('departure_date_too_far_in_future__civil_penalty') }}</p>
+      <p>{{ __('departure_date_too_far_in_future__flight_requirements') }}</p>
+      <p>{{ __('note_about_utc_and_daylight_saving_hours') }}</p>
     </strong>
   </div>
 {% endmacro %}
 
-
-
 {% macro empty_table_message(message) %}
-<tr class="govuk-table__row">
-  <caption class="govuk-inset-text" style="caption-side:bottom">{{ message }}</caption>
-</tr>
+  <tr class="govuk-table__row">
+    <caption class="govuk-inset-text" style="caption-side:bottom">{{ message }}</caption>
+  </tr>
 {% endmacro %}
 
 {% macro submit_buttons(analyticsPage, csrfToken, __) %}
@@ -84,19 +84,19 @@
       name="buttonClicked"
       value="{{ __('form_save_and_come_back') }}">
   </p>
-  
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 {% endmacro %}
 
 {% macro exit_without_saving(csrfToken, __) %}
-<form id="cancel-form" action="/garfile/view" method="post">
-  <p class="govuk-body-m">
-    <button type="submit" id="exit-without-saving" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-      {{__('form_exit_without_saving')}}
-    </button>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-  </p>
-</form>
+  <form id="cancel-form" action="/garfile/view" method="post">
+    <p class="govuk-body-m">
+      <button type="submit" id="exit-without-saving" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+        {{__('form_exit_without_saving')}}
+      </button>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    </p>
+  </form>
 {% endmacro %}
 
 {#

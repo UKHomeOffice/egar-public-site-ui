@@ -39,15 +39,6 @@ const performAPICall = (cookie, buttonClicked, res) => {
     });
 };
 
-// Define port / date validation msgs
-const portChoiceMsg = 'Select whether the port code is known';
-const portCodeMsg = 'The arrival airport code must be entered';
-const futureDateMsg = 'Arrival date must be today or in the future';
-const realDateMsg = 'Enter a real arrival date';
-const timeMsg = 'Enter a real arrival time';
-const latitudeMsg = 'Value entered is incorrect. Enter latitude to 6 decimal places';
-const longitudeMsg = 'Value entered is incorrect. Enter longitude to 6 decimal places';
-const samePortMsg = 'Arrival port must be different to departure port';
 
 const buildValidations = (voyage) => {
   // Create validation input objs
@@ -68,28 +59,19 @@ const buildValidations = (voyage) => {
 
   // Define port validations
   const arrivalPortValidation = [
-    new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, portCodeMsg),
+    new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, __('field_arrival_port_code_validation')),
     new ValidationRule(validator.isValidAirportCode, 'arrivalPort', voyage.arrivalPort, 'Arrival port should be an ICAO or IATA code')
   ];
 
-  // Define latitude validations
-  const arrivalLatValidation = [new ValidationRule(validator.latitude, 'arrivalLat', voyage.arrivalLat, latitudeMsg)];
-
-  // Define latitude validations
-  const arrivalLongValidation = [new ValidationRule(validator.longitude, 'arrivalLong', voyage.arrivalLong, longitudeMsg)];
-
-  // Define latitude/longitude direction and non-empty validations
-  const arrivalLatDirectionValidation = [new ValidationRule(validator.notEmpty, 'arrivalLatDirection', voyage.arrivalLatDirection, __('field_latitude_direction'))];
-  const arrivalLongDirectionValidation = [new ValidationRule(validator.notEmpty, 'arrivalLongDirection', voyage.arrivalLongDirection, __('field_longitude_direction'))];
-  const arrivalLatDirectionInvalid = [new ValidationRule(validator.invalidLatDirection, 'arrivalLatDirection', voyage.arrivalLatDirection, __('field_latitude_value'))];
-  const arrivalLongDirectionInvalid = [new ValidationRule(validator.invalidLongDirection, 'arrivalLongDirection', voyage.arrivalLongDirection, __('field_longitude_value'))];
+  const arrivalLatValidation = [new ValidationRule(validator.latitude, 'arrivalLat', voyage.arrivalLat, __('field_latitude_validation'))];
+  const arrivalLongValidation = [new ValidationRule(validator.longitude, 'arrivalLong', voyage.arrivalLong, __('field_longitude_validation'))];
 
   const validations = [
-    [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, realDateMsg)],
+    [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, __('field_arrival_date_validation'))],
     [new ValidationRule(validator.currentOrPastDate, 'arrivalDate', arriveDateObj, __('field_arrival_date_too_far_in_future'))],
     [new ValidationRule(validator.dateNotMoreThanMonthInFuture, 'arrivalDate', arriveDateObj, __('field_arrival_date_too_far_in_future'))],
-    [new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, timeMsg)],
-    [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, portChoiceMsg)],
+    [new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, __('field_arrival_time_validation'))],
+    [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
   ];
 
 
@@ -98,10 +80,6 @@ const buildValidations = (voyage) => {
     validations.push(
       arrivalLatValidation,
       arrivalLongValidation,
-      arrivalLatDirectionValidation,
-      arrivalLongDirectionValidation,
-      arrivalLatDirectionInvalid,
-      arrivalLongDirectionInvalid
     );
   } else if (voyage.portChoice) {
     // if not just add port validation
@@ -122,57 +100,29 @@ module.exports = async (req, res) => {
   // Define voyage
   const voyage = req.body;
   delete voyage.buttonClicked;
-  if (voyage.portChoice === 'No') {
-    logger.debug('Testing arrival Lat and Long values...');
 
-    if (voyage.arrivalLatDirection && voyage.arrivalLatDirection.toUpperCase() == 'S'){
-      const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes/60) + parseFloat((voyage.arrivalSeconds/3600).toFixed(6)));
-      voyage.arrivalLat = '-' + parseFloat(convertedLat).toFixed(6);
-    }
-    else{
-      const convertedLat = parseFloat(voyage.arrivalDegrees) + parseFloat((voyage.arrivalMinutes/60) + parseFloat((voyage.arrivalSeconds/3600).toFixed(6)));
-      voyage.arrivalLat = parseFloat(convertedLat).toFixed(6);
-    }
-    
-    if (voyage.arrivalLongDirection && voyage.arrivalLongDirection.toUpperCase() == 'W'){
-      const convertedLong = parseFloat(voyage.arrivalLongDegrees) + parseFloat((voyage.arrivalLongMinutes/60) + parseFloat((voyage.arrivalLongSeconds/3600).toFixed(6)));
-      voyage.arrivalLong = '-' + parseFloat(convertedLong).toFixed(6);
-    }
-    else{
-      const convertedLong = parseFloat(voyage.arrivalLongDegrees) + parseFloat((voyage.arrivalLongMinutes/60) + parseFloat((voyage.arrivalLongSeconds/3600).toFixed(6)));
-      voyage.arrivalLong = parseFloat(convertedLong).toFixed(6);
-    }
-
-    logger.debug(voyage.arrivalLat);
-    logger.debug(voyage.arrivalLong);
-    const combinedCoordinates = `${voyage.arrivalLat.toString()} ${voyage.arrivalLong.toString()}`;
-    voyage.arrivalPort = combinedCoordinates;
-    logger.debug(voyage.arrivalPort);
-  } else {
-    // If 'Yes' is selected then clear the coordinate values
+  if (voyage.portChoice === 'Yes') {
     voyage.arrivalLat = '';
     voyage.arrivalLong = '';
-    voyage.arrivalPort = _.toUpper(voyage.arrivalPort);
-    logger.debug(voyage.arrivalPort);
+  } else {
+    voyage.arrivalPort = `${voyage.arrivalLat} ${voyage.arrivalLong}`;
   }
   cookie.setGarArrivalVoyage(voyage);
 
   const validations = buildValidations(voyage);
 
   const gar = await garApi.get(cookie.getGarId());
+  const departurePort = JSON.parse(gar).departurePort;
 
   validations.push([
-    new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], samePortMsg),
+    new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, departurePort], __('field_arrival_port_different_departure')),
   ]);
 
-  if (voyage.arrivalPort.length <= 4 && JSON.parse(gar).departurePort.length <= 4) {
-    // logger.debug(voyage.arrivalPort);
-    // logger.debug(JSON.parse(gar).departurePort);
+  if (voyage.portChoice === 'Yes') {
     validations.push([
-      new ValidationRule(airportValidation.includesOneBritishAirport, 'arrivalPort', [voyage.arrivalPort, JSON.parse(gar).departurePort], airportValidation.notBritishMsg),
+      new ValidationRule(airportValidation.includesOneBritishAirport, 'arrivalPort', [voyage.arrivalPort, departurePort], airportValidation.notBritishMsg),
     ]);
   }
-
 
   validator.validateChains(validations)
     .then(() => {
