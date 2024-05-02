@@ -106,6 +106,18 @@
                 {{ 'aria-describedby=responsibleTown-error' if errors | containsError('responsibleTown') }}>
             </div>
 
+            <div class="govuk-form-group {{ m.form_group_class('responsiblePostcode', errors) }}">
+              <label class="govuk-label" for="responsiblePostcode">{{ __('field_postcode') }}</label>
+
+              {{ m.error_message('responsiblePostcode', errors, __) }}
+
+              <input class="govuk-input govuk-input--width-10"
+                id="responsiblePostcode" name="responsiblePostcode" type="text"
+                value="{{ cookie.getGarResponsiblePerson().responsiblePostcode }}"
+                maxlength="{{ MAX_POSTCODE_LENGTH }}"
+              />
+            </div>
+
             <div class="govuk-form-group {{ m.form_group_class('responsibleCounty', errors) }}">
               <label id="responsibleCountry-label" class="govuk-label" for="responsibleCounty">{{ __('field_address_country') }}</label>
               {{ m.error_message('responsibleCounty', errors, __) }}
@@ -118,19 +130,7 @@
                 {% endfor %}
               </select>
             </div>
-
-            <div class="govuk-form-group {{ m.form_group_class('responsiblePostcode', errors) }}">
-              <label class="govuk-label" for="responsiblePostcode">{{ __('field_postcode') }}</label>
-
-              {{ m.error_message('responsiblePostcode', errors, __) }}
-
-              <input class="govuk-input govuk-input--width-10"
-                id="responsiblePostcode" name="responsiblePostcode" type="text"
-                value="{{ cookie.getGarResponsiblePerson().responsiblePostcode }}"
-                maxlength="{{ MAX_POSTCODE_LENGTH }}"
-              />
-            </div>
-          </fieldset>
+        </fieldset>
 
           <fieldset class="govuk-fieldset" style="background-color:pink;">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ __('field_fbo_question') }}</legend>
