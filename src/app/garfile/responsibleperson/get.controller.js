@@ -29,7 +29,7 @@ module.exports = (req, res) => {
         responsibleCounty: gar.responsibleCounty,
         responsibleContactNo: gar.responsibleContactNo,
         fixedBasedOperator: gar.fixedBasedOperator,
-        fixedBasedOperatorAnswer: gar.fixedBasedOperatorAnswer,
+        fixedBasedOperatorAnswer: gar.fixedBasedOperatorAnswer
       };
 
       context.gar = gar;

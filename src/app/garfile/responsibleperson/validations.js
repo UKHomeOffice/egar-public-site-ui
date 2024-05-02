@@ -16,7 +16,9 @@ module.exports.validations = (req) => {
     responsibleAddressLine2,
     responsibleTown,
     responsibleCounty,
-    responsiblePostcode
+    responsiblePostcode,
+    fixedBasedOperator,
+    fixedBasedOperatorAnswer
   } = req.body;
 
   return [
@@ -65,10 +67,8 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.validTextLength, 'responsiblePostcode', { value: responsiblePostcode, maxLength: MAX_POSTCODE_LENGTH }, `Postcode must be ${MAX_POSTCODE_LENGTH} characters or less`),
       new ValidationRule(validator.isPostCodeValidCharacters, 'responsiblePostcode', responsiblePostcode, `Postcode must not contain special characters such as $ % ' or ä`),
     ],
-    // [
-    //   new ValidationRule(
-    //     validator.notEmpty, 'fixedBasedOperator', 'fixedBasedOperator', 'Select the role of the responsible person.'
-    //   ),
-    // ],
+    [
+      req.body.fixedBasedOperator !== 'Other' ? new ValidationRule(validator.notEmpty, 'fixedBasedOperator', fixedBasedOperator, `Select the role of the responsible person.`) : new ValidationRule(validator.notEmpty, 'fixedBasedOperatorAnswer', fixedBasedOperatorAnswer, `Enter your responsible person role.`),
+    ],
   ];
 };

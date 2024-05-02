@@ -147,13 +147,13 @@
                     <label id="fixedBasedOperator-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{ choice.option }}" >{{ choice.option }}</label>
                   </div>
 
-                  {% if choice.value == 'Other' %}
+                  {% if choice.value === 'Other' %}
                     <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-fixedBasedOperatorAnswer">
                       <div class="govuk-form-group">
                         <textarea class="govuk-textarea" id="fixedBasedOperatorAnswer" name="fixedBasedOperatorAnswer"
-                          rows="3" aria-describedby="fixedBasedOperator-hint" placeholder="{{ __('field_fbo_textarea_placeholder') }}"
+                          rows="3" aria-describedby="other-answer-description" placeholder="{{ __('field_fbo_textarea_placeholder') }}"
                           maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}"
-                        ></textarea>
+                        >{{ "" if (cookie.getGarResponsiblePerson().fixedBasedOperatorAnswer === null) else cookie.getGarResponsiblePerson().fixedBasedOperatorAnswer }}</textarea>
                       </div>
                     </div>
                   {% endif %}
