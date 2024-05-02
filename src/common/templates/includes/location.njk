@@ -65,20 +65,31 @@
 
 {% macro lat_long(lat, long, prefix, errors, __) %}
 
+    <style type="text/css">
+
+        #{{ prefix }}Long:invalid{
+            background-color:#ff9baf;
+        }
+        #{{ prefix }}Lat:invalid{
+            background-color:#ff9baf;
+        }
+
+    
+    </style>
     {# Start location coords #}
     {# Latitude #}
     <div class="govuk-form-group {{ m.form_group_class(prefix + 'Lat', errors) }}">
         <label class="govuk-label" for="{{ prefix }}Lat">{{__('field_latitude')}}</label>
         {{ m.hint(prefix + 'Latitude', __('field_latitude_hint')) }}
         {{ m.error_message(prefix + 'Lat', errors, __) }}
-        <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Lat" name="{{ prefix }}Lat" type="number" step="0.000001" max="90" min="-90" value="{{ lat }}">
+        <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Lat" name="{{ prefix }}Lat" type="text"  maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -180 to 180" value="{{ lat }}">
     </div>
     {# Longitude #}
     <div class="govuk-form-group {{ m.form_group_class(prefix + 'Long', errors) }}">
         <label class="govuk-label" for="{{ prefix }}Long">{{__('field_longitude')}}</label>
         {{ m.hint(prefix + 'Longitude', __('field_longitude_hint')) }}
         {{ m.error_message(prefix + 'Long', errors, __) }}
-        <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Long" name="{{ prefix }}Long" type="text" step="0.000001" max="180" min="-180" value="{{ long }}">
+        <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Long" name="{{ prefix }}Long" type="text" maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -90 to 90" value="{{ long }}">
     </div>
     {# End location coords #}
 
