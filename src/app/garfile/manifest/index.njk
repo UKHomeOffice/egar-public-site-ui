@@ -45,9 +45,9 @@
       </div>
     <div class="govuk-grid-column-full">
       {% if manifestInvalidSavedPeople and (manifestInvalidSavedPeople | length) > 0 %}
-        <p class="govuk-error-message">
+        <h2 class="govuk-error-message govuk-heading-m">
           {{ __('saved_people_are_invalid__info') }}
-        </p>
+        </h2>
         {% for person in savedPeople %}
           {% if (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
             <ul class="govuk-list govuk-list--bullet">
@@ -69,19 +69,6 @@
           {% endfor %}
         {% endif %}
 
-        <h1 class="govuk-heading-m">People already added</h1>
-        {% for person in savedPeople %}
-          {% if person.isDuplicate %}
-          <ul class="govuk-list govuk-list--bullet">
-              <li>
-                  {{person.lastName}}, 
-                  {{person.firstName}}, 
-                  {{person.peopleType.name}}, 
-                  {{person.documentExpiryDate}}
-              </li>
-            </ul>
-          {% endif %}
-        {% endfor %}
         <p class="govuk-body-l">{{__('people_caption')}}</p>
         <p class="govuk-body-m">{{__('person_search')}}</p>
         <form id="people" action="/people" method="post">
