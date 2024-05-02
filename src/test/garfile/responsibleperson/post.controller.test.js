@@ -34,16 +34,17 @@ describe('GAR Responsible Person Post Controller', () => {
 
     req = {
       body: {
-        fixedBasedOperatorAnswer: '',
         responsibleGivenName: 'Jean-Luc',
         responsibleSurname: 'Picard',
+        responsibleContactNo: '001234567890',
+        responsibleEmail: 'test@test.com',
         responsibleAddressLine1: 'Enterprise',
         responsibleAddressLine2: 'United Federation of Planets',
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleContactNo: '001234567890',
-        responsibleEmail: 'test@test.com'
+        fixedBasedOperator: 'Captain',
+        fixedBasedOperatorAnswer: ''
       },
       session: {
         gar: { id: '123456', status: 'Draft', responsiblePerson: {} },
@@ -144,16 +145,15 @@ describe('GAR Responsible Person Post Controller', () => {
       expect(garApi.patch).to.have.been.calledWith('123456', 'Draft', {
         responsibleGivenName: 'Jean-Luc',
         responsibleSurname: 'Picard',
+        responsibleContactNo: '001234567890',
+        responsibleEmail: 'test@test.com',
         responsibleAddressLine1: 'Enterprise',
         responsibleAddressLine2: 'United Federation of Planets',
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleEmail: 'test@test.com',
-        responsibleContactNo: '001234567890',
-        fixedBasedOperator: undefined,
-        fixedBasedOperatorAnswer: '',
-        fixedBasedOperatorOptions
+        fixedBasedOperator: 'Other',
+        fixedBasedOperatorAnswer: 'Chief Pilot'
       });
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
@@ -180,16 +180,15 @@ describe('GAR Responsible Person Post Controller', () => {
       expect(garApi.patch).to.have.been.calledWith('123456', 'Draft', {
         responsibleGivenName: 'Jean-Luc',
         responsibleSurname: 'Picard',
+        responsibleContactNo: '001234567890',
+        responsibleEmail: 'test@test.com',
         responsibleAddressLine1: 'Enterprise',
         responsibleAddressLine2: 'United Federation of Planets',
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleContactNo: '001234567890',
-        responsibleEmail: 'test@test.com',
-        fixedBasedOperator: undefined,
-        fixedBasedOperatorAnswer: '',
-        fixedBasedOperatorOptions
+        fixedBasedOperator: 'Other',
+        fixedBasedOperatorAnswer: 'Agent',
       });
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
@@ -215,16 +214,15 @@ describe('GAR Responsible Person Post Controller', () => {
       expect(garApi.patch).to.have.been.calledWith('123456', 'Draft', {
         responsibleGivenName: 'Jean-Luc',
         responsibleSurname: 'Picard',
+        responsibleContactNo: '001234567890',
+        responsibleEmail: 'test@test.com',
         responsibleAddressLine1: 'Enterprise',
         responsibleAddressLine2: 'United Federation of Planets',
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleContactNo: '001234567890',
-        responsibleEmail: 'test@test.com',
-        fixedBasedOperator: undefined,
+        fixedBasedOperator: 'Fixed Base Operator',
         fixedBasedOperatorAnswer: '',
-        fixedBasedOperatorOptions
       });
       expect(res.render).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
@@ -245,16 +243,15 @@ describe('GAR Responsible Person Post Controller', () => {
       expect(garApi.patch).to.have.been.calledWith('123456', 'Draft', {
         responsibleGivenName: 'Jean-Luc',
         responsibleSurname: 'Picard',
+        responsibleContactNo: '001234567890',
+        responsibleEmail: 'test@test.com',
         responsibleAddressLine1: 'Enterprise',
         responsibleAddressLine2: 'United Federation of Planets',
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        responsibleContactNo: '001234567890',
-        responsibleEmail: 'test@test.com',
-        fixedBasedOperator: undefined,
+        fixedBasedOperator: 'Operator',
         fixedBasedOperatorAnswer: '',
-        fixedBasedOperatorOptions
       });
       expect(res.render).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledWith('/garfile/customs');
