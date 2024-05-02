@@ -43,15 +43,14 @@
         <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
 
       </div>
-
-      <div class="govuk-grid-column-full">
-        {% if manifestInvalidSavedPeople %}
-          <p class="govuk-error-message">
-            {{ __('saved_people_are_invalid__info') }}
-          </p>
-          {% for person in savedPeople %}
-            {% if (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
-              <ul class="govuk-list govuk-list--bullet">
+    <div class="govuk-grid-column-full">
+      {% if manifestInvalidSavedPeople and (manifestInvalidSavedPeople | length) > 0 %}
+        <p class="govuk-error-message">
+          {{ __('saved_people_are_invalid__info') }}
+        </p>
+        {% for person in savedPeople %}
+          {% if (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
+            <ul class="govuk-list govuk-list--bullet">
                 <li>
                   <button 
                     id="edit-person-{{ loop.index }}" 
