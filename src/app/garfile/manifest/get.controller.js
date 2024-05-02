@@ -5,25 +5,10 @@ const personApi = require('../../../common/services/personApi');
 const garApi = require('../../../common/services/garApi');
 
 function flagDuplicatesInSavedPeople(savedPeople, garPeople) {
-  logger.info(JSON.stringify({ y: savedPeople }));
   if (garPeople === undefined) return savedPeople;
 
   const result = savedPeople.map((savedPerson) => {
     const duplicatePersonInGar = garPeople.filter((garPerson) => {
-      logger.info(JSON.stringify({
-        gfn: garPerson.firstName,
-        sfn: savedPerson.firstName,
-        gln: garPerson.lastName,
-        sln: savedPerson.lastName,
-        gdn: garPerson.documentNumber,
-        sgn: savedPerson.documentNumber,
-        gis: garPerson.issuingState,
-        sis: savedPerson.issuingState,
-        isDuplicate: (garPerson.firstName === savedPerson.firstName
-        && garPerson.lastName === savedPerson.lastName
-        && garPerson.documentNumber === savedPerson.documentNumber
-        && garPerson.issuingState === savedPerson.issuingState)
-      }, 4))
       return (
         garPerson.firstName === savedPerson.firstName
         && garPerson.lastName === savedPerson.lastName
@@ -38,7 +23,6 @@ function flagDuplicatesInSavedPeople(savedPeople, garPeople) {
     };
   })
 
-  logger.info(JSON.stringify(result))
   return result;
 }
 
