@@ -30,12 +30,20 @@ module.exports = (req, res) => {
           })
           .catch((err) => {
             logger.error(err);
-            logger.error('Failed to patch GAR with updated manifest');
+            logger.error(`${cookie.getUserDbId()}: Failed to patch GAR with updated manifest`);
+            req.session.manifestErr = { 
+              message: 'Failed to patch GAR with updated manifest',
+              identifier: ''
+            };
             res.redirect('/garfile/manifest');
           });
       })
       .catch(() => {
-        logger.info('Failed to retrieve manifest ids');
+        logger.error(`${cookie.getUserDbId()}: Failed to retrieve manifest ids`);
+        req.session.manifestErr = { 
+          message: 'Failed to patch GAR with updated manifest',
+          identifier: ''
+        };
         res.redirect('/garfile/manifest');
       });
   } else if (req.body.garPeopleId && buttonClicked === 'Add to PEOPLE') {

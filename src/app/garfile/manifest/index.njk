@@ -68,6 +68,20 @@
             {% endif %}
           {% endfor %}
         {% endif %}
+
+        <h1 class="govuk-heading-m">People already added</h1>
+        {% for person in savedPeople %}
+          {% if person.isDuplicate %}
+          <ul class="govuk-list govuk-list--bullet">
+              <li>
+                  {{person.lastName}}, 
+                  {{person.firstName}}, 
+                  {{person.peopleType.name}}, 
+                  {{person.documentExpiryDate}}
+              </li>
+            </ul>
+          {% endif %}
+        {% endfor %}
         <p class="govuk-body-l">{{__('people_caption')}}</p>
         <p class="govuk-body-m">{{__('person_search')}}</p>
         <form id="people" action="/people" method="post">
@@ -100,17 +114,18 @@
                 {% if savedPeople | length %}
                   {% for person in savedPeople %}
                     {% if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
+                    {% elif person.isDuplicate %}
                     {% else %}
                       <tr class="govuk-table__row" id="savedPerson-{{loop.index0}}">
                         <td class="govuk-table__cell multiple-choice--hod">
                           <div class="govuk-checkboxes__item">
                             <input 
-                      type="checkbox" 
-                      class="govuk-checkboxes__input jsCheckbox" 
-                      id="savedPerson-{{loop.index0}}" 
-                      name="personId" 
-                      value="{{person.personId}}"
-                    >
+                              type="checkbox" 
+                              class="govuk-checkboxes__input jsCheckbox" 
+                              id="savedPerson-{{loop.index0}}" 
+                              name="personId" 
+                              value="{{person.personId}}"
+                            >
                             <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
                       &nbsp;
                     </label>
