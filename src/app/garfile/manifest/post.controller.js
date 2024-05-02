@@ -24,12 +24,14 @@ module.exports = (req, res) => {
     manifestUtil.getDetailsByIds(req.body.personId, cookie.getUserDbId())
       .then((selectedPeople) => {
         garApi.patch(cookie.getGarId(), 'Draft', { people: selectedPeople })
-          .then(() => {
+          .then((patchResponse) => {
+            logger.info(patchResponse)
             console.debug( {people: selectedPeople })
             res.redirect('/garfile/manifest');
           })
-          .catch(() => {
-            logger.info('Failed to patch GAR with updated manifest');
+          .catch((err) => {
+            logger.error(err);
+            logger.error('Failed to patch GAR with updated manifest');
             res.redirect('/garfile/manifest');
           });
       })
