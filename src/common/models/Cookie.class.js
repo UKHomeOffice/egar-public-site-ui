@@ -684,8 +684,8 @@ class Cookie {
     const craftBaseLatLong = destination.craftBase.match(/^[\+\-]?[\d.]+ [\+\-]?[\d.]+$/);
     if (craftBaseLatLong) {
       const [craftBaseLat, craftBaseLong] = craftBaseLatLong[0].split(' ');
-      destination.craftBaseLat = trimToDecimalPlaces(craftBaseLat, 4);
-      destination.craftBaseLong = trimToDecimalPlaces(craftBaseLong, 4);
+      destination.craftBaseLat = trimToDecimalPlaces(craftBaseLat, 6);
+      destination.craftBaseLong = trimToDecimalPlaces(craftBaseLong, 6);
       destination.portChoice = 'No';
       return;
     }
