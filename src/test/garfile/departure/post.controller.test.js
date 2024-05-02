@@ -150,8 +150,8 @@ describe('Departure Post Controller', () => {
           cookie,
           errors: [
             new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known'),
-            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
-            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
+            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 6 decimal places'),
+            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 6 decimal places'),
           ],
         });
       });
@@ -176,8 +176,8 @@ describe('Departure Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
           cookie,
           errors: [
-            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
-            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
+            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 6 decimal places'),
+            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 6 decimal places'),
           ],
         });
       });
@@ -203,8 +203,8 @@ describe('Departure Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
           cookie,
           errors: [
-            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 4 decimal places'),
-            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 4 decimal places'),
+            new ValidationRule(validator.latitude, 'departureLat', undefined, 'Value entered is incorrect. Enter latitude to 6 decimal places'),
+            new ValidationRule(validator.longitude, 'departureLong', undefined, 'Value entered is incorrect. Enter longitude to 6 decimal places'),
           ],
         });
       });

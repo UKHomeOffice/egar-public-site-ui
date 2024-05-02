@@ -345,7 +345,7 @@ describe('Validator', () => {
   });
 
   // Latitude tests
-  it('Should return true for a valid latitude - 4 dp', () => {
+  it('Should return true for a valid latitude - 6 dp', () => {
     expect(validator.latitude('51.957681')).to.be.true;
     expect(validator.latitude('1.957624')).to.be.true;
     expect(validator.latitude('-51.957612')).to.be.true;
@@ -353,18 +353,19 @@ describe('Validator', () => {
     expect(validator.latitude('-90.000000')).to.be.true;
   });
 
-  it('Should return false for an invalid latitude - 4 dp', () => {
-
+  it('Should return false for an invalid latitude - 6 dp', () => {
+    expect(validator.latitude('51.9537')).to.be.false;
+    expect(validator.latitude('51.95377')).to.be.false;
     expect(validator.latitude('51.953')).to.be.false;
     expect(validator.latitude('51.95')).to.be.false;
     expect(validator.latitude('51.9')).to.be.false;
     expect(validator.latitude('51')).to.be.false;
-    expect(validator.latitude('90.000')).to.be.false;
-    expect(validator.latitude('-90.00')).to.be.false;
+    expect(validator.latitude('90.0001')).to.be.false;
+    expect(validator.latitude('-90.0001')).to.be.false;
   });
 
   // Longitude tests
-  it('Should return true for a valid longitude - 4 dp', () => {
+  it('Should return true for a valid longitude - 6 dp', () => {
     expect(validator.longitude('-1.245623')).to.be.true;
     expect(validator.longitude('1.957667')).to.be.true;
     expect(validator.longitude('12.957689')).to.be.true;
@@ -372,14 +373,16 @@ describe('Validator', () => {
     expect(validator.longitude('-180.000000')).to.be.true;
   });
 
-  it('Should return false for an invalid longitude - 4 dp', () => {
+  it('Should return false for an invalid longitude - 6 dp', () => {
+    expect(validator.longitude('-1.2456')).to.be.false;
+    expect(validator.longitude('-1.24563')).to.be.false;
     expect(validator.longitude('-1.245')).to.be.false;
     expect(validator.longitude('-1.24')).to.be.false;
     expect(validator.longitude('-1.2')).to.be.false;
     expect(validator.longitude('-1.')).to.be.false;
     expect(validator.longitude('-1')).to.be.false;
-    expect(validator.longitude('181.000')).to.be.false;
-    expect(validator.longitude('-180.000')).to.be.false;
+    expect(validator.longitude('181.0001')).to.be.false;
+    expect(validator.longitude('-180.0001')).to.be.false;
   });
 
   it('Should return true when validating different ports', () => {

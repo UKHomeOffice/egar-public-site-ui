@@ -205,8 +205,8 @@ class Cookie {
       this.session.gar.voyageArrival.arrivalTime = voyageObj.arrivalTime;
     }
     this.session.gar.voyageArrival.arrivalPort = voyageObj.arrivalPort;
-    this.session.gar.voyageArrival.arrivalLong = trimToDecimalPlaces(voyageObj.arrivalLong, 4);
-    this.session.gar.voyageArrival.arrivalLat = trimToDecimalPlaces(voyageObj.arrivalLat, 4);
+    this.session.gar.voyageArrival.arrivalLong = trimToDecimalPlaces(voyageObj.arrivalLong, 6);
+    this.session.gar.voyageArrival.arrivalLat = trimToDecimalPlaces(voyageObj.arrivalLat, 6);
     this.session.gar.voyageArrival.arrivalPortChoice = voyageObj.portChoice || (voyageObj.arrivalLat || voyageObj.arrivalLong) ? 'No' : 'Yes';
   }
 
@@ -226,8 +226,8 @@ class Cookie {
       this.session.gar.voyageDeparture.departureTime = voyageObj.departureTime;
     }
     this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
-    this.session.gar.voyageDeparture.departureLat = trimToDecimalPlaces(voyageObj.departureLat, 4);
-    this.session.gar.voyageDeparture.departureLong = trimToDecimalPlaces(voyageObj.departureLong, 4);
+    this.session.gar.voyageDeparture.departureLat = trimToDecimalPlaces(voyageObj.departureLat, 6);
+    this.session.gar.voyageDeparture.departureLong = trimToDecimalPlaces(voyageObj.departureLong, 6);
     this.session.gar.voyageDeparture.departurePortChoice = voyageObj.portChoice || (voyageObj.departureLat || voyageObj.departureLong) ? 'No' : 'Yes';
 
   }
