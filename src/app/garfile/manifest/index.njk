@@ -99,8 +99,8 @@
                       <div class="govuk-checkboxes__item">
                         <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
                         <label class="govuk-label govuk-checkboxes__label" for="radio-all">
-                  &nbsp;
-                </label>
+                          &nbsp;
+                        </label>
                       </div>
                     {% endif %}
                   </th>
@@ -114,22 +114,23 @@
                 {% if savedPeople | length %}
                   {% for person in savedPeople %}
                     {% if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
-                    {% elif person.isDuplicate %}
                     {% else %}
-                      <tr class="govuk-table__row" id="savedPerson-{{loop.index0}}">
+                      <tr class="govuk-table__row {{ "disabled-row" if person.isDuplicate }}" id="savedPerson-{{loop.index0}}">
                         <td class="govuk-table__cell multiple-choice--hod">
-                          <div class="govuk-checkboxes__item">
-                            <input 
-                              type="checkbox" 
-                              class="govuk-checkboxes__input jsCheckbox" 
-                              id="savedPerson-{{loop.index0}}" 
-                              name="personId" 
-                              value="{{person.personId}}"
-                            >
-                            <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
-                      &nbsp;
-                    </label>
-                          </div>
+                          {% if not person.isDuplicate %}
+                            <div class="govuk-checkboxes__item">
+                              <input 
+                                type="checkbox" 
+                                class="govuk-checkboxes__input jsCheckbox" 
+                                id="savedPerson-{{loop.index0}}" 
+                                name="personId" 
+                                value="{{person.personId}}"
+                              >
+                              <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
+                                &nbsp;
+                              </label>
+                            </div>
+                          {% endif %}
                         </td>
                         <td class="govuk-table__cell">{{person.lastName}}</td>
                         <td class="govuk-table__cell">{{person.firstName}}</td>
