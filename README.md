@@ -45,3 +45,12 @@ In general you don't need to run `gateway-api` and `data-integr-cbp`, unless:
 
 - You want to mock submitting a GAR to CBP 
 - If you are mocking a flight from a foreign country to the UK and need check their UPT status
+
+## Structure of app
+
+- Files are organisation to match route path, e.g. ./app/garfile/manifest --> http://localhost:3000/garfile/manifest.
+    - Occasionally, the route path may deviate e.g. upload gar spreadsheet is under `./api/uploadgar` rather than `./garfile/garupload`.
+- get and post are separated out in get.controller.js and post.controller.js.
+- `./test` file structure roughly maps the `./app`.
+- `public` folders cotnains frontend scripts, stylesheets and html sent to the user.
+- `locales` contains text used in the app, `common` contains common functionalty.
