@@ -87,7 +87,7 @@ describe('Manifest Get Controller', () => {
     beforeEach(() => {
       personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(savedPeople()));
       garApiStub = sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({ 
-        items: garPeople()
+        items: garPeople(),
       }));
     });
 
@@ -104,6 +104,7 @@ describe('Manifest Get Controller', () => {
         cookie,
         savedPeople: flaggedSavedPeople(),
         isInvalidSavedPeople: false,
+        isUnableToAddPeople: false,
         manifest: { items: garPeople() },
         errors: [{ message: 'Example Error Message' }],
       });
@@ -128,6 +129,7 @@ describe('Manifest Get Controller', () => {
           cookie,
           savedPeople: flaggedSavedPeople(),
           isInvalidSavedPeople: false,
+          isUnableToAddPeople: false,
           manifest: { items: garPeople() },
           manifestInvalidPeople: [{ firstName: 'Jean-Luc', lastName: 'Picard' }],
           errors: [{ message: 'Wrong era' }],
@@ -148,6 +150,7 @@ describe('Manifest Get Controller', () => {
         cookie,
         savedPeople: flaggedSavedPeople(),
         isInvalidSavedPeople: false,
+        isUnableToAddPeople: false,
         manifest: { items: garPeople() },
         successMsg: 'All present captain',
       });
@@ -166,6 +169,7 @@ describe('Manifest Get Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
           savedPeople: flaggedSavedPeople(),
+          isUnableToAddPeople: false,
           isInvalidSavedPeople: false,
           manifest: { items: garPeople() },
         });
