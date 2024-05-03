@@ -26,6 +26,15 @@ function flagDuplicatesInSavedPeople(savedPeople, garPeople) {
   return result;
 }
 
+function flagInvalidSavedPeople(savedPeople, manifestInvalidSavedPeople) {
+  return savedPeople.map((savedPerson, index) => {
+    return {
+      ...savedPerson,
+      isInvalid: manifestInvalidSavedPeople.includes(`person-${index}`)
+    }
+  })
+}
+
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -48,7 +57,15 @@ module.exports = async (req, res) => {
 
     const isValidSavedPeople = await savedPeopleManifest.validate();
     const isValidGarPeople = await garPeopleManifest.validate();
-    const savedPeople = flagDuplicatesInSavedPeople(initialSavedPeople, garpeople.items);
+    const flaggedDuplicateSavedPeople = flagDuplicatesInSavedPeople(
+      initialSavedPeople, 
+      garpeople.items
+    );
+    const savedPeople = flagInvalidSavedPeople(
+      flaggedDuplicateSavedPeople, 
+      savedPeopleManifest.invalidPeople
+    );
+    const isInvalidSavedPeople = savedPeople.filter((savedPerson) => savedPerson.isInvalid).length > 0;
 
       if (req.session.errMsg) {
         const { errMsg } = req.session;
@@ -56,6 +73,7 @@ module.exports = async (req, res) => {
         return res.render('app/garfile/manifest/index', { 
           cookie, 
           savedPeople, 
+          isInvalidSavedPeople,
           manifest: garpeople, 
           errors: [errMsg] 
         });
@@ -68,7 +86,7 @@ module.exports = async (req, res) => {
         return res.render('app/garfile/manifest/index', { 
           cookie, 
           savedPeople, 
-          manifestInvalidSavedPeople: savedPeopleManifest.invalidPeople,
+          isInvalidSavedPeople,
           manifest: garpeople, 
           manifestInvalidPeople, 
           errors: manifestErr 
@@ -81,10 +99,10 @@ module.exports = async (req, res) => {
     
         return res.render('app/garfile/manifest/index', { 
           cookie, 
-          savedPeople, 
+          savedPeople,
+          isInvalidSavedPeople,
           manifest: garpeople, 
           manifestInvalidPeople: garPeopleManifest.invalidPeople, 
-          manifestInvalidSavedPeople: savedPeopleManifest.invalidPeople,
           errors: invalidGarPeople.length ? invalidGarPeople : undefined
         });
       }
@@ -94,14 +112,16 @@ module.exports = async (req, res) => {
         delete req.session.successMsg;
         return res.render('app/garfile/manifest/index', { 
           cookie, 
-          savedPeople, 
+          savedPeople,
+          isInvalidSavedPeople,
           manifest: garpeople, 
           successMsg 
         });
       }
       return res.render('app/garfile/manifest/index', { 
         cookie, 
-        savedPeople, 
+        savedPeople,
+        isInvalidSavedPeople, 
         manifest: garpeople 
       });
     } catch(err) {

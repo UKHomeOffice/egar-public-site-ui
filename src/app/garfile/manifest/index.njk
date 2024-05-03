@@ -44,32 +44,15 @@
 
       </div>
     <div class="govuk-grid-column-full">
-      {% if manifestInvalidSavedPeople and (manifestInvalidSavedPeople | length) > 0 %}
-        <h2 class="govuk-error-message govuk-heading-m">
-          {{ __('saved_people_are_invalid__info') }}
-        </h2>
-        {% for person in savedPeople %}
-          {% if (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
-            <ul class="govuk-list govuk-list--bullet">
-                <li>
-                  <button 
-                    id="edit-person-{{ loop.index }}" 
-                    class="govuk-link btn-link" 
-                    title="Edit details for {{ person.firstName }} {{ person.lastName }}" 
-                    name="editSavedPerson" 
-                    value="{{person.personId}}">
-                    {{person.lastName}}, 
-                    {{person.firstName}}, 
-                    {{person.peopleType.name}}, 
-                    {{person.documentExpiryDate}}
-                  </button>
-                </li>
-              </ul>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-
-        <p class="govuk-body-l">{{__('people_caption')}}</p>
+        <p class="govuk-body-l">
+          {{__('people_caption')}}
+          {% if isInvalidSavedPeople %}
+            <div class="govuk-error-message govuk-heading-m">
+              {{ __('saved_people_are_invalid__info') }}
+            </div>
+          {% endif %}
+        </p>
+        
         <p class="govuk-body-m">{{__('person_search')}}</p>
         <form id="people" action="/people" method="post">
           {% if savedPeople | length %}
@@ -100,11 +83,23 @@
               <tbody class="govuk-table__body" id="people_table_row">
                 {% if savedPeople | length %}
                   {% for person in savedPeople %}
-                    {% if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
-                    {% else %}
-                      <tr class="govuk-table__row {{ "disabled-row" if person.isDuplicate }}" id="savedPerson-{{loop.index0}}">
-                        <td class="govuk-table__cell multiple-choice--hod">
-                          {% if not person.isDuplicate %}
+                      <tr class="govuk-table__row 
+                        {{ "disabled-row" if person.isDuplicate or person.isInvalid }} 
+                        {{ "govuk-form-group govuk-form-group--error" if person.isInvalid }}"
+                        id="savedPerson-{{loop.index0}}">
+                        <td 
+                          class="govuk-table__cell multiple-choice--hod"
+                          style="{{ "padding-left: 10px" if person.isInvalid }}">
+                          {% if person.isInvalid %}
+                            <button 
+                              id="edit-person-{{ loop.index }}" 
+                              class="govuk-link btn-link" 
+                              title="Edit details for {{ person.firstName }} {{ person.lastName }}" 
+                              name="editSavedPerson" 
+                              value="{{person.personId}}">
+                              Edit
+                            </button>
+                          {% elif not person.isDuplicate %}
                             <div class="govuk-checkboxes__item">
                               <input 
                                 type="checkbox" 
@@ -117,14 +112,13 @@
                                 &nbsp;
                               </label>
                             </div>
-                          {% endif %}
+                          {% endif%}
                         </td>
                         <td class="govuk-table__cell">{{person.lastName}}</td>
                         <td class="govuk-table__cell">{{person.firstName}}</td>
                         <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                         <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
                       </tr>
-                    {% endif %}
                   {% endfor %}
                 {% else %}
                   {{ m.empty_table_message(__('people_no_records')) }}

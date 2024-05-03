@@ -8,10 +8,12 @@
     color: white !important;
 }
 
-.disabled-row > * {
-    opacity: 0.6;
-}
-
 .table-clickable tbody .disabled-row:hover {
     background-color: inherit;
+    cursor: default;
+}
+
+
+.table-clickable tbody tr td button.btn-link {
+    cursor: pointer;
 }
