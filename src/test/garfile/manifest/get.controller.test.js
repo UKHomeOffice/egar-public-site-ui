@@ -5,7 +5,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const { savedPeople, garPeople } = require('../../fixtures');
+const { savedPeople, garPeople, flaggedSavedPeople } = require('../../fixtures');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -102,7 +102,8 @@ describe('Manifest Get Controller', () => {
       expect(req.session.errMsg).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie,
-        savedPeople: savedPeople(),
+        savedPeople: flaggedSavedPeople(),
+        isInvalidSavedPeople: false,
         manifest: { items: garPeople() },
         errors: [{ message: 'Example Error Message' }],
       });
@@ -127,7 +128,6 @@ describe('Manifest Get Controller', () => {
           cookie,
           savedPeople: savedPeople(),
           manifest: { items: garPeople() },
-          manifestInvalidSavedPeople: [],
           manifestInvalidPeople: [{ firstName: 'Jean-Luc', lastName: 'Picard' }],
           errors: [{ message: 'Wrong era' }],
         });
