@@ -48,9 +48,9 @@ In general you don't need to run `gateway-api` and `data-integr-cbp`, unless:
 
 ## Structure of app
 
-- Files are organisation to match route path, e.g. ./app/garfile/manifest --> http://localhost:3000/garfile/manifest.
-    - Occasionally, the route path may deviate e.g. upload gar spreadsheet is under `./api/uploadgar` rather than `./garfile/garupload`.
-- get and post are separated out in get.controller.js and post.controller.js.
-- `./test` file structure roughly maps the `./app`.
-- `public` folders cotnains frontend scripts, stylesheets and html sent to the user.
-- `locales` contains text used in the app, `common` contains common functionalty.
+- Files are organised to match route path, e.g. ./app/garfile/manifest --> http://localhost:3000/garfile/manifest.
+    - Occasionally, the route path may deviate from this rule e.g. upload gar spreadsheet is under `./api/uploadgar` rather than `./garfile/garupload`.
+- GET and POST request handlers are separated out in `get.controller.js` and `post.controller.js`.
+- `./test` file structure roughly maps the `./app` file structure e.g. test/garfile/garupload/get.controller.test.js` is the test for `./app/garfile/garupload/get.controller.js`.
+- `public` folders contains frontend scripts, stylesheets and html that is sent to the user.
+- `locales` contains text used in the app, `common` contains common functionalty used in app.
