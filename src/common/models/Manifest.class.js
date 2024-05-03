@@ -36,13 +36,13 @@ class Manifest {
         lastName: person.lastName,
 
         nationality: person.nationality,
-        personType: peopleType.name,
+        personType: person.peopleType.name,
         gender: person.gender,
         birthplace: person.placeOfBirth,
 
-        travelDocumentNumber: person.travelDocumentNumber,
         travelDocumentType: person.documentType,
         travelDocumentNumber: person.documentNumber,
+        travelDocumentOther: person.documentDesc,
 
         issuingState: person.issuingState, 
 
