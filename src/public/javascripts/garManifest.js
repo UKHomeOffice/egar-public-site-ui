@@ -13,7 +13,7 @@ function initPeopleSort() {
         });
         $(this).click(function () {
 
-            if ($(col.parent()).hasClass('disabled-row')) return undefined;
+            if ($(col.parent()).hasClass('disabled-row')) return;
             if ($(this).is('.asc')) {
                 $(this).removeClass('asc');
                 $(this).addClass('desc selected');

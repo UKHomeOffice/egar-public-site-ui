@@ -29,7 +29,7 @@ $(".jsCheckbox").change(function(){
 
 //Select entire table row
 $(".table-clickable tbody tr").click(function(e) {
-  if ($(this).hasClass("disabled-row")) return undefined;
+  if ($(this).hasClass("disabled-row")) return;
   if (e.target.type == "checkbox") {
     // stop the bubbling to prevent firing the rows click event
     e.stopPropagation()
