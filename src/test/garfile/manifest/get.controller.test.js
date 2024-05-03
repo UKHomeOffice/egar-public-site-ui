@@ -126,7 +126,8 @@ describe('Manifest Get Controller', () => {
         expect(req.session.manifestInvalidPeople).to.be.undefined;
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
-          savedPeople: savedPeople(),
+          savedPeople: flaggedSavedPeople(),
+          isInvalidSavedPeople: false,
           manifest: { items: garPeople() },
           manifestInvalidPeople: [{ firstName: 'Jean-Luc', lastName: 'Picard' }],
           errors: [{ message: 'Wrong era' }],
@@ -145,7 +146,8 @@ describe('Manifest Get Controller', () => {
       expect(req.session.successMsg).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie,
-        savedPeople: savedPeople(),
+        savedPeople: flaggedSavedPeople(),
+        isInvalidSavedPeople: false,
         manifest: { items: garPeople() },
         successMsg: 'All present captain',
       });
@@ -163,7 +165,8 @@ describe('Manifest Get Controller', () => {
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
-          savedPeople: savedPeople(),
+          savedPeople: flaggedSavedPeople(),
+          isInvalidSavedPeople: false,
           manifest: { items: garPeople() },
         });
       });
