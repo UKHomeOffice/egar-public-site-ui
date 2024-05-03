@@ -46,13 +46,14 @@
     <div class="govuk-grid-column-full">
         <p class="govuk-body-l">
           {{__('people_caption')}}
+          <br />
+          {{__('people_caption--already_selected_people')}}
           {% if isInvalidSavedPeople %}
-            <div class="govuk-error-message govuk-heading-m">
+            <div class="govuk-error-message">
               {{ __('saved_people_are_invalid__info') }}
             </div>
           {% endif %}
         </p>
-        
         <p class="govuk-body-m">{{__('person_search')}}</p>
         <form id="people" action="/people" method="post">
           {% if savedPeople | length %}
@@ -65,7 +66,7 @@
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
-                    {% if savedPeople | length %}
+                    {% if savedPeople | length and not isUnableToAddPeople %}
                       <div class="govuk-checkboxes__item">
                         <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
                         <label class="govuk-label govuk-checkboxes__label" for="radio-all">
@@ -128,7 +129,14 @@
           </div>
 
           <div class="govuk-grid-column-two-thirds">
-            <button id="addToManifest" type="submit" name="buttonClicked" value="Add to GAR" class="govuk-button">{{__('button_add_to_gar')}}</button>
+            <button 
+              id="addToManifest"
+              type="submit"
+              name="buttonClicked"
+              value="Add to GAR"
+              class="govuk-button"
+             {{ "disabled" if isUnableToAddPeople }}
+            >{{__('button_add_to_gar')}}</button>
           </div>
           <div class="govuk-grid-column-full">
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">

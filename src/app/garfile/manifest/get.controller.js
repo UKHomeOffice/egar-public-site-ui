@@ -35,6 +35,14 @@ function flagInvalidSavedPeople(savedPeople, manifestInvalidSavedPeople) {
   })
 }
 
+function isAllPeopleUnableToAdd(savedPeople) {
+  const peopleUnableToAdd = savedPeople.filter((savedPerson) => {
+    return savedPerson.isDuplicate || savedPerson.isInvalid;
+  })
+
+  return savedPeople.length === peopleUnableToAdd.length;
+}
+
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -66,6 +74,7 @@ module.exports = async (req, res) => {
       savedPeopleManifest.invalidPeople
     );
     const isInvalidSavedPeople = savedPeople.filter((savedPerson) => savedPerson.isInvalid).length > 0;
+    const isUnableToAddPeople = isAllPeopleUnableToAdd(savedPeople);
 
       if (req.session.errMsg) {
         const { errMsg } = req.session;
@@ -74,6 +83,7 @@ module.exports = async (req, res) => {
           cookie, 
           savedPeople, 
           isInvalidSavedPeople,
+          isUnableToAddPeople,
           manifest: garpeople, 
           errors: [errMsg] 
         });
@@ -89,6 +99,7 @@ module.exports = async (req, res) => {
           isInvalidSavedPeople,
           manifest: garpeople, 
           manifestInvalidPeople, 
+          isUnableToAddPeople,
           errors: manifestErr 
         });
       }
@@ -101,6 +112,7 @@ module.exports = async (req, res) => {
           cookie, 
           savedPeople,
           isInvalidSavedPeople,
+          isUnableToAddPeople,
           manifest: garpeople, 
           manifestInvalidPeople: garPeopleManifest.invalidPeople, 
           errors: invalidGarPeople.length ? invalidGarPeople : undefined
@@ -114,6 +126,7 @@ module.exports = async (req, res) => {
           cookie, 
           savedPeople,
           isInvalidSavedPeople,
+          isUnableToAddPeople,
           manifest: garpeople, 
           successMsg 
         });
@@ -122,6 +135,7 @@ module.exports = async (req, res) => {
         cookie, 
         savedPeople,
         isInvalidSavedPeople, 
+        isUnableToAddPeople,
         manifest: garpeople 
       });
     } catch(err) {
