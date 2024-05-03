@@ -85,7 +85,7 @@
                 {% if savedPeople | length %}
                   {% for person in savedPeople %}
                       <tr class="govuk-table__row 
-                        {{ "disabled-row" if person.isDuplicate or person.isInvalid }} 
+                        {{ "unselectable-row" if person.isDuplicate or person.isInvalid }} 
                         {{ "govuk-form-group govuk-form-group--error" if person.isInvalid }}"
                         id="savedPerson-{{loop.index0}}">
                         <td 

@@ -8,7 +8,7 @@
     color: white !important;
 }
 
-.table-clickable tbody .disabled-row:hover {
+.table-clickable tbody .unselectable-row:hover {
     background-color: inherit;
     cursor: default;
 }
