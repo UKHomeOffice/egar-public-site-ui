@@ -2340,11 +2340,11 @@
     "label": "Kamenz Airport (Germany) (EDCM)"
   },
   {
-    "id": "SXF",
+    "id": "BER",
     "id2": "EDDB",
     "british": false,
     "crownDependency": false,
-    "label": "Berlin-Schönefeld Airport (Germany) (EDDB / SXF)"
+    "label": "Berlin Brandenburg Airport (Germany) (EDDB / BER)"
   },
   {
     "id": "DRS",
