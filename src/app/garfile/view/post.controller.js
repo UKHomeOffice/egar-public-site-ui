@@ -74,7 +74,8 @@ module.exports = (req, res) => {
         garfile: parsedGar,
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
-        showChangeLinks: true
+        showChangeLinks: true,
+        isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort)
       };
 
       if (parsedGar.status.name === 'Submitted' || parsedGar.status.name === 'Cancelled') {
