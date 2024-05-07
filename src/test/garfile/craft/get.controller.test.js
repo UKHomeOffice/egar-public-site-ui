@@ -145,7 +145,7 @@ describe('GAR Craft Get Controller', () => {
 
       callController().then(() => {
         expect(cookie.getGarCraft()).to.eql({
-          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', freeCirculation: undefined, visitReason: undefined,
+          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', craftBasePort: 'EGLL', portChoice: "Yes"
         });
         expect(cookie.getSavedCraft()).to.eql({
           items: [
@@ -236,7 +236,7 @@ describe('GAR Craft Get Controller', () => {
       req.headers = { referer: 'garfile/anythingelse' };
       req.session.gar.craft = {};
       cookie = new CookieModel(req);
-      cookie.setGarCraft(currentCraft.registration, currentCraft.craftType, currentCraft.craftBase);
+      cookie.setGarCraft(currentCraft.registration, currentCraft.craftType, currentCraft.craftBase, 'Yes');
       cookie.setSavedCraft(savedCraft);
       garApiGetStub.resolves(JSON.stringify(currentCraft));
       craftApiGetOrgCraftsStub.resolves(JSON.stringify({
@@ -252,7 +252,7 @@ describe('GAR Craft Get Controller', () => {
 
       callController().then(() => {
         expect(cookie.getGarCraft()).to.eql({
-          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', freeCirculation: undefined, visitReason: undefined,
+          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', craftBasePort: "EGLL", portChoice: "Yes"
         });
         expect(cookie.getSavedCraft()).to.eql({
           items: [

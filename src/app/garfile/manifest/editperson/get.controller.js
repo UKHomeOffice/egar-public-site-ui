@@ -22,7 +22,6 @@ module.exports = async (req, res) => {
     const parsedResponse = JSON.parse(apiResponse).items;
     const person = parsedResponse.find((garPerson) => garPerson.garPeopleId === personId);
 
-    logger.info(JSON.stringify(person));
     const requestToValidate = Manifest.turnPersonToRequest(person);
 
     validator.validateChains(validations.validations(requestToValidate))

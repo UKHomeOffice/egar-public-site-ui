@@ -7,3 +7,13 @@
     background: #b10e1e !important; 
     color: white !important;
 }
+
+.table-clickable tbody .unselectable-row:hover {
+    background-color: inherit;
+    cursor: default;
+}
+
+
+.table-clickable tbody tr td button.btn-link {
+    cursor: pointer;
+}

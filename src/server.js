@@ -46,8 +46,8 @@ const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js'
 // Set Cookie secure flag depending on environment variable
 let secureFlag = process.env.COOKIE_SECURE_FLAG === 'true';
 
-logger.debug('Secure Flag for Cookie set to:');
-logger.debug(secureFlag);
+logger.debug('Secure Flag for Cookie set to: ' + secureFlag);
+
 // Define app views
 const APP_VIEWS = [
   path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),

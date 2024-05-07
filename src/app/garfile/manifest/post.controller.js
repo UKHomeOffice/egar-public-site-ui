@@ -25,11 +25,41 @@ module.exports = (req, res) => {
       .then((selectedPeople) => {
         garApi.patch(cookie.getGarId(), 'Draft', { people: selectedPeople })
           .then(() => {
-            console.debug( {people: selectedPeople })
+            console.debug({ people: selectedPeople })
+            res.redirect('/garfile/manifest');
+          })
+          .catch((err) => {
+            logger.error(err);
+            logger.error(`user_id: ${cookie.getUserDbId()}, gar_id: ${cookie.getGarId()} > Failed to patch GAR with updated manifest`);
+            req.session.manifestErr = [{ 
+              message: 'Failed to patch GAR with updated manifest',
+              identifier: ''
+            }];
+            res.redirect('/garfile/manifest');
+          });
+      })
+      .catch(() => {
+        logger.error(`user_id: ${cookie.getUserDbId()}, gar_id: ${cookie.getGarId()} > Failed to retrieve manifest ids`);
+        req.session.manifestErr = [{ 
+          message: 'Failed to patch GAR with updated manifest',
+          identifier: ''
+        }];
+        res.redirect('/garfile/manifest');
+      });
+  } else if (req.body.garPeopleId && buttonClicked === 'Add to PEOPLE') {
+    logger.debug('Found person(s) to add to people');
+    manifestUtil.getgarPeopleIds(req.body.garPeopleId, cookie.getGarId())
+      .then((selectedPeople) => {
+        const person = selectedPeople.reduce(function (element) {
+          return ({ firstName: element.firstName, lastName: element.lastName, dateOfBirth: element.dateOfBirth, documentNumber: element.documentNumber, documentExpiryDate: element.documentExpiryDate, documentType: element.documentType, nationality: element.nationality, gender: element.gender, issuingState: element.issuingState, placeOfBirth: element.placeOfBirth, peopleType: element.peopleType });
+        });
+        personApi.create(cookie.getUserDbId(), person)
+          .then(() => {
+            req.session.successMsg = 'Person successfully added to people!';
             res.redirect('/garfile/manifest');
           })
           .catch(() => {
-            logger.info('Failed to patch GAR with updated manifest');
+            logger.info('Failed to create People with updated manifest');
             res.redirect('/garfile/manifest');
           });
       })
@@ -37,27 +67,6 @@ module.exports = (req, res) => {
         logger.info('Failed to retrieve manifest ids');
         res.redirect('/garfile/manifest');
       });
-     } else if (req.body.garPeopleId && buttonClicked === 'Add to PEOPLE') {
-        logger.debug('Found person(s) to add to people');
-       manifestUtil.getgarPeopleIds(req.body.garPeopleId, cookie.getGarId())
-       .then((selectedPeople) => {
-     const person = selectedPeople.reduce(function(element) {
-     return ({firstName: element.firstName, lastName: element.lastName, dateOfBirth: element.dateOfBirth, documentNumber: element.documentNumber, documentExpiryDate: element.documentExpiryDate, documentType: element.documentType, nationality: element.nationality, gender: element.gender, issuingState: element.issuingState, placeOfBirth: element.placeOfBirth, peopleType: element.peopleType});
-     });
-        personApi.create(cookie.getUserDbId(), person) 
-        .then(() => {  
-          req.session.successMsg = 'Person successfully added to people!'; 
-           res.redirect('/garfile/manifest');
-     })
-      .catch(() => {
-        logger.info('Failed to create People with updated manifest');
-      res.redirect('/garfile/manifest');
-      });
-      })
-     .catch(() => {
-     logger.info('Failed to retrieve manifest ids');
-      res.redirect('/garfile/manifest');
-     });   
   } else if (req.body.buttonClicked === 'Save and Exit') {
     res.redirect('/garfile/manifest');
   } else if (req.body.buttonClicked === 'Continue') {

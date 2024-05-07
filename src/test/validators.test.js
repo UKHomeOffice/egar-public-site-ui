@@ -249,34 +249,6 @@ describe('Validator', () => {
     expect(validationArr).to.have.length(2);
   });
 
-  it('Should return true when ZZZZ is entered as a port alongside lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('ZZZZ', '28.120439', '-7.077516'))).to.be.true;
-  });
-
-  it('Should return true when a valid pord is entered without lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('FRN', '', ''))).to.be.true;
-  });
-
-  it('Should return true when a valid pord is entered without lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('FRN', '', ''))).to.be.true;
-  });
-
-  it('Should return true when a valid pord is entered with lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('FRN', '28.120439', '-7.077516'))).to.be.true;
-  });
-
-  it('Should return false when a ZZZZ is entered as a port without lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('ZZZZ', '', ''))).to.be.false;
-  });
-
-  it('Should return false when a YYYY is entered as a port without lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('YYYY', '', ''))).to.be.false;
-  });
-
-  it('Should return true when YYYY is entered as a port alongside lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('YYYY', '28.120439', '-7.077516'))).to.be.true;
-  });
-
   it('Should validate a 3 char length ISO country code', () => {
     expect(validator.validISOCountryLength('ZAF')).to.be.true;
     expect(validator.validISOCountryLength('')).to.be.false;

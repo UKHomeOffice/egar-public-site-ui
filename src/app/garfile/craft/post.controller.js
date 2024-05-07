@@ -33,18 +33,28 @@ module.exports = (req, res) => {
       });
   } else {
     const craftObj = {
-      registration: req.body.craftReg,
+      registration: req.body.registration,
       craftType: req.body.craftType,
-      craftBase: req.body.craftBase,
+      portChoice: req.body.portChoice,
     };
 
-    cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase);
+    if (craftObj.portChoice === 'Yes') {
+      craftObj.craftBasePort = req.body.craftBasePort;
+    }
+    else {
+      craftObj.craftBaseLat = req.body.craftBaseLat;
+      craftObj.craftBaseLong = req.body.craftBaseLong;
+    }
 
+    craftObj.craftBase = cookie.reduceCraftBase(craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong);
+    cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase, craftObj.portChoice);
     const validations = validationList.validations(craftObj);
 
     validator.validateChains(validations)
       .then(() => {
-        garApi.patch(cookie.getGarId(), cookie.getGarStatus(), craftObj)
+
+
+        garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { registration: craftObj.registration, craftType: craftObj.craftType, craftBase: craftObj.craftBase })
           .then((apiResponse) => {
             const parsedResponse = JSON.parse(apiResponse);
             if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -69,7 +79,7 @@ module.exports = (req, res) => {
       })
       .catch((err) => {
         logger.info('GAR aircraft validation failed');
-        logger.debug(JSON.stringify(err));
+        logger.debug(err);
         res.render('app/garfile/craft/index', { cookie, errors: err });
       });
   }

@@ -36,6 +36,47 @@ const savedPeople = () => {
       ]
 }
 
+const flaggedSavedPeople = () => {
+  return [
+    {
+      dateOfBirth: '1994-06-22',
+      documentExpiryDate: '2023-06-22',
+      documentNumber: '1283',
+      documentType: 'Identity Card',
+      firstName: 'James',
+      garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+      gender: 'Male',
+      issuingState: 'PTA',
+      lastName: 'Smith',
+      nationality: 'GBR',
+      peopleType: {
+        name: 'Crew',
+      },
+      placeOfBirth: 'PTA',
+      isDuplicate: false,
+      isInvalid: false,
+    },
+    {
+      dateOfBirth: '1994-06-22',
+      documentExpiryDate: '2023-06-22',
+      documentNumber: '1283',
+      documentType: 'Identity Card',
+      firstName: 'James',
+      garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+      gender: 'Male',
+      issuingState: 'PTA',
+      lastName: 'Smith',
+      nationality: 'GBR',
+      peopleType: {
+        name: 'Crew',
+      },
+      placeOfBirth: 'PTA',
+      isDuplicate: false,
+      isInvalid: false,
+    },
+  ]
+}
+
 const garPeople = () => {
     return [
         {
@@ -59,5 +100,6 @@ const garPeople = () => {
 
 module.exports = {
     savedPeople,
+    flaggedSavedPeople,
     garPeople
 }

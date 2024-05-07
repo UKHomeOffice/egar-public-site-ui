@@ -1,0 +1,96 @@
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% macro location(legendLabel, warningMessage, isPortChoice, portCode, lat, long, prefix, errors, __) %}
+
+    {# legendLabel:string html for legend contents#}
+    {# warningMessage:string text for any port warning hint#}
+    {# isPortChoice:bool -  is the location a port:true, or lat/long:false #}
+    {# portCode:string - the IATA or ICAO port code, if used  #}
+    {# lat:string - latitude in decimal  #}
+    {# long:string - latitude in decimal  #}
+    {# prefix:string - prefix to namespace form fields and similar. for arrival, departure, craft etc  #}
+    {# errors:array(Object) - error messages  #}
+    <div class="{{ m.form_group_class('portChoice', errors) }}">
+        <fieldset class="govuk-fieldset" aria-describedby="portChoice-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                {{legendLabel | safe  }}
+            </legend>
+            <span id="portChoice-hint" class="govuk-hint">{{__('field_port_choice_hint')}}</span>
+            {{ m.error_message('portChoice', errors, __) }}
+            <div class="govuk-radios govuk-radios--conditional" data-module="radios">
+                <div class="govuk-radios__item">
+                    <input id="portChoiceCode" name="portChoice" class="govuk-radios__input" type="radio" value="Yes" {{ 'checked' if isPortChoice}} data-aria-controls="portChoiceCodeContainer" aria-labelledby="portChoiceCode-label">
+                    <label id="portChoiceCode-label" class="govuk-label govuk-radios__label" for="portChoiceCode">{{__('field_choice_yes')}}</label>
+                </div>
+                <div id="portChoiceCodeContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
+                    {{port_choice(portCode, prefix, errors, __)}}
+                </div>
+                <div class="govuk-radios__item">
+                    <input id="portChoiceCoordinates" name="portChoice" class="govuk-radios__input" type="radio" value="No" {{ 'checked' if not isPortChoice}} data-aria-controls="portChoiceCoordinatesContainer" aria-labelledby="portChoiceCoordinates-label">
+                    <label id="portChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="portChoiceCoordinates">{{__('field_choice_no')}}</label>
+                </div>
+                <div id="portChoiceCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
+                    <div class="govuk-form-group">
+                        {{ m.hint(prefix + 'Coordinates', __('field_coordinate_hint')) }}
+                    </div>
+                    {{lat_long(lat, long, prefix, errors, __)}}
+                </div>
+            </div>
+            {{warningMessage}}
+        </fieldset>
+    </div>
+
+{% endmacro %}
+
+{% macro port_choice(portCode, prefix, errors, __) %}
+
+    <div class="{{ m.form_group_class(prefix + 'Port', errors) }}">
+        <label id="{{ prefix }}Port-label" class="govuk-label" for="{{ prefix }}Port">{{__('field_port_code')}}</label>
+        {{ m.hint(prefix + 'Port', __('field_port_hint')) }}
+        {{ m.error_message(prefix + 'Port', errors, __) }}
+        <select id="{{ prefix }}Port" name="{{ prefix }}Port" class="govuk-select" value="{{ portCode }}" aria-labelledby="{{ prefix }}Port-label" aria-describedby="{{ prefix }}Port-hint{{ ' ' + prefix  +'Port-error' if errors | containsError(prefix + 'Port') }}">
+            {% for airport in airportList | sort(attribute = 'label') %}
+                <option value="{{ airport.id }}" {{ 'selected=selected' if portCode in [airport.id, airport.id2] }}>{{ airport.label }}</option>
+            {% endfor %}
+        </select>
+        <script type="text/javascript">
+            accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#{{ prefix }}Port'), minLength: 2});
+            document
+                .getElementById("{{ prefix }}Port")
+                .setAttribute('aria-describedby', '{{ prefix }}Port-hint{{ ' ' + prefix + 'Port-error' if errors | containsError(prefix + 'Port') }}');
+        </script>
+    </div>
+
+{% endmacro %}
+
+{% macro lat_long(lat, long, prefix, errors, __) %}
+
+    <style type="text/css">
+
+        #{{ prefix }}Long:invalid{
+            background-color:#ff9baf;
+        }
+        #{{ prefix }}Lat:invalid{
+            background-color:#ff9baf;
+        }
+
+    
+    </style>
+    {# Start location coords #}
+    {# Latitude #}
+    <div class="govuk-form-group {{ m.form_group_class(prefix + 'Lat', errors) }}">
+        <label class="govuk-label" for="{{ prefix }}Lat">{{__('field_latitude')}}</label>
+        {{ m.hint(prefix + 'Latitude', __('field_latitude_hint')) }}
+        {{ m.error_message(prefix + 'Lat', errors, __) }}
+        <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Lat" name="{{ prefix }}Lat" type="text"  maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -180 to 180" value="{{ lat }}">
+    </div>
+    {# Longitude #}
+    <div class="govuk-form-group {{ m.form_group_class(prefix + 'Long', errors) }}">
+        <label class="govuk-label" for="{{ prefix }}Long">{{__('field_longitude')}}</label>
+        {{ m.hint(prefix + 'Longitude', __('field_longitude_hint')) }}
+        {{ m.error_message(prefix + 'Long', errors, __) }}
+        <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Long" name="{{ prefix }}Long" type="text" maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -90 to 90" value="{{ long }}">
+    </div>
+    {# End location coords #}
+
+{% endmacro %}
