@@ -97,7 +97,8 @@
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">{{ __('field_person_type') }}</h2>
       </legend>
-      {{ m.hint('personType', __('field_person_type_hint')) }}
+      {% set fieldPersonTypeHint = [__('field_person_type_hint'), '<br/> <a href="https://www.gov.uk/government/publications/aircrew-crm02" target="_blank">Guidance on Crew and Passengers - GOV.UK (www.gov.uk) </a>'] | join | safe %}
+      {{ m.hint('personType', fieldPersonTypeHint) }} 
       {{ m.error_message('personType', errors, __) }}
       <div class="govuk-radios">
         {% for choice in persontype %}
