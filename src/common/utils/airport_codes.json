@@ -9473,6 +9473,13 @@
     "label": "Villacoublay-Vélizy (BA 107) Air Base (France) (LFPV / VIY)"
   },
   {
+    "id": "XZX",
+    "id2": "LFPX",
+    "british": false,
+    "crownDependency": false,
+    "label": "Chavenay Aerodrome (France) (LFPX / XZX)"
+  },
+  {
     "id": "LFQA",
     "id2": "LFQA",
     "british": false,
