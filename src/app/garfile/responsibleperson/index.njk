@@ -44,7 +44,7 @@
             {{ m.error_message('responsibleSurname', errors, __) }}
             <input class="govuk-input govuk-input--width-30"
               id="responsibleSurname" name="responsibleSurname" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
-              value="{{  cookie.getGarResponsiblePerson().responsibleSurname}}"
+              value="{{ cookie.getGarResponsiblePerson().responsibleSurname }}"
               {{ 'aria-describedby=responsibleSurname-error' if errors | containsError('responsibleSurname') }}>
           </div>
 
@@ -67,9 +67,7 @@
             <input class="govuk-input govuk-input--width-20"
               id="responsibleEmail" name="responsibleEmail" type="email"
               value="{{ cookie.getGarResponsiblePerson().responsibleEmail }}"
-              aria-describedby="responsibleEmail-hint{{
-                ' responsibleEmail-error' if errors | containsError('responsibleEmail')
-              }}"
+              aria-describedby="responsibleEmail-hint{{ 'responsibleEmail-error' if errors | containsError('responsibleEmail') }}"
               maxlength="{{ MAX_EMAIL_LENGTH }}">
           </div>
 
