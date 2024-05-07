@@ -29,20 +29,32 @@ class Manifest {
     const person = structuredClone(inputtedPerson);
     const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
     const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
+
+    return { 
+      body: {
+        firstName: person.firstName,
+        lastName: person.lastName,
+
+        nationality: person.nationality,
+        personType: person.peopleType.name,
+        gender: person.gender,
+        birthplace: person.placeOfBirth,
+
+        travelDocumentType: person.documentType,
+        travelDocumentNumber: person.documentNumber,
+        travelDocumentOther: person.documentDesc,
+
+        issuingState: person.issuingState, 
+
+        dobYear: birtDateObject.y,
+        dobMonth: birtDateObject.m,
+        dobDay: birtDateObject.d,
     
-    person.dobYear = birtDateObject.y;
-    person.dobMonth = birtDateObject.m;
-    person.dobDay = birtDateObject.d;
-
-    person.expiryYear = expiryDateObject.y;
-    person.expiryMonth = expiryDateObject.m;
-    person.expiryDay = expiryDateObject.d;
-
-    person.personType = person.peopleType.name;
-    person.travelDocumentNumber = person.documentNumber;
-    person.travelDocumentType = person.documentType;
-
-    return { body: person };
+        expiryYear: expiryDateObject.y,
+        expiryMonth: expiryDateObject.m,
+        expiryDay: expiryDateObject.d,
+      } 
+    };
   }
   
   /**

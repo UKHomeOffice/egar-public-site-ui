@@ -98,7 +98,7 @@
 	"person_search": "Search for Names or Person type",
 	"person_sort": "Click table headers to sort alphabetically",
 	"field_given_name": "Given names",
-	"field_given_name_hint": "If you have a middle name, you must include it here.",
+	"field_given_name_hint": "If you have any middle names, you must include them here.",
 	"field_surname": "Surname",
 	"field_day": "Day",
 	"field_month": "Month",
