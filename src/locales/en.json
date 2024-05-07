@@ -519,5 +519,6 @@
 	"improve_accessibility_step3_caption": "We will conduct user research and testing with users who have access needs.",
 	"improve_accessibility_step4_caption": "We will put in place alternative arrangements for those who need them and be willing to make additional adjustments if these are not enough.",
 	"": "",
-	"saved_people_are_invalid__info": "Please fix invalid saved people listed below:"
+	"saved_people_are_invalid__info": "Please fix invalid saved people highlighted below.",
+	"people_caption--already_selected_people": "You can't select people already added to the GAR."
 }

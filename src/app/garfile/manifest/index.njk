@@ -44,31 +44,16 @@
 
       </div>
     <div class="govuk-grid-column-full">
-      {% if manifestInvalidSavedPeople and (manifestInvalidSavedPeople | length) > 0 %}
-        <p class="govuk-error-message">
-          {{ __('saved_people_are_invalid__info') }}
+        <p class="govuk-body-l">
+          {{__('people_caption')}}
+          <br />
+          {{__('people_caption--already_selected_people')}}
+          {% if isInvalidSavedPeople %}
+            <div class="govuk-error-message">
+              {{ __('saved_people_are_invalid__info') }}
+            </div>
+          {% endif %}
         </p>
-        {% for person in savedPeople %}
-          {% if (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
-            <ul class="govuk-list govuk-list--bullet">
-                <li>
-                  <button 
-                    id="edit-person-{{ loop.index }}" 
-                    class="govuk-link btn-link" 
-                    title="Edit details for {{ person.firstName }} {{ person.lastName }}" 
-                    name="editSavedPerson" 
-                    value="{{person.personId}}">
-                    {{person.lastName}}, 
-                    {{person.firstName}}, 
-                    {{person.peopleType.name}}, 
-                    {{person.documentExpiryDate}}
-                  </button>
-                </li>
-              </ul>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-        <p class="govuk-body-l">{{__('people_caption')}}</p>
         <p class="govuk-body-m">{{__('person_search')}}</p>
         <form id="people" action="/people" method="post">
           {% if savedPeople | length %}
@@ -81,12 +66,12 @@
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
-                    {% if savedPeople | length %}
+                    {% if savedPeople | length and not isUnableToAddPeople %}
                       <div class="govuk-checkboxes__item">
                         <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
                         <label class="govuk-label govuk-checkboxes__label" for="radio-all">
-                  &nbsp;
-                </label>
+                          &nbsp;
+                        </label>
                       </div>
                     {% endif %}
                   </th>
@@ -99,29 +84,42 @@
               <tbody class="govuk-table__body" id="people_table_row">
                 {% if savedPeople | length %}
                   {% for person in savedPeople %}
-                    {% if manifestInvalidSavedPeople and (("person-" + loop.index0) in manifestInvalidSavedPeople) %}
-                    {% else %}
-                      <tr class="govuk-table__row" id="savedPerson-{{loop.index0}}">
-                        <td class="govuk-table__cell multiple-choice--hod">
-                          <div class="govuk-checkboxes__item">
-                            <input 
-                      type="checkbox" 
-                      class="govuk-checkboxes__input jsCheckbox" 
-                      id="savedPerson-{{loop.index0}}" 
-                      name="personId" 
-                      value="{{person.personId}}"
-                    >
-                            <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
-                      &nbsp;
-                    </label>
-                          </div>
+                      <tr class="govuk-table__row 
+                        {{ "unselectable-row" if person.isDuplicate or person.isInvalid }} 
+                        {{ "govuk-form-group govuk-form-group--error" if person.isInvalid }}"
+                        id="savedPerson-{{loop.index0}}">
+                        <td 
+                          class="govuk-table__cell multiple-choice--hod"
+                          style="{{ "padding-left: 10px" if person.isInvalid }}">
+                          {% if person.isInvalid %}
+                            <button 
+                              id="edit-person-{{ loop.index }}" 
+                              class="govuk-link btn-link" 
+                              title="Edit details for {{ person.firstName }} {{ person.lastName }}" 
+                              name="editSavedPerson" 
+                              value="{{person.personId}}">
+                              Edit
+                            </button>
+                          {% elif not person.isDuplicate %}
+                            <div class="govuk-checkboxes__item">
+                              <input 
+                                type="checkbox" 
+                                class="govuk-checkboxes__input jsCheckbox" 
+                                id="savedPerson-{{loop.index0}}" 
+                                name="personId" 
+                                value="{{person.personId}}"
+                              >
+                              <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
+                                &nbsp;
+                              </label>
+                            </div>
+                          {% endif%}
                         </td>
                         <td class="govuk-table__cell">{{person.lastName}}</td>
                         <td class="govuk-table__cell">{{person.firstName}}</td>
                         <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                         <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
                       </tr>
-                    {% endif %}
                   {% endfor %}
                 {% else %}
                   {{ m.empty_table_message(__('people_no_records')) }}
@@ -131,7 +129,14 @@
           </div>
 
           <div class="govuk-grid-column-two-thirds">
-            <button id="addToManifest" type="submit" name="buttonClicked" value="Add to GAR" class="govuk-button">{{__('button_add_to_gar')}}</button>
+            <button 
+              id="addToManifest"
+              type="submit"
+              name="buttonClicked"
+              value="Add to GAR"
+              class="govuk-button"
+             {{ "disabled" if isUnableToAddPeople }}
+            >{{__('button_add_to_gar')}}</button>
           </div>
           <div class="govuk-grid-column-full">
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
