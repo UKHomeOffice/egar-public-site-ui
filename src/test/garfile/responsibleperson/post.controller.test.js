@@ -223,7 +223,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        fixedBasedOperator: 'Fixed Base Operator',
+        fixedBasedOperator: 'Captain',
         fixedBasedOperatorAnswer: '',
         fixedBasedOperatorOptions
       });
@@ -253,7 +253,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        fixedBasedOperator: 'Operator',
+        fixedBasedOperator: 'Captain',
         fixedBasedOperatorAnswer: '',
         fixedBasedOperatorOptions
       });
