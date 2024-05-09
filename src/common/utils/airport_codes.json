@@ -2340,11 +2340,11 @@
     "label": "Kamenz Airport (Germany) (EDCM)"
   },
   {
-    "id": "BER",
+    "id": "SXF",
     "id2": "EDDB",
     "british": false,
     "crownDependency": false,
-    "label": "Berlin Brandenburg Airport (Germany) (EDDB / BER)"
+    "label": "Berlin-Schönefeld Airport (Germany) (EDDB / SXF)"
   },
   {
     "id": "DRS",
@@ -9471,13 +9471,6 @@
     "british": false,
     "crownDependency": false,
     "label": "Villacoublay-Vélizy (BA 107) Air Base (France) (LFPV / VIY)"
-  },
-  {
-    "id": "XZX",
-    "id2": "LFPX",
-    "british": false,
-    "crownDependency": false,
-    "label": "Chavenay Aerodrome (France) (LFPX / XZX)"
   },
   {
     "id": "LFQA",
@@ -47460,6 +47453,13 @@
     "british": false,
     "crownDependency": false,
     "label": "Borroloola Airport (Australia) (YBRL / BOX)"
+  },
+  {
+    "id": "EBSG",
+    "id2": "EBSG",
+    "british": false,
+    "crownDependency": false,
+    "label": "Saint-Ghislain Airport (EBSG)"
   },
   {
     "id": "EDNF",
