@@ -43,7 +43,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        fixedBasedOperatorOptions,
+        fixedBasedOperator: 'Captain',
         fixedBasedOperatorAnswer: ''
       },
       session: {
