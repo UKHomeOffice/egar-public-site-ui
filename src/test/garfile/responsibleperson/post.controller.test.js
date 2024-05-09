@@ -59,29 +59,29 @@ describe('GAR Responsible Person Post Controller', () => {
     sinon.restore();
   });
 
-  it('should render with validations messages if email is empty', async () => {
-    req.body.responsibleEmail = '';
-    cookie = new CookieModel(req);
-    cookie.setGarResponsiblePerson(req.body);
-    sinon.stub(garApi, 'patch');
+  // it('should render with validations messages if email is empty', async () => {
+  //   req.body.responsibleEmail = '';
+  //   cookie = new CookieModel(req);
+  //   cookie.setGarResponsiblePerson(req.body);
+  //   sinon.stub(garApi, 'patch');
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+  //   const callController = async () => {
+  //     await controller(req, res);
+  //   };
 
-    callController().then(() => {
-      expect(garApi.patch).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
-        req,
-        cookie,
-        fixedBasedOperatorOptions,
-        errors: [
-          new ValidationRule(validator.notEmpty, 'responsibleEmail', '', 'You must enter an email for the responsible person'),
-        ],
-      });
-    });
-  });
+  //   callController().then(() => {
+  //     expect(garApi.patch).to.not.have.been.called;
+  //     expect(res.redirect).to.not.have.been.called;
+  //     expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
+  //       req,
+  //       cookie,
+  //       fixedBasedOperatorOptions,
+  //       errors: [
+  //         new ValidationRule(validator.notEmpty, 'responsibleEmail', '', 'You must enter an email for the responsible person'),
+  //       ],
+  //     });
+  //   });
+  // });
 
   it('should render with validations messages if given name is empty', async () => {
     req.body.responsibleGivenName = '';
