@@ -27,7 +27,7 @@ i18n.configure({
 });
 
 describe('GAR Responsible Person Post Controller', () => {
-  let req; let res;
+  let req, res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -151,9 +151,8 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        fixedBasedOperator: 'Other',
-        fixedBasedOperatorAnswer: 'Chief Pilot',
-        fixedBasedOperatorOptions
+        fixedBasedOperatorOptions,
+        fixedBasedOperatorAnswer: ''
       });
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
@@ -187,9 +186,8 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        fixedBasedOperator: 'Captain',
-        fixedBasedOperatorAnswer: '',
-        fixedBasedOperatorOptions
+        fixedBasedOperatorOptions,
+        fixedBasedOperatorAnswer: ''
       });
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
@@ -222,9 +220,8 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        fixedBasedOperator: 'Fixed Base Operator',
-        fixedBasedOperatorAnswer: '',
-        fixedBasedOperatorOptions
+        fixedBasedOperatorOptions,
+        fixedBasedOperatorAnswer: ''
       });
       expect(res.render).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
@@ -252,9 +249,8 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleTown: 'Alpha Quadrant',
         responsiblePostcode: 'NCC-1701D',
         responsibleCounty: 'GBR',
-        fixedBasedOperator: 'Operator',
-        fixedBasedOperatorAnswer: '',
-        fixedBasedOperatorOptions
+        fixedBasedOperatorOptions,
+        fixedBasedOperatorAnswer: ''
       });
       expect(res.render).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledWith('/garfile/customs');
