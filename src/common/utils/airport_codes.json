@@ -47462,6 +47462,13 @@
     "label": "Borroloola Airport (Australia) (YBRL / BOX)"
   },
   {
+    "id": "EBSG",
+    "id2": "EBSG",
+    "british": false,
+    "crownDependency": false,
+    "label": "Saint-Ghislain Airport (EBSG)"
+  },
+  {
     "id": "EDNF",
     "id2": "EDNF",
     "british": false,
