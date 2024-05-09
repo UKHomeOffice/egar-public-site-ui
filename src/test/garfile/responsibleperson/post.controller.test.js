@@ -203,34 +203,34 @@ describe('GAR Responsible Person Post Controller', () => {
   //   });
   // });
 
-  // it('should redirect to home if buttonClicked is not set', () => {
-  //   cookie = new CookieModel(req);
-  //   cookie.setGarResponsiblePerson(req.body);
-  //   sinon.stub(garApi, 'patch').resolves(JSON.stringify({}));
+  it('should redirect to home if buttonClicked is not set', () => {
+    cookie = new CookieModel(req);
+    cookie.setGarResponsiblePerson(req.body);
+    sinon.stub(garApi, 'patch').resolves(JSON.stringify({}));
 
-  //   const callController = async () => {
-  //     await controller(req, res);
-  //   };
+    const callController = async () => {
+      await controller(req, res);
+    };
 
-  //   callController().then().then(() => {
-  //     expect(garApi.patch).to.have.been.calledWith('123456', 'Draft', {
-  //       responsibleGivenName: 'Jean-Luc',
-  //       responsibleSurname: 'Picard',
-  //       responsibleContactNo: '001234567890',
-  //       responsibleEmail: 'test@test.com',
-  //       responsibleAddressLine1: 'Enterprise',
-  //       responsibleAddressLine2: 'United Federation of Planets',
-  //       responsibleTown: 'Alpha Quadrant',
-  //       responsiblePostcode: 'NCC-1701D',
-  //       responsibleCounty: 'GBR',
-  //       fixedBasedOperator: 'Captain',
-  //       fixedBasedOperatorAnswer: '',
-  //       fixedBasedOperatorOptions
-  //     });
-  //     expect(res.render).to.not.have.been.called;
-  //     expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
-  //   });
-  // });
+    callController().then().then(() => {
+      expect(garApi.patch).to.have.been.calledWith('123456', 'Draft', {
+        responsibleGivenName: 'Jean-Luc',
+        responsibleSurname: 'Picard',
+        responsibleContactNo: '001234567890',
+        responsibleEmail: 'test@test.com',
+        responsibleAddressLine1: 'Enterprise',
+        responsibleAddressLine2: 'United Federation of Planets',
+        responsibleTown: 'Alpha Quadrant',
+        responsiblePostcode: 'NCC-1701D',
+        responsibleCounty: 'GBR',
+        fixedBasedOperator: 'Captain',
+        fixedBasedOperatorAnswer: '',
+        fixedBasedOperatorOptions
+      });
+      expect(res.render).to.not.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
+    });
+  });
 
   it('should redirect to customs page if buttonClicked is Save and continue', () => {
     req.body.buttonClicked = 'Save and continue';
@@ -255,6 +255,7 @@ describe('GAR Responsible Person Post Controller', () => {
         responsibleCounty: 'GBR',
         fixedBasedOperator: 'Captain',
         fixedBasedOperatorAnswer: '',
+        fixedBasedOperatorOptions
       });
       expect(res.render).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledWith('/garfile/customs');
