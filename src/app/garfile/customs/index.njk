@@ -113,6 +113,7 @@
                   rows="5" 
                   aria-describedby="prohibitedGoods-hint"
                   maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.goodsDeclaration}}</textarea>
+                  {{ m.character_count_hint('goodsDeclaration', MAX_TEXT_BOX_LENGTH - 100 ) }}
               </div>
             </div>
             {% endif %} 

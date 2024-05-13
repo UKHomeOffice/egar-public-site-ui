@@ -113,7 +113,7 @@
           type="text" maxlength="{{ MAX_STRING_LENGTH }}"
           value="{{craft.craftType}}"
           aria-describedby="craftType-hint{{ ' craftType-error' if errors | containsError('craftType') }}">
-              {{ m.character_count_hint('registration', MAX_STRING_LENGTH) }}
+              {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
             </div>
 
             {% set legendLabel = __('field_aircraft_base')%}
