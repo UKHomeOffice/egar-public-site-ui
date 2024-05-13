@@ -41,8 +41,9 @@
           <label class="govuk-label govuk-label--m" for="firstname">{{__('field_given_name')}}</label>
           {{ m.error_message('firstname', errors, __) }}
           <input id="firstname" name="Firstname" autocomplete="off" class="govuk-input"
-            type="text" value="{{cookie.getUserFirstName()}}"
+            type="text" value="{{cookie.getUserFirstName()}}" maxlength="{{ MAX_STRING_LENGTH}}"
             {{ 'aria-describedby=firstname-error' if errors | containsError('firstname') }}>
+          {{ m.character_count_hint('Firstname', MAX_STRING_LENGTH) }}
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('lastname', errors) }}">
@@ -51,6 +52,7 @@
           <input id="lastname" name="Lastname" autocomplete="off" class="govuk-input"
             type="text" maxlength="{{ MAX_STRING_LENGTH}}" value="{{cookie.getUserLastName()}}"
             {{ 'aria-describedby=lastname-error' if errors | containsError('lastname') }}>
+          {{ m.character_count_hint('Lastname', MAX_STRING_LENGTH) }} 
         </div>
 
         <button type="submit" class="govuk-button" onclick="sendAnalytics(event, 'Edit Account - Save', 'click')">{{__('form_save_changes')}}</button>

@@ -74,7 +74,6 @@
                 ' responsibleEmail-error' if errors | containsError('responsibleEmail') 
               }}"
               maxlength="{{ MAX_EMAIL_LENGTH }}">
-            {{ m.character_count_hint('responsibleEmail', MAX_EMAIL_LENGTH) }}          
           </div>
 
           <fieldset class="govuk-fieldset">
@@ -136,7 +135,6 @@
                 value="{{cookie.getGarResponsiblePerson().responsiblePostcode}}"
                 maxlength="{{ MAX_POSTCODE_LENGTH }}"
               />
-              {{ m.character_count_hint('responsiblePostcode', MAX_POSTCODE_LENGTH) }} 
             </div>
 
           <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
@@ -157,7 +155,6 @@
                 <textarea class="govuk-textarea" id="fixedBasedOperatorAnswer" name="fixedBasedOperatorAnswer"
                   rows="3" aria-describedby="fixedBasedOperator-hint"
                   maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.fixedBasedOperatorAnswer}}</textarea>
-                {{ m.character_count_hint('fixedBasedOperatorAnswer', MAX_TEXT_BOX_LENGTH - 100) }} 
               </div>
             </div>
           {% endif %}

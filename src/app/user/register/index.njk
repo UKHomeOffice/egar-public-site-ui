@@ -32,6 +32,7 @@
         <input id="userFname" name="userFname" autocomplete="off" class="govuk-input govuk-input--width-30"
           type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ fname }}"
           {{ 'aria-describedby=userFname-error' if errors | containsError('userFname') }}>
+        {{ m.character_count_hint('userFname', MAX_STRING_LENGTH) }} 
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }}">
@@ -40,6 +41,7 @@
         <input id="userLname" name="userLname" autocomplete="off" class="govuk-input govuk-input--width-30"
           type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lname }}"
           {{ 'aria-describedby=userLname-error' if errors | containsError('userLname') }}>
+        {{ m.character_count_hint('userLname', MAX_STRING_LENGTH) }} 
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('userId', errors) }}">
