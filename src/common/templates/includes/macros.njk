@@ -111,3 +111,9 @@
 {% macro hint(id, hint) %}
   <span id="{{ id }}-hint" class="govuk-hint">{{ hint }}</span>
 {% endmacro %}
+
+{% macro character_count_hint(id, max_length) %}
+  <div id="{{ id }}-info" class="govuk-hint govuk-character-count__message">
+    You can enter up to {{ max_length }} characters
+  </div>
+{% endmacro %}
