@@ -113,7 +113,6 @@
                   rows="5" 
                   aria-describedby="prohibitedGoods-hint"
                   maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.goodsDeclaration}}</textarea>
-                  {{ m.character_count_hint('goodsDeclaration', MAX_TEXT_BOX_LENGTH - 100 ) }}
               </div>
             </div>
             {% endif %} 
@@ -145,7 +144,6 @@
                   <textarea class="govuk-textarea" id="baggageDeclaration" name="baggageDeclaration" placeholder="e.g. firearms"
                     rows="5" aria-describedby="baggage-hint"
                     maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.baggageDeclaration}}</textarea>
-                  {{ m.character_count_hint('baggageDeclaration', MAX_TEXT_BOX_LENGTH - 100 ) }}
                 </div>
               </div>
             {% endif %}   
@@ -188,7 +186,6 @@
                     rows="5" 
                     aria-describedby="continentalShelf-hint"
                     maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.continentalShelfDeclaration}}</textarea>
-                    {{ m.character_count_hint('continentalShelfDeclaration', MAX_TEXT_BOX_LENGTH - 100 ) }}
                 </div>
               </div>
               {% endif %} 
@@ -210,7 +207,6 @@
               <textarea class="govuk-textarea" id="passengerTravellingReason" name="passengerTravellingReason" placeholder="{{__('passenger_travelling_reason_placeholder')}}"
               rows="5" aria-describedby="passengerTravellingReason-hint"
               maxlength="{{ MAX_TEXT_BOX_LENGTH }}">{{gar.passengerTravellingReason}}</textarea>
-              {{ m.character_count_hint('passengerTravellingReason', MAX_TEXT_BOX_LENGTH) }}
             </div>
           </div>
         </fieldset>
@@ -259,7 +255,6 @@
                 <textarea class="govuk-textarea" id="operatorAnswer" name="operatorAnswer" 
                   rows="3" aria-describedby="operator-hint"
                   maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.operatorAnswer}}</textarea>
-                {{ m.character_count_hint('operatorAnswer', MAX_TEXT_BOX_LENGTH - 100) }}
               </div>
             </div>
             {% endif %}
@@ -270,7 +265,6 @@
                 <textarea class="govuk-textarea" id="fixedBasedOperatorAnswer" name="fixedBasedOperatorAnswer"
                   rows="3" aria-describedby="fixedBasedOperator-hint"
                   maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.fixedBasedOperatorAnswer}}</textarea>
-                {{ m.character_count_hint('fixedBasedOperatorAnswer', MAX_TEXT_BOX_LENGTH - 100) }}
               </div>
             </div>
           </div>     
@@ -291,7 +285,6 @@
               <textarea class="govuk-textarea" id="supportingInformation" name="supportingInformation" placeholder="e.g. Unaccompanied minor travelling, animal onboard"
               rows="5" aria-describedby="supportingInformation-hint"
               maxlength="{{ MAX_TEXT_BOX_LENGTH - 50 }}">{{gar.supportingInformation}}</textarea>
-              {{ m.character_count_hint('supportingInformation', MAX_TEXT_BOX_LENGTH - 50) }}
             </div>
           </div>
         </fieldset>
