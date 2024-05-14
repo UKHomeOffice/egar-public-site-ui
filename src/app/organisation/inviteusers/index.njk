@@ -36,8 +36,9 @@
           <label class="govuk-label govuk-label--m" for="fname">{{__('field_given_name')}}</label>
           {{ m.hint('fname', __('invite_user_given_name_hint')) }}
           {{ m.error_message('fname', errors, __) }}
-          <input id="fname" name="fname" class="govuk-input" type="text" 
+          <input id="fname" name="fname" class="govuk-input" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
             value="{{ fname }}" aria-describedby="fname-hint{{ ' fname-error' if errors | containsError('fname') }}">
+          {{ m.character_count_hint('fname', MAX_STRING_LENGTH) }} 
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('lname', errors) }}">
@@ -46,6 +47,7 @@
           {{ m.error_message('lname', errors, __) }}
           <input id="lname" name="lname" class="govuk-input" type="text"
             maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lname }}" aria-describedby="lname-hint{{ ' lname-error' if errors | containsError('lname') }}">
+          {{ m.character_count_hint('lname', MAX_STRING_LENGTH) }} 
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('email', errors) }}">

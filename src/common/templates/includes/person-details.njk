@@ -6,6 +6,7 @@
     <input class="govuk-input govuk-input--width-30" id="firstName" name="firstName" autocomplete="off" type="text"
       maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.firstName or req.body.firstName }}"
       {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
+    {{ m.character_count_hint('firstName', MAX_STRING_LENGTH) }}   
   </div>
 
   <div class="{{ m.form_group_class('lastName', errors) }}">
@@ -14,6 +15,7 @@
     <input class="govuk-input govuk-input--width-30" id="lastName" name="lastName" autocomplete="off" type="text"
       maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.lastName or req.body.lastName }}"
       {{ 'aria-describedby=lastName-error' if errors | containsError('lastName') }}>
+    {{ m.character_count_hint('lastName', MAX_STRING_LENGTH) }}   
   </div>
 
   <div class="{{ m.form_group_class('nationality', errors) }}">
@@ -90,6 +92,7 @@
     <input class="govuk-input govuk-input--width-30" id="birthplace" name="birthplace" autocomplete="off" type="text"
       maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}"
       {{ 'aria-describedby=birthplace-error' if errors | containsError('birthplace') }}>
+    {{ m.character_count_hint('birthplace', MAX_STRING_LENGTH) }}
   </div>
 
   <div class="{{ m.form_group_class('personType', errors) }}" id="personType">
@@ -123,6 +126,7 @@
     <input id="travelDocumentNumber" name="travelDocumentNumber" class="govuk-input govuk-input--width-20" type="text"
       maxlength="{{ MAX_STRING_LENGTH }}" value="{{person.documentNumber or req.body.travelDocumentNumber}}"
       {{ 'aria-describedby=travelDocumentNumber-error' if errors | containsError('travelDocumentNumber') }}>
+    {{ m.character_count_hint('travelDocumentNumber', MAX_STRING_LENGTH) }}
   </div>
 
   <div class="{{ m.form_group_class('documentExpiryDate', errors) }}" id="documentExpiryDate">
@@ -186,19 +190,16 @@
     </select>
   </div>
 
-    {% if person.documentType  === 'Other' %}
-      <div class="{{ m.form_group_class('travelDocumentOther', errors) }}" id="travelDocumentOtherDiv" >
-      {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
-      <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
-      maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
-      </div>
-    {% else %}
-      <div class="{{ m.form_group_class('travelDocumentOther', errors) }}" id="travelDocumentOtherDiv" hidden>
-      {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
-      <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
-      maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
-      </div>
-    {% endif %}
+  <div 
+    class="{{ m.form_group_class('travelDocumentOther', errors) }}" 
+    id="travelDocumentOtherDiv" 
+    {{ "hidden" if person.documentType  !== 'Other' }}
+  >
+    {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
+    <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
+    maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
+    {{ m.character_count_hint('travelDocumentOther', MAX_STRING_LENGTH) }}
+  </div>
 
 <script type="text/javascript" src="/utils/validator.js"></script>
 <script type="text/javascript">
