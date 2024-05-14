@@ -33,9 +33,8 @@
       <div class="{{ m.form_group_class('firstName', errors) }}">
         <label class="govuk-label govuk-label--m" for="firstName">{{__('field_given_name')}}</label>
         {{ m.error_message('firstName', errors, __) }}
-        <input id="firstName" name="firstName" class="govuk-input" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
+        <input id="firstName" name="firstName" class="govuk-input" type="text"
           value="{{orgUser.firstName}}" {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
-        {{ m.character_count_hint('firstName', MAX_STRING_LENGTH) }} 
       </div>
 
       <div class="{{ m.form_group_class('lastName', errors) }}">
@@ -43,7 +42,6 @@
         {{ m.error_message('lastName', errors, __) }}
         <input id="lastName" name="lastName" class="govuk-input" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
           value="{{orgUser.lastName}}" {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
-        {{ m.character_count_hint('lastName', MAX_STRING_LENGTH) }} 
       </div>
 
       <div class="{{ m.form_group_class('role', errors) }}">

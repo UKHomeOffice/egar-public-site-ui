@@ -30,18 +30,16 @@
         <label class="govuk-label govuk-label--m" for="userFname">{{ __('field_given_name') }}</label>
         {{ m.error_message('userFname', errors, __) }}
         <input id="userFname" name="userFname" autocomplete="off" class="govuk-input govuk-input--width-30"
-          type="text" maxlength="{{ USER_FIRST_NAME_CHARACTER_COUNT }}" value="{{ fname }}"
+          type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ fname }}"
           {{ 'aria-describedby=userFname-error' if errors | containsError('userFname') }}>
-        {{ m.character_count_hint('userFname', USER_FIRST_NAME_CHARACTER_COUNT) }} 
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }}">
         <label class="govuk-label govuk-label--m" for="userLname">{{ __('field_surname') }}</label>
         {{ m.error_message('userLname', errors, __) }}
         <input id="userLname" name="userLname" autocomplete="off" class="govuk-input govuk-input--width-30"
-          type="text" maxlength="{{ USER_SURNAME_CHARACTER_COUNT }}" value="{{ lname }}"
+          type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lname }}"
           {{ 'aria-describedby=userLname-error' if errors | containsError('userLname') }}>
-        {{ m.character_count_hint('userLname', USER_SURNAME_CHARACTER_COUNT) }} 
       </div>
 
       <div class="govuk-form-group {{ m.form_group_class('userId', errors) }}">

@@ -229,9 +229,6 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('MAX_EMAIL_LENGTH', config.MAX_EMAIL_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_ADDRESS_LINE_LENGTH', config.MAX_ADDRESS_LINE_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_TEXT_BOX_LENGTH', config.MAX_TEXT_BOX_LENGTH);
-  nunjucksEnvironment.addGlobal('USER_FIRST_NAME_CHARACTER_COUNT', config.USER_FIRST_NAME_CHARACTER_COUNT);
-  nunjucksEnvironment.addGlobal('USER_SURNAME_CHARACTER_COUNT', config.USER_SURNAME_CHARACTER_COUNT);
-
   // Add unavailable page variables into nunjucks envrionment
   nunjucksEnvironment.addGlobal('IS_PLANNED_MAINTENANCE', availability.IS_PLANNED_MAINTENANCE);
   nunjucksEnvironment.addGlobal('MAINTENANCE_START_DATETIME', availability.MAINTENANCE_START_DATETIME);
