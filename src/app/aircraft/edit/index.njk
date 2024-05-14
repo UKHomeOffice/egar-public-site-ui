@@ -45,7 +45,8 @@
           {{ m.error_message('registration', errors, __) }}
           <input id="registration" name="registration"  class="govuk-input govuk-input--width-10"
             type="text" aria-describedby="registration-hint{{ ' registration-error' if errors | containsError('registration') }}"
-            value="{{craft.registration}}"/>
+            value="{{craft.registration}}" maxlength="{{ MAX_REGISTRATION_LENGTH }}"/>
+          {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
         </div>
 
         <div class="{{ m.form_group_class('craftType', errors) }}">
@@ -54,7 +55,8 @@
           {{ m.error_message('craftType', errors, __) }}
           <input id="craftType" name="craftType" class="govuk-input govuk-input--width-20"
             type="text" aria-describedby="craftType-hint{{ ' craftType-error' if errors | containsError('craftType') }}"
-            value="{{craft.craftType}}">
+            value="{{craft.craftType}}" maxlength="{{ MAX_STRING_LENGTH }}">
+          {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
         </div>
 
         {% set legendLabel = __('field_aircraft_base')%}
