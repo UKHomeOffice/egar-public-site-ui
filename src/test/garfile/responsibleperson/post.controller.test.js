@@ -127,7 +127,32 @@ describe('GAR Responsible Person Post Controller', () => {
         cookie,
         fixedBasedOperatorOptions,
         errors: [
-          new ValidationRule(validator.isValidStringLength, 'responsibleGivenName', 'abcdefghijklmnopqrstuvwxyz1234567890', `Given name must be ${MAX_STRING_LENGTH} characters or less`),
+          new ValidationRule(validator.isValidStringLength, 'responsibleGivenName', req.body.responsibleGivenName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
+        ],
+      });
+    });
+  });
+
+  it('should render with validation messages if FBO answer is blank', async () => {
+    req.body.fixedBasedOperator = 'Other';
+    req.body.fixedBasedOperatorAnswer = '';
+    cookie = new CookieModel(req);
+    cookie.setGarResponsiblePerson(req.body);
+    sinon.stub(garApi, 'patch');
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApi.patch).to.not.have.been.called;
+      expect(res.redirect).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/garfile/responsibleperson/index', {
+        req,
+        cookie,
+        fixedBasedOperatorOptions,
+        errors: [
+          req.body.fixedBasedOperator !== 'Other' ? new ValidationRule(validator.notEmpty, 'fixedBasedOperator', req.body.fixedBasedOperator, `Select the role of the responsible person.`) : new ValidationRule(validator.notEmpty, 'fixedBasedOperatorAnswer', req.body.fixedBasedOperatorAnswer, `Enter your responsible person role.`),
         ],
       });
     });
