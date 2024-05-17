@@ -9,6 +9,8 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const { buttonClicked } = req.body;
 
+  logger.info(JSON.stringify(req.body))
+
   logger.debug('In garfile / manifest post controller');
   if (req.body.editSavedPerson) {
     req.session.editPersonId = req.body.editSavedPerson;
@@ -17,7 +19,9 @@ module.exports = (req, res) => {
     req.session.editPersonId = req.body.editPersonId;
     req.session.save(() => res.redirect('/garfile/manifest/editperson'));
   } else if (req.body.deletePersonId) {
-    req.session.deletePersonId = req.body.deletePersonId;
+    req.session.deletePersonId = typeof req.body.deletePersonId === 'string' 
+      ? req.body.deletePersonId.split(',')
+      : req.body.deletePersonId;
     req.session.save(() => res.redirect('/garfile/manifest/deleteperson'));
   } else if (req.body.personId && buttonClicked === 'Add to GAR') {
     logger.debug('Found people to add to manifest');

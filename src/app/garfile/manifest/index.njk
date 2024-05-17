@@ -214,8 +214,8 @@
                                       type="checkbox" 
                                       class="govuk-checkboxes__input jsCheckbox" 
                                       id="garperson-{{loop.index0}}" 
-                                      name="garPeopleId" 
-                                      value="{{person.personId}}"
+                                      name="deletePersonId"
+                                      value="{{person.garPeopleId}}"
                                     >
                                     <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="garperson-{{loop.index0}}">
                                       &nbsp;
@@ -265,7 +265,7 @@
 
                                               <tr class="govuk-table__row">
                                                 <td class="govuk-table__cell" colspan="2">
-                                                  <button id="delete-person-{{ loop.index }}" class="link btn-link" name="deletePersonId" value="{{person.garPeopleId}}">{{__('table_delete')}}</button>
+                                                  <button id="delete-person-{{ loop.index }}" class="link btn-link">{{__('table_delete')}}</button>
                                                 </td>
                                               </tr>
                                             </tbody>

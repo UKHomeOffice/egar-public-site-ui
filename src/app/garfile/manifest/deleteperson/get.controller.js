@@ -6,24 +6,24 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile / manifest / deleteperson get controller');
 
-  const personId = req.session.deletePersonId;
+  const garpeopleIdsToDelete = req.session.deletePersonId;
   delete req.session.deletePersonId;
   const deleteErr = { message: 'Failed to delete GAR person. Try again' };
 
-  if (personId === undefined) {
+  if (garpeopleIdsToDelete === undefined) {
     logger.error('No id provided, redirecting to manifest page');
     return res.redirect('/garfile/manifest');
   }
 
-  if (typeof personId !== "string") {
-    logger.error(`${personId} Id provided is not string, redirecting to manifest page`);
+  if (!Array.isArray(garpeopleIdsToDelete)) {
+    logger.error(`${garpeopleIdsToDelete} Id provided is not array, redirecting to manifest page`);
     return res.redirect('/garfile/manifest');
   }
 
-  const garpeopleIdsToDelete = personId.split(',');
+  
 
   logger.info(`Removing ${garpeopleIdsToDelete} from manifest`);
-  
+
   garApi.deleteGarPerson(cookie.getGarId(), garpeopleIdsToDelete)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
