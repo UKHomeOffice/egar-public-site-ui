@@ -214,7 +214,7 @@
                                       type="checkbox" 
                                       class="govuk-checkboxes__input jsCheckbox" 
                                       id="garperson-{{loop.index0}}" 
-                                      name="deletePersonId"
+                                      name="garPeopleId"
                                       value="{{person.garPeopleId}}"
                                     >
                                     <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="garperson-{{loop.index0}}">
@@ -262,12 +262,6 @@
                                                 <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
                                                 <td class="govuk-table__cell">{{ person.documentExpiryDate }}</td>
                                               </tr>
-
-                                              <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell" colspan="2">
-                                                  <button id="delete-person-{{ loop.index }}" class="link btn-link">{{__('table_delete')}}</button>
-                                                </td>
-                                              </tr>
                                             </tbody>
                                           </table>
                                         </div>
@@ -295,6 +289,16 @@
                   </div>
 
                   <button id="garPeopleId" type="submit" name="buttonClicked" value="Add to PEOPLE" class="govuk-button">{{__('button_add_to_people')}}</button>
+                  <button 
+                    id="delete-people" 
+                    type="submit" 
+                    class="govuk-button warning-button"
+                    formmethod="post"
+                    formaction="/garfile/manifest/deleteperson"
+                  >
+                    {{__('table_delete_gar_people')}}
+                  </button>
+
                   <hr />
                   {# Start buttons #}
                   <input id="continue" type="submit" class="govuk-button" 

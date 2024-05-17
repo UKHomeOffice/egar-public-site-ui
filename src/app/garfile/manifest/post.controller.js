@@ -18,12 +18,7 @@ module.exports = (req, res) => {
   } else if (req.body.editPersonId) {
     req.session.editPersonId = req.body.editPersonId;
     req.session.save(() => res.redirect('/garfile/manifest/editperson'));
-  } else if (req.body.deletePersonId) {
-    req.session.deletePersonId = typeof req.body.deletePersonId === 'string' 
-      ? req.body.deletePersonId.split(',')
-      : req.body.deletePersonId;
-    req.session.save(() => res.redirect('/garfile/manifest/deleteperson'));
-  } else if (req.body.personId && buttonClicked === 'Add to GAR') {
+  }  else if (req.body.personId && buttonClicked === 'Add to GAR') {
     logger.debug('Found people to add to manifest');
     manifestUtil.getDetailsByIds(req.body.personId, cookie.getUserDbId())
       .then((selectedPeople) => {
@@ -52,7 +47,12 @@ module.exports = (req, res) => {
       });
   } else if (req.body.garPeopleId && buttonClicked === 'Add to PEOPLE') {
     logger.debug('Found person(s) to add to people');
-    manifestUtil.getgarPeopleIds(req.body.garPeopleId, cookie.getGarId())
+
+    const addPeopleToGarIds = typeof req.body.garPeopleId === 'string' 
+      ? req.body.garPeopleId.split(',')
+      : req.body.garPeopleId;
+      
+    manifestUtil.getgarPeopleIds(addPeopleToGarIds, cookie.getGarId())
       .then((selectedPeople) => {
         const people = selectedPeople.map(function (element) {
           return ({ 

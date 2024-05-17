@@ -4,10 +4,12 @@ const garApi = require('../../../../common/services/garApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
-  logger.debug('In garfile / manifest / deleteperson get controller');
+  logger.debug('In garfile / manifest / deleteperson post controller ' + JSON.stringify(req.body));
 
-  const garpeopleIdsToDelete = req.session.deletePersonId;
-  delete req.session.deletePersonId;
+  const garpeopleIdsToDelete = typeof req.body.garPeopleId === 'string' 
+    ? req.body.garPeopleId.split(',')
+    : req.body.garPeopleId;
+
   const deleteErr = { message: 'Failed to delete GAR person. Try again' };
 
   if (garpeopleIdsToDelete === undefined) {
