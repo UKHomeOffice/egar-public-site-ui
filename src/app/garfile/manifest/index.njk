@@ -164,17 +164,17 @@
           <div class="govuk-grid-column-full">
             <table class="govuk-table" id="manifest_table">
               <thead class="govuk-table__head">
-                {# New Entry below ///////////////////////////////////////////////////// #}
                 <tr class="govuk-table__row">
+                  <th class="govuk-table__header">
                   {% if manifest.items | length %}
-                    <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
-                    <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}">
-              &nbsp;    
-              </label>
-                    <div>
+                    <div class="govuk-checkboxes__item">
+                        <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
+                        <label class="govuk-label govuk-checkboxes__label" for="radio-all">
+                          &nbsp;
+                        </label>
+                      </div>
                     {% endif %}
                   </th>
-                  {# New Entry above///////////////////////////////////////////////////// #}
                   <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
                   <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
                   <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
@@ -207,18 +207,22 @@
                             </script>
                             <tr style="color:red; font-weight: bold; background-color:aliceblue">
                             {% endif %}
-                            {#          ###################                                   #}
                             <tr class="govuk-table__row">
-                              <div class="govuk-radios">
-                                <td class="govuk-table__cell">
-                                  <div class="govuk-radios govuk-radios--inline">
-                                    <div class="govuk-radios__item">
-                                      <input class="govuk-radios__input" id="person-{{loop.index0}}" name="garPeopleId" type="radio" value="{{person.garPeopleId}}">
-                                      <label class="govuk-label govuk-radios__label" for="person-{{loop.index0}}"></label>
-                                    </div>
-                                    {#          ###################                                   #}
-                                  {% endif %}
-
+                              <td class="govuk-table__cell">
+                                <div class="govuk-checkboxes__item">
+                                    <input 
+                                      type="checkbox" 
+                                      class="govuk-checkboxes__input jsCheckbox" 
+                                      id="garperson-{{loop.index0}}" 
+                                      name="garPeopleId" 
+                                      value="{{person.personId}}"
+                                    >
+                                    <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="garperson-{{loop.index0}}">
+                                      &nbsp;
+                                    </label>
+                                  </div>
+                                </td>
+                                {% endif %}
                                   <td class="govuk-table__cell" style="{{ "padding-left: 10px" if isGarPersonInvalid }}">{{person.lastName}}</td>
                                   <td class="govuk-table__cell">{{person.firstName}}</td>
                                   <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
@@ -291,7 +295,7 @@
                   </div>
 
                   <button id="garPeopleId" type="submit" name="buttonClicked" value="Add to PEOPLE" class="govuk-button">{{__('button_add_to_people')}}</button>
-
+                  <hr />
                   {# Start buttons #}
                   <input id="continue" type="submit" class="govuk-button" 
         name="buttonClicked"

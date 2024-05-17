@@ -51,7 +51,19 @@ module.exports = (req, res) => {
     manifestUtil.getgarPeopleIds(req.body.garPeopleId, cookie.getGarId())
       .then((selectedPeople) => {
         const person = selectedPeople.reduce(function (element) {
-          return ({ firstName: element.firstName, lastName: element.lastName, dateOfBirth: element.dateOfBirth, documentNumber: element.documentNumber, documentExpiryDate: element.documentExpiryDate, documentType: element.documentType, nationality: element.nationality, gender: element.gender, issuingState: element.issuingState, placeOfBirth: element.placeOfBirth, peopleType: element.peopleType });
+          return ({ 
+            firstName: element.firstName,
+            lastName: element.lastName,
+            dateOfBirth: element.dateOfBirth,
+            documentNumber: element.documentNumber,
+            documentExpiryDate: element.documentExpiryDate,
+            documentType: element.documentType,
+            nationality: element.nationality,
+            gender: element.gender,
+            issuingState: element.issuingState,
+            placeOfBirth: element.placeOfBirth,
+            peopleType: element.peopleType 
+          });
         });
         personApi.create(cookie.getUserDbId(), person)
           .then(() => {
