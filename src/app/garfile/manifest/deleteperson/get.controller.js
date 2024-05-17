@@ -20,8 +20,6 @@ module.exports = (req, res) => {
     return res.redirect('/garfile/manifest');
   }
 
-  
-
   logger.info(`Removing ${garpeopleIdsToDelete} from manifest`);
 
   garApi.deleteGarPerson(cookie.getGarId(), garpeopleIdsToDelete)

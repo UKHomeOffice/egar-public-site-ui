@@ -54,7 +54,7 @@ module.exports = (req, res) => {
     logger.debug('Found person(s) to add to people');
     manifestUtil.getgarPeopleIds(req.body.garPeopleId, cookie.getGarId())
       .then((selectedPeople) => {
-        const person = selectedPeople.reduce(function (element) {
+        const people = selectedPeople.map(function (element) {
           return ({ 
             firstName: element.firstName,
             lastName: element.lastName,
@@ -69,7 +69,7 @@ module.exports = (req, res) => {
             peopleType: element.peopleType 
           });
         });
-        personApi.create(cookie.getUserDbId(), person)
+        personApi.create(cookie.getUserDbId(), { people })
           .then(() => {
             req.session.successMsg = 'Person successfully added to people!';
             res.redirect('/garfile/manifest');
