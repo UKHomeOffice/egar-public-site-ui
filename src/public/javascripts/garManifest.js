@@ -2,6 +2,7 @@ $(function () {
     initManifestSearch();
     initPeopleSearch();
     initPeopleSort();
+    handleMultiSelectTableButtons();
 });
 
 function initPeopleSort() {
@@ -84,4 +85,31 @@ function initPeopleSearch() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
+}
+
+function handleMultiSelectTableButtons() {
+    const isAnyCheckboxesChecked =  () => {
+        const checkedBoxes = $(".jsCheckbox").filter((index, element) => {
+            return element.checked;
+        });
+
+        return checkedBoxes.length > 0
+    }
+    // Select all checkbox change
+    $(".jsCheckboxAll").change(function() {
+        const currentTableCheckboxButtons = $(this).parents("form").find(".multi-submit-button");
+        
+        currentTableCheckboxButtons.each(function (index, element) {
+            element.disabled = !isAnyCheckboxesChecked();
+        })
+    })
+  
+  //".jsCheckbox" change
+  $(".jsCheckbox").change(function() {
+    const currentTableCheckboxButtons = $(this).parents("form").find(".multi-submit-button");
+        
+        currentTableCheckboxButtons.each(function (index, element) {
+            element.disabled = !isAnyCheckboxesChecked();
+        })
+  })
 }

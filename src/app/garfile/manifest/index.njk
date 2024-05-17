@@ -134,7 +134,7 @@
               type="submit"
               name="buttonClicked"
               value="Add to GAR"
-              class="govuk-button"
+              class="govuk-button multi-submit-button"
              {{ "disabled" if isUnableToAddPeople }}
             >{{__('button_add_to_gar')}}</button>
           </div>
@@ -288,13 +288,23 @@
                     <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
                   </div>
 
-                  <button id="garPeopleId" type="submit" name="buttonClicked" value="Add to PEOPLE" class="govuk-button">{{__('button_add_to_people')}}</button>
+                  <button 
+                    id="garPeopleId" 
+                    type="submit" 
+                    name="buttonClicked" 
+                    value="Add to PEOPLE" 
+                    class="govuk-button multi-submit-button"
+                    disabled="true"
+                  >
+                    {{__('button_add_to_people')}}
+                  </button>
                   <button 
                     id="delete-people" 
                     type="submit" 
-                    class="govuk-button warning-button"
+                    class="govuk-button warning-button multi-submit-button"
                     formmethod="post"
                     formaction="/garfile/manifest/deleteperson"
+                    disabled="true"
                   >
                     {{__('table_delete_gar_people')}}
                   </button>
