@@ -133,7 +133,7 @@ describe('SearchUser', () => {
 
   beforeEach(() => {
     nock(BASE_URL)
-      .get(`/user/search?email=${email}`)
+      .get(`/user/search?email=${encodeURIComponent(email)}`)
       .reply(200, user);
   });
 
@@ -152,7 +152,7 @@ describe('SearchUser', () => {
   it('should throw an error', () => {
     nock.cleanAll();
     nock(BASE_URL)
-      .get(`/user/search?email=${email}`)
+      .get(`/user/search?email=${encodeURIComponent(email)}`)
       .replyWithError({ message: 'Example searchUser error', code: 404 });
 
     userApi.userSearch(email).then(() => {
