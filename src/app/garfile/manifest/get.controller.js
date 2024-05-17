@@ -76,6 +76,8 @@ module.exports = async (req, res) => {
     const isInvalidSavedPeople = savedPeople.filter((savedPerson) => savedPerson.isInvalid).length > 0;
     const isUnableToAddPeople = isAllPeopleUnableToAdd(savedPeople);
 
+    logger.info(JSON.stringify({ savedPeople }, 4))
+
       if (req.session.errMsg) {
         const { errMsg } = req.session;
         delete req.session.errMsg;
