@@ -3,7 +3,6 @@ $(function () {
     initPeopleSearch();
     initPeopleSort();
     handleMultiSelectTableButtons();
-    setupDeletePeopleDialog();
 });
 
 function initPeopleSort() {
@@ -113,18 +112,4 @@ function handleMultiSelectTableButtons() {
             element.disabled = !isAnyCheckboxesChecked();
         })
   })
-}
-
-function setupDeletePeopleDialog() {
-    const deletePeopleDialog = document.getElementById("deletePeopleDialog");
-    const deletePeopleDialogButton = document.getElementById("delete-people-dialog-button");
-    const peopleToDeleteList = document.getElementById("peopleToDeleteList");
-
-    
-    
-    dialogPolyfill.registerDialog(deletePeopleDialog);
-
-    deletePeopleDialogButton.addEventListener("click", (e) => {
-        deletePeopleDialog.showModal();
-    })
 }
