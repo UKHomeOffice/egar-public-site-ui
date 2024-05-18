@@ -279,7 +279,7 @@
                     </tbody>
                   </table>
                 </div>
-                <div class="govuk-grid-column-two-thirds">
+                <div class="govuk-grid-column-full">
                   <div class="govuk-form-group">
                     <label class="govuk-label" for="totalPersonsOnBoard">
                       {{__('total_persons_on_board')}}
@@ -304,7 +304,8 @@
                       disabled="true"
                     >
                       {{__('table_delete_gar_people')}}
-                    </button>
+                  </button>
+
                   <dialog id="deletePeopleDialog" class="govuk-grid-column-two-thirds">
                     <h2 class="govuk-error-message govuk-!-font-size-36">
                       Warning
@@ -322,7 +323,6 @@
                           Close
                         </button>
                     </form>
-                    <br />
                     <button 
                       id="delete-people" 
                       type="submit" 
@@ -335,7 +335,7 @@
                     </button>
                   </dialog>
 
-                  <hr />
+                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
                   {# Start buttons #}
                   <input id="continue" type="submit" class="govuk-button" 
         name="buttonClicked"
@@ -343,7 +343,6 @@
         onclick="sendAnalytics(event, 'GAR Manifest - Continue', 'click')">
                   <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                 </form>
-
                 <form id="cancel-form" action="/garfile/view" method="post">
                   <p class="govuk-body-m">
                     <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
