@@ -119,12 +119,40 @@ function setupDeletePeopleDialog() {
     const deletePeopleDialog = document.getElementById("deletePeopleDialog");
     const deletePeopleDialogButton = document.getElementById("delete-people-dialog-button");
     const peopleToDeleteList = document.getElementById("peopleToDeleteList");
+    
 
-    
-    
     dialogPolyfill.registerDialog(deletePeopleDialog);
 
     deletePeopleDialogButton.addEventListener("click", (e) => {
+        const garPeopleLastNames = Array.from(document.getElementsByClassName("garPersonLastName"));
+        const garPeopleFirstNames = Array.from(document.getElementsByClassName("garPersonFirstName"));
+        const garPeopleNationalities= Array.from(document.getElementsByClassName("garPersonNationality"));
+
+        const manifestTableRows = Array.from(
+            document.querySelectorAll('#manifestTable_row > .govuk-table__row:has(.jsCheckbox:checked)')
+        );
+
+        Array.from(peopleToDeleteList.children).forEach((element) => {
+            peopleToDeleteList.removeChild(element);
+        });
+
+        const listOfPeopleToDelete = manifestTableRows.map((tableRow) => {
+            const [garPersonLastName] = garPeopleLastNames.filter(element => tableRow.contains(element));
+            const [garPersonFirstName] = garPeopleFirstNames.filter(element => tableRow.contains(element));
+            const [garPersonNationality] = garPeopleNationalities.filter(element => tableRow.contains(element));
+
+            const garPersonToDelete = document.createElement('li');
+
+            garPersonToDelete.textContent = 
+                `${garPersonLastName.textContent}, ${garPersonFirstName.textContent}, ${garPersonNationality.textContent}`;
+            return garPersonToDelete
+
+        });
+
+        listOfPeopleToDelete.forEach((personToDelete) => {
+            peopleToDeleteList.appendChild(personToDelete);
+        });
+
         deletePeopleDialog.showModal();
     })
 }

@@ -226,7 +226,7 @@
                                   <td class="govuk-table__cell garPersonLastName" style="{{ "padding-left: 10px" if isGarPersonInvalid }}">{{person.lastName}}</td>
                                   <td class="govuk-table__cell garPersonFirstName">{{person.firstName}}</td>
                                   <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
-                                  <td class="govuk-table__cell">{{person.nationality | upper}}</td>
+                                  <td class="govuk-table__cell garPersonNationality">{{person.nationality | upper}}</td>
                                   <td class="govuk-table__cell">{{person.gender}}</td>
                                   <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
                                   <td class="govuk-table__cell">{{person.peopleType.name}}</td>
@@ -316,6 +316,7 @@
                         Are you sure you want to to delete these people?
                       </strong>
                     </div>
+                    <ul id="peopleToDeleteList" class="govuk-list govuk-list--bullet"></ul>
                     <form method="dialog">
                       <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
                           Close
