@@ -22,6 +22,8 @@ module.exports = (req, res) => {
     return res.redirect('/garfile/manifest');
   }
 
+  // see if duplicates, time for util.
+
   logger.info(`Removing ${garpeopleIdsToDelete} from manifest`);
 
   garApi.deleteGarPerson(cookie.getGarId(), garpeopleIdsToDelete)

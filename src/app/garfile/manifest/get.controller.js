@@ -3,46 +3,11 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const personApi = require('../../../common/services/personApi');
 const garApi = require('../../../common/services/garApi');
-
-function flagDuplicatesInSavedPeople(savedPeople, garPeople) {
-  if (garPeople === undefined) return savedPeople;
-
-  const result = savedPeople.map((savedPerson) => {
-    const duplicatePersonInGar = garPeople.filter((garPerson) => {
-      return (
-        garPerson.firstName === savedPerson.firstName
-        && garPerson.lastName === savedPerson.lastName
-        && garPerson.documentNumber === savedPerson.documentNumber
-        && garPerson.issuingState === savedPerson.issuingState
-      )
-    });
-
-    return { 
-      ...savedPerson,
-      isDuplicate: duplicatePersonInGar.length > 0 
-    };
-  })
-
-  return result;
-}
-
-function flagInvalidSavedPeople(savedPeople, manifestInvalidSavedPeople) {
-  return savedPeople.map((savedPerson, index) => {
-    return {
-      ...savedPerson,
-      isInvalid: manifestInvalidSavedPeople.includes(`person-${index}`)
-    }
-  })
-}
-
-function isAllPeopleUnableToAdd(savedPeople) {
-  const peopleUnableToAdd = savedPeople.filter((savedPerson) => {
-    return savedPerson.isDuplicate || savedPerson.isInvalid;
-  })
-
-  return savedPeople.length === peopleUnableToAdd.length;
-}
-
+const  {
+  flagDuplicatePeopleIn,
+  flagInvalidPeopleIn,
+  isAllPeopleUnableToAdd
+} = require("../../../common/utils/people.utils");
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -65,11 +30,11 @@ module.exports = async (req, res) => {
 
     const isValidSavedPeople = await savedPeopleManifest.validate();
     const isValidGarPeople = await garPeopleManifest.validate();
-    const flaggedDuplicateSavedPeople = flagDuplicatesInSavedPeople(
+    const flaggedDuplicateSavedPeople = flagDuplicatePeopleIn(
       initialSavedPeople, 
       garpeople.items
     );
-    const savedPeople = flagInvalidSavedPeople(
+    const savedPeople = flagInvalidPeopleIn(
       flaggedDuplicateSavedPeople, 
       savedPeopleManifest.invalidPeople
     );
