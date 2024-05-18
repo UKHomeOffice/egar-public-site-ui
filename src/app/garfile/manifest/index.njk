@@ -30,7 +30,7 @@
   {% endif %}
 
   <div class="govuk-grid-row">
-    <form action="/garfile/manifest" method="post">
+    <form id="manifestForm" action="/garfile/manifest" method="post">
       <div class="govuk-grid-column-two-thirds">
         <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
         <h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
@@ -162,7 +162,7 @@
               <span style="background-color:#77DD77;">{{__('adding_person_to_people')}}</span></p>
           </div>
           <div class="govuk-grid-column-full">
-            <table class="govuk-table" id="manifest_table">
+            <table class="govuk-table table-clickable" id="manifest_table">
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th class="govuk-table__header">
@@ -185,7 +185,7 @@
                   <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
                 </tr>
               </thead>
-              <tbody class="govuk-table__body " id="manifestTable_row">
+              <tbody class="govuk-table__body" id="manifestTable_row">
                 {% if manifest.items | length %}
                   {% for person in manifest.items %}
                     {% if (manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople)) %}
@@ -223,8 +223,8 @@
                                   </div>
                                 </td>
                                 {% endif %}
-                                  <td class="govuk-table__cell" style="{{ "padding-left: 10px" if isGarPersonInvalid }}">{{person.lastName}}</td>
-                                  <td class="govuk-table__cell">{{person.firstName}}</td>
+                                  <td class="govuk-table__cell garPersonLastName" style="{{ "padding-left: 10px" if isGarPersonInvalid }}">{{person.lastName}}</td>
+                                  <td class="govuk-table__cell garPersonFirstName">{{person.firstName}}</td>
                                   <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
                                   <td class="govuk-table__cell">{{person.nationality | upper}}</td>
                                   <td class="govuk-table__cell">{{person.gender}}</td>
@@ -287,7 +287,6 @@
 
                     <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
                   </div>
-
                   <button 
                     id="garPeopleId" 
                     type="submit" 
@@ -299,15 +298,41 @@
                     {{__('button_add_to_people')}}
                   </button>
                   <button 
-                    id="delete-people" 
-                    type="submit" 
-                    class="govuk-button warning-button multi-submit-button"
-                    formmethod="post"
-                    formaction="/garfile/manifest/deleteperson"
-                    disabled="true"
-                  >
-                    {{__('table_delete_gar_people')}}
-                  </button>
+                      id="delete-people-dialog-button" 
+                      type="button" 
+                      class="govuk-button warning-button multi-submit-button"
+                      disabled="true"
+                    >
+                      {{__('table_delete_gar_people')}}
+                    </button>
+                  <dialog id="deletePeopleDialog" class="govuk-grid-column-two-thirds">
+                    <h2 class="govuk-error-message govuk-!-font-size-36">
+                      Warning
+                    </h2>
+                    <div class="govuk-warning-text">
+                      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                      <strong class="govuk-warning-text__text">
+                        <span class="govuk-visually-hidden">Warning</span>
+                        Are you sure you want to to delete these people?
+                      </strong>
+                    </div>
+                    <form method="dialog">
+                      <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
+                          Close
+                        </button>
+                    </form>
+                    <br />
+                    <button 
+                      id="delete-people" 
+                      type="submit" 
+                      class="govuk-button warning-button multi-submit-button"
+                      formmethod="post"
+                      formaction="/garfile/manifest/deleteperson"
+                      disabled="true"
+                    >
+                      {{__('table_delete_gar_people')}}
+                    </button>
+                  </dialog>
 
                   <hr />
                   {# Start buttons #}
@@ -330,7 +355,5 @@
                 {# End buttons #}
               </div>
             </div>
-
           </div>
-
         {% endblock %}
