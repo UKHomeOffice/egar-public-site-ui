@@ -288,6 +288,7 @@
 	"field_aircraft_base": "Aircraft home port / location",
 	"field_aircraft_base_hint": "Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA / ICAO code. Provide coordinates to 4 decimal places.",
 	"table_action": "Action",
+	"table_delete": "Delete",
 	"table_delete_gar_people": "Delete People from GAR",
 	"title_edit_aircraft": "Edit aircraft",
 	"edit_aircraft_caption": "Please enter the following information. This information can be re-used when submitting a GAR.",
