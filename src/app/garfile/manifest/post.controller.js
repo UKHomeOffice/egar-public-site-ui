@@ -4,6 +4,7 @@ const { Manifest } = require('../../../common/models/Manifest.class');
 const garApi = require('../../../common/services/garApi');
 const personApi = require('../../../common/services/personApi');
 const manifestUtil = require('./bulkAdd');
+const  { flagDuplicatePeopleIn } = require("../../../common/utils/people.utils");
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -71,6 +72,9 @@ module.exports = (req, res) => {
         });
         personApi.create(cookie.getUserDbId(), { people })
           .then(() => {
+            return personApi.getPeople(userId, 'individual');
+          })
+          .then((savedPeople) => {
             req.session.successMsg = 'Person successfully added to people!';
             res.redirect('/garfile/manifest');
           })
