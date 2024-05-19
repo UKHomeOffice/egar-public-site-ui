@@ -10,7 +10,7 @@ require('../../../global.test');
 const CookieModel = require('../../../../common/models/Cookie.class');
 const garApi = require('../../../../common/services/garApi');
 
-const controller = require('../../../../app/garfile/manifest/deleteperson/get.controller');
+const controller = require('../../../../app/garfile/manifest/deleteperson/post.controller');
 
 describe('Person Delete Get Controller', () => {
   let req; let res;
@@ -25,6 +25,7 @@ describe('Person Delete Get Controller', () => {
     };
 
     req = {
+      body: {},
       session: {
         gar: { id: '9001' },
       },
@@ -47,14 +48,14 @@ describe('Person Delete Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(req.session.deletePersonId).to.be.undefined;
+      expect(req.body.garPeopleId).to.be.undefined;
       expect(garApiStub).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
     });
   });
 
   it('should redirect back if api rejects', () => {
-    req.session.deletePersonId = 'DELETE-PERSON-ID';
+    req.body.garPeopleId = 'DELETE-PERSON-ID';
     garApiStub.rejects('personApi.getDetails Example Reject');
 
     const callController = async () => {
@@ -62,14 +63,14 @@ describe('Person Delete Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(garApiStub).to.have.been.calledWith('9001', 'DELETE-PERSON-ID');
+      expect(garApiStub).to.have.been.calledWith('9001', ['DELETE-PERSON-ID']);
       expect(req.session.errMsg).to.eql({ message: 'Failed to delete GAR person. Try again' });
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
     });
   });
 
   it('should redirect with error messages if api returns one', () => {
-    req.session.deletePersonId = 'DELETE-PERSON-ID';
+    req.body.garPeopleId = 'DELETE-PERSON-ID';
     cookie = new CookieModel(req);
 
     garApiStub.resolves(JSON.stringify({
@@ -81,14 +82,14 @@ describe('Person Delete Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(garApiStub).to.have.been.calledWith('9001', 'DELETE-PERSON-ID');
+      expect(garApiStub).to.have.been.calledWith('9001', ['DELETE-PERSON-ID']);
       expect(req.session.errMsg).to.eql({ message: 'Person id not found' });
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
     });
   });
 
   it('should redirect to people with success message if ok', () => {
-    req.session.deletePersonId = 'DELETE-PERSON-ID';
+    req.body.garPeopleId = 'DELETE-PERSON-ID';
     cookie = new CookieModel(req);
 
     garApiStub.resolves(JSON.stringify(apiResponse));
@@ -98,7 +99,7 @@ describe('Person Delete Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(garApiStub).to.have.been.calledWith('9001', 'DELETE-PERSON-ID');
+      expect(garApiStub).to.have.been.calledWith('9001', ['DELETE-PERSON-ID']);
       expect(req.session.successMsg).to.eq('Person removed from GAR');
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
     });
