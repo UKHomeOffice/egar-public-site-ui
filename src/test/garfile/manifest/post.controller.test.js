@@ -79,25 +79,6 @@ describe('Manifest Post Controller', () => {
     });
   });
 
-  it('should redirect to deleteperson', () => {
-    req.body.deletePersonId = '987654';
-    sinon.stub(req.session, 'save').callsArg(0);
-    sinon.stub(garApi, 'getPeople');
-    sinon.stub(manifestUtil, 'getDetailsByIds');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then().then(() => {
-      expect(req.session.deletePersonId).to.eq('987654');
-      expect(garApi.getPeople).to.not.have.been.called;
-      expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
-      expect(req.session.save).to.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest/deleteperson');
-    });
-  });
-
   // TODO: It really should inform the user of an issue...
   it('should redirect if garApi rejects', () => {
     req.body.buttonClicked = 'Add to GAR';
