@@ -115,17 +115,16 @@ class Cookie {
         responsiblePerson: {
           responsibleGivenName: null,
           responsibleSurname: null,
+          responsibleContactNo: null,
+          responsibleEmail: null,
           responsibleAddressLine1: null,
           responsibleAddressLine2: null,
           responsibleTown: null,
-          responsibleCounty: null,
           responsiblePostcode: null,
-          responsibleContactNo: null,
-          responsibleEmail: null,
+          responsibleCounty: null,
+          fixedBasedOperator: null,
+          fixedBasedOperatorAnswer: null
         },
-        fixedBasedOperator: null,
-        fixedBasedOperatorAnswer: null,
-        fixedBasedOperatorList: [],
         prohibitedGoods: null,
         goodsDeclaration: null,
         continentalShelf: null,
@@ -398,6 +397,8 @@ class Cookie {
     this.session.gar.responsiblePerson.responsibleCounty = person.responsibleCounty;
     this.session.gar.responsiblePerson.responsibleContactNo = person.responsibleContactNo;
     this.session.gar.responsiblePerson.responsibleEmail = person.responsibleEmail;
+    this.session.gar.responsiblePerson.fixedBasedOperator = person.fixedBasedOperator;
+    this.session.gar.responsiblePerson.fixedBasedOperatorAnswer = person.fixedBasedOperatorAnswer;
   }
 
   getGarResponsiblePerson() {

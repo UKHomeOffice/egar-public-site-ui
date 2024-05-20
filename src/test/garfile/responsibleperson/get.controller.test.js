@@ -55,12 +55,15 @@ describe('GAR Responsible Person Get Controller', () => {
     const apiResponse = {
       responsibleGivenName: 'Jean-Luc',
       responsibleSurname: 'Picard',
+      responsibleContactNo: '1234567890',
+      responsibleEmail: 'test@test.com',
       responsibleAddressLine1: 'Enterprise',
       responsibleAddressLine2: 'United Federation of Planets',
       responsibleTown: 'Alpha Quadrant',
       responsiblePostcode: 'NCC-1701D',
       responsibleCounty: 'GBR',
-      responsibleContactNo: '1234567890',
+      fixedBasedOperator: 'Captain',
+      fixedBasedOperatorAnswer: ''
     };
     const cookie = new CookieModel(req);
     cookie.setGarResponsiblePerson(apiResponse);
