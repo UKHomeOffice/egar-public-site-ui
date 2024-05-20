@@ -24,7 +24,7 @@ module.exports = (req, res) => {
     responsiblePostcode: req.body.responsiblePostcode,
     fixedBasedOperator: req.body.fixedBasedOperator,
     fixedBasedOperatorAnswer: (req.body.fixedBasedOperator === 'Other' ? req.body.fixedBasedOperatorAnswer : ''),
-    fixedBasedOperatorOptions,
+    fixedBasedOperatorOptions
   };
 
   const { buttonClicked } = req.body;

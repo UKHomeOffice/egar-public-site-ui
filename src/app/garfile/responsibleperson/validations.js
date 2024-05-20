@@ -16,7 +16,9 @@ module.exports.validations = (req) => {
     responsibleAddressLine2,
     responsibleTown,
     responsibleCounty,
-    responsiblePostcode
+    responsiblePostcode,
+    fixedBasedOperator,
+    fixedBasedOperatorAnswer
   } = req.body;
 
   return [
@@ -65,6 +67,9 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(validator.notEmpty, 'responsibleCounty', responsibleCounty, 'Enter a country for the responsible person'),
+    ],
+    [
+      req.body.fixedBasedOperator !== 'Other' ? new ValidationRule(validator.notEmpty, 'fixedBasedOperator', fixedBasedOperator, `Select the role of the responsible person.`) : new ValidationRule(validator.notEmpty, 'fixedBasedOperatorAnswer', fixedBasedOperatorAnswer, `Enter your responsible person role.`),
     ],
   ];
 };

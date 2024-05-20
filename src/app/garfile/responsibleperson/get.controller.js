@@ -28,9 +28,10 @@ module.exports = (req, res) => {
         responsiblePostcode: gar.responsiblePostcode,
         responsibleCounty: gar.responsibleCounty,
         responsibleContactNo: gar.responsibleContactNo,
+        fixedBasedOperator: gar.fixedBasedOperator,
+        fixedBasedOperatorAnswer: gar.fixedBasedOperatorAnswer
       };
 
-     
       context.gar = gar;
       cookie.setGarResponsiblePerson(responsiblePerson);
 
