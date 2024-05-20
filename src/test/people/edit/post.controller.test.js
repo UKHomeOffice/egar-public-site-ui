@@ -166,7 +166,8 @@ describe('Person Edit Post Controller', () => {
       expect(res.render).to.not.have.been.called;
     });
   });
-  it('should render with people other document type validating the alpha numeric stuff', () => {
+  it('should render with validation messages if "Other" document type is selected and special characters, apostrophes or numbers are present in the given name', () => {
+    // refers to "GivenName" in the people details form
     req.body.firstName = 'abcd1234';
     req.body.lastName = 'de;ce';
     req.body.travelDocumentType = 'Other';
