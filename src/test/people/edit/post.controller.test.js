@@ -166,4 +166,33 @@ describe('Person Edit Post Controller', () => {
       expect(res.render).to.not.have.been.called;
     });
   });
+
+  it('should render with people other document type validating the alpha numeric stuff', () => {
+    req.body.firstName = 'abcd1234';
+    req.body.lastName = 'de;ce';
+    req.body.travelDocumentType = 'Other';
+    req.body.travelDocumentOther = '';
+    const cookie = new CookieModel(req);
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then().then(() => {
+      expect(personApiStub).to.not.have.been.called;
+      expect(res.redirect).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/people/edit/index', {
+        req,
+        cookie,
+        persontype,
+        documenttype,
+        genderchoice,
+        errors: [
+          new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Given name must not contain special characters, apostrophes or numbers'),
+          new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Surname must not contain special characters, apostrophes or numbers'),
+          new ValidationRule(validator.notEmpty, 'travelDocumentOther', req.body.travelDocumentOther, 'Enter the document type you are using'),
+        ],
+      });
+    });
+  });
 });
