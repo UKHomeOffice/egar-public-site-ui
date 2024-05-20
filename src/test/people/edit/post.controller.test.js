@@ -166,12 +166,11 @@ describe('Person Edit Post Controller', () => {
       expect(res.render).to.not.have.been.called;
     });
   });
-
   it('should render with people other document type validating the alpha numeric stuff', () => {
     req.body.firstName = 'abcd1234';
     req.body.lastName = 'de;ce';
     req.body.travelDocumentType = 'Other';
-    req.body.travelDocumentOther = '';
+    req.body.travelDocumentOther = 'xyz';
     const cookie = new CookieModel(req);
 
     const callController = async () => {
@@ -188,9 +187,8 @@ describe('Person Edit Post Controller', () => {
         documenttype,
         genderchoice,
         errors: [
-          new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Given name must not contain special characters, apostrophes or numbers'),
-          new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Surname must not contain special characters, apostrophes or numbers'),
-          new ValidationRule(validator.notEmpty, 'travelDocumentOther', req.body.travelDocumentOther, 'Enter the document type you are using'),
+          new ValidationRule(validator.isAlpha, 'firstName', req.body.firstName, 'Given name must not contain special characters, apostrophes or numbers'),
+          new ValidationRule(validator.isAlpha, 'lastName', req.body.lastName, 'Surname must not contain special characters, apostrophes or numbers'),
         ],
       });
     });
