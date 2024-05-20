@@ -62,11 +62,12 @@ module.exports = (req, res) => {
             documentNumber: element.documentNumber,
             documentExpiryDate: element.documentExpiryDate,
             documentType: element.documentType,
+            documentDesc: element.documentDesc,
             nationality: element.nationality,
             gender: element.gender,
             issuingState: element.issuingState,
             placeOfBirth: element.placeOfBirth,
-            peopleType: element.peopleType 
+            peopleType: element.peopleType
           });
         });
         personApi.create(cookie.getUserDbId(), { people })
