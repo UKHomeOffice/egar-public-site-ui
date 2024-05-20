@@ -135,7 +135,6 @@
               name="buttonClicked"
               value="Add to GAR"
               class="govuk-button multi-submit-button"
-             {{ "disabled" if isUnableToAddPeople }}
             >{{__('button_add_to_gar')}}</button>
           </div>
           <div class="govuk-grid-column-full">
@@ -301,7 +300,6 @@
                       id="delete-people-dialog-button" 
                       type="button" 
                       class="govuk-button warning-button multi-submit-button"
-                      disabled="true"
                     >
                       {{__('table_delete_gar_people')}}
                   </button>
@@ -326,10 +324,9 @@
                     <button 
                       id="delete-people" 
                       type="submit" 
-                      class="govuk-button warning-button multi-submit-button"
+                      class="govuk-button warning-button"
                       formmethod="post"
                       formaction="/garfile/manifest/deleteperson"
-                      disabled="true"
                     >
                       {{__('table_delete_gar_people')}}
                     </button>

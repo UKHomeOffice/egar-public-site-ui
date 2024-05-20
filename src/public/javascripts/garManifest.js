@@ -89,6 +89,9 @@ function initPeopleSearch() {
 }
 
 function handleMultiSelectTableButtons() {
+    $(".multi-submit-button").each((index, element) => {
+        element.disabled = true;
+    });
     const isAnyCheckboxesChecked =  () => {
         const checkedBoxes = $(".jsCheckbox").filter((index, element) => {
             return element.checked;
