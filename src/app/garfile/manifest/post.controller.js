@@ -9,8 +9,6 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const { buttonClicked } = req.body;
 
-  logger.info(JSON.stringify(req.body))
-
   logger.debug('In garfile / manifest post controller');
   if (req.body.editSavedPerson) {
     req.session.editPersonId = req.body.editSavedPerson;
@@ -49,7 +47,7 @@ module.exports = (req, res) => {
     logger.debug('Found person(s) to add to people');
 
     const addPeopleToGarIds = typeof req.body.garPeopleId === 'string' 
-      ? req.body.garPeopleId.split(',')
+      ? [req.body.garPeopleId]
       : req.body.garPeopleId;
       
     manifestUtil.getgarPeopleIds(addPeopleToGarIds, cookie.getGarId())
