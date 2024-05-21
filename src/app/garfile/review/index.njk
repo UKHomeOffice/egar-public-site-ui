@@ -31,6 +31,9 @@
         {% include "common/templates/includes/errors.njk" %}
       {% endif %}
 
+      {% if successMsg %}
+        {% include "common/templates/includes/success-action.njk" %}
+      {% endif %}
       {% include "check-your-answers.njk" %}
 
       {% if isJourneyUkInbound%}

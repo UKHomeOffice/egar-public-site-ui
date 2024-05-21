@@ -10,7 +10,7 @@ const responsibleMsg = 'Responsible person details must be completed';
 const customsMsg = 'Customs Declaration question not answered';
 
 
-module.exports.validations = (garfile, garpeople) => {
+module.exports.validations = (garfile, garpeople, frmUpload = false) => {
   const voyageDateMsg = i18n.__('validator_msg_voyage_dates');
   const {
     departureDate, departureTime, arrivalDate, arrivalTime, registration, responsibleGivenName, prohibitedGoods, baggage, visitReason, intentionValue,
@@ -41,14 +41,16 @@ module.exports.validations = (garfile, garpeople) => {
   validationArr.push([
     new ValidationRule(validator.notEmpty, 'manifest', garpeople.items, validateCaptainCrewMsg),
   ]);
-  validationArr.push([
-    new ValidationRule(validator.notEmpty, 'responsiblePerson', responsibleGivenName, responsibleMsg),
-  ]);
+  if(!frmUpload) {
+    validationArr.push([
+      new ValidationRule(validator.notEmpty, 'responsiblePerson', responsibleGivenName, responsibleMsg),
+    ]);
+    validationArr.push([
+      new ValidationRule(validator.notEmpty, 'intentionValue', intentionValue, customsMsg),
+    ]);
+  }
   validationArr.push([
     new ValidationRule(validator.notEmpty, 'customs', visitReason, 'Visit Reason question not answered'),
-  ]);
-  validationArr.push([
-    new ValidationRule(validator.notEmpty, 'intentionValue', intentionValue, customsMsg),
   ]);
   return validationArr;
 };
