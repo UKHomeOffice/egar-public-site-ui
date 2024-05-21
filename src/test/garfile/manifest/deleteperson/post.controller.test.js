@@ -35,7 +35,7 @@ describe('Person Delete Get Controller', () => {
       redirect: sinon.spy(),
     };
 
-    garApiStub = sinon.stub(garApi, 'deleteGarPerson');
+    garApiStub = sinon.stub(garApi, 'deleteGarPeople');
   });
 
   afterEach(() => {

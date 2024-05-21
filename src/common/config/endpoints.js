@@ -170,7 +170,7 @@ const endpoints = {
     logger.debug(`Calling garperson update endpoint ${endpoint}`);
     return endpoint;
   },
-  deleteGarPerson(garId) {
+  deleteGarPeople(garId) {
     const endpoint = new URL(`${API_VERSION}/gar/${garId}/people`, BASE_URL).href;
     logger.debug(`Calling garperson delete endpoint ${endpoint}`);
     return endpoint;

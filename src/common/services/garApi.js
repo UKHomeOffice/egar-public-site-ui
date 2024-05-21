@@ -326,11 +326,11 @@ module.exports = {
    * @param {String} personDetails the updated details of the person
    * @returns {Promise} resolves with API response.
    */
-  deleteGarPerson(garId, garPersonId) {
+  deleteGarPeople(garId, garPersonId) {
     return new Promise((resolve, reject) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.deleteGarPerson(garId),
+        url: endpoints.deleteGarPeople(garId),
         body: JSON.stringify({
           garPeopleId: garPersonId,
         }),
@@ -343,7 +343,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body);
-          logger.error(`${garId} ${garPersonId} garApi.deleteGarPerson request was not successful : ${responseErrorMessage}`);
+          logger.error(`${garId} ${garPersonId} garApi.deleteGarPeople request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }

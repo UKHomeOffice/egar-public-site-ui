@@ -25,7 +25,7 @@ module.exports = (req, res) => {
 
   logger.info(`User: ${userId} Removing ${garpeopleIdsToDelete} from manifest`);
 
-  garApi.deleteGarPerson(cookie.getGarId(), garpeopleIdsToDelete)
+  garApi.deleteGarPeople(cookie.getGarId(), garpeopleIdsToDelete)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
