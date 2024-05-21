@@ -104,4 +104,21 @@ describe('Person Delete Get Controller', () => {
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
     });
   });
+
+  it('Deleting multiple is possible with multiple ids', () => {
+    req.body.garPeopleId = ['DELETE-PERSON-ID', 'ANOTHER_DELETE_PERSON_ID'];
+    cookie = new CookieModel(req);
+
+    garApiStub.resolves(JSON.stringify(apiResponse));
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(garApiStub).to.have.been.calledWith('9001', ['DELETE-PERSON-ID', 'ANOTHER_DELETE_PERSON_ID']);
+      expect(req.session.successMsg).to.eq('Person removed from GAR');
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
+    });
+  });
 });

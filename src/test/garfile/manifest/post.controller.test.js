@@ -11,6 +11,7 @@ const { garPeople } = require('../../fixtures');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
+const personApi = require('../../../common/services/personApi');
 const manifestUtil = require('../../../app/garfile/manifest/bulkAdd');
 
 const controller = require('../../../app/garfile/manifest/post.controller');
@@ -171,6 +172,23 @@ describe('Manifest Post Controller', () => {
     });
   });
 
+  it('Add people button was called', () => {
+    req.body.buttonClicked = 'Add to PEOPLE';
+    req.body.garPeopleId = ['1234', '5678'];
+    cookie = new CookieModel(req);
+    sinon.stub(personApi, 'create').resolves(true);
+    sinon.stub(manifestUtil, 'getgarPeopleIds').resolves(garPeople());
+
+  
+    const callController = async () => {
+      await controller(req, res);
+    };
+    callController().then().then(() => {
+      expect(manifestUtil.getgarPeopleIds).to.have.been.called;
+      expect(personApi.create).to.have.been.called;
+      expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+    });
+  });
 
   it('should redirect with errors if buttonClicked is Continue and gar api rejects', () => {
     req.body.buttonClicked = 'Continue';
