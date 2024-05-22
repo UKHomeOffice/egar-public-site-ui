@@ -1,13 +1,15 @@
 // Select all checkbox change
 $(".jsCheckboxAll").change(function() {
+  const currentTableCheckboxes = $(this).parents("table").find(".jsCheckbox");
+
   // Change all ".jsCheckbox" checked status
-  $(".jsCheckbox").prop("checked", $(this).prop("checked"))
+  currentTableCheckboxes.prop("checked", $(this).prop("checked"))
 
   // Toggle checked class on other checkboxes
   if($(this).prop("checked")) {
-    $(".jsCheckbox").parents("tr").addClass("checked")
+    currentTableCheckboxes.parents("tr").addClass("checked")
   } else {
-    $(".jsCheckbox").parents("tr").removeClass("checked")
+    currentTableCheckboxes.parents("tr").removeClass("checked")
   }
 })
 

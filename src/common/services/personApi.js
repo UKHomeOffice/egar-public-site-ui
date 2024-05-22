@@ -21,40 +21,12 @@ module.exports = {
    * @param {String} userId userId of user saving the person
    * @param {Object} person person Object
    */
-  create(userId, person) {
-    const { firstName } = person;
-    const { lastName } = person;
-    const { nationality } = person;
-    const { placeOfBirth } = person;
-    const { dateOfBirth } = person;
-    const { gender } = person;
-    const { documentType } = person;
-    const { documentNumber } = person;
-    const { documentExpiryDate } = person;
-    const { peopleType } = person;
-    const { issuingState } = person;
-    const { documentDesc } = person;
-    
-
+  create(userId, people) {
     return new Promise((resolve, reject) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.createPerson(userId),
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          nationality,
-          placeOfBirth,
-          dateOfBirth,
-          gender,
-          documentType,
-          documentNumber,
-          documentExpiryDate,
-          peopleType,
-          issuingState,
-          documentDesc,
-          
-        }),
+        body: JSON.stringify(people),
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call person creation API endpoint');

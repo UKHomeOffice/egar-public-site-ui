@@ -6,7 +6,7 @@ const flagpole = require('../../../../common/middleware/flagpole');
 const usercheck = require('../../../../common/middleware/usercheck');
 
 // Local dependencies
-const getController = require('./get.controller');
+const postController = require('./post.controller');
 
 // Initialisation
 const router = new express.Router();
@@ -16,7 +16,7 @@ const paths = {
 };
 
 // Routing
-router.get(paths.index, flagpole, usercheck, getController);
+router.post(paths.index, flagpole, usercheck, postController);
 
 // Export
 module.exports = {

@@ -195,6 +195,7 @@ describe('GAR view post controller', () => {
           ],
         },
         showChangeLinks: true,
+        isJourneyUKInbound: true
       });
     });
   });
@@ -242,6 +243,7 @@ describe('GAR view post controller', () => {
           ],
         },
         showChangeLinks: true,
+        isJourneyUKInbound: true
       });
     });
   });
@@ -277,6 +279,7 @@ describe('GAR view post controller', () => {
         cookie,
         manifestFields,
         showChangeLinks: false,
+        isJourneyUKInbound: true,
         garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' } },
         garpeople: {
           items: [
@@ -357,6 +360,7 @@ describe('GAR view post controller', () => {
         cookie,
         manifestFields,
         showChangeLinks: false,
+        isJourneyUKInbound: false,
         garfile: {
           garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, departurePort: 'LGW', arrivalPort: 'LAX'
         },
@@ -406,6 +410,7 @@ describe('GAR view post controller', () => {
         cookie,
         manifestFields,
         showChangeLinks: false,
+        isJourneyUKInbound: false,
         garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' } , departurePort: 'LGW', arrivalPort: 'LAX'},
         garpeople: {
           items: [

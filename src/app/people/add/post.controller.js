@@ -29,13 +29,11 @@ module.exports = (req, res) => {
     logger.info(person.documentType);
     logger.info(person.documentDesc);
 
-    
-
   // Validate chains
   validator.validateChains(validations.validations(req))
     .then(() => {
       // call the API to update the database and then
-      personApi.create(cookie.getUserDbId(), person).then((apiResponse) => {
+      personApi.create(cookie.getUserDbId(), { people: [person] }).then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
           // API returned error
