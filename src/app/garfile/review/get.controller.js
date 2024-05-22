@@ -42,7 +42,7 @@ module.exports = (req, res) => {
       .then(() => {
         if(frmUpload){
         renderObj.successHeader = 'GAR file is uploaded successfully';
-        renderObj.successMsg = 'Please complete responsible person details and custome declarations';
+        renderObj.successMsg = 'Complete Responsible person details & Customs declarations below';
         }
         res.render('app/garfile/review/index', renderObj);
       }).catch((err) => {
