@@ -45,12 +45,15 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
     validationArr.push([
       new ValidationRule(validator.notEmpty, 'responsiblePerson', responsibleGivenName, responsibleMsg),
     ]);
-    validationArr.push([
-      new ValidationRule(validator.notEmpty, 'intentionValue', intentionValue, customsMsg),
-    ]);
+    
   }
   validationArr.push([
     new ValidationRule(validator.notEmpty, 'customs', visitReason, 'Visit Reason question not answered'),
   ]);
+  if(!frmUpload) {
+    validationArr.push([
+      new ValidationRule(validator.notEmpty, 'intentionValue', intentionValue, customsMsg),
+    ]);
+  }
   return validationArr;
 };
