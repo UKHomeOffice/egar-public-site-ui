@@ -10,7 +10,7 @@ module.exports = (req, res) => {
   logger.debug('In garfile / review get controller');
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
-  const frmUpload = req.query.from === 'uploadGar';
+  const frmUpload = req.query?.from === 'uploadGar';
   Promise.all([
     garApi.get(garId),
     garApi.getPeople(garId),
