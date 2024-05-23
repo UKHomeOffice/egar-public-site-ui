@@ -149,11 +149,19 @@ module.exports = (req, res) => {
         - Journey is coming into UK but no status check: Send to AMG/UPT
         - Journey is coming into UK and status check: Submit GAR
       */
+     const isRequiresPassengerCheck = (
+        airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) 
+        && !statuscheck
+      )
 
-      if (airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && !statuscheck) {
+      const isAnAllMilitaryFlight = (
+        garfile.isMilitaryFlight 
+        && garpeople.items.length === 0
+      );
+
+      if (isRequiresPassengerCheck && !isAnAllMilitaryFlight) {
         performAPICallAMG(garId, cookie, req, res);
-      }
-      else {
+      } else {
         performAPICall(garId, cookie, req, res);
       }
     }).catch((err) => {
