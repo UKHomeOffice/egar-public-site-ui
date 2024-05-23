@@ -340,10 +340,7 @@
                         Military flight
                       </h1>
                     </legend>
-                    <div id="isMilitaryFlight-hint" class="govuk-hint">
-                      This applies specific to flight carried out by military services e.g. Royal Air Force or US Air Force.
-                      If it is, you do not need to specify passengers or crew who are part of the military, civilians needs to added as passengers.
-                    </div>
+                    {{ m.hint("isMilitaryFlight", __("is_military_flight_hint")) }}
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                       <div class="govuk-checkboxes__item">
                         <input 
