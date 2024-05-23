@@ -85,6 +85,7 @@ module.exports = async (req, res) => {
   } else if (req.body.buttonClicked === 'Save and Exit') {
     res.redirect('/garfile/manifest');
   } else if (req.body.buttonClicked === 'Continue') {
+    
     const isMilitaryFlight = Boolean(req.body.isMilitaryFlight);
     cookie.setIsMilitaryFlight(isMilitaryFlight);
 
@@ -105,7 +106,7 @@ module.exports = async (req, res) => {
       logger.error('Failed to get manifest');
       logger.error(err);
       req.session.manifestErr = 'Failed to get manifest';
-      res.redirect('/garfile/manifest');
+      return res.redirect('/garfile/manifest');
     }
     
     try {
@@ -119,12 +120,12 @@ module.exports = async (req, res) => {
       logger.info('Manifest validation failed, redirecting with error msg');
       req.session.manifestErr = manifest.genErrValidations();
       req.session.manifestInvalidPeople = manifest.invalidPeople;
-      logger.info(JSON.stringify(req.session.manifestErr));
       return res.redirect('/garfile/manifest');
+
     } catch (err) {
       logger.error(JSON.stringify(err));
+      return res.redirect('/garfile/manifest');
     }
-
   } else {
     res.redirect('/garfile/manifest');
   }
