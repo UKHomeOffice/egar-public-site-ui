@@ -85,6 +85,37 @@ describe('ManifestModel', () => {
     expect(manifest.validateCaptainCrew()).to.be.false;
   });
 
+  it('Military flight can disregard the valdiate CaptainCrew check', () => {
+    const isMilitary = true;
+    const singlePassenger = JSON.stringify({
+      items: [
+        {
+          dateOfBirth: '1994-06-22',
+          documentExpiryDate: '2023-06-22',
+          documentNumber: '1283',
+          documentType: 'Identity Card',
+          firstName: 'James',
+          garPeopleId: '1ca90ecf-12f4-4ccb-815d-651aae449fbd',
+          gender: 'Male',
+          issuingState: 'PTA',
+          lastName: 'Smith',
+          nationality: 'GBR',
+          peopleType: {
+            name: 'Passenger',
+          },
+          placeOfBirth: 'PTA',
+        },
+      ],
+    });
+    const onlyPassengerManifest = new Manifest(singlePassenger);
+    expect(onlyPassengerManifest.validateCaptainCrew()).to.be.false;
+    expect(onlyPassengerManifest.validateCaptainCrew(isMilitary)).to.be.true;
+
+    const allMilitaryManifest = new Manifest();
+    expect(allMilitaryManifest.validateCaptainCrew()).to.be.false;
+    expect(allMilitaryManifest.validateCaptainCrew(isMilitary)).to.be.true;
+  });
+
   it('Should return false for captain crew for no manifest', () => {
     const emptyManifest = JSON.stringify({
       items: [],
