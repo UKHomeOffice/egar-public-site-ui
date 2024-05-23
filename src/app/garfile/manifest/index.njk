@@ -346,7 +346,13 @@
                     </div>
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                       <div class="govuk-checkboxes__item">
-                        <input class="govuk-checkboxes__input" id="isMilitaryFlight" name="isMilitaryFlight" type="checkbox" value="true">
+                        <input 
+                          class="govuk-checkboxes__input" 
+                          id="isMilitaryFlight" 
+                          name="isMilitaryFlight" 
+                          type="checkbox" 
+                          {{ "checked" if cookie.getIsMilitaryFlight() }}
+                          value="true">
                         <label class="govuk-label govuk-checkboxes__label" for="isMilitaryFlight">
                           Is this a Military flight?
                         </label>

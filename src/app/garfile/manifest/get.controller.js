@@ -48,6 +48,8 @@ module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile / manifest get controller');
 
+  logger.info(cookie.getIsMilitaryFlight())
+
   const userId = cookie.getUserDbId();
   const garId = cookie.getGarId();
 
@@ -88,7 +90,7 @@ module.exports = async (req, res) => {
           errors: [errMsg] 
         });
       }
-
+    
       if (req.session.manifestErr) {
         const { manifestErr, manifestInvalidPeople } = req.session;
         delete req.session.manifestErr;

@@ -7,7 +7,7 @@ const manifestUtil = require('./bulkAdd');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
-  const { buttonClicked, isMilitaryFlight } = req.body;
+  const { buttonClicked } = req.body;
 
   logger.debug('In garfile / manifest post controller');
   if (req.body.editSavedPerson) {
@@ -85,7 +85,9 @@ module.exports = (req, res) => {
   } else if (req.body.buttonClicked === 'Save and Exit') {
     res.redirect('/garfile/manifest');
   } else if (req.body.buttonClicked === 'Continue') {
-    garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { isMilitaryFlight: Boolean(isMilitaryFlight) })
+    const isMilitaryFlight = Boolean(req.body.isMilitaryFlight);
+    cookie.setIsMilitaryFlight(isMilitaryFlight);
+    garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { isMilitaryFlight })
       .then(() => {
         garApi.getPeople(cookie.getGarId())
         .then(async (apiResponse) => {
