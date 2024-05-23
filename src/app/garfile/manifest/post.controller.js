@@ -7,7 +7,7 @@ const manifestUtil = require('./bulkAdd');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
-  const { buttonClicked } = req.body;
+  const { buttonClicked, isMilitaryFlight } = req.body;
 
   logger.debug('In garfile / manifest post controller');
   if (req.body.editSavedPerson) {
@@ -85,32 +85,40 @@ module.exports = (req, res) => {
   } else if (req.body.buttonClicked === 'Save and Exit') {
     res.redirect('/garfile/manifest');
   } else if (req.body.buttonClicked === 'Continue') {
-    // Perform manifest validation then redirect to next section
-    garApi.getPeople(cookie.getGarId())
-      .then(async (apiResponse) => {
-        try {
-          const manifest = new Manifest(apiResponse);
-          const isValid = await manifest.validate();
-          
-          if (isValid) {
-            return res.redirect('/garfile/responsibleperson');
-          } 
-
-          logger.info('Manifest validation failed, redirecting with error msg');
-          req.session.manifestErr = manifest.genErrValidations();
-          req.session.manifestInvalidPeople = manifest.invalidPeople;
-      
-          return res.redirect('/garfile/manifest');
-        } catch (err) {
-          logger.error(JSON.stringify(err));
-        }
+    garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { isMilitaryFlight: Boolean(isMilitaryFlight) })
+      .then(() => {
+        garApi.getPeople(cookie.getGarId())
+        .then(async (apiResponse) => {
+          try {
+            const manifest = new Manifest(apiResponse);
+            const isValid = await manifest.validate();
+            
+            if (isValid) {
+              return res.redirect('/garfile/responsibleperson');
+            } 
+  
+            logger.info('Manifest validation failed, redirecting with error msg');
+            req.session.manifestErr = manifest.genErrValidations();
+            req.session.manifestInvalidPeople = manifest.invalidPeople;
+        
+            return res.redirect('/garfile/manifest');
+          } catch (err) {
+            logger.error(JSON.stringify(err));
+          }
+        })
+        .catch((err) => {
+          logger.error('Failed to get manifest');
+          logger.error(err);
+          req.session.manifestErr = 'Failed to get manifest';
+          res.redirect('/garfile/manifest');
+        });
       })
       .catch((err) => {
-        logger.error('Failed to get manifest');
+        logger.error('Failed to update GAR');
         logger.error(err);
-        req.session.manifestErr = 'Failed to get manifest';
+        req.session.manifestErr = 'Failed to update GAR';
         res.redirect('/garfile/manifest');
-      });
+      })
   } else {
     res.redirect('/garfile/manifest');
   }

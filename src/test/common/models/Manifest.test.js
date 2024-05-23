@@ -107,11 +107,13 @@ describe('ManifestModel', () => {
         },
       ],
     });
+    const allMilitary = JSON.stringify({ items: [] });
+    
     const onlyPassengerManifest = new Manifest(singlePassenger);
     expect(onlyPassengerManifest.validateCaptainCrew()).to.be.false;
     expect(onlyPassengerManifest.validateCaptainCrew(isMilitary)).to.be.true;
 
-    const allMilitaryManifest = new Manifest();
+    const allMilitaryManifest = new Manifest(allMilitary);
     expect(allMilitaryManifest.validateCaptainCrew()).to.be.false;
     expect(allMilitaryManifest.validateCaptainCrew(isMilitary)).to.be.true;
   });

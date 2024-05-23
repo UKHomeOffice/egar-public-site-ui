@@ -86,7 +86,7 @@ const buildValidations = async (garfile, garpeople, manifest) => {
     ]);
   }
 
-  if (!manifest.validateCaptainCrew()) {
+  if (!manifest.validateCaptainCrew(garfile.isMilitaryFlight)) {
     const validateCaptainCrewMsg = 'There must be at least one captain or crew member on the voyage';
     validations.push([
       new ValidationRule(validator.valuetrue, 'manifest', '', validateCaptainCrewMsg),

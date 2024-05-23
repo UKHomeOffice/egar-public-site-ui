@@ -78,7 +78,9 @@ class Manifest {
     return this.invalidPeople.length === 0;
   }
 
-  validateCaptainCrew() {
+  validateCaptainCrew(isMilitary = false) {
+    if (isMilitary) return true;
+    
     let captainCrewCount = 0;
     this.manifest.forEach((person) => {
       Object.keys(person).forEach((key) => {
