@@ -88,7 +88,7 @@ module.exports = async (req, res) => {
     
     const isMilitaryFlight = Boolean(req.body.isMilitaryFlight);
     cookie.setIsMilitaryFlight(isMilitaryFlight);
-
+    
     try {
       await garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { isMilitaryFlight })
     } catch(err) {
@@ -111,6 +111,16 @@ module.exports = async (req, res) => {
     
     try {
       const manifest = new Manifest(apiResponse);
+
+      if (!isMilitaryFlight && !manifest.validateCaptainCrew()) {
+        req.session.manifestInvalidPeople = [];
+        req.session.manifestErr = [{
+          message: __('has_no_crew_or_captains'),
+          identifier: 'manifestTable_row'
+        }];
+        return res.redirect('/garfile/manifest');
+      }
+
       const isValid = await manifest.validate();
       
       if (isValid) {

@@ -524,6 +524,6 @@
 	"saved_people_are_invalid__info": "Please fix invalid saved people highlighted below.",
 	"people_caption--already_selected_people": "You can't select people already added to the GAR.",
 	"is_military_flight": "Is Military Flight?",
-	"has_no_crew_or_captains": "There must be at least one captain or crew member on the voyage. If this is a military flight, this can be bypassed in the manifest section.",
+	"has_no_crew_or_captains": "There must be at least one captain or crew member on the voyage. If this is a military flight, this can be bypassed in the manifest's military flight section.",
 	"is_military_flight_hint": "This applies specificially to flights carried out by military services e.g. Royal Air Force or US Air Force."
 }
