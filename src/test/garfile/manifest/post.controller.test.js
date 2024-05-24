@@ -6,8 +6,6 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const { garPeople } = require('../../fixtures');
-const logger = require('../../../common/utils/logger')(__filename);
-
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -225,7 +223,6 @@ describe('Manifest Post Controller', () => {
 
     expect(garApi.getPeople).to.have.been.calledWith('9001');
     expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
-    logger.info(req.session.manifestErr)
     expect(req.session.manifestErr).to.eql([
       { message: 'Click the edit link of the person(s) with the errors to edit and correct their details.', identifier: 'person-0' },
       { message: 'Click the edit link of the person(s) with the errors to edit and correct their details.', identifier: 'person-1' },
