@@ -93,7 +93,6 @@ module.exports = async (req, res) => {
     
       if (req.session.manifestErr) {
         const { manifestErr, manifestInvalidPeople } = req.session;
-        logger.error(JSON.stringify(manifestErr))
         delete req.session.manifestErr;
         delete req.session.manifestInvalidPeople;
         return res.render('app/garfile/manifest/index', { 
