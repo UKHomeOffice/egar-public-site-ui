@@ -53,17 +53,19 @@ module.exports = async (req, res) => {
   const userId = cookie.getUserDbId();
   const garId = cookie.getGarId();
 
-  const getSavedPeople = personApi.getPeople(userId, 'individual');
-  const getManifest = garApi.getPeople(garId);
-
   try {
-    const [savedPeopleJson, garpeopleJson] = await Promise.all([getSavedPeople, getManifest]);
-
+    const savedPeopleJson = await personApi.getPeople(userId, 'individual');
+    const garpeopleJson = await garApi.getPeople(garId);
+    const garfileJson = await garApi.get(garId);
+ 
     const initialSavedPeople = JSON.parse(savedPeopleJson);
+    const garfile = await JSON.parse(garfileJson);
     const savedPeopleManifest = new Manifest(JSON.stringify({ items: initialSavedPeople }));
 
     const garpeople = JSON.parse(garpeopleJson);
     const garPeopleManifest = new Manifest(garpeopleJson);
+
+    cookie.setIsMilitaryFlight(garfile.isMilitaryFlight);
 
     const isValidSavedPeople = await savedPeopleManifest.validate();
     const isValidGarPeople = await garPeopleManifest.validate();
