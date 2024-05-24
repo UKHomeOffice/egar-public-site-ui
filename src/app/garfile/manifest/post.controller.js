@@ -113,7 +113,7 @@ module.exports = async (req, res) => {
       const manifest = new Manifest(apiResponse);
 
       if (!isMilitaryFlight && !manifest.validateCaptainCrew()) {
-        logger.error(`user ${userId}, gar ${garId}: Manifest validation no crew`);
+        logger.error(`user ${cookie.getUserDbId()}, gar ${cookie.getGarId()}: Manifest validation no crew`);
         req.session.manifestInvalidPeople = [];
         req.session.manifestErr = [{
           message: __('has_no_crew_or_captains'),

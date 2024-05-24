@@ -98,8 +98,46 @@ const garPeople = () => {
     ]
 }
 
+const invalidPassengersAndCrew = () => {
+  return [
+      {
+          dateOfBirth: '1994-06-22',
+          documentExpiryDate: '2100-06-22',
+          documentNumber: '1283',
+          documentType: 'Passport',
+          firstName: 'Montgomery2',
+          garPeopleId: 1,
+          gender: 'Male',
+          issuingState: 'PTA',
+          lastName: 'Scott',
+          nationality: 'GBR',
+          peopleType: {
+            name: 'Crew',
+          },
+          placeOfBirth: 'PTA',
+      },
+      {
+        dateOfBirth: '1994-06-22',
+        documentExpiryDate: '2100-06-22',
+        documentNumber: '1283',
+        documentType: 'Passport',
+        firstName: 'Montgomery1',
+        garPeopleId: 1,
+        gender: 'Male',
+        issuingState: 'PTA',
+        lastName: 'Scott',
+        nationality: 'GBR',
+        peopleType: {
+          name: 'Passenger',
+        },
+        placeOfBirth: 'PTA',
+    },
+  ]
+}
+
 module.exports = {
     savedPeople,
     flaggedSavedPeople,
-    garPeople
+    garPeople,
+    invalidPassengersAndCrew
 }

@@ -5,7 +5,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const { garPeople } = require('../../fixtures');
+const { garPeople, invalidPassengersAndCrew } = require('../../fixtures');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -212,10 +212,7 @@ describe('Manifest Post Controller', () => {
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'patch').resolves(true);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
-      items: [
-        { firstName: 'James', lastName: 'Kirk', date: '2012-13-34' },
-        { firstName: 'S\'chn T\'gai', lastName: 'Spock', date: '2012-13-34' },
-      ],
+      items: invalidPassengersAndCrew(),
     }));
     sinon.stub(manifestUtil, 'getDetailsByIds');
 
