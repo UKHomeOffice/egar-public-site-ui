@@ -372,7 +372,7 @@ describe('API upload GAR post controller', () => {
           expect(req.session.failureMsg).to.be.undefined;
           expect(req.session.failureIdentifier).to.be.undefined;
           expect(req.session.save).to.have.been.called;
-          expect(res.redirect).to.have.been.calledWith('/garfile/review?from=uploadGar');
+          expect(res.redirect).to.have.been.calledWith('/garfile/review');
         });
     });
 
@@ -446,7 +446,7 @@ describe('API upload GAR post controller', () => {
           expect(req.session.failureMsg).to.be.undefined;
           expect(req.session.failureIdentifier).to.be.undefined;
           expect(req.session.save).to.have.been.called;
-          expect(res.redirect).to.have.been.calledWith('/garfile/review?from=uploadGar');
+          expect(res.redirect).to.have.been.calledWith('/garfile/review');
         });
     });
   });
