@@ -10,7 +10,7 @@ module.exports = (req, res) => {
   logger.debug('In garfile / review get controller');
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
-  const frmUpload = req.query?.from === 'uploadGar';
+
   Promise.all([
     garApi.get(garId),
     garApi.getPeople(garId),
@@ -27,7 +27,7 @@ module.exports = (req, res) => {
 
     const isJourneyUkInbound = airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort);
 
-    const validations = validationList.validations(garfile, garpeople, frmUpload);
+    const validations = validationList.validations(garfile, garpeople);
     const renderObj = {
       cookie,
       manifestFields,
@@ -40,10 +40,6 @@ module.exports = (req, res) => {
 
     validator.validateChains(validations)
       .then(() => {
-        if(frmUpload){
-        renderObj.successHeader = 'GAR file is uploaded successfully';
-        renderObj.successMsg = 'Complete Responsible person details & Customs declarations below';
-        }
         res.render('app/garfile/review/index', renderObj);
       }).catch((err) => {
         logger.info('GAR review validation failed');
