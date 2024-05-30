@@ -94,7 +94,10 @@ module.exports = async (req, res) => {
     } catch(err) {
       logger.error('Failed to update GAR');
       logger.error(err);
-      req.session.manifestErr = 'Failed to update GAR';
+      req.session.manifestErr = [{
+        message: 'Failed to update GAR',
+        identifier: ''
+      }];
       return res.redirect('/garfile/manifest');
     }
 
@@ -105,7 +108,10 @@ module.exports = async (req, res) => {
     } catch (err) {
       logger.error('Failed to get manifest');
       logger.error(err);
-      req.session.manifestErr = 'Failed to get manifest';
+      req.session.manifestErr = [{
+        message: 'Failed to get manifest',
+        identifier: ''
+      }];
       return res.redirect('/garfile/manifest');
     }
     
@@ -134,7 +140,12 @@ module.exports = async (req, res) => {
       return res.redirect('/garfile/manifest');
 
     } catch (err) {
-      logger.error(JSON.stringify(err));
+      
+      logger.error(`user ${cookie.getUserDbId()}, gar ${cookie.getGarId()} > ${JSON.stringify(err)}`);
+      req.session.manifestErr = [{
+        message: 'Failed to submit manifest',
+        identifier: ''
+      }];
       return res.redirect('/garfile/manifest');
     }
   } else {
