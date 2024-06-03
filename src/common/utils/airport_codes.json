@@ -11265,6 +11265,13 @@
     "label": "Băneasa International Airport (Romania) (LRBS / BBU)"
   },
   {
+    "id": "GHV",
+    "id2": "LRBV",
+    "british": false,
+    "crownDependency": false,
+    "label": "Brașov-Ghimbav International Airport (Romania) (LRBV / GHV)"
+  },
+  {
     "id": "CND",
     "id2": "LRCK",
     "british": false,
