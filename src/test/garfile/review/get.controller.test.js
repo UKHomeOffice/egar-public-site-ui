@@ -126,6 +126,12 @@ describe('GAR Review Get Controller', () => {
           new ValidationRule(validator.notEmpty, 'responsiblePerson', undefined, 'Responsible person details must be completed'),
           new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
           new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
+          new ValidationRule(
+            validator.valuetrue,
+           'manifest',
+            '',
+            "There must be at least one captain or crew member on the voyage. If this is a military flight, this error can be bypassed in the manifest's military flight section."
+          )
         ],
       });
     });

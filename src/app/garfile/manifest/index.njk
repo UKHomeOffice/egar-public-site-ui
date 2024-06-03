@@ -333,7 +333,30 @@
                       {{__('table_delete_gar_people')}}
                     </button>
                   </dialog>
-
+                <div class="govuk-form-group">
+                  <fieldset class="govuk-fieldset" aria-describedby="isMilitaryFlight-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                      <h1 class="govuk-fieldset__heading">
+                        Military flight
+                      </h1>
+                    </legend>
+                    {{ m.hint("isMilitaryFlight", __("is_military_flight_hint")) }}
+                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                      <div class="govuk-checkboxes__item">
+                        <input 
+                          class="govuk-checkboxes__input" 
+                          id="isMilitaryFlight" 
+                          name="isMilitaryFlight" 
+                          type="checkbox" 
+                          {{ "checked" if cookie.getIsMilitaryFlight() }}
+                          value="true">
+                        <label class="govuk-label govuk-checkboxes__label" for="isMilitaryFlight">
+                          Is this a Military flight?
+                        </label>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
                 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
                   {# Start buttons #}
                   <input id="continue" type="submit" class="govuk-button" 

@@ -125,6 +125,7 @@ class Cookie {
           fixedBasedOperator: null,
           fixedBasedOperatorAnswer: null
         },
+        isMilitaryFlight: null,
         prohibitedGoods: null,
         goodsDeclaration: null,
         continentalShelf: null,
@@ -176,6 +177,14 @@ class Cookie {
 
   getAddPersonId() {
     return this.session.gar.tempAddPersonId;
+  }
+
+  getIsMilitaryFlight() {
+    return Boolean(this.session.gar.isMilitaryFlight);
+  }
+
+  setIsMilitaryFlight(isMilitaryFlight) {
+    this.session.gar.isMilitaryFlight = isMilitaryFlight;
   }
 
   setGarCraft(registration, craftType, craftBase, portChoice) {
