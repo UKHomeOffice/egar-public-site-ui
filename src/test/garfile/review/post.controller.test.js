@@ -171,12 +171,7 @@ describe('GAR Review Post Controller', () => {
           new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
           new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
           new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation')),
-          new ValidationRule(
-            validator.valuetrue,
-           'manifest',
-            '',
-            "There must be at least one captain or crew member on the voyage. If this is a military flight, this error can be bypassed in the manifest's military flight section."
-          )
+          new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
         ],
       });
     });
@@ -232,12 +227,7 @@ describe('GAR Review Post Controller', () => {
           new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
           new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation')),
           new ValidationRule(validator.valuetrue, 'resolveError', '', 'Resolve manifest errors before submitting'),
-          new ValidationRule(
-            validator.valuetrue,
-           'manifest',
-            '',
-            "There must be at least one captain or crew member on the voyage. If this is a military flight, this error can be bypassed in the manifest's military flight section."
-          )
+          new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
         ],
       });
     });

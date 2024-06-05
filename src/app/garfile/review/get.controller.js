@@ -5,8 +5,6 @@ const garApi = require('../../../common/services/garApi');
 const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
-const { Manifest } = require('../../../common/models/Manifest.class');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
 
 module.exports = (req, res) => {
   logger.debug('In garfile / review get controller');
@@ -22,8 +20,6 @@ module.exports = (req, res) => {
     validator.handleResponseError(garfile);
 
     const garpeople = JSON.parse(apiResponse[1]);
-    const manifest = new Manifest(apiResponse[1]);
-    
     validator.handleResponseError(garpeople);
 
     const garsupportingdocs = JSON.parse(apiResponse[2]);
@@ -32,14 +28,6 @@ module.exports = (req, res) => {
     const isJourneyUkInbound = airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort);
 
     const validations = validationList.validations(garfile, garpeople, frmUpload);
-
-    if (!garfile.isMilitaryFlight && !manifest.validateCaptainCrew()) {
-      const validateCaptainCrewMsg = __('has_no_crew_or_captains');
-      validations.push([
-        new ValidationRule(validator.valuetrue, 'manifest', '', validateCaptainCrewMsg),
-      ]);
-    }
-
     const renderObj = {
       cookie,
       manifestFields,

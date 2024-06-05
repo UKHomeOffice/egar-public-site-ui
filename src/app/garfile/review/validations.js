@@ -4,7 +4,7 @@ const i18n = require('i18n');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 
-const validateManifestMsg = 'An invalid manifest was provided to the server';
+const validateCaptainCrewMsg = 'There must be at least one captain or crew member on the voyage.';
 const registrationMsg = 'Aircraft registration must be completed';
 const responsibleMsg = 'Responsible person details must be completed';
 const customsMsg = 'Customs Declaration question not answered';
@@ -39,7 +39,7 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
     new ValidationRule(validator.notEmpty, 'aircraft', registration, registrationMsg),
   ]);
   validationArr.push([
-    new ValidationRule(validator.notEmpty, 'manifest', garpeople.items, validateManifestMsg),
+    new ValidationRule(validator.notEmpty, 'manifest', garpeople.items, validateCaptainCrewMsg),
   ]);
   if(!frmUpload) {
     validationArr.push([

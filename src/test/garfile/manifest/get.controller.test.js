@@ -42,7 +42,6 @@ describe('Manifest Get Controller', () => {
       redirect: sinon.spy(),
       render: sinon.spy(),
     };
-    sinon.stub(garApi, 'get').resolves(true);
   });
 
   afterEach(() => {
@@ -50,12 +49,14 @@ describe('Manifest Get Controller', () => {
     clock.restore();
   });
 
-  it('should return an error if person api rejects', async () => {
+  it('should return an error if person api rejects', () => {
     cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').rejects('Some reason here');
     sinon.stub(garApi, 'getPeople').resolves();
 
-    await controller(req, res);
+    const callController = async () => {
+      await controller(req, res);
+    };
 
     callController().then().then(() => {
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
