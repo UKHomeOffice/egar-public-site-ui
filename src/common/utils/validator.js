@@ -8,6 +8,22 @@ const genderValues = require('../seeddata/egar_gender_choice.json');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList } = require('../../common/utils/autocomplete');
+const documenttype = require('../../common/seeddata/egar_saved_people_travel_document_type.json');
+
+const documentTypes = documenttype
+  .map(documentType => documentType.documenttype)
+  .filter(documentType => Boolean(documentType))
+
+function isValidDocumentType(documentType) {
+  return documentTypes.includes(documentType);
+}
+
+function isOtherDocumentWithDocumentDescription(args){
+  const [documentType, documentDesc] = args;
+
+  return documentDesc === undefined || documentType === "Other"
+}
+
 
 /**
  * @param {Date} date
@@ -774,5 +790,7 @@ module.exports = {
   dateNotMoreThanTwoDaysInFuture,
   isTwoHoursPriorDeparture,
   convertDateToUTC,
-  containTabs
+  containTabs,
+  isValidDocumentType,
+  isOtherDocumentWithDocumentDescription
 };

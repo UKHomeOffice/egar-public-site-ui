@@ -58,14 +58,6 @@ function strToBytes(strSize) {
 }
 
 /**
- * Returns docType if valid, else undefined
- * @param {String} docType
- */
-function docTypeOrUndefined(docType) {
-  return ['Identity Card', 'Passport'].includes(docType) ? docType : undefined;
-}
-
-/**
  * GAR excel sheet instructs users to use 'Unknown' as a gender type
  * external systems expect 'Unspecified' to be used.
  * Convert Unknown to Unspecified
@@ -90,7 +82,6 @@ module.exports = {
   upperCamelCase,
   numToString,
   strToBytes,
-  docTypeOrUndefined,
   unknownToUnspecified,
   toUpper,
   trimWhitespace

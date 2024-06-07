@@ -5,6 +5,14 @@ const airportValidation = require('../../../common/utils/airportValidation');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
+const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
+
+
+const documentTypes = documenttype
+    .map(documentType => documentType.documenttype)
+    .filter(documentType => Boolean(documentType))
+    .map(documentType => `"${documentType}"`)
+    .join(", ")
 
 function getVoyageFieldLabel(key) {
   switch (key) {
@@ -89,7 +97,25 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     const peopleType = crew.peopleType === 'Crew' ? crewLabel : passengerLabel;
     const name = i18n.__('validator_api_uploadgar_person_type_person_name', { peopleType, firstName: crew.firstName, lastName: crew.lastName });
 
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentType, `Enter a valid document type for ${name}`)]);
+    validationArr.push([new ValidationRule(
+      validator.isValidDocumentType, 
+      '', 
+      crew.documentType, 
+      `Enter a valid document type for ${name}, it should be ${documentTypes}, not "${crew.documentType ?? ''}"`
+    )]);
+    validationArr.push([new ValidationRule(
+      validator.isOtherDocumentWithDocumentDescription, 
+      '', 
+      [crew.documentType, crew.documentDesc], 
+      `For ${name} has a document description "${crew.documentDesc}" for a "${crew.documentType}" document type. Please remove document description or select "Other" document type.`
+    )]);
+
+    if (crew.documentType === 'Other') {
+      validationArr.push([
+        new ValidationRule(validator.notEmpty, 'travelDocumentOther', crew.documentDesc, `For ${name} enter the document description you are using`),
+        new ValidationRule(validator.validName, 'travelDocumentOther', crew.documentDesc, `For ${name} enter a real document description`),
+      ]);
+    }
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${name}`)]);
     validationArr.push([
       new ValidationRule(validator.validISOCountryLength, '', crew.issuingState, `Enter a valid document issuing state for ${name}. Must be a ISO 3166 country code`),
