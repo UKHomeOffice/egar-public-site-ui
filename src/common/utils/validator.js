@@ -21,7 +21,7 @@ function isValidDocumentType(documentType) {
 function isOtherDocumentWithDocumentDescription(args){
   const [documentType, documentDesc] = args;
 
-  return documentDesc === undefined || documentType === "Other"
+  return isEmpty(documentDesc) || documentType === "Other"
 }
 
 
