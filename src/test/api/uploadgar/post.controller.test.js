@@ -423,7 +423,7 @@ describe('API upload GAR post controller', () => {
             validator.isOtherDocumentWithDocumentDesc, 
             '', 
             ["Passport", "UN document"], 
-            'For crew member James Kirk has a document description "UN document" for a "Passport" document type. Please remove document description or select "Other" document type if "Passport" was selected by mistake'
+            'For crew member James Kirk, "Passport" document type should be "Other" or remove "UN document" value from document description'
           ),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');

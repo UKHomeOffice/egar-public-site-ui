@@ -107,7 +107,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       validator.isOtherDocumentWithDocumentDesc, 
       '', 
       [crew.documentType, crew.documentDesc], 
-      `For ${name} has a document description "${crew.documentDesc}" for a "${crew.documentType}" document type. Please remove document description or select "Other" document type if "${crew.documentType}" was selected by mistake`
+      `For ${name}, "${crew.documentType}" document type should be "Other" or remove "${crew.documentDesc}" value from document description`
     )]);
 
     if (crew.documentType === 'Other') {
