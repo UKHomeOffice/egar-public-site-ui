@@ -375,5 +375,103 @@ describe('API upload GAR post controller', () => {
           expect(res.redirect).to.have.been.calledWith('/garfile/review?from=uploadGar');
         });
     });
+
+    it('Phoney document type shoudl be disallowed', () => {	
+      const data = getValidWorkbook();	
+
+      data.Sheets.Valid1.A9.v = "Cipher";	
+      data.Sheets.Valid1.B9.v = undefined;	
+
+      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.spy(req.session, 'save');
+
+      const callController = async () => {	
+        await controller(req, res);	
+      };	
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(
+            validator.isValidDocumentType, 
+            "", 
+            "Cipher", 
+            'Enter a valid document type for crew member James Kirk, it should be "Identity Card", "Passport", "Other", not "Cipher"'
+          ),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
+
+    it('Phoney document type shoudl be disallowed', () => {	
+      const data = getValidWorkbook();	
+
+      data.Sheets.Valid1.A9.v = "Passport";	
+      data.Sheets.Valid1.B9.v = 'UN document';	
+
+      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.spy(req.session, 'save');
+
+      const callController = async () => {	
+        await controller(req, res);	
+      };	
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(
+            validator.isOtherDocumentWithDocumentDesc, 
+            '', 
+            ["Passport", "UN document"], 
+            'For crew member James Kirk has a document description "UN document" for a "Passport" document type. Please remove document description or select "Other" document type.'
+          ),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
+
+    it('document desc should not be other and raise a validation error', () => {	
+      const data = getValidWorkbook();	
+
+      data.Sheets.Valid1.A20.v = "Other";	
+      data.Sheets.Valid1.B20.v = undefined;	
+
+      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.spy(req.session, 'save');
+
+      const callController = async () => {	
+        await controller(req, res);	
+      };	
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.notEmpty, 'travelDocumentOther', undefined, 'For passenger Pavel Chekov enter the document description you are using'),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
+
+    it('document description should be a valid text and not symbols', () => {	
+      const data = getValidWorkbook();	
+
+      data.Sheets.Valid1.A20.v = "Other";	
+      data.Sheets.Valid1.B20.v = "$a$a$";	
+
+      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.spy(req.session, 'save');
+
+      const callController = async () => {	
+        await controller(req, res);	
+      };	
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.validName, 'travelDocumentOther', "$a$a$", 'For passenger Pavel Chekov enter a real document description'),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
   });
 });
