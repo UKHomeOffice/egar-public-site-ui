@@ -1058,7 +1058,31 @@ describe('Validator', () => {
 
       expect(validator.isValidAirportCode('Not An airport code')).to.eql(false);
       expect(validator.isValidAirportCode('12345')).to.eql(false);
-
     })
+
+    it("Should return a valid document type from a given document type", () => {
+      expect(validator.isValidDocumentType("Passport")).to.eql(true);
+      expect(validator.isValidDocumentType("Identity Card")).to.eql(true);
+      expect(validator.isValidDocumentType("Other")).to.eql(true);
+
+      expect(validator.isValidDocumentType("Banana")).to.eql(false);
+      expect(validator.isValidDocumentType("Ice cream")).to.eql(false);
+      expect(validator.isValidDocumentType(1)).to.eql(false);
+      expect(validator.isValidDocumentType(undefined)).to.eql(false);
+      expect(validator.isValidDocumentType([])).to.eql(false);
+      expect(validator.isValidDocumentType()).to.eql(false);
+    });
+
+    it("Should return a valid document type from a given document type", () => {
+      expect(validator.isOtherDocumentWithDocumentDesc(["Other", "UN documents"])).to.eql(true);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", undefined])).to.eql(true);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Identity Card", null])).to.eql(true);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", ""])).to.eql(true);
+
+      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", "Apple"])).to.eql(false);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Identity Card", "Pineapple"])).to.eql(false);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", {}])).to.eql(false);
+      expect(validator.isOtherDocumentWithDocumentDesc()).to.eql(false);
+    });
   })
 });

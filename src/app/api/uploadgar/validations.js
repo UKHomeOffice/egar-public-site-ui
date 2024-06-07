@@ -104,7 +104,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       `Enter a valid document type for ${name}, it should be ${documentTypes}, not "${crew.documentType ?? ''}"`
     )]);
     validationArr.push([new ValidationRule(
-      validator.isOtherDocumentWithDocumentDescription, 
+      validator.isOtherDocumentWithDocumentDesc, 
       '', 
       [crew.documentType, crew.documentDesc], 
       `For ${name} has a document description "${crew.documentDesc}" for a "${crew.documentType}" document type. Please remove document description or select "Other" document type.`

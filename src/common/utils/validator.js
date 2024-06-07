@@ -18,12 +18,12 @@ function isValidDocumentType(documentType) {
   return documentTypes.includes(documentType);
 }
 
-function isOtherDocumentWithDocumentDescription(args){
+function isOtherDocumentWithDocumentDesc(args){
+  if (!args) return false;
   const [documentType, documentDesc] = args;
 
-  return isEmpty(documentDesc) || documentType === "Other"
+  return isEmpty(documentDesc) || documentType === "Other" 
 }
-
 
 /**
  * @param {Date} date
@@ -792,5 +792,5 @@ module.exports = {
   convertDateToUTC,
   containTabs,
   isValidDocumentType,
-  isOtherDocumentWithDocumentDescription
+  isOtherDocumentWithDocumentDesc
 };
