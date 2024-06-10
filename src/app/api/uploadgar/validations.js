@@ -7,7 +7,6 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 
-
 const documentTypes = documenttype
     .map(documentType => documentType.documenttype)
     .filter(documentType => Boolean(documentType))
@@ -116,6 +115,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
         new ValidationRule(validator.validName, 'travelDocumentOther', crew.documentDesc, `For ${name} enter a real document description`),
       ]);
     }
+    
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${name}`)]);
     validationArr.push([
       new ValidationRule(validator.validISOCountryLength, '', crew.issuingState, `Enter a valid document issuing state for ${name}. Must be a ISO 3166 country code`),

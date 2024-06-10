@@ -10,11 +10,11 @@ const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList } = require('../../common/utils/autocomplete');
 const documenttype = require('../../common/seeddata/egar_saved_people_travel_document_type.json');
 
-const documentTypes = documenttype
-  .map(documentType => documentType.documenttype)
-  .filter(documentType => Boolean(documentType))
-
 function isValidDocumentType(documentType) {
+  const documentTypes = documenttype
+    .map(documentType => documentType.documenttype)
+    .filter(documentType => Boolean(documentType));
+
   return documentTypes.includes(documentType);
 }
 
