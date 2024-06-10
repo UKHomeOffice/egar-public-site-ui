@@ -376,78 +376,102 @@ describe('API upload GAR post controller', () => {
         });
     });
 
-    it('should succeed and set document type other correctly', () => {
-      const data = getValidWorkbook();
-      delete data.Sheets.Valid1.A9.v;
-      data.Sheets.Valid1.B9.v = 'Biochip';
-      delete data.Sheets.Valid1.A20.v;
-      data.Sheets.Valid1.B20.v = 'Federation Card';
+    it('Phoney document type shoudl be disallowed', () => {	
+      const data = getValidWorkbook();	
 
-      sinon.stub(createGarApi, 'createGar').resolves(JSON.stringify({
-        garId: 'ABCD-1234',
-      }));
-      const garApiPatch = sinon.stub(garApi, 'patch').resolves();
+      data.Sheets.Valid1.A9.v = "Cipher";	
+      data.Sheets.Valid1.B9.v = undefined;	
+
+      sinon.stub(XLSX, 'read').returns(data);	
       sinon.spy(req.session, 'save');
-      sinon.stub(XLSX, 'read').returns(data);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+      const callController = async () => {	
+        await controller(req, res);	
+      };	
 
-      // Promise.all for three Promises...
-      callController().then().then().then()
-        .then(() => {
-          expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
-          expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
-            people: [{
-              dateOfBirth: '1965-10-13',
-              documentDesc: 'Biochip',
-              documentExpiryDate: '2033-02-28',
-              documentNumber: 'DocumentNumber',
-              documentType: 'Other',
-              firstName: 'James',
-              gender: 'Male',
-              issuingState: 'USA',
-              lastName: 'Kirk',
-              nationality: 'USA',
-              peopleType: 'Crew',
-              placeOfBirth: 'Place of Birth',
-            }],
-          });
-          expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
-            arrivalPort: 'BFS',
-            arrivalDate: '2022-05-31',
-            arrivalTime: 'Arrival Time',
-            departurePort: 'LGW',
-            departureDate: '2022-05-30',
-            departureTime: 'Departure Time',
-            registration: 'Registration',
-            craftType: 'Craft Type',
-            craftBase: 'Craft Base',
-            freeCirculation: 'FreeCirculation',
-            visitReason: 'VisitReason',
-          });
-          expect(garApiPatch).to.have.been.calledWith('ABCD-1234', 'Draft', {
-            people: [{
-              dateOfBirth: '1975-10-31',
-              documentDesc: 'Federation Card',
-              documentExpiryDate: '2023-06-01',
-              documentNumber: 'DocumentNumber',
-              documentType: 'Other',
-              firstName: 'Pavel',
-              gender: 'Male',
-              issuingState: 'USA',
-              lastName: 'Chekov',
-              nationality: 'RUS',
-              peopleType: 'Passenger',
-              placeOfBirth: 'Place of Birth',
-            }],
-          });
-          expect(req.session.failureMsg).to.be.undefined;
-          expect(req.session.failureIdentifier).to.be.undefined;
-          expect(req.session.save).to.have.been.called;
-          expect(res.redirect).to.have.been.calledWith('/garfile/review?from=uploadGar');
-        });
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(
+            validator.isValidDocumentType, 
+            "", 
+            "Cipher", 
+            'Enter a valid document type for crew member James Kirk, it should be "Identity Card", "Passport", "Other", not "Cipher"'
+          ),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
+
+    it('Phoney document type shoudl be disallowed', () => {	
+      const data = getValidWorkbook();	
+
+      data.Sheets.Valid1.A9.v = "Passport";	
+      data.Sheets.Valid1.B9.v = 'UN document';	
+
+      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.spy(req.session, 'save');
+
+      const callController = async () => {	
+        await controller(req, res);	
+      };	
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(
+            validator.isOtherDocumentWithDocumentDesc, 
+            '', 
+            ["Passport", "UN document"], 
+            'For crew member James Kirk, "Passport" document type should be "Other" or remove "UN document" value from document description'
+          ),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
+
+    it('document desc should not be other and raise a validation error', () => {	
+      const data = getValidWorkbook();	
+
+      data.Sheets.Valid1.A20.v = "Other";	
+      data.Sheets.Valid1.B20.v = undefined;	
+
+      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.spy(req.session, 'save');
+
+      const callController = async () => {	
+        await controller(req, res);	
+      };	
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.notEmpty, 'travelDocumentOther', undefined, 'For passenger Pavel Chekov enter the document description you are using'),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
+    });
+
+    it('document description should be a valid text and not symbols', () => {	
+      const data = getValidWorkbook();	
+
+      data.Sheets.Valid1.A20.v = "Other";	
+      data.Sheets.Valid1.B20.v = "$a$a$";	
+
+      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.spy(req.session, 'save');
+
+      const callController = async () => {	
+        await controller(req, res);	
+      };	
+
+      callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.eql([
+          new ValidationRule(validator.validName, 'travelDocumentOther', "$a$a$", 'For passenger Pavel Chekov enter a real document description'),
+        ]);
+        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
+      });
     });
   });
 });
