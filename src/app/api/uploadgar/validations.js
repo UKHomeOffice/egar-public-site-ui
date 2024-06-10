@@ -5,13 +5,11 @@ const airportValidation = require('../../../common/utils/airportValidation');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
-const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
+const { documentTypes } = require('../../../common/utils/utils');
 
-const documentTypes = documenttype
-    .map(documentType => documentType.documenttype)
-    .filter(documentType => Boolean(documentType))
-    .map(documentType => `"${documentType}"`)
-    .join(", ")
+const listedDocumentTypes = documentTypes
+  .map(documentType => `"${documentType}"`)
+  .join(", ")
 
 function getVoyageFieldLabel(key) {
   switch (key) {
@@ -100,7 +98,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       validator.isValidDocumentType, 
       '', 
       crew.documentType, 
-      `Enter a valid document type for ${name}, it should be ${documentTypes}, not "${crew.documentType ?? ''}"`
+      `Enter a valid document type for ${name}, it should be ${listedDocumentTypes}, not "${crew.documentType ?? ''}"`
     )]);
     validationArr.push([new ValidationRule(
       validator.isOtherDocumentWithDocumentDesc, 
