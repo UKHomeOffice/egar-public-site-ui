@@ -30,11 +30,17 @@ const checkGARUser = (parsedGar, userId, organisationId) => {
 module.exports = (req, res) => {
   logger.debug('In garfile / view post controller');
   const cookie = new CookieModel(req);
-  let { garId } = req.body;
+  let { garId, cbpId } = req.body;
   if (garId === undefined) {
     garId = cookie.getGarId();
   }
+
+  if (cbpId === undefined) {
+    cbpId = cookie.getCbpId();
+  }
+
   cookie.setGarId(garId);
+  cookie.setCbpId(cbpId);
   const garPeople = garApi.getPeople(garId);
   const garDetails = garApi.get(garId);
   const garDocs = garApi.getSupportingDocs(garId);
