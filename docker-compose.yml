@@ -29,7 +29,7 @@ services:
       context: ./mock_clamav
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - "8080:8080"
     volumes:
       - ./mock_clamav:/code
 
