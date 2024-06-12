@@ -40,6 +40,13 @@ psql -U user -d egar
 # RUN you sql commands after wards
 ```
 
+## Mock clamav
+- To use the mock clamav container, you need to specific the following environment variables in the `.env.dev`:
+```sh
+CLAMAV_BASE=http://mock-clamav
+CLAMAV_PORT=8080
+```
+
 ## Other repositories
 
 In general you don't need to run `gateway-api` and `data-integr-cbp`, unless:
