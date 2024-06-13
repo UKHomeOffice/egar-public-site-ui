@@ -34,14 +34,15 @@ module.exports = (req, res) => {
         .then(() => {
           emailService.send(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, cookie.getUserEmail(), {
             firstName: cookie.getUserFirstName(),
-            garId: cookie.getCbpId(),
+            garId: cookie.getGarId(),
+            submissionReference: cookie.getCbpId() ?? false,
           }).then(() => {
             req.session.successMsg = 'The GAR has been successfully cancelled';
             req.session.successHeader = 'Cancellation Confirmation';
             req.session.save(() => {
               res.redirect('/home');
             });
-          }).catch(() => {
+          }).catch((err) => {
             req.session.successMsg = 'The GAR has been successfully cancelled, but there was a problem with sending the email';
             req.session.successHeader = 'Cancellation Confirmation';
             req.session.save(() => {
