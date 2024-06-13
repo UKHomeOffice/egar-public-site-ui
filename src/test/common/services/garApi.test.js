@@ -52,7 +52,7 @@ describe('GarService', () => {
       });
 
     nock(BASE_URL)
-      .get(`/gar/${garId}`)
+      .get(`/gar/${garId}?cbp_id=false`)
       .reply(200, {
         status: { name: 'Draft' },
       });
@@ -237,7 +237,7 @@ describe('GarService', () => {
   it('should throw an error for get', () => {
     nock.cleanAll();
     nock(BASE_URL)
-      .get(`/gar/${garId}`)
+      .get(`/gar/${garId}?cbp_id=false`)
       .replyWithError({ message: 'Example get error', code: 404 });
 
     garApi.get(garId).then(() => {

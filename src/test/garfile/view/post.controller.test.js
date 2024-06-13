@@ -116,7 +116,7 @@ describe('GAR view post controller', () => {
     };
 
     callController().then().then(() => {
-      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
       expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
@@ -137,7 +137,7 @@ describe('GAR view post controller', () => {
     };
 
     callController().then().then(() => {
-      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
       expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       // expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
@@ -176,7 +176,7 @@ describe('GAR view post controller', () => {
     };
 
     callController().then().then(() => {
-      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2');
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2', true);
       expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2');
       expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2');
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
@@ -224,7 +224,7 @@ describe('GAR view post controller', () => {
     };
 
     callController().then().then(() => {
-      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
       expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
@@ -272,7 +272,7 @@ describe('GAR view post controller', () => {
     };
 
     callController().then().then(() => {
-      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
       expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
@@ -320,7 +320,7 @@ describe('GAR view post controller', () => {
     };
 
     callController().then().then(() => {
-      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
       expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
@@ -353,7 +353,7 @@ describe('GAR view post controller', () => {
     };
 
     callController().then().then(() => {
-      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
       expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
@@ -403,7 +403,7 @@ describe('GAR view post controller', () => {
     };
 
     callController().then().then(() => {
-      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
       expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
