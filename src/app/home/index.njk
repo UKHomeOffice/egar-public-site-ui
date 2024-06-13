@@ -138,7 +138,6 @@
                         <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell" >
                           <small>
                             <code>{{m.gar_id_screen_reader(gar.cbp_id) if gar.cbp_id else ('Processing...' if gar.status.name == 'Submitted') }}</code>
-                            <input name="cbpId" type="hidden" value={{ gar.cbp_id}} />
                           </small>
                         </td>
                       </tr>

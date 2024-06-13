@@ -58,11 +58,11 @@ module.exports = {
    * @param {String} garId id of GAR being requested
    * @returns {Promise} Resolves with API response.
    */
-  get(garId) {
+  get(garId, isCbpId = false) {
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.getGar(garId),
+        url: endpoints.getGar(garId, isCbpId),
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call GAR get API endpoint');

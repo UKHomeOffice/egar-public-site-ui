@@ -32,10 +32,20 @@ module.exports = (req, res) => {
     .then(() => {
       garApi.patch(cookie.getGarId(), 'Cancelled', {})
         .then(() => {
+          if (!cookie.getCbpId()) {
+            req.session.successMsg = 'The GAR has been successfully cancelled';
+            req.session.successHeader = 'Cancellation Confirmation';
+            req.session.save(() => {
+              res.redirect('/home');
+            });
+
+            return;
+          }
+
+          logger.info(cookie.getCbpId())
           emailService.send(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, cookie.getUserEmail(), {
             firstName: cookie.getUserFirstName(),
-            garId: cookie.getGarId(),
-            submissionReference: cookie.getCbpId() ?? false,
+            cancellationReference: cookie.getCbpId(),
           }).then(() => {
             req.session.successMsg = 'The GAR has been successfully cancelled';
             req.session.successHeader = 'Cancellation Confirmation';
