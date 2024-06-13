@@ -42,7 +42,6 @@ module.exports = (req, res) => {
             return;
           }
 
-          logger.info(cookie.getCbpId())
           emailService.send(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, cookie.getUserEmail(), {
             firstName: cookie.getUserFirstName(),
             cancellationReference: cookie.getCbpId(),
