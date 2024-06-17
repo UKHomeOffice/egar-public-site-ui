@@ -17,8 +17,8 @@ function includesOneBritishAirport(airports) {
   const airport0 = findAirportForCode(airports[0]);
   const airport1 = findAirportForCode(airports[1]);
 
-  return airport0.british || airport1.british;
   
+  return airport0 && airport0.british || airport1 && airport1.british;
 }
 
 function findAirportForCode(airportCode) {
