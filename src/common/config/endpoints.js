@@ -120,8 +120,8 @@ const endpoints = {
     logger.debug(`Calling update GAR endpoint ${endpoint}`);
     return endpoint;
   },
-  getGar(garId) {
-    const endpoint = new URL(`${API_VERSION}/gar/${garId}`, BASE_URL).href;
+  getGar(garId, isCbpId = false) {
+    const endpoint = new URL(`${API_VERSION}/gar/${garId}?cbp_id=${String(isCbpId)}`, BASE_URL).href;
     logger.debug(`Calling get GAR endpoint ${endpoint}`);
     return endpoint;
   },

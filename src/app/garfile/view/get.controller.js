@@ -2,6 +2,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
+const airportValidation = require('../../../common/utils/airportValidation');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id

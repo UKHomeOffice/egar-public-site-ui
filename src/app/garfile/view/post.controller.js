@@ -34,9 +34,11 @@ module.exports = (req, res) => {
   if (garId === undefined) {
     garId = cookie.getGarId();
   }
+
   cookie.setGarId(garId);
+
   const garPeople = garApi.getPeople(garId);
-  const garDetails = garApi.get(garId);
+  const garDetails = garApi.get(garId, true);
   const garDocs = garApi.getSupportingDocs(garId);
 
   let renderContext = {
@@ -59,7 +61,8 @@ module.exports = (req, res) => {
         res.redirect('/home');
         return;
       }
-
+      
+      cookie.setCbpId(parsedGar.cbpId)
       cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);

@@ -1,16 +1,14 @@
 import logging
-import json
 from flask import Flask, request
-from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
-request_date = datetime.today().strftime('%a,%d %b %Y %H:%M:%S %Z')
-mock_clamav_response = "Everything ok : true\n"
 
 @app.route("/scan", methods=["POST"])
 def clamav():
+    mock_clamav_response = "Everything ok : true\n"
+
     logging.info(f"Request data : {str(request.data)}")
     return mock_clamav_response
 

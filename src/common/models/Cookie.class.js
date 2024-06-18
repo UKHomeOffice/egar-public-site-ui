@@ -89,6 +89,7 @@ class Cookie {
       this.session.gar = {
         id: null,
         status: null,
+        cbpId: null,
         craft: {
           registration: null,
           craftType: null,
@@ -165,6 +166,14 @@ class Cookie {
 
   setGarId(id) {
     this.session.gar.id = id;
+  }
+
+  getCbpId() {
+    return this.session.gar.cbpId;
+  }
+
+  setCbpId(cbpId) {
+    this.session.gar.cbpId = cbpId;
   }
 
   getGarId() {
