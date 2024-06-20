@@ -224,7 +224,9 @@ class Cookie {
     this.session.gar.voyageArrival.arrivalPort = voyageObj.arrivalPort;
     this.session.gar.voyageArrival.arrivalLong = trimToDecimalPlaces(voyageObj.arrivalLong, 6);
     this.session.gar.voyageArrival.arrivalLat = trimToDecimalPlaces(voyageObj.arrivalLat, 6);
-    this.session.gar.voyageArrival.arrivalPortChoice = voyageObj.portChoice || (voyageObj.arrivalLat || voyageObj.arrivalLong) ? 'No' : 'Yes';
+    
+    const defaultPortChoice = (voyageObj.arrivalLat || voyageObj.arrivalLong) ? 'No' : 'Yes';
+    this.session.gar.voyageArrival.arrivalPortChoice = voyageObj.portChoice || defaultPortChoice;
   }
 
   getGarArrivalVoyage() {
@@ -245,7 +247,9 @@ class Cookie {
     this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
     this.session.gar.voyageDeparture.departureLat = trimToDecimalPlaces(voyageObj.departureLat, 6);
     this.session.gar.voyageDeparture.departureLong = trimToDecimalPlaces(voyageObj.departureLong, 6);
-    this.session.gar.voyageDeparture.departurePortChoice = voyageObj.portChoice || (voyageObj.departureLat || voyageObj.departureLong) ? 'No' : 'Yes';
+
+    const defaultPortChoice = (voyageObj.departureLat || voyageObj.departureLong) ? 'No' : 'Yes';
+    this.session.gar.voyageDeparture.departurePortChoice = voyageObj.portChoice || defaultPortChoice;
 
   }
 
