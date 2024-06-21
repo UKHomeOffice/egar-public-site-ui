@@ -1,10 +1,10 @@
-const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const airportValidation = require('../../../common/utils/airportValidation');
+const { isValidAirportCode } = require("../../../common/utils/validator");
 
 const performAPICall = (cookie, buttonClicked, res) => {
   garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
@@ -76,7 +76,7 @@ const buildValidations = (voyage) => {
 
 
   // Check if port code is greater than 4 as then need to validate lat/long
-  if (arrivePortObj.portCode.length > 4) {
+  if (!isValidAirportCode(arrivePortObj.portCode)) {
     validations.push(
       arrivalLatValidation,
       arrivalLongValidation,
