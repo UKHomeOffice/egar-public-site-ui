@@ -210,23 +210,16 @@ class Cookie {
   }
 
   setGarArrivalVoyage(voyageObj) {
-    if (!voyageObj.arrivalDate) {
-      this.session.gar.voyageArrival.arrivalDate = this.generateDate(voyageObj.arrivalDay,
-        voyageObj.arrivalMonth, voyageObj.arrivalYear);
+    const arrivalJourney = this.parseVoyageObj("arrival", voyageObj);
 
-      this.session.gar.voyageArrival.arrivalTime = this.generateTime(voyageObj.arrivalHour,
-        voyageObj.arrivalMinute);
-    } else {
-      // Set voyage from API response, so dates and times are already built
-      this.session.gar.voyageArrival.arrivalDate = voyageObj.arrivalDate;
-      this.session.gar.voyageArrival.arrivalTime = voyageObj.arrivalTime;
-    }
-    this.session.gar.voyageArrival.arrivalPort = voyageObj.arrivalPort;
-    this.session.gar.voyageArrival.arrivalLong = trimToDecimalPlaces(voyageObj.arrivalLong, 6);
-    this.session.gar.voyageArrival.arrivalLat = trimToDecimalPlaces(voyageObj.arrivalLat, 6);
+    this.session.gar.voyageArrival.arrivalDate = arrivalJourney.arrivalDate;
+    this.session.gar.voyageArrival.arrivalTime = arrivalJourney.arrivalTime;
+
+    this.session.gar.voyageArrival.arrivalPort = arrivalJourney.arrivalPort;
+    this.session.gar.voyageArrival.arrivalLong = arrivalJourney.arrivalLong;
+    this.session.gar.voyageArrival.arrivalLat = arrivalJourney.arrivalLat;
     
-    const defaultPortChoice = (voyageObj.arrivalLat || voyageObj.arrivalLong) ? 'No' : 'Yes';
-    this.session.gar.voyageArrival.arrivalPortChoice = voyageObj.portChoice || defaultPortChoice;
+    this.session.gar.voyageArrival.arrivalPortChoice = arrivalJourney.arrivalPortChoice;
   }
 
   getGarArrivalVoyage() {
@@ -234,22 +227,15 @@ class Cookie {
   }
 
   setGarDepartureVoyage(voyageObj) {
-    if (!voyageObj.departureDate) {
-      this.session.gar.voyageDeparture.departureDate = this.generateDate(voyageObj.departureDay,
-        voyageObj.departureMonth, voyageObj.departureYear);
-      this.session.gar.voyageDeparture.departureTime = this.generateTime(voyageObj.departureHour,
-        voyageObj.departureMinute);
-    } else {
-      // get it from the api
-      this.session.gar.voyageDeparture.departureDate = voyageObj.departureDate;
-      this.session.gar.voyageDeparture.departureTime = voyageObj.departureTime;
-    }
-    this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
-    this.session.gar.voyageDeparture.departureLat = trimToDecimalPlaces(voyageObj.departureLat, 6);
-    this.session.gar.voyageDeparture.departureLong = trimToDecimalPlaces(voyageObj.departureLong, 6);
+    const departureJourney = this.parseVoyageObj("departure", voyageObj);
 
-    const defaultPortChoice = (voyageObj.departureLat || voyageObj.departureLong) ? 'No' : 'Yes';
-    this.session.gar.voyageDeparture.departurePortChoice = voyageObj.portChoice || defaultPortChoice;
+    this.session.gar.voyageDeparture.departureDate = departureJourney.departureDate;
+    this.session.gar.voyageDeparture.departureTime = departureJourney.departureTime;
+
+    this.session.gar.voyageDeparture.departurePort = departureJourney.departurePort;
+    this.session.gar.voyageDeparture.departureLat = departureJourney.departureLat;
+    this.session.gar.voyageDeparture.departureLong = departureJourney.departureLong;
+    this.session.gar.voyageDeparture.departurePortChoice = departureJourney.departurePortChoice;
 
   }
 
@@ -768,6 +754,32 @@ class Cookie {
     const h = hour == null ? '' : hour;
     const m = minute == null ? '' : minute;
     return `${h}:${m}`;
+  }
+
+  parseVoyageObj(type, voyageObj) {
+    let voyage = {};
+    if (!voyageObj[`${type}Date`]) {
+      voyage[`${type}Date`] = this.generateDate(
+        voyageObj[`${type}Day`],
+        voyageObj[`${type}Month`],
+        voyageObj[`${type}Year`]
+      );
+
+      voyage[`${type}Time`] = this.generateTime(voyageObj[`${type}Hour`],
+        voyageObj[`${type}Minute`]);
+    } else {
+      // Set voyage from API response, so dates and times are already built
+      voyage[`${type}Date`] = voyageObj[`${type}Date`];
+      voyage[`${type}Time`] = voyageObj[`${type}Time`];
+    }
+    voyage[`${type}Port`] = voyageObj[`${type}Port`];
+    voyage[`${type}Long`] = trimToDecimalPlaces(voyageObj[`${type}Long`], 6);
+    voyage[`${type}Lat`] = trimToDecimalPlaces(voyageObj[`${type}Lat`], 6);
+    
+    const defaultPortChoice = (voyageObj[`${type}Lat`] || voyageObj[`${type}Long`]) ? 'No' : 'Yes';
+    voyage[`${type}PortChoice`] = voyageObj.portChoice || defaultPortChoice;
+
+    return voyage;
   }
 
   dateSlice(dateType, date) {
