@@ -4,7 +4,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const airportValidation = require('../../../common/utils/airportValidation');
-const { isValidAirportCode } = require("../../../common/utils/validator");
 
 const performAPICall = (cookie, buttonClicked, res) => {
   garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
@@ -42,11 +41,6 @@ const performAPICall = (cookie, buttonClicked, res) => {
 
 const buildValidations = (voyage) => {
   // Create validation input objs
-  const arrivePortObj = {
-    portCode: voyage.arrivalPort,
-    lat: voyage.arrivalLat,
-    long: voyage.arrivalLong,
-  };
   const arriveDateObj = {
     d: voyage.arrivalDay,
     m: voyage.arrivalMonth,
@@ -74,9 +68,7 @@ const buildValidations = (voyage) => {
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
   ];
 
-
-  // Check if port code is greater than 4 as then need to validate lat/long
-  if (!isValidAirportCode(arrivePortObj.portCode)) {
+  if (voyage.portChoice === 'Yes') {
     validations.push(
       arrivalLatValidation,
       arrivalLongValidation,
