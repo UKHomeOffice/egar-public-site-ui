@@ -757,7 +757,7 @@ class Cookie {
   }
 
   parseVoyageObj(type, voyageObj) {
-    const voyage = {};
+    let voyage = {};
     if (!voyageObj[`${type}Date`]) {
       voyage[`${type}Date`] = this.generateDate(
         voyageObj[`${type}Day`],
