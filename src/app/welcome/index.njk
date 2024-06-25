@@ -18,10 +18,8 @@ Create GAR | Start
 
 {% block content %}
 	<p class="govuk-body-l">
-		<span style="background-color: #f7d352">
-		We have introduced Passenger Response Messages to sGAR from January 2024. For more information, please refer to the <a href="/help">Help &amp; Guidance page</a>.
-			<br/>
-			The Home Office will be hosting some engagement events to provide support and clarity regarding these changes, please check the <a href="/welcome/index#events">events tab</a> if you would like to attend. 
+		<span style='background-color: #f7d352'>
+		{{homePageMessage | safe}}
 		</span>
 	</p>
 
