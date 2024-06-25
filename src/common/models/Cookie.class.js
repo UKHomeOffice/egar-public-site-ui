@@ -757,21 +757,19 @@ class Cookie {
   }
 
   parseVoyageObj(type, voyageObj) {
-    let voyage = {};
-    if (!voyageObj[`${type}Date`]) {
-      voyage[`${type}Date`] = this.generateDate(
-        voyageObj[`${type}Day`],
-        voyageObj[`${type}Month`],
-        voyageObj[`${type}Year`]
-      );
+    const voyage = {};
+    
+    voyage[`${type}Date`] = voyageObj[`${type}Date`] || this.generateDate(
+      voyageObj[`${type}Day`],
+      voyageObj[`${type}Month`],
+      voyageObj[`${type}Year`]
+    );
 
-      voyage[`${type}Time`] = this.generateTime(voyageObj[`${type}Hour`],
-        voyageObj[`${type}Minute`]);
-    } else {
-      // Set voyage from API response, so dates and times are already built
-      voyage[`${type}Date`] = voyageObj[`${type}Date`];
-      voyage[`${type}Time`] = voyageObj[`${type}Time`];
-    }
+    voyage[`${type}Time`] = voyageObj[`${type}Time`] || this.generateTime(
+      voyageObj[`${type}Hour`],
+      voyageObj[`${type}Minute`]
+    );
+
     voyage[`${type}Port`] = voyageObj[`${type}Port`];
     voyage[`${type}Long`] = trimToDecimalPlaces(voyageObj[`${type}Long`], 6);
     voyage[`${type}Lat`] = trimToDecimalPlaces(voyageObj[`${type}Lat`], 6);
