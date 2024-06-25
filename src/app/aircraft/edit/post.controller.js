@@ -24,6 +24,9 @@ module.exports = (req, res) => {
     portChoice
   };
 
+  const craftBase = cookie.reduceCraftBase(craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong);
+  cookie.updateEditCraft(registration, craftType, craftBase);
+
   if (portChoice === 'Yes'){
 
     delete craftObj.craftBaseLat;
@@ -39,9 +42,6 @@ module.exports = (req, res) => {
   // Validate chains
   validator.validateChains(validationChain)
     .then(() => {
-
-      const craftBase = cookie.reduceCraftBase(craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong);
-      cookie.updateEditCraft(registration, craftType, craftBase);
 
       // call the API to update craft
       craftApi.update(registration, craftType, craftBase, cookie.getUserDbId(), craftId)

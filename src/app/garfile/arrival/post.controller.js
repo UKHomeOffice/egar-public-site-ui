@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -42,11 +41,6 @@ const performAPICall = (cookie, buttonClicked, res) => {
 
 const buildValidations = (voyage) => {
   // Create validation input objs
-  const arrivePortObj = {
-    portCode: voyage.arrivalPort,
-    lat: voyage.arrivalLat,
-    long: voyage.arrivalLong,
-  };
   const arriveDateObj = {
     d: voyage.arrivalDay,
     m: voyage.arrivalMonth,
@@ -74,17 +68,14 @@ const buildValidations = (voyage) => {
     [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
   ];
 
-
-  // Check if port code is greater than 4 as then need to validate lat/long
-  if (arrivePortObj.portCode.length > 4) {
+  if (voyage.portChoice === 'Yes') {
+    validations.push(
+      arrivalPortValidation,
+    );
+  } else {
     validations.push(
       arrivalLatValidation,
       arrivalLongValidation,
-    );
-  } else if (voyage.portChoice) {
-    // if not just add port validation
-    validations.push(
-      arrivalPortValidation,
     );
   }
 
