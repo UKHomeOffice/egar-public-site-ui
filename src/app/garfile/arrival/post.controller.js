@@ -70,13 +70,12 @@ const buildValidations = (voyage) => {
 
   if (voyage.portChoice === 'Yes') {
     validations.push(
+      arrivalPortValidation,
+    );
+  } else {
+    validations.push(
       arrivalLatValidation,
       arrivalLongValidation,
-    );
-  } else if (voyage.portChoice) {
-    // if not just add port validation
-    validations.push(
-      arrivalPortValidation,
     );
   }
 
