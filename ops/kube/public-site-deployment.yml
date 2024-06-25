@@ -254,7 +254,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: environment
-                  key: MAX_NUM_FILES  
+                  key: MAX_NUM_FILES
+            - name: HOMEPAGE_MESSAGE
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: HOMEPAGE_MESSAGE        
           ports:
             - name: public-site-prt
               containerPort: 3000
