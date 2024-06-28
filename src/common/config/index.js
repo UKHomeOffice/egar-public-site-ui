@@ -66,3 +66,6 @@ exports.MFA_TOKEN_MAX_ATTEMPTS = parseInt(process.env.NOTIFY_MFA_TOKEN_MAX_ATTEM
 
 //MAX NUMBER OF FILES
 exports.MAX_NUM_FILES = parseInt(process.env.MAX_NUM_FILES, 10) || 8;
+
+//Homepage banner message
+exports.HOMEPAGE_MESSAGE = process.env.HOMEPAGE_MESSAGE;
