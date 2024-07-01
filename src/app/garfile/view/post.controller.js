@@ -3,6 +3,7 @@ const airportValidation = require('../../../common/utils/airportValidation');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
+const { isAbleToCancelGar } = require('../../../common/utils/validator');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -54,6 +55,7 @@ module.exports = (req, res) => {
       const parsedGar = JSON.parse(responseValues[0]);
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
+      const cbpSubmittedDate = parsedGar.cbpSubmittedDate ? new Date(parsedGar.cbpSubmittedDate) : null;
 
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
@@ -75,6 +77,7 @@ module.exports = (req, res) => {
         cookie,
         manifestFields,
         garfile: parsedGar,
+        // isAbleToCancelGar: isAbleToCancelGar(cbpSubmittedDate),
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         showChangeLinks: true,

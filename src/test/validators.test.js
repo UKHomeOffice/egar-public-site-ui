@@ -1084,5 +1084,46 @@ describe('Validator', () => {
       expect(validator.isOtherDocumentWithDocumentDesc(["Passport", {}])).to.eql(false);
       expect(validator.isOtherDocumentWithDocumentDesc()).to.eql(false);
     });
+
+  })
+
+  describe('Should determine if a value is cancellable by CBP', () => {
+
+    //const clock = sinon.useFakeTimers(new Date(2020, 04, 11).getTime());
+    let clock;
+    const MARCH = 2;
+    const APRIL = 3;
+    
+    beforeEach(() => {
+      clock = sinon.useFakeTimers({
+        now: new Date(2023, APRIL, 11),
+        shouldAdvanceTime: false,
+        toFake: ["Date"],
+      });
+    })
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it("Should be valid to cancel GAR by CBP", () => {
+      const currentDate = new Date(2023, APRIL, 11);
+      const dayOld = new Date(2023, APRIL, 10);
+      const weekOld = new Date(2023, APRIL, 4);
+      const twoWeeksOld = new Date(2023, MARCH, 29);
+  
+      expect(validator.isAbleToCancelGar(currentDate)).to.eql(true);
+      expect(validator.isAbleToCancelGar(null)).to.eql(true);
+      expect(validator.isAbleToCancelGar(dayOld)).to.eql(true);
+      expect(validator.isAbleToCancelGar(weekOld)).to.eql(true);
+      expect(validator.isAbleToCancelGar(twoWeeksOld)).to.eql(true);
+    })
+
+    it("Should be invalid to cancel GAR by CBP", () => {
+      const twoWeeksAndADayOld = new Date(2023, MARCH, 28);
+      const yearOld = new Date(2022, APRIL, 11);
+      expect(validator.isAbleToCancelGar(twoWeeksAndADayOld)).to.eql(false);
+      expect(validator.isAbleToCancelGar(yearOld)).to.eql(false);
+    })
   })
 });
