@@ -183,6 +183,7 @@ describe('GAR view post controller', () => {
         cookie,
         manifestFields,
         garfile: { garId: 'GAR-ID-EXAMPLE-2-API', status: { name: 'Draft' } },
+        isAbleToCancelGar: true,
         garpeople: {
           items: [
             { id: 'PERSON-1', firstName: 'Simona' },
@@ -231,6 +232,7 @@ describe('GAR view post controller', () => {
         cookie,
         manifestFields,
         garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' } },
+        isAbleToCancelGar: true,
         garpeople: {
           items: [
             { id: 'PERSON-1', firstName: 'Simona' },
@@ -280,6 +282,7 @@ describe('GAR view post controller', () => {
         manifestFields,
         showChangeLinks: false,
         isJourneyUKInbound: true,
+        isAbleToCancelGar: true,
         garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' } },
         garpeople: {
           items: [
@@ -361,6 +364,7 @@ describe('GAR view post controller', () => {
         manifestFields,
         showChangeLinks: false,
         isJourneyUKInbound: false,
+        isAbleToCancelGar: true,
         garfile: {
           garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, departurePort: 'LGW', arrivalPort: 'LAX'
         },
@@ -411,6 +415,7 @@ describe('GAR view post controller', () => {
         manifestFields,
         showChangeLinks: false,
         isJourneyUKInbound: false,
+        isAbleToCancelGar: true,
         garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' } , departurePort: 'LGW', arrivalPort: 'LAX'},
         garpeople: {
           items: [
