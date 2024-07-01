@@ -35,7 +35,6 @@
       {% if garfile.status.name === 'Draft' %}
         <a id="submit-gar" class="govuk-button" href="/garfile/review">{{__('button_submit_this_gar')}}</a>
         <a id="display-manifest" class="govuk-button" href="/garfile/printmanifest">Print GAR</a>
-
       {% endif %}
       {% if garfile.status.name !== 'Cancelled' %}
         <p class="govuk-body-m">
