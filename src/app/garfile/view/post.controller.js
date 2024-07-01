@@ -67,6 +67,7 @@ module.exports = (req, res) => {
       cookie.setCbpId(parsedGar.cbpId)
       cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
+      logger.info(cbpSubmittedDate.toISOString())
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
 
       // Maybe not necessary but delete the ids as the template does not need them
@@ -77,7 +78,7 @@ module.exports = (req, res) => {
         cookie,
         manifestFields,
         garfile: parsedGar,
-        // isAbleToCancelGar: isAbleToCancelGar(cbpSubmittedDate),
+        isAbleToCancelGar: isAbleToCancelGar(cbpSubmittedDate),
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         showChangeLinks: true,

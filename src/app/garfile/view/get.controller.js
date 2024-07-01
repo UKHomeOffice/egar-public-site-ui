@@ -82,7 +82,7 @@ module.exports = (req, res) => {
         cookie,
         manifestFields,
         garfile: parsedGar,
-        // isAbleToCancelGar: isAbleToCancelGar(cbpSubmittedDate),
+        isAbleToCancelGar: isAbleToCancelGar(cbpSubmittedDate),
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         successMsg,
