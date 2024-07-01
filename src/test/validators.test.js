@@ -1105,10 +1105,10 @@ describe('Validator', () => {
     });
 
     it("Should be valid to cancel GAR by CBP", () => {
-      const currentDate = new Date(2023, APRIL, 11);
-      const dayOld = new Date(2023, APRIL, 10);
-      const weekOld = new Date(2023, APRIL, 4);
-      const twoWeeksOld = new Date(2023, MARCH, 29);
+      const currentDate = "2023-04-11T00:00:00.000000";
+      const dayOld = "2023-04-10T00:00:00.000000";
+      const weekOld = "2023-04-11T00:00:00.000000";
+      const twoWeeksOld = "2023-03-29T00:00:00.000000";
   
       expect(validator.isAbleToCancelGar(currentDate)).to.eql(true);
       expect(validator.isAbleToCancelGar(null)).to.eql(true);
@@ -1118,10 +1118,26 @@ describe('Validator', () => {
     })
 
     it("Should be invalid to cancel GAR by CBP", () => {
-      const twoWeeksAndADayOld = new Date(2023, MARCH, 28);
-      const yearOld = new Date(2022, APRIL, 11);
+      const twoWeeksAndADayOld = "2023-03-28T00:00:00.000000";
+      const yearOld = "2022-04-11T00:00:00.000000";
       expect(validator.isAbleToCancelGar(twoWeeksAndADayOld)).to.eql(false);
       expect(validator.isAbleToCancelGar(yearOld)).to.eql(false);
+
+      const blankString = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, '');
+      const undefinedDate = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, undefined);
+      const blankObject = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, {});
+
+      expect(blankString).to.throw(
+        'cbpSubmittedDateString: "", type: "string", is not null or a valid string'
+      );
+
+      expect(undefinedDate).to.throw(
+        'cbpSubmittedDateString: "undefined", type: "undefined", is not null or a valid string'
+      );
+
+      expect(blankObject).to.throw(
+        'cbpSubmittedDateString: "[object Object]", type: "object", is not null or a valid string'
+      );
     })
   })
 });

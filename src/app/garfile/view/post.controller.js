@@ -55,7 +55,7 @@ module.exports = (req, res) => {
       const parsedGar = JSON.parse(responseValues[0]);
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
-      const cbpSubmittedDate = parsedGar.cbpSubmittedDate ? new Date(parsedGar.cbpSubmittedDate) : null;
+      const cbpSubmittedDateString = parsedGar.cbpSubmittedDate ? parsedGar.cbpSubmittedDate : null;
 
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
@@ -77,7 +77,7 @@ module.exports = (req, res) => {
         cookie,
         manifestFields,
         garfile: parsedGar,
-        isAbleToCancelGar: isAbleToCancelGar(cbpSubmittedDate),
+        isAbleToCancelGar: isAbleToCancelGar(cbpSubmittedDateString),
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         showChangeLinks: true,

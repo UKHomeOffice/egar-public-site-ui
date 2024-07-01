@@ -10,10 +10,23 @@ const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList } = require('../../common/utils/autocomplete');
 const { documentTypes } = require('./utils');
 
-const isAbleToCancelGar = (cbpSubmittedDate) => {
-  if (cbpSubmittedDate === null) return true;
+/**
+ * isAbleToCancelGar
+ * @param {string|null} cbpSubmittedDateString
+ * @return {Date}
+ */
+const isAbleToCancelGar = (cbpSubmittedDateString) => {
+  if (cbpSubmittedDateString === null) return true;
+  if (cbpSubmittedDateString && typeof cbpSubmittedDateString === "string") {
+    const cbpSubmittedDate = new Date(cbpSubmittedDateString);
+    const today = new Date().getTime();
+    return (cbpSubmittedDate.getTime() + MAX_ALLOWED_CANCELLATION_TIME_TO_CBP) > today;
+  } else {
+    throw new Error(
+      `cbpSubmittedDateString: "${cbpSubmittedDateString}", type: "${typeof cbpSubmittedDateString}", is not null or a valid string`
+    )
+  }
 
-  return (cbpSubmittedDate.getTime() + MAX_ALLOWED_CANCELLATION_TIME_TO_CBP) > new Date().getTime();
 }
 
 function isValidDocumentType(documentType) {
