@@ -1088,8 +1088,6 @@ describe('Validator', () => {
   })
 
   describe('Should determine if a value is cancellable by CBP', () => {
-
-    //const clock = sinon.useFakeTimers(new Date(2020, 04, 11).getTime());
     let clock;
     const MARCH = 2;
     const APRIL = 3;
