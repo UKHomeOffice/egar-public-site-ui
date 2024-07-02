@@ -167,7 +167,7 @@ describe('GAR view post controller', () => {
     delete req.body.garId;
     req.session.gar = { id: 'GAR-ID-EXAMPLE-2' };
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-2-API', status: { name: 'Draft' }, userId: 'USER-123',
+      garId: 'GAR-ID-EXAMPLE-2-API', status: { name: 'Draft' }, userId: 'USER-123', cbpSubmittedDate: null
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -192,7 +192,7 @@ describe('GAR view post controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
         cookie,
         manifestFields,
-        garfile: { garId: 'GAR-ID-EXAMPLE-2-API', status: { name: 'Draft' } },
+        garfile: { garId: 'GAR-ID-EXAMPLE-2-API', status: { name: 'Draft' }, cbpSubmittedDate: null },
         isAbleToCancelGar: true,
         garpeople: {
           items: [
@@ -216,7 +216,7 @@ describe('GAR view post controller', () => {
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, userId: 'USER-123',
+      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, userId: 'USER-123', cbpSubmittedDate: null
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -241,7 +241,7 @@ describe('GAR view post controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
         cookie,
         manifestFields,
-        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' } },
+        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, cbpSubmittedDate: null },
         isAbleToCancelGar: true,
         garpeople: {
           items: [
@@ -265,7 +265,7 @@ describe('GAR view post controller', () => {
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' }, userId: 'USER-123',
+      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' }, userId: 'USER-123', cbpSubmittedDate: null
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -293,7 +293,7 @@ describe('GAR view post controller', () => {
         showChangeLinks: false,
         isJourneyUKInbound: true,
         isAbleToCancelGar: true,
-        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' } },
+        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' }, cbpSubmittedDate: null },
         garpeople: {
           items: [
             { id: 'PERSON-1', firstName: 'Simona' },
@@ -314,7 +314,7 @@ describe('GAR view post controller', () => {
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-124',
+      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-124', 
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [

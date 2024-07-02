@@ -140,7 +140,8 @@ const outboundGar = () => {
     garId: 'GAR-ID-EXAMPLE-1-API', 
     status: { name: 'Submitted' }, 
     departurePort: 'LGW', 
-    arrivalPort: 'LAX'
+    arrivalPort: 'LAX',
+    cbpSubmittedDate: null
   };
 }
 
