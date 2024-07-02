@@ -56379,6 +56379,14 @@
     "british": false,
     "crownDependency": false,
     "label": "Sakhir Air Base (Bahrain) (OBKH)"
+  },
+  {
+    "id": "SPX",
+    "id2": "HESX",
+    "british": false,
+    "crownDependency": false,
+    "label": "Sphinx International Airport (Egypt) (HESX / SPX)"
   }
+
 ]
   
