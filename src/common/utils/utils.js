@@ -17,7 +17,42 @@ const documentTypes = documenttype
     .map(documentType => documentType.documenttype)
     .filter(documentType => Boolean(documentType));
 
+function getResponsiblePersonFromReq(req) {
+    return {
+        responsibleGivenName: req.body.responsibleGivenName,
+        responsibleSurname: req.body.responsibleSurname,
+        responsibleContactNo: req.body.responsibleContactNo,
+        responsibleEmail: req.body.responsibleEmail,
+        responsibleAddressLine1: req.body.responsibleAddressLine1,
+        responsibleAddressLine2: req.body.responsibleAddressLine2,
+        responsibleTown: req.body.responsibleTown,
+        responsibleCounty: req.body.responsibleCounty,
+        responsiblePostcode: req.body.responsiblePostcode,
+        fixedBasedOperator: req.body.fixedBasedOperator,
+        fixedBasedOperatorAnswer: (req.body.fixedBasedOperator === 'Other' ? req.body.fixedBasedOperatorAnswer : '')
+    };
+}
+
+function getResponsiblePersonFromGar(gar) {
+    return {
+        responsibleGivenName: gar.responsibleGivenName,
+        responsibleSurname: gar.responsibleSurname,
+        responsibleContactNo: gar.responsibleContactNo,
+        responsibleEmail: gar.responsibleEmail,
+        responsibleAddressLine1: gar.responsibleAddressLine1,
+        responsibleAddressLine2: gar.responsibleAddressLine2,
+        responsibleTown: gar.responsibleTown,
+        responsibleCounty: gar.responsibleCounty,
+        responsiblePostcode: gar.responsiblePostcode,
+        fixedBasedOperator: gar.fixedBasedOperator,
+        fixedBasedOperatorAnswer: gar.fixedBasedOperatorAnswer
+    };
+}
+
+
 module.exports = {
     trimToDecimalPlaces,
-    documentTypes
+    documentTypes,
+    getResponsiblePersonFromReq,
+    getResponsiblePersonFromGar,
 }
