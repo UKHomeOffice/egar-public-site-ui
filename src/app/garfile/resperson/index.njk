@@ -1,0 +1,89 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+    {{ __('error_prefix') if errors }} Create GAR | Responsible person | {{ __('title') }}
+{% endblock %}
+
+{% set active = '/home' %}
+
+{% block header %}
+    {% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {% include "phase.njk" %}
+    <a href="/garfile/manifest" class="govuk-back-link">{{ __('nav_back') }}</a>
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="/javascripts/resperson_utils.js"></script>
+    <div class="govuk-grid-row">
+        {% if errors %}
+            {% include "common/templates/includes/errors.njk" %}
+        {% endif %}
+        <form id="page-form" action="/garfile/resperson" autocomplete="off" class="form-group"
+                method="post" role="form">
+            <div class="govuk-grid-column-two-thirds">
+                <span class="govuk-caption-xl">{{ __('section_count', 5, 9) }}</span>
+                <h1 class="govuk-heading-xl">{{ __('heading_responsible_person_details') }}</h1>
+                <p class="govuk-body-m">Search for responsible person </p>
+                    <input class="govuk-input govuk-input--width-20" id="resperson-search" name="resperson-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+                <h2 id="saved_responsible_persons" class="govuk-heading-l">{{__('heading_responsible_person')}}</h2>
+                <p class="govuk-body-l">{{__('caption_responsible_person_details')}}</p>
+            </div>
+            <div class="govuk-grid-column-full">
+                <p class="govuk-body-s" style="margin-bottom: 10px">{{__('person_sort')}}</p>
+                <table class="govuk-table" id="res_person_table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header" style="width: 5%;" scope="col">&nbsp;</th>
+                            <th class="govuk-table__header" id="surname" scope="col">{{__('field_surname')}}</th>
+                            <th class="govuk-table__header" id="given_name" scope="col">{{__('field_given_name')}}</th>
+                            <th class="govuk-table__header" id="email" scope="col">{{__('field_email')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body" id="resPerson_table_row">
+                        {% if responsiblePersons | length %}
+                            {% for resPerson in responsiblePersons %}
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">
+                                        <div class="govuk-radios govuk-radios--inline">
+                                            <div class="govuk-radios__item">
+                                                <input class="govuk-radios__input" id="resPerson_{{ loop.index }}" name="addResponsiblePerson" type="radio" value="{{resPerson.responsiblePersonId}}">
+                                                <label class="govuk-label govuk-radios__label" for="resPerson_{{ loop.index }}"></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="govuk-table__cell">{{resPerson.responsibleGivenName}}</td>
+                                    <td class="govuk-table__cell" scope="row">{{resPerson.responsibleSurname}}</td>
+                                    <td class="govuk-table__cell">{{resPerson.responsibleEmail}}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            {{ m.empty_table_message(__('responsible_person_no_records_create_new')) }}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="govuk-grid-column-two-thirds">
+            {% if responsiblePersons | length %}
+            <div class="govuk-form-group">
+              <input id="addResPersonToGAR" class="govuk-button" type="submit" name="buttonClicked" value="Add to GAR"
+                onclick="sendAnalytics(event, 'Add resperson to GAR - submit', 'click')">
+            </div>
+            {% endif %}
+            <h2 class="govuk-heading-l">{{__('res_person_add')}}</h2>
+            {% include "responsible-person-details.njk" %}
+            {{ m.submit_buttons('GAR Responsible Persons', csrfToken, __) }}
+            </div>
+        </form>
+        <div class="govuk-grid-column-two-thirds">
+            {{ m.exit_without_saving(csrfToken, __) }}
+        </div>
+    </div>
+    <script>
+        accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#responsibleCounty')});
+    </script>
+{% endblock %}
