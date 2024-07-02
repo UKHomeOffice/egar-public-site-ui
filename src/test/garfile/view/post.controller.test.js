@@ -12,13 +12,22 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
 const garApi = require('../../../common/services/garApi');
 
 const controller = require('../../../app/garfile/view/post.controller');
+const { outboundGar } = require('../../fixtures');
 
 describe('GAR view post controller', () => {
   let req; let res;
   let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub;
 
+  let clock;
+  const APRIL = 3;
+  
   beforeEach(() => {
     chai.use(sinonChai);
+    clock = sinon.useFakeTimers({
+      now: new Date(2023, APRIL, 11),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
 
     req = {
       body: { garId: 'GAR-ID-EXAMPLE-1' },
@@ -40,6 +49,7 @@ describe('GAR view post controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   describe('checkGARUser', () => {
@@ -157,7 +167,7 @@ describe('GAR view post controller', () => {
     delete req.body.garId;
     req.session.gar = { id: 'GAR-ID-EXAMPLE-2' };
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-2-API', status: { name: 'Draft' }, userId: 'USER-123',
+      garId: 'GAR-ID-EXAMPLE-2-API', status: { name: 'Draft' }, userId: 'USER-123', cbpSubmittedDate: null
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -182,7 +192,8 @@ describe('GAR view post controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
         cookie,
         manifestFields,
-        garfile: { garId: 'GAR-ID-EXAMPLE-2-API', status: { name: 'Draft' } },
+        garfile: { garId: 'GAR-ID-EXAMPLE-2-API', status: { name: 'Draft' }, cbpSubmittedDate: null },
+        isAbleToCancelGar: true,
         garpeople: {
           items: [
             { id: 'PERSON-1', firstName: 'Simona' },
@@ -205,7 +216,7 @@ describe('GAR view post controller', () => {
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, userId: 'USER-123',
+      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, userId: 'USER-123', cbpSubmittedDate: null
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -230,7 +241,8 @@ describe('GAR view post controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
         cookie,
         manifestFields,
-        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' } },
+        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, cbpSubmittedDate: null },
+        isAbleToCancelGar: true,
         garpeople: {
           items: [
             { id: 'PERSON-1', firstName: 'Simona' },
@@ -253,7 +265,7 @@ describe('GAR view post controller', () => {
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' }, userId: 'USER-123',
+      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' }, userId: 'USER-123', cbpSubmittedDate: null
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -280,7 +292,8 @@ describe('GAR view post controller', () => {
         manifestFields,
         showChangeLinks: false,
         isJourneyUKInbound: true,
-        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' } },
+        isAbleToCancelGar: true,
+        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Cancelled' }, cbpSubmittedDate: null },
         garpeople: {
           items: [
             { id: 'PERSON-1', firstName: 'Simona' },
@@ -301,7 +314,7 @@ describe('GAR view post controller', () => {
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
     garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-124',
+      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-124', 
     }));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
@@ -333,9 +346,11 @@ describe('GAR view post controller', () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
-    garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-124', organisationId: 'ORG-123', departurePort: 'LGW', arrivalPort: 'LAX'
-    }));
+    let garWithMatchingOrgsNotUser = outboundGar()
+    garWithMatchingOrgsNotUser.userId = 'USER-124';
+    garWithMatchingOrgsNotUser.organisationId = 'ORG-123';
+
+    garApiGetStub.resolves(JSON.stringify(garWithMatchingOrgsNotUser));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
         { id: 'PERSON-1', firstName: 'Simona' },
@@ -361,9 +376,8 @@ describe('GAR view post controller', () => {
         manifestFields,
         showChangeLinks: false,
         isJourneyUKInbound: false,
-        garfile: {
-          garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, departurePort: 'LGW', arrivalPort: 'LAX'
-        },
+        isAbleToCancelGar: true,
+        garfile: outboundGar(),
         garpeople: {
           items: [
             { id: 'PERSON-1', firstName: 'Simona' },
@@ -383,9 +397,10 @@ describe('GAR view post controller', () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
-    garApiGetStub.resolves(JSON.stringify({
-      garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' }, userId: 'USER-123', departurePort: 'LGW', arrivalPort: 'LAX'
-    }));
+    let outboundGarWithSameUserId = outboundGar();
+    outboundGarWithSameUserId.userId = 'USER-123';
+
+    garApiGetStub.resolves(JSON.stringify(outboundGarWithSameUserId));
     garApiGetPeopleStub.resolves(JSON.stringify({
       items: [
         { id: 'PERSON-1', firstName: 'Simona' },
@@ -411,7 +426,61 @@ describe('GAR view post controller', () => {
         manifestFields,
         showChangeLinks: false,
         isJourneyUKInbound: false,
-        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Submitted' } , departurePort: 'LGW', arrivalPort: 'LAX'},
+        isAbleToCancelGar: true,
+        garfile: outboundGar(),
+        garpeople: {
+          items: [
+            { id: 'PERSON-1', firstName: 'Simona' },
+            { id: 'PERSON-2', firstName: 'Serena' },
+          ],
+        },
+        garsupportingdocs: {
+          items: [
+            { name: 'EXAMPLE-DOC-1', size: '1MB' },
+          ],
+        },
+      });
+    });
+  });
+
+  it('Should return isAbleToSubmitGar as false value is 2 weeks old than cbp submission date', () => {
+    const cookie = new CookieModel(req);
+    cookie.setGarId('GAR-ID-EXAMPLE-1');
+    const userOldSubmissionGar = outboundGar();
+    userOldSubmissionGar.userId = 'USER-123';
+    userOldSubmissionGar.cbpSubmittedDate = '2023-03-20T10:55:26.285425';
+
+    garApiGetStub.resolves(JSON.stringify(userOldSubmissionGar));
+    garApiGetPeopleStub.resolves(JSON.stringify({
+      items: [
+        { id: 'PERSON-1', firstName: 'Simona' },
+        { id: 'PERSON-2', firstName: 'Serena' },
+      ],
+    }));
+    garApiGetSupportingDocsStub.resolves(JSON.stringify({
+      items: [
+        { name: 'EXAMPLE-DOC-1', size: '1MB' },
+      ],
+    }));
+
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    let resultantOutboundGar = outboundGar();
+    resultantOutboundGar.cbpSubmittedDate = '2023-03-20T10:55:26.285425';
+
+    callController().then().then(() => {
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
+      expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+        cookie,
+        manifestFields,
+        showChangeLinks: false,
+        isJourneyUKInbound: false,
+        isAbleToCancelGar: false,
+        garfile: resultantOutboundGar,
         garpeople: {
           items: [
             { id: 'PERSON-1', firstName: 'Simona' },

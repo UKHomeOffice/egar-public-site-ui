@@ -69,3 +69,6 @@ exports.MAX_NUM_FILES = parseInt(process.env.MAX_NUM_FILES, 10) || 8;
 
 //Homepage banner message
 exports.HOMEPAGE_MESSAGE = process.env.HOMEPAGE_MESSAGE;
+
+// Max allowed cancellation to CBP - 2 weeks
+exports.MAX_ALLOWED_CANCELLATION_TIME_TO_CBP = 2 * 7 * 24 * 60 * 60 * 1000

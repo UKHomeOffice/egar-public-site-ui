@@ -135,9 +135,20 @@ const invalidPassengersAndCrew = () => {
   ]
 }
 
+const outboundGar = () => {
+  return { 
+    garId: 'GAR-ID-EXAMPLE-1-API', 
+    status: { name: 'Submitted' }, 
+    departurePort: 'LGW', 
+    arrivalPort: 'LAX',
+    cbpSubmittedDate: null
+  };
+}
+
 module.exports = {
     savedPeople,
     flaggedSavedPeople,
     garPeople,
-    invalidPassengersAndCrew
+    invalidPassengersAndCrew,
+    outboundGar
 }
