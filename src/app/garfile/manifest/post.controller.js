@@ -131,7 +131,7 @@ module.exports = async (req, res) => {
       const isValid = await manifest.validate();
       
       if (isValid) {
-        return res.redirect('/garfile/responsibleperson');
+        return res.redirect('/garfile/resperson');
       } 
 
       logger.info('Manifest validation failed, redirecting with error msg');

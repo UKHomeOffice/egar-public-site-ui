@@ -85,6 +85,26 @@ const endpoints = {
     logger.debug(`Calling update craft endpoint ${endpoint}`);
     return endpoint;
   },
+  createResPerson(userId) {
+    const endpoint = new URL(`${API_VERSION}/user/${userId}/responsiblepersons`, BASE_URL).href;
+    logger.debug(`Calling create responsible person endpoint ${endpoint}`);
+    return endpoint;
+  },
+  getResPersons(userId) {
+    const endpoint = new URL(`${API_VERSION}/user/${userId}/responsiblepersons`, BASE_URL).href;
+    logger.debug(`Calling get responsible person endpoint ${endpoint}`);
+    return endpoint;
+  },
+  getResPersonDetail(userId, responsiblepersonId) {
+    const endpoint = new URL(`${API_VERSION}/user/${userId}/responsibleperson/${responsiblepersonId}`, BASE_URL).href;
+    logger.debug(`Calling get responsible person details endpoint ${endpoint}`);
+    return endpoint;
+  },
+  deleteResPerson(userId, responsiblepersonId) {
+    const endpoint = new URL(`${API_VERSION}/user/${userId}/responsibleperson/${responsiblepersonId}`, BASE_URL).href;
+    logger.debug(`Calling delete responsible person details endpoint ${endpoint}`);
+    return endpoint;
+  },
   createPerson(userId) {
     const endpoint = new URL(`${API_VERSION}/user/${userId}/people`, BASE_URL).href;
     logger.debug(`Calling create person endpoint ${endpoint}`);
