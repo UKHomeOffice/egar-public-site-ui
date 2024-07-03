@@ -81,5 +81,7 @@
             {{ m.exit_without_saving(csrfToken, __) }}
         </div>
     </div>
-
+    <script>
+        accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#responsibleCounty')});
+    </script>
 {% endblock %}
