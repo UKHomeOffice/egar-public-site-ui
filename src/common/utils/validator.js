@@ -5,10 +5,29 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../config/index');
+const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT, MAX_ALLOWED_CANCELLATION_TIME_TO_CBP } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList } = require('../../common/utils/autocomplete');
 const { documentTypes } = require('./utils');
+
+/**
+ * isAbleToCancelGar
+ * @param {string|null} cbpSubmittedDateString
+ * @return {Date}
+ */
+const isAbleToCancelGar = (cbpSubmittedDateString) => {
+  if (cbpSubmittedDateString === null) return true;
+  if (cbpSubmittedDateString && typeof cbpSubmittedDateString === "string") {
+    const cbpSubmittedDate = new Date(cbpSubmittedDateString);
+    const today = new Date().getTime();
+    return (cbpSubmittedDate.getTime() + MAX_ALLOWED_CANCELLATION_TIME_TO_CBP) > today;
+  } else {
+    throw new Error(
+      `cbpSubmittedDateString: "${cbpSubmittedDateString}", type: "${typeof cbpSubmittedDateString}", is not null or a valid string`
+    )
+  }
+
+}
 
 function isValidDocumentType(documentType) {
   return documentTypes.includes(documentType);
@@ -788,5 +807,6 @@ module.exports = {
   convertDateToUTC,
   containTabs,
   isValidDocumentType,
-  isOtherDocumentWithDocumentDesc
+  isOtherDocumentWithDocumentDesc,
+  isAbleToCancelGar
 };

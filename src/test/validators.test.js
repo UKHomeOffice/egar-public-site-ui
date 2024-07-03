@@ -1084,5 +1084,60 @@ describe('Validator', () => {
       expect(validator.isOtherDocumentWithDocumentDesc(["Passport", {}])).to.eql(false);
       expect(validator.isOtherDocumentWithDocumentDesc()).to.eql(false);
     });
+
+  })
+
+  describe('Should determine if a value is cancellable by CBP', () => {
+    let clock;
+    const MARCH = 2;
+    const APRIL = 3;
+    
+    beforeEach(() => {
+      clock = sinon.useFakeTimers({
+        now: new Date(2023, APRIL, 11),
+        shouldAdvanceTime: false,
+        toFake: ["Date"],
+      });
+    })
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it("Should be valid to cancel GAR by CBP", () => {
+      const currentDate = "2023-04-11T00:00:00.000000";
+      const dayOld = "2023-04-10T00:00:00.000000";
+      const weekOld = "2023-04-11T00:00:00.000000";
+      const twoWeeksOld = "2023-03-29T00:00:00.000000";
+  
+      expect(validator.isAbleToCancelGar(currentDate)).to.eql(true);
+      expect(validator.isAbleToCancelGar(null)).to.eql(true);
+      expect(validator.isAbleToCancelGar(dayOld)).to.eql(true);
+      expect(validator.isAbleToCancelGar(weekOld)).to.eql(true);
+      expect(validator.isAbleToCancelGar(twoWeeksOld)).to.eql(true);
+    })
+
+    it("Should be invalid to cancel GAR by CBP", () => {
+      const twoWeeksAndADayOld = "2023-03-28T00:00:00.000000";
+      const yearOld = "2022-04-11T00:00:00.000000";
+      expect(validator.isAbleToCancelGar(twoWeeksAndADayOld)).to.eql(false);
+      expect(validator.isAbleToCancelGar(yearOld)).to.eql(false);
+
+      const blankString = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, '');
+      const undefinedDate = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, undefined);
+      const blankObject = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, {});
+
+      expect(blankString).to.throw(
+        'cbpSubmittedDateString: "", type: "string", is not null or a valid string'
+      );
+
+      expect(undefinedDate).to.throw(
+        'cbpSubmittedDateString: "undefined", type: "undefined", is not null or a valid string'
+      );
+
+      expect(blankObject).to.throw(
+        'cbpSubmittedDateString: "[object Object]", type: "object", is not null or a valid string'
+      );
+    })
   })
 });
