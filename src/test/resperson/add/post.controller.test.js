@@ -54,7 +54,7 @@ describe('Responsible Person Add Post Controller', () => {
     it('should render with errors if responsibleSurname is empty', () => {
         req.body.responsibleSurname = '';
         const cookie = new CookieModel(req);
-
+        _responsiblePerson = utils.getResponsiblePersonFromReq(req);
         const callController = async () => {
             await controller(req, res);
         };
@@ -67,9 +67,9 @@ describe('Responsible Person Add Post Controller', () => {
                 req,
                 fixedBasedOperatorOptions,
                 errors: [
-                  new ValidationRule(validator.notEmpty, 'responsibleSurname', responsibleSurname, 'Enter a surname for the responsible person'),
+                  new ValidationRule(validator.notEmpty, 'responsibleSurname', req.body.responsibleSurname, 'Enter a surname for the responsible person'),
                 ],
-                responsiblePerson,
+                responsiblePerson: _responsiblePerson,
               });
         });
 
@@ -91,6 +91,20 @@ describe('Responsible Person Add Post Controller', () => {
             fixedBasedOperatorOptions,
             errors: [{ message: 'There was a problem creating the responsible person. Please try again' }],
           });
+        });
+      });
+
+      it('should redirect on res person create success', () => {
+        resPersonApiStub.resolves(JSON.stringify({}));
+    
+        const callController = async () => {
+          await controller(req, res);
+        };
+    
+        callController().then().then(() => {
+          expect(resPersonApiStub).to.have.been.calledWith('90210', responsiblePerson);
+          expect(res.redirect).to.have.been.calledWith('/resperson');
+          expect(res.render).to.not.have.been.called;
         });
       });
 

@@ -36,7 +36,7 @@ module.exports = (req, res) => {
   .catch((err) => {
     logger.info('Validation errors creating a new responsible person');
       logger.debug(JSON.stringify(err));
-      res.render('app/resPerson/add/index', {
+      res.render('app/resperson/add/index', {
         cookie, req,  fixedBasedOperatorOptions, errors: err, responsiblePerson
       });
   });
