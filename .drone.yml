@@ -20,7 +20,9 @@ steps:
         from_secret: DOCKER_USERNAME
     commands:
       # Wait for the docker service to be up
-      - env
+      - echo "testing"
+      - echo $${DOCKER_USERNAME}
+      - echo $${DOCKER_PASSWORD}
       - echo "Checking for docker availability."
       - n=0; while [ "$n" -lt 60 ] && ! docker stats --no-stream >/dev/null 2>&1; do n=$(( n + 1 )); sleep 1; done
       - echo "echo docker now available."
