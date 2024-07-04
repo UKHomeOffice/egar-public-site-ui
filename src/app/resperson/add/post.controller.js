@@ -29,7 +29,7 @@ module.exports = (req, res) => {
       logger.error('There was a problem adding person to saved people');
       logger.error(err);
       res.render('app/resperson/add/index', {
-        cookie, fixedBasedOperatorOptions, errors: [{ message: 'There was a problem creating the person. Please try again' }],
+        cookie, fixedBasedOperatorOptions, errors: [{ message: 'There was a problem creating the responsible person. Please try again' }],
       });
     });
   })
