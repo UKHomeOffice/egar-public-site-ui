@@ -467,7 +467,7 @@ steps:
         cpu: 1000
         memory: 1024Mi
     environment:
-      IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+      IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:${DRONE_COMMIT}
     when:
       event:
       - cron
@@ -517,9 +517,7 @@ trigger:
     - cron
   cron:
         - scheduled_vulnerability_scan
-  target:
-      exclude:
-        - production
+
 
 
 
