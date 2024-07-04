@@ -245,7 +245,7 @@ describe('Manifest Post Controller', () => {
     expect(req.session.manifestErr).to.be.undefined;
     expect(req.session.manifestInvalidPeople).to.be.undefined;
     expect(res.redirect).to.have.been.called;
-    expect(res.redirect).to.have.been.calledWith('/garfile/responsibleperson');
+    expect(res.redirect).to.have.been.calledWith('/garfile/resperson');
   });
 
   it('should redirect to next page if buttonClicked is Continue and gar api resolves even if personId set', async () => {
@@ -265,6 +265,6 @@ describe('Manifest Post Controller', () => {
     expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
     expect(req.session.manifestErr).to.be.undefined;
     expect(req.session.manifestInvalidPeople).to.be.undefined;
-    expect(res.redirect).to.have.been.calledWith('/garfile/responsibleperson');
+    expect(res.redirect).to.have.been.calledWith('/garfile/resperson');
   });
 });

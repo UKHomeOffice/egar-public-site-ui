@@ -26,7 +26,6 @@ const userDelete = require('./user/deleteAccount');
 
 // GAR dependencies
 const aircraftdetail = require('./garfile/craft');
-const responsiblepersondetail = require('./garfile/responsibleperson');
 const customsDetail = require('./garfile/customs');
 const departuredetail = require('./garfile/departure');
 const arrivaldetail = require('./garfile/arrival');
@@ -122,7 +121,6 @@ module.exports.bind = (app) => {
   app.use(userSavedCraftDelete.router);
   app.use(usersavedcraftadd.router);
   app.use(userDelete.router);
-  app.use(responsiblepersondetail.router);
   app.use(customsDetail.router);
   app.use(garhome.router);
   app.use(manifest.router);
