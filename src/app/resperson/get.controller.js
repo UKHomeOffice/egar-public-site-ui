@@ -15,6 +15,19 @@ module.exports = async (req, res) => {
       delete req.session.successMsg;
       return res.render('app/resperson/index', { cookie, resPersons, successMsg, successHeader });
     }
+    if (req.session.errMsg) {
+      const { errMsg } = req.session;
+      delete req.session.errMsg;
+      return res.render('app/resperson/index', {
+        cookie, resPersons, errors: [errMsg],
+      });
+    }
+    if(resPersons.message) {
+      logger.info(`Failed to get saved people: ${resPersons.message}`)
+      return res.render('app/resperson/index', {
+        cookie, resPersons, errors: [errMSg],
+      });
+    }
     return res.render('app/resperson/index', { cookie, resPersons });
   } 
   catch (err) {
