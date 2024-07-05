@@ -3,7 +3,6 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
-const CookieModel = require('../../../common/models/Cookie.class');
 const resPersonApi = require('../../../common/services/resPersonApi');
 
 const controller = require('../../../app/resperson/delete/get.controller');
