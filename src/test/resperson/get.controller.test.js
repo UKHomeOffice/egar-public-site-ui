@@ -8,7 +8,6 @@ const CookieModel = require('../../common/models/Cookie.class');
 const resPersonApi = require('../../common/services/resPersonApi');
 
 const controller = require('../../app/resperson/get.controller');
-const logger = require('../../common/utils/logger');
 
 const responsible_persons = [
   {

@@ -4,81 +4,96 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 const CookieModel = require('../../../common/models/Cookie.class');
-const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const resPersonApi = require('../../../common/services/resPersonApi');
 
-const controller = require('../../../app/resperson/add/post.controller');
+const controller = require('../../../app/resperson/delete/get.controller');
 
 
 describe('Responsible Person Delete Get Controller', () => {
-    let req; let res;
+
+    let req;
+    let res;
+    let deleteResPersonStub;
+    let sessionSaveStub;
 
     beforeEach(() => {
-        chai.use(sinonChai);
-
         req = {
             session: {
-                u: { dbId: '90210' },
+                u: { dbId: '343' },
+                save: callback => callback(),
             },
         };
+
         res = {
-            render: sinon.spy(),
+            redirect: sinon.spy(),
         };
+
+        sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
+        deleteResPersonStub = sinon.stub(resPersonApi, 'deleteResponsiblePerson');
     });
 
     afterEach(() => {
         sinon.restore();
     });
 
-    it('should render the page with error if the api rejeccts', async () => {
-        const cookie = new CookieModel(req);
-        sinon.stub(resPersonApi, 'deleteResponsiblePerson').rejects({ 'message': 'User not recoganised' });
+    it('should redirect if responsiblePersonId is undefined', async () => {
+        delete req.session.deleteResponsiblePersonId;
 
-        const callController = async () => {
-            await controller(req, res);
-        };
+        await controller(req, res);
 
-        callController().then().then(() => {
-            expect(req.session.errMsg).to.eql({ message: 'User not recoganised' });
-            expect(resPersonApi).to.have.been.calledWith('90210', 'individual');
-            expect(res.redirect).to.have.been.calledWith('/resperson');
-            expect(res.render).to.not.have.been.called;
-        });
-
+        expect(deleteResPersonStub).to.not.have.been.called;
+        expect(res.redirect).to.have.been.calledWith('/resperson');
     });
 
-    it('should render the page with error if the api resolved message response', async () => {
-        const cookie = new CookieModel(req);
-        sinon.stub(resPersonApi, 'deleteResponsiblePerson').resolves({ 'message': 'responsible person does not exist' });
+    it('should render the page with error if the resPerson api resolves', async () => {
+        req.session.deleteResponsiblePersonId = 'DELETE-PERSON-ID';
 
-        const callController = async () => {
-            await controller(req, res);
-        };
+        deleteResPersonStub.resolves(JSON.stringify({
+            message: 'responsible person not found',
+        }));
 
-        callController().then().then(() => {
-            expect(req.session.errMsg).to.eql({ message: 'responsible person does not exist' });
-            expect(resPersonApi).to.have.been.calledWith('90210', 'individual');
-            expect(res.redirect).to.have.been.calledWith('/resperson');
-            expect(res.render).to.not.have.been.called;
-        });
+        await controller(req, res);
 
+        expect(deleteResPersonStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
+        expect(req.session.errMsg).to.eql({ message: 'Failed to delete responsible person. Try again' });
+        expect(sessionSaveStub).to.have.been.calledOnce;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/resperson');
     });
 
     it('should render the page with success message on successful deletion of responsible person', async () => {
-        const cookie = new CookieModel(req);
-        sinon.stub(resPersonApi, 'deleteResponsiblePerson').resolves({});
+        req.session.deleteResponsiblePersonId = 'DELETE-PERSON-ID';
+
+        deleteResPersonStub.resolves(JSON.stringify({
+        }));
+
+        await controller(req, res);
+
+        expect(deleteResPersonStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
+        expect(req.session.errMsg).to.be.undefined;
+        expect(req.session.successHeader).to.eq('Success');
+        expect(req.session.successMsg).to.eq('Responsible is person deleted');
+        expect(sessionSaveStub).to.have.been.calledOnce;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/resperson');
+    });
+
+    it('should render the page with error if the resPerson API rejects', async () => {
+
+        req.session.deleteResponsiblePersonId = 'DELETE-PERSON-ID';
+
+        deleteResPersonStub.rejects('getResPerson Example Reject');
 
         const callController = async () => {
             await controller(req, res);
         };
 
-        callController().then().then(() => {
-            expect(req.session.successHeader).to.eql('Success');
-            expect(req.session.successMsg).to.eql('Responsible is person deleted');
-            expect(resPersonApi).to.have.been.calledWith('90210', 'individual');
-            expect(res.redirect).to.have.been.calledWith('/resperson');
-            expect(res.render).to.not.have.been.called;
+        callController().then(() => {
+            expect(deleteResPersonStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
+            expect(req.session.errMsg).to.eql({ message: 'Failed to delete responsible person. Try again' });
+            expect(sessionSaveStub).to.have.been.calledOnce;
+            expect(res.redirect).to.have.been.calledOnceWithExactly('/resperson');
         });
+
+
 
     });
 
