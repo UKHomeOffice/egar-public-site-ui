@@ -4,8 +4,8 @@ const validator = require('../../../common/utils/validator');
 const validations = require('../validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
-const resPersonApi = require('../../../common/services/resPersonApi');
 const utils = require('../../../common/utils/utils');
+const resPersonApi = require('../../../common/services/resPersonApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -14,7 +14,6 @@ module.exports = (req, res) => {
 
   const responsiblePerson = utils.getResponsiblePersonFromReq(req);
   const resPersonId = req.session.editResponsiblePersonId;
-  logger.info(JSON.stringify(responsiblePerson));
   validator.validateChains(validations.validations(req))
   .then(() => {
     resPersonApi.updateResPerson(cookie.getUserDbId(), resPersonId, responsiblePerson).then((apiResponse) => {
@@ -30,14 +29,14 @@ module.exports = (req, res) => {
       logger.error('There was a problem adding person to saved people');
       logger.error(err);
       res.render('app/resperson/edit/index', {
-        cookie, fixedBasedOperatorOptions, errors: [{ message: 'There was a problem creating the person. Please try again' }],
+        cookie, responsiblePerson, fixedBasedOperatorOptions, errors: [{ message: 'There was a problem updating responsible person. Please try again' }],
       });
     });
   })
   .catch((err) => {
     logger.info('Validation errors creating a new responsible person');
       logger.debug(JSON.stringify(err));
-      res.render('app/resPerson/edit/index', {
+      res.render('app/resperson/edit/index', {
         cookie, req, responsiblePerson, fixedBasedOperatorOptions, errors: err,
       });
   });
