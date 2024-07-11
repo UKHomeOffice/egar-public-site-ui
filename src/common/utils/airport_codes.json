@@ -56386,6 +56386,13 @@
     "british": false,
     "crownDependency": false,
     "label": "Sphinx International Airport (Egypt) (HESX / SPX)"
+  },
+  {
+    "id": "KTYQ",
+    "id2": "KTYQ",
+    "british": false,
+    "crownDependency": false,
+    "label": "Indianapolis Executive Airport (United States) (KTYQ)"
   }
 
 ]
