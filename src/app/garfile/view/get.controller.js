@@ -51,15 +51,13 @@ module.exports = (req, res) => {
       garsupportingdocs: {},
     };
 
-  
-
   Promise.all([garDetails, garPeople, garDocs])
     .then((responseValues) => {
       const parsedGar = JSON.parse(responseValues[0]);
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;
-      const lastDepartureDateString = departureDate || departureTime ? `${departureDate}T${departureTime}.000Z`: null;
+      const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z`: null;
 
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {

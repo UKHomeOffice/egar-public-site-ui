@@ -448,7 +448,8 @@ describe('GAR view post controller', () => {
     cookie.setGarId('GAR-ID-EXAMPLE-1');
     const userOldSubmissionGar = outboundGar();
     userOldSubmissionGar.userId = 'USER-123';
-    userOldSubmissionGar.cbpSubmittedDate = '2023-03-20T10:55:26.285425';
+    userOldSubmissionGar.departureDate = '2023-03-20';
+    userOldSubmissionGar.departureTime = '10:55:26';
 
     garApiGetStub.resolves(JSON.stringify(userOldSubmissionGar));
     garApiGetPeopleStub.resolves(JSON.stringify({
@@ -468,7 +469,8 @@ describe('GAR view post controller', () => {
     };
 
     let resultantOutboundGar = outboundGar();
-    resultantOutboundGar.cbpSubmittedDate = '2023-03-20T10:55:26.285425';
+    resultantOutboundGar.departureDate = '2023-03-20';
+    resultantOutboundGar.departureTime = '10:55:26';
 
     callController().then().then(() => {
       expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
