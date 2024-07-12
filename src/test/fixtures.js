@@ -141,7 +141,8 @@ const outboundGar = () => {
     status: { name: 'Submitted' }, 
     departurePort: 'LGW', 
     arrivalPort: 'LAX',
-    cbpSubmittedDate: null
+    departureDate: '2023-04-11',
+    departureTime: '11:30:15'
   };
 }
 

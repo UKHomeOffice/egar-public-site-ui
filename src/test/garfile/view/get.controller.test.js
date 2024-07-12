@@ -64,7 +64,7 @@ describe('GAR view get controller', () => {
         cookie.setGarId('GAR-ID-EXAMPLE-1');
 
         garApiGetStub.resolves(JSON.stringify({
-            garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, userId: 'USER-123', cbpSubmittedDate: null
+            garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, userId: 'USER-123'
         }));
         garApiGetPeopleStub.resolves(JSON.stringify({
         items: [
@@ -89,7 +89,7 @@ describe('GAR view get controller', () => {
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
             cookie,
             manifestFields,
-            garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, cbpSubmittedDate: null },
+            garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' } },
             isAbleToCancelGar: true,
             successHeader:"Success",
             successMsg:"Success Message",
@@ -110,12 +110,14 @@ describe('GAR view get controller', () => {
         });
     });
 
-    it('Should return isAbleToSubmitGar as false value is 2 weeks old than cbp submission date', () => {
+    it('Should return isAbleToSubmitGar as false value is 2 weeks old than departure datetime', () => {
         const cookie = new CookieModel(req);
         cookie.setGarId('GAR-ID-EXAMPLE-1');
         const userOldSubmissionGar = outboundGar();
         userOldSubmissionGar.userId = 'USER-123';
-        userOldSubmissionGar.cbpSubmittedDate = '2023-03-20T10:55:26.285425';
+        userOldSubmissionGar.departureDate = '2023-03-20';
+        userOldSubmissionGar.departureTime = '10:55:26';
+
 
         garApiGetStub.resolves(JSON.stringify(userOldSubmissionGar));
         garApiGetPeopleStub.resolves(JSON.stringify({
@@ -135,7 +137,8 @@ describe('GAR view get controller', () => {
         };
 
         let resultantOutboundGar = outboundGar();
-        resultantOutboundGar.cbpSubmittedDate = '2023-03-20T10:55:26.285425';
+        resultantOutboundGar.departureDate = '2023-03-20';
+        resultantOutboundGar.departureTime = '10:55:26';
 
         callController().then().then(() => {
         expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');

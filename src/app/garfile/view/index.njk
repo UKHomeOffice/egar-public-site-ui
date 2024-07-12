@@ -38,7 +38,7 @@
       {% endif %}
       {% if garfile.status.name !== 'Cancelled' %}
         <p class="govuk-body-m">
-          {% if garfile.status.name !== 'Submitted' or isAbleToCancelGar %}
+          {% if isAbleToCancelGar %}
             <a id="cancel-gar"  class="govuk-button" href="/garfile/cancel">{{__('title_cancel_gar')}}</a>
           {% endif %}
           {% if garfile.status.name === 'Submitted' %}

@@ -51,14 +51,13 @@ module.exports = (req, res) => {
       garsupportingdocs: {},
     };
 
-  
-
   Promise.all([garDetails, garPeople, garDocs])
     .then((responseValues) => {
       const parsedGar = JSON.parse(responseValues[0]);
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
-      const cbpSubmittedDateString = parsedGar.cbpSubmittedDate ? parsedGar.cbpSubmittedDate : null;
+      const { departureDate, departureTime } = parsedGar;
+      const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z`: null;
 
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
@@ -82,7 +81,7 @@ module.exports = (req, res) => {
         cookie,
         manifestFields,
         garfile: parsedGar,
-        isAbleToCancelGar: isAbleToCancelGar(cbpSubmittedDateString),
+        isAbleToCancelGar: isAbleToCancelGar(lastDepartureDateString),
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         successMsg,

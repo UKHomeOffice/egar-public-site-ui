@@ -1128,15 +1128,15 @@ describe('Validator', () => {
       const blankObject = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, {});
 
       expect(blankString).to.throw(
-        'cbpSubmittedDateString: "", type: "string", is not null or a valid string'
+        'lastDepartureDateString: "", type: "string", is not null or a valid string'
       );
 
       expect(undefinedDate).to.throw(
-        'cbpSubmittedDateString: "undefined", type: "undefined", is not null or a valid string'
+        'lastDepartureDateString: "undefined", type: "undefined", is not null or a valid string'
       );
 
       expect(blankObject).to.throw(
-        'cbpSubmittedDateString: "[object Object]", type: "object", is not null or a valid string'
+        'lastDepartureDateString: "[object Object]", type: "object", is not null or a valid string'
       );
     })
   })

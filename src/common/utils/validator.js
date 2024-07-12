@@ -12,18 +12,18 @@ const { documentTypes } = require('./utils');
 
 /**
  * isAbleToCancelGar
- * @param {string|null} cbpSubmittedDateString
+ * @param {string|null} lastDepartureDateString
  * @return {Date}
  */
-const isAbleToCancelGar = (cbpSubmittedDateString) => {
-  if (cbpSubmittedDateString === null) return true;
-  if (cbpSubmittedDateString && typeof cbpSubmittedDateString === "string") {
-    const cbpSubmittedDate = new Date(cbpSubmittedDateString);
+const isAbleToCancelGar = (lastDepartureDateString) => {
+  if (lastDepartureDateString === null) return true;
+  if (lastDepartureDateString && typeof lastDepartureDateString === "string") {
+    const cbpSubmittedDate = new Date(lastDepartureDateString);
     const today = new Date().getTime();
     return (cbpSubmittedDate.getTime() + MAX_ALLOWED_CANCELLATION_TIME_TO_CBP) > today;
   } else {
     throw new Error(
-      `cbpSubmittedDateString: "${cbpSubmittedDateString}", type: "${typeof cbpSubmittedDateString}", is not null or a valid string`
+      `lastDepartureDateString: "${lastDepartureDateString}", type: "${typeof lastDepartureDateString}", is not null or a valid string`
     )
   }
 
