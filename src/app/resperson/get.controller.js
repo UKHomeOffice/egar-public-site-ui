@@ -5,7 +5,7 @@ const resPersonApi = require('../../common/services/resPersonApi');
 module.exports = async (req, res) => {
   logger.debug('In responsible person get controller');
   const cookie = new CookieModel(req);
-  const errMSg = { message: 'Failed to get saved responsible persons' };
+  const errMessage = { message: 'Failed to get saved responsible persons' };
   try {
     const response = await resPersonApi.getResPersons(cookie.getUserDbId())
     const resPersons = JSON.parse(response);
@@ -23,16 +23,16 @@ module.exports = async (req, res) => {
       });
     }
     if(resPersons.message) {
-      logger.info(`Failed to get saved people: ${resPersons.message}`)
+      logger.info(`Failed to get saved responsible persons: ${resPersons.message}`)
       return res.render('app/resperson/index', {
-        cookie, resPersons, errors: [errMSg],
+        cookie, resPersons, errors: [errMessage],
       });
     }
     return res.render('app/resperson/index', { cookie, resPersons });
   } 
   catch (err) {
-    logger.info('Failed to get saved responsible people');
+    logger.info('Failed to get saved responsible persons');
     logger.info(err);
-    return res.render('app/resperson/index', { cookie, errors: [errMSg] });
+    return res.render('app/resperson/index', { cookie, errors: [errMessage] });
   };
 };

@@ -5,7 +5,6 @@ const endpoints = require('../config/endpoints');
 module.exports = {
 
     create(userId, resPerson) {
-        logger.debug(JSON.stringify(resPerson));
         return new Promise((resolve, reject) => {
             request.post({
                 headers: { 'content-type': 'application/json' },

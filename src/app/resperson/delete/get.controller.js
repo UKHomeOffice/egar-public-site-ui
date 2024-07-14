@@ -17,6 +17,7 @@ module.exports = (req, res) => {
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+        logger.error(`Failed to delete the responsible persons: ${parsedResponse.message}`)
         req.session.errMsg = errMsg;
         return req.session.save(() => res.redirect('/resperson'));
       }
