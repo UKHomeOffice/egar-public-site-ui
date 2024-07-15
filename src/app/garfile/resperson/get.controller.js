@@ -22,8 +22,8 @@ module.exports = async (req, res) => {
     const userId = cookie.getUserDbId();
     if(req.query.resPersonId) {
       const resPerResponse = await resPersonApi.getResPersonDetails(userId, req.query.resPersonId);
-      const responsiblePerson = await JSON.parse(resPerResponse);
-      res.render('app/garfile/resperson/index', { cookie, responsiblePerson, responsiblePersons, fixedBasedOperatorOptions });
+      const responsible_person = await JSON.parse(resPerResponse);
+      res.render('app/garfile/resperson/index', { cookie, responsiblePerson:responsible_person, responsiblePersons, fixedBasedOperatorOptions });
     } else {
       res.render('app/garfile/resperson/index', { cookie, responsiblePerson, responsiblePersons, fixedBasedOperatorOptions });
     }

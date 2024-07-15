@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
     if(resPersons.message) {
       logger.info(`Failed to get saved responsible persons: ${resPersons.message}`)
       return res.render('app/resperson/index', {
-        cookie, resPersons, errors: [errMessage],
+        cookie, resPersons:[], errors: [errMessage],
       });
     }
     return res.render('app/resperson/index', { cookie, resPersons });
