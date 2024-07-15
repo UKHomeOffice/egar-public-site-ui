@@ -95,7 +95,7 @@ describe('Responsible Person Index Get Controller', () => {
     callController().then(() => {
       expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
       expect(res.render).to.have.been.calledWith('app/resperson/index', {
-        cookie, resPersons, errors: [{ message: 'Failed to get saved responsible persons' }],
+        cookie, resPersons:[], errors: [{ message: 'Failed to get saved responsible persons' }],
       });
     });
   });
