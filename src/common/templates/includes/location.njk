@@ -1,6 +1,6 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
-{% macro location(legendLabel, warningMessage, isPortChoice, portCode, lat, long, prefix, errors, __) %}
+{% macro location(legendLabel, warningMessage, isPortChoice, portCode, lat, long, prefix, errors, __, countryCode) %}
 
     {# legendLabel:string html for legend contents#}
     {# warningMessage:string text for any port warning hint#}
@@ -10,6 +10,9 @@
     {# long:string - latitude in decimal  #}
     {# prefix:string - prefix to namespace form fields and similar. for arrival, departure, craft etc  #}
     {# errors:array(Object) - error messages  #}
+    {# countryCode:string - country code for the app #}
+
+
     <div class="{{ m.form_group_class('portChoice', errors) }}">
         <fieldset class="govuk-fieldset" aria-describedby="portChoice-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -33,7 +36,7 @@
                     <div class="govuk-form-group">
                         {{ m.hint(prefix + 'Coordinates', __('field_coordinate_hint')) }}
                     </div>
-                    {{lat_long(lat, long, prefix, errors, __)}}
+                    {{lat_long(lat, long, prefix, errors, __, countryCode)}}
                 </div>
             </div>
             {{warningMessage}}
@@ -62,7 +65,7 @@
 
 {% endmacro %}
 
-{% macro lat_long(lat, long, prefix, errors, __) %}
+{% macro lat_long(lat, long, prefix, errors, __, countryCode='') %}
 
     <style type="text/css">
 
@@ -92,31 +95,34 @@
     </div>
     {# End location coords #}
 
-    {#value=countryCode#}
-    <div class="{{ m.form_group_class(prefix + 'CountryCode', errors) }}">
-    <label 
-        id="{{ prefix }}CountryCode-label" 
-        class="govuk-label govuk-label--m" 
-        for="{{ prefix }}CountryCode">
-        {{ __('field_coordinate_country') }}
-    </label>
-    {{ m.hint(prefix + 'CountryCode', __('field_coordinate_country_hint')) }}
-    {{ m.error_message(prefix + 'CountryCode', errors, __) }}
-    <select 
-        class="govuk-select" 
-        id="{{ prefix }}CountryCode" 
-        name="{{ prefix }}CountryCode" 
-        aria-labelledby="{{ prefix }}CountryCode-label" 
-        aria-describedby="{{ prefix }}CountryCode-hint"
-    >
-      {% for country in countryList|sort(attribute='label') %}
-        <option value="{{ country.code }}">{{ country.label }}</option>
-      {% endfor %}
-    </select>
-    <script>
-        accessibleAutocomplete.enhanceSelectElement({ selectElement: document.querySelector('#{{ prefix }}CountryCode')});
-    </script>
-  </div>
+    {% if prefix === "departure" or prefix === "arrival" %}
+        <div class="{{ m.form_group_class(prefix + 'CountryCode', errors) }}">
+            <label 
+                id="{{ prefix }}CountryCode-label" 
+                class="govuk-label govuk-label--m" 
+                for="{{ prefix }}CountryCode">
+                {{ __('field_coordinate_country') }}
+            </label>
+            {{ m.hint(prefix + 'CountryCode', __('field_coordinate_country_hint')) }}
+            {{ m.error_message(prefix + 'CountryCode', errors, __) }}
+            <select 
+                class="govuk-select" 
+                id="{{ prefix }}CountryCode" 
+                name="{{ prefix }}CountryCode" 
+                aria-labelledby="{{ prefix }}CountryCode-label" 
+                aria-describedby="{{ prefix }}CountryCode-hint"
+                value={{ countryCode }}
+            >
+            {% for country in countryList|sort(attribute='label') %}
+                <option value="{{ country.code }}" {{ 'selected=selected' if countryCode == country.code }}>{{ country.label }}</option>
+            {% endfor %}
+            </select>
+            <script>
+                accessibleAutocomplete.enhanceSelectElement({ selectElement: document.querySelector('#{{ prefix }}CountryCode')});
+            </script>
+        </div>
+
+    {% endif %}
 
     
 

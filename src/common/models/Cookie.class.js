@@ -220,6 +220,8 @@ class Cookie {
     this.session.gar.voyageArrival.arrivalLat = arrivalJourney.arrivalLat;
     
     this.session.gar.voyageArrival.arrivalPortChoice = arrivalJourney.arrivalPortChoice;
+    this.session.gar.voyageArrival.arrivalCountryCode = arrivalJourney.arrivalCountryCode;
+
   }
 
   getGarArrivalVoyage() {

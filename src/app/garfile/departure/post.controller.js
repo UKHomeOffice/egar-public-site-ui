@@ -33,10 +33,23 @@ const createValidationChains = (voyage) => {
   ];
 
   // Define latitude validations
-  const departureLatValidation = [new ValidationRule(validator.latitude, 'departureLat', voyage.departureLat, __('field_latitude_validation'))];
+  const departureLatValidation = [
+    new ValidationRule(validator.latitude, 'departureLat', voyage.departureLat, __('field_latitude_validation'))
+  ];
 
   // Define latitude validations
-  const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, __('field_longitude_validation'))];
+  const departureLongValidation = [
+    new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, __('field_longitude_validation'))
+  ];
+
+  const departureCountryCodeValidation = [
+    new ValidationRule(
+      validator.validISO3Country,
+      'departureCountryCode',
+      voyage.departureCountryCode,
+      'Enter a valid country'
+    )
+  ]
 
   const validations = [
     [new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation'))],
@@ -53,6 +66,7 @@ const createValidationChains = (voyage) => {
     validations.push(
       departureLatValidation,
       departureLongValidation,
+      departureCountryCodeValidation
     );
   }
 
@@ -109,7 +123,6 @@ module.exports = async (req, res) => {
 
   } else {
     voyage.departurePort = voyage.departureLat + " " + voyage.departureLong;
-    voyage.departureCountryCode = voyage.departureCountryCode;
   }
 
   cookie.setGarDepartureVoyage(voyage);

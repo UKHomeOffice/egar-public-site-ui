@@ -139,6 +139,8 @@
         {% set lat = departure.departureLat%}
         {% set long = departure.departureLong%}
         {% set prefix = 'departure'%}
+        {% set countryCode = '' if isPortChoice else departure.departureCountryCode %}
+
 
         {{ l.location(legendLabel, 
                       warningMessage, 
@@ -148,7 +150,8 @@
                       long, 
                       prefix, 
                       errors, 
-                      __) }}
+                      __,
+                      countryCode) }}
         
         {# Start buttons #}
         {{ m.submit_buttons('GAR Departure', csrfToken, __) }}

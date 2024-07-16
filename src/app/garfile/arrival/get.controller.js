@@ -8,6 +8,7 @@ module.exports = (req, res) => {
   garApi.get(cookie.getGarId())
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
+      parsedResponse.arrivalCountryCode = cookie.getGarArrivalVoyage().arrivalCountryCode;
       cookie.setGarArrivalVoyage(parsedResponse);
       return res.render('app/garfile/arrival/index', {
         cookie,

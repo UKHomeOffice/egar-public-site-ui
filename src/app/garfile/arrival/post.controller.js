@@ -59,6 +59,14 @@ const buildValidations = (voyage) => {
 
   const arrivalLatValidation = [new ValidationRule(validator.latitude, 'arrivalLat', voyage.arrivalLat, __('field_latitude_validation'))];
   const arrivalLongValidation = [new ValidationRule(validator.longitude, 'arrivalLong', voyage.arrivalLong, __('field_longitude_validation'))];
+  const arrivalCountryCodeValidation = [
+    new ValidationRule(
+      validator.validISO3Country,
+      'arrivalCountryCode',
+      voyage.arrivalCountryCode,
+      'Enter a valid country'
+    )
+  ]
 
   const validations = [
     [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, __('field_arrival_date_validation'))],
@@ -76,6 +84,7 @@ const buildValidations = (voyage) => {
     validations.push(
       arrivalLatValidation,
       arrivalLongValidation,
+      arrivalCountryCodeValidation
     );
   }
 
@@ -95,9 +104,12 @@ module.exports = async (req, res) => {
   if (voyage.portChoice === 'Yes') {
     voyage.arrivalLat = '';
     voyage.arrivalLong = '';
+    const airport = airportValidation.findAirportForCode(voyage.arrivalPort);
+    voyage.arrivalCountryCode = airport?.countryCode;
   } else {
     voyage.arrivalPort = `${voyage.arrivalLat} ${voyage.arrivalLong}`;
   }
+  logger.info(JSON.stringify(voyage))
   cookie.setGarArrivalVoyage(voyage);
 
   const validations = buildValidations(voyage);
@@ -117,6 +129,8 @@ module.exports = async (req, res) => {
 
   validator.validateChains(validations)
     .then(() => {
+      logger.info(JSON.stringify(cookie.getGarArrivalVoyage()));
+
       performAPICall(cookie, buttonClicked, res);
     })
     .catch((err) => {
