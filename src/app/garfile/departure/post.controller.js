@@ -4,6 +4,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
+const { findAirportForCode } = require('../../../common/utils/airportValidation');
 //const airportValidation = require('../../../common/utils/airportValidation');
 
 const createValidationChains = (voyage) => {
@@ -103,8 +104,12 @@ module.exports = async (req, res) => {
   if (voyage.portChoice === 'Yes') {
      voyage.departureLat = '';
      voyage.departureLong = '';
+     const airport = findAirportForCode(voyage.departurePort);
+    voyage.departureCountryCode = airport?.countryCode;
+
   } else {
     voyage.departurePort = voyage.departureLat + " " + voyage.departureLong;
+    voyage.departureCountryCode = voyage.departureCountryCode;
   }
 
   cookie.setGarDepartureVoyage(voyage);

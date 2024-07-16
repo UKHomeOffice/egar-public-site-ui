@@ -236,11 +236,20 @@ class Cookie {
     this.session.gar.voyageDeparture.departureLat = departureJourney.departureLat;
     this.session.gar.voyageDeparture.departureLong = departureJourney.departureLong;
     this.session.gar.voyageDeparture.departurePortChoice = departureJourney.departurePortChoice;
+    this.session.gar.voyageDeparture.departureCountryCode = departureJourney.departureCountryCode;
 
   }
 
   getGarDepartureVoyage() {
     return this.session.gar.voyageDeparture;
+  }
+
+  getDepartureCountryCode() {
+    return this.session.gar.voyageDeparture.departureCountryCode;
+  }
+
+  setDepartureCountryCode(departureCountryCode) {
+    this.session.gar.voyageDeparture.departureCountryCode = departureCountryCode;
   }
 
   setGarManifest(manifest) {
@@ -776,6 +785,7 @@ class Cookie {
     
     const defaultPortChoice = (voyageObj[`${type}Lat`] || voyageObj[`${type}Long`]) ? 'No' : 'Yes';
     voyage[`${type}PortChoice`] = voyageObj.portChoice || defaultPortChoice;
+    voyage[`${type}CountryCode`] = voyageObj[`${type}CountryCode`]
 
     return voyage;
   }

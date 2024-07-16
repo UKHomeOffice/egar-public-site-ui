@@ -3616,6 +3616,7 @@
   {
     "id": "IOM",
     "id2": "EGNS",
+    "countryCode": "IMN",
     "british": false,
     "crownDependency": true,
     "label": "Isle of Man Airport (Isle of Man) (EGNS / IOM)"

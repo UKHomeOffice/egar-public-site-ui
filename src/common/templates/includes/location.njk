@@ -43,7 +43,6 @@
 {% endmacro %}
 
 {% macro port_choice(portCode, prefix, errors, __) %}
-
     <div class="{{ m.form_group_class(prefix + 'Port', errors) }}">
         <label id="{{ prefix }}Port-label" class="govuk-label" for="{{ prefix }}Port">{{__('field_port_code')}}</label>
         {{ m.hint(prefix + 'Port', __('field_port_hint')) }}
@@ -92,5 +91,33 @@
         <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Long" name="{{ prefix }}Long" type="text" maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -90 to 90" value="{{ long }}">
     </div>
     {# End location coords #}
+
+    {#value=countryCode#}
+    <div class="{{ m.form_group_class(prefix + 'CountryCode', errors) }}">
+    <label 
+        id="{{ prefix }}CountryCode-label" 
+        class="govuk-label govuk-label--m" 
+        for="{{ prefix }}CountryCode">
+        {{ __('field_coordinate_country') }}
+    </label>
+    {{ m.hint(prefix + 'CountryCode', __('field_coordinate_country_hint')) }}
+    {{ m.error_message(prefix + 'CountryCode', errors, __) }}
+    <select 
+        class="govuk-select" 
+        id="{{ prefix }}CountryCode" 
+        name="{{ prefix }}CountryCode" 
+        aria-labelledby="{{ prefix }}CountryCode-label" 
+        aria-describedby="{{ prefix }}CountryCode-hint"
+    >
+      {% for country in countryList|sort(attribute='label') %}
+        <option value="{{ country.code }}">{{ country.label }}</option>
+      {% endfor %}
+    </select>
+    <script>
+        accessibleAutocomplete.enhanceSelectElement({ selectElement: document.querySelector('#{{ prefix }}CountryCode')});
+    </script>
+  </div>
+
+    
 
 {% endmacro %}

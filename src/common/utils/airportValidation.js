@@ -88,5 +88,6 @@ module.exports = {
   includesOneBritishAirport,
   notBritishMsg,
   isBritishAirport,
-  isJourneyUKInbound
+  isJourneyUKInbound,
+  findAirportForCode
 };
