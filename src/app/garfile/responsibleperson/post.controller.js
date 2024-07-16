@@ -6,9 +6,12 @@ const validations = require('./validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
+const { isIsleOfManFlight } = require('../../../common/utils/utils');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
+  const { departureCountryCode } = cookie.getGarDepartureVoyage();
+  const { arrivalCountryCode } = cookie.getGarArrivalVoyage();
 
   req.body.fixedBasedOperatorAnswer = _.trim(req.body.fixedBasedOperatorAnswer);
 
@@ -41,9 +44,14 @@ module.exports = (req, res) => {
             });
             return;
           }
+
+          logger.info(JSON.stringify({ x: String(arrivalCountryCode),y: String(departureCountryCode), isIsleOfManFlight: isIsleOfManFlight(
+            departureCountryCode,
+            arrivalCountryCode
+          ) }))
           // Successful api response
           cookie.setGarResponsiblePerson(responsiblePerson);
-          if (buttonClicked === 'Save and continue') {
+          if (buttonClicked === 'Save and continue' && !isIsleOfManFlight(departureCountryCode, arrivalCountryCode)) {
             res.redirect('/garfile/customs');
           } else {
             // Temporary redirect (307) so this POST also becomes a POST for garfile/view

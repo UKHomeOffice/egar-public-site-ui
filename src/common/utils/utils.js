@@ -17,7 +17,13 @@ const documentTypes = documenttype
     .map(documentType => documentType.documenttype)
     .filter(documentType => Boolean(documentType));
 
+function isIsleOfManFlight (departureCountryCode, arrivalCountryCode) {
+    const isleOfMan = "IMN";
+    return departureCountryCode === isleOfMan || arrivalCountryCode === isleOfMan;
+}
+
 module.exports = {
     trimToDecimalPlaces,
+    isIsleOfManFlight,
     documentTypes
 }

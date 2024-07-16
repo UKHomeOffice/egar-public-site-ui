@@ -4,6 +4,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
+const { isIsleOfManFlight } = require('../../../common/utils/utils');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -31,6 +32,8 @@ const checkGARUser = (parsedGar, userId, organisationId) => {
 module.exports = (req, res) => {
   logger.debug('In garfile / view post controller');
   const cookie = new CookieModel(req);
+  const { departureCountryCode } = cookie.getGarDepartureVoyage();
+  const { arrivalCountryCode } = cookie.getGarArrivalVoyage();
   let { garId } = req.body;
   if (garId === undefined) {
     garId = cookie.getGarId();
@@ -82,6 +85,10 @@ module.exports = (req, res) => {
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         showChangeLinks: true,
+        isIsleOfManFlight: isIsleOfManFlight(
+          departureCountryCode,
+          arrivalCountryCode
+        ),
         isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort)
       };
 

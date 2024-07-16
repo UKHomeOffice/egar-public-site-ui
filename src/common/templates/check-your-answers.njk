@@ -266,7 +266,7 @@
               {{ check_your_answers_row(__('field_fbo_question_review'), garfile.fixedBasedOperatorAnswer | truncate(50)) }}
             {% endif %}
           </dl>
-
+{% if not isIsleOfManFlight %}
           <dl id="customs" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
             <div class="app-check-your-answers__contents">
               <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
@@ -325,6 +325,7 @@
               {% endif %}
             </div>
           </dl>
+        
 
           <table class="govuk-table">
             <thead class="govuk-table__head">
@@ -348,4 +349,6 @@
               {% endif %}
             </tbody>
           </table>
+      {%endif%}
+
         </div>

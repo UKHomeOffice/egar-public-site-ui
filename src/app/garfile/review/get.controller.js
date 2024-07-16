@@ -7,12 +7,16 @@ const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
+const { isIsleOfManFlight } = require('../../../common/utils/utils');
 
 module.exports = (req, res) => {
   logger.debug('In garfile / review get controller');
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
   const frmUpload = req.query?.from === 'uploadGar';
+  const { departureCountryCode } = cookie.getGarDepartureVoyage();
+  const { arrivalCountryCode } = cookie.getGarArrivalVoyage();
+
   Promise.all([
     garApi.get(garId),
     garApi.getPeople(garId),
@@ -47,7 +51,11 @@ module.exports = (req, res) => {
       garpeople,
       garsupportingdocs,
       showChangeLinks: true,
-      isJourneyUkInbound
+      isJourneyUkInbound,
+      isIsleOfManFlight: isIsleOfManFlight(
+        departureCountryCode, 
+        arrivalCountryCode
+      )
     };
 
     validator.validateChains(validations)

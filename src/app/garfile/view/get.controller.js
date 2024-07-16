@@ -4,6 +4,7 @@ const garApi = require('../../../common/services/garApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const airportValidation = require('../../../common/utils/airportValidation');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
+const { isIsleOfManFlight } = require('../../../common/utils/utils');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -31,6 +32,8 @@ const { isAbleToCancelGar } = require('../../../common/utils/validator');
 module.exports = (req, res) => {
     const cookie = new CookieModel(req);
     logger.debug('In garfile/view get controller');
+    const { departureCountryCode } = cookie.getGarDepartureVoyage();
+    const { arrivalCountryCode } = cookie.getGarArrivalVoyage();
     
     const context = { cookie };
 
@@ -77,6 +80,11 @@ module.exports = (req, res) => {
       delete req.session.successHeader;
       delete req.session.successMsg;
 
+      logger.info(JSON.stringify({ arrivalCountryCode, departureCountryCode, isIsleOfManFlight: isIsleOfManFlight(
+        departureCountryCode,
+        arrivalCountryCode
+      ) }))
+      
       renderContext = {
         cookie,
         manifestFields,
@@ -86,6 +94,10 @@ module.exports = (req, res) => {
         garsupportingdocs: supportingDocuments,
         successMsg,
         successHeader,
+        isIsleOfManFlight: isIsleOfManFlight(
+          departureCountryCode,
+          arrivalCountryCode
+        ),
         isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort)
       }; 
       renderContext.showChangeLinks = true;

@@ -246,14 +246,6 @@ class Cookie {
     return this.session.gar.voyageDeparture;
   }
 
-  getDepartureCountryCode() {
-    return this.session.gar.voyageDeparture.departureCountryCode;
-  }
-
-  setDepartureCountryCode(departureCountryCode) {
-    this.session.gar.voyageDeparture.departureCountryCode = departureCountryCode;
-  }
-
   setGarManifest(manifest) {
     this.session.gar.manifest = manifest;
   }
