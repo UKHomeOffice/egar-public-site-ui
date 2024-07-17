@@ -46,19 +46,22 @@ module.exports = (req, res) => {
   }
   const isleOfManFlightUKPassenger = isIsleOfManFlight(
     departureCountryCode, arrivalCountryCode
-  ) && passengerInfo.nationality === "GBR"
+  ) && passengerInfo.nationality === "GBR" || req.body.nationality === "IRL"
 
   validator.validateChains(validations.validations(req, infoType))
     .then(() => {
+      logger.info("1")
       if (infoType === "PASSENGER" && !isleOfManFlightUKPassenger) {
-        cookie.setAddPerson(passengerInfo)
+      logger.info("2")
+
+        cookie.updateAddPerson(passengerInfo)
         res.render('app/garfile/manifest/addnewperson/index', {
-          req, cookie, person, persontype, documenttype, genderchoice, errors: [parsedResponse], infoType: "TRAVEL"
+          req, cookie, person, persontype, documenttype, genderchoice, infoType: "TRAVEL"
         });
 
         return;
       } else {
-        isleOfManFlightUKPassenger ? cookie.setAddPerson(passengerInfo) : cookie.setAddPerson(travelDocumentInfo);
+        isleOfManFlightUKPassenger ? cookie.updateAddPerson(passengerInfo) : cookie.updateAddPerson(travelDocumentInfo);
         const addPerson = cookie.getAddPerson();
         garApi.patch(cookie.getGarId(), 'Draft', { people: [addPerson] })
           .then((garResponse) => {
@@ -68,7 +71,6 @@ module.exports = (req, res) => {
                 req, cookie, person, persontype, documenttype, genderchoice, errors: [parsedResponse], infoType
               });
             } else {
-              this.session.infoType = infoType;
               res.redirect('/garfile/manifest');
             }
           }).catch((err) => {

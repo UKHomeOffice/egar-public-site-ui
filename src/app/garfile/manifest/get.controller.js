@@ -3,6 +3,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const personApi = require('../../../common/services/personApi');
 const garApi = require('../../../common/services/garApi');
+const { isIsleOfManFlight } = require('../../../common/utils/utils');
 
 function flagDuplicatesInSavedPeople(savedPeople, garPeople) {
   if (garPeople === undefined) return savedPeople;
@@ -50,6 +51,11 @@ module.exports = async (req, res) => {
 
   const userId = cookie.getUserDbId();
   const garId = cookie.getGarId();
+  const { departureCountryCode } = cookie.getGarDepartureVoyage();
+  const { arrivalCountryCode } = cookie.getGarArrivalVoyage();
+
+  const isleOfManFlight = isIsleOfManFlight(departureCountryCode, arrivalCountryCode);
+  cookie.setAddPerson({})
 
   try {
     const savedPeopleJson = await personApi.getPeople(userId, 'individual');
@@ -65,10 +71,9 @@ module.exports = async (req, res) => {
 
     cookie.setIsMilitaryFlight(garfile.isMilitaryFlight);
 
-    const isValidSavedPeople = await savedPeopleManifest.validate(this.session.infoType);
-    const isValidGarPeople = await garPeopleManifest.validate(this.session.infoType);
+    const isValidSavedPeople = await savedPeopleManifest.validate(isleOfManFlight);
+    const isValidGarPeople = await garPeopleManifest.validate(isleOfManFlight);
 
-    delete this.session.infoType;
     const flaggedDuplicateSavedPeople = flagDuplicatesInSavedPeople(
       initialSavedPeople, 
       garpeople.items
@@ -83,6 +88,7 @@ module.exports = async (req, res) => {
       if (req.session.errMsg) {
         const { errMsg } = req.session;
         delete req.session.errMsg;
+
         return res.render('app/garfile/manifest/index', { 
           cookie, 
           savedPeople, 
@@ -135,6 +141,7 @@ module.exports = async (req, res) => {
           successMsg 
         });
       }
+
       return res.render('app/garfile/manifest/index', { 
         cookie, 
         savedPeople,

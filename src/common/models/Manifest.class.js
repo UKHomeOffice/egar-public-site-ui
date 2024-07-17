@@ -28,7 +28,9 @@ class Manifest {
   static turnPersonToRequest (inputtedPerson) {
     const person = structuredClone(inputtedPerson);
     const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
-    const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
+    logger.info(JSON.stringify({ expdate: person.documentExpiryDate }))
+    const expiryDateObject = person.documentExpiryDate ? Manifest._constructDateObj(person.documentExpiryDate) : { y: '', m: '', d: '' };
+    logger.info(JSON.stringify({ expiryDateObject }))
 
     return { 
       body: {
@@ -61,11 +63,12 @@ class Manifest {
    * Validate Manifest data cannot be empty and cannot have invalid dates
    * @returns {Bool} true if valid, else false
    */
-  async validate(useValidation = "DEFAULT") {
+  async validate(isIsleOfManFlight) {
     const validatingPeople = Promise.allSettled(
         this.manifest.map(async (person) => {
           try {
             const req = Manifest.turnPersonToRequest(person);
+            const useValidation = isIsleOfManFlight && (req.body.nationality === "GBR"  || req.body.nationality === "IRL") ? "PASSENGER" : "DEFAULT";
             return await validator.validateChains(validations.validations(req, useValidation));
           } catch (err) {
             this._recordValidationErr(this.manifest.indexOf(person));

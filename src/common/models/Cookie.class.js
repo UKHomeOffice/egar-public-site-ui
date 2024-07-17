@@ -196,8 +196,12 @@ class Cookie {
     return this.session.addPerson;
   }
 
-  setAddPerson(person) {
+  updateAddPerson(person) {
     this.session.addPerson = { ...this.session.addPerson, ...person };
+  }
+
+  setAddPerson(person) {
+    this.session.addPerson = {}
   }
 
   getIsMilitaryFlight() {

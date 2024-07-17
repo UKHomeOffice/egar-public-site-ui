@@ -3,11 +3,17 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const garApi = require('../../../common/services/garApi');
 const personApi = require('../../../common/services/personApi');
+const { isIsleOfManFlight } = require('../../../common/utils/utils');
 const manifestUtil = require('./bulkAdd');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   const { buttonClicked } = req.body;
+
+  const { departureCountryCode } = cookie.getGarDepartureVoyage();
+  const { arrivalCountryCode } = cookie.getGarArrivalVoyage();
+
+  const isleOfManFlight = isIsleOfManFlight(departureCountryCode, arrivalCountryCode);
 
   logger.debug('In garfile / manifest post controller');
   if (req.body.editSavedPerson) {
@@ -128,7 +134,7 @@ module.exports = async (req, res) => {
         return res.redirect('/garfile/manifest');
       }
 
-      const isValid = await manifest.validate();
+      const isValid = await manifest.validate(isleOfManFlight);
       
       if (isValid) {
         return res.redirect('/garfile/responsibleperson');

@@ -193,10 +193,7 @@
                         <td class="govuk-table__cell"></td>
                       {% else %}
                         <tr class="govuk-table__row" id="person-{{loop.index0}}">
-                          {% if person
-                            .documentExpiryDate
-                            .toString() < expiryDate
-                            .toString() %}
+                          {% if person.documentExpiryDate and (person.documentExpiryDate.toString() < expiryDate.toString()) %}
                             <h3  class="govuk-heading-s" id="expired" style="color:red" hidden>Please be advised, {{person.firstName}}
                               {{person.lastName}}'s passport has expired </h3>
                             <script>
@@ -235,41 +232,43 @@
                                     <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
                                   </td>
                                 </tr>
-                                <tr class="govuk-table__row">
-                                  <td class="govuk-table__cell" colspan="9">
-                                    <div>
-                                      <details role="group">
-                                        <summary role="button" aria-controls="details-content-{{ loop.index }}" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
-                                          <span id="further-information-{{ loop.index }}" class="summary">{{__('label_manifest_further_personal_details')}}</span>
-                                        </summary>
-                                        <div class="panel panel-border-narrow" id="details-content-{{ loop.index }}" aria-hidden="true">
-                                          <table class="govuk-table" width="100%">
-                                            <tbody class="govuk-table__body">
-                                              <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
-                                                <td class="govuk-table__cell">{{person.documentType}}</td>
-                                              </tr>
-                                              <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
-                                                <td class="govuk-table__cell">{{person.issuingState | upper }}</td>
-                                              </tr>
+                                {% if person.documentType %}
+                                  <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell" colspan="9">
+                                      <div>
+                                        <details role="group">
+                                          <summary role="button" aria-controls="details-content-{{ loop.index }}" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
+                                            <span id="further-information-{{ loop.index }}" class="summary">{{__('label_manifest_further_personal_details')}}</span>
+                                          </summary>
+                                          <div class="panel panel-border-narrow" id="details-content-{{ loop.index }}" aria-hidden="true">
+                                            <table class="govuk-table" width="100%">
+                                              <tbody class="govuk-table__body">
+                                                <tr class="govuk-table__row">
+                                                  <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
+                                                  <td class="govuk-table__cell">{{person.documentType}}</td>
+                                                </tr>
+                                                <tr class="govuk-table__row">
+                                                  <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
+                                                  <td class="govuk-table__cell">{{person.issuingState | upper }}</td>
+                                                </tr>
 
-                                              <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">{{__('field_travel_document_number')}}</td>
-                                                <td class="govuk-table__cell">{{ person.documentNumber }}</td>
-                                              </tr>
+                                                <tr class="govuk-table__row">
+                                                  <td class="govuk-table__cell">{{__('field_travel_document_number')}}</td>
+                                                  <td class="govuk-table__cell">{{ person.documentNumber }}</td>
+                                                </tr>
 
-                                              <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
-                                                <td class="govuk-table__cell">{{ person.documentExpiryDate }}</td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                      </details>
-                                    </div>
-                                  </td>
-                                </tr>
+                                                <tr class="govuk-table__row">
+                                                  <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
+                                                  <td class="govuk-table__cell">{{ person.documentExpiryDate }}</td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </details>
+                                      </div>
+                                    </td>
+                                  </tr>
+                              {% endif %}
                               {% endfor %}
                             </div>
                           </td>

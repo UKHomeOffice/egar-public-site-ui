@@ -7,6 +7,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
+const { isIsleOfManFlight } = require('../../../common/utils/utils');
 
 const performAPICallAMG = (garId, cookie, req, res) => {
   garApi.submitGARForCheckin(garId)
@@ -60,8 +61,8 @@ const performAPICall = (garId, cookie, req, res) => {
     });
 };
 
-const buildValidations = async (garfile, garpeople, manifest) => {
-  const validations = validationList.validations(garfile, garpeople);
+const buildValidations = async (garfile, garpeople, manifest, isleOfManFlight) => {
+  const validations = validationList.validations(garfile, garpeople, false, isleOfManFlight);
   const departureDateParts = garfile.departureDate ? garfile.departureDate.split('-') : [];
   const departDateObj = {
     d: departureDateParts[2],
@@ -77,7 +78,7 @@ const buildValidations = async (garfile, garpeople, manifest) => {
 
   // Manifest specific validations does not using generic mechanism, so wrapped in
   // an uninformative message for now
-  const isManifestValid = await manifest.validate();
+  const isManifestValid = await manifest.validate(isleOfManFlight);
 
   if (!isManifestValid) {
     const validateFailMsg = 'Resolve manifest errors before submitting';
@@ -97,9 +98,15 @@ const buildValidations = async (garfile, garpeople, manifest) => {
 };
 
 module.exports = (req, res) => {
+  
   logger.debug('In garfile / review post controller');
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
+
+  const { departureCountryCode } = cookie.getGarDepartureVoyage();
+  const { arrivalCountryCode } = cookie.getGarArrivalVoyage();
+
+  const isleOfManFlight = isIsleOfManFlight(departureCountryCode, arrivalCountryCode);
 
   // Validate GAR to be submitted
   Promise.all([
@@ -119,7 +126,7 @@ module.exports = (req, res) => {
     const garsupportingdocs = JSON.parse(responseValues[2]);
     validator.handleResponseError(garsupportingdocs);
 
-    const validations = await buildValidations(garfile, garpeople, manifest);
+    const validations = await buildValidations(garfile, garpeople, manifest, isleOfManFlight);
 
     if (garfile.status.name.toLowerCase() === 'submitted') {
       const submitError = {
