@@ -1,4 +1,5 @@
-<div class="{{ m.form_group_class('savedpeople', errors) }}">
+
+{% macro passengerInfo(__, errors) %}
   <div class="{{ m.form_group_class('firstName', errors) }}">
     <label class="govuk-label govuk-label--m" for="firstName">{{ __('field_given_name') }}</label>
     {{ m.hint('firstName', __('field_given_name_hint')) }}
@@ -116,8 +117,10 @@
       </div>
     </fieldset>
   </div>
+{% endmacro %}
 
-  <h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
+{% macro travelDocumentInfo(__, errors) %}
+ <h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
   <p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
 
   <div class="govuk-form-group {{ m.form_group_class('travelDocumentNumber', errors) }}">
@@ -200,7 +203,17 @@
     maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
     {{ m.character_count_hint('travelDocumentOther', MAX_STRING_LENGTH) }}
   </div>
+{% endmacro %}
 
+<div class="{{ m.form_group_class('savedpeople', errors) }}">
+  {% if infoType === "PASSENGER" %}
+    {{ passengerInfo(__, errors) }}
+  {% elif infoType === "TRAVEL" %}
+    {{ travelDocumentInfo(__, errors) }}
+  {% else %}
+    {{ passengerInfo(__, errors) }}
+    {{ travelDocumentInfo(__, errors) }}
+  {% endif %}
 <script type="text/javascript" src="/utils/validator.js"></script>
 <script type="text/javascript">
   accessibleAutocomplete.enhanceSelectElement({

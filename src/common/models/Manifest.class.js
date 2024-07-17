@@ -61,12 +61,12 @@ class Manifest {
    * Validate Manifest data cannot be empty and cannot have invalid dates
    * @returns {Bool} true if valid, else false
    */
-  async validate() {
+  async validate(useValidation = "DEFAULT") {
     const validatingPeople = Promise.allSettled(
         this.manifest.map(async (person) => {
           try {
             const req = Manifest.turnPersonToRequest(person);
-            return await validator.validateChains(validations.validations(req));
+            return await validator.validateChains(validations.validations(req, useValidation));
           } catch (err) {
             this._recordValidationErr(this.manifest.indexOf(person));
           }

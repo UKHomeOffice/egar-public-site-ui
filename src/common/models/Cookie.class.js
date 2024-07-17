@@ -82,6 +82,10 @@ class Cookie {
     if (this.session.editPerson == null) {
       this.session.editPerson = {};
     }
+
+    if (this.session.addPerson == null) {
+      this.session.addPerson = {};
+    }
   }
 
   initialiseGar() {
@@ -186,6 +190,14 @@ class Cookie {
 
   getAddPersonId() {
     return this.session.gar.tempAddPersonId;
+  }
+
+  getAddPerson() {
+    return this.session.addPerson;
+  }
+
+  setAddPerson(person) {
+    this.session.addPerson = { ...this.session.addPerson, ...person };
   }
 
   getIsMilitaryFlight() {

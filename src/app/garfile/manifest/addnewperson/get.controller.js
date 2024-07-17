@@ -9,13 +9,14 @@ const transformer = require('../../../../common/utils/transformers');
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile / manifest / addperson post controller');
+  const infoType = req.query.infoType === undefined ? "PASSENGER" : req.query.infoType;
 
   const personId = req.session.addPersonId;
   let person = {};
 
   if (personId === undefined) {
     res.render('app/garfile/manifest/addnewperson/index', {
-      cookie, persontype, documenttype, genderchoice, req, person,
+      cookie, persontype, documenttype, genderchoice, req, person, infoType
     });
     return;
   }
@@ -27,7 +28,7 @@ module.exports = (req, res) => {
       delete req.session.addPersonId;
       person = transformer.transformPerson(person);
       res.render('app/garfile/manifest/addnewperson/index', {
-        cookie, persontype, documenttype, genderchoice, req, person,
+        cookie, persontype, documenttype, genderchoice, req, person, infoType
       });
     })
     .catch((err) => {

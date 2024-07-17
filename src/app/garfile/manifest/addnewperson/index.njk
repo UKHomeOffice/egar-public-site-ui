@@ -30,7 +30,7 @@
       
       <p class="govuk-body-l">{{__('caption_manifest_person_details')}}</p>
 
-      <form action="/garfile/manifest/addnewperson" autocomplete="off" class="form-group" method="post" role="form">
+      <form action="/garfile/manifest/addnewperson?infoType={{ infoType }}" autocomplete="off" class="form-group" method="post" role="form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% include "person-details.njk" %}
         <br>
