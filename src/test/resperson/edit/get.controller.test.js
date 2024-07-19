@@ -20,6 +20,9 @@ describe('Responsible Person Edit Get Controller', () => {
 
     beforeEach(() => {
         req = {
+            query: {
+                editResponsiblePerson: 'EDIT-ID',
+            },
             session: {
                 u: { dbId: '343' },
                 save: callback => callback(),
@@ -53,7 +56,7 @@ describe('Responsible Person Edit Get Controller', () => {
     });
 
     it('edit should redirect if responsiblePersonId is undefined', async () => {
-        delete req.session.editResponsiblePersonId;
+        delete req.query.editResponsiblePerson;
 
         const callController = async () => {
             await controller(req, res);

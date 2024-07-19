@@ -5,7 +5,7 @@ const resPersonApi = require('../../../common/services/resPersonApi');
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const errMsg = { message: 'Failed to delete responsible person. Try again' };
-  const responsiblePersonId = req.session.deleteResponsiblePersonId;
+  const responsiblePersonId = req.query.deleteResponsiblePerson;
   logger.debug('In responsible person / delete get controller');
 
   if (responsiblePersonId === undefined) {

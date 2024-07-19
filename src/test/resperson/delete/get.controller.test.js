@@ -17,6 +17,9 @@ describe('Responsible Person Delete Get Controller', () => {
 
     beforeEach(() => {
         req = {
+            query: {
+                deleteResponsiblePerson: 'DELETE-PERSON-ID'
+            },
             session: {
                 u: { dbId: '343' },
                 save: callback => callback(),
@@ -36,7 +39,7 @@ describe('Responsible Person Delete Get Controller', () => {
     });
 
     it('should redirect if responsiblePersonId is undefined', async () => {
-        delete req.session.deleteResponsiblePersonId;
+        delete req.query.deleteResponsiblePerson;
 
         await controller(req, res);
 
@@ -45,7 +48,6 @@ describe('Responsible Person Delete Get Controller', () => {
     });
 
     it('should render the page with error if the resPerson api resolves', async () => {
-        req.session.deleteResponsiblePersonId = 'DELETE-PERSON-ID';
 
         deleteResPersonStub.resolves(JSON.stringify({
             message: 'responsible person not found',
@@ -60,7 +62,6 @@ describe('Responsible Person Delete Get Controller', () => {
     });
 
     it('should render the page with success message on successful deletion of responsible person', async () => {
-        req.session.deleteResponsiblePersonId = 'DELETE-PERSON-ID';
 
         deleteResPersonStub.resolves(JSON.stringify({
         }));
@@ -77,7 +78,6 @@ describe('Responsible Person Delete Get Controller', () => {
 
     it('should render the page with error if the resPerson API rejects', async () => {
 
-        req.session.deleteResponsiblePersonId = 'DELETE-PERSON-ID';
 
         deleteResPersonStub.rejects('getResPerson Example Reject');
 

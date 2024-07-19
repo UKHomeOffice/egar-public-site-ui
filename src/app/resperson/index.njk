@@ -54,14 +54,19 @@
                   <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                       <button id="edit-edit_reponsiblePerson-{{ loop.index }}" class="govuk-link btn-link" 
-                      title="Edit details for {{ resPerson.responsibleGivenName }} {{ resPerson.responsibleSurname }}" 
-                      name="editResponsiblePerson" value="{{resPerson.responsiblePersonId}}">{{resPerson.responsibleGivenName}}
+                        title="Edit details for {{ resPerson.responsibleGivenName }} {{ resPerson.responsibleSurname }}" 
+                        formaction="resperson/edit" formmethod="get"
+                        name="editResponsiblePerson" value="{{resPerson.responsiblePersonId}}">{{resPerson.responsibleGivenName}}
                       </button>
                     </td>
                     <td class="govuk-table__cell" scope="row">{{resPerson.responsibleSurname}}</td>
                     <td class="govuk-table__cell">{{resPerson.responsibleEmail}}</td>
                     <td class="govuk-table__cell ">
-                      <button id="delete_responsible_person_{{ loop.index }}" class="govuk-link btn-link" name="deleteResponsiblePerson" value="{{resPerson.responsiblePersonId}}">{{__('table_delete')}}</button>
+                      <button id="delete_responsible_person_{{ loop.index }}" 
+                        class="govuk-link btn-link" name="deleteResponsiblePerson" 
+                        formaction="/resperson/delete" formmethod="get"
+                        value="{{resPerson.responsiblePersonId}}">{{__('table_delete')}}
+                      </button>
                     </td>
                 </tr>
               {% endfor %}

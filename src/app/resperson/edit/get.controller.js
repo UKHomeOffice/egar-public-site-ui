@@ -7,11 +7,12 @@ module.exports = (req, res) => {
   logger.debug('In responsible person edit get controller');
   const errMsg = { message: 'Failed to get responsible person details' };
   const cookie = new CookieModel(req);
-  const responsiblePersonId = req.session.editResponsiblePersonId;
+  const responsiblePersonId = req.query.editResponsiblePerson;
   if (responsiblePersonId === undefined) {
     res.redirect('/resperson');
     return;
   }
+  req.session.editResponsiblePersonId = responsiblePersonId;
   resPersonApi.getResPersonDetails(cookie.getUserDbId(), responsiblePersonId)
     .then((apiResponse) => {
       const responsiblePerson = JSON.parse(apiResponse);
