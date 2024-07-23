@@ -9,9 +9,11 @@ const sinonChai = require('sinon-chai');
 require('../global.test');
 
 const controller = require('../../app/organisation/post.controller');
+const pagination = require('../../common/utils/pagination');
 
 describe('Organisation Post Controller', () => {
   let req; let res; let saveSessionStub;
+  let paginationStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -27,11 +29,33 @@ describe('Organisation Post Controller', () => {
       redirect: sinon.spy(),
     };
 
+    paginationStub = sinon.stub(pagination, 'setCurrentPage');
     saveSessionStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
   afterEach(() => {
     sinon.restore();
+  });
+
+
+   it('should do nothing if nextPage is not set', async () => {
+    await controller(req, res);
+    expect(req.session.save).to.not.have.been.called;
+  });
+
+  it('should redirect if nextPage found 11', () => {
+    req.body.nextPage = 6;
+
+    callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(paginationStub).to.have.been.called;
+      expect(saveSessionStub).to.have.been.called;
+    }).then(() => {
+      expect(res.redirect).to.have.been.calledWith('/organisation');
+    });
   });
 
   it('should redirect to editorganisation if editOrgUser set', () => {

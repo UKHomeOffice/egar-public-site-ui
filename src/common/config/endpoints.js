@@ -60,6 +60,11 @@ const endpoints = {
     logger.debug(`Calling get org users endpoint ${endpoint}`);
     return endpoint;
   },
+  getSearchOrgUsers(orgId, searchUser) {
+    const endpoint = new URL(`${API_VERSION}/organisations/${orgId}/users/search?searchName=${searchUser}`, BASE_URL).href;
+    logger.debug(`Calling get org search users endpoint ${endpoint}`);
+    return endpoint;
+  },
   createCraft(userId) {
     const endpoint = new URL(`${API_VERSION}/user/${userId}/crafts`, BASE_URL).href;
     logger.debug(`Calling create craft endpoint ${endpoint}`);
