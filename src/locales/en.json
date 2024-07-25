@@ -29,6 +29,7 @@
 	"nav_bar_upt-help": "Help & Guidance",
 	"nav_bar_sign_out": "Sign out",
 	"nav_bar_create_organisation": "Create organisation",
+	"nav_bar_responsible_person": "Responsible person",
 	"nav_bar_organisation": "Organisation",
 	"nav_bar_account": "Account",
 	"nav_back": "Back",
@@ -249,7 +250,7 @@
 	"passenger_travelling_reason_hint": "This information can help Border Force process your arrival (Max characters: 250)",
 	"passenger_travelling_reason_placeholder": "e.g. details if resident in the UK or coming for business visit, tourism and details of duration for short-term visit would be useful. If various passengers on board coming for separate reasons, then if easier a document can be attached on page 7 detailing the reasons.",
 	"passenger_travelling_reason_review": "Reason for Travelling to the UK",
-	"field_fbo_question": "In submitting this GAR are you one of the following?",
+	"field_fbo_question": "In submitting the GAR are you one of the following?",
 	"field_fbo_textarea_placeholder": "Please specify your responsible person role.",
 	"field_fbo_question_review": "Who is submitting the GAR",
 	"field_supporting_information_question": "Please add any further information about your arrival, if relevant for Border Force consideration.",
@@ -525,5 +526,14 @@
 	"people_caption--already_selected_people": "You can't select people already added to the GAR.",
 	"is_military_flight": "Is Military Flight?",
 	"has_no_crew_or_captains": "There must be at least one captain or crew member on the voyage. If this is a military flight, this error can be bypassed in the manifest's military flight section.",
-	"is_military_flight_hint": "This applies specificially to flights carried out by military services e.g. Royal Air Force or US Air Force."
+	"is_military_flight_hint": "This applies specificially to flights carried out by military services e.g. Royal Air Force or US Air Force.",
+	"res_person_caption": "You can view, edit or delete responsible person that you regularly add to GARs.",
+	"res_person_no_records": "There are no saved responsible person records",
+	"res_person_add": "Add a new responsible person",
+	"res_person_add_caption": "Add the details of responsible person that you regularly add to GARs.",
+	"title_add_res_person": "Add a responsible person",
+	"responsible_person_no_records": "There are no saved responsible person records",
+	"responsible_person_no_records_create_new": "No saved responsible person records found. Create a new one in the Responsible Person tab.",
+	"heading_edit_responsible_person": "Edit responsible person",
+	"caption_responsible_person_details": "Select the details of a responsible person you have previously added"
 }

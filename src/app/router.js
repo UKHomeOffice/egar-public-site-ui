@@ -26,7 +26,6 @@ const userDelete = require('./user/deleteAccount');
 
 // GAR dependencies
 const aircraftdetail = require('./garfile/craft');
-const responsiblepersondetail = require('./garfile/responsibleperson');
 const customsDetail = require('./garfile/customs');
 const departuredetail = require('./garfile/departure');
 const arrivaldetail = require('./garfile/arrival');
@@ -55,6 +54,13 @@ const peopleAdd = require('./people/add');
 const peopleEdit = require('./people/edit');
 const peopleDelete = require('./people/delete');
 const peopleExport = require('./people/export')
+
+// responsible person
+const resperson = require('./resperson');
+const respersonAdd = require('./resperson/add');
+const respersonEdit = require('./resperson/edit');
+const respersonDelete = require('./resperson/delete');
+const respersonDetail = require('./garfile/resperson');
 
 // Misc dependency
 const error = require('./error');
@@ -115,7 +121,6 @@ module.exports.bind = (app) => {
   app.use(userSavedCraftDelete.router);
   app.use(usersavedcraftadd.router);
   app.use(userDelete.router);
-  app.use(responsiblepersondetail.router);
   app.use(customsDetail.router);
   app.use(garhome.router);
   app.use(manifest.router);
@@ -147,6 +152,11 @@ module.exports.bind = (app) => {
   app.use(accessibility.router)
   app.use(unavailable.router);
   app.use(printmanifest.router);
+  app.use(resperson.router);
+  app.use(respersonAdd.router);
+  app.use(respersonDelete.router);
+  app.use(respersonEdit.router);
+  app.use(respersonDetail.router);
   //
   app.use(amgcheckin.router);
 };

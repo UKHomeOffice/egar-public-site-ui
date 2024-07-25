@@ -2,9 +2,9 @@
 
 const i18n = require('i18n');
 
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const { MAX_STRING_LENGTH, MAX_EMAIL_LENGTH, MAX_POSTCODE_LENGTH } = require('../../../common/config/index');
+const ValidationRule = require('../../common/models/ValidationRule.class');
+const validator = require('../../common/utils/validator');
+const { MAX_STRING_LENGTH, MAX_EMAIL_LENGTH, MAX_POSTCODE_LENGTH } = require('../../common/config/index');
 
 module.exports.validations = (req) => {
   const {
