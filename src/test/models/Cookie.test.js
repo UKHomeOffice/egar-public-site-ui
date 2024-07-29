@@ -9,7 +9,7 @@ const sinonChai = require('sinon-chai');
 require('../global.test');
 
 const CookieModel = require('../../common/models/Cookie.class');
-const { reqExampleData, departureVoyage } = require('../fixtures');
+const { reqExampleData, departurePortVoyage, departureCoordinateVoyage } = require('../fixtures');
 
 /**
  * Unit tests for the Cookie.class.js
@@ -234,7 +234,7 @@ describe('Cookie Model', () => {
   describe('determine with a flight is to the isle of man or not', () => {
     it('should return false for a non isle of man departure flight', () => {
       const cookie = new CookieModel(reqExampleData());
-      const nonIsleOfManDepartureVoyage = departureVoyage();
+      const nonIsleOfManDepartureVoyage = departurePortVoyage();
       cookie.setGarDepartureVoyage(nonIsleOfManDepartureVoyage);
   
       expect(cookie.getIsIsleOfManFlight()).to.eq(false);
@@ -243,7 +243,7 @@ describe('Cookie Model', () => {
     it('should return true a isle of man departure flight to the isle of man airport', () => {
       const cookie = new CookieModel(reqExampleData());
 
-      const isleOfManPortCodeDepartureVoyage = departureVoyage();
+      const isleOfManPortCodeDepartureVoyage = departurePortVoyage();
       const ISLE_OF_MAN_IATA_CODE = 'IOM';
 
       isleOfManPortCodeDepartureVoyage.departurePort = ISLE_OF_MAN_IATA_CODE;
@@ -252,15 +252,25 @@ describe('Cookie Model', () => {
       expect(cookie.getIsIsleOfManFlight()).to.eq(true);
     });
 
+    it('should return false for coordiantes to an non isle of man departure', () => {
+      const cookie = new CookieModel(reqExampleData());
+
+      const nonIsleOfManCoordinateDeparture = departureCoordinateVoyage();
+
+      cookie.setGarDepartureVoyage(nonIsleOfManCoordinateDeparture);
+  
+      expect(cookie.getIsIsleOfManFlight()).to.eq(false);
+    });
+
     it('should return true for coordiantes to an isle of man departure', () => {
       const cookie = new CookieModel(reqExampleData());
 
-      const isleOfManCoordinateDepartureVoyage = departureVoyage();
+      const isleOfManCoordinateDepartureVoyage = departureCoordinateVoyage();
       const isleOfManLatitude = '54.137806';
       const isleOfManLongtitude = '-4.621783';
  
       isleOfManCoordinateDepartureVoyage.departureLat = isleOfManLatitude;
-      isleOfManCoordinateDepartureVoyage.departureLong - isleOfManLongtitude;
+      isleOfManCoordinateDepartureVoyage.departureLong = isleOfManLongtitude;
       cookie.setGarDepartureVoyage(isleOfManCoordinateDepartureVoyage);
   
       expect(cookie.getIsIsleOfManFlight()).to.eq(true);

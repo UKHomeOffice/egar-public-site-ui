@@ -170,7 +170,7 @@ const reqExampleData = () => {
   }
 }
 
-const departureVoyage = () => {
+const departurePortVoyage = () => {
   return {
     departureDay: '05',
     departureMonth: '10',
@@ -184,6 +184,20 @@ const departureVoyage = () => {
   }
 }
 
+const departureCoordinateVoyage = () => {
+  return {
+    departureDay: '05',
+    departureMonth: '10',
+    departureYear: '2024',
+    departureHour: '10',
+    departureMinute: '15',
+    departurePort: '',
+    departureLong: '-77.371323',
+    departureLat: '39.088531',
+    departurePortChoice: 'No'
+  }
+}
+
 module.exports = {
     savedPeople,
     flaggedSavedPeople,
@@ -191,5 +205,6 @@ module.exports = {
     invalidPassengersAndCrew,
     outboundGar,
     reqExampleData,
-    departureVoyage
+    departurePortVoyage,
+    departureCoordinateVoyage
 }

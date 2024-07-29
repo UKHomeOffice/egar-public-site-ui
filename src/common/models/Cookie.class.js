@@ -805,7 +805,7 @@ class Cookie {
   }
 
   isleOfManFlightFromCoordinates(latitude, longitude) {
-    const departurePortCountryCode = iso1A3Code([latitude, longitude], { level: 'territory' });
+    const departurePortCountryCode = iso1A3Code([longitude, latitude], { level: 'territory' });
     return departurePortCountryCode === this.isleOfManCountryCode;
   }
 
