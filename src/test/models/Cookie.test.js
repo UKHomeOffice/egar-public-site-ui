@@ -9,6 +9,7 @@ const sinonChai = require('sinon-chai');
 require('../global.test');
 
 const CookieModel = require('../../common/models/Cookie.class');
+const { exampleReq } = require('../fixtures');
 
 /**
  * Unit tests for the Cookie.class.js
@@ -16,19 +17,7 @@ const CookieModel = require('../../common/models/Cookie.class');
  * Significantly more if coverage is priority, namely the boilerplate getter and setters.
  */
 describe('Cookie Model', () => {
-  const reqExampleData = {
-    session: {
-      org: {
-        id: 1, name: 'exampleName', users: 'exampleUsers',
-      },
-      s: ['exampleSubmission1', 'exampleSubmission2'],
-      gar: {
-        id: 9000,
-        tempAddPersonId: 1,
-        status: 'Draft',
-      },
-    },
-  };
+  const reqExampleData = exampleReq();
 
   beforeEach(() => {
     chai.use(sinonChai);

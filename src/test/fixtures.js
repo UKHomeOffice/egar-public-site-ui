@@ -146,10 +146,27 @@ const outboundGar = () => {
   };
 }
 
+const exampleReq = () => {
+  return {
+    session: {
+      org: {
+        id: 1, name: 'exampleName', users: 'exampleUsers',
+      },
+      s: ['exampleSubmission1', 'exampleSubmission2'],
+      gar: {
+        id: 9000,
+        tempAddPersonId: 1,
+        status: 'Draft',
+      },
+    },
+  }
+}
+
 module.exports = {
     savedPeople,
     flaggedSavedPeople,
     garPeople,
     invalidPassengersAndCrew,
-    outboundGar
+    outboundGar,
+    exampleReq
 }
