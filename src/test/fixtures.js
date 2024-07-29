@@ -157,14 +157,21 @@ const reqExampleData = () => {
         id: 9000,
         tempAddPersonId: 1,
         status: 'Draft',
+        isIsleOfManFlight: null,
         voyageDeparture: {
           departureDate: null,
           departureTime: null,
           departurePort: null,
           departureLong: null,
           departureLat: null,
-          isIsleOfManFlight: null
-        }
+        },
+        voyageArrival: {
+          arrivalDate: null,
+          arrivalTime: null,
+          arrivalPort: null,
+          arrivalLong: null,
+          arrivalLat: null,
+        },
       },
     },
   }
@@ -198,6 +205,34 @@ const departureCoordinateVoyage = () => {
   }
 }
 
+const arrivalPortVoyage = () => {
+  return {
+    arrivalDay: '05',
+    arrivalMonth: '10',
+    arrivalYear: '2024',
+    arrivalHour: '10',
+    arrivalMinute: '15',
+    arrivalPort: 'LHR',
+    arrivalLong: '',
+    arrivalLat: '',
+    arrivalPortChoice: 'Yes'
+  }
+}
+
+const arrivalCoordinateVoyage = () => {
+  return {
+    arrivalDay: '05',
+    arrivalMonth: '10',
+    arrivalYear: '2024',
+    arrivalHour: '10',
+    arrivalMinute: '15',
+    arrivalPort: '',
+    arrivalLong: '-77.371323',
+    arrivalLat: '39.088531',
+    arrivalPortChoice: 'No'
+  }
+}
+
 module.exports = {
     savedPeople,
     flaggedSavedPeople,
@@ -206,5 +241,7 @@ module.exports = {
     outboundGar,
     reqExampleData,
     departurePortVoyage,
-    departureCoordinateVoyage
+    departureCoordinateVoyage,
+    arrivalPortVoyage,
+    arrivalCoordinateVoyage
 }
