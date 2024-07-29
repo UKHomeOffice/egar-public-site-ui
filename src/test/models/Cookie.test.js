@@ -231,34 +231,41 @@ describe('Cookie Model', () => {
     });
   });
 
-  it('should determine with a flight is to the isle of man or not', () => {
-    const cookie = new CookieModel(reqExampleData());
-    const nonIsleOfManDepartureVoyage = departureVoyage();
-    cookie.setGarDepartureVoyage(nonIsleOfManDepartureVoyage)
+  describe('determine with a flight is to the isle of man or not', () => {
+    it('should return false for a non isle of man departure flight', () => {
+      const cookie = new CookieModel(reqExampleData());
+      const nonIsleOfManDepartureVoyage = departureVoyage();
+      cookie.setGarDepartureVoyage(nonIsleOfManDepartureVoyage);
+  
+      expect(cookie.getIsIsleOfManFlight()).to.eq(false);
+    });
 
-    expect(cookie.getIsIsleOfManFlight()).to.eq(false)
+    it('should return true a isle of man departure flight to the isle of man airport', () => {
+      const cookie = new CookieModel(reqExampleData());
 
-    const isleOfManPortCodeDepartureVoyage = departureVoyage();
-    const ISLE_OF_MAN_IATA_CODE = "IOM";
+      const isleOfManPortCodeDepartureVoyage = departureVoyage();
+      const ISLE_OF_MAN_IATA_CODE = 'IOM';
 
-    isleOfManPortCodeDepartureVoyage.departurePort = ISLE_OF_MAN_IATA_CODE;
-    cookie.setGarDepartureVoyage(isleOfManPortCodeDepartureVoyage);
+      isleOfManPortCodeDepartureVoyage.departurePort = ISLE_OF_MAN_IATA_CODE;
+      cookie.setGarDepartureVoyage(isleOfManPortCodeDepartureVoyage);
 
-    expect(cookie.getIsIsleOfManFlight()).to.eq(true)
+      expect(cookie.getIsIsleOfManFlight()).to.eq(true);
+    });
 
-    cookie.setGarDepartureVoyage(nonIsleOfManDepartureVoyage)
-    expect(cookie.getIsIsleOfManFlight()).to.eq(false)
-    
-    const isleOfManCoordinateDepartureVoyage = departureVoyage();
-    const isleOfManLatitude = 54.137806;
-    const isleOfManLongtitude = -4.621783;
+    it('should return true for coordiantes to an isle of man departure', () => {
+      const cookie = new CookieModel(reqExampleData());
 
-    isleOfManCoordinateDepartureVoyage.departureLat = isleOfManLatitude;
-    isleOfManCoordinateDepartureVoyage.departureLong - isleOfManLongtitude;
-    cookie.setGarDepartureVoyage(isleOfManCoordinateDepartureVoyage);
-
-    expect(cookie.getIsIsleOfManFlight()).to.eq(true)
-  })
+      const isleOfManCoordinateDepartureVoyage = departureVoyage();
+      const isleOfManLatitude = '54.137806';
+      const isleOfManLongtitude = '-4.621783';
+ 
+      isleOfManCoordinateDepartureVoyage.departureLat = isleOfManLatitude;
+      isleOfManCoordinateDepartureVoyage.departureLong - isleOfManLongtitude;
+      cookie.setGarDepartureVoyage(isleOfManCoordinateDepartureVoyage);
+  
+      expect(cookie.getIsIsleOfManFlight()).to.eq(true);
+    });
+  });
 
   afterEach(() => {
     sinon.restore();

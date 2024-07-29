@@ -1,6 +1,8 @@
 const logger = require("../utils/logger")(__filename);
 const { isValidAirportCode } = require("../utils/validator");
 const { trimToDecimalPlaces } = require("../utils/utils");
+const { iso1A3Code } = require('@rapideditor/country-coder')
+const { findAirportForCode } = require('../utils/airportValidation');
 
 /*
  *
@@ -20,6 +22,7 @@ class Cookie {
 
     this.initialise();
     this.initialiseGar();
+    this.isleOfManCountryCode = "IMN";
   }
 
 
@@ -241,7 +244,7 @@ class Cookie {
     this.session.gar.voyageDeparture.departureLat = departureJourney.departureLat;
     this.session.gar.voyageDeparture.departureLong = departureJourney.departureLong;
     this.session.gar.voyageDeparture.departurePortChoice = departureJourney.departurePortChoice;
-
+    this.session.gar.voyageDeparture.isIsleOfManFlight = this.determineIfIsIsleOfManFlight(departureJourney);
   }
 
   getGarDepartureVoyage() {
@@ -783,6 +786,33 @@ class Cookie {
     voyage[`${type}PortChoice`] = voyageObj.portChoice || defaultPortChoice;
 
     return voyage;
+  }
+
+  determineIfIsIsleOfManFlight(voyageObj) {
+    let isIsleOfManFlight = null;
+    if (voyageObj['departurePortChoice'] === 'Yes') {
+      isIsleOfManFlight = this.isleOfManFlightFromDeparturePort(
+        voyageObj['departurePort']
+      );
+    } else {
+      isIsleOfManFlight = this.isleOfManFlightFromCoordinates(
+        voyageObj['departureLat'],
+        voyageObj['departureLong']
+      )
+    }
+
+    return isIsleOfManFlight;
+  }
+
+  isleOfManFlightFromCoordinates(latitude, longitude) {
+    const departurePortCountryCode = iso1A3Code([latitude, longitude], { level: 'territory' });
+    return departurePortCountryCode === this.isleOfManCountryCode;
+  }
+
+  isleOfManFlightFromDeparturePort(departurePort) {
+    const airport = findAirportForCode(departurePort) ?? {};
+
+    return airport.countryCode === this.isleOfManCountryCode;
   }
 
   dateSlice(dateType, date) {
