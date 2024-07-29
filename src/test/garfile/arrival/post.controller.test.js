@@ -12,10 +12,12 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 
+
 const controller = require('../../../app/garfile/arrival/post.controller');
 
 const i18n = require('i18n');
 const path = require('path');
+const { reqExampleData } = require('../../fixtures');
 
 i18n.configure({
   locales: ['en'],
@@ -28,6 +30,8 @@ i18n.configure({
 describe('Arrival Post Controller', () => {
   let req; let res;
   let clock;
+  const arrivalPostSession = reqExampleData().session;
+  arrivalPostSession.gar.id = 'ABCDEFGH';
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -50,13 +54,7 @@ describe('Arrival Post Controller', () => {
         arrivalHour: '15',
         arrivalMinute: '00',
       },
-      session: {
-        gar: {
-          id: 'ABCDEFGH',
-          voyageArrival: {},
-          status: 'Draft',
-        },
-      },
+      session: arrivalPostSession,
     };
 
     res = {

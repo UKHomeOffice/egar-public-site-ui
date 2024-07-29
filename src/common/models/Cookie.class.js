@@ -217,13 +217,12 @@ class Cookie {
 
   determineIfIsIsleOfManFlight() {
     return (
-      this.session.gar.voyageDeparture.departureCountryCode === this.isleOfManCountryCode
-      || this.session.gar.voyageArrival.arrivalCountryCode === this.isleOfManCountryCode
+      this.session.gar.voyageDeparture?.departureCountryCode === this.isleOfManCountryCode
+      || this.session.gar.voyageArrival?.arrivalCountryCode === this.isleOfManCountryCode
     )
   }
 
   getIsIsleOfManFlight() {
-    
     return this.session.gar.isIsleOfManFlight;
   }
 
