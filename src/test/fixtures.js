@@ -146,7 +146,7 @@ const outboundGar = () => {
   };
 }
 
-const exampleReq = () => {
+const reqExampleData = () => {
   return {
     session: {
       org: {
@@ -157,8 +157,30 @@ const exampleReq = () => {
         id: 9000,
         tempAddPersonId: 1,
         status: 'Draft',
+        voyageDeparture: {
+          departureDate: null,
+          departureTime: null,
+          departurePort: null,
+          departureLong: null,
+          departureLat: null,
+          isIsleOfManFlight: null
+        }
       },
     },
+  }
+}
+
+const departureVoyage = () => {
+  return {
+    departureDay: '05',
+    departureMonth: '10',
+    departureYear: '2024',
+    departureHour: '10',
+    departureMinute: '15',
+    departurePort: 'LHR',
+    departureLong: '',
+    departureLat: '',
+    departurePortChoice: 'Yes'
   }
 }
 
@@ -168,5 +190,6 @@ module.exports = {
     garPeople,
     invalidPassengersAndCrew,
     outboundGar,
-    exampleReq
+    reqExampleData,
+    departureVoyage
 }

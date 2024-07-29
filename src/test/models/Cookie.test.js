@@ -9,7 +9,7 @@ const sinonChai = require('sinon-chai');
 require('../global.test');
 
 const CookieModel = require('../../common/models/Cookie.class');
-const { exampleReq } = require('../fixtures');
+const { reqExampleData, departureVoyage } = require('../fixtures');
 
 /**
  * Unit tests for the Cookie.class.js
@@ -17,8 +17,6 @@ const { exampleReq } = require('../fixtures');
  * Significantly more if coverage is priority, namely the boilerplate getter and setters.
  */
 describe('Cookie Model', () => {
-  const reqExampleData = exampleReq();
-
   beforeEach(() => {
     chai.use(sinonChai);
 
@@ -65,7 +63,7 @@ describe('Cookie Model', () => {
   });
 
   it('should run initialise using the variables in the session', () => {
-    const req = JSON.parse(JSON.stringify(reqExampleData));
+    const req = JSON.parse(JSON.stringify(reqExampleData()));
     const constructor = () => new CookieModel(req);
 
     cookie = constructor();
@@ -88,7 +86,7 @@ describe('Cookie Model', () => {
   });
 
   it('should set properties to null when reset is called', () => {
-    const req = JSON.parse(JSON.stringify(reqExampleData));
+    const req = JSON.parse(JSON.stringify(reqExampleData()));
     const constructor = () => new CookieModel(req);
 
     cookie = constructor();
@@ -121,11 +119,23 @@ describe('Cookie Model', () => {
   });
 
   it('should get and set as expected', () => {
-    const req = JSON.parse(JSON.stringify(reqExampleData));
+    const req = JSON.parse(JSON.stringify(reqExampleData()));
     const constructor = () => new CookieModel(req);
 
     cookie = constructor();
-    expect(cookie.getGar()).to.eql({ id: 9000, tempAddPersonId: 1, status: 'Draft' });
+    expect(cookie.getGar()).to.eql({ 
+      id: 9000, 
+      tempAddPersonId: 1, 
+      status: 'Draft',
+      voyageDeparture: {
+        departureDate: null,
+        departureTime: null,
+        departurePort: null,
+        departureLong: null,
+        departureLat: null,
+        isIsleOfManFlight: null
+      }
+    });
 
     expect(cookie.getGarId()).to.eq(9000);
     cookie.setGarId(9001);
@@ -148,10 +158,11 @@ describe('Cookie Model', () => {
     expect(cookie.getEditCraft()).to.eql({});
   });
 
+
   describe('date and time functions', () => {
     let cookie;
     beforeEach(() => {
-      const req = JSON.parse(JSON.stringify(reqExampleData));
+      const req = JSON.parse(JSON.stringify(reqExampleData()));
       cookie = new CookieModel(req);
     });
 
@@ -219,6 +230,35 @@ describe('Cookie Model', () => {
       expect(cookie.timeSlice('MINUTE', '12:34')).to.eq('34');
     });
   });
+
+  it('should determine with a flight is to the isle of man or not', () => {
+    const cookie = new CookieModel(reqExampleData());
+    const nonIsleOfManDepartureVoyage = departureVoyage();
+    cookie.setGarDepartureVoyage(nonIsleOfManDepartureVoyage)
+
+    expect(cookie.getIsIsleOfManFlight()).to.eq(false)
+
+    const isleOfManPortCodeDepartureVoyage = departureVoyage();
+    const ISLE_OF_MAN_IATA_CODE = "IOM";
+
+    isleOfManPortCodeDepartureVoyage.departurePort = ISLE_OF_MAN_IATA_CODE;
+    cookie.setGarDepartureVoyage(isleOfManPortCodeDepartureVoyage);
+
+    expect(cookie.getIsIsleOfManFlight()).to.eq(true)
+
+    cookie.setGarDepartureVoyage(nonIsleOfManDepartureVoyage)
+    expect(cookie.getIsIsleOfManFlight()).to.eq(false)
+    
+    const isleOfManCoordinateDepartureVoyage = departureVoyage();
+    const isleOfManLatitude = 54.137806;
+    const isleOfManLongtitude = -4.621783;
+
+    isleOfManCoordinateDepartureVoyage.departureLat = isleOfManLatitude;
+    isleOfManCoordinateDepartureVoyage.departureLong - isleOfManLongtitude;
+    cookie.setGarDepartureVoyage(isleOfManCoordinateDepartureVoyage);
+
+    expect(cookie.getIsIsleOfManFlight()).to.eq(true)
+  })
 
   afterEach(() => {
     sinon.restore();

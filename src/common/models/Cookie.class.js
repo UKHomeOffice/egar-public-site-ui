@@ -110,6 +110,7 @@ class Cookie {
           departurePort: null,
           departureLong: null,
           departureLat: null,
+          isIsleOfManFlight: null
         },
         manifest: [],
         tempAddPersonId: null,
@@ -207,6 +208,10 @@ class Cookie {
   getGarCraft() {
     logger.info(JSON.stringify(this.session.gar.craft));
     return this.session.gar.craft;
+  }
+
+  getIsIsleOfManFlight() {
+    return this.session.gar.voyageDeparture.isIsleOfManFlight;
   }
 
   setGarArrivalVoyage(voyageObj) {
