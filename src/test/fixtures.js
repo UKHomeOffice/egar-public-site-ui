@@ -234,14 +234,14 @@ const arrivalCoordinateVoyage = () => {
 }
 
 module.exports = {
-    savedPeople,
-    flaggedSavedPeople,
-    garPeople,
-    invalidPassengersAndCrew,
-    outboundGar,
-    reqExampleData,
-    departurePortVoyage,
-    departureCoordinateVoyage,
-    arrivalPortVoyage,
-    arrivalCoordinateVoyage
+  savedPeople,
+  flaggedSavedPeople,
+  garPeople,
+  invalidPassengersAndCrew,
+  outboundGar,
+  reqExampleData,
+  departurePortVoyage,
+  departureCoordinateVoyage,
+  arrivalPortVoyage,
+  arrivalCoordinateVoyage
 }

@@ -100,12 +100,14 @@ class Cookie {
           freeCirculation: null,
           visitReason: null,
         },
+        isIsleOfManFlight: null,
         voyageArrival: {
           arrivalDate: null,
           arrivalTime: null,
           arrivalPort: null,
           arrivalLong: null,
           arrivalLat: null,
+          arrivalCountryCode: null,
         },
         voyageDeparture: {
           departureDate: null,
@@ -113,7 +115,7 @@ class Cookie {
           departurePort: null,
           departureLong: null,
           departureLat: null,
-          isIsleOfManFlight: null
+          departureCountryCode: null,
         },
         manifest: [],
         tempAddPersonId: null,
@@ -213,8 +215,16 @@ class Cookie {
     return this.session.gar.craft;
   }
 
+  determineIfIsIsleOfManFlight() {
+    return (
+      this.session.gar.voyageDeparture.departureCountryCode === this.isleOfManCountryCode
+      || this.session.gar.voyageArrival.arrivalCountryCode === this.isleOfManCountryCode
+    )
+  }
+
   getIsIsleOfManFlight() {
-    return this.session.gar.voyageDeparture.isIsleOfManFlight;
+    
+    return this.session.gar.isIsleOfManFlight;
   }
 
   setGarArrivalVoyage(voyageObj) {
@@ -228,6 +238,9 @@ class Cookie {
     this.session.gar.voyageArrival.arrivalLat = arrivalJourney.arrivalLat;
     
     this.session.gar.voyageArrival.arrivalPortChoice = arrivalJourney.arrivalPortChoice;
+    this.session.gar.voyageArrival.arrivalCountryCode = arrivalJourney.arrivalCountryCode;
+
+    this.session.gar.isIsleOfManFlight = this.determineIfIsIsleOfManFlight();
   }
 
   getGarArrivalVoyage() {
@@ -244,7 +257,9 @@ class Cookie {
     this.session.gar.voyageDeparture.departureLat = departureJourney.departureLat;
     this.session.gar.voyageDeparture.departureLong = departureJourney.departureLong;
     this.session.gar.voyageDeparture.departurePortChoice = departureJourney.departurePortChoice;
-    this.session.gar.voyageDeparture.isIsleOfManFlight = this.determineIfIsIsleOfManFlight(departureJourney);
+    this.session.gar.voyageDeparture.departureCountryCode = departureJourney.departureCountryCode;
+    
+    this.session.gar.isIsleOfManFlight = this.determineIfIsIsleOfManFlight();
   }
 
   getGarDepartureVoyage() {
@@ -785,34 +800,15 @@ class Cookie {
     const defaultPortChoice = (voyageObj[`${type}Lat`] || voyageObj[`${type}Long`]) ? 'No' : 'Yes';
     voyage[`${type}PortChoice`] = voyageObj.portChoice || defaultPortChoice;
 
-    return voyage;
-  }
-
-  determineIfIsIsleOfManFlight(voyageObj) {
-    let isIsleOfManFlight = null;
-    if (voyageObj['departurePortChoice'] === 'Yes') {
-      isIsleOfManFlight = this.isleOfManFlightFromDeparturePort(
-        voyageObj['departurePort']
-      );
+    if (voyage[`${type}PortChoice`] === 'Yes') {
+      voyage[`${type}CountryCode`] = findAirportForCode(voyage[`${type}Port`])?.countryCode;
     } else {
-      isIsleOfManFlight = this.isleOfManFlightFromCoordinates(
-        voyageObj['departureLat'],
-        voyageObj['departureLong']
-      )
+      voyage[`${type}CountryCode`] = iso1A3Code(
+        [voyage[`${type}Long`], voyage[`${type}Lat`]], 
+        { level: 'territory' }
+      );
     }
-
-    return isIsleOfManFlight;
-  }
-
-  isleOfManFlightFromCoordinates(latitude, longitude) {
-    const departurePortCountryCode = iso1A3Code([longitude, latitude], { level: 'territory' });
-    return departurePortCountryCode === this.isleOfManCountryCode;
-  }
-
-  isleOfManFlightFromDeparturePort(departurePort) {
-    const airport = findAirportForCode(departurePort) ?? {};
-
-    return airport.countryCode === this.isleOfManCountryCode;
+    return voyage;
   }
 
   dateSlice(dateType, date) {
