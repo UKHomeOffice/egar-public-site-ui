@@ -19,3 +19,7 @@ travelDocumentDetails.hidden = hideTravelDocumentDetails(nationalitySelect().val
 nationality.addEventListener("change", (e) => {
     travelDocumentDetails.hidden = hideTravelDocumentDetails(nationalitySelect().value);
 })
+
+nationality.addEventListener("blur", (e) => {
+    travelDocumentDetails.hidden = hideTravelDocumentDetails(nationalitySelect().value);
+})
