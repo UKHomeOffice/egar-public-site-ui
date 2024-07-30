@@ -60,7 +60,7 @@ const performAPICall = (garId, cookie, req, res) => {
     });
 };
 
-const buildValidations = async (garfile, garpeople, manifest) => {
+const buildValidations = async (garfile, garpeople, manifest, isIsleOfManFlight) => {
   const validations = validationList.validations(garfile, garpeople);
   const departureDateParts = garfile.departureDate ? garfile.departureDate.split('-') : [];
   const departDateObj = {
@@ -77,7 +77,7 @@ const buildValidations = async (garfile, garpeople, manifest) => {
 
   // Manifest specific validations does not using generic mechanism, so wrapped in
   // an uninformative message for now
-  const isManifestValid = await manifest.validate(cookie.getIsIsleOfManFlight());
+  const isManifestValid = await manifest.validate(isIsleOfManFlight);
 
   if (!isManifestValid) {
     const validateFailMsg = 'Resolve manifest errors before submitting';
@@ -119,7 +119,7 @@ module.exports = (req, res) => {
     const garsupportingdocs = JSON.parse(responseValues[2]);
     validator.handleResponseError(garsupportingdocs);
 
-    const validations = await buildValidations(garfile, garpeople, manifest);
+    const validations = await buildValidations(garfile, garpeople, manifest, cookie.getIsIsleOfManFlight());
 
     if (garfile.status.name.toLowerCase() === 'submitted') {
       const submitError = {

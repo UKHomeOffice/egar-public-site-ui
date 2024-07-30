@@ -24,7 +24,7 @@ module.exports = (req, res) => {
 
   const errMsg = { message: 'Failed to update GAR person. Try again' };
 
-  validator.validateChains(validations.validations(req))
+  validator.validateChains(validations.validations(req, cookie.getIsIsleOfManFlight()))
     .then(() => {
       garApi.updateGarPerson(cookie.getGarId(), person)
         .then((apiResponse) => {

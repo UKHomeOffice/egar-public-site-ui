@@ -232,6 +232,7 @@
                                     <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
                                   </td>
                                 </tr>
+                                {% if person.documentType %}
                                 <tr class="govuk-table__row">
                                   <td class="govuk-table__cell" colspan="9">
                                     <div>
@@ -267,6 +268,7 @@
                                     </div>
                                   </td>
                                 </tr>
+                                {% endif %}
                               {% endfor %}
                             </div>
                           </td>
