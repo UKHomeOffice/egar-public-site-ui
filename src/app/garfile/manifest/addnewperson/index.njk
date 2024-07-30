@@ -32,6 +32,7 @@
 
       <form action="/garfile/manifest/addnewperson" autocomplete="off" class="form-group" method="post" role="form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <input type="hidden" id="isIsleOfManFlight" name="isIsleOfManFlight" value="{{ cookie.getIsIsleOfManFlight() }}" />
         {% include "person-details.njk" %}
         <br>
         <input id="add-person-manifest" class="govuk-button" type="submit" value="{{__('form_save_and_add_to_gar')}}" onclick="sendAnalytics(event, 'Save and Exit', 'click')">
@@ -42,4 +43,5 @@
     </div>
   </div>
 </div>
+<script src="/javascripts/manifestPersonForm.js"></script>
 {% endblock %}
