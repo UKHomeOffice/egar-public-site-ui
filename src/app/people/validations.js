@@ -1,19 +1,18 @@
 const validator = require('../../common/utils/validator');
 const ValidationRule = require('../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH } = require('../../common/config/index');
+const { isBristishOrIrishIsleOfManPassenger } = require('../../common/utils/utils');
 
-module.exports.validations = (req) => {
+module.exports.validations = (req, isIsleOfManFlight) => {
   const dobObj = { d: req.body.dobDay, m: req.body.dobMonth, y: req.body.dobYear };
   const expiryDateObj = { d: req.body.expiryDay, m: req.body.expiryMonth, y: req.body.expiryYear };
   const docTypeOther = req.body.travelDocumentType;
 
-  const peopleValidationRules = [
+  const passengerRulesToProcess = [
     [
       new ValidationRule(validator.bornAfter1900, 'dob', dobObj, 'Enter a real date of birth'),
     ],
-    [
-      new ValidationRule(validator.realDateInFuture, 'documentExpiryDate', expiryDateObj, 'Enter a real document expiry date'),
-    ],
+ 
     [
       new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter the given name of the person'),
       new ValidationRule(validator.isValidStringLength, 'firstName', req.body.firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
@@ -36,11 +35,17 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(validator.notEmpty, 'gender', req.body.gender, 'Select the sex of the person'),
+    ]
+  ];
+
+  const travelDocumentRules = [
+    [
+      new ValidationRule(validator.realDateInFuture, 'documentExpiryDate', expiryDateObj, 'Enter a real document expiry date'),
     ],
     [
       new ValidationRule(validator.notEmpty, 'travelDocumentNumber', req.body.travelDocumentNumber, 'Enter the travel document number'),
       new ValidationRule(validator.isValidStringLength, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAlphanumeric, 'travelDocumentNumber', req.body.travelDocumentNumber, `Travel document number must be alphanumeric only.`),
+      new ValidationRule(validator.isAlphanumeric, 'travelDocumentNumber', req.body.travelDocumentNumber, 'Travel document number must be alphanumeric only.'),
     ],
     [
       new ValidationRule(validator.notEmpty, 'travelDocumentType', req.body.travelDocumentType, 'Select the travel document type'),
@@ -48,6 +53,13 @@ module.exports.validations = (req) => {
     [
       new ValidationRule(validator.notEmpty, 'issuingState', req.body.issuingState, 'Enter the issuing state for the document'),
     ],
+  ];
+
+  const travelDocumentRulesToProcess = isBristishOrIrishIsleOfManPassenger(req.body.nationality, isIsleOfManFlight) ? [] : travelDocumentRules;
+  const peopleValidationRules = [
+    ...passengerRulesToProcess,
+    ...travelDocumentRulesToProcess,
+
   ];
 
   if (docTypeOther === 'Other') {

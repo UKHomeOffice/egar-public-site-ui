@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
 
     const requestToValidate = Manifest.turnPersonToRequest(person);
 
-    validator.validateChains(validations.validations(requestToValidate))
+    validator.validateChains(validations.validations(requestToValidate, cookie.getIsIsleOfManFlight()))
     .then(() => {
       res.render('app/garfile/manifest/editperson/index', {
         cookie, persontype, documenttype, genderchoice, req, person,

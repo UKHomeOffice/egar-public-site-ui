@@ -49,10 +49,48 @@ function getResponsiblePersonFromGar(gar) {
     };
 }
 
+const UK_COUNTRY_CODE = 'GBR';
+const IRELAND_COUNTRY_CODE = 'IRL';
+
+function isBristishOrIrishIsleOfManPassenger(nationality, isIsleOfManFlight) {
+    return isIsleOfManFlight && (
+        nationality === UK_COUNTRY_CODE 
+        || nationality === IRELAND_COUNTRY_CODE 
+      );
+} 
+
+function getPersonFromRequest(req, isIsleOfManFlight) {
+    
+    const passengerInformation = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        gender: req.body.gender,
+        dateOfBirth: req.body.dateOfBirth,
+        placeOfBirth: req.body.birthplace,
+        nationality: req.body.nationality.toUpperCase(),
+        peopleType: req.body.personType,
+    };
+
+    const travelInformation = isBristishOrIrishIsleOfManPassenger(req.body.nationality, isIsleOfManFlight) ? {} : {
+        documentNumber: req.body.travelDocumentNumber,
+        documentType: req.body.travelDocumentType,
+        documentDesc: req.body.travelDocumentOther,
+        issuingState: req.body.issuingState.toUpperCase(),
+        documentExpiryDate: req.body.documentExpiryDate,
+    };
+
+    return {
+        ...passengerInformation,
+        ...travelInformation
+      };
+}
+
 
 module.exports = {
     trimToDecimalPlaces,
     documentTypes,
     getResponsiblePersonFromReq,
     getResponsiblePersonFromGar,
+    getPersonFromRequest,
+    isBristishOrIrishIsleOfManPassenger
 }

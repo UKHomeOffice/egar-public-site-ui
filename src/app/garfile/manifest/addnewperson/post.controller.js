@@ -8,6 +8,7 @@ const documenttype = require('../../../../common/seeddata/egar_saved_people_trav
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
 const validations = require('../../../people/validations');
+const { getPersonFromRequest } = require('../../../../common/utils/utils');
 
 module.exports = (req, res) => {
   logger.debug('In Manifest/Add new Person post controller');
@@ -16,23 +17,13 @@ module.exports = (req, res) => {
 
   const birthdate = `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`;
   const expiryDate = `${req.body.expiryYear}-${req.body.expiryMonth}-${req.body.expiryDay}`;
+  
+  req.body.dateOfBirth = birthdate;
+  req.body.documentExpiryDate = expiryDate;
 
-  const person = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    gender: req.body.gender,
-    dateOfBirth: birthdate,
-    placeOfBirth: req.body.birthplace,
-    nationality: _.toUpper(req.body.nationality),
-    peopleType: req.body.personType,
-    documentNumber: req.body.travelDocumentNumber,
-    documentType: req.body.travelDocumentType,
-    documentDesc: req.body.travelDocumentOther,
-    issuingState: _.toUpper(req.body.issuingState),
-    documentExpiryDate: expiryDate,
-  };
+  const person = getPersonFromRequest(req, cookie.getIsIsleOfManFlight());
 
-  validator.validateChains(validations.validations(req))
+  validator.validateChains(validations.validations(req, cookie.getIsIsleOfManFlight()))
     .then(() => {
       garApi.patch(cookie.getGarId(), 'Draft', { people: [person] })
         .then((garResponse) => {
