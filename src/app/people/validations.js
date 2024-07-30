@@ -3,7 +3,7 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH } = require('../../common/config/index');
 const { isBristishOrIrishIsleOfManPassenger } = require('../../common/utils/utils');
 
-module.exports.validations = (req, isIsleOfManFlight) => {
+module.exports.validations = (req, isIsleOfManFlight = false) => {
   const dobObj = { d: req.body.dobDay, m: req.body.dobMonth, y: req.body.dobYear };
   const expiryDateObj = { d: req.body.expiryDay, m: req.body.expiryMonth, y: req.body.expiryYear };
   const docTypeOther = req.body.travelDocumentType;

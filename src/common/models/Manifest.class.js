@@ -2,6 +2,7 @@
 const logger = require('../../common/utils/logger')(__filename);
 const validations = require('../../app/people/validations');
 const validator = require('../../common/utils/validator');
+const { isBristishOrIrishIsleOfManPassenger } = require('../utils/utils');
 
 class Manifest {
   /**
@@ -25,10 +26,24 @@ class Manifest {
     }
   }
 
-  static turnPersonToRequest (inputtedPerson) {
+  static turnPersonToRequest (inputtedPerson, isIsleOfManFlight = false) {
     const person = structuredClone(inputtedPerson);
     const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
-    const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
+
+    let travelDocumentInformation = {};
+
+    if (!isBristishOrIrishIsleOfManPassenger(person.nationality, isIsleOfManFlight)) {
+      const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
+      travelDocumentInformation = {
+        travelDocumentType: person.documentType,
+        travelDocumentNumber: person.documentNumber,
+        travelDocumentOther: person.documentDesc,
+        issuingState: person.issuingState,
+        expiryYear: expiryDateObject.y,
+        expiryMonth: expiryDateObject.m,
+        expiryDay: expiryDateObject.d,
+      };
+    }
 
     return { 
       body: {
@@ -40,19 +55,10 @@ class Manifest {
         gender: person.gender,
         birthplace: person.placeOfBirth,
 
-        travelDocumentType: person.documentType,
-        travelDocumentNumber: person.documentNumber,
-        travelDocumentOther: person.documentDesc,
-
-        issuingState: person.issuingState, 
-
         dobYear: birtDateObject.y,
         dobMonth: birtDateObject.m,
         dobDay: birtDateObject.d,
-    
-        expiryYear: expiryDateObject.y,
-        expiryMonth: expiryDateObject.m,
-        expiryDay: expiryDateObject.d,
+        ...travelDocumentInformation
       } 
     };
   }
@@ -61,13 +67,14 @@ class Manifest {
    * Validate Manifest data cannot be empty and cannot have invalid dates
    * @returns {Bool} true if valid, else false
    */
-  async validate(isIsleOfManFlight) {
+  async validate(isIsleOfManFlight = false) {
     const validatingPeople = Promise.allSettled(
         this.manifest.map(async (person) => {
           try {
-            const req = Manifest.turnPersonToRequest(person);
+            const req = Manifest.turnPersonToRequest(person, isIsleOfManFlight,);
             return await validator.validateChains(validations.validations(req, isIsleOfManFlight));
           } catch (err) {
+            logger.error(err)
             this._recordValidationErr(this.manifest.indexOf(person));
           }
         })

@@ -128,7 +128,7 @@ module.exports = async (req, res) => {
         return res.redirect('/garfile/manifest');
       }
 
-      const isValid = await manifest.validate();
+      const isValid = await manifest.validate(cookie.getIsIsleOfManFlight());
       
       if (isValid) {
         return res.redirect('/garfile/resperson');

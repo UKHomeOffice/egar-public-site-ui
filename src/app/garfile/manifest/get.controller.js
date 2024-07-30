@@ -66,7 +66,7 @@ module.exports = async (req, res) => {
     cookie.setIsMilitaryFlight(garfile.isMilitaryFlight);
 
     const isValidSavedPeople = await savedPeopleManifest.validate();
-    const isValidGarPeople = await garPeopleManifest.validate();
+    const isValidGarPeople = await garPeopleManifest.validate(cookie.getIsIsleOfManFlight());
     const flaggedDuplicateSavedPeople = flagDuplicatesInSavedPeople(
       initialSavedPeople, 
       garpeople.items

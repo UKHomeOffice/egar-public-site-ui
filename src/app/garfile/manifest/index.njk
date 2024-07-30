@@ -193,10 +193,7 @@
                         <td class="govuk-table__cell"></td>
                       {% else %}
                         <tr class="govuk-table__row" id="person-{{loop.index0}}">
-                          {% if person
-                            .documentExpiryDate
-                            .toString() < expiryDate
-                            .toString() %}
+                          {% if person.documentExpiryDate and (person.documentExpiryDate.toString() < expiryDate.toString()) %}
                             <h3  class="govuk-heading-s" id="expired" style="color:red" hidden>Please be advised, {{person.firstName}}
                               {{person.lastName}}'s passport has expired </h3>
                             <script>

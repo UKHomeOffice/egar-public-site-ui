@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     const parsedResponse = JSON.parse(apiResponse).items;
     const person = parsedResponse.find((garPerson) => garPerson.garPeopleId === personId);
 
-    const requestToValidate = Manifest.turnPersonToRequest(person);
+    const requestToValidate = Manifest.turnPersonToRequest(person, cookie.getIsIsleOfManFlight());
 
     validator.validateChains(validations.validations(requestToValidate, cookie.getIsIsleOfManFlight()))
     .then(() => {

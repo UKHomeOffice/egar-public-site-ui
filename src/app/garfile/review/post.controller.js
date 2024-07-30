@@ -77,7 +77,7 @@ const buildValidations = async (garfile, garpeople, manifest) => {
 
   // Manifest specific validations does not using generic mechanism, so wrapped in
   // an uninformative message for now
-  const isManifestValid = await manifest.validate();
+  const isManifestValid = await manifest.validate(cookie.getIsIsleOfManFlight());
 
   if (!isManifestValid) {
     const validateFailMsg = 'Resolve manifest errors before submitting';
