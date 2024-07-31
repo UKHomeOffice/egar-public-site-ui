@@ -92,15 +92,15 @@
                 maxlength="{{ MAX_POSTCODE_LENGTH }}">
         </div>
 
-        <div class="govuk-form-group {{ m.form_group_class('responsibleCounty', errors) }}">
-            <label id="responsibleCountry-label" class="govuk-label" for="responsibleCounty">{{ __('field_address_country') }}</label>
-            {{ m.error_message('responsibleCounty', errors, __) }}
-            <select class="govuk-select" id="responsibleCounty" name="responsibleCounty"
-                value="{{ responsiblePerson.responsibleCounty }}"
+        <div class="govuk-form-group {{ m.form_group_class('responsibleCountry', errors) }}">
+            <label id="responsibleCountry-label" class="govuk-label" for="responsibleCountry">{{ __('field_address_country') }}</label>
+            {{ m.error_message('responsibleCountry', errors, __) }}
+            <select class="govuk-select" id="responsibleCountry" name="responsibleCountry"
+                value="{{ responsiblePerson.responsibleCountry }}"
                 aria-labelledby="responsibleCountry-label">
                 {% for country in countryList | sort(attribute = 'label') %}
                     <option value="{{ country.code }}"
-                    {{ 'selected=selected' if responsiblePerson.responsibleCounty == country.code }}>{{ country.label }}</option>
+                    {{ 'selected=selected' if responsiblePerson.responsibleCountry == country.code }}>{{ country.label }}</option>
                 {% endfor %}
             </select>
         </div>

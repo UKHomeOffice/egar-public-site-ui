@@ -21,7 +21,7 @@ const garResponsiblePersonPartial = {
   responsibleAddressLine2: 'Buckingham Palace Road',
   responsibleTown: 'London',
   responsiblePostcode: 'SW111A',
-  responsibleCounty: 'GBR',
+  responsibleCountry: 'GBR',
   fixedBasedOperator: 'Captain',
   fixedBasedOperatorAnswer: ''
 };
