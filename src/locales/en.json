@@ -535,5 +535,6 @@
 	"responsible_person_no_records": "There are no saved responsible person records",
 	"responsible_person_no_records_create_new": "No saved responsible person records found. Create a new one in the Responsible Person tab.",
 	"heading_edit_responsible_person": "Edit responsible person",
-	"caption_responsible_person_details": "Select the details of a responsible person you have previously added"
+	"caption_responsible_person_details": "Select the details of a responsible person you have previously added",
+	"prevent_zzzz_or_yyyy_message": "Add ICAO/IATA codes for the location. ZZZZ or YYYY are not accepted codes."
 }
