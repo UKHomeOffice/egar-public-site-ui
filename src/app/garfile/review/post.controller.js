@@ -11,7 +11,7 @@ const validationList = require('./validations');
 
 const performAPICall = async (garId, cookie, req, res) => {
   try {
-    const apiResponse = garApi.patch(garId, 'Submitted', {});
+    const apiResponse = await garApi.patch(garId, 'Submitted', {});
     logger.info('Received response from API');
     const parsedResponse = JSON.parse(apiResponse);
 
