@@ -8,25 +8,9 @@ const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
 
-const performAPICallAMG = (garId, cookie, req, res) => {
-  garApi.submitGARForCheckin(garId)
-    .then((apiResponse) => {
-      logger.info('Submiited GAR people to AMG checkin');
-      res.redirect('/garfile/amg/checkin');
-    }).catch((err) => {
-      logger.error('Api failed to submit GAR people for AMG checkin');
-      logger.error(err);
-      res.render('app/garfile/review/index.njk', {
-        cookie,
-      });
-    });
-};
-
-
 const performAPICall = (garId, cookie, req, res) => {
   garApi.patch(garId, 'Submitted', {})
     .then((apiResponse) => {
-
       logger.info('Received response from API');
       const parsedResponse = JSON.parse(apiResponse);
 
@@ -50,7 +34,6 @@ const performAPICall = (garId, cookie, req, res) => {
       res.render('app/garfile/submit/success/index', {
         cookie,
       });
-
     }).catch((err) => {
       logger.error('Api failed to update GAR');
       logger.error(err);
@@ -149,23 +132,31 @@ module.exports = (req, res) => {
         - Journey is coming into UK but no status check: Send to AMG/UPT
         - Journey is coming into UK and status check: Submit GAR
       */
-     const isRequiresPassengerCheck = (
+      const isRequiresPassengerCheck = (
         airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) 
         && !statuscheck
-      )
+      );
 
       const isAnAllMilitaryFlight = (
-        garfile.isMilitaryFlight 
+        garfile.isMilitaryFlight
         && garpeople.items.length === 0
       );
 
-      if (isRequiresPassengerCheck && !isAnAllMilitaryFlight) {
-        performAPICallAMG(garId, cookie, req, res);
-      } else {
-        performAPICall(garId, cookie, req, res);
-      }
+      garApi.submitGARForCheckin(garId).then(() => {
+        if (isRequiresPassengerCheck && !isAnAllMilitaryFlight) {
+          logger.info('Submiited GAR people to AMG checkin');
+          res.redirect('/garfile/amg/checkin');
+        } else {
+          performAPICall(garId, cookie, req, res);
+        }
+      }).catch((err) => {
+        logger.error('Api failed to submit GAR people for AMG checkin');
+        logger.error(err);
+        res.render('app/garfile/review/index.njk', {
+          cookie,
+        });
+      });
     }).catch((err) => {
-
       logger.info('Failed to submit incomplete GAR - validation failed');
       logger.debug(JSON.stringify(err));
       renderObj.errors = err;
