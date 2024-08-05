@@ -93,7 +93,7 @@ module.exports = async (req, res) => {
   let garpeople;
 
   try {
-    const responseValues = Promise.all([
+    const responseValues = await Promise.all([
       garApi.get(garId),
       garApi.getPeople(garId),
       garApi.getSupportingDocs(garId),
@@ -134,9 +134,12 @@ module.exports = async (req, res) => {
     };
   } catch (err) {
     logger.error('Error retrieving GAR for review');
+    logger.error('0');
     logger.error(err);
+    logger.error('1');
     return res.render('app/garfile/review/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
   }
+  logger.error('2');
 
   try {
     await validator.validateChains(validations);
