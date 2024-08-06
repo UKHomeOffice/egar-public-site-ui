@@ -19,7 +19,7 @@ const responsible_persons = [
     responsibleAddressLine1: 'House44',
     responsibleAddressLine2: 'Street33',
     responsibleTown: 'London',
-    responsibleCounty: 'GBR',
+    responsibleCountry: 'GBR',
     responsiblePostcode: 'GB66BG',
     fixedBasedOperator: 'Captain',
     fixedBasedOperatorAnswer: ''
@@ -33,7 +33,7 @@ const responsible_persons = [
     responsibleAddressLine1: 'House44',
     responsibleAddressLine2: 'Street33',
     responsibleTown: 'London',
-    responsibleCounty: 'GBR',
+    responsibleCountry: 'GBR',
     responsiblePostcode: 'GB66BG',
     fixedBasedOperator: 'Captain',
     fixedBasedOperatorAnswer: ''
