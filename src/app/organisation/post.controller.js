@@ -10,8 +10,8 @@ module.exports = (req, res) => {
     return;
   }
  
-  if(req.body.searchUser) {
-    req.session.searchUserName = req.body.searchUser;
+  if(req.body.organisation_search) {
+    req.session.searchUserName = req.body.organisation_search;
     req.session.save(() => res.redirect('/organisation/users/search'));
     return;
   }
