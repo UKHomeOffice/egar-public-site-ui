@@ -10,7 +10,7 @@ module.exports = (req, res) => {
     return;
   }
  
-  if(req.body.organisation_search) {
+  if(req.body.organisation_search && !(req.body.editOrgUser || req.body.editOrg || req.body.deleteUser)) {
     req.session.searchUserName = req.body.organisation_search;
     req.session.save(() => res.redirect('/organisation/users/search'));
     return;

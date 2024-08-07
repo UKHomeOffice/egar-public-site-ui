@@ -11,7 +11,6 @@ $(document).ready(function () {
   
     $("#searchUsers").on("click", function () {  
         if($("#organisation-search").val().length > 0) {
-            console.log($("#organisation-search").val().length);
          document.getElementById('organisation').submit();  
         }
       }); 
@@ -19,10 +18,10 @@ $(document).ready(function () {
     if($("#current-pg").val() > 1){
       /** If user click on next page then page will scroll to users table area */
       $('html, body').animate({
-        scrollTop: ($('#organisation_table').offset().top )
+        scrollTop: ($('#searchUsers').offset().top )
         }, 0);     
-    }  
-
+    }
+  
 
     // OLD JAVASCRIPT
 
