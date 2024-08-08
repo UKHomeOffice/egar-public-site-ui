@@ -9,7 +9,6 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const orgApii = require('../../../common/services/organisationApi');
-
 const controller = require('../../../app/organisation/searchusers/get.controller');
 
 describe('Organisation Search Users Get Controller', () => {
@@ -19,6 +18,7 @@ describe('Organisation Search Users Get Controller', () => {
     chai.use(sinonChai);
 
     req = {
+      body: {},
       session: { org: { i: 'ORGANISATION-ID-1' }, searchUserName: 'TEST'  }
     };
 
@@ -45,6 +45,7 @@ describe('Organisation Search Users Get Controller', () => {
     expect(orgApiStub).to.not.have.been.called;
   });
 
+
   it('should redirect with error message if api rejects', () => {
     orgApiStub.rejects('orgApiStub.getSearchUsers Example Reject');
     const callController = async () => {
@@ -53,6 +54,72 @@ describe('Organisation Search Users Get Controller', () => {
 
     callController().then(() => {
       expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1', 'TEST');
+    });
+  });
+
+
+  it('should display error message if set', async () => {
+    req.session.errMsg = { message: 'Example Error Message' };
+      const cookie = new CookieModel(req);
+      orgApiStub.resolves(JSON.stringify({
+        items: [
+          { id: 'PERSON-1', first_name: 'PERSON-1-name', role: { name: 'User' } },
+          { id: 'PERSON-4', first_name: 'PERSON-1-name', role: { name: 'User' } },
+          { id: 'PERSON-5', first_name: 'PERSON-1-name', role: { name: 'User' } },
+        ],
+        
+      }));
+
+    const callController = async () => {
+        await controller(req, res);
+      };
+
+    callController().then(() => {
+      expect(req.session.errMsg).not.to.be.undefined;
+      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1', 'TEST' );
+      expect(res.render).to.not.have.been.calledOnceWithExactly('/organisation/index', {
+        cookie,
+        orgUser: [
+          { id: 'PERSON-1', first_name: 'PERSON-1-name', role: { name: 'User' } },
+          { id: 'PERSON-4', first_name: 'PERSON-1-name', role: { name: 'User' } },
+          { id: 'PERSON-5', first_name: 'PERSON-3-name', role: { name: 'Admin' } },
+        ],
+        errors: [{ message: 'Example error message' }]
+      });
+      
+    });
+  });
+
+
+  it('should display success message if set', async () => {
+    const cookie = new CookieModel(req);
+
+    orgApiStub.resolves(JSON.stringify({
+      items: [
+        { id: 'PERSON-1', first_name: 'PERSON-1-name', role: { name: 'User' } },
+        { id: 'PERSON-4', first_name: 'PERSON-1-name', role: { name: 'User' } },
+        { id: 'PERSON-5', first_name: 'PERSON-3-name', role: { name: 'Admin' } },
+      ],
+    }));
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    callController().then(() => {
+      expect(req.session.successMsg).to.be.undefined;
+      expect(req.session.successHeader).to.be.undefined;
+      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1','TEST');
+      expect(res.render).to.not.have.been.calledOnceWithExactly('/organisation/index', {
+        cookie,
+        orgUser: [
+          { id: 'PERSON-1', first_name: 'PERSON-1-name', role: { name: 'User' } },
+          { id: 'PERSON-4', first_name: 'PERSON-1-name', role: { name: 'User' } },
+          { id: 'PERSON-5', first_name: 'PERSON-3-name', role: { name: 'Admin' } },
+        ],
+        successHeader: 'Successful header',
+        successMsg: 'Example success message'
+      });
+      
     });
   });
 
@@ -71,6 +138,10 @@ describe('Organisation Search Users Get Controller', () => {
     };
 
     callController().then(() => {
+      expect(res.render).to.not.have.been.calledOnceWithExactly('/organisation/index', {
+        cookie,
+        orgUser: [],  
+      });
       expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1', 'TEST' );
     });
   });
@@ -102,3 +173,4 @@ describe('Organisation Search Users Get Controller', () => {
     });
   });
 });
+

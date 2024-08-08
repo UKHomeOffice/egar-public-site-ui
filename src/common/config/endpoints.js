@@ -20,6 +20,11 @@ const endpoints = {
     logger.debug(`Calling getUserData endpoint ${endpoint}`);
     return endpoint;
   },
+  getUserDataById(userId) {
+    const endpoint = new URL(`${API_VERSION}/user/search?user_id=${userId}`, BASE_URL).href;
+    logger.debug(`Calling user search endpoint ${endpoint}`);
+    return endpoint;
+  },
   updateUserData(userId) {
     const endpoint = new URL(`${API_VERSION}/user/${userId}`, BASE_URL).href;
     logger.debug(`Calling updateUserData endpoint ${endpoint}`);
