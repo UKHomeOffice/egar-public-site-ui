@@ -92,6 +92,8 @@ describe('Organisation Search Users Get Controller', () => {
 
 
   it('should display success message if set', async () => {
+    req.session.successMsg = 'Example Success Message';
+    req.session.successHeader = 'Successful Header';
     const cookie = new CookieModel(req);
 
     orgApiStub.resolves(JSON.stringify({
@@ -106,8 +108,8 @@ describe('Organisation Search Users Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(req.session.successMsg).to.be.undefined;
-      expect(req.session.successHeader).to.be.undefined;
+      expect(req.session.successMsg).not.to.be.undefined;
+      expect(req.session.successHeader).not.to.be.undefined;
       expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1','TEST');
       expect(res.render).to.not.have.been.calledOnceWithExactly('/organisation/index', {
         cookie,
@@ -116,8 +118,8 @@ describe('Organisation Search Users Get Controller', () => {
           { id: 'PERSON-4', first_name: 'PERSON-1-name', role: { name: 'User' } },
           { id: 'PERSON-5', first_name: 'PERSON-3-name', role: { name: 'Admin' } },
         ],
-        successHeader: 'Successful header',
-        successMsg: 'Example success message'
+        successHeader: 'Successful Header',
+        successMsg: 'Example Success Message'
       });
       
     });
