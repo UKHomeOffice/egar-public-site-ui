@@ -17,3 +17,10 @@
 .table-clickable tbody tr td button.btn-link {
     cursor: pointer;
 }
+
+/** CSS for Organisation page */
+
+  #organisation-search {
+    float: left;
+    margin-bottom: 10px;
+  }

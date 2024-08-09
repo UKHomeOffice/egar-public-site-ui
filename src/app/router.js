@@ -85,7 +85,8 @@ const editorganisation = require('./organisation/editorganisation');
 const orgassignrole = require('./organisation/assignrole');
 const orgEditUsers = require('./organisation/editusers');
 const deleteUser = require('./organisation/delete');
-const exportusers = require('./organisation/exportusers')
+const exportusers = require('./organisation/exportusers');
+const searchUsers = require('./organisation/searchusers');
 
 
 // Export
@@ -117,6 +118,7 @@ module.exports.bind = (app) => {
   app.use(orgEditUsers.router);
   app.use(exportusers.router)
   app.use(deleteUser.router);
+  app.use(searchUsers.router);
   app.use(usersavedcraftedit.router);
   app.use(userSavedCraftDelete.router);
   app.use(usersavedcraftadd.router);

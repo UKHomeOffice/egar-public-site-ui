@@ -20,6 +20,11 @@ const endpoints = {
     logger.debug(`Calling getUserData endpoint ${endpoint}`);
     return endpoint;
   },
+  getUserDataById(userId) {
+    const endpoint = new URL(`${API_VERSION}/user/search?user_id=${userId}`, BASE_URL).href;
+    logger.debug(`Calling user search endpoint ${endpoint}`);
+    return endpoint;
+  },
   updateUserData(userId) {
     const endpoint = new URL(`${API_VERSION}/user/${userId}`, BASE_URL).href;
     logger.debug(`Calling updateUserData endpoint ${endpoint}`);
@@ -58,6 +63,11 @@ const endpoints = {
   getOrgUsers(orgId) {
     const endpoint = new URL(`${API_VERSION}/organisations/${orgId}/users`, BASE_URL).href;
     logger.debug(`Calling get org users endpoint ${endpoint}`);
+    return endpoint;
+  },
+  getSearchOrgUsers(orgId, searchUser) {
+    const endpoint = new URL(`${API_VERSION}/organisations/${orgId}/users/search?searchName=${searchUser}`, BASE_URL).href;
+    logger.debug(`Calling get org search users endpoint ${endpoint}`);
     return endpoint;
   },
   createCraft(userId) {

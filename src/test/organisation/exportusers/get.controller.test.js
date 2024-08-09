@@ -74,7 +74,7 @@ describe('Organisation Export User Controller', () => {
 
       callController()
         .then(() => {
-          expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1');
+          expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 999999999999999 );
           expect(res.setHeader).to.have.been.calledWith('Content-disposition', 'attachment; filename=ORG-ID-1-users-2024-03-14.csv');
           expect(res.setHeader).to.have.been.calledWith('Content-Type', 'text/csv');
           expect(res.write).to.have.been.calledWith('Id,First Name,Last Name,Email,Role,State\n');
