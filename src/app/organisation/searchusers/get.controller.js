@@ -14,7 +14,7 @@ module.exports = (req, res) => {
   logger.debug('In organisation / search organisation user controller');
   const errMsg = { message: 'Failed to fetch user. Try again' };
   const userPermissions = permissionLevels[cookie.getUserRole()];
-  const searchUserName = req.session.searchUserName;
+  const { searchUserName } = req.query;
     
   if (searchUserName === undefined) {
     res.redirect('/organisation');
@@ -28,20 +28,7 @@ module.exports = (req, res) => {
       });
       cookie.setOrganisationUsers(orgUsers);
       
-      if (req.session.errMsg) {
-        const { errMsg } = req.session;
-        delete req.session.errMsg;
-        return res.render('app/organisation/index', { cookie, orgUsers, errors: [errMsg]});
-      }
-      if (req.session.successMsg) {
-        const { successMsg, successHeader } = req.session;
-        delete req.session.successHeader;
-        delete req.session.successMsg;
-        return res.render('app/organisation/index', {
-          cookie, orgUsers, successHeader, successMsg
-        });
-      }
-      return res.render('app/organisation/index', { cookie, orgUsers, searchUserName});
+      return res.render('app/organisation/index', { cookie, orgUsers, searchUserName });
     })
     .catch((err) => {
       logger.error(err);

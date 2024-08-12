@@ -58,21 +58,21 @@
         </a>
       </div>
 
-      <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
-        <div class="govuk-grid-column-two-thirds">    
-          <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-          <p class="govuk-body-m">Search for people within the organisation,  {{ cookie.getOrganisationName() }}</p>
-          <input class="govuk-input govuk-input--width-20" id="organisation-search" name="organisation_search" type="text" value="{{ searchUserName }}" placeholder="Search">
-          
-          <a class="govuk-button" id='searchUsers'> 
-              <svg class="gem-c-search__icon" width="20" height="15" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"  aria-hidden="true" focusable="false">
-                <circle cx="12.0161" cy="11.0161" r="8.51613" stroke="white" stroke-width="3"></circle>
-                <line x1="17.8668" y1="17.3587" x2="26.4475" y2="25.9393" stroke="white" stroke-width="3"></line>
-              </svg>
-          </a>    
-          <a type="submit" class="govuk-button" href="/organisation">Refresh Search</a>
-        </div>
+      <form id="organisation" action="/organisation/users/search" class="form-group" method="GET" role="form" >  
+        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+        <p class="govuk-body-m">Search for people within the organisation,  {{ cookie.getOrganisationName() }}</p>
+        <input class="govuk-input govuk-input--width-20" id="organisation-search" name="searchUserName" type="text" value="{{ searchUserName }}" placeholder="Search">
+        
+        <button id="searchUsers" class="govuk-button" type="submit"> 
+            <svg class="gem-c-search__icon" width="20" height="15" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"  aria-hidden="true" focusable="false">
+              <circle cx="12.0161" cy="11.0161" r="8.51613" stroke="white" stroke-width="3"></circle>
+              <line x1="17.8668" y1="17.3587" x2="26.4475" y2="25.9393" stroke="white" stroke-width="3"></line>
+            </svg>
+        </button>    
+        <a class="govuk-button" href="/organisation">Refresh Search</a>
+      </form>
 
+      <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
         <div class="govuk-grid-column-full">
           <h1 class="govuk-heading-l">{{__('title_organisation_users')}}</h1>
           <p class="govuk-body-l">{{__('organisations_users_caption')}}</p>
