@@ -19,7 +19,8 @@ describe('Organisation Search Users Get Controller', () => {
 
     req = {
       body: {},
-      session: { org: { i: 'ORGANISATION-ID-1' }, searchUserName: 'TEST'  }
+      query: { searchUserName: 'TEST' },
+      session: { org: { i: 'ORGANISATION-ID-1' } }
     };
 
     res = {
@@ -35,7 +36,7 @@ describe('Organisation Search Users Get Controller', () => {
   });
 
   it('redirects if no searchUserName set', async () => {
-    delete req.session.searchUserName;
+    delete req.query.searchUserName;
 
     await controller(req, res);
 
@@ -71,55 +72,6 @@ describe('Organisation Search Users Get Controller', () => {
       cookie = new CookieModel(req);
       cookie.setOrganisationUsers(apiResponse);
       orgApiStub.resolves(JSON.stringify(apiResponse));     
-    });
-
-    it('should display error message if set', async () => {
-      req.session.errMsg = { message: 'Example Error Message' };
-
-      const callController = async () => {
-          await controller(req, res);
-        };
-
-      callController().then(() => {
-        expect(req.session.errMsg).to.be.undefined;
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1', 'TEST' );
-        expect(res.render).to.not.have.been.calledOnceWithExactly('/organisation/index', {
-          cookie,
-          orgUser: [
-            { id: 'PERSON-1', first_name: 'PERSON-1-name', role: { name: 'User' } },
-            { id: 'PERSON-4', first_name: 'PERSON-1-name', role: { name: 'User' } },
-            { id: 'PERSON-5', first_name: 'PERSON-3-name', role: { name: 'Admin' } },
-          ],
-          errors: [{ message: 'Example error message' }]
-        });
-        
-      });
-    });
-
-    it('should display success message if set', async () => {
-      req.session.successMsg = 'Example Success Message';
-      req.session.successHeader = 'Successful Header';
-      
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(req.session.successMsg).to.be.undefined;
-        expect(req.session.successHeader).to.be.undefined;
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1','TEST');
-        expect(res.render).to.not.have.been.calledOnceWithExactly('/organisation/index', {
-          cookie,
-          orgUser: [
-            { id: 'PERSON-1', first_name: 'PERSON-1-name', role: { name: 'User' } },
-            { id: 'PERSON-4', first_name: 'PERSON-1-name', role: { name: 'User' } },
-            { id: 'PERSON-5', first_name: 'PERSON-3-name', role: { name: 'Admin' } },
-          ],
-          successHeader: 'Successful Header',
-          successMsg: 'Example Success Message'
-        });
-        
-      });
     });
 
     it('should render with no users if no match', () => {

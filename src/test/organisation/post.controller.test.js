@@ -37,12 +37,6 @@ describe('Organisation Post Controller', () => {
     sinon.restore();
   });
 
-
-   it('should do nothing if nextPage is not set', async () => {
-    await controller(req, res);
-    expect(req.session.save).to.not.have.been.called;
-  });
-
   it('should redirect if nextPage found 11', () => {
     req.body.nextPage = 6;
 
@@ -92,25 +86,11 @@ describe('Organisation Post Controller', () => {
     };
 
     callController().then(() => {
+      expect(req.session.errMsg.message).to.eql('Organisation page failed to perform action.');
       expect(req.session.editUserId).to.be.undefined;
       expect(req.session.editOrgId).to.be.undefined;
-      expect(saveSessionStub).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-    });
-  });
-
-  it('should redirect to search organisation user if organisation_search set', () => {
-    req.body.organisation_search = 'TESTUSER';
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(req.body.organisation_search).to.eq('TESTUSER');
-      expect(req.session.searchUserName).to.eq('TESTUSER');
       expect(saveSessionStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/users/search');
+      expect(res.redirect).to.have.been.called;
     });
   });
 });

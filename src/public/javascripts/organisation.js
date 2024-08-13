@@ -8,12 +8,6 @@ $(document).ready(function () {
       });
       
     });
-  
-    $("#searchUsers").on("click", function () {  
-        if($("#organisation-search").val().length > 0) {
-         document.getElementById('organisation').submit();  
-        }
-      }); 
 
     if($("#current-pg").val() > 1){
       /** If user click on next page then page will scroll to users table area */
