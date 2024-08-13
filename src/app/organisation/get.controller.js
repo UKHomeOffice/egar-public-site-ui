@@ -18,7 +18,6 @@ module.exports = (req, res) => {
   const userPermissions = permissionLevels[cookie.getUserRole()];
   const currentPage = pagination.getCurrentPage(req, '/organisation');
   
-  
   orgApi.getUsers(cookie.getOrganisationId(), currentPage)
     .then((values) => {
       const orgUsers = JSON.parse(values).items.map((orgUser) => {

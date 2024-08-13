@@ -7,25 +7,18 @@ module.exports = (req, res) => {
   if (req.body.nextPage) {
     pagination.setCurrentPage(req, '/organisation', req.body.nextPage);
     req.session.save(() => res.redirect('/organisation'));
-    return;
-  }
-
-  if (req.body.editOrgUser) {
-  logger.debug(req.body.editOrgUser);
-   req.session.editUserId = req.body.editOrgUser;
-   req.session.save(() => res.redirect('/organisation/users/edit'));
-   return;
- }
-  if (req.body.editOrg) {
+  } else if (req.body.editOrgUser) {
+    logger.debug(req.body.editOrgUser);
+    req.session.editUserId = req.body.editOrgUser;
+    req.session.save(() => res.redirect('/organisation/users/edit'));
+  } else if (req.body.editOrg) {
     req.session.editOrgId = req.body.editOrg;
     req.session.save(() => res.redirect('/organisation/editorganisation'));
-    return;
-   }
-   if (req.body.deleteUser) {
+  } else if (req.body.deleteUser) {
     req.session.deleteUserId = req.body.deleteUser;
     req.session.save(() => res.redirect('/organisation/delete'));
-    return;
-    // Unexpected action, just redirect back to calling screen
-   // res.redirect('/organisation');
-   }
+  } else {
+    req.session.errMsg = { message: 'Organisation page failed to perform action.' };
+    req.session.save(() => res.redirect('/organisation'));
+  }
 };
