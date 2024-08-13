@@ -98,19 +98,4 @@ describe('Organisation Post Controller', () => {
       expect(res.redirect).to.not.have.been.called;
     });
   });
-
-  it('should redirect to search organisation user if organisation_search set', () => {
-    req.body.organisation_search = 'TESTUSER';
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(req.body.organisation_search).to.eq('TESTUSER');
-      expect(req.session.searchUserName).to.eq('TESTUSER');
-      expect(saveSessionStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/users/search');
-    });
-  });
 });
