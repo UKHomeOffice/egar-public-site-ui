@@ -15,6 +15,8 @@ module.exports = (req, res) => {
   const errMsg = { message: 'Failed to fetch user. Try again' };
   const userPermissions = permissionLevels[cookie.getUserRole()];
   const { searchUserName } = req.query;
+
+  logger.info(JSON.stringify(req.query));
     
   if (searchUserName === undefined) {
     res.redirect('/organisation');
@@ -32,14 +34,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error(err);
-      req.session.errMsg = { message: 'Failed to find user details. Try again' };
+      req.session.errMsg = errMsg;
       return res.redirect('/organisation');
     });
 };
-
-
-
-
-
-
-
