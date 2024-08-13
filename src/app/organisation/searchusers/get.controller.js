@@ -15,13 +15,12 @@ module.exports = (req, res) => {
   const errMsg = { message: 'Failed to fetch user. Try again' };
   const userPermissions = permissionLevels[cookie.getUserRole()];
   const { searchUserName } = req.query;
-
-  logger.info(JSON.stringify(req.query));
     
   if (searchUserName === undefined) {
     res.redirect('/organisation');
     return;
   }
+  
   organisationApi.getSearchOrgUsers(cookie.getOrganisationId(), searchUserName)
     .then((apiResponse) => {
       const orgUsers = JSON.parse(apiResponse).map((orgUser) => {
