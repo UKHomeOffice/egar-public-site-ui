@@ -58,8 +58,10 @@
         </a>
       </div>
 
-      <form id="organisation" action="/organisation/users/search" class="form-group" method="GET" role="form" >  
-        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+      <form id="organisation" action="/organisation/users/search" class="form-group" method="GET" role="form" >
+        <div class="govuk-grid-column-full">
+          <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+        </div>
         <p class="govuk-body-m">Search for people within the organisation,  {{ cookie.getOrganisationName() }}</p>
         <input class="govuk-input govuk-input--width-20" id="organisation-search" name="searchUserName" type="text" value="{{ searchUserName }}" placeholder="Search" required>
         
@@ -72,12 +74,12 @@
         <a class="govuk-button" href="/organisation">Refresh Search</a>
       </form>
 
+      <h1 class="govuk-heading-l">{{__('title_organisation_users')}}</h1>
+      <p class="govuk-body-l">{{__('organisations_users_caption')}}</p>
+      <p class="govuk-body-s">{{__('person_sort')}}</p>
+      
       <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
         <div class="govuk-grid-column-full">
-          <h1 class="govuk-heading-l">{{__('title_organisation_users')}}</h1>
-          <p class="govuk-body-l">{{__('organisations_users_caption')}}</p>
-          <p class="govuk-body-s">{{__('person_sort')}}</p>
-
           <table class="govuk-table" id="organisation_table">
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
