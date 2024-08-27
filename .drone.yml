@@ -116,7 +116,7 @@ steps:
     image: quay.io/ukhomeofficedigital/kd
     commands:
       - source ./ops/test_deploy_vars.sh
-      - source ./ops/deploy.sh
+      - source ./ops/test_deploy.sh
     environment:
       INGRESS_CLASS: nginx-internal
       INSECURE_SKIP_TLS_VERIFY: true
@@ -295,7 +295,7 @@ steps:
     image: quay.io/ukhomeofficedigital/kd
     commands:
       - source ./ops/prod_deploy_vars.sh
-      - source ./ops/deploy.sh
+      - source ./ops/prod_deploy.sh
     environment:
       DOCKER_REGISTRY_URL:
         from_secret: DOCKER_REGISTRY_URL
