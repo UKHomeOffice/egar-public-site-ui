@@ -5,4 +5,4 @@ export PUBLIC_SITE_EXTERNAL_URL=${DEV_URL_SERVICE}
 export PUBLIC_SITE_INTERNAL_URL=${DEV_BASE_URL}
 # export KUBE_ARTIFACTORY_APP_SECRET=${DEV_KUBE_ARTIFACTORY_APP_SECRET}
 source ./ops/common_lib
-source ./ops/prod_values
+source ./ops/notprod_values
