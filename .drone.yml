@@ -378,6 +378,7 @@ steps:
         memory: 1024Mi
     environment:
       IMAGE_NAME: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:${DRONE_COMMIT}
+      IGNORE_UNFIXED: true
     when:
       event:
       - cron
