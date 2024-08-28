@@ -250,7 +250,7 @@ steps:
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
-      - source ./staging_deploy_vars.sh
+      - source ./ops/staging_deploy_vars.sh
       - source ./ops/deploy.sh
     environment:
       DOCKER_REGISTRY_URL:
