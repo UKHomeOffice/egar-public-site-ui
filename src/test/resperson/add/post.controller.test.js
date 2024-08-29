@@ -27,7 +27,7 @@ describe('Responsible Person Add Post Controller', () => {
                 responsibleAddressLine1: 'Add Line 1',
                 responsibleAddressLine2: 'Add Line 2',
                 responsibleTown: 'London',
-                responsibleCounty: 'USA',
+                responsibleCountry: 'USA',
                 responsiblePostcode: 'HN77NH',
                 fixedBasedOperator: 'Captain',
             },

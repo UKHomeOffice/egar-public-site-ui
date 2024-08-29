@@ -7,13 +7,13 @@ const config = require('../../../common/config');
 module.exports = (req, res) => {
   logger.debug('In garfile / cancel post controller');
   const cookie = new CookieModel(req);
-  const isCancelled = true
+  const isCancelled = true;
 
   garApi.getPeople(cookie.getGarId())
     .then((res) => {
       const garpeople = JSON.parse(res).items;
       const passengersToRaiseException = garpeople
-        .filter(garperson => garperson.amgCheckinResponseCode !== null)
+        .filter(garperson => garperson.amgHasDeparted !== null)
         .map(garperson => garperson.garPeopleId);
 
       return passengersToRaiseException;

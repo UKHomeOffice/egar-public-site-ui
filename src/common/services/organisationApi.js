@@ -87,11 +87,15 @@ module.exports = {
    * @param {String} orgId id of an organisation to get users for
    * @returns {Promise} resolves with API response.
    */
-  getUsers(orgId) {
+  getUsers(orgId, pageNumber, numberOfUsers) {
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getOrgUsers(orgId),
+        qs: {
+          per_page: numberOfUsers,
+          page: pageNumber,
+        }
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call get organisation users API endpoint');
@@ -148,4 +152,49 @@ module.exports = {
       });
     });
   },
+
+   /**
+   * Gets a list of users belonging to an organisation.
+   * @param {String} orgId id of an organisation to get users for
+   * @param {String} organisationName
+   * @returns {Promise} resolves with API response.
+   */
+   getSearchOrgUsers(orgId, searchUserName) {
+    return new Promise((resolve, reject) => {
+      request.get({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.getSearchOrgUsers(orgId, searchUserName)     
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call get search organisation users API endpoint');
+          reject(error);
+          return;
+        }
+        logger.debug('Successfully called get search organisation users API endpoint');
+        resolve(body);
+      });
+    });
+  },
+
+  /**
+   * Get a user based on user_id.
+   * @param {String} user_id id for user
+   * @returns {Promise} resolves with API response.
+   */
+     getUserById(userId) {
+      return new Promise((resolve, reject) => {
+        request.get({
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getUserDataById(userId)     
+        }, (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get search organisation users API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get search organisation users API endpoint');
+          resolve(body);
+        });
+      });
+    },
 };

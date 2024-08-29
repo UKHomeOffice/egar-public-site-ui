@@ -128,7 +128,7 @@ class Cookie {
           responsibleAddressLine2: null,
           responsibleTown: null,
           responsiblePostcode: null,
-          responsibleCounty: null,
+          responsibleCountry: null,
           fixedBasedOperator: null,
           fixedBasedOperatorAnswer: null
         },
@@ -424,7 +424,7 @@ class Cookie {
     this.session.gar.responsiblePerson.responsibleAddressLine2 = person.responsibleAddressLine2;
     this.session.gar.responsiblePerson.responsibleTown = person.responsibleTown;
     this.session.gar.responsiblePerson.responsiblePostcode = person.responsiblePostcode;
-    this.session.gar.responsiblePerson.responsibleCounty = person.responsibleCounty;
+    this.session.gar.responsiblePerson.responsibleCountry = person.responsibleCountry;
     this.session.gar.responsiblePerson.responsibleContactNo = person.responsibleContactNo;
     this.session.gar.responsiblePerson.responsibleEmail = person.responsibleEmail;
     this.session.gar.responsiblePerson.fixedBasedOperator = person.fixedBasedOperator;

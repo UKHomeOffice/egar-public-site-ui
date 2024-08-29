@@ -26,7 +26,7 @@ function getResponsiblePersonFromReq(req) {
         responsibleAddressLine1: req.body.responsibleAddressLine1,
         responsibleAddressLine2: req.body.responsibleAddressLine2,
         responsibleTown: req.body.responsibleTown,
-        responsibleCounty: req.body.responsibleCounty,
+        responsibleCountry: req.body.responsibleCountry,
         responsiblePostcode: req.body.responsiblePostcode,
         fixedBasedOperator: req.body.fixedBasedOperator,
         fixedBasedOperatorAnswer: (req.body.fixedBasedOperator === 'Other' ? req.body.fixedBasedOperatorAnswer : '')
@@ -42,7 +42,7 @@ function getResponsiblePersonFromGar(gar) {
         responsibleAddressLine1: gar.responsibleAddressLine1,
         responsibleAddressLine2: gar.responsibleAddressLine2,
         responsibleTown: gar.responsibleTown,
-        responsibleCounty: gar.responsibleCounty,
+        responsibleCountry: gar.responsibleCountry,
         responsiblePostcode: gar.responsiblePostcode,
         fixedBasedOperator: gar.fixedBasedOperator,
         fixedBasedOperatorAnswer: gar.fixedBasedOperatorAnswer

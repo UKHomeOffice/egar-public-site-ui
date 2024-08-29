@@ -6,7 +6,7 @@ const roles = require('../../../common/seeddata/egar_user_roles');
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const userId = req.session.editUserId;
-
+  
   logger.debug('In organisation / editusers get controller');
 
   if (userId === undefined) {
@@ -14,10 +14,9 @@ module.exports = (req, res) => {
     return;
   }
 
-  orgApi.getUsers(cookie.getOrganisationId())
+  orgApi.getUserById(userId)
     .then((apiResponse) => {
-      const orgUsers = JSON.parse(apiResponse).items;
-      const orgUser = orgUsers.find(user => user.userId === userId);
+      const orgUser = JSON.parse(apiResponse);
       if (orgUser !== undefined) {
         orgUser.role = orgUser.role.name;
       }
