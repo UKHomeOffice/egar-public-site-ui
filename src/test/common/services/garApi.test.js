@@ -52,7 +52,7 @@ describe('GarService', () => {
       });
 
     nock(BASE_URL)
-      .get(`/gar/${garId}`)
+      .get(`/gar/${garId}?cbp_id=false`)
       .reply(200, {
         status: { name: 'Draft' },
       });
@@ -213,7 +213,7 @@ describe('GarService', () => {
   });
 
   it('Should delete the person from a GARs manifest', () => {
-    garApi.deleteGarPerson(garId, personId)
+    garApi.deleteGarPeople(garId, personId)
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         expect(typeof parsedResponse).to.equal('object');
@@ -237,7 +237,7 @@ describe('GarService', () => {
   it('should throw an error for get', () => {
     nock.cleanAll();
     nock(BASE_URL)
-      .get(`/gar/${garId}`)
+      .get(`/gar/${garId}?cbp_id=false`)
       .replyWithError({ message: 'Example get error', code: 404 });
 
     garApi.get(garId).then(() => {
@@ -312,16 +312,16 @@ describe('GarService', () => {
     });
   });
 
-  it('should throw an error for deleteGarPerson', () => {
+  it('should throw an error for deleteGarPeople', () => {
     nock.cleanAll();
     nock(BASE_URL)
       .delete(`/gar/${garId}/people`)
-      .replyWithError({ message: 'Example deleteGarPerson error', code: 404 });
+      .replyWithError({ message: 'Example deleteGarPeople error', code: 404 });
 
-    garApi.deleteGarPerson(garId, personId).then(() => {
+    garApi.deleteGarPeople(garId, personId).then(() => {
       chai.assert.fail('Should not have returned without error');
     }).catch((err) => {
-      expect(err.message).to.equal('Example deleteGarPerson error');
+      expect(err.message).to.equal('Example deleteGarPeople error');
     });
   });
 });

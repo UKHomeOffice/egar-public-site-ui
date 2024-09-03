@@ -58,11 +58,11 @@ module.exports = {
    * @param {String} garId id of GAR being requested
    * @returns {Promise} Resolves with API response.
    */
-  get(garId) {
+  get(garId, isCbpId = false) {
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.getGar(garId),
+        url: endpoints.getGar(garId, isCbpId),
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call GAR get API endpoint');
@@ -78,7 +78,7 @@ module.exports = {
         }
 
         let gar = JSON.parse(body);
-        gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCounty);
+        gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCountry);
 
         logger.debug('Successfully called GAR get endpoint');
         resolve(JSON.stringify(gar));
@@ -326,11 +326,11 @@ module.exports = {
    * @param {String} personDetails the updated details of the person
    * @returns {Promise} resolves with API response.
    */
-  deleteGarPerson(garId, garPersonId) {
+  deleteGarPeople(garId, garPersonId) {
     return new Promise((resolve, reject) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.deleteGarPerson(garId),
+        url: endpoints.deleteGarPeople(garId),
         body: JSON.stringify({
           garPeopleId: garPersonId,
         }),
@@ -343,7 +343,7 @@ module.exports = {
 
         if (_response.statusCode >= 400) {
           const responseErrorMessage = getResponseErrorMessage(_response, body);
-          logger.error(`${garId} ${garPersonId} garApi.deleteGarPerson request was not successful : ${responseErrorMessage}`);
+          logger.error(`${garId} ${garPersonId} garApi.deleteGarPeople request was not successful : ${responseErrorMessage}`);
           resolve(body);
           return;
         }

@@ -113,7 +113,7 @@ describe('Person Add Post Controller', () => {
     };
 
     callController().then().then(() => {
-      expect(personApiStub).to.have.been.calledWith('90210', person);
+      expect(personApiStub).to.have.been.calledWith('90210', { people: [ person ] });
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledWith('app/people/add/index', {
         cookie,
@@ -138,7 +138,7 @@ describe('Person Add Post Controller', () => {
     };
 
     callController().then().then(() => {
-      expect(personApiStub).to.have.been.calledWith('90210', person);
+      expect(personApiStub).to.have.been.calledWith('90210', { people: [person] });
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWith('app/people/add/index', {
         cookie,
@@ -158,7 +158,7 @@ describe('Person Add Post Controller', () => {
     };
 
     callController().then().then(() => {
-      expect(personApiStub).to.have.been.calledWith('90210', person);
+      expect(personApiStub).to.have.been.calledWith('90210',{ people: [ person ] });
       expect(res.redirect).to.have.been.calledWith('/people');
       expect(res.render).to.not.have.been.called;
     });

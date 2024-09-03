@@ -2340,11 +2340,11 @@
     "label": "Kamenz Airport (Germany) (EDCM)"
   },
   {
-    "id": "SXF",
+    "id": "BER",
     "id2": "EDDB",
     "british": false,
     "crownDependency": false,
-    "label": "Berlin-Schönefeld Airport (Germany) (EDDB / SXF)"
+    "label": "Berlin Brandenburg Airport (Germany) (EDDB / BER)"
   },
   {
     "id": "DRS",
@@ -9473,6 +9473,13 @@
     "label": "Villacoublay-Vélizy (BA 107) Air Base (France) (LFPV / VIY)"
   },
   {
+    "id": "XZX",
+    "id2": "LFPX",
+    "british": false,
+    "crownDependency": false,
+    "label": "Chavenay Aerodrome (France) (LFPX / XZX)"
+  },
+  {
     "id": "LFQA",
     "id2": "LFQA",
     "british": false,
@@ -10965,7 +10972,7 @@
   },
   {
     "id": "LOAN",
-    "id2": "MLA",
+    "id2": "LOAN",
     "british": false,
     "crownDependency": false,
     "label": "Wiener Neustadt East Airport (Austria) (LOAN)"
@@ -11256,6 +11263,13 @@
     "british": false,
     "crownDependency": false,
     "label": "Băneasa International Airport (Romania) (LRBS / BBU)"
+  },
+  {
+    "id": "GHV",
+    "id2": "LRBV",
+    "british": false,
+    "crownDependency": false,
+    "label": "Brașov-Ghimbav International Airport (Romania) (LRBV / GHV)"
   },
   {
     "id": "CND",
@@ -47455,6 +47469,13 @@
     "label": "Borroloola Airport (Australia) (YBRL / BOX)"
   },
   {
+    "id": "EBSG",
+    "id2": "EBSG",
+    "british": false,
+    "crownDependency": false,
+    "label": "Saint-Ghislain Airport (EBSG)"
+  },
+  {
     "id": "EDNF",
     "id2": "EDNF",
     "british": false,
@@ -51405,9 +51426,9 @@
   {
     "id": "EGCS",
     "id2": "EGCS",
-    "british": false,
+    "british": true,
     "crownDependency": false,
-    "label": "Sturgate Airfield (Hungary) (EGCS)"
+    "label": "Sturgate Airfield (EGCS)"
   },
   {
     "id": "NIS",
@@ -56351,6 +56372,28 @@
     "british": true,
     "crownDependency": false,
     "label": "NORTH ELMHAM / NEW LANE FARM (United Kingdom) (E190)"
+  },
+  {
+    "id": "OBKH",
+    "id2": "OBKH",
+    "british": false,
+    "crownDependency": false,
+    "label": "Sakhir Air Base (Bahrain) (OBKH)"
+  },
+  {
+    "id": "SPX",
+    "id2": "HESX",
+    "british": false,
+    "crownDependency": false,
+    "label": "Sphinx International Airport (Egypt) (HESX / SPX)"
+  },
+  {
+    "id": "KTYQ",
+    "id2": "KTYQ",
+    "british": false,
+    "crownDependency": false,
+    "label": "Indianapolis Executive Airport (United States) (KTYQ)"
   }
+
 ]
   

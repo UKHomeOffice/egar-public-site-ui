@@ -2,6 +2,8 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
+const airportValidation = require('../../../common/utils/airportValidation');
+const { isAbleToCancelGar } = require('../../../common/utils/validator');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -12,7 +14,6 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
  * @param {String} userId The user id to check against
  * @param {String} organisationId The organisation to check against
  */
-
  const checkGARUser = (parsedGar, userId, organisationId) => {
   if (parsedGar === undefined || parsedGar === null) return false;
 
@@ -50,13 +51,13 @@ module.exports = (req, res) => {
       garsupportingdocs: {},
     };
 
-  
-
   Promise.all([garDetails, garPeople, garDocs])
     .then((responseValues) => {
       const parsedGar = JSON.parse(responseValues[0]);
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
+      const { departureDate, departureTime } = parsedGar;
+      const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z`: null;
 
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
@@ -80,10 +81,12 @@ module.exports = (req, res) => {
         cookie,
         manifestFields,
         garfile: parsedGar,
+        isAbleToCancelGar: isAbleToCancelGar(lastDepartureDateString),
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         successMsg,
-        successHeader
+        successHeader,
+        isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort)
       }; 
       renderContext.showChangeLinks = true;
       if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {

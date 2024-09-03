@@ -134,10 +134,10 @@ describe('OrganisationService', () => {
   it('should throw an error when getting an organisations users', () => {
     nock.cleanAll();
     nock(BASE_URL)
-      .get(`${url}/${orgId}/users`)
+      .get(`${url}/${orgId}/users?per_page=10&page=1`)
       .replyWithError({ message: 'Example getUsers error', code: 404 });
 
-    organisationApi.getUsers(orgId).then(() => {
+    organisationApi.getUsers(orgId, 1, 10).then(() => {
       chai.assert.fail('Should not have returned without error');
     }).catch((err) => {
       expect(err.message).to.equal('Example getUsers error');

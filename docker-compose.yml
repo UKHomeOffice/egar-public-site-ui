@@ -23,22 +23,15 @@ services:
     ports:
       - "5000:5000"
 
-  clamav:
-    image: quay.io/ukhomeofficedigital/clamav:v1.6.1
-    container_name: clamav
-    ports:
-      - "3310:3310"
-
-  clamav-api:
-    image: quay.io/ukhomeofficedigital/docker-clamav-rest:1.0.0
-    container_name: clamav-api
-    environment:
-      - CLAMD_HOST=clamav
-      - TIMEOUT=60000
-    depends_on:
-      - clamav
+  mock_clamav:
+    container_name: mock-clamav
+    build: 
+      context: ./mock_clamav
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./mock_clamav:/code
 
   node:
     build: .
@@ -53,7 +46,6 @@ services:
     depends_on:
       - api
       - database
-      - clamav-api
     volumes:
       - ./src/app:/public-site/app
       - ./src/common:/public-site/common

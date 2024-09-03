@@ -2,9 +2,9 @@
 
 const i18n = require('i18n');
 
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const { MAX_STRING_LENGTH, MAX_EMAIL_LENGTH, MAX_POSTCODE_LENGTH } = require('../../../common/config/index');
+const ValidationRule = require('../../common/models/ValidationRule.class');
+const validator = require('../../common/utils/validator');
+const { MAX_STRING_LENGTH, MAX_EMAIL_LENGTH, MAX_POSTCODE_LENGTH } = require('../../common/config/index');
 
 module.exports.validations = (req) => {
   const {
@@ -15,8 +15,10 @@ module.exports.validations = (req) => {
     responsibleEmail,
     responsibleAddressLine2,
     responsibleTown,
-    responsibleCounty,
-    responsiblePostcode
+    responsibleCountry,
+    responsiblePostcode,
+    fixedBasedOperator,
+    fixedBasedOperatorAnswer
   } = req.body;
 
   return [
@@ -35,7 +37,7 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(
-        validator.notEmpty, 'responsibleEmail', responsibleEmail, 'Your must enter an email for the responsible person'
+        validator.notEmpty, 'responsibleEmail', responsibleEmail, 'You must enter an email for the responsible person'
       ),
       new ValidationRule(
         validator.email, 'responsibleEmail', responsibleEmail, 'Please enter a valid email address'
@@ -59,11 +61,15 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.isAddressValidCharacters, 'responsibleTown', responsibleTown, `Town or city must not contain special characters such as $ % ' or ä`),
     ],
     [
+      new ValidationRule(validator.notEmpty, 'responsiblePostcode', responsiblePostcode, 'Enter a postcode for the responsible person.'),
       new ValidationRule(validator.validTextLength, 'responsiblePostcode', { value: responsiblePostcode, maxLength: MAX_POSTCODE_LENGTH }, `Postcode must be ${MAX_POSTCODE_LENGTH} characters or less`),
       new ValidationRule(validator.isPostCodeValidCharacters, 'responsiblePostcode', responsiblePostcode, `Postcode must not contain special characters such as $ % ' or ä`),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'responsibleCounty', responsibleCounty, 'Enter a country for the responsible person'),
+      new ValidationRule(validator.notEmpty, 'responsibleCountry', responsibleCountry, 'Enter a country for the responsible person'),
+    ],
+    [
+      req.body.fixedBasedOperator !== 'Other' ? new ValidationRule(validator.notEmpty, 'fixedBasedOperator', fixedBasedOperator, `Select the role of the responsible person.`) : new ValidationRule(validator.notEmpty, 'fixedBasedOperatorAnswer', fixedBasedOperatorAnswer, `Enter your responsible person role.`),
     ],
   ];
 };

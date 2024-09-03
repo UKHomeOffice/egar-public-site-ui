@@ -25,6 +25,7 @@ describe('GAR Cancel Post Controller', () => {
       session: {
         gar: {
           id: 'ABCDE-CANCEL',
+          cbpId: 'CBP-ID'
         },
         u: {
           fn: 'Roberto Baggio',
@@ -88,7 +89,7 @@ describe('GAR Cancel Post Controller', () => {
       .then()
       .then(() => {
         expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
-        expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', garId: 'ABCDE-CANCEL' });
+        expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', cancellationReference:  'CBP-ID' });
         expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled');
         expect(req.session.successHeader).to.eq('Cancellation Confirmation');
         expect(sessionSaveStub).to.have.been.called;
@@ -113,7 +114,7 @@ describe('GAR Cancel Post Controller', () => {
     .then()
     .then(() => {
       expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
-      expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', garId: 'ABCDE-CANCEL' });
+      expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', cancellationReference:  'CBP-ID' });
       expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled, but there was a problem with sending the email');
       expect(req.session.successHeader).to.eq('Cancellation Confirmation');
       expect(sessionSaveStub).to.have.been.called;

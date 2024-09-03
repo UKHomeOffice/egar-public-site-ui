@@ -21,11 +21,14 @@
     "freeCirculation": "",
     "responsibleGivenName": "James",
     "responsibleSurname": "Lizamore",
+    "responsibleContactNo": "1231231",
+    "responsibleEmail": "test@test.com",
     "responsibleAddressLine1": "3",
     "responsibleAddressLine2": "Pullman",
     "responsibleTown": "Godalming",
     "responsiblePostcode": "GU7111",
-    "responsibleCounty": "GBR",
-    "responsibleContactNo": "1231231",
+    "responsibleCountry": "GBR",
+    "fixedBasedOperator": "Fixed Base Operator",
+    "fixedBasedOperatorAnswer": "",
     "prohibitedGoods": true
 }

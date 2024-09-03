@@ -7,13 +7,13 @@ const config = require('../../../common/config');
 module.exports = (req, res) => {
   logger.debug('In garfile / cancel post controller');
   const cookie = new CookieModel(req);
-  const isCancelled = true
+  const isCancelled = true;
 
   garApi.getPeople(cookie.getGarId())
     .then((res) => {
       const garpeople = JSON.parse(res).items;
       const passengersToRaiseException = garpeople
-        .filter(garperson => garperson.amgCheckinResponseCode !== null)
+        .filter(garperson => garperson.amgHasDeparted !== null)
         .map(garperson => garperson.garPeopleId);
 
       return passengersToRaiseException;
@@ -32,16 +32,26 @@ module.exports = (req, res) => {
     .then(() => {
       garApi.patch(cookie.getGarId(), 'Cancelled', {})
         .then(() => {
+          if (!cookie.getCbpId()) {
+            req.session.successMsg = 'The GAR has been successfully cancelled';
+            req.session.successHeader = 'Cancellation Confirmation';
+            req.session.save(() => {
+              res.redirect('/home');
+            });
+
+            return;
+          }
+
           emailService.send(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, cookie.getUserEmail(), {
             firstName: cookie.getUserFirstName(),
-            garId: cookie.getGarId(),
+            cancellationReference: cookie.getCbpId(),
           }).then(() => {
             req.session.successMsg = 'The GAR has been successfully cancelled';
             req.session.successHeader = 'Cancellation Confirmation';
             req.session.save(() => {
               res.redirect('/home');
             });
-          }).catch(() => {
+          }).catch((err) => {
             req.session.successMsg = 'The GAR has been successfully cancelled, but there was a problem with sending the email';
             req.session.successHeader = 'Cancellation Confirmation';
             req.session.save(() => {

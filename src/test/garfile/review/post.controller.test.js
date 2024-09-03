@@ -18,14 +18,21 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
 const emailService = require('../../../common/services/sendEmail');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const controller = require('../../../app/garfile/review/post.controller');
+const { garPeople } = require('../../fixtures');
 
 describe('GAR Review Post Controller', () => {
-  let req; let res;
+  let req; let res; let clock;
+  const APRIL = 3;
   let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub; let garApiPatchStub; let garAPISubmitForCheckinStub;
   let sessionSaveStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
+    clock = sinon.useFakeTimers({
+      now: new Date(2023, APRIL, 11),
+      shouldAdvanceTime: false,
+      toFake: ["Date"],
+    });
 
     req = {
       body: {
@@ -71,6 +78,7 @@ describe('GAR Review Post Controller', () => {
 
   afterEach(() => {
     sinon.restore();
+    clock.restore();
   });
 
   it('should do nothing if retrieving a gar causes an issue', () => {
@@ -79,11 +87,7 @@ describe('GAR Review Post Controller', () => {
     garApiGetPeopleStub.resolves();
     garApiGetSupportingDocsStub.rejects('garApi.getSupportingDocs Example Reject');
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then().then(() => {
+    controller(req, res).then(() => {
       expect(cookie.getGarId()).to.eq('ABCDE');
       expect(garApiGetStub).to.have.been.calledWith(cookie.getGarId());
       expect(garApiGetPeopleStub).to.have.been.calledWith(cookie.getGarId());
@@ -103,11 +107,7 @@ describe('GAR Review Post Controller', () => {
     }));
     garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then().then(() => {
+    controller(req, res).then(() => {
       expect(sessionSaveStub).to.have.been.called;
       expect(req.session.submiterrormessage).to.eql([{
         message: 'This GAR has already been submitted',
@@ -135,11 +135,8 @@ describe('GAR Review Post Controller', () => {
     }));
     garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then().then().then(() => {
+    controller(req, res).then(() => {
+      expect(res.render).to.have.been.called;
       expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
         cookie,
         manifestFields,
@@ -162,7 +159,12 @@ describe('GAR Review Post Controller', () => {
           new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
           new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
           new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation')),
-          new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
+          new ValidationRule(
+            validator.valuetrue,
+            'manifest',
+            '',
+            "There must be at least one captain or crew member on the voyage. If this is a military flight, this error can be bypassed in the manifest's military flight section."
+          )
         ],
       });
     });
@@ -190,11 +192,7 @@ describe('GAR Review Post Controller', () => {
     }));
     garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then().then().then(() => {
+    controller(req, res).then(() => {
       expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
         cookie,
         manifestFields,
@@ -218,7 +216,12 @@ describe('GAR Review Post Controller', () => {
           new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Customs Declaration question not answered'),
           new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation')),
           new ValidationRule(validator.valuetrue, 'resolveError', '', 'Resolve manifest errors before submitting'),
-          new ValidationRule(validator.valuetrue, 'manifest', '', 'There must be at least one captain or crew member on the voyage'),
+          new ValidationRule(
+            validator.valuetrue,
+            'manifest',
+            '',
+            "There must be at least one captain or crew member on the voyage. If this is a military flight, this error can be bypassed in the manifest's military flight section."
+          )
         ],
       });
     });
@@ -252,22 +255,16 @@ describe('GAR Review Post Controller', () => {
       }));
 
       garApiGetPeopleStub.resolves(JSON.stringify({
-        items: [
-          { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
-        ],
+        items: garPeople(),
       }));
 
       garAPISubmitForCheckinStub.rejects('garApi.submitGARForCheckin Example Reject')
       garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
 
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then().then().then()
-        .then(() => {
-          expect(res.render).to.have.been.calledWith('app/garfile/review/index.njk', { cookie });
-        });
+      controller(req, res).then(() => {
+        expect(res.render).to.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/garfile/review/index.njk', { cookie });
+      });
     });
 
     // it.only('should return an error if the API returns a message', () => {
@@ -357,35 +354,35 @@ describe('GAR Review Post Controller', () => {
     //     });
     // });
 
-  //   it('sends email and goes to success page', () => {
-  //     const cookie = new CookieModel(req);
-  //     garApiGetStub.resolves(JSON.stringify({
-  //       registration: 'Z-AFTC',
-  //       departureDate: '2012-12-13',
-  //       departureTime: '15:03:00',
-  //       arrivalDate: '2012-12-14',
-  //       arrivalTime: '16:04:00',
-  //       status: {
-  //         name: 'draft',
-  //       },
-  //       responsibleGivenName: 'James',
-  //       prohibitedGoods: 'No',
-  //       freeCirculation: 'No',
-  //       visitReason: 'No',
-  //       intentionValue: 'No'
-  //     }));
-  //     garApiGetPeopleStub.resolves(JSON.stringify({
-  //       items: [
-  //         { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
-  //       ],
-  //     }));
-  //     garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
-  //     garApiPatchStub.resolves(JSON.stringify({}));
-  //     sinon.stub(emailService, 'send').resolves();
+    //   it('sends email and goes to success page', () => {
+    //     const cookie = new CookieModel(req);
+    //     garApiGetStub.resolves(JSON.stringify({
+    //       registration: 'Z-AFTC',
+    //       departureDate: '2012-12-13',
+    //       departureTime: '15:03:00',
+    //       arrivalDate: '2012-12-14',
+    //       arrivalTime: '16:04:00',
+    //       status: {
+    //         name: 'draft',
+    //       },
+    //       responsibleGivenName: 'James',
+    //       prohibitedGoods: 'No',
+    //       freeCirculation: 'No',
+    //       visitReason: 'No',
+    //       intentionValue: 'No'
+    //     }));
+    //     garApiGetPeopleStub.resolves(JSON.stringify({
+    //       items: [
+    //         { peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' },
+    //       ],
+    //     }));
+    //     garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
+    //     garApiPatchStub.resolves(JSON.stringify({}));
+    //     sinon.stub(emailService, 'send').resolves();
 
-  //     const callController = async () => {
-  //       await controller(req, res);
-  //     };
+    //     const callController = async () => {
+    //       await controller(req, res);
+    //     };
 
   //     callController().then().then().then(() => {
   //       cookie.setGarStatus('Submitted');
@@ -396,5 +393,5 @@ describe('GAR Review Post Controller', () => {
   //         expect(res.render).to.have.been.calledWith('app/garfile/submit/success/index', { cookie });
   //       });
   //   });
-   });
+  });
 });

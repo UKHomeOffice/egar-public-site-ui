@@ -4,8 +4,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
-const logger = require('../common/utils/logger')(__filename);
-
 require('./global.test');
 
 const validator = require('../common/utils/validator');
@@ -68,6 +66,14 @@ describe('Validator', () => {
 
   it('Should return false when input ends with a symbol', () => {
     expect(validator.hasOnlySymbols('aa$')).to.be.false;
+  });
+
+  it('Should return false when a horizontal tab present in the input', () => {
+    expect(validator.containTabs('tab name')).to.be.false;
+  });
+
+  it('Should return false when a input starts with a tab', () => {
+    expect(validator.containTabs('  name')).to.be.false;
   });
 
   it('Should return false when numeric inputs are not', () => {
@@ -243,34 +249,6 @@ describe('Validator', () => {
     expect(validationArr).to.have.length(2);
   });
 
-  it('Should return true when ZZZZ is entered as a port alongside lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('ZZZZ', '28.120439', '-7.077516'))).to.be.true;
-  });
-
-  it('Should return true when a valid pord is entered without lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('FRN', '', ''))).to.be.true;
-  });
-
-  it('Should return true when a valid pord is entered without lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('FRN', '', ''))).to.be.true;
-  });
-
-  it('Should return true when a valid pord is entered with lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('FRN', '28.120439', '-7.077516'))).to.be.true;
-  });
-
-  it('Should return false when a ZZZZ is entered as a port without lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('ZZZZ', '', ''))).to.be.false;
-  });
-
-  it('Should return false when a YYYY is entered as a port without lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('YYYY', '', ''))).to.be.false;
-  });
-
-  it('Should return true when YYYY is entered as a port alongside lat and long coords', () => {
-    expect(validator.validatePortCoords(genPortObj('YYYY', '28.120439', '-7.077516'))).to.be.true;
-  });
-
   it('Should validate a 3 char length ISO country code', () => {
     expect(validator.validISOCountryLength('ZAF')).to.be.true;
     expect(validator.validISOCountryLength('')).to.be.false;
@@ -320,18 +298,50 @@ describe('Validator', () => {
       });
   });
 
-  it('Should return true when a + and min 5 max 20 digits no spaces', () => {
-    expect(validator.validIntlPhone('12345')).to.be.true;
-    expect(validator.validIntlPhone('1234544')).to.be.true;
-    expect(validator.validIntlPhone('12233445566778899112')).to.be.true;
+  it('Should allow local UK mobile numbers', () => {
+    expect(validator.validIntlPhone('07973111111')).to.be.true;
   });
 
-  it('Should return false when less than 5 max more than 20 digits has letters or spaces', () => {
-    expect(validator.validIntlPhone('1234')).to.be.false;
-    expect(validator.validIntlPhone('122334455667788991123')).to.be.false;
-    expect(validator.validIntlPhone('+123475')).to.be.false;
-    expect(validator.validIntlPhone('1234x5')).to.be.false;
-    expect(validator.validIntlPhone('1234 5')).to.be.false;
+  it('Should allow local UK landline numbers', () => {
+    expect(validator.validIntlPhone('01223123456')).to.be.true;
+  });
+
+  it('Should allow UK mobile numbers with plus prefix', () => {
+    expect(validator.validIntlPhone('+44123450284')).to.be.true;
+  });
+
+  it('Should allow UK mobile numbers with double zero prefix', () => {
+    expect(validator.validIntlPhone('0044123450284')).to.be.true;
+  });
+
+  it('Should allow international UK landline numbers with plus prefix ', () => {
+    expect(validator.validIntlPhone('+441223123456')).to.be.true;
+  });
+
+  it('Should allow US landline numbers in international format ', () => {
+    expect(validator.validIntlPhone('01017182222222')).to.be.true;
+  });
+  
+
+
+  it('Should reject numbers beginning double zeros that are less than 10 characters ', () => {
+    expect(validator.validIntlPhone('001234567')).to.be.false;
+  });
+
+  it('Should reject numbers that do not begin with one of: 0, 00, +', () => {
+    expect(validator.validIntlPhone('8812345678')).to.be.false;
+  });
+
+  it('Should reject numbers with spaces', () => {
+    expect(validator.validIntlPhone('88 12345678')).to.be.false;
+  });
+
+  it('Should reject numbers with hyphens', () => {
+    expect(validator.validIntlPhone('0044-12345678')).to.be.false;
+  });
+
+  it('Should reject numbers with periods', () => {
+    expect(validator.validIntlPhone('0044.12345678')).to.be.false;
   });
 
   // Latitude tests
@@ -880,12 +890,19 @@ describe('Validator', () => {
     const MARCH = 2;
     
     beforeEach(() => {
+      process.env.TZ = 'UTC';
+      
       clock = sinon.useFakeTimers({
         now: new Date(2023, MARCH, 27, 14, 15),
         shouldAdvanceTime: false,
         toFake: ["Date"],
       });
-    })
+    });
+
+    afterEach(()=>{
+      process.env.TZ = 'UTC';
+      clock.restore();
+    });
 
     it('Works on a valid by a day date', () => {
       expect(validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 28, 11, 0))).to.equal(true);
@@ -901,6 +918,13 @@ describe('Validator', () => {
 
       const validByMinuteDate = new Date(2023, MARCH, 27, 16, 16);
       expect(validator.isTwoHoursPriorDeparture(validByMinuteDate)).to.equal(true);
+
+      process.env.TZ = 'America/Los_Angeles'; // 5 hours and 30 minute offset
+      const validInTimezoneByHourDate = new Date(2023, MARCH, 27, 15, 15);
+      expect(validator.isTwoHoursPriorDeparture(validInTimezoneByHourDate)).to.equal(false);
+
+      const validInTimezoneByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
+      expect(validator.isTwoHoursPriorDeparture(validInTimezoneByMinuteDate)).to.equal(false);
     }); 
 
     it('Same day but not 2 hour prior date is inaccurate', () => {
@@ -909,10 +933,56 @@ describe('Validator', () => {
 
       const invalidByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
       expect(validator.isTwoHoursPriorDeparture(invalidByMinuteDate)).to.equal(false);
-    });    
 
-    afterEach(()=>{
-      clock.restore();
+      process.env.TZ = 'Asia/Kolkata'; // 5 hours and 30 minute offset
+      const invalidInTimezoneByHourDate = new Date(2023, MARCH, 27, 15, 15);
+      expect(validator.isTwoHoursPriorDeparture(invalidInTimezoneByHourDate)).to.equal(false);
+
+      const invalidInTimezoneByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
+      expect(validator.isTwoHoursPriorDeparture(invalidInTimezoneByMinuteDate)).to.equal(false);
+    });
+
+    it('Confirm that the timezone offset is converted to UTC', () => {
+      process.env.TZ = 'Asia/Kolkata'; // 5 hours and 30 minute offset
+      const mumbaiTime = new Date(2023, MARCH, 27, 15, 15);
+      
+      expect(mumbaiTime.getUTCFullYear()).to.equal(2023);
+      expect(mumbaiTime.getMonth()).to.equal(MARCH);
+      expect(mumbaiTime.getDate()).to.equal(27);
+
+      expect(mumbaiTime.getHours()).to.equal(15);
+      expect(mumbaiTime.getMinutes()).to.equal(15);
+
+      const utcEquivalentTime = validator.convertDateToUTC(mumbaiTime);
+
+      expect(utcEquivalentTime.getUTCFullYear()).to.equal(2023);
+      expect(utcEquivalentTime.getMonth()).to.equal(MARCH);
+      expect(utcEquivalentTime.getDate()).to.equal(27);
+
+      expect(utcEquivalentTime.getHours()).to.equal(9);
+      expect(utcEquivalentTime.getMinutes()).to.equal(45);
+    });
+
+
+    it('Confirm that the timezone offset is converted to UTC', () => {
+      process.env.TZ = 'America/Los_Angeles'; // -7 hours
+      const sanFranciscoTime = new Date(2023, MARCH, 27, 20, 15);
+      
+      expect(sanFranciscoTime.getUTCFullYear()).to.equal(2023);
+      expect(sanFranciscoTime.getMonth()).to.equal(MARCH);
+      expect(sanFranciscoTime.getDate()).to.equal(27);
+
+      expect(sanFranciscoTime.getHours()).to.equal(20);
+      expect(sanFranciscoTime.getMinutes()).to.equal(15);
+
+      const utcEquivalentTime = validator.convertDateToUTC(sanFranciscoTime);
+
+      expect(utcEquivalentTime.getUTCFullYear()).to.equal(2023);
+      expect(utcEquivalentTime.getMonth()).to.equal(MARCH);
+      expect(utcEquivalentTime.getDate()).to.equal(28);
+
+      expect(utcEquivalentTime.getHours()).to.equal(3);
+      expect(utcEquivalentTime.getMinutes()).to.equal(15);
     });
   });
 
@@ -988,7 +1058,86 @@ describe('Validator', () => {
 
       expect(validator.isValidAirportCode('Not An airport code')).to.eql(false);
       expect(validator.isValidAirportCode('12345')).to.eql(false);
+    })
 
+    it("Should return a valid document type from a given document type", () => {
+      expect(validator.isValidDocumentType("Passport")).to.eql(true);
+      expect(validator.isValidDocumentType("Identity Card")).to.eql(true);
+      expect(validator.isValidDocumentType("Other")).to.eql(true);
+
+      expect(validator.isValidDocumentType("Banana")).to.eql(false);
+      expect(validator.isValidDocumentType("Ice cream")).to.eql(false);
+      expect(validator.isValidDocumentType(1)).to.eql(false);
+      expect(validator.isValidDocumentType(undefined)).to.eql(false);
+      expect(validator.isValidDocumentType([])).to.eql(false);
+      expect(validator.isValidDocumentType()).to.eql(false);
+    });
+
+    it("Should return a valid document type from a given document type", () => {
+      expect(validator.isOtherDocumentWithDocumentDesc(["Other", "UN documents"])).to.eql(true);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", undefined])).to.eql(true);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Identity Card", null])).to.eql(true);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", ""])).to.eql(true);
+
+      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", "Apple"])).to.eql(false);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Identity Card", "Pineapple"])).to.eql(false);
+      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", {}])).to.eql(false);
+      expect(validator.isOtherDocumentWithDocumentDesc()).to.eql(false);
+    });
+
+  })
+
+  describe('Should determine if a value is cancellable by CBP', () => {
+    let clock;
+    const MARCH = 2;
+    const APRIL = 3;
+    
+    beforeEach(() => {
+      clock = sinon.useFakeTimers({
+        now: new Date(2023, APRIL, 11),
+        shouldAdvanceTime: false,
+        toFake: ["Date"],
+      });
+    })
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it("Should be valid to cancel GAR by CBP", () => {
+      const currentDate = "2023-04-11T00:00:00.000000";
+      const dayOld = "2023-04-10T00:00:00.000000";
+      const weekOld = "2023-04-11T00:00:00.000000";
+      const twoWeeksOld = "2023-03-29T00:00:00.000000";
+  
+      expect(validator.isAbleToCancelGar(currentDate)).to.eql(true);
+      expect(validator.isAbleToCancelGar(null)).to.eql(true);
+      expect(validator.isAbleToCancelGar(dayOld)).to.eql(true);
+      expect(validator.isAbleToCancelGar(weekOld)).to.eql(true);
+      expect(validator.isAbleToCancelGar(twoWeeksOld)).to.eql(true);
+    })
+
+    it("Should be invalid to cancel GAR by CBP", () => {
+      const twoWeeksAndADayOld = "2023-03-28T00:00:00.000000";
+      const yearOld = "2022-04-11T00:00:00.000000";
+      expect(validator.isAbleToCancelGar(twoWeeksAndADayOld)).to.eql(false);
+      expect(validator.isAbleToCancelGar(yearOld)).to.eql(false);
+
+      const blankString = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, '');
+      const undefinedDate = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, undefined);
+      const blankObject = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, {});
+
+      expect(blankString).to.throw(
+        'lastDepartureDateString: "", type: "string", is not null or a valid string'
+      );
+
+      expect(undefinedDate).to.throw(
+        'lastDepartureDateString: "undefined", type: "undefined", is not null or a valid string'
+      );
+
+      expect(blankObject).to.throw(
+        'lastDepartureDateString: "[object Object]", type: "object", is not null or a valid string'
+      );
     })
   })
 });

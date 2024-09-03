@@ -35,15 +35,16 @@
       {% if garfile.status.name === 'Draft' %}
         <a id="submit-gar" class="govuk-button" href="/garfile/review">{{__('button_submit_this_gar')}}</a>
         <a id="display-manifest" class="govuk-button" href="/garfile/printmanifest">Print GAR</a>
-
       {% endif %}
       {% if garfile.status.name !== 'Cancelled' %}
         <p class="govuk-body-m">
-          <a id="cancel-gar"  class="govuk-button" href="/garfile/cancel">{{__('title_cancel_gar')}}</a>
-            {% if garfile.status.name === 'Submitted' %}
-              <a id="amend-gar" class="govuk-button" href="/garfile/amend">{{__('title_amend_gar')}}</a>
-              <a id="display-manifest" class="govuk-button" href="/garfile/printmanifest">Print GAR</a>
-            {% endif %}
+          {% if isAbleToCancelGar or garfile.status.name === 'Draft' %}
+            <a id="cancel-gar"  class="govuk-button" href="/garfile/cancel">{{__('title_cancel_gar')}}</a>
+          {% endif %}
+          {% if garfile.status.name === 'Submitted' %}
+            <a id="amend-gar" class="govuk-button" href="/garfile/amend">{{__('title_amend_gar')}}</a>
+            <a id="display-manifest" class="govuk-button" href="/garfile/printmanifest">Print GAR</a>
+          {% endif %}
         </p>
       {% endif %}
       <p class="govuk-body-m">

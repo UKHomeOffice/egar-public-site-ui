@@ -20,7 +20,7 @@ module.exports = {
         L3: { v: 'Free Circulation' },
         B6: { v: 'Visit Reason' },
         // Crew
-        A9: { v: 'TD_TYPE Document Type' },
+        A9: { v: 'Other' },
         B9: { v: 'Document Type Other' },
         C9: { v: 'Issuing State' },
         D9: { v: 'DocumentNumber' },
@@ -34,7 +34,7 @@ module.exports = {
         A17: { v: 'TOTAL CREW' },
         // Passengers
         A18: { v: 'PASSENGERS' },
-        A20: { v: 'TD_TYPE Document Type' },
+        A20: { v: 'Other' },
         B20: { v: 'Document Type Other' },
         C20: { v: 'Issuing State' },
         D20: { v: 'DocumentNumber' },

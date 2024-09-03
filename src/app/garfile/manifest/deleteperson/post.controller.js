@@ -4,23 +4,32 @@ const garApi = require('../../../../common/services/garApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
-  logger.debug('In garfile / manifest / deleteperson get controller');
+  const userId = cookie.getUserDbId()
+  logger.debug(`User: ${userId} In garfile / manifest / deleteperson post controller`);
 
-  const personId = req.session.deletePersonId;
-  delete req.session.deletePersonId;
+  const garpeopleIdsToDelete = typeof req.body.garPeopleId === 'string' 
+    ? [req.body.garPeopleId]
+    : req.body.garPeopleId;
+
   const deleteErr = { message: 'Failed to delete GAR person. Try again' };
 
-  if (personId === undefined) {
-    logger.info('No id provided, redirecting to manifest page');
+  if (garpeopleIdsToDelete === undefined) {
+    logger.error(`User: ${userId} No id provided, redirecting to manifest page`);
     return res.redirect('/garfile/manifest');
   }
 
-  logger.info(`Removing ${personId} from manifest`);
-  garApi.deleteGarPerson(cookie.getGarId(), personId)
+  if (!Array.isArray(garpeopleIdsToDelete)) {
+    logger.error(`User: ${userId} ${garpeopleIdsToDelete} Id provided is not array, redirecting to manifest page`);
+    return res.redirect('/garfile/manifest');
+  }
+
+  logger.info(`User: ${userId} Removing ${garpeopleIdsToDelete} from manifest`);
+
+  garApi.deleteGarPeople(cookie.getGarId(), garpeopleIdsToDelete)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        logger.debug(`Api returned: ${parsedResponse.message}`);
+        logger.debug(`User: ${userId} Api returned: ${parsedResponse.message}`);
         req.session.errMsg = parsedResponse;
         return res.redirect('/garfile/manifest');
       }
@@ -28,7 +37,7 @@ module.exports = (req, res) => {
       return res.redirect('/garfile/manifest');
     })
     .catch((err) => {
-      logger.error('Failed to delete gar person');
+      logger.error(`User: ${userId} Failed to delete gar person`);
       logger.error(err);
       req.session.errMsg = deleteErr;
       return res.redirect('/garfile/manifest');

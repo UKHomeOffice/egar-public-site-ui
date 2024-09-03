@@ -1,4 +1,6 @@
-const logger = require("../utils/logger");
+const logger = require("../utils/logger")(__filename);
+const { isValidAirportCode } = require("../utils/validator");
+const { trimToDecimalPlaces } = require("../utils/utils");
 
 /*
  *
@@ -19,6 +21,7 @@ class Cookie {
     this.initialise();
     this.initialiseGar();
   }
+
 
   initialise() {
     // Initialise org
@@ -86,6 +89,7 @@ class Cookie {
       this.session.gar = {
         id: null,
         status: null,
+        cbpId: null,
         craft: {
           registration: null,
           craftType: null,
@@ -99,14 +103,6 @@ class Cookie {
           arrivalPort: null,
           arrivalLong: null,
           arrivalLat: null,
-          arrivalDegrees: null,
-          arrivalMinutes: null,
-          arrivalSeconds: null,
-          arrivalLongDegrees: null,
-          arrivalLongMinutes: null,
-          arrivalLongSeconds: null,
-          arrivalLatDirection: null,
-          arrivalLongDirection: null,
         },
         voyageDeparture: {
           departureDate: null,
@@ -114,60 +110,23 @@ class Cookie {
           departurePort: null,
           departureLong: null,
           departureLat: null,
-          departureDegrees: null,
-          departureMinutes: null,
-          departureSeconds: null,
-          departureLatDirection: null,
-          departureLongDegrees: null,
-          departureLongMinutes: null,
-          departureLongSeconds: null,
-          departureLongDirection: null,
-
-        },
-        voyage: {
-          departureDate: null,
-          departureTime: null,
-          departurePort: null,
-          departureLat: null,
-          departureLong: null,
-          departureDegrees: null,
-          departureMinutes: null,
-          departureSeconds: null,
-          departureLatDirection: null,
-          departureLongDegrees: null,
-          departureLongMinutes: null,
-          departureLongSeconds: null,
-          departureLongDirection: null,
-          arrivalDate: null,
-          arrivalTime: null,
-          arrivalPort: null,
-          arrivalLong: null,
-          arrivalLat: null,
-          arrivalDegrees: null,
-          arrivalMinutes: null,
-          arrivalSeconds: null,
-          arrivalLongDegrees: null,
-          arrivalLongMinutes: null,
-          arrivalLongSeconds: null,
-          arrivalLatDirection: null,
-          arrivalLongDirection: null,
         },
         manifest: [],
         tempAddPersonId: null,
         responsiblePerson: {
           responsibleGivenName: null,
           responsibleSurname: null,
+          responsibleContactNo: null,
+          responsibleEmail: null,
           responsibleAddressLine1: null,
           responsibleAddressLine2: null,
           responsibleTown: null,
-          responsibleCounty: null,
           responsiblePostcode: null,
-          responsibleContactNo: null,
-          responsibleEmail: null,
+          responsibleCountry: null,
+          fixedBasedOperator: null,
+          fixedBasedOperatorAnswer: null
         },
-        fixedBasedOperator: null,
-        fixedBasedOperatorAnswer: null,
-        fixedBasedOperatorList: [],
+        isMilitaryFlight: null,
         prohibitedGoods: null,
         goodsDeclaration: null,
         continentalShelf: null,
@@ -209,6 +168,14 @@ class Cookie {
     this.session.gar.id = id;
   }
 
+  getCbpId() {
+    return this.session.gar.cbpId;
+  }
+
+  setCbpId(cbpId) {
+    this.session.gar.cbpId = cbpId;
+  }
+
   getGarId() {
     return this.session.gar.id;
   }
@@ -221,41 +188,38 @@ class Cookie {
     return this.session.gar.tempAddPersonId;
   }
 
-  setGarCraft(registration, craftType, craftBase, freeCirculation, visitReason) {
+  getIsMilitaryFlight() {
+    return Boolean(this.session.gar.isMilitaryFlight);
+  }
+
+  setIsMilitaryFlight(isMilitaryFlight) {
+    this.session.gar.isMilitaryFlight = isMilitaryFlight;
+  }
+
+  setGarCraft(registration, craftType, craftBase, portChoice) {
     this.session.gar.craft.registration = registration;
     this.session.gar.craft.craftType = craftType;
     this.session.gar.craft.craftBase = craftBase;
-    this.session.gar.craft.freeCirculation = freeCirculation;
-    this.session.gar.craft.visitReason = visitReason;
+    this.session.gar.craft.portChoice = portChoice
+    this.parseCraftBase(this.session.gar.craft);
   }
 
   getGarCraft() {
+    logger.info(JSON.stringify(this.session.gar.craft));
     return this.session.gar.craft;
   }
 
   setGarArrivalVoyage(voyageObj) {
-    if (!voyageObj.arrivalDate) {
-      this.session.gar.voyageArrival.arrivalDate = this.generateDate(voyageObj.arrivalDay,
-        voyageObj.arrivalMonth, voyageObj.arrivalYear);
+    const arrivalJourney = this.parseVoyageObj("arrival", voyageObj);
 
-      this.session.gar.voyageArrival.arrivalTime = this.generateTime(voyageObj.arrivalHour,
-        voyageObj.arrivalMinute);
-    } else {
-      // Set voyage from API response, so dates and times are already built
-      this.session.gar.voyageArrival.arrivalDate = voyageObj.arrivalDate;
-      this.session.gar.voyageArrival.arrivalTime = voyageObj.arrivalTime;
-    }
-    this.session.gar.voyageArrival.arrivalPort = voyageObj.arrivalPort;
-    this.session.gar.voyageArrival.arrivalLong = voyageObj.arrivalLong;
-    this.session.gar.voyageArrival.arrivalLat = voyageObj.arrivalLat;
-    this.session.gar.voyageArrival.arrivalDegrees = voyageObj.arrivalDegrees;
-    this.session.gar.voyageArrival.arrivalMinutes = voyageObj.arrivalMinutes;
-    this.session.gar.voyageArrival.arrivalSeconds = voyageObj.arrivalSeconds;
-    this.session.gar.voyageArrival.arrivalLatDirection = voyageObj.arrivalLatDirection;
-    this.session.gar.voyageArrival.arrivalLongDegrees = voyageObj.arrivalLongDegrees;
-    this.session.gar.voyageArrival.arrivalLongMinutes = voyageObj.arrivalLongMinutes;
-    this.session.gar.voyageArrival.arrivalLongSeconds = voyageObj.arrivalLongSeconds;
-    this.session.gar.voyageArrival.arrivalLongDirection = voyageObj.arrivalLongDirection;
+    this.session.gar.voyageArrival.arrivalDate = arrivalJourney.arrivalDate;
+    this.session.gar.voyageArrival.arrivalTime = arrivalJourney.arrivalTime;
+
+    this.session.gar.voyageArrival.arrivalPort = arrivalJourney.arrivalPort;
+    this.session.gar.voyageArrival.arrivalLong = arrivalJourney.arrivalLong;
+    this.session.gar.voyageArrival.arrivalLat = arrivalJourney.arrivalLat;
+    
+    this.session.gar.voyageArrival.arrivalPortChoice = arrivalJourney.arrivalPortChoice;
   }
 
   getGarArrivalVoyage() {
@@ -263,88 +227,20 @@ class Cookie {
   }
 
   setGarDepartureVoyage(voyageObj) {
-    if (!voyageObj.departureDate) {
-      this.session.gar.voyageDeparture.departureDate = this.generateDate(voyageObj.departureDay,
-        voyageObj.departureMonth, voyageObj.departureYear);
-      this.session.gar.voyageDeparture.departureTime = this.generateTime(voyageObj.departureHour,
-        voyageObj.departureMinute);
-      // this.session.gar.voyageDeparture.departureLat = this.generateLatitude(voyageObj.departureDegrees, 
-      //   voyageObj.departureMinutes, voyageObj.departureSeconds);
-    } else {
-      // get it from the api
-      this.session.gar.voyageDeparture.departureDate = voyageObj.departureDate;
-      this.session.gar.voyageDeparture.departureTime = voyageObj.departureTime;
-    }
-    this.session.gar.voyageDeparture.departurePort = voyageObj.departurePort;
-    this.session.gar.voyageDeparture.departureLat = voyageObj.departureLat;
-    this.session.gar.voyageDeparture.departureLong = voyageObj.departureLong;
-    this.session.gar.voyageDeparture.departureDegrees = voyageObj.departureDegrees;
-    this.session.gar.voyageDeparture.departureMinutes = voyageObj.departureMinutes;
-    this.session.gar.voyageDeparture.departureSeconds = voyageObj.departureSeconds;
-    this.session.gar.voyageDeparture.departureLatDirection = voyageObj.departureLatDirection;
-    this.session.gar.voyageDeparture.departureLongDegrees = voyageObj.departureLongDegrees;
-    this.session.gar.voyageDeparture.departureLongMinutes = voyageObj.departureLongMinutes;
-    this.session.gar.voyageDeparture.departureLongSeconds = voyageObj.departureLongSeconds;
-    this.session.gar.voyageDeparture.departureLongDirection = voyageObj.departureLongDirection;
+    const departureJourney = this.parseVoyageObj("departure", voyageObj);
+
+    this.session.gar.voyageDeparture.departureDate = departureJourney.departureDate;
+    this.session.gar.voyageDeparture.departureTime = departureJourney.departureTime;
+
+    this.session.gar.voyageDeparture.departurePort = departureJourney.departurePort;
+    this.session.gar.voyageDeparture.departureLat = departureJourney.departureLat;
+    this.session.gar.voyageDeparture.departureLong = departureJourney.departureLong;
+    this.session.gar.voyageDeparture.departurePortChoice = departureJourney.departurePortChoice;
+
   }
 
   getGarDepartureVoyage() {
     return this.session.gar.voyageDeparture;
-  }
-
-  setGarVoyage(voyageObj) {
-    if (!voyageObj.departureDate) {
-      // Set voyage from form data, so we must build dates and times
-      this.session.gar.voyage.departureDate = this.generateDate(voyageObj.departureDay,
-        voyageObj.departureMonth,
-        voyageObj.departureYear);
-      this.session.gar.voyage.departureTime = this.generateTime(voyageObj.departureHour,
-        voyageObj.departureMinute);
-      this.session.gar.voyage.arrivalDate = this.generateDate(voyageObj.arrivalDay,
-        voyageObj.arrivalMonth,
-        voyageObj.arrivalYear);
-      this.session.gar.voyage.arrivalTime = this.generateTime(voyageObj.arrivalHour,
-        voyageObj.arrivalMinute);
-    } else {
-      // Set voyage from API response, so dates and times are already built
-      this.session.gar.voyage.departureDate = voyageObj.departureDate;
-      this.session.gar.voyage.arrivalDate = voyageObj.arrivalDate;
-      this.session.gar.voyage.departureTime = voyageObj.departureTime;
-      this.session.gar.voyage.arrivalTime = voyageObj.arrivalTime;
-    }
-    this.session.gar.voyage.departurePort = voyageObj.departurePort;
-    this.session.gar.voyage.departureLat = voyageObj.departureLat;
-    this.session.gar.voyage.departureLong = voyageObj.departureLong;
-    this.session.gar.voyage.departureDegrees = voyageObj.departureDegrees;
-    this.session.gar.voyage.departureMinutes = voyageObj.departureMinutes;
-    this.session.gar.voyage.departureSeconds = voyageObj.departureSeconds;
-    this.session.gar.voyage.departureLatDirection = voyageObj.departureLatDirection;
-    this.session.gar.voyage.departureLongDirection = voyageObj.departureLongDirection;
-    this.session.gar.voyage.arrivalPort = voyageObj.arrivalPort;
-    this.session.gar.voyage.arrivalLong = voyageObj.arrivalLong;
-    this.session.gar.voyage.arrivalLat = voyageObj.arrivalLat;
-    this.session.gar.voyage.arrivalDegrees = voyageObj.arrivalDegrees;
-    this.session.gar.voyage.arrivalMinutes = voyageObj.arrivalMinutes;
-    this.session.gar.voyage.arrivalSeconds = voyageObj.arrivalSeconds;
-    this.session.gar.voyage.arrivalLatDirection = voyageObj.arrivalLatDirection;
-    this.session.gar.voyage.arrivalLongDegrees = voyageObj.arrivalLongDegrees;
-    this.session.gar.voyage.arrivalLongMinutes = voyageObj.arrivalLongMinutes;
-    this.session.gar.voyage.arrivalLongSeconds = voyageObj.arrivalLongSeconds;
-    this.session.gar.voyage.arrivalLongDirection = voyageObj.arrivalLongDirection;
-  }
-
-  setGarVoyageFromFile(departureDate, departureTime, departurePort, arrivalDate, arrivalPort, arrivalTime) {
-    this.session.gar.voyage.departureDate = departureDate;
-    this.session.gar.voyage.departureTime = departureTime;
-    this.session.gar.voyage.arrivalDate = arrivalDate;
-    this.session.gar.voyage.departurePort = departurePort;
-    this.session.gar.voyage.arrivalPort = arrivalPort;
-    this.session.gar.voyage.arrivalTime = arrivalTime;
-    this.session.gar.voyage.arrivalTime = arrivalTime;
-  }
-
-  getGarVoyage() {
-    return this.session.gar.voyage;
   }
 
   setGarManifest(manifest) {
@@ -364,7 +260,7 @@ class Cookie {
   }
 
   getGarfixedBasedOperator() {
-  return this.session.gar.fixedBasedOperator;
+    return this.session.gar.fixedBasedOperator;
   }
 
   setGarfixedBasedOperator(fbo) {
@@ -454,21 +350,21 @@ class Cookie {
   getGarpassengerTravellingReason() {
     return this.session.gar.passengerTravellingReason;
   }
-  
+
   setGarpassengerTravellingReason(ptr) {
-   this.session.gar.passengerTravellingReason = ptr;
+    this.session.gar.passengerTravellingReason = ptr;
   }
-      
+
   getGarpassengerTravellingReasonList() {
     return this.session.gar.passengerTravellingReasonList;
   }
-      
- setGarpassengerTravellingReasonList(ptrl) {
-   this.session.gar.manifest.push(ptrl);
+
+  setGarpassengerTravellingReasonList(ptrl) {
+    this.session.gar.manifest.push(ptrl);
   }
 
   getGarSupportingInformation() {
-  return this.session.gar.supportingInformation;
+    return this.session.gar.supportingInformation;
   }
 
   setGarSupportingInformation(si) {
@@ -484,7 +380,7 @@ class Cookie {
   }
 
   getGarIntentionValue() {
-  return this.session.gar.intentionValue;
+    return this.session.gar.intentionValue;
   }
 
   setGarIntentionValue(iv) {
@@ -506,9 +402,11 @@ class Cookie {
     this.session.gar.responsiblePerson.responsibleAddressLine2 = person.responsibleAddressLine2;
     this.session.gar.responsiblePerson.responsibleTown = person.responsibleTown;
     this.session.gar.responsiblePerson.responsiblePostcode = person.responsiblePostcode;
-    this.session.gar.responsiblePerson.responsibleCounty = person.responsibleCounty;
+    this.session.gar.responsiblePerson.responsibleCountry = person.responsibleCountry;
     this.session.gar.responsiblePerson.responsibleContactNo = person.responsibleContactNo;
     this.session.gar.responsiblePerson.responsibleEmail = person.responsibleEmail;
+    this.session.gar.responsiblePerson.fixedBasedOperator = person.fixedBasedOperator;
+    this.session.gar.responsiblePerson.fixedBasedOperatorAnswer = person.fixedBasedOperatorAnswer;
   }
 
   getGarResponsiblePerson() {
@@ -774,14 +672,59 @@ class Cookie {
     this.session.editPerson.documentDesc = person.documentDesc;
   }
 
+  parseCraftBase(destination) {
+
+    /*
+    - accept a craft object from session with a craftBase property that can either be an airfield code or lat/long
+    - if it matches an airfield code, assign this value to the craftBasePort property of session object, and set portChoice property to 'Yes'
+    - if it matches lat/long extract lat/long values to craftBaseLat, craftBaseLong, set portChoice to 'No'
+    - if neither of above: if session object has a portChoice use that, otherwise default to 'Yes'
+    */
+
+    //avoid null and undefined issues
+    destination.craftBase ||= '';
+
+    if (isValidAirportCode(destination.craftBase)) {
+      destination.craftBasePort = destination.craftBase;
+      destination.portChoice = 'Yes';
+      return;
+    }
+
+    const craftBaseLatLong = destination.craftBase.match(/^[\+\-]?[\d.]+ [\+\-]?[\d.]+$/);
+    if (craftBaseLatLong) {
+      const [craftBaseLat, craftBaseLong] = craftBaseLatLong[0].split(' ');
+      destination.craftBaseLat = trimToDecimalPlaces(craftBaseLat, 6);
+      destination.craftBaseLong = trimToDecimalPlaces(craftBaseLong, 6);
+      destination.portChoice = 'No';
+      return;
+    }
+
+    destination.portChoice ||= 'Yes';
+  };
+
+  reduceCraftBase(craftBasePort, craftBaseLat, craftBaseLong) {
+
+    if (craftBasePort && (craftBaseLat || craftBaseLong)) {
+      throw 'Both port and lat/long supplied for craft base. Supply port or lat/long'
+    }
+
+    if (craftBasePort) {
+      return craftBasePort;
+    }
+
+    return `${craftBaseLat} ${craftBaseLong}`;
+  };
+
   setEditCraft(craft) {
     this.session.editCraft = craft;
+    this.parseCraftBase(this.session.editCraft);
   }
 
   updateEditCraft(reg, type, base) {
     this.session.editCraft.registration = reg;
     this.session.editCraft.craftType = type;
     this.session.editCraft.craftBase = base;
+    this.parseCraftBase(this.session.editCraft);
   }
 
   clearEditCraft() {
@@ -813,16 +756,29 @@ class Cookie {
     return `${h}:${m}`;
   }
 
-  // generateLatitude(degrees, minutes, seconds){
-  //   const latDeg = degrees == null ? '' : degrees;
-  //   const latMin = minutes == null ? '' : minutes;
-  //   const latSec = seconds == null ? '' : seconds;
-  //   const convertedLat = parseFloat(latDeg) + parseFloat((latMin/60) + parseFloat((latSec/3600).toFixed(6)));
-  //   let converted = parseFloat(convertedLat).toFixed(6);
+  parseVoyageObj(type, voyageObj) {
+    const voyage = {};
+    
+    voyage[`${type}Date`] = voyageObj[`${type}Date`] || this.generateDate(
+      voyageObj[`${type}Day`],
+      voyageObj[`${type}Month`],
+      voyageObj[`${type}Year`]
+    );
 
-  //   return converted;
+    voyage[`${type}Time`] = voyageObj[`${type}Time`] || this.generateTime(
+      voyageObj[`${type}Hour`],
+      voyageObj[`${type}Minute`]
+    );
 
-  // }
+    voyage[`${type}Port`] = voyageObj[`${type}Port`];
+    voyage[`${type}Long`] = trimToDecimalPlaces(voyageObj[`${type}Long`], 6);
+    voyage[`${type}Lat`] = trimToDecimalPlaces(voyageObj[`${type}Lat`], 6);
+    
+    const defaultPortChoice = (voyageObj[`${type}Lat`] || voyageObj[`${type}Long`]) ? 'No' : 'Yes';
+    voyage[`${type}PortChoice`] = voyageObj.portChoice || defaultPortChoice;
+
+    return voyage;
+  }
 
   dateSlice(dateType, date) {
     let dateValue = '';

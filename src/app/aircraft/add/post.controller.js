@@ -13,23 +13,38 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  const { craftReg, craftType } = req.body;
-  const craftBase = _.toUpper(req.body.craftBase);
+  let { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes'} = req.body;
+  
+  if(portChoice === 'Yes'){
+    craftBaseLat = null;
+    craftBaseLong = null;
+  }
+  else{
+    craftBasePort = null;
+  }
 
   // Define a validation chain for user registeration fields
   const craftObj = {
-    registration: req.body.craftReg,
+    registration,
     craftType,
-    craftBase,
+    craftBasePort,
+    craftBaseLat,
+    craftBaseLong,
+    portChoice
   };
+
+
 
   const validationChain = craftValidations.validations(craftObj);
 
   // Validate chains
   validator.validateChains(validationChain)
     .then(() => {
+      
+      const craftBase = cookie.reduceCraftBase(craftBasePort, craftBaseLat, craftBaseLong);
+
       // call the API to update the data base and then
-      craftApi.create(craftReg, craftType, craftBase, cookie.getUserDbId())
+      craftApi.create(registration, craftType, craftBase, cookie.getUserDbId())
         .then((apiResponse) => {
           try {
             const parsedResponse = JSON.parse(apiResponse);
@@ -42,23 +57,22 @@ module.exports = (req, res) => {
               req.session.save(() => res.redirect('/aircraft'));
             }
           } catch (err) {
-            // Until the back end corrects the issue with indexing (preventing duplicate registrations)
-            // this catch and return should at least prevent the application from hanging
             logger.error('Parsing attempt from API caused error, was not JSON');
             let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
             if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {
               errMsg = { message: 'Craft already exists' };
             }
             res.render('app/aircraft/add/index', {
-              cookie, craftType, craftReg, craftBase, errors: [errMsg],
+              cookie, craftObj, errors: [errMsg],
             });
           }
         });
     })
     .catch((err) => {
       logger.info('Add craft postcontroller - There was a problem with adding the saved craft');
+      logger.info(err)
       res.render('app/aircraft/add/index', {
-        cookie, craftType, craftReg, craftBase, errors: err,
+        cookie, craftObj, errors: err,
       });
     });
 };

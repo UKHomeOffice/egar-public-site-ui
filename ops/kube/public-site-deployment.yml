@@ -51,7 +51,7 @@ spec:
             - name: STATSD_METRICS
               value: 'FALSE'
         - name: public-site
-          image: quay.io/ukhomeofficedigital/egar-public-site-ui:{{ .TAGGED_VERSION }}
+          image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:{{ .TAGGED_VERSION }}
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsNonRoot: true
@@ -250,6 +250,16 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: MAINTENANCE_END_DATETIME
+            - name: MAX_NUM_FILES
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: MAX_NUM_FILES
+            - name: HOMEPAGE_MESSAGE
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: HOMEPAGE_MESSAGE        
           ports:
             - name: public-site-prt
               containerPort: 3000

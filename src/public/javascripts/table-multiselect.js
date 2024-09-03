@@ -1,13 +1,15 @@
 // Select all checkbox change
 $(".jsCheckboxAll").change(function() {
+  const currentTableCheckboxes = $(this).parents("table").find(".jsCheckbox");
+
   // Change all ".jsCheckbox" checked status
-  $(".jsCheckbox").prop("checked", $(this).prop("checked"))
+  currentTableCheckboxes.prop("checked", $(this).prop("checked"))
 
   // Toggle checked class on other checkboxes
   if($(this).prop("checked")) {
-    $(".jsCheckbox").parents("tr").addClass("checked")
+    currentTableCheckboxes.parents("tr").addClass("checked")
   } else {
-    $(".jsCheckbox").parents("tr").removeClass("checked")
+    currentTableCheckboxes.parents("tr").removeClass("checked")
   }
 })
 
@@ -29,6 +31,7 @@ $(".jsCheckbox").change(function(){
 
 //Select entire table row
 $(".table-clickable tbody tr").click(function(e) {
+  if ($(this).hasClass("unselectable-row")) return;
   if (e.target.type == "checkbox") {
     // stop the bubbling to prevent firing the rows click event
     e.stopPropagation()

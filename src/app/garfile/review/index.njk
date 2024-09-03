@@ -31,6 +31,9 @@
         {% include "common/templates/includes/errors.njk" %}
       {% endif %}
 
+      {% if successMsg %}
+        {% include "common/templates/includes/success-action.njk" %}
+      {% endif %}
       {% include "check-your-answers.njk" %}
 
       {% if isJourneyUkInbound%}
@@ -55,6 +58,9 @@
     </div>
   </div>
 
+  {{ m.departure_warning_dialog(__) }}
+
   <script type="text/javascript" src="/utils/validator.js"></script>
+  <script type="text/javascript" src="/javascripts/reviewGarfile.js"></script>
 {% endblock %}
 

@@ -23,8 +23,11 @@
     <meta name="referrer" content="origin-when-cross-origin" />
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
 
+    <link href="/stylesheets/custom.css" rel="stylesheet" />
     <link href="/stylesheets/application.min.css" rel="stylesheet" />
+    <link href="/stylesheets/dialog-polyfill.css" rel="stylesheet" type="text/css" />
     <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet" />
 
     {% block headIcons %}
@@ -40,6 +43,7 @@
     {# The default og:image is added below head so that scrapers see any custom metatags first, and this is just a fallback #}
     {# image url needs to be absolute e.g. http://wwww.domain.com/.../govuk-opengraph-image.png #}
     <meta property="og:image" content="{{ assetUrl | default('/assets') }}/images/govuk-opengraph-image.png">
+    <script src="/javascripts/dialog-polyfill.js"></script>
   </head>
 
   <body class="govuk-template__body {{ bodyClasses }}">

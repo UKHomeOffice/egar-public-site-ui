@@ -2,9 +2,10 @@
 
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
+{% import "common/templates/includes/location.njk" as l %}
 
 {% block pageTitle %}
-	{{__('error_prefix') if errors}} Create GAR | Aircraft
+  {{__('error_prefix') if errors}} Create GAR | Aircraft
 {% endblock %}
 
 {% set active = '/home' %}
@@ -19,158 +20,128 @@
 {% endblock %}
 
 {% block content %}
+  <script type="text/javascript" src="/javascripts/craft.js"></script>
+  <div class="govuk-grid-row">
+    {% if errors %}
+      {% include "common/templates/includes/errors.njk" %}
+    {% endif %}
 
-<div class="govuk-grid-row">
-	{% if errors %}
-		{% include "common/templates/includes/errors.njk" %}
-	{% endif %}
+    <form id="previous_aircraft" action="/garfile/craft" autocomplete="off" class="form-group" method="post" role="form">
+      <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">{{__('section_count', 3, 9)}}</span>
+        <h1 class="govuk-heading-xl">{{__('heading_aircraft_details')}}</h1>
 
-    <script>
-      $(document).ready(function(){
-        $("#aircraft-search").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#aircraft_table_row tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-          });
-        });
-        });
-      </script>
-
-
-  <form id="previous_aircraft" action="/garfile/craft" autocomplete="off" class="form-group" method="post" role="form">
-    <div class="govuk-grid-column-two-thirds">
-			<span class="govuk-caption-xl">{{__('section_count', 3, 9)}}</span>
-			<h1 class="govuk-heading-xl">{{__('heading_aircraft_details')}}</h1>
-
-			<h2 id="saved_aircraft" class="govuk-heading-l">{{__('title_aircraft')}}</h2>
-			<p class="govuk-body-l">{{__('caption_aircraft_details')}}</p>
-      <p class="govuk-body-m">Search for aircraft </p>
-      <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
-    </div>
-    <div class="govuk-grid-column-full">
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
-          <th class="govuk-table__header">{{__('field_aircraft_registration')}}</th>
-          <th class="govuk-table__header">{{__('field_aircraft_type')}}</th>
-          <th class="govuk-table__header">{{__('field_aircraft_base')}}</th>
-        </tr>
-        </thead>
-        <tbody class="govuk-table__body" id="aircraft_table_row">
-        {% if cookie.getSavedCraft().items | length %}
-          {% for craft in cookie.getSavedCraft().items %}
+        <h2 id="saved_aircraft" class="govuk-heading-l">{{__('title_aircraft')}}</h2>
+        <p class="govuk-body-l">{{__('caption_aircraft_details')}}</p>
+        <p class="govuk-body-m">Search for aircraft </p>
+        <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+      </div>
+      <div class="govuk-grid-column-full">
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <div class="govuk-radios">
-              <td class="govuk-table__cell">
-                <div class="govuk-radios govuk-radios--inline">
-                  <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="aircraft_{{ loop.index }}" name="addCraft" type="radio" value="{{craft.craftId}}">
-                    <label class="govuk-label govuk-radios__label" for="aircraft_{{ loop.index }}"></label>
-                  </div>
-                </div>
-              </td>
-              <td class="govuk-table__cell">{{ craft.registration }}</td>
-              <td class="govuk-table__cell">{{ craft.craftType }}</td>
-              <td class="govuk-table__cell">{{ craft.craftBase }}</td>
+              <th class="govuk-table__header" style="width: 5%;">&nbsp;</th>
+              <th class="govuk-table__header">{{__('field_aircraft_registration')}}</th>
+              <th class="govuk-table__header">{{__('field_aircraft_type')}}</th>
+              <th class="govuk-table__header">{{__('field_aircraft_base')}}</th>
             </tr>
-          {% endfor %}
-        {% else %}
-          {{ m.empty_table_message(__('aircraft_no_records')) }}
-        {% endif %}
-        </tbody>
-      </table>
-      {% if cookie.getSavedCraft().items | length %}
-        {{ pagination.build('previous_aircraft', pages, __)}}
-      {% endif %}
-    </div>
-    <div class="govuk-grid-column-two-thirds">
-      {% if cookie.getSavedCraft().items | length %}
-        <div class="govuk-form-group">
-          <input id="saveCraft" class="govuk-button" type="submit" name="buttonClicked" value="Add to GAR"
-            onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
+          </thead>
+          <tbody class="govuk-table__body" id="aircraft_table_row">
+            {% if cookie
+              .getSavedCraft()
+              .items | length %}
+              {% for craft in cookie.getSavedCraft().items %}
+                <tr class="govuk-table__row">
+                  <div class="govuk-radios">
+                    <td class="govuk-table__cell">
+                      <div class="govuk-radios govuk-radios--inline">
+                        <div class="govuk-radios__item">
+                          <input class="govuk-radios__input" id="aircraft_{{ loop.index }}" name="addCraft" type="radio" value="{{craft.craftId}}">
+                          <label class="govuk-label govuk-radios__label" for="aircraft_{{ loop.index }}"></label>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="govuk-table__cell">{{ craft.registration }}</td>
+                    <td class="govuk-table__cell">{{ craft.craftType }}</td>
+                    <td class="govuk-table__cell">{{ craft.craftBase }}</td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                {{ m.empty_table_message(__('aircraft_no_records')) }}
+              {% endif %}
+            </tbody>
+          </table>
+          {% if cookie
+            .getSavedCraft()
+            .items | length %}
+            {{ pagination.build('previous_aircraft', pages, __)}}
+          {% endif %}
         </div>
-      {% endif %}
+        <div class="govuk-grid-column-two-thirds">
+          {% if cookie
+            .getSavedCraft()
+            .items | length %}
+            <div class="govuk-form-group">
+              <input id="saveCraft" class="govuk-button" type="submit" name="buttonClicked" value="Add to GAR"
+            onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
+            </div>
+          {% endif %}
 
-      <div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
-        <h2 class="govuk-heading-l">{{__('aircraft_add')}}</h2>
-        {% if not cookie.getGarCraft().registration %}
-          <p class="govuk-body-l">{{__('aircraft_add_caption_garfile')}}</p>
-        {% endif %}
-        <div class="govuk-form-group {{ m.form_group_class('craftReg', errors) }}">
-        <label class="govuk-label" for="craftReg">{{__('field_aircraft_registration')}}</label>
-        {{ m.hint('craftReg', __('field_aircraft_registration_hint'))}}
-        {{ m.error_message('craftReg', errors, __) }}
-        <input id="craftReg" name="craftReg" class="govuk-input govuk-input--width-10" autocomplete="off"
-          type="text" maxlength="{{ MAX_REGISTRATION_LENGTH }}"
-          value="{{cookie.getGarCraft().registration}}"
-          aria-describedby="craftReg-hint{{ ' craftReg-error' if errors | containsError('craftReg') }}">
-      </div>
+          {% set craft = cookie.getGarCraft() %}
 
-      <div class="govuk-form-group {{ m.form_group_class('craftType', errors) }}">
-        <label class="govuk-label" for="craftType">{{__('field_aircraft_type')}}</label>
-        {{ m.hint('craftType', __('field_aircraft_type_hint'))}}
-        {{ m.error_message('craftType', errors, __) }}
-        <input id="craftType" name="craftType" class="govuk-input govuk-input--width-20" autocomplete="off"
+          <div class="govuk-form-group {{ m.form_group_class('newCraft', errors) }}">
+            <h2 class="govuk-heading-l">{{__('aircraft_add')}}</h2>
+            {% if not craft.registration %}
+              <p class="govuk-body-l">{{__('aircraft_add_caption_garfile')}}</p>
+            {% endif %}
+            <div class="govuk-form-group {{ m.form_group_class('registration', errors) }}">
+              <label class="govuk-label" for="registration">{{__('field_aircraft_registration')}}</label>
+              {{ m.hint('registration', __('field_aircraft_registration_hint'))}}
+              {{ m.error_message('registration', errors, __) }}
+              <input id="registration" name="registration" class="govuk-input govuk-input--width-10" autocomplete="off"
+                type="text" maxlength="{{ MAX_REGISTRATION_LENGTH }}"
+                value="{{craft.registration}}"
+                aria-describedby="registration-hint{{ ' registration-error' if errors | containsError('registration') }}">
+              {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
+            </div>
+
+            <div class="govuk-form-group {{ m.form_group_class('craftType', errors) }}">
+              <label class="govuk-label" for="craftType">{{__('field_aircraft_type')}}</label>
+              {{ m.hint('craftType', __('field_aircraft_type_hint'))}}
+              {{ m.error_message('craftType', errors, __) }}
+              <input id="craftType" name="craftType" class="govuk-input govuk-input--width-20" autocomplete="off"
           type="text" maxlength="{{ MAX_STRING_LENGTH }}"
-          value="{{cookie.getGarCraft().craftType}}"
+          value="{{craft.craftType}}"
           aria-describedby="craftType-hint{{ ' craftType-error' if errors | containsError('craftType') }}">
+              {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
+            </div>
+
+            {% set legendLabel = __('field_aircraft_base')%}
+            {% set warningMessage = undefined%}
+            {% set isPortChoice = (craft.portChoice === 'Yes')%}
+            {% set portCode = craft.craftBasePort%}
+            {% set lat = craft.craftBaseLat%}
+            {% set long = craft.craftBaseLong%}
+            {% set prefix = 'craftBase'%}
+
+            {{ l.location(legendLabel, 
+                      warningMessage, 
+                      isPortChoice, 
+                      portCode, 
+                      lat, 
+                      long, 
+                      prefix, 
+                      errors, 
+                      __) }}
+            {# Start buttons #}
+          </div>
+          {{ m.submit_buttons('Add craft to GAR', csrfToken, __) }}
+        </form>
+        {# End buttons #}
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        {{ m.exit_without_saving(csrfToken, __) }}
       </div>
 
-      <div class="govuk-form-group {{ m.form_group_class('craftBase', errors) }}">
-        <label class="govuk-label" for="craftBase">{{__('field_aircraft_base')}}</label>
-        <span id="craftBase-hint" class="govuk-hint">
-          Provide the IATA / ICAO code or coordinates (decimal). You are only required to enter coordinates if your port does not have an IATA / ICAO code. Provide coordinates to 4 decimal places
-        </span>
-        {{ m.error_message('craftBase', errors, __) }}
-        <input id="craftBase" name="craftBase" class="govuk-input govuk-input--width-10" autocomplete="off"
-          type="text" value="{{cookie.getGarCraft().craftBase | upper }}"
-          aria-describedby="craftBase-hint{{ ' craftBase-error' if errors | containsError('craftBase') }}">
-      </div>
-    {# Start buttons #}</div>
-        {{ m.submit_buttons('Add craft to GAR', csrfToken, __) }}
-    </form>
-    {# End buttons #}
-	  </div>
-    <div class="govuk-grid-column-two-thirds">
-      {{ m.exit_without_saving(csrfToken, __) }}
     </div>
-    <script>
-    $(document).ready(function() {
-      $('th').each(function(col) {
-        $(this).hover(
-        function() { $(this).addClass('focus'); },
-        function() { $(this).removeClass('focus'); }
-      );
-    $(this).click(function() {
-      if ($(this).is('.asc')) {
-        $(this).removeClass('asc');
-        $(this).addClass('desc selected');
-        sortOrder = -1;
-      }
-      else {
-        $(this).addClass('asc selected');
-        $(this).removeClass('desc');
-        sortOrder = 1;
-      }
-      $(this).siblings().removeClass('asc selected');
-      $(this).siblings().removeClass('desc selected');
-      var arrData = $('table').find('tbody >tr:has(td)').get();
-      arrData.sort(function(a, b) {
-        var val1 = $(a).children('td').eq(col).text().toUpperCase();
-        var val2 = $(b).children('td').eq(col).text().toUpperCase();
-        if($.isNumeric(val1) && $.isNumeric(val2))
-        return sortOrder == 1 ? val1-val2 : val2-val1;
-        else
-            return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
-      });
-      $.each(arrData, function(index, row) {
-        $('tbody').append(row);
-      });
-    });
-      });
-    });
-    </script>
-</div>
-
-{% endblock %}
+  {% endblock %}

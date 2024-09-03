@@ -28,7 +28,7 @@ describe('Organisation Edit Users Get Controller', () => {
       render: sinon.spy(),
     };
 
-    orgApiStub = sinon.stub(orgApi, 'getUsers');
+    orgApiStub = sinon.stub(orgApi, 'getUserById');
   });
 
   afterEach(() => {
@@ -57,7 +57,7 @@ describe('Organisation Edit Users Get Controller', () => {
       expect(req.session.errMsg).to.eql({ message: 'Failed to find user details. Try again' });
       expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
       expect(res.render).to.not.have.been.called;
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1');
+      expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
     });
   });
 
@@ -65,13 +65,7 @@ describe('Organisation Edit Users Get Controller', () => {
     const cookie = new CookieModel(req);
 
     orgApiStub.resolves(JSON.stringify({
-      items: [
-        { id: 'PERSON-1', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
-        { id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
-        { id: 'PERSON-3', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
-        { id: 'PERSON-4', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
-        { id: 'PERSON-5', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
-      ],
+      id: 'PERSON-1', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' }  
     }));
     const callController = async () => {
       await controller(req, res);
@@ -85,7 +79,7 @@ describe('Organisation Edit Users Get Controller', () => {
         orgUser: [],
         roles,
       });
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1');
+      expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
     });
   });
 
@@ -93,13 +87,7 @@ describe('Organisation Edit Users Get Controller', () => {
     const cookie = new CookieModel(req);
 
     orgApiStub.resolves(JSON.stringify({
-      items: [
-        { id: 'PERSON-1', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
-        { id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID', role: { name: 'User' } },
-        { id: 'PERSON-3', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
-        { id: 'PERSON-4', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' } },
-        { id: 'PERSON-5', userId: 'EXAMPLE-EDIT-USER-ID', role: { name: 'Admin' } },
-      ],
+      id: 'PERSON-1', userId: 'EXAMPLE-EDIT-USER-ID-2', role: { name: 'User' },  
     }));
     const callController = async () => {
       await controller(req, res);
@@ -110,13 +98,11 @@ describe('Organisation Edit Users Get Controller', () => {
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.not.have.been.calledOnceWithExactly('app/organisation/editusers/index', {
         cookie,
-        orgUser: [
-          { id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID', role: 'User' },
-          { id: 'PERSON-5', userId: 'EXAMPLE-EDIT-USER-ID', role: 'Admin' },
-        ],
+        orgUser: {
+           id: 'PERSON-2', userId: 'EXAMPLE-EDIT-USER-ID', role: 'User' },
         roles,
       });
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1');
+      expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
     });
   });
 });

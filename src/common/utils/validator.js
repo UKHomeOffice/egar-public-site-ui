@@ -5,9 +5,51 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../config/index');
+const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT, MAX_ALLOWED_CANCELLATION_TIME_TO_CBP } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList } = require('../../common/utils/autocomplete');
+const { documentTypes } = require('./utils');
+
+/**
+ * isAbleToCancelGar
+ * @param {string|null} lastDepartureDateString
+ * @return {Date}
+ */
+const isAbleToCancelGar = (lastDepartureDateString) => {
+  if (lastDepartureDateString === null) return true;
+  if (lastDepartureDateString && typeof lastDepartureDateString === "string") {
+    const cbpSubmittedDate = new Date(lastDepartureDateString);
+    const today = new Date().getTime();
+    return (cbpSubmittedDate.getTime() + MAX_ALLOWED_CANCELLATION_TIME_TO_CBP) > today;
+  } else {
+    throw new Error(
+      `lastDepartureDateString: "${lastDepartureDateString}", type: "${typeof lastDepartureDateString}", is not null or a valid string`
+    )
+  }
+
+}
+
+function isValidDocumentType(documentType) {
+  return documentTypes.includes(documentType);
+}
+
+function isOtherDocumentWithDocumentDesc(args){
+  if (!args) return false;
+  const [documentType, documentDesc] = args;
+
+  return isEmpty(documentDesc) || documentType === "Other" 
+}
+
+/**
+ * @param {Date} date
+ * @return {Date}
+ */
+function convertDateToUTC(date) {
+  const UTCOffsetMinutes = new Date().getTimezoneOffset();
+  const UTCOffsetMilliseconds = UTCOffsetMinutes * 60 * 1000;
+
+  return new Date(date.getTime() + UTCOffsetMilliseconds);
+}
 
 /**
  * Check if the string has leading spaces
@@ -25,6 +67,10 @@ function hasLeadingSpace(value) {
  */
 function hasOnlySymbols(value) {
   return (/^[^a-zA-Z0-9]+$/.test(value));
+}
+
+function containTabs(value) {
+  return /\t+/.test(value);
 }
 
 /**
@@ -63,6 +109,10 @@ function notEmpty(value) {
 
   // check for only symbols
   if (hasOnlySymbols(value)) {
+    return false;
+  }
+
+  if(containTabs(value)) {
     return false;
   }
   return true;
@@ -248,26 +298,34 @@ function dateNotMoreThanMonthInFuture(dObj) {
   return Boolean(providedDate) && providedDate <= nextMonth;
 }
 
+/**
+ * @param {Date} providedDate
+ * @return {Boolean}
+ */
 function dateNotMoreThanTwoDaysInFuture(providedDate) {
-  const now = new Date();
-  const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
-  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS_MILLISECONDS);
-
   if (!(providedDate instanceof Date)) {
     return false;
   }
+
+  const now = convertDateToUTC(new Date());
+  const TWO_DAYS_MILLISECONDS = 2 * 24 * 60 * 60 * 1000;
+  const maxDepartureDate = new Date(now.getTime() + TWO_DAYS_MILLISECONDS);
 
   return Boolean(providedDate) && providedDate.getTime() <= maxDepartureDate.getTime();
 }
 
-function isTwoHoursPriorDeparture(providedDate) {  
-  const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
-  const today = new Date()
-  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
-
+/**
+ * @param {Date} providedDate
+ * @return {Boolean}
+ */
+function isTwoHoursPriorDeparture(providedDate) {
   if (!(providedDate instanceof Date)) {
     return false;
   }
+
+  const today = convertDateToUTC(new Date());
+  const TWO_HOURS_MILLISECONDS = 2 * 60 * 60 * 1000;
+  const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
 
   return Boolean(providedDate) && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime();
 }    
@@ -446,19 +504,7 @@ function email(value) {
   return regex.test(value);
 }
 
-/**
- * Returns true if valid portcode given.
- * Returns false if ZZZZ or YYYY entered without coords.
- * @param {Object} portObj contains keys [portCode, lat, long]
- * @returns {Boolean} true if valid port, false if zzzz without coords
- */
-function validatePortCoords(portObj) {
-  const portCode = portObj.portCode.toUpperCase();
-  if (portCode === 'ZZZZ' || portCode === 'YYYY') {
-    return ((portObj.lat !== '') && (portObj.long !== ''));
-  }
-  return true;
-}
+
 
 function latitude(value) {
   const regex = /^-?([1-8]?[0-9]\.{1}\d{6}$|90\.{1}0{6}$)/;
@@ -470,9 +516,21 @@ function longitude(value) {
   return regex.test(value);
 }
 
-// very basic min 5 and max 20 numbers
+/*
+This function tries to allow:
+Local UK numbers beginning 0 e.g. 01225123456 or 07777777777
+International numbers beginning either + or 00
+Spaces, hyphens, brackets and anything other than numbers are rejected.
+The number is not validated beyond these requirements.
+Min and max lengths depend on format: 
+-UK numbers and international numnbers starting + can range 9-34 chars
+-International numbers starting 00 10-15
+These lengths are a bit arbitrary.
+*/
 function validIntlPhone(value) {
-  const regex = /^[0-9]{5,20}$/;
+  const regex =  /^(\+|00?)[1-9][0-9]{7,32}$/;
+
+
   return regex.test(value);
 }
 
@@ -650,54 +708,6 @@ function autoTab(field1, dayMonthOrYear, field2) {
   }
 }
 
-function sanitiseCoordinateDegreesOrSeconds(input, type) {
-  const regex = (type === 'seconds') ? /^\d{0,3}(\.\d{0,4})?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
-
-  return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
-
-}
-
-function sanitiseCoordinateMinutes(input, type) {
-  const regex = (type === 'minutes') ? /^\d{0,2}?$/ : /^[0-9]{1,3}$|^\[0-9]{1,3}$/;
-
-  return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
-
-}
-
-function autoTab1(field1, degreesMinutesOrSeconds, field2) {
-
-  let len = (degreesMinutesOrSeconds === 'minutes') ? 2 : 3;
-
-  let field1Value = sanitiseCoordinateMinutes(field1.value, degreesMinutesOrSeconds);
-
-  if (field1Value.length == len) {
-    field2.focus();
-  }
-}
-
-function invalidLatDirection(value) {
-  value = value || '';
-  value = value.toUpperCase();
-  if (['S', 'N'].includes(value)) {
-    return true;
-  }
-  else {
-    return false;
-  }
-
-}
-
-function invalidLongDirection(value) {
-  value = value || '';
-  value = value.toUpperCase();
-  if (['W', 'E'].includes(value)) {
-    return true;
-  }
-  else {
-    return false;
-  }
-
-}
 
 function isAlphanumeric(input) {
   const alphanumericRegex = /^[a-zA-Z0-9]+$/;
@@ -755,7 +765,6 @@ module.exports = {
   onlySymbols,
   validateChains,
   genValidations,
-  validatePortCoords,
   realDate,
   realDateInFuture,
   bornAfter1900,
@@ -786,11 +795,6 @@ module.exports = {
   birthDate,
   dateNotInPast,
   autoTab,
-  autoTab1,
-  sanitiseCoordinateDegreesOrSeconds,
-  invalidLatDirection,
-  invalidLongDirection,
-  sanitiseCoordinateMinutes,
   preventZ,
   dateNotMoreThanMonthInFuture,
   isAlphanumeric,
@@ -799,5 +803,10 @@ module.exports = {
   isPostCodeValidCharacters,
   isValidAirportCode,
   dateNotMoreThanTwoDaysInFuture,
-  isTwoHoursPriorDeparture
+  isTwoHoursPriorDeparture,
+  convertDateToUTC,
+  containTabs,
+  isValidDocumentType,
+  isOtherDocumentWithDocumentDesc,
+  isAbleToCancelGar
 };

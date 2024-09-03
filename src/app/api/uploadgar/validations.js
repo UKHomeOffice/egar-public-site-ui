@@ -5,6 +5,11 @@ const airportValidation = require('../../../common/utils/airportValidation');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
+const { documentTypes } = require('../../../common/utils/utils');
+
+const listedDocumentTypes = documentTypes
+  .map(documentType => `"${documentType}"`)
+  .join(", ")
 
 function getVoyageFieldLabel(key) {
   switch (key) {
@@ -41,10 +46,10 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
   const validationArr = [
     [new ValidationRule(validator.isValidAirportCode, '', voyageObj.arrivalPort, 'Arrival port should be an ICAO or IATA code')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalPort, 'Enter a value for the arrival port')],
-    [new ValidationRule(validator.preventZ, '', voyageObj.arrivalPort, 'Add ICAO/IATA or Latitude/Longitude Co-ordinates for the location')],
+    [new ValidationRule(validator.preventZ, '', voyageObj.arrivalPort, `Arrival Port: ${__('prevent_zzzz_or_yyyy_message')}`)],
     [new ValidationRule(validator.isValidAirportCode, '', voyageObj.departurePort, 'Departure port should be an ICAO or IATA code')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departurePort, 'Enter a value for the departure port')],
-    [new ValidationRule(validator.preventZ, '', voyageObj.departurePort, 'Add ICAO/IATA or Latitude/Longitude Co-ordinates for the location')],
+    [new ValidationRule(validator.preventZ, '', voyageObj.departurePort, `Departure Port: ${__('prevent_zzzz_or_yyyy_message')}`)],
     [new ValidationRule(airportValidation.includesOneBritishAirport, '', [voyageObj.departurePort, voyageObj.arrivalPort], airportValidation.notBritishMsg)],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalTime, 'Enter a value for the arrival time')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.departureTime, 'Enter a value for the departure time')],
@@ -89,7 +94,26 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     const peopleType = crew.peopleType === 'Crew' ? crewLabel : passengerLabel;
     const name = i18n.__('validator_api_uploadgar_person_type_person_name', { peopleType, firstName: crew.firstName, lastName: crew.lastName });
 
-    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.documentType, `Enter a valid document type for ${name}`)]);
+    validationArr.push([new ValidationRule(
+      validator.isValidDocumentType, 
+      '', 
+      crew.documentType, 
+      `Enter a valid document type for ${name}, it should be ${listedDocumentTypes}, not "${crew.documentType ?? ''}"`
+    )]);
+    validationArr.push([new ValidationRule(
+      validator.isOtherDocumentWithDocumentDesc, 
+      '', 
+      [crew.documentType, crew.documentDesc], 
+      `For ${name}, "${crew.documentType}" document type should be "Other" or remove "${crew.documentDesc}" value from document description`
+    )]);
+
+    if (crew.documentType === 'Other') {
+      validationArr.push([
+        new ValidationRule(validator.notEmpty, 'travelDocumentOther', crew.documentDesc, `For ${name} enter the document description you are using`),
+        new ValidationRule(validator.validName, 'travelDocumentOther', crew.documentDesc, `For ${name} enter a real document description`),
+      ]);
+    }
+    
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${name}`)]);
     validationArr.push([
       new ValidationRule(validator.validISOCountryLength, '', crew.issuingState, `Enter a valid document issuing state for ${name}. Must be a ISO 3166 country code`),

@@ -77,7 +77,7 @@ const cellMap = {
 
 // The cell mappings for manifests, i.e. crew and passengers, this is for the columns
 const manifestMap = {
-  documentType: { location: 'A', transform: [transformers.titleCase, transformers.docTypeOrUndefined] },
+  documentType: { location: 'A', transform: [transformers.titleCase] },
   documentDesc: { location: 'B' },
   issuingState: { location: 'C', transform: [transformers.toUpper] },
   documentNumber: { location: 'D', transform: [transformers.numToString] },
@@ -135,8 +135,6 @@ module.exports = (req, res) => {
   crew.forEach((person) => {
     const crewmember = person;
     crewmember.peopleType = 'Crew';
-    crewmember.documentType = crewmember.documentDesc ? 'Other' : crewmember.documentType;
-    logger.debug(crewmember.documentDesc);
   });
 
   const passengerParser = new ExcelParser(worksheet, manifestMap, passengerMapConfig);
@@ -144,9 +142,8 @@ module.exports = (req, res) => {
   passengers.forEach((person) => {
     const passenger = person;
     passenger.peopleType = 'Passenger';
-    passenger.documentType = passenger.documentDesc ? 'Other' : passenger.documentType;
-    logger.debug(passenger.documentDesc);
   });
+
   validator.validateChains(validations(voyageParser.parse(), crew, passengers))
     .then(() => {
       logger.info('Uploaded excel sheet is valid, creating GAR via API');
@@ -170,7 +167,7 @@ module.exports = (req, res) => {
           Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
             .then(() => {
               logger.info('Updated GAR with excel data');
-              req.session.save(() => res.redirect('/garfile/review'));
+              req.session.save(() => res.redirect('/garfile/review?from=uploadGar'));
             })
             .catch((err) => {
               logger.error('Failed to update API with GAR information');

@@ -151,10 +151,10 @@ describe('Cookie Model', () => {
     expect(cookie.getGarStatus()).to.eq('Submitted');
 
     expect(cookie.getEditCraft()).to.eql({});
-    cookie.setEditCraft({ registration: 1, craftBase: 'Example' });
-    expect(cookie.getEditCraft()).to.eql({ registration: 1, craftBase: 'Example' });
-    cookie.updateEditCraft('exampleReg', 'exampleType', 'exampleBase');
-    expect(cookie.getEditCraft()).to.eql({ registration: 'exampleReg', craftType: 'exampleType', craftBase: 'exampleBase' });
+    cookie.setEditCraft({ registration: 1, craftBase: 'LHR' });
+    expect(cookie.getEditCraft()).to.eql({ registration: 1, craftBase: 'LHR', craftBasePort: 'LHR',  portChoice: 'Yes'});
+    cookie.updateEditCraft('exampleReg', 'exampleType', 'LHR');
+    expect(cookie.getEditCraft()).to.eql({ registration: 'exampleReg', craftType: 'exampleType', craftBase: 'LHR', craftBasePort: 'LHR',  portChoice: 'Yes' });
     cookie.clearEditCraft();
     expect(cookie.getEditCraft()).to.eql({});
   });

@@ -12,21 +12,14 @@ steps:
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
     environment:
-      DOCKER_PASSWORD:
-        from_secret: DOCKER_PASSWORD
-      DOCKER_REGISTRY_URL:
-        from_secret: DOCKER_REGISTRY_URL
-      DOCKER_USERNAME:
-        from_secret: DOCKER_USERNAME
+      AWS_ACCESS_KEY_ID:
+        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_SECRET_ACCESS_KEY
+      DOCKER_REGISTRY_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
+      REPO: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui
     commands:
-      # Wait for the docker service to be up
-      - echo "Checking for docker availability."
-      - n=0; while [ "$n" -lt 60 ] && ! docker stats --no-stream >/dev/null 2>&1; do n=$(( n + 1 )); sleep 1; done
-      - echo "echo docker now available."
-      - docker login -u="$${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} $${DOCKER_REGISTRY_URL}
-      - docker build -t egar_ui-public-site:$${DRONE_COMMIT} .
-      - docker tag egar_ui-public-site:$${DRONE_COMMIT} $${DOCKER_REGISTRY_URL}/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
-      - docker push quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+      - source ./ops/build_and_push.sh
     settings:
       group: build-stage
 
@@ -54,7 +47,7 @@ steps:
         cpu: 1000
         memory: 1024Mi
     environment:
-      IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:${DRONE_COMMIT}
+      IMAGE_NAME: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:${DRONE_COMMIT}
       IGNORE_UNFIXED: true
     when:
       event:
@@ -87,22 +80,8 @@ steps:
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
-      - export TAGGED_VERSION=$${DRONE_COMMIT}
-      - export KUBE_SERVER=$${DEV_KUBE_SERVER}
-      - export KUBE_TOKEN=$${DEV_KUBE_TOKEN}
-      - export PUBLIC_SITE_EXTERNAL_URL=$${DEV_URL_SERVICE}
-      - export PUBLIC_SITE_INTERNAL_URL=$${DEV_BASE_URL}
-      - export KUBE_ARTIFACTORY_APP_SECRET=$${DEV_KUBE_ARTIFACTORY_APP_SECRET}
-      - source ./ops/common_lib
-      - source ./ops/notprod_values
-      - kd --timeout=6m --file ops/kube/artifactory-secret.yml
-      - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
-      - kd --timeout=12m --file ops/kube/public-site-deployment.yml
-      - kd --timeout=6m --file ops/kube/public-site-service.yml
-      - kd --timeout=6m --file ops/kube/public-site-internal-ingress.yml
-      - kd --timeout=6m --file ops/kube/public-site-internal-tls.yml
-      - kd --timeout=6m --file ops/kube/public-site-external-ingress.yml
-      - kd --timeout=6m --file ops/kube/public-site-external-tls.yml
+      - source ./ops/dev_deploy_vars.sh
+      - source ./ops/deploy.sh
     environment:
       INGRESS_CLASS: nginx-internal
       INSECURE_SKIP_TLS_VERIFY: true
@@ -110,8 +89,6 @@ steps:
       NODE_ENV: development
       DEV_BASE_URL:
         from_secret: DEV_BASE_URL
-      DEV_KUBE_ARTIFACTORY_APP_SECRET:
-        from_secret: DEV_KUBE_ARTIFACTORY_APP_SECRET
       DEV_KUBE_SERVER:
         from_secret: DEV_KUBE_SERVER
       DEV_KUBE_TOKEN:
@@ -138,19 +115,8 @@ steps:
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
-      - export TAGGED_VERSION=$${DRONE_COMMIT}
-      - export KUBE_SERVER=$${TEST_KUBE_SERVER}
-      - export KUBE_TOKEN=$${TEST_KUBE_TOKEN}
-      - export PUBLIC_SITE_INTERNAL_URL=$${TEST_BASE_URL}
-      - export KUBE_ARTIFACTORY_APP_SECRET=$${TEST_KUBE_ARTIFACTORY_APP_SECRET}
-      - source ./ops/common_lib
-      - source ./ops/notprod_values
-      - kd --timeout=6m --file ops/kube/artifactory-secret.yml
-      - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
-      - kd --timeout=12m --file ops/kube/public-site-deployment.yml
-      - kd --timeout=6m --file ops/kube/public-site-service.yml
-      - kd --timeout=6m --file ops/kube/public-site-internal-ingress.yml
-      - kd --timeout=6m --file ops/kube/public-site-internal-tls.yml
+      - source ./ops/test_deploy_vars.sh
+      - source ./ops/test_deploy.sh
     environment:
       INGRESS_CLASS: nginx-internal
       INSECURE_SKIP_TLS_VERIFY: true
@@ -158,9 +124,6 @@ steps:
       NODE_ENV: testing
       TEST_BASE_URL:
         from_secret: TEST_BASE_URL
-      TEST_KUBE_ARTIFACTORY_APP_SECRET:
-      #DELIBERATE - getting this from dev value to avoid duplicating. may need to review these tokens.
-        from_secret: DEV_KUBE_ARTIFACTORY_APP_SECRET
       TEST_KUBE_SERVER:
         from_secret: TEST_KUBE_SERVER
       TEST_KUBE_TOKEN:
@@ -187,22 +150,8 @@ steps:
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
-      - export TAGGED_VERSION=$${DRONE_COMMIT}
-      - export KUBE_ARTIFACTORY_APP_SECRET=$${SIT_KUBE_ARTIFACTORY_APP_SECRET}
-      - export KUBE_SERVER=$${SIT_KUBE_SERVER}
-      - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
-      - export PUBLIC_SITE_EXTERNAL_URL=$${SIT_BASE_URL_SERVICE}
-      - export PUBLIC_SITE_INTERNAL_URL=$${SIT_BASE_URL}
-      - source ./ops/common_lib
-      - source ./ops/notprod_values
-      - kd --timeout=6m --file ops/kube/artifactory-secret.yml
-      - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
-      - kd --timeout=12m --file ops/kube/public-site-deployment.yml
-      - kd --timeout=6m --file ops/kube/public-site-service.yml
-      - kd --timeout=6m --file ops/kube/public-site-internal-ingress.yml
-      - kd --timeout=6m --file ops/kube/public-site-internal-tls.yml
-      - kd --timeout=6m --file ops/kube/public-site-external-ingress.yml
-      - kd --timeout=6m --file ops/kube/public-site-external-tls.yml
+      - source ./ops/sit_deploy_vars.sh
+      - source ./ops/deploy.sh
     environment:
       INGRESS_CLASS: nginx-internal
       INSECURE_SKIP_TLS_VERIFY: true
@@ -212,8 +161,6 @@ steps:
         from_secret: SIT_BASE_URL
       SIT_BASE_URL_SERVICE:
         from_secret: SIT_BASE_URL_SERVICE
-      SIT_KUBE_ARTIFACTORY_APP_SECRET:
-        from_secret: SIT_KUBE_ARTIFACTORY_APP_SECRET
       SIT_KUBE_SERVER:
         from_secret: SIT_KUBE_SERVER
       SIT_KUBE_TOKEN:
@@ -303,23 +250,8 @@ steps:
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
-      - export TAGGED_VERSION=$${DRONE_COMMIT}
-      - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
-      - export KUBE_ARTIFACTORY_APP_SECRET=$${STAGING_KUBE_ARTIFACTORY_APP_SECRET}
-      - export KUBE_SERVER=$${STAGING_KUBE_SERVER}
-      - export KUBE_TOKEN=$${STAGING_KUBE_TOKEN}
-      - export PUBLIC_SITE_EXTERNAL_URL=$${STAGING_BASE_URL_SERVICE}
-      - export PUBLIC_SITE_INTERNAL_URL=$${STAGING_BASE_URL}
-      - source ./ops/common_lib
-      - source ./ops/notprod_values
-      - kd --timeout=6m --file ops/kube/artifactory-secret.yml
-      - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
-      - kd --timeout=6m --file ops/kube/public-site-deployment.yml
-      - kd --timeout=6m --file ops/kube/public-site-service.yml
-      - kd --timeout=6m --file ops/kube/public-site-internal-ingress.yml
-      - kd --timeout=6m --file ops/kube/public-site-internal-tls.yml
-      - kd --timeout=6m --file ops/kube/public-site-external-ingress.yml
-      - kd --timeout=6m --file ops/kube/public-site-external-tls.yml
+      - source ./ops/staging_deploy_vars.sh
+      - source ./ops/deploy.sh
     environment:
       DOCKER_REGISTRY_URL:
         from_secret: DOCKER_REGISTRY_URL
@@ -331,8 +263,6 @@ steps:
         from_secret: STAGING_BASE_URL
       STAGING_BASE_URL_SERVICE:
         from_secret: STAGING_BASE_URL_SERVICE
-      STAGING_KUBE_ARTIFACTORY_APP_SECRET:
-        from_secret: STAGING_KUBE_ARTIFACTORY_APP_SECRET
       STAGING_KUBE_SERVER:
         from_secret: STAGING_KUBE_SERVER
       STAGING_KUBE_TOKEN:
@@ -364,20 +294,8 @@ steps:
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
-      - export TAGGED_VERSION=$${DRONE_COMMIT}
-      - export DOCKER_REGISTRY_URL=$${DOCKER_REGISTRY_URL}
-      - export KUBE_ARTIFACTORY_APP_SECRET=$${PRODUCTION_KUBE_ARTIFACTORY_APP_SECRET}
-      - export KUBE_SERVER=$${PRODUCTION_KUBE_SERVER}
-      - export KUBE_TOKEN=$${PRODUCTION_KUBE_TOKEN}
-      - export PUBLIC_SITE_EXTERNAL_URL=$${PRODUCTION_BASE_URL_SERVICE}
-      - source ./ops/common_lib
-      - source ./ops/prod_values
-      - kd --timeout=6m --file ops/kube/artifactory-secret.yml
-      - kd --timeout=6m --file ops/kube/public-site-network-policy.yml
-      - kd --timeout=6m --file ops/kube/public-site-deployment.yml
-      - kd --timeout=6m --file ops/kube/public-site-service.yml
-      - kd --timeout=6m --file ops/kube/public-site-external-ingress.yml
-      - kd --timeout=6m --file ops/kube/public-site-external-tls.yml
+      - source ./ops/prod_deploy_vars.sh
+      - source ./ops/prod_deploy.sh
     environment:
       DOCKER_REGISTRY_URL:
         from_secret: DOCKER_REGISTRY_URL
@@ -387,8 +305,6 @@ steps:
       NODE_ENV: production
       PRODUCTION_BASE_URL_SERVICE:
         from_secret: PRODUCTION_BASE_URL_SERVICE
-      PRODUCTION_KUBE_ARTIFACTORY_APP_SECRET:
-        from_secret: PRODUCTION_KUBE_ARTIFACTORY_APP_SECRET
       PRODUCTION_KUBE_SERVER:
         from_secret: PRODUCTION_KUBE_SERVER
       PRODUCTION_KUBE_TOKEN:
@@ -442,21 +358,15 @@ steps:
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
     environment:
-      DOCKER_PASSWORD:
-        from_secret: DOCKER_PASSWORD
-      DOCKER_REGISTRY_URL:
-        from_secret: DOCKER_REGISTRY_URL
-      DOCKER_USERNAME:
-        from_secret: DOCKER_USERNAME
+      AWS_ACCESS_KEY_ID:
+        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_SECRET_ACCESS_KEY
+      DOCKER_REGISTRY_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
+      REPO: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui
+
     commands:
-      # Wait for the docker service to be up
-      - echo "Checking for docker availability."
-      - n=0; while [ "$n" -lt 60 ] && ! docker stats --no-stream >/dev/null 2>&1; do n=$(( n + 1 )); sleep 1; done
-      - echo "echo docker now available."
-      - docker login -u="$${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} $${DOCKER_REGISTRY_URL}
-      - docker build -t egar_ui-public-site:$${DRONE_COMMIT} .
-      - docker tag egar_ui-public-site:$${DRONE_COMMIT} $${DOCKER_REGISTRY_URL}/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
-      - docker push quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+      - source ./ops/build_and_push.sh
     settings:
       group: build-stage
 
@@ -467,7 +377,8 @@ steps:
         cpu: 1000
         memory: 1024Mi
     environment:
-      IMAGE_NAME: quay.io/ukhomeofficedigital/egar-public-site-ui:$${DRONE_COMMIT}
+      IMAGE_NAME: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:${DRONE_COMMIT}
+      IGNORE_UNFIXED: true
     when:
       event:
       - cron
@@ -516,12 +427,4 @@ trigger:
   event:
     - cron
   cron:
-        - scheduled_vulnerability_scan
-  target:
-      exclude:
-        - production
-
-
-
-
-
+    - scheduled_vulnerability_scan

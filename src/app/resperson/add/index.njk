@@ -1,0 +1,49 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+  {{ __('error_prefix') if errors }} GAR | Save Responsible person | {{ __('title') }}
+{% endblock %}
+
+{% set active = '/resperson' %}
+
+{% block header %}
+  {% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+  <a href="/resperson" class="govuk-back-link">{{ __('nav_back') }}</a>
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="/resperson/add" autocomplete="off" class="form-group"
+      method="post" role="form">
+        <h1 class="govuk-heading-xl">{{ __('heading_responsible_person') }}</h1>
+        <p class="govuk-body-l">{{ __('responsible_person_caption') }}
+        </p>
+        {% include "responsible-person-details.njk" %}
+        <div class="govuk-form-group">
+          <input id="add-and-exit" class="govuk-button" type="submit"
+          name="buttonClicked"
+          value="{{__('form_add_and_exit')}}"
+          onclick="sendAnalytics(event, 'Saved Aircraft Add - Save', 'click')">
+          <p class="govuk-body-m">
+            <a class="govuk-button govuk-button--secondary" href="/resperson#" onclick="sendAnalytics(event, 'Saved Responsible person Add - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
+          </p>
+        </div>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      </form>
+    </div>
+  </div>
+  <script>
+    accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#responsibleCountry')});
+  </script>
+{% endblock %}

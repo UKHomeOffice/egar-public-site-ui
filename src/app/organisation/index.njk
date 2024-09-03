@@ -1,6 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/pagination.njk" as pagination %}
 
 {% block pageTitle %}
   Manage organisation | Submit a General Aviation Report (GAR)
@@ -17,6 +18,7 @@
 {% endblock %}
 
 {% block content %}
+  <script type="text/javascript" src="/javascripts/organisation.js"></script>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
@@ -56,30 +58,28 @@
         </a>
       </div>
 
-      <script>
-        $(document).ready(function () {
-          $("#organisation-search").on("keyup", function () {
-            var value = $(this)
-              .val()
-              .toLowerCase();
-            $("#organisation_table_row tr").filter(function () {
-              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-          });
-        });
-      </script>
-
-      <div class="govuk-grid-column-full">
-        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+      <form id="organisationSearch" action="/organisation/users/search" class="form-group" method="GET" role="form" >
+        <div class="govuk-grid-column-full">
+          <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+        </div>
         <p class="govuk-body-m">Search for people within the organisation,  {{ cookie.getOrganisationName() }}</p>
-        <input class="govuk-input govuk-input--width-20" id="organisation-search" name="organisation-search" type="text" placeholder="Search" style="margin-bottom: 10px">
-      </div>
+        <input class="govuk-input govuk-input--width-20" id="organisation-search" name="searchUserName" type="text" value="{{ searchUserName }}" placeholder="Search" required>
+        
+        <button id="searchUsers" class="govuk-button" type="submit"> 
+            <svg class="gem-c-search__icon" width="20" height="15" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"  aria-hidden="true" focusable="false">
+              <circle cx="12.0161" cy="11.0161" r="8.51613" stroke="white" stroke-width="3"></circle>
+              <line x1="17.8668" y1="17.3587" x2="26.4475" y2="25.9393" stroke="white" stroke-width="3"></line>
+            </svg>
+        </button>    
+        <a class="govuk-button" href="/organisation">Refresh Search</a>
+      </form>
+
+      <h1 class="govuk-heading-l">{{__('title_organisation_users')}}</h1>
+      <p class="govuk-body-l">{{__('organisations_users_caption')}}</p>
+      <p class="govuk-body-s">{{__('person_sort')}}</p>
+      
       <form id="organisation" action="/organisation" class="form-group" method="post" role="form" >
         <div class="govuk-grid-column-full">
-          <h1 class="govuk-heading-l">{{__('title_organisation_users')}}</h1>
-          <p class="govuk-body-l">{{__('organisations_users_caption')}}</p>
-          <p class="govuk-body-s">{{__('person_sort')}}</p>
-
           <table class="govuk-table" id="organisation_table">
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
@@ -96,7 +96,7 @@
                   <tr class="govuk-table__row">
                     {% if user.isEditable %}
                       <td class="govuk-table__cell">
-                        <button id="edit_user_{{ loop.index }}" class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}">
+                        <button id="edit_user_{{ loop.index }}" class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}" type="submit">
                           {{ user.lastName }}
                         </button>
                       </td>
@@ -109,7 +109,7 @@
                     <td class="govuk-table__cell">
                       {% if user.isEditable %}
 
-                        <button id="delete_user_{{ loop.index }}" class="govuk-link btn-link" name="deleteUser" value="{{user.email}}">
+                        <button id="delete_user_{{ loop.index }}" class="govuk-link btn-link" name="deleteUser" value="{{user.email}}" type="submit">
                           {{ __('table_delete') }}
                         </button>
                       {% endif %}
@@ -122,68 +122,19 @@
             </tbody>
           </table>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+          
+            {% if orgUsers | length and pages %}
+              {{ pagination.build('organisation', pages, __)}}
+            {% endif %}
         </form>
-        {% if orgUsers | length %}
+        <input type="hidden" id="current-pg" value="{{currentPage}}" >
+
+        {% if orgUsers | length  and pages %}
           <a href="/organisation/users/export" class="govuk-button">Download CSV</a>
         {% endif %}
+
       </div>
-      <script>
-        $(document).ready(function () {
-          $('th').each(function (col) {
-            $(this).hover(function () {
-              $(this).addClass('focus');
-            }, function () {
-              $(this).removeClass('focus');
-            });
-            $(this).click(function () {
-              if ($(this).is('.asc')) {
-                $(this).removeClass('asc');
-                $(this).addClass('desc selected');
-                sortOrder = -1;
-              } else {
-                $(this).addClass('asc selected');
-                $(this).removeClass('desc');
-                sortOrder = 1;
-              }
-              $(this)
-                .siblings()
-                .removeClass('asc selected');
-              $(this)
-                .siblings()
-                .removeClass('desc selected');
-              var arrData = $('table')
-                .find('tbody >tr:has(td)')
-                .get();
-              arrData.sort(function (a, b) {
-                var val1 = $(a)
-                  .children('td')
-                  .eq(col)
-                  .text()
-                  .toUpperCase();
-                var val2 = $(b)
-                  .children('td')
-                  .eq(col)
-                  .text()
-                  .toUpperCase();
-                if ($.isNumeric(val1) && $.isNumeric(val2)) 
-                  return sortOrder == 1
-                    ? val1 - val2
-                    : val2 - val1;
-                else 
-                  return (val1 < val2)
-                    ? -sortOrder
-                    : (val1 > val2)
-                      ? sortOrder
-                      : 0;
-                }
-              );
-              $.each(arrData, function (index, row) {
-                $('tbody').append(row);
-              });
-            });
-          });
-        });
-      </script>
+
     </div>
 
   {% endblock %}
