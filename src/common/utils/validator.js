@@ -1,4 +1,3 @@
-const countries = require('i18n-iso-countries');
 const moment = require('moment');
 
 const ValidationRule = require('../../common/models/ValidationRule.class');
@@ -7,7 +6,7 @@ const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT, MAX_ALLOWED_CANCELLATION_TIME_TO_CBP } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
-const { airportCodeList } = require('../../common/utils/autocomplete');
+const { airportCodeList, nationalityList } = require('../../common/utils/autocomplete');
 const { documentTypes } = require('./utils');
 
 /**
@@ -205,14 +204,15 @@ function validISOCountryLength(countryCode) {
 }
 
 /**
- * Predicate to check whether the country code is a valid ISO1366 alpha 3 code.
+ * Predicate to check whether the country code is a valid nationality alpha 3 code.
  *
  * @param {String} countryCode
- * @returns {Bool} True if 3 an ISO1366 code, false otherwise
+ * @returns {Bool} True if 3 an nationality code, false otherwise
  */
-function validISO3Country(countryCode) {
-  return countries.isValid(countryCode);
+function isValidNationality(countryCode) {
+  return nationalityList.map(country => country.code).includes(countryCode);
 }
+
 
 /**
  * Predicate function which checks a given free circulation value.
@@ -774,7 +774,7 @@ module.exports = {
   validFlag,
   validPort,
   validISOCountryLength,
-  validISO3Country,
+  isValidNationality,
   validFreeCirculation,
   validVisitReason,
   validGender,

@@ -187,6 +187,7 @@ module.exports = (req, res) => {
     .catch((validationErrs) => {
       logger.info('Validation errors detected on file upload');
       req.session.failureMsg = validationErrs;
+      logger.error(req.session.failureMsg);
       logger.error(req.session.failureMsg.map(validRule => validRule.message))
       req.session.save(() => res.redirect('/garfile/garupload'));
     });

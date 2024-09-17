@@ -23,7 +23,7 @@
     {{ m.hint('nationality', __('field_nationality_hint')) }}
     {{ m.error_message('nationality', errors, __) }}
     <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}" aria-labelledby="nationality-label" aria-describedby="nationality-hint">
-      {% for country in countryList|sort(attribute='label') %}
+      {% for country in nationalityList|sort(attribute='label') %}
         <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
       {% endfor %}
     </select>
@@ -169,7 +169,7 @@
     {{ m.hint('issuingState', __('field_issuing_state_hint')) }}
     {{ m.error_message('issuingState', errors, __) }}
     <select class="govuk-select" id="issuingState" name="issuingState" value="{{ (person.issuingState or req.body.issuingState)}}"  aria-labelledby="issuingState-label"  aria-describedby="issuingState-hint">
-      {% for country in countryList|sort(attribute='label') %}
+      {% for country in nationalityList|sort(attribute='label') %}
         <option value="{{ country.code }}" {{ 'selected=selected' if (person.issuingState or req.body.issuingState) == country.code }}>{{ country.label }}</option>
       {% endfor %}
     </select>
