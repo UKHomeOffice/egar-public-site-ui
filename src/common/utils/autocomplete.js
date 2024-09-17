@@ -34,9 +34,6 @@ const generateCountryList = () => {
 
 const countryList = generateCountryList();
 
-logger.info(JSON.stringify(countryList));
-
-
 /**
  * get the country label from a country code
  * @param  {String} countryCode
