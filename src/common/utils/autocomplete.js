@@ -7,11 +7,22 @@ const airportList = require('./airport_codes.json');
  * This essentially means taking the more normally used alpha-2 (GB) code and country
  * pair and using instead alpha-3 (GBR) as the key.
  */
+const customNationalities = [
+  { code: 'GBD', label: 'British Overseas Territories Citizen (GBD)' },
+  { code: 'GBN', label: 'British National (Overseas)(GBN)' },
+  { code: 'GBO', label: 'British Overseas Citizen (GBO)' },
+];
+
 const generateCountryList = () => {
   logger.info('Obtaining all countries and converting to alpha 3 codes');
   const alpha3List = [];
   countries.registerLocale(en);
   alpha3List.push({ code: '', label: '' });
+
+  customNationalities.forEach((nationality) => {
+    alpha3List.push(nationality);
+  });
+
   Object.keys(countries.getNames('en')).forEach((key) => {
     const alpha3 = countries.alpha2ToAlpha3(key);
     const countryName = countries.getNames('en')[key];
@@ -22,6 +33,9 @@ const generateCountryList = () => {
 };
 
 const countryList = generateCountryList();
+
+logger.info(JSON.stringify(countryList));
+
 
 /**
  * get the country label from a country code
