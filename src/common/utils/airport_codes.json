@@ -3495,6 +3495,20 @@
     "label": "London Gatwick Airport (United Kingdom) (EGKK / LGW)"
   },
   {
+    "id": "CWF",
+    "id2": "KCWF",
+    "british": false,
+    "crownDependency": false,
+    "label": "Chennault International Airport (United States) (CWF / KCWF)"
+  },
+  {
+    "id": "JHF",
+    "id2": "SBJH",
+    "british": false,
+    "crownDependency": false,
+    "label": "São Paulo Catarina International Executive Airport (Brazil) (JHF / SBJH)"
+  },
+  {
     "id": "LCY",
     "id2": "EGLC",
     "british": true,
@@ -53970,13 +53984,6 @@
     "british": true,
     "crownDependency": false,
     "label": "SILVERSTONE RACING CIRCUIT (United Kingdom) (EGBV)"
-  },
-  {
-    "id": "EGCA",
-    "id2": "EGCA",
-    "british": true,
-    "crownDependency": false,
-    "label": "COAL ASTON / BENTLEY FARM (United Kingdom) (EGCA)"
   },
   {
     "id": "EGCG",
