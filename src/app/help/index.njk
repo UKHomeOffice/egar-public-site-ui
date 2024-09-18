@@ -23,67 +23,12 @@ GAR | Help
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
       <h1 class="govuk-heading-l">Help &amp; Guidance</h1>
-
-      <h2 class="govuk-heading-m">Technical Support</h2>
 
       <p class="govuk-body-m">
         You are required to complete a GAR prior to your departure. For information about this process please see the following
         <a href="{{__('gar_form_link')}}">information</a>
       </p>
-
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary" aria-controls="details-content-general-support" aria-expanded="false" title="Checking Passport / Travel Documents">
-          <span class="govuk-details__summary-text">General Support</span>
-        </summary>
-        <div class="govuk-details__text" id="details-content-general-support" aria-hidden="true">
-          <p class="govuk-body-m">
-            <strong>Please do not contact GAR Support for passenger related queries.
-              If you have a query regarding a response message and you are unable to determine whether an individual has a valid permission to travel, please see 'Response Messages' section on this page.
-              <br/>
-              If you need more help, email <a href="mailto:uptqueries@homeoffice.gov.uk">uptqueries@homeoffice.gov.uk</a>
-            </strong>
-          </p>
-
-          <p class="govuk-body-m">
-              You can get support with using the service by emailing the Submit a GAR support team by emailing us at:
-          </p>
-          <p class="govuk-body-m">
-            <a href="mailto:GARSupport@homeoffice.gov.uk">GARSupport@Homeoffice.gov.uk</a>
-          </p>
-          {# <p class="govuk-body-m">
-            You can call the Submit a GAR team on: <br>
-            Telephone: 0845 468 0084 <br>
-            From overseas: +44 (0) 845 468 0084
-          </p>
-          <p class="govuk-body-m">
-            This is a 24/7 support service. <br>
-            <a href="https://www.gov.uk/call-charges">Find out about call charges</a>
-          </p> #}
-        </div>
-      </details>
-
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary" aria-controls="details-content-emergencies" aria-expanded="false" title="Checking Passport / Travel Documents">
-          <span class="govuk-details__summary-text">Exceptional Circumstances</span>
-        </summary>
-        <div class="govuk-details__text" id="details-content-general-emergencies" aria-hidden="true">
-
-          <p class="govuk-body-m">If, due to bad weather or technical issues, a flight is forced to change its arrival location in-flight, the following process may be followed:</p>
-
-          <ol>
-            <li>Provided it is practicable to do so, the change may be notified to the HMRC National Co-ordination Unit (NCU) by calling +44 300 123 2012. </li>
-            <li>If this is not possible, the pilot must divert to the alternative customs and excise designated aerodrome specified on the flight plan.</li>
-            <li>Flights which the pilot is required to notify in accordance with the Terrorism Act 2000 must use the alternative police designated aerodrome specified on the flight plan. If circumstances mean the pilot is unable to divert to the alternative customs or police designated aerodrome specified on the flight plan, the pilot must redirect to the nearest available airfield, submit a new report and contact local Border Force on arrival.</li>
-          </ol>
-
-          <p class="govuk-body-m">Further information about reporting in exceptional circumstances in respect of delayed flights can be found in the General Aviation Guidance on <a href="https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights">Providing information about international general aviation flights - GOV.UK (www.gov.uk)</a></p>
-          
-
-        </div>
-      </details>
-
       <h2 class="govuk-heading-m">Passenger Support</h2>
 
       <details class="govuk-details" data-module="govuk-details">
@@ -92,59 +37,79 @@ GAR | Help
         </summary>
         <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
           <p class="govuk-body-m">
-            Pilots, operators and agents responsible for carrying an individual to the UK are expected to make sure that:
+            Pilots, operators, and agents responsible for carrying an individual to the UK are expected to make sure that:
           </p>
           <ul class="govuk-list govuk-list--bullet">
             <li>Every individual onboard has a valid passport or travel document which is acceptable in the UK.</li>
-            <li>The person is the rightful holder of the passport or travel document. </li>
+            <li>The individual is the rightful holder of the passport or travel document.</li>
           </ul>
           <p class="govuk-body-m">
             For more information on checking passports and travel documents click here
               <a href="{{__('upt_guidance_link')}}">Guidance on examining identity documents (publishing.service.gov.uk)</a>
           </p>
-          <p class="govuk-body-m">
-            For visa nationals, pilots, operators and agents responsible for carrying an individual to the UK are expected to make sure that:
-          </p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>The visa is valid for the holder.</li>
-            <li>The date from which the visa is valid.</li>
-            <li>The date of expiry of the visa.</li>
-          </ul>
-          <p class="govuk-body-m">
-            Follow this link to check visa requirements 
-            <a href="https://www.gov.uk/check-uk-visa">Check if you need a UK visa - GOV.UK (www.gov.uk)</a>
-          </p>
-          <p class="govuk-body-m">
-            Follow this link for more information on checking immigration documents
-            <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1127332/Charging_procedures_A_guide_for_Carriers.pdf">Charging Guide Procedures – A Guide for Carriers</a>.
-          </p>
-          <p class="govuk-body-m">
-          Follow this link for more information on visa nationals 
-          <a href="https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-visitor-visa-national-list">Immigration Rules - Immigration Rules Appendix Visitor: Visa national list - Guidance - GOV.UK (www.gov.uk)</a>
-          </p>
-          <p class="govuk-body-m">
-            <strong>
-              If you need more help, email <a href="mailto:uptqueries@homeoffice.gov.uk">uptqueries@homeoffice.gov.uk</a>
-            </strong>
-          </p>
         </div>
       </details>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary" aria-controls="details-content-documents" aria-expanded="false" title="Checking Passport / Travel Documents">
+          <span class="govuk-details__summary-text">Visa Nationals</span>
+        </summary>
+        <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
+          <p class="govuk-body-m">
+            Pilots, operators, and agents bringing passengers to the UK are expected to make sure that visa nationals have a valid immigration permission or exemption.
+          </p>
+          <p>
+            If you receive, a <b>VALID PERMISSION TO TRAVEL</b> response this is confirmation that the individual has a that a valid immigration permission 
+            and no other immigration checks are required.
+          </p>
+          <p>
+            If you receive an <b>AUTHORITY TO CARRY GRANTED</b> response for visa nationals, you should conduct a manual check for an immigration permission by:
+          </p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>Checking for a valid physical immigration document (such as a visa vignette or stamp etc.) </li>
+            Or
+            <li>By using a sharecode which the individual can request from their UKVI account. Follow this link to access the service 
+              <a href = 'https://www.gov.uk/check-immigration-status'>https://www.gov.uk/check-immigration-status</a>
+              </li>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>
+                  If the individual has no exemption or proof of physical or digital permission, pilots, operators and agents may contact the 
+                  Home Office for advice by calling the UK Border Force Carrier Support Hub 0300 369 0610.
+                  </li>
+                </ul>
+          </ul>
+          <p>
+            Follow this link for more information on checking immigration documents
+            <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1127332/Charging_procedures_A_guide_for_Carriers.pdf">
+            <i>Charging Guide Procedures - A Guide for Carriers</i></a>. 
+            </p>
+      </div>
+      </details>
 
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary" aria-controls="details-content-documents" aria-expanded="false" title="Checking Passport / Travel Documents">
+          <span class="govuk-details__summary-text">Authority to Carry</span>
+        </summary>
+        <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
+          <p>
+            The submission of advance passenger information (API) enables the operation of the UK’s Authority to Carry Scheme 2023. 
+            This Scheme is a border security measure intended to prevent the travel of certain individuals where it is in the public interest. 
+            <a href = "https://www.gov.uk/government/publications/authority-to-carry-scheme-2023">
+            Authority to Carry Scheme 2023 - GOV.UK (www.gov.uk)
+            </a>
+            </p>
+        </div>
+      </details>
       <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary" aria-controls="details-content-response-messages" aria-expanded="false" title="Response Messages">
           <span class="govuk-details__summary-text">Response Messages</span>
         </summary>
         <div class="govuk-details__text" id="details-content-response-messages" aria-hidden="true">
+
           <p class="govuk-body-m">
-            We have introduced Response Messages to sGAR from January 2024. These messages apply to UK inbound journeys, outside of the Common Travel Area, and will confirm whether an individual has a valid permission to travel to the UK or if you need to conduct a manual check for a visa. </p>
-          <p class="govuk-body-m">
-            Whenever you submit data for an individual travelling on a flight coming to the UK using sGAR we will return a response; the response will be displayed on the sGAR service.</p>
-          <p class="govuk-body-m"> From January 2024 you will see one of the following responses for each UK inbound passenger.
-          </p>
-          <p class="govuk-body-m">
-            <strong>
-              If you need more help, email <a href="mailto:uptqueries@homeoffice.gov.uk">uptqueries@homeoffice.gov.uk</a>
-            </strong>
+          UPT Response Messages have now been introduced to sGAR. These messages will confirm whether an individual has a valid permission to travel or 
+          if a manual check for a physical immigration or exemption document, or an online check using the sharecode function on an individual’s 
+          UKVI account is required. Every time you submit data for an individual via sGAR we will return a response. 
+          The response will be displayed on the sGAR service. You will see one of the following responses for each passenger.
           </p>
           <table class="govuk-table">
             <thead class="govuk-table__head">
@@ -154,26 +119,92 @@ GAR | Help
               </tr>
             </thead>
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell">Valid permission to travel</td>
-              <td class="govuk-table__cell">The Home Office can find a valid permission to travel for the person. Pilots, operators and agents are not required to check visas, but Passport or Travel Document checks still apply. They must check that the passport or travel document presented is genuine and valid, and that the person is the rightful holder.
-            <br/><br/>For more information on checking passports and travel documents click here  <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
+              <td class="govuk-table__cell">VALID PERMISSION TO TRAVEL</td>
+              <td class="govuk-table__cell">
+                This is confirmation that the individual has a valid immigration permission and no other immigration checks are required.<br/>
+                You must still check if this individual has a valid passport or travel document and that the passport or travel document presented is genuine and valid, 
+                and that the person is the rightful holder.</br/>
+                For more information on checking passports and travel documents click here 
+                <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">
+                Guidance on examining identity documents (publishing.service.gov.uk)
+                </a>
               </td>
             </tr>
             <tr>
-              <td class="govuk-table__cell">Authority to carry granted</td>
-              <td class="govuk-table__cell">Pilots, operators and agents are required to check visas for Visa Nationals. Passport or Travel Document checks apply for all passengers. They must check that the passport or travel document presented is genuine and valid, and that the person is the rightful holder.
-          <br/><br/>For more information on checking passports and travel documents click here <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
-          Follow this link to check visa requirements <a href="https://www.gov.uk/check-uk-visa">Check if you need a UK visa - GOV.UK (www.gov.uk)</a>
+              <td class="govuk-table__cell">AUTHORITY TO CARRY GRANTED</td>
+              <td class="govuk-table__cell">
+                You must check if this individual has a valid passport or travel document.<br/>
+                For visa nationals you must also check for a valid immigration or exemption document. Follow this link to check
+                <a href = "https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers">
+                UK visa requirements (accessible version) - GOV.UK (www.gov.uk)
+                </a><br/>
+                You should conduct a manual check for an immigration permission by:<br/>
+                Checking for a valid physical immigration document (such as a visa vignette or stamp etc.)<br/>
+                Or<br/>
+                By using a sharecode which the individual can request from their UKVI account. Follow this link to access the service
+                <a href="https://www.gov.uk/check-immigration-status">
+                https://www.gov.uk/check-immigration-status
+                </a><br/><br/>
+                If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub 0300 369 0610
               </td>
             </tr>
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell">Authority to carry refused. DO NOT BOARD.</td>
-              <td class="govuk-table__cell">This response message will not be displayed on the screen. Pilots, operators and agents will be instructed not to board an individual (NO BOARD) via a call and email when Authority to Carry (ATC) has been refused.</td>
+              <td class="govuk-table__cell">AUTHORITY TO CARRY REFUSED. DO NOT BOARD.</td>
+              <td class="govuk-table__cell">This response message will not be displayed on the screen. Pilots, 
+                operators and agents will be instructed not to board an individual (NO BOARD) via a call and email when Authority to Carry (ATC) has been refused.</td>
             </tr>
           </table>
         </div>
       </details>
 
+      <h2 class="govuk-heading-m">Technical Support</h2>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary" aria-controls="details-content-general-support" aria-expanded="false" title="Checking Passport / Travel Documents">
+          <span class="govuk-details__summary-text">General Support</span>
+        </summary>
+        <div class="govuk-details__text" id="details-content-general-support" aria-hidden="true">
+          <p class="govuk-body-m">
+            For non-technical UPT related queries <b>before</b> Monday 30th September at 10:00am, 
+            please contact the UPT Queries Mailbox by emailing us at: 
+            <a href="mailto:UPTqueries@homeoffice.gov.uk">UPTqueries@homeoffice.gov.uk</a>.
+          </p>
+          <p class="govuk-body-m">
+            For non-technical UPT related queries <b>after</b> Monday 30th September at 10:00am, 
+            please contact the UK Border Force Carrier Support Hub on 0300 369 0610.
+          </p>
+          <p class="govuk-body-m">
+            For technical queries relating to the sGAR web service, please contact the sGAR support team by emailing us at:
+            <a href="mailto:GARSupport@Homeoffice.gov.uk">GARSupport@Homeoffice.gov.uk</a>
+          </p>
+        </div>
+      </details>
+
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary" aria-controls="details-content-emergencies" aria-expanded="false" title="Checking Passport / Travel Documents">
+          <span class="govuk-details__summary-text">Exceptional Circumstances</span>
+        </summary>
+        <div class="govuk-details__text" id="details-content-general-emergencies" aria-hidden="true">
+
+          <p class="govuk-body-m">
+            If, due to bad weather or technical issues, a flight is forced to change its arrival location in-flight, the following process may be followed:
+          </p>
+          <p class="govuk-body-m">
+            Provided it is practicable to do so, the change may be notified to the HMRC National Co-ordination Unit (NCU) by calling +44 300 123 2012.
+            If this is not possible, the pilot must divert to the alternative customs and excise designated aerodrome specified on the flight plan.
+          </p>
+          <p class="govuk-body-m">
+            Flights which the pilot is required to notify in accordance with the Terrorism Act 2000 must use the alternative police designated aerodrome 
+            specified on the flight plan. If circumstances mean the pilot is unable to divert to the alternative customs or police designated aerodrome 
+            specified on the flight plan, the pilot must redirect to the nearest available airfield, submit a new report and contact local Border Force on arrival.
+          </p>
+          <p class="govuk-body-m">
+            Further information about reporting in exceptional circumstances in respect of delayed flights can be found in the General Aviation Guidance on
+            <a href = "https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights">
+            Providing information about international general aviation flights - GOV.UK (www.gov.uk)
+            </a>
+          </p>
+        </div>
+      </details>
     </div>
   </div>
 
