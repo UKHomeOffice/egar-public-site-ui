@@ -117,7 +117,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${name}`)]);
     validationArr.push([
       new ValidationRule(validator.validISOCountryLength, '', crew.issuingState, `Enter a valid document issuing state for ${name}. Must be a ISO 3166 country code`),
-      new ValidationRule(validator.validISO3Country, '', crew.issuingState, `Enter a valid document issuing state for ${name}. Must be a ISO 3166 country code`),
+      new ValidationRule(validator.isValidNationality, '', crew.issuingState, `Enter a valid document issuing state for ${name}. Must be a ISO 3166 country code`),
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.documentNumber, `Enter a document number for ${name}`),
@@ -147,7 +147,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.nationality, `Enter a nationality for ${name}`)]);
     validationArr.push([
       new ValidationRule(validator.validISOCountryLength, '', crew.nationality, `Enter a valid nationality for ${name}. Must be a ISO 3166 country code`),
-      new ValidationRule(validator.validISO3Country, '', crew.nationality, `Enter a valid nationality for ${name}. Must be a ISO 3166 country code`),
+      new ValidationRule(validator.isValidNationality, '', crew.nationality, `Enter a valid nationality for ${name}. Must be a ISO 3166 country code`),
     ]);
     validationArr.push([
       new ValidationRule(validator.notEmpty, '', crew.documentExpiryDate, `Enter a Travel Document expiry date for ${name}. (Check cell is in Date not General format).`),

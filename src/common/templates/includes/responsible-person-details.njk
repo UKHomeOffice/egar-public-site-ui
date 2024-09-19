@@ -98,7 +98,7 @@
             <select class="govuk-select" id="responsibleCountry" name="responsibleCountry"
                 value="{{ responsiblePerson.responsibleCountry }}"
                 aria-labelledby="responsibleCountry-label">
-                {% for country in countryList | sort(attribute = 'label') %}
+                {% for country in nationalityList | sort(attribute = 'label') %}
                     <option value="{{ country.code }}"
                     {{ 'selected=selected' if responsiblePerson.responsibleCountry == country.code }}>{{ country.label }}</option>
                 {% endfor %}

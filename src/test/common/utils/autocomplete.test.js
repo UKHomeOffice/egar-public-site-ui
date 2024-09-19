@@ -14,7 +14,7 @@ const autocomplete = require('../../../common/utils/autocomplete');
  */
 describe('Autocomplete Utility', () => {
   it('should generate a list of countries with alpha 3 codes', () => {
-    const result = autocomplete.generateCountryList();
+    const result = autocomplete.generateNationalityList();
     expect(result).to.not.be.undefined;
 
     const uk = result.find(row => row.code === 'GBR');

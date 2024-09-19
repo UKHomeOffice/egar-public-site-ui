@@ -7,13 +7,15 @@ const airportList = require('./airport_codes.json');
  * This essentially means taking the more normally used alpha-2 (GB) code and country
  * pair and using instead alpha-3 (GBR) as the key.
  */
+
+// ISO/IEC 7501-1 codes, not part of ISO 3166/MA
 const customNationalities = [
   { code: 'GBD', label: 'British Overseas Territories Citizen (GBD)' },
-  { code: 'GBN', label: 'British National (Overseas)(GBN)' },
+  { code: 'GBN', label: 'British National (Overseas) (GBN)' },
   { code: 'GBO', label: 'British Overseas Citizen (GBO)' },
 ];
 
-const generateCountryList = () => {
+const generateNationalityList = () => {
   logger.info('Obtaining all countries and converting to alpha 3 codes');
   const alpha3List = [];
   countries.registerLocale(en);
@@ -32,14 +34,14 @@ const generateCountryList = () => {
   return alpha3List;
 };
 
-const countryList = generateCountryList();
+const nationalityList = generateNationalityList();
 
 /**
  * get the country label from a country code
  * @param  {String} countryCode
  */
 function getCountryFromCode(countryCode) {
-  const countryFromCode = countryList.find(country => country.code === countryCode);
+  const countryFromCode = nationalityList.find(country => country.code === countryCode);
   return countryFromCode === undefined ? countryCode : countryFromCode.label;
 }
 
@@ -58,16 +60,16 @@ function listOfAirportCodes(airportList) {
     airportCodes.push(icaoCode);
   });
 
-  return airportCodes
+  return airportCodes;
 }
 
 const airportCodeList = listOfAirportCodes(airportList);
 
 
 module.exports = {
-  generateCountryList,
+  generateNationalityList,
   getCountryFromCode,
-  countryList,
+  nationalityList,
   airportList,
   airportCodeList
 };

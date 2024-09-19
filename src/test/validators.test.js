@@ -554,13 +554,19 @@ describe('Validator', () => {
     });
 
     it('should return false when provided country code is unknown', () => {
-      expect(validator.validISO3Country('CHI')).to.be.false;
-      expect(validator.validISO3Country('UK')).to.be.false;
+      expect(validator.isValidNationality('CHI')).to.be.false;
+      expect(validator.isValidNationality('UK')).to.be.false;
     });
 
     it('should return true when provided country code is valid', () => {
-      expect(validator.validISO3Country('USA')).to.be.true;
-      expect(validator.validISO3Country('GBR')).to.be.true;
+      expect(validator.isValidNationality('USA')).to.be.true;
+      expect(validator.isValidNationality('GBR')).to.be.true;
+    });
+
+    it('should return true when provided country code which is not official, but custom', () => {
+      expect(validator.isValidNationality('GBD')).to.be.true;
+      expect(validator.isValidNationality('GBN')).to.be.true;
+      expect(validator.isValidNationality('GBO')).to.be.true;
     });
   });
 
