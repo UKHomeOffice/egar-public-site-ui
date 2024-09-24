@@ -56107,11 +56107,18 @@
     "label": "CREATON CLAY COTTAGE (United Kingdom) (X583)"
   },
   {
-    "id": "BLYTHE HALL LATHOM (X584)",
-    "id2": "X584",
+    "id": "COAL ASTON / BENTLEY FARM (X720)",
+    "id2": "X720",
     "british": true,
     "crownDependency": false,
-    "label": "BLYTHE HALL LATHOM (United Kingdom) (X584)"
+    "label": "COAL ASTON / BENTLEY FARM(United Kingdom) (X720)"
+  },
+  {
+    "id": "BLYTHE HALL LATHOM (X591)",
+    "id2": "X591",
+    "british": true,
+    "crownDependency": false,
+    "label": "BLYTHE HALL LATHOM (United Kingdom) (X591)"
   },
   {
     "id": "STRUBBY NORTH (X585)",
