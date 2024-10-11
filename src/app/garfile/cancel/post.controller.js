@@ -53,7 +53,5 @@ module.exports = (req, res) => {
     .catch((err) => {
       logger.error(err);
       res.render('app/garfile/cancel', { cookie, error: [{ message: 'Failed to cancel GAR' }] });
-    })
-  })
-  
+    })  
 };
