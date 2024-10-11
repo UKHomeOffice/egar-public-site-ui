@@ -41,7 +41,7 @@ describe('GAR Cancel Post Controller', () => {
     };
 
     garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
-    postGarPassengerConfirmationsStub = sinon.stub(garApi, 'postGarPassengerConfirmations');
+    postGarDepartureExceptionsStub = sinon.stub(garApi, 'postGarDepartureExceptions');
     garApiPatchStub = sinon.stub(garApi, 'patch');
     emailServiceStub = sinon.stub(emailService, 'send');
     sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
@@ -55,7 +55,7 @@ describe('GAR Cancel Post Controller', () => {
     const cookie = new CookieModel(req);
     garApiPatchStub.rejects('garApi.patch Example Reject');
     garApiGetPeopleStub.resolves('{"items": []}');
-    postGarPassengerConfirmationsStub.resolves();
+    postGarDepartureExceptionsStub.resolves();
 
     const callController = async () => {
       await controller(req, res);
@@ -77,7 +77,7 @@ describe('GAR Cancel Post Controller', () => {
     garApiPatchStub.resolves();
     emailServiceStub.resolves();
     garApiGetPeopleStub.resolves('{"items": []}');
-    postGarPassengerConfirmationsStub.resolves();
+    postGarDepartureExceptionsStub.resolves();
 
     const callController = async () => {
       await controller(req, res);
@@ -101,7 +101,7 @@ describe('GAR Cancel Post Controller', () => {
     garApiPatchStub.resolves();
     emailServiceStub.rejects('emailService.send Example Reject');
     garApiGetPeopleStub.resolves('{"items": []}');
-    postGarPassengerConfirmationsStub.resolves();
+    postGarDepartureExceptionsStub.resolves();
 
     const callController = async () => {
       await controller(req, res);
