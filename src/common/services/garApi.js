@@ -247,10 +247,9 @@ module.exports = {
     },
 
     /**
-   * Submits data about whether passengers left with the craft or not.
+   * Submits departure exception for all passengers in a GAR
    *
    * @param {String} garId the id of the gar the person is associated with
-   * @param {String[]} exceptions uuids of garpeople that did not depart
    * @returns {Promise} resolves with API response.
    */
     postGarDepartureExceptions(garId) {
