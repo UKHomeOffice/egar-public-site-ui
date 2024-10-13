@@ -43,16 +43,37 @@
             {% if checkin_code === travelPermissionCodes.NO_BOARD %}
               Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
             {% elif(checkin_code === travelPermissionCodes.VALID) %}
-              The Home Office can find a valid permission to travel for the person. Pilots, operators and agents are not required to check visas, but Passport or Travel Document checks still apply. They must check that the passport or travel document presented is genuine and valid, and that the person is the rightful holder.
-              <br/><br/>For more information on checking passports and travel documents click here  <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
+              <p class="govuk-body-s">
+                This is confirmation that the individual has a valid immigration permission and no other immigration checks are required.
+              </p>
+              <p class="govuk-body-s">
+                You must still check if this individual has a valid passport or travel document and that the passport or travel document presented is genuine and valid, and that the person is the rightful holder. 
+              </p>
+              <p class="govuk-body-s">
+                For more information on checking passports and travel documents click here&nbsp;
+                <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
+              </p>
             {% else %}
-              Pilots, operators and agents are required to check visas for Visa Nationals. Passport or Travel Document checks apply for all passengers. They must check that the passport or travel document presented is genuine and valid, and that the person is the rightful holder.
-              <br/><br/>For more information on checking passports and travel documents click here <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
-              Follow this link to check visa requirements <a href="https://www.gov.uk/check-uk-visa">Check if you need a UK visa - GOV.UK (www.gov.uk)</a>
+            <p class="govuk-body-s">
+              You must check if this individual has a valid passport or travel document.
+            </p>
+            <p class="govuk-body-s">
+              For visa nationals you must also check for a valid immigration or exemption document. 
+              Follow this link to check&nbsp;
+              <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers">UK visa requirements (accessible version) - GOV.UK (www.gov.uk)</a>
+              <br/> You should conduct a manual check for an immigration permission by:
+              Checking for a valid physical immigration document (such as a visa vignette or stamp etc.)<br/>
+              Or
+              By using a sharecode which the individual can request from their UKVI account. 
+              Follow this link to access the service <a href="https://www.gov.uk/check-immigration-status">https://www.gov.uk/check-immigration-status</a>
+            </p>
+            <p class="govuk-body-s">
+              If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub 0300 369 0610
+            </p>
             {% endif %}
           {% else %}
             There was an error processing the permission to travel for this person.
-            <br/><br />Please contact <a href="/help">Support</a> or email <a href="uptqueries@homeoffice.gov.uk">uptqueries@homeoffice.gov.uk</a> about the issue.
+            <br/><br />Please contact <a href="/help">Support</a> or email <a href="mailto:GARSupport@Homeoffice.gov.uk">GARSupport@Homeoffice.gov.uk</a> about the issue.
           {% endif %}
         </div>
       </details>
