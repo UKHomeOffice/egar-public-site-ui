@@ -18034,6 +18034,13 @@
     "label": "El Eden Airport (Colombia) (SKAR / AXM)"
   },
   {
+    "id": "AFI",
+    "id2": "SKAM",
+    "british": false,
+    "crownDependency": false,
+    "label": "Amalfi Airport (Colombia) (AFI / SKAM)"
+  },
+  {
     "id": "PUU",
     "id2": "SKAS",
     "british": false,
