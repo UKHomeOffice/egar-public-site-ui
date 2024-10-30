@@ -32188,6 +32188,13 @@
     "label": "Al-Jawf Domestic Airport (Saudi Arabia) (OESK / AJF)"
   },
   {
+    "id": "NUM",
+    "id2": "OENN",
+    "british": false,
+    "crownDependency": false,
+    "label": "Neom Bay Airport (Saudi Arabia) (OENN / NUM)"
+  },
+  {
     "id": "WAE",
     "id2": "OEWD",
     "british": false,
