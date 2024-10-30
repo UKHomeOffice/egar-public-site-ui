@@ -14661,10 +14661,10 @@
   },
   {
     "id": "KWI",
-    "id2": "OKBK",
+    "id2": "OKKK",
     "british": false,
     "crownDependency": false,
-    "label": "Kuwait International Airport (Kuwait) (OKBK / KWI)"
+    "label": "Kuwait International Airport (Kuwait) (OKKK / KWI)"
   },
   {
     "id": "BEY",
@@ -18034,6 +18034,13 @@
     "label": "El Eden Airport (Colombia) (SKAR / AXM)"
   },
   {
+    "id": "AFI",
+    "id2": "SKAM",
+    "british": false,
+    "crownDependency": false,
+    "label": "Amalfi Airport (Colombia) (AFI / SKAM)"
+  },
+  {
     "id": "PUU",
     "id2": "SKAS",
     "british": false,
@@ -18595,10 +18602,10 @@
   },
   {
     "id": "LIM",
-    "id2": "SPIM",
+    "id2": "SPJC",
     "british": false,
     "crownDependency": false,
-    "label": "Jorge Chávez International Airport (Peru) (SPIM / LIM)"
+    "label": "Jorge Chávez International Airport (Peru) (SPJC / LIM)"
   },
   {
     "id": "JJI",
@@ -23051,6 +23058,13 @@
     "british": false,
     "crownDependency": false,
     "label": "Cleveland Hopkins International Airport (United States) (KCLE / CLE)"
+  },
+  {
+    "id": "KDIJ",
+    "id2": "KDIJ",
+    "british": false,
+    "crownDependency": false,
+    "label": "Driggs–Reed Memorial Airport (United States) (KDIJ)"
   },
   {
     "id": "DOV",
@@ -32172,6 +32186,13 @@
     "british": false,
     "crownDependency": false,
     "label": "Al-Jawf Domestic Airport (Saudi Arabia) (OESK / AJF)"
+  },
+  {
+    "id": "NUM",
+    "id2": "OENN",
+    "british": false,
+    "crownDependency": false,
+    "label": "Neom Bay Airport (Saudi Arabia) (OENN / NUM)"
   },
   {
     "id": "WAE",
