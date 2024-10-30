@@ -23060,6 +23060,13 @@
     "label": "Cleveland Hopkins International Airport (United States) (KCLE / CLE)"
   },
   {
+    "id": "KDIJ",
+    "id2": "KDIJ",
+    "british": false,
+    "crownDependency": false,
+    "label": "Driggs–Reed Memorial Airport (United States) (KDIJ)"
+  },
+  {
     "id": "DOV",
     "id2": "KDOV",
     "british": false,
