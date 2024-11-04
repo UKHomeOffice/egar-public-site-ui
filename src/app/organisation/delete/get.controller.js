@@ -18,12 +18,16 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const userToDelete = await userApi.getDetails(deleteUserEmail);
-
+    const userApiRes = await userApi.getDetails(deleteUserEmail);
+    const userToDelete = await JSON.parse(userApiRes);
+    
     const apiResponse = await organisationApi.deleteUser(requesterId, organisationId, {
-      userId: userToDelete.id,
-      role: userToDelete.role,
+      userId: userToDelete.userId,
+      firstName: userToDelete.firstName,
+      lastName: userToDelete.lastName,
+      role: userToDelete.role.name,
     });
+
     const parsedResponse = JSON.parse(apiResponse);
     if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
       req.session.errMsg = errMsg;
