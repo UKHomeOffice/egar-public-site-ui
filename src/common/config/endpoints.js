@@ -220,6 +220,11 @@ const endpoints = {
     logger.debug(`Calling edit org user endpoint ${endpoint}`);
     return endpoint;
   },
+  deleteOrgUser(orgId) {
+    const endpoint = new URL(`${API_VERSION}/organisations/${orgId}/users`, BASE_URL).href;
+    logger.debug(`Calling delete org user endpoint ${endpoint}`);
+    return endpoint;
+  },
   deleteGarSupportingDoc(garId, garSupportingDocId) {
     const endpoint = new URL(`${API_VERSION}/gar/${garId}/supportingdocs/${garSupportingDocId}`, BASE_URL).href;
     logger.debug(`Calling delete supporting document endpoint ${endpoint}`);

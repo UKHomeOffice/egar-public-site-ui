@@ -1,4 +1,5 @@
 import logging
+import json
 from flask import Flask, request
 
 logging.basicConfig(level=logging.INFO)
@@ -9,7 +10,7 @@ app = Flask(__name__)
 def clamav():
     mock_clamav_response = "Everything ok : true\n"
 
-    logging.info(f"Request data : {str(request.data)}")
+    logging.info(f"Request data : {str(request.files)}")
     return mock_clamav_response
 
 
