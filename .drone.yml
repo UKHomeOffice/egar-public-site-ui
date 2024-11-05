@@ -271,6 +271,7 @@ trigger:
   branch:
     - master
     - hotfix/*
+    - sGAR*
   event:
     - promote
   target:

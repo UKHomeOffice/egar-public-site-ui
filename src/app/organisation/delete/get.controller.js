@@ -12,6 +12,7 @@ module.exports = async (req, res) => {
     const requesterId = cookie.getUserDbId();
     const organisationId = cookie.getOrganisationId();
     const deleteUserEmail = req.session.deleteUserId;
+    delete req.session.deleteUserId;
 
     if (deleteUserEmail === undefined) {
       res.redirect('/organisation');
