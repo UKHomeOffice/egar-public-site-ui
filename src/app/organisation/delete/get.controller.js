@@ -1,38 +1,46 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const organisationApi = require('../../../common/services/organisationApi');
+const userApi = require('../../../common/services/userManageApi')
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In organisation / delete get controller');
   const errMsg = { message: 'Failed to delete user. Try again' };
-  const userId = req.session.deleteUserId;
 
-  if (userId === undefined) {
-    res.redirect('/organisation');
-    return;
-  }
-  organisationApi.deleteUser(userId)
-    .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        req.session.errMsg = errMsg;
-        return req.session.save(() => res.redirect('/organisation'));
-      }
-      req.session.successHeader = 'Success';
-      req.session.successMsg = 'User deleted';
-      return req.session.save(() => res.redirect('/organisation'));
-    })
-    .catch((err) => {
-      logger.error(err);
+  try {
+    const requesterId = cookie.getUserDbId();
+    const organisationId = cookie.getOrganisationId();
+    const deleteUserEmail = req.session.deleteUserId;
+    delete req.session.deleteUserId;
+
+    if (deleteUserEmail === undefined) {
+      res.redirect('/organisation');
+      return;
+    }
+
+    const userApiRes = await userApi.getDetails(deleteUserEmail);
+    const userToDelete = await JSON.parse(userApiRes);
+    
+    const apiResponse = await organisationApi.deleteUser(requesterId, organisationId, {
+      userId: userToDelete.userId,
+      firstName: userToDelete.firstName,
+      lastName: userToDelete.lastName,
+      role: userToDelete.role.name,
+    });
+
+    const parsedResponse = JSON.parse(apiResponse);
+    if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
       req.session.errMsg = errMsg;
       return req.session.save(() => res.redirect('/organisation'));
-    });
+    }
+    req.session.successHeader = 'Success';
+    req.session.successMsg = 'User deleted';
+    return req.session.save(() => res.redirect('/organisation'));
+    
+  } catch (err) {
+    logger.error(err);
+    req.session.errMsg = errMsg;
+    return req.session.save(() => res.redirect('/organisation'));  
+  }
 };
-
-
-
-
-
-
-
