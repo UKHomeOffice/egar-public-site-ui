@@ -161,7 +161,7 @@ const endpoints = {
     return endpoint;
   },
   submitGARForException(garId, onlyIndividuals) {
-    const endpoint = new URL(`${API_VERSION}/gar/${garId}/departure/exception?only_individuals=${onlyIndividuals ? 'true' : ''}`, BASE_URL).href;
+    const endpoint = new URL(`${API_VERSION}/gar/${garId}/departure/exception?only_individuals=${onlyIndividuals}`, BASE_URL).href;
     logger.debug(`Calling post GAR passenger exceptions endpoint ${endpoint}`);
     return endpoint;
   },
