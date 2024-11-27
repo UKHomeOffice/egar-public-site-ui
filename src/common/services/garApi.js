@@ -262,7 +262,7 @@ module.exports = {
           body: JSON.stringify({ passengerIds }),
         }, (error, _response, body) => {
           if (error) {
-            logger.error('Failed call passenger confirmation endpoint');
+            logger.error('Failed call passenger exception endpoint');
             reject(error);
             return;
           }
@@ -274,7 +274,7 @@ module.exports = {
             return;
           }
           
-          logger.debug('Successfully called passenger confirmation endpoint');
+          logger.debug('Successfully called passenger exception endpoint');
           resolve(body);
         });
       });
