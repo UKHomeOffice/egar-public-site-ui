@@ -253,15 +253,13 @@ module.exports = {
    * @param {String[]} exceptions uuids of garpeople that did not depart
    * @returns {Promise} resolves with API response.
    */
-    postGarPassengerConfirmations(garId, exceptions, isCancelled = false) {
+    submitGARForException(garId, passengerIds = []) {
+      const onlyIndividuals = passengerIds.length > 0;
       return new Promise((resolve, reject) => {
         request.post({
           headers: { 'content-type': 'application/json' },
-          url: endpoints.postGarPassengerConfirmations(garId),
-          body: JSON.stringify({
-            exceptions: exceptions,
-            isCancelled
-          }),
+          url: endpoints.submitGARForException(garId, onlyIndividuals),
+          body: JSON.stringify({ passengerIds }),
         }, (error, _response, body) => {
           if (error) {
             logger.error('Failed call passenger confirmation endpoint');
@@ -271,7 +269,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.postGarPassengerConfirmations request was not successful : ${responseErrorMessage}`);
+            logger.error(`${garId} garApi.submitGARForException request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
