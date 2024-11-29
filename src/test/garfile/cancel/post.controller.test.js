@@ -41,7 +41,7 @@ describe('GAR Cancel Post Controller', () => {
     };
 
     garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
-    postGarPassengerConfirmationsStub = sinon.stub(garApi, 'postGarPassengerConfirmations');
+    submitGARForExceptionStub = sinon.stub(garApi, 'submitGARForException');
     garApiPatchStub = sinon.stub(garApi, 'patch');
     emailServiceStub = sinon.stub(emailService, 'send');
     sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
@@ -51,74 +51,52 @@ describe('GAR Cancel Post Controller', () => {
     sinon.restore();
   });
 
-  it('should return an error message if api rejects', () => {
+  it('should return an error message if api rejects', async () => {
     const cookie = new CookieModel(req);
     garApiPatchStub.rejects('garApi.patch Example Reject');
     garApiGetPeopleStub.resolves('{"items": []}');
-    postGarPassengerConfirmationsStub.resolves();
+    submitGARForExceptionStub.resolves();
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then()
-      .then()
-      .then(() => {
-        expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
-        expect(emailServiceStub).to.not.have.been.called;
-        expect(sessionSaveStub).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/cancel', { cookie, error: [{ message: 'Failed to cancel GAR' }] });
-      });
+    await controller(req, res);
+   
+    expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
+    expect(emailServiceStub).to.not.have.been.called;
+    expect(sessionSaveStub).to.not.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/cancel/index', { 
+      cookie, 
+      errors: [ { identifier: '', message: 'Failed to cancel GAR' } ],
+    });
   });
 
-  it('should send an email and redirect with message', () => {
+  it('should send an email and redirect with message', async () => {
     garApiPatchStub.resolves();
     emailServiceStub.resolves();
     garApiGetPeopleStub.resolves('{"items": []}');
-    postGarPassengerConfirmationsStub.resolves();
+    submitGARForExceptionStub.resolves();
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController()
-      .then()
-      .then()
-      .then()
-      .then(() => {
-        expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
-        expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', cancellationReference:  'CBP-ID' });
-        expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled');
-        expect(req.session.successHeader).to.eq('Cancellation Confirmation');
-        expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
-      });
+    expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
+    expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', cancellationReference:  'CBP-ID' });
+    expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled');
+    expect(req.session.successHeader).to.eq('Cancellation Confirmation');
+    expect(sessionSaveStub).to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
   });
 
-  it('should redirect with error message', () => {
+  it('should redirect with error message', async () => {
     garApiPatchStub.resolves();
     emailServiceStub.rejects('emailService.send Example Reject');
     garApiGetPeopleStub.resolves('{"items": []}');
-    postGarPassengerConfirmationsStub.resolves();
+    submitGARForExceptionStub.resolves();
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController()
-    .then()
-    .then()
-    .then()
-    .then()
-    .then(() => {
-      expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
-      expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', cancellationReference:  'CBP-ID' });
-      expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled, but there was a problem with sending the email');
-      expect(req.session.successHeader).to.eq('Cancellation Confirmation');
-      expect(sessionSaveStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
-    });
+    expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
+    expect(emailServiceStub).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'missed@usa94.fifa.com', { firstName: 'Roberto Baggio', cancellationReference:  'CBP-ID' });
+    expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled, but there was a problem with sending the email');
+    expect(req.session.successHeader).to.eq('Cancellation Confirmation');
+    expect(sessionSaveStub).to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
   });
 });

@@ -155,14 +155,14 @@ const endpoints = {
     logger.debug(`Calling get GAR endpoint ${endpoint}`);
     return endpoint;
   },
-  submitGARForCheckin(garId){
+  submitGARForCheckin(garId) {
     const endpoint = new URL(`${API_VERSION}/gar/${garId}/checkin`, BASE_URL).href;
     logger.debug(`Calling post GAR passenger checkin endpoint ${endpoint}`);
     return endpoint;
   },
-  postGarPassengerConfirmations(garId){
-    const endpoint = new URL(`${API_VERSION}/gar/${garId}/confirmation`, BASE_URL).href;
-    logger.debug(`Calling post GAR passenger confirmations endpoint ${endpoint}`);
+  submitGARForException(garId, onlyIndividuals) {
+    const endpoint = new URL(`${API_VERSION}/gar/${garId}/departure/exception?only_individuals=${onlyIndividuals}`, BASE_URL).href;
+    logger.debug(`Calling post GAR passenger exceptions endpoint ${endpoint}`);
     return endpoint;
   },
   postFile(garId) {
