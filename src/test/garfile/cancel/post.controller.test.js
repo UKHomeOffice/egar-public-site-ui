@@ -62,7 +62,10 @@ describe('GAR Cancel Post Controller', () => {
     expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
     expect(emailServiceStub).to.not.have.been.called;
     expect(sessionSaveStub).to.not.have.been.called;
-    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/cancel', { cookie, error: [{ message: 'Failed to cancel GAR' }] });
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/cancel/index', { 
+      cookie, 
+      errors: [ { identifier: '', message: 'Failed to cancel GAR' } ],
+    });
   });
 
   it('should send an email and redirect with message', async () => {
