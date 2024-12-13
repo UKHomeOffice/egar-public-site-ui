@@ -170,6 +170,16 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: PUBLIC_SITE_DBNAME
+            - name: CARRIER_SUPPORT_HUB_UK_NUMBER
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: CARRIER_SUPPORT_HUB_UK_NUMBER
+            - name: CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER
             - name: PUBLIC_SITE_DBUSER
               valueFrom:
                 secretKeyRef:
