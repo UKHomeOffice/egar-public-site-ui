@@ -233,6 +233,10 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('IS_PLANNED_MAINTENANCE', availability.IS_PLANNED_MAINTENANCE);
   nunjucksEnvironment.addGlobal('MAINTENANCE_START_DATETIME', availability.MAINTENANCE_START_DATETIME);
   nunjucksEnvironment.addGlobal('MAINTENANCE_END_DATETIME', availability.MAINTENANCE_END_DATETIME);
+
+  nunjucksEnvironment.addGlobal('CARRIER_SUPPORT_HUB_UK_NUMBER', config.CARRIER_SUPPORT_HUB_UK_NUMBER);
+  nunjucksEnvironment.addGlobal('CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER', config.CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER);
+
   nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
   logger.info('Set global settings for nunjucks');
 }
