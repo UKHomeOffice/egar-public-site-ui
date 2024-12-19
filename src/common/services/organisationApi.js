@@ -82,6 +82,29 @@ module.exports = {
       });
     });
   },
+
+  /**
+   * Calls delete organisation api, deleting the organisation and any associated users & data
+   *
+   * @param {String} orgId
+   * @returns {Promise} returns response body when resolved
+   */
+  delete(orgId) {
+    return new Promise((resolve, reject) => {
+      request.delete({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.deleteOrgDetails(orgId),
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call delete organisation details API');
+          reject(error);
+          return;
+        }
+        logger.debug('Successfully called delete organisation details API');
+        resolve(body);
+      });
+    });
+  },
   /**
    * Gets a list of users belonging to an organisation.
    * @param {String} orgId id of an organisation to get users for
