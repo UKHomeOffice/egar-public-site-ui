@@ -24,18 +24,19 @@
     <h1 class="govuk-heading-l">
       {{__('heading_are_you_sure_delete_account')}}
     </h1>
+    <p class="govuk-body-m">{{ text.deleteOrgInfo or "" }}</p>
     <p class="govuk-body-m">
       {{__('are_you_sure_delete_account_caption')}}
     </p>
   <br>
 
   <form action="/user/delete" method="post">
-    <input id="delete" class="govuk-button" type="submit" onclick="sendAnalytics(event, 'Delete Account - Delete', 'click')" value="{{__('heading_delete_account')}}">
+    <input id="delete" class="govuk-button" type="submit" value="{{ text.deleteButton or __('heading_delete_account') }}">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </form>
 
   <p class="govuk-body-m">
-    <a id="exit-without-deleting" href="/user/details" onclick="sendAnalytics(event, 'Delete Account - Cancel', 'click')">{{__('form_exit_without_deleting')}}</a>
+    <a id="exit-without-deleting" href="/user/details">{{__('form_exit_without_deleting')}}</a>
   </p>
 </main>
 {% endblock %}

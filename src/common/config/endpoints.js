@@ -60,8 +60,18 @@ const endpoints = {
     logger.debug(`Calling get org endpoint ${endpoint}`);
     return endpoint;
   },
+  deleteOrgDetails(orgId) {
+    const endpoint = new URL(`${API_VERSION}/organisations/${orgId}`, BASE_URL).href;
+    logger.debug(`Calling delete org endpoint ${endpoint}`);
+    return endpoint;
+  },
   getOrgUsers(orgId) {
     const endpoint = new URL(`${API_VERSION}/organisations/${orgId}/users`, BASE_URL).href;
+    logger.debug(`Calling get org users endpoint ${endpoint}`);
+    return endpoint;
+  },
+  getListOfOrgUsers(orgId) {
+    const endpoint = new URL(`${API_VERSION}/organisations/${orgId}/users?is_paginated=false`, BASE_URL).href;
     logger.debug(`Calling get org users endpoint ${endpoint}`);
     return endpoint;
   },
