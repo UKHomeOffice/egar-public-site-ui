@@ -1,3 +1,4 @@
+/* eslint-disable no-return-await */
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const emailService = require('../../../common/services/sendEmail');
@@ -6,48 +7,111 @@ const organisationApi = require('../../../common/services/organisationApi');
 
 const settings = require('../../../common/config/index');
 
+const adminDeletionType = (orgUsers) => {
+  const LAST_ADMIN_IN_ORGANISATION = 1;
+  const FINAL_TWO_USERS_IN_ORGANISATION = 2;
+
+  const totalAdminsInOrg = orgUsers.filter(user => user.role.name === 'Admin').length;
+
+  if (orgUsers.length === LAST_ADMIN_IN_ORGANISATION
+    && totalAdminsInOrg === LAST_ADMIN_IN_ORGANISATION
+  ) {
+    return 'DELETE_ORGANISATION';
+  }
+
+  if (
+    orgUsers.length === FINAL_TWO_USERS_IN_ORGANISATION
+    && totalAdminsInOrg !== FINAL_TWO_USERS_IN_ORGANISATION
+  ) {
+    return 'DO_NOT_DELETE_ADMIN';
+  }
+
+  return 'DELETE_ADMIN';
+};
+
 const postController = async (req, res) => {
   logger.debug('In user / deleteAccount postcontroller');
 
   const cookie = new CookieModel(req);
+  const userRole = cookie.getUserRole();
   const errObj = { message: 'Failed to delete your account. Contact support or try again' };
 
-  const deleteAccount = {
-    Individual: async () => await userApi.deleteUser(cookie.getUserEmail()),
-    User: async () => await userApi.deleteUser(cookie.getUserEmail()),
-    Manager: async () => await userApi.deleteUser(cookie.getUserEmail()),
-    Admin: async () => {
-      const LAST_ADMIN_IN_ORGANISATION = 1;
-      const FINAL_TWO_USERS_IN_ORGANISATION = 2;
+  const defaultDeletion = async () => ({
+    deleteAccount: async () => await userApi.deleteUser(cookie.getUserEmail()),
+    notifyUser: async () => await emailService.send(
+      settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
+      cookie.getUserEmail(),
+      { firstName: cookie.getUserFirstName() },
+    ),
+  });
 
+  const accountTypes = {
+    Individual: defaultDeletion,
+    User: defaultDeletion,
+    Manager: defaultDeletion,
+    Admin: async () => {
       const orgId = cookie.getOrganisationId();
       const orgUsersRes = await organisationApi.getUsers(orgId);
       const orgUsers = JSON.parse(orgUsersRes).items;
+      const deletionType = adminDeletionType(orgUsers);
 
-      const NOT_TWO_ADMINS_IN_ORGANISATION = (
-        orgUsers.filter(user => user.role.name === 'Admin').length !== FINAL_TWO_USERS_IN_ORGANISATION
-      );
+      return {
+        deleteAccount: async () => {
+          switch (deletionType) {
+            case 'DELETE_ORGANISATION':
+              return organisationApi.delete(orgId);
 
-      if (orgUsers.length === LAST_ADMIN_IN_ORGANISATION) {
-        return await organisationApi.delete(orgId);
-      } if (
-        orgUsers.length === FINAL_TWO_USERS_IN_ORGANISATION
-        && NOT_TWO_ADMINS_IN_ORGANISATION
-      ) {
-        return;
-      }
+            case 'DO_NOT_DELETE_ADMIN':
+              return JSON.stringify({
+                message: `You cannot leave an organisation with one non admin user.
+                To delete your user, please add or promote another admin.
+                To delete the organisation, delete the non admin user and then your account.`,
+              });
 
-      return await userApi.deleteUser(cookie.getUserEmail());
+            case 'DELETE_ADMIN':
+              return userApi.deleteUser(cookie.getUserEmail());
+
+            default:
+              throw new Error('Invalid Deletion type provided');
+          }
+        },
+        notifyUser: async () => {
+          switch (deletionType) {
+            case 'DELETE_ORGANISATION':
+              return await emailService.send(
+                settings.NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID,
+                cookie.getUserEmail(),
+                {
+                  firstName: cookie.getUserFirstName(),
+                  orgName: cookie.getOrganisationName(),
+                },
+              );
+
+            case 'DO_NOT_DELETE_ADMIN':
+              throw new Error('Email should not be sent if admin is not deleted');
+
+            case 'DELETE_ADMIN':
+              return await emailService.send(
+                settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
+                cookie.getUserEmail(),
+                { firstName: cookie.getUserFirstName() },
+              );
+
+            default:
+              throw new Error('Invalid Deletion type provided');
+          }
+        },
+      };
     },
   };
 
 
   try {
-    const apiResponse = deleteAccount[cookie.getUserRole()]();
+    const apiResponse = await accountTypes[userRole]().deleteAccount();
     const parsedResponse = JSON.parse(apiResponse);
 
     if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-      res.render('app/user/deleteAccount/index', { cookie, errors: [errObj] });
+      res.render('app/user/deleteAccount/index', { cookie, errors: [parsedResponse] });
       return;
     }
   } catch (err) {
@@ -57,12 +121,7 @@ const postController = async (req, res) => {
   }
 
   try {
-    await emailService.send(
-      settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
-      cookie.getUserEmail(),
-      { firstName: cookie.getUserFirstName() },
-    );
-
+    await accountTypes[userRole].notifyUser();
     return res.redirect('/user/logout');
   } catch (err) {
     logger.error('Failed to send email that user account is deleted');
@@ -71,4 +130,4 @@ const postController = async (req, res) => {
   }
 };
 
-module.exports = postController;
+module.exports = { postController, adminDeletionType };
