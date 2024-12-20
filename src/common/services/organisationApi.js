@@ -59,7 +59,7 @@ module.exports = {
     });
   },
 
-  //TODO: I don't think this endpoint is even used. To double check.
+  // TODO: I don't think this endpoint is even used. To double check.
   /**
    * Calls get organisation API endpoint and returns organisation details.
    *
@@ -106,7 +106,7 @@ module.exports = {
     });
   },
   /**
-   * Gets a list of users belonging to an organisation.
+   * Gets a **paginated** list of users belonging to an organisation.
    * @param {String} orgId id of an organisation to get users for
    * @returns {Promise} resolves with API response.
    */
@@ -118,7 +118,7 @@ module.exports = {
         qs: {
           per_page: numberOfUsers,
           page: pageNumber,
-        }
+        },
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call get organisation users API endpoint');
@@ -130,6 +130,29 @@ module.exports = {
       });
     });
   },
+
+  /**
+  * Gets a **non** paginated list of users belonging to an organisation.
+  * @param {String} orgId id of an organisation to get users for
+  * @returns {Promise} resolves with API response.
+  */
+  getListOfOrgUsers(orgId) {
+    return new Promise((resolve, reject) => {
+      request.get({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.getListOfOrgUsers(orgId),
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call get list organisation users API endpoint');
+          reject(error);
+          return;
+        }
+        logger.debug('Successfully called get list organisation users API endpoint');
+        resolve(body);
+      });
+    });
+  },
+
   /**
    * Update the details of an organisational user.
    *
@@ -182,17 +205,17 @@ module.exports = {
     });
   },
 
-   /**
+  /**
    * Gets a list of users belonging to an organisation.
    * @param {String} orgId id of an organisation to get users for
    * @param {String} organisationName
    * @returns {Promise} resolves with API response.
    */
-   getSearchOrgUsers(orgId, searchUserName) {
+  getSearchOrgUsers(orgId, searchUserName) {
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.getSearchOrgUsers(orgId, searchUserName)     
+        url: endpoints.getSearchOrgUsers(orgId, searchUserName),
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call get search organisation users API endpoint');
@@ -210,20 +233,20 @@ module.exports = {
    * @param {String} user_id id for user
    * @returns {Promise} resolves with API response.
    */
-     getUserById(userId) {
-      return new Promise((resolve, reject) => {
-        request.get({
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getUserDataById(userId)     
-        }, (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call get search organisation users API endpoint');
-            reject(error);
-            return;
-          }
-          logger.debug('Successfully called get search organisation users API endpoint');
-          resolve(body);
-        });
+  getUserById(userId) {
+    return new Promise((resolve, reject) => {
+      request.get({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.getUserDataById(userId),
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call get search organisation users API endpoint');
+          reject(error);
+          return;
+        }
+        logger.debug('Successfully called get search organisation users API endpoint');
+        resolve(body);
       });
-    },
+    });
+  },
 };
