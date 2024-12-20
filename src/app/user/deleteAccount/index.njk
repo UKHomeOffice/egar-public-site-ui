@@ -24,14 +24,14 @@
     <h1 class="govuk-heading-l">
       {{__('heading_are_you_sure_delete_account')}}
     </h1>
-    <p class="govuk-body-m">{{ text.deleteOrgInfo }}</p>
+    <p class="govuk-body-m">{{ text.deleteOrgInfo or "" }}</p>
     <p class="govuk-body-m">
       {{__('are_you_sure_delete_account_caption')}}
     </p>
   <br>
 
   <form action="/user/delete" method="post">
-    <input id="delete" class="govuk-button" type="submit" value="{{ text.deleteButton }}">
+    <input id="delete" class="govuk-button" type="submit" value="{{ text.deleteButton or __('heading_delete_account') }}">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </form>
 

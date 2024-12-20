@@ -7,9 +7,17 @@ module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   const userRole = cookie.getUserRole();
 
-  const deleteAccountOptions = await deleteAccount[userRole](cookie);
+  const errObj = { message: 'Internal Server Error. Please contact support or try again' };
 
-  res.locals.text = deleteAccountOptions.text();
+  try {
+    const deleteAccountOptions = await deleteAccount[userRole](cookie);
 
-  res.render('app/user/deleteAccount/index', { cookie });
+    res.locals.text = deleteAccountOptions.text();
+
+    res.render('app/user/deleteAccount/index', { cookie });
+  } catch (err) {
+    logger.error('user delete account get controller failed');
+    logger.error(err);
+    res.render('app/user/deleteAccount/index', { cookie, errors: [errObj] });
+  }
 };

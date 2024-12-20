@@ -40,7 +40,7 @@ const defaultDeletion = async cookie => ({
     cookie.getUserEmail(),
     { firstName: cookie.getUserFirstName() },
   ),
-  text: defaultText(),
+  text: defaultText,
 });
 
 const deleteAccount = {
