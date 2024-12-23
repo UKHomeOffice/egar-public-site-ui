@@ -10,11 +10,12 @@ const postController = async (req, res) => {
   const userRole = cookie.getUserRole();
 
   const errObj = { message: 'Failed to delete your account. Contact support or try again' };
-  const deleteAccountOptions = await deleteAccount[userRole](cookie);
-
-  res.locals.text = deleteAccountOptions.text();
+  let deleteAccountOptions;
 
   try {
+    deleteAccountOptions = await deleteAccount[userRole](cookie);
+
+    res.locals.text = deleteAccountOptions.text();
     const apiResponse = await deleteAccountOptions.deleteAccount();
     const parsedResponse = JSON.parse(apiResponse);
 
