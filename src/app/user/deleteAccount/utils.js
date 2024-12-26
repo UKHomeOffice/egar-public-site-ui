@@ -48,6 +48,7 @@ const deleteAccount = {
   User: defaultDeletion,
   Manager: defaultDeletion,
   Admin: async (cookie) => {
+    const requesterId = cookie.getUserDbId();
     const orgId = cookie.getOrganisationId();
     const orgUsersRes = await organisationApi.getListOfOrgUsers(orgId);
     const orgUsers = JSON.parse(orgUsersRes).items;
@@ -57,7 +58,7 @@ const deleteAccount = {
       deleteAccount: async () => {
         switch (deletionType) {
           case 'DELETE_ORGANISATION':
-            return organisationApi.delete(orgId);
+            return organisationApi.delete(orgId, requesterId);
 
           case 'DO_NOT_DELETE_ADMIN':
             return JSON.stringify({

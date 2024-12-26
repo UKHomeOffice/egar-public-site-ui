@@ -87,13 +87,17 @@ module.exports = {
    * Calls delete organisation api, deleting the organisation and any associated users & data
    *
    * @param {String} orgId
+   * @param {String} requesterId
    * @returns {Promise} returns response body when resolved
    */
-  delete(orgId) {
+  delete(orgId, requesterId) {
     return new Promise((resolve, reject) => {
       request.delete({
         headers: { 'content-type': 'application/json' },
         url: endpoints.deleteOrgDetails(orgId),
+        body: JSON.stringify({
+          requesterId,
+        }),
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call delete organisation details API');
