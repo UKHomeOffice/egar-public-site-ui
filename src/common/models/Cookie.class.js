@@ -1,6 +1,7 @@
 const logger = require("../utils/logger")(__filename);
 const { isValidAirportCode } = require("../utils/validator");
 const { trimToDecimalPlaces } = require("../utils/utils");
+const { randomUUID } = require('crypto');
 
 /*
  *
@@ -174,6 +175,10 @@ class Cookie {
 
   setCbpId(cbpId) {
     this.session.gar.cbpId = cbpId;
+  }
+
+  getIdempotencyKey() {
+    return randomUUID();
   }
 
   getGarId() {

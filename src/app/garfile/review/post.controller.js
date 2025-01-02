@@ -165,7 +165,7 @@ module.exports = async (req, res) => {
   );
 
   try {
-    await garApi.submitGARForCheckin(garId);
+    await garApi.submitGARForCheckin(garId, req.body.idempotencyKey);
   } catch (err) {
     logger.error('Api failed to submit GAR people for AMG checkin');
     logger.error(err);

@@ -221,10 +221,13 @@ module.exports = {
    * @param {String} garId the id of the gar the person is associated with
    * @returns {Promise} resolves with API response.
    */
-    submitGARForCheckin(garId) {
+    submitGARForCheckin(garId, idempotencyKey) {
       return new Promise((resolve, reject) => {
         request.post({
-          headers: { 'content-type': 'application/json' },
+          headers: { 
+            'content-type': 'application/json',
+            'Idempotency-Key': idempotencyKey,
+          },
           url: endpoints.submitGARForCheckin(garId),
         }, (error, _response, body) => {
           if (error) {
