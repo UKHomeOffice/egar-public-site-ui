@@ -155,6 +155,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: NOTIFY_MFA_TEMPLATE_ID
+            - name: NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID
             - name: PUBLIC_SITE_DBHOST
               valueFrom:
                 secretKeyRef:
