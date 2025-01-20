@@ -1,12 +1,21 @@
 <div class="{{ m.form_group_class('savedpeople', errors) }}">
   <div class="{{ m.form_group_class('firstName', errors) }}">
     <label class="govuk-label govuk-label--m" for="firstName">{{ __('field_given_name') }}</label>
-    {{ m.hint('firstName', __('field_given_name_hint')) }}
     {{ m.error_message('firstName', errors, __) }}
     <input class="govuk-input govuk-input--width-30" id="firstName" name="firstName" autocomplete="off" type="text"
       maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.firstName or req.body.firstName }}"
       {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
     {{ m.character_count_hint('firstName', MAX_STRING_LENGTH) }}   
+  </div>
+
+   <div class="{{ m.form_group_class('middleName', errors) }}">
+    <label class="govuk-label govuk-label--m" for="middleName">{{ __('field_middle_name') }}</label>
+    {{ m.hint('middleName', __('field_middle_name_hint')) }}
+    {{ m.error_message('middleName', errors, __) }}
+    <input class="govuk-input govuk-input--width-30" id="middleName" name="middleName" autocomplete="off" type="text"
+      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.middleName or req.body.middleName }}"
+      {{ 'aria-describedby=middleName-error' if errors | containsError('middleName') }}>
+    {{ m.character_count_hint('middleName', MAX_STRING_LENGTH) }}   
   </div>
 
   <div class="{{ m.form_group_class('lastName', errors) }}">

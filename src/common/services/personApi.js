@@ -100,26 +100,28 @@ module.exports = {
    * @param {Object} person Object representing the person
    */
   update(userId, personId, person) {
-    const { firstName } = person;
-    const { lastName } = person;
-    const { nationality } = person;
-    const { placeOfBirth } = person;
-    const { dateOfBirth } = person;
-    const { gender } = person;
-    const { documentType } = person;
-    const { documentNumber } = person;
-    const { documentExpiryDate } = person;
-    const { peopleType } = person;
-    const { issuingState } = person;
-    const { documentDesc } = person;
-    
-
+    const {
+      firstName,
+      middleName,
+      lastName,
+      nationality,
+      placeOfBirth,
+      dateOfBirth,
+      gender,
+      documentType,
+      documentNumber,
+      documentExpiryDate,
+      peopleType,
+      issuingState,
+      documentDesc,
+    } = person;
     return new Promise((resolve, reject) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updatePerson(userId, personId),
         body: JSON.stringify({
           firstName,
+          middleName,
           lastName,
           nationality,
           placeOfBirth,
@@ -131,7 +133,6 @@ module.exports = {
           peopleType,
           issuingState,
           documentDesc,
-          
         }),
       }, (error, _response, body) => {
         if (error) {

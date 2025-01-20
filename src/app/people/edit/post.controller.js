@@ -13,6 +13,7 @@ module.exports = (req, res) => {
 
   const person = {
     firstName: req.body.firstName,
+    middleName: req.body.middleName,
     lastName: req.body.lastName,
     nationality: _.toUpper(req.body.nationality),
     placeOfBirth: req.body.birthplace,
@@ -25,9 +26,6 @@ module.exports = (req, res) => {
     dateOfBirth: `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`,
     documentDesc: req.body.travelDocumentOther,
   };
-
-  logger.info(person.documentType);
-  logger.info(person.documentDesc);
 
   cookie.updateEditPerson(person);
 

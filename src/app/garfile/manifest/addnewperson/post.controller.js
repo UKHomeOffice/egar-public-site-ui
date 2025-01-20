@@ -19,6 +19,7 @@ module.exports = (req, res) => {
 
   const person = {
     firstName: req.body.firstName,
+    middleName: req.body.middleName,
     lastName: req.body.lastName,
     gender: req.body.gender,
     dateOfBirth: birthdate,

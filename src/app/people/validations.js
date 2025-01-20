@@ -56,6 +56,14 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.validName, 'travelDocumentOther', req.body.travelDocumentOther, 'Enter a real document type'),
     ]);
   }
-  
+
+  if (req.body.middleName) {
+    peopleValidationRules.push([
+      new ValidationRule(validator.notEmpty, 'middleName', req.body.middleName, 'Enter the middle name of the person'),
+      new ValidationRule(validator.isValidStringLength, 'middleName', req.body.middleName, `Middle name must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlpha, 'middleName', req.body.middleName, 'Middle name must not contain special characters, apostrophes or numbers'),
+    ]);
+  }
+
   return peopleValidationRules;
 };

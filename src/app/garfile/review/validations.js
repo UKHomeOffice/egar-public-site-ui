@@ -4,11 +4,9 @@ const i18n = require('i18n');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 
-const validateManifestMsg = 'An invalid manifest was provided to the server';
 const registrationMsg = 'Aircraft registration must be completed';
 const responsibleMsg = 'Responsible person details must be completed';
 const customsMsg = 'Customs Declaration question not answered';
-
 
 module.exports.validations = (garfile, garpeople, frmUpload = false) => {
   const voyageDateMsg = i18n.__('validator_msg_voyage_dates');
@@ -19,18 +17,6 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
     departureDate, departureTime, arrivalDate, arrivalTime,
   };
   const validationArr = [];
-  garpeople.items.forEach((crew) => {
-    const crewLabel = i18n.__('validator_api_uploadgar_people_type_crew');
-    const passengerLabel = i18n.__('validator_api_uploadgar_people_type_passenger');
-    const peopleType = crew.peopleType === 'Crew' ? crewLabel : passengerLabel;
-    const name = i18n.__('validator_api_uploadgar_person_type_person_name', { peopleType, firstName: crew.firstName, lastName: crew.lastName });
-    validationArr.push([
-      new ValidationRule(validator.isAlpha, '', crew.lastName, `Surname for ${name} must not contain special characters or numbers.`),
-    ]);
-    validationArr.push([
-      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given name for ${name} must not contain special characters or numbers.`),
-    ]);
-  });
 
   validationArr.push([
     new ValidationRule(validator.isValidDepAndArrDate, 'departure', voyageDateTimeObj, voyageDateMsg),
@@ -38,9 +24,7 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
   validationArr.push([
     new ValidationRule(validator.notEmpty, 'aircraft', registration, registrationMsg),
   ]);
-  validationArr.push([
-    new ValidationRule(validator.notEmpty, 'manifest', garpeople.items, validateManifestMsg),
-  ]);
+
   if(!frmUpload) {
     validationArr.push([
       new ValidationRule(validator.notEmpty, 'responsiblePerson', responsibleGivenName, responsibleMsg),

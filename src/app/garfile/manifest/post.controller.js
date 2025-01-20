@@ -55,6 +55,7 @@ module.exports = async (req, res) => {
         const people = selectedPeople.map(function (element) {
           return ({ 
             firstName: element.firstName,
+            middleName: req.body.middleName,
             lastName: element.lastName,
             dateOfBirth: element.dateOfBirth,
             documentNumber: element.documentNumber,
