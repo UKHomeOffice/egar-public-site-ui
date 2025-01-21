@@ -100,6 +100,7 @@
 	"person_sort": "Click table headers to sort alphabetically",
 	"column_first_and_middle_name": "First and middle name",
 	"field_given_name": "Given names",
+	"field_given_name_hint": "If you have any middle names, you must include them here.",
 	"field_middle_name": "Middle name",
 	"field_middle_name_hint": "This field is optional.",
 	"field_surname": "Surname",
@@ -539,6 +540,5 @@
 	"responsible_person_no_records_create_new": "No saved responsible person records found. Create a new one in the Responsible Person tab.",
 	"heading_edit_responsible_person": "Edit responsible person",
 	"caption_responsible_person_details": "Select the details of a responsible person you have previously added",
-	"prevent_zzzz_or_yyyy_message": "Add ICAO/IATA codes for the location. ZZZZ or YYYY are not accepted codes.",
-	"field_given_name_hint": "field_given_name_hint"
+	"prevent_zzzz_or_yyyy_message": "Add ICAO/IATA codes for the location. ZZZZ or YYYY are not accepted codes."
 }
