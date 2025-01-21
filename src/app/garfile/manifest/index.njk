@@ -76,7 +76,7 @@
                     {% endif %}
                   </th>
                   <th class="govuk-table__header">{{__('field_surname')}}</th>
-                  <th class="govuk-table__header">{{__('field_given_name')}}</th>
+                  <th class="govuk-table__header">{{__('column_first_and_middle_name')}}</th>
                   <th class="govuk-table__header">{{__('field_person_type_short')}}</th>
                   <th class="govuk-table__header">{{__('field_document_expiry_date')}}</th>
                 </tr>
@@ -117,7 +117,7 @@
                           {% endif%}
                         </td>
                         <td class="govuk-table__cell">{{person.lastName}}</td>
-                        <td class="govuk-table__cell">{{person.firstName}}</td>
+                        <td class="govuk-table__cell">{{person.firstName}} {{person.middleName}}</td>
                         <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                         <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
                       </tr>
@@ -176,7 +176,7 @@
                     {% endif %}
                   </th>
                   <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
-                  <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
+                  <th class="govuk-table__header" scope="col">{{__('column_first_and_middle_name')}}</th>
                   <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
                   <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
                   <th class="govuk-table__header" scope="col">{{__('field_gender')}}</th>
@@ -225,7 +225,7 @@
                                 </td>
                                 {% endif %}
                                   <td class="govuk-table__cell garPersonLastName" style="{{ "padding-left: 10px" if isGarPersonInvalid }}">{{person.lastName}}</td>
-                                  <td class="govuk-table__cell garPersonFirstName">{{person.firstName}}</td>
+                                  <td class="govuk-table__cell garPersonFirstName">{{person.firstName}} {{person.middleName}}</td>
                                   <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
                                   <td class="govuk-table__cell garPersonNationality">{{person.nationality | upper}}</td>
                                   <td class="govuk-table__cell">{{person.gender}}</td>

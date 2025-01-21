@@ -659,6 +659,7 @@ class Cookie {
 
   updateEditPerson(person) {
     this.session.editPerson.firstName = person.firstName;
+    this.session.editPerson.middleName = person.middleName;
     this.session.editPerson.lastName = person.lastName;
     this.session.editPerson.documentType = person.documentType;
     this.session.editPerson.documentNumber = person.documentNumber;

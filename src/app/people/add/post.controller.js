@@ -13,6 +13,7 @@ module.exports = (req, res) => {
 
   const person = {
     firstName: req.body.firstName,
+    middleName: req.body.middleName,
     lastName: req.body.lastName,
     nationality: _.toUpper(req.body.nationality),
     placeOfBirth: req.body.birthplace,

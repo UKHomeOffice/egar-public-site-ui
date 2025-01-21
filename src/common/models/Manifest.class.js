@@ -33,6 +33,7 @@ class Manifest {
     return { 
       body: {
         firstName: person.firstName,
+        middleName: person.middleName,
         lastName: person.lastName,
 
         nationality: person.nationality,
