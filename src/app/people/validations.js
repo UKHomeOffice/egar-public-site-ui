@@ -59,9 +59,9 @@ module.exports.validations = (req) => {
 
   if (req.body.middleName) {
     peopleValidationRules.push([
+      new ValidationRule(validator.isAlpha, 'middleName', req.body.middleName, 'Middle name must not contain special characters, apostrophes or numbers'),
       new ValidationRule(validator.notEmpty, 'middleName', req.body.middleName, 'Enter the middle name of the person'),
       new ValidationRule(validator.isValidStringLength, 'middleName', req.body.middleName, `Middle name must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAlpha, 'middleName', req.body.middleName, 'Middle name must not contain special characters, apostrophes or numbers'),
     ]);
   }
 

@@ -7,6 +7,7 @@ module.exports = {
   /**
    * Creates a new saved person. Person object contains:
    * firstName,
+   * middleName
    * lastName,
    * nationality,
    * placeOfBirth,

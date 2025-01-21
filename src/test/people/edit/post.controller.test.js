@@ -60,6 +60,7 @@ describe('Person Edit Post Controller', () => {
 
     person = {
       firstName: req.body.firstName,
+      middleName: undefined,
       lastName: req.body.lastName,
       gender: req.body.gender,
       dateOfBirth: '1937-06-07',

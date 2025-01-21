@@ -6,7 +6,7 @@ const createArrayCsvStringifier = require('csv-writer').createArrayCsvStringifie
 
 const writePeopleAsCSVtoResponse = (res, people) => {
     const csvStringifier = createArrayCsvStringifier({
-        header: ['Id', 'First Name', 'Last Name', 'Gender', 'DoB', 'Nationality', 'Doc Type', 'Doc Number', 'Doc Expiry', 'Doc Issuing State', 'Type']
+        header: ['Id', 'First Name', 'Middle Name', 'Last Name', 'Gender', 'DoB', 'Nationality', 'Doc Type', 'Doc Number', 'Doc Expiry', 'Doc Issuing State', 'Type']
     });
 
     const dateSlug = new Date().toISOString().slice(0, 10);
@@ -27,7 +27,7 @@ module.exports = (req, res) => {
 
             const people = JSON.parse(values).map((person) => {
 
-                return [person.personId, person.firstName, person.lastName, person.gender, person.dateOfBirth, person.nationality, person.documentType, person.documentNumber, person.documentExpiryDate, person.issuingState, person.peopleType.name];
+                return [person.personId, person.firstName, person.middleName, person.lastName, person.gender, person.dateOfBirth, person.nationality, person.documentType, person.documentNumber, person.documentExpiryDate, person.issuingState, person.peopleType.name];
             });
 
             writePeopleAsCSVtoResponse(res, people);

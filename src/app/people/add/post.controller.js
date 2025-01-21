@@ -27,9 +27,6 @@ module.exports = (req, res) => {
     documentDesc: req.body.travelDocumentOther,
   };
 
-    logger.info(person.documentType);
-    logger.info(person.documentDesc);
-
   // Validate chains
   validator.validateChains(validations.validations(req))
     .then(() => {

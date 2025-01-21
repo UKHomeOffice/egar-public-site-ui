@@ -59,6 +59,7 @@ describe('Person Add Post Controller', () => {
 
     person = {
       firstName: req.body.firstName,
+      middleName: undefined,
       lastName: req.body.lastName,
       nationality: 'USA', // Check it upper cases it
       placeOfBirth: req.body.birthplace,
