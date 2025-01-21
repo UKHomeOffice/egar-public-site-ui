@@ -24,3 +24,16 @@
     float: left;
     margin-bottom: 10px;
   }
+
+  .custom-govuk-notification-banner{
+	background-color: #005ea5 !important;
+    border: 5px solid #005ea5;
+    margin-bottom: 50px;
+}
+.notification-banner-text-link{
+    text-decoration: none;
+    color: #005ea5;
+}
+.app-check-your-answers-margin-bottom{
+    margin-bottom: 10px;
+}

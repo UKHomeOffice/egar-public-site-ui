@@ -16,7 +16,6 @@
       {% endif %}
     </div>
   </dl>
-  {{ b.coa_designation_regulation_change(true) }}
 
   {% macro check_your_answers_row(label, value, id = "") %}
     <div class="app-check-your-answers__contents">
@@ -74,7 +73,6 @@
       {% endif %}
     </div>
   </dl>
-  {{ b.coa_designation_regulation_change(false) }}
 
   <dl class="app-check-your-answers app-check-your-answers--short">
     {{ check_your_answers_row(__('field_arrival_date'), garfile.arrivalDate) }}
@@ -109,25 +107,10 @@
     <div class="app-check-your-answers__contents">
       <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
         {{__('heading_manifest_details')}}
-        <p class="govuk-body-s" style="white-space: nowrap;">
-          <mark>{{__('expired_passport_warning')}}</mark>
+        <p class="govuk-body-s" style="white-space: nowrap;padding-top:15px;font-size: 1.1875rem;">
+          {{__('expired_passport_warning')}}
         </p>
-        {% if showChangeLinks %}
-          <html>
-            <head>
-              <p>
-                <b>Click</b>
-              </head>
-              <body>
-                <a href="/garfile/manifest">
-                       here
-               </a>
-                <head>
-                  <b>to add a person from current manifest to people.</b>
-                  <head></body>
-                </html>
-              {% endif %}
-            </dt>
+      </dt>
             {% if showChangeLinks %}
               <dd style="border-bottom: none;" class="app-check-your-answers__change">
                 <a href="/garfile/manifest" id='manifest-change'>
@@ -210,6 +193,9 @@
                 {% endif %}
               </tbody>
             </table>
+            {% if showChangeLinks %}
+            <p><a href="/garfile/manifest">Add a person from current manifest to people</a></p>
+            {% endif %}
             <dl class="app-check-your-answers app-check-your-answers--short">
               {{ check_your_answers_row(
                   __('is_military_flight'), 
