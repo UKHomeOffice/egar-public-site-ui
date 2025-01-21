@@ -116,8 +116,4 @@ describe('People validations', () => {
       );
     }
   });
-
-  // too long
-  // whtiespace only
-  // can be added.
 });
