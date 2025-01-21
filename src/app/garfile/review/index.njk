@@ -55,6 +55,7 @@
 
       {% if isJourneyUkInbound%}
         <form id="submitGarForm" action="/garfile/review" method="post">
+          <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
           <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit_amg')}}">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         </form>
