@@ -26,24 +26,7 @@
     <div class="govuk-grid-column-full">
       <span class="govuk-caption-xl">{{__('section_count', 8, 9)}}</span>
       <h1 class="govuk-heading-xl">{{__('title_review_gar')}}</h1>
-        <div class="custom-govuk-notification-banner" role="region"
-        aria-labelledby="govuk-notification-banner-title"
-        data-module="custom-govuk-notification-banner">
-            <div class="govuk-notification-banner__header">
-              <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                Important
-              </h2>
-            </div>
-            <div class="govuk-notification-banner__content">
-              <p class="govuk-notification-banner__heading">
-                The GB departure and arrival ports must be officially designated to handle this flight.
-              </p>
-              <p class="govuk-notification-banner__heading">
-                Check the <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1151707/GOV.UK_GAR-Instructions-April_2023_V1.0_SDS.pdf" class="notification-banner-text-link">General aviation report (GAR) guidance</a> to find out if your intended port is officially approved or confirm with aerodrome authority directly.
-              </p>
-            </div>
-        </div>
-
+       {% include "common/templates/includes/blue-banner.njk" %}
       {% if errors %}
         {% include "common/templates/includes/errors.njk" %}
       {% endif %}
@@ -55,13 +38,11 @@
 
       {% if isJourneyUkInbound%}
         <form id="submitGarForm" action="/garfile/review" method="post">
-          <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
           <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit_amg')}}">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         </form>
       {% else %}
         <form id="submitGarForm" action="/garfile/review" method="post">
-          <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
           <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit')}}">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         </form>
