@@ -1,4 +1,5 @@
 # kd --timeout=6m --file ops/kube/artifactory-secret.yml
+kd --timeout=6m --file ops/kube/secret-to-create.yml
 kd --timeout=6m --file ops/kube/public-site-network-policy.yml
 kd --timeout=12m --file ops/kube/public-site-deployment.yml
 kd --timeout=6m --file ops/kube/public-site-service.yml
