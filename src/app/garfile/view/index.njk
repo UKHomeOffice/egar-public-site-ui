@@ -19,33 +19,31 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">{{__('title_gar_summary')}}</h1>
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl heading-text-spacing">{% if successHeader === 'GAR Amendment' %}Amend your GAR {% else %}  {{__('title_gar_summary')}} {% endif %}</h1>
+      {% include "common/templates/includes/blue-banner.njk" %}
     </div>
-    
-    <div class="govuk-grid-column-two-thirds">
-      {% if successMsg %}
+     
+    <div class="govuk-grid-column-full">
+      {% if successMsg and successHeader !== 'GAR Amendment' %}
         {% include "common/templates/includes/success-action.njk" %}
       {% endif %}
     </div>
-
     {% include "check-your-answers.njk" %}
     <div class="govuk-grid-column-two-thirds">
 
       {% if garfile.status.name === 'Draft' %}
-        <a id="submit-gar" class="govuk-button" href="/garfile/review">{{__('button_submit_this_gar')}}</a>
-        <a id="display-manifest" class="govuk-button" href="/garfile/printmanifest">Print GAR</a>
+        <a id="submit-gar" class="govuk-button margin-right-20" href="/garfile/review">{% if successHeader === 'GAR Amendment' %}Resubmit GAR {% else %} {{__('button_submit_this_gar')}} {% endif %}</a>
+        <a id="display-manifest" class="govuk-button margin-right-20" href="/garfile/printmanifest">Print GAR</a>
       {% endif %}
       {% if garfile.status.name !== 'Cancelled' %}
-        <p class="govuk-body-m">
           {% if isAbleToCancelGar or garfile.status.name === 'Draft' %}
-            <a id="cancel-gar"  class="govuk-button" href="/garfile/cancel">{{__('title_cancel_gar')}}</a>
+            <a id="cancel-gar"  class="govuk-button margin-right-20" href="/garfile/cancel">{{__('title_cancel_gar')}}</a>
           {% endif %}
           {% if garfile.status.name === 'Submitted' %}
-            <a id="amend-gar" class="govuk-button" href="/garfile/amend">{{__('title_amend_gar')}}</a>
-            <a id="display-manifest" class="govuk-button" href="/garfile/printmanifest">Print GAR</a>
+            <a id="amend-gar" class="govuk-button margin-right-20" href="/garfile/amend">{{__('title_amend_gar')}}</a>
+            <a id="display-manifest" class="govuk-button margin-right-20" href="/garfile/printmanifest">Print GAR</a>
           {% endif %}
-        </p>
       {% endif %}
       <p class="govuk-body-m">
         <a id='exit-view' class="govuk-button govuk-button--secondary" href="/home" >{{__('form_exit')}}</a>

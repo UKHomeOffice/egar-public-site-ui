@@ -1,14 +1,14 @@
 {% import "common/templates/includes/banners.njk" as b %}
 
 <div class="govuk-grid-column-full">
-  <dl id="departure" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+  <dl id="departure" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
     <div class="app-check-your-answers__contents">
       <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
         {{ __('heading_departure_details') }}
       </dt>
       {% if showChangeLinks %}
         <dd style="border-bottom: none;" class="app-check-your-answers__change">
-          <a href="/garfile/departure" id='departure-change'>
+          <a href="/garfile/departure" id='departure-change' class="a-link-text">
             {{__('change_prefix')}}
             <span class="govuk-visually-hidden">{{ __('heading_departure_details') }}</span>
           </a>
@@ -58,14 +58,14 @@
 
   {{ m.departure_warning_message(__) }}
 
-  <dl id="arrival" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+  <dl id="arrival" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
     <div class="app-check-your-answers__contents">
       {% if showChangeLinks %}
         <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
           {{__('heading_arrival_details')}}
         </dt>
         <dd style="border-bottom: none;" class="app-check-your-answers__change">
-          <a href="/garfile/arrival" id='arrival-change'>
+          <a href="/garfile/arrival" id='arrival-change' class="a-link-text">
             {{__('change_prefix')}}
             <span class="govuk-visually-hidden">{{__('heading_arrival_details')}}</span>
           </a>
@@ -81,14 +81,14 @@
     {{ check_your_answers_row_coordinates('arrivalCoordinates', __('field_arrival_coordinates'), garfile.arrivalLat, garfile.arrivalLong, __) }}
   </dl>
 
-  <dl id="aircraft" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+  <dl id="aircraft" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
     <div class="app-check-your-answers__contents">
       <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
         {{__('heading_aircraft_details')}}
       </dt>
       {% if showChangeLinks %}
         <dd style="border-bottom: none;" class="app-check-your-answers__change">
-          <a href="/garfile/craft" id='aircraft-change'>
+          <a href="/garfile/craft" id='aircraft-change'  class="a-link-text">
             {{__('change_prefix')}}
             <span class="govuk-visually-hidden">{{__('heading_aircraft_details')}}</span>
           </a>
@@ -103,7 +103,7 @@
     {{ check_your_answers_row(__('field_aircraft_base'), garfile.craftBase) }}
   </dl>
 
-  <dl id="manifest" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+  <dl id="manifest" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
     <div class="app-check-your-answers__contents">
       <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
         {{__('heading_manifest_details')}}
@@ -113,7 +113,7 @@
       </dt>
             {% if showChangeLinks %}
               <dd style="border-bottom: none;" class="app-check-your-answers__change">
-                <a href="/garfile/manifest" id='manifest-change'>
+                <a href="/garfile/manifest" id='manifest-change'  class="a-link-text">
                   {{__('change_prefix')}}
                   <span class="govuk-visually-hidden">{{__('heading_manifest_details')}}</span>
                 </a>
@@ -127,15 +127,15 @@
           <table class="govuk-table" id="manifestTable">
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
-                <th class="govuk-table__header" scope="col">{{__('field_given_name')}}</th>
-                <th class="govuk-table__header" scope="col">{{__('field_dob')}}</th>
-                <th class="govuk-table__header" scope="col">{{__('field_nationality')}}</th>
-                <th class="govuk-table__header" scope="col">{{__('field_gender')}}</th>
-                <th class="govuk-table__header" scope="col">{{__('field_birth_place')}}</th>
-                <th class="govuk-table__header" scope="col">{{__('field_person_type_short')}}</th>
+                <th class="govuk-table__header" scope="col" valign="top">{{__('field_surname')}}</th>
+                <th class="govuk-table__header" scope="col" valign="top">{{__('field_given_name')}}</th>
+                <th class="govuk-table__header" scope="col" valign="top">{{__('field_dob')}}</th>
+                <th class="govuk-table__header" scope="col" valign="top">{{__('field_nationality')}}</th>
+                <th class="govuk-table__header" scope="col" valign="top">{{__('field_gender')}}</th>
+                <th class="govuk-table__header" scope="col" valign="top">{{__('field_birth_place')}}</th>
+                <th class="govuk-table__header" scope="col" valign="top">{{__('field_person_type_short')}}</th>
                 {% if isJourneyUKInbound %}
-                  <th class="govuk-table__header" scope="col">{{__('field_upt_response')}}</th>
+                  <th class="govuk-table__header" scope="col" valign="top">{{__('field_upt_response')}}</th>
                 {% endif %}
               </tr>
             </thead>
@@ -151,7 +151,14 @@
                     <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
                     <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                     {% if isJourneyUKInbound %}
-                      <td class="govuk-table__cell">{{__('amg_status_check_response_code_' + person.amgCheckinResponseCode) if person.amgCheckinResponseCode}}</td>
+                      {% if person.amgCheckinResponseCode === '0B'%}
+                        {% set statusColor = 'no-reocord'%}
+                      {% elif person.amgCheckinResponseCode === '0A'%}
+                        {% set statusColor = 'valid-permission-to-travel'%}
+                      {% elif person.amgCheckinResponseCode === '0Z'%}
+                        {% set statusColor = 'authority-to-carry-granted'%}
+                      {% endif %}
+                      <td class="govuk-table__cell"><div class="{{statusColor}} status-text">{{__('amg_status_check_response_code_' + person.amgCheckinResponseCode)if person.amgCheckinResponseCode}}</div></td>
                       {%endif%}
                     </tr>
                     <tr class="govuk-table__row">
@@ -194,7 +201,7 @@
               </tbody>
             </table>
             {% if showChangeLinks %}
-            <p><a href="/garfile/manifest">Add a person from current manifest to people</a></p>
+            <p class="margin-bottom-40"><a href="/garfile/manifest"  class="a-link-text">Add a person from current manifest to people</a></p>
             {% endif %}
             <dl class="app-check-your-answers app-check-your-answers--short">
               {{ check_your_answers_row(
@@ -207,14 +214,14 @@
             
           </div>
 
-          <dl id="responsiblePerson" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+          <dl id="responsiblePerson" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
             <div class="app-check-your-answers__contents">
               <dt style="width: 500px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
                 {{__('heading_responsible_person_details')}}
               </dt>
               {% if showChangeLinks %}
                 <dd style="border-bottom: none;" class="app-check-your-answers__change">
-                  <a href="/garfile/resperson" id='responsible-person-change'>
+                  <a href="/garfile/resperson" id='responsible-person-change'  class="a-link-text">
                     {{__('change_prefix')}}
                     <span class="govuk-visually-hidden">{{__('heading_responsible_person_details')}}</span>
                   </a>
@@ -255,14 +262,14 @@
             {% endif %}
           </dl>
 
-          <dl id="customs" class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+          <dl id="customs" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
             <div class="app-check-your-answers__contents">
               <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
                 {{__('heading_customs')}}
               </dt>
               {% if showChangeLinks %}
                 <dd style="border-bottom: none;" class="app-check-your-answers__change">
-                  <a href="/garfile/customs" id='customs-change'>
+                  <a href="/garfile/customs" id='customs-change'  class="a-link-text">
                     {{__('change_prefix')}}
                     <span class="govuk-visually-hidden">{{__('heading_customs')}}</span>
                   </a>
@@ -298,14 +305,14 @@
             {% endif %}
           </dl>
 
-          <dl class="app-check-your-answers app-check-your-answers--short" style="margin-bottom: 0;">
+          <dl class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
             <div class="app-check-your-answers__contents">
               <dt style="width: 400px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
                 {{__('heading_supporting_documentation_details')}}
               </dt>
               {% if showChangeLinks %}
                 <dd style="border-bottom: none;" class="app-check-your-answers__change">
-                  <a href="/garfile/supportingdocuments" id='supporting-documents-change'>
+                  <a href="/garfile/supportingdocuments" id='supporting-documents-change'  class="a-link-text">
                     {{__('change_prefix')}}
                     <span class="govuk-visually-hidden">{{__('heading_supporting_documentation_details')}}</span>
                   </a>

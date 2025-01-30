@@ -4,23 +4,19 @@
   {% set checkin_code = person.amgCheckinResponseCode %}
 
   {% if (status === 'Complete') %}
-    {% if (checkin_code === travelPermissionCodes.VALID) %}
-      {% set statuscolour = 'green' %}
-    {% elif(checkin_code === travelPermissionCodes.NO_BOARD) %}
-      {% set statuscolour = 'red' %}
-      {% set statustitle = 'This passenger may not travel' %}
-    {% else %}
-      {% set statuscolour = 'blue' %}
-    {% endif %}
-
     {% set statustitle = __('amg_status_check_response_code_' + checkin_code) if checkin_code else '' %}
-
   {% elif(status === 'Pending') %}
-    {% set statuscolour = 'amber' %}
     {% set statustitle = 'Permission to travel pending' %}
   {% else %}
-    {% set statuscolour = 'black' %}
     {% set statustitle = 'There was a problem requesting permission to travel for this passenger' %}
+  {% endif %}
+
+  {% if person.amgCheckinResponseCode === '0B'%}
+    {% set statusColor = 'no-reocord'%}
+  {% elif person.amgCheckinResponseCode === '0A'%}
+    {% set statusColor = 'valid-permission-to-travel'%}
+  {% elif person.amgCheckinResponseCode === '0Z'%}
+    {% set statusColor = 'authority-to-carry-granted'%}
   {% endif %}
 
   {% set statustitle = statustitle %}
@@ -28,55 +24,25 @@
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">
       <div>
-        <div class="status-disc {{statuscolour}}" title="{{statustitle}}"></div>
+        <div class="{{statusColor}} status-text"  title="{{statustitle}}">{{statustitle}}</div>
       </div>
     </td>
     <td class="govuk-table__cell">{{person.firstName}}
       {{person.lastName}}</td>
     <td class="govuk-table__cell">
-      <details class="govuk-details permission-details" data-module="govuk-details">
-        <summary class="govuk-details__summary" aria-controls="details-content-general-support" aria-expanded="false" title="Checking Passport / Travel Documents">
-          <span class="govuk-details__summary-text">{{statustitle}}</span>
-        </summary>
-        <div class="govuk-details__text" id="details-content-general-support" aria-hidden="true">
-          {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === '0') %}
-            {% if checkin_code === travelPermissionCodes.NO_BOARD %}
+        <div>
+            {% if checkin_code === travelPermissionCodes.NO_BOARD %} 
               Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
             {% elif(checkin_code === travelPermissionCodes.VALID) %}
-              <p class="govuk-body-s">
-                This is confirmation that the individual has a valid immigration permission and no other immigration checks are required.
-              </p>
-              <p class="govuk-body-s">
-                You must still check if this individual has a valid passport or travel document and that the passport or travel document presented is genuine and valid, and that the person is the rightful holder. 
-              </p>
-              <p class="govuk-body-s">
-                For more information on checking passports and travel documents click here&nbsp;
-                <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">Guidance on examining identity documents (publishing.service.gov.uk)</a>
+              <p class="govuk-body">
+                No action required.
               </p>
             {% else %}
-            <p class="govuk-body-s">
+            <p class="govuk-body">
               You must check if this individual has a valid passport or travel document.
             </p>
-            <p class="govuk-body-s">
-              For visa nationals you must also check for a valid immigration or exemption document. 
-              Follow this link to check&nbsp;
-              <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers">UK visa requirements (accessible version) - GOV.UK (www.gov.uk)</a>
-              <br/> You should conduct a manual check for an immigration permission by:
-              Checking for a valid physical immigration document (such as a visa vignette or stamp etc.)<br/>
-              Or
-              By using a sharecode which the individual can request from their UKVI account. 
-              Follow this link to access the service <a href="https://www.gov.uk/check-immigration-status">https://www.gov.uk/check-immigration-status</a>
-            </p>
-            <p class="govuk-body-s">
-              If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub {{ CARRIER_SUPPORT_HUB_UK_NUMBER }} or {{ CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER }} from outside the UK.
-            </p>
             {% endif %}
-          {% else %}
-            There was an error processing the permission to travel for this person.
-            <br/><br />Please contact <a href="/help">Support</a> or email <a href="mailto:GARSupport@Homeoffice.gov.uk">GARSupport@Homeoffice.gov.uk</a> about the issue.
-          {% endif %}
         </div>
-      </details>
     </td>
   </tr>
 
@@ -86,9 +52,9 @@
 <table class="govuk-table" id="upt-responses" style="table-layout: fixed;">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th class="govuk-table__header" style="width:15%;">Status</th>
-      <th class="govuk-table__header" style="width:35%;">Passenger</th>
-      <th class="govuk-table__header" style="width:50%;">Permission to Travel</th>
+      <th class="govuk-table__header" style="width:35%;">Status</th>
+      <th class="govuk-table__header" style="width:40%;">Passenger</th>
+      <th class="govuk-table__header" style="width:35%;">What you need to do</th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
@@ -112,9 +78,27 @@
     {% endfor %}
   </tbody>
 </table>
-
+<div class="margin-bottom-40">
+<p>
+  You must check if this individual has a valid passport or travel document. </p>
+  <p> You must also check for a valid immigration or exemption document. <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers">Check UK visa requirements.</a></p>
+  <p>You should conduct a manual check for an immigration permission by: 
+<ul>
+<li><p>Checking for a valid physical immigration document (such as a visa vignette or stamp etc.)</p></li>
+</ul>
+<p>Or</p>
+<ul>
+<li>
+  <p>By using a sharecode which the individual can request from their UKVI account.
+  <a href="https://www.gov.uk/check-immigration-status">Access the UKVI service.</a>
+  <p>
+</li></ul>
+</p>
+ <p>If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for advice by calling the Border Force Carrier Support Hub 0300 369 0610 or +44 204 619 6020 from outside the UK.</p>
+           
+</div>
 <form action="/garfile/review" method="post">
-  <h2 class="govuk-heading-m">{{__('heading_submit_gar')}}</h2>
+  <h2 class="govuk-heading-m">Declaration</h2>
   <p class="govuk-body-m">{{__('submit_gar_caption')}}</p>
   <input id='review-submit' type="submit" class="govuk-button" value="{{__('amg_check_form_submit')}}">
   <input type="hidden" name="statuscheck" value="true"/>
