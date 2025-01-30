@@ -4,22 +4,10 @@
   {% set checkin_code = person.amgCheckinResponseCode %}
 
   {% if (status === 'Complete') %}
-    {% if (checkin_code === travelPermissionCodes.VALID) %}
-      {% set statuscolour = 'green' %}
-    {% elif(checkin_code === travelPermissionCodes.NO_BOARD) %}
-      {% set statuscolour = 'red' %}
-      {% set statustitle = 'This passenger may not travel' %}
-    {% else %}
-      {% set statuscolour = 'blue' %}
-    {% endif %}
-
     {% set statustitle = __('amg_status_check_response_code_' + checkin_code) if checkin_code else '' %}
-
   {% elif(status === 'Pending') %}
-    {% set statuscolour = 'amber' %}
     {% set statustitle = 'Permission to travel pending' %}
   {% else %}
-    {% set statuscolour = 'black' %}
     {% set statustitle = 'There was a problem requesting permission to travel for this passenger' %}
   {% endif %}
 
