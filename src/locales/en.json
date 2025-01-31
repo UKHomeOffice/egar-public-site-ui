@@ -387,7 +387,7 @@
 	"what_happens_next_caption": "We have sent the user an email that contains an invitation link. This link will remain valid for 12 hours. The user will need to click the link in the email to complete the account registration process.",
 	"what_happens_next_any_queries_1": "If you have any queries please ",
 	"what_happens_next_any_queries_2": "contact us",
-	"support_email": "{{__('support_email')}}",
+	"support_email": "GARSupport@Homeoffice.gov.uk",
 	"what_happens_next_any_queries_3": ".",
 	"title_assign_role": "Assign user role",
 	"assign_role_caption": "Please select the role you would like the user to perform within your organisation.",
