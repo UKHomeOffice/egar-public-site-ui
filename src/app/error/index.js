@@ -9,11 +9,6 @@ router.get('/error/404', (req, res) => {
   res.render('app/error/404');
 });
 
-router.get('/error/500', (req, res) => {
-  res.status(500);
-  res.render('app/error/500');
-});
-
 router.get('/error/503', (req, res) => {
   res.status(503);
   res.render('app/error/503');
