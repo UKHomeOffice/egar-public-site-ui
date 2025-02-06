@@ -5,10 +5,8 @@
 
   {% if (status === 'Complete') %}
     {% set statustitle = __('amg_status_check_response_code_' + checkin_code) if checkin_code else '' %}
-  {% elif(status === 'Pending') %}
-    {% set statustitle = 'Permission to travel pending' %}
   {% else %}
-    {% set statustitle = 'There was a problem requesting permission to travel for this passenger' %}
+    {% set statustitle = '' %}
   {% endif %}
 
   {% if person.amgCheckinResponseCode === '0B'%}
@@ -17,6 +15,8 @@
     {% set statusColor = 'valid-permission-to-travel'%}
   {% elif person.amgCheckinResponseCode === '0Z'%}
     {% set statusColor = 'authority-to-carry-granted'%}
+  {% else %}  
+    {% set statusColor = ''%}
   {% endif %}
 
   {% set statustitle = statustitle %}
@@ -24,24 +24,30 @@
   <tr class="govuk-table__row">
     <td class="govuk-table__cell">
       <div>
+        {% if statusColor %}
         <div class="{{statusColor}} status-text"  title="{{statustitle}}">{{statustitle}}</div>
+        {% endif %}
       </div>
     </td>
     <td class="govuk-table__cell">{{person.firstName}}
       {{person.lastName}}</td>
     <td class="govuk-table__cell">
         <div>
-            {% if checkin_code === travelPermissionCodes.NO_BOARD %} 
-              Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
-            {% elif(checkin_code === travelPermissionCodes.VALID) %}
+          {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === '0') %}
+              {% if checkin_code === travelPermissionCodes.NO_BOARD %} 
+                Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
+              {% elif(checkin_code === travelPermissionCodes.VALID) %}
+                <p class="govuk-body">
+                  No action required.
+                </p>
+              {% else %}
               <p class="govuk-body">
-                No action required.
+                You must check if this individual has a valid passport or travel document.
               </p>
-            {% else %}
-            <p class="govuk-body">
-              You must check if this individual has a valid passport or travel document.
-            </p>
-            {% endif %}
+              {% endif %}
+          {% else %}
+            There was an error processing the permission to travel for this person.
+          {% endif %}
         </div>
     </td>
   </tr>

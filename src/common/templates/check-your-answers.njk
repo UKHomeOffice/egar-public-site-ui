@@ -157,9 +157,15 @@
                         {% set statusColor = 'valid-permission-to-travel'%}
                       {% elif person.amgCheckinResponseCode === '0Z'%}
                         {% set statusColor = 'authority-to-carry-granted'%}
+                      {% else %}  
+                        {% set statusColor = '' %}
                       {% endif %}
-                      <td class="govuk-table__cell"><div class="{{statusColor}} status-text">{{__('amg_status_check_response_code_' + person.amgCheckinResponseCode)if person.amgCheckinResponseCode}}</div></td>
-                      {%endif%}
+                      <td class="govuk-table__cell">
+                        {% if statusColor %}
+                          <div class="{{statusColor}} status-text">{{__('amg_status_check_response_code_' + person.amgCheckinResponseCode)if person.amgCheckinResponseCode}}</div>
+                        {% endif%}
+                      </td>  
+                      {% endif%}
                     </tr>
                     <tr class="govuk-table__row">
                       <td class="govuk-table__cell" colspan="{{8 if isJourneyUKInbound else 7}}">
