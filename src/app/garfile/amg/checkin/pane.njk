@@ -1,4 +1,4 @@
-{% macro statusRow(person) %}
+{% macro statusRow(person, statusCheckComplete) %}
 
   {% set status = person.amgCheckinStatus.name %}
   {% set checkin_code = person.amgCheckinResponseCode %}
@@ -33,6 +33,7 @@
       {{person.lastName}}</td>
     <td class="govuk-table__cell">
         <div>
+          {% if statusCheckComplete %}
           {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === '0') %}
               {% if checkin_code === travelPermissionCodes.NO_BOARD %} 
                 Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
@@ -47,6 +48,9 @@
               {% endif %}
           {% else %}
             There was an error processing the permission to travel for this person.
+          {% endif %}
+          {% else %}
+           <span style="opacity:.5;"> Awaiting ...</span>
           {% endif %}
         </div>
     </td>
@@ -80,28 +84,22 @@
 
     {% for person in garpeople.items %}
       {# <pre>{{person | dump(2)}}</pre> #}
-      {{statusRow(person)}}
+      {{statusRow(person, statusCheckComplete)}}
     {% endfor %}
   </tbody>
 </table>
-<div class="margin-bottom-40">
-<p>
-  You must check if this individual has a valid passport or travel document. </p>
-  <p> You must also check for a valid immigration or exemption document. <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers">Check UK visa requirements.</a></p>
-  <p>You should conduct a manual check for an immigration permission by: 
-<ul>
-<li><p>Checking for a valid physical immigration document (such as a visa vignette or stamp etc.)</p></li>
-</ul>
-<p>Or</p>
-<ul>
-<li>
-  <p>By using a sharecode which the individual can request from their UKVI account.
-  <a href="https://www.gov.uk/check-immigration-status">Access the UKVI service.</a>
-  <p>
-</li></ul>
-</p>
- <p>If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for advice by calling the Border Force Carrier Support Hub 0300 369 0610 or +44 204 619 6020 from outside the UK.</p>
-           
+<div class="margin-bottom-40 govuk-body">
+  <p>To evidence a passenger's immigration status, you must:</p>
+  <ul>
+  <li>check if they are <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers">from a country that needs a visa to travel to the UK</a></li>
+  <li>review their physical documentation or <a href="https://www.gov.uk/check-immigration-status">use a sharecode</a> they have provided in advance</li>
+  </ul>
+   
+   <p>If you cannot get valid digital or physical evidence from the passenger, you can contact Border Force for advice. The Carrier Support Hub (CSH) is open 24/7.</p>
+   <ul>
+      <li>UK: 0300 369 0610</li>
+      <li>International: (+44) 204 619 6020</li>
+   </ul>   
 </div>
 <form action="/garfile/review" method="post">
   <h2 class="govuk-heading-m">Declaration</h2>
