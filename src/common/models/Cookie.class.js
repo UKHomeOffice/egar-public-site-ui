@@ -90,6 +90,7 @@ class Cookie {
         id: null,
         status: null,
         cbpId: null,
+        createdDate: null,
         craft: {
           registration: null,
           craftType: null,
@@ -178,6 +179,14 @@ class Cookie {
 
   getGarId() {
     return this.session.gar.id;
+  }
+
+  getGarCreatedDate() {
+    return this.session.gar.createdDate;
+  }
+  
+  setGarCreatedDate(createdDate) {
+    this.session.gar.createdDate = createdDate;
   }
 
   setAddPersonId(id) {

@@ -65,9 +65,11 @@ module.exports = (req, res) => {
         return;
       }
       
-      cookie.setCbpId(parsedGar.cbpId)
+      cookie.setCbpId(parsedGar.cbpId);
       cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
+      cookie.setGarCreatedDate(parsedGar.createdDate);
+
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
 
       // Maybe not necessary but delete the ids as the template does not need them
