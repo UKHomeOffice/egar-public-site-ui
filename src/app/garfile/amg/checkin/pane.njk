@@ -2,13 +2,14 @@
 
   {% set status = person.amgCheckinStatus.name %}
   {% set checkin_code = person.amgCheckinResponseCode %}
+  {% set awaitingFlag = true %}
 
   {% if (status === 'Complete') %}
     {% set statustitle = __('amg_status_check_response_code_' + checkin_code) if checkin_code else '' %}
   {% else %}
     {% set statustitle = '' %}
   {% endif %}
-
+  
   {% if person.amgCheckinResponseCode === '0B'%}
     {% set statusColor = 'no-reocord'%}
   {% elif person.amgCheckinResponseCode === '0A'%}
@@ -17,6 +18,7 @@
     {% set statusColor = 'authority-to-carry-granted'%}
   {% else %}  
     {% set statusColor = ''%}
+    {% set awaitingFlag = false %} 
   {% endif %}
 
   {% set statustitle = statustitle %}
@@ -50,7 +52,9 @@
             There was an error processing the permission to travel for this person.
           {% endif %}
           {% else %}
-              <span style="opacity:.5;"> Awaiting ...</span>
+              {% if awaitingFlag %}
+                <span style="opacity:.5;"> Awaiting ...</span>
+              {% endif %}
           {% endif %}
         </div>
     </td>
