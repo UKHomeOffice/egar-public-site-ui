@@ -33,7 +33,7 @@
       {{person.lastName}}</td>
     <td class="govuk-table__cell">
         <div>
-          {% if statusCheckComplete %}
+          {% if statusColor %}
           {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === '0') %}
               {% if checkin_code === travelPermissionCodes.NO_BOARD %} 
                 Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
@@ -50,7 +50,7 @@
             There was an error processing the permission to travel for this person.
           {% endif %}
           {% else %}
-           <span style="opacity:.5;"> Awaiting ...</span>
+              <span style="opacity:.5;"> Awaiting ...</span>
           {% endif %}
         </div>
     </td>
