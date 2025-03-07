@@ -37,14 +37,14 @@
           {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === '0') %}
               {% if checkin_code === travelPermissionCodes.NO_BOARD %} 
                 Pilots, operators and agents will receive a NO BOARD response via a call and email when Authority to Carry (ATC) has been refused.
-              {% elif(checkin_code === travelPermissionCodes.VALID) %}
+              {% elif(checkin_code === '0B') %}
                 <p class="govuk-body">
-                  No action required.
+                  Extra evidence may be needed, for example a copy of the passenger's visa
                 </p>
               {% else %}
-              <p class="govuk-body">
-                You must check if this individual has a valid passport or travel document.
-              </p>
+                  <p class="govuk-body">
+                    Check the passenger's documents
+                  </p>
               {% endif %}
           {% else %}
             There was an error processing the permission to travel for this person.
