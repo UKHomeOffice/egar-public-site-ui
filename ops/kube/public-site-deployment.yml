@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: public-site-proxy
-          image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.2
+          image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsNonRoot: true
