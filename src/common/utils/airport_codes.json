@@ -1,5 +1,3 @@
-
-
 [
   {
     "id": "",
@@ -273,6 +271,13 @@
     "british": false,
     "crownDependency": false,
     "label": "Chilliwack Airport (Canada) (CYCW / YCW)"
+  },
+  {
+    "id": "TFU",
+    "id2": "ZUTF",
+    "british": false,
+    "crownDependency": false,
+    "label": "Chengdu Tianfu International Airport (TFU / ZUTF)"
   },
   {
     "id": "YCY",
@@ -5538,7 +5543,7 @@
     "crownDependency": false,
     "label": "Graaff Reinet Airport (South Africa) (FAGR)"
   },
-{
+  {
     "id": "FAGT",
     "id2": "FAGT",
     "british": false,
@@ -10361,7 +10366,7 @@
     "crownDependency": false,
     "label": "Vincenzo Florio Airport Trapani-Birgi (Italy) (LICT / TPS)"
   },
-{
+  {
     "id": "NSY",
     "id2": "LICZ",
     "british": false,
@@ -15429,7 +15434,7 @@
     "crownDependency": false,
     "label": "Tsushima Airport (Japan) (RJDT / TSJ)"
   },
-{
+  {
     "id": "MBE",
     "id2": "RJEB",
     "british": false,
@@ -20182,7 +20187,7 @@
     "crownDependency": false,
     "label": "Stung Treng Airport (Cambodia) (VDST / TNX)"
   },
-{
+  {
     "id": "IXV",
     "id2": "VEAN",
     "british": false,
@@ -27252,7 +27257,7 @@
     "crownDependency": false,
     "label": "Yaoqiang Airport (China) (ZSJN / TNA)"
   },
-{
+  {
     "id": "CZX",
     "id2": "ZSCG",
     "british": false,
@@ -32369,7 +32374,7 @@
     "crownDependency": false,
     "label": "Sehwan Sharif Airport (Pakistan) (OPSN / SYW)"
   },
-{
+  {
     "id": "TUK",
     "id2": "OPTU",
     "british": false,
@@ -37353,7 +37358,7 @@
     "crownDependency": false,
     "label": "Bagram Air Base (Afghanistan) (OAIX / OAI)"
   },
-{
+  {
     "id": "AKH",
     "id2": "OEPS",
     "british": false,
@@ -49822,7 +49827,7 @@
   },
   {
     "id": "LAKV",
-    "id2": "LAKV", 
+    "id2": "LAKV",
     "british": false,
     "crownDependency": false,
     "label": "Kucove Air Base (Albania) (LAKV)"
@@ -54323,7 +54328,7 @@
   },
   {
     "id": "EGND",
-    "id2": "EGND", 
+    "id2": "EGND",
     "british": true,
     "crownDependency": false,
     "label": "CROSLAND MOOR - HUDDERSFIELD (United Kingdom) (EGND)"
@@ -56017,7 +56022,7 @@
   },
   {
     "id": "CLADSWELL FARMHOUSE COOKHILL (X568)",
-    "id2": "X568", 
+    "id2": "X568",
     "british": true,
     "crownDependency": false,
     "label": "CLADSWELL FARMHOUSE COOKHILL (United Kingdom) (X568)"
@@ -56155,7 +56160,6 @@
     "crownDependency": false,
     "label": "PLASSEY HOLIDAY PARK, RETAIL VILLAGE AND GOLF COURSE (United Kingdom) (X586)"
   },
-  
   {
     "id": "CENTRAL HOUSE, WYTON (X587)",
     "id2": "X587",
@@ -56429,6 +56433,4 @@
     "crownDependency": false,
     "label": "Indianapolis Executive Airport (United States) (KTYQ)"
   }
-
 ]
-  

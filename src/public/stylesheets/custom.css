@@ -24,3 +24,56 @@
     float: left;
     margin-bottom: 10px;
   }
+
+  .custom-govuk-notification-banner{
+	background-color: #005ea5 !important;
+    border: 5px solid #005ea5;
+    margin-bottom: 50px;
+}
+.notification-banner-text-link{
+    text-decoration: none;
+    color: #005ea5 !important;
+}
+.app-check-your-answers-margin-bottom{
+    margin-bottom: 10px;
+}
+.margin-bottom-10{
+    margin-bottom: 10px !important;
+}
+.margin-right-20{
+    margin-right: 20px !important;
+}
+.heading-text-spacing{
+    margin: 40px 0 50px 0 !important;
+}
+.a-link-text{
+    color: #005ea5 !important;
+}
+.margin-bottom-40{
+    margin-bottom: 40px !important;
+}
+.no-reocord{
+    color: #74472E;
+    background-color: #F6D7C6;
+    text-transform:uppercase;
+    padding: 5px 10px 5px 10px;
+    font-weight: 600;
+}
+.authority-to-carry-granted{
+    color: #254D7D;
+    background-color: #D5E2EF;
+    text-transform:uppercase;
+    padding: 5px 10px 5px 10px;
+    font-weight: 600;
+}
+.valid-permission-to-travel{
+    color: #2F623F;
+    background-color: #D0E1D9;
+    text-transform:uppercase;
+    padding: 5px 10px 5px 10px;
+    font-weight: 700;
+}
+.status-text{
+    font-size: 14px;
+    font-weight: 600;
+}
