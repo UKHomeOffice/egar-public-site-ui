@@ -19,6 +19,5 @@ EXPOSE 3000
 
 WORKDIR /public-site/
 
-#RUN npm install
 RUN npm ci --omit dev
 CMD ["node", "start"]
