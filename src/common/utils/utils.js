@@ -60,4 +60,5 @@ module.exports = {
     documentTypes,
     getResponsiblePersonFromReq,
     getResponsiblePersonFromGar,
+    nanoid
 }

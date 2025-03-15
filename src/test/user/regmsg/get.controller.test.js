@@ -6,7 +6,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const nanoid = require('../../../common/utils/utils');
+const { nanoid } = require('../../../common/utils/utils');
 const tokenService = require('../../../common/services/create-token');
 const CookieModel = require('../../../common/models/Cookie.class');
 const sendTokenService = require('../../../common/services/send-token');
