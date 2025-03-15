@@ -1,3 +1,4 @@
+const { customAlphabet } = require('nanoid');
 const documenttype = require('../../common/seeddata/egar_saved_people_travel_document_type.json');
 
 function trimToDecimalPlaces(input, places) {
@@ -47,6 +48,10 @@ function getResponsiblePersonFromGar(gar) {
         fixedBasedOperator: gar.fixedBasedOperator,
         fixedBasedOperatorAnswer: gar.fixedBasedOperatorAnswer
     };
+}
+
+function nanoid(alphabet, tokenLength) {
+    return customAlphabet(alphabet, tokenLength)();
 }
 
 

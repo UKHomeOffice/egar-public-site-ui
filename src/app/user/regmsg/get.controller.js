@@ -1,4 +1,4 @@
-const nanoid = require('nanoid/generate');
+const nanoid = require('../../../common/utils/utils');
 const tokenService = require('../../../common/services/create-token');
 const sendTokenService = require('../../../common/services/send-token');
 const tokenApi = require('../../../common/services/tokenApi');
