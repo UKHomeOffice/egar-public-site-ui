@@ -11,7 +11,6 @@ const bodyParser = require('body-parser');
 const i18n = require('i18n');
 const loggingMiddleware = require('morgan');
 const argv = require('minimist')(process.argv.slice(2));
-const staticify = require('staticify')(path.join(__dirname, 'public'));
 const compression = require('compression');
 const nunjucks = require('nunjucks');
 const helmet = require('helmet');
@@ -40,8 +39,6 @@ const PORT = (process.env.PORT || 3000);
 const { NODE_ENV } = process.env;
 const G4_ID = (process.env.G4_ID || '');
 const BASE_URL = (process.env.BASE_URL || '');
-const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css');
-const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js');
 
 // Set Cookie secure flag depending on environment variable
 let secureFlag = process.env.COOKIE_SECURE_FLAG === 'true';
@@ -113,13 +110,8 @@ function initialiseGlobalMiddleware(app) {
     });
   }
 
-  app.set('settings', {
-    getVersionedPath: staticify.getVersionedPath,
-  });
-
   app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
   app.use(compression());
-  app.use(staticify.middleware);
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
     app.use(/\/((?!images|public|stylesheets|javascripts).)*/, loggingMiddleware(
@@ -206,10 +198,6 @@ function initialiseTemplateEngine(app) {
   app.set('view engine', 'njk');
   logger.info('Set view engine');
 
-  // Version static assets on production for better caching
-  // if it's not production we want to re-evaluate the assets on each file change
-  // nunjucksEnvironment.addGlobal('css_path', NODE_ENV === 'production' ? CSS_PATH : staticify.getVersionedPath('/stylesheets/application.min.css'));
-  // nunjucksEnvironment.addGlobal('js_path', NODE_ENV === 'production' ? JAVASCRIPT_PATH : staticify.getVersionedPath('/javascripts/application.js'));
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
   nunjucksEnvironment.addGlobal('travelPermissionCodes', travelPermissionCodes)
@@ -323,6 +311,5 @@ if (argv.i) {
 
 module.exports = {
   start,
-  staticify,
   getApp: initialise,
 };
