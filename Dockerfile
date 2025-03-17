@@ -1,4 +1,4 @@
-FROM node:22-alpine3.21
+FROM node:22-alpine3.21 AS development
 
 RUN apk update \
     && apk upgrade --update-cache --available \
@@ -18,6 +18,13 @@ USER 1000
 EXPOSE 3000
 
 WORKDIR /public-site/
+
+RUN npm i
+
+FROM node:22-alpine3.21
+
+WORKDIR /public-site/
+COPY --from=build /public-site/ /public-site/
 
 RUN npm ci --omit dev
 CMD ["node", "start"]
