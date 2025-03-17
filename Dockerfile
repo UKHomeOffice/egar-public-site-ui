@@ -19,6 +19,8 @@ EXPOSE 3000
 
 WORKDIR /public-site/
 
+RUN npm i
+
 FROM development AS production
 
 WORKDIR /public-site/
