@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-const nanoid = require('nanoid/generate');
+const { nanoid } = require('../../common/utils/utils');
 const i18n = require('i18n');
 const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');

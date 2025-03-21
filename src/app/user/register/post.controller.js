@@ -1,4 +1,4 @@
-const nanoid = require('nanoid/generate');
+const { nanoid } = require('../../../common/utils/utils');
 
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
@@ -139,6 +139,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Failed registration validations');
+      logger.error(err)
       res.render('app/user/register/index', {
         cookie,
         fname,

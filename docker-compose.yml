@@ -34,7 +34,8 @@ services:
       - ./mock_clamav:/code
 
   node:
-    build: .
+    build:
+      target: development
     container_name: node
     command: sh -c 'sleep 5 && npm install nodemon && npm run dev'
     ports:
@@ -47,11 +48,4 @@ services:
       - api
       - database
     volumes:
-      - ./src/app:/public-site/app
-      - ./src/common:/public-site/common
-      - ./src/locales:/public-site/locales
-      - ./src/public:/public-site/public
-      - ./src/test:/public-site/test
-      - ./src/server.js:/public-site/server.js
-      - ./src/start.js:/public-site/start.js
-      - ./src/package.json:/public-site/package.json
+      - ./src/:/public-site/

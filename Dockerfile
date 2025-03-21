@@ -1,4 +1,4 @@
-FROM node:18-alpine3.18
+FROM node:22-alpine3.21 AS development
 
 RUN apk update \
     && apk upgrade --update-cache --available \
@@ -8,14 +8,7 @@ RUN mkdir -p /public-site/ && \
     mkdir -p /var/log/nodejs/ && \
     touch /var/log/nodejs/app.log
 
-COPY src/app /public-site/app
-COPY src/common /public-site/common
-COPY src/locales /public-site/locales
-COPY src/public /public-site/public
-COPY src/test /public-site/test
-COPY src/server.js /public-site/
-COPY src/start.js /public-site/
-COPY src/package.json /public-site/
+COPY src /public-site
 
 RUN chown -R node /public-site/ && \
     chown -R node /var/log/nodejs/
@@ -26,6 +19,12 @@ EXPOSE 3000
 
 WORKDIR /public-site/
 
-#RUN npm install
-RUN npm install --production
+RUN npm i
+
+FROM development AS production
+
+WORKDIR /public-site/
+
+RUN npm ci --omit dev
+
 CMD ["node", "start"]
