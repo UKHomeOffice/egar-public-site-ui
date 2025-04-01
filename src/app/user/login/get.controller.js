@@ -1,4 +1,4 @@
-const navUtil = require('../../../common/utils/nav');
+const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
 
 /**
  * If incoming object contains a dbId (id), vr (verified) and rl (role),
@@ -18,5 +18,5 @@ module.exports = (req, res) => {
     res.redirect('/home');
     return;
   }
-  navUtil.simpleGetRender(req, res, 'app/user/login/index');
+  res.render('app/user/login/index', { oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res)});
 };
