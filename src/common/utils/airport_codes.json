@@ -56432,5 +56432,13 @@
     "british": false,
     "crownDependency": false,
     "label": "Indianapolis Executive Airport (United States) (KTYQ)"
+  },
+
+  {
+    "id": "VRMU",
+    "id2": "DDD",
+    "british": false,
+    "crownDependency": false,
+    "label": "Dhaalu Airport (Maldives) (VRMU / DDD)"
   }
 ]
