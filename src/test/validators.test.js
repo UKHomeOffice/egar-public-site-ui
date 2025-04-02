@@ -866,7 +866,7 @@ describe('Validator', () => {
     });
 
     it('Should allow a date within two days in the future', () => {
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2023, APRIL, 13));
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(validator.convertDateToUTC(new Date(2023, APRIL, 13)));
       expect(actualResult).to.equal(true);
     });
 
