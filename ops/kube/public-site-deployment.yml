@@ -275,6 +275,51 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: HOMEPAGE_MESSAGE        
+            - name: ONE_LOGIN_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: ONE_LOGIN_PRIVATE_KEY
+            - name: ONE_LOGIN_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: ONE_LOGIN_CLIENT_ID
+            - name: ONE_LOGIN_INTEGRATION_URL
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: ONE_LOGIN_INTEGRATION_URL
+            - name: ONE_LOGIN_REDIRECT_URI
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: ONE_LOGIN_REDIRECT_URI
+            - name: ONE_LOGIN_LOGOUT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: ONE_LOGIN_LOGOUT_URL
+            - name: ONE_LOGIN_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: ONE_LOGIN_PUBLIC_KEY
+            - name: ONE_LOGIN_ACCOUNT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: ONE_LOGIN_ACCOUNT_URL
+            - name: ONE_LOGIN_POST_MIGRATION
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: ONE_LOGIN_POST_MIGRATION
+            - name: ONE_LOGIN_SHOW_ONE_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: ONE_LOGIN_SHOW_ONE_LOGIN
           ports:
             - name: public-site-prt
               containerPort: 3000
