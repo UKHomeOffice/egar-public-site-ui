@@ -41,5 +41,10 @@
     </nav>
   </div>
 </div>
-<script src="/javascripts/custom-changes.js"></script>
+ <script>
+    document.getElementById('nav-manage-gars-li').addEventListener('click', function(e) {
+      console.log('Reload the page');
+      location.reload(true); 
+    }, false);
+  </script>
 </header>
