@@ -60,6 +60,18 @@
 	<div class="govuk-grid-column-two-thirds">
         <form action="login" autocomplete="off" method="POST" onsubmit="submitButton.disabled=true; return true;">
 			<h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
+      {% if ONE_LOGIN_SHOW_ONE_LOGIN %}
+        <div class="box-left-grey-border">
+          <div class="email-text">
+              <p class="govuk-body">How you sign in to Submit a General Aviation Report (GAR) is changing.</p>
+              <p class="govuk-body">From <strong>[Date]</strong>{{migrationDate}} you'll sign in using GOV.UK One Login. You'll be able to create a GOV.UK One Login if you do not already have one.</p>
+              <p class="govuk-body">You should use the same email address to create your GOV.UK One Login that you use for your SGAR account. This is so you keep the existing information in your account.</p>
+              <p class="govuk-body">You can still sign in without using GOV.UK One Login until <strong>[Date]</strong>{{migrationDate}}</p>
+              <p class="govuk-body">New users of the service will need to login using GOV.UK One Login.</p>
+          </div>
+        </div>
+      {% endif %}
+
 			<div class="govuk-form-group {{ m.form_group_class('username', errors) }}">
 				<label class="govuk-label govuk-label--m" for="username">{{ __('field_username') }}</label>
 				<span id="username-hint" class="govuk-hint">{{ __('field_username_hint') }}</span>
@@ -67,9 +79,18 @@
 				<input class="govuk-input" id="username" name="username" type="text" aria-describedby="username-hint{{ ' username-error' if errors }}">
 			</div>
 
-            <button id="submitButton" type="submit" class="govuk-button" data-prevent-double-click="true">
+      <button id="submitButton" type="submit" class="govuk-button" data-prevent-double-click="true">
 				{{ __('button_sign_in' )}}
 			</button>
+      {% if ONE_LOGIN_SHOW_ONE_LOGIN %}
+        <br/>
+        <a
+          href="{{oneLoginAuthUrl}}"
+          role="button"
+          class="govuk-button govuk-button--secondary govuk-!-margin-top-2 govuk-!-margin-bottom-8"
+          >Sign in or Create your GOV.UK One Login</a>   
+      {% endif %}
+
 
 			<h2 class="govuk-heading-m">{{ __('create_account_caption') }}</h2>
 			<p class="govuk-body">

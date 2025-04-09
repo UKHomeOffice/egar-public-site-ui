@@ -77,3 +77,25 @@
     font-size: 14px;
     font-weight: 600;
 }
+.grey-box {
+    background-color: #f3f2f1;
+    padding: 1em 0em 1em 1em;
+}
+
+.bottom-margin-7 {
+    margin-bottom: 7%;
+}
+.box-left-grey-border {
+    border-left: 9px solid #b1b4b6;
+    margin: 20px 0 20px 0;
+    padding: 20px 0 1px 0;
+}
+.email-text {
+    margin-left: 15px;
+}
+.top-margin-5 {
+    margin-top: 5%;
+}
+.bottom-margin-5 {
+    margin-bottom: 5%;
+}
