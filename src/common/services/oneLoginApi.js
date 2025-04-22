@@ -26,9 +26,9 @@ module.exports = {
             jti: `${Math.floor(Math.random() * 999999999999999)}`,
             iat: Math.floor(Date.now() / 1000),
           };
-      
+
           const jwt = oneLoginUtil.createJwt(jwtParams);
-  
+
           const params = {
             // eslint-disable-next-line camelcase
             grant_type: 'authorization_code',
@@ -48,11 +48,11 @@ module.exports = {
         }, (error, _response, body) => {
           if (error) {
             logger.error('Failed to call get one login API endpoint');
-            reject(error);
+            reject(JSON.parse(error));
             return;
           }
           logger.debug('Successfully called one login API endpoint');
-          resolve(body);
+          resolve(JSON.parse(body));
         });
       });
     },
@@ -79,7 +79,7 @@ module.exports = {
           return;
         }
         logger.info(`Successfully called oneLogin user info API`);
-        resolve(body);
+        resolve(JSON.parse(body));
       });
     });
     },

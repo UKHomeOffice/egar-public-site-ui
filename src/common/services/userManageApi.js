@@ -22,7 +22,8 @@ module.exports = {
           return;
         }
         logger.debug('Successfully called get user details API endpoint');
-        resolve(body);
+        console.log(body)
+        resolve(JSON.parse(body));
       });
     });
   },
@@ -73,11 +74,11 @@ module.exports = {
       });
     });
   },
-  userSearch(email) {
+  userSearch(email, oneLonginSid = null) {
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.userSearch(email),
+        url: endpoints.userSearch(email, oneLonginSid),
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call user search endpoint');
@@ -85,7 +86,8 @@ module.exports = {
           return;
         }
         logger.debug('Successfully called user search endpoint');
-        resolve(body);
+        console.log(body)
+        resolve(JSON.parse(body));
       });
     });
   },

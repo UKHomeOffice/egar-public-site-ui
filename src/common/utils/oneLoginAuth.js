@@ -88,8 +88,6 @@ const getOneLoginPublicKey = (header, callback) => {
 const verifyJwt = (idToken, nonce, callback) => {
   let valid = false;
   try {
-    console.log(idToken);
-    console.log(nonce);
     const decodedToken = decodeToken(idToken);
     console.log(decodeToken);
     jwt.verify(

@@ -1,4 +1,5 @@
 const CookieModel = require('../../common/models/Cookie.class');
+const {next} = require("lodash/seq");
 const logger = require('../utils/logger')(__filename);
 
 const checkUserInCookie = (cookie) => {
@@ -9,7 +10,10 @@ const checkUserInCookie = (cookie) => {
   return userDbIdNotSet || userVerifiedNotSet || userRoleNotSet;
 };
 
+
 module.exports = (req, res, next) => {
+  req.session.reload(() => {})
+
   const cookie = new CookieModel(req);
 
   // Checking for a blank referer appears to prevent a user from entering a URL in the browser
