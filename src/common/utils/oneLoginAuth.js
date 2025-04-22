@@ -9,14 +9,14 @@ const getOneLoginAuthUrl = (res) => {
     const nonce = uuidv4();
     res.cookie('nonce', nonce, {
       httpOnly: true,
-      secure: IS_HTTPS_SERVER,
-      sameSite: SAME_SITE_VALUE,
+      secure: config.IS_HTTPS_SERVER,
+      sameSite: config.SAME_SITE_VALUE,
     });
     const state = uuidv4();
     res.cookie('state', state, {
       httpOnly: true,
-      secure: IS_HTTPS_SERVER,
-      sameSite: SAME_SITE_VALUE,
+      secure: config.IS_HTTPS_SERVER,
+      sameSite: config.SAME_SITE_VALUE,
     });
     const oneLoginAuthUrl = `${config.ONE_LOGIN_INTEGRATION_URL}/authorize`;
     const clientId = config.ONE_LOGIN_CLIENT_ID;
