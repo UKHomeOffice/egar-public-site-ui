@@ -99,3 +99,19 @@
 .bottom-margin-5 {
     margin-bottom: 5%;
 }
+.govuk-button.govuk-button--warning {
+    background-color: #d4351c;
+    box-shadow: 0 2px 0 #55150b;
+}
+.govuk-button.govuk-button--warning:hover {
+    background-color: #aa2a16;
+}
+.govuk-button.govuk-button--warning:focus:active:not(:hover) {
+    background-color: #d4351c;
+}
+.govuk-button:focus:not(:active):not(:hover) {
+    border-color: #fd0;
+    color: #0b0c0c;
+    background-color: #fd0;
+    box-shadow: 0 2px 0 #0b0c0c;
+}
