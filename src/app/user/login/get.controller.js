@@ -1,4 +1,5 @@
-const navUtil = require('../../../common/utils/nav');
+const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
+const CookieModel = require('../../../common/models/Cookie.class');
 
 /**
  * If incoming object contains a dbId (id), vr (verified) and rl (role),
@@ -18,5 +19,6 @@ module.exports = (req, res) => {
     res.redirect('/home');
     return;
   }
-  navUtil.simpleGetRender(req, res, 'app/user/login/index');
+  const cookie = new CookieModel(req);
+  res.render('app/user/login/index', { cookie, oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res)});
 };
