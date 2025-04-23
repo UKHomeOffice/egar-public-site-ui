@@ -113,6 +113,7 @@ module.exports = (req, res) => {
   }
   logger.debug('Determined file to be Excel, beginning to read');
 
+  try{
   const cookie = new CookieModel(req);
 
   // Read xls/x file into memory
@@ -136,7 +137,6 @@ module.exports = (req, res) => {
     const crewmember = person;
     crewmember.peopleType = 'Crew';
   });
-
   const passengerParser = new ExcelParser(worksheet, manifestMap, passengerMapConfig);
   const passengers = passengerParser.rangeParse();
   passengers.forEach((person) => {
@@ -190,4 +190,13 @@ module.exports = (req, res) => {
       logger.error(req.session.failureMsg.map(validRule => validRule.message))
       req.session.save(() => res.redirect('/garfile/garupload'));
     });
+
+  }
+  catch(error){
+    logger.error('Failed to upload GAR information, check the original template file rows');
+    logger.error(error);
+    req.session.failureMsg = 'Failed to upload GAR information. Try again';
+    req.session.failureIdentifier = 'file';
+    res.redirect('garfile/garupload');
+  }
 };
