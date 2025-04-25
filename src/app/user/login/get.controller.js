@@ -38,14 +38,6 @@ module.exports = async (req, res) => {
         return;
     }
 
-    if (id_token) {
-      res.cookie('id_token', id_token, {
-        httpOnly: true,
-        secure: IS_HTTPS_SERVER,
-        sameSite: 'none',
-      });
-    }
-
     const isValid = await new Promise((resolve) => {
       oneLoginUtil.verifyJwt(id_token, req.cookies.nonce, async (valid) => {
         resolve(valid);

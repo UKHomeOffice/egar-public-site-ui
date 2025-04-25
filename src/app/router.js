@@ -96,7 +96,6 @@ module.exports.bind = (app) => {
   app.use(index.router);
   app.use(welcome.router);
   app.use(usersignin.router);
-  // app.use(oneloginUser.router);
   app.use(userregister.router);
   app.use(registermsg.router);
   app.use(aircraftdetail.router);
