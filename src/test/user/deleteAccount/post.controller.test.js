@@ -121,6 +121,6 @@ describe('User Delete Account Post Controller', () => {
 
     await controller(req, res);
 
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/user/delete_confirm');
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/user/deleteconfirm');
   });
 });

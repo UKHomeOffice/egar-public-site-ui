@@ -32,14 +32,14 @@ const postController = async (req, res) => {
     await deleteAccountOptions.notifyUser();
     req.session.destroy(() => {
       cookie.reset();
-      res.redirect('/user/delete_confirm');
+      res.redirect('/user/deleteconfirm');
     });
   } catch (err) {
     logger.error('Failed to send email that user account is deleted');
     logger.error(err);
     req.session.destroy(() => {
       cookie.reset();
-      res.redirect('/user/delete_confirm');
+      res.redirect('/user/deleteconfirm');
     });
   }
 };
