@@ -7,9 +7,17 @@ const { v4: uuidv4 } = require('uuid');
 const getOneLoginAuthUrl = (res) => {
   try {
     const nonce = uuidv4();
-    res.cookie('nonce', nonce, { httpOnly: true, secure: config.IS_PRODUCTION_ENV });
+    res.cookie('nonce', nonce, {
+      httpOnly: true,
+      secure: config.IS_HTTPS_SERVER,
+      sameSite: config.SAME_SITE_VALUE,
+    });
     const state = uuidv4();
-    res.cookie('state', state, { httpOnly: true, secure: config.IS_PRODUCTION_ENV });
+    res.cookie('state', state, {
+      httpOnly: true,
+      secure: config.IS_HTTPS_SERVER,
+      sameSite: config.SAME_SITE_VALUE,
+    });
     const oneLoginAuthUrl = `${config.ONE_LOGIN_INTEGRATION_URL}/authorize`;
     const clientId = config.ONE_LOGIN_CLIENT_ID;
     const jwtOptions = {
@@ -24,7 +32,6 @@ const getOneLoginAuthUrl = (res) => {
       vtr: `['Cl.Cm']`,
       ui_locales: 'en',
     };
-    logger.info(JSON.stringify(jwtOptions));
     const jwt = createJwt(jwtOptions);
     const options = {
       response_type: 'code',

@@ -77,6 +77,7 @@ describe('User Delete Account Post Controller', () => {
     req = {
       session: {
         u: { e: 'exampleuser@somewhere.com', rl: userRole, fn: 'Example' },
+        destroy: (callback)=>{callback()},
       },
     };
 
@@ -120,6 +121,6 @@ describe('User Delete Account Post Controller', () => {
 
     await controller(req, res);
 
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/user/logout');
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/user/deleteconfirm');
   });
 });
