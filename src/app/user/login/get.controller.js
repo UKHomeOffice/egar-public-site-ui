@@ -1,6 +1,7 @@
 const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
+const logger = require('../../../common/utils/logger')(__filename);
 const { resolve } = require('path');
 const {IS_HTTPS_SERVER} = require("../../../common/config");
 const CookieModel = require("../../../common/models/Cookie.class");
@@ -26,11 +27,10 @@ module.exports = async (req, res) => {
     return;
   }
 
+  const cookie = new CookieModel(req);
   const code = req.query.code;
 
   if(code){
-    const cookie = new CookieModel(req);
-
     const { access_token, id_token } = await oneLoginApi.sendOneLoginTokenRequest(code);
 
     if (req.query.state !== req.cookies.state) {
@@ -57,33 +57,42 @@ module.exports = async (req, res) => {
 
         if (userInfo && userInfo.email_verified) {
           //search user by one login sid and email
-          const {userId, state, oneLoginSid, email, firstName, role} = await userApi.userSearch(
+          const {userId, state, oneLoginSid, email, firstName, lastName, role} = await userApi.userSearch(
             userInfo.email,
             userInfo.sub,
           );
 
-          if (state !== 'verified' || oneLoginSid === null) {
+          // If no userId, then the user doesn't exist.
+          if (!userId || state !== 'verified') {
+            logger.info('User Id not found or email not verified during onelogin flow.')
             res.redirect('/error/404');
             return;
+          }
+
+          if (userInfo.sub && !oneLoginSid) {
+            //   Update DB wih One Login
+            await userApi.updateDetails(email, firstName, lastName, userInfo.sub)
           }
 
           const {organisation} = await userApi.getDetails(email)
 
           if (organisation === null) {
+            logger.info('Organisation not found during onelogin flow')
             res.redirect('/error/404');
             return;
           }
 
-          cookie.setOrganisationId(organisation.organisationId);
           cookie.setUserEmail(email);
           cookie.setUserFirstName(firstName)
+          cookie.setUserLastName(lastName);
           cookie.setUserDbId(userId);
           cookie.setUserRole(role.name);
-          cookie.setUserVerified(true);
+          cookie.setOrganisationId(organisation.organisationId);
+          cookie.setUserVerified(state === 'verified');
 
           delete req.cookies.nonce;
           delete req.cookies.state
-
+          console.log('Cookied ', cookie)
           res.redirect('/home');
           return;
         }
