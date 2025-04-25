@@ -26,12 +26,16 @@
     </h1>
     <p class="govuk-body-m">{{ text.deleteOrgInfo or "" }}</p>
     <p class="govuk-body-m">
-      {{__('are_you_sure_delete_account_caption')}}
+      {% if ONE_LOGIN_SHOW_ONE_LOGIN %}
+        {{__('are_you_sure_delete_account_one_login_caption')}}
+      {% else %}
+        {{__('are_you_sure_delete_account_caption')}}
+      {% endif %}
     </p>
   <br>
 
   <form action="/user/delete" method="post">
-    <input id="delete" class="govuk-button" type="submit" value="{{ text.deleteButton or __('heading_delete_account') }}">
+    <input id="delete" class="govuk-button govuk-button--warning" type="submit" value="Yes, delete this account">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </form>
 

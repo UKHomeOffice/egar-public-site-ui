@@ -1,0 +1,30 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	GAR | Account Deleted
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        Account deleted
+      </h1>
+    </div>
+
+    <p class="govuk-body-m">
+      We have sent you a confirmation email.
+    </p>
+  <br>
+
+</main>
+{% endblock %}
