@@ -31,7 +31,9 @@ describe('User Login Get Controller', () => {
 
     req = {
       headers: {},
-      session: {},
+      session: {
+        reload: sinon.spy(),
+      },
     };
 
     res = {

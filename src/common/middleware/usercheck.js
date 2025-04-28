@@ -12,6 +12,8 @@ const checkUserInCookie = (cookie) => {
 
 
 module.exports = (req, res, next) => {
+  req.session.reload(() => {})
+
   const cookie = new CookieModel(req);
 
   // Checking for a blank referer appears to prevent a user from entering a URL in the browser
