@@ -400,4 +400,60 @@ FnBdx5XR9zLe40LX3+cbEtw=
     expect(res.render).to.have.been.calledWith('app/user/login/index');
     expect(res.redirect).to.not.have.been.called;
   });
+
+  it('should redirect to /user/register if user cannot be found from userApi.search', async () => {
+    // Setup
+    req.query = {
+      code: '123',
+      state: 'valid_state'
+    };
+
+    req.cookies = {
+      state: 'valid_state',
+      nonce: 'valid_nonce'
+    };
+
+    // Restore the original stubs
+    sinon.restore();
+
+    // Create stubs for the test
+    sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
+      callback(true); // Simulate successful JWT verification
+    });
+
+    oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl')
+      .returns("https://onelogin_url?code=123&state=valid_state");
+
+    sendOneLoginTokenRequestStub = sinon.stub(oneLoginApi, 'sendOneLoginTokenRequest')
+      .resolves({
+        access_token: 'mock_access_token',
+        id_token: 'mock_id_token'
+      });
+
+    // Mock user info from OneLogin with email_verified set to true
+    getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin')
+      .resolves({
+        email_verified: true,
+        email: 'test@example.com',
+        sub: 'onelogin_sid'
+      });
+
+    // Mock userApi.userSearch to return a result indicating no user was found
+    userSearchStub = sinon.stub(userApi, 'userSearch').resolves({
+      userId: null, // No user ID indicates user not found
+      state: null,
+      oneLoginSid: null,
+      email: null,
+      firstName: null,
+      lastName: null,
+      role: null
+    });
+
+    // Execute controller
+    await controller(req, res);
+
+    // Verify that the controller redirects to /user/register
+    expect(res.redirect).to.have.been.calledOnceWith('/user/register');
+    expect(res.render).to.not.have.been.called;
+  });
 });
