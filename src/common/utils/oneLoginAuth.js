@@ -96,7 +96,7 @@ const verifyJwt = (idToken, nonce, callback) => {
   let valid = false;
   try {
     const decodedToken = decodeToken(idToken);
-    console.log(decodeToken);
+
     jwt.verify(
       idToken,
       getOneLoginPublicKey,

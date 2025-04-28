@@ -84,7 +84,6 @@ module.exports = async (req, res) => {
 
           delete req.cookies.nonce;
           delete req.cookies.state
-          console.log('Cookied ', cookie)
           res.redirect('/home');
           return;
         }

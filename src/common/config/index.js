@@ -90,4 +90,3 @@ exports.ONE_LOGIN_SHOW_ONE_LOGIN = process.env.ONE_LOGIN_SHOW_ONE_LOGIN;
 exports.ONE_LOGIN_ACCOUNT_URL = process.env.ONE_LOGIN_ACCOUNT_URL;
 exports.IS_HTTPS_SERVER = process.env.BASE_URL ? !process.env.BASE_URL.startsWith("http://localhost") : true;
 exports.SAME_SITE_VALUE = this.IS_HTTPS_SERVER ? 'none' : 'lax';
-exports.IS_PRODUCTION_ENV = process.env.NODE_ENV === 'production';
