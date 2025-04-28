@@ -88,7 +88,6 @@ module.exports = async (req, res) => {
           return;
         }
       }
-
  }
 
   res.render('app/user/login/index', { oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res)});
