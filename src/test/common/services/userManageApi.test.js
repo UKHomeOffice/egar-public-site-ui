@@ -30,7 +30,7 @@ describe('UserGetDetails', () => {
   it('Should successfully find a user', (done) => {
     userApi.getDetails(email)
       .then((response) => {
-        const responseObj = JSON.parse(response);
+        const responseObj = response;
         expect(typeof responseObj).to.equal('object');
         expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
         expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
@@ -133,14 +133,15 @@ describe('SearchUser', () => {
 
   beforeEach(() => {
     nock(BASE_URL)
-      .get(`/user/search?email=${email}`)
+      .get('/user/search')
+      .query({email})
       .reply(200, user);
   });
 
   it('Should successfully find a user', (done) => {
     userApi.userSearch(email)
       .then((response) => {
-        const responseObj = JSON.parse(response);
+        const responseObj = response;
         expect(typeof responseObj).to.equal('object');
         expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
         expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
@@ -152,7 +153,8 @@ describe('SearchUser', () => {
   it('should throw an error', () => {
     nock.cleanAll();
     nock(BASE_URL)
-      .get(`/user/search?email=${email}`)
+      .get(`/user/search`)
+      .query({email})
       .replyWithError({ message: 'Example searchUser error', code: 404 });
 
     userApi.userSearch(email).then(() => {

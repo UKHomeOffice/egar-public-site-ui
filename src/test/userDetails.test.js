@@ -23,7 +23,7 @@ describe('LoginService', () => {
   it('Should get the user details', (done) => {
     userManageApi.getDetails(email)
       .then((response) => {
-        const responseObj = JSON.parse(response);
+        const responseObj = response;
         expect(typeof responseObj).to.equal('object');
         expect(responseObj).to.have.keys(['firstName', 'lastName', 'email']);
         done();
