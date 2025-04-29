@@ -60,7 +60,6 @@ module.exports = async (req, res) => {
             return;
           }
 
-          // If no userId, then the user doesn't exist.
           if (state !== 'verified') {
             logger.info('User Id not found or email not verified during onelogin flow.')
             res.redirect('/error/404');
