@@ -51,7 +51,7 @@ const checkFileIsGAR = (req, res, worksheet) => {
   const versionCell = worksheet.C1;
   const versionCellValue = (versionCell ? versionCell.v : undefined);
   if (versionCellValue === undefined
-      || versionCellValue.trim() !== i18n.__({ phrase: 'upload_gar_file_header', locale: 'en' })) {
+    || versionCellValue.trim() !== i18n.__({ phrase: 'upload_gar_file_header', locale: 'en' })) {
     req.session.failureMsg = i18n.__('validator_api_uploadgar_incorrect_gar_file');
     req.session.failureIdentifier = 'file';
     res.redirect('garfile/garupload');
@@ -113,86 +113,86 @@ module.exports = (req, res) => {
   }
   logger.debug('Determined file to be Excel, beginning to read');
 
-  try{
-  const cookie = new CookieModel(req);
+  try {
+    const cookie = new CookieModel(req);
 
-  // Read xls/x file into memory
-  const workbook = XLSX.read(req.file.buffer, { cellDates: true });
-  const firstSheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[firstSheetName];
+    // Read xls/x file into memory
+    const workbook = XLSX.read(req.file.buffer, { cellDates: true });
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
 
-  if (!checkFileIsGAR(req, res, worksheet)) {
-    return;
-  }
-  logger.debug('Determined file to be a valid GAR template, beginning to parse');
-  const voyageParser = new ExcelParser(worksheet, cellMap);
+    if (!checkFileIsGAR(req, res, worksheet)) {
+      return;
+    }
+    logger.debug('Determined file to be a valid GAR template, beginning to parse');
+    const voyageParser = new ExcelParser(worksheet, cellMap);
 
-  // Excel sheet provides two possible cells per person which may correspond to documentType
-  // If the second cell is populated then its value should be considered 'Other' and it should take
-  // precedence over the first cell if both are populated.
-  // Additionally, set the relevant peopleType field for each section of the manifest
-  const crewParser = new ExcelParser(worksheet, manifestMap, crewMapConfig);
-  const crew = crewParser.rangeParse();
-  crew.forEach((person) => {
-    const crewmember = person;
-    crewmember.peopleType = 'Crew';
-  });
-  const passengerParser = new ExcelParser(worksheet, manifestMap, passengerMapConfig);
-  const passengers = passengerParser.rangeParse();
-  passengers.forEach((person) => {
-    const passenger = person;
-    passenger.peopleType = 'Passenger';
-  });
-
-  validator.validateChains(validations(voyageParser.parse(), crew, passengers))
-    .then(() => {
-      logger.info('Uploaded excel sheet is valid, creating GAR via API');
-      createGarApi.createGar(cookie.getUserDbId())
-        .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (parsedResponse.message) {
-            req.session.failureMsg = 'Failed to create GAR';
-            req.session.save(() => res.redirect('garfile/garupload'));
-            return;
-          }
-          logger.info('Created new GAR');
-          const { garId } = parsedResponse;
-          cookie.setGarId(garId);
-          cookie.setGarStatus('Draft');
-
-          const crewUpdate = garApi.patch(garId, 'Draft', { people: crew });
-          const passengerUpdate = garApi.patch(garId, 'Draft', { people: passengers });
-          const voyageUpdate = garApi.patch(garId, 'Draft', voyageParser.parse());
-
-          Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
-            .then(() => {
-              logger.info('Updated GAR with excel data');
-              req.session.save(() => res.redirect('/garfile/review?from=uploadGar'));
-            })
-            .catch((err) => {
-              logger.error('Failed to update API with GAR information');
-              logger.error(err);
-              req.session.failureMsg = 'Failed to update GAR. Try again';
-              req.session.failureIdentifier = 'file';
-              res.redirect('garfile/garupload');
-            });
-        }).catch((err) => {
-          logger.error('Failed to create API with GAR information');
-          logger.error(err);
-          req.session.failureMsg = 'Failed to create GAR. Try again';
-          req.session.failureIdentifier = 'file';
-          res.redirect('garfile/garupload');
-        });
-    })
-    .catch((validationErrs) => {
-      logger.info('Validation errors detected on file upload');
-      req.session.failureMsg = validationErrs;
-      logger.error(req.session.failureMsg.map(validRule => validRule.message))
-      req.session.save(() => res.redirect('/garfile/garupload'));
+    // Excel sheet provides two possible cells per person which may correspond to documentType
+    // If the second cell is populated then its value should be considered 'Other' and it should take
+    // precedence over the first cell if both are populated.
+    // Additionally, set the relevant peopleType field for each section of the manifest
+    const crewParser = new ExcelParser(worksheet, manifestMap, crewMapConfig);
+    const crew = crewParser.rangeParse();
+    crew.forEach((person) => {
+      const crewmember = person;
+      crewmember.peopleType = 'Crew';
+    });
+    const passengerParser = new ExcelParser(worksheet, manifestMap, passengerMapConfig);
+    const passengers = passengerParser.rangeParse();
+    passengers.forEach((person) => {
+      const passenger = person;
+      passenger.peopleType = 'Passenger';
     });
 
+    validator.validateChains(validations(voyageParser.parse(), crew, passengers))
+      .then(() => {
+        logger.info('Uploaded excel sheet is valid, creating GAR via API');
+        createGarApi.createGar(cookie.getUserDbId())
+          .then((apiResponse) => {
+            const parsedResponse = JSON.parse(apiResponse);
+            if (parsedResponse.message) {
+              req.session.failureMsg = 'Failed to create GAR';
+              req.session.save(() => res.redirect('garfile/garupload'));
+              return;
+            }
+            logger.info('Created new GAR');
+            const { garId } = parsedResponse;
+            cookie.setGarId(garId);
+            cookie.setGarStatus('Draft');
+
+            const crewUpdate = garApi.patch(garId, 'Draft', { people: crew });
+            const passengerUpdate = garApi.patch(garId, 'Draft', { people: passengers });
+            const voyageUpdate = garApi.patch(garId, 'Draft', voyageParser.parse());
+
+            Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
+              .then(() => {
+                logger.info('Updated GAR with excel data');
+                req.session.save(() => res.redirect('/garfile/review?from=uploadGar'));
+              })
+              .catch((err) => {
+                logger.error('Failed to update API with GAR information');
+                logger.error(err);
+                req.session.failureMsg = 'Failed to update GAR. Try again';
+                req.session.failureIdentifier = 'file';
+                res.redirect('garfile/garupload');
+              });
+          }).catch((err) => {
+            logger.error('Failed to create API with GAR information');
+            logger.error(err);
+            req.session.failureMsg = 'Failed to create GAR. Try again';
+            req.session.failureIdentifier = 'file';
+            res.redirect('garfile/garupload');
+          });
+      })
+      .catch((validationErrs) => {
+        logger.info('Validation errors detected on file upload');
+        req.session.failureMsg = validationErrs;
+        logger.error(req.session.failureMsg.map(validRule => validRule.message))
+        req.session.save(() => res.redirect('/garfile/garupload'));
+      });
+
   }
-  catch(error){
+  catch (error) {
     logger.error('Failed to upload GAR information, check the original template file rows');
     logger.error(error);
     req.session.failureMsg = 'Failed to upload GAR information. Try again';
