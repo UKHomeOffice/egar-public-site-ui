@@ -2,98 +2,135 @@ const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
-const { resolve } = require('path');
-const {IS_HTTPS_SERVER} = require("../../../common/config");
-const CookieModel = require("../../../common/models/Cookie.class");
+const CookieModel = require('../../../common/models/Cookie.class');
 
-/**
- * If incoming object contains a dbId (id), vr (verified) and rl (role),
- * then consider the user logged in.
- *
- * @param {Object} userSessionObject object representing the User in the session.
- */
-const checkUserInSession = (userSessionObject) => {
-  if (userSessionObject) {
-    return userSessionObject.dbId && userSessionObject.vr && userSessionObject.rl;
-  }
-  return false;
+// Constants
+const ROUTES = {
+  HOME: '/home',
+  ERROR_404: '/error/404',
+  REGISTER: '/onelogin/register'
 };
 
+const USER_STATES = {
+  VERIFIED: 'verified'
+};
 
+/**
+ * Checks if user is authenticated in the session
+ * @param {Object} userSessionObject - User session object
+ * @returns {boolean} - True if user is authenticated
+ */
+const isUserAuthenticated = (userSessionObject) => {
+  if (!userSessionObject) return false;
+  return !!(userSessionObject.dbId && userSessionObject.vr && userSessionObject.rl);
+};
 
+/**
+ * Handles user authentication state and cookie management
+ * @param {Object} userInfo - User information from OneLogin
+ * @param {Object} cookie - Cookie model instance
+ * @returns {Object} - User authentication result
+ */
+const handleUserAuthentication = async (userInfo, cookie) => {
+  const {email, sub: oneLoginSid} = userInfo;
+  const userData = await userApi.userSearch(email, oneLoginSid);
+
+  if (!userData.userId) {
+    return {redirect: ROUTES.REGISTER};
+  }
+
+  if (userData.state !== USER_STATES.VERIFIED) {
+    logger.info('User Id not found or email not verified during onelogin flow.');
+    return {redirect: ROUTES.ERROR_404};
+  }
+
+  if (oneLoginSid && !userData.oneLoginSid) {
+    await userApi.updateDetails(email, userData.firstName, userData.lastName, oneLoginSid);
+  }
+
+  const {organisation} = await userApi.getDetails(email);
+  if (!organisation) {
+    logger.info('Organisation not found during onelogin flow');
+    return {redirect: ROUTES.ERROR_404};
+  }
+
+  setUserCookies(cookie, {
+    ...userData, organisation, state: userData.state
+  });
+
+  return {redirect: ROUTES.HOME};
+};
+
+/**
+ * Sets all necessary user cookies
+ * @param {Object} cookie - Cookie model instance
+ * @param {Object} userData - User data
+ */
+const setUserCookies = (cookie, userData) => {
+  const {email, firstName, lastName, userId, role, organisation, state} = userData;
+  cookie.setUserEmail(email);
+  cookie.setUserFirstName(firstName);
+  cookie.setUserLastName(lastName);
+  cookie.setUserDbId(userId);
+  cookie.setUserRole(role.name);
+  cookie.setOrganisationId(organisation.organisationId);
+  cookie.setUserVerified(state === USER_STATES.VERIFIED);
+};
+
+/**
+ * Main login controller
+ */
 module.exports = async (req, res) => {
-  if (req.headers.referer && checkUserInSession(req.session.u)) {
-    res.redirect('/home');
-    return;
+  if (req.headers.referer && isUserAuthenticated(req.session.u)) {
+    return res.redirect(ROUTES.HOME);
+  }
+
+  const {code} = req.query;
+  if (!code) {
+    return res.render('app/user/login/index', {
+      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res)
+    });
   }
 
   const cookie = new CookieModel(req);
-  const code = req.query.code;
 
-  if(code){
-    const { access_token, id_token } = await oneLoginApi.sendOneLoginTokenRequest(code);
+  if (req.query.state !== req.cookies.state) {
+    return res.redirect(ROUTES.ERROR_404);
+  }
 
-    if (req.query.state !== req.cookies.state) {
-        res.redirect('/error/404');
-        return;
+  try {
+    const {access_token, id_token} = await oneLoginApi.sendOneLoginTokenRequest(code);
+
+    if (!id_token) {
+      logger.error('Invalid ID Token error.');
+      res.render('app/user/login/index', {
+        oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res),
+      });
+      return;
     }
 
-    const isValid = await new Promise((resolve) => {
-      oneLoginUtil.verifyJwt(id_token, req.cookies.nonce, async (valid) => {
-        resolve(valid);
-        });
-    })
+    const isValid = await new Promise(resolve => {
+      oneLoginUtil.verifyJwt(id_token, req.cookies.nonce, resolve);
+    });
 
-    if(isValid){
-        const userInfo = await oneLoginApi.getUserInfoFromOneLogin(access_token);
+    if (!isValid) {
+      logger.info('Invalid jwt token received from OneLogin.');
+      return res.render('app/user/login/index', {
+        oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res),
+      });
+    }
 
-        if (userInfo && userInfo.email_verified) {
-          //search user by one login sid and email
-          const {userId, state, oneLoginSid, email, firstName, lastName, role} = await userApi.userSearch(
-            userInfo.email,
-            userInfo.sub,
-          );
+    const userInfo = await oneLoginApi.getUserInfoFromOneLogin(access_token);
+    if (!userInfo?.email_verified) {
+      return res.redirect(ROUTES.ERROR_404);
+    }
 
-          if (!userId) {
-            // We don't have the user on record, move to registration page.
-            res.redirect('/user/register');
-            return;
-          }
-
-          if (state !== 'verified') {
-            logger.info('User Id not found or email not verified during onelogin flow.')
-            res.redirect('/error/404');
-            return;
-          }
-
-          if (userInfo.sub && !oneLoginSid) {
-            //   Update DB wih One Login
-            await userApi.updateDetails(email, firstName, lastName, userInfo.sub)
-          }
-
-          const {organisation} = await userApi.getDetails(email)
-
-          if (organisation === null) {
-            logger.info('Organisation not found during onelogin flow')
-            res.redirect('/error/404');
-            return;
-          }
-
-          cookie.setUserEmail(email);
-          cookie.setUserFirstName(firstName)
-          cookie.setUserLastName(lastName);
-          cookie.setUserDbId(userId);
-          cookie.setUserRole(role.name);
-          cookie.setOrganisationId(organisation.organisationId);
-          cookie.setUserVerified(state === 'verified');
-
-          delete req.cookies.nonce;
-          delete req.cookies.state
-          res.redirect('/home');
-          return;
-        }
-      }
- }
-
-  res.render('app/user/login/index', { oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res)});
+    const {redirect} = await handleUserAuthentication(userInfo, cookie);
+    delete req.cookies.nonce;
+    delete req.cookies.state;
+    return res.redirect(redirect);
+  } catch (error) {
+    logger.error('Login process failed:', error);
+    return res.redirect(ROUTES.ERROR_404);
+  }
 };

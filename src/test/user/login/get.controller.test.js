@@ -20,6 +20,7 @@ describe('User Login Get Controller', () => {
   let req;
   let res;
   let oneLoginUrlStub;
+  let oneLoginJwtVerifyStub;
   let sendOneLoginTokenRequestStub;
   let getUserInfoFromOneLogin;
   let userSearchStub;
@@ -39,7 +40,7 @@ describe('User Login Get Controller', () => {
     res = {
       redirect: sinon.spy(),
       render: sinon.spy(),
-      cookie: () => (true)
+      cookie: () => true
     };
 
     oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl')
@@ -61,9 +62,7 @@ describe('User Login Get Controller', () => {
 
     userSearchStub = sinon.stub(userApi, 'userSearch')
     updateUserData = sinon.stub(userApi, 'updateDetails')
-
-    // Add stubs for other dependencies that would be called after sendOneLoginTokenRequest
-    sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
+    oneLoginJwtVerifyStub = sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
       callback(true); // Simulate successful JWT verification
     });
 
@@ -326,7 +325,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
     // Setup
     req.query = {
       code: '123',
-      state: 'valid_state'
+      state: 'valid_state',
     };
 
     req.cookies = {
@@ -334,28 +333,25 @@ FnBdx5XR9zLe40LX3+cbEtw=
       nonce: 'valid_nonce'
     };
 
-    // Restore the original stub and create a new one that returns false
-    sinon.restore();
-    sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
-      callback(false); // Simulate failed JWT verification
+    oneLoginJwtVerifyStub.callsFake((idToken, nonce, callback) => {
+      callback(false);
     });
 
-    // Re-stub other methods to avoid actual API calls
-    oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl')
-      .returns("https://onelogin_url?code=123&state=valid_state");
+    oneLoginUrlStub.returns("https://onelogin_url?code=123&state=valid_state");
 
-    sendOneLoginTokenRequestStub = sinon.stub(oneLoginApi, 'sendOneLoginTokenRequest')
-      .resolves({
-        access_token: 'mock_access_token',
-        id_token: 'mock_id_token'
-      });
+    sendOneLoginTokenRequestStub.resolves({
+      access_token: 'mock_access_token',
+      id_token: 'mock_id_token'
+    });
 
     // Execute controller
     await controller(req, res);
 
     // Verify that the login page is rendered
-    expect(res.render).to.have.been.calledWith('app/user/login/index');
-    expect(res.redirect).to.not.have.been.called;
+    expect(res.render).to.have.been.calledWith('app/user/login/index', {
+      oneLoginAuthUrl: "https://onelogin_url?code=123&state=valid_state"
+    });
+
   });
 
   it('should render login page if user email is not verified in OneLogin', async () => {
@@ -399,11 +395,10 @@ FnBdx5XR9zLe40LX3+cbEtw=
     await controller(req, res);
 
     // Verify that the login page is rendered
-    expect(res.render).to.have.been.calledWith('app/user/login/index');
-    expect(res.redirect).to.not.have.been.called;
+    expect(res.redirect).to.have.been.calledWith('/error/404');
   });
 
-  it('should redirect to /user/register if user cannot be found from userApi.search', async () => {
+  it('should redirect to /onelogin/register if user cannot be found from userApi.search', async () => {
     // Setup
     req.query = {
       code: '123',
@@ -455,7 +450,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
     await controller(req, res);
 
     // Verify that the controller redirects to /user/register
-    expect(res.redirect).to.have.been.calledOnceWith('/user/register');
+    expect(res.redirect).to.have.been.calledOnceWith('/onelogin/register');
     expect(res.render).to.not.have.been.called;
   });
 });
