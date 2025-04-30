@@ -19,9 +19,8 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const userApiRes = await userApi.getDetails(deleteUserEmail);
-    const userToDelete = await JSON.parse(userApiRes);
-    
+    const userToDelete = await userApi.getDetails(deleteUserEmail);
+
     const apiResponse = await organisationApi.deleteUser(requesterId, organisationId, {
       userId: userToDelete.userId,
       firstName: userToDelete.firstName,
@@ -37,10 +36,10 @@ module.exports = async (req, res) => {
     req.session.successHeader = 'Success';
     req.session.successMsg = 'User deleted';
     return req.session.save(() => res.redirect('/organisation'));
-    
+
   } catch (err) {
     logger.error(err);
     req.session.errMsg = errMsg;
-    return req.session.save(() => res.redirect('/organisation'));  
+    return req.session.save(() => res.redirect('/organisation'));
   }
 };
