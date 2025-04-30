@@ -22,7 +22,7 @@ module.exports = {
           return;
         }
         logger.debug('Successfully called get user details API endpoint');
-        resolve(body);
+        resolve(JSON.parse(body));
       });
     });
   },
@@ -33,17 +33,24 @@ module.exports = {
    * @param {String} userId id of user to update
    * @param {String} firstName new first name of user
    * @param {String} lastName new last name of user
+   * @param oneLoginSid
    * @returns {Promise} returns JSON parsed response when resolved
    */
-  updateDetails(userId, firstName, lastName) {
+  updateDetails(userId, firstName, lastName, oneLoginSid = null) {
+    const reqBody = {
+      firstName,
+      lastName,
+    }
+
+    if (oneLoginSid) {
+      reqBody.oneLoginSid = oneLoginSid;
+    }
+
     return new Promise((resolve, reject) => {
       request.put({
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateUserData(userId),
-        body: JSON.stringify({
-          firstName,
-          lastName,
-        }),
+        body: JSON.stringify(reqBody),
       },
       (error, _response, body) => {
         if (error) {
@@ -73,11 +80,11 @@ module.exports = {
       });
     });
   },
-  userSearch(email) {
+  userSearch(email, oneLonginSid = null) {
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.userSearch(email),
+        url: endpoints.userSearch(email, oneLonginSid),
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call user search endpoint');
@@ -85,7 +92,7 @@ module.exports = {
           return;
         }
         logger.debug('Successfully called user search endpoint');
-        resolve(body);
+        resolve(JSON.parse(body));
       });
     });
   },

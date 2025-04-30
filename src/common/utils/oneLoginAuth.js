@@ -96,6 +96,7 @@ const verifyJwt = (idToken, nonce, callback) => {
   let valid = false;
   try {
     const decodedToken = decodeToken(idToken);
+
     jwt.verify(
       idToken,
       getOneLoginPublicKey,
@@ -138,5 +139,6 @@ module.exports = {
   getOneLoginLogoutUrl,
   getOneLoginPublicKey,
   verifyJwt,
-  decodeToken
+  decodeToken,
+  createJwt
 };

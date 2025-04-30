@@ -32,8 +32,9 @@ module.exports = (req, res) => {
   validator.validateChains([unameChain])
     .then(() => {
       userApi.userSearch(usrname).then((result) => {
-        const user = JSON.parse(result);
-        if (Object.prototype.hasOwnProperty.call(user, 'message')) {
+        const user = typeof result === 'string' ? JSON.parse(result) : result;
+
+        if (user?.message) {
           logger.info(`Invalid email entered: ${usrname}`);
           cookie.setUserVerified(false);
           if (user.message !== 'No results found') {

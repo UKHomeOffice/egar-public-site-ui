@@ -31,7 +31,9 @@ module.exports = (req, res) => {
             .then(() => {
               userApi.getDetails(cookie.getUserEmail())
                 .then((apiResponse) => {
-                  const parsedResponse = JSON.parse(apiResponse);
+                  const parsedResponse = apiResponse;
+                  console.log(parsedResponse);
+                  cookie.setOrganisationId(apiResponse?.organisation?.organisationId);
                   cookie.setLoginInfo(parsedResponse);
                   req.session.save(() => {
                     res.redirect('/home');

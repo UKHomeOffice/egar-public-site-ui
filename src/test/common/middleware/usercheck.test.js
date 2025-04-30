@@ -24,6 +24,7 @@ describe('User Check Middleware', () => {
           rl: 'User',
           vr: true,
         },
+        reload: sinon.spy(),
       },
     };
 

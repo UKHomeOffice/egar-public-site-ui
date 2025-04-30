@@ -200,10 +200,17 @@ const endpoints = {
     logger.debug(`Calling get supporting docs endpoint ${url}`);
     return url;
   },
-  userSearch(email) {
-    const endpoint = new URL(`${API_VERSION}/user/search?email=${email}`, BASE_URL).href;
+  userSearch(email, oneLoginSid = null) {
+    let  params = {email}
+
+    if (oneLoginSid) {
+      params['onelogin_sid'] = oneLoginSid
+    }
+
+    const endpoint = new URL(`${API_VERSION}/user/search`, BASE_URL);
+    endpoint.search = (new URLSearchParams(params)).toString();
     logger.debug(`Calling user search endpoint ${endpoint}`);
-    return endpoint;
+    return endpoint.href;
   },
   updateGarPerson(garId) {
     const endpoint = new URL(`${API_VERSION}/gar/${garId}/people`, BASE_URL).href;
