@@ -180,7 +180,7 @@ describe('Verify MFA Post Controller', () => {
     it('should successfully login', async () => {
       sinon.stub(tokenApi, 'validateMfaToken').resolves();
       sinon.stub(tokenApi, 'updateMfaToken').resolves();
-      sinon.stub(userApi, 'getDetails').resolves(JSON.stringify({
+      sinon.stub(userApi, 'getDetails').resolves({
         firstName: 'Darth',
         lastName: 'Vader',
         userId: 'dvader@empire.net',
@@ -189,7 +189,7 @@ describe('Verify MFA Post Controller', () => {
         },
         state: 'verified',
         organisation: null,
-      }));
+      });
       settings.MFA_TOKEN_LENGTH = 20;
 
       // Promise chain, so controller call is wrapped into its own method
