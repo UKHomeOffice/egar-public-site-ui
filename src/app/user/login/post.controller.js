@@ -32,7 +32,7 @@ module.exports = (req, res) => {
   validator.validateChains([unameChain])
     .then(() => {
       userApi.userSearch(usrname).then((result) => {
-        const user = JSON.parse(result);
+        const user = result;
         if (Object.prototype.hasOwnProperty.call(user, 'message')) {
           logger.info(`Invalid email entered: ${usrname}`);
           cookie.setUserVerified(false);
