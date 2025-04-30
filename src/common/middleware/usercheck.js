@@ -1,5 +1,4 @@
 const CookieModel = require('../../common/models/Cookie.class');
-const {next} = require("lodash/seq");
 const logger = require('../utils/logger')(__filename);
 
 const checkUserInCookie = (cookie) => {
