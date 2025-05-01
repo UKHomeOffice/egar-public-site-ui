@@ -74,7 +74,7 @@ const setUserCookies = (cookie, userData) => {
   cookie.setUserDbId(userId);
   cookie.setUserRole(role.name);
   cookie.setOrganisationId(organisation.organisationId);
-  cookie.setUserVerified(state === USER_STATES.VERIFIED);
+  cookie.setUserVerified(true);
 };
 
 /**
@@ -85,14 +85,14 @@ module.exports = async (req, res) => {
     return res.redirect(ROUTES.HOME);
   }
 
+  const cookie = new CookieModel(req);
+
   const {code} = req.query;
   if (!code) {
     return res.render('app/user/login/index', {
       oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res)
     });
   }
-
-  const cookie = new CookieModel(req);
 
   if (req.query.state !== req.cookies.state) {
     return res.redirect(ROUTES.ERROR_404);
