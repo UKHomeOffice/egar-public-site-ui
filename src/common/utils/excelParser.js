@@ -81,7 +81,7 @@ class ExcelParser {
       const cellValue = this._getValue(`${column}${i}`);
       if (cellValue === identifier) return i + this.rangeConfig.skipNum;
     }
-    throw new Error('Identifying cell not found');
+    throw new Error(`Identifying cell not found ${identifier}`);
   }
 
   _getValue(cell, rawValue) {
