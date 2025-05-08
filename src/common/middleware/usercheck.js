@@ -5,7 +5,7 @@ const checkUserInCookie = (cookie) => {
   const userDbIdNotSet = cookie.getUserDbId() === undefined || cookie.getUserDbId() === null;
   const userVerifiedNotSet = cookie.getUserVerified() === undefined || cookie.getUserVerified() === null || !cookie.getUserVerified();
   const userRoleNotSet = cookie.getUserRole() === undefined || cookie.getUserRole() === null;
-  console.log(userDbIdNotSet, userVerifiedNotSet, userRoleNotSet);
+
   return userDbIdNotSet || userVerifiedNotSet || userRoleNotSet;
 };
 

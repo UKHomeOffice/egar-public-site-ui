@@ -212,6 +212,11 @@ const endpoints = {
     logger.debug(`Calling user search endpoint ${endpoint}`);
     return endpoint.href;
   },
+  createUser() {
+    const endpoint = new URL(`${API_VERSION}/user/register`, BASE_URL).href;
+    logger.debug(`Calling create user endpoint ${endpoint}`);
+    return endpoint;
+  },
   updateGarPerson(garId) {
     const endpoint = new URL(`${API_VERSION}/gar/${garId}/people`, BASE_URL).href;
     logger.debug(`Calling garperson update endpoint ${endpoint}`);

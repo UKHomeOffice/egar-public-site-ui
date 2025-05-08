@@ -3,6 +3,7 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
+const config = require("../../../common/config");
 
 // Constants
 const ROUTES = {
@@ -48,11 +49,7 @@ const handleUserAuthentication = async (userInfo, cookie) => {
     await userApi.updateDetails(email, userData.firstName, userData.lastName, oneLoginSid);
   }
 
-  const {organisation} = await userApi.getDetails(email);
-  if (!organisation) {
-    logger.info('Organisation not found during onelogin flow');
-    return {redirect: ROUTES.ERROR_404};
-  }
+  const {organisation} = await userApi.getDetails(email) || {};
 
   setUserCookies(cookie, {
     ...userData, organisation, state: userData.state
@@ -73,8 +70,16 @@ const setUserCookies = (cookie, userData) => {
   cookie.setUserLastName(lastName);
   cookie.setUserDbId(userId);
   cookie.setUserRole(role.name);
-  cookie.setOrganisationId(organisation.organisationId);
-  cookie.setUserVerified(true);
+
+  if (typeof organisation === 'object') {
+    cookie.setOrganisationId(organisation?.organisationId);
+    cookie.setOrganisationName(organisation?.name);
+    cookie.setUserOrganisationId(organisation?.organisationId);
+  }
+
+  cookie.setUserVerified(state === USER_STATES.VERIFIED);
+
+  cookie.session.save()
 };
 
 /**
@@ -126,11 +131,23 @@ module.exports = async (req, res) => {
     }
 
     const {redirect} = await handleUserAuthentication(userInfo, cookie);
-    delete req.cookies.nonce;
-    delete req.cookies.state;
+    if (redirect === ROUTES.HOME) {
+      delete req.cookies.nonce;
+      delete req.cookies.state;
+    } else if (redirect === ROUTES.REGISTER) {
+      res.cookie(
+        "access_token",
+        access_token,
+        {
+          httpOnly: true,
+          secure: config.IS_HTTPS_SERVER,
+          sameSite: config.SAME_SITE_VALUE,
+        });
+    }
+
     return res.redirect(redirect);
   } catch (error) {
-    logger.error('Login process failed:', error);
+    logger.error(`Login process failed ${error}`);
     return res.redirect(ROUTES.ERROR_404);
   }
 };
