@@ -96,6 +96,7 @@ function handleCompleteSubmission(req, res) {
     delete req.session.nonce;
     delete req.session.step;
     delete req.session.step_data;
+    req.session.save();
 
     return [Outcome.SUCCESS, null, '/home'] ;
 }
@@ -133,11 +134,12 @@ module.exports = async (req, res) => {
       req.session.step_data = data;
       req.session.save();
 
-      if (redirect) {
-          return res.redirect(redirect);
+      if (redirect === "/home" ) {
+        delete req.session.step_data;
+        delete req.session.step;
       }
-      break;
 
+      return res.redirect(redirect);
     case Outcome.VALIDATION_FAILED:
       return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...data});
   }
