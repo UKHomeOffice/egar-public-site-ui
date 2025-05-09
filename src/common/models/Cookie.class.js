@@ -218,7 +218,7 @@ class Cookie {
     this.session.gar.voyageArrival.arrivalPort = arrivalJourney.arrivalPort;
     this.session.gar.voyageArrival.arrivalLong = arrivalJourney.arrivalLong;
     this.session.gar.voyageArrival.arrivalLat = arrivalJourney.arrivalLat;
-    
+
     this.session.gar.voyageArrival.arrivalPortChoice = arrivalJourney.arrivalPortChoice;
   }
 
@@ -485,6 +485,10 @@ class Cookie {
 
   setOrganisationId(id) {
     this.session.org.i = id;
+  }
+
+  setUserOrganisationId(id) {
+    this.session.u.orgId = id;
   }
 
   setOrganisationUsers(users) {
@@ -758,7 +762,7 @@ class Cookie {
 
   parseVoyageObj(type, voyageObj) {
     const voyage = {};
-    
+
     voyage[`${type}Date`] = voyageObj[`${type}Date`] || this.generateDate(
       voyageObj[`${type}Day`],
       voyageObj[`${type}Month`],
@@ -773,7 +777,7 @@ class Cookie {
     voyage[`${type}Port`] = voyageObj[`${type}Port`];
     voyage[`${type}Long`] = trimToDecimalPlaces(voyageObj[`${type}Long`], 6);
     voyage[`${type}Lat`] = trimToDecimalPlaces(voyageObj[`${type}Lat`], 6);
-    
+
     const defaultPortChoice = (voyageObj[`${type}Lat`] || voyageObj[`${type}Long`]) ? 'No' : 'Yes';
     voyage[`${type}PortChoice`] = voyageObj.portChoice || defaultPortChoice;
 

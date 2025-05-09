@@ -79,6 +79,7 @@ module.exports = {
           return;
         }
         logger.info(`Successfully called oneLogin user info API`);
+        console.log(body);
         resolve(JSON.parse(body));
       });
     });

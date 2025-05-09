@@ -34,9 +34,10 @@ module.exports = {
    * @param {String} firstName new first name of user
    * @param {String} lastName new last name of user
    * @param oneLoginSid
+   * @param state
    * @returns {Promise} returns JSON parsed response when resolved
    */
-  updateDetails(userId, firstName, lastName, oneLoginSid = null) {
+  updateDetails(userId, firstName, lastName, oneLoginSid = null, state = null) {
     const reqBody = {
       firstName,
       lastName,
@@ -44,6 +45,10 @@ module.exports = {
 
     if (oneLoginSid) {
       reqBody.oneLoginSid = oneLoginSid;
+    }
+
+    if (state) {
+      reqBody.state = state;
     }
 
     return new Promise((resolve, reject) => {
@@ -96,4 +101,34 @@ module.exports = {
       });
     });
   },
+
+  createUser(email, firstName, lastName, oneLoginSid, state = null) {
+    const reqBody = {
+      email,
+      firstName,
+      lastName,
+      oneLoginSid,
+    }
+
+    if (state && ['verified', 'unverified'].includes(state)) {
+      reqBody['state'] = state;
+    }
+
+    return new Promise((resolve, reject) => {
+      request.post({
+        url: endpoints.createUser(),
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(reqBody),
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call create user endpoint');
+          logger.error(error);
+          reject(error);
+          return;
+        }
+        logger.debug('Successfully called create user endpoint');
+        resolve(JSON.parse(body));
+      })
+    })
+  }
 };

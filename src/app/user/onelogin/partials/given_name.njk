@@ -1,0 +1,33 @@
+{% import "common/templates/includes/macros.njk" as m %}
+
+ {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+
+<div class="govuk-grid-column-two-thirds">
+      <form id="page-form" action="/onelogin/register" autocomplete="off" method="post" role="form">
+        <h1 class="govuk-heading-xl">{{__('title_create_account_onelogin')}}</h1>
+
+        <div class="govuk-form-group {{ m.form_group_class('userFname', errors) }}">
+          <label class="govuk-label govuk-label--m" for="userFname">{{ __('field_given_name') }}</label>
+          {{ m.error_message('userFname', errors, __) }}
+          <input id="userFname" name="userFname" autocomplete="off" class="govuk-input govuk-input--width-30"
+            type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ firstName }}"
+            {{ 'aria-describedby=userFname-error' if errors | containsError('userFname') }} required>
+        </div>
+
+        <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }}">
+          <label class="govuk-label govuk-label--m" for="userLname">{{ __('field_family_name') }}</label>
+          {{ m.error_message('userLname', errors, __) }}
+          <input id="userLname" name="userLname" autocomplete="off" class="govuk-input govuk-input--width-30"
+            type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lastName }}"
+            {{ 'aria-describedby=userLname-error' if errors | containsError('userLname') }} required>
+        </div>
+
+
+        <div class="form-group">
+          <input id="login" class="govuk-button" type="submit" value="Continue" onclick="sendAnalytics(event, 'OneLogin.Register - continue', 'click')">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        </div>
+      </form>
+</div>
