@@ -17,7 +17,8 @@ const e = require("express");
 const Outcome = {
     SUCCESS: 'success',
     VALIDATION_FAILED: 'validation_failed',
-    ERROR: 'error'
+    ERROR: 'error',
+    DECLARATION_NOT_CHECKED: 'declaration_not_checked'
 }
 
 /**
@@ -45,48 +46,68 @@ async function handleGivenNameSubmission(req, res) {
     try {
       await validator.validateChains([fnameChain, lnameChain])
 
-      const {access_token: accessToken} = req.cookies;
-      const {email, sub} = await oneLoginApi.getUserInfoFromOneLogin(accessToken)
+      try {
+        const {access_token: accessToken} = req.cookies;
+        const {email, sub} = await oneLoginApi.getUserInfoFromOneLogin(accessToken)
 
-      const step_data = {
-        firstName,
-        lastName,
-        email,
-        sub,
+        const step_data = {
+          firstName,
+          lastName,
+          email,
+          sub,
+        }
+
+        logger.info("Validating user Given Name submission");
+
+        return [Outcome.SUCCESS, step_data, null]
+      } catch (apiError) {
+        logger.error("API error when getting user info");
+        logger.error(apiError);
+        return [Outcome.ERROR, apiError.message || 'API error', null];
       }
+    } catch (validationError) {
+      errors = validationError
+      logger.error("Validation error");
+      logger.error(validationError);
 
-      logger.info("Validating user Given Name submission");
+      // Check if there's a validation error for userFname and set firstName to empty string if so
+      const hasFirstNameError = errors.some(error => error.identifier === 'userFname');
+      const firstNameValue = hasFirstNameError ? '' : firstName;
 
-      return [Outcome.SUCCESS, step_data, null]
-    } catch (e) {
-      errors = e
-      logger.error("Error creating user");
-      logger.error(e);
+      return [Outcome.VALIDATION_FAILED, {firstName: firstNameValue, lastName, errors}, null];
     }
-
-    return [Outcome.VALIDATION_FAILED, {firstName, lastName, errors}, null];
 }
 
 async function handleConfirmNameSubmission(req, res) {
     if (!req.body.nameConfirmDeclaration) {
-        return Outcome.ERROR;
+        logger.info("Declaration not checked in name confirmation");
+        return [Outcome.DECLARATION_NOT_CHECKED, 'Declaration not checked', '/onelogin/register'];
     }
     const {email, firstName, lastName, sub} = req.session.step_data;
-    const resp = await userApi.createUser(email, firstName, lastName, sub, 'verified');
 
-    if (resp.message) {
-        return [Outcome.ERROR, resp.message, null];
+    try {
+        const resp = await userApi.createUser(email, firstName, lastName, sub, 'verified');
+
+        if (resp.message) {
+            logger.error("Error creating user");
+            logger.error(resp.message);
+            return [Outcome.ERROR, resp.message, null];
+        }
+
+        const cookie = new CookieModel(req);
+        cookie.setUserEmail(email);
+        cookie.setUserFirstName(firstName);
+        cookie.setUserLastName(lastName);
+        cookie.setUserDbId(resp.userId);
+        cookie.setUserVerified(resp.state === 'verified');
+        cookie.setUserRole(resp.role.name);
+
+        return [Outcome.SUCCESS, {}, null];
+    } catch (error) {
+        logger.error("Exception when creating user");
+        logger.error(error);
+        return [Outcome.ERROR, error.message || 'Error creating user', null];
     }
-
-    const cookie = new CookieModel(req);
-    cookie.setUserEmail(email);
-    cookie.setUserFirstName(firstName);
-    cookie.setUserLastName(lastName);
-    cookie.setUserDbId(resp.userId);
-    cookie.setUserVerified(resp.state === 'verified');
-    cookie.setUserRole(resp.role.name);
-
-    return [Outcome.SUCCESS, {}, null];
 }
 
 function handleCompleteSubmission(req, res) {
@@ -137,11 +158,17 @@ module.exports = async (req, res) => {
       if (redirect === "/home" ) {
         delete req.session.step_data;
         delete req.session.step;
+        return res.redirect(redirect);
       }
-
-      return res.redirect(redirect);
+      break;
     case Outcome.VALIDATION_FAILED:
       return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...data});
+    case Outcome.DECLARATION_NOT_CHECKED:
+      logger.info('Declaration not checked in confirmation flow');
+      return res.redirect('/onelogin/register');
+    case Outcome.ERROR:
+      logger.error('Error in onelogin flow: ' + data);
+      return res.redirect('error/404')
   }
 
   return res.redirect('/onelogin/register');
