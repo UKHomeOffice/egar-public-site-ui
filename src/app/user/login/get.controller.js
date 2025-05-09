@@ -45,16 +45,16 @@ const handleUserAuthentication = async (userInfo, cookie) => {
     return {redirect: ROUTES.ERROR_404};
   }
 
-  if (oneLoginSid && !userData.oneLoginSid) {
+  if (oneLoginSid && !userData?.oneLoginSid) {
     await userApi.updateDetails(email, userData.firstName, userData.lastName, oneLoginSid);
   }
 
-  const {organisation} = await userApi.getDetails(email) || {};
+  const { organisation } = await userApi.getDetails(email) || {};
 
   setUserCookies(cookie, {
     ...userData, organisation, state: userData.state
   });
-
+console.log('redirecting to home')
   return {redirect: ROUTES.HOME};
 };
 
