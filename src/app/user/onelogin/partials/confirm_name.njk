@@ -13,7 +13,7 @@
         </div>
 
         <div class="app-check-your-answers__contents">
-            <dt class="app-check-your-answers__question">Your Name</dt>
+            <dt class="app-check-your-answers__question">Name</dt>
             <dd class="app-check-your-answers__answer">{{ firstName }} {{ lastName }}</dd>
             <dd class="app-check-your-answers__change">
                 <a class="govuk-link" href="/onelogin/register?action=change-name">Change<span class="govuk-visually-hidden"> your name</span></a>
@@ -35,7 +35,7 @@
           </p>
       </div>
 
-      <div>
+      <div style="margin-top: 55px;">
         <form method="post" action="/onelogin/register">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
            <div>
@@ -46,7 +46,7 @@
            <div class="govuk-button-group" style="margin-top: 29px;">
              {{ govukButton({element: "button", text: "Create Account" }) }}
 
-              <p class="govuk-link item-center" style="display: inline-block; margin-left: 24px;">
+              <p class="govuk-link item-center" style="display: inline-block; margin-left: 24px; margin-top: 6px;">
                 <a href="/">Cancel</a>
                </p>
           </div>
