@@ -117,9 +117,14 @@ function handleCompleteSubmission(req, res) {
     delete req.session.nonce;
     delete req.session.step;
     delete req.session.step_data;
-    req.session.save();
-
-    return [Outcome.SUCCESS, null, '/home'] ;
+    return new Promise((resolve) => {
+      req.session.save((err) => {
+        if (err) {
+          logger.error(`Failed to save session: ${err}`);
+        }
+        resolve([Outcome.SUCCESS, null, '/home']);
+      });
+    });
 }
 
 
@@ -153,14 +158,19 @@ module.exports = async (req, res) => {
       stepValue = nextStep(stepValue);
       req.session.step = stepValue;
       req.session.step_data = data;
-      req.session.save();
 
-      if (redirect === "/home" ) {
-        delete req.session.step_data;
-        delete req.session.step;
-        return res.redirect(redirect);
-      }
-      break;
+      return req.session.save((err) => {
+        if (err) {
+          logger.error(`Failed to save session: ${err}`);
+          return res.redirect('error/404');
+        }
+
+        if (redirect === "/home" ) {
+          delete req.session.step_data;
+          delete req.session.step;
+          return res.redirect(redirect);
+        }
+      });
     case Outcome.VALIDATION_FAILED:
       return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...data});
     case Outcome.DECLARATION_NOT_CHECKED:

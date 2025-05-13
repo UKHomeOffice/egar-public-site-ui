@@ -27,7 +27,7 @@
           {{ nav_link('manage-gars', '/home', __('nav_bar_gars')) }}
           {{ nav_link('aircraft', '/aircraft', __('title_aircraft')) }}
           {{ nav_link('people', '/people', __('title_people')) }}
-          {{ nav_link('res-person', '/resperson', __('nav_bar_responsible_person')) }}  
+          {{ nav_link('res-person', '/resperson', __('nav_bar_responsible_person')) }}
           {% if cookie.getUserRole() == 'Individual' %}
             {{ nav_link('create-org', '/organisation/create', __('nav_bar_create_organisation')) }}
           {% elseif cookie.getUserRole() == 'Admin' or cookie.getUserRole() == 'Manager' %}
@@ -35,7 +35,7 @@
           {% elseif cookie.getUserRole() == 'User' %}
           {% endif %}
           {{ nav_link('manage-account', '/user/details', __('nav_bar_account')) }}
-          {{ nav_link('logout', '/user/logout', __('nav_bar_sign_out')) }}
+          {{ nav_link('logout', '/onelogin/logout', __('nav_bar_sign_out')) }}
           {{ nav_link('upt-help', '/help', __('nav_bar_upt-help')) }}
       </ul>
     </nav>

@@ -1,5 +1,6 @@
 const navUtil = require('../../../common/utils/nav');
 const {PHASE_GIVEN_NAME, WORKFLOW_STEPS}  = require('./constants');
+const logger = require('../../../common/utils/logger')(__filename);
 
 
 
@@ -15,8 +16,14 @@ module.exports = (req, res) => {
   }
 
   req.session.step = stepValue;
-  req.session.save();
 
-  const stepData = req.session?.step_data;
-  return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...stepData});
+  return req.session.save((err) => {
+    if (err) {
+      logger.error(`Failed to save session: ${err}`);
+      return res.redirect('error/404');
+    }
+
+    const stepData = req.session?.step_data;
+    return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...stepData});
+  });
 };
