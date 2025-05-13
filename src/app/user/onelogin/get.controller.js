@@ -7,7 +7,7 @@ const checkKeys = (obj, ...keys) => {
 
 module.exports = (req, res) => {
 
-  if (!checkKeys(req.cookies, 'state', 'id_token', 'nonce') || !req.headers.referer) {
+  if (!checkKeys(req.cookies, 'state', 'id_token', 'nonce') || req.headers.referer === null) {
     return res.redirect('/');
   }
 

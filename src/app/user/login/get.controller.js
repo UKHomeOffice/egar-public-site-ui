@@ -143,6 +143,7 @@ module.exports = async (req, res) => {
           sameSite: config.SAME_SITE_VALUE,
         });
     }
+    req.session.save();
 
     return res.redirect(redirect);
   } catch (error) {

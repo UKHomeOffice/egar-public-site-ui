@@ -13,6 +13,8 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require("../../../common/utils/validator");
 const {USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT} = require("../../../common/config");
 const e = require("express");
+const sendEmail = require("../../../common/services/sendEmail");
+const config = require("../../../common/config");
 
 const Outcome = {
     SUCCESS: 'success',
@@ -79,30 +81,47 @@ async function handleConfirmNameSubmission(req, res) {
         return [Outcome.DECLARATION_NOT_CHECKED, 'Declaration not checked', '/onelogin/register'];
     }
     const {email, firstName, lastName, sub} = req.session.step_data;
+    let resp = {};
 
     try {
-        const resp = await userApi.createUser(email, firstName, lastName, sub, 'verified');
-
-        if (resp.message) {
-            logger.error("Error creating user");
-            logger.error(resp.message);
-            return [Outcome.ERROR, resp.message, null];
-        }
-
-        const cookie = new CookieModel(req);
-        cookie.setUserEmail(email);
-        cookie.setUserFirstName(firstName);
-        cookie.setUserLastName(lastName);
-        cookie.setUserDbId(resp.userId);
-        cookie.setUserVerified(resp.state === 'verified');
-        cookie.setUserRole(resp.role.name);
-
-        return [Outcome.SUCCESS, {}, null];
-    } catch (error) {
+        resp = await userApi.createUser(email, firstName, lastName, sub, 'verified');
+   } catch (error) {
         logger.error("Exception when creating user");
         logger.error(error);
         return [Outcome.ERROR, error.message || 'Error creating user', null];
     }
+
+    if (resp.message) {
+        logger.error("Error creating user");
+        logger.error(resp.message);
+        return [Outcome.ERROR, resp.message, null];
+    }
+
+    const cookie = new CookieModel(req);
+    cookie.setUserEmail(email);
+    cookie.setUserFirstName(firstName);
+    cookie.setUserLastName(lastName);
+    cookie.setUserDbId(resp.userId);
+    cookie.setUserVerified(resp.state === 'verified');
+    cookie.setUserRole(resp.role.name);
+
+    try {
+      await sendEmail.send(
+        // config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL,
+        "cd77f9d3-a325-4373-b415-dc3c11fe5775",
+        email,
+        {
+          firstName,
+          lastName,
+        }
+      );
+    } catch (error) {
+      logger.error("Error sending email");
+      logger.error(error);
+    }
+
+    return [Outcome.SUCCESS, {}, null];
+
 }
 
 function handleCompleteSubmission(req, res) {
@@ -112,7 +131,6 @@ function handleCompleteSubmission(req, res) {
     delete req.session.nonce;
     delete req.session.step;
     delete req.session.step_data;
-    req.session.save();
 
     return [Outcome.SUCCESS, null, '/home'] ;
 }
