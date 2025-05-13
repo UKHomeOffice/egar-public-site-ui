@@ -50,6 +50,17 @@ describe('User OneLogin Get Controller', () => {
 
   describe('GET Controller Tests', () => {
     it('should render the given_name step by default', async () => {
+      req.cookies = {
+        'state': 'valid_state',
+        'nonce': 'valid_nonce',
+        'id_token': 'valid_id_token',
+        'access_token': 'valid_access_token'
+      }
+      req.headers = {
+        referer: 'https://localhost:3000/'
+      }
+
+
       await getController(req, res);
 
       expect(req.session.step).to.equal(PHASE_GIVEN_NAME);
@@ -62,6 +73,16 @@ describe('User OneLogin Get Controller', () => {
     it('should redirect to 404 if step is not in workflow steps', async () => {
       req.session.step = 'invalid_step';
 
+      req.cookies = {
+        'state': 'valid_state',
+        'nonce': 'valid_nonce',
+        'id_token': 'valid_id_token',
+        'access_token': 'valid_access_token'
+      }
+      req.headers = {
+        referer: 'https://localhost:3000/'
+      }
+
       await getController(req, res);
 
       expect(res.redirect).to.have.been.calledWith('error/404');
@@ -71,6 +92,15 @@ describe('User OneLogin Get Controller', () => {
     it('should change step to given_name if action is change-name', async () => {
       req.session.step = PHASE_CONFIRM_NAME;
       req.query.action = 'change-name';
+      req.cookies = {
+        'state': 'valid_state',
+        'nonce': 'valid_nonce',
+        'id_token': 'valid_id_token',
+        'access_token': 'valid_access_token'
+      }
+      req.headers = {
+        referer: 'https://localhost:3000/'
+      }
 
       await getController(req, res);
 
@@ -87,6 +117,15 @@ describe('User OneLogin Get Controller', () => {
         firstName: 'John',
         lastName: 'Doe'
       };
+      req.cookies = {
+        'state': 'valid_state',
+        'nonce': 'valid_nonce',
+        'id_token': 'valid_id_token',
+        'access_token': 'valid_access_token'
+      }
+      req.headers = {
+        referer: 'https://localhost:3000/'
+      }
 
       await getController(req, res);
 
@@ -245,11 +284,21 @@ describe('User OneLogin Post Controller', () => {
         message: 'Error creating user'
       });
 
+      req.cookies = {
+        'state': 'valid_state',
+        'nonce': 'valid_nonce',
+        'id_token': 'valid_id_token',
+        'access_token': 'valid_access_token'
+      }
+      req.headers = {
+        referer: 'https://localhost:3000/'
+      }
+
       await postController(req, res);
 
       expect(createUserStub).to.have.been.called;
       expect(req.session.step).to.equal(PHASE_CONFIRM_NAME);
-      expect(res.redirect).to.have.been.calledWith('/onelogin/register');
+      expect(res.redirect).to.have.been.calledWith('error/404');
     });
 
     it('should handle error if nameConfirmDeclaration is not checked', async () => {
