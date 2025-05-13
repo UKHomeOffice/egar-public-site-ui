@@ -54,7 +54,6 @@ const handleUserAuthentication = async (userInfo, cookie) => {
   setUserCookies(cookie, {
     ...userData, organisation, state: userData.state
   });
-console.log('redirecting to home')
   return {redirect: ROUTES.HOME};
 };
 
