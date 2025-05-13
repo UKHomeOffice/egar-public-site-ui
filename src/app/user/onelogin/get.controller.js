@@ -1,9 +1,16 @@
 const navUtil = require('../../../common/utils/nav');
 const {PHASE_GIVEN_NAME, WORKFLOW_STEPS}  = require('./constants');
 
-
+const checkKeys = (obj, ...keys) => {
+  return keys.every(key => obj.hasOwnProperty(key));
+}
 
 module.exports = (req, res) => {
+
+  if (!checkKeys(req.cookies, 'state', 'id_token', 'nonce') || !req.headers.referer) {
+    return res.redirect('/');
+  }
+
   let stepValue = req.session.step || PHASE_GIVEN_NAME;
 
   if (!WORKFLOW_STEPS.includes(stepValue)) {

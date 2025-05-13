@@ -68,13 +68,8 @@ async function handleGivenNameSubmission(req, res) {
     } catch (validationError) {
       errors = validationError
       logger.error("Validation error");
-      logger.error(validationError);
 
-      // Check if there's a validation error for userFname and set firstName to empty string if so
-      const hasFirstNameError = errors.some(error => error.identifier === 'userFname');
-      const firstNameValue = hasFirstNameError ? '' : firstName;
-
-      return [Outcome.VALIDATION_FAILED, {firstName: firstNameValue, lastName, errors}, null];
+      return [Outcome.VALIDATION_FAILED, {firstName: firstName, lastName, errors}, null];
     }
 }
 
