@@ -54,7 +54,6 @@ const handleUserAuthentication = async (userInfo, cookie) => {
   setUserCookies(cookie, {
     ...userData, organisation, state: userData.state
   });
-
   return {redirect: ROUTES.HOME};
 };
 
@@ -96,12 +95,7 @@ module.exports = async (req, res) => {
     });
   }
 
-  // Check state against cookie or session state
-  const stateFromCookie = req.cookies.state;
-  const stateFromSession = req.session.state;
-
-  if (req.query.state !== stateFromCookie && req.query.state !== stateFromSession) {
-    logger.error('State mismatch during login flow');
+  if (req.query.state !== req.cookies.state) {
     return res.redirect(ROUTES.ERROR_404);
   }
 
@@ -116,19 +110,14 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // Use nonce from cookie or session
-    const nonceFromCookie = req.cookies.nonce;
-    const nonceFromSession = req.session.nonce;
-    const nonce = nonceFromCookie || nonceFromSession;
-
     const isValid = await new Promise(resolve => {
-      oneLoginUtil.verifyJwt(id_token, nonce, resolve);
+      oneLoginUtil.verifyJwt(id_token, req.cookies.nonce, resolve);
     });
 
     if (!isValid) {
       logger.info('Invalid jwt token received from OneLogin.');
       return res.render('app/user/login/index', {
-        oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res, req),
+        oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res),
       });
     }
 
@@ -156,13 +145,8 @@ module.exports = async (req, res) => {
           sameSite: config.SAME_SITE_VALUE,
         });
     }
-    return req.session.save((err) => {
-      if (err) {
-        logger.error(`Failed to save session: ${err}`);
-        return res.redirect(ROUTES.ERROR_404);
-      }
-      return res.redirect(redirect);
-    });
+
+    return res.redirect(redirect);
   } catch (error) {
     logger.error(`Login process failed ${error}`);
     return res.redirect(ROUTES.ERROR_404);

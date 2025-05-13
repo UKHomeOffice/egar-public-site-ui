@@ -13,6 +13,8 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require("../../../common/utils/validator");
 const {USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT} = require("../../../common/config");
 const e = require("express");
+const sendEmail = require("../../../common/services/sendEmail");
+const config = require("../../../common/config");
 
 const Outcome = {
     SUCCESS: 'success',
@@ -68,13 +70,8 @@ async function handleGivenNameSubmission(req, res) {
     } catch (validationError) {
       errors = validationError
       logger.error("Validation error");
-      logger.error(validationError);
 
-      // Check if there's a validation error for userFname and set firstName to empty string if so
-      const hasFirstNameError = errors.some(error => error.identifier === 'userFname');
-      const firstNameValue = hasFirstNameError ? '' : firstName;
-
-      return [Outcome.VALIDATION_FAILED, {firstName: firstNameValue, lastName, errors}, null];
+      return [Outcome.VALIDATION_FAILED, {firstName, lastName, errors}, null];
     }
 }
 
@@ -84,30 +81,48 @@ async function handleConfirmNameSubmission(req, res) {
         return [Outcome.DECLARATION_NOT_CHECKED, 'Declaration not checked', '/onelogin/register'];
     }
     const {email, firstName, lastName, sub} = req.session.step_data;
+    let resp = {};
 
     try {
-        const resp = await userApi.createUser(email, firstName, lastName, sub, 'verified');
+        resp = await userApi.createUser(email, firstName, lastName, sub, 'verified');
+   } catch (error) {
+        logger.error("Exception when creating user");
+        logger.error(error);
+        return [Outcome.ERROR, error.message || 'Error creating user', null];
+    }
 
-        if (resp.message) {
-            logger.error("Error creating user");
-            logger.error(resp.message);
-            return [Outcome.ERROR, resp.message, null];
+    if (resp.message) {
+        logger.error("Error creating user");
+        logger.error(resp.message);
+        return [Outcome.ERROR, resp.message, null];
+    }
+
+    const cookie = new CookieModel(req);
+    cookie.setUserEmail(email);
+    cookie.setUserFirstName(firstName);
+    cookie.setUserLastName(lastName);
+    cookie.setUserDbId(resp.userId);
+    cookie.setUserVerified(resp.state === 'verified');
+    cookie.setUserRole(resp.role.name);
+
+    try {
+      await sendEmail.send(
+        // config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL,
+        "cd77f9d3-a325-4373-b415-dc3c11fe5775",
+        email,
+        {
+          firstName,
+          lastName,
         }
-
-        const cookie = new CookieModel(req);
-        cookie.setUserEmail(email);
-        cookie.setUserFirstName(firstName);
-        cookie.setUserLastName(lastName);
-        cookie.setUserDbId(resp.userId);
-        cookie.setUserVerified(resp.state === 'verified');
-        cookie.setUserRole(resp.role.name);
-
-        return [Outcome.SUCCESS, {}, null];
+      );
     } catch (error) {
         logger.error("Exception when creating user");
         logger.error(error);
         return [Outcome.ERROR, error.message || 'Error creating user', null];
     }
+
+    return [Outcome.SUCCESS, {}, null];
+
 }
 
 function handleCompleteSubmission(req, res) {
@@ -117,14 +132,8 @@ function handleCompleteSubmission(req, res) {
     delete req.session.nonce;
     delete req.session.step;
     delete req.session.step_data;
-    return new Promise((resolve) => {
-      req.session.save((err) => {
-        if (err) {
-          logger.error(`Failed to save session: ${err}`);
-        }
-        resolve([Outcome.SUCCESS, null, '/home']);
-      });
-    });
+
+    return [Outcome.SUCCESS, null, '/home'] ;
 }
 
 
@@ -158,19 +167,14 @@ module.exports = async (req, res) => {
       stepValue = nextStep(stepValue);
       req.session.step = stepValue;
       req.session.step_data = data;
+      req.session.save();
 
-      return req.session.save((err) => {
-        if (err) {
-          logger.error(`Failed to save session: ${err}`);
-          return res.redirect('error/404');
-        }
-
-        if (redirect === "/home" ) {
-          delete req.session.step_data;
-          delete req.session.step;
-          return res.redirect(redirect);
-        }
-      });
+      if (redirect === "/home" ) {
+        delete req.session.step_data;
+        delete req.session.step;
+        return res.redirect(redirect);
+      }
+      break;
     case Outcome.VALIDATION_FAILED:
       return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...data});
     case Outcome.DECLARATION_NOT_CHECKED:
