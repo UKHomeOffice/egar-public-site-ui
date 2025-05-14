@@ -107,7 +107,7 @@ async function handleConfirmNameSubmission(req, res) {
 
     try {
       await sendEmail.send(
-        config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL,
+        config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID,
         email,
         {
           firstName,
