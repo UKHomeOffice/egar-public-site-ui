@@ -22,8 +22,6 @@ module.exports = (req, res) => {
   }
 
   req.session.step = stepValue;
-  req.session.save();
-
   const stepData = req.session?.step_data;
   return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...stepData});
 };
