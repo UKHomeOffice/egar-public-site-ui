@@ -4,6 +4,8 @@ const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const config = require("../../../common/config");
+const {getUserInviteToken} = require("../../../common/services/verificationApi");
+const {next} = require("lodash/seq");
 
 // Constants
 const ROUTES = {
@@ -30,13 +32,14 @@ const isUserAuthenticated = (userSessionObject) => {
  * Handles user authentication state and cookie management
  * @param {Object} userInfo - User information from OneLogin
  * @param {Object} cookie - Cookie model instance
+ * @param {Object} res
  * @returns {Object} - User authentication result
  */
 const handleUserAuthentication = async (userInfo, cookie) => {
   const {email, sub: oneLoginSid} = userInfo;
   const userData = await userApi.userSearch(email, oneLoginSid);
 
-  if (!userData.userId) {
+  if (!userData?.userId) {
     return {redirect: ROUTES.REGISTER};
   }
 
@@ -70,11 +73,9 @@ const setUserCookies = (cookie, userData) => {
   cookie.setUserDbId(userId);
   cookie.setUserRole(role.name);
 
-  if (typeof organisation === 'object') {
-    cookie.setOrganisationId(organisation?.organisationId);
-    cookie.setOrganisationName(organisation?.name);
-    cookie.setUserOrganisationId(organisation?.organisationId);
-  }
+  cookie.setOrganisationId(organisation?.organisationId);
+  cookie.setOrganisationName(organisation?.organisationName);
+  cookie.setUserOrganisationId(organisation?.organisationId);
 
   cookie.setUserVerified(state === USER_STATES.VERIFIED);
 

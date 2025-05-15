@@ -15,6 +15,7 @@ module.exports = (req, res) => {
   const { role } = req.body;
   cookie.setInviteUserRole(role);
   logger.debug(`Invitee role: ${role}`);
+  console.log(cookie);
 
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
@@ -25,7 +26,7 @@ module.exports = (req, res) => {
   const inviterId = cookie.getUserDbId();
   const inviteOrgName = cookie.getOrganisationName();
   const inviteOrgId = cookie.getOrganisationId();
-  const inviteeEmail = cookie.getInviteUserEmail();
+  const inviteeEmail = cookie.getInviteUserEmail()?.toLowerCase();
   const roleId = cookie.getInviteUserRole();
 
   // Define a validation chain for first name
@@ -36,7 +37,7 @@ module.exports = (req, res) => {
   // Validate chains
   validator.validateChains([roleChain])
     .then(() => {
-      tokenApi.setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId)
+      tokenApi.setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId, inviteeEmail)
         .then((apiResponse) => {
           const apiResponseObj = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(apiResponseObj, 'message')) {
@@ -60,6 +61,7 @@ module.exports = (req, res) => {
           });
         })
         .catch((err) => {
+          console.log(err);
           logger.error('Error setting the invite token');
           logger.error(err);
           res.render('app/organisation/assignrole/index', { cookie, roles, errors: [err] });

@@ -15,6 +15,7 @@ const {USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT} = require(
 const e = require("express");
 const sendEmail = require("../../../common/services/sendEmail");
 const config = require("../../../common/config");
+const {getUserInviteToken} = require("../../../common/services/verificationApi");
 
 const Outcome = {
     SUCCESS: 'success',
@@ -80,11 +81,14 @@ async function handleConfirmNameSubmission(req, res) {
         logger.info("Declaration not checked in name confirmation");
         return [Outcome.DECLARATION_NOT_CHECKED, 'Declaration not checked', '/onelogin/register'];
     }
-    const {email, firstName, lastName, sub} = req.session.step_data;
+    const {email, firstName, lastName, sub, tokenId} = req.session.step_data;
     let resp = {};
 
     try {
-        resp = await userApi.createUser(email, firstName, lastName, sub, 'verified');
+        const {tokenId} = await getUserInviteToken(email)
+
+        resp = await userApi.createUser(email, firstName, lastName, sub, 'verified', tokenId);
+
    } catch (error) {
         logger.error("Exception when creating user");
         logger.error(error);
@@ -96,14 +100,16 @@ async function handleConfirmNameSubmission(req, res) {
         logger.error(resp.message);
         return [Outcome.ERROR, resp.message, null];
     }
+    const {userId, state, role, organisation} = resp
 
     const cookie = new CookieModel(req);
     cookie.setUserEmail(email);
     cookie.setUserFirstName(firstName);
     cookie.setUserLastName(lastName);
-    cookie.setUserDbId(resp.userId);
-    cookie.setUserVerified(resp.state === 'verified');
-    cookie.setUserRole(resp.role.name);
+    cookie.setUserDbId(userId);
+    cookie.setUserVerified(state === 'verified');
+    cookie.setUserRole(role.name);
+    cookie.setOrganisationId(organisation?.organisationId);
 
     try {
       await sendEmail.send(
@@ -148,7 +154,6 @@ function nextStep(currentStep) {
 
 
 module.exports = async (req, res) => {
-
   if (!req.session?.step) {
     return res.redirect('error/404');
   }
