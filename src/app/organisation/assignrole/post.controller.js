@@ -15,7 +15,6 @@ module.exports = (req, res) => {
   const { role } = req.body;
   cookie.setInviteUserRole(role);
   logger.debug(`Invitee role: ${role}`);
-  console.log(cookie);
 
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
@@ -61,7 +60,6 @@ module.exports = (req, res) => {
           });
         })
         .catch((err) => {
-          console.log(err);
           logger.error('Error setting the invite token');
           logger.error(err);
           res.render('app/organisation/assignrole/index', { cookie, roles, errors: [err] });
