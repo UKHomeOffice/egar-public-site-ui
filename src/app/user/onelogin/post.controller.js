@@ -116,8 +116,7 @@ async function handleConfirmNameSubmission(req, res) {
         config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID,
         email,
         {
-          firstName,
-          lastName,
+          user: `${firstName}`,
         }
       );
     } catch (error) {
