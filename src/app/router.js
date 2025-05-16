@@ -162,7 +162,6 @@ module.exports.bind = (app) => {
   app.use(respersonDelete.router);
   app.use(respersonEdit.router);
   app.use(respersonDetail.router);
-  //
   app.use(amgcheckin.router);
   app.use(oneloginRegister.router);
 };
