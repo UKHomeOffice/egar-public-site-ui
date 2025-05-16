@@ -168,7 +168,6 @@ module.exports = (req, res) => {
             });
           })
           .then(redirect => {
-            console.log("REdirect to ", redirect);
             res.redirect(redirect);
           });
       });
