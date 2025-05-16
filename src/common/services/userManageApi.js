@@ -102,7 +102,7 @@ module.exports = {
     });
   },
 
-  createUser(email, firstName, lastName, oneLoginSid, state = null) {
+  createUser(email, firstName, lastName, oneLoginSid, state = null, tokenId = null) {
     const reqBody = {
       email,
       firstName,
@@ -112,6 +112,10 @@ module.exports = {
 
     if (state && ['verified', 'unverified'].includes(state)) {
       reqBody['state'] = state;
+    }
+
+    if (tokenId) {
+      reqBody['tokenId'] = tokenId;
     }
 
     return new Promise((resolve, reject) => {

@@ -135,12 +135,6 @@ describe('User OneLogin Post Controller', () => {
       expect(getUserInfoStub).to.have.been.calledWith('mock_access_token');
       expect(req.session.step).to.equal(PHASE_GIVEN_NAME);
       expect(res.redirect).to.be.calledWith('error/404')
-      // expect(res.render).to.have.been.calledWith('app/user/onelogin/index', {
-      //   step: `app/user/onelogin/partials/${PHASE_GIVEN_NAME}.njk`,
-      //   firstName: 'John',
-      //   lastName: 'Doe',
-      //   errors: sinon.match.array
-      // });
     });
   });
 

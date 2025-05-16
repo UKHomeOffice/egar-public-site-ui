@@ -1,6 +1,5 @@
 const navUtil = require('../../../common/utils/nav');
 const {PHASE_GIVEN_NAME, WORKFLOW_STEPS}  = require('./constants');
-const logger = require('../../../common/utils/logger')(__filename);
 
 const checkKeys = (obj, ...keys) => {
   if (!obj) return false;
@@ -8,7 +7,7 @@ const checkKeys = (obj, ...keys) => {
 }
 
 module.exports = (req, res) => {
-  if (!checkKeys(req.cookies, 'state', 'id_token', 'nonce') || req.headers.referer === null) {
+  if (!checkKeys(req.cookies, 'state', 'id_token', 'nonce') || req.headers.referer === null || !req.session?.access_token) {
     return res.redirect('/');
   }
 
@@ -23,14 +22,6 @@ module.exports = (req, res) => {
   }
 
   req.session.step = stepValue;
-
-  return req.session.save((err) => {
-    if (err) {
-      logger.error(`Failed to save session: ${err}`);
-      return res.redirect('error/404');
-    }
-
-    const stepData = req.session?.step_data;
-    return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...stepData});
-  });
+  const stepData = req.session?.step_data;
+  return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...stepData});
 };
