@@ -33,6 +33,7 @@ const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
+const {IS_HTTPS_SERVER} = require("./common/config");
 
 // Global constants
 const PORT = (process.env.PORT || 3000);
@@ -87,7 +88,7 @@ function initialisExpressSession(app) {
     cookie: {
       secure: secureFlag,
       httpOnly: true,
-      sameSite: true,
+      sameSite: IS_HTTPS_SERVER,
       maxAge: 60 * 60 * 1000,
     },
   }));
@@ -224,7 +225,7 @@ function initialiseTemplateEngine(app) {
 
   nunjucksEnvironment.addGlobal('CARRIER_SUPPORT_HUB_UK_NUMBER', config.CARRIER_SUPPORT_HUB_UK_NUMBER);
   nunjucksEnvironment.addGlobal('CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER', config.CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER);
-  
+
   nunjucksEnvironment.addGlobal('ONE_LOGIN_SHOW_ONE_LOGIN', config.ONE_LOGIN_SHOW_ONE_LOGIN);
   nunjucksEnvironment.addGlobal('ONE_LOGIN_POST_MIGRATION', config.ONE_LOGIN_POST_MIGRATION);
 
