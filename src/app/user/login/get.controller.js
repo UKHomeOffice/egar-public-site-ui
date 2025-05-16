@@ -152,7 +152,7 @@ module.exports = (req, res) => {
               delete req.cookies.nonce;
               delete req.cookies.state;
             } else if (redirect === ROUTES.REGISTER) {
-              res.cookie("access_token", access_token);
+              req.session.access_token = access_token;
             }
 
             return new Promise((resolve, reject) => {
@@ -168,7 +168,8 @@ module.exports = (req, res) => {
             });
           })
           .then(redirect => {
-            res.redirect(redirect);
+            res.set('Referer', req.headers.host)
+            res.redirect(redirect)
           });
       });
     })

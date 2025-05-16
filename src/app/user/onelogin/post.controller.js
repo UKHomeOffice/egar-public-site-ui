@@ -50,7 +50,7 @@ async function handleGivenNameSubmission(req, res) {
       await validator.validateChains([fnameChain, lnameChain])
 
       try {
-        const {access_token: accessToken} = req.cookies;
+        const {access_token: accessToken} = req.session;
         const {email, sub} = await oneLoginApi.getUserInfoFromOneLogin(accessToken)
 
         const step_data = {
@@ -129,12 +129,13 @@ async function handleConfirmNameSubmission(req, res) {
 }
 
 function handleCompleteSubmission(req, res) {
-    delete req.session.id_token;
     delete req.session.access_token;
-    delete req.session.state;
-    delete req.session.nonce;
     delete req.session.step;
     delete req.session.step_data;
+
+    delete req.cookies.state;
+    delete req.cookies.nonce;
+
 
     return [Outcome.SUCCESS, null, '/home'] ;
 }
