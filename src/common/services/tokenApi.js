@@ -70,22 +70,29 @@ module.exports = {
    * Sends organisation invite token to API for storage.
    *
    * @param {String} tokenId token id to be stored
-   * @param {String} invitorId userid of user sending the invite
+   * @param inviterId
    * @param {String} organisationId organisationid of the organisation sending the invite
-   * @param {String} roleId roleId of the role the invited user will be given.
+   * @param roleName
+   * @param inviteeEmail
    * @returns {Promise} returns response body when resolved.
    */
-  setInviteUserToken(tokenId, inviterId, organisationId, roleName) {
+  setInviteUserToken(tokenId, inviterId, organisationId, roleName, inviteeEmail = null) {
+    const requestBody = {
+      tokenId,
+      inviterId,
+      organisationId,
+      roleName,
+    }
+
+    if (inviteeEmail) {
+      requestBody.inviteeEmail = inviteeEmail;
+    }
+
     return new Promise((resolve, reject) => {
       request.post({
         headers: { 'content-type': 'application/json' },
         url: endpoints.setToken(),
-        body: JSON.stringify({
-          tokenId,
-          inviterId,
-          organisationId,
-          roleName,
-        }),
+        body: JSON.stringify(requestBody),
       }, (error, _response, body) => {
         if (error) {
           logger.error('There was a problem calling the setInviteUserToken API');

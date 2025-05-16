@@ -1,0 +1,30 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	{{__('error_prefix') if data.errors}} GAR | Register
+{% endblock %}
+
+{% block header %}
+  {% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+  <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>
+{% endblock %}
+
+
+{% block content %}
+      {% if data.errors %}
+        {% include "common/templates/includes/errors.njk" %}
+      {% endif %}
+
+     <div class="govuk-grid-row">
+         {% if step %}
+            {% include step %}
+         {% endif %}
+    </div>
+
+{% endblock %}

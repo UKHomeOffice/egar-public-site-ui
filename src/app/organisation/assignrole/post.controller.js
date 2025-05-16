@@ -25,7 +25,7 @@ module.exports = (req, res) => {
   const inviterId = cookie.getUserDbId();
   const inviteOrgName = cookie.getOrganisationName();
   const inviteOrgId = cookie.getOrganisationId();
-  const inviteeEmail = cookie.getInviteUserEmail();
+  const inviteeEmail = cookie.getInviteUserEmail()?.toLowerCase();
   const roleId = cookie.getInviteUserRole();
 
   // Define a validation chain for first name
@@ -36,7 +36,7 @@ module.exports = (req, res) => {
   // Validate chains
   validator.validateChains([roleChain])
     .then(() => {
-      tokenApi.setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId)
+      tokenApi.setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId, inviteeEmail)
         .then((apiResponse) => {
           const apiResponseObj = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(apiResponseObj, 'message')) {
