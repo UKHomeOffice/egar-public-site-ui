@@ -21,6 +21,7 @@ const {
 
 // Import controller
 const postController = require('../../../app/user/onelogin/post.controller');
+const {getUserInviteToken} = require("../../../common/services/verificationApi");
 
 describe('User OneLogin Post Controller', () => {
   let req;
@@ -28,6 +29,7 @@ describe('User OneLogin Post Controller', () => {
   let validateChainsStub;
   let getUserInfoStub;
   let createUserStub;
+  let getUserInviteTokenStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -52,6 +54,7 @@ describe('User OneLogin Post Controller', () => {
     validateChainsStub = sinon.stub(validator, 'validateChains');
     getUserInfoStub = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin');
     createUserStub = sinon.stub(userApi, 'createUser');
+    getUserInviteTokenStub = sinon.stub(getUserInviteToken, 'getUserInviteToken')
   });
 
   afterEach(() => {
@@ -59,6 +62,7 @@ describe('User OneLogin Post Controller', () => {
   });
 
   it('should redirect to 404 if step is not set in session', async () => {
+    getUserInviteTokenStub.resolves({tokenId: '123'})
     delete req.session.step;
 
     await postController(req, res);
@@ -239,6 +243,8 @@ describe('User OneLogin Post Controller', () => {
     });
 
     it('should set user cookies when creating user successfully', async () => {
+      getUserInviteTokenStub.resolves({tokenId: '123'})
+
       const cookieSetSpy = {
         setUserEmail: sinon.spy(),
         setUserFirstName: sinon.spy(),
