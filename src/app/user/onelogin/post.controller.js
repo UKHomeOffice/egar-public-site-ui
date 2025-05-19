@@ -72,7 +72,7 @@ async function handleGivenNameSubmission(req, res) {
       errors = validationError
       logger.error("Validation error");
 
-      return [Outcome.VALIDATION_FAILED, {firstName, lastName, errors}, null];
+      return [Outcome.VALIDATION_FAILED, {firstName: firstName, lastName, errors}, null];
     }
 }
 
