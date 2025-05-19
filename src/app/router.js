@@ -12,6 +12,7 @@ const usersignin = require('./user/login');
 const postusersignin = require('./home');
 const userregister = require('./user/register');
 const registermsg = require('./user/regmsg');
+const oneloginRegister = require('./user/onelogin');
 
 // User dependencies
 const aircraft = require('./aircraft');
@@ -161,6 +162,6 @@ module.exports.bind = (app) => {
   app.use(respersonDelete.router);
   app.use(respersonEdit.router);
   app.use(respersonDetail.router);
-  //
   app.use(amgcheckin.router);
+  app.use(oneloginRegister.router);
 };

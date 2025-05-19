@@ -25,7 +25,7 @@ services:
 
   mock_clamav:
     container_name: mock-clamav
-    build: 
+    build:
       context: ./mock_clamav
       dockerfile: Dockerfile
     ports:

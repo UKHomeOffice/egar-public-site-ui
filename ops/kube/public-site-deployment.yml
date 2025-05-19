@@ -155,6 +155,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: NOTIFY_MFA_TEMPLATE_ID
+            - name: NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID
             - name: NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
@@ -274,7 +279,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: environment
-                  key: HOMEPAGE_MESSAGE        
+                  key: HOMEPAGE_MESSAGE
             - name: ONE_LOGIN_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
