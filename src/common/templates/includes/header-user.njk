@@ -35,7 +35,7 @@
           {% elseif cookie.getUserRole() == 'User' %}
           {% endif %}
           {{ nav_link('manage-account', '/user/details', __('nav_bar_account')) }}
-          {{ nav_link('logout', '/onelogin/logout', __('nav_bar_sign_out')) }}
+          {{ nav_link('logout', '/user/logout', __('nav_bar_sign_out')) }}
           {{ nav_link('upt-help', '/help', __('nav_bar_upt-help')) }}
       </ul>
     </nav>
