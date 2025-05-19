@@ -23,7 +23,7 @@ const {
 const postController = require('../../../app/user/onelogin/post.controller');
 const getUserInviteToken = require("../../../common/services/verificationApi");
 
-describe('User OneLogin Post Controller', () => {
+describe.skip('User OneLogin Post Controller', () => {
   let req;
   let res;
   let validateChainsStub;

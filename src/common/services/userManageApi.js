@@ -64,7 +64,7 @@ module.exports = {
           return;
         }
         logger.debug('Successfully called edit user details API endpoint');
-        resolve(JSON.parse(body));
+        resolve(body);
       });
     });
   },
