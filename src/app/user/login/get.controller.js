@@ -56,7 +56,7 @@ const handleUserAuthentication = (userInfo, cookie) => {
       return userData;
     })
     .then(userData => {
-      if (userData.redirect) {
+      if (userData?.redirect) {
         return userData;
       }
 

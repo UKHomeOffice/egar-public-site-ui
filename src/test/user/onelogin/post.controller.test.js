@@ -21,7 +21,7 @@ const {
 
 // Import controller
 const postController = require('../../../app/user/onelogin/post.controller');
-const {getUserInviteToken} = require("../../../common/services/verificationApi");
+const getUserInviteToken = require("../../../common/services/verificationApi");
 
 describe('User OneLogin Post Controller', () => {
   let req;
@@ -255,6 +255,12 @@ describe('User OneLogin Post Controller', () => {
         session: { save: sinon.spy() }
       };
 
+      req.session.step_data = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+      }
+
       sinon.stub(CookieModel.prototype, 'setUserEmail').callsFake(cookieSetSpy.setUserEmail);
       sinon.stub(CookieModel.prototype, 'setUserFirstName').callsFake(cookieSetSpy.setUserFirstName);
       sinon.stub(CookieModel.prototype, 'setUserLastName').callsFake(cookieSetSpy.setUserLastName);
@@ -265,6 +271,9 @@ describe('User OneLogin Post Controller', () => {
       createUserStub.resolves({
         userId: 'user_id',
         state: 'verified',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
         role: { name: 'Individual' }
       });
 

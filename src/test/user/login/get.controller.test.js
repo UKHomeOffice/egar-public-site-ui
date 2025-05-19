@@ -25,6 +25,7 @@ describe('User Login Get Controller', () => {
   let getUserInfoFromOneLogin;
   let userSearchStub;
   let updateUserData;
+  let getDetailsStub;
 
 
   beforeEach(() => {
@@ -63,6 +64,7 @@ describe('User Login Get Controller', () => {
 
     userSearchStub = sinon.stub(userApi, 'userSearch')
     updateUserData = sinon.stub(userApi, 'updateDetails')
+    getDetailsStub = sinon.stub(userApi, 'getDetails')
     oneLoginJwtVerifyStub = sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
       callback(true); // Simulate successful JWT verification
     });
@@ -170,9 +172,16 @@ FnBdx5XR9zLe40LX3+cbEtw=
     });
 
     // Mock getDetails to return a valid organization
-    sinon.stub(userApi, 'getDetails').resolves({
-      organisation: {organisationId: 'org123'},
+    getDetailsStub.resolves({
+      organisation: {organisationId: 'org123', organisationName: 'Org 1'},
+      firstName: 'Test',
+      lastName: 'User',
+      email: 'test@example.com',
+      state: 'verified',
+      role: {name: 'Individual'}
     });
+
+    updateUserData.returns(Promise.resolve({'userId': 'userid', redirect: '/home'}));
 
     // Execute
     await controller(req, res);
@@ -182,7 +191,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
       'test@example.com',
       'Test',
       'User',
-      'onelogin_sid'
+      'onelogin_sid',
     );
 
     expect(res.redirect).to.have.been.calledOnceWith('/home');
