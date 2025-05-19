@@ -8,6 +8,9 @@ services:
       - .env.dev
     ports:
       - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
 
   api:
     build:
@@ -25,7 +28,7 @@ services:
 
   mock_clamav:
     container_name: mock-clamav
-    build: 
+    build:
       context: ./mock_clamav
       dockerfile: Dockerfile
     ports:
@@ -49,3 +52,6 @@ services:
       - database
     volumes:
       - ./src/:/public-site/
+
+volumes:
+  db-data:
