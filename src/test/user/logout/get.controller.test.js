@@ -9,7 +9,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 
-const controller = require('../../../app/register/logout/get.controller');
+const controller = require('../../../app/user/logout/get.controller');
 
 describe('Logout Get Controller', () => {
   let req; let res; let sessionDestroyStub;

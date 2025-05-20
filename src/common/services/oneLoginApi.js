@@ -7,6 +7,39 @@ const request = require('request');
 const qs = require('querystring');
 const {resolve} = require('path');
 
+
+/**
+ * This function is meant to convert URLs in non prod such that if the user is making a request from an internal URL, then a internal URL will be returned.
+ * If it is a non-internal URL, then a non-internal URL will be returned.
+ *
+ * This is designed so that someone testing the service will avoid issues with different URLs for user who are not on the VPN
+ *
+ * @param url the URL to check
+ * @param req node request object
+ * @returns
+ */
+const parseUrlForNonProd = (req, url) => {
+  const currentAddress = req.get('host');
+  const internalRegex =
+    '^.*ssar-public-ui.(dev|sit|staging|test).internal.egar-notprod.homeoffice.gov.uk';
+  const notInternalRegex =
+    '^.*ssar-public-ui.(dev|sit|staging|test).egar-notprod.homeoffice.gov.uk';
+  let returnUrl = url;
+
+  if (currentAddress?.match(notInternalRegex) && url.match(internalRegex)) {
+    returnUrl = url.replace('.internal.egar-notprod', '.egar-notprod');
+    logger.info(`We would change URL: '${url}' to '${returnUrl}'`);
+  } else if (
+    currentAddress?.match(internalRegex) &&
+    url.match(notInternalRegex)
+  ) {
+    returnUrl = url.replace('.egar-notprod', '.internal.egar-notprod');
+    logger.info(`We would change URL: '${url}' to '${returnUrl}'`);
+  }
+  return url;
+};
+
+
 module.exports = {
   /**
    * Gets a list of users belonging to an organisation.
@@ -83,4 +116,30 @@ module.exports = {
       });
     });
   },
+
+  /**
+ * Create the log user out request to One Login API.
+ * @param id_token param to get the user info from onlogin
+ * @returns returns onelogin logout url
+ */
+getOneLoginLogoutUrl(id_token, state, req) {
+  try {
+    logger.info('create a logout url for one Login');
+    const url = `${config.ONE_LOGIN_INTEGRATION_URL}/logout`;
+    const options = {
+      id_token_hint: id_token,
+      post_logout_redirect_uri: parseUrlForNonProd(
+        req,
+        config.ONE_LOGIN_LOGOUT_URL,
+      ),
+      state,
+    };
+    const query = new URLSearchParams(options);
+    const logoutUrl = `${url}?${query}`;
+    return logoutUrl;
+  } catch (error) {
+    logger.error('Failed to create oneLogin user logout');
+    throw error;
+  }
+}
 }

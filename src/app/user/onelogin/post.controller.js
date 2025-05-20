@@ -72,7 +72,7 @@ async function handleGivenNameSubmission(req, res) {
       errors = validationError
       logger.error("Validation error");
 
-      return [Outcome.VALIDATION_FAILED, {firstName: firstName, lastName, errors}, null];
+      return [Outcome.VALIDATION_FAILED, {firstName, lastName, errors}, null];
     }
 }
 
@@ -120,8 +120,9 @@ async function handleConfirmNameSubmission(req, res) {
         }
       );
     } catch (error) {
-      logger.error("Error sending email");
-      logger.error(error);
+        logger.error("Exception when creating user");
+        logger.error(error);
+        return [Outcome.ERROR, error.message || 'Error creating user', null];
     }
 
     return [Outcome.SUCCESS, {}, null];
