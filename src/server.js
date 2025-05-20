@@ -33,7 +33,7 @@ const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
-const {IS_HTTPS_SERVER} = require("./common/config");
+const {SAME_SITE_VALUE} = require("./common/config");
 
 // Global constants
 const PORT = (process.env.PORT || 3000);
@@ -88,7 +88,7 @@ function initialisExpressSession(app) {
     cookie: {
       secure: secureFlag,
       httpOnly: true,
-      sameSite: IS_HTTPS_SERVER,
+      sameSite: SAME_SITE_VALUE,
       maxAge: 60 * 60 * 1000,
     },
   }));
