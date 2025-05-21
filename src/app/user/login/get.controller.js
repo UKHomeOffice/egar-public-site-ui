@@ -6,6 +6,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const config = require("../../../common/config");
 const {getUserInviteToken} = require("../../../common/services/verificationApi");
 const {next} = require("lodash/seq");
+const {IS_HTTPS_SERVER, SAME_SITE_VALUE} = require("../../../common/config");
 
 // Constants
 const ROUTES = {
@@ -124,7 +125,11 @@ module.exports = (req, res) => {
         return Promise.reject();
       }
 
-      res.cookie("id_token", id_token);
+      res.cookie("id_token", id_token, {
+          httpOnly: true,
+          secure: IS_HTTPS_SERVER,
+          sameSite: SAME_SITE_VALUE,
+        });
 
       return new Promise(resolve => {
         oneLoginUtil.verifyJwt(id_token, req.cookies.nonce, resolve);
