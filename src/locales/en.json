@@ -463,7 +463,7 @@
 	"field_continental_shelf_review": "Intention to make continental shelf declaration",
 	"field_continental_shelf_declaration_review": "Continental shelf goods details",
 	"amg_status_check_response_code_0A": "Valid permission to travel",
-	"amg_status_check_response_code_0B": "NO RECORD",
+	"amg_status_check_response_code_0B": "No record of valid permission to travel",
 	"amg_status_check_response_code_0Z": "Authority to carry granted",
 	"amg_status_check_response_code_2Z": "SELECTEE REFER TO STANDARD OPERATING PROCEDURES FOR UK",
 	"amg_status_check_response_code_0P": "Authority to carry granted",
