@@ -55,21 +55,18 @@
 .no-reocord{
     color: #74472E;
     background-color: #F6D7C6;
-    text-transform:uppercase;
     padding: 5px 10px 5px 10px;
     font-weight: 600;
 }
 .authority-to-carry-granted{
     color: #254D7D;
     background-color: #D5E2EF;
-    text-transform:uppercase;
     padding: 5px 10px 5px 10px;
     font-weight: 600;
 }
 .valid-permission-to-travel{
     color: #2F623F;
     background-color: #D0E1D9;
-    text-transform:uppercase;
     padding: 5px 10px 5px 10px;
     font-weight: 700;
 }
