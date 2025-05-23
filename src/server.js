@@ -75,9 +75,6 @@ function initialiseDb() {
 
 function initialisExpressSession(app) {
   app.use(cookieParser());
-  console.log("IS_HTTPS_SERVER: " + IS_HTTPS_SERVER);
-  console.log("SAME_SITE_VALUE: " + SAME_SITE_VALUE);
-
   app.use(session({
     name: 'sess_id',
     genid: () => uuid(),
