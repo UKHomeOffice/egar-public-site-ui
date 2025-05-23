@@ -88,7 +88,7 @@ function initialisExpressSession(app) {
     cookie: {
       secure: secureFlag,
       httpOnly: true,
-      sameSite: IS_HTTPS_SERVER,
+      sameSite: 'None',
       maxAge: 60 * 60 * 1000,
     },
   }));
