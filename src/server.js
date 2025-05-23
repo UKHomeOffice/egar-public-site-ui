@@ -90,7 +90,7 @@ function initialisExpressSession(app) {
     saveUninitialized: true,
     cookie: {
       secure: secureFlag,
-      httpOnly: true,
+      httpOnly: IS_HTTPS_SERVER,
       sameSite: SAME_SITE_VALUE,
       maxAge: 60 * 60 * 1000,
     },
