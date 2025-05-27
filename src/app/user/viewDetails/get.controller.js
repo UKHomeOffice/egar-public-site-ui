@@ -9,8 +9,6 @@ module.exports = (req, res) => {
   const userId = cookie.getUserDbId();
   const oneloginUrl = config.ONE_LOGIN_ACCOUNT_URL;
 
-  console.log(oneloginUrl);
-
   Promise.all([personApi.getPeople(userId, 'individual')])
     .then(([people]) => {
       const savedPeople = JSON.parse(people);

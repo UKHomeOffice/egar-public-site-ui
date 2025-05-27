@@ -10,8 +10,17 @@ module.exports = (req, res) => {
   const firstName = req.body.firstname;
   const lastName = req.body.lastname;
 
+  delete req.session.successMsg;
+  delete req.session.successHeader;
+
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
+
+  if (firstName.trim() === cookie.getUserFirstName() && lastName.trim() === cookie.getUserLastName()) {
+    console.log("Redirecting away")
+    logger.debug('Names unchanged - skipping update');
+    return res.redirect('/user/details');
+  }
 
   // Define a validation chain for user registeration fields
   const firstNameChain = [
@@ -29,7 +38,7 @@ module.exports = (req, res) => {
 
   validator.validateChains([firstNameChain, lnameChain])
     .then(() => {
-      logger.debug('Updating user in the database');
+
       userApi.updateDetails(cookie.getUserEmail(), firstName, lastName)
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
