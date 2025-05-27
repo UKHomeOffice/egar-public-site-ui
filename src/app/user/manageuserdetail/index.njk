@@ -35,42 +35,33 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="signform" action="/user/manageuserdetail" autocomplete="new-password" class="form-group" method="post" role="form">
         <h1 class="govuk-heading-xl">{{__('title_edit_account')}}</h1>
-        <p class="govuk-body-l">{{__('edit_account_caption')}}</p>
 
         <div class="govuk-form-group {{ m.form_group_class('firstname', errors) }}">
           <label class="govuk-label govuk-label--m" for="firstname">{{__('field_given_name')}}</label>
           {{ m.error_message('firstname', errors, __) }}
-          <input id="firstname" name="Firstname" autocomplete="off" class="govuk-input"
+          <input id="firstname" name="firstname" autocomplete="off" class="govuk-input"
             type="text" value="{{cookie.getUserFirstName()}}"
             {{ 'aria-describedby=firstname-error' if errors | containsError('firstname') }}>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('lastname', errors) }}">
-          <label class="govuk-label govuk-label--m" for="lastname">{{__('field_surname')}}</label>
+          <label class="govuk-label govuk-label--m" for="lastname">{{__('field_family_name')}}</label>
           {{ m.error_message('lastname', errors, __) }}
-          <input id="lastname" name="Lastname" autocomplete="off" class="govuk-input"
+          <input id="lastname" name="lastname" autocomplete="off" class="govuk-input"
             type="text" maxlength="{{ MAX_STRING_LENGTH}}" value="{{cookie.getUserLastName()}}"
             {{ 'aria-describedby=lastname-error' if errors | containsError('lastname') }}>
         </div>
 
-        <button type="submit" class="govuk-button" onclick="sendAnalytics(event, 'Edit Account - Save', 'click')">{{__('form_save_changes')}}</button>
+        <button type="submit" class="govuk-button" onclick="sendAnalytics(event, 'Edit Account - Save', 'click')">{{__('button_continue')}}</button>
 
-        <p class="govuk-body-m">
-          <a class="govuk-button govuk-button--secondary" href="/user/details#" onclick="sendAnalytics(event, 'Edit Account - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
+        <p class="govuk-body-m" style="margin-bottom: 60px;">
+          <a class="govuk-link" href="/user/details#" onclick="sendAnalytics(event, 'Edit Account - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
         </p>
-      
+
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       </form>
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    <div class="govuk-form-group">
-        <h1 class="govuk-heading-l">{{__('heading_delete_account')}}</h1>
-      
-        <p class="govuk-body-m">{{__('are_you_sure_delete_account_caption')}}</p>
-        <p class="govuk-body-m">
-          <a href="/user/delete">{{__('form_delete_this_account')}}</a>
-        </p>
-    </div>
   </div>
 </div>
 
