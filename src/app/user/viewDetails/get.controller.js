@@ -1,6 +1,7 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const personApi = require('../../../common/services/personApi');
+const config = require('../../../common/config');
 
 module.exports = (req, res) => {
   logger.debug('In user / viewDetails get controller');
@@ -15,7 +16,7 @@ module.exports = (req, res) => {
         const { errMsg } = req.session;
         delete req.session.errMsg;
         return res.render('app/user/viewDetails/index', {
-          cookie, savedPeople, errors: [errMsg],
+          cookie, savedPeople, errors: [errMsg]
         });
       }
       if (req.session.successMsg) {
@@ -26,7 +27,7 @@ module.exports = (req, res) => {
           cookie, savedPeople, successHeader, successMsg,
         });
       }
-      return res.render('app/user/viewDetails/index', { cookie, savedPeople });
+      return res.render('app/user/viewDetails/index', {cookie, savedPeople });
     })
     .catch((err) => {
       logger.error('There was an error fetching craft / people data for an individual');
