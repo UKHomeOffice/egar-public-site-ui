@@ -21,12 +21,15 @@ describe('Manage User Detail Post Controller', () => {
 
     req = {
       body: {
-        Firstname: 'Kylo',
-        Lastname: 'Ren',
+        firstname: 'Kylo',
+        lastname: 'Ren',
       },
       session: {
         u: {
           e: 'kylo.ren@firstorder.emp',
+          rl: 'Admin',
+          fn: 'Kylo',
+          ln: 'Ren',
         },
       },
     };
@@ -41,8 +44,10 @@ describe('Manage User Detail Post Controller', () => {
   });
 
   it('should return validation error on empty first name', () => {
-    req.body.Firstname = '';
+    req.body.firstname = '';
+
     const cookie = new CookieModel(req);
+    cookie.getUserFirstName();
 
     const callController = async () => {
       await controller(req, res);
@@ -55,7 +60,7 @@ describe('Manage User Detail Post Controller', () => {
       });
     });
 
-    delete req.body.Firstname;
+    delete req.body.firstname;
 
     callController().then(() => {
       expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
@@ -66,7 +71,9 @@ describe('Manage User Detail Post Controller', () => {
   });
 
   it('should return validation error on empty last name', () => {
-    req.body.Lastname = '';
+    req.body.lastname = '';
+    req.body.firstname = 'Kylo';
+
     const cookie = new CookieModel(req);
 
     const callController = async () => {
@@ -76,7 +83,7 @@ describe('Manage User Detail Post Controller', () => {
     callController().then(() => {
       expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
         cookie,
-        errors: [new ValidationRule(validator.notEmpty, 'lastname', '', 'Enter your surname')],
+        errors: [new ValidationRule(validator.notEmpty, 'lastname', '', 'Enter your family name')],
       });
     });
   });
@@ -102,6 +109,9 @@ describe('Manage User Detail Post Controller', () => {
       message: 'Person does not exist',
     }));
     const cookie = new CookieModel(req);
+
+    cookie.setUserFirstName('Kylo');
+    cookie.setUserLastName('Ren');
 
     const callController = async () => {
       await controller(req, res);

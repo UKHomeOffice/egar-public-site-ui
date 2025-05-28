@@ -16,11 +16,7 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  if (firstName.trim() === cookie.getUserFirstName() && lastName.trim() === cookie.getUserLastName()) {
-    console.log("Redirecting away")
-    logger.debug('Names unchanged - skipping update');
-    return res.redirect('/user/details');
-  }
+
 
   // Define a validation chain for user registeration fields
   const firstNameChain = [
@@ -30,14 +26,19 @@ module.exports = (req, res) => {
     new ValidationRule(validator.validFirstNameLength, 'firstname', firstName, `Please enter a given name of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`),
   ];
   const lnameChain = [
-    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your surname'),
-    new ValidationRule(validator.isValidStringLength, 'lastname', lastName, `Surname must be ${MAX_STRING_LENGTH} characters or less`),
+    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your family name'),
+    new ValidationRule(validator.isValidStringLength, 'lastname', lastName, `Family name must be ${MAX_STRING_LENGTH} characters or less`),
     new ValidationRule(validator.validName, 'lastname', lastName, 'Please enter a valid family name'),
       new ValidationRule(validator.validSurnameLength, 'lastname', lastName, `Please enter a family name of at most ${USER_SURNAME_CHARACTER_COUNT} characters`),
   ];
 
   validator.validateChains([firstNameChain, lnameChain])
     .then(() => {
+
+      if (firstName?.trim() === cookie.getUserFirstName() && lastName?.trim() === cookie.getUserLastName()) {
+        logger.debug('Names unchanged - skipping update');
+        return res.redirect('/user/details');
+      }
 
       userApi.updateDetails(cookie.getUserEmail(), firstName, lastName)
         .then((apiResponse) => {
