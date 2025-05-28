@@ -16,8 +16,6 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-
-
   // Define a validation chain for user registeration fields
   const firstNameChain = [
     new ValidationRule(validator.notEmpty, 'firstname', firstName, 'Enter your given name'),

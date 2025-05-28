@@ -37,7 +37,7 @@
         <h1 class="govuk-heading-xl">{{__('title_edit_account')}}</h1>
 
         <div class="govuk-form-group {{ m.form_group_class('firstname', errors) }}">
-          <label class="govuk-label govuk-label--m" for="firstname">{{__('field_given_name')}}</label>
+          <label class="govuk-label" for="firstname">{{__('field_given_name')}}</label>
           {{ m.error_message('firstname', errors, __) }}
           <input id="firstname" name="firstname" autocomplete="off" class="govuk-input"
             type="text" value="{{cookie.getUserFirstName()}}"
@@ -45,14 +45,14 @@
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('lastname', errors) }}">
-          <label class="govuk-label govuk-label--m" for="lastname">{{__('field_family_name')}}</label>
+          <label class="govuk-label" for="lastname">{{__('field_family_name')}}</label>
           {{ m.error_message('lastname', errors, __) }}
           <input id="lastname" name="lastname" autocomplete="off" class="govuk-input"
             type="text" maxlength="{{ MAX_STRING_LENGTH}}" value="{{cookie.getUserLastName()}}"
             {{ 'aria-describedby=lastname-error' if errors | containsError('lastname') }}>
         </div>
 
-        <button type="submit" class="govuk-button" onclick="sendAnalytics(event, 'Edit Account - Save', 'click')">{{__('button_continue')}}</button>
+        <button type="submit" class="govuk-button" onclick="sendAnalytics(event, 'Edit Account - Save', 'click')" style="margin-top: 30px;">{{__('button_continue')}}</button>
 
         <p class="govuk-body-m" style="margin-bottom: 60px;">
           <a class="govuk-link" href="/user/details#" onclick="sendAnalytics(event, 'Edit Account - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>

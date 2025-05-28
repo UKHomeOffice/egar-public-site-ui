@@ -28,7 +28,7 @@
       {% if successMsg %}
           {% include "common/templates/includes/success-action.njk" %}
       {% endif %}
-      <h1 class="govuk-heading">Your Account</h1>
+      <h1 class="govuk-heading-l">Your account</h1>
 
      <dl class="app-check-your-answers app-check-your-answers--short" style="margin-top: 20px;">
           <div class="app-check-your-answers__contents" style="width: 100%;">
@@ -49,7 +49,7 @@
     <div style="margin-top: -20px;">
       <h2 class="govuk-heading-m">Change your sign in details</h2>
       <div class="govuk-body">
-          <p>You use your GOV.UK One Login to sign in to Submit a General Aviation Report (GAR)</p>
+          <p>You use your GOV.UK One Login to sign in to Submit a General Aviation Report (GAR).</p>
           <p>You can change your GOV.UK One Login details including:
             <ul>
                 <li>email address</li>
@@ -62,16 +62,24 @@
           </p>
       </div>
 
-      <div style="margin-top: 55px;">
+      <div style="margin-top: 30px;">
           <form method="post" action="/user/delete">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
              <div class="govuk-button-group" style="margin-top: 29px;">
                {{ govukButton({element: "button", text: "Delete your account", classes: "govuk-button--warning" }) }}
             </div>
           </form>
+          <p>
           <a class="govuk-link" href="/home">Return to GARs</a>
+          </p>
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
+
+<stylesheet>
+  p.govuk-notification-banner__heading strong {
+
+  }
+</stylesheet>
