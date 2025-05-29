@@ -2,7 +2,7 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 const db = require('../utils/db');
 const config = require('../config/index');
-const oneLoginUtil = require('../utils/oneLoginAuth');
+//const oneLoginUtil = require('../utils/oneLoginAuth');
 const request = require('request');
 const qs = require('querystring');
 const {resolve} = require('path');
@@ -19,11 +19,12 @@ const {resolve} = require('path');
  * @returns
  */
 const parseUrlForNonProd = (req, url) => {
+  console.log('here');
   const currentAddress = req.get('host');
   const internalRegex =
-    '^.*ssar-public-ui.(dev|sit|staging|test).internal.egar-notprod.homeoffice.gov.uk';
+    '^.*public-ui.(dev|sit|staging|test).internal.egar-notprod.homeoffice.gov.uk';
   const notInternalRegex =
-    '^.*ssar-public-ui.(dev|sit|staging|test).egar-notprod.homeoffice.gov.uk';
+    '^.*public-ui.(dev|sit|staging|test).egar-notprod.homeoffice.gov.uk';
   let returnUrl = url;
 
   if (currentAddress?.match(notInternalRegex) && url.match(internalRegex)) {
@@ -41,13 +42,15 @@ const parseUrlForNonProd = (req, url) => {
 
 
 module.exports = {
+
   /**
    * Gets a list of users belonging to an organisation.
    * @param {String} orgId id of an organisation to get users for
    * @param {String} organisationName
    * @returns {Promise} resolves with API response.
    */
-  sendOneLoginTokenRequest(code) {
+  sendOneLoginTokenRequest(code, req, oneLoginUtil) {
+     console.log('here33');
     return new Promise((resolve, reject) => {
       const oneLoginIntegrationUrl = config.ONE_LOGIN_INTEGRATION_URL;
       const clientId = config.ONE_LOGIN_CLIENT_ID;
@@ -67,7 +70,7 @@ module.exports = {
         grant_type: 'authorization_code',
         code,
         // eslint-disable-next-line camelcase
-        redirect_uri: config.ONE_LOGIN_REDIRECT_URI,
+        redirect_uri: parseUrlForNonProd(req, config.ONE_LOGIN_REDIRECT_URI),
         // eslint-disable-next-line camelcase
         client_assertion_type:
           'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
@@ -117,29 +120,5 @@ module.exports = {
     });
   },
 
-  /**
- * Create the log user out request to One Login API.
- * @param id_token param to get the user info from onlogin
- * @returns returns onelogin logout url
- */
-getOneLoginLogoutUrl(id_token, state, req) {
-  try {
-    logger.info('create a logout url for one Login');
-    const url = `${config.ONE_LOGIN_INTEGRATION_URL}/logout`;
-    const options = {
-      id_token_hint: id_token,
-      post_logout_redirect_uri: parseUrlForNonProd(
-        req,
-        config.ONE_LOGIN_LOGOUT_URL,
-      ),
-      state,
-    };
-    const query = new URLSearchParams(options);
-    const logoutUrl = `${url}?${query}`;
-    return logoutUrl;
-  } catch (error) {
-    logger.error('Failed to create oneLogin user logout');
-    throw error;
-  }
-}
+  parseUrlForNonProd,
 }
