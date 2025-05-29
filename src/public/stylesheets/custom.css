@@ -4,7 +4,7 @@
 }
 
 .warning-button {
-    background: #b10e1e !important; 
+    background: #b10e1e !important;
     color: white !important;
 }
 
@@ -40,6 +40,19 @@
 .margin-bottom-10{
     margin-bottom: 10px !important;
 }
+
+.margin-top-20 {
+    margin-top: 20px !important;
+}
+
+.margin-top-30 {
+    margin-top: 30px !important;
+}
+.margin-top-60 {
+    margin-top: 60px !important;
+}
+
+
 .margin-right-20{
     margin-right: 20px !important;
 }
