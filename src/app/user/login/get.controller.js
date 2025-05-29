@@ -111,7 +111,7 @@ module.exports = (req, res) => {
     return res.redirect(ROUTES.ERROR_404);
   }
 
-  oneLoginApi.sendOneLoginTokenRequest(code, req, oneLoginUtil)
+  oneLoginApi.sendOneLoginTokenRequest(req, code, oneLoginUtil)
     .then(({access_token, id_token}) => {
       if (!id_token) {
         logger.error('Invalid ID Token error.');

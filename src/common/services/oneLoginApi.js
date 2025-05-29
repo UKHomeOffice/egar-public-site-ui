@@ -19,12 +19,11 @@ const {resolve} = require('path');
  * @returns
  */
 const parseUrlForNonProd = (req, url) => {
-  console.log('here');
   const currentAddress = req.get('host');
   const internalRegex =
-    '^.*public-ui.(dev|sit|staging|test).internal.egar-notprod.homeoffice.gov.uk';
+    '^.*public-site.(dev|sit|staging|test).internal.egar-notprod.homeoffice.gov.uk';
   const notInternalRegex =
-    '^.*public-ui.(dev|sit|staging|test).egar-notprod.homeoffice.gov.uk';
+    '^.*public-site.(dev|sit|staging|test).egar-notprod.homeoffice.gov.uk';
   let returnUrl = url;
 
   if (currentAddress?.match(notInternalRegex) && url.match(internalRegex)) {
@@ -37,7 +36,8 @@ const parseUrlForNonProd = (req, url) => {
     returnUrl = url.replace('.egar-notprod', '.internal.egar-notprod');
     logger.info(`We would change URL: '${url}' to '${returnUrl}'`);
   }
-  return url;
+  logger.info(`return URL ${returnUrl}`);
+  return returnUrl;
 };
 
 
@@ -49,8 +49,7 @@ module.exports = {
    * @param {String} organisationName
    * @returns {Promise} resolves with API response.
    */
-  sendOneLoginTokenRequest(code, req, oneLoginUtil) {
-     console.log('here33');
+  sendOneLoginTokenRequest(req, code, oneLoginUtil) {
     return new Promise((resolve, reject) => {
       const oneLoginIntegrationUrl = config.ONE_LOGIN_INTEGRATION_URL;
       const clientId = config.ONE_LOGIN_CLIENT_ID;
