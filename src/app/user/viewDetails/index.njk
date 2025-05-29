@@ -26,7 +26,22 @@
   <div class="govuk-grid-row" style="padding-bottom: 60px;">
     <div class="govuk-grid-column-two-thirds">
       {% if successMsg %}
-          {% include "common/templates/includes/success-action.njk" %}
+      <div class="govuk-grid-row">
+        <div class="govuk-column-full">
+          <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" tabindex="-1">
+             <div class="govuk-notification-banner__header">
+             <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+              {{successHeader}}
+            </h2>
+            </div>
+            <div class="govuk-notification-banner__content">
+              <h3 class="govuk-notification-banner__heading">
+                {{successMsg}}
+              </h3>
+            </div>
+            </div>
+        </div>
+      </div>
       {% endif %}
       <h1 class="govuk-heading-l">Your account</h1>
 
