@@ -16,7 +16,7 @@ module.exports = (req, res) => {
       const {state, id_token} = req.cookies;
 
       if (state && id_token)  {
-        const logoutUrl = getOneLoginLogoutUrl(id_token, state);
+        const logoutUrl = getOneLoginLogoutUrl(req, id_token, state);
         res.redirect(logoutUrl);
       }
     });
