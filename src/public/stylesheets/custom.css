@@ -52,6 +52,16 @@
     margin-top: 60px !important;
 }
 
+.margin-left-30 {
+    margin-left: 30px;
+}
+
+.margin-left-45 {
+    margin-left: 45px;
+}
+
+
+
 .margin-right-20{
     margin-right: 20px !important;
 }
@@ -70,6 +80,10 @@
 
 .padding-bottom-60 {
     padding-bottom: 60px !important;
+}
+
+.padding-left-60 {
+    padding-left: 60px !important;
 }
 
 .no-reocord{
