@@ -4,10 +4,14 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const userApi = require('../../../common/services/userManageApi');
 const { MAX_STRING_LENGTH } = require('../../../common/config/index');
+const {USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT} = require("../../../common/config");
 
 module.exports = (req, res) => {
-  const firstName = req.body.Firstname;
-  const lastName = req.body.Lastname;
+  const firstName = req.body.firstname;
+  const lastName = req.body.lastname;
+
+  delete req.session.successMsg;
+  delete req.session.successHeader;
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
@@ -16,15 +20,24 @@ module.exports = (req, res) => {
   const firstNameChain = [
     new ValidationRule(validator.notEmpty, 'firstname', firstName, 'Enter your given name'),
     new ValidationRule(validator.isValidStringLength, 'firstname', firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
+    new ValidationRule(validator.validName, 'firstname', firstName, 'Please enter a valid given name'),
+    new ValidationRule(validator.validFirstNameLength, 'firstname', firstName, `Please enter a given name of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`),
   ];
   const lnameChain = [
-    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your surname'),
-    new ValidationRule(validator.isValidStringLength, 'lastname', lastName, `Surname must be ${MAX_STRING_LENGTH} characters or less`),
+    new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your family name'),
+    new ValidationRule(validator.isValidStringLength, 'lastname', lastName, `Family name must be ${MAX_STRING_LENGTH} characters or less`),
+    new ValidationRule(validator.validName, 'lastname', lastName, 'Please enter a valid family name'),
+      new ValidationRule(validator.validSurnameLength, 'lastname', lastName, `Please enter a family name of at most ${USER_SURNAME_CHARACTER_COUNT} characters`),
   ];
 
   validator.validateChains([firstNameChain, lnameChain])
     .then(() => {
-      logger.debug('Updating user in the database');
+
+      if (firstName?.trim() === cookie.getUserFirstName() && lastName?.trim() === cookie.getUserLastName()) {
+        logger.debug('Names unchanged - skipping update');
+        return res.redirect('/user/details');
+      }
+
       userApi.updateDetails(cookie.getUserEmail(), firstName, lastName)
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
@@ -33,7 +46,15 @@ module.exports = (req, res) => {
           }
           cookie.setUserFirstName(firstName);
           cookie.setUserLastName(lastName);
-          return res.render('app/user/detailschanged/index', { cookie });
+          req.session.successMsg = 'You have changed your name';
+          req.session.successHeader = 'Success';
+          req.session.save((err) => {
+            if (err) {
+              logger.error('Failed to save session');
+              logger.error(err);
+            }
+            return res.redirect('/user/details');
+          });
         })
         .catch((err) => {
           logger.error('Failed to update user details');
