@@ -14,7 +14,6 @@ module.exports = async (req, res) => {
     const deleteAccountOptions = await deleteAccount[userRole](cookie);
 
     res.locals.text = deleteAccountOptions.text();
-    console.log(ONE_LOGIN_SHOW_ONE_LOGIN)
     res.render('app/user/deleteAccount/index', { cookie, ONE_LOGIN_SHOW_ONE_LOGIN });
   } catch (err) {
     logger.error('user delete account get controller failed');
