@@ -13,7 +13,7 @@
           {{ m.error_message('userFname', errors, __) }}
           <input id="userFname" name="userFname" autocomplete="off" class="govuk-input govuk-input--width-30"
             type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ firstName }}"
-            {{ 'aria-describedby=userFname-error' if errors | containsError('userFname') }} required>
+            {{ 'aria-describedby=userFname-error' if errors | containsError('userFname') }}>
         </div>
 
         <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }}" style="margin-bottom: 60px;">
@@ -21,7 +21,7 @@
           {{ m.error_message('userLname', errors, __) }}
           <input id="userLname" name="userLname" autocomplete="off" class="govuk-input govuk-input--width-30"
             type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lastName }}"
-            {{ 'aria-describedby=userLname-error' if errors | containsError('userLname') }} required>
+            {{ 'aria-describedby=userLname-error' if errors | containsError('userLname') }} >
         </div>
 
 
