@@ -39,7 +39,7 @@ const defaultDeletion = async cookie => ({
     await emailService.send(
     settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
     cookie.getUserEmail(),
-    { firstName: cookie.getUserFirstName(), lastname: cookie.getUserLastName() },
+    { firstName: cookie.getUserFirstName(), lastName: cookie.getUserLastName() },
   )},
   text: defaultText,
 });
