@@ -1,4 +1,5 @@
 {% from "govuk/components/button/macro.njk" import govukButton%}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading">
@@ -37,11 +38,15 @@
 
       <div style="margin-top: 55px;">
         <form method="post" action="/onelogin/register">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-           <div>
-             <input type="checkbox" name="nameConfirmDeclaration"/>
-             <span class="govuk-body">I understand and agree with these declarations </span>
-           </div>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            <div class="govuk-checkboxes govuk-checkboxes--small" id="nameDeclaration">
+              <div class="govuk-checkboxes__item">
+                <input type="checkbox" class="govuk-checkboxes__input" name="nameConfirmDeclaration">
+                <label class="govuk-label govuk-checkboxes__label" for="nameConfirmDeclaration">
+                  I understand and agree with these declarations
+                </label>
+              </div>
+            </div>
 
            <div class="govuk-button-group" style="margin-top: 29px;">
              {{ govukButton({element: "button", text: "Create Account" }) }}

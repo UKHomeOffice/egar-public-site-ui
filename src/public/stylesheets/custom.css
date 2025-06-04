@@ -162,3 +162,31 @@ h2.govuk-notification-banner__title {
     font-size: 1.1875rem;
     line-height: 1.3157894737;
 }
+
+#nameDeclaration .govuk-checkboxes__label {
+    margin-left: -9px;
+    margin-top: 2px;
+}
+
+.govuk-checkboxes--small .govuk-checkboxes__label:before {
+    top: 10px;
+    left: 0;
+    width: 24px;
+    height: 24px;
+}
+
+
+.govuk-checkboxes--small .govuk-checkboxes__label:after {
+    top: 17px;
+    left: 6px;
+    width: 12px;
+    height: 6.5px;
+    border-width: 0 0 3px 3px;
+}
+
+.govuk-checkboxes--small .govuk-checkboxes__input + .govuk-checkboxes__label::after {
+    top: 16px;
+    left: 6px;
+    width: 10px;
+    height: 6.5px;
+}
