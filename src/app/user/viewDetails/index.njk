@@ -8,8 +8,6 @@
 	Manage account | Submit a General Aviation Report (GAR)
 {% endblock %}
 
-{% set active = '/user/details' %}
-
 {% block header %}
   {% include "header-user.njk" %}
 {% endblock %}
@@ -24,7 +22,7 @@
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
   <div class="govuk-grid-row padding-bottom-60">
-    <div class="govuk-grid-column-two-thirds margin-left-50 margin-top-30">
+    <div class="govuk-grid-column-two-thirds margin-left-60 margin-top-30">
       {% if successMsg %}
       <div class="govuk-grid-row">
         <div class="govuk-column-full">
