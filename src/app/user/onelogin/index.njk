@@ -12,7 +12,6 @@
 
 {% block beforeContent %}
   {% include "phase.njk" %}
-  <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 
@@ -21,7 +20,7 @@
         {% include "common/templates/includes/errors.njk" %}
       {% endif %}
 
-     <div class="govuk-grid-row">
+     <div class="govuk-grid-row padding-bottom-60">
          {% if step %}
             {% include step %}
          {% endif %}
