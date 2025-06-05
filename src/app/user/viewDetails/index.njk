@@ -24,7 +24,7 @@
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
   <div class="govuk-grid-row padding-bottom-60">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds margin-left-50 margin-top-30">
       {% if successMsg %}
       <div class="govuk-grid-row">
         <div class="govuk-column-full">
@@ -78,12 +78,9 @@
       </div>
 
       <div class="margin-top-30">
-          <form method="post" action="/user/delete">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
              <div class="govuk-button-group margin-top-30">
-               {{ govukButton({element: "button", text: "Delete your account", classes: "govuk-button--warning" }) }}
+               {{ govukButton({element: "a", text: "Delete your account", classes: "govuk-button--warning", href: "/user/delete" }) }}
             </div>
-          </form>
           <p>
           <a class="govuk-link" href="/home">Return to GARs</a>
           </p>

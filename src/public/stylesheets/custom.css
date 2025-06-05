@@ -52,9 +52,22 @@
     margin-top: 60px !important;
 }
 
+.margin-left-30 {
+    margin-left: 30px;
+}
+
+.margin-left-50 {
+    margin-left: 50px;
+}
+
+.margin-left-45 {
+    margin-left: 45px;
+}
+
 .margin-right-20{
     margin-right: 20px !important;
 }
+
 .heading-text-spacing{
     margin: 40px 0 50px 0 !important;
 }
@@ -70,6 +83,10 @@
 
 .padding-bottom-60 {
     padding-bottom: 60px !important;
+}
+
+.padding-left-60 {
+    padding-left: 60px !important;
 }
 
 .no-reocord{
@@ -147,4 +164,32 @@ h3.govuk-notification-banner__heading {
 h2.govuk-notification-banner__title {
     font-size: 1.1875rem;
     line-height: 1.3157894737;
+}
+
+#nameDeclaration .govuk-checkboxes__label {
+    margin-left: -12px;
+    margin-top: 2px;
+}
+
+.govuk-checkboxes--small .govuk-checkboxes__label:before {
+    top: 10px;
+    left: 0;
+    width: 24px;
+    height: 24px;
+}
+
+
+.govuk-checkboxes--small .govuk-checkboxes__label:after {
+    top: 17px;
+    left: 6px;
+    width: 12px;
+    height: 6.5px;
+    border-width: 0 0 3px 3px;
+}
+
+.govuk-checkboxes--small .govuk-checkboxes__input + .govuk-checkboxes__label::after {
+    top: 16px;
+    left: 6px;
+    width: 10px;
+    height: 6.5px;
 }

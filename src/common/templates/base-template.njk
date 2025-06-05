@@ -21,12 +21,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     {# Stack overflow suggests this might help for Edge and issues with empty referer #}
     <meta name="referrer" content="origin-when-cross-origin" />
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
 
-    <link href="/stylesheets/custom.css" rel="stylesheet" />
     <link href="/stylesheets/application.min.css" rel="stylesheet" />
+    <link href="/stylesheets/custom.css" rel="stylesheet" />
     <link href="/stylesheets/dialog-polyfill.css" rel="stylesheet" type="text/css" />
     <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet" />
 
@@ -52,7 +52,7 @@
     {% block bodyStart %}{% endblock %}
 
   {% block cookie_message %}
-  <div class="govuk-cookie-banner " data-nosnippet role="region" id="main_cookie_banner" aria-label="Cookies on Submit a GAR" hidden> 
+  <div class="govuk-cookie-banner " data-nosnippet role="region" id="main_cookie_banner" aria-label="Cookies on Submit a GAR" hidden>
   <div class="govuk-cookie-banner__message govuk-width-container" id="main_cookie_message">
 
     <div class="govuk-grid-row">
@@ -122,7 +122,7 @@
         text: 'Skip to main content'
       }) }}
     {% endblock %}
-    
+
 
     {% block header %}
       {{ govukHeader({}) }}
@@ -162,7 +162,7 @@
               </li>
               <li class="govuk-footer__inline-list-item">
                 <a class="govuk-footer__link" href="/accessibility">
-                  Accessibility Statement 
+                  Accessibility Statement
                 </a>
               </li>
             </ul>

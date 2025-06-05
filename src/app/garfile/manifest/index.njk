@@ -67,12 +67,12 @@
                 <tr class="govuk-table__row">
                   <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
                     {% if savedPeople | length and not isUnableToAddPeople %}
-                      <div class="govuk-checkboxes__item">
-                        <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
-                        <label class="govuk-label govuk-checkboxes__label" for="radio-all">
-                          &nbsp;
-                        </label>
-                      </div>
+                        <div class="govuk-checkboxes__item">
+                          <input type="checkbox" class="govuk-checkboxes__input jsCheckboxAll" id="radio-all">
+                          <label class="govuk-label govuk-checkboxes__label" for="radio-all">
+                            &nbsp;
+                          </label>
+                        </div>
                     {% endif %}
                   </th>
                   <th class="govuk-table__header">{{__('field_surname')}}</th>
@@ -84,29 +84,29 @@
               <tbody class="govuk-table__body" id="people_table_row">
                 {% if savedPeople | length %}
                   {% for person in savedPeople %}
-                      <tr class="govuk-table__row 
-                        {{ "unselectable-row" if person.isDuplicate or person.isInvalid }} 
+                      <tr class="govuk-table__row
+                        {{ "unselectable-row" if person.isDuplicate or person.isInvalid }}
                         {{ "govuk-form-group govuk-form-group--error" if person.isInvalid }}"
                         id="savedPerson-{{loop.index0}}">
-                        <td 
+                        <td
                           class="govuk-table__cell multiple-choice--hod"
                           style="{{ "padding-left: 10px" if person.isInvalid }}">
                           {% if person.isInvalid %}
-                            <button 
-                              id="edit-person-{{ loop.index }}" 
-                              class="govuk-link btn-link" 
-                              title="Edit details for {{ person.firstName }} {{ person.lastName }}" 
-                              name="editSavedPerson" 
+                            <button
+                              id="edit-person-{{ loop.index }}"
+                              class="govuk-link btn-link"
+                              title="Edit details for {{ person.firstName }} {{ person.lastName }}"
+                              name="editSavedPerson"
                               value="{{person.personId}}">
                               Edit
                             </button>
                           {% elif not person.isDuplicate %}
                             <div class="govuk-checkboxes__item">
-                              <input 
-                                type="checkbox" 
-                                class="govuk-checkboxes__input jsCheckbox" 
-                                id="savedPerson-{{loop.index0}}" 
-                                name="personId" 
+                              <input
+                                type="checkbox"
+                                class="govuk-checkboxes__input jsCheckbox"
+                                id="savedPerson-{{loop.index0}}"
+                                name="personId"
                                 value="{{person.personId}}"
                                 autocomplete="off"
                               >
@@ -130,7 +130,7 @@
           </div>
 
           <div class="govuk-grid-column-two-thirds">
-            <button 
+            <button
               id="addToManifest"
               type="submit"
               name="buttonClicked"
@@ -210,10 +210,10 @@
                             <tr class="govuk-table__row">
                               <td class="govuk-table__cell">
                                 <div class="govuk-checkboxes__item">
-                                    <input 
-                                      type="checkbox" 
-                                      class="govuk-checkboxes__input jsCheckbox" 
-                                      id="garperson-{{loop.index0}}" 
+                                    <input
+                                      type="checkbox"
+                                      class="govuk-checkboxes__input jsCheckbox"
+                                      id="garperson-{{loop.index0}}"
                                       name="garPeopleId"
                                       value="{{person.garPeopleId}}"
                                       autocomplete="off"
@@ -288,19 +288,19 @@
 
                     <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
                   </div>
-                  <button 
-                    id="garPeopleId" 
-                    type="submit" 
-                    name="buttonClicked" 
-                    value="Add to PEOPLE" 
+                  <button
+                    id="garPeopleId"
+                    type="submit"
+                    name="buttonClicked"
+                    value="Add to PEOPLE"
                     class="govuk-button multi-submit-button"
                     disabled="true"
                   >
                     {{__('button_add_to_people')}}
                   </button>
-                  <button 
-                      id="delete-people-dialog-button" 
-                      type="button" 
+                  <button
+                      id="delete-people-dialog-button"
+                      type="button"
                       class="govuk-button warning-button multi-submit-button"
                     >
                       {{__('table_delete_gar_people')}}
@@ -323,9 +323,9 @@
                           Close
                         </button>
                     </form>
-                    <button 
-                      id="delete-people" 
-                      type="submit" 
+                    <button
+                      id="delete-people"
+                      type="submit"
                       class="govuk-button warning-button"
                       formmethod="post"
                       formaction="/garfile/manifest/deleteperson"
@@ -343,11 +343,11 @@
                     {{ m.hint("isMilitaryFlight", __("is_military_flight_hint")) }}
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                       <div class="govuk-checkboxes__item">
-                        <input 
-                          class="govuk-checkboxes__input" 
-                          id="isMilitaryFlight" 
-                          name="isMilitaryFlight" 
-                          type="checkbox" 
+                        <input
+                          class="govuk-checkboxes__input"
+                          id="isMilitaryFlight"
+                          name="isMilitaryFlight"
+                          type="checkbox"
                           {{ "checked" if cookie.getIsMilitaryFlight() }}
                           value="true">
                         <label class="govuk-label govuk-checkboxes__label" for="isMilitaryFlight">
@@ -359,7 +359,7 @@
                 </div>
                 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
                   {# Start buttons #}
-                  <input id="continue" type="submit" class="govuk-button" 
+                  <input id="continue" type="submit" class="govuk-button"
         name="buttonClicked"
         value="{{__('button_continue')}}"
         onclick="sendAnalytics(event, 'GAR Manifest - Continue', 'click')">

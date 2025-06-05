@@ -35,11 +35,12 @@ const defaultText = () => ({
 
 const defaultDeletion = async cookie => ({
   deleteAccount: async () => await userApi.deleteUser(cookie.getUserEmail()),
-  notifyUser: async () => await emailService.send(
+  notifyUser: async () => {
+    await emailService.send(
     settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
     cookie.getUserEmail(),
-    { firstName: cookie.getUserFirstName() },
-  ),
+    { firstName: cookie.getUserFirstName(), lastName: cookie.getUserLastName() },
+  )},
   text: defaultText,
 });
 

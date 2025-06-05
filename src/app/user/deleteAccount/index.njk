@@ -21,26 +21,31 @@
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
 
-    <h1 class="govuk-heading-l">
-      {{__('heading_are_you_sure_delete_account')}}
-    </h1>
-    <p class="govuk-body-m">{{ text.deleteOrgInfo or "" }}</p>
-    <p class="govuk-body-m">
-      {% if ONE_LOGIN_SHOW_ONE_LOGIN %}
-        {{__('are_you_sure_delete_account_one_login_caption')}}
-      {% else %}
-        {{__('are_you_sure_delete_account_caption')}}
-      {% endif %}
-    </p>
-  <br>
+    <div class="govuk-grid-row padding-bottom-60 margin-top-30 ">
+      <div class="govuk-grid-column-two-thirds padding-left-60">
+        <h1 class="govuk-heading-l">
+          {{__('heading_are_you_sure_delete_account')}}
+        </h1>
 
-  <form action="/user/delete" method="post">
-    <input id="delete" class="govuk-button govuk-button--warning" type="submit" value="Yes, delete this account">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-  </form>
+          {% if ONE_LOGIN_SHOW_ONE_LOGIN %}
+            <p class="govuk-body-m">
+              {{__('are_you_sure_delete_account_one_login_caption')}}
+              </p>
+          {% else %}
+          <p class="govuk-body-m">{{ text.deleteOrgInfo or "" }}</p>
+            <p>
+              {{__('are_you_sure_delete_account_caption')}}
+            </p>
+          {% endif %}
 
-  <p class="govuk-body-m">
-    <a id="exit-without-deleting" href="/user/details">{{__('form_exit_without_deleting')}}</a>
-  </p>
-</main>
+        <form action="/user/delete" method="post">
+          <input id="delete" class="govuk-button govuk-button--warning" type="submit" value="Yes, delete this account">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        </form>
+
+        <p class="govuk-body-m">
+          <a id="exit-without-deleting" href="/user/details">{{__('form_exit_without_deleting')}}</a>
+        </p>
+      </div>
+    </div>
 {% endblock %}
