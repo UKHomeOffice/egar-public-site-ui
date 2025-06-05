@@ -56,15 +56,19 @@
     margin-left: 30px;
 }
 
+.margin-left-50 {
+    margin-left: 50px;
+}
+
 .margin-left-45 {
     margin-left: 45px;
 }
 
-
-
 .margin-right-20{
     margin-right: 20px !important;
 }
+
+
 .heading-text-spacing{
     margin: 40px 0 50px 0 !important;
 }
