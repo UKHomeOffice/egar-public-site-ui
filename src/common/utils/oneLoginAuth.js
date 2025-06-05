@@ -2,9 +2,10 @@ const config = require('../config/index');
 const logger = require('./logger')(__filename);
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
+const {parseUrlForNonProd} = require('../services/oneLoginApi');
 
 
-const getOneLoginAuthUrl = (res) => {
+const getOneLoginAuthUrl = (req, res) => {
   try {
     const nonce = uuidv4();
     res.cookie('nonce', nonce, {
@@ -26,7 +27,7 @@ const getOneLoginAuthUrl = (res) => {
       response_type: 'code',
       client_id: clientId,
       state,
-      redirect_uri: config.ONE_LOGIN_REDIRECT_URI,
+      redirect_uri: parseUrlForNonProd(req, config.ONE_LOGIN_REDIRECT_URI),
       scope: ['openid', 'email'].join(' '),
       nonce,
       vtr: `['Cl.Cm']`,
@@ -52,14 +53,14 @@ const getOneLoginAuthUrl = (res) => {
  * @param id_token param to get the user info from onlogin
  * @returns returns onelogin logout url
  */
-const getOneLoginLogoutUrl = (id_token, state) => {
+const getOneLoginLogoutUrl = (req, id_token, state) => {
 
   try {
     logger.info('create a logout url for one Login');
     const url = `${config.ONE_LOGIN_INTEGRATION_URL}/logout`;
     const options = {
       id_token_hint: id_token,
-      post_logout_redirect_uri: config.ONE_LOGIN_LOGOUT_URL,
+      post_logout_redirect_uri: parseUrlForNonProd(req, config.ONE_LOGIN_LOGOUT_URL),
       state,
     };
     const query = new URLSearchParams(options);

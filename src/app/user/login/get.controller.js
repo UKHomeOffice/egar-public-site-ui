@@ -3,9 +3,6 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const config = require("../../../common/config");
-const {getUserInviteToken} = require("../../../common/services/verificationApi");
-const {next} = require("lodash/seq");
 
 // Constants
 const ROUTES = {
@@ -106,7 +103,7 @@ module.exports = (req, res) => {
 
   if (!code) {
     return res.render('app/user/login/index', {
-      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res)
+      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res)
     });
   }
 
@@ -114,12 +111,12 @@ module.exports = (req, res) => {
     return res.redirect(ROUTES.ERROR_404);
   }
 
-  oneLoginApi.sendOneLoginTokenRequest(code)
+  oneLoginApi.sendOneLoginTokenRequest(req, code, oneLoginUtil)
     .then(({access_token, id_token}) => {
       if (!id_token) {
         logger.error('Invalid ID Token error.');
         res.render('app/user/login/index', {
-          oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res),
+          oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
         });
         return Promise.reject();
       }
