@@ -19,10 +19,10 @@ module.exports = (req, res) => {
   // Define a validation chain for user registeration fields
   const firstNameChain = [
     new ValidationRule(validator.validFirstNameLength, 'firstname', firstName, `Please enter a given name of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`),
-    new ValidationRule(validator.notEmpty, 'firstname', firstName, 'Enter your given name(s)'),
-    new ValidationRule(validator.nameHasNoNumbers, 'firstname', firstName, 'Your given name(s) cannot include numbers'),
+    new ValidationRule(validator.notEmpty, 'firstname', firstName, 'Enter your given names'),
+    new ValidationRule(validator.nameHasNoNumbers, 'firstname', firstName, 'Your given names cannot include numbers'),
     new ValidationRule(validator.isValidStringLength, 'firstname', firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
-    new ValidationRule(validator.validName, 'firstname', firstName, 'Your given name(s) cannot include special characters or numbers'),
+    new ValidationRule(validator.validName, 'firstname', firstName, 'Your given names cannot include special characters or numbers'),
   ];
   const lnameChain = [
     new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your family name'),
