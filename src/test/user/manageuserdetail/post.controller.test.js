@@ -58,7 +58,7 @@ describe('Manage User Detail Post Controller', () => {
     callController().then(() => {
       expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
         cookie,
-        errors: [new ValidationRule(validator.notEmpty, 'firstname', '', 'Enter your given name')],
+        errors: [new ValidationRule(validator.notEmpty, 'firstname', '', 'Enter your given names')],
       });
     });
 
@@ -67,7 +67,7 @@ describe('Manage User Detail Post Controller', () => {
     callController().then(() => {
       expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
         cookie,
-        errors: [new ValidationRule(validator.notEmpty, 'firstname', undefined, 'Enter your given name')],
+        errors: [new ValidationRule(validator.notEmpty, 'firstname', undefined, 'Enter your given names')],
       });
     });
   });
