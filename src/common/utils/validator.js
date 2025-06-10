@@ -36,7 +36,7 @@ function isOtherDocumentWithDocumentDesc(args){
   if (!args) return false;
   const [documentType, documentDesc] = args;
 
-  return isEmpty(documentDesc) || documentType === "Other" 
+  return isEmpty(documentDesc) || documentType === "Other"
 }
 
 /**
@@ -123,6 +123,10 @@ function notEmpty(value) {
 function validName(value) {
   const regex = /^[A-z ](?:[A-z ]|[-|\'](?=[A-z ]))*[A-z ]$/
   return regex.test(value);
+}
+
+function nameHasNoNumbers(value) {
+  return !/\d/.test(value);
 }
 
 function validFirstNameLength(value) {
@@ -328,7 +332,7 @@ function isTwoHoursPriorDeparture(providedDate) {
   const twoHoursPriorDepartureDate = new Date(today.getTime() + TWO_HOURS_MILLISECONDS);
 
   return Boolean(providedDate) && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime();
-}    
+}
 
 /**
  * Normalises and returns various supplied date objects / formats
@@ -522,7 +526,7 @@ Local UK numbers beginning 0 e.g. 01225123456 or 07777777777
 International numbers beginning either + or 00
 Spaces, hyphens, brackets and anything other than numbers are rejected.
 The number is not validated beyond these requirements.
-Min and max lengths depend on format: 
+Min and max lengths depend on format:
 -UK numbers and international numnbers starting + can range 9-34 chars
 -International numbers starting 00 10-15
 These lengths are a bit arbitrary.
@@ -808,5 +812,6 @@ module.exports = {
   containTabs,
   isValidDocumentType,
   isOtherDocumentWithDocumentDesc,
-  isAbleToCancelGar
+  isAbleToCancelGar,
+  nameHasNoNumbers
 };
