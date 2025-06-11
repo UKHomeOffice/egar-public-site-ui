@@ -35,6 +35,6 @@ describe('Manage User Detail Get Controller', () => {
     await controller(req, res);
 
     // CookieModel instance created, can that be asserted
-    expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', { cookie });
+    expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/old_index', { cookie });
   });
 });

@@ -3,6 +3,8 @@ const logger = require('../../../common/utils/logger')(__filename);
 const personApi = require('../../../common/services/personApi');
 const config = require('../../../common/config');
 
+const template = config.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'index' : 'old_index'
+
 module.exports = (req, res) => {
   logger.debug('In user / viewDetails get controller');
   const cookie = new CookieModel(req);
@@ -15,7 +17,7 @@ module.exports = (req, res) => {
       if (req.session.errMsg) {
         const { errMsg } = req.session;
         delete req.session.errMsg;
-        return res.render('app/user/viewDetails/index', {
+        return res.render(`app/user/viewDetails/${template}`, {
           cookie, savedPeople, errors: [errMsg]
         });
       }
@@ -23,15 +25,15 @@ module.exports = (req, res) => {
         const { successMsg, successHeader } = req.session;
         delete req.session.successHeader;
         delete req.session.successMsg;
-        return res.render('app/user/viewDetails/index', {
+        return res.render(`app/user/viewDetails/${template}`, {
           cookie, savedPeople, successHeader, successMsg,
         });
       }
-      return res.render('app/user/viewDetails/index', {cookie, savedPeople });
+      return res.render(`app/user/viewDetails/${template}`, {cookie, savedPeople });
     })
     .catch((err) => {
       logger.error('There was an error fetching craft / people data for an individual');
       logger.error(err);
-      res.render('app/user/viewDetails/index', { cookie, errors: [{ message: 'There was a problem fetching data' }] });
+      res.render(`app/user/viewDetails/${template}`, { cookie, errors: [{ message: 'There was a problem fetching data' }] });
     });
 };

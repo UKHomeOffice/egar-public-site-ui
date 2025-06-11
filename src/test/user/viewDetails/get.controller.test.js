@@ -54,7 +54,7 @@ describe('User View Details Get Controller', () => {
     callController().then().then(() => {
       //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
       expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
         cookie,
         errors: [{ message: 'There was a problem fetching data' }],
       });
@@ -96,7 +96,7 @@ describe('User View Details Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
           cookie,
           // savedCrafts: {
           //   items: [
@@ -128,7 +128,7 @@ describe('User View Details Get Controller', () => {
         expect(req.session.successMsg).to.be.undefined;
         //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
           cookie,
           // savedCrafts: {
           //   items: [
@@ -158,7 +158,7 @@ describe('User View Details Get Controller', () => {
         expect(req.session.successMsg).to.be.undefined;
         //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
           cookie,
           // savedCrafts: {
           //   items: [
