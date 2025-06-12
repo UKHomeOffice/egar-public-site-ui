@@ -3,6 +3,7 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
+const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
 
 // Constants
 const ROUTES = {
@@ -103,7 +104,8 @@ module.exports = (req, res) => {
 
   if (!code) {
     return res.render('app/user/login/index', {
-      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res)
+      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
+      ONE_LOGIN_SHOW_ONE_LOGIN
     });
   }
 
@@ -117,6 +119,7 @@ module.exports = (req, res) => {
         logger.error('Invalid ID Token error.');
         res.render('app/user/login/index', {
           oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
+          ONE_LOGIN_SHOW_ONE_LOGIN
         });
         return Promise.reject();
       }
@@ -131,6 +134,7 @@ module.exports = (req, res) => {
           logger.info('Invalid jwt token received from OneLogin.');
           res.render('app/user/login/index', {
             oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res),
+            ONE_LOGIN_SHOW_ONE_LOGIN
           });
           return Promise.reject();
         }

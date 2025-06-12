@@ -3,10 +3,20 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const proxyquire = require('proxyquire');
+const settings = require('../../../common/config/index');
 
 require('../../global.test');
 
-const controller = require('../../../app/user/detailschanged/get.controller');
+const configMock = {
+  ...settings,
+  ONE_LOGIN_SHOW_ONE_LOGIN: false
+};
+
+
+const controller = proxyquire('../../../app/user/detailschanged/get.controller', {
+  '../../../common/config/index': configMock
+});
 
 describe('Manage User Detail Get Controller', () => {
   let req; let res;

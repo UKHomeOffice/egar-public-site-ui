@@ -5,6 +5,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+const proxyquire = require('proxyquire');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -44,7 +45,6 @@ describe('User View Details Get Controller', () => {
 
   it('should redirect with errors if api rejects', () => {
     const cookie = new CookieModel(req);
-    //craftApiStub.rejects('craftApi.getCrafts Example Reject');
     personApiStub.resolves();
 
     const callController = async () => {
@@ -52,9 +52,8 @@ describe('User View Details Get Controller', () => {
     };
 
     callController().then().then(() => {
-      //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
       expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
         cookie,
         errors: [{ message: 'There was a problem fetching data' }],
       });
@@ -94,15 +93,9 @@ describe('User View Details Get Controller', () => {
 
       callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
-        //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
           cookie,
-          // savedCrafts: {
-          //   items: [
-          //     { registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
-          //   ],
-          // },
           savedPeople: {
             items: [
               { id: 'PERSON-1', firstName: 'Jessica' },
@@ -126,15 +119,9 @@ describe('User View Details Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
-        //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
           cookie,
-          // savedCrafts: {
-          //   items: [
-          //     { registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
-          //   ],
-          // },
           savedPeople: {
             items: [
               { id: 'PERSON-1', firstName: 'Jessica' },
@@ -156,15 +143,9 @@ describe('User View Details Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
-        //expect(craftApiStub).to.have.been.calledOnceWithExactly('USER-ID-1');
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/index', {
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
           cookie,
-          // savedCrafts: {
-          //   items: [
-          //     { registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' },
-          //   ],
-          // },
           savedPeople: {
             items: [
               { id: 'PERSON-1', firstName: 'Jessica' },
