@@ -92,7 +92,7 @@ const deleteAccount = {
             return await emailService.send(
               settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
               cookie.getUserEmail(),
-              { firstName: cookie.getUserFirstName() },
+              { firstName: cookie.getUserFirstName(), lastName: cookie.getUserLastName() },
             );
 
           default:
