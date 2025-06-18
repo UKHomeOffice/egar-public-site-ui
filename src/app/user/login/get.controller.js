@@ -4,6 +4,9 @@ const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
+const sendEmail = require("../../../common/services/sendEmail");
+const config = require("../../../common/config");
+const {getUsers} = require("../../../common/services/organisationApi");
 
 // Constants
 const ROUTES = {
@@ -46,9 +49,32 @@ const handleUserAuthentication = (userInfo, cookie) => {
         return {redirect: ROUTES.ERROR_404};
       }
 
-      if (oneLoginSid && !userData?.oneLoginSid) {
-        return userApi.updateDetails(email, userData.firstName, userData.lastName, oneLoginSid)
-          .then(() => userData);
+      const hasEmailChanged = (email !== userData.email && userData.oneLoginSid !== null)
+      const isFirstTimeLogin = (oneLoginSid && userData?.oneLoginSid === null);
+
+      if (isFirstTimeLogin || hasEmailChanged) {
+        logger.info('Updating user details with OneLogin SID and Email');
+        const updatedData = {...userData, oneLoginSid, email: userInfo.email};
+
+        return userApi.updateUserDetails(userData.email, updatedData)
+          .then(() =>  {
+
+            if ((userData.email !== userInfo.email) && organisation?.organisationId) {
+              userData.email = userInfo.email;
+              getUsers(organisation?.organisationId, 1, 100).then(users => {
+                 const adminUsers = users.filter(user => user.role.name === 'admin' && user.state === 'verified');
+                  for (const adminUser of adminUsers) {
+                      logger.info(`Send email to ${adminUser.email}`);
+                      sendEmail(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE, adminUser.email, {
+                        name: `${userData.firstName} ${userData.lastName}`,
+                      });
+                    }
+              })
+
+            }
+            // send user email update
+            return userData;
+          });
       }
 
       return userData;

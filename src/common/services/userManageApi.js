@@ -37,18 +37,10 @@ module.exports = {
    * @param state
    * @returns {Promise} returns JSON parsed response when resolved
    */
-  updateDetails(userId, firstName, lastName, oneLoginSid = null, state = null) {
+  updateDetails(userId, firstName, lastName) {
     const reqBody = {
       firstName,
       lastName,
-    }
-
-    if (oneLoginSid) {
-      reqBody.oneLoginSid = oneLoginSid;
-    }
-
-    if (state) {
-      reqBody.state = state;
     }
 
     return new Promise((resolve, reject) => {
@@ -56,6 +48,36 @@ module.exports = {
         headers: { 'content-type': 'application/json' },
         url: endpoints.updateUserData(userId),
         body: JSON.stringify(reqBody),
+      },
+      (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call edit user details endpoint');
+          reject(error);
+          return;
+        }
+        logger.debug('Successfully called edit user details API endpoint');
+        resolve(body);
+      });
+    });
+  },
+  /**
+   *  Replace the user model in the api with a put operation.
+   * @param userId
+   * @param userData
+   * @returns {Promise<unknown>}
+   * TODO: we will need to offer a patch operation on the data-access-api
+   */
+  updateUserDetails(userId, userData) {
+    /**
+     *  The previous updateDetails replaces fields not set with null.
+     *  since we using a PUT operation, we need the entire object.
+     *  TODO: refactor
+     */
+    return new Promise((resolve, reject) => {
+      request.put({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.updateUserData(userId),
+        body: JSON.stringify(userData),
       },
       (error, _response, body) => {
         if (error) {
