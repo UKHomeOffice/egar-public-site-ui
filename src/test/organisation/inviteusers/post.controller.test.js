@@ -91,7 +91,7 @@ describe('Organisation Invite User Post Controller', () => {
           lname: 'abcdefghijklmnopqrstuvwxyzabcdefghij',
           email: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com',
           errors: [
-            new ValidationRule(validator.isValidStringLength, 'fname', 'abcdefghijklmnopqrstuvwxyzabcdefghijk', 'Given name must be 35 characters or less'),
+            new ValidationRule(validator.isValidStringLength, 'fname', 'abcdefghijklmnopqrstuvwxyzabcdefghijk', 'Given names must be 35 characters or less'),
             new ValidationRule(validator.isValidStringLength, 'lname', 'abcdefghijklmnopqrstuvwxyzabcdefghij', 'Surname must be 35 characters or less'),
             new ValidationRule(validator.isValidEmailLength, 'email',
               '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com', 'Email must be 150 characters or less'),

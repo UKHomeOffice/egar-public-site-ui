@@ -19,7 +19,14 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const whiteListService = require('../../../common/services/whiteList');
 
-const controller = require('../../../app/user/register/post.controller');
+const settings = require('../../../common/config/index');
+const configMock = {
+  ...settings,
+  ONE_LOGIN_SHOW_ONE_LOGIN: false
+};
+const controller = require('../../../app/user/register/post.controller', {
+  '../../../common/config/index': configMock
+});
 
 describe('User Register Post Controller', () => {
   let req; let res;
@@ -123,7 +130,7 @@ describe('User Register Post Controller', () => {
         lname: lName,
         usrname: email,
         errors: [
-          new ValidationRule(validator.validName, 'userFname', fName, 'Please enter a valid first name'),
+          new ValidationRule(validator.validName, 'userFname', fName, 'Please enter a valid given names'),
           new ValidationRule(validator.validName, 'userLname', lName, 'Please enter a valid surname'),
         ],
       });
@@ -225,7 +232,7 @@ describe('User Register Post Controller', () => {
         lname: lName,
         usrname: email,
         errors: [
-          new ValidationRule(validator.validFirstNameLength, 'userFname', fName, `Please enter a first name of at most ${maxFirstNameLength} characters`),
+          new ValidationRule(validator.validFirstNameLength, 'userFname', fName, `Please enter a given names of at most ${maxFirstNameLength} characters`),
           new ValidationRule(validator.validSurnameLength, 'userLname', lName, `Please enter a surname of at most ${maxSurnameLength} characters`),
         ],
       });
@@ -257,7 +264,7 @@ describe('User Register Post Controller', () => {
         lname: 'V4D3R',
         usrname: 'dvader@empire.net',
         errors: [
-          new ValidationRule(validator.validName, 'userFname', 'D4rth', 'Please enter a valid first name'),
+          new ValidationRule(validator.validName, 'userFname', 'D4rth', 'Please enter a valid given names'),
           new ValidationRule(validator.validName, 'userLname', 'V4D3R', 'Please enter a valid surname'),
         ],
       });
