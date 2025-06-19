@@ -99,7 +99,7 @@ describe('Person Edit Post Controller', () => {
         documenttype,
         genderchoice,
         errors: [
-          new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter the given name of the person'),
+          new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter the given names of the person'),
           new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
         ],
       });
@@ -166,7 +166,7 @@ describe('Person Edit Post Controller', () => {
       expect(res.render).to.not.have.been.called;
     });
   });
-  it('should render with validation messages if "Other" document type is selected and special characters, apostrophes or numbers are present in the given name', () => {
+  it('should render with validation messages if "Other" document type is selected and special characters, apostrophes or numbers are present in the given names', () => {
     // refers to "GivenName" in the people details form
     req.body.firstName = 'abcd1234';
     req.body.lastName = 'de;ce';
@@ -188,7 +188,7 @@ describe('Person Edit Post Controller', () => {
         documenttype,
         genderchoice,
         errors: [
-          new ValidationRule(validator.isAlpha, 'firstName', req.body.firstName, 'Given name must not contain special characters, apostrophes or numbers'),
+          new ValidationRule(validator.isAlpha, 'firstName', req.body.firstName, 'Given names must not contain special characters, apostrophes or numbers'),
           new ValidationRule(validator.isAlpha, 'lastName', req.body.lastName, 'Surname must not contain special characters, apostrophes or numbers'),
         ],
       });

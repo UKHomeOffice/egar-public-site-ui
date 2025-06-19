@@ -87,7 +87,7 @@ describe('User Register Post Controller', () => {
         errors: [
           new ValidationRule(validator.notEmpty, 'userId', '', 'Please enter your email'),
           new ValidationRule(validator.notEmpty, 'cUserId', '', 'Please confirm the email address'),
-          new ValidationRule(validator.notEmpty, 'userFname', '', 'Please enter your given name'),
+          new ValidationRule(validator.notEmpty, 'userFname', '', 'Please enter your given names'),
           new ValidationRule(validator.notEmpty, 'userLname', '', 'Please enter your surname'),
         ],
       });

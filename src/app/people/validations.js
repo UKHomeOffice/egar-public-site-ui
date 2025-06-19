@@ -15,9 +15,9 @@ module.exports.validations = (req) => {
       new ValidationRule(validator.realDateInFuture, 'documentExpiryDate', expiryDateObj, 'Enter a real document expiry date'),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter the given name of the person'),
-      new ValidationRule(validator.isValidStringLength, 'firstName', req.body.firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAlpha, 'firstName', req.body.firstName, `Given name must not contain special characters, apostrophes or numbers`),
+      new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter the given names of the person'),
+      new ValidationRule(validator.isValidStringLength, 'firstName', req.body.firstName, `Given names must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlpha, 'firstName', req.body.firstName, `Given names must not contain special characters, apostrophes or numbers`),
     ],
     [
       new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),

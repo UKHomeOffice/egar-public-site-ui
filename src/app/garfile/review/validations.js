@@ -28,7 +28,7 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
       new ValidationRule(validator.isAlpha, '', crew.lastName, `Surname for ${name} must not contain special characters or numbers.`),
     ]);
     validationArr.push([
-      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given name for ${name} must not contain special characters or numbers.`),
+      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given names for ${name} must not contain special characters or numbers.`),
     ]);
   });
 

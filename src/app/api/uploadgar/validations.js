@@ -130,9 +130,9 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       new ValidationRule(validator.isAlpha, '', crew.lastName, `Surname for ${name}  must not contain special characters, apostrophes or numbers`),
     ]);
     validationArr.push([
-      new ValidationRule(validator.notEmpty, '', crew.firstName, `Enter a given name for ${peopleType} ${crew.lastName}`),
-      new ValidationRule(validator.isValidStringLength, '', crew.firstName, `Given name for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
-      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given name for ${name}  must not contain special characters, apostrophes or numbers`),
+      new ValidationRule(validator.notEmpty, '', crew.firstName, `Enter a given names for ${peopleType} ${crew.lastName}`),
+      new ValidationRule(validator.isValidStringLength, '', crew.firstName, `Given names for ${name} must be ${MAX_STRING_LENGTH} characters or less`),
+      new ValidationRule(validator.isAlpha, '', crew.firstName, `Given names for ${name}  must not contain special characters, apostrophes or numbers`),
     ]);
     validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a sex for ${name}`)]);
     validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid sex for ${name}`)]);

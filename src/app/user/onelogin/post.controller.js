@@ -34,10 +34,10 @@ async function handleGivenNameSubmission(req, res) {
     const {userFname: firstName, userLname: lastName} = req.body;
 
     const fnameChain = [
-      new ValidationRule(validator.validFirstNameLength, 'userFname', firstName, `Enter a given name of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`),
-        new ValidationRule(validator.notEmpty, 'userFname', firstName, 'Enter your given name'),
-      new ValidationRule(validator.nameHasNoNumbers, 'userFname', firstName, 'Your given name cannot include numbers'),
-      new ValidationRule(validator.validName, 'userFname', firstName, 'Your given name cannot include special characters or numbers'),
+      new ValidationRule(validator.validFirstNameLength, 'userFname', firstName, `Enter a given names of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`),
+        new ValidationRule(validator.notEmpty, 'userFname', firstName, 'Enter your given names'),
+      new ValidationRule(validator.nameHasNoNumbers, 'userFname', firstName, 'Your given names cannot include numbers'),
+      new ValidationRule(validator.validName, 'userFname', firstName, 'Your given names cannot include special characters or numbers'),
     ];
     const lnameChain = [
       new ValidationRule(validator.notEmpty, 'userLname', lastName, 'Enter your family name'),
@@ -62,7 +62,7 @@ async function handleGivenNameSubmission(req, res) {
           sub,
         }
 
-        logger.info("Validating user Given Name submission");
+        logger.info("Validating user Given Names submission");
 
         return [Outcome.SUCCESS, step_data, null]
       } catch (apiError) {
