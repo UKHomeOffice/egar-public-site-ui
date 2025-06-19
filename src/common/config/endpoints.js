@@ -187,12 +187,12 @@ const endpoints = {
     return endpoint;
   },
   getIndividualGars(userId, page) {
-    const endpoint = new URL(`${API_VERSION}/user/${userId}/gars?page=${page}&per_page=1000`, BASE_URL).href;
+    const endpoint = new URL(`${API_VERSION}/user/${userId}/gars?page=${page}&per_page=10000`, BASE_URL).href;
     logger.debug(`Calling get individual user GARs endpoint ${endpoint}`);
     return endpoint;
   },
   getOrgGars(userId, orgId, page) {
-    const endpoint = new URL(`${API_VERSION}/user/${userId}/organisation/${orgId}/gars?page=${page}&per_page=1000`, BASE_URL).href;
+    const endpoint = new URL(`${API_VERSION}/user/${userId}/organisation/${orgId}/gars?page=${page}&per_page=10000`, BASE_URL).href;
     logger.debug(`Calling get org user GARs endpoint ${endpoint}`);
     return endpoint;
   },
