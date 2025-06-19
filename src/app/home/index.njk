@@ -64,7 +64,7 @@
       var totalResults = 1;
       var maxPages = 1;
       var paginationState = {};
-      function initialisePagination(paginationName, totalResults, maxPages){
+      function initialisePagination(paginationName, totalResults, maxPages, pageSize){
 
         var elements = {};
 
@@ -87,6 +87,7 @@
           currentPage: 1,
           totalResults: totalResults,
           maxPages: maxPages,
+          pageSize: pageSize,
           elements: elements
         }
         
@@ -156,8 +157,9 @@
         paginationData.elements.nextNumberLink.textContent = paginationData.currentPage+1;
         paginationData.elements.nextNumberLink.ariaLabel = "Page " + paginationData.currentPage+1;
 
-        paginationData.elements.fromNumber.textContent = ((paginationData.currentPage-1)*10)+1;
-        paginationData.elements.toNumber.textContent = paginationData.totalResults > paginationData.currentPage*10? paginationData.currentPage*10 : paginationData.totalResults;
+        paginationData.elements.fromNumber.textContent = ((paginationData.currentPage-1)*paginationData.pageSize)+1;
+        paginationData.elements.toNumber.textContent = Math.min(paginationData.totalResults, paginationData.currentPage*paginationData.pageSize);
+
       }
 
       function goToNextPage(paginationName){
@@ -182,14 +184,12 @@
       <div class="govuk-tabs" data-module="tabs">
         <ul class="govuk-tabs__list">
           <li class="govuk-tabs__list-item">
-            {# <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft"> #}
-            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="?page=1#gars-draft">
+            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft">
               {{__('tab_gar_draft', draftGars.length)}}
             </a>
           </li>
           <li class="govuk-tabs__list-item">
-            {# <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-submitted"> #}
-            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="?page=1#gars-submitted">
+            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-submitted">
               {{__('tab_gar_submitted', submittedGars.length)}}
             </a>
           </li>
@@ -201,7 +201,7 @@
         </ul>
         <form id="signform2" action="/garfile/view" method="post" role="form">
           {% macro gar_summary_table(name, gars) %}
-            {% set maxPage = (gars.length // 10)+1 if gars.length % 10 else gars.length // 10 %}
+            {% set maxPage = (gars.length // pageSize)+1 if gars.length % pageSize else gars.length // pageSize %}
             <section class="govuk-tabs__panel" id="gars-{{ name }}">
               <h2 class="govuk-heading-m">{{ name | capitalize }} GARs</h2>
               <table class="govuk-table" id="sortGAR">
@@ -220,7 +220,7 @@
                 <tbody class="govuk-table__body pagination__table_{{name}}">
                   {% if gars | length %}
                     {% for gar in gars %}
-                      {% set page = ((loop.index-1) // 10) + 1 %}
+                      {% set page = ((loop.index-1) // pageSize) + 1 %}
                       <tr class="govuk-table__row {{ 'hidden' if page!=1}} pagination-page pagination-page_{{page}}" id="pagination-row-{{page}}-{{ loop.index }}">
                         <td class="govuk-table__cell">
                           {% if gar.registration === null %}
@@ -301,7 +301,7 @@
               </script>
 
               <nav class="govuk-pagination pagination__{{name}}_paginator" role="navigation" aria-label="Pagination">
-                <div class="pagination__summary">Showing <span id="pagination__from_number">1</span> &ndash; <span id="pagination__to_number">{{10 if gars.length > 10 else gars.length}} </span> of {{gars.length}} results</div>
+                <div class="pagination__summary">Showing <span id="pagination__from_number">1</span> &ndash; <span id="pagination__to_number">{{pageSize if gars.length > pageSize else gars.length}} </span> of {{gars.length}} results</div>
                 <ul class="pagination">
                   <li class="govuk-pagination__item pagination__previous_button" hidden="true"><a class="pagination__link" onClick="goToPreviousPage('{{name}}')" aria-label="Previous page" hidden="true"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
                   <li class="govuk-pagination__item pagination__first_number" hidden="true"><a class="pagination__link" onClick="goToPage('{{name}}',1)" aria-label="Page 1">1</a></li>
@@ -316,7 +316,7 @@
               </nav> 
 
               <script>
-                initialisePagination('{{name}}', {{gars.length}}, {{maxPage}})
+                initialisePagination('{{name}}', {{gars.length}}, {{maxPage}}, {{pageSize}});
                 goToPage('{{name}}', 1);
               </script>
               

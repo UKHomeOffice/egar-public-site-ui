@@ -33,7 +33,8 @@ module.exports = (req, res) => {
             successHeader,
             draftGars,
             submittedGars,
-            cancelledGars
+            cancelledGars,
+            pageSize: 10
           });
         })
         .catch((err) => {
