@@ -17,10 +17,11 @@ module.exports = (req, res) => {
   tokenApi.getLastLogin(cookie.getUserEmail())
     .then((userSession) => {
       const { successHeader, successMsg } = req.session;
+      const page = req.query.page ? req.query.page : 1;
       delete req.session.successHeader;
       delete req.session.successMsg;
 
-      garApi.getGars(userId, role, orgId)
+      garApi.getGars(userId, role, page, orgId)
         .then((apiResponse) => {
           const garList = JSON.parse(apiResponse).items;
           const draftGars = garList.filter(gar => gar.status.name === 'Draft');
@@ -34,7 +35,8 @@ module.exports = (req, res) => {
             draftGars,
             submittedGars,
             cancelledGars,
-            pageSize: 10
+            pageSize: 10, 
+            serverPagination
           });
         })
         .catch((err) => {
