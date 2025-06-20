@@ -17,14 +17,14 @@
   {% endif %}
   {% set statustitle = statustitle %}
   <tr class="govuk-table__row">
-    <td class="govuk-table__cell">
+    <td class="govuk-table__cell col-vertical-alignment">
       <div>
         {% if statusColor %}
           <div class="{{ statusColor }} status-text" title="{{ statustitle }}">{{ statustitle }}</div>
         {% endif %}
       </div>
     </td>
-    <td class="govuk-table__cell">{{ person.firstName }}
+    <td class="govuk-table__cell col-vertical-alignment">{{ person.firstName }}
       {{ person.lastName }}</td>
     <td class="govuk-table__cell">
       <div>
@@ -43,7 +43,7 @@
                   <p class="govuk-body">
                     You must check if this individual has a valid passport or travel document.
                   </p>
-                  <p class="govuk-body">You must also check for a valid immigration or exemption document. <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers" target="_blank" class="govuk-link">Check UK visa requirements
+                  <p class="govuk-body">You must also check for a valid immigration or exemption document. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers" target="_blank" class="govuk-link">UK visa requirements
                     (opens in new tab on GOV.UK)</a>.
                   </p>
                   <p class="govuk-body">
@@ -101,7 +101,7 @@
                 </summary>
                 <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
                   <p class="govuk-body">You must check if this individual has a valid passport or travel document.</p>
-                  <p class="govuk-body">For visa nationals you must also check for a valid immigration or exemption document. <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers" target="_blank" class="govuk-link">Check UK
+                  <p class="govuk-body">For visa nationals you must also check for a valid immigration or exemption document. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers" target="_blank" class="govuk-link">UK
                     visa requirements (opens in new tab on GOV.UK)</a>.</p>
                   <p class="govuk-body">You should conduct a manual check for an immigration permission by:</p>
                   <ul class="govuk-body">
