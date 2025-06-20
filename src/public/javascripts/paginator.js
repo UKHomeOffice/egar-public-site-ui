@@ -109,8 +109,6 @@ function goToPreviousPage(paginationName){
     goToPage(paginationName, this.paginationState[paginationName].currentPage - 1);
 }
 
-
-//TODO see if there is a better way to hide and show elements
 function hideElement(element){
     element.setAttribute("hidden", true);
     element.style.display="none";
