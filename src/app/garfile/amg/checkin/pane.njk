@@ -17,14 +17,14 @@
   {% endif %}
   {% set statustitle = statustitle %}
   <tr class="govuk-table__row">
-    <td class="govuk-table__cell col-vertical-alignment">
+    <td class="govuk-table__cell vertical-align-top">
       <div>
         {% if statusColor %}
           <div class="{{ statusColor }} status-text" title="{{ statustitle }}">{{ statustitle }}</div>
         {% endif %}
       </div>
     </td>
-    <td class="govuk-table__cell col-vertical-alignment">{{ person.firstName }}
+    <td class="govuk-table__cell vertical-align-top">{{ person.firstName }}
       {{ person.lastName }}</td>
     <td class="govuk-table__cell">
       <div>
