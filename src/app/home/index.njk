@@ -2,6 +2,8 @@
 
 {% import "common/templates/includes/macros.njk" as m %}
 
+{% import "common/templates/includes/paginator.njk" as p %}
+
 {% block pageTitle %}
 	GAR | Dashboard
 {% endblock %}
@@ -70,152 +72,6 @@
       </div>
     </div>
 
-    <script>
-      var currentPage = 1;
-      var totalResults = 1;
-      var maxPages = 1;
-      var paginationState = {};
-      function initialisePagination(paginationName, totalResults, maxPages, pageSize){
-
-        var elements = {};
-
-        elements.previousButton = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__previous_button');
-        elements.nextButton = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__next_button');
-        elements.firstNumber = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__first_number');
-        elements.firstEllipses = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__first_ellipses');
-        elements.lastNumber = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__last_number');
-        elements.lastEllipses = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__last_ellipses');
-        elements.previousNumber = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__previous_number');
-        elements.previousNumberLink = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__previous_number .pagination__link');
-        elements.currentNumber = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__current_number');
-        elements.currentNumberLink = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__current_number .pagination__link');
-        elements.nextNumber = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__next_number');
-        elements.nextNumberLink = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__next_number .pagination__link');
-        elements.fromNumber = document.querySelector('.pagination__' + paginationName + '_paginator #pagination__from_number');
-        elements.toNumber = document.querySelector('.pagination__' + paginationName + '_paginator #pagination__to_number');
-
-        this.paginationState[paginationName] = {
-          currentPage: 1,
-          totalResults: totalResults,
-          maxPages: maxPages,
-          pageSize: pageSize,
-          elements: elements
-        }
-        
-        if(maxPages<=1){
-          hideElement(document.querySelector('.pagination__' + paginationName + '_paginator'));
-        }
-      }
-
-      function goToPage(paginationName, page){
-
-        var paginationData = this.paginationState[paginationName];
-
-        if(page > 0){
-          paginationData.currentPage = page;
-        }
-        document.querySelectorAll('.pagination__table_'+paginationName+' .pagination-page').forEach(el=>hideElement(el));
-        document.querySelectorAll('.pagination__table_'+paginationName+' .pagination-page.pagination-page_'+paginationData.currentPage).forEach(el=>showElement(el));
-
-        if(paginationData.currentPage===1){
-          hideElement(paginationData.elements.previousButton);
-          hideElement(paginationData.elements.firstNumber);
-        }else{
-          showElement(paginationData.elements.previousButton);
-          showElement(paginationData.elements.firstNumber);
-        }
-
-        if(paginationData.currentPage<=2){
-          hideElement(paginationData.elements.previousNumber);
-        }else{
-          showElement(paginationData.elements.previousNumber);
-        }
-
-        if(paginationData.currentPage>3){
-          showElement(paginationData.elements.firstEllipses);
-        }else{
-          hideElement(paginationData.elements.firstEllipses);
-        }
-
-        if(paginationData.currentPage>paginationData.maxPages-3){
-          hideElement(paginationData.elements.lastEllipses);
-        }else{
-          showElement(paginationData.elements.lastEllipses);
-        }
-
-        if(paginationData.currentPage>paginationData.maxPages-2){
-          hideElement(paginationData.elements.lastNumber);
-        }else{
-          showElement(paginationData.elements.lastNumber);
-        }
-
-        if(paginationData.currentPage>paginationData.maxPages-1){
-          hideElement(paginationData.elements.nextNumber);
-        }else{
-          showElement(paginationData.elements.nextNumber);
-        }
-
-        if(paginationData.currentPage===paginationData.maxPages){
-          hideElement(paginationData.elements.nextButton);
-        }else{
-          showElement(paginationData.elements.nextButton);
-        }
-
-        paginationData.elements.previousNumberLink.textContent = paginationData.currentPage-1;
-        paginationData.elements.previousNumberLink.ariaLabel = "Page " + paginationData.currentPage-1;
-        paginationData.elements.currentNumberLink.textContent = paginationData.currentPage;
-        paginationData.elements.currentNumberLink.ariaLabel = "Page " + paginationData.currentPage + ", current page";
-        paginationData.elements.nextNumberLink.textContent = paginationData.currentPage+1;
-        paginationData.elements.nextNumberLink.ariaLabel = "Page " + paginationData.currentPage+1;
-
-        paginationData.elements.fromNumber.textContent = ((paginationData.currentPage-1)*paginationData.pageSize)+1;
-        paginationData.elements.toNumber.textContent = Math.min(paginationData.totalResults, paginationData.currentPage*paginationData.pageSize);
-
-      }
-
-      function goToNextPage(paginationName){
-        goToPage(paginationName, this.paginationState[paginationName].currentPage + 1);
-      }
-      function goToPreviousPage(paginationName){
-        goToPage(paginationName, this.paginationState[paginationName].currentPage - 1);
-      }
-
-
-      //TODO see if there is a better way to hide and show elements
-      function hideElement(element){
-        element.setAttribute("hidden", true);
-        element.style.display="none";
-      }
-
-      function showElement(element){
-        element.removeAttribute("hidden");
-        element.style.display="";
-      }
-    </script>
-
-    {% macro paginator(name, pageSize, totalItems) %}
-      {% set maxPage = (totalItems // pageSize)+1 if totalItems % pageSize else totalItems // pageSize %}
-      <nav class="govuk-pagination pagination__{{name}}_paginator" role="navigation" aria-label="Pagination">
-        <div class="pagination__summary">Showing <span id="pagination__from_number">1</span> &ndash; <span id="pagination__to_number">{{pageSize if totalItems > pageSize else totalItems}} </span> of {{totalItems}} results</div>
-        <ul class="pagination">
-          <li class="govuk-pagination__item pagination__previous_button" hidden="true"><a class="pagination__link" onClick="goToPreviousPage('{{name}}')" aria-label="Previous page" hidden="true"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
-          <li class="govuk-pagination__item pagination__first_number" hidden="true"><a class="pagination__link" onClick="goToPage('{{name}}',1)" aria-label="Page 1">1</a></li>
-          <li class="govuk-pagination__item pagination__first_ellipses">⋯</li>
-          <li class="govuk-pagination__item pagination__previous_number"><a class="pagination__link" onClick="goToPreviousPage('{{name}}')" aria-label="Page 2">2</a></li>
-          <li class="govuk-pagination__item pagination__current_number"><a class="pagination__link current" aria-current="true" aria-label="Page 3, current page">3</a></li>
-          <li class="govuk-pagination__item pagination__next_number"><a class="pagination__link" onClick="goToNextPage('{{name}}')" aria-label="Page 4">4</a></li>
-          <li class="govuk-pagination__item pagination__last_ellipses">⋯</li>
-          <li class="govuk-pagination__item pagination__last_number"><a class="pagination__link" onClick="goToPage('{{name}}',{{maxPage}})" aria-label="Page {{maxPage}}">{{maxPage}}</a></li>
-          <li class="govuk-pagination__item pagination__next_button"><a class="pagination__link" onClick="goToNextPage('{{name}}')" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
-        </ul>
-      </nav> 
-
-      <script>
-        initialisePagination('{{name}}', {{totalItems}}, {{maxPage}}, {{pageSize}});
-        goToPage('{{name}}', 1);
-      </script>
-   {% endmacro %}
-
     <div class="govuk-grid-column-full">
       <div class="govuk-tabs" data-module="tabs">
         <ul class="govuk-tabs__list">
@@ -235,6 +91,8 @@
             </a>
           </li>
         </ul>
+        
+        <script type="text/javascript" src="/javascripts/paginator.js"></script>
         <form id="signform2" action="/garfile/view" method="post" role="form">
           {% macro gar_summary_table(name, gars) %}
             {% set maxPage = (gars.length // pageSize)+1 if gars.length % pageSize else gars.length // pageSize %}
@@ -335,7 +193,7 @@
                 }
               </script>
 
-              {{ paginator(name, pageSize, gars.length) }}
+              {{ p.paginator(name, pageSize, gars.length) }}
               
             </section>
           {% endmacro %}
