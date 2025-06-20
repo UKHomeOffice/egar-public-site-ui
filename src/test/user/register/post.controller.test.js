@@ -130,7 +130,7 @@ describe('User Register Post Controller', () => {
         lname: lName,
         usrname: email,
         errors: [
-          new ValidationRule(validator.validName, 'userFname', fName, 'Please enter a valid given names'),
+          new ValidationRule(validator.validName, 'userFname', fName, 'Please enter valid given names'),
           new ValidationRule(validator.validName, 'userLname', lName, 'Please enter a valid surname'),
         ],
       });
@@ -232,7 +232,7 @@ describe('User Register Post Controller', () => {
         lname: lName,
         usrname: email,
         errors: [
-          new ValidationRule(validator.validFirstNameLength, 'userFname', fName, `Please enter a given names of at most ${maxFirstNameLength} characters`),
+          new ValidationRule(validator.validFirstNameLength, 'userFname', fName, `Please enter given names of at most ${maxFirstNameLength} characters`),
           new ValidationRule(validator.validSurnameLength, 'userLname', lName, `Please enter a surname of at most ${maxSurnameLength} characters`),
         ],
       });
@@ -264,7 +264,7 @@ describe('User Register Post Controller', () => {
         lname: 'V4D3R',
         usrname: 'dvader@empire.net',
         errors: [
-          new ValidationRule(validator.validName, 'userFname', 'D4rth', 'Please enter a valid given names'),
+          new ValidationRule(validator.validName, 'userFname', 'D4rth', 'Please enter valid given names'),
           new ValidationRule(validator.validName, 'userLname', 'V4D3R', 'Please enter a valid surname'),
         ],
       });

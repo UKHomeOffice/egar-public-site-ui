@@ -21,8 +21,8 @@ const userAlreadyRegisteredMsg = 'User already registered';
 const createValidationChains = (fname, lname, usrname, cusrname) => {
   const fnameChain = [
     new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given names'),
-    new ValidationRule(validator.validName, 'userFname', fname, 'Please enter a valid given names'),
-    new ValidationRule(validator.validFirstNameLength, 'userFname', fname, `Please enter a given names of at most ${USER_FIRST_NAME_CHARACTER_COUNT} characters`),
+    new ValidationRule(validator.validName, 'userFname', fname, 'Please enter valid given names'),
+    new ValidationRule(validator.validFirstNameLength, 'userFname', fname, `Please enter given names of at most ${USER_FIRST_NAME_CHARACTER_COUNT} characters`),
   ];
   const lnameChain = [
     new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),

@@ -23,7 +23,7 @@ module.exports.validations = (req) => {
 
   return [
     [
-      new ValidationRule(validator.notEmpty, 'responsibleGivenName', responsibleGivenName, 'Enter a given names for the responsible person'),
+      new ValidationRule(validator.notEmpty, 'responsibleGivenName', responsibleGivenName, 'Enter given names for the responsible person'),
       new ValidationRule(validator.isValidStringLength, 'responsibleGivenName', responsibleGivenName, `Given names must be ${MAX_STRING_LENGTH} characters or less`),
       new ValidationRule(validator.isAlpha, 'responsibleGivenName', responsibleGivenName, `Given names must not contain special characters, apostrophes or numbers`),
     ],
