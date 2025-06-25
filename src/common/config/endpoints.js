@@ -205,7 +205,7 @@ const endpoints = {
     let  params = {email}
 
     if (oneLoginSid) {
-      params['onelogin_sid'] = oneLoginSid
+      params['one_login_sid'] = oneLoginSid
     }
 
     const endpoint = new URL(`${API_VERSION}/user/search`, BASE_URL);
