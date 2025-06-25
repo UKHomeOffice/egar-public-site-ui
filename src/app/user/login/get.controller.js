@@ -56,7 +56,7 @@ const handleUserAuthentication = (userInfo, cookie) => {
   const {email, sub: oneLoginSid} = userInfo;
   return userApi.userSearch(email, oneLoginSid)
     .then(userData => {
-      if (!userData?.userId && !userData?.oneLoginSid) {
+      if (!userData?.userId) {
         return {redirect: ROUTES.REGISTER};
       }
 
