@@ -4,8 +4,8 @@ const { MAX_STRING_LENGTH } = require('../../../common/config/index');
 
 module.exports.validations = req => [
   [
-    new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter a given name'),
-    new ValidationRule(validator.isValidStringLength, 'firstName', req.body.firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
+    new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter given names'),
+    new ValidationRule(validator.isValidStringLength, 'firstName', req.body.firstName, `Given names must be ${MAX_STRING_LENGTH} characters or less`),
   ],
   [
     new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter a surname'),

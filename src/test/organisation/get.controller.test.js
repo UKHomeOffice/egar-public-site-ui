@@ -11,7 +11,14 @@ const CookieModel = require('../../common/models/Cookie.class');
 const orgApi = require('../../common/services/organisationApi');
 
 const pagination = require('../../common/utils/pagination');
-const controller = require('../../app/organisation/get.controller');
+const settings = require('../../common/config/index');
+const configMock = {
+  ...settings,
+  ONE_LOGIN_SHOW_ONE_LOGIN: false
+};
+const controller = require('../../app/organisation/get.controller', {
+  '../../common/config/index': configMock
+});
 
 describe('Organisation Get Controller', () => {
   let req; let res; let orgApiStub;
