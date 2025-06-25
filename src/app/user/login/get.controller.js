@@ -32,8 +32,9 @@ const sendAdminUpdateEmail =  (userObj) => {
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then(users => {
     const userList = JSON.parse(users)
 
-    userList.items.filter(user => user.role.name === 'Admin').forEach(user => {
-      sendEmail.send(
+    userList.items.forEach(user => {
+      try {
+        sendEmail.send(
         NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
         user.email,
         {
@@ -43,6 +44,11 @@ const sendAdminUpdateEmail =  (userObj) => {
           organisationName: userObj.organisation.organisationName,
         }
       );
+      } catch (error) {
+        logger.error("Exception when sending email to admin");
+        logger.error(error);
+      }
+
     });
   })
 }
