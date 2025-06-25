@@ -155,11 +155,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: NOTIFY_MFA_TEMPLATE_ID
-            - name: NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE
+            - name: NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
                   name: environment
-                  key: NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE
+                  key: NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID
             - name: NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
