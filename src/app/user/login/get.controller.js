@@ -35,15 +35,15 @@ const sendAdminUpdateEmail =  (userObj) => {
     userList.items.forEach(user => {
       try {
         sendEmail.send(
-        NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
-        user.email,
-        {
-          userName: userObj.firstName,
-          adminFirstName: user.firstName,
-          adminLastName: user.lastName,
-          organisationName: userObj.organisation.organisationName,
-        }
-      );
+          NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
+          user.email,
+          {
+            userName: userObj.firstName,
+            adminFirstName: user.firstName,
+            adminLastName: user.lastName,
+            organisationName: userObj.organisation.organisationName,
+          }
+        );
       } catch (error) {
         logger.error("Exception when sending email to admin");
         logger.error(error);
