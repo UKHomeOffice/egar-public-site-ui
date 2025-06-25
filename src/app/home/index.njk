@@ -98,6 +98,7 @@
             {% set maxPage = (gars.length // pageSize)+1 if gars.length % pageSize else gars.length // pageSize %}
             <section class="govuk-tabs__panel" id="gars-{{ name }}">
               <h2 class="govuk-heading-m">{{ name | capitalize }} GARs</h2>
+              {% if gars | length %}
               <table class="govuk-table" id="sortGAR">
                 <thead class="govuk-table__head" >
                   <tr class="govuk-table__row">
@@ -112,10 +113,9 @@
                   </tr>
                 </thead>
                 <tbody class="govuk-table__body pagination__table_{{name}}">
-                  {% if gars | length %}
                     {% for gar in gars %}
                       {% set page = ((loop.index-1) // pageSize) + 1 %}
-                      <tr class="govuk-table__row {{ 'hidden' if page!=1}} pagination-page pagination-page_{{page}}" id="pagination-row-{{page}}-{{ loop.index }}">
+                      <tr class="govuk-table__row pagination-page pagination-page_{{page}}" id="pagination-row-{{page}}-{{ loop.index }}">
                         <td class="govuk-table__cell">
                           {% if gar.registration === null %}
                             <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
@@ -136,11 +136,11 @@
                         </td>
                       </tr>
                     {% endfor %}
-                  {% else %}
-                    {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
-                  {% endif %}
                 </tbody>
               </table>
+              {% else %}
+                {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
+              {% endif %}
               <script>
                 $(document).on("click", "table thead tr th:not(.no-sort)", function () {
                   var table = $(this).parents("table");
