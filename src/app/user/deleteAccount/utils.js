@@ -36,8 +36,14 @@ const defaultText = () => ({
 const defaultDeletion = async cookie => ({
   deleteAccount: async () => await userApi.deleteUser(cookie.getUserEmail()),
   notifyUser: async () => {
+    let templateId = settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID;
+
+    if (settings.ONE_LOGIN_SHOW_ONE_LOGIN || settings.ONE_LOGIN_POST_MIGRATION) {
+      templateId = settings.NOTIFY_ONELOGIN_ACCOUNT_DELETE_TEMPLATE_ID;
+    }
+
     await emailService.send(
-    settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
+    templateId,
     cookie.getUserEmail(),
     { firstName: cookie.getUserFirstName(), lastName: cookie.getUserLastName() },
   )},
