@@ -205,3 +205,8 @@ h2.govuk-notification-banner__title {
 .vertical-align-top {
     vertical-align: top;
 }
+
+.button-link{
+    cursor: pointer;
+    user-select: none;
+}
