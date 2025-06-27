@@ -17,7 +17,7 @@ module.exports = (req, res) => {
   tokenApi.getLastLogin(cookie.getUserEmail())
     .then((userSession) => {
       const { successHeader, successMsg } = req.session;
-      const page = req.query ? req.query.page ? req.query.page : 1 : 1;
+      const page = req?.query?.page || 1;
       delete req.session.successHeader;
       delete req.session.successMsg;
 

@@ -58,14 +58,19 @@
       <p class="govuk-body-m">{{__('manage_gars_caption')}}</p>
       <div class="padding-bottom-10"> 
         <div class="govuk-inset-text">Your draft, submitted and cancelled GARs will only be saved for 6 months, after this they will be deleted.</div>
-        {% if serverPagination.totalPages>1 %}
+        {% set hasMultipleServerPages = serverPagination.totalPages > 1 %}
+        {% set notOnFirstPage = serverPagination.page > 1 %}
+        {% set onLastPage = serverPagination.page == serverPagination.totalPages %}
+        {% set onSecondToLastPage = serverPagination.page == serverPagination.totalPages - 1 %}
+        {% set notOnLastPage = serverPagination.page < serverPagination.totalPages %}
+        {% if hasMultipleServerPages %}
         <div class="govuk-inset-text">
-          You are viewing {{serverPagination.perPage * (serverPagination.page-1) +1}} - {{serverPagination.totalItems if serverPagination.page == serverPagination.totalPages else serverPagination.perPage * serverPagination.page}}  of your most recent GARs, there are {{serverPagination.totalItems}} total GARs. 
-          {% if serverPagination.page>1 %}
+          You are viewing {{serverPagination.perPage * (serverPagination.page-1) +1}} - {{serverPagination.totalItems if onLastPage else serverPagination.perPage * serverPagination.page}}  of your most recent GARs, there are {{serverPagination.totalItems}} total GARs. 
+          {% if notOnFirstPage %}
           <br/>To view the previous {{serverPagination.perPage}} GARs <a href="?page={{serverPagination.page-1}}">click here</a>.
           {% endif %}
-          {% if serverPagination.page<serverPagination.totalPages %}
-          <br/>To view the next {{serverPagination.totalItems % serverPagination.perPage if serverPagination.page == serverPagination.totalPages-1 else serverPagination.perPage}} GARs <a href="?page={{serverPagination.page+1}}">click here</a>.
+          {% if notOnLastPage %}
+          <br/>To view the next {{serverPagination.totalItems % serverPagination.perPage if onSecondToLastPage else serverPagination.perPage}} GARs <a href="?page={{serverPagination.page+1}}">click here</a>.
           {% endif %}
         </div>
         {% endif %}
