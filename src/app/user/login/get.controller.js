@@ -3,7 +3,9 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
+const {ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID} = require("../../../common/config");
+const sendEmail = require("../../../common/services/sendEmail");
+const organisationApi = require('../../../common/services/organisationApi');
 
 // Constants
 const ROUTES = {
@@ -26,6 +28,31 @@ const isUserAuthenticated = (userSessionObject) => {
   return !!(userSessionObject.dbId && userSessionObject.vr && userSessionObject.rl);
 };
 
+const sendAdminUpdateEmail =  (userObj) => {
+  return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then(users => {
+    const userList = JSON.parse(users)
+
+    userList.items.forEach(user => {
+      try {
+        sendEmail.send(
+          NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
+          user.email,
+          {
+            userName: userObj.firstName,
+            adminFirstName: user.firstName,
+            adminLastName: user.lastName,
+            organisationName: userObj.organisation.organisationName,
+          }
+        );
+      } catch (error) {
+        logger.error("Exception when sending email to admin");
+        logger.error(error);
+      }
+
+    });
+  })
+}
+
 /**
  * Handles user authentication state and cookie management
  * @param {Object} userInfo - User information from OneLogin
@@ -34,7 +61,6 @@ const isUserAuthenticated = (userSessionObject) => {
  */
 const handleUserAuthentication = (userInfo, cookie) => {
   const {email, sub: oneLoginSid} = userInfo;
-
   return userApi.userSearch(email, oneLoginSid)
     .then(userData => {
       if (!userData?.userId) {
@@ -45,10 +71,20 @@ const handleUserAuthentication = (userInfo, cookie) => {
         logger.info('User Id not found or email not verified during onelogin flow.');
         return {redirect: ROUTES.ERROR_404};
       }
+      if ((oneLoginSid && !userData?.oneLoginSid) || email !== userData?.email) {
+        const updateDetails = {
+          userId: userData.userId,
+          email: email,
+          oneLoginSid: oneLoginSid,
+          editedEmail: 'ONE_LOGIN_EMAIL_UPDATE',
+        }
 
-      if (oneLoginSid && !userData?.oneLoginSid) {
-        return userApi.updateDetails(email, userData.firstName, userData.lastName, oneLoginSid)
-          .then(() => userData);
+        return new Promise((resolve, reject) => {
+          organisationApi.editUser(userData.userId, userData.organisation.organisationId, updateDetails)
+            .then(() => {
+              sendAdminUpdateEmail(userData).then(() =>resolve(userData))
+          });
+        })
       }
 
       return userData;

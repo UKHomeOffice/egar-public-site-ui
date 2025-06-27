@@ -136,15 +136,22 @@ module.exports = {
   },
 
   /**
-  * Gets a **non** paginated list of users belonging to an organisation.
-  * @param {String} orgId id of an organisation to get users for
-  * @returns {Promise} resolves with API response.
-  */
-  getListOfOrgUsers(orgId) {
+   * Gets a **non** paginated list of users belonging to an organisation.
+   * @param {String} orgId id of an organisation to get users for
+   * @param role
+   * @returns {Promise} resolves with API response.
+   */
+  getListOfOrgUsers(orgId, role = null) {
+    let url = endpoints.getOrgUsers(orgId)
+
+    if (role) {
+      url = `${url}?role=${role}`
+    }
+
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
-        url: endpoints.getListOfOrgUsers(orgId),
+        url: url,
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call get list organisation users API endpoint');
