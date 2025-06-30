@@ -67,7 +67,7 @@ describe('Home Get Controller', () => {
 
     callController().then().then(() => {
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
-      expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', undefined);
+      expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', 1, undefined);
       expect(res.render).to.have.been.calledOnceWith('app/home/index', {
         cookie, successHeader: undefined, successMsg: undefined, errors: [{ message: 'Failed to get GARs' }],
       });
@@ -98,7 +98,7 @@ describe('Home Get Controller', () => {
 
     callController().then().then(() => {
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
-      expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', undefined);
+      expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', 1, undefined);
       expect(res.render).to.have.been.calledOnceWith('app/home/index', {
         cookie,
         successMsg: undefined,
@@ -114,6 +114,8 @@ describe('Home Get Controller', () => {
           { id: 'GAR-6', status: { name: 'Submitted' } },
         ],
         cancelledGars: [{ id: 'GAR-3', status: { name: 'Cancelled' } }],
+        pageSize: 10,
+        serverPagination: undefined
       });
     });
   });
@@ -146,7 +148,7 @@ describe('Home Get Controller', () => {
       expect(req.session.successHeader).to.be.undefined;
       expect(req.session.successMsg).to.be.undefined;
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
-      expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', undefined);
+      expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', 1, undefined);
       expect(res.render).to.have.been.calledOnceWith('app/home/index', {
         cookie,
         successHeader: 'Windows XP',
@@ -162,6 +164,8 @@ describe('Home Get Controller', () => {
           { id: 'GAR-6', status: { name: 'Submitted' } },
         ],
         cancelledGars: [{ id: 'GAR-3', status: { name: 'Cancelled' } }],
+        pageSize: 10,
+        serverPagination: undefined
       });
     });
   });
