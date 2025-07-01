@@ -3,15 +3,17 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const {ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID} = require("../../../common/config");
+const { ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID } = require("../../../common/config");
 const sendEmail = require("../../../common/services/sendEmail");
 const organisationApi = require('../../../common/services/organisationApi');
+const verifyUserService = require('../../../common/services/verificationApi');
 
 // Constants
 const ROUTES = {
   HOME: '/home',
   ERROR_404: '/error/404',
-  REGISTER: '/onelogin/register'
+  REGISTER: '/onelogin/register',
+  ERROR_INVITE_EXPIRED: '/error/inviteExpiredError',
 };
 
 const USER_STATES = {
@@ -28,7 +30,7 @@ const isUserAuthenticated = (userSessionObject) => {
   return !!(userSessionObject.dbId && userSessionObject.vr && userSessionObject.rl);
 };
 
-const sendAdminUpdateEmail =  (userObj) => {
+const sendAdminUpdateEmail = (userObj) => {
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then(users => {
     const userList = JSON.parse(users)
 
@@ -60,16 +62,17 @@ const sendAdminUpdateEmail =  (userObj) => {
  * @returns {Promise<Object>} - User authentication result
  */
 const handleUserAuthentication = (userInfo, cookie) => {
-  const {email, sub: oneLoginSid} = userInfo;
+  const { email, sub: oneLoginSid } = userInfo;
   return userApi.userSearch(email, oneLoginSid)
     .then(userData => {
+
       if (!userData?.userId) {
-        return {redirect: ROUTES.REGISTER};
+        return { redirect: ROUTES.REGISTER };
       }
 
       if (userData.state !== USER_STATES.VERIFIED) {
         logger.info('User Id not found or email not verified during onelogin flow.');
-        return {redirect: ROUTES.ERROR_404};
+        return { redirect: ROUTES.ERROR_404 };
       }
       if ((oneLoginSid && !userData?.oneLoginSid) || email !== userData?.email) {
         const updateDetails = {
@@ -82,8 +85,8 @@ const handleUserAuthentication = (userInfo, cookie) => {
         return new Promise((resolve, reject) => {
           organisationApi.editUser(userData.userId, userData.organisation.organisationId, updateDetails)
             .then(() => {
-              sendAdminUpdateEmail(userData).then(() =>resolve(userData))
-          });
+              sendAdminUpdateEmail(userData).then(() => resolve(userData))
+            });
         })
       }
 
@@ -102,7 +105,7 @@ const handleUserAuthentication = (userInfo, cookie) => {
             ...userData, organisation, state: userData.state
           });
 
-          return {redirect: ROUTES.HOME};
+          return { redirect: ROUTES.HOME };
         });
     });
 };
@@ -113,7 +116,7 @@ const handleUserAuthentication = (userInfo, cookie) => {
  * @param {Object} userData - User data
  */
 const setUserCookies = (cookie, userData) => {
-  const {email, firstName, lastName, userId, role, organisation, state} = userData;
+  const { email, firstName, lastName, userId, role, organisation, state } = userData;
   cookie.setUserEmail(email);
   cookie.setUserFirstName(firstName);
   cookie.setUserLastName(lastName);
@@ -136,7 +139,7 @@ module.exports = (req, res) => {
 
   const cookie = new CookieModel(req);
 
-  const {code} = req.query;
+  const { code } = req.query;
 
   if (!code) {
     return res.render('app/user/login/index', {
@@ -150,7 +153,7 @@ module.exports = (req, res) => {
   }
 
   oneLoginApi.sendOneLoginTokenRequest(req, code, oneLoginUtil)
-    .then(({access_token, id_token}) => {
+    .then(({ access_token, id_token }) => {
       if (!id_token) {
         logger.error('Invalid ID Token error.');
         res.render('app/user/login/index', {
@@ -165,50 +168,54 @@ module.exports = (req, res) => {
       return new Promise(resolve => {
         oneLoginUtil.verifyJwt(id_token, req.cookies.nonce, resolve);
       })
-      .then(isValid => {
-        if (!isValid) {
-          logger.info('Invalid jwt token received from OneLogin.');
-          res.render('app/user/login/index', {
-            oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res),
-            ONE_LOGIN_SHOW_ONE_LOGIN
-          });
-          return Promise.reject();
-        }
-
-        return oneLoginApi.getUserInfoFromOneLogin(access_token);
-      })
-      .then(userInfo => {
-        if (!userInfo?.email_verified) {
-          res.redirect(ROUTES.ERROR_404);
-          return Promise.reject();
-        }
-
-        return handleUserAuthentication(userInfo, cookie)
-          .then(({redirect}) => {
-            if (redirect === ROUTES.HOME) {
-              delete req.cookies.nonce;
-              delete req.cookies.state;
-            } else if (redirect === ROUTES.REGISTER) {
-              req.session.access_token = access_token;
-            }
-
-            return new Promise((resolve, reject) => {
-              req.session.save(err => {
-                if (err) {
-                  logger.error('Session save error:', err);
-                  reject(err);
-                } else {
-                  logger.info('Session saved successfully');
-                  resolve(redirect);
-                }
-              });
+        .then(isValid => {
+          if (!isValid) {
+            logger.info('Invalid jwt token received from OneLogin.');
+            res.render('app/user/login/index', {
+              oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res),
+              ONE_LOGIN_SHOW_ONE_LOGIN
             });
-          })
-          .then(redirect => {
-            res.set('Referer', req.headers.host)
-            res.redirect(redirect)
-          });
-      });
+            return Promise.reject();
+          }
+
+          return oneLoginApi.getUserInfoFromOneLogin(access_token);
+        })
+        .then(userInfo => {
+          if (!userInfo?.email_verified) {
+            res.redirect(ROUTES.ERROR_404);
+            return Promise.reject();
+          }
+
+          return handleUserAuthentication(userInfo, cookie)
+            .then(({ redirect }) => {
+
+              if (redirect === ROUTES.HOME) {
+                delete req.cookies.nonce;
+                delete req.cookies.state;
+              } else if (redirect === ROUTES.REGISTER) {
+                req.session.access_token = access_token;
+              }
+
+              return new Promise((resolve, reject) => {
+                req.session.save(err => {
+                  if (err) {
+                    logger.error('Session save error:', err);
+                    reject(err);
+                  } else {
+                    logger.info('Session saved successfully');
+                    resolve(redirect);
+                  }
+                });
+              });
+            })
+            .then(async redirect => {
+              res.set('Referer', req.headers.host)
+              if (redirect === ROUTES.REGISTER) {
+                return checkUserInvite(res, userInfo.email);
+              }
+              return res.redirect(redirect);
+            });
+        });
     })
     .catch(error => {
       if (error) {
@@ -217,3 +224,20 @@ module.exports = (req, res) => {
       return res.redirect(ROUTES.ERROR_404);
     });
 };
+
+
+async function checkUserInvite(res, email) {
+  try {
+    const apiResponse = await verifyUserService.getUserInviteToken(email);
+    if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
+      return res.redirect(ROUTES.ERROR_INVITE_EXPIRED);
+    }
+    else{
+      return res.redirect(ROUTES.REGISTER);
+    }
+  }
+  catch (error) {
+    logger.error(`Invite link to register failed ${error}`);
+    return res.redirect(ROUTES.ERROR_404);
+  }
+}
