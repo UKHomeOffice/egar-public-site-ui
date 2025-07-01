@@ -7,6 +7,8 @@ const token = require('../../../common/services/create-token');
 const userApi = require('../../../common/services/userManageApi');
 const emailService = require('../../../common/services/sendEmail');
 const settings = require('../../../common/config/index');
+const oneLoginUtil = require("../../../common/utils/oneLoginAuth");
+const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
 
 module.exports = (req, res) => {
   logger.debug('In user / login post controller');
@@ -27,6 +29,12 @@ module.exports = (req, res) => {
   const errMsg = { message: 'There was a problem sending your code. Please try again.' };
 
   cookie.setUserEmail(usrname);
+
+  let oneLoginAuthUrl = null;
+
+  if (ONE_LOGIN_SHOW_ONE_LOGIN === true) {
+    oneLoginAuthUrl = oneLoginUtil.getOneLoginAuthUrl(req, res);
+  }
 
   // Validate chains
   validator.validateChains([unameChain])
@@ -78,6 +86,6 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Validation error when logging in');
-      res.render('app/user/login/index', { cookie, errors: err });
+      res.render('app/user/login/index', { cookie, errors: err, ONE_LOGIN_SHOW_ONE_LOGIN, oneLoginAuthUrl });
     });
 };
