@@ -18,7 +18,7 @@ module.exports = (req, res) => {
         const { errMsg } = req.session;
         delete req.session.errMsg;
         return res.render(`app/user/viewDetails/${template}`, {
-          cookie, savedPeople, errors: [errMsg], oneLoginAccountUrl: ONE_LOGIN_ACCOUNT_URL,
+          cookie, savedPeople, errors: [errMsg], ONE_LOGIN_ACCOUNT_URL,
         });
       }
       if (req.session.successMsg) {
