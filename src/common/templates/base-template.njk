@@ -48,8 +48,10 @@
 
   <body class="govuk-template__body {{ bodyClasses }}">
 
-    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-    {% block bodyStart %}{% endblock %}
+  <script nonce="{{cspNonce}}">
+    document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+  </script>
+  {% block bodyStart %}{% endblock %}
 
   {% block cookie_message %}
   <div class="govuk-cookie-banner " data-nosnippet role="region" id="main_cookie_banner" aria-label="Cookies on Submit a GAR" hidden>
@@ -186,13 +188,12 @@
 
     {% block bodyEnd %}{% endblock %}
 
-  <script src="/javascripts/all.min.js"></script>
-  <script>
-  GOVUKFrontend.initAll();
-  </script>
+    <script src="/javascripts/all.min.js"></script>
+    <script nonce="{{cspNonce}}">
+      GOVUKFrontend.initAll();
+    </script>
 
-
-    <script>
+    <script nonce="{{cspNonce}}">
       $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function(eventObj) {
         $("<input />")
           .attr("type", "hidden")

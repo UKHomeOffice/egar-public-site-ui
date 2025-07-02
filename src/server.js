@@ -31,6 +31,7 @@ const db = require('./common/utils/db');
 const noCache = require('./common/utils/no-cache');
 const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
+const cspHeader = require('./common/middleware/cspHeader.js');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const {IS_HTTPS_SERVER, SAME_SITE_VALUE} = require("./common/config");
@@ -123,6 +124,8 @@ function initialiseGlobalMiddleware(app) {
   app.use(bodyParser.urlencoded({
     extended: true,
   }));
+
+  app.use(cspHeader.cspReportingHeader);
 
   app.use(csrf({
     cookie: {
