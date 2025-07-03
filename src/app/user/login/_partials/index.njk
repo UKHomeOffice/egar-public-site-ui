@@ -39,9 +39,9 @@
   {% endif %}
 
 <div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-two-thirds">
         <form action="login" autocomplete="off" method="POST" onsubmit="submitButton.disabled=true; return true;">
-			<h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
+      <h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
       {% if ONE_LOGIN_SHOW_ONE_LOGIN == true %}
         <div class="box-left-grey-border">
           <div class="email-text">
@@ -54,16 +54,16 @@
         </div>
       {% endif %}
 
-			<div class="govuk-form-group {{ m.form_group_class('username', errors) }}">
-				<label class="govuk-label govuk-label--m" for="username">{{ __('field_username') }}</label>
-				<span id="username-hint" class="govuk-hint">{{ __('field_username_hint') }}</span>
+      <div class="govuk-form-group {{ m.form_group_class('username', errors) }}">
+        <label class="govuk-label govuk-label--m" for="username">{{ __('field_username') }}</label>
+        <span id="username-hint" class="govuk-hint">{{ __('field_username_hint') }}</span>
         {{ m.error_message('username', errors, __) }}
-				<input class="govuk-input" id="username" name="username" type="text" aria-describedby="username-hint{{ ' username-error' if errors }}">
-			</div>
+        <input class="govuk-input" id="username" name="username" type="text" aria-describedby="username-hint{{ ' username-error' if errors }}">
+      </div>
 
       <button id="submitButton" type="submit" class="govuk-button" data-prevent-double-click="true">
-				{{ __('button_sign_in' )}}
-			</button>
+        {{ __('button_sign_in' )}}
+      </button>
       {% if ONE_LOGIN_SHOW_ONE_LOGIN %}
         <br/>
         <a
@@ -74,12 +74,12 @@
       {% endif %}
 
 
-			<h2 class="govuk-heading-m">{{ __('create_account_caption') }}</h2>
-			<p class="govuk-body">
+      <h2 class="govuk-heading-m">{{ __('create_account_caption') }}</h2>
+      <p class="govuk-body">
         <a href="/user/register">{{ __('title_create_account') }}</a>
       </p>
 
       <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-		</form>
-	</div>
+    </form>
+  </div>
 </div>
