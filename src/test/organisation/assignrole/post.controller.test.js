@@ -18,10 +18,16 @@ const roles = require('../../../common/seeddata/egar_user_roles.json');
 
 const controller = require('../../../app/organisation/assignrole/post.controller');
 
-describe('Organisation Assign Role Post Controller', () => {
-  let req; let res;
-  let tokenServiceStub; let tokenApiStub; let emailServiceStub;
 
+describe('Organisation Assign Role Post Controller', () => {
+  let req; 
+  let res;
+  let tokenServiceStub; 
+  let tokenApiStub; 
+  let emailServiceStub;
+  const TEMPLATE_ID = config.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID' : 'NOTIFY_INVITE_TEMPLATE_ID';
+  const indexPage = config.ONE_LOGIN_SHOW_ONE_LOGIN  === true ? 'onelogin_page' :  'old_invite_page';
+  
   beforeEach(() => {
     chai.use(sinonChai);
 
@@ -117,7 +123,7 @@ describe('Organisation Assign Role Post Controller', () => {
   });
 
   it('should render with error messages if email api rejects', () => {
-    sinon.stub(config, 'NOTIFY_INVITE_TEMPLATE_ID').value('EXAMPLE_TEMPLATE_ID');
+    sinon.stub(config, TEMPLATE_ID).value(indexPage);
     sinon.stub(config, 'BASE_URL').value('http://www.somewhere.com');
     tokenApiStub.resolves(JSON.stringify({}));
     emailServiceStub.rejects({ message: 'emailService.send Example Reject' });
@@ -131,7 +137,7 @@ describe('Organisation Assign Role Post Controller', () => {
       const generatedToken = tokenServiceStub.getCall(0).args[0];
       expect(req.session.inv.rl).to.eq('SuperUser');
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('ExampleGeneratedHash', 'USER-DB-ID-1', 'ORG-ID-1', 'SuperUser', cookie.getInviteUserEmail());
-      expect(emailServiceStub).to.have.been.calledOnceWithExactly('EXAMPLE_TEMPLATE_ID', 'persontoinvite@random.com', {
+      expect(emailServiceStub).to.have.been.calledOnceWithExactly(indexPage, 'persontoinvite@random.com', {
         firstname: 'Anakin',
         user: 'Sheev',
         org_name: 'Sith',
@@ -148,7 +154,7 @@ describe('Organisation Assign Role Post Controller', () => {
   });
 
   it('should redirect if email api ok', () => {
-    sinon.stub(config, 'NOTIFY_INVITE_TEMPLATE_ID').value('EXAMPLE_TEMPLATE_ID');
+    sinon.stub(config, TEMPLATE_ID).value(indexPage);
     sinon.stub(config, 'BASE_URL').value('http://www.somewhere.com');
     tokenApiStub.resolves(JSON.stringify({}));
     emailServiceStub.resolves();
@@ -162,7 +168,7 @@ describe('Organisation Assign Role Post Controller', () => {
       const generatedToken = tokenServiceStub.getCall(0).args[0];
       expect(req.session.inv.rl).to.eq('SuperUser');
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('ExampleGeneratedHash', 'USER-DB-ID-1', 'ORG-ID-1', 'SuperUser', cookie.getInviteUserEmail());
-      expect(emailServiceStub).to.have.been.calledOnceWithExactly('EXAMPLE_TEMPLATE_ID', 'persontoinvite@random.com', {
+      expect(emailServiceStub).to.have.been.calledOnceWithExactly(indexPage, 'persontoinvite@random.com', {
         firstname: 'Anakin',
         user: 'Sheev',
         org_name: 'Sith',
