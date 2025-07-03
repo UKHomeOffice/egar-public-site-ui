@@ -10,10 +10,8 @@ module.exports = (req, res) => {
   let oneLoginUrl = null;
 
   if (ONE_LOGIN_POST_MIGRATION === true) {
-    console.log("ONE_LOGIN_POST_MIGRATION ", ONE_LOGIN_POST_MIGRATION)
     oneLoginUrl = oneLoginUtil.getOneLoginAuthUrl(req, res)
   }
 
-  console.log("Temoakte ", template, '   ', ONE_LOGIN_POST_MIGRATION, oneLoginUrl)
   res.render(template, {HOMEPAGE_MESSAGE, ONE_LOGIN_POST_MIGRATION, oneLoginUrl: oneLoginUrl });
 };
