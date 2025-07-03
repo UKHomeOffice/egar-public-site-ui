@@ -5,8 +5,14 @@ const oneLoginUtil = require("../../common/utils/oneLoginAuth");
 
 module.exports = (req, res) => {
   logger.debug('In welcome get controller');
-  const oneLoginUrl = oneLoginUtil.getOneLoginAuthUrl(req, res)
-  let template = ONE_LOGIN_POST_MIGRATION === 'true' ? 'app/welcome/post_migration_page' : 'app/welcome/index';
+  let template = ONE_LOGIN_POST_MIGRATION === true ? 'app/welcome/post_migration_page' : 'app/welcome/index';
+
+  let oneLoginUrl = null;
+
+  if (ONE_LOGIN_POST_MIGRATION === true) {
+    console.log("ONE_LOGIN_POST_MIGRATION ", ONE_LOGIN_POST_MIGRATION)
+    oneLoginUrl = oneLoginUtil.getOneLoginAuthUrl(req, res)
+  }
 
   console.log("Temoakte ", template, '   ', ONE_LOGIN_POST_MIGRATION, oneLoginUrl)
   res.render(template, {HOMEPAGE_MESSAGE, ONE_LOGIN_POST_MIGRATION, oneLoginUrl: oneLoginUrl });
