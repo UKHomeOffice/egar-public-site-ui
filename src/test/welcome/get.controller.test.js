@@ -8,15 +8,10 @@ const proxyrequire = require('proxyquire').noCallThru();
 const config = require('../../common/config/index');
 const oneLoginApi = require('../../common/utils/oneLoginAuth');
 
-let configMock = sinon.stub(config, 'ONE_LOGIN_POST_MIGRATION').value(false);
-
-
 require('../global.test');
-const {HOMEPAGE_MESSAGE} = require("../../common/config");
-
 
 describe('Welcome Get Controller', () => {
-  let req; let res;
+  let req; let res; let configMock;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -29,15 +24,23 @@ describe('Welcome Get Controller', () => {
       cookie: sinon.spy(),
       render: sinon.spy(),
     };
+
+    configMock = {
+      ...config,
+      ONE_LOGIN_POST_MIGRATION: false,
+      ONE_LOGIN_SHOW_ONE_LOGIN: false,
+      HOMEPAGE_MESSAGE: 'Welcome to the new service',
+    }
   });
 
   afterEach(() => {
     sinon.restore();
+    configMock = {}
   });
 
   it('should render the welcome page', async () => {
     const controller = proxyrequire('../../app/welcome/get.controller', {
-        '../../../common/config/index': configMock,
+        '../../common/config/index': configMock,
     });
 
     await controller(req, res);
@@ -46,24 +49,22 @@ describe('Welcome Get Controller', () => {
   });
 
   it('should render the post migration page when flag is on', async () => {
-    configMock.ONE_LOGIN_POST_MIGRATION  = true;
-    configMock.ONE_LOGIN_SHOW_ONE_LOGIN  = false;
+    configMock['ONE_LOGIN_POST_MIGRATION']  = true;
+    configMock['ONE_LOGIN_SHOW_ONE_LOGIN']  = false;
 
     sinon.stub(oneLoginApi, 'getOneLoginAuthUrl').returns('https://onelogin.com');
 
     const controller = proxyrequire('../../app/welcome/get.controller', {
-        '../../../common/config/index': configMock,
+        '../../common/config/index': configMock,
     });
 
 
     await controller(req, res);
 
     expect(res.render).to.have.been.calledWith('app/welcome/post_migration_page', {
-      HOMEPAGE_MESSAGE: undefined,
+      HOMEPAGE_MESSAGE: 'Welcome to the new service',
       ONE_LOGIN_POST_MIGRATION: true,
       oneLoginUrl: 'https://onelogin.com',
     });
   });
-
-
 });
