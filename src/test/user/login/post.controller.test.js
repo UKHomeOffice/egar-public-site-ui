@@ -11,11 +11,14 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const tokenApi = require('../../../common/services/tokenApi');
 const userApi = require('../../../common/services/userManageApi');
 const emailService = require('../../../common/services/sendEmail');
+const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 
 const controller = require('../../../app/user/login/post.controller');
+const ValidationRule = require("../../../common/models/ValidationRule.class");
 
 describe('User Login Post Controller', () => {
   let req; let res;
+  let oneLoginStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -27,6 +30,7 @@ describe('User Login Post Controller', () => {
         departurePort: 'ZZZZ',
       },
       session: {
+        cookie: {},
         gar: {
           id: 12345,
           voyageDeparture: {
@@ -35,14 +39,16 @@ describe('User Login Post Controller', () => {
             departureYear: 2019,
           },
         },
-        cookie: {},
       },
     };
 
     res = {
       render: sinon.stub(),
       redirect: sinon.stub(),
+      cookie: sinon.stub(),
     };
+
+    oneLoginStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').resolves("https://dummy.com")
   });
 
   afterEach(() => {
