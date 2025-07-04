@@ -1,19 +1,4 @@
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script src="/javascripts/cookie-banner.js"></script>
-<script>
-function loadAnalytics(){
-  window.dataLayer = window.dataLayer || [];
-  checkForCookie = getCookie('sgar_cookies_policy');
-
-  if (checkForCookie == 'true') {
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '{{ g4_id }}', { 'anonymize_ip': true });
-  }
-  else{
-    window['ga-disable-UA-{{ g4_id }}'] = true;
-  }
-}
-loadAnalytics();
-</script>
+<script src="/javascripts/load-analytics.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ g4_id }}"></script>

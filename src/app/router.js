@@ -70,6 +70,7 @@ const cookies = require('./cookie');
 const help = require('./help');
 const unavailable = require('./unavailable');
 const accessibility = require('./accessibility');
+const csp = require('./csp');
 
 // veirfy registeruser
 const verifyregisteruser = require('./verify/registeruser');
@@ -155,6 +156,7 @@ module.exports.bind = (app) => {
   app.use(cookies.router);
   app.use(help.router);
   app.use(accessibility.router)
+  app.use(csp.router)
   app.use(unavailable.router);
   app.use(printmanifest.router);
   app.use(resperson.router);

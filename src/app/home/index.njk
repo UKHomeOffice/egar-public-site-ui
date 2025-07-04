@@ -97,7 +97,7 @@
           </li>
         </ul>
         
-        <script type="text/javascript" src="/javascripts/paginator.js"></script>
+        <script type="text/javascript" src="/javascripts/paginator.js" nonce="{{CSP_NONCE}}"></script>
         <form id="signform2" action="/garfile/view" method="post" role="form">
           {% macro gar_summary_table(name, gars) %}
             {% set maxPage = (gars.length // pageSize)+1 if gars.length % pageSize else gars.length // pageSize %}
@@ -146,7 +146,7 @@
               {% else %}
                 {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
               {% endif %}
-              <script>
+              <script nonce="{{CSP_NONCE}}">
                 $(document).on("click", "table thead tr th:not(.no-sort)", function () {
                   var table = $(this).parents("table");
                   var rows = $(this)
