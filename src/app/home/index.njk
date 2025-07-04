@@ -97,7 +97,7 @@
           </li>
         </ul>
         
-        <script type="text/javascript" src="/javascripts/paginator.js" nonce="{{CSP_NONCE}}"></script>
+        <script type="text/javascript" src="/javascripts/paginator.js"></script>
         <form id="signform2" action="/garfile/view" method="post" role="form">
           {% macro gar_summary_table(name, gars) %}
             {% set maxPage = (gars.length // pageSize)+1 if gars.length % pageSize else gars.length // pageSize %}
@@ -198,7 +198,7 @@
                 }
               </script>
 
-              {{ p.paginator(name, pageSize, gars.length) }}
+              {{ p.paginator(name, pageSize, gars.length, CSP_NONCE) }}
               
             </section>
           {% endmacro %}

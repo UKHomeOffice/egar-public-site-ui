@@ -4,10 +4,14 @@ function initialisePagination(paginationName, totalResults, maxPages, pageSize){
     var elements = {};
 
     elements.previousButton = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__previous_button');
+    elements.previousButtonLink = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__previous_button .pagination__link');
     elements.nextButton = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__next_button');
+    elements.nextButtonLink = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__next_button .pagination__link');
     elements.firstNumber = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__first_number');
+    elements.firstNumberLink = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__first_number .pagination__link');
     elements.firstEllipses = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__first_ellipses');
     elements.lastNumber = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__last_number');
+    elements.lastNumberLink = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__last_number .pagination__link');
     elements.lastEllipses = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__last_ellipses');
     elements.previousNumber = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__previous_number');
     elements.previousNumberLink = document.querySelector('.pagination__' + paginationName + '_paginator .pagination__previous_number .pagination__link');
@@ -29,6 +33,13 @@ function initialisePagination(paginationName, totalResults, maxPages, pageSize){
     if(maxPages<=1){
         hideElement(document.querySelector('.pagination__' + paginationName + '_paginator'));
     }
+
+    elements.previousButtonLink.addEventListener("click", ()=>goToPreviousPage(paginationName));
+    elements.firstNumberLink.addEventListener("click", ()=>goToPage(paginationName, 1));
+    elements.previousNumberLink.addEventListener("click", ()=>goToPreviousPage(paginationName));
+    elements.nextNumberLink.addEventListener("click", ()=>goToNextPage(paginationName));
+    elements.lastNumberLink.addEventListener("click", ()=>goToPage(paginationName, maxPages));
+    elements.nextButtonLink.addEventListener("click", ()=>goToNextPage(paginationName));
 }
 
 function goToPage(paginationName, page){
