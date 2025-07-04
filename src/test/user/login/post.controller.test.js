@@ -15,6 +15,7 @@ const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 
 const controller = require('../../../app/user/login/post.controller');
 const ValidationRule = require("../../../common/models/ValidationRule.class");
+const oneLoginApi = require("../../../common/utils/oneLoginAuth");
 
 describe('User Login Post Controller', () => {
   let req; let res;
@@ -48,7 +49,7 @@ describe('User Login Post Controller', () => {
       cookie: sinon.stub(),
     };
 
-    oneLoginStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').resolves("https://dummy.com")
+    oneLoginStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns("https://dummy.com")
   });
 
   afterEach(() => {
@@ -114,6 +115,7 @@ describe('User Login Post Controller', () => {
       const apiResponse = {
         message: 'No results found',
       };
+
       sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
 
@@ -126,7 +128,7 @@ describe('User Login Post Controller', () => {
         expect(emailService.send).to.not.have.been.called;
       }).then(() => {
         expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/login/index', { cookie, unregistered: true });
+        expect(res.render).to.have.been.calledOnceWithExactly('app/user/login/index', { cookie, unregistered: true, oneLoginAuthUrl: "https://dummy.com" });
       });
     });
   });
