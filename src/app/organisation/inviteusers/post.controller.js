@@ -3,6 +3,7 @@ const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
 const userApi = require('../../../common/services/userManageApi');
 const CookieModel = require('../../../common/models/Cookie.class');
+const { response } = require('express');
 
 module.exports = (req, res) => {
   const { fname, lname, email } = req.body;
@@ -14,21 +15,23 @@ module.exports = (req, res) => {
       cookie.setInviteUserFirstName(fname);
       cookie.setInviteUserLastName(lname);
       cookie.setInviteUserEmail(email);
+      //return checkUserEmail(email);
       userApi.getDetails(email)
         .then((apiResponse) => {
-          if (apiResponse.email.toLowerCase() === email.toLowerCase()) {
-            res.render('app/organisation/inviteusers/userExistError', { fname, lname });
-            return;
+          if (apiResponse.message === 'User not registered') {
+            return res.redirect('/organisation/assignrole');
           }
           else {
-            res.redirect('/organisation/assignrole');
+            if (typeof apiResponse.email !== 'undefined' && apiResponse.email.toLowerCase() === email.toLowerCase()) {
+              res.render('app/organisation/inviteusers/userExistError', { fname, lname });
+              return;
+            }
           }
         })
         .catch((err) => {
           logger.error(err);
           res.render('app/user/login/index');
         });
-
     })
     .catch((err) => {
       logger.error('Invite Users Organisation postcontroller - There was a problem inviting a user');
@@ -38,3 +41,5 @@ module.exports = (req, res) => {
       });
     });
 };
+
+
