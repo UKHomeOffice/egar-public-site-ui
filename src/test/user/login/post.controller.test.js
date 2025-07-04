@@ -12,14 +12,18 @@ const tokenApi = require('../../../common/services/tokenApi');
 const userApi = require('../../../common/services/userManageApi');
 const emailService = require('../../../common/services/sendEmail');
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
+const proxyrequire = require('proxyquire').noCallThru();
 
 const controller = require('../../../app/user/login/post.controller');
 const ValidationRule = require("../../../common/models/ValidationRule.class");
 const oneLoginApi = require("../../../common/utils/oneLoginAuth");
 
+const config = require('../../../common/config/index');
+
 describe('User Login Post Controller', () => {
   let req; let res;
   let oneLoginStub;
+  let configMock;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -48,6 +52,13 @@ describe('User Login Post Controller', () => {
       redirect: sinon.stub(),
       cookie: sinon.stub(),
     };
+
+    configMock = {
+      ...config,
+      ONE_LOGIN_POST_MIGRATION: false,
+      ONE_LOGIN_SHOW_ONE_LOGIN: false,
+      HOMEPAGE_MESSAGE: 'Welcome to the new service',
+    }
 
     oneLoginStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns("https://dummy.com")
   });
@@ -115,6 +126,10 @@ describe('User Login Post Controller', () => {
       const apiResponse = {
         message: 'No results found',
       };
+
+      const controller = proxyrequire('../../../app/user/login/post.controller', {
+        '../../common/config/index': configMock,
+    });
 
       sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
