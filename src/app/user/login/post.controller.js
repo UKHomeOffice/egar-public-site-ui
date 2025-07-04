@@ -51,7 +51,7 @@ module.exports = (req, res) => {
 
           // Used to send an email and then go to the MFA token verification
           // if it displays an error message, then an email is redundant?
-          res.render('app/user/login/index', { cookie, unregistered: true });
+          res.render('app/user/login/index', { cookie, unregistered: true, oneLoginAuthUrl });
           return;
         }
         const returnedEmail = user.email;
@@ -77,11 +77,11 @@ module.exports = (req, res) => {
           })
           .catch((err) => {
             logger.error(err);
-            res.render('app/user/login/index', { cookie, errors: [errMsg] });
+            res.render('app/user/login/index', { cookie, errors: [errMsg], oneLoginAuthUrl });
           });
       }).catch((err) => {
         logger.error(err);
-        res.render('app/user/login/index', { cookie, errors: [errMsg] });
+        res.render('app/user/login/index', { cookie, errors: [errMsg], oneLoginAuthUrl });
       });
     })
     .catch((err) => {
