@@ -15,7 +15,7 @@ const personApi = require('../../../common/services/personApi');
 const settings = require('../../../common/config/index');
 const configMock = {
   ...settings,
-  ONE_LOGIN_SHOW_ONE_LOGIN: false
+  ONE_LOGIN_SHOW_ONE_LOGIN: false,
 };
 
 const controller = require('../../../app/user/viewDetails/get.controller', {
@@ -65,6 +65,7 @@ describe('User View Details Get Controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
         cookie,
         errors: [{ message: 'There was a problem fetching data' }],
+        ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
       });
     });
   });
@@ -112,6 +113,7 @@ describe('User View Details Get Controller', () => {
             ],
           },
           errors: [{ message: 'Example error message' }],
+          ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
         });
       });
     });
@@ -139,6 +141,7 @@ describe('User View Details Get Controller', () => {
           },
           successHeader: 'Successful header',
           successMsg: 'Example success message',
+          ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
         });
       });
     });
@@ -161,6 +164,7 @@ describe('User View Details Get Controller', () => {
               { id: 'PERSON-2', firstName: 'Trish' },
             ],
           },
+          ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
         });
       });
     });

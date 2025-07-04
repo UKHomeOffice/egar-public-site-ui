@@ -209,3 +209,8 @@ h2.govuk-notification-banner__title {
 .highlight-yellow{ 
     background-color: #f7d352;
 }
+
+.button-link{
+    cursor: pointer;
+    user-select: none;
+}

@@ -5,13 +5,19 @@ const express = require('express');
 const flagpole = require('../../../common/middleware/flagpole');
 const csrfcheck = require('../../../common/middleware/csrfcheck')
 const parseForm = require('../../../common/middleware/parseForm');
+const setting = require('../../../common/config/index');
 
 // Local dependencies
 const getController = require('./get.controller');
 
 // Initialisation
 const router = new express.Router();
-const indexPath = '/verify/invite';
+let indexPath = '/verify/invite';
+
+if(setting.ONE_LOGIN_SHOW_ONE_LOGIN === true || setting.ONE_LOGIN_POST_MIGRATION === true){
+   indexPath = '/verify/invite/onelogin';
+}
+
 const paths = {
   index: indexPath,
 };

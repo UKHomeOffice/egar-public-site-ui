@@ -1,0 +1,77 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageTitle %}
+	{{__('error_prefix') if errors or unverified or unregistered }} GAR | Sign In
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+  {% include "common/templates/includes/errors.njk" %}
+{% endif %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds margin-bottom-60 margin-top-30">
+      <h1 class="govuk-heading-l">{{ __('title') }}</h1>
+
+      <div class="margin-top-60">
+        <p>Use this service to:</p>
+
+        <ul class="govuk-list govuk-list--bullet margin-bottom-20 padding-left-35">
+          <li>submit a GAR</li>
+          <li>view, edit or cancel a GAR</li>
+          <li>add, remove or manage people on your flight</li>
+        </ul>
+      </div>
+
+      <p>Before you submit information about your flight you should read <a href="https://www.legislation.gov.uk/ukdsi/2024/9780348254365">the General Aviation (Persons on Board, Flight Information and Civil Penalties) Regulations 2024</a>.</p>
+
+      <div class="box-left-grey-border margin-top-30">
+        <div class="email-text">
+          <p>General Aviation Reports emailed directly to Border Force will not be compliant and will not be accepted.</p>
+        </div>
+      </div>
+
+      <!-- what you need section -->
+      <h2 class="govuk-heading-m margin-top-30">What you'll need</h2>
+
+      <p>You'll need:</p>
+
+      <ul class="govuk-list govuk-list--bullet margin-bottom-40 padding-left-35">
+        <li>aircraft details (including registration number and base)</li>
+        <li>arrival and departure details (date, location and scheduled times)</li>
+        <li>captain, crew and passenger details (including travel document information and UK visiting address)</li>
+        <li>name and telephone number of the person responsible for goods on board</li>
+      </ul>
+
+      <p>Find out more about <a href="https://www.gov.uk/uk-border-control">entering the UK.</a></p>
+
+      <div class="box-left-grey-border margin-top-60">
+        <div class="email-text">
+          <p>You'll need a GOV.UK One Login to sign in to this service. If you've not used GOV.UK One Login before, you can create an account on the next page.</p>
+        </div>
+      </div>
+
+      <div class="margin-top-30">
+      <a id="start_now" href="{{ oneLoginUrl }}" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-6">
+				Create account
+			</a>
+      </div>
+
+      <p>Already have an account? <a href="{{ oneLoginUrl }}">Sign in</a></p>
+    </div>
+  </div>
+
+{% endblock %}
