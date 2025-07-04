@@ -48,7 +48,7 @@
 
   <body class="govuk-template__body {{ bodyClasses }}">
 
-  <script nonce="{{cspNonce}}">
+  <script nonce="{{CSP_NONCE}}">
     document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
   </script>
   {% block bodyStart %}{% endblock %}
@@ -189,11 +189,11 @@
     {% block bodyEnd %}{% endblock %}
 
     <script src="/javascripts/all.min.js"></script>
-    <script nonce="{{cspNonce}}">
+    <script nonce="{{CSP_NONCE}}">
       GOVUKFrontend.initAll();
     </script>
 
-    <script nonce="{{cspNonce}}">
+    <script nonce="{{CSP_NONCE}}">
       $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function(eventObj) {
         $("<input />")
           .attr("type", "hidden")
