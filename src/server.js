@@ -5,8 +5,6 @@ const path = require('path');
 const express = require('express');
 const session = require('express-session');
 const favicon = require('serve-favicon');
-const crypto = require('crypto');
-
 
 // Npm dependencies
 const bodyParser = require('body-parser');
@@ -154,6 +152,8 @@ function initialiseGlobalMiddleware(app) {
     next();
   });
 
+  app.use(cspHeader.cspReportingHeader);
+
   logger.info('Set CSRF Token');
   app.use(helmet());
 
@@ -200,17 +200,7 @@ function initialiseTemplateEngine(app) {
 
   // Set view engine
   app.set('view engine', 'njk');
-  logger.info('Set view engine');
-
-  // Set middleware to generate a nonce for CSP, we need it here so we can add it to the nunjucks global environment
-  app.use((_req, res, next) => {
-    const nonce = crypto.randomBytes(16).toString("base64");
-    nunjucksEnvironment.addGlobal("CSP_NONCE", nonce);
-    res.cspNonce = nonce;
-    next(); 
-  });
-  //CSP header middleware must come after the CSP nonce is generated
-  app.use(cspHeader.cspReportingHeader);
+  logger.info('Set view engine');  
 
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);

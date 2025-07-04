@@ -1,13 +1,20 @@
+import crypto from 'crypto';
+import _ from 'lodash';
+
 export const styleSrc = ["'self'"];
 
 export const cspReportingHeader = (_req, res, next) => {
+
+    const nonce = crypto.randomBytes(16).toString("base64");
+    res.cspNonce = nonce;
+
     const scriptSrc = [
         "'self'",
         "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='", //TODO change this
         "'sha384-pgQaOX4XVLz+ULrPIlTuJe6EIQSDptm5tBSJh6ukBI3O9Bej5Su0ufNQTdmOWoYy'",//This is supposed to be a sha for jquery, dosnt seem to work
         "https://ajax.googleapis.com/",//This is a quick bodge for the above
         "https://www.googletagmanager.com/",//More bodge
-        "'nonce-"+res.cspNonce+"'",
+        "'nonce-"+nonce+"'",
     ]
 
     var BASE_URL = "localhost"//TODO change this for actual env value
@@ -32,8 +39,16 @@ export const cspReportingHeader = (_req, res, next) => {
         `style-src ${styleSrc.join(' ')};` +
         `upgrade-insecure-requests;${reporting}`;
     res.set(
-        'Content-Security-Policy-Report-Only',
+        'Content-Security-Policy-Report-Only', //TODO seems like report only is to help with dev, we should probalby ditch this
         contentSecurityReportingPolicy,
     );
+
+    const _render = res.render;
+    res.render = function (view, options, fn) {
+      _.extend(options, { CSP_NONCE: nonce });
+      _render.call(this, view, options, fn);
+    };
+
+
     next();
 };
