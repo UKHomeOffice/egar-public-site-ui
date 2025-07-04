@@ -1,6 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
+const userApi = require('../../../common/services/userManageApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 module.exports = (req, res) => {
@@ -13,7 +14,21 @@ module.exports = (req, res) => {
       cookie.setInviteUserFirstName(fname);
       cookie.setInviteUserLastName(lname);
       cookie.setInviteUserEmail(email);
-      res.redirect('/organisation/assignrole');
+      userApi.getDetails(email)
+        .then((apiResponse) => {
+          if (apiResponse.email.toLowerCase() === email.toLowerCase()) {
+            res.render('app/organisation/inviteusers/userExistError', { fname, lname });
+            return;
+          }
+          else {
+            res.redirect('/organisation/assignrole');
+          }
+        })
+        .catch((err) => {
+          logger.error(err);
+          res.render('app/user/login/index');
+        });
+
     })
     .catch((err) => {
       logger.error('Invite Users Organisation postcontroller - There was a problem inviting a user');
