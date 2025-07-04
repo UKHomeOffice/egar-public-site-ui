@@ -31,6 +31,11 @@ const isUserAuthenticated = (userSessionObject) => {
 };
 
 const sendAdminUpdateEmail = (userObj) => {
+
+if (!userObj.organisation) {
+  return new Promise((resolve, reject) => resolve(userObj));
+}
+
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then(users => {
     const userList = JSON.parse(users)
 
@@ -40,10 +45,12 @@ const sendAdminUpdateEmail = (userObj) => {
           NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
           user.email,
           {
-            userName: userObj.firstName,
+            firstName: userObj.firstName,
+            lastName: userObj.lastName,
             adminFirstName: user.firstName,
             adminLastName: user.lastName,
             organisationName: userObj.organisation.organisationName,
+            accountUrl: ''
           }
         );
       } catch (error) {
