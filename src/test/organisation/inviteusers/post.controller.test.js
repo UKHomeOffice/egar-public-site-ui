@@ -10,11 +10,12 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-
+const userApi = require('../../../common/services/userManageApi');
 const controller = require('../../../app/organisation/inviteusers/post.controller');
 
 describe('Organisation Invite User Post Controller', () => {
   let req; let res; let cookie;
+  let getDetailsStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -33,6 +34,8 @@ describe('Organisation Invite User Post Controller', () => {
       render: sinon.spy(),
       redirect: sinon.spy(),
     };
+
+    getDetailsStub = sinon.stub(userApi, 'getDetails')
   });
 
   afterEach(() => {
@@ -134,12 +137,25 @@ describe('Organisation Invite User Post Controller', () => {
       await controller(req, res);
     };
 
+    getDetailsStub.resolves({email: 'prequel@enterprise.net', 'message': 'User not registered'});
     callController().then(() => {
       expect(req.session.inv.fn).to.eq('Jonathon');
       expect(req.session.inv.ln).to.eq('Archer');
       expect(req.session.inv.e).to.eq('prequel@enterprise.net');
       expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/assignrole');
+      expect(getDetailsStub).to.have.been.calledOnceWith('prequel@enterprise.net');
       expect(res.render).to.not.have.been.called;
+    });
+  });
+
+  it('should render to error page if user is already exist', () => {
+    const callController = async () => {
+      await controller(req, res);
+    };
+
+    getDetailsStub.resolves({email: 'prequel@enterprise.net'});
+    callController().then(() => {
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/userExistError', { fname:'Jonathon', lname:'Archer' });
     });
   });
 });

@@ -15,7 +15,6 @@ module.exports = (req, res) => {
       cookie.setInviteUserFirstName(fname);
       cookie.setInviteUserLastName(lname);
       cookie.setInviteUserEmail(email);
-      //return checkUserEmail(email);
       userApi.getDetails(email)
         .then((apiResponse) => {
           if (apiResponse.message === 'User not registered') {
@@ -29,8 +28,8 @@ module.exports = (req, res) => {
           }
         })
         .catch((err) => {
-          logger.error(err);
-          res.render('app/user/login/index');
+          logger.error(`Error: proble while getting a user details ${err}`);
+          return res.redirect('/organisation/inviteuser');
         });
     })
     .catch((err) => {
