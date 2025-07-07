@@ -1,0 +1,25 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block page_title %}
+	Error - User account exist
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+
+{% block content %}
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">This user already has an account</h1>
+      <p class="govuk-body">There's already an individual account for the email address you provided.</p>
+      <p class="govuk-body">If you still want to <a href="/organisation/inviteusers">invite this user to your organisation</a>, you'll need to use a different email address for them.</p>
+    </div>
+</div>
+{% endblock %}
