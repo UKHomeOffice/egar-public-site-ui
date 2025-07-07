@@ -128,8 +128,6 @@ describe('User Login Post Controller', () => {
         message: 'No results found',
       };
 
-      configMock.ONE_LOGIN_SHOW_ONE_LOGIN = false;
-
       sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
 
