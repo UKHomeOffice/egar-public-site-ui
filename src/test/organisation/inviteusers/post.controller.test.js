@@ -155,7 +155,7 @@ describe('Organisation Invite User Post Controller', () => {
 
     getDetailsStub.resolves({email: 'prequel@enterprise.net'});
     callController().then(() => {
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/userExistError', { fname:'Jonathon', lname:'Archer' });
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/userExistError');
     });
   });
 });

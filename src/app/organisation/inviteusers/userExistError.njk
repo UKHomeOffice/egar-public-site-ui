@@ -17,10 +17,9 @@
   {% endif %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">{{fname ~' '~ lname}} already has an account</h1>
-      <p class="govuk-body">{{fname ~' '~ lname}}  already has an individual account linked to the email address you have provided.</p>
-      <p class="govuk-body">If you still wish to invite {{fname ~' '~ lname}} to your organisation you will need to invite them using a different email address. </p>
-      <p>You should ask them to provide a different email address before you <a href="/organisation/inviteusers">invite them to your organisation</a>. </p>
+      <h1 class="govuk-heading-l">This user already has an account</h1>
+      <p class="govuk-body">There's already an individual account for the email address you provided.</p>
+      <p class="govuk-body">If you still want to <a href="/organisation/inviteusers">invite this user to your organisation</a>, you'll need to use a different email address for them.</p>
     </div>
 </div>
 {% endblock %}

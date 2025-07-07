@@ -20,11 +20,9 @@ module.exports = (req, res) => {
           if (apiResponse.message === 'User not registered') {
             return res.redirect('/organisation/assignrole');
           }
-          else {
-            if (typeof apiResponse.email !== 'undefined' && apiResponse.email.toLowerCase() === email.toLowerCase()) {
-              res.render('app/organisation/inviteusers/userExistError', { fname, lname });
-              return;
-            }
+          if (typeof apiResponse.email !== 'undefined' && apiResponse.email.toLowerCase() === email.toLowerCase()) {
+            res.render('app/organisation/inviteusers/userExistError');
+            return;
           }
         })
         .catch((err) => {
