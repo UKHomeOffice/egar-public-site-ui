@@ -20,9 +20,9 @@ module.exports = (req, res) => {
   const firstNameChain = [
     new ValidationRule(validator.notEmpty, 'firstname', firstName, 'Enter your given names'),
     new ValidationRule(validator.nameHasNoNumbers, 'firstname', firstName, 'Your given names cannot include numbers'),
-    new ValidationRule(validator.isValidStringLength, 'firstname', firstName, `Given name must be ${MAX_STRING_LENGTH} characters or less`),
+    new ValidationRule(validator.isValidStringLength, 'firstname', firstName, `Given names must be ${MAX_STRING_LENGTH} characters or less`),
     new ValidationRule(validator.validName, 'firstname', firstName, 'Your given names cannot include special characters or numbers'),
-    new ValidationRule(validator.validFirstNameLength, 'firstname', firstName, `Please enter a given name of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`),
+    new ValidationRule(validator.validFirstNameLength, 'firstname', firstName, `Please enter given names of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`),
   ];
   const lnameChain = [
     new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your family name'),

@@ -113,7 +113,7 @@ describe.skip('User OneLogin Post Controller', () => {
 
     it('should render with validation errors if validation fails', async () => {
       const validationErrors = [
-        { identifier: 'userFname', message: 'Please enter your given name' }
+        { identifier: 'userFname', message: 'Please enter your given names' }
       ];
       validateChainsStub.rejects(validationErrors);
 

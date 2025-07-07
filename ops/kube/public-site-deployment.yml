@@ -330,6 +330,16 @@ spec:
                 secretKeyRef:
                   name: egar-one-login
                   key: ONE_LOGIN_SHOW_ONE_LOGIN
+            - name: NOTIFY_ONELOGIN_ACCOUNT_DELETE_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: egar-one-login
+                  key: NOTIFY_ONELOGIN_ACCOUNT_DELETE_TEMPLATE_ID
+            - name: NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID
           ports:
             - name: public-site-prt
               containerPort: 3000

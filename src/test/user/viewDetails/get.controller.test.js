@@ -12,7 +12,15 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const craftApi = require('../../../common/services/craftApi');
 const personApi = require('../../../common/services/personApi');
 
-const controller = require('../../../app/user/viewDetails/get.controller');
+const settings = require('../../../common/config/index');
+const configMock = {
+  ...settings,
+  ONE_LOGIN_SHOW_ONE_LOGIN: false,
+};
+
+const controller = require('../../../app/user/viewDetails/get.controller', {
+  '../../../common/config/index': configMock
+});
 
 // TODO: Most of this logic handles obtaining craft and people, which are not
 // displayed on the resulting template! These unit tests are to reduce
@@ -20,7 +28,8 @@ const controller = require('../../../app/user/viewDetails/get.controller');
 describe('User View Details Get Controller', () => {
   let req; let res;
   let craftApiStub; let personApiStub;
-
+  const indexPage = settings.ONE_LOGIN_SHOW_ONE_LOGIN ? 'app/user/viewDetails/index' : 'app/user/viewDetails/old_index';
+  
   beforeEach(() => {
     chai.use(sinonChai);
 
@@ -53,9 +62,10 @@ describe('User View Details Get Controller', () => {
 
     callController().then().then(() => {
       expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
+      expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
         cookie,
         errors: [{ message: 'There was a problem fetching data' }],
+        ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
       });
     });
   });
@@ -94,7 +104,7 @@ describe('User View Details Get Controller', () => {
       callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
+        expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
           cookie,
           savedPeople: {
             items: [
@@ -103,6 +113,7 @@ describe('User View Details Get Controller', () => {
             ],
           },
           errors: [{ message: 'Example error message' }],
+          ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
         });
       });
     });
@@ -120,7 +131,7 @@ describe('User View Details Get Controller', () => {
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
+        expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
           cookie,
           savedPeople: {
             items: [
@@ -130,6 +141,7 @@ describe('User View Details Get Controller', () => {
           },
           successHeader: 'Successful header',
           successMsg: 'Example success message',
+          ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
         });
       });
     });
@@ -144,7 +156,7 @@ describe('User View Details Get Controller', () => {
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/viewDetails/old_index', {
+        expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
           cookie,
           savedPeople: {
             items: [
@@ -152,6 +164,7 @@ describe('User View Details Get Controller', () => {
               { id: 'PERSON-2', firstName: 'Trish' },
             ],
           },
+          ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
         });
       });
     });

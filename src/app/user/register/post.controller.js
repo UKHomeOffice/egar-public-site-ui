@@ -20,9 +20,9 @@ const userAlreadyRegisteredMsg = 'User already registered';
 // Define a validation chain for user registration fields
 const createValidationChains = (fname, lname, usrname, cusrname) => {
   const fnameChain = [
-    new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given name'),
-    new ValidationRule(validator.validName, 'userFname', fname, 'Please enter a valid first name'),
-    new ValidationRule(validator.validFirstNameLength, 'userFname', fname, `Please enter a first name of at most ${USER_FIRST_NAME_CHARACTER_COUNT} characters`),
+    new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given names'),
+    new ValidationRule(validator.validName, 'userFname', fname, 'Please enter valid given names'),
+    new ValidationRule(validator.validFirstNameLength, 'userFname', fname, `Please enter given names of at most ${USER_FIRST_NAME_CHARACTER_COUNT} characters`),
   ];
   const lnameChain = [
     new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),

@@ -162,7 +162,7 @@ describe('GarService', () => {
   });
 
   it('Should return all GARs belonging to an individual', (done) => {
-    garApi.getGars(userId, 'Individual')
+    garApi.getGars(userId, 'Individual', 1)
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         expect(typeof parsedResponse).to.equal('object');
@@ -173,7 +173,7 @@ describe('GarService', () => {
   });
 
   it('Should return all GARs belonging to an organisation', (done) => {
-    garApi.getGars(userId, 'Admin', orgId)
+    garApi.getGars(userId, 'Admin', 1, orgId)
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         expect(typeof parsedResponse).to.equal('object');
@@ -266,7 +266,7 @@ describe('GarService', () => {
       .get(`/user/${userId}/gars?page=1&per_page=10000`)
       .replyWithError({ message: 'Example getGars error', code: 404 });
 
-    garApi.getGars(userId, 'Individual').then(() => {
+    garApi.getGars(userId, 'Individual', 1).then(() => {
       chai.assert.fail('Should not have returned without error');
     }).catch((err) => {
       expect(err.message).to.equal('Example getGars error');

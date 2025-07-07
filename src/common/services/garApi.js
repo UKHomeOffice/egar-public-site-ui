@@ -138,8 +138,8 @@ module.exports = {
    * @param {String} orgId id of organisation a user belongs to. Only required if org user.
    * @returns {Promise} Resolves with API response.
    */
-  getGars(userId, userType, orgId = null) {
-    const garsUrl = userType === 'Individual' ? endpoints.getIndividualGars(userId) : endpoints.getOrgGars(userId, orgId);
+  getGars(userId, userType, page, orgId = null) {
+    const garsUrl = userType === 'Individual' ? endpoints.getIndividualGars(userId, 1) : endpoints.getOrgGars(userId, orgId, page);
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },

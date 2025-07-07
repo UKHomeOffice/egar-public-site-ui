@@ -14,5 +14,10 @@ router.get('/error/503', (req, res) => {
   res.render('app/error/503');
 });
 
+router.get('/error/inviteExpiredError', (req, res) => {
+  res.status(410);
+  res.render('app/error/inviteExpiredError');
+});
+
 // Export
 module.exports = { router };
