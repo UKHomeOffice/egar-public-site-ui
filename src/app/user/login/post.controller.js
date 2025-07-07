@@ -8,7 +8,7 @@ const userApi = require('../../../common/services/userManageApi');
 const emailService = require('../../../common/services/sendEmail');
 const settings = require('../../../common/config/index');
 const oneLoginUtil = require("../../../common/utils/oneLoginAuth");
-const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
+const config = require("../../../common/config/index");
 
 module.exports = (req, res) => {
   logger.debug('In user / login post controller');
@@ -32,7 +32,7 @@ module.exports = (req, res) => {
 
   let oneLoginAuthUrl = null;
 
-  if (ONE_LOGIN_SHOW_ONE_LOGIN === true) {
+  if (config.ONE_LOGIN_SHOW_ONE_LOGIN === true) {
     oneLoginAuthUrl = oneLoginUtil.getOneLoginAuthUrl(req, res);
   }
 
@@ -51,7 +51,7 @@ module.exports = (req, res) => {
 
           // Used to send an email and then go to the MFA token verification
           // if it displays an error message, then an email is redundant?
-          res.render('app/user/login/index', { cookie, unregistered: true });
+          res.render('app/user/login/index', { cookie, unregistered: true, oneLoginAuthUrl });
           return;
         }
         const returnedEmail = user.email;
@@ -77,15 +77,15 @@ module.exports = (req, res) => {
           })
           .catch((err) => {
             logger.error(err);
-            res.render('app/user/login/index', { cookie, errors: [errMsg] });
+            res.render('app/user/login/index', { cookie, errors: [errMsg], oneLoginAuthUrl });
           });
       }).catch((err) => {
         logger.error(err);
-        res.render('app/user/login/index', { cookie, errors: [errMsg] });
+        res.render('app/user/login/index', { cookie, errors: [errMsg], oneLoginAuthUrl });
       });
     })
     .catch((err) => {
       logger.info('Validation error when logging in');
-      res.render('app/user/login/index', { cookie, errors: err, ONE_LOGIN_SHOW_ONE_LOGIN, oneLoginAuthUrl });
+      res.render('app/user/login/index', { cookie, errors: err, ONE_LOGIN_SHOW_ONE_LOGIN: config.ONE_LOGIN_SHOW_ONE_LOGIN, oneLoginAuthUrl });
     });
 };
