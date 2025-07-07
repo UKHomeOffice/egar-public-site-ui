@@ -127,12 +127,12 @@ describe('User Login Post Controller', () => {
         message: 'No results found',
       };
 
-      const controller = proxyrequire('../../../app/user/login/post.controller', {
-        '../../common/config/index': configMock,
-    });
-
       sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
+
+      const controller = proxyrequire('../../../app/user/login/post.controller', {
+        '../../common/config/index': configMock,
+      });
 
       // Promise chain, so controller call is wrapped into its own method
       const callController = async () => {
