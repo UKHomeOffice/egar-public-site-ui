@@ -43,7 +43,6 @@ const sendAdminUpdateEmail = (userObj) => {
           NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
           user.email,
           {
-            userName: userObj.firstName,
             firstName: userObj.firstName,
             lastName: userObj.lastName,
             accountUrl: BASE_URL + '/organisation',
