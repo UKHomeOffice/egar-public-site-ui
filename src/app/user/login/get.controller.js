@@ -7,6 +7,7 @@ const { ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_
 const sendEmail = require("../../../common/services/sendEmail");
 const organisationApi = require('../../../common/services/organisationApi');
 const verifyUserService = require('../../../common/services/verificationApi');
+const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
 
 // Constants
 const ROUTES = {
@@ -19,6 +20,8 @@ const ROUTES = {
 const USER_STATES = {
   VERIFIED: 'verified'
 };
+
+let accountUrl = BASE_URL + '/organisation'
 
 /**
  * Checks if user is authenticated in the session
@@ -34,6 +37,7 @@ const sendAdminUpdateEmail = (userObj) => {
   if (!userObj.organisation) {
     return new Promise((resolve, reject) => resolve(userObj));
   }
+
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then(users => {
     const userList = JSON.parse(users)
 
@@ -45,7 +49,7 @@ const sendAdminUpdateEmail = (userObj) => {
           {
             firstName: userObj.firstName,
             lastName: userObj.lastName,
-            accountUrl: BASE_URL + '/organisation',
+            accountUrl,
             adminFirstName: user.firstName,
             adminLastName: user.lastName,
             organisationName: userObj.organisation.organisationName,
@@ -193,6 +197,8 @@ module.exports = (req, res) => {
             res.redirect(ROUTES.ERROR_404);
             return Promise.reject();
           }
+
+          accountUrl = parseUrlForNonProd(req, accountUrl);
 
           return handleUserAuthentication(userInfo, cookie)
             .then(({ redirect }) => {
