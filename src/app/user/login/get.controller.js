@@ -3,7 +3,7 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const { ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID } = require("../../../common/config");
+const { ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL} = require("../../../common/config");
 const sendEmail = require("../../../common/services/sendEmail");
 const organisationApi = require('../../../common/services/organisationApi');
 const verifyUserService = require('../../../common/services/verificationApi');
@@ -31,6 +31,11 @@ const isUserAuthenticated = (userSessionObject) => {
 };
 
 const sendAdminUpdateEmail = (userObj) => {
+
+if (!userObj.organisation) {
+  return new Promise((resolve, reject) => resolve(userObj));
+}
+
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then(users => {
     const userList = JSON.parse(users)
 
@@ -40,10 +45,12 @@ const sendAdminUpdateEmail = (userObj) => {
           NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
           user.email,
           {
-            userName: userObj.firstName,
+            firstName: userObj.firstName,
+            lastName: userObj.lastName,
             adminFirstName: user.firstName,
             adminLastName: user.lastName,
             organisationName: userObj.organisation.organisationName,
+            accountUrl: `${BASE_URL}/organisation`,
           }
         );
       } catch (error) {
