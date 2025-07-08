@@ -3,7 +3,7 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const { ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID } = require("../../../common/config");
+const { ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL} = require("../../../common/config");
 const sendEmail = require("../../../common/services/sendEmail");
 const organisationApi = require('../../../common/services/organisationApi');
 const verifyUserService = require('../../../common/services/verificationApi');
@@ -31,6 +31,9 @@ const isUserAuthenticated = (userSessionObject) => {
 };
 
 const sendAdminUpdateEmail = (userObj) => {
+  if (!userObj.organisation) {
+    return new Promise((resolve, reject) => resolve(userObj));
+  }
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then(users => {
     const userList = JSON.parse(users)
 
@@ -41,6 +44,9 @@ const sendAdminUpdateEmail = (userObj) => {
           user.email,
           {
             userName: userObj.firstName,
+            firstName: userObj.firstName,
+            lastName: userObj.lastName,
+            accountUrl: BASE_URL + '/organisation',
             adminFirstName: user.firstName,
             adminLastName: user.lastName,
             organisationName: userObj.organisation.organisationName,
@@ -74,18 +80,21 @@ const handleUserAuthentication = (userInfo, cookie) => {
         logger.info('User Id not found or email not verified during onelogin flow.');
         return { redirect: ROUTES.ERROR_404 };
       }
-      if ((oneLoginSid && !userData?.oneLoginSid) || email !== userData?.email) {
-        const updateDetails = {
-          userId: userData.userId,
-          email: email,
-          oneLoginSid: oneLoginSid,
-          editedEmail: 'ONE_LOGIN_EMAIL_UPDATE',
-        }
 
+      if (email !== userData?.email) {
+        return new Promise((resolve, reject) =>
+          userApi.updateEmailOrOneLoginSid(userData.email, {email}).then(
+            () =>  sendAdminUpdateEmail(userData).then(() => resolve(userData))
+          ).catch((err) => reject(err))
+        );
+      }
+
+      if (oneLoginSid && !userData?.oneLoginSid) {
         return new Promise((resolve, reject) => {
-          organisationApi.editUser(userData.userId, userData.organisation.organisationId, updateDetails)
+          userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
             .then(() => {
-              sendAdminUpdateEmail(userData).then(() => resolve(userData))
+              userData.oneLoginSid = oneLoginSid;
+              return userData;
             });
         })
       }
