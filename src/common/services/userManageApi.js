@@ -68,6 +68,45 @@ module.exports = {
       });
     });
   },
+  /**
+   *
+   * @param userEmail
+   * @param email
+   * @param oneLoginSid
+   * @returns {Promise<unknown>}
+   */
+  updateEmailOrOneLoginSid(userEmail, {email,  oneLoginSid }) {
+    let reqBody = {}
+
+    if (email) {
+      reqBody = {...reqBody, email}
+    }
+
+    if (oneLoginSid) {
+      reqBody = {...reqBody, oneLoginSid }
+    }
+
+    if (reqBody === {}) {
+      throw new Error('Provide updateEmail or oneLoginSid')
+    }
+
+    return new Promise((resolve, reject) => {
+      request.put({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.updateUserData(userEmail),
+        body: JSON.stringify(reqBody),
+      },
+      (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call edit user details endpoint');
+          reject(error);
+          return;
+        }
+        logger.debug('Successfully called update user details API endpoint');
+        resolve(body);
+      });
+    });
+  },
   deleteUser(email) {
     return new Promise((resolve, reject) => {
       request.delete({
