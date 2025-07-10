@@ -124,7 +124,7 @@
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
           
             {% if orgUsers | length and pages %}
-              {{ pagination.build('organisation', pages, __)}}
+              {{ pagination.build('organisation', pages, __, CSP_NONCE)}}
             {% endif %}
         </form>
         <input type="hidden" id="current-pg" value="{{currentPage}}" >

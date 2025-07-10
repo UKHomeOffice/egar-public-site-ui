@@ -74,7 +74,7 @@
           {% if cookie
             .getSavedCraft()
             .items | length %}
-            {{ pagination.build('previous_aircraft', pages, __)}}
+            {{ pagination.build('previous_aircraft', pages, __, CSP_NONCE)}}
           {% endif %}
         </div>
         <div class="govuk-grid-column-two-thirds">

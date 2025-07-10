@@ -85,7 +85,7 @@
         </tbody>
       </table>
       {% if savedCrafts.items | length %}
-        {{ pagination.build('aircraft', pages, __)}}
+        {{ pagination.build('aircraft', pages, __, CSP_NONCE)}}
       {% endif %}
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
