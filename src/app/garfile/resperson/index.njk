@@ -29,12 +29,12 @@
                 <span class="govuk-caption-xl">{{ __('section_count', 5, 9) }}</span>
                 <h1 class="govuk-heading-xl">{{ __('heading_responsible_person_details') }}</h1>
                 <p class="govuk-body-m">Search for responsible person </p>
-                    <input class="govuk-input govuk-input--width-20" id="resperson-search" name="resperson-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+                    <input class="govuk-input govuk-input--width-20 margin-bottom-10" id="resperson-search" name="resperson-search" type="text" placeholder="Search">
                 <h2 id="saved_responsible_persons" class="govuk-heading-l">{{__('heading_responsible_person')}}</h2>
                 <p class="govuk-body-l">{{__('caption_responsible_person_details')}}</p>
             </div>
             <div class="govuk-grid-column-full">
-                <p class="govuk-body-s" style="margin-bottom: 10px">{{__('person_sort')}}</p>
+                <p class="govuk-body-s margin-bottom-10">{{__('person_sort')}}</p>
                 <table class="govuk-table" id="res_person_table">
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
@@ -83,7 +83,7 @@
             {{ m.exit_without_saving(csrfToken, __) }}
         </div>
     </div>
-    <script>
+    <script nonce="{{CSP_NONCE}}">
         accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#responsibleCountry')});
     </script>
 {% endblock %}

@@ -34,7 +34,7 @@
         <h2 id="saved_aircraft" class="govuk-heading-l">{{__('title_aircraft')}}</h2>
         <p class="govuk-body-l">{{__('caption_aircraft_details')}}</p>
         <p class="govuk-body-m">Search for aircraft </p>
-        <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+        <input class="govuk-input govuk-input--width-20 margin-bottom-10" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search">
       </div>
       <div class="govuk-grid-column-full">
         <table class="govuk-table">
@@ -74,7 +74,7 @@
           {% if cookie
             .getSavedCraft()
             .items | length %}
-            {{ pagination.build('previous_aircraft', pages, __)}}
+            {{ pagination.build('previous_aircraft', pages, __, CSP_NONCE)}}
           {% endif %}
         </div>
         <div class="govuk-grid-column-two-thirds">
@@ -132,7 +132,8 @@
                       long, 
                       prefix, 
                       errors, 
-                      __) }}
+                      __,
+                      CSP_NONCE) }}
             {# Start buttons #}
           </div>
           {{ m.submit_buttons('Add craft to GAR', csrfToken, __) }}

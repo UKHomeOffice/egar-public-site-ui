@@ -146,7 +146,7 @@
               {% else %}
                 {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
               {% endif %}
-              <script>
+              <script nonce="{{CSP_NONCE}}">
                 $(document).on("click", "table thead tr th:not(.no-sort)", function () {
                   var table = $(this).parents("table");
                   var rows = $(this)
@@ -198,7 +198,7 @@
                 }
               </script>
 
-              {{ p.paginator(name, pageSize, gars.length) }}
+              {{ p.paginator(name, pageSize, gars.length, CSP_NONCE) }}
               
             </section>
           {% endmacro %}

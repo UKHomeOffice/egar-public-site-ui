@@ -31,6 +31,7 @@ const db = require('./common/utils/db');
 const noCache = require('./common/utils/no-cache');
 const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
+const cspHeader = require('./common/middleware/cspHeader.js');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const {IS_HTTPS_SERVER, SAME_SITE_VALUE} = require("./common/config");
@@ -151,6 +152,8 @@ function initialiseGlobalMiddleware(app) {
     next();
   });
 
+  app.use(cspHeader.cspReportingHeader);
+
   logger.info('Set CSRF Token');
   app.use(helmet());
 
@@ -197,7 +200,7 @@ function initialiseTemplateEngine(app) {
 
   // Set view engine
   app.set('view engine', 'njk');
-  logger.info('Set view engine');
+  logger.info('Set view engine');  
 
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);

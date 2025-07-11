@@ -35,7 +35,7 @@
         <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
         <h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
         <p class="govuk-body-l">
-          <span style="background-color: #66ff66">
+          <span class="horrible-green">
             {{__('id_card_withdrawl_text')}}
             <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span>
         </p>
@@ -61,8 +61,8 @@
             {% else %}
               <table class="govuk-table" id="people_table" >
               {% endif %}
-              <input class="govuk-input govuk-input--width-20" id="person-search" name="person-search" type="text" placeholder="Search" style="margin-bottom: 10px">
-              <p class="govuk-body-s" style="margin-bottom: 10px">{{__('person_sort')}}</p>
+              <input class="govuk-input govuk-input--width-20 margin-bottom-10" id="person-search" name="person-search" type="text" placeholder="Search">
+              <p class="govuk-body-s margin-bottom-10">{{__('person_sort')}}</p>
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th style="width: 5%;" class="govuk-table__header multiple-choice--hod">
@@ -154,7 +154,7 @@
             <h2 class="govuk-heading-l">{{__('heading_current_manifest')}}</h2>
             <p class="govuk-body-l">{{__('current_manifest_caption')}}</p>
             <p class="govuk-body-m">Search for people on the manifest</p>
-            <input class="govuk-input govuk-input--width-20" id="manifest-search" name="manifest-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+            <input class="govuk-input govuk-input--width-20 margin-bottom-10" id="manifest-search" name="manifest-search" type="text" placeholder="Search">
             <p class="govuk-body-m">
               <mark>{{__('expired_passport_warning')}}</mark>
             </p>

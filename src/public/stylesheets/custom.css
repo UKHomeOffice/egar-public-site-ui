@@ -89,6 +89,10 @@
     padding-left: 35px !important;
 }
 
+.padding-left-15 {
+    padding-left: 15px;
+}
+
 .padding-bottom-60 {
     padding-bottom: 60px !important;
 }
@@ -206,7 +210,15 @@ h2.govuk-notification-banner__title {
     vertical-align: top;
 }
 
+.highlight-yellow{ 
+    background-color: #f7d352;
+}
+
 .button-link{
     cursor: pointer;
     user-select: none;
+}
+
+.horrible-green{
+    background-color: #66ff66
 }

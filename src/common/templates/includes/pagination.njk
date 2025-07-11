@@ -4,9 +4,9 @@ submitted results in page transitions, and the pages object, an object returned
 from the pagination.js build function. The i18n __ reference also needs to be
 passed in explicitly it seems.
 #}
-{% macro build(formName, pages, __) %}
+{% macro build(formName, pages, __, cspNonce) %}
 <nav role="navigation" aria-label="Pagination Navigation" aria-labelledby="{{ formName }}">
-  <script type="text/javascript">
+  <script type="text/javascript" nonce="{{cspNonce}}">
     function transitionToPage(pageNumber) {
       nextPage=document.createElement('input');
       nextPage.type='hidden';

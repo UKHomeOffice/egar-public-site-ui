@@ -1,6 +1,6 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
-{% macro location(legendLabel, warningMessage, isPortChoice, portCode, lat, long, prefix, errors, __) %}
+{% macro location(legendLabel, warningMessage, isPortChoice, portCode, lat, long, prefix, errors, __, cspNonce) %}
 
     {# legendLabel:string html for legend contents#}
     {# warningMessage:string text for any port warning hint#}
@@ -23,7 +23,7 @@
                     <label id="portChoiceCode-label" class="govuk-label govuk-radios__label" for="portChoiceCode">{{__('field_choice_yes')}}</label>
                 </div>
                 <div id="portChoiceCodeContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
-                    {{port_choice(portCode, prefix, errors, __)}}
+                    {{port_choice(portCode, prefix, errors, __, cspNonce)}}
                 </div>
                 <div class="govuk-radios__item">
                     <input id="portChoiceCoordinates" name="portChoice" class="govuk-radios__input" type="radio" value="No" {{ 'checked' if not isPortChoice}} data-aria-controls="portChoiceCoordinatesContainer" aria-labelledby="portChoiceCoordinates-label">
@@ -33,7 +33,7 @@
                     <div class="govuk-form-group">
                         {{ m.hint(prefix + 'Coordinates', __('field_coordinate_hint')) }}
                     </div>
-                    {{lat_long(lat, long, prefix, errors, __)}}
+                    {{lat_long(lat, long, prefix, errors, __, cspNonce)}}
                 </div>
             </div>
             {{warningMessage}}
@@ -42,7 +42,7 @@
 
 {% endmacro %}
 
-{% macro port_choice(portCode, prefix, errors, __) %}
+{% macro port_choice(portCode, prefix, errors, __, cspNonce) %}
 
     <div class="{{ m.form_group_class(prefix + 'Port', errors) }}">
         <label id="{{ prefix }}Port-label" class="govuk-label" for="{{ prefix }}Port">{{__('field_port_code')}}</label>
@@ -53,7 +53,7 @@
                 <option value="{{ airport.id }}" {{ 'selected=selected' if portCode in [airport.id, airport.id2] }}>{{ airport.label }}</option>
             {% endfor %}
         </select>
-        <script type="text/javascript">
+        <script type="text/javascript" nonce="{{cspNonce}}">
             accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#{{ prefix }}Port'), minLength: 2});
             document
                 .getElementById("{{ prefix }}Port")
@@ -63,19 +63,8 @@
 
 {% endmacro %}
 
-{% macro lat_long(lat, long, prefix, errors, __) %}
+{% macro lat_long(lat, long, prefix, errors, __, cspNonce) %}
 
-    <style type="text/css">
-
-        #{{ prefix }}Long:invalid{
-            background-color:#ff9baf;
-        }
-        #{{ prefix }}Lat:invalid{
-            background-color:#ff9baf;
-        }
-
-    
-    </style>
     {# Start location coords #}
     {# Latitude #}
     <div class="govuk-form-group {{ m.form_group_class(prefix + 'Lat', errors) }}">
@@ -92,5 +81,15 @@
         <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Long" name="{{ prefix }}Long" type="text" maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -90 to 90" value="{{ long }}">
     </div>
     {# End location coords #}
+    
+    <script nonce="{{cspNonce}}">
+
+        let styleSheet = new CSSStyleSheet();
+
+        styleSheet.addRule("#{{ prefix }}Long:invalid", "background-color:#ff9baf");
+        styleSheet.addRule("#{{ prefix }}Lat:invalid", "background-color:#ff9baf");
+        document.adoptedStyleSheets.push(styleSheet);
+    
+    </script>
 
 {% endmacro %}

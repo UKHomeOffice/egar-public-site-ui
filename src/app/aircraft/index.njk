@@ -29,7 +29,7 @@
       {% include "common/templates/includes/success-action.njk" %}
     {% endif %}
 
-      <script>
+      <script nonce="{{CSP_NONCE}}">
       $(document).ready(function(){
         $("#aircraft-search").on("keyup", function() {
         var value = $(this).val().toLowerCase();
@@ -44,7 +44,7 @@
     {# {% if cookie.getUserRole() != 'User' %} #}
       <p class="govuk-body-l">{{__('aircraft_caption')}}</p>
       <p class="govuk-body-m">Search for aircraft </p>
-      <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+      <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search">
     {# {% endif %} #}
   </div>
 
@@ -85,7 +85,7 @@
         </tbody>
       </table>
       {% if savedCrafts.items | length %}
-        {{ pagination.build('aircraft', pages, __)}}
+        {{ pagination.build('aircraft', pages, __, CSP_NONCE)}}
       {% endif %}
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
@@ -106,7 +106,7 @@
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
     </div>
   {# {% endif %} #}
-  	<script>
+  	<script nonce="{{CSP_NONCE}}">
     $(document).ready(function() {
       $('th').each(function(col) {
         $(this).hover(
