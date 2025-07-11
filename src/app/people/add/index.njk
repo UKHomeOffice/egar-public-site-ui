@@ -41,7 +41,7 @@
 
       {% include "person-details.njk" %}
 
-      <script>
+      <script nonce="{{ CSP_NONCE }}">
         document.getElementById("travelDocumentType").addEventListener("load", checkDocumentType());
       </script>
 

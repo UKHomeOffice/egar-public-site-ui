@@ -47,7 +47,7 @@
     </div>
   </div>
 
-  <script>
+  <script nonce="{{ CSP_NONCE }}">
    $(function () {
       window.myinterval = setInterval(function () {
         const permissionDetails = () => Array.from(document.getElementsByClassName('permission-details'));

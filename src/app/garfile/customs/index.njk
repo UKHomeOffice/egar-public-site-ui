@@ -64,19 +64,19 @@
           </div>
         </fieldset>
       </div> 
-      <script>
-      function hide() {
-        if (document.getElementById('Yes  ').checked) {
-          document.getElementById('prohibitedGoods').style.display = 'block';
-          document.getElementById('baggage').style.display = 'block';
-          document.getElementById('continentalShelf').style.display = 'block';
+      <script nonce="{{ CSP_NONCE }}">
+        function hide() {
+          if (document.getElementById('Yes  ').checked) {
+            document.getElementById('prohibitedGoods').style.display = 'block';
+            document.getElementById('baggage').style.display = 'block';
+            document.getElementById('continentalShelf').style.display = 'block';
+          }
+          else {
+            document.getElementById('prohibitedGoods').style.display = 'none';
+            document.getElementById('baggage').style.display = 'none';
+            document.getElementById('continentalShelf').style.display = 'none';
+          }
         }
-        else {
-          document.getElementById('prohibitedGoods').style.display = 'none';
-          document.getElementById('baggage').style.display = 'none';
-          document.getElementById('continentalShelf').style.display = 'none';
-        }
-      }
       </script>
 
       <div class="govuk-form-group {{ m.form_group_class('prohibitedGoods', errors) }}" id="prohibitedGoods" hidden>
