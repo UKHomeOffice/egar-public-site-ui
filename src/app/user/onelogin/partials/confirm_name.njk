@@ -22,7 +22,7 @@
         </div>
     </dl>
 
-    <div style="margin-top: -20px;">
+    <div class="margin-top-minus-20">
       <h2 class="govuk-heading-m">Declaration</h2>
       <div class="govuk-body">
         <p>I confirm that:
@@ -36,7 +36,7 @@
           </p>
       </div>
 
-      <div style="margin-top: 55px;">
+      <div class="margin-top-55">
         <form method="post" action="/onelogin/register">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
             <div class="govuk-checkboxes govuk-checkboxes--small" id="nameDeclaration">
@@ -48,7 +48,7 @@
               </div>
             </div>
 
-           <div class="govuk-button-group" style="margin-top: 29px;">
+           <div class="govuk-button-group margin-top-29">
              {{ govukButton({element: "button", text: "Create Account" }) }}
 
               <p class="govuk-link item-center" style="display: inline-block; margin-left: 24px; margin-top: 6px;">

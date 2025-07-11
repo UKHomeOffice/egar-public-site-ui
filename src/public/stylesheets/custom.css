@@ -44,14 +44,36 @@
 .margin-bottom-20 {
     margin-bottom: 20px !important;
 }
+.margin-bottom-1em {
+    margin-bottom: 1em;
+}
+.margin-bottom-29 {
+    margin-bottom: 29px;
+}
+.margin-bottom-60 {
+    margin-bottom: 60px;
+}
+
+.margin-top-minus-20 {
+    margin-top: 20px;
+}
 
 .margin-top-20 {
     margin-top: 20px !important;
 }
 
+.margin-top-29 {
+    margin-top: 29px;
+}
+
 .margin-top-30 {
     margin-top: 30px !important;
 }
+
+.margin-top-55 {
+    margin-top: 55px;
+}
+
 .margin-top-60 {
     margin-top: 60px !important;
 }
@@ -221,4 +243,8 @@ h2.govuk-notification-banner__title {
 
 .horrible-green{
     background-color: #66ff66
+}
+
+.opacity-half{
+    opacity: 0.5;
 }

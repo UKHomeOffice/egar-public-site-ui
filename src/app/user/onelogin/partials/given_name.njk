@@ -15,7 +15,7 @@
             {{ 'aria-describedby=userFname-error' if errors | containsError('userFname') }}>
         </div>
 
-        <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }}" style="margin-bottom: 60px;">
+        <div class="govuk-form-group margin-bottom-60 {{ m.form_group_class('userLname', errors) }}">
           <label class="govuk-label" for="userLname">{{ __('field_family_name') }}</label>
           {{ m.error_message('userLname', errors, __) }}
           <input id="userLname" name="userLname" autocomplete="off" class="govuk-input govuk-input--width-30"

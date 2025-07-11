@@ -131,7 +131,7 @@
           {% endif %}
         {% else %}
           {% if not statusColor and not statusCheckComplete %}
-            <span style="opacity:.5;">
+            <span class="opacity-half">
               Awaiting ...</span>
           {% endif %}
         {% endif %}
@@ -152,14 +152,14 @@
     {% if statusCheckComplete %}
       <tr class="govuk-table__row">
         <td class="govuk-table__cell"></td>
-        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
+        <td class="govuk-table__cell opacity-half" colspan="2">This process is now complete.</td>
       </tr>
     {% else %}
       <tr class="govuk-table__row">
         <td class="govuk-table__cell">
           <div id="spinner" title="loading..." class="status-disc spinner"></div>
         </td>
-        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">Awaiting Permission to Travel responses...</td>
+        <td class="govuk-table__cell opacity-half" colspan="2">Awaiting Permission to Travel responses...</td>
       </tr>
     {% endif %}
     {% for person in garpeople.items %}
