@@ -1,7 +1,7 @@
 {% macro coa_designation_regulation_change(isDeparture) %}
 
     {% set journeyStage = "departure" if isDeparture else "arrival" %}
-    <span class="govuk-body-m" style="background:#00FFFF;">
+    <span class="govuk-body-m background-pastel-cyan">
         The GB {{ journeyStage }} port must be officially designated to handle this flight, if you are unsure whether your intended port of departure is officially approved please visit 
         <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1151707/GOV.UK_GAR-Instructions-April_2023_V1.0_SDS.pdf">General Aviation Report (GAR) Guidance – April 2023 (publishing.service.gov.uk)</a> or confirm with the aerodrome authority directly. 
         Only officially designated GB aerodromes are able to handle international or CTA {{ journeyStage }}s from 01/01/24.

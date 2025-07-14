@@ -107,13 +107,18 @@
     margin-bottom: 60px !important;
 }
 
-.padding-left-35 {
-    padding-left: 35px !important;
+.padding-left-10 {
+    padding-left: 10px;
 }
 
 .padding-left-15 {
     padding-left: 15px;
 }
+
+.padding-left-35 {
+    padding-left: 35px !important;
+}
+
 
 .padding-bottom-60 {
     padding-bottom: 60px !important;
@@ -141,6 +146,23 @@
 
 .width-100{
     width: 100%;
+}
+
+.width-200px{
+    width: 200px;
+}
+
+.width-400px{
+    width: 400px;
+}
+
+.width-500px{
+    width: 500px;
+}
+
+.account-created-container{
+    width: 640px;
+    height: 225px;
 }
 
 .no-reocord{
@@ -262,7 +284,23 @@ h2.govuk-notification-banner__title {
 }
 
 .horrible-green{
-    background-color: #66ff66
+    background-color: #66ff66;
+}
+
+.color-red{
+    color: red;
+}
+
+.background-pastel-green{
+    background-color: #77DD77;
+}
+
+.background-pastel-cyan{
+    background: #00FFFF;
+}
+
+.background-aliceblue{
+    background-color:aliceblue;
 }
 
 .opacity-half{
@@ -275,4 +313,20 @@ h2.govuk-notification-banner__title {
 
 .border-bottom-none{
     border-bottom: none;
+}
+
+.font-weight-bold{
+    font-weight: bold;
+}
+
+.register-cancel-button{
+    display: inline-block; 
+    margin-left: 24px; 
+    margin-top: 6px;
+}
+
+.expired-passport-warning{
+    white-space: nowrap;
+    padding-top:15px;
+    font-size: 1.1875rem;
 }

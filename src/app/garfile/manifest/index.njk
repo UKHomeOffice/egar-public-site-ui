@@ -88,9 +88,7 @@
                         {{ "unselectable-row" if person.isDuplicate or person.isInvalid }}
                         {{ "govuk-form-group govuk-form-group--error" if person.isInvalid }}"
                         id="savedPerson-{{loop.index0}}">
-                        <td
-                          class="govuk-table__cell multiple-choice--hod"
-                          style="{{ "padding-left: 10px" if person.isInvalid }}">
+                        <td class="govuk-table__cell multiple-choice--hod {{ "padding-left-10" if person.isInvalid }}">
                           {% if person.isInvalid %}
                             <button
                               id="edit-person-{{ loop.index }}"
@@ -159,7 +157,7 @@
               <mark>{{__('expired_passport_warning')}}</mark>
             </p>
             <p>
-              <span style="background-color:#77DD77;">{{__('adding_person_to_people')}}</span></p>
+              <span class="background-pastel-green">{{__('adding_person_to_people')}}</span></p>
           </div>
           <div class="govuk-grid-column-full">
             <table class="govuk-table table-clickable" id="manifest_table">
@@ -197,7 +195,7 @@
                             .documentExpiryDate
                             .toString() < expiryDate
                             .toString() %}
-                            <h3  class="govuk-heading-s" id="expired" style="color:red" hidden>Please be advised, {{person.firstName}}
+                            <h3  class="govuk-heading-s color-red" id="expired" hidden>Please be advised, {{person.firstName}}
                               {{person.lastName}}'s passport has expired </h3>
                             <script nonce="{{ CSP_NONCE }}">
                               document
@@ -205,7 +203,7 @@
                                 .style
                                 .display = "block"
                             </script>
-                            <tr style="color:red; font-weight: bold; background-color:aliceblue">
+                            <tr class="color-red background-aliceblue font-weight-bold">
                             {% endif %}
                             <tr class="govuk-table__row">
                               <td class="govuk-table__cell">
@@ -224,7 +222,7 @@
                                   </div>
                                 </td>
                                 {% endif %}
-                                  <td class="govuk-table__cell garPersonLastName" style="{{ "padding-left: 10px" if isGarPersonInvalid }}">{{person.lastName}}</td>
+                                  <td class="govuk-table__cell garPersonLastName {{ "padding-left-10" if isGarPersonInvalid }}">{{person.lastName}}</td>
                                   <td class="govuk-table__cell garPersonFirstName">{{person.firstName}}</td>
                                   <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
                                   <td class="govuk-table__cell garPersonNationality">{{person.nationality | upper}}</td>
