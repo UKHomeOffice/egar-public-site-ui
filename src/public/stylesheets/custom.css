@@ -123,6 +123,26 @@
     padding-left: 60px !important;
 }
 
+.width-5{
+    width: 5%;
+}
+
+.width-35{
+    width: 35%;
+}
+
+.width-40{
+    width: 40%;
+}
+
+.width-65{
+    width: 65%;
+}
+
+.width-100{
+    width: 100%;
+}
+
 .no-reocord{
     color: #74472E;
     background-color: #F6D7C6;
@@ -247,4 +267,12 @@ h2.govuk-notification-banner__title {
 
 .opacity-half{
     opacity: 0.5;
+}
+
+.fixed-table-layout{
+    table-layout: fixed;
+}
+
+.border-bottom-none{
+    border-bottom: none;
 }
