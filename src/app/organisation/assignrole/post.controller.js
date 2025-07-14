@@ -46,11 +46,11 @@ module.exports = (req, res) => {
           }
           // API call successful
           let notifyTemplate = config.NOTIFY_INVITE_TEMPLATE_ID;
-          
+
           if(config.ONE_LOGIN_SHOW_ONE_LOGIN || config.ONE_LOGIN_POST_MIGRATION){
             notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
           }
-          
+
           emailService.send(notifyTemplate, inviteeEmail, {
             firstname: firstName,
             user: inviterName,

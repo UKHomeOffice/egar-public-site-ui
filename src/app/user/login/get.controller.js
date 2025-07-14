@@ -84,25 +84,45 @@ const handleUserAuthentication = (userInfo, cookie) => {
         return { redirect: ROUTES.ERROR_404 };
       }
 
-      if (email !== userData?.email) {
-        return new Promise((resolve, reject) =>
-          userApi.updateEmailOrOneLoginSid(userData.email, {email}).then(
-            () =>  sendAdminUpdateEmail(userData).then(() => resolve(userData))
-          ).catch((err) => reject(err))
-        );
-      }
+      /**
+       * TODO:
+       *  1. If user exists, we check for one login match. if one login matches, we check email.
+       *  2. If one login is not a match but email is a match == update user onelogin
+       */
+      const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid && userData.oneLoginSid !== null;
+      const emailMatches = email === userData.email;
 
-      if (oneLoginSid && !userData?.oneLoginSid) {
-        return new Promise((resolve, reject) => {
-          userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
-            .then(() => {
-              userData.oneLoginSid = oneLoginSid;
-              return userData;
-            });
-        })
-      }
+      switch (true) {
+        case oneLoginSidMatches && emailMatches:
+          return userData;
 
-      return userData;
+        case oneLoginSidMatches && !emailMatches:
+          // sid matches but email does not.
+          return new Promise((resolve, reject) =>
+            userApi.updateEmailOrOneLoginSid(userData.email, {email}).then(
+              () => {
+                userData.email = email;
+                sendAdminUpdateEmail(userData).then(() => resolve(userData))
+              }).catch((err) => reject(err))
+          );
+        case !oneLoginSidMatches && emailMatches:
+          // user email exist, but onelogin is null or does not match - action, update SID
+          return new Promise((resolve, reject) => {
+            userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
+              .then(() => {
+                userData.oneLoginSid = oneLoginSid;
+                return userData;
+              })
+          });
+        case !oneLoginSidMatches && !emailMatches:
+          // if neither sid or email matches, register user. Invite token checked in Onelogin flow
+          return new Promise((resolve, reject) => resolve({ redirect: ROUTES.REGISTER }));
+        default:
+          logger.warning('User Id not found or email not verified during onelogin flow.');
+          return { redirect: ROUTES.ERROR_404 };
+      }
+      logger.warning(`One logging flow missing match condition OneLoginMatch: ${oneLoginSidMatches} and  Email match: ${emailMatches}`);
+      return { redirect: ROUTES.ERROR_404 };
     })
     .then(userData => {
       if (userData?.redirect) {
