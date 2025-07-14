@@ -116,8 +116,6 @@ const handleUserAuthentication = (userInfo, cookie) => {
           logger.warning('User Id not found or email not verified during onelogin flow.');
           return { redirect: ROUTES.ERROR_404 };
       }
-      logger.warning(`One logging flow missing match condition OneLoginMatch: ${oneLoginSidMatches} and  Email match: ${emailMatches}`);
-      return { redirect: ROUTES.ERROR_404 };
     })
     .then(userData => {
       if (userData?.redirect) {
