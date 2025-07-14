@@ -84,11 +84,6 @@ const handleUserAuthentication = (userInfo, cookie) => {
         return { redirect: ROUTES.ERROR_404 };
       }
 
-      /**
-       * TODO:
-       *  1. If user exists, we check for one login match. if one login matches, we check email.
-       *  2. If one login is not a match but email is a match == update user onelogin
-       */
       const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid && userData.oneLoginSid !== null;
       const emailMatches = email === userData.email;
 
