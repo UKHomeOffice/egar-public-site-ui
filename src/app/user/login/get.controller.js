@@ -84,25 +84,39 @@ const handleUserAuthentication = (userInfo, cookie) => {
         return { redirect: ROUTES.ERROR_404 };
       }
 
-      if (email !== userData?.email) {
-        return new Promise((resolve, reject) =>
-          userApi.updateEmailOrOneLoginSid(userData.email, {email}).then(
-            () =>  sendAdminUpdateEmail(userData).then(() => resolve(userData))
-          ).catch((err) => reject(err))
-        );
-      }
+      const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid;
+      const emailMatches = email === userData.email;
 
-      if (oneLoginSid && !userData?.oneLoginSid) {
-        return new Promise((resolve, reject) => {
-          userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
-            .then(() => {
-              userData.oneLoginSid = oneLoginSid;
-              return userData;
-            });
-        })
-      }
+      switch (true) {
+        case oneLoginSidMatches && emailMatches:
+          // happy path - SID matches, email matches.
+          return userData;
 
-      return userData;
+        case oneLoginSidMatches && !emailMatches:
+          // sid matches but email does not.
+          return new Promise((resolve, reject) =>
+            userApi.updateEmailOrOneLoginSid(userData.email, {email}).then(
+              () => {
+                userData.email = email;
+                sendAdminUpdateEmail(userData).then(() => resolve(userData))
+              }).catch((err) => reject(err))
+          );
+        case emailMatches && userData.oneLoginSid === null:
+          // user email exists, but onelogin is null or does not match - action, update SID
+          return new Promise((resolve, reject) => {
+            userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
+              .then(() => {
+                userData.oneLoginSid = oneLoginSid;
+                return userData;
+              })
+          });
+        case !oneLoginSidMatches && !emailMatches:
+          // if neither sid or email matches, register user. Invite token checked in Onelogin flow
+          return new Promise((resolve, reject) => resolve({ redirect: ROUTES.REGISTER }));
+        default:
+          logger.warning('User Id not found or email not verified during onelogin flow.');
+          return { redirect: ROUTES.ERROR_404 };
+      }
     })
     .then(userData => {
       if (userData?.redirect) {
