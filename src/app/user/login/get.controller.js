@@ -101,7 +101,7 @@ const handleUserAuthentication = (userInfo, cookie) => {
                 sendAdminUpdateEmail(userData).then(() => resolve(userData))
               }).catch((err) => reject(err))
           );
-        case !oneLoginSidMatches && emailMatches && userData.oneLoginSid === null:
+        case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
           return new Promise((resolve, reject) => {
             userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
