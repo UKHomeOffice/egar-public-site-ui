@@ -84,11 +84,12 @@ const handleUserAuthentication = (userInfo, cookie) => {
         return { redirect: ROUTES.ERROR_404 };
       }
 
-      const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid && userData.oneLoginSid !== null;
+      const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid;
       const emailMatches = email === userData.email;
 
       switch (true) {
         case oneLoginSidMatches && emailMatches:
+          // happy path - SID matches, email matches.
           return userData;
 
         case oneLoginSidMatches && !emailMatches:
@@ -100,8 +101,8 @@ const handleUserAuthentication = (userInfo, cookie) => {
                 sendAdminUpdateEmail(userData).then(() => resolve(userData))
               }).catch((err) => reject(err))
           );
-        case !oneLoginSidMatches && emailMatches:
-          // user email exist, but onelogin is null or does not match - action, update SID
+        case !oneLoginSidMatches && emailMatches && userData.oneLoginSid === null:
+          // user email exists, but onelogin is null or does not match - action, update SID
           return new Promise((resolve, reject) => {
             userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
               .then(() => {
