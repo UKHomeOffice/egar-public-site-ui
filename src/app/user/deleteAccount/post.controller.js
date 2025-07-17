@@ -3,9 +3,8 @@ const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { deleteAccount } = require('./utils');
 const {getOneLoginLogoutUrl} = require("../../../common/utils/oneLoginAuth");
-const request = require('request');
-const {BASE_URL} = require("../../../common/config");
 const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
+const {BASE_URL} = require("../../../common/config");
 
 const postController = async (req, res) => {
   logger.debug('In user / deleteAccount postcontroller');
