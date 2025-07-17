@@ -36,13 +36,9 @@ const postController = async (req, res) => {
     const {state, id_token} = req.cookies;
 
     if (state && id_token)  {
-      const redirect_url = parseUrlForNonProd(req, `${BASE_URL}/user/deleteconfirm`)
-      let logoutUrl = getOneLoginLogoutUrl(req, id_token, state, redirect_url) ;
-      logoutUrl = parseUrlForNonProd(req, logoutUrl)
-      req.session.destroy(async () => {
-        cookie.reset();
-        res.redirect(logoutUrl);
-      });
+      res.cookie('userDeleted', true);
+      req.session.save()
+      res.redirect('/user/logout')
       return
     }
 
