@@ -53,14 +53,14 @@ const getOneLoginAuthUrl = (req, res) => {
  * @param id_token param to get the user info from onlogin
  * @returns returns onelogin logout url
  */
-const getOneLoginLogoutUrl = (req, id_token, state) => {
+const getOneLoginLogoutUrl = (req, id_token, state, redirect_uri = null) => {
 
   try {
     logger.info('create a logout url for one Login');
     const url = `${config.ONE_LOGIN_INTEGRATION_URL}/logout`;
     const options = {
       id_token_hint: id_token,
-      post_logout_redirect_uri: parseUrlForNonProd(req, config.ONE_LOGIN_LOGOUT_URL),
+      post_logout_redirect_uri: redirect_uri ? parseUrlForNonProd(req, redirect_uri) : parseUrlForNonProd(req, config.ONE_LOGIN_LOGOUT_URL),
       state,
     };
     const query = new URLSearchParams(options);
