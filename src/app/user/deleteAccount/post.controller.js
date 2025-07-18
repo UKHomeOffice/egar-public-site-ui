@@ -31,7 +31,7 @@ const postController = async (req, res) => {
   try {
     await deleteAccountOptions.notifyUser();
 
-    if (Object.hasOwn(req.cookies, 'state') && Object.hasOwn(req.cookies, 'id_token')) {
+    if (Object.hasOwn(req.cookies, 'id_token')) {
       res.redirect('/user/logout?action=user-deleted')
       return;
     }
