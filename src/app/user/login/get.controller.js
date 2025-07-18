@@ -162,7 +162,7 @@ module.exports = (req, res) => {
   if (req.headers.referer && isUserAuthenticated(req.session.u)) {
     return res.redirect(ROUTES.HOME);
   }
-
+  const viewOnLoginPageForTest = req.query.testOneLogin === 'true' ;
   const cookie = new CookieModel(req);
 
   const { code } = req.query;
@@ -170,7 +170,8 @@ module.exports = (req, res) => {
   if (!code) {
     return res.render('app/user/login/index', {
       oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
-      ONE_LOGIN_SHOW_ONE_LOGIN
+      ONE_LOGIN_SHOW_ONE_LOGIN,
+      viewOnLoginPageForTest
     });
   }
 

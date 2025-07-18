@@ -42,7 +42,7 @@
   <div class="govuk-grid-column-two-thirds">
         <form action="login" autocomplete="off" method="POST" onsubmit="submitButton.disabled=true; return true;">
       <h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
-      {% if ONE_LOGIN_SHOW_ONE_LOGIN == true %}
+      {% if ONE_LOGIN_SHOW_ONE_LOGIN == true or viewOnLoginPageForTest %}
         <div class="box-left-grey-border">
           <div class="email-text">
               <p class="govuk-body">How you sign in to Submit a General Aviation Report (GAR) is changing.</p>
@@ -65,7 +65,7 @@
       <button id="submitButton" type="submit" class="govuk-button" data-prevent-double-click="true">
         {{ __('button_sign_in' )}}
       </button>
-      {% if ONE_LOGIN_SHOW_ONE_LOGIN %}
+      {% if ONE_LOGIN_SHOW_ONE_LOGIN or viewOnLoginPageForTest %}
         <br/>
         <a
           href="{{oneLoginAuthUrl}}"
