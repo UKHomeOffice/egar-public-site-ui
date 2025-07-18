@@ -42,14 +42,15 @@
   <div class="govuk-grid-column-two-thirds">
         <form action="login" autocomplete="off" method="POST" onsubmit="submitButton.disabled=true; return true;">
       <h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
-      {% if ONE_LOGIN_SHOW_ONE_LOGIN == true %}
+      {% if ONE_LOGIN_SHOW_ONE_LOGIN == true or viewOnLoginPageForTest %}
         <div class="box-left-grey-border">
           <div class="email-text">
               <p class="govuk-body">How you sign in to Submit a General Aviation Report (GAR) is changing.</p>
-              <p class="govuk-body">From <strong>[Date]</strong>{{migrationDate}} you'll sign in using GOV.UK One Login. You'll be able to create a GOV.UK One Login if you do not already have one.</p>
-              <p class="govuk-body">You should use the same email address to create your GOV.UK One Login that you use for your SGAR account. This is so you keep the existing information in your account.</p>
-              <p class="govuk-body">You can still sign in without using GOV.UK One Login until <strong>[Date]</strong>{{migrationDate}}</p>
+              <p class="govuk-body">You should sign in using GOV.UK One Login. You'll be able to create a GOV.UK One Login if you do not already have one.</p>
+              <p class="govuk-body">You should use the same email address to create your GOV.UK One Login that you use for your Submit a General Aviation Report (GAR) account. This is so you keep the existing information in your account.</p>
+              <p class="govuk-body">You can still sign in without using GOV.UK One Login until 31 October 2025.</p>
               <p class="govuk-body">New users of the service will need to login using GOV.UK One Login.</p>
+              <p class="govuk-body">If you have any feedback on this new process, please email our support email at <a href="mailto:sas-fairfield@digital.homeoffice.gov.uk">sas-fairfield@digital.homeoffice.gov.uk</a>.</p>
           </div>
         </div>
       {% endif %}
@@ -64,7 +65,7 @@
       <button id="submitButton" type="submit" class="govuk-button" data-prevent-double-click="true">
         {{ __('button_sign_in' )}}
       </button>
-      {% if ONE_LOGIN_SHOW_ONE_LOGIN %}
+      {% if ONE_LOGIN_SHOW_ONE_LOGIN or viewOnLoginPageForTest %}
         <br/>
         <a
           href="{{oneLoginAuthUrl}}"
