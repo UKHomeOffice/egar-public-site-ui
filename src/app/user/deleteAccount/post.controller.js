@@ -2,9 +2,6 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { deleteAccount } = require('./utils');
-const {getOneLoginLogoutUrl} = require("../../../common/utils/oneLoginAuth");
-const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
-const {BASE_URL} = require("../../../common/config");
 
 const postController = async (req, res) => {
   logger.debug('In user / deleteAccount postcontroller');
@@ -33,17 +30,9 @@ const postController = async (req, res) => {
 
   try {
     await deleteAccountOptions.notifyUser();
-    const {state, id_token} = req.cookies;
-
-    if (state && id_token)  {
-      const redirect_url = parseUrlForNonProd(req, `${BASE_URL}/user/deleteconfirm`)
-      let logoutUrl = getOneLoginLogoutUrl(req, id_token, state, redirect_url) ;
-      logoutUrl = parseUrlForNonProd(req, logoutUrl)
-      req.session.destroy(async () => {
-        cookie.reset();
-        res.redirect(logoutUrl);
-      });
-      return
+    if (Object.hasOwn(req.cookies, 'state') && Object.hasOwn(req.cookies, 'id_token')) {
+      res.redirect('/user/logout?action=user-deleted')
+      return;
     }
 
     // if session doesn't have ONE login cookies
