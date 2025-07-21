@@ -27,8 +27,9 @@ module.exports = (req, res) => {
     if (req.query?.action === 'user-deleted') {
       state = 'user-deleted';
     }
+
     const logoutUrl = getOneLoginLogoutUrl(req, id_token, state);
-    return res.redirect(logoutUrl);
+    return logoutAndClearCookies(req, res, cookie, logoutUrl);
   }
 
   // Default logout path
