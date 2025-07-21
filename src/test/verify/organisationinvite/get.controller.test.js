@@ -15,6 +15,7 @@ const controller = require('../../../app/verify/organisationinvite/get.controlle
 const { cookie } = require('request');
 const { config } = require('winston');
 const settings = require('../../../common/config/index');
+const verifyUserService = require('../../../common/services/verificationApi');
 
 describe('Verify Organisation Invite Get Controller', () => {
   let req; 
@@ -22,6 +23,7 @@ describe('Verify Organisation Invite Get Controller', () => {
   let oneLoginUrlStub;
   const oneLoginAuthUrl = settings.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'https://onelogin?code=123&state=state' : '';
   const pathName = settings.ONE_LOGIN_SHOW_ONE_LOGIN  === true ? '/verify/invite/onelogin' :  '/verify/invite/';
+  let verifyUserServiceStub;
  
   beforeEach(() => {
     chai.use(sinonChai);
@@ -38,8 +40,10 @@ describe('Verify Organisation Invite Get Controller', () => {
     res = {
       render: sinon.spy(),
       cookie: sinon.stub(),
+      redirect: sinon.stub(),
     };
     sinon.stub(tokenService, 'generateHash').returns('HashedToken123');
+    verifyUserServiceStub = sinon.stub(verifyUserService, 'getUserInviteTokenByTokenId');
     
   });
 
@@ -55,7 +59,7 @@ describe('Verify Organisation Invite Get Controller', () => {
     cookie.setInviteUserToken('HashedToken123');
     oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl')
       .returns("https://onelogin?code=123&state=state");
- 
+    verifyUserServiceStub.resolves('Token is valid');
     await controller(req, res);
      
     // CookieModel instance created, can that be asserted

@@ -52,5 +52,28 @@ module.exports = {
     }).catch((err) => {
       logger.error(err);
     });
+  },
+
+  async getUserInviteTokenByTokenId(tokenId) {
+    try {
+      return await new Promise((resolve, reject) => {
+        const url = new URL(endpoints.verifyUser());
+        url.searchParams.append('token_id', tokenId);
+        logger.info('Sending request to API to verify token');
+        request.get({
+          url: url.toString(),
+          headers: { 'content-type': 'application/json' },
+        }, (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call token verification service');
+            reject(new Error('Token verification service failed'));
+            return;
+          }
+          resolve(JSON.parse(body));
+        });
+      });
+    } catch (err) {
+      logger.error(err);
+    }
   }
 };

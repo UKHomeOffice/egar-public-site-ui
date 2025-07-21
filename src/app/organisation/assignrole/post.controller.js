@@ -22,7 +22,8 @@ module.exports = (req, res) => {
   const token = nanoid(alphabet, 13);
   const hashToken = tokenservice.generateHash(token);
   const inviterName = cookie.getUserFirstName();
-  let firstName = cookie.getInviteUserFirstName();
+  const firstName = cookie.getInviteUserFirstName();
+  const lastName = cookie.getInviteUserLastName();
   const inviterId = cookie.getUserDbId();
   const inviteOrgName = cookie.getOrganisationName();
   const inviteOrgId = cookie.getOrganisationId();
@@ -50,11 +51,11 @@ module.exports = (req, res) => {
 
           if(config.ONE_LOGIN_SHOW_ONE_LOGIN || config.ONE_LOGIN_POST_MIGRATION){
             notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
-            firstName = firstName+" "+cookie.getInviteUserLastName();
           }
-
+          
           emailService.send(notifyTemplate, inviteeEmail, {
             firstname: firstName,
+            lastname: lastName,
             user: inviterName,
             org_name: inviteOrgName,
             base_url: parseUrlForNonProd(req, config.BASE_URL),
