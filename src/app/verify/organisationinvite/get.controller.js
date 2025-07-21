@@ -32,9 +32,9 @@ module.exports = async (req, res) => {
       if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
         return res.redirect('/error/inviteExpiredError');
       }
-      else{
-        return res.render('app/verify/organisationinvite/index', {pathName, oneLoginAuthUrl});
-      }
+     
+      return res.render('app/verify/organisationinvite/index', {pathName, oneLoginAuthUrl});
+      
     }
     catch (error) {
       logger.error(`Invite link to register failed ${error}`);
