@@ -15,6 +15,7 @@ const tokenApi = require('../../../common/services/tokenApi');
 const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config/index');
 const roles = require('../../../common/seeddata/egar_user_roles.json');
+const oneLoginApi = require("../../../common/services/oneLoginApi");
 
 const controller = require('../../../app/organisation/assignrole/post.controller');
 
@@ -38,8 +39,10 @@ describe('Organisation Assign Role Post Controller', () => {
       session: {
         u: { dbId: 'USER-DB-ID-1', fn: 'Sheev' },
         org: { i: 'ORG-ID-1', name: 'Sith' },
-        inv: { e: 'persontoinvite@random.com', fn: 'Anakin', rl: 'NormalUser' },
+        inv: { e: 'persontoinvite@random.com', fn: 'Anakin', ln: 'Test', rl: 'NormalUser' },
       },
+      get: sinon.stub().withArgs('Authorization').returns('Bearer token')
+  
     };
     res = {
       redirect: sinon.stub(),
@@ -125,6 +128,7 @@ describe('Organisation Assign Role Post Controller', () => {
   it('should render with error messages if email api rejects', () => {
     sinon.stub(config, TEMPLATE_ID).value(indexPage);
     sinon.stub(config, 'BASE_URL').value('http://www.somewhere.com');
+  
     tokenApiStub.resolves(JSON.stringify({}));
     emailServiceStub.rejects({ message: 'emailService.send Example Reject' });
     cookie = new CookieModel(req);
@@ -139,6 +143,7 @@ describe('Organisation Assign Role Post Controller', () => {
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('ExampleGeneratedHash', 'USER-DB-ID-1', 'ORG-ID-1', 'SuperUser', cookie.getInviteUserEmail());
       expect(emailServiceStub).to.have.been.calledOnceWithExactly(indexPage, 'persontoinvite@random.com', {
         firstname: 'Anakin',
+        lastname: 'Test',
         user: 'Sheev',
         org_name: 'Sith',
         base_url: 'http://www.somewhere.com',
@@ -170,6 +175,7 @@ describe('Organisation Assign Role Post Controller', () => {
       expect(tokenApiStub).to.have.been.calledOnceWithExactly('ExampleGeneratedHash', 'USER-DB-ID-1', 'ORG-ID-1', 'SuperUser', cookie.getInviteUserEmail());
       expect(emailServiceStub).to.have.been.calledOnceWithExactly(indexPage, 'persontoinvite@random.com', {
         firstname: 'Anakin',
+        lastname: 'Test',
         user: 'Sheev',
         org_name: 'Sith',
         base_url: 'http://www.somewhere.com',

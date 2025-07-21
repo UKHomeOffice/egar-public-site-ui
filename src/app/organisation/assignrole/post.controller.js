@@ -8,6 +8,7 @@ const emailService = require('../../../common/services/sendEmail');
 const tokenApi = require('../../../common/services/tokenApi');
 const config = require('../../../common/config/index');
 const roles = require('../../../common/seeddata/egar_user_roles.json');
+const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
@@ -22,6 +23,7 @@ module.exports = (req, res) => {
   const hashToken = tokenservice.generateHash(token);
   const inviterName = cookie.getUserFirstName();
   const firstName = cookie.getInviteUserFirstName();
+  const lastName = cookie.getInviteUserLastName();
   const inviterId = cookie.getUserDbId();
   const inviteOrgName = cookie.getOrganisationName();
   const inviteOrgId = cookie.getOrganisationId();
@@ -50,12 +52,13 @@ module.exports = (req, res) => {
           if(config.ONE_LOGIN_SHOW_ONE_LOGIN || config.ONE_LOGIN_POST_MIGRATION){
             notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
           }
-
+          
           emailService.send(notifyTemplate, inviteeEmail, {
             firstname: firstName,
+            lastname: lastName,
             user: inviterName,
             org_name: inviteOrgName,
-            base_url: config.BASE_URL,
+            base_url: parseUrlForNonProd(req, config.BASE_URL),
             token,
           }).then(() => {
             res.redirect('/organisation/invite/success');
