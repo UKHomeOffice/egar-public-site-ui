@@ -38,12 +38,12 @@ const postController = async (req, res) => {
   } catch (err) {
     logger.error('Failed to send email that user account is deleted');
     logger.error(err);
-  } finally {
-    req.session.destroy(() => {
-      cookie.reset();
-      res.redirect('/user/deleteconfirm');
-    });
   }
+
+  req.session.destroy(() => {
+    cookie.reset();
+    res.redirect('/user/deleteconfirm');
+  });
 };
 
 module.exports = postController;
