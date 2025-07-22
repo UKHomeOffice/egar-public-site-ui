@@ -114,7 +114,7 @@ const handleUserAuthentication = (userInfo, cookie) => {
           // if neither sid or email matches, register user. Invite token checked in Onelogin flow
           return new Promise((resolve, reject) => resolve({ redirect: ROUTES.REGISTER }));
         default:
-          logger.warning('User Id not found or email not verified during onelogin flow.');
+          logger.info('User Id not found or email not verified during onelogin flow.');
           return { redirect: ROUTES.ERROR_404 };
       }
     })
