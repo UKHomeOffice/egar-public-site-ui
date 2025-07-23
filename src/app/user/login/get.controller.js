@@ -3,7 +3,12 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const { ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL} = require("../../../common/config");
+const {
+  ONE_LOGIN_SHOW_ONE_LOGIN,
+  NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
+  BASE_URL,
+  ONE_LOGIN_POST_MIGRATION,
+} = require("../../../common/config");
 const sendEmail = require("../../../common/services/sendEmail");
 const organisationApi = require('../../../common/services/organisationApi');
 const verifyUserService = require('../../../common/services/verificationApi');
@@ -31,6 +36,10 @@ let accountUrl = BASE_URL + '/organisation'
 const isUserAuthenticated = (userSessionObject) => {
   if (!userSessionObject) return false;
   return !!(userSessionObject.dbId && userSessionObject.vr && userSessionObject.rl);
+};
+
+const isPostMigrationAndDirectAccess = () => {
+  return ONE_LOGIN_POST_MIGRATION === true;
 };
 
 const sendAdminUpdateEmail = (userObj) => {
@@ -155,6 +164,7 @@ const setUserCookies = (cookie, userData) => {
   cookie.setUserOrganisationId(organisation?.organisationId);
 };
 
+
 /**
  * Main login controller
  */
@@ -168,6 +178,9 @@ module.exports = (req, res) => {
   const { code } = req.query;
 
   if (!code) {
+     if (isPostMigrationAndDirectAccess()) {
+        return res.redirect(ROUTES.HOME);
+    }
     return res.render('app/user/login/index', {
       oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
       ONE_LOGIN_SHOW_ONE_LOGIN,
