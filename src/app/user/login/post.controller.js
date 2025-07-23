@@ -51,7 +51,7 @@ module.exports = (req, res) => {
 
           // Used to send an email and then go to the MFA token verification
           // if it displays an error message, then an email is redundant?
-          res.render('app/user/login/index', { cookie, unregistered: true, oneLoginAuthUrl });
+          res.render('app/user/login/email_not_found', { cookie, unregistered: true, oneLoginAuthUrl });
           return;
         }
         const returnedEmail = user.email;

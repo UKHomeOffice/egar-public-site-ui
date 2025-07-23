@@ -169,6 +169,11 @@ module.exports = (req, res) => {
   if (req.headers.referer && isUserAuthenticated(req.session.u)) {
     return res.redirect(ROUTES.HOME);
   }
+
+  if (isPostMigrationEnabled()) {
+    return res.redirect(ROUTES.HOME);
+  }
+
   const viewOnLoginPageForTest = req.query.testOneLogin === 'true' ;
   const cookie = new CookieModel(req);
 
