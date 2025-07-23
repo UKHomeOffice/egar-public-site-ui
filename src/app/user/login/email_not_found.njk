@@ -1,0 +1,40 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+	{{__('error_prefix') if errors or unverified or unregistered }} GAR | Sign In
+{% endblock %}
+
+{% block header %}
+{% include "header-pre-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+{% endblock %}
+
+{% block content %}
+	<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds margin-left-50 margin-top-30">
+      <h1 class="govuk-heading-l">You’re new to Submit a General Aviation Report (GAR) service</h1>
+
+      <p class="govuk-body">There is no account for your email address.</p>
+
+      <p class="govuk-body">You can <a href="{{oneLoginAuthUrl}}">create an account</a> to start using the service.</p>
+
+      <p class="govuk-body">As a new user, you'll need a GOV.UK One Login to access the service. You can create a GOV.UK One Login account if you do not already have one.</p>
+
+      <p class="govuk-body">
+        <a
+            href="/login"
+            role="button"
+            class="govuk-button govuk-button--primary govuk-!-margin-top-2 govuk-!-margin-bottom-8"
+            >
+            Return to sign in
+          </a>
+      </p>
+    </div>
+  </div>
+
+{% endblock %}
