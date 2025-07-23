@@ -9,6 +9,7 @@ const emailService = require('../../../common/services/sendEmail');
 const settings = require('../../../common/config/index');
 const oneLoginUtil = require("../../../common/utils/oneLoginAuth");
 const config = require("../../../common/config/index");
+const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
 
 module.exports = (req, res) => {
   logger.debug('In user / login post controller');
@@ -49,9 +50,15 @@ module.exports = (req, res) => {
             throw new Error(`Unexpected response from API: ${user.message}`);
           }
 
+          let template = 'index';
+
+          if (ONE_LOGIN_SHOW_ONE_LOGIN === true) {
+            template = 'email_not_found';
+          }
+
           // Used to send an email and then go to the MFA token verification
           // if it displays an error message, then an email is redundant?
-          res.render('app/user/login/email_not_found', { cookie, unregistered: true, oneLoginAuthUrl });
+          res.render(`app/user/login/${template}`, { cookie, unregistered: true, oneLoginAuthUrl });
           return;
         }
         const returnedEmail = user.email;
