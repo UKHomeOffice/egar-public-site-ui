@@ -38,9 +38,6 @@ const isUserAuthenticated = (userSessionObject) => {
   return !!(userSessionObject.dbId && userSessionObject.vr && userSessionObject.rl);
 };
 
-const isPostMigrationAndDirectAccess = () => {
-  return ONE_LOGIN_POST_MIGRATION === true;
-};
 
 const sendAdminUpdateEmail = (userObj) => {
   if (!userObj.organisation) {
@@ -178,7 +175,7 @@ module.exports = (req, res) => {
   const { code } = req.query;
 
   if (!code) {
-     if (isPostMigrationAndDirectAccess()) {
+     if (ONE_LOGIN_POST_MIGRATION === true) {
         return res.redirect(ROUTES.HOME);
     }
     return res.render('app/user/login/index', {
