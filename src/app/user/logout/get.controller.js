@@ -17,18 +17,21 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   let { state, id_token } = req.cookies || {};
 
-  // If returning from Onelogin with a "user-deleted" state
+  // If returning from Onelogin with a "user-deleted" state after delete confirm
   if (req.query?.state === 'user-deleted') {
-    return logoutAndClearCookies(req, res, cookie, '/user/deleteconfirm');
+    return logoutAndClearCookies(req, res, cookie,'/user/deleteconfirm');
   }
 
-  // If we detect valid OneLogin session cookies
+  // One login sign path
   if (state && id_token) {
     if (req.query?.action === 'user-deleted') {
       state = 'user-deleted';
     }
 
     const logoutUrl = getOneLoginLogoutUrl(req, id_token, state);
+
+    res.clearCookie('id_token');
+    res.clearCookie('state');
     return res.redirect(logoutUrl);
   }
 
