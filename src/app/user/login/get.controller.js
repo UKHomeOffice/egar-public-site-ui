@@ -165,7 +165,6 @@ const setUserCookies = (cookie, userData) => {
 };
 
 
-
 /**
  * Main login controller
  */
