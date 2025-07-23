@@ -170,10 +170,6 @@ module.exports = (req, res) => {
     return res.redirect(ROUTES.HOME);
   }
 
-  if (isPostMigrationEnabled()) {
-    return res.redirect(ROUTES.HOME);
-  }
-
   const viewOnLoginPageForTest = req.query.testOneLogin === 'true' ;
   const cookie = new CookieModel(req);
 
