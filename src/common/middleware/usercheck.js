@@ -11,8 +11,9 @@ const checkUserInCookie = (cookie) => {
 
 
 module.exports = (req, res, next) => {
+  
   const cookie = new CookieModel(req);
-
+  
   const isLoggedIn = checkUserInCookie(cookie) === false; // weird logic. To be refactored.
 
   if (isLoggedIn) {

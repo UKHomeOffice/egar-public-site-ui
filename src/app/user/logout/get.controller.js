@@ -21,11 +21,26 @@ module.exports = (req, res) => {
   if (req.query?.state === 'user-deleted') {
     return logoutAndClearCookies(req, res, cookie,'/user/deleteconfirm');
   }
+  else if(req.query?.state === 'login-error') {
+    return res.redirect('/error/loginError');
+  } else if (req.query?.state === 'service-error') {
+    return res.redirect('/error/oneLoginServiceError');
+  } else if (req.query?.state === 'invite-expired') {
+    return res.redirect('/error/inviteExpiredError');
+  }
+
+  //  if (req.query?.action === 'user-deleted') {
+  //     state = 'user-deleted';
+  //   }
+  //   else if (req.query?.action === 'loginerror') {
+  //     state = 'loginerror';
+  //   }
+
 
   // One login sign path
   if (state && id_token) {
-    if (req.query?.action === 'user-deleted') {
-      state = 'user-deleted';
+    if (req.query?.action !== null) {
+      state = req.query.action;
     }
 
     const logoutUrl = getOneLoginLogoutUrl(req, id_token, state);
