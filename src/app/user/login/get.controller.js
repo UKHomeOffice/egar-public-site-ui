@@ -83,7 +83,7 @@ const handleUserAuthentication = (res, userInfo, cookie) => {
 
       if (userData.state !== USER_STATES.VERIFIED) {
         logger.info('User Id not found or email not verified during onelogin flow.');
-        return { redirect: ROUTES.ERROR_IN_LOGIN };
+        return res.redirect('/user/logout?action=login-error');
       }
 
       const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid;
@@ -114,10 +114,10 @@ const handleUserAuthentication = (res, userInfo, cookie) => {
           });
         case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
-          return { redirect: ROUTES.ERROR_IN_LOGIN };
+          return { redirect: '/user/logout?action=login-error' };
         default:
           logger.info('User Id not found or email not verified during onelogin flow.');
-          return { redirect: ROUTES.ERROR_ONELOGIN_SERVICE };
+          return { redirect: '/user/logout?action=service-error' };
       }
     })
     .then(userData => {
@@ -181,8 +181,8 @@ module.exports = async (req, res) => {
     });
   }
 
-  if (req.query.state !== req.cookies.state) {
-    return res.redirect(ROUTES.ERROR_ONELOGIN_SERVICE);
+  if (req.query.state === req.cookies.state) {
+    return res.redirect('/user/logout?action=service-error');
   }
 
   try {
@@ -198,7 +198,7 @@ module.exports = async (req, res) => {
       if (!id_token) {
         // If for some reason, One Login service does not return a valid id_token, something is wrong with service.
         logger.error('Invalid ID Token error.');
-        return res.redirect(ROUTES.ERROR_ONELOGIN_SERVICE);
+        return res.redirect('/user/logout?action=service-error');
       }
 
       res.cookie("id_token", id_token);
@@ -209,15 +209,14 @@ module.exports = async (req, res) => {
         .then(isValid => {
           if (!isValid) {
             logger.info('Invalid jwt token received from OneLogin.');
-            res.redirect(ROUTES.ERROR_ONELOGIN_SERVICE);
-            return;
+            return res.redirect('/user/logout?action=service-error');
           }
+
           return oneLoginApi.getUserInfoFromOneLogin(access_token);
         })
         .then(userInfo => {
           if (!userInfo?.email_verified) {
-            res.redirect(ROUTES.ERROR_404);
-            return;
+            return res.redirect('/user/logout?action=login-error');
           }
 
           accountUrl = parseUrlForNonProd(req, accountUrl);
@@ -254,20 +253,14 @@ async function checkUserInvite(res, email) {
   try {
     const apiResponse = await verifyUserService.getUserInviteToken(email);
     if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
-      return res.redirect(ROUTES.ERROR_INVITE_EXPIRED);
+      // return res.redirect(ROUTES.ERROR_INVITE_EXPIRED);
+      return res.redirect('/user/logout?action=invite-expired');
     }
-    else{
-      return res.redirect(ROUTES.REGISTER);
-    }
+
+    return res.redirect(ROUTES.REGISTER);
   }
   catch (error) {
     logger.error(`Invite link to register failed ${error}`);
-    return res.redirect(ROUTES.ERROR_404);
+    return res.redirect('/user/logout?action=login-error');
   }
 }
-
-async function testFun(res, err){
-
-   return res.redirect('/user/logout?action=loginerror');
-}
-
