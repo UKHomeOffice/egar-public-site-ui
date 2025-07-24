@@ -74,11 +74,12 @@
           >Sign in or Create your GOV.UK One Login</a>
       {% endif %}
 
-
+      {% if ONE_LOGIN_SHOW_ONE_LOGIN == false and viewOnLoginPageForTest == false %}
       <h2 class="govuk-heading-m">{{ __('create_account_caption') }}</h2>
       <p class="govuk-body">
         <a href="/user/register">{{ __('title_create_account') }}</a>
       </p>
+      {% endif %}
 
       <input type="hidden" name="_csrf" value="{{csrfToken}}" />
     </form>
