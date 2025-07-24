@@ -83,12 +83,12 @@ const handleUserAuthentication = (res, userInfo, cookie) => {
 
       if (userData.state !== USER_STATES.VERIFIED) {
         logger.info('User Id not found or email not verified during onelogin flow.');
-        return { redirect: ROUTES.ERROR_404 };
+        return { redirect: ROUTES.ERROR_IN_LOGIN };
       }
 
       const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid;
       const emailMatches = email === userData.email;
-    
+
       switch (true) {
         case oneLoginSidMatches && emailMatches:
           // happy path - SID matches, email matches.
@@ -112,13 +112,12 @@ const handleUserAuthentication = (res, userInfo, cookie) => {
                 return userData;
               })
           });
-        case !oneLoginSidMatches && !emailMatches:
-          // if neither sid or email matches, register user. Invite token checked in Onelogin flow
-          return new Promise((resolve, reject) => resolve({ redirect: ROUTES.REGISTER }));
+        case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
+          // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
+          return { redirect: ROUTES.ERROR_IN_LOGIN };
         default:
           logger.info('User Id not found or email not verified during onelogin flow.');
-          //return { redirect: '/user/logout?action=loginerror' };
-          return await testFun(res, 'errr 2');
+          return { redirect: ROUTES.ERROR_ONELOGIN_SERVICE };
       }
     })
     .then(userData => {
@@ -129,14 +128,11 @@ const handleUserAuthentication = (res, userInfo, cookie) => {
       return userApi.getDetails(email)
         .then(details => {
           const { organisation } = details || {};
-          
-          if(!userData){
-            return testFun(res, 'testerr');
-          }
+
           setUserCookies(cookie, {
             ...userData, organisation, state: userData.state
           });
-          
+
           return { redirect: ROUTES.HOME };
         });
     });
@@ -164,90 +160,84 @@ const setUserCookies = (cookie, userData) => {
 /**
  * Main login controller
  */
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   if (req.headers.referer && isUserAuthenticated(req.session.u)) {
     return res.redirect(ROUTES.HOME);
   }
+
   const viewOnLoginPageForTest = req.query.testOneLogin === 'true' ;
   const cookie = new CookieModel(req);
 
   const { code } = req.query;
 
   if (!code) {
+     if (ONE_LOGIN_POST_MIGRATION === true) {
+        return res.redirect(ROUTES.HOME);
+    }
     return res.render('app/user/login/index', {
       oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
       ONE_LOGIN_SHOW_ONE_LOGIN,
       viewOnLoginPageForTest
     });
   }
-  
+
   if (req.query.state !== req.cookies.state) {
-    return res.redirect(ROUTES.ERROR_404);
+    return res.redirect(ROUTES.ERROR_ONELOGIN_SERVICE);
   }
 
+  try {
+
+  } catch (error) {
+    if (error) {
+      logger.error(`Login process failed ${error}`);
+    }
+  }
   oneLoginApi.sendOneLoginTokenRequest(req, code, oneLoginUtil)
     .then(({ access_token, id_token }) => {
+
       if (!id_token) {
+        // If for some reason, One Login service does not return a valid id_token, something is wrong with service.
         logger.error('Invalid ID Token error.');
-        res.render('app/user/login/index', {
-          oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
-          ONE_LOGIN_SHOW_ONE_LOGIN
-        });
-        return Promise.reject();
+        return res.redirect(ROUTES.ERROR_ONELOGIN_SERVICE);
       }
-      console.log('ANother TESTTT');
+
       res.cookie("id_token", id_token);
 
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         oneLoginUtil.verifyJwt(id_token, req.cookies.nonce, resolve);
       })
         .then(isValid => {
           if (!isValid) {
             logger.info('Invalid jwt token received from OneLogin.');
-            res.render('app/user/login/index', {
-              oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(res),
-              ONE_LOGIN_SHOW_ONE_LOGIN
-            });
-            return Promise.reject();
+            res.redirect(ROUTES.ERROR_ONELOGIN_SERVICE);
+            return;
           }
-
           return oneLoginApi.getUserInfoFromOneLogin(access_token);
         })
         .then(userInfo => {
           if (!userInfo?.email_verified) {
             res.redirect(ROUTES.ERROR_404);
-            return Promise.reject();
+            return;
           }
 
           accountUrl = parseUrlForNonProd(req, accountUrl);
 
           return handleUserAuthentication(res, userInfo, cookie)
             .then(({ redirect }) => {
-
               if (redirect === ROUTES.HOME) {
                 delete req.cookies.nonce;
                 delete req.cookies.state;
               } else if (redirect === ROUTES.REGISTER) {
                 req.session.access_token = access_token;
               }
-
-              return new Promise((resolve, reject) => {
-                req.session.save(err => {
-                  if (err) {
-                    logger.error('Session save error:', err);
-                    reject(err);
-                  } else {
-                    logger.info('Session saved successfully');
-                    resolve(redirect);
-                  }
-                });
-              });
+              return redirect;
             })
-            .then(async redirect => {
+            .then(redirect => {
               res.set('Referer', req.headers.host)
               if (redirect === ROUTES.REGISTER) {
                 return checkUserInvite(res, userInfo.email);
               }
+              req.session.save()
               return res.redirect(redirect);
             });
         });
@@ -256,7 +246,6 @@ module.exports = (req, res) => {
       if (error) {
         logger.error(`Login process failed ${error}`);
       }
-      return res.redirect(ROUTES.ERROR_404);
     });
 };
 
