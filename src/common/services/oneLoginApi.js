@@ -73,6 +73,7 @@ module.exports = {
         // eslint-disable-next-line camelcase
         client_assertion: jwt,
       };
+    
       request.post({
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         url: `${oneLoginIntegrationUrl}/token`,

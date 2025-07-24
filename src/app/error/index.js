@@ -19,5 +19,14 @@ router.get('/error/inviteExpiredError', (req, res) => {
   res.render('app/error/inviteExpiredError');
 });
 
+router.get('/error/oneLoginServiceError', (req, res) => {
+  res.status(410);
+  res.render('app/error/oneLoginServiceError');
+});
+
+router.get('/error/loginError', (req, res) => {
+ // res.status(410)
+  res.render('app/error/loginError');
+});
 // Export
 module.exports = { router };

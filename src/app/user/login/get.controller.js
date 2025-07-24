@@ -15,6 +15,8 @@ const ROUTES = {
   ERROR_404: '/error/404',
   REGISTER: '/onelogin/register',
   ERROR_INVITE_EXPIRED: '/error/inviteExpiredError',
+  ERROR_IN_LOGIN: '/error/loginError',
+  ERROR_ONELOGIN_SERVICE: '/error/oneLoginServiceError',
 };
 
 const USER_STATES = {
@@ -70,10 +72,10 @@ const sendAdminUpdateEmail = (userObj) => {
  * @param {Object} cookie - Cookie model instance
  * @returns {Promise<Object>} - User authentication result
  */
-const handleUserAuthentication = (userInfo, cookie) => {
+const handleUserAuthentication = (res, userInfo, cookie) => {
   const { email, sub: oneLoginSid } = userInfo;
   return userApi.userSearch(email, oneLoginSid)
-    .then(userData => {
+    .then(async userData => {
 
       if (!userData?.userId) {
         return { redirect: ROUTES.REGISTER };
@@ -86,7 +88,7 @@ const handleUserAuthentication = (userInfo, cookie) => {
 
       const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid;
       const emailMatches = email === userData.email;
-
+    
       switch (true) {
         case oneLoginSidMatches && emailMatches:
           // happy path - SID matches, email matches.
@@ -115,7 +117,8 @@ const handleUserAuthentication = (userInfo, cookie) => {
           return new Promise((resolve, reject) => resolve({ redirect: ROUTES.REGISTER }));
         default:
           logger.info('User Id not found or email not verified during onelogin flow.');
-          return { redirect: ROUTES.ERROR_404 };
+          //return { redirect: '/user/logout?action=loginerror' };
+          return await testFun(res, 'errr 2');
       }
     })
     .then(userData => {
@@ -126,11 +129,14 @@ const handleUserAuthentication = (userInfo, cookie) => {
       return userApi.getDetails(email)
         .then(details => {
           const { organisation } = details || {};
-
+          
+          if(!userData){
+            return testFun(res, 'testerr');
+          }
           setUserCookies(cookie, {
             ...userData, organisation, state: userData.state
           });
-
+          
           return { redirect: ROUTES.HOME };
         });
     });
@@ -174,7 +180,7 @@ module.exports = (req, res) => {
       viewOnLoginPageForTest
     });
   }
-
+  
   if (req.query.state !== req.cookies.state) {
     return res.redirect(ROUTES.ERROR_404);
   }
@@ -189,7 +195,7 @@ module.exports = (req, res) => {
         });
         return Promise.reject();
       }
-
+      console.log('ANother TESTTT');
       res.cookie("id_token", id_token);
 
       return new Promise(resolve => {
@@ -215,7 +221,7 @@ module.exports = (req, res) => {
 
           accountUrl = parseUrlForNonProd(req, accountUrl);
 
-          return handleUserAuthentication(userInfo, cookie)
+          return handleUserAuthentication(res, userInfo, cookie)
             .then(({ redirect }) => {
 
               if (redirect === ROUTES.HOME) {
@@ -270,3 +276,9 @@ async function checkUserInvite(res, email) {
     return res.redirect(ROUTES.ERROR_404);
   }
 }
+
+async function testFun(res, err){
+
+   return res.redirect('/user/logout?action=loginerror');
+}
+
