@@ -111,7 +111,7 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
             userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
               .then(() => {
                 userData.oneLoginSid = oneLoginSid;
-                return userData;
+                return resolve(userData);
               }));
         case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
