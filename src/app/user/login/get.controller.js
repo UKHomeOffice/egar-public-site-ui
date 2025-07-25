@@ -119,7 +119,6 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
 
         default:
           logger.info('User Id not found or email not verified during onelogin flow.');
-          //return { redirect: '/user/logout?action=service-error' };
           return redirectErrorPage(req, res, 'service-error');
       }
     })
