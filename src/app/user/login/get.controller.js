@@ -85,7 +85,7 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
       if (userData.state !== USER_STATES.VERIFIED) {
         logger.info('User Id not found or email not verified during onelogin flow.');
         return redirectErrorPage(req, res, 'login-error');
-        
+
       }
 
       const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid;
@@ -107,7 +107,7 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
           );
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve, reject) =>
             userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
               .then(() => {
                 userData.oneLoginSid = oneLoginSid;
@@ -213,7 +213,7 @@ module.exports = async (req, res) => {
         .then(userInfo => {
           if (!userInfo?.email_verified) {
             return redirectErrorPage(req, res, 'login-error');
-            
+
           }
 
           accountUrl = parseUrlForNonProd(req, accountUrl);
