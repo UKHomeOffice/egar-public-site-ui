@@ -109,13 +109,13 @@ const handleUserAuthentication = (userInfo, cookie) => {
           );
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve, reject) =>
             userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
               .then(() => {
                 userData.oneLoginSid = oneLoginSid;
                 return userData;
               })
-          });
+          );
         case !oneLoginSidMatches && !emailMatches:
           // if neither sid or email matches, register user. Invite token checked in Onelogin flow
           return new Promise((resolve, reject) => resolve({ redirect: ROUTES.REGISTER }));
