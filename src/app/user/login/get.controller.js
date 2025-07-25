@@ -112,8 +112,7 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
               .then(() => {
                 userData.oneLoginSid = oneLoginSid;
                 return userData;
-              })
-          });
+              }));
         case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
           return redirectErrorPage(req, res, 'login-error');
