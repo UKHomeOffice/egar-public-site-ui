@@ -18,6 +18,7 @@ describe('Welcome Get Controller', () => {
 
     req = {
       get: sinon.stub(),
+      cookies: {errorPage: ''},
     };
     res = {
       session: {cookies: {}},
