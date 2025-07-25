@@ -72,13 +72,12 @@
           role="button"
           class="govuk-button govuk-button--secondary govuk-!-margin-top-2 govuk-!-margin-bottom-8"
           >Sign in or Create your GOV.UK One Login</a>
-      {% endif %}
-
-
+      {% else %}
       <h2 class="govuk-heading-m">{{ __('create_account_caption') }}</h2>
       <p class="govuk-body">
         <a href="/user/register">{{ __('title_create_account') }}</a>
       </p>
+      {% endif %}
 
       <input type="hidden" name="_csrf" value="{{csrfToken}}" />
     </form>
