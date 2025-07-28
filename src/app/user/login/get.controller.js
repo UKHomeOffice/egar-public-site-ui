@@ -157,6 +157,8 @@ const setUserCookies = (cookie, userData) => {
   cookie.setUserOrganisationId(organisation?.organisationId);
 };
 
+let global_id_token = null;
+
 /**
  * Main login controller
  */
@@ -190,6 +192,8 @@ module.exports = async (req, res) => {
     .then(({ access_token, id_token }) => {
 
       res.cookie("id_token", id_token);
+      global_id_token = id_token;
+
       if (!id_token) {
         // If for some reason, One Login service does not return a valid id_token, something is wrong with service.
         logger.error('Invalid ID Token error.');
@@ -260,6 +264,6 @@ async function checkUserInvite(req, res, email) {
 
 function redirectErrorPage(req, res, errorPage) {
   res.cookie("errorPage", errorPage);
-  return getOneLoginLogoutUrl(req, req.cookies.id_token, req.cookies.state);
+  return getOneLoginLogoutUrl(req, global_id_token, req.cookies.state);
 }
 
