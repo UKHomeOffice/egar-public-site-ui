@@ -83,12 +83,11 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
 
       if (userData.state !== USER_STATES.VERIFIED) {
         logger.error('User email not verified during onelogin flow.');
-        return redirectErrorPage(req, res, 'login-error');
-
+        return { redirect: redirectErrorPage(req, res, 'login-error')};
       }
 
       const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid;
-      const emailMatches = email === userData.email;
+      const emailMatches = email.toLowerCase() === userData.email.toLowerCase();
 
       switch (true) {
         case oneLoginSidMatches && emailMatches:
@@ -116,7 +115,6 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
           logger.error('login error: User SID does not match but email matches.');
           return {redirect: redirectErrorPage(req, res, 'login-error')};
-
         default:
           logger.error('User Id not found or email not verified during onelogin flow.');
           return {redirect: redirectErrorPage(req, res, 'service-error')};
