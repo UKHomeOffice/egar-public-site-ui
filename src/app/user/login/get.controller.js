@@ -77,13 +77,12 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
   const { email, sub: oneLoginSid } = userInfo;
   return userApi.userSearch(email, oneLoginSid)
     .then(async userData => {
-
       if (!userData?.userId) {
         return { redirect: ROUTES.REGISTER };
       }
 
       if (userData.state !== USER_STATES.VERIFIED) {
-        logger.info('User Id not found or email not verified during onelogin flow.');
+        logger.error('User email not verified during onelogin flow.');
         return redirectErrorPage(req, res, 'login-error');
 
       }
@@ -109,17 +108,18 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
           // user email exists, but onelogin is null or does not match - action, update SID
           return new Promise((resolve, reject) =>
             userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
-              .then(() => {
+              .then((e) => {
                 userData.oneLoginSid = oneLoginSid;
                 return resolve(userData);
               }));
         case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
-          return redirectErrorPage(req, res, 'login-error');
+          logger.error('login error: User SID does not match but email matches.');
+          return {redirect: redirectErrorPage(req, res, 'login-error')};
 
         default:
-          logger.info('User Id not found or email not verified during onelogin flow.');
-          return redirectErrorPage(req, res, 'service-error');
+          logger.error('User Id not found or email not verified during onelogin flow.');
+          return {redirect: redirectErrorPage(req, res, 'service-error')};
       }
     })
     .then(userData => {
@@ -203,7 +203,7 @@ module.exports = async (req, res) => {
       })
         .then(isValid => {
           if (!isValid) {
-            logger.info('Invalid jwt token received from OneLogin.');
+            logger.error('Invalid jwt token received from OneLogin.');
             return redirectErrorPage(req, res, 'service-error');
           }
           return oneLoginApi.getUserInfoFromOneLogin(access_token);
@@ -226,11 +226,12 @@ module.exports = async (req, res) => {
               }
               return redirect;
             })
-            .then(redirect => {
+            .then(async (redirect) => {
               res.set('Referer', req.headers.host)
               if (redirect === ROUTES.REGISTER) {
-                return checkUserInvite(req, res, userInfo.email);
+                redirect = await checkUserInvite(req, res, userInfo.email);
               }
+
               req.session.save()
               return res.redirect(redirect);
             });
@@ -248,10 +249,11 @@ async function checkUserInvite(req, res, email) {
   try {
     const apiResponse = await verifyUserService.getUserInviteToken(email);
     if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
+      logger.error('Invite link to register expired or already used.');
       return redirectErrorPage(req, res, 'invite-expired');
     }
 
-    return res.redirect(ROUTES.REGISTER);
+    return ROUTES.REGISTER;
   }
   catch (error) {
     logger.error(`Invite link to register failed ${error}`);
@@ -260,9 +262,7 @@ async function checkUserInvite(req, res, email) {
 }
 
 function redirectErrorPage(req, res, errorPage) {
-res.cookie("errorPage", errorPage);
-
-const logoutUrl = getOneLoginLogoutUrl(req, req.cookies.id_token, req.cookies.state);
-return res.redirect(logoutUrl);
+  res.cookie("errorPage", errorPage);
+  return getOneLoginLogoutUrl(req, req.cookies.id_token, req.cookies.state);
 }
 
