@@ -182,7 +182,7 @@ module.exports = async (req, res) => {
   }
 
   if (req.query?.state !== req.cookies.state) {
-    return redirectErrorPage(req, res, 'service-error');
+    return res.redirect(redirectErrorPage(req, res, 'service-error'));
   }
 
 
@@ -193,7 +193,7 @@ module.exports = async (req, res) => {
       if (!id_token) {
         // If for some reason, One Login service does not return a valid id_token, something is wrong with service.
         logger.error('Invalid ID Token error.');
-        return redirectErrorPage(req, res, 'service-error');
+        return res.redirect(redirectErrorPage(req, res, 'service-error'));
       }
 
       return new Promise((resolve) => {
@@ -202,14 +202,13 @@ module.exports = async (req, res) => {
         .then(isValid => {
           if (!isValid) {
             logger.error('Invalid jwt token received from OneLogin.');
-            return redirectErrorPage(req, res, 'service-error');
+            return res.redirect(redirectErrorPage(req, res, 'service-error'));
           }
           return oneLoginApi.getUserInfoFromOneLogin(access_token);
         })
         .then(userInfo => {
           if (!userInfo?.email_verified) {
-            return redirectErrorPage(req, res, 'login-error');
-
+            return res.redirect(redirectErrorPage(req, res, 'login-error'));
           }
 
           accountUrl = parseUrlForNonProd(req, accountUrl);
