@@ -82,7 +82,7 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
       }
 
       if (userData.state !== USER_STATES.VERIFIED) {
-        logger.info('User Id not found or email not verified during onelogin flow.');
+        logger.error('User email not verified during onelogin flow.');
         return redirectErrorPage(req, res, 'login-error');
 
       }
@@ -114,10 +114,11 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
               }));
         case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
+          logger.error('login error: User SID does not match but email matches.');
           return {redirect: redirectErrorPage(req, res, 'login-error')};
 
         default:
-          logger.info('User Id not found or email not verified during onelogin flow.');
+          logger.error('User Id not found or email not verified during onelogin flow.');
           return {redirect: redirectErrorPage(req, res, 'service-error')};
       }
     })
@@ -202,7 +203,7 @@ module.exports = async (req, res) => {
       })
         .then(isValid => {
           if (!isValid) {
-            logger.info('Invalid jwt token received from OneLogin.');
+            logger.error('Invalid jwt token received from OneLogin.');
             return redirectErrorPage(req, res, 'service-error');
           }
           return oneLoginApi.getUserInfoFromOneLogin(access_token);
