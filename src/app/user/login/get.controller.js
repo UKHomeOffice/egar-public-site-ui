@@ -249,6 +249,7 @@ async function checkUserInvite(req, res, email) {
   try {
     const apiResponse = await verifyUserService.getUserInviteToken(email);
     if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
+      logger.error('Invite link to register expired or already used.');
       return redirectErrorPage(req, res, 'invite-expired');
     }
 
