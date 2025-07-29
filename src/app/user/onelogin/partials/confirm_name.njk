@@ -37,7 +37,7 @@
       </div>
 
       <div style="margin-top: 55px;">
-        <form method="post" action="/onelogin/register">
+        <form method="post" action="/onelogin/register" class="prevent-double-click">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
             <div class="govuk-checkboxes govuk-checkboxes--small" id="nameDeclaration">
               <div class="govuk-checkboxes__item">
@@ -58,4 +58,3 @@
         </form>
       </div>
     </div>
-
