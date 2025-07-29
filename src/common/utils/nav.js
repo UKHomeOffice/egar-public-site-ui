@@ -6,6 +6,7 @@ const flagpole = require('../../common/middleware/flagpole');
 const usercheck = require('../../common/middleware/usercheck');
 const csrfcheck = require('../../common/middleware/csrfcheck');
 const parseForm = require('../../common/middleware/parseForm');
+const pageAccess = require('../middleware/pageAccess');
 
 const logger = require('./logger')(__filename);
 const CookieModel = require('../models/Cookie.class');
@@ -19,9 +20,9 @@ const buildRouterAndPaths = (path, getController, postController) => {
   };
 
   // Routing
-  router.get(paths.index, flagpole, usercheck, csrfcheck, getController);
+  router.get(paths.index, flagpole, usercheck, csrfcheck, pageAccess, getController);
   if (postController) {
-    router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, postController);
+    router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, pageAccess, postController);
   }
 
   return { router, paths };

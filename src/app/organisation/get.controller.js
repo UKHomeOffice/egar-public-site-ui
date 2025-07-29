@@ -4,11 +4,12 @@ const CookieModel = require('../../common/models/Cookie.class');
 const orgApi = require('../../common/services/organisationApi');
 const logger = require('../../common/utils/logger')(__filename);
 const pagination = require('../../common/utils/pagination');
-const permissionLevels = require('../../common/utils/permissionLevels');
+const {permissionLevels} = require('../../common/utils/permissionLevels');
 
 module.exports = (req, res) => {
   logger.debug('In organisation get controller');
   const cookie = new CookieModel(req);
+ 
   const errMSg = { message: 'Failed to get orgusers' };
   const userPermissions = permissionLevels[cookie.getUserRole()];
   const currentPage = pagination.getCurrentPage(req, '/organisation');
