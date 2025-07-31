@@ -15,7 +15,7 @@ module.exports = (req, res) => {
   }
   
   if(cookie.getUserRole() !== 'Admin'){
-    roles = roles.filter(role => role.id !== '0');
+    roles = roles.filter(role => role.id !== 'Admin');
   }
 
   orgApi.getUserById(userId)

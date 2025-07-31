@@ -6,7 +6,7 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
  
   if(cookie.getUserRole() !== 'Admin'){
-    roles = roles.filter(role => role.id !== '0');
+    roles = roles.filter(role => role.name !== 'Admin');
   }
 
   res.render('app/organisation/assignrole/index', { cookie, roles });

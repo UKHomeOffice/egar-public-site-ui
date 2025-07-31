@@ -31,9 +31,7 @@ describe('Organisation Assign Role Get Controller', () => {
 
   it('should render the appropriate page', async () => {
     const cookie = new CookieModel(req);
-    if(cookie.getUserRole() !== 'Admin') {
-      roles = roles.filter(role => role.id !== '0');
-    }
+    cookie.setUserRole('Admin');
 
     await controller(req, res);
 
