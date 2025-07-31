@@ -35,6 +35,7 @@ const cspHeader = require('./common/middleware/cspHeader.js');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const {IS_HTTPS_SERVER, SAME_SITE_VALUE} = require("./common/config");
+const csp = require('./app/csp');
 
 // Global constants
 const PORT = (process.env.PORT || 3000);
@@ -125,6 +126,11 @@ function initialiseGlobalMiddleware(app) {
     extended: true,
   }));
 
+  //Set up CSP policy and route, must come before CSRF
+  app.use(cspHeader.cspReportingHeader);
+  app.use(csp.router);
+
+
   app.use(csrf({
     cookie: {
       httpOnly: true,
@@ -152,7 +158,6 @@ function initialiseGlobalMiddleware(app) {
     next();
   });
 
-  app.use(cspHeader.cspReportingHeader);
 
   logger.info('Set CSRF Token');
   app.use(helmet());

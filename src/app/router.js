@@ -155,8 +155,7 @@ module.exports.bind = (app) => {
   app.use(peopleExport.router);
   app.use(cookies.router);
   app.use(help.router);
-  app.use(accessibility.router)
-  app.use(csp.router)
+  app.use(accessibility.router);
   app.use(unavailable.router);
   app.use(printmanifest.router);
   app.use(resperson.router);

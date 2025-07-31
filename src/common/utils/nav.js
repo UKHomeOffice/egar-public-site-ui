@@ -36,7 +36,9 @@ const buildRouterAndPathsNoUserCheck = (path, getController, postController) => 
   };
 
   // Routing
-  router.get(paths.index, flagpole, csrfcheck, getController);
+  if(getController){
+    router.get(paths.index, flagpole, csrfcheck, getController);
+  }
   if (postController) {
     router.post(paths.index, flagpole, parseForm, csrfcheck, postController);
   }
