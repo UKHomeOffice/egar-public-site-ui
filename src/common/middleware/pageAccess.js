@@ -1,14 +1,21 @@
 const CookieModel = require('../models/Cookie.class');
 const logger = require('../utils/logger')(__filename);
 
-module.exports = (roles) =>
-  (req, res, next) => {
+const permissions = {
+  'organisation': ['User'],
+  'assignrole': ['User'],
+}
+
+
+module.exports = (req, res, next) => {
   const cookie = new CookieModel(req);
   const userRole = cookie.getUserRole();
+  const page = req.originalUrl.split('/')[1];
 
-  if (!roles.includes(userRole) === false) {
-    logger.info(`Can not access the page`);
+  if (!!permissions[page] && permissions[page].includes(userRole)) {
+    logger.info(`Can not access the ${page} page`);
     return res.redirect('/home');
   }
-  next();
+
+  next()
 };

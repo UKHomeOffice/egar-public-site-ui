@@ -20,8 +20,8 @@ const paths = {
 }
 
 // Routing
-router.get(paths.index, flagpole, usercheck,csrfcheck, pageAccess(["Admin", "Manager"]), getController);
-router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck,pageAccess(["Admin", "Manager"]), postController);
+router.get(paths.index, flagpole, usercheck,csrfcheck, getController);
+router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, postController);
 
 // Export
 module.exports = {
