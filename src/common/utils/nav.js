@@ -20,9 +20,9 @@ const buildRouterAndPaths = (path, getController, postController) => {
   };
 
   // Routing
-  router.get(paths.index, flagpole, usercheck, csrfcheck, pageAccess, getController);
+  router.get(paths.index, flagpole, usercheck, csrfcheck, pageAccess(["Admin", "Manager"]), getController);
   if (postController) {
-    router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, pageAccess, postController);
+    router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, pageAccess(["Admin", "Manager"]), postController);
   }
 
   return { router, paths };

@@ -16,12 +16,12 @@ const postController = require('./post.controller')
 const router = new express.Router()
 const indexPath = '/organisation/assignrole'
 const paths = {
-  index: indexPath 
+  index: indexPath
 }
 
 // Routing
-router.get(paths.index, flagpole, usercheck,csrfcheck, pageAccess, getController);
-router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck,pageAccess, postController);
+router.get(paths.index, flagpole, usercheck,csrfcheck, pageAccess(["Admin", "Manager"]), getController);
+router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck,pageAccess(["Admin", "Manager"]), postController);
 
 // Export
 module.exports = {
