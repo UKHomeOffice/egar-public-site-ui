@@ -1,7 +1,7 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const orgApi = require('../../../common/services/organisationApi');
-const roles = require('../../../common/seeddata/egar_user_roles');
+let roles = require('../../../common/seeddata/egar_user_roles');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -12,6 +12,10 @@ module.exports = (req, res) => {
   if (userId === undefined) {
     res.redirect('/organisation');
     return;
+  }
+  
+  if(cookie.getUserRole() !== 'Admin'){
+    roles = roles.filter(role => role.name !== 'Admin');
   }
 
   orgApi.getUserById(userId)

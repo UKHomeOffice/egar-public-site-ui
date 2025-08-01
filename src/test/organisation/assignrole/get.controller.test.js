@@ -6,7 +6,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const roles = require('../../../common/seeddata/egar_user_roles.json');
+let roles = require('../../../common/seeddata/egar_user_roles.json');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const controller = require('../../../app/organisation/assignrole/get.controller');
@@ -31,6 +31,7 @@ describe('Organisation Assign Role Get Controller', () => {
 
   it('should render the appropriate page', async () => {
     const cookie = new CookieModel(req);
+    cookie.setUserRole('Admin');
 
     await controller(req, res);
 

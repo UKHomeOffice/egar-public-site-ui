@@ -11,13 +11,25 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const orgApi = require('../../../common/services/organisationApi');
-const roles = require('../../../common/seeddata/egar_user_roles.json');
+let roles = require('../../../common/seeddata/egar_user_roles.json');
 
 const controller = require('../../../app/organisation/editusers/post.controller');
+let { cookie } = require('request');
 
 describe('Organisation Edit Users Post Controller', () => {
   let req; let res; let orgApiStub; let sessionSaveStub;
-
+  const nonAdminRoles = [
+    {
+      id: '1',
+      name: 'Manager',
+      description: 'A manager is able to create, edit, submit or cancel a GAR. A manager can create, edit and delete people or aircraft. A manager can invite, edit or promote users, but cannot promote a user to admin or demote an admin.'
+    },
+    {
+      id: '2',
+      name: 'User',
+      description: 'A user can create, edit, submit or cancel a GAR. A user can create, edit and delete people or aircraft. A user has no ability to edit or view an organisation'
+    }
+  ];
   beforeEach(() => {
     chai.use(sinonChai);
 
@@ -41,6 +53,7 @@ describe('Organisation Edit Users Post Controller', () => {
 
     orgApiStub = sinon.stub(orgApi, 'editUser');
     sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
+
   });
 
   afterEach(() => {
@@ -53,6 +66,7 @@ describe('Organisation Edit Users Post Controller', () => {
       req.body.lastName = '';
       req.body.role = '';
       cookie = new CookieModel(req);
+      cookie.setUserRole('Admin');
 
       const callController = async () => {
         await controller(req, res);
@@ -65,12 +79,13 @@ describe('Organisation Edit Users Post Controller', () => {
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editusers/index', {
           cookie,
           orgUser: {
+            userId: 'EDIT-BADDIE-1',
             firstName: '',
             lastName: '',
             role: '',
-            userId: 'EDIT-BADDIE-1',
+
           },
-          roles,
+          roles: nonAdminRoles,
           errors: [
             new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter given names'),
             new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter a surname'),
@@ -84,7 +99,8 @@ describe('Organisation Edit Users Post Controller', () => {
       req.body.firstName = 'abcdefghijklmnopqrstuvwxyzabcdefghijk';
       req.body.lastName = 'abcdefghijklmnopqrstuvwxyzabcdefghij';
       cookie = new CookieModel(req);
-
+      cookie.setUserRole('Admin');
+      
       const callController = async () => {
         await controller(req, res);
       };
@@ -101,7 +117,7 @@ describe('Organisation Edit Users Post Controller', () => {
             role: 'Individual',
             userId: 'EDIT-BADDIE-1',
           },
-          roles,
+          roles: nonAdminRoles,
           errors: [
             new ValidationRule(validator.isValidStringLength, 'firstName', 'abcdefghijklmnopqrstuvwxyzabcdefghijk', 'Given names must be 35 characters or less'),
             new ValidationRule(validator.isValidStringLength, 'lastName', 'abcdefghijklmnopqrstuvwxyzabcdefghij', 'Surname must be 35 characters or less'),

@@ -3,11 +3,12 @@ const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const orgApi = require('../../../common/services/organisationApi');
-const roles = require('../../../common/seeddata/egar_user_roles');
+let roles = require('../../../common/seeddata/egar_user_roles');
 
 module.exports = (req, res) => {
   logger.debug('In organisation / editusers post controller');
   const cookie = new CookieModel(req);
+  
 
   const orgUser = {
     userId: req.session.editUserId,
@@ -15,6 +16,10 @@ module.exports = (req, res) => {
     lastName: req.body.lastName,
     role: req.body.role,
   };
+
+  if(cookie.getUserRole() !== 'Admin'){
+     roles = roles.filter(role => role.name !== 'Admin');
+  }
 
   validator.validateChains(validations.validations(req))
     .then(() => {

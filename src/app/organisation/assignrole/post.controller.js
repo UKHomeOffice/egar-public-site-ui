@@ -7,7 +7,7 @@ const tokenservice = require('../../../common/services/create-token');
 const emailService = require('../../../common/services/sendEmail');
 const tokenApi = require('../../../common/services/tokenApi');
 const config = require('../../../common/config/index');
-const roles = require('../../../common/seeddata/egar_user_roles.json');
+let roles = require('../../../common/seeddata/egar_user_roles.json');
 const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
 
 module.exports = (req, res) => {
@@ -16,6 +16,10 @@ module.exports = (req, res) => {
   const { role } = req.body;
   cookie.setInviteUserRole(role);
   logger.debug(`Invitee role: ${role}`);
+
+  if(cookie.getUserRole() !== 'Admin'){
+    roles = roles.filter(role => role.name !== 'Admin');
+  }
 
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';

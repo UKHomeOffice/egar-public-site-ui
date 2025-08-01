@@ -14,10 +14,11 @@ const tokenService = require('../../../common/services/create-token');
 const tokenApi = require('../../../common/services/tokenApi');
 const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config/index');
-const roles = require('../../../common/seeddata/egar_user_roles.json');
+let roles = require('../../../common/seeddata/egar_user_roles.json');
 const oneLoginApi = require("../../../common/services/oneLoginApi");
 
 const controller = require('../../../app/organisation/assignrole/post.controller');
+let { cookie } = require('request');
 
 
 describe('Organisation Assign Role Post Controller', () => {
@@ -61,6 +62,7 @@ describe('Organisation Assign Role Post Controller', () => {
   it('should render message when role empty', () => {
     req.body.role = '';
     cookie = new CookieModel(req);
+    cookie.setUserRole('Admin');
 
     const callController = async () => {
       await controller(req, res);
@@ -85,6 +87,7 @@ describe('Organisation Assign Role Post Controller', () => {
     tokenApiStub.rejects({ message: 'tokenApi.generateHash Example Reject' });
     cookie = new CookieModel(req);
     cookie.setInviteUserEmail('inviteemail@mail.com')
+    cookie.setUserRole('Admin');
 
     const callController = async () => {
       await controller(req, res);
@@ -107,6 +110,7 @@ describe('Organisation Assign Role Post Controller', () => {
   it('should render with error messages if api returns one', () => {
     tokenApiStub.resolves(JSON.stringify({ message: 'User ID not found' }));
     cookie = new CookieModel(req);
+    cookie.setUserRole('Admin');
 
     const callController = async () => {
       await controller(req, res);
@@ -132,6 +136,7 @@ describe('Organisation Assign Role Post Controller', () => {
     tokenApiStub.resolves(JSON.stringify({}));
     emailServiceStub.rejects({ message: 'emailService.send Example Reject' });
     cookie = new CookieModel(req);
+    cookie.setUserRole('Admin');
 
     const callController = async () => {
       await controller(req, res);
