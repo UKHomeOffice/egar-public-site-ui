@@ -37,12 +37,14 @@ async function handleGivenNameSubmission(req, res) {
     lastName = lastName.trim();
 
     const fnameChain = [
+      new ValidationRule(validator.isNotEmpty, 'userFname', firstName, 'Enter your given names'),
       new ValidationRule(validator.validFirstNameLength, 'userFname', firstName, `Enter given names of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`),
       new ValidationRule(validator.nameHasNoNumbers, 'userFname', firstName, 'Your given names cannot include numbers'),
       new ValidationRule(validator.validName, 'userFname', firstName, 'Your given names cannot include special characters or numbers'),
-        new ValidationRule(validator.notEmpty, 'userFname', firstName, 'Enter your given names'),
+      new ValidationRule(validator.notEmpty, 'userFname', firstName, 'Enter your given names'),
     ];
     const lnameChain = [
+      new ValidationRule(validator.isNotEmpty, 'userLname', lastName, 'Enter your family name'),
       new ValidationRule(validator.nameHasNoNumbers, 'userLname', lastName, 'Your family name cannot include numbers'),
       new ValidationRule(validator.validName, 'userLname', lastName, 'Your family name cannot include special characters or numbers'),
       new ValidationRule(validator.validSurnameLength, 'userLname', lastName, `Please enter a family name of at most ${USER_SURNAME_CHARACTER_COUNT} characters`),

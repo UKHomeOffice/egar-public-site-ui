@@ -7,8 +7,8 @@ const { MAX_STRING_LENGTH } = require('../../../common/config/index');
 const {USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT} = require("../../../common/config");
 
 module.exports = (req, res) => {
-  const firstName = req.body.firstname.trim();
-  const lastName = req.body.lastname.trim();
+  const firstName = req.body.firstname;
+  const lastName = req.body.lastname;
 
   delete req.session.successMsg;
   delete req.session.successHeader;
@@ -18,6 +18,7 @@ module.exports = (req, res) => {
 
   // Define a validation chain for user registeration fields
   const firstNameChain = [
+    new ValidationRule(validator.isNotEmpty, 'firstname', firstName, 'Enter your given names'),
     new ValidationRule(validator.nameHasNoNumbers, 'firstname', firstName, 'Your given names cannot include numbers'),
     new ValidationRule(validator.isValidStringLength, 'firstname', firstName, `Given names must be ${MAX_STRING_LENGTH} characters or less`),
     new ValidationRule(validator.validName, 'firstname', firstName, 'Your given names cannot include special characters or numbers'),
@@ -25,6 +26,7 @@ module.exports = (req, res) => {
     new ValidationRule(validator.notEmpty, 'firstname', firstName, 'Enter your given names'),
   ];
   const lnameChain = [
+    new ValidationRule(validator.isNotEmpty, 'lastname', lastName, 'Enter your family name'),
     new ValidationRule(validator.nameHasNoNumbers, 'lastname', lastName, 'Your family name cannot include numbers'),
     new ValidationRule(validator.isValidStringLength, 'lastname', lastName, `Family name must be ${MAX_STRING_LENGTH} characters or less`),
     new ValidationRule(validator.validName, 'lastname', lastName, 'Your family name cannot include special characters or numbers'),
