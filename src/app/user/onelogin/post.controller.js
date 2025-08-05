@@ -33,9 +33,6 @@ const Outcome = {
 async function handleGivenNameSubmission(req, res) {
     let {userFname: firstName, userLname: lastName} = req.body;
 
-    firstName = firstName.trim();
-    lastName = lastName.trim();
-
     const fnameChain = [
       new ValidationRule(validator.isNotEmpty, 'userFname', firstName, 'Enter your given names'),
       new ValidationRule(validator.validFirstNameLength, 'userFname', firstName, `Enter given names of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`),

@@ -98,7 +98,7 @@ function isEmpty(value) {
  * @returns {boolean} True if value is not empty, false otherwise
  */
 function isNotEmpty(value) {
-  return !isEmpty(value);
+  return isEmpty(value) === false;
 }
 
 

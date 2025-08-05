@@ -7,8 +7,8 @@ const { MAX_STRING_LENGTH } = require('../../../common/config/index');
 const {USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT} = require("../../../common/config");
 
 module.exports = (req, res) => {
-  const firstName = req.body.firstname;
-  const lastName = req.body.lastname;
+  const firstName = req.body.firstname?.trim();
+  const lastName = req.body.lastname?.trim();
 
   delete req.session.successMsg;
   delete req.session.successHeader;

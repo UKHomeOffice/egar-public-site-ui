@@ -50,7 +50,7 @@ describe('Responsible Person Edit Post Controller', () => {
     });
 
     it('edit should render with errors if responsibleSurname is empty', () => {
-        
+
         req.body.responsibleSurname = '';
         const cookie = new CookieModel(req);
         responsiblePerson = utils.getResponsiblePersonFromReq(req);
@@ -67,7 +67,7 @@ describe('Responsible Person Edit Post Controller', () => {
                 responsiblePerson,
                 fixedBasedOperatorOptions,
                 errors: [
-                  new ValidationRule(validator.notEmpty, 'responsibleSurname', req.body.responsibleSurname, 'Enter a surname for the responsible person'),
+                  new ValidationRule(validator.isNotEmpty, 'responsibleSurname', req.body.responsibleSurname, 'Enter a surname for the responsible person'),
                 ],
               });
         });
@@ -84,7 +84,7 @@ describe('Responsible Person Edit Post Controller', () => {
         const callController = async () => {
           await controller(req, res);
         };
-    
+
         callController().then().then(() => {
           expect(resPersonEditStub).to.have.been.calledWith('90210', 'EDIT-101', responsiblePerson);
           expect(res.redirect).to.not.have.been.called;
@@ -101,11 +101,11 @@ describe('Responsible Person Edit Post Controller', () => {
         req.session.editResponsiblePersonId = 'EDIT-101'
         responsiblePerson = utils.getResponsiblePersonFromReq(req);
         resPersonEditStub.resolves(JSON.stringify({}));
-    
+
         const callController = async () => {
           await controller(req, res);
         };
-    
+
         callController().then().then(() => {
           expect(resPersonEditStub).to.have.been.calledWith('90210', 'EDIT-101', responsiblePerson);
           expect(res.redirect).to.have.been.calledWith('/resperson');
