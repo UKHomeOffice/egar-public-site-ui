@@ -74,8 +74,8 @@ function containTabs(value) {
 
 /**
  * Check if the string is empty, null or undefined.
- * @param {String} value
- * @return {boolean}
+ * @param {*} value Value to check for emptiness
+ * @return {boolean} True if value is empty, null or undefined, false otherwise
  */
 function isEmpty(value) {
   if (value === undefined) {
@@ -89,6 +89,18 @@ function isEmpty(value) {
   }
   return false;
 }
+
+/**
+ * Check if the string is not empty, null or undefined.
+ * Opposite of isEmpty() function.
+ *
+ * @param {*} value Value to check for emptiness
+ * @returns {boolean} True if value is not empty, false otherwise
+ */
+function isNotEmpty(value) {
+  return isEmpty(value) === false;
+}
+
 
 /**
  * Check if the string is not empty, does not start with a space and does not contain only symbols.
@@ -761,6 +773,7 @@ module.exports = {
   email,
   confirmPassword,
   valuetrue,
+  isNotEmpty,
   isNumeric,
   isPrintable,
   validDay,

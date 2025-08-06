@@ -65,7 +65,7 @@ describe('Responsible Person Add Post Controller', () => {
                 req,
                 fixedBasedOperatorOptions,
                 errors: [
-                  new ValidationRule(validator.notEmpty, 'responsibleSurname', req.body.responsibleSurname, 'Enter a surname for the responsible person'),
+                  new ValidationRule(validator.isNotEmpty, 'responsibleSurname', req.body.responsibleSurname, 'Enter a surname for the responsible person'),
                 ],
                 responsiblePerson: _responsiblePerson,
               });
@@ -76,11 +76,11 @@ describe('Responsible Person Add Post Controller', () => {
     it('should render with messages if resPerson api rejects', () => {
         const cookie = new CookieModel(req);
         resPersonApiStub.rejects('resPersonApiStub.create Example Reject');
-    
+
         const callController = async () => {
           await controller(req, res);
         };
-    
+
         callController().then().then(() => {
           expect(resPersonApiStub).to.have.been.calledWith('90210', responsiblePerson);
           expect(res.redirect).to.not.have.been.called;
@@ -94,11 +94,11 @@ describe('Responsible Person Add Post Controller', () => {
 
       it('should redirect on res person create success', () => {
         resPersonApiStub.resolves(JSON.stringify({}));
-    
+
         const callController = async () => {
           await controller(req, res);
         };
-    
+
         callController().then().then(() => {
           expect(resPersonApiStub).to.have.been.calledWith('90210', responsiblePerson);
           expect(res.redirect).to.have.been.calledWith('/resperson');
