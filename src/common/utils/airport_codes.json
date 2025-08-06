@@ -11809,11 +11809,11 @@
     "label": "Bălți International Airport (Moldova) (LUBL / BZY)"
   },
   {
-    "id": "KIV",
+    "id": "RMO",
     "id2": "LUKK",
     "british": false,
     "crownDependency": false,
-    "label": "Chişinău International Airport (Moldova) (LUKK / KIV)"
+    "label": "Chişinău International Airport (Moldova) (LUKK / RMO)"
   },
   {
     "id": "OHD",
@@ -56433,7 +56433,6 @@
     "crownDependency": false,
     "label": "Indianapolis Executive Airport (United States) (KTYQ)"
   },
-
   {
     "id": "VRMU",
     "id2": "DDD",
