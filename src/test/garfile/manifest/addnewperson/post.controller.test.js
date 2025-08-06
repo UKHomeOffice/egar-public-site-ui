@@ -87,13 +87,13 @@ describe('GAR Manifest Add Person Post Controller', () => {
       expect(garApiStub).to.not.have.been.called;
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/addnewperson/index', {
-        req, 
-        cookie, 
-        person, 
-        persontype, 
-        documenttype, 
-        genderchoice, 
-        errors: [new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person')],
+        req,
+        cookie,
+        person,
+        persontype,
+        documenttype,
+        genderchoice,
+        errors: [new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person')],
       });
     });
   });

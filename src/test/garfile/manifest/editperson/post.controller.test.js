@@ -99,7 +99,7 @@ describe('Manifest Edit Person Post Controller', () => {
         documenttype,
         genderchoice,
         errors: [
-          new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
+          new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
         ],
       });
     });
