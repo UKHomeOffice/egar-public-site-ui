@@ -7,11 +7,13 @@
     {% set statustitle = '' %}
   {% endif %}
   {% if person.amgCheckinResponseCode === '0B' %}
-    {% set statusColor = 'no-reocord' %}
+    {% set statusColor = 'no-record' %}
   {% elif person.amgCheckinResponseCode === '0A' %}
     {% set statusColor = 'valid-permission-to-travel' %}
   {% elif person.amgCheckinResponseCode === '0Z' %}
     {% set statusColor = 'authority-to-carry-granted' %}
+  {% elif person.amgCheckinResponseCode === '0T'%}
+    {% set statusColor = 'system-timeout'%}
   {% else %}
     {% set statusColor = '' %}
   {% endif %}
@@ -120,6 +122,23 @@
                   <p class="govuk-body">
                     If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for
                     advice by calling the Border Force Carrier Support Hub 0300 369 0610 or +44 204 619 6020 from outside the UK.
+                  </p>
+                </div>
+              </details>
+            {% elif(checkin_code === '0T') %}
+              <details class="govuk-details" data-module="govuk-details">
+                <summary
+                  class="govuk-details__summary"
+                  aria-controls="details-content-documents"
+                  aria-expanded="false"
+                  title="Checking Passport / Travel Documents">
+                  <span class="govuk-details__summary-text">System time out</span>
+                </summary>
+                <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
+                  <p class="govuk-body">If the GAR was submitted at 2 hours before the expected time of departure, no resubmission attempts are required. If the GAR was submitted earlier and on receipt of a ‘system time out’ response for a passenger, a resubmission attempt for that passenger should be made, this should result in the receipt of a successful permission to travel response.</p>
+                  <p class="govuk-body">
+                    If a 'system time out' response is received at or later than 2 hours before the expected time of departure, then the passenger may be boarded. There will be no <a href="" target="_blank" class="govuk-link">section 40</a>
+                    liability if the passenger is subsequently found not to hold a valid permission to travel.
                   </p>
                 </div>
               </details>

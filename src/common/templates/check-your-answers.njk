@@ -152,11 +152,13 @@
                     <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                     {% if isJourneyUKInbound %}
                       {% if person.amgCheckinResponseCode === '0B'%}
-                        {% set statusColor = 'no-reocord'%}
+                        {% set statusColor = 'no-record'%}
                       {% elif person.amgCheckinResponseCode === '0A'%}
                         {% set statusColor = 'valid-permission-to-travel'%}
                       {% elif person.amgCheckinResponseCode === '0Z'%}
                         {% set statusColor = 'authority-to-carry-granted'%}
+                      {% elif person.amgCheckinResponseCode === '0T'%}
+                        {% set statusColor = 'system-timeout'%}
                       {% else %}  
                         {% set statusColor = '' %}
                       {% endif %}
