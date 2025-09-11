@@ -4,6 +4,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
+const {getDurationBeforeDeparture} = require('../../../common/utils/utils.js');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -41,13 +42,15 @@ module.exports = (req, res) => {
   const garPeople = garApi.getPeople(garId);
   const garDetails = garApi.get(garId, true);
   const garDocs = garApi.getSupportingDocs(garId);
-
+  let numberOf0TResponseCodes = 0;
+  
   let renderContext = {
     cookie,
     manifestFields,
     garfile: {},
     garpeople: {},
     garsupportingdocs: {},
+    numberOf0TResponseCodes,
   };
 
   Promise.all([garDetails, garPeople, garDocs])
@@ -57,7 +60,8 @@ module.exports = (req, res) => {
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;
       const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z`: null;
-
+      numberOf0TResponseCodes = parsedPeople.items.filter(x => x.amgCheckinResponseCode === '0T').length;
+      const durationInDeparture = getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
         logger.error(`Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`);
@@ -82,7 +86,9 @@ module.exports = (req, res) => {
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         showChangeLinks: true,
-        isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort)
+        isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort),
+        numberOf0TResponseCodes,
+        durationInDeparture,
       };
 
       if (parsedGar.status.name === 'Submitted' || parsedGar.status.name === 'Cancelled') {

@@ -97,7 +97,7 @@
     padding-left: 60px !important;
 }
 
-.no-reocord{
+.no-record{
     color: #74472E;
     background-color: #F6D7C6;
     padding: 5px 10px 5px 10px;
@@ -114,6 +114,12 @@
     background-color: #D0E1D9;
     padding: 5px 10px 5px 10px;
     font-weight: 700;
+}
+.system-timeout{
+    color: #594d00;
+    background-color: #fff7bf;
+    padding: 5px 10px 5px 10px;
+    font-weight: 600;
 }
 .status-text{
     font-size: 14px;
@@ -209,4 +215,47 @@ h2.govuk-notification-banner__title {
 .button-link{
     cursor: pointer;
     user-select: none;
+}
+
+/* loading screen */
+#loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  margin: 1em;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.flex-center {
+  padding-top: 2%;
+  display: flex;
+  justify-content: center;
+}
+
+.center-text {
+  text-align: center;
+}
+.cursor{
+    cursor: pointer;
 }

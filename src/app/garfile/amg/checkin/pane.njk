@@ -1,3 +1,4 @@
+{% import "common/templates/includes/macros.njk" as m %}
 {% macro statusRow(person, statusCheckComplete) %}
   {% set status = person.amgCheckinStatus.name %}
   {% set checkin_code = person.amgCheckinResponseCode %}
@@ -7,11 +8,13 @@
     {% set statustitle = '' %}
   {% endif %}
   {% if person.amgCheckinResponseCode === '0B' %}
-    {% set statusColor = 'no-reocord' %}
+    {% set statusColor = 'no-record' %}
   {% elif person.amgCheckinResponseCode === '0A' %}
     {% set statusColor = 'valid-permission-to-travel' %}
   {% elif person.amgCheckinResponseCode === '0Z' %}
     {% set statusColor = 'authority-to-carry-granted' %}
+  {% elif person.amgCheckinResponseCode === '0T' %}
+    {% set statusColor = 'system-timeout' %}
   {% else %}
     {% set statusColor = '' %}
   {% endif %}
@@ -123,6 +126,23 @@
                   </p>
                 </div>
               </details>
+            {% elif(checkin_code === '0T') %}
+              <details class="govuk-details" data-module="govuk-details">
+                <summary
+                  class="govuk-details__summary"
+                  aria-controls="details-content-documents"
+                  aria-expanded="false"
+                  title="Checking Passport / Travel Documents">
+                  <span class="govuk-details__summary-text">System time out</span>
+                </summary>
+                <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
+                  <p class="govuk-body">If the GAR was submitted at 2 hours before the expected time of departure, no resubmission attempts are required. If the GAR was submitted earlier and on receipt of a ‘system time out’ response for a passenger, a resubmission attempt for that passenger should be made, this should result in the receipt of a successful permission to travel response.</p>
+                  <p class="govuk-body">
+                    If a 'system time out' response is received at or later than 2 hours before the expected time of departure, then the passenger may be boarded. There will be no <a href="" target="_blank" class="govuk-link">section 40</a>
+                    liability if the passenger is subsequently found not to hold a valid permission to travel.
+                  </p>
+                </div>  
+              </details>
             {% else %}
               <p class="govuk-body"></p>
             {% endif %}
@@ -140,12 +160,12 @@
   </tr>
 {% endmacro %}
 {# <pre>{{garfile | dump(2)}}</pre> #}
-<table class="govuk-table" id="upt-responses" style="table-layout: fixed;">
+<table class="govuk-table" id="upt-responses" style="">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th class="govuk-table__header" style="width:35%;">Status</th>
-      <th class="govuk-table__header" style="width:40%;">Passenger</th>
-      <th class="govuk-table__header" style="width:35%;">What you need to do</th>
+      <th class="govuk-table__header" style="width:20%;">Status</th>
+      <th class="govuk-table__header" style="width:30%;">Passenger</th>
+      <th class="govuk-table__header" style="width:50%;">What you need to do</th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
@@ -182,3 +202,4 @@
     </button>
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
   </form>
+

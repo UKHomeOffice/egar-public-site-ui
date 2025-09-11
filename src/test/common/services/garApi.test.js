@@ -58,7 +58,7 @@ describe('GarService', () => {
       });
 
     nock(BASE_URL)
-      .get(`/gar/${garId}/people?page=1&per_page=10000&priority=amg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A`)
+      .get(`/gar/${garId}/people?page=1&per_page=10000&priority=amg_checkin_response_code%3A0T%2Camg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A`)
       .reply(200, {
         "_meta": {
           "page": 1,
@@ -250,7 +250,7 @@ describe('GarService', () => {
   it('should throw an error for getPeople', () => {
     nock.cleanAll();
     nock(BASE_URL)
-      .get(`/gar/${garId}/people?page=1&per_page=10000&priority=amg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A`)
+      .get(`/gar/${garId}/people?page=1&per_page=10000&priority=amg_checkin_response_code%3A0T%2Camg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A`)
       .replyWithError({ message: 'Example getPeople error', code: 404 });
 
     garApi.getPeople(garId).then(() => {
