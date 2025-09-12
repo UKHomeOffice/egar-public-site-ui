@@ -4,7 +4,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
-const {getDurationBeforeDeparture} = require('../../../common/utils/utils.js');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -60,8 +59,9 @@ module.exports = (req, res) => {
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;
       const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z`: null;
-      numberOf0TResponseCodes = parsedPeople.items.filter(x => x.amgCheckinResponseCode === '0T').length;
-      const durationInDeparture = getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
+  
+      numberOf0TResponseCodes = (parsedPeople.items || []).filter(x => x.amgCheckinResponseCode === '0T').length;
+      const durationInDeparture = garApi.getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
         logger.error(`Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`);

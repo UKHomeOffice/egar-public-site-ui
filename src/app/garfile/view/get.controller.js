@@ -4,7 +4,6 @@ const garApi = require('../../../common/services/garApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const airportValidation = require('../../../common/utils/airportValidation');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
-const {getDurationBeforeDeparture} = require('../../../common/utils/utils.js');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -40,14 +39,13 @@ module.exports = async (req, res) => {
       garId = cookie.getGarId();
     }
     cookie.setGarId(garId);
-    const garPeople = await garApi.getPeople(garId);
+    const garPeople = garApi.getPeople(garId);
     const garDetails = garApi.get(garId);
     const garDocs = garApi.getSupportingDocs(garId);
     const progress = JSON.parse(await garApi.getGarCheckinProgress(garId));
     
     const resubmitted = req.query.resubmitted;
-    let  numberOf0TResponseCodes = 0;
-
+   
     if ('poll' in req.query) {
         logger.info(
           `User GAR ${garId}: Checkin progress status is ${progress}`,
@@ -62,20 +60,17 @@ module.exports = async (req, res) => {
       garfile: {},
       garpeople: {},
       garsupportingdocs: {},
-      resubmitted,
-      numberOf0TResponseCodes,
     };
-
-  Promise.all([garDetails, garPeople, garDocs])
+   console.log(renderContext);
+  Promise.all([garDetails, garPeople, garDocs, progress])
     .then((responseValues) => {
       const parsedGar = JSON.parse(responseValues[0]);
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;
       const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z`: null;
-      const durationInDeparture = getDurationBeforeDeparture(departureDate, departureTime);
+      const durationInDeparture = garApi.getDurationBeforeDeparture(departureDate, departureTime);
       const numberOf0TResponseCodes = parsedPeople.items.filter(x => x.amgCheckinResponseCode === '0T').length;
-      
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
         logger.error(`Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`);
@@ -92,7 +87,7 @@ module.exports = async (req, res) => {
       const { successMsg, successHeader } = req.session;
       delete req.session.successHeader;
       delete req.session.successMsg;
-
+      const progress = responseValues[3];
       renderContext = {
         cookie,
         manifestFields,
@@ -106,12 +101,15 @@ module.exports = async (req, res) => {
         resubmitted,
         durationInDeparture,
         numberOf0TResponseCodes,
-      }; 
+      };
       renderContext.showChangeLinks = true;
       if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
         renderContext.showChangeLinks = false;
       }
-      logger.info('Rendering GAR review page');
+      
+      
+      logger.info(`Rendering GAR review page`);
+    
       if(progress.progress === 'Incomplete') {
     res.render('app/garfile/amg/checkin/resubmit',renderContext);
   } else{

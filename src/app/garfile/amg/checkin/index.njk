@@ -18,8 +18,9 @@
 
 {% block content %}
   <link rel="stylesheet" href="/stylesheets/amg.css"/> 
-  <div class="govuk-grid-row" id="checkinpage" >
-    {% if resubmitted === 'no' and numberOf0TResponseCodes > 0 and durationInDeparture > 125  %}
+  <div class="govuk-grid-row" id="checkinpage">
+    {% set showImportantBanner = (statusCheckComplete and resubmitted === 'no' and numberOf0TResponseCodes > 0 and durationInDeparture > 125 ) %}
+    {% if showImportantBanner  %}
     <div class="govuk-grid-column-full">
        <div class="custom-govuk-notification-banner" role="region"
         aria-labelledby="govuk-notification-banner-title"
@@ -80,5 +81,5 @@
       }, 3000);
     });
 </script>
-  <script type="text/javascript" src="/javascripts/resubmitGar.js"></script>
+<script type="text/javascript" src="/javascripts/resubmitGar.js"></script>
 {% endblock content %}
