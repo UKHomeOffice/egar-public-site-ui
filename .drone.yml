@@ -24,8 +24,8 @@ steps:
       group: build-stage
 
   - name: sonarqube_scan
-    pull: always
-    image: quay.io/ukhomeofficedigital/sonar-scanner:latest
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/sonar-scanner-nodejs:latest
     commands:
     - sonar-scanner -Dproject.settings=./sonar-project.properties
     when:
