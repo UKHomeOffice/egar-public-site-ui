@@ -23,6 +23,19 @@ steps:
     settings:
       group: build-stage
 
+  - name: sonarqube_scan
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/sonar-scanner-nodejs:latest
+    commands:
+    - sonar-scanner -Dproject.settings=./sonar-project.properties
+    when:
+      branch:
+        exclude:
+        - debug/**
+        event:
+        - push
+        - tag
+
   - name: Unit Tests
     pull: if-not-exists
     image: node:22-alpine3.21
@@ -222,7 +235,7 @@ steps:
 services:
   - name: docker
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-      
+
 
 
 volumes:
