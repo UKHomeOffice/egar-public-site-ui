@@ -93,6 +93,7 @@ module.exports = {
    */
   getPeople(garId) {
     const priority = [
+        'amg_checkin_response_code:0T',
         'amg_checkin_response_code:0B',
         'amg_checkin_response_code:0Z',
         'amg_checkin_response_code:0A',
@@ -356,4 +357,68 @@ module.exports = {
       });
     });
   },
+
+  updateGarPeopleCheckinStauts(garId, passengersIds, status) {
+    return new Promise((resolve, reject) => {
+      request.patch({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.updateGarPerson(garId),
+        body: JSON.stringify({
+           people: passengersIds,
+           amgCheckinStatus: status,
+        }),
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call update garpeople status endpoint');
+          reject(error);
+          return;
+        }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body);
+          logger.error(`${garId} garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+
+        logger.debug('Successfully called update garperson status update endpoint');
+        resolve(body);
+      });
+    });
+  },
+
+  getGarCheckinProgress(garId) {
+    return new Promise((resolve, reject) => {
+      request.get({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.getGarCheckinProgress(garId),
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed to call GAR progress API endpoint');
+          reject(error);
+          return;
+        }
+
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body)
+          logger.error(`${garId} garApi.progress request was not successful : ${responseErrorMessage}`);
+          resolve(body);
+          return;
+        }
+        
+        logger.debug('Successfully called progress endpoint');
+        resolve(body);
+      });
+    });
+
+  },
+
+  getDurationBeforeDeparture(departureDate, departureTime) {
+    const departureDateTimeString = `${departureDate} ${departureTime}`;
+    const departureDateTime = new Date(departureDateTimeString);
+    const currentDateTime = new Date();
+    const durationInMinutes = Math.abs(departureDateTime - currentDateTime)/1000/60;
+    return durationInMinutes;
+  }
+ 
 };

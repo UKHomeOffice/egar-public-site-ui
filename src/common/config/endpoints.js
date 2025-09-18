@@ -253,6 +253,13 @@ const endpoints = {
     logger.debug(`Calling delete supporting document endpoint ${endpoint}`);
     return endpoint;
   },
+
+  getGarCheckinProgress(garId) {
+    const endpoint = new URL(`${API_VERSION}/gar/${garId}/progress`, BASE_URL)
+      .href;
+    logger.debug(`Calling get GAR checkin progress endpoint ${endpoint}`);
+    return endpoint;
+  },
 };
 
 module.exports = endpoints;
