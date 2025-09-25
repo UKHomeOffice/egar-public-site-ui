@@ -6,7 +6,7 @@ metadata:
   labels:
     cert-manager.io/solver: http01
   annotations:
-    kubernetes.io/ingress.class: "nginx-external"
+   # kubernetes.io/ingress.class: "nginx-external" # This is deprecated and replaced by the ingressClassName field in spec.
     cert-manager.io/enabled: "true"
     ingress.kubernetes.io/force-ssl-redirect: "true"
     ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -27,6 +27,7 @@ spec:
   - hosts:
     - {{ .PUBLIC_SITE_EXTERNAL_URL }}
     secretName: public-site-external-tls
+  ingressClassName: nginx-external  
   rules:
   - host: {{ .PUBLIC_SITE_EXTERNAL_URL }}
     http:
