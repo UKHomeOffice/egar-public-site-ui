@@ -6,7 +6,7 @@ metadata:
   labels:
     cert-manager.io/solver: route53
   annotations:
-    kubernetes.io/ingress.class: "nginx-internal"
+    # kubernetes.io/ingress.class: "nginx-internal" # This is deprecated and replaced by the ingressClassName field in spec.
     cert-manager.io/enabled: "true"
     ingress.kubernetes.io/force-ssl-redirect: "true"
     ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -27,6 +27,7 @@ spec:
   - hosts:
     - {{ .PUBLIC_SITE_INTERNAL_URL }}
     secretName: public-site-internal-tls
+  ingressClassName: nginx-internal  
   rules:
   - host: {{ .PUBLIC_SITE_INTERNAL_URL }}
     http:
