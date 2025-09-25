@@ -56439,5 +56439,12 @@
     "british": false,
     "crownDependency": false,
     "label": "Dhaalu Airport (Maldives) (VRMU / DDD)"
+  },
+  {
+    "id": "EDHG",
+    "id2": "EDHG",
+    "british": false,
+    "crownDependency": false,
+    "label": "Lüneburg Airport (Germany) (EDHG)"
   }
 ]
