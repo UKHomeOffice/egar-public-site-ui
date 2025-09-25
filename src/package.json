@@ -21,6 +21,7 @@
   },
   "overrides": {
     "form-data": "^2.5.5",
+    "cookie": "^0.7.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "send": "0.19.0",
     "axios": "1.12.0"
@@ -34,7 +35,6 @@
     "client-sessions": "^0.8.0",
     "compression": "^1.7.3",
     "connect-pg-simple": "9.0.0",
-    "cookie": "^0.7.0",
     "cookie-parser": "^1.4.3",
     "correlation-id": "^3.0.1",
     "csurf": "^1.2.2",
