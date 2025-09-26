@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const {parseUrlForNonProd} = require('../services/oneLoginApi');
 
 
-const getOneLoginAuthUrl = (req, res) => {
+const getOneLoginAuthUrl = (req, res, stateParam='') => {
   try {
     const nonce = uuidv4();
     res.cookie('nonce', nonce, {
@@ -13,7 +13,7 @@ const getOneLoginAuthUrl = (req, res) => {
       secure: config.IS_HTTPS_SERVER,
       sameSite: config.SAME_SITE_VALUE,
     });
-    const state = uuidv4();
+    const state = stateParam !== '' ? stateParam : uuidv4();
     res.cookie('state', state, {
       httpOnly: true,
       secure: config.IS_HTTPS_SERVER,

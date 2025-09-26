@@ -9,6 +9,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const tokenApi = require('../../../common/services/tokenApi');
 const userApi = require('../../../common/services/userManageApi');
 const settings = require('../../../common/config/index');
+const {redirectTo} = require("../../../common/middleware/redirectToPage");
 
 module.exports = (req, res) => {
   logger.debug('In verify / mfa post controller');
@@ -34,6 +35,11 @@ module.exports = (req, res) => {
                   const parsedResponse = apiResponse;
                   cookie.setOrganisationId(apiResponse?.organisation?.organisationId);
                   cookie.setLoginInfo(parsedResponse);
+                  const redirectId = cookie.getRedirectedId();
+                  cookie.setGarId(redirectId);
+                  if(redirectId !== ''){
+                     return redirectTo(res, redirectId, cookie);
+                  }
                   req.session.save(() => {
                     res.redirect('/home');
                   });

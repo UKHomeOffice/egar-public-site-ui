@@ -9,6 +9,8 @@ const organisationApi = require('../../../common/services/organisationApi');
 const verifyUserService = require('../../../common/services/verificationApi');
 const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
 const { getOneLoginLogoutUrl } = require("../../../common/utils/oneLoginAuth");
+const {redirectTo} = require("../../../common/middleware/redirectToPage");
+
 
 // Constants
 const ROUTES = {
@@ -169,15 +171,16 @@ module.exports = async (req, res) => {
 
   const viewOnLoginPageForTest = req.query.testOneLogin === 'true' ;
   const cookie = new CookieModel(req);
-
+  
   const { code } = req.query;
 
   if (!code) {
      if (ONE_LOGIN_POST_MIGRATION === true) {
         return res.redirect(ROUTES.HOME);
     }
+
     return res.render('app/user/login/index', {
-      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
+      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res, cookie.getRedirectedId()),
       ONE_LOGIN_SHOW_ONE_LOGIN,
       viewOnLoginPageForTest
     });
@@ -219,6 +222,11 @@ module.exports = async (req, res) => {
 
           return handleUserAuthentication(req, res, userInfo, cookie)
             .then(({ redirect }) => {
+              cookie.setRedirectedId(req.cookies.state);
+              if(cookie.getRedirectedId() !== '') { 
+                return redirectTo(res, req.cookies.state, cookie);
+              }
+
               if (redirect === ROUTES.HOME) {
                 delete req.cookies.nonce;
                 delete req.cookies.state;

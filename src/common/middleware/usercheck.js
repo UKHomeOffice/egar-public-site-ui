@@ -13,6 +13,11 @@ const checkUserInCookie = (cookie) => {
 module.exports = (req, res, next) => {
   const cookie = new CookieModel(req);
 
+  if(req.query.gar_id){
+    cookie.setRedirectedId(req.query.gar_id);
+    //Need to set a garId here to redirect to gar summary page when the user logged in.
+    cookie.setGarId(req.query.gar_id);
+  }
   const isLoggedIn = checkUserInCookie(cookie) === false; // weird logic. To be refactored.
 
   if (isLoggedIn) {
