@@ -1,9 +1,7 @@
 import countries from 'i18n-iso-countries';
 import en from 'i18n-iso-countries/langs/en.json' with { type: 'json' };
 import loggerFactory from './logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import airportList from './airport_codes.json' with { type: "json"};
 /**
  * Utility function for generating the list of country codes in a format for this app.

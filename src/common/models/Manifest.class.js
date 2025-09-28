@@ -1,9 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 import loggerFactory from '../../common/utils/logger.js';
 
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import validations from '../../app/people/validations.js';
 import validator from '../../common/utils/validator.js';
 

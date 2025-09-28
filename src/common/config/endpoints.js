@@ -1,9 +1,7 @@
 import { URL } from 'url';
 import settings from './index.js';
 import loggerFactory from '../utils/logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 
 const { API_BASE } = settings;
 const { API_VERSION } = settings;

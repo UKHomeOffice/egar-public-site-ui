@@ -1,8 +1,6 @@
 import CookieModel from '../../../common/models/Cookie.class.js';
 import loggerFactory from '../../../common/utils/logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import garApi from '../../../common/services/garApi.js';
 
 export default (req, res) => {

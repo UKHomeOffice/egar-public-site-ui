@@ -9,8 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 import { dirname } from 'path';
 const __dirname = dirname(__filename);
 
-
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import server from './server.js';
 
 const pidFile = path.join(__dirname, '/.start.pid');

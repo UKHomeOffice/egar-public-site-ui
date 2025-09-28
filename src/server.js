@@ -30,7 +30,7 @@ const __filename = fileURLToPath(import.meta.url);
 import { dirname } from 'path';
 const __dirname = dirname(__filename);
 
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import config from './common/config/index.js';
 import availability from './common/config/availability.js';
 import router from './app/router.js';

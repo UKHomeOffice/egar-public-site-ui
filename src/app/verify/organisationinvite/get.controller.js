@@ -1,7 +1,5 @@
 import loggerFactory from '../../../common/utils/logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import { API_BASE, ONE_LOGIN_SHOW_ONE_LOGIN, ONE_LOGIN_POST_MIGRATION } from '../../../common/config/index.js';
 import CookieModel from '../../../common/models/Cookie.class.js';
 import tokenService from '../../../common/services/create-token.js';

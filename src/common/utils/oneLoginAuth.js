@@ -1,8 +1,6 @@
 import config from '../config/index.js';
 import loggerFactory from './logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import jwt from 'jsonwebtoken';
 import uuid from 'uuid';
 import oneLoginApi from '../services/oneLoginApi.js';

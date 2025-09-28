@@ -4,9 +4,7 @@ import utils from '../../common/utils/utils.js';
 
 import i18n from 'i18n';
 import loggerFactory from '../../common/utils/logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import CookieModel from '../../common/models/Cookie.class.js';
 import verifyUserService from '../../common/services/verificationApi.js';
 import sendTokenService from '../../common/services/send-token.js';

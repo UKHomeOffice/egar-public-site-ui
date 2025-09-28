@@ -1,7 +1,5 @@
 import loggerFactory from '../utils/logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import config from '../config/index.js';
 import request from 'request';
 import qs from 'querystring';

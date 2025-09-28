@@ -8,9 +8,7 @@ import csrfcheck from '../../common/middleware/csrfcheck.js';
 import parseForm from '../../common/middleware/parseForm.js';
 import pageAccess from '../middleware/pageAccess.js';
 import loggerFactory from './logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import CookieModel from '../models/Cookie.class.js';
 
 const buildRouterAndPaths = (path, getController, postController) => {

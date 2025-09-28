@@ -1,9 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import loggerFactory from '../../../common/utils/logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import postController from './post.controller.js';
 
 const router = express.Router();

@@ -11,9 +11,7 @@ import userApi from '../../../common/services/userManageApi.js';
 import loggerFactory from '../../../common/utils/logger.js';
 
 
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import ValidationRule from '../../../common/models/ValidationRule.class.js';
 import validator from '../../../common/utils/validator.js';
 import { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } from '../../../common/config/index.js';

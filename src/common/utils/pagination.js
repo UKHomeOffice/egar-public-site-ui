@@ -1,9 +1,7 @@
 import url from 'url';
 import _ from 'lodash';
 import loggerFactory from './logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 
 const PAGE_SIZE = 5;
 

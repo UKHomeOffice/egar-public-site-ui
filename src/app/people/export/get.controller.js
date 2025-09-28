@@ -2,9 +2,7 @@ import { getPeople } from '../../../common/config/endpoints.js';
 import CookieModel from '../../../common/models/Cookie.class.js';
 import personApi from '../../../common/services/personApi.js';
 import loggerFactory from '../../../common/utils/logger.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const logger = loggerFactory(__filename);
+const logger = loggerFactory(import.meta.url);
 import { createArrayCsvStringifier } from 'csv-writer';
 
 const writePeopleAsCSVtoResponse = (res, people) => {

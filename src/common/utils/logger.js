@@ -1,5 +1,7 @@
 import winston from 'winston';
 import config from '../config/index.js';
+import { fileURLToPath } from 'url';
+
 
 const logger = winston.createLogger({
   level: config.LOG_LEVEL.toLowerCase(),
@@ -12,9 +14,13 @@ if (process.env.NODE_ENV !== 'production') {
   }));
 }
 
-export default (fileName) => {
+export default (metaUrl) => {
+
+  const fileName = fileURLToPath(metaUrl);
+  
   // Dockerfile stores and sets working dir to public-site, so remove it from file path
   const logPrefix = `${fileName.replace('/public-site/', '')}: `;
+
   const loggerWithFilename = {
     error: text => logger.error(logPrefix + text),
     debug: (text, metadata) => logger.debug(logPrefix + text, metadata),
