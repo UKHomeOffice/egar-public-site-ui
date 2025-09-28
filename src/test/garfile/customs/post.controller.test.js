@@ -10,7 +10,7 @@ import '../../global.test.js';
 import garApi from '../../../common/services/garApi.js';
 import CookieModel from '../../../common/models/Cookie.class.js';
 import emailService from '../../../common/services/sendEmail.js';
-import prohibitedGoodsOptions from '../../../common/seeddata/egar_prohibited_goods_options';
+import prohibitedGoodsOptions from '../../../common/seeddata/egar_prohibited_goods_options.json' with { type: "json"};
 import reasonForVisitOptions from '../../../common/seeddata/egar_visit_reason_options.json' with { type: "json"};
 import baggageOptions from '../../../common/seeddata/egar_baggage_options.json' with { type: "json"};
 import intentionValueOptions from '../../../common/seeddata/egar_intention_value_options.json' with { type: "json"};
