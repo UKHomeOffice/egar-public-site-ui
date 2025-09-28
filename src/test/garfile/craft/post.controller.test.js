@@ -2,7 +2,6 @@
 /* eslint-disable no-undef */
 
 import sinon from 'sinon';
-
 import { expect } from 'chai';
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
@@ -16,8 +15,6 @@ import validator from '../../../common/utils/validator.js';
 import CookieModel from '../../../common/models/Cookie.class.js';
 import pagination from '../../../common/utils/pagination.js';
 import controller from '../../../app/garfile/craft/post.controller.js';
-
-import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
