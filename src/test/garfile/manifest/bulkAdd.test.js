@@ -7,7 +7,7 @@ import chai from 'chai';
 import sinonChai from 'sinon-chai';
 import '../../global.test.js';
 import personApi from '../../../common/services/personApi.js';
-import { getDetailsByIds } from '../../../app/garfile/manifest/bulkAdd.js';
+import bulkAdd from '../../../app/garfile/manifest/bulkAdd.js';
 
 describe('bulkAdd class', () => {
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('bulkAdd class', () => {
       { personId: 'PERSON-3' },
     ]));
 
-    await getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then((result) => {
+    await bulkAdd.getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then((result) => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-ID-1', 'individual');
       expect(result).to.eql([]);
     });
@@ -39,7 +39,7 @@ describe('bulkAdd class', () => {
       { personId: 'PERSON-1', peopleType: { name: 'Captain' } },
     ]));
 
-    await getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then((result) => {
+    await bulkAdd.getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then((result) => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-ID-1', 'individual');
       expect(result).to.eql([
         { personId: 'PERSON-1', peopleType: 'Captain' },
@@ -54,7 +54,7 @@ describe('bulkAdd class', () => {
       { personId: 'PERSON-2', peopleType: { name: 'Crew' } },
     ]));
 
-    await getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then((result) => {
+    await bulkAdd.getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then((result) => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-ID-1', 'individual');
       expect(result).to.eql([
         { personId: 'PERSON-1', peopleType: 'Captain' },
@@ -66,7 +66,7 @@ describe('bulkAdd class', () => {
   it('should reject if person api rejects', async () => {
     sinon.stub(personApi, 'getPeople').rejects('personApi.getPeople Example Reject');
 
-    await getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then().catch((err) => {
+    await bulkAdd.getDetailsByIds(['PERSON-1', 'PERSON-2'], 'USER-ID-1').then().catch((err) => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-ID-1', 'individual');
       expect(err.name).to.eq('personApi.getPeople Example Reject');
     });
