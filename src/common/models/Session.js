@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const Session = sequelize.define('Session', {
     sid: {
       allowNull: false,

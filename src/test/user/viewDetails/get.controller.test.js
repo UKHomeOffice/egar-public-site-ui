@@ -1,26 +1,23 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-expressions */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const craftApi = require('../../../common/services/craftApi');
-const personApi = require('../../../common/services/personApi');
-
-const settings = require('../../../common/config/index');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import proxyquire from 'proxyquire';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import craftApi from '../../../common/services/craftApi.js';
+import personApi from '../../../common/services/personApi.js';
+import settings from '../../../common/config/index.js';
 const configMock = {
   ...settings,
   ONE_LOGIN_SHOW_ONE_LOGIN: false,
 };
 
-const controller = require('../../../app/user/viewDetails/get.controller', {
-  '../../../common/config/index': configMock
-});
+import controller from '../../../app/user/viewDetails/get.controller.js';
 
 // TODO: Most of this logic handles obtaining craft and people, which are not
 // displayed on the resulting template! These unit tests are to reduce

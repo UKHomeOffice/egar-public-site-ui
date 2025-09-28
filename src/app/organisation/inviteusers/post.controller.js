@@ -1,16 +1,19 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const validator = require('../../../common/utils/validator');
-const validations = require('./validations');
-const userApi = require('../../../common/services/userManageApi');
-const CookieModel = require('../../../common/models/Cookie.class');
-const { response } = require('express');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../../../common/utils/validator.js';
+import validations from './validations.js';
+import userApi from '../../../common/services/userManageApi.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import { response } from 'express';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const { fname, lname, email } = req.body;
   const cookie = new CookieModel(req);
 
   // Validate chains
-  validator.validateChains(validations.validations(req))
+  validator.validateChains(validations(req))
     .then(() => {
       cookie.setInviteUserFirstName(fname);
       cookie.setInviteUserLastName(lname);

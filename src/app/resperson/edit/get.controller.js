@@ -1,9 +1,12 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const resPersonApi = require('../../../common/services/resPersonApi');
-const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import resPersonApi from '../../../common/services/resPersonApi.js';
+import fixedBasedOperatorOptions from '../../../common/seeddata/fixed_based_operator_options.json' with { type: "json"};
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In responsible person edit get controller');
   const errMsg = { message: 'Failed to get responsible person details' };
   const cookie = new CookieModel(req);

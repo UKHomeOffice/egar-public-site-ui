@@ -1,15 +1,17 @@
 // Npm dependencies
-const express = require('express');
+import express from 'express';
 
-// Middleware
-const flagpole = require('../../common/middleware/flagpole');
-const usercheck = require('../../common/middleware/usercheck');
-const csrfcheck = require('../../common/middleware/csrfcheck');
-const parseForm = require('../../common/middleware/parseForm');
-const pageAccess = require('../middleware/pageAccess');
+import flagpole from '../../common/middleware/flagpole.js';
 
-const logger = require('./logger')(__filename);
-const CookieModel = require('../models/Cookie.class');
+import usercheck from '../../common/middleware/usercheck.js';
+import csrfcheck from '../../common/middleware/csrfcheck.js';
+import parseForm from '../../common/middleware/parseForm.js';
+import pageAccess from '../middleware/pageAccess.js';
+import loggerFactory from './logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../models/Cookie.class.js';
 
 const buildRouterAndPaths = (path, getController, postController) => {
   // Initialisation
@@ -60,6 +62,4 @@ const simpleGetRender = (req, res, page) => {
   res.render(page, { cookie });
 };
 
-exports.simpleGetRender = simpleGetRender;
-exports.buildRouterAndPaths = buildRouterAndPaths;
-exports.buildRouterAndPathsNoUserCheck = buildRouterAndPathsNoUserCheck;
+export default { simpleGetRender, buildRouterAndPaths, buildRouterAndPathsNoUserCheck };

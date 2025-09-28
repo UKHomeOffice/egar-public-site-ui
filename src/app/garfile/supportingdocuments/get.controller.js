@@ -1,9 +1,12 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const config = require('../../../common/config/index'); 
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garApi from '../../../common/services/garApi.js';
+import config from '../../../common/config/index.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const cookie = new CookieModel(req);
   const max_num_files = config.MAX_NUM_FILES;
   logger.debug('In garfile / supporting documents get controller');

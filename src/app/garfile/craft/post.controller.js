@@ -1,12 +1,15 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const craftApi = require('../../../common/services/craftApi');
-const validationList = require('./validations');
-const pagination = require('../../../common/utils/pagination');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garApi from '../../../common/services/garApi.js';
+import craftApi from '../../../common/services/craftApi.js';
+import validationList from './validations.js';
+import pagination from '../../../common/utils/pagination.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In garfile / craft post controller');
 
   const { buttonClicked } = req.body;

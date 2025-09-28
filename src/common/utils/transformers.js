@@ -76,7 +76,7 @@ function trimWhitespace(aStr) {
   return typeof aStr !== "string" ? aStr : aStr.trim();
 }
 
-module.exports = {
+export default {
   transformPerson,
   titleCase,
   upperCamelCase,

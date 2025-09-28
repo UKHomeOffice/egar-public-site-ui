@@ -1,17 +1,16 @@
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
-const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
-const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
-
-const controller = require('../../../app/people/add/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import persontype from '../../../common/seeddata/egar_type_of_saved_person';
+import documenttype from '../../../common/seeddata/egar_saved_people_travel_document_type.json' with { type: "json"};
+import genderchoice from '../../../common/seeddata/egar_gender_choice.json' with { type: "json"};
+import controller from '../../../app/people/add/get.controller.js';
 
 describe('People Add Get Controller', () => {
   let req; let res;

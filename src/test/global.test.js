@@ -1,5 +1,5 @@
-const chai = require('chai');
-const { before, after } = require('mocha');
+import chai from 'chai';
+import { before, after } from 'mocha';
 
 const unhandledRejectionHandler = (reason, promise) => {
   chai.assert.fail(`Unhandled rejection encountered: ${reason} for promise: ${promise}`);

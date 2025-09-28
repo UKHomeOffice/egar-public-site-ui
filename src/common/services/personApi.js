@@ -1,9 +1,11 @@
-const request = require('request');
-const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
+import request from 'request';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import endpoints from '../config/endpoints.js';
 
-module.exports = {
-
+const exported = {
   /**
    * Creates a new saved person. Person object contains:
    * firstName,
@@ -167,5 +169,15 @@ module.exports = {
         resolve(body);
       });
     });
-  },
+  }
 };
+
+export default exported;
+
+export const {
+  create,
+  getDetails,
+  getPeople,
+  update,
+  deletePerson
+} = exported;

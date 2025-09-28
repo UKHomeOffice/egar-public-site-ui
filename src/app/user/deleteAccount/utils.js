@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-return-await */
-const i18n = require('i18n');
-const emailService = require('../../../common/services/sendEmail');
-const userApi = require('../../../common/services/userManageApi');
-const organisationApi = require('../../../common/services/organisationApi');
+import i18n from 'i18n';
 
-const settings = require('../../../common/config/index');
+import emailService from '../../../common/services/sendEmail.js';
+import userApi from '../../../common/services/userManageApi.js';
+import organisationApi from '../../../common/services/organisationApi.js';
+import settings from '../../../common/config/index.js';
 
 const adminDeletionType = (orgUsers) => {
   const LAST_ADMIN_IN_ORGANISATION = 1;
@@ -129,7 +129,7 @@ const deleteAccount = {
   },
 };
 
-module.exports = {
+export default {
   adminDeletionType,
   deleteAccount,
 };

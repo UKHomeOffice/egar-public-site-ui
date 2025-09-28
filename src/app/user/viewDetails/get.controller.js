@@ -1,11 +1,14 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const personApi = require('../../../common/services/personApi');
-const {ONE_LOGIN_ACCOUNT_URL, ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import personApi from '../../../common/services/personApi.js';
+import { ONE_LOGIN_ACCOUNT_URL, ONE_LOGIN_SHOW_ONE_LOGIN } from '../../../common/config/index.js';
 
 const template = ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'index' : 'old_index'
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In user / viewDetails get controller');
   const cookie = new CookieModel(req);
   const userId = cookie.getUserDbId();

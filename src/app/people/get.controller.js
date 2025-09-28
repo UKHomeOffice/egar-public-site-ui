@@ -1,9 +1,12 @@
-const logger = require('../../common/utils/logger')(__filename);
-const personApi = require('../../common/services/personApi');
-const CookieModel = require('../../common/models/Cookie.class');
-const { Manifest } = require('../../common/models/Manifest.class');
+import loggerFactory from '../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import personApi from '../../common/services/personApi.js';
+import CookieModel from '../../common/models/Cookie.class.js';
+import { Manifest } from '../../common/models/Manifest.class.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   logger.debug('In people get controller');
   const cookie = new CookieModel(req);
   const errMSg = { message: 'Failed to get saved people' };

@@ -1,21 +1,19 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const {expect} = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const config = require('../../../common/config/index');
-const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
-const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
-const verification = require('../../../common/services/verificationApi');
+import sinon from 'sinon';
 
-
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-
-const controller = require('../../../app/user/login/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import config from '../../../common/config/index.js';
+import oneLoginUtils from '../../../common/utils/oneLoginAuth.js';
+import oneLoginApi from '../../../common/services/oneLoginApi.js';
+import userApi from '../../../common/services/userManageApi.js';
+import verification from '../../../common/services/verificationApi.js';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import controller from '../../../app/user/login/get.controller.js';
 
 describe.skip('User Login Get Controller', () => {
   let req;

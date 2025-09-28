@@ -1,15 +1,14 @@
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
-
-const controller = require('../../../app/garfile/home/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garoptions from '../../../common/seeddata/egar_create_gar_options.json' with { type: "json"};
+import controller from '../../../app/garfile/home/get.controller.js';
 
 describe('GAR Home Get Controller', () => {
   let req; let res;

@@ -1,7 +1,10 @@
-const logger = require('../utils/logger')(__filename);
-const db = require('../utils/db');
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import db from '../utils/db.js';
 
-module.exports = {
+const exported = {
   /**
    * Predicate. True if email is in whitelist table, else false.
    *
@@ -27,5 +30,11 @@ module.exports = {
           return reject(err);
         });
     });
-  },
+  }
 };
+
+export default exported;
+
+export const {
+  isWhitelisted
+} = exported;

@@ -1,8 +1,8 @@
-const validator = require('../../common/utils/validator');
-const ValidationRule = require('../../common/models/ValidationRule.class');
-const { MAX_STRING_LENGTH } = require('../../common/config/index');
+import validator from '../../common/utils/validator.js';
+import ValidationRule from '../../common/models/ValidationRule.class.js';
+import { MAX_STRING_LENGTH } from '../../common/config/index.js';
 
-module.exports.validations = (req) => {
+export default (req) => {
   const dobObj = { d: req.body.dobDay, m: req.body.dobMonth, y: req.body.dobYear };
   const expiryDateObj = { d: req.body.expiryDay, m: req.body.expiryMonth, y: req.body.expiryYear };
   const docTypeOther = req.body.travelDocumentType;

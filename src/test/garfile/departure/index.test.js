@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-require('../../global.test');
-
-const index = require('../../../app/garfile/departure/index');
+import '../../global.test.js';
+import index from '../../../app/garfile/departure/index.js';
 
 describe('Departure index.js', () => {
   it('should have included everything', () => {

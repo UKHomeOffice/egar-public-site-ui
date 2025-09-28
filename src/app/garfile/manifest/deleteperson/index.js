@@ -1,12 +1,11 @@
 // Npm dependencies
-const express = require('express');
+import express from 'express';
 
-// Middleware
-const flagpole = require('../../../../common/middleware/flagpole');
-const usercheck = require('../../../../common/middleware/usercheck');
+import flagpole from '../../../../common/middleware/flagpole.js';
 
-// Local dependencies
-const postController = require('./post.controller');
+import usercheck from '../../../../common/middleware/usercheck.js';
+
+import postController from './post.controller.js';
 
 // Initialisation
 const router = new express.Router();
@@ -19,7 +18,7 @@ const paths = {
 router.post(paths.index, flagpole, usercheck, postController);
 
 // Export
-module.exports = {
+export default {
   router,
   paths,
 };

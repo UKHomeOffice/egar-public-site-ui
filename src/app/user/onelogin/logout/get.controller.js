@@ -1,7 +1,7 @@
-const {getOneLoginLogoutUrl} = require("../../../../common/utils/oneLoginAuth");
-const CookieModel = require('../../../../common/models/Cookie.class');
+import oneLoginAuth from '../../../../common/utils/oneLoginAuth.js';
+import CookieModel from '../../../../common/models/Cookie.class.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   // Destroy session and clear cookies before redirecting
   if (req.session) {
     const cookie = new CookieModel(req);
@@ -16,7 +16,7 @@ module.exports = (req, res) => {
       const {state, id_token} = req.cookies;
 
       if (state && id_token)  {
-        const logoutUrl = getOneLoginLogoutUrl(req, id_token, state);
+        const logoutUrl = oneLoginAuth.getOneLoginLogoutUrl(req, id_token, state);
         res.redirect(logoutUrl);
       }
     });

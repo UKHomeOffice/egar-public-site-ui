@@ -1,16 +1,15 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-expressions */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/personApi');
-
-const controller = require('../../../app/people/delete/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import personApi from '../../../common/services/personApi.js';
+import controller from '../../../app/people/delete/get.controller.js';
 
 describe('Person Delete Get Controller', () => {
   let req; let res;

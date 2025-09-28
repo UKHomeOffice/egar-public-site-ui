@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 
-const i18n = require('i18n');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
+import i18n from 'i18n';
+
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
 
 const validateManifestMsg = 'An invalid manifest was provided to the server';
 const registrationMsg = 'Aircraft registration must be completed';
@@ -10,7 +11,7 @@ const responsibleMsg = 'Responsible person details must be completed';
 const customsMsg = 'Customs Declaration question not answered';
 
 
-module.exports.validations = (garfile, garpeople, frmUpload = false) => {
+export default (garfile, garpeople, frmUpload = false) => {
   const voyageDateMsg = i18n.__('validator_msg_voyage_dates');
   const {
     departureDate, departureTime, arrivalDate, arrivalTime, registration, responsibleGivenName, prohibitedGoods, baggage, visitReason, intentionValue,

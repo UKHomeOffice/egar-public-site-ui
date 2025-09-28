@@ -1,12 +1,12 @@
-const navUtil = require('../../../common/utils/nav');
-const {PHASE_GIVEN_NAME, WORKFLOW_STEPS}  = require('./constants');
+import navUtil from '../../../common/utils/nav.js';
+import { PHASE_GIVEN_NAME, WORKFLOW_STEPS } from './constants.js';
 
 const checkKeys = (obj, ...keys) => {
   if (!obj) return false;
   return keys.every(key => obj.hasOwnProperty(key));
 }
 
-module.exports = (req, res) => {
+export default (req, res) => {
   if (!checkKeys(req.cookies, 'state', 'id_token', 'nonce') || req.headers.referer === null || !req.session?.access_token) {
     return res.redirect('/');
   }

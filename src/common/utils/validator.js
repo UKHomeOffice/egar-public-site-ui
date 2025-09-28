@@ -1,13 +1,24 @@
-const moment = require('moment');
+import moment from 'moment';
+import ValidationRule from '../../common/models/ValidationRule.class.js';
+import freeCirculationValues from '../seeddata/egar_craft_eu_free_circulation_options.json' with { type: "json"};
+import visitReasonValues from '../seeddata/egar_visit_reason_options.json' with { type: "json"};
+import genderValues from '../seeddata/egar_gender_choice.json' with { type: "json"};
 
-const ValidationRule = require('../../common/models/ValidationRule.class');
-const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
-const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
-const genderValues = require('../seeddata/egar_gender_choice.json');
-const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT, MAX_ALLOWED_CANCELLATION_TIME_TO_CBP } = require('../config/index');
-const logger = require('../../common/utils/logger')(__filename);
-const { airportCodeList, nationalityList } = require('../../common/utils/autocomplete');
-const { documentTypes } = require('./utils');
+import {
+  MAX_STRING_LENGTH,
+  MAX_REGISTRATION_LENGTH,
+  MAX_EMAIL_LENGTH,
+  USER_FIRST_NAME_CHARACTER_COUNT,
+  USER_SURNAME_CHARACTER_COUNT,
+  MAX_ALLOWED_CANCELLATION_TIME_TO_CBP,
+} from '../config/index.js';
+
+import loggerFactory from '../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import autocomplete from '../../common/utils/autocomplete.js';
+import utils from './utils.js';
 
 /**
  * isAbleToCancelGar
@@ -29,7 +40,7 @@ const isAbleToCancelGar = (lastDepartureDateString) => {
 }
 
 function isValidDocumentType(documentType) {
-  return documentTypes.includes(documentType);
+  return utils.documentTypes.includes(documentType);
 }
 
 function isOtherDocumentWithDocumentDesc(args){
@@ -226,7 +237,7 @@ function validISOCountryLength(countryCode) {
  * @returns {Bool} True if 3 an nationality code, false otherwise
  */
 function isValidNationality(countryCode) {
-  return nationalityList.map(country => country.code).includes(countryCode);
+  return autocomplete.nationalityList.map(country => country.code).includes(countryCode);
 }
 
 
@@ -759,10 +770,10 @@ function preventZ(value) {
  * @returns {Bool}
  */
 function isValidAirportCode(airportCode) {
-  return airportCodeList.includes(airportCode);
+  return autoairportCodeList.includes(airportCode);
 }
 
-module.exports = {
+export default {
   hasOnlySymbols,
   hasLeadingSpace,
   isEmpty,

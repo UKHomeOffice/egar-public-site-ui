@@ -1,20 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-const i18n = require('i18n');
-require('../global.test');
-const config = require('../../common/config');
-const tokenService = require('../../common/services/create-token');
-const verifyUserService = require('../../common/services/verificationApi');
-const tokenApi = require('../../common/services/tokenApi');
-const sendTokenService = require('../../common/services/send-token');
-
-const controller = require('../../app/verify/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import i18n from 'i18n';
+import '../global.test.js';
+import config from '../../common/config/index.js';
+import tokenService from '../../common/services/create-token.js';
+import verifyUserService from '../../common/services/verificationApi.js';
+import tokenApi from '../../common/services/tokenApi.js';
+import sendTokenService from '../../common/services/send-token.js';
+import controller from '../../app/verify/get.controller.js';
 
 describe('Verify Get Controller', () => {
   let req; let res;

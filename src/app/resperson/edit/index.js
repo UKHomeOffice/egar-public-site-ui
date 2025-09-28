@@ -1,5 +1,5 @@
-const nav = require('../../../common/utils/nav');
-const getController = require('./get.controller');
-const postController = require('./post.controller');
+import nav from '../../../common/utils/nav.js';
+import getController from './get.controller.js';
+import postController from './post.controller.js';
 
-module.exports = nav.buildRouterAndPaths('/resperson/edit', getController, postController);
+export default nav.buildRouterAndPaths('/resperson/edit', getController, postController);

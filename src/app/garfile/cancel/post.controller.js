@@ -1,10 +1,13 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const emailService = require('../../../common/services/sendEmail');
-const config = require('../../../common/config');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garApi from '../../../common/services/garApi.js';
+import emailService from '../../../common/services/sendEmail.js';
+import config from '../../../common/config/index.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   logger.debug('In garfile / cancel post controller');
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();

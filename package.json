@@ -3,22 +3,25 @@
   "version": "1.0.0",
   "description": "Electronic Gar Site",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon start.js",
-    "test": "nyc --reporter=lcov mocha --recursive",
+    "dev": "nodemon ./src/start.js",
+    "test": "nyc  --report-dir=./coverage --reporter=lcov mocha --recursive ./src/test",
     "test-drone": "nyc --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --recursive"
   },
   "nyc": {
-    "all": true,
+    "include": [
+      "src/**/*.js"
+    ],
     "exclude": [
-      "public/javascripts/*.js",
-      "**/lcov-report",
-      "common/templates/includes/tabs/*.js",
-      "*.js",
-      "app/router.js",
-      "test/**/*.js"
+      "src/coverage/**",
+      "src/test/**/*.js",
+      "node_modules/**",
+      "src/public"
     ]
-  },
+  },"mocha": {
+    "env": "dotenv_config_path=/.env.dev"
+},
   "overrides": {
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "tough-cookie": "4.1.3"
@@ -74,7 +77,8 @@
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",
     "chai": "^4.2.0",
-    "csvtojson": "^2.0.10",
+    "dotenv": "^17.2.2",
+    "esmock": "^2.7.3",
     "mocha": "11.1.0",
     "nock": "^10.0.0",
     "node-test": "^1.2.4",

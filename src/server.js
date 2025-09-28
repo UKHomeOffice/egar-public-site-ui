@@ -1,39 +1,46 @@
 /* eslint-disable no-underscore-dangle */
 
 // Node.js core dependencies
-const path = require('path');
-const express = require('express');
-const session = require('express-session');
-const favicon = require('serve-favicon');
+import path from 'path';
 
-// Npm dependencies
-const bodyParser = require('body-parser');
-const i18n = require('i18n');
-const loggingMiddleware = require('morgan');
-const argv = require('minimist')(process.argv.slice(2));
-const compression = require('compression');
-const nunjucks = require('nunjucks');
-const helmet = require('helmet');
-const _ = require('lodash');
-const cookieParser = require('cookie-parser');
-const uuid = require('uuid/v4');
-const csrf = require('csurf');
-const PgSession = require('connect-pg-simple')(session);
+import express from 'express';
+import session from 'express-session';
+import favicon from 'serve-favicon';
 
+import bodyParser from 'body-parser';
 
+import i18n from 'i18n';
+import loggingMiddleware from 'morgan';
+import argvFactory from 'minimist';
+const argv = argvFactory(process.argv.slice(2));
+import compression from 'compression';
+import nunjucks from 'nunjucks';
+import helmet from 'helmet';
+import _ from 'lodash';
+import cookieParser from 'cookie-parser';
+import uuid from 'uuid';
+import csrf from 'csurf';
+import PgSessionFactory from 'connect-pg-simple';
+const PgSession = PgSessionFactory(session);
 
-// Local dependencies
-const logger = require('./common/utils/logger')(__filename);
-const config = require('./common/config/index');
-const availability = require('./common/config/availability')
-const router = require('./app/router');
-const db = require('./common/utils/db');
-const noCache = require('./common/utils/no-cache');
-const autocompleteUtil = require('./common/utils/autocomplete');
-const correlationHeader = require('./common/middleware/correlation-header');
-const nunjucksFilters = require('./common/utils/templateFilters.js');
-const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
-const {IS_HTTPS_SERVER, SAME_SITE_VALUE} = require("./common/config");
+import loggerFactory from './common/utils/logger.js';
+
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+import { dirname } from 'path';
+const __dirname = dirname(__filename);
+
+const logger = loggerFactory(__filename);
+import config from './common/config/index.js';
+import availability from './common/config/availability.js';
+import router from './app/router.js';
+import db from './common/utils/db.js';
+import noCache from './common/utils/no-cache.js';
+import autocompleteUtil from './common/utils/autocomplete.js';
+import correlationHeader from './common/middleware/correlation-header.js';
+import nunjucksFilters from './common/utils/templateFilters.js';
+import travelPermissionCodes from './common/utils/travel_permission_codes.json' with { type: 'json' };
+import { IS_HTTPS_SERVER, SAME_SITE_VALUE } from './common/config/index.js';
 
 // Global constants
 const PORT = (process.env.PORT || 3000);
@@ -48,12 +55,12 @@ logger.debug('Secure Flag for Cookie set to: ' + secureFlag);
 
 // Define app views
 const APP_VIEWS = [
-  path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
   __dirname,
-  'node_modules/govuk-frontend/',
-  'node_modules/govuk-frontend/components/',
-  'common/templates',
-  'common/templates/includes',
+  // path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
+  path.join(__dirname, '../node_modules/govuk-frontend/'),
+  path.join(__dirname, '/node_modules/govuk-frontend/components/'),
+  path.join(__dirname, '/common/templates'),
+  path.join(__dirname, '/common/templates/includes'),
 ];
 
 function initialiseDb() {
@@ -77,7 +84,7 @@ function initialisExpressSession(app) {
   app.use(cookieParser());
   app.use(session({
     name: 'sess_id',
-    genid: () => uuid(),
+    genid: () => uuid.v4(),
     store: new PgSession({
       conString: config.PUBLIC_SITE_DB_CONNSTR,
       ttl: 60 * 60,
@@ -110,8 +117,9 @@ function initialiseGlobalMiddleware(app) {
       next();
     });
   }
+  //todo: reinstate favicon
+  // app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
 
-  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
   app.use(compression());
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
@@ -211,7 +219,7 @@ function initialiseTemplateEngine(app) {
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
   // nunjucksEnvironment.addGlobal("toDate", toDate());
-  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_POSTCODE_LENGTH', config.MAX_POSTCODE_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
@@ -229,12 +237,12 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('ONE_LOGIN_SHOW_ONE_LOGIN', config.ONE_LOGIN_SHOW_ONE_LOGIN);
   nunjucksEnvironment.addGlobal('ONE_LOGIN_POST_MIGRATION', config.ONE_LOGIN_POST_MIGRATION);
 
-  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   logger.info('Set global settings for nunjucks');
 }
 
 function initialisePublic(app) {
-  app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')));
+  app.use('/javascripts', express.static(path.join(__dirname, '..', '/node_modules/accessible-autocomplete/dist')));
   //app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
   app.use('/assets', express.static(path.join(__dirname, '/common/assets/')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
@@ -243,9 +251,25 @@ function initialisePublic(app) {
   logger.info('Initialised public assets');
 }
 
+function listRoutes(app) {
+  logger.info('Registered routes:');
+  app._router.stack.forEach((middleware) => {
+    if (middleware.route) { // routes registered directly on the app
+      logger.info(`${Object.keys(middleware.route.methods).join(', ').toUpperCase()} ${middleware.route.path}`);
+    } else if (middleware.name === 'router') { // router middleware
+      middleware.handle.stack.forEach((handler) => {
+        if (handler.route) {
+          logger.info(`${Object.keys(handler.route.methods).join(', ').toUpperCase()} ${handler.route.path}`);
+        }
+      });
+    }
+  });
+}
+
 function initialiseRoutes(app) {
   logger.info('Initialised router');
-  router.bind(app);
+  router(app);
+  // listRoutes(app);
   logger.info('Initialised routes');
 }
 
@@ -281,7 +305,7 @@ function initialise() {
       initialisePublic(unconfiguredApp);
       initialiseErrorHandling(unconfiguredApp);
       logger.info('Initialised app: ');
-    } catch(e) {
+    } catch (e) {
       logger.error("Prepping the database failed.")
       logger.error(e);
     }
@@ -313,7 +337,7 @@ if (argv.i) {
   start();
 }
 
-module.exports = {
+export default {
   start,
   getApp: initialise,
 };

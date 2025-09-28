@@ -93,4 +93,4 @@ class ExcelParser {
   }
 }
 
-module.exports.ExcelParser = ExcelParser;
+export { ExcelParser };

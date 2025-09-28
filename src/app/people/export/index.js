@@ -1,6 +1,5 @@
-const nav = require('../../../common/utils/nav');
+import nav from '../../../common/utils/nav.js';
 
-// Local dependencies
-const getController = require('./get.controller');
+import getController from './get.controller.js';
 
-module.exports = nav.buildRouterAndPaths('/people/export', getController);
+export default nav.buildRouterAndPaths('/people/export', getController);

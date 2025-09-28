@@ -1,15 +1,14 @@
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-
-const { deleteAccount } = require('../../../app/user/deleteAccount/utils');
-const controller = require('../../../app/user/deleteAccount/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import { deleteAccount } from '../../../app/user/deleteAccount/utils.js';
+import controller from '../../../app/user/deleteAccount/get.controller.js';
 
 describe('User Delete Account Get Controller', () => {
   let req; let res; let deleteOptionStub;

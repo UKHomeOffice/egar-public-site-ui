@@ -1,7 +1,11 @@
 /* eslint no-underscore-dangle: 0 */
-const logger = require('../../common/utils/logger')(__filename);
-const validations = require('../../app/people/validations');
-const validator = require('../../common/utils/validator');
+import loggerFactory from '../../common/utils/logger.js';
+
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validations from '../../app/people/validations.js';
+import validator from '../../common/utils/validator.js';
 
 class Manifest {
   /**
@@ -66,7 +70,7 @@ class Manifest {
         this.manifest.map(async (person) => {
           try {
             const req = Manifest.turnPersonToRequest(person);
-            return await validator.validateChains(validations.validations(req));
+            return await validator.validateChains(validations(req));
           } catch (err) {
             this._recordValidationErr(this.manifest.indexOf(person));
           }
@@ -123,4 +127,4 @@ class Manifest {
   }
 }
 
-module.exports.Manifest = Manifest;
+export { Manifest };

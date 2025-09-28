@@ -2,31 +2,28 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const rewire = require('rewire');
+import sinon from 'sinon';
 
-require('../../global.test');
-const tokenApi = require('../../../common/services/tokenApi');
-const config = require('../../../common/config');
-const userCreateApi = require('../../../common/services/createUserApi');
-const tokenService = require('../../../common/services/create-token');
-const sendTokenService = require('../../../common/services/send-token');
-const CookieModel = require('../../../common/models/Cookie.class');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const whiteListService = require('../../../common/services/whiteList');
-
-const settings = require('../../../common/config/index');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import rewire from 'rewire';
+import '../../global.test.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import config from '../../../common/config/index.js';
+import userCreateApi from '../../../common/services/createUserApi.js';
+import tokenService from '../../../common/services/create-token.js';
+import sendTokenService from '../../../common/services/send-token.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import whiteListService from '../../../common/services/whiteList.js';
+import settings from '../../../common/config/index.js';
 const configMock = {
   ...settings,
   ONE_LOGIN_SHOW_ONE_LOGIN: false
 };
-const controller = require('../../../app/user/register/post.controller', {
-  '../../../common/config/index': configMock
-});
+import controller from '../../../app/user/register/post.controller.js';
 
 describe('User Register Post Controller', () => {
   let req; let res;

@@ -1,15 +1,14 @@
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-let roles = require('../../../common/seeddata/egar_user_roles.json');
-const CookieModel = require('../../../common/models/Cookie.class');
-
-const controller = require('../../../app/organisation/assignrole/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import roles from '../../../common/seeddata/egar_user_roles.json' with { type: "json"};
+import CookieModel from '../../../common/models/Cookie.class.js';
+import controller from '../../../app/organisation/assignrole/get.controller.js';
 
 describe('Organisation Assign Role Get Controller', () => {
   let req; let res;

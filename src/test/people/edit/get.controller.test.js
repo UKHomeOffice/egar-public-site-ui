@@ -1,20 +1,19 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-expressions */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const { savedPeople } = require('../../fixtures');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
-const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
-const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
-const personApi = require('../../../common/services/personApi');
-
-const controller = require('../../../app/people/edit/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import { savedPeople } from '../../fixtures.js';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import persontype from '../../../common/seeddata/egar_type_of_saved_person';
+import documenttype from '../../../common/seeddata/egar_saved_people_travel_document_type.json' with { type: "json"};
+import genderchoice from '../../../common/seeddata/egar_gender_choice.json' with { type: "json"};
+import personApi from '../../../common/services/personApi.js';
+import controller from '../../../app/people/edit/get.controller.js';
 
 describe('Person Edit Get Controller', () => {
   let req; let res; let personApiStub; let apiResponse;

@@ -1,7 +1,11 @@
 /* eslint-disable consistent-return */
-const logger = require('../../../common/utils/logger')(__filename);
-const CookieModel = require('../../../common/models/Cookie.class');
-const { deleteAccount } = require('./utils');
+import loggerFactory from '../../../common/utils/logger.js';
+
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../../../common/models/Cookie.class.js';
+import utils from './utils.js';
 
 const postController = async (req, res) => {
   logger.debug('In user / deleteAccount postcontroller');
@@ -13,7 +17,7 @@ const postController = async (req, res) => {
   let deleteAccountOptions;
 
   try {
-    deleteAccountOptions = await deleteAccount[userRole](cookie);
+    deleteAccountOptions = await utils.deleteAccount[userRole](cookie);
 
     res.locals.text = deleteAccountOptions.text();
     const apiResponse = await deleteAccountOptions.deleteAccount();
@@ -46,4 +50,4 @@ const postController = async (req, res) => {
   });
 };
 
-module.exports = postController;
+export default postController;

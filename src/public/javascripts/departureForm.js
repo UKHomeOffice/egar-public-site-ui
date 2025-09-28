@@ -1,3 +1,6 @@
+
+import validator from "/utils/shared_validator.js";
+
 const departureDay = document.getElementById("departureDay");
 const departureMonth = document.getElementById("departureMonth");
 const departureYear = document.getElementById("departureYear");
@@ -17,7 +20,7 @@ let departureFormSubmitter = undefined;
 
 dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
 
-const departureDate =  () => {
+const departureDate = () => {
   return new Date(
     Number(departureYear.value),
     Number(departureMonth.value) - 1,
@@ -26,33 +29,33 @@ const departureDate =  () => {
     Number(departureMinuteTime.value)
   );
 };
-  
+
 
 function showDepartureDateWarningMessages(providedDate) {
-  twoHourWarningTexts.forEach($element => $element.hidden = isTwoHoursPriorDeparture(providedDate));
-  fortyEightHourWarningTexts.forEach($element => $element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate));
+  twoHourWarningTexts.forEach($element => $element.hidden = validator.isTwoHoursPriorDeparture(providedDate));
+  fortyEightHourWarningTexts.forEach($element => $element.hidden = validator.dateNotMoreThanTwoDaysInFuture(providedDate));
 }
 
 window.addEventListener("load", () => {
-    // So it does not show warning message when form is blank
-    if ([
-      departureYear.value, 
-      departureMonth.value,
-      departureDay.value,
-      departureHourTime.value,
-      departureMinuteTime.value
-    ].includes('')) {
-      return;
-    }
-    
+  // So it does not show warning message when form is blank
+  if ([
+    departureYear.value,
+    departureMonth.value,
+    departureDay.value,
+    departureHourTime.value,
+    departureMinuteTime.value
+  ].includes('')) {
+    return;
+  }
+
   showDepartureDateWarningMessages(departureDate());
 })
 
 
 pageForm.addEventListener("submit", (e) => {
-    // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
+  // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
   if ([
-    departureYear.value, 
+    departureYear.value,
     departureMonth.value,
     departureDay.value,
     departureHourTime.value,
@@ -64,8 +67,9 @@ pageForm.addEventListener("submit", (e) => {
   if (departureFormSubmitter) {
     return;
   }
-  
-  if (isTwoHoursPriorDeparture(departureDate()) && dateNotMoreThanTwoDaysInFuture(departureDate())) {
+
+  if (validator.isTwoHoursPriorDeparture(departureDate()) && validator.dateNotMoreThanTwoDaysInFuture(departureDate())) {
+
     return;
   }
 
@@ -73,40 +77,40 @@ pageForm.addEventListener("submit", (e) => {
   departureFormSubmitter = e.submitter;
   showDepartureDateWarningMessages(departureDate());
   confirmWarnedDepartureDialog.showModal();
-  
+
 });
 
 confirmWarnedDepartureDialog.addEventListener("close", (e) => {
   departureFormSubmitter = undefined;
 });
 continueWithWarnedDate.addEventListener("click", (e) => {
-    pageForm.requestSubmit(departureFormSubmitter);
+  pageForm.requestSubmit(departureFormSubmitter);
 });
 
 departureDay.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'day');
-  autoTab(departureDay, 'day', departureMonth);
+  e.target.value = validator.sanitiseDateOrTime(e.target.value, 'day');
+  validator.autoTab(departureDay, 'day', departureMonth);
   showDepartureDateWarningMessages(departureDate());
 });
 
 departureMonth.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'month');
-  autoTab(departureMonth, 'month', departureYear);
+  e.target.value = validator.sanitiseDateOrTime(e.target.value, 'month');
+  validator.autoTab(departureMonth, 'month', departureYear);
   showDepartureDateWarningMessages(departureDate());
 });
 
 departureYear.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'year')
+  e.target.value = validator.sanitiseDateOrTime(e.target.value, 'year')
   showDepartureDateWarningMessages(departureDate());
-});  
+});
 
 departureHourTime.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'hour');
-  autoTab(departureHourTime, 'hour', departureMinuteTime);
+  e.target.value = validator.sanitiseDateOrTime(e.target.value, 'hour');
+  validator.autoTab(departureHourTime, 'hour', departureMinuteTime);
   showDepartureDateWarningMessages(departureDate());
 });
 
 departureMinuteTime.addEventListener("keyup", (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'minute');
+  e.target.value = validator.sanitiseDateOrTime(e.target.value, 'minute');
   showDepartureDateWarningMessages(departureDate());
 });

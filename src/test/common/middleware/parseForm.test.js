@@ -1,20 +1,18 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-
-require('../../global.test');
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import esmock from 'esmock';
+import '../../global.test.js';
 
 describe('Parse Form Middleware', () => {
   let res; let req; let next;
 
   beforeEach(() => {
     chai.use(sinonChai);
-
     next = sinon.spy();
   });
 
@@ -24,7 +22,8 @@ describe('Parse Form Middleware', () => {
 
   it('should call next and invoke the bodyParser', async () => {
     const bodyParserStub = sinon.stub();
-    const proxiedMiddleware = proxyquire('../../../common/middleware/parseForm', {
+    
+    const proxiedMiddleware = await esmock('../../../common/middleware/parseForm.js', {
       'body-parser': { urlencoded: bodyParserStub },
     });
 

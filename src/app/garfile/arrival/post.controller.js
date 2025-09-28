@@ -1,9 +1,12 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const airportValidation = require('../../../common/utils/airportValidation');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garApi from '../../../common/services/garApi.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import airportValidation from '../../../common/utils/airportValidation.js';
 
 const performAPICall = (cookie, buttonClicked, res) => {
   garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
@@ -82,7 +85,7 @@ const buildValidations = (voyage) => {
   return validations;
 };
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   logger.debug('In garfile / arrival post controller');
 
   const cookie = new CookieModel(req);

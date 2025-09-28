@@ -1,11 +1,14 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenApi = require('../../../common/services/tokenApi');
-const token = require('../../../common/services/create-token');
-const emailService = require('../../../common/services/sendEmail');
-const settings = require('../../../common/config/index');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import token from '../../../common/services/create-token.js';
+import emailService from '../../../common/services/sendEmail.js';
+import settings from '../../../common/config/index.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In verify / MFA get controller');
   const cookie = new CookieModel(req);
   const mfaTokenLength = settings.MFA_TOKEN_LENGTH;

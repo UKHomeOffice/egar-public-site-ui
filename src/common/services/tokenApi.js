@@ -1,15 +1,17 @@
-const request = require('request');
-const moment = require('moment');
-const Sequelize = require('sequelize');
-const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
-const db = require('../utils/db');
-const config = require('../config/index');
+import request from 'request';
+import moment from 'moment';
+import Sequelize from 'sequelize';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import endpoints from '../config/endpoints.js';
+import db from '../utils/db.js';
+import config from '../config/index.js';
 
 const { lte } = Sequelize.Op;
 
-module.exports = {
-
+const exported = {
   /**
    * Sends user tokenId to API.
    *
@@ -134,6 +136,7 @@ module.exports = {
         });
     });
   },
+
   /**
    * Validates the number of verification attempts for a token.
    *
@@ -144,6 +147,7 @@ module.exports = {
     logger.info(`Token verification attempt number ${token.NumAttempts}`);
     return token.NumAttempts <= config.MFA_TOKEN_MAX_ATTEMPTS;
   },
+
   /**
    * Validates a MFA token for a given user.
    *
@@ -199,6 +203,7 @@ module.exports = {
         });
     });
   },
+
   /**
    * Updates a give MFA token for an email
    * @param {String} Email Email of the user
@@ -259,5 +264,18 @@ module.exports = {
           reject(err);
         });
     });
-  },
+  }
 };
+
+export default exported;
+
+export const {
+  setToken,
+  updateToken,
+  setInviteUserToken,
+  setMfaToken,
+  validNumAttempts,
+  validateMfaToken,
+  updateMfaToken,
+  getLastLogin
+} = exported;

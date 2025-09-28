@@ -1,7 +1,7 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
+import CookieModel from '../../../common/models/Cookie.class.js';
+import fixedBasedOperatorOptions from '../../../common/seeddata/fixed_based_operator_options.json' with { type: "json"};
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const cookie = new CookieModel(req);
   const context = {
     fixedBasedOperatorOptions,

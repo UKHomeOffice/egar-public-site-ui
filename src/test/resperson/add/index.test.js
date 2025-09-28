@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-require('../../global.test');
-const index = require('../../../app/resperson/add/index');
+import '../../global.test.js';
+import index from '../../../app/resperson/add/index.js';
 
 describe('Responsible person index.js', () => {
   it('should have included responsible person everything', () => {

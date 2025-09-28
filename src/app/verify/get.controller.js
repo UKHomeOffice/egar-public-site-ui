@@ -1,15 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 
-const { nanoid } = require('../../common/utils/utils');
-const i18n = require('i18n');
-const logger = require('../../common/utils/logger')(__filename);
-const CookieModel = require('../../common/models/Cookie.class');
-const verifyUserService = require('../../common/services/verificationApi');
-const sendTokenService = require('../../common/services/send-token');
-const tokenService = require('../../common/services/create-token');
-const tokenApi = require('../../common/services/tokenApi');
+import utils from '../../common/utils/utils.js';
 
-module.exports = async (req, res) => {
+import i18n from 'i18n';
+import loggerFactory from '../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../../common/models/Cookie.class.js';
+import verifyUserService from '../../common/services/verificationApi.js';
+import sendTokenService from '../../common/services/send-token.js';
+import tokenService from '../../common/services/create-token.js';
+import tokenApi from '../../common/services/tokenApi.js';
+
+export default async (req, res) => {
   logger.debug('In verify / registeruser get controller');
 
   // Start by clearing cookies and initialising
@@ -28,7 +32,7 @@ module.exports = async (req, res) => {
     if (parsedResponse.message === 'Token has expired') {
       logger.info('Token expired, updating');
       const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
-      const alphabetToken = nanoid(alphabet, 13);
+      const alphabetToken = utils.nanoid(alphabet, 13);
       const hashtoken = tokenService.generateHash(alphabetToken);
       // TODO: A Promise.all should wrap these two asynchronous calls to ensure
       // both the new token and email are sent otherwise users will not know if

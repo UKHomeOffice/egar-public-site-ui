@@ -1,14 +1,13 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../global.test');
-
-const controller = require('../../app/welcome/post.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../global.test.js';
+import controller from '../../app/welcome/post.controller.js';
 
 describe('Welcome Post Controller', () => {
   let req; let res;

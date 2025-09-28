@@ -1,9 +1,11 @@
-const request = require('request');
-const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
+import request from 'request';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import endpoints from '../config/endpoints.js';
 
-module.exports = {
-
+const exported = {
     create(userId, resPerson) {
         return new Promise((resolve, reject) => {
             request.post({
@@ -80,7 +82,6 @@ module.exports = {
         });
     },
 
-
     deleteResponsiblePerson(userId, responsiblePersonId) {
         return new Promise((resolve, reject) => {
             request.delete({
@@ -96,6 +97,15 @@ module.exports = {
                 resolve(body);
             });
         });
-    },
-
+    }
 };
+
+export default exported;
+
+export const {
+    create,
+    getResPersons,
+    getResPersonDetails,
+    updateResPerson,
+    deleteResponsiblePerson
+} = exported;

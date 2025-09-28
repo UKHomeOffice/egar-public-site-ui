@@ -1,9 +1,11 @@
-const request = require('request');
-const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
+import request from 'request';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import endpoints from '../config/endpoints.js';
 
-module.exports = {
-
+const exported = {
   /**
    * Calls create craft API endpoint.
    *
@@ -27,5 +29,11 @@ module.exports = {
       .catch((err) => {
         logger.error(err);
       });
-  },
+  }
 };
+
+export default exported;
+
+export const {
+  createGar
+} = exported;

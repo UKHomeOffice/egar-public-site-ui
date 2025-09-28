@@ -1,7 +1,10 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const orgApi = require('../../../common/services/organisationApi');
-const logger = require('../../../common/utils/logger')(__filename);
-const createArrayCsvStringifier = require('csv-writer').createArrayCsvStringifier;
+import CookieModel from '../../../common/models/Cookie.class.js';
+import orgApi from '../../../common/services/organisationApi.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import { createArrayCsvStringifier } from 'csv-writer';
 
 
 const writeUsersAsCSVtoResponse = (res, orgUsers, orgName) => {
@@ -20,7 +23,7 @@ const writeUsersAsCSVtoResponse = (res, orgUsers, orgName) => {
     res.end();
 }
 
-module.exports = (req, res) => {
+export default (req, res) => {
     logger.debug('In organisation export users get controller');
     const cookie = new CookieModel(req);
 
@@ -37,4 +40,4 @@ module.exports = (req, res) => {
             writeUsersAsCSVtoResponse(res, orgUsers, cookie.getOrganisationName());
         }
         )
-}
+};

@@ -1,5 +1,5 @@
-const { customAlphabet } = require('nanoid');
-const documenttype = require('../../common/seeddata/egar_saved_people_travel_document_type.json');
+import { customAlphabet } from 'nanoid';
+import documenttype from '../../common/seeddata/egar_saved_people_travel_document_type.json' with { type: "json"};
 
 function trimToDecimalPlaces(input, places) {
 
@@ -55,10 +55,10 @@ function nanoid(alphabet, tokenLength) {
 }
 
 
-module.exports = {
+export default {
     trimToDecimalPlaces,
     documentTypes,
     getResponsiblePersonFromReq,
     getResponsiblePersonFromGar,
     nanoid
-}
+};

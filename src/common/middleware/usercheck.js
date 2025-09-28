@@ -1,5 +1,8 @@
-const CookieModel = require('../../common/models/Cookie.class');
-const logger = require('../utils/logger')(__filename);
+import CookieModel from '../../common/models/Cookie.class.js';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
 
 const checkUserInCookie = (cookie) => {
   const userDbIdNotSet = cookie.getUserDbId() === undefined || cookie.getUserDbId() === null;
@@ -10,7 +13,7 @@ const checkUserInCookie = (cookie) => {
 };
 
 
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   const cookie = new CookieModel(req);
 
   const isLoggedIn = checkUserInCookie(cookie) === false; // weird logic. To be refactored.

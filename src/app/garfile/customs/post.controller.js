@@ -1,18 +1,20 @@
-const _ = require('lodash');
+import _ from 'lodash';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validations from './validations.js';
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garApi from '../../../common/services/garApi.js';
+import prohibitedGoodsOptions from '../../../common/seeddata/egar_prohibited_goods_options.json' with { type: "json"};
+import baggageOptions from '../../../common/seeddata/egar_baggage_options.json' with { type: "json"};
+import reasonForVisitOptions from '../../../common/seeddata/egar_visit_reason_options.json' with { type: "json"};
+import freeCirculationOptions from '../../../common/seeddata/egar_craft_eu_free_circulation_options.json' with { type: "json"};
+import intentionValueOptions from '../../../common/seeddata/egar_intention_value_options.json' with { type: "json"};
+import continentalShelfOptions from '../../../common/seeddata/egar_continental_shelf_options.json' with { type: "json"};
 
-const logger = require('../../../common/utils/logger')(__filename);
-const validations = require('./validations');
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options.json');
-const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
-const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
-const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
-const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
-const continentalShelfOptions = require('../../../common/seeddata/egar_continental_shelf_options.json');
-
-module.exports = (req, res) => {
+export default (req, res) => {
   const cookie = new CookieModel(req);
 
   req.body.goodsDeclaration = _.trim(req.body.goodsDeclaration);
@@ -51,7 +53,7 @@ module.exports = (req, res) => {
 
   const { buttonClicked } = req.body;
 
-  validator.validateChains(validations.validations(req))
+  validator.validateChains(validations(req))
     .then(() => {
       garApi.patch(cookie.getGarId(), cookie.getGarStatus(), customs)
         .then((apiResponse) => {

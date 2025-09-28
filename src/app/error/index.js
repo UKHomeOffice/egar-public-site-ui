@@ -1,5 +1,5 @@
 // Npm dependencies
-const express = require('express');
+import express from 'express';
 
 // Initialisation
 const router = new express.Router();
@@ -30,4 +30,4 @@ router.get('/error/loginError', (req, res) => {
 });
 
 // Export
-module.exports = { router };
+export default { router };

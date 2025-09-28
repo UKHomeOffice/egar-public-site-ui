@@ -1,12 +1,15 @@
 
-const { json } = require('body-parser');
-const CookieModel = require('../../common/models/Cookie.class');
-const orgApi = require('../../common/services/organisationApi');
-const logger = require('../../common/utils/logger')(__filename);
-const pagination = require('../../common/utils/pagination');
-const {permissionLevels} = require('../../common/utils/permissionLevels');
+// import { json } from 'body-parser';
+import CookieModel from '../../common/models/Cookie.class.js';
+import orgApi from '../../common/services/organisationApi.js';
+import loggerFactory from '../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import pagination from '../../common/utils/pagination.js';
+import permissionLevels from '../../common/utils/permissionLevels.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In organisation get controller');
   const cookie = new CookieModel(req);
  

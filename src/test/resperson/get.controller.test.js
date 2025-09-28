@@ -1,13 +1,11 @@
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-
-require('../global.test');
-const CookieModel = require('../../common/models/Cookie.class');
-const resPersonApi = require('../../common/services/resPersonApi');
-
-const controller = require('../../app/resperson/get.controller');
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../global.test.js';
+import CookieModel from '../../common/models/Cookie.class.js';
+import resPersonApi from '../../common/services/resPersonApi.js';
+import controller from '../../app/resperson/get.controller.js';
 
 const responsible_persons = [
   {

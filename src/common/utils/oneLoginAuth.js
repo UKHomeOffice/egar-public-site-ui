@@ -1,19 +1,22 @@
-const config = require('../config/index');
-const logger = require('./logger')(__filename);
-const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid');
-const {parseUrlForNonProd} = require('../services/oneLoginApi');
+import config from '../config/index.js';
+import loggerFactory from './logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import jwt from 'jsonwebtoken';
+import uuid from 'uuid';
+import oneLoginApi from '../services/oneLoginApi.js';
 
 
 const getOneLoginAuthUrl = (req, res) => {
   try {
-    const nonce = uuidv4();
+    const nonce = uuid.v4();
     res.cookie('nonce', nonce, {
       httpOnly: true,
       secure: config.IS_HTTPS_SERVER,
       sameSite: config.SAME_SITE_VALUE,
     });
-    const state = uuidv4();
+    const state = uuid.v4();
     res.cookie('state', state, {
       httpOnly: true,
       secure: config.IS_HTTPS_SERVER,
@@ -27,7 +30,7 @@ const getOneLoginAuthUrl = (req, res) => {
       response_type: 'code',
       client_id: clientId,
       state,
-      redirect_uri: parseUrlForNonProd(req, config.ONE_LOGIN_REDIRECT_URI),
+      redirect_uri: oneLoginApi.parseUrlForNonProd(req, config.ONE_LOGIN_REDIRECT_URI),
       scope: ['openid', 'email'].join(' '),
       nonce,
       vtr: `['Cl.Cm']`,
@@ -134,7 +137,7 @@ const decodeToken = (token) => {
 }
 
 
-module.exports = {
+export default {
   getOneLoginAuthUrl,
   getOneLoginLogoutUrl,
   getOneLoginPublicKey,

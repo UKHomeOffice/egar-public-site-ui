@@ -1,8 +1,11 @@
-const request = require('request');
-const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
+import request from 'request';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import endpoints from '../config/endpoints.js';
 
-module.exports = {
+const exported = {
   /**
    * Calls get user details API endpoint.
    *
@@ -68,6 +71,7 @@ module.exports = {
       });
     });
   },
+
   /**
    *
    * @param userEmail
@@ -107,6 +111,7 @@ module.exports = {
       });
     });
   },
+
   deleteUser(email) {
     return new Promise((resolve, reject) => {
       request.delete({
@@ -124,6 +129,7 @@ module.exports = {
       });
     });
   },
+
   userSearch(email, oneLonginSid = null) {
     return new Promise((resolve, reject) => {
       request.get({
@@ -175,3 +181,14 @@ module.exports = {
     })
   }
 };
+
+export default exported;
+
+export const {
+  getDetails,
+  updateDetails,
+  updateEmailOrOneLoginSid,
+  deleteUser,
+  userSearch,
+  createUser
+} = exported;

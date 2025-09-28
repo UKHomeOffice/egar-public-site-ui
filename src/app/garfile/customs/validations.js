@@ -1,8 +1,8 @@
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const { MAX_TEXT_BOX_LENGTH } = require('../../../common/config/index');
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import { MAX_TEXT_BOX_LENGTH } from '../../../common/config/index.js';
 
-module.exports.validations = (req) => {
+export default (req) => {
   const {
     prohibitedGoods,
     goodsDeclaration,

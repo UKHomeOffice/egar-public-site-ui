@@ -1,14 +1,13 @@
 // Npm dependencies
-const express = require('express');
+import express from 'express';
 
-// Middleware
-const flagpole = require('../../../common/middleware/flagpole');
-const csrfcheck = require('../../../common/middleware/csrfcheck')
-const parseForm = require('../../../common/middleware/parseForm');
-const setting = require('../../../common/config/index');
+import flagpole from '../../../common/middleware/flagpole.js';
 
-// Local dependencies
-const getController = require('./get.controller');
+import csrfcheck from '../../../common/middleware/csrfcheck.js';
+import parseForm from '../../../common/middleware/parseForm.js';
+import setting from '../../../common/config/index.js';
+
+import getController from './get.controller.js';
 
 // Initialisation
 const router = new express.Router();
@@ -26,7 +25,7 @@ const paths = {
 router.get(paths.index, flagpole,  csrfcheck, getController);
 
 // Export
-module.exports = {
+export default {
   router,
   paths,
 };

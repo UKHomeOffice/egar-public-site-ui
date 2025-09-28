@@ -1,32 +1,33 @@
 /* eslint-disable no-underscore-dangle */
 
-const i18n = require('i18n');
-const airportValidation = require('../../../common/utils/airportValidation');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
-const { documentTypes } = require('../../../common/utils/utils');
+import i18n from 'i18n';
 
-const listedDocumentTypes = documentTypes
+import airportValidation from '../../../common/utils/airportValidation.js';
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } from '../../../common/config/index.js';
+import utils from '../../../common/utils/utils.js';
+
+const listedDocumentTypes = utils.documentTypes
   .map(documentType => `"${documentType}"`)
   .join(", ")
 
-function getVoyageFieldLabel(key) {
-  switch (key) {
-    case 'arrivalPort': return i18n.__('field_arrival_port');
-    case 'departurePort': return i18n.__('field_departure_port');
-    case 'arrivalTime': return i18n.__('field_arrival_time');
-    case 'departureTime': return i18n.__('field_departure_time');
-    case 'arrivalDate': return i18n.__('field_arrival_date');
-    case 'departureDate': return i18n.__('field_departure_date');
-    case 'registration': return i18n.__('field_aircraft_registration');
-    case 'craftType': return i18n.__('field_aircraft_type');
-    case 'craftBase': return i18n.__('field_aircraft_base');
-    default: return `One of the voyage details (${key})`;
-  }
-}
+export const getVoyageFieldLabel = (key) => {
+  const labels = {
+    arrivalPort: i18n.__('field_arrival_port'),
+    departurePort: i18n.__('field_departure_port'),
+    arrivalTime: i18n.__('field_arrival_time'),
+    departureTime: i18n.__('field_departure_time'),
+    arrivalDate: i18n.__('field_arrival_date'),
+    departureDate: i18n.__('field_departure_date'),
+    registration: i18n.__('field_aircraft_registration'),
+    craftType: i18n.__('field_aircraft_type'),
+    craftBase: i18n.__('field_aircraft_base'),
+  };
+  return labels[key] || `Voyage field (${key})`;
+};
 
-function getCrewFieldLabel(key) { //NOSONAR
+export const getCrewFieldLabel = (key) => { //NOSONAR
   switch (key) {
     case 'documentType': return i18n.__('field_travel_document_type');
     case 'issuingState': return i18n.__('field_issuing_state');
@@ -42,7 +43,7 @@ function getCrewFieldLabel(key) { //NOSONAR
   }
 }
 
-module.exports.validations = (voyageObj, crewArr, passengersArr) => {
+export const validations = (voyageObj, crewArr, passengersArr) => {
   const validationArr = [
     [new ValidationRule(validator.isValidAirportCode, '', voyageObj.arrivalPort, 'Arrival port should be an ICAO or IATA code')],
     [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalPort, 'Enter a value for the arrival port')],

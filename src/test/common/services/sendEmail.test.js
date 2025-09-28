@@ -1,17 +1,18 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const rewire = require('rewire');
+import sinon from 'sinon';
 
-require('../../global.test');
-const notify = require('notifications-node-client');
-const config = require('../../../common/config/index');
-
-const service = require('../../../common/services/sendEmail');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import rewire from 'rewire';
+import '../../global.test.js';
+import notify from 'notifications-node-client';
+import config from '../../../common/config/index.js';
+import service from '../../../common/services/sendEmail.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
 
 describe('Send Email Service', () => {
   let notifyStub;

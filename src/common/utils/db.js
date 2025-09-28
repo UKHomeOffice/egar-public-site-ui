@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const config = require('../config/index');
+import Sequelize from 'sequelize';
+import config from '../config/index.js';
 
 const sequelize = new Sequelize(config.PUBLIC_SITE_DBNAME,
   config.PUBLIC_SITE_DBUSER,
@@ -15,13 +15,19 @@ const sequelize = new Sequelize(config.PUBLIC_SITE_DBNAME,
     },
   });
 
+import UserSessionsModel from '../models/UserSessions.js';
+import WhiteListModel from '../models/WhiteList.js';
+import SessionModel from '../models/Session.js';
 
-module.exports.Sequelize = Sequelize;
-module.exports.sequelize = sequelize;
+const UserSessions = UserSessionsModel(sequelize, Sequelize);
+const WhiteList = WhiteListModel(sequelize, Sequelize);
+const Session = SessionModel(sequelize, Sequelize);
 
-module.exports.UserSessions = require('../models/UserSessions')(sequelize, Sequelize);
-module.exports.WhiteList = require('../models/WhiteList')(sequelize, Sequelize);
-module.exports.Session = require('../models/Session')(sequelize, Sequelize);
-
-
-module.exports.op = Sequelize.Op;
+export default {
+  Sequelize,
+  sequelize,
+  UserSessions,
+  WhiteList,
+  Session,
+  op: Sequelize.Op,
+};

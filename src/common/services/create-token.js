@@ -1,9 +1,11 @@
-const crypto = require('crypto');
-const logger = require('../utils/logger')(__filename);
-const config = require('../config/index');
+import crypto from 'crypto';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import config from '../config/index.js';
 
-module.exports = {
-
+const exported = {
   /**
    * Generates a hash off an incoming token.
    *
@@ -27,5 +29,12 @@ module.exports = {
     logger.debug('Generating MFA token');
     const tokenLength = config.MFA_TOKEN_LENGTH;
     return Math.floor((10 ** (tokenLength - 1)) + Math.random() * 9 * (10 ** (tokenLength - 1)));
-  },
+  }
 };
+
+export default exported;
+
+export const {
+  generateHash,
+  genMfaToken
+} = exported;

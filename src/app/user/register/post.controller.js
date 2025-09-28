@@ -1,16 +1,18 @@
-const { nanoid } = require('../../../common/utils/utils');
-
-const logger = require('../../../common/utils/logger')(__filename);
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenservice = require('../../../common/services/create-token');
-const sendTokenService = require('../../../common/services/send-token');
-const userCreateApi = require('../../../common/services/createUserApi');
-const tokenApi = require('../../../common/services/tokenApi');
-const whitelist = require('../../../common/services/whiteList');
-const config = require('../../../common/config');
-const { USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config/index');
+import utils from '../../../common/utils/utils.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenservice from '../../../common/services/create-token.js';
+import sendTokenService from '../../../common/services/send-token.js';
+import userCreateApi from '../../../common/services/createUserApi.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import whitelist from '../../../common/services/whiteList.js';
+import config from '../../../common/config/index.js';
+import { USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } from '../../../common/config/index.js';
 
 const regFailureError = {
   message: 'Registration failed, try again',
@@ -51,7 +53,7 @@ const createUser = (req, res, cookie) => {
 
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
-  const token = nanoid(alphabet, 13);
+  const token = utils.nanoid(alphabet, 13);
   const hashtoken = tokenservice.generateHash(token);
 
   userCreateApi.post(fname, lname, usrname, cookie.getInviteUserToken())
@@ -90,7 +92,7 @@ const createUser = (req, res, cookie) => {
     });
 };
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In user / register post controller');
 
   const cookie = new CookieModel(req);

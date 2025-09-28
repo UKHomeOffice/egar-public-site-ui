@@ -1,13 +1,15 @@
-const fileType = require('file-type');
-const stream = require('stream');
-
-const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
-const transformers = require('../../../common/utils/transformers');
-const clamAVService = require('../../../common/services/clamAVService');
-const uploadFile = require('../../../common/services/fileUploadApi');
-const config = require('../../../common/config/index');
-const { isValidFileMime } = require('../../../common/utils/validator');
+import fileType from 'file-type';
+import stream from 'stream';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import garApi from '../../../common/services/garApi.js';
+import transformers from '../../../common/utils/transformers.js';
+import clamAVService from '../../../common/services/clamAVService.js';
+import uploadFile from '../../../common/services/fileUploadApi.js';
+import config from '../../../common/config/index.js';
+import validator from '../../../common/utils/validator.js';
 
 const exceedFileNumSizeLimit = (fileSize, garId) => {
   logger.debug(`Entering exceed file number & size limit function, max size 8MB max number:${config.MAX_NUM_FILES}`);
@@ -65,7 +67,7 @@ const handleDeleteDocument = (req, res) => {
   return true;
 };
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.info('Entering upload file post controller');
 
   if (handleDeleteDocument(req, res)) {
@@ -94,7 +96,7 @@ module.exports = (req, res) => {
       const mimeType = fileType(req.file.buffer);
       logger.info(`Detected uploaded file mimetype as: ${JSON.stringify(mimeType)}`);
 
-      if (!mimeType || !isValidFileMime(req.file.originalname, mimeType.mime)) {
+      if (!mimeType || !validator.isValidFileMime(req.file.originalname, mimeType.mime)) {
         logger.info('Rejecting file due to disallowed mimetype');
         res.redirect('/garfile/supportingdocuments?query=invalid');
         return;

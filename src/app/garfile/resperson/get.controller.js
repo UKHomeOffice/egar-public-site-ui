@@ -1,11 +1,14 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
-const resPersonApi = require('../../../common/services/resPersonApi');
-const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
-const utils = require('../../../common/utils/utils');
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import garApi from '../../../common/services/garApi.js';
+import resPersonApi from '../../../common/services/resPersonApi.js';
+import fixedBasedOperatorOptions from '../../../common/seeddata/fixed_based_operator_options.json' with { type: "json"};
+import utils from '../../../common/utils/utils.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   logger.debug('In garfile/responsible person get controller');
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();

@@ -1,20 +1,19 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const orgApi = require('../../../common/services/organisationApi');
-let roles = require('../../../common/seeddata/egar_user_roles.json');
-
-const controller = require('../../../app/organisation/editusers/post.controller');
-let { cookie } = require('request');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import orgApi from '../../../common/services/organisationApi.js';
+import roles from '../../../common/seeddata/egar_user_roles.json' with { type: "json"};
+import controller from '../../../app/organisation/editusers/post.controller.js';
+import { cookie } from 'request';
 
 describe('Organisation Edit Users Post Controller', () => {
   let req; let res; let orgApiStub; let sessionSaveStub;

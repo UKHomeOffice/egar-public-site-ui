@@ -1,17 +1,17 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../global.test');
-const CookieModel = require('../../common/models/Cookie.class');
-const craftApi = require('../../common/services/craftApi');
-const pagination = require('../../common/utils/pagination');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../global.test.js';
+import CookieModel from '../../common/models/Cookie.class.js';
+import craftApi from '../../common/services/craftApi.js';
+import pagination from '../../common/utils/pagination.js';
 
-controller = require('../../app/aircraft/get.controller');
+import controller from '../../app/aircraft/get.controller.js';
 
 describe('Saved Aircraft Get Controller', () => {
   let res; let individualCraftStub; let organisationCraftStub;

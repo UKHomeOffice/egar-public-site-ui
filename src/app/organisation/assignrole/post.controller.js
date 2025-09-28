@@ -1,16 +1,19 @@
-const { nanoid } = require('../../../common/utils/utils');
-const logger = require('../../../common/utils/logger')(__filename);
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenservice = require('../../../common/services/create-token');
-const emailService = require('../../../common/services/sendEmail');
-const tokenApi = require('../../../common/services/tokenApi');
-const config = require('../../../common/config/index');
-let roles = require('../../../common/seeddata/egar_user_roles.json');
-const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
+import utils from '../../../common/utils/utils.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenservice from '../../../common/services/create-token.js';
+import emailService from '../../../common/services/sendEmail.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import config from '../../../common/config/index.js';
+import roles from '../../../common/seeddata/egar_user_roles.json' with { type: "json"};
+import oneLoginApi from '../../../common/services/oneLoginApi.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
   const { role } = req.body;
@@ -23,7 +26,7 @@ module.exports = (req, res) => {
 
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
-  const token = nanoid(alphabet, 13);
+  const token = utils.nanoid(alphabet, 13);
   const hashToken = tokenservice.generateHash(token);
   const inviterName = cookie.getUserFirstName();
   const firstName = cookie.getInviteUserFirstName();
@@ -62,7 +65,7 @@ module.exports = (req, res) => {
             lastname: lastName,
             user: inviterName,
             org_name: inviteOrgName,
-            base_url: parseUrlForNonProd(req, config.BASE_URL),
+            base_url: oneLoginApi.parseUrlForNonProd(req, config.BASE_URL),
             token,
           }).then(() => {
             res.redirect('/organisation/invite/success');

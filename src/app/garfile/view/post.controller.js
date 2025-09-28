@@ -1,9 +1,12 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const airportValidation = require('../../../common/utils/airportValidation');
-const CookieModel = require('../../../common/models/Cookie.class');
-const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const garApi = require('../../../common/services/garApi');
-const { isAbleToCancelGar } = require('../../../common/utils/validator');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import airportValidation from '../../../common/utils/airportValidation.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import manifestFields from '../../../common/seeddata/gar_manifest_fields.json' with { type: "json"};
+import garApi from '../../../common/services/garApi.js';
+import validator from '../../../common/utils/validator.js';
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -28,7 +31,7 @@ const checkGARUser = (parsedGar, userId, organisationId) => {
   return false;
 };
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In garfile / view post controller');
   const cookie = new CookieModel(req);
   let { garId } = req.body;
@@ -78,7 +81,7 @@ module.exports = (req, res) => {
         cookie,
         manifestFields,
         garfile: parsedGar,
-        isAbleToCancelGar: isAbleToCancelGar(lastDepartureDateString),
+        isAbleToCancelGar: validator.isAbleToCancelGar(lastDepartureDateString),
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         showChangeLinks: true,
@@ -99,4 +102,5 @@ module.exports = (req, res) => {
       res.render('app/garfile/view/index', renderContext);
     });
 };
-module.exports.checkGARUser = checkGARUser;
+
+export { checkGARUser };

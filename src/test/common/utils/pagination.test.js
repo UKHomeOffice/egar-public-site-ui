@@ -1,15 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const rewire = require('rewire');
+import sinon from 'sinon';
 
-require('../../global.test');
-
-const pagination = require('../../../common/utils/pagination');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import rewire from 'rewire';
+import '../../global.test.js';
+import pagination from '../../../common/utils/pagination.js';
 
 describe('Pagination Module', () => {
   let req; let saveSessionStub;

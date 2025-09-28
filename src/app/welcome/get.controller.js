@@ -1,9 +1,12 @@
-const logger = require('../../common/utils/logger')(__filename);
-const { HOMEPAGE_MESSAGE } = require('../../common/config/index');
-const {ONE_LOGIN_POST_MIGRATION, } = require("../../common/config/index");
-const oneLoginUtil = require("../../common/utils/oneLoginAuth");
+import loggerFactory from '../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import { HOMEPAGE_MESSAGE } from '../../common/config/index.js';
+import { ONE_LOGIN_POST_MIGRATION } from '../../common/config/index.js';
+import oneLoginUtil from '../../common/utils/oneLoginAuth.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In welcome get controller');
   
   if (req.cookies.errorPage === 'login-error') {

@@ -1,28 +1,29 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const { decodeToken } = require('../../../common/utils/oneLoginAuth');
-const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
-const validator = require('../../../common/utils/validator');
-const {
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import { decodeToken } from '../../../common/utils/oneLoginAuth.js';
+import oneLoginApi from '../../../common/services/oneLoginApi.js';
+import userApi from '../../../common/services/userManageApi.js';
+import validator from '../../../common/utils/validator.js';
+
+import {
   PHASE_GIVEN_NAME,
   PHASE_CONFIRM_NAME,
   PHASE_REGISTRATION_COMPLETE,
-  WORKFLOW_STEPS
-} = require('../../../app/user/onelogin/constants');
+  WORKFLOW_STEPS,
+} from '../../../app/user/onelogin/constants.js';
 
-// Import controllers
-const getController = require('../../../app/user/onelogin/get.controller');
-const postController = require('../../../app/user/onelogin/post.controller');
-const {getUserInviteToken} = require("../../../common/services/verificationApi");
+import getController from '../../../app/user/onelogin/get.controller.js';
+
+import postController from '../../../app/user/onelogin/post.controller.js';
+import { getUserInviteToken } from '../../../common/services/verificationApi.js';
 
 describe.skip('User OneLogin Get Controller', () => {
   describe('GET Controller Tests', () => {

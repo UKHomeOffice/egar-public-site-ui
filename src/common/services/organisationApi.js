@@ -1,8 +1,11 @@
-const request = require('request');
-const logger = require('../../common/utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
+import request from 'request';
+import loggerFactory from '../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import endpoints from '../config/endpoints.js';
 
-module.exports = {
+const exported = {
   /**
    * Call the create organisation endpoint.
    *
@@ -109,6 +112,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Gets a **paginated** list of users belonging to an organisation.
    * @param {String} orgId id of an organisation to get users for
@@ -193,6 +197,7 @@ module.exports = {
       });
     });
   },
+
   deleteUser(requesterId, orgId, userObj) {
     return new Promise((resolve, reject) => {
       request.delete({
@@ -259,5 +264,20 @@ module.exports = {
         resolve(body);
       });
     });
-  },
+  }
 };
+
+export default exported;
+/* 
+export const {
+  create,
+  update,
+  get,
+  delete,
+  getUsers,
+  getListOfOrgUsers,
+  editUser,
+  deleteUser,
+  getSearchOrgUsers,
+  getUserById
+} = exported */;

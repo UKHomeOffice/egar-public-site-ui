@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-require('../../global.test');
-
-const autocomplete = require('../../../common/utils/autocomplete');
+import '../../global.test.js';
+import autocomplete from '../../../common/utils/autocomplete.js';
 
 /**
  * A true unit test should probably mock the incoming list of country codes,

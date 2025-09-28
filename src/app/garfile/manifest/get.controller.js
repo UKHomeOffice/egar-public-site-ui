@@ -1,8 +1,11 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const CookieModel = require('../../../common/models/Cookie.class');
-const { Manifest } = require('../../../common/models/Manifest.class');
-const personApi = require('../../../common/services/personApi');
-const garApi = require('../../../common/services/garApi');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../../../common/models/Cookie.class.js';
+import { Manifest } from '../../../common/models/Manifest.class.js';
+import personApi from '../../../common/services/personApi.js';
+import garApi from '../../../common/services/garApi.js';
 
 function flagDuplicatesInSavedPeople(savedPeople, garPeople) {
   if (garPeople === undefined) return savedPeople;
@@ -44,7 +47,7 @@ function isAllPeopleUnableToAdd(savedPeople) {
 }
 
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile / manifest get controller');
 

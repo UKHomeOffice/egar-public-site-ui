@@ -1,4 +1,4 @@
-const getController = require('./get.controller');
-const nav = require('../../../../common/utils/nav');
+import getController from './get.controller.js';
+import nav from '../../../../common/utils/nav.js';
 
-module.exports = nav.buildRouterAndPaths('/garfile/amg/checkin', getController);
+export default nav.buildRouterAndPaths('/garfile/amg/checkin', getController);

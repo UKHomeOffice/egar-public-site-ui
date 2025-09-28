@@ -1,20 +1,23 @@
-const _ = require('lodash');
-const logger = require('../../../common/utils/logger')(__filename);
-const validator = require('../../../common/utils/validator');
-const validations = require('../validations');
-const CookieModel = require('../../../common/models/Cookie.class');
-const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
-const utils = require('../../../common/utils/utils');
-const resPersonApi = require('../../../common/services/resPersonApi');
+import _ from 'lodash';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../../../common/utils/validator.js';
+import validations from '../validations.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import fixedBasedOperatorOptions from '../../../common/seeddata/fixed_based_operator_options.json' with { type: "json"};
+import utils from '../../../common/utils/utils.js';
+import resPersonApi from '../../../common/services/resPersonApi.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const cookie = new CookieModel(req);
 
   req.body.fixedBasedOperatorAnswer = _.trim(req.body.fixedBasedOperatorAnswer);
 
   const responsiblePerson = utils.getResponsiblePersonFromReq(req);
   const resPersonId = req.session.editResponsiblePersonId;
-  validator.validateChains(validations.validations(req))
+  validator.validateChains(validations(req))
   .then(() => {
     resPersonApi.updateResPerson(cookie.getUserDbId(), resPersonId, responsiblePerson).then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);

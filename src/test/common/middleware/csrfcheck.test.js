@@ -1,17 +1,16 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-
-require('../../global.test');
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import esmock from 'esmock';
+import '../../global.test.js';
 
 describe('CSRF Check Middleware', () => {
   let res; let req; let next;
-  let proxiedMiddleware; let csurfStub;
+  let csurfStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -25,8 +24,8 @@ describe('CSRF Check Middleware', () => {
   });
 
   it('should call csurf with secure false', async () => {
-    proxiedMiddleware = proxyquire('../../../common/middleware/csrfcheck', {
-      csurf: csurfStub,
+    const proxiedMiddleware = await esmock('../../../common/middleware/csrfcheck.js', {
+      'csurf': csurfStub,
     });
 
     await proxiedMiddleware(req, res, next);
@@ -42,8 +41,9 @@ describe('CSRF Check Middleware', () => {
 
   it('should call csurf with secure true', async () => {
     sinon.stub(process, 'env').value({ COOKIE_SECURE_FLAG: 'true' });
-    proxiedMiddleware = proxyquire('../../../common/middleware/csrfcheck', {
-      csurf: csurfStub,
+    
+    const proxiedMiddleware = await esmock('../../../common/middleware/csrfcheck.js', {
+      'csurf': csurfStub,
     });
 
     await proxiedMiddleware(req, res, next);

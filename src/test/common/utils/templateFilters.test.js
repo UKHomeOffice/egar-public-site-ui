@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-require('../../global.test');
-
-const templateFilters = require('../../../common/utils/templateFilters');
+import '../../global.test.js';
+import templateFilters from '../../../common/utils/templateFilters.js';
 
 // TODO: Uncamcelcase should frankly just use a library to perform the operation
 describe('Template Filters Utility', () => {

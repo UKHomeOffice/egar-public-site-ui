@@ -1,13 +1,12 @@
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-
-const CookieModel = require('../../../common/models/Cookie.class');
-const resPersonApi = require('../../../common/services/resPersonApi');
-const controller = require('../../../app/resperson/edit/get.controller');
-const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
-const utils = require('../../../common/utils/utils');
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import resPersonApi from '../../../common/services/resPersonApi.js';
+import controller from '../../../app/resperson/edit/get.controller.js';
+import fixedBasedOperatorOptions from '../../../common/seeddata/fixed_based_operator_options.json' with { type: "json"};
+import utils from '../../../common/utils/utils.js';
 
 chai.use(sinonChai);
 

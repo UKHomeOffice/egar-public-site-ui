@@ -146,10 +146,10 @@ const outboundGar = () => {
   };
 }
 
-module.exports = {
+export default {
     savedPeople,
     flaggedSavedPeople,
     garPeople,
     invalidPassengersAndCrew,
     outboundGar
-}
+};

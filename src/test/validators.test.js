@@ -1,12 +1,11 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
-const sinon = require('sinon');
+import { expect } from 'chai';
 
-require('./global.test');
-
-const validator = require('../common/utils/validator');
+import sinon from 'sinon';
+import './global.test.js';
+import validator from '../common/utils/validator.js';
 
 function genPortObj(portCode, lat, long) {
   return {

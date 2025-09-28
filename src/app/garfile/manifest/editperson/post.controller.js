@@ -1,15 +1,17 @@
-const _ = require('lodash');
+import _ from 'lodash';
+import loggerFactory from '../../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../../../../common/utils/validator.js';
+import CookieModel from '../../../../common/models/Cookie.class.js';
+import garApi from '../../../../common/services/garApi.js';
+import documenttype from '../../../../common/seeddata/egar_saved_people_travel_document_type.json' with { type: "json"};
+import persontype from '../../../../common/seeddata/egar_type_of_saved_person.json' with { type: "json"};
+import genderchoice from '../../../../common/seeddata/egar_gender_choice.json' with { type: "json"};
+import validations from '../../../people/validations.js';
 
-const logger = require('../../../../common/utils/logger')(__filename);
-const validator = require('../../../../common/utils/validator');
-const CookieModel = require('../../../../common/models/Cookie.class');
-const garApi = require('../../../../common/services/garApi');
-const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
-const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
-const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
-const validations = require('../../../people/validations');
-
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In Manifest/Edit Person post controller');
 
   const cookie = new CookieModel(req);
@@ -35,7 +37,7 @@ module.exports = (req, res) => {
 
   const errMsg = { message: 'Failed to update GAR person. Try again' };
 
-  validator.validateChains(validations.validations(req))
+  validator.validateChains(validations(req))
     .then(() => {
       garApi.updateGarPerson(cookie.getGarId(), person)
         .then((apiResponse) => {

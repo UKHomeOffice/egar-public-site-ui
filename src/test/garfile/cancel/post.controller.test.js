@@ -1,18 +1,17 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const config = require('../../../common/config');
-const emailService = require('../../../common/services/sendEmail');
-
-const controller = require('../../../app/garfile/cancel/post.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garApi from '../../../common/services/garApi.js';
+import config from '../../../common/config/index.js';
+import emailService from '../../../common/services/sendEmail.js';
+import controller from '../../../app/garfile/cancel/post.controller.js';
 
 describe('GAR Cancel Post Controller', () => {
   let req; let res; let sessionSaveStub;

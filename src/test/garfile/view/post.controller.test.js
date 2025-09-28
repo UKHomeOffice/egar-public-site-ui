@@ -1,18 +1,17 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const garApi = require('../../../common/services/garApi');
-
-const controller = require('../../../app/garfile/view/post.controller');
-const { outboundGar } = require('../../fixtures');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import manifestFields from '../../../common/seeddata/gar_manifest_fields.json' with { type: "json"};
+import garApi from '../../../common/services/garApi.js';
+import controller from '../../../app/garfile/view/post.controller.js';
+import { outboundGar } from '../../fixtures.js';
 
 describe('GAR view post controller', () => {
   let req; let res;

@@ -1,8 +1,7 @@
 // Npm dependencies
-const express = require('express');
+import express from 'express';
 
-// Local dependencies
-const getController = require('./get.controller');
+import getController from './get.controller.js';
 
 // Initialisation
 const router = new express.Router();
@@ -15,4 +14,4 @@ const paths = {
 router.get(paths.index, getController);
 
 // Export
-module.exports = { router, paths };
+export default { router, paths };

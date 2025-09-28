@@ -1,8 +1,11 @@
-const request = require('request');
-const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
-const autocompleteUtil = require('../utils/autocomplete');
-const travelPermissionCodes = require('../utils/travel_permission_codes.json');
+import request from 'request';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import endpoints from '../config/endpoints.js';
+import autocompleteUtil from '../utils/autocomplete.js';
+import travelPermissionCodes from '../utils/travel_permission_codes.json' with { type: "json"};
 
 function getResponseErrorMessage(_response, body) {
   const responseErrorMessage = JSON.stringify({
@@ -14,8 +17,7 @@ function getResponseErrorMessage(_response, body) {
   return responseErrorMessage;
 }
 
-module.exports = {
-
+const exported = {
   /**
    * Updates GAR.
    *
@@ -52,6 +54,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Gets a GAR's details.
    *
@@ -85,6 +88,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Gets a GAR's saved people details.
    *
@@ -130,6 +134,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Gets the GARs belonging to an individual or organisation.
    *
@@ -220,70 +225,70 @@ module.exports = {
     });
   },
 
-    /**
-   * Submits GARPeople for AMG checkin
-   *
-   * @param {String} garId the id of the gar the person is associated with
-   * @returns {Promise} resolves with API response.
-   */
-    submitGARForCheckin(garId) {
-      return new Promise((resolve, reject) => {
-        request.post({
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.submitGARForCheckin(garId),
-        }, (error, _response, body) => {
-          if (error) {
-            logger.error('Failed call passenger checkin endpoint');
-            reject(error);
-            return;
-          }
-          
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-          
-          logger.debug('Successfully called passenger checkin endpoint');
+  /**
+ * Submits GARPeople for AMG checkin
+ *
+ * @param {String} garId the id of the gar the person is associated with
+ * @returns {Promise} resolves with API response.
+ */
+  submitGARForCheckin(garId) {
+    return new Promise((resolve, reject) => {
+      request.post({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.submitGARForCheckin(garId),
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed call passenger checkin endpoint');
+          reject(error);
+          return;
+        }
+        
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body);
+          logger.error(`${garId} garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`);
           resolve(body);
-        });
+          return;
+        }
+        
+        logger.debug('Successfully called passenger checkin endpoint');
+        resolve(body);
       });
-    },
+    });
+  },
 
-    /**
-   * Submits data about whether passengers left with the craft or not.
-   *
-   * @param {String} garId the id of the gar the person is associated with
-   * @param {String[]} exceptions uuids of garpeople that did not depart
-   * @returns {Promise} resolves with API response.
-   */
-    submitGARForException(garId, passengerIds = []) {
-      const onlyIndividuals = passengerIds.length > 0;
-      return new Promise((resolve, reject) => {
-        request.post({
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.submitGARForException(garId, onlyIndividuals),
-          body: JSON.stringify({ passengerIds }),
-        }, (error, _response, body) => {
-          if (error) {
-            logger.error('Failed call passenger exception endpoint');
-            reject(error);
-            return;
-          }
+  /**
+ * Submits data about whether passengers left with the craft or not.
+ *
+ * @param {String} garId the id of the gar the person is associated with
+ * @param {String[]} exceptions uuids of garpeople that did not depart
+ * @returns {Promise} resolves with API response.
+ */
+  submitGARForException(garId, passengerIds = []) {
+    const onlyIndividuals = passengerIds.length > 0;
+    return new Promise((resolve, reject) => {
+      request.post({
+        headers: { 'content-type': 'application/json' },
+        url: endpoints.submitGARForException(garId, onlyIndividuals),
+        body: JSON.stringify({ passengerIds }),
+      }, (error, _response, body) => {
+        if (error) {
+          logger.error('Failed call passenger exception endpoint');
+          reject(error);
+          return;
+        }
 
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.submitGARForException request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-          
-          logger.debug('Successfully called passenger exception endpoint');
+        if (_response.statusCode >= 400) {
+          const responseErrorMessage = getResponseErrorMessage(_response, body);
+          logger.error(`${garId} garApi.submitGARForException request was not successful : ${responseErrorMessage}`);
           resolve(body);
-        });
+          return;
+        }
+        
+        logger.debug('Successfully called passenger exception endpoint');
+        resolve(body);
       });
-    },
+    });
+  },
 
   /**
    * Updates the details of a person on a GAR.
@@ -355,5 +360,20 @@ module.exports = {
         resolve(body);
       });
     });
-  },
+  }
 };
+
+export default exported;
+
+export const {
+  patch,
+  get,
+  getPeople,
+  getGars,
+  getSupportingDocs,
+  deleteGarSupportingDoc,
+  submitGARForCheckin,
+  submitGARForException,
+  updateGarPerson,
+  deleteGarPeople
+} = exported;

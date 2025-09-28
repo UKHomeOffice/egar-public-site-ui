@@ -48,4 +48,4 @@ services:
       - api
       - database
     volumes:
-      - ./src/:/public-site/
+      - ./:/public-site/

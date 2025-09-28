@@ -1,8 +1,8 @@
 
-const CookieModel = require('../../../common/models/Cookie.class');
-let roles = require('../../../common/seeddata/egar_user_roles.json');
+import CookieModel from '../../../common/models/Cookie.class.js';
+import roles from '../../../common/seeddata/egar_user_roles.json' with { type: "json"};
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const cookie = new CookieModel(req);
  
   if(cookie.getUserRole() !== 'Admin'){

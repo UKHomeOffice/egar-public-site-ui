@@ -2,7 +2,7 @@
  * Convenience file for returning bare bones representations of Excel spreadsheets as read and used
  * by the XLSX library. Can be imported and the functions called to return them.
  */
-module.exports = {
+const exported = {
   getInvalidWorkbook: () => ({
     SheetNames: ['Sheet1'],
     Sheets: {
@@ -49,6 +49,7 @@ module.exports = {
       },
     },
   }),
+
   getValidWorkbook: () => ({
     SheetNames: ['Valid1'],
     Sheets: {
@@ -94,5 +95,12 @@ module.exports = {
         A40: { v: 'TOTAL PASSENGERS' },
       },
     },
-  }),
+  })
 };
+
+export default exported;
+
+export const {
+  getInvalidWorkbook,
+  getValidWorkbook
+} = exported;

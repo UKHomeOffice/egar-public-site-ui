@@ -1,6 +1,9 @@
-const notify = require('notifications-node-client');
-const logger = require('../utils/logger')(__filename);
-const config = require('../config/index');
+import notify from 'notifications-node-client';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import config from '../config/index.js';
 
 if (config.NOTIFY_API_KEY === null) {
   throw new Error('Mandatory environment variable for GOV.UK Notify not set');
@@ -9,8 +12,7 @@ if (config.NOTIFY_API_KEY === null) {
 // Instantiate a new Notify client
 const notifyClient = new notify.NotifyClient(config.NOTIFY_API_KEY);
 
-module.exports = {
-
+const exported = {
   /**
    * @param {String} user
    * @param {String} token
@@ -32,5 +34,11 @@ module.exports = {
           reject(err);
         });
     });
-  },
+  }
 };
+
+export default exported;
+
+export const {
+  send
+} = exported;

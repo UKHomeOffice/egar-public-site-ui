@@ -1,9 +1,12 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const organisationApi = require('../../../common/services/organisationApi');
-const userApi = require('../../../common/services/userManageApi')
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import organisationApi from '../../../common/services/organisationApi.js';
+import userApi from '../../../common/services/userManageApi.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In organisation / delete get controller');
   const errMsg = { message: 'Failed to delete user. Try again' };

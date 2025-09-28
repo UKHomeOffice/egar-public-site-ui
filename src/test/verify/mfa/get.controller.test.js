@@ -1,19 +1,18 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenService = require('../../../common/services/create-token');
-const tokenApi = require('../../../common/services/tokenApi');
-const emailService = require('../../../common/services/sendEmail');
-const settings = require('../../../common/config/index');
-
-const controller = require('../../../app/verify/mfa/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenService from '../../../common/services/create-token.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import emailService from '../../../common/services/sendEmail.js';
+import settings from '../../../common/config/index.js';
+import controller from '../../../app/verify/mfa/get.controller.js';
 
 describe('Verify MFA Get Controller', () => {
   let req; let res;

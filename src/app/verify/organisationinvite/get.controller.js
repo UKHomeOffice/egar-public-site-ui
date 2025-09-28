@@ -1,12 +1,15 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const { API_BASE, ONE_LOGIN_SHOW_ONE_LOGIN, ONE_LOGIN_POST_MIGRATION } = require('../../../common/config');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenService = require('../../../common/services/create-token');
-const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
-const {URL} = require('url');
-const verifyUserService = require('../../../common/services/verificationApi');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import { API_BASE, ONE_LOGIN_SHOW_ONE_LOGIN, ONE_LOGIN_POST_MIGRATION } from '../../../common/config/index.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenService from '../../../common/services/create-token.js';
+import oneLoginUtil from '../../../common/utils/oneLoginAuth.js';
+import { URL } from 'url';
+import verifyUserService from '../../../common/services/verificationApi.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   logger.debug('In verify / invite get controller');
 
   // Start by clearing cookies and initialising

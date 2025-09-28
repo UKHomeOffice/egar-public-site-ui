@@ -1,17 +1,16 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenService = require('../../../common/services/create-token');
-const verifyUserService = require('../../../common/services/verificationApi');
-
-const controller = require('../../../app/verify/registeruser/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenService from '../../../common/services/create-token.js';
+import verifyUserService from '../../../common/services/verificationApi.js';
+import controller from '../../../app/verify/registeruser/get.controller.js';
 
 describe('Verify Register User Get Controller', () => {
   let req; let res;

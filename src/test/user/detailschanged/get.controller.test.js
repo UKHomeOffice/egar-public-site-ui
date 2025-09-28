@@ -1,28 +1,27 @@
 /* eslint-disable no-undef */
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const settings = require('../../../common/config/index');
-
-require('../../global.test');
-
-const configMock = {
-  ...settings,
-  ONE_LOGIN_SHOW_ONE_LOGIN: false
-};
-
-
-const controller = proxyquire('../../../app/user/detailschanged/get.controller', {
-  '../../../common/config/index': configMock
-});
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import esmock from 'esmock';
+import settings from '../../../common/config/index.js';
+import '../../global.test.js';
 
 describe('Manage User Detail Get Controller', () => {
-  let req; let res;
+  let req; let res; let controller;
 
-  beforeEach(() => {
+  const configMock = {
+    ...settings,
+    ONE_LOGIN_SHOW_ONE_LOGIN: false
+  };
+
+  beforeEach(async () => {
     chai.use(sinonChai);
+
+    // Mock the controller with the config dependency
+    controller = await esmock('../../../app/user/detailschanged/get.controller.js', {
+      '../../../common/config/index.js': configMock
+    });
 
     req = {
       session: {},
@@ -31,8 +30,6 @@ describe('Manage User Detail Get Controller', () => {
     res = {
       render: sinon.spy(),
     };
-    // Need to figure out how to stub the CookieModel and its constructor,
-    // in order to just check it is instantiated
   });
 
   afterEach(() => {

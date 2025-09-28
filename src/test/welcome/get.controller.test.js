@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyrequire = require('proxyquire').noCallThru();
-const config = require('../../common/config/index');
-const oneLoginApi = require('../../common/utils/oneLoginAuth');
+import sinon from 'sinon';
 
-require('../global.test');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+const proxyrequire = require('proxyquire').noCallThru();
+import config from '../../common/config/index.js';
+import oneLoginApi from '../../common/utils/oneLoginAuth.js';
+import '../global.test.js';
 
 describe('Welcome Get Controller', () => {
   let req; let res; let configMock;

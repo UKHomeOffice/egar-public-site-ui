@@ -1,18 +1,17 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const craftApi = require('../../../common/services/craftApi');
-const pagination = require('../../../common/utils/pagination');
-
-const controller = require('../../../app/garfile/craft/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garApi from '../../../common/services/garApi.js';
+import craftApi from '../../../common/services/craftApi.js';
+import pagination from '../../../common/utils/pagination.js';
+import controller from '../../../app/garfile/craft/get.controller.js';
 
 describe('GAR Craft Get Controller', () => {
   let req; let res; let garApiGetStub;

@@ -1,15 +1,15 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
-const sinon = require('sinon');
-const { garPeople } = require('../../fixtures');
+import { expect } from 'chai';
 
-require('../../global.test');
-const { Manifest } = require('../../../common/models/Manifest.class');
+import sinon from 'sinon';
+import fixtures from '../../fixtures.js';
+import '../../global.test.js';
+import { Manifest } from '../../../common/models/Manifest.class.js';
 
 const apiResponse = JSON.stringify({
-  items: garPeople(),
+  items: fixtures.garPeople(),
 });
 
 describe('ManifestModel', () => {

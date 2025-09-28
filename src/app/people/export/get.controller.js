@@ -1,8 +1,11 @@
-const { getPeople } = require('../../../common/config/endpoints');
-const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/personApi');
-const logger = require('../../../common/utils/logger')(__filename);
-const createArrayCsvStringifier = require('csv-writer').createArrayCsvStringifier;
+import { getPeople } from '../../../common/config/endpoints.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import personApi from '../../../common/services/personApi.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import { createArrayCsvStringifier } from 'csv-writer';
 
 const writePeopleAsCSVtoResponse = (res, people) => {
     const csvStringifier = createArrayCsvStringifier({
@@ -17,7 +20,7 @@ const writePeopleAsCSVtoResponse = (res, people) => {
     res.end();
 }
 
-module.exports = (req, res) => {
+export default (req, res) => {
     const cookie = new CookieModel(req);
     const userId = cookie.getUserDbId();
     logger.debug(`In people export get controller, user ${userId} is exporting data.`);
@@ -33,4 +36,4 @@ module.exports = (req, res) => {
             writePeopleAsCSVtoResponse(res, people);
         }
         )
-}
+};

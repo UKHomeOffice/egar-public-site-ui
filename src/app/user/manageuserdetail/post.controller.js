@@ -1,12 +1,15 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const userApi = require('../../../common/services/userManageApi');
-const { MAX_STRING_LENGTH } = require('../../../common/config/index');
-const {USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT} = require("../../../common/config");
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import userApi from '../../../common/services/userManageApi.js';
+import { MAX_STRING_LENGTH } from '../../../common/config/index.js';
+import { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } from '../../../common/config/index.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const firstName = req.body.firstname?.trim();
   const lastName = req.body.lastname?.trim();
 

@@ -1,16 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 
-const i18n = require('i18n');
+import i18n from 'i18n';
 
-const logger = require('../../../common/utils/logger')(__filename);
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenApi = require('../../../common/services/tokenApi');
-const userApi = require('../../../common/services/userManageApi');
-const settings = require('../../../common/config/index');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import userApi from '../../../common/services/userManageApi.js';
+import settings from '../../../common/config/index.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In verify / mfa post controller');
   const { mfaCode } = req.body;
 

@@ -1,21 +1,19 @@
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const settings = require('../../../common/config/index');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import settings from '../../../common/config/index.js';
 const configMock = {
   ...settings,
   ONE_LOGIN_SHOW_ONE_LOGIN: false
 };
 
-const controller = require('../../../app/user/manageuserdetail/get.controller', {
-  '../../../common/config/index': configMock
-});
+import controller from '../../../app/user/manageuserdetail/get.controller.js';
 
 
 describe('Manage User Detail Get Controller', () => {

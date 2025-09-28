@@ -1,12 +1,11 @@
 /* eslint-env mocha */
 
-const { expect } = require('chai');
-const nock = require('nock');
+import { expect } from 'chai';
 
-require('./global.test');
-const endpoints = require('../common/config/endpoints');
-
-const userManageApi = require('../common/services/userManageApi');
+import nock from 'nock';
+import './global.test.js';
+import endpoints from '../common/config/endpoints.js';
+import userManageApi from '../common/services/userManageApi.js';
 
 const BASE_URL = endpoints.baseUrl();
 

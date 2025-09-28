@@ -1,18 +1,17 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-expressions */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const { savedPeople, garPeople, flaggedSavedPeople } = require('../../fixtures');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/personApi');
-const garApi = require('../../../common/services/garApi');
-
-const controller = require('../../../app/garfile/manifest/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import { savedPeople, garPeople, flaggedSavedPeople } from '../../fixtures.js';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import personApi from '../../../common/services/personApi.js';
+import garApi from '../../../common/services/garApi.js';
+import controller from '../../../app/garfile/manifest/get.controller.js';
 
 describe('Manifest Get Controller', () => {
   let req; let res; let clock;

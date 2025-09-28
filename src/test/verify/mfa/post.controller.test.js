@@ -1,22 +1,21 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenService = require('../../../common/services/create-token');
-const tokenApi = require('../../../common/services/tokenApi');
-const userApi = require('../../../common/services/userManageApi');
-const settings = require('../../../common/config/index');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-
-const i18n = require('i18n');
-const path = require('path');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenService from '../../../common/services/create-token.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import userApi from '../../../common/services/userManageApi.js';
+import settings from '../../../common/config/index.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import i18n from 'i18n';
+import path from 'path';
 
 i18n.configure({
   locales: ['en'],
@@ -26,7 +25,7 @@ i18n.configure({
   register: global,
 });
 
-const controller = require('../../../app/verify/mfa/post.controller');
+import controller from '../../../app/verify/mfa/post.controller.js';
 
 describe('Verify MFA Post Controller', () => {
   let req; let res; let sessionSaveStub;

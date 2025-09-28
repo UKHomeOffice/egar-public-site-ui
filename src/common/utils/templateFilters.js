@@ -20,7 +20,5 @@ const expiryDate = () => {
   return checkDateExpiry;  
 };
 
-exports.uncamelCase = uncamelCase;
-exports.containsError = containsError;
-exports.expiryDate = expiryDate;
+export default { uncamelCase, containsError, expiryDate };
 

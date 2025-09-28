@@ -1,21 +1,26 @@
-const {
-    WORKFLOW_STEPS,
-    PHASE_GIVEN_NAME,
-    PHASE_CONFIRM_NAME,
-    PHASE_REGISTRATION_COMPLETE
-} = require("./constants");
-const CookieModel = require("../../../common/models/Cookie.class");
-const {decodeToken} = require("../../../common/utils/oneLoginAuth");
-const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
-const logger = require('../../../common/utils/logger')(__filename);
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require("../../../common/utils/validator");
-const {USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT} = require("../../../common/config");
-const e = require("express");
-const sendEmail = require("../../../common/services/sendEmail");
-const config = require("../../../common/config");
-const {getUserInviteToken} = require("../../../common/services/verificationApi");
+import {
+  WORKFLOW_STEPS,
+  PHASE_GIVEN_NAME,
+  PHASE_CONFIRM_NAME,
+  PHASE_REGISTRATION_COMPLETE,
+} from './constants.js';
+
+import CookieModel from '../../../common/models/Cookie.class.js';
+import oneLoginApi from '../../../common/services/oneLoginApi.js';
+import userApi from '../../../common/services/userManageApi.js';
+import loggerFactory from '../../../common/utils/logger.js';
+
+
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } from '../../../common/config/index.js';
+import e from 'express';
+import sendEmail from '../../../common/services/sendEmail.js';
+import config from '../../../common/config/index.js';
+import { getUserInviteToken } from '../../../common/services/verificationApi.js';
 
 const Outcome = {
     SUCCESS: 'success',
@@ -158,7 +163,7 @@ function nextStep(currentStep) {
 }
 
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   if (!req.session?.step) {
     return res.redirect('error/404');
   }

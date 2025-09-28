@@ -1,17 +1,20 @@
 /* eslint-disable no-underscore-dangle */
 
-const i18n = require('i18n');
-const XLSX = require('xlsx');
-const stream = require('stream');
+import i18n from 'i18n';
 
-const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
-const createGarApi = require('../../../common/services/createGarApi.js');
-const CookieModel = require('../../../common/models/Cookie.class');
-const validator = require('../../../common/utils/validator');
-const { validations } = require('./validations');
-const transformers = require('../../../common/utils/transformers');
-const { ExcelParser } = require('../../../common/utils/excelParser');
+import XLSX from 'xlsx';
+import stream from 'stream';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import garApi from '../../../common/services/garApi.js';
+import createGarApi from '../../../common/services/createGarApi.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import validator from '../../../common/utils/validator.js';
+import { validations } from './validations.js';
+import transformers from '../../../common/utils/transformers.js';
+import { ExcelParser } from '../../../common/utils/excelParser.js';
 
 
 const checkFileIsExcel = (req, res) => {
@@ -106,7 +109,7 @@ const passengerMapConfig = {
   maxRows: 2000,
 };
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('Entering upload GAR post controller', { userId: req.session.u.dbId });
   if (!checkFileIsExcel(req, res)) {
     return;

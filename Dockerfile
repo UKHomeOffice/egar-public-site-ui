@@ -8,7 +8,9 @@ RUN mkdir -p /public-site/ && \
     mkdir -p /var/log/nodejs/ && \
     touch /var/log/nodejs/app.log
 
-COPY src /public-site
+COPY src /public-site/src 
+COPY package.json /public-site/ 
+COPY package-lock.json /public-site/
 
 RUN chown -R node /public-site/ && \
     chown -R node /var/log/nodejs/

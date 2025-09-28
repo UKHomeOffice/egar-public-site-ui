@@ -1,17 +1,16 @@
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const userApi = require('../../../common/services/userManageApi');
-
-const controller = require('../../../app/user/manageuserdetail/post.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import userApi from '../../../common/services/userManageApi.js';
+import controller from '../../../app/user/manageuserdetail/post.controller.js';
 
 describe('Manage User Detail Post Controller', () => {
   let req; let res;

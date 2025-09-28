@@ -1,13 +1,13 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
-const chai = require('chai');
-const nock = require('nock');
+import { expect } from 'chai';
 
-require('../../global.test');
-const endpoints = require('../../../common/config/endpoints');
-const organisationApi = require('../../../common/services/organisationApi');
+import chai from 'chai';
+import nock from 'nock';
+import '../../global.test.js';
+import endpoints from '../../../common/config/endpoints.js';
+import organisationApi from '../../../common/services/organisationApi.js';
 
 const BASE_URL = endpoints.baseUrl();
 

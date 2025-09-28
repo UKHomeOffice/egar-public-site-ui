@@ -1,25 +1,22 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenApi = require('../../../common/services/tokenApi');
-const userApi = require('../../../common/services/userManageApi');
-const emailService = require('../../../common/services/sendEmail');
-const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
-const proxyrequire = require('proxyquire').noCallThru();
-
-const controller = require('../../../app/user/login/post.controller');
-const ValidationRule = require("../../../common/models/ValidationRule.class");
-const oneLoginApi = require("../../../common/utils/oneLoginAuth");
-
-const config = require('../../../common/config/index');
-const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import esmock from 'esmock';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import userApi from '../../../common/services/userManageApi.js';
+import emailService from '../../../common/services/sendEmail.js';
+import oneLoginUtils from '../../../common/utils/oneLoginAuth.js';
+import controller from '../../../app/user/login/post.controller.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import oneLoginApi from '../../../common/utils/oneLoginAuth.js';
+import config from '../../../common/config/index.js';
+import { ONE_LOGIN_SHOW_ONE_LOGIN } from '../../../common/config/index.js';
 
 describe('User Login Post Controller', () => {
   let req; let res;
@@ -59,9 +56,9 @@ describe('User Login Post Controller', () => {
       ONE_LOGIN_POST_MIGRATION: false,
       ONE_LOGIN_SHOW_ONE_LOGIN: false,
       HOMEPAGE_MESSAGE: 'Welcome to the new service',
-    }
+    };
 
-    oneLoginStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns("https://dummy.com")
+    oneLoginStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns("https://dummy.com");
   });
 
   afterEach(() => {
@@ -102,26 +99,20 @@ describe('User Login Post Controller', () => {
   // TODO: These unit tests represent the functionality as it currently is, and
   // should highlight that this needs addressing
   describe('UserAPI resolves with no results', () => {
-    it('should return an error message for an unexpected message', () => {
+    it('should return an error message for an unexpected message', async () => {
       const apiResponse = {
         message: 'Unexpected message',
       };
       sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
 
-      // Promise chain, so controller call is wrapped into its own method
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController().then(() => {
-        expect(emailService.send).to.not.have.been.called;
-      }).then(() => {
-        expect(res.render).to.have.been.calledWith('app/user/login/index');
-      });
+      expect(emailService.send).to.not.have.been.called;
+      expect(res.render).to.have.been.calledWith('app/user/login/index');
     });
 
-    it('should return unregistered back to the page if no user found', () => {
+    it('should return unregistered back to the page if no user found', async () => {
       const cookie = new CookieModel(req);
       cookie.setUserVerified(false);
       const apiResponse = {
@@ -131,26 +122,20 @@ describe('User Login Post Controller', () => {
       sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
 
-      const controller = proxyrequire('../../../app/user/login/post.controller', {
-        '../../../common/config/index': configMock,
+      const mockedController = await esmock('../../../app/user/login/post.controller.js', {
+        '../../../common/config/index.js': configMock,
       });
 
-      // Promise chain, so controller call is wrapped into its own method
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await mockedController(req, res);
 
-      callController().then(() => {
-        expect(emailService.send).to.not.have.been.called;
-      }).then(() => {
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/login/index', { cookie, unregistered: true, oneLoginAuthUrl: null });
-      });
+      expect(emailService.send).to.not.have.been.called;
+      expect(res.redirect).to.not.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/login/index', { cookie, unregistered: true, oneLoginAuthUrl: null });
     });
   });
 
   describe('UserAPI resolves with a verified user', () => {
-    it('should go to the next screen after creating a token', () => {
+    it('should go to the next screen after creating a token', async () => {
       const expectedCookie = new CookieModel(req);
       expectedCookie.setUserDbId(123);
       expectedCookie.setUserFirstName('Darth');
@@ -160,25 +145,17 @@ describe('User Login Post Controller', () => {
         firstName: 'Darth',
       };
       sinon.stub(tokenApi, 'setMfaToken').resolves();
-      sinon.stub(emailService, 'send');
+      sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
 
-      // Promise chain, so controller call is wrapped into its own method
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController().then(() => {
-        expect(userApi.userSearch).to.have.been.calledWith('ExampleUser');
-        expect(emailService.send).to.not.have.been.called;
-        expect(res.redirect).to.not.have.been.called;
-      }).then(() => {
-        expect(emailService.send).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/login/authenticate');
-      });
+      expect(userApi.userSearch).to.have.been.calledWith('ExampleUser');
+      expect(emailService.send).to.have.been.called;
+      expect(res.redirect).to.have.been.calledWith('/login/authenticate');
     });
 
-    it('should return to the login page with an error message if token is not created', () => {
+    it('should return to the login page with an error message if token is not created', async () => {
       const expectedCookie = new CookieModel(req);
       expectedCookie.setUserDbId(123);
       expectedCookie.setUserFirstName('Darth');
@@ -188,29 +165,20 @@ describe('User Login Post Controller', () => {
         firstName: 'Darth',
       };
       sinon.stub(tokenApi, 'setMfaToken').rejects('Example Reject');
-      sinon.stub(emailService, 'send');
+      sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
 
-      // Promise chain, so controller call is wrapped into its own method
-      const callController = async () => {
+      try {
         await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(emailService.send).to.not.have.been.called;
-        expect(res.render).to.not.have.been.called;
-      }).then(() => {
-        expect(emailService.send).to.not.have.been.called;
-        expect(res.render).to.not.have.been.called;
-      }).then(() => {
+      } catch (err) {
         expect(emailService.send).to.not.have.been.called;
         expect(res.render).to.have.been.calledWith('app/user/login/index');
-      });
+      }
     });
   });
 
   describe('UserAPI resolves with an unverified user', () => {
-    it('should return the login page with variables', () => {
+    it('should return the login page with variables', async () => {
       const expectedCookie = new CookieModel(req);
       expectedCookie.setUserDbId(123);
       expectedCookie.setUserFirstName('Darth');
@@ -221,14 +189,9 @@ describe('User Login Post Controller', () => {
       };
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
 
-      // Promise chain, so controller call is wrapped into its own method
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController().then(() => {
-        expect(res.render).to.have.been.calledWith('app/user/login/index', { cookie: expectedCookie, unverified: true });
-      });
+      expect(res.render).to.have.been.calledWith('app/user/login/index', { cookie: expectedCookie, unverified: true });
     });
   });
 });

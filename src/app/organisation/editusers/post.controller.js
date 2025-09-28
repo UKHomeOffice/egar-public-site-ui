@@ -1,11 +1,14 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const validator = require('../../../common/utils/validator');
-const validations = require('./validations');
-const CookieModel = require('../../../common/models/Cookie.class');
-const orgApi = require('../../../common/services/organisationApi');
-let roles = require('../../../common/seeddata/egar_user_roles');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../../../common/utils/validator.js';
+import validations from './validations.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import orgApi from '../../../common/services/organisationApi.js';
+import roles from '../../../common/seeddata/egar_user_roles.json' with { type: 'json' };
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In organisation / editusers post controller');
   const cookie = new CookieModel(req);
   
@@ -21,7 +24,7 @@ module.exports = (req, res) => {
      roles = roles.filter(role => role.name !== 'Admin');
   }
 
-  validator.validateChains(validations.validations(req))
+  validator.validateChains(validations(req))
     .then(() => {
       orgApi.editUser(cookie.getUserDbId(), cookie.getOrganisationId(), orgUser)
         .then((apiResponse) => {

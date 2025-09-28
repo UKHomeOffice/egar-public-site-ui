@@ -1,9 +1,11 @@
-const request = require('request');
-const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
+import request from 'request';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import endpoints from '../config/endpoints.js';
 
-module.exports = {
-
+const exported = {
   /**
    * Calls create craft API endpoint.
    *
@@ -34,6 +36,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Gets the details of a craft.
    *
@@ -58,6 +61,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Lists all crafts a user is able to see.
    *
@@ -81,6 +85,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Lists all crafts a user is able to see.
    *
@@ -108,6 +113,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Updates a given craft.
    *
@@ -139,6 +145,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Delete an individual user's craft.
    *
@@ -167,6 +174,7 @@ module.exports = {
       });
     });
   },
+
   /**
    * Delete an organisation's craft.
    *
@@ -195,5 +203,17 @@ module.exports = {
         resolve(body);
       });
     });
-  },
+  }
 };
+
+export default exported;
+
+export const {
+  create,
+  getDetails,
+  getCrafts,
+  getOrgCrafts,
+  update,
+  deleteCraft,
+  deleteOrgCraft
+} = exported;

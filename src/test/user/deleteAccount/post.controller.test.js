@@ -1,16 +1,15 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-
-const { adminDeletionType, deleteAccount } = require('../../../app/user/deleteAccount/utils');
-const controller = require('../../../app/user/deleteAccount/post.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import { adminDeletionType, deleteAccount } from '../../../app/user/deleteAccount/utils.js';
+import controller from '../../../app/user/deleteAccount/post.controller.js';
 
 describe('Admin deletion type is correctly determined from organisation users inputted', () => {
   it('Delete organisation if the org users are only 1 admin', () => {

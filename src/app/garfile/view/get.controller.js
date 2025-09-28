@@ -1,9 +1,12 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
-const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const airportValidation = require('../../../common/utils/airportValidation');
-const { isAbleToCancelGar } = require('../../../common/utils/validator');
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import garApi from '../../../common/services/garApi.js';
+import manifestFields from '../../../common/seeddata/gar_manifest_fields.json' with { type: "json"};
+import airportValidation from '../../../common/utils/airportValidation.js';
+import validator from '../../../common/utils/validator.js';
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -14,21 +17,21 @@ const { isAbleToCancelGar } = require('../../../common/utils/validator');
  * @param {String} userId The user id to check against
  * @param {String} organisationId The organisation to check against
  */
- const checkGARUser = (parsedGar, userId, organisationId) => {
-  if (parsedGar === undefined || parsedGar === null) return false;
+const checkGARUser = (parsedGar, userId, organisationId) => {
+ if (parsedGar === undefined || parsedGar === null) return false;
 
-  if ((parsedGar.organisationId && organisationId) && parsedGar.organisationId === organisationId) {
-    logger.info('GAR organisation id matches current user ID');
-    return true;
-  }
-  if (parsedGar.userId === userId) {
-    logger.info('GAR user id matches current user ID');
-    return true;
-  }
-  return false;
+ if ((parsedGar.organisationId && organisationId) && parsedGar.organisationId === organisationId) {
+   logger.info('GAR organisation id matches current user ID');
+   return true;
+ }
+ if (parsedGar.userId === userId) {
+   logger.info('GAR user id matches current user ID');
+   return true;
+ }
+ return false;
 };
 
-module.exports = (req, res) => {
+export default (req, res) => {
     const cookie = new CookieModel(req);
     logger.debug('In garfile/view get controller');
     
@@ -81,7 +84,7 @@ module.exports = (req, res) => {
         cookie,
         manifestFields,
         garfile: parsedGar,
-        isAbleToCancelGar: isAbleToCancelGar(lastDepartureDateString),
+        isAbleToCancelGar: validator.isAbleToCancelGar(lastDepartureDateString),
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         successMsg,

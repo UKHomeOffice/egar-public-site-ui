@@ -1,15 +1,14 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-expressions */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../global.test');
-
-const controller = require('../../app/organisation/post.controller');
-const pagination = require('../../common/utils/pagination');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../global.test.js';
+import controller from '../../app/organisation/post.controller.js';
+import pagination from '../../common/utils/pagination.js';
 
 describe('Organisation Post Controller', () => {
   let req; let res; let saveSessionStub;

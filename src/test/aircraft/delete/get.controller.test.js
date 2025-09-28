@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const craftApi = require('../../../common/services/craftApi');
-
-const controller = require('../../../app/aircraft/delete/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import craftApi from '../../../common/services/craftApi.js';
+import controller from '../../../app/aircraft/delete/get.controller.js';
 
 describe('Aircraft Delete Get Controller', () => {
   let req; let res; let deleteCraftStub; let deleteOrgCraftStub;

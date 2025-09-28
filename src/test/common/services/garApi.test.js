@@ -1,13 +1,13 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
-const chai = require('chai');
-const nock = require('nock');
+import { expect } from 'chai';
 
-require('../../global.test');
-const endpoints = require('../../../common/config/endpoints');
-const garApi = require('../../../common/services/garApi');
+import chai from 'chai';
+import nock from 'nock';
+import '../../global.test.js';
+import endpoints from '../../../common/config/endpoints.js';
+import garApi from '../../../common/services/garApi.js';
 
 const garId = 'c2d86db6-006c-4f5e-9e22-e039c8b1ddc7';
 const userId = 'f058e37b-3fa2-4c05-a057-6c810d6c6bd6';

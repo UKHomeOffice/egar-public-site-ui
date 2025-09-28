@@ -1,11 +1,10 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-require('./global.test');
-
-const utilFunctions = require('../common/utils/utils');
+import './global.test.js';
+import utilFunctions from '../common/utils/utils.js';
 
 describe('Decimal truncation tests', () => {
     it('should truncate long decimal to four places', () => {

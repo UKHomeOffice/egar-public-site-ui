@@ -1,9 +1,12 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenService = require('../../../common/services/create-token');
-const verifyUserService = require('../../../common/services/verificationApi');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenService from '../../../common/services/create-token.js';
+import verifyUserService from '../../../common/services/verificationApi.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In verify / registeruser get controller');
 
   // Start by clearing cookies and initialising

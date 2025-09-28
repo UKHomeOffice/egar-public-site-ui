@@ -1,15 +1,18 @@
 /* eslint-disable no-underscore-dangle */
 
-const _ = require('lodash');
+import _ from 'lodash';
 
-const logger = require('../../../common/utils/logger')(__filename);
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const craftApi = require('../../../common/services/craftApi');
-const pagination = require('../../../common/utils/pagination');
-const craftValidations = require('../../../app/garfile/craft/validations');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import craftApi from '../../../common/services/craftApi.js';
+import pagination from '../../../common/utils/pagination.js';
+import craftValidations from '../../../app/garfile/craft/validations.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 

@@ -1,9 +1,12 @@
-const _ = require('lodash');
-const logger = require('../../../common/utils/logger')(__filename);
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
+import _ from 'lodash';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garApi from '../../../common/services/garApi.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
 //const airportValidation = require('../../../common/utils/airportValidation');
 
 const createValidationChains = (voyage) => {
@@ -91,7 +94,7 @@ const performAPICall = (cookie, res, buttonClicked) => {
     });
 };
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   logger.debug('In garfile / arrival post controller');
 
   const cookie = new CookieModel(req);
@@ -101,8 +104,8 @@ module.exports = async (req, res) => {
   const voyage = req.body;
   delete voyage.buttonClicked;
   if (voyage.portChoice === 'Yes') {
-     voyage.departureLat = '';
-     voyage.departureLong = '';
+    voyage.departureLat = '';
+    voyage.departureLong = '';
   } else {
     voyage.departurePort = voyage.departureLat + " " + voyage.departureLong;
   }

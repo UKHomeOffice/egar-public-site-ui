@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const { expect } = require('chai');
-const sinon = require('sinon');
+import { expect } from 'chai';
 
-require('../../global.test');
-
-const { ExcelParser } = require('../../../common/utils/excelParser');
+import sinon from 'sinon';
+import '../../global.test.js';
+import { ExcelParser } from '../../../common/utils/excelParser.js';
 
 describe('ExcelParser', () => {
   const workbook = { A1: { v: '123' } };

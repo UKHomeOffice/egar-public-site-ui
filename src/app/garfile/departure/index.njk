@@ -127,8 +127,8 @@
         </div>
 
 
-        
-        
+
+
         {{ m.departure_warning_message(__)}}
 
 
@@ -140,16 +140,16 @@
         {% set long = departure.departureLong%}
         {% set prefix = 'departure'%}
 
-        {{ l.location(legendLabel, 
-                      warningMessage, 
-                      isPortChoice, 
-                      portCode, 
-                      lat, 
-                      long, 
-                      prefix, 
-                      errors, 
+        {{ l.location(legendLabel,
+                      warningMessage,
+                      isPortChoice,
+                      portCode,
+                      lat,
+                      long,
+                      prefix,
+                      errors,
                       __) }}
-        
+
         {# Start buttons #}
         {{ m.submit_buttons('GAR Departure', csrfToken, __) }}
       </form>
@@ -159,7 +159,6 @@
   </div>
   {{ m.departure_warning_dialog(__) }}
 
-  <script type="text/javascript" src="/utils/validator.js"></script>
-  <script type="text/javascript"  src="/javascripts/departureForm.js"></script>
+  <script type="module"  src="/javascripts/departureForm.js"></script>
 
 {% endblock %}

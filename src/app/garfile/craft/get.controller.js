@@ -1,11 +1,15 @@
 /* eslint-disable no-underscore-dangle */
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const craftApi = require('../../../common/services/craftApi');
-const garApi = require('../../../common/services/garApi');
-const pagination = require('../../../common/utils/pagination');
+import CookieModel from '../../../common/models/Cookie.class.js';
 
-module.exports = (req, res) => {
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import craftApi from '../../../common/services/craftApi.js';
+import garApi from '../../../common/services/garApi.js';
+import pagination from '../../../common/utils/pagination.js';
+
+export default (req, res) => {
   logger.debug('In garfile/craft get controller');
 
   // Clear existing editcraft

@@ -1,21 +1,20 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenService = require('../../../common/services/create-token');
-
-const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
-const controller = require('../../../app/verify/organisationinvite/get.controller');
-const { cookie } = require('request');
-const { config } = require('winston');
-const settings = require('../../../common/config/index');
-const verifyUserService = require('../../../common/services/verificationApi');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenService from '../../../common/services/create-token.js';
+import oneLoginUtils from '../../../common/utils/oneLoginAuth.js';
+import controller from '../../../app/verify/organisationinvite/get.controller.js';
+import { cookie } from 'request';
+import { config } from 'winston';
+import settings from '../../../common/config/index.js';
+import verifyUserService from '../../../common/services/verificationApi.js';
 
 describe('Verify Organisation Invite Get Controller', () => {
   let req; 

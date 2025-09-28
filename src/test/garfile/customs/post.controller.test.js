@@ -1,26 +1,24 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const garApi = require('../../../common/services/garApi');
-const CookieModel = require('../../../common/models/Cookie.class');
-const emailService = require('../../../common/services/sendEmail');
-const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options');
-const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
-const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
-const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
-const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
-const continentalShelfOptions = require('../../../common/seeddata/egar_continental_shelf_options.json');
-
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-
-const controller = require('../../../app/garfile/customs/post.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import garApi from '../../../common/services/garApi.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import emailService from '../../../common/services/sendEmail.js';
+import prohibitedGoodsOptions from '../../../common/seeddata/egar_prohibited_goods_options';
+import reasonForVisitOptions from '../../../common/seeddata/egar_visit_reason_options.json' with { type: "json"};
+import baggageOptions from '../../../common/seeddata/egar_baggage_options.json' with { type: "json"};
+import intentionValueOptions from '../../../common/seeddata/egar_intention_value_options.json' with { type: "json"};
+import freeCirculationOptions from '../../../common/seeddata/egar_craft_eu_free_circulation_options.json' with { type: "json"};
+import continentalShelfOptions from '../../../common/seeddata/egar_continental_shelf_options.json' with { type: "json"};
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import controller from '../../../app/garfile/customs/post.controller.js';
 
 describe('GAR Customs Post Controller', () => {
   let req; let res;

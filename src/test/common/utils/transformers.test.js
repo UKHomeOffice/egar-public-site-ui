@@ -1,11 +1,10 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-require('../../global.test');
-
-const transformer = require('../../../common/utils/transformers');
+import '../../global.test.js';
+import transformer from '../../../common/utils/transformers.js';
 
 describe('Transformers', () => {
   it('Should flatten nested peopletypes', () => {

@@ -2,18 +2,17 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-const i18n = require('i18n');
-const rewire = require('rewire');
+import i18n from 'i18n';
+import rewire from 'rewire';
 
-const validations = rewire('../../../app/api/uploadgar/validations');
-
-require('../../global.test');
+// const validations = rewire('../../../app/api/uploadgar/validations.js');
+import {getCrewFieldLabel, getVoyageFieldLabel} from '../../../app/api/uploadgar/validations.js';
+import '../../global.test.js';
 
 describe('Get message labels from i18n', () => {
   it('Should get voyage labels from i18n', () => {
-    const getVoyageFieldLabel = validations.__get__('getVoyageFieldLabel');
     expect(getVoyageFieldLabel('arrivalPort')).to.equal(i18n.__('field_arrival_port'));
     expect(getVoyageFieldLabel('departurePort')).to.equal(i18n.__('field_departure_port'));
     expect(getVoyageFieldLabel('arrivalTime')).to.equal(i18n.__('field_arrival_time'));
@@ -26,7 +25,6 @@ describe('Get message labels from i18n', () => {
     expect(getVoyageFieldLabel('OTHER KEY')).to.equal('One of the voyage details (OTHER KEY)');
   });
   it('Should get crew / passenger details label from i18n', () => {
-    const getCrewFieldLabel = validations.__get__('getCrewFieldLabel');
     expect(getCrewFieldLabel('documentType')).to.equal(i18n.__('field_travel_document_type'));
     expect(getCrewFieldLabel('issuingState')).to.equal(i18n.__('field_issuing_state'));
     expect(getCrewFieldLabel('documentNumber')).to.equal(i18n.__('field_travel_document_number'));

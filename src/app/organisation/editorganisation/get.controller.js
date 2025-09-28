@@ -1,5 +1,5 @@
-const navUtil = require('../../../common/utils/nav');
+import navUtil from '../../../common/utils/nav.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   navUtil.simpleGetRender(req, res, 'app/organisation/editorganisation/index');
 };

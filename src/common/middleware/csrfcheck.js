@@ -1,10 +1,11 @@
-const csurf = require('csurf');
+import csurf from 'csurf';
 
 let secureFlag = false;
 if (process.env.COOKIE_SECURE_FLAG === 'true') {
   secureFlag = true;
 }
-module.exports = (req, res, next) => {
+
+export default (req, res, next) => {
   csurf(
     {
       cookie: {

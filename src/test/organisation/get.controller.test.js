@@ -1,24 +1,21 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-expressions */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../global.test');
-const CookieModel = require('../../common/models/Cookie.class');
-const orgApi = require('../../common/services/organisationApi');
-
-const pagination = require('../../common/utils/pagination');
-const settings = require('../../common/config/index');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../global.test.js';
+import CookieModel from '../../common/models/Cookie.class.js';
+import orgApi from '../../common/services/organisationApi.js';
+import pagination from '../../common/utils/pagination.js';
+import settings from '../../common/config/index.js';
 const configMock = {
   ...settings,
   ONE_LOGIN_SHOW_ONE_LOGIN: false
 };
-const controller = require('../../app/organisation/get.controller', {
-  '../../common/config/index': configMock
-});
+import controller from '../../app/organisation/get.controller.js';
 
 describe('Organisation Get Controller', () => {
   let req; let res; let orgApiStub;

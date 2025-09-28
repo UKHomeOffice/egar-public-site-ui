@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const i18n = require('i18n');
-const path = require('path');
+import sinon from 'sinon';
+
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import i18n from 'i18n';
+import path from 'path';
 
 i18n.configure({
   locales: ['en'],
@@ -16,13 +17,12 @@ i18n.configure({
   register: global,
 });
 
-require('../../global.test');
-const garApi = require('../../../common/services/garApi');
-const CookieModel = require('../../../common/models/Cookie.class');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-
-const controller = require('../../../app/garfile/departure/post.controller');
+import '../../global.test.js';
+import garApi from '../../../common/services/garApi.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import controller from '../../../app/garfile/departure/post.controller.js';
 
 describe('Departure Post Controller', () => {
   let req; let res; let apiResponse;

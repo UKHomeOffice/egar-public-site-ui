@@ -1,10 +1,10 @@
-const navUtil = require('../../common/utils/nav');
-const availability = require('../../common/config/availability');
+import navUtil from '../../common/utils/nav.js';
+import availability from '../../common/config/availability.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   if (availability.ENABLE_UNAVAILABLE_PAGE.toLowerCase() === 'false') {
     res.redirect('/welcome/index')
   } else {
     navUtil.simpleGetRender(req, res, 'app/unavailable/index');
   };
-}
+};

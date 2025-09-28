@@ -1,3 +1,4 @@
+import validator from "/utils/shared_validator.js";
 const submitGarForm = document.getElementById("submitGarForm");
 const confirmWarnedDepartureDialog = document.getElementById("confirmWarnedDepartureDialog")
 const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
@@ -15,8 +16,8 @@ dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
 const fullDepartureDate = new Date(Date.parse(`${departureDate.textContent}T${departureTime.textContent}`));
 
 function showDepartureDateWarningMessages(providedDate) {
-  twoHourWarningTexts.forEach($element => $element.hidden = isTwoHoursPriorDeparture(providedDate));
-  fortyEightHourWarningTexts.forEach($element => $element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate));
+  twoHourWarningTexts.forEach($element => $element.hidden = validator.isTwoHoursPriorDeparture(providedDate));
+  fortyEightHourWarningTexts.forEach($element => $element.hidden = validator.dateNotMoreThanTwoDaysInFuture(providedDate));
 }
 
 window.addEventListener("load", () => {
@@ -30,7 +31,7 @@ window.addEventListener("load", () => {
 
 
 submitGarForm.addEventListener("submit", (e) => {
-    // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
+  // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
   if ([departureDate.textContent, departureTime.textContent].includes('')) {
     return undefined;
   }
@@ -38,8 +39,8 @@ submitGarForm.addEventListener("submit", (e) => {
   if (departureFormSubmitter) {
     return undefined;
   }
-  
-  if (isTwoHoursPriorDeparture(fullDepartureDate) && dateNotMoreThanTwoDaysInFuture(fullDepartureDate)) {
+
+  if (validator.isTwoHoursPriorDeparture(fullDepartureDate) && validator.dateNotMoreThanTwoDaysInFuture(fullDepartureDate)) {
     return undefined;
   }
 
@@ -47,7 +48,7 @@ submitGarForm.addEventListener("submit", (e) => {
   departureFormSubmitter = e.submitter;
   showDepartureDateWarningMessages(fullDepartureDate);
   confirmWarnedDepartureDialog.showModal();
-  
+
 });
 
 confirmWarnedDepartureDialog.addEventListener("close", (e) => {

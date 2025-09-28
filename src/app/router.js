@@ -1,98 +1,97 @@
-const index = require('./index');
-// Local dependencies
-const healthcheck = require('./api/healthcheck');
-const uploadfile = require('./api/uploadfile');
-const uploadgar = require('./api/uploadgar');
+import index from './index/index.js';
 
-// Welcome dependencies
-const welcome = require('./welcome');
+import healthcheck from './api/healthcheck/index.js';
 
-// Register dependencies
-const usersignin = require('./user/login');
-const postusersignin = require('./home');
-const userregister = require('./user/register');
-const registermsg = require('./user/regmsg');
-const oneloginRegister = require('./user/onelogin');
+import uploadfile from './api/uploadfile/index.js';
+import uploadgar from './api/uploadgar/index.js';
 
-// User dependencies
-const aircraft = require('./aircraft');
-const userDetails = require('./user/viewDetails');
-const manageUserDetails = require('./user/manageuserdetail');
-const logout = require('./user/logout');
-const detailschanged = require('./user/detailschanged');
-const usersavedcraftedit = require('./aircraft/edit');
-const usersavedcraftadd = require('./aircraft/add');
-const userSavedCraftDelete = require('./aircraft/delete');
-const userDelete = require('./user/deleteAccount');
-const userDeleteConfirm = require('./user/deleteAccount/deleteAccountConfirmation');
+import welcome from './welcome/index.js';
 
-// GAR dependencies
-const aircraftdetail = require('./garfile/craft');
-const customsDetail = require('./garfile/customs');
-const departuredetail = require('./garfile/departure');
-const arrivaldetail = require('./garfile/arrival');
-const garhome = require('./garfile/home');
-const manifest = require('./garfile/manifest');
-const addnewperson = require('./garfile/manifest/addnewperson');
-const editPerson = require('./garfile/manifest/editperson');
-const deletePerson = require('./garfile/manifest/deleteperson');
-const garManage = require('./home');
-const supportingdocuments = require('./garfile/supportingdocuments');
-const garreview = require('./garfile/review');
-const garupload = require('./garfile/garupload');
-const garView = require('./garfile/view');
-const garCancel = require('./garfile/cancel');
-const garAmend = require('./garfile/amend');
-const garsubmitsucess = require('./garfile/submit/success');
-const garsubmitfailure = require('./garfile/submit/failure');
-const printmanifest = require('./garfile/printmanifest');
+import usersignin from './user/login/index.js';
 
-//amg
-const amgcheckin  = require('./garfile/amg/checkin');
+import postusersignin from './home/index.js';
+import userregister from './user/register/index.js';
+import registermsg from './user/regmsg/index.js';
+import oneloginRegister from './user/onelogin/index.js';
 
-// Saved entities
-const people = require('./people');
-const peopleAdd = require('./people/add');
-const peopleEdit = require('./people/edit');
-const peopleDelete = require('./people/delete');
-const peopleExport = require('./people/export')
+import aircraft from './aircraft/index.js';
 
-// responsible person
-const resperson = require('./resperson');
-const respersonAdd = require('./resperson/add');
-const respersonEdit = require('./resperson/edit');
-const respersonDelete = require('./resperson/delete');
-const respersonDetail = require('./garfile/resperson');
+import userDetails from './user/viewDetails/index.js';
+import manageUserDetails from './user/manageuserdetail/index.js';
+import logout from './user/logout/index.js';
+import detailschanged from './user/detailschanged/index.js';
+import usersavedcraftedit from './aircraft/edit/index.js';
+import usersavedcraftadd from './aircraft/add/index.js';
+import userSavedCraftDelete from './aircraft/delete/index.js';
+import userDelete from './user/deleteAccount/index.js';
+import userDeleteConfirm from './user/deleteAccount/deleteAccountConfirmation/index.js';
 
-// Misc dependency
-const error = require('./error');
-const cookies = require('./cookie');
-const help = require('./help');
-const unavailable = require('./unavailable');
-const accessibility = require('./accessibility');
+import aircraftdetail from './garfile/craft/index.js';
 
-// veirfy registeruser
-const verifyregisteruser = require('./verify/registeruser');
-const verifytokenuser = require('./verify');
-const verifyInvite = require('./verify/organisationinvite');
-const verifyMfa = require('./verify/mfa');
+import customsDetail from './garfile/customs/index.js';
+import departuredetail from './garfile/departure/index.js';
+import arrivaldetail from './garfile/arrival/index.js';
+import garhome from './garfile/home/index.js';
+import manifest from './garfile/manifest/index.js';
+import addnewperson from './garfile/manifest/addnewperson/index.js';
+import editPerson from './garfile/manifest/editperson/index.js';
+import deletePerson from './garfile/manifest/deleteperson/index.js';
+import garManage from './home/index.js';
+import supportingdocuments from './garfile/supportingdocuments/index.js';
+import garreview from './garfile/review/index.js';
+import garupload from './garfile/garupload/index.js';
+import garView from './garfile/view/index.js';
+import garCancel from './garfile/cancel/index.js';
+import garAmend from './garfile/amend/index.js';
+import garsubmitsucess from './garfile/submit/success/index.js';
+import garsubmitfailure from './garfile/submit/failure/index.js';
+import printmanifest from './garfile/printmanifest/index.js';
 
-// organisation
-const organisation = require('./organisation');
-const createorganisation = require('./organisation/create');
-const inviteuserorganisation = require('./organisation/inviteusers');
-const orgcreatesuccess = require('./organisation/createsuccess');
-const orginvitesuccess = require('./organisation/invitesuccess');
-const editorganisation = require('./organisation/editorganisation');
-const orgassignrole = require('./organisation/assignrole');
-const orgEditUsers = require('./organisation/editusers');
-const deleteUser = require('./organisation/delete');
-const exportusers = require('./organisation/exportusers');
-const searchUsers = require('./organisation/searchusers');
+import amgcheckin from './garfile/amg/checkin/index.js';
+
+import people from './people/index.js';
+
+import peopleAdd from './people/add/index.js';
+import peopleEdit from './people/edit/index.js';
+import peopleDelete from './people/delete/index.js';
+import peopleExport from './people/export/index.js';
+
+import resperson from './resperson/index.js';
+
+import respersonAdd from './resperson/add/index.js';
+import respersonEdit from './resperson/edit/index.js';
+import respersonDelete from './resperson/delete/index.js';
+import respersonDetail from './garfile/resperson/index.js';
+
+import error from './error/index.js';
+
+import cookies from './cookie/index.js';
+import help from './help/index.js';
+import unavailable from './unavailable/index.js';
+import accessibility from './accessibility/index.js';
+
+import verifyregisteruser from './verify/registeruser/index.js';
+
+import verifytokenuser from './verify/index.js';
+import verifyInvite from './verify/organisationinvite/index.js';
+import verifyMfa from './verify/mfa/index.js';
+
+import organisation from './organisation/index.js';
+
+import createorganisation from './organisation/create/index.js';
+import inviteuserorganisation from './organisation/inviteusers/index.js';
+import orgcreatesuccess from './organisation/createsuccess/index.js';
+import orginvitesuccess from './organisation/invitesuccess/index.js';
+import editorganisation from './organisation/editorganisation/index.js';
+import orgassignrole from './organisation/assignrole/index.js';
+import orgEditUsers from './organisation/editusers/index.js';
+import deleteUser from './organisation/delete/index.js';
+import exportusers from './organisation/exportusers/index.js';
+import searchUsers from './organisation/searchusers/index.js';
 
 
 // Export
-module.exports.bind = (app) => {
+export default(app) => {
   app.use(healthcheck.router);
   app.use(index.router);
   app.use(welcome.router);

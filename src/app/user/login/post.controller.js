@@ -1,17 +1,20 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const tokenApi = require('../../../common/services/tokenApi');
-const token = require('../../../common/services/create-token');
-const userApi = require('../../../common/services/userManageApi');
-const emailService = require('../../../common/services/sendEmail');
-const settings = require('../../../common/config/index');
-const oneLoginUtil = require("../../../common/utils/oneLoginAuth");
-const config = require("../../../common/config/index");
-const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import token from '../../../common/services/create-token.js';
+import userApi from '../../../common/services/userManageApi.js';
+import emailService from '../../../common/services/sendEmail.js';
+import settings from '../../../common/config/index.js';
+import oneLoginUtil from '../../../common/utils/oneLoginAuth.js';
+import config from '../../../common/config/index.js';
+import { ONE_LOGIN_SHOW_ONE_LOGIN } from '../../../common/config/index.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In user / login post controller');
 
   const usrname = req.body.username;

@@ -1,5 +1,8 @@
-const airportCodes = require('./airport_codes.json');
-const logger = require('./logger')(__filename);
+import airportCodes from './airport_codes.json' with { type: "json"};
+import loggerFactory from './logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
 
 const notBritishMsg = 'Either the Arrival or Departure port must be a UK port';
 
@@ -84,7 +87,7 @@ function isAnAirportCode(airportCode) {
   return true;
 }
 
-module.exports = {
+export default {
   includesOneBritishAirport,
   notBritishMsg,
   isBritishAirport,

@@ -1,15 +1,14 @@
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-
-const controller = require('../../../app/organisation/exportusers/get.controller');
-const orgApi = require('../../../common/services/organisationApi');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import controller from '../../../app/organisation/exportusers/get.controller.js';
+import orgApi from '../../../common/services/organisationApi.js';
 
 describe('Organisation Export User Controller', () => {
   let req; let res; let orgApiStub;

@@ -1,20 +1,24 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const i18n = require('i18n');
-const XLSX = require('xlsx');
+import sinon from 'sinon';
 
-require('../../global.test');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const createGarApi = require('../../../common/services/createGarApi.js');
-const garApi = require('../../../common/services/garApi');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import i18n from 'i18n';
+import XLSX from 'xlsx';
+import '../../global.test.js';
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import createGarApi from '../../../common/services/createGarApi.js';
+import garApi from '../../../common/services/garApi.js';
+import path from 'path';
 
-const path = require('path');
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 i18n.configure({
   locales: ['en'],
@@ -24,8 +28,8 @@ i18n.configure({
   register: global,
 });
 
-const controller = require('../../../app/api/uploadgar/post.controller');
-const { getInvalidWorkbook, getValidWorkbook } = require('./workbook-data');
+import controller from '../../../app/api/uploadgar/post.controller.js';
+import { getInvalidWorkbook, getValidWorkbook } from './workbook-data.js';
 
 describe('API upload GAR post controller', () => {
   let req; let res;

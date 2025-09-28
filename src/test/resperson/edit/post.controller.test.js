@@ -1,15 +1,14 @@
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-
-const CookieModel = require('../../../common/models/Cookie.class');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
-const resPersonApi = require('../../../common/services/resPersonApi');
-const utils = require('../../../common/utils/utils');
-const controller = require('../../../app/resperson/edit/post.controller');
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import fixedBasedOperatorOptions from '../../../common/seeddata/fixed_based_operator_options.json' with { type: "json"};
+import resPersonApi from '../../../common/services/resPersonApi.js';
+import utils from '../../../common/utils/utils.js';
+import controller from '../../../app/resperson/edit/post.controller.js';
 
 describe('Responsible Person Edit Post Controller', () => {
 

@@ -1,11 +1,14 @@
-const logger = require('../../../common/utils/logger')(__filename);
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
-const createGarApi = require('../../../common/services/createGarApi.js');
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garoptions from '../../../common/seeddata/egar_create_gar_options.json' with { type: "json"};
+import createGarApi from '../../../common/services/createGarApi.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In garfile / home post controller');
 
   const garStatus = 'Draft';

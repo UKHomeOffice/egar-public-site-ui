@@ -1,11 +1,9 @@
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-
-const resPersonApi = require('../../../common/services/resPersonApi');
-
-const controller = require('../../../app/resperson/delete/get.controller');
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import resPersonApi from '../../../common/services/resPersonApi.js';
+import controller from '../../../app/resperson/delete/get.controller.js';
 
 
 describe('Responsible Person Delete Get Controller', () => {

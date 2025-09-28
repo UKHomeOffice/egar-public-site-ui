@@ -1,9 +1,12 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const organisationApi = require('../../../common/services/organisationApi');
-const permissionLevels = require('../../../common/utils/permissionLevels');
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import organisationApi from '../../../common/services/organisationApi.js';
+import permissionLevels from '../../../common/utils/permissionLevels.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In organisation / search organisation user controller');
   const errMsg = { message: 'Failed to fetch user. Try again' };

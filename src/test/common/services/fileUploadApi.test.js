@@ -1,16 +1,14 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const { URL } = require('url');
-
-require('../../global.test');
-
-const config = require('../../../common/config/index');
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import esmock from 'esmock';
+import { URL } from 'url';
+import '../../global.test.js';
+import config from '../../../common/config/index.js';
 
 describe('File Upload API Service', () => {
   const { API_VERSION, API_BASE } = config;
@@ -30,8 +28,8 @@ describe('File Upload API Service', () => {
 
   it('should do nothing if request throws error', async () => {
     const requestStub = sinon.stub().throws('request.post Throw Error');
-    const proxiedService = proxyquire('../../../common/services/fileUploadApi', {
-      request: { post: requestStub },
+    const proxiedService = await esmock('../../../common/services/fileUploadApi.js', {
+      'request': { post: requestStub },
     });
 
     await proxiedService.postFile('GAR-ID-1', file);
@@ -50,8 +48,8 @@ describe('File Upload API Service', () => {
 
   it('should reject if error present', async () => {
     const requestStub = sinon.stub().yields('Example Error', null, null);
-    const proxiedService = proxyquire('../../../common/services/fileUploadApi', {
-      request: { post: requestStub },
+    const proxiedService = await esmock('../../../common/services/fileUploadApi.js', {
+      'request': { post: requestStub },
     });
 
     const result = await proxiedService.postFile('GAR-ID-1', file);
@@ -75,8 +73,8 @@ describe('File Upload API Service', () => {
     };
 
     const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/fileUploadApi', {
-      request: { post: requestStub },
+    const proxiedService = await esmock('../../../common/services/fileUploadApi.js', {
+      'request': { post: requestStub },
     });
 
     const result = await proxiedService.postFile('GAR-ID-1', file);

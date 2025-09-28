@@ -1,19 +1,18 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const createGarApi = require('../../../common/services/createGarApi.js');
-
-const controller = require('../../../app/garfile/home/post.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import garoptions from '../../../common/seeddata/egar_create_gar_options.json' with { type: "json"};
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import createGarApi from '../../../common/services/createGarApi.js';
+import controller from '../../../app/garfile/home/post.controller.js';
 
 describe('GAR Customs Post Controller', () => {
   let req; let res;

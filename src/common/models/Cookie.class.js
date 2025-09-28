@@ -1,6 +1,9 @@
-const logger = require("../utils/logger")(__filename);
-const { isValidAirportCode } = require("../utils/validator");
-const { trimToDecimalPlaces } = require("../utils/utils");
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../utils/validator.js';
+import utils from '../utils/utils.js';
 
 /*
  *
@@ -688,7 +691,7 @@ class Cookie {
     //avoid null and undefined issues
     destination.craftBase ||= '';
 
-    if (isValidAirportCode(destination.craftBase)) {
+    if (validator.isValidAirportCode(destination.craftBase)) {
       destination.craftBasePort = destination.craftBase;
       destination.portChoice = 'Yes';
       return;
@@ -697,8 +700,8 @@ class Cookie {
     const craftBaseLatLong = destination.craftBase.match(/^[\+\-]?[\d.]+ [\+\-]?[\d.]+$/);
     if (craftBaseLatLong) {
       const [craftBaseLat, craftBaseLong] = craftBaseLatLong[0].split(' ');
-      destination.craftBaseLat = trimToDecimalPlaces(craftBaseLat, 6);
-      destination.craftBaseLong = trimToDecimalPlaces(craftBaseLong, 6);
+      destination.craftBaseLat = utils.trimToDecimalPlaces(craftBaseLat, 6);
+      destination.craftBaseLong = utils.trimToDecimalPlaces(craftBaseLong, 6);
       destination.portChoice = 'No';
       return;
     }
@@ -775,8 +778,8 @@ class Cookie {
     );
 
     voyage[`${type}Port`] = voyageObj[`${type}Port`];
-    voyage[`${type}Long`] = trimToDecimalPlaces(voyageObj[`${type}Long`], 6);
-    voyage[`${type}Lat`] = trimToDecimalPlaces(voyageObj[`${type}Lat`], 6);
+    voyage[`${type}Long`] = utils.trimToDecimalPlaces(voyageObj[`${type}Long`], 6);
+    voyage[`${type}Lat`] = utils.trimToDecimalPlaces(voyageObj[`${type}Lat`], 6);
 
     const defaultPortChoice = (voyageObj[`${type}Lat`] || voyageObj[`${type}Long`]) ? 'No' : 'Yes';
     voyage[`${type}PortChoice`] = voyageObj.portChoice || defaultPortChoice;
@@ -827,4 +830,4 @@ class Cookie {
 
 
 
-module.exports = Cookie;
+export default Cookie;

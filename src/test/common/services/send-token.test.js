@@ -1,14 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const rewire = require('rewire');
+import sinon from 'sinon';
 
-require('../../global.test');
-
-const config = require('../../../common/config/index');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import rewire from 'rewire';
+import '../../global.test.js';
+import config from '../../../common/config/index.js';
 
 describe('Send Token Service', () => {
   beforeEach(() => {

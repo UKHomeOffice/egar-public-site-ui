@@ -10,4 +10,4 @@ class ValidationRule {
   }
 }
 
-module.exports = ValidationRule;
+export default ValidationRule;

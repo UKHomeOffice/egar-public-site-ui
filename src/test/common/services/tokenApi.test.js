@@ -1,106 +1,126 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-const { expect } = require('chai');
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const moment = require('moment');
-const nock = require('nock');
-
-require('../../global.test');
-
-const endpoints = require('../../../common/config/endpoints');
-const tokenApi = require('../../../common/services/tokenApi');
-const genToken = require('../../../common/services/create-token');
-const config = require('../../../common/config/index');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import esmock from 'esmock';
+import moment from 'moment';
+import nock from 'nock';
+import '../../global.test.js';
+import endpoints from '../../../common/config/endpoints.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import genToken from '../../../common/services/create-token.js';
+import config from '../../../common/config/index.js';
 
 const { MFA_TOKEN_EXPIRY, MFA_TOKEN_MAX_ATTEMPTS } = config;
-const createStub = sinon.stub().resolves(true);
-const updateStub = sinon.stub().resolves(true);
-const findOneStub = sinon.stub().resolves({
-  get() {
-    return '2019-03-01 14:24:23.195+00';
-  },
-  increment() {
-    this.NumAttempts += 1;
-  },
-  MFAToken: '87654321',
-  NumAttempts: 0,
-});
-
-const dbStub = {
-  sequelize: {
-    models: {
-      UserSessions: {
-        update: updateStub,
-        create: createStub,
-        findOne: findOneStub,
-      },
-    },
-  },
-};
 
 describe('UserSessions', () => {
-  const tokenApiProxy = proxyquire('../../../common/services/tokenApi', { '../utils/db': dbStub });
+  let tokenApiProxy;
+  let createStub;
+  let updateStub;
+  let findOneStub;
+
+  let clock;
 
   before(() => {
     chai.use(sinonChai);
-    this.clock = date => sinon.useFakeTimers(new Date(date));
-    this.clock('2019-04-01');
+    clock = sinon.useFakeTimers(new Date('2019-04-01'));
   });
 
-  it('Should create a usersession entry', (done) => {
-    tokenApiProxy.setMfaToken('myemail@email.com', 87654321, true)
-      .then(() => {
-        sinon.assert.calledOnce(createStub);
-        done();
-      });
+  after(() => {
+    if (clock) {
+      clock.restore();
+    }
   });
 
-  it('setMfaToken rejects', () => {
-    createStub.rejects(new Error('Test'));
-    const callSetToken = async () => {
-      await tokenApiProxy.setMfaToken('example@email.com', 'tokenId', 'status');
+  beforeEach(async () => {
+    createStub = sinon.stub().resolves(true);
+    updateStub = sinon.stub().resolves(true);
+    findOneStub = sinon.stub().resolves({
+      get() {
+        return '2019-03-01 14:24:23.195+00';
+      },
+      increment() {
+        this.NumAttempts += 1;
+      },
+      MFAToken: '87654321',
+      NumAttempts: 0,
+    });
+
+    const dbStub = {
+      sequelize: {
+        models: {
+          UserSessions: {
+            update: updateStub,
+            create: createStub,
+            findOne: findOneStub,
+          },
+        },
+      },
     };
 
-    callSetToken().then(() => {
-      chai.assert.fail('Should have rejected');
-    }).catch((result) => {
-      expect(result.message).to.eq('Test');
+    tokenApiProxy = await esmock('../../../common/services/tokenApi.js', {
+      '../../../common/utils/db.js': dbStub,
     });
   });
 
-  it('Should update a usersession entry', (done) => {
-    tokenApiProxy.updateMfaToken('myemail@email.com', 87654321)
-      .then(() => {
-        sinon.assert.calledOnce(updateStub);
-        done();
-      });
+  afterEach(() => {
+    sinon.restore();
   });
 
-  it('updateMfaToken rejects', () => {
+  it('Should create a usersession entry', async () => {
+    await tokenApiProxy.setMfaToken('myemail@email.com', 87654321, true);
+    sinon.assert.calledOnce(createStub);
+  });
+
+  it('setMfaToken rejects', async () => {
+    createStub.rejects(new Error('Test'));
+    
+    try {
+      await tokenApiProxy.setMfaToken('example@email.com', 'tokenId', 'status');
+      chai.assert.fail('Should have rejected');
+    } catch (result) {
+      expect(result.message).to.eq('Test');
+    }
+  });
+
+  it('Should update a usersession entry', async () => {
+    await tokenApiProxy.updateMfaToken('myemail@email.com', 87654321);
+    sinon.assert.calledOnce(updateStub);
+  });
+
+  it('updateMfaToken rejects', async () => {
     updateStub.resetHistory();
     updateStub.rejects(new Error('Test Update MFA Token'));
-    const callSetToken = async () => {
+    
+    try {
       await tokenApiProxy.updateMfaToken('myemail@email.com', 87654321);
-    };
-
-    callSetToken().then(() => {
       chai.assert.fail('Should have rejected');
-    }).catch((result) => {
+    } catch (result) {
       expect(updateStub).to.have.been.calledOnce;
       expect(result.message).to.eq('Test Update MFA Token');
-    });
+    }
   });
 
   it('Should not validate an incorrect token', async () => {
-    // Should resolve to null after changes to tokenApi functions made.
     const findOneStubFail = sinon.stub().resolves(false);
-    dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
+    
+    const tokenApiProxyFail = await esmock('../../../common/services/tokenApi.js', {
+      '../../../common/utils/db.js': {
+        sequelize: {
+          models: {
+            UserSessions: {
+              findOne: findOneStubFail,
+            },
+          },
+        },
+      },
+    });
+    
     try {
-      await tokenApiProxy.validateMfaToken('myemail@email.com', 87654322);
+      await tokenApiProxyFail.validateMfaToken('myemail@email.com', 87654322);
     } catch (err) {
       expect(err.message).to.equal('No MFA token found');
     }
@@ -117,8 +137,20 @@ describe('UserSessions', () => {
       MFAToken: 87654321,
       NumAttempts: 0,
     });
-    dbStub.sequelize.models.UserSessions.findOne = findOneStubSucc;
-    const result = await tokenApiProxy.validateMfaToken('myemail@email.com', 87654321);
+    
+    const tokenApiProxySucc = await esmock('../../../common/services/tokenApi.js', {
+      '../../../common/utils/db.js': {
+        sequelize: {
+          models: {
+            UserSessions: {
+              findOne: findOneStubSucc,
+            },
+          },
+        },
+      },
+    });
+    
+    const result = await tokenApiProxySucc.validateMfaToken('myemail@email.com', 87654321);
     expect(result).to.equal(true);
   });
 
@@ -133,8 +165,20 @@ describe('UserSessions', () => {
       MFAToken: 87654321,
       NumAttempts: 4,
     });
-    dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
-    const result = await tokenApiProxy.validateMfaToken('myemail@email.com', 87654321);
+    
+    const tokenApiProxyFail = await esmock('../../../common/services/tokenApi.js', {
+      '../../../common/utils/db.js': {
+        sequelize: {
+          models: {
+            UserSessions: {
+              findOne: findOneStubFail,
+            },
+          },
+        },
+      },
+    });
+    
+    const result = await tokenApiProxyFail.validateMfaToken('myemail@email.com', 87654321);
     expect(result).to.equal(true);
   });
 
@@ -150,9 +194,20 @@ describe('UserSessions', () => {
       NumAttempts: 5,
     });
 
-    dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
+    const tokenApiProxyFail = await esmock('../../../common/services/tokenApi.js', {
+      '../../../common/utils/db.js': {
+        sequelize: {
+          models: {
+            UserSessions: {
+              findOne: findOneStubFail,
+            },
+          },
+        },
+      },
+    });
+    
     try {
-      await tokenApiProxy.validateMfaToken('myemail@email.com', 87654322);
+      await tokenApiProxyFail.validateMfaToken('myemail@email.com', 87654322);
     } catch (err) {
       expect(err.message).to.equal('Invalid MFA token');
     }
@@ -161,9 +216,20 @@ describe('UserSessions', () => {
   it('should reject if sequelize throws an error', async () => {
     const findOneStubFail = sinon.stub().throws(new Error('Not sure what happened'));
 
-    dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
+    const tokenApiProxyFail = await esmock('../../../common/services/tokenApi.js', {
+      '../../../common/utils/db.js': {
+        sequelize: {
+          models: {
+            UserSessions: {
+              findOne: findOneStubFail,
+            },
+          },
+        },
+      },
+    });
+    
     try {
-      await tokenApiProxy.validateMfaToken('myemail@email.com', 87654322);
+      await tokenApiProxyFail.validateMfaToken('myemail@email.com', 87654322);
     } catch (err) {
       expect(err.message).to.equal('Not sure what happened');
     }
@@ -172,10 +238,23 @@ describe('UserSessions', () => {
   it('should reject if sequelize rejects', async () => {
     const findOneStubFail = sinon.stub().rejects(new Error('Sequelize reject'));
 
-    dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
-    await tokenApiProxy.validateMfaToken('myemail@email.com', 87654322).then().catch((err) => {
-      expect(err.message).to.equal('Sequelize reject');
+    const tokenApiProxyFail = await esmock('../../../common/services/tokenApi.js', {
+      '../../../common/utils/db.js': {
+        sequelize: {
+          models: {
+            UserSessions: {
+              findOne: findOneStubFail,
+            },
+          },
+        },
+      },
     });
+    
+    try {
+      await tokenApiProxyFail.validateMfaToken('myemail@email.com', 87654322);
+    } catch (err) {
+      expect(err.message).to.equal('Sequelize reject');
+    }
   });
 
   it('Should reject a correctly entered token after 5 incorrect attempts', async () => {
@@ -190,9 +269,20 @@ describe('UserSessions', () => {
       NumAttempts: 5,
     });
 
-    dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
+    const tokenApiProxyFail = await esmock('../../../common/services/tokenApi.js', {
+      '../../../common/utils/db.js': {
+        sequelize: {
+          models: {
+            UserSessions: {
+              findOne: findOneStubFail,
+            },
+          },
+        },
+      },
+    });
+    
     try {
-      await tokenApiProxy.validateMfaToken('myemail@email.com', 87654321);
+      await tokenApiProxyFail.validateMfaToken('myemail@email.com', 87654321);
     } catch (err) {
       expect(err.message).to.equal(`MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`);
     }
@@ -209,9 +299,21 @@ describe('UserSessions', () => {
       MFAToken: 87654321,
       NumAttempts: 3,
     });
-    dbStub.sequelize.models.UserSessions.findOne = findOneStubExpired;
+    
+    const tokenApiProxyExpired = await esmock('../../../common/services/tokenApi.js', {
+      '../../../common/utils/db.js': {
+        sequelize: {
+          models: {
+            UserSessions: {
+              findOne: findOneStubExpired,
+            },
+          },
+        },
+      },
+    });
+    
     try {
-      await tokenApiProxy.validateMfaToken('myemail@email.com', 87654321);
+      await tokenApiProxyExpired.validateMfaToken('myemail@email.com', 87654321);
     } catch (err) {
       expect(err.message).to.equal(`MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`);
     }
@@ -243,63 +345,56 @@ describe('TokenService', () => {
       .reply(201, {});
   });
 
-  it('Should successfully call the settoken API', (done) => {
-    tokenApi.setToken(tokenId, userId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+  it('Should successfully call the settoken API', async () => {
+    const response = await tokenApi.setToken(tokenId, userId);
+    const responseObj = JSON.parse(response);
+    expect(typeof responseObj).to.equal('object');
+    expect(responseObj).to.be.empty;
   });
 
-  it('should throw an error when calling the settoken API', () => {
+  it('should throw an error when calling the settoken API', async () => {
     nock.cleanAll();
     nock(BASE_URL)
       .post(url, { tokenId, userId })
       .replyWithError({ message: 'Example setToken error', code: 404 });
 
-    tokenApi.setToken(tokenId, userId).then(() => {
+    try {
+      await tokenApi.setToken(tokenId, userId);
       chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
+    } catch (err) {
       expect(err.message).to.equal('Example setToken error');
-    });
+    }
   });
 
-  it('should allow the updating of a tokenId', (done) => {
-    tokenApi.updateToken(newTokenId, userId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+  it('should allow the updating of a tokenId', async () => {
+    const response = await tokenApi.updateToken(newTokenId, userId);
+    const responseObj = JSON.parse(response);
+    expect(typeof responseObj).to.equal('object');
+    expect(responseObj).to.be.empty;
   });
 
-  it('should throw an error when updating a tokenId', () => {
+  it('should throw an error when updating a tokenId', async () => {
     nock.cleanAll();
     nock(BASE_URL)
       .put(url, { tokenId: newTokenId, userId })
       .replyWithError({ message: 'Example updateToken error', code: 404 });
 
-    tokenApi.updateToken(newTokenId, userId).then(() => {
+    try {
+      await tokenApi.updateToken(newTokenId, userId);
       chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
+    } catch (err) {
       expect(err.message).to.equal('Example updateToken error');
-    });
+    }
   });
 
-  it('should successfully set the token of an invited org user', (done) => {
-    tokenApi.setInviteUserToken(tokenId, userId, orgId, roleName)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+  it('should successfully set the token of an invited org user', async () => {
+    const response = await tokenApi.setInviteUserToken(tokenId, userId, orgId, roleName);
+    const responseObj = JSON.parse(response);
+    expect(typeof responseObj).to.equal('object');
+    expect(responseObj).to.be.empty;
   });
 
-  it('should throw an error when setting the token of an invited org user', () => {
+  it('should throw an error when setting the token of an invited org user', async () => {
     nock.cleanAll();
     nock(BASE_URL)
       .post(url, {
@@ -307,11 +402,12 @@ describe('TokenService', () => {
       })
       .replyWithError({ message: 'Example setInviteUserToken error', code: 404 });
 
-    tokenApi.setInviteUserToken(tokenId, userId, orgId, roleName).then(() => {
+    try {
+      await tokenApi.setInviteUserToken(tokenId, userId, orgId, roleName);
       chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
+    } catch (err) {
       expect(err.message).to.equal('Example setInviteUserToken error');
-    });
+    }
   });
 });
 

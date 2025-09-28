@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const controller = require('../../app/unavailable/get.controller');
-const availability = require('../../common/config/availability');
+import sinon from 'sinon';
 
-require('../global.test');
-const CookieModel = require('../../common/models/Cookie.class');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import controller from '../../app/unavailable/get.controller.js';
+import availability from '../../common/config/availability.js';
+import '../global.test.js';
+import CookieModel from '../../common/models/Cookie.class.js';
 
 describe('User Login Get Controller', () => {
   let req; let res;

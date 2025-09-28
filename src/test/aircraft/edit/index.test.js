@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-require('../../global.test');
-
-const index = require('../../../app/aircraft/edit/index');
+import '../../global.test.js';
+import index from '../../../app/aircraft/edit/index.js';
 
 describe('Aircraft index.js', () => {
   it('should have included everything', () => {

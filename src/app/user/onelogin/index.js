@@ -1,7 +1,7 @@
-const nav = require('../../../common/utils/nav');
+import nav from '../../../common/utils/nav.js';
 
-// Local dependencies
-const getController = require('./get.controller');
-const postController = require('./post.controller');
+import getController from './get.controller.js';
 
-module.exports = nav.buildRouterAndPathsNoUserCheck('/onelogin/register', getController, postController);
+import postController from './post.controller.js';
+
+export default nav.buildRouterAndPathsNoUserCheck('/onelogin/register', getController, postController);

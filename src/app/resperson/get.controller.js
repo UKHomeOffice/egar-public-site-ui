@@ -1,8 +1,11 @@
-const logger = require('../../common/utils/logger')(__filename);
-const CookieModel = require('../../common/models/Cookie.class');
-const resPersonApi = require('../../common/services/resPersonApi');
+import loggerFactory from '../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../../common/models/Cookie.class.js';
+import resPersonApi from '../../common/services/resPersonApi.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   logger.debug('In responsible person get controller');
   const cookie = new CookieModel(req);
   const errMessage = { message: 'Failed to get saved responsible persons' };

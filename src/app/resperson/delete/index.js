@@ -1,7 +1,7 @@
-const express = require('express');
-const flagpole = require('../../../common/middleware/flagpole');
-const usercheck = require('../../../common/middleware/usercheck');
-const getController = require('./get.controller');
+import express from 'express';
+import flagpole from '../../../common/middleware/flagpole.js';
+import usercheck from '../../../common/middleware/usercheck.js';
+import getController from './get.controller.js';
 
 const router = new express.Router();
 const indexPath = '/resperson/delete';
@@ -11,4 +11,4 @@ const paths = {
 
 router.get(paths.index, flagpole, usercheck, getController);
 
-module.exports = { router, paths };
+export default { router, paths };

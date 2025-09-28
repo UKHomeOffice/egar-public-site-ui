@@ -48,7 +48,7 @@
                       <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_day')}}
                     </label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalDay"
-                    name="arrivalDay"  type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'day');autoTab(arrivalDay, 'day', arrivalMonth);"
+                    name="arrivalDay"  type="text" maxLength=2
                     value="{{cookie.dateSlice('day', arrival.arrivalDate)}}"
                     {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
                   </div>
@@ -61,7 +61,7 @@
                     </label>
                     <span id="arrival-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMonth"
-                    name="arrivalMonth" type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'month');autoTab(arrivalMonth, 'month', arrivalYear);" 
+                    name="arrivalMonth" type="text" maxLength=2
                     value="{{cookie.dateSlice('month', arrival.arrivalDate)}}"
                     aria-describedby="{{ 'arrivalDate-error ' if errors | containsError('arrivalDate') }}arrival-month-hint">
                   </div>
@@ -73,7 +73,7 @@
                       <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_year')}}
                     </label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalYear"
-                    name="arrivalYear" type="text" maxLength=4  onKeyup="value = sanitiseDateOrTime(this.value, 'year');"
+                    name="arrivalYear" type="text" maxLength=4
                     value="{{cookie.dateSlice('year', arrival.arrivalDate)}}"
                     {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
                   </div>
@@ -100,7 +100,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_hour')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalHour"
-                    name="arrivalHour" type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'hour');autoTab(arrivalHour, 'hour', arrivalMinute);"
+                    name="arrivalHour" type="text" maxLength=2
                     value="{{cookie.timeSlice('hour', arrival.arrivalTime)}}"
                     {{ 'aria-describedby=arrivalTime-error' if errors | containsError('arrivalTime') }}>
                 </div>
@@ -112,7 +112,7 @@
                     <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_minute')}}
                   </label>
                   <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMinute"
-                    name="arrivalMinute" type="text" maxLength=2  onKeyup="value = sanitiseDateOrTime(this.value, 'minute');"
+                    name="arrivalMinute" type="text" maxLength=2
                     value="{{cookie.timeSlice('minute', arrival.arrivalTime)}}"
                     {{ 'aria-describedby=arrivalTime-error' if errors | containsError('arrivalTime') }}>
                 </div>
@@ -131,14 +131,14 @@
         {% set long = arrival.arrivalLong%}
         {% set prefix = 'arrival'%}
 
-        {{ l.location(legendLabel, 
-                      warningMessage, 
-                      isPortChoice, 
-                      portCode, 
-                      lat, 
-                      long, 
-                      prefix, 
-                      errors, 
+        {{ l.location(legendLabel,
+                      warningMessage,
+                      isPortChoice,
+                      portCode,
+                      lat,
+                      long,
+                      prefix,
+                      errors,
                       __) }}
 
         {# Start buttons #}
@@ -148,5 +148,5 @@
       {# End buttons #}
     </div>
   </div>
-  <script type="text/javascript" src="/utils/validator.js"></script>
+  <script type="module" src="/javascripts/arrivalForm.js"></script>
 {% endblock %}

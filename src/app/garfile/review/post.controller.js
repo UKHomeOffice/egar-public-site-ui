@@ -1,13 +1,17 @@
 /* eslint-disable consistent-return */
-const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
-const CookieModel = require('../../../common/models/Cookie.class');
-const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const { Manifest } = require('../../../common/models/Manifest.class');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const airportValidation = require('../../../common/utils/airportValidation');
-const validationList = require('./validations');
+import loggerFactory from '../../../common/utils/logger.js';
+
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import garApi from '../../../common/services/garApi.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import manifestFields from '../../../common/seeddata/gar_manifest_fields.json' with { type: "json"};
+import { Manifest } from '../../../common/models/Manifest.class.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import airportValidation from '../../../common/utils/airportValidation.js';
+import validationList from './validations.js';
 
 const performAPICall = async (garId, cookie, req, res) => {
   try {
@@ -80,7 +84,7 @@ const buildValidations = async (garfile, garpeople, manifest) => {
   return validations;
 };
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   logger.debug('In garfile / review post controller');
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();

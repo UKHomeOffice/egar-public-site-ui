@@ -4,6 +4,6 @@ const permissionLevels = {
   Admin: 2,
 };
 
-module.exports = {
+export default {
   permissionLevels,
 };

@@ -1,14 +1,17 @@
-const _ = require('lodash');
-const logger = require('../../../common/utils/logger')(__filename);
-const validator = require('../../../common/utils/validator');
-const validations = require('../validations');
-const CookieModel = require('../../../common/models/Cookie.class');
-const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
-const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
-const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
-const personApi = require('../../../common/services/personApi');
+import _ from 'lodash';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import validator from '../../../common/utils/validator.js';
+import validations from '../validations.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import persontype from '../../../common/seeddata/egar_type_of_saved_person.json' with { type: "json"};
+import documenttype from '../../../common/seeddata/egar_saved_people_travel_document_type.json' with { type: "json"};
+import genderchoice from '../../../common/seeddata/egar_gender_choice.json' with { type: "json"};
+import personApi from '../../../common/services/personApi.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const cookie = new CookieModel(req);
 
   const person = {
@@ -32,7 +35,7 @@ module.exports = (req, res) => {
   cookie.updateEditPerson(person);
 
   // Validate chains
-  validator.validateChains(validations.validations(req))
+  validator.validateChains(validations(req))
     .then(() => {
       // call the API to update the data base and then
       personApi.update(

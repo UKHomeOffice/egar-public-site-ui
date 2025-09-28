@@ -1,8 +1,17 @@
-const path = require('path');
-const fs = require('fs');
-const throng = require('throng');
-const logger = require('./common/utils/logger')(__filename);
-const server = require('./server');
+import path from 'path';
+import fs from 'fs';
+import throng from 'throng';
+import loggerFactory from './common/utils/logger.js';
+
+
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+import { dirname } from 'path';
+const __dirname = dirname(__filename);
+
+
+const logger = loggerFactory(__filename);
+import server from './server.js';
 
 const pidFile = path.join(__dirname, '/.start.pid');
 const fileOptions = { encoding: 'utf-8' };

@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-require('../../global.test');
-
-const airportValidation = require('../../../common/utils/airportValidation');
+import '../../global.test.js';
+import airportValidation from '../../../common/utils/airportValidation.js';
 
 describe('Airport Validation', () => {
     it('should return correct `not British message`', () => {

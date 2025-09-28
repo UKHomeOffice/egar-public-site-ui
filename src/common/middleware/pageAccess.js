@@ -1,11 +1,14 @@
-const CookieModel = require('../models/Cookie.class');
-const logger = require('../utils/logger')(__filename);
+import CookieModel from '../models/Cookie.class.js';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
 
 const inaccessiblePageRoute = {
   'organisation' : ['User'],
 };
 
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   const cookie = new CookieModel(req);
   const userRole = cookie.getUserRole(); 
   const page = req.originalUrl.split('/')[1];

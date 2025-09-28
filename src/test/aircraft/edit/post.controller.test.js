@@ -1,19 +1,18 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-const i18n = require('i18n');
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const craftApi = require('../../../common/services/craftApi');
-
-const controller = require('../../../app/aircraft/edit/post.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import i18n from 'i18n';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import validator from '../../../common/utils/validator.js';
+import craftApi from '../../../common/services/craftApi.js';
+import controller from '../../../app/aircraft/edit/post.controller.js';
 
 describe('Aircraft Edit Post Controller', () => {
   let req; let res;

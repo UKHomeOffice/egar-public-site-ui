@@ -1,14 +1,23 @@
-const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
-const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
-const logger = require('../../../common/utils/logger')(__filename);
-const CookieModel = require('../../../common/models/Cookie.class');
-const { ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, ONE_LOGIN_POST_MIGRATION} = require("../../../common/config");
-const sendEmail = require("../../../common/services/sendEmail");
-const organisationApi = require('../../../common/services/organisationApi');
-const verifyUserService = require('../../../common/services/verificationApi');
-const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
-const { getOneLoginLogoutUrl } = require("../../../common/utils/oneLoginAuth");
+import oneLoginUtil from '../../../common/utils/oneLoginAuth.js';
+import oneLoginApi from '../../../common/services/oneLoginApi.js';
+import userApi from '../../../common/services/userManageApi.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import oneLoginAuth from '../../../common/utils/oneLoginAuth.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import CookieModel from '../../../common/models/Cookie.class.js';
+
+import {
+  ONE_LOGIN_SHOW_ONE_LOGIN,
+  NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
+  BASE_URL,
+  ONE_LOGIN_POST_MIGRATION,
+} from '../../../common/config/index.js';
+
+import sendEmail from '../../../common/services/sendEmail.js';
+import organisationApi from '../../../common/services/organisationApi.js';
+import verifyUserService from '../../../common/services/verificationApi.js';
 
 // Constants
 const ROUTES = {
@@ -162,7 +171,7 @@ let global_id_token = null;
 /**
  * Main login controller
  */
-module.exports = async (req, res) => {
+export default async (req, res) => {
   if (req.headers.referer && isUserAuthenticated(req.session.u)) {
     return res.redirect(ROUTES.HOME);
   }
@@ -215,7 +224,7 @@ module.exports = async (req, res) => {
             return res.redirect(redirectErrorPage(req, res, 'login-error'));
           }
 
-          accountUrl = parseUrlForNonProd(req, accountUrl);
+          accountUrl = oneLoginAuth.parseUrlForNonProd(req, accountUrl);
 
           return handleUserAuthentication(req, res, userInfo, cookie)
             .then(({ redirect }) => {
@@ -264,6 +273,6 @@ async function checkUserInvite(req, res, email) {
 
 function redirectErrorPage(req, res, errorPage) {
   res.cookie("errorPage", errorPage);
-  return getOneLoginLogoutUrl(req, global_id_token, req.cookies.state);
+  return oneLoginAuth.getOneLoginLogoutUrl(req, global_id_token, req.cookies.state);
 }
 

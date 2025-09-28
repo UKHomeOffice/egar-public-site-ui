@@ -1,7 +1,10 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
-const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import garApi from '../../../common/services/garApi.js';
+import manifestFields from '../../../common/seeddata/gar_manifest_fields.json' with { type: "json"};
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -13,21 +16,21 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
  * @param {String} organisationId The organisation to check against
  */
 
- const checkGARUser = (parsedGar, userId, organisationId) => {
-  if (parsedGar === undefined || parsedGar === null) return false;
+const checkGARUser = (parsedGar, userId, organisationId) => {
+ if (parsedGar === undefined || parsedGar === null) return false;
 
-  if ((parsedGar.organisationId && organisationId) && parsedGar.organisationId === organisationId) {
-    logger.info('GAR organisation id matches current user ID');
-    return true;
-  }
-  if (parsedGar.userId === userId) {
-    logger.info('GAR user id matches current user ID');
-    return true;
-  }
-  return false;
+ if ((parsedGar.organisationId && organisationId) && parsedGar.organisationId === organisationId) {
+   logger.info('GAR organisation id matches current user ID');
+   return true;
+ }
+ if (parsedGar.userId === userId) {
+   logger.info('GAR user id matches current user ID');
+   return true;
+ }
+ return false;
 };
 
-module.exports = (req, res) => {
+export default (req, res) => {
     const cookie = new CookieModel(req);
     logger.debug('In garfile/print manifest get controller');
     

@@ -1,17 +1,16 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const garApi = require('../../../common/services/garApi');
-const clamAVService = require('../../../common/services/clamAVService');
-const fileUploadApi = require('../../../common/services/fileUploadApi');
-
-const controller = require('../../../app/api/uploadfile/post.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import garApi from '../../../common/services/garApi.js';
+import clamAVService from '../../../common/services/clamAVService.js';
+import fileUploadApi from '../../../common/services/fileUploadApi.js';
+import controller from '../../../app/api/uploadfile/post.controller.js';
 
 describe('API upload file post controller', () => {
   let req; let res;

@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const nock = require('nock');
-
-require('../../global.test');
-const endpoints = require('../../../common/config/endpoints');
-const registerApi = require('../../../common/services/createUserApi');
+import sinon from 'sinon';
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import esmock from 'esmock';
+import nock from 'nock';
+import '../../global.test.js';
+import endpoints from '../../../common/config/endpoints.js';
+import registerApi from '../../../common/services/createUserApi.js';
 
 const BASE_URL = endpoints.baseUrl();
 
@@ -20,36 +19,30 @@ describe('UserCreationService', () => {
     email: 'soshino@email.com',
   };
 
-  it('Should create a user and return the tokenId', (done) => {
+  it('Should create a user and return the tokenId', async () => {
     nock(BASE_URL)
       .post('/user/register', user)
       .reply(201, { tokenId: '43f70daa-dc2e-4c88-af9c-f0dc1ff13a8e' });
 
-    registerApi.post(user.firstName, user.lastName, user.email)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.keys(['tokenId']);
-        done();
-      });
+    const response = await registerApi.post(user.firstName, user.lastName, user.email);
+    const responseObj = JSON.parse(response);
+    expect(typeof responseObj).to.equal('object');
+    expect(responseObj).to.have.keys(['tokenId']);
   });
 
-  it('Should not create a user that already exists', (done) => {
+  it('Should not create a user that already exists', async () => {
     nock(BASE_URL)
       .post('/user/register', user)
       .reply(400, { message: 'User already registered' });
 
-    registerApi.post(user.firstName, user.lastName, user.email)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.keys(['message']);
-        expect(responseObj.message).to.eq('User already registered');
-        done();
-      });
+    const response = await registerApi.post(user.firstName, user.lastName, user.email);
+    const responseObj = JSON.parse(response);
+    expect(typeof responseObj).to.equal('object');
+    expect(responseObj).to.have.keys(['message']);
+    expect(responseObj.message).to.eq('User already registered');
   });
 
-  it('Should enforce mandatory fields', (done) => {
+  it('Should enforce mandatory fields', async () => {
     const badUser = {
       firstName: 'Shinobu',
       lastName: 'Oshino',
@@ -58,17 +51,14 @@ describe('UserCreationService', () => {
       .post('/user/register', badUser)
       .reply(400, { message: { email: 'This field is required' } });
 
-    registerApi.post(user.firstName, user.lastName)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.keys(['message']);
-        expect(responseObj.message.email).to.eq('This field is required');
-        done();
-      });
+    const response = await registerApi.post(user.firstName, user.lastName);
+    const responseObj = JSON.parse(response);
+    expect(typeof responseObj).to.equal('object');
+    expect(responseObj).to.have.keys(['message']);
+    expect(responseObj.message.email).to.eq('This field is required');
   });
 
-  it('Should successfully create an organisational user', (done) => {
+  it('Should successfully create an organisational user', async () => {
     const orgUser = {
       firstName: 'Shinobu',
       lastName: 'Oshino',
@@ -80,13 +70,10 @@ describe('UserCreationService', () => {
       .post('/user/register', orgUser)
       .reply(201, { tokenId: '43f70daa-dc2e-4c88-af9c-f0dc1ff13aae' });
 
-    registerApi.post(orgUser.firstName, orgUser.lastName, orgUser.email, orgUser.tokenId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.keys(['tokenId']);
-        done();
-      });
+    const response = await registerApi.post(orgUser.firstName, orgUser.lastName, orgUser.email, orgUser.tokenId);
+    const responseObj = JSON.parse(response);
+    expect(typeof responseObj).to.equal('object');
+    expect(responseObj).to.have.keys(['tokenId']);
   });
 });
 
@@ -101,8 +88,8 @@ describe('Create User API Service', () => {
 
   it('should do nothing if request throws error', async () => {
     const requestStub = sinon.stub().throws('request.post Throw Error');
-    const proxiedService = proxyquire('../../../common/services/createUserApi', {
-      request: { post: requestStub },
+    const proxiedService = await esmock('../../../common/services/createUserApi.js', {
+      'request': { post: requestStub },
     });
 
     await proxiedService.post('Darth', 'Vader', 'vader@sith.net');
@@ -116,8 +103,8 @@ describe('Create User API Service', () => {
 
   it('should reject if error present', async () => {
     const requestStub = sinon.stub().yields('Example Error', null, null);
-    const proxiedService = proxyquire('../../../common/services/createUserApi', {
-      request: { post: requestStub },
+    const proxiedService = await esmock('../../../common/services/createUserApi.js', {
+      'request': { post: requestStub },
     });
 
     const result = await proxiedService.post('Darth', 'Vader', 'vader@sith.net');
@@ -135,8 +122,8 @@ describe('Create User API Service', () => {
       garId: 'NEW-ID',
     };
     const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/createUserApi', {
-      request: { post: requestStub },
+    const proxiedService = await esmock('../../../common/services/createUserApi.js', {
+      'request': { post: requestStub },
     });
 
     const result = await proxiedService.post('Darth', 'Vader', 'vader@sith.net');
@@ -154,8 +141,8 @@ describe('Create User API Service', () => {
       userId: 'NEW-ID',
     };
     const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/createUserApi', {
-      request: { post: requestStub },
+    const proxiedService = await esmock('../../../common/services/createUserApi.js', {
+      'request': { post: requestStub },
     });
 
     const result = await proxiedService.post('Darth', 'Vader', 'vader@sith.net', 'TOKEN12345');

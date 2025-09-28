@@ -1,24 +1,23 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const tokenService = require('../../../common/services/create-token');
-const tokenApi = require('../../../common/services/tokenApi');
-const emailService = require('../../../common/services/sendEmail');
-const config = require('../../../common/config/index');
-let roles = require('../../../common/seeddata/egar_user_roles.json');
-const oneLoginApi = require("../../../common/services/oneLoginApi");
-
-const controller = require('../../../app/organisation/assignrole/post.controller');
-let { cookie } = require('request');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import tokenService from '../../../common/services/create-token.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import emailService from '../../../common/services/sendEmail.js';
+import config from '../../../common/config/index.js';
+import roles from '../../../common/seeddata/egar_user_roles.json' with { type: "json"};
+import oneLoginApi from '../../../common/services/oneLoginApi.js';
+import controller from '../../../app/organisation/assignrole/post.controller.js';
+import { cookie } from 'request';
 
 
 describe('Organisation Assign Role Post Controller', () => {

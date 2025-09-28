@@ -1,18 +1,17 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-const sinon = require('sinon');
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
 
-require('../../global.test');
-const { nanoid } = require('../../../common/utils/utils');
-const tokenService = require('../../../common/services/create-token');
-const CookieModel = require('../../../common/models/Cookie.class');
-const sendTokenService = require('../../../common/services/send-token');
-const tokenApi = require('../../../common/services/tokenApi');
-
-const controller = require('../../../app/user/regmsg/get.controller');
+import { expect } from 'chai';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
+import '../../global.test.js';
+import { nanoid } from '../../../common/utils/utils.js';
+import tokenService from '../../../common/services/create-token.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import sendTokenService from '../../../common/services/send-token.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import controller from '../../../app/user/regmsg/get.controller.js';
 
 describe('User Register Message Get Controller', () => {
   let req; let res;

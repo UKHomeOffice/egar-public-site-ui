@@ -1,9 +1,9 @@
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const { MAX_STRING_LENGTH } = require('../../../common/config/index');
-const { MAX_EMAIL_LENGTH } = require('../../../common/config/index');
+import validator from '../../../common/utils/validator.js';
+import ValidationRule from '../../../common/models/ValidationRule.class.js';
+import { MAX_STRING_LENGTH } from '../../../common/config/index.js';
+import { MAX_EMAIL_LENGTH } from '../../../common/config/index.js';
 
-module.exports.validations = req => [
+export default req => [
   [
     new ValidationRule(validator.notEmpty, 'fname', req.body.fname, 'Please enter the given names of the user'),
     new ValidationRule(validator.isValidStringLength, 'fname', req.body.fname, `Given names must be ${MAX_STRING_LENGTH} characters or less`),

@@ -1,7 +1,9 @@
-const url = require('url');
-const _ = require('lodash');
-
-const logger = require('./logger')(__filename);
+import url from 'url';
+import _ from 'lodash';
+import loggerFactory from './logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
 
 const PAGE_SIZE = 5;
 
@@ -121,6 +123,4 @@ const build = (req, totalPages, totalItems, optionalPath) => {
   };
 };
 
-exports.getCurrentPage = getCurrentPage;
-exports.setCurrentPage = setCurrentPage;
-exports.build = build;
+export default { getCurrentPage, setCurrentPage, build };

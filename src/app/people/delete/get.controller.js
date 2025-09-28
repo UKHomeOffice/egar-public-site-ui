@@ -1,8 +1,11 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const personApi = require('../../../common/services/personApi');
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import personApi from '../../../common/services/personApi.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In people / delete get controller');
 

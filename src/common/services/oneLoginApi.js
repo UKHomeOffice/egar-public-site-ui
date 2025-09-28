@@ -1,8 +1,10 @@
-const logger = require('../utils/logger')(__filename);
-const config = require('../config/index');
-const request = require('request');
-const qs = require('querystring');
-const {resolve} = require('path');
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import config from '../config/index.js';
+import request from 'request';
+import qs from 'querystring';
 
 
 /**
@@ -38,7 +40,7 @@ const parseUrlForNonProd = (req, url) => {
 };
 
 
-module.exports = {
+export default {
 
   /**
    * Gets a list of users belonging to an organisation.
@@ -117,4 +119,4 @@ module.exports = {
   },
 
   parseUrlForNonProd,
-}
+};

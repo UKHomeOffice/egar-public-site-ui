@@ -1,14 +1,13 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
-const { expect } = require('chai');
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import { expect } from 'chai';
 
-require('../global.test');
-
-const CookieModel = require('../../common/models/Cookie.class');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import '../global.test.js';
+import CookieModel from '../../common/models/Cookie.class.js';
 
 /**
  * Unit tests for the Cookie.class.js

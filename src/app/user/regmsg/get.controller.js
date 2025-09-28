@@ -1,18 +1,21 @@
-const { nanoid } = require('../../../common/utils/utils');
-const tokenService = require('../../../common/services/create-token');
-const sendTokenService = require('../../../common/services/send-token');
-const tokenApi = require('../../../common/services/tokenApi');
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
+import utils from '../../../common/utils/utils.js';
+import tokenService from '../../../common/services/create-token.js';
+import sendTokenService from '../../../common/services/send-token.js';
+import tokenApi from '../../../common/services/tokenApi.js';
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In user / regmsg get controller');
   const cookie = new CookieModel(req);
 
   if (req.query.resend && cookie.getUserEmail() !== null) {
     // Generate a new token for the user
     const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
-    const token = nanoid(alphabet, 13);
+    const token = utils.nanoid(alphabet, 13);
     const hashtoken = tokenService.generateHash(token);
 
     sendTokenService.send(cookie.getUserFirstName(), cookie.getUserEmail(), token)

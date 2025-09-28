@@ -1,8 +1,11 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const logger = require('../../../common/utils/logger')(__filename);
-const craftApi = require('../../../common/services/craftApi');
+import CookieModel from '../../../common/models/Cookie.class.js';
+import loggerFactory from '../../../common/utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
+import craftApi from '../../../common/services/craftApi.js';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   logger.debug('In user craft edit get controller');
   const cookie = new CookieModel(req);
   const craftId = req.session.editCraftId;

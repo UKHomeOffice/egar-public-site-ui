@@ -1,5 +1,5 @@
-const CookieModel = require('../../../common/models/Cookie.class');
-const { getOneLoginLogoutUrl } = require("../../../common/utils/oneLoginAuth");
+import CookieModel from '../../../common/models/Cookie.class.js';
+import oneLoginAuth from '../../../common/utils/oneLoginAuth.js';
 
 function logoutAndClearCookies(req, res, cookie, redirectUrl) {
   req.session.destroy(() => {
@@ -13,7 +13,7 @@ function logoutAndClearCookies(req, res, cookie, redirectUrl) {
   });
 }
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const cookie = new CookieModel(req);
   let { state, id_token } = req.cookies || {};
 
@@ -28,7 +28,7 @@ module.exports = (req, res) => {
       state = 'user-deleted';
     }
 
-    const logoutUrl = getOneLoginLogoutUrl(req, id_token, state);
+    const logoutUrl = oneLoginAuth.getOneLoginLogoutUrl(req, id_token, state);
 
     res.clearCookie('id_token');
     res.clearCookie('state');

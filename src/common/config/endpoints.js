@@ -1,6 +1,9 @@
-const { URL } = require('url');
-const settings = require('./index');
-const logger = require('../utils/logger')(__filename);
+import { URL } from 'url';
+import settings from './index.js';
+import loggerFactory from '../utils/logger.js';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const logger = loggerFactory(__filename);
 
 const { API_BASE } = settings;
 const { API_VERSION } = settings;
@@ -255,4 +258,55 @@ const endpoints = {
   },
 };
 
-module.exports = endpoints;
+export default endpoints;
+
+export const {
+  baseUrl,
+  register,
+  getUserData,
+  getUserDataById,
+  updateUserData,
+  deleteUser,
+  setToken,
+  verifyUser,
+  registerOrg,
+  updateOrg,
+  getOrgDetails,
+  deleteOrgDetails,
+  getOrgUsers,
+  getListOfOrgUsers,
+  getSearchOrgUsers,
+  createCraft,
+  getCraftData,
+  getCrafts,
+  getOrgCrafts,
+  updateCraft,
+  createResPerson,
+  getResPersons,
+  getResPersonDetail,
+  deleteResPerson,
+  createPerson,
+  getPersonData,
+  getPeople,
+  getOrgPeople,
+  updatePerson,
+  createGar,
+  updateGar,
+  getGar,
+  submitGARForCheckin,
+  submitGARForException,
+  postFile,
+  getGarPeople,
+  getIndividualGars,
+  getOrgGars,
+  getSupportingDoc,
+  userSearch,
+  createUser,
+  updateGarPerson,
+  deleteGarPeople,
+  deletePerson,
+  deleteCraft,
+  editOrgUser,
+  deleteOrgUser,
+  deleteGarSupportingDoc
+} = endpoints;
