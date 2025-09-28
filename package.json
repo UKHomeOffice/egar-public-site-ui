@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon ./src/start.js",
     "test": "nyc  --report-dir=./coverage --reporter=lcov mocha --recursive ./src/test",
-    "test-drone": "nyc --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --recursive"
+    "test-drone": "nyc --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --recursive ./src/test"
   },
   "nyc": {
     "include": [
@@ -19,9 +19,10 @@
       "node_modules/**",
       "src/public"
     ]
-  },"mocha": {
+  },
+  "mocha": {
     "env": "dotenv_config_path=/.env.dev"
-},
+  },
   "overrides": {
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "tough-cookie": "4.1.3"

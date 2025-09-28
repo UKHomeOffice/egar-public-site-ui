@@ -41,7 +41,6 @@ steps:
     image: node:22-alpine3.21
     commands:
     - export NOTIFY_API_KEY=dummy
-    - cd src
     - npm install
     - npm run test-drone
     settings:
