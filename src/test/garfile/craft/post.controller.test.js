@@ -17,6 +17,12 @@ import CookieModel from '../../../common/models/Cookie.class.js';
 import pagination from '../../../common/utils/pagination.js';
 import controller from '../../../app/garfile/craft/post.controller.js';
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 describe('GAR Craft Post Controller', () => {
   let req; let res; let paginationStub; let saveSessionStub;
 
