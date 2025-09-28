@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import { expect } from 'chai';
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
-import { garPeople } from '../../../fixtures.js';
+import fixtures from '../../../fixtures.js';
 import '../../../global.test.js';
 import garApi from '../../../../common/services/garApi.js';
 import controller from '../../../../app/garfile/manifest/editperson/get.controller.js';
@@ -18,7 +18,7 @@ describe('Manifest Edit Person Get Controller', () => {
     chai.use(sinonChai);
 
     apiResponse = {
-      items: garPeople(),
+      items: fixtures.garPeople(),
     };
 
     // Example request and response objects with appropriate spies
