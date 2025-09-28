@@ -8,7 +8,7 @@ import chai from 'chai';
 import sinonChai from 'sinon-chai';
 import '../../../global.test.js';
 import CookieModel from '../../../../common/models/Cookie.class.js';
-import persontype from '../../../../common/seeddata/egar_type_of_saved_person';
+import persontype from '../../../../common/seeddata/egar_type_of_saved_person.json' with { type: "json"};
 import documenttype from '../../../../common/seeddata/egar_saved_people_travel_document_type.json' with { type: "json"};
 import genderchoice from '../../../../common/seeddata/egar_gender_choice.json' with { type: "json"};
 import personApi from '../../../../common/services/personApi.js';
