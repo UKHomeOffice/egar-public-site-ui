@@ -23,6 +23,7 @@ import controller from '../../../app/garfile/customs/post.controller.js';
 describe('GAR Customs Post Controller', () => {
   let req; let res;
   let garApiPatchStub;
+  let emailServiceStub;
 
   beforeEach(() => {
     chai.use(sinonChai);

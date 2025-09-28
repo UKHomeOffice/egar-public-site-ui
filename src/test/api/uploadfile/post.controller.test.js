@@ -196,7 +196,7 @@ describe('API upload file post controller', () => {
 
     it('should redirect without any parameter when number of files less than the max number', () => {
       // Create form data for ClamAV
-    formData = {
+    const formData = {
       name: req.file.originalname,
       file: {
         value: req.file.buffer, // Upload the  file in the multi-part post

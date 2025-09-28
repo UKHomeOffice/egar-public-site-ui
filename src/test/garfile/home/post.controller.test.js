@@ -77,7 +77,7 @@ describe('GAR Customs Post Controller', () => {
   });
 
   it('should return an error message if api rejects', () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     req.body.garoption = '0';
     createGarApiStub.rejects('createGarApi.createGar Example Reject');
 
@@ -98,7 +98,7 @@ describe('GAR Customs Post Controller', () => {
 
   it('should return an error message if api rejects', () => {
     // Back end does not really return any other outcome, contrived example
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     req.body.garoption = '0';
     createGarApiStub.resolves(JSON.stringify({
       message: 'Example contrived error message',
@@ -119,7 +119,7 @@ describe('GAR Customs Post Controller', () => {
   });
 
   it('should redirect to departure page on success', () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     req.body.garoption = '0';
     createGarApiStub.resolves(JSON.stringify({
       garId: 'NEWLY-CREATED-ID',

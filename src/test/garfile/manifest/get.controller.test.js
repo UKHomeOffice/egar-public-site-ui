@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import { expect } from 'chai';
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
-import { savedPeople, garPeople, flaggedSavedPeople } from '../../fixtures.js';
+import fixtures from '../../fixtures.js';
 import '../../global.test.js';
 import CookieModel from '../../../common/models/Cookie.class.js';
 import personApi from '../../../common/services/personApi.js';
@@ -26,7 +26,7 @@ describe('Manifest Get Controller', () => {
       toFake: ["Date"],
     });
 
-    apiResponse = {
+    const apiResponse = {
       items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],
     };
 
@@ -50,11 +50,13 @@ describe('Manifest Get Controller', () => {
   });
 
   it('should return an error if person api rejects', async () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').rejects('Some reason here');
     sinon.stub(garApi, 'getPeople').resolves();
 
-    await controller(req, res);
+    const callController = async () => {
+      await controller(req, res);
+    };
 
     callController().then().then(() => {
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
@@ -64,7 +66,7 @@ describe('Manifest Get Controller', () => {
   });
 
   it('should return an error if gar api rejects', () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').resolves();
     sinon.stub(garApi, 'getPeople').rejects('garApi.getPeople Example Reject');
 
@@ -83,15 +85,15 @@ describe('Manifest Get Controller', () => {
     let personApiStub; let garApiStub;
 
     beforeEach(() => {
-      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(savedPeople()));
+      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(fixtures.savedPeople()));
       garApiStub = sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({ 
-        items: garPeople(),
+        items: fixtures.garPeople(),
       }));
     });
 
     it('should render with errMsg populated', async () => {
       req.session.errMsg = { message: 'Example Error Message' };
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
 
       await controller(req, res);
 
@@ -100,10 +102,10 @@ describe('Manifest Get Controller', () => {
       expect(req.session.errMsg).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie,
-        savedPeople: flaggedSavedPeople(),
+        savedPeople: fixtures.flaggedSavedPeople(),
         isInvalidSavedPeople: false,
         isUnableToAddPeople: false,
-        manifest: { items: garPeople() },
+        manifest: { items: fixtures.garPeople() },
         errors: [{ message: 'Example Error Message' }],
       });
     });
@@ -111,7 +113,7 @@ describe('Manifest Get Controller', () => {
     it('should render with manifestErr populated', async () => {
       req.session.manifestErr = [{ message: 'Wrong era' }];
       req.session.manifestInvalidPeople = [{ firstName: 'Jean-Luc', lastName: 'Picard' }];
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
 
       const callController = async () => {
         await controller(req, res);
@@ -125,10 +127,10 @@ describe('Manifest Get Controller', () => {
         expect(req.session.manifestInvalidPeople).to.be.undefined;
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
-          savedPeople: flaggedSavedPeople(),
+          savedPeople: fixtures.flaggedSavedPeople(),
           isInvalidSavedPeople: false,
           isUnableToAddPeople: false,
-          manifest: { items: garPeople() },
+          manifest: { items: fixtures.garPeople() },
           manifestInvalidPeople: [{ firstName: 'Jean-Luc', lastName: 'Picard' }],
           errors: [{ message: 'Wrong era' }],
         });
@@ -137,7 +139,7 @@ describe('Manifest Get Controller', () => {
 
     it('should render with successMsg populated', async () => {
       req.session.successMsg = 'All present captain';
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
 
       await controller(req, res);
   
@@ -146,16 +148,16 @@ describe('Manifest Get Controller', () => {
       expect(req.session.successMsg).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie,
-        savedPeople: flaggedSavedPeople(),
+        savedPeople: fixtures.flaggedSavedPeople(),
         isInvalidSavedPeople: false,
         isUnableToAddPeople: false,
-        manifest: { items: garPeople() },
+        manifest: { items: fixtures.garPeople() },
         successMsg: 'All present captain',
       });
     });
 
     it('should render without any extra parameters', async () => {
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
 
       const callController = async () => {
         await controller(req, res);
@@ -166,10 +168,10 @@ describe('Manifest Get Controller', () => {
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
           cookie,
-          savedPeople: flaggedSavedPeople(),
+          savedPeople: fixtures.flaggedSavedPeople(),
           isUnableToAddPeople: false,
           isInvalidSavedPeople: false,
-          manifest: { items: garPeople() },
+          manifest: { items: fixtures.garPeople() },
         });
       });
     });

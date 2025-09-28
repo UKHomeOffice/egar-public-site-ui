@@ -49,7 +49,7 @@ describe('Aircraft Post Controller', () => {
   it('should redirect if nextPage found', () => {
     req.body.nextPage = 6;
 
-    callController = async () => {
+    const callController = async () => {
       await controller(req, res);
     };
 
@@ -64,7 +64,7 @@ describe('Aircraft Post Controller', () => {
   it('should redirect to edit', async () => {
     req.body.editCraft = '1234';
 
-    callController = async () => {
+    const callController = async () => {
       await controller(req, res);
     };
 
@@ -80,7 +80,7 @@ describe('Aircraft Post Controller', () => {
   it('should redirect to delete', async () => {
     req.body.deleteCraft = '1234';
 
-    callController = async () => {
+    const callController = async () => {
       await controller(req, res);
     };
 

@@ -13,7 +13,9 @@ import ValidationRule from '../../../common/models/ValidationRule.class.js';
 import orgApi from '../../../common/services/organisationApi.js';
 import roles from '../../../common/seeddata/egar_user_roles.json' with { type: "json"};
 import controller from '../../../app/organisation/editusers/post.controller.js';
-import { cookie } from 'request';
+import request from 'request';
+
+const { cookie } = request;
 
 describe('Organisation Edit Users Post Controller', () => {
   let req; let res; let orgApiStub; let sessionSaveStub;

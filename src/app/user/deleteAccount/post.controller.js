@@ -3,7 +3,7 @@ import loggerFactory from '../../../common/utils/logger.js';
 
 const logger = loggerFactory(import.meta.url);
 import CookieModel from '../../../common/models/Cookie.class.js';
-import utils from './utils.js';
+import {deleteAccount} from './utils.js';
 
 const postController = async (req, res) => {
   logger.debug('In user / deleteAccount postcontroller');
@@ -15,7 +15,7 @@ const postController = async (req, res) => {
   let deleteAccountOptions;
 
   try {
-    deleteAccountOptions = await utils.deleteAccount[userRole](cookie);
+    deleteAccountOptions = await deleteAccount[userRole](cookie);
 
     res.locals.text = deleteAccountOptions.text();
     const apiResponse = await deleteAccountOptions.deleteAccount();

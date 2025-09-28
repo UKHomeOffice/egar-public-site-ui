@@ -6,13 +6,11 @@ import sinon from 'sinon';
 import { expect } from 'chai';
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
-import rewire from 'rewire';
+import esmock from 'esmock';
 import '../../global.test.js';
 import notify from 'notifications-node-client';
 import config from '../../../common/config/index.js';
 import service from '../../../common/services/sendEmail.js';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
 
 describe('Send Email Service', () => {
   let notifyStub;
@@ -28,12 +26,18 @@ describe('Send Email Service', () => {
   });
 
   // For the sake of code coverage, have this rewire the logger for production...
-  it('should throw an error if no API key set', () => {
+  it('should throw an error if no API key set', async () => {
     process.env.NODE_ENV = 'production';
     sinon.stub(config, 'NOTIFY_API_KEY').value(null);
     try {
-      rewire('../../../common/utils/logger')(__filename);
-      sendTokenService = rewire('../../../common/services/sendEmail');
+
+      
+      const logger = await esmock('../../../common/utils/logger.js', {
+      });
+
+      const sendTokenService = await esmock('../../../common/services/sendEmail.js', {
+      });
+
     } catch (err) {
       expect(err.message).to.eq('Mandatory environment variable for GOV.UK Notify not set');
       expect(notifyStub).to.not.have.been.called;

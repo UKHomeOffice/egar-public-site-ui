@@ -11,8 +11,6 @@ import CookieModel from '../../../common/models/Cookie.class.js';
 import tokenService from '../../../common/services/create-token.js';
 import oneLoginUtils from '../../../common/utils/oneLoginAuth.js';
 import controller from '../../../app/verify/organisationinvite/get.controller.js';
-import { cookie } from 'request';
-import { config } from 'winston';
 import settings from '../../../common/config/index.js';
 import verifyUserService from '../../../common/services/verificationApi.js';
 

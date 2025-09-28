@@ -1,5 +1,5 @@
 
-const savedPeople = () => {
+export const savedPeople = () => {
     return [
         {
           dateOfBirth: '1994-06-22',
@@ -36,7 +36,7 @@ const savedPeople = () => {
       ]
 }
 
-const flaggedSavedPeople = () => {
+export const flaggedSavedPeople = () => {
   return [
     {
       dateOfBirth: '1994-06-22',
@@ -77,7 +77,7 @@ const flaggedSavedPeople = () => {
   ]
 }
 
-const garPeople = () => {
+export const garPeople = () => {
     return [
         {
             dateOfBirth: '1994-06-22',
@@ -98,7 +98,7 @@ const garPeople = () => {
     ]
 }
 
-const invalidPassengersAndCrew = () => {
+export const invalidPassengersAndCrew = () => {
   return [
       {
           dateOfBirth: '1994-06-22',
@@ -135,7 +135,7 @@ const invalidPassengersAndCrew = () => {
   ]
 }
 
-const outboundGar = () => {
+export const outboundGar = () => {
   return { 
     garId: 'GAR-ID-EXAMPLE-1-API', 
     status: { name: 'Submitted' }, 

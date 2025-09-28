@@ -8,6 +8,7 @@ import fixtures from '../../fixtures.js';
 import '../../global.test.js';
 import { Manifest } from '../../../common/models/Manifest.class.js';
 
+let clock = null;
 const apiResponse = JSON.stringify({
   items: fixtures.garPeople(),
 });
@@ -54,7 +55,7 @@ describe('ManifestModel', () => {
 
   it('Should return true for captain crew for a single crew manifest', () => {
     const singleCrew = JSON.stringify({
-      items: garPeople(),
+      items: fixtures.garPeople(),
     });
     const manifest = new Manifest(singleCrew);
     expect(manifest.validateCaptainCrew()).to.be.true;

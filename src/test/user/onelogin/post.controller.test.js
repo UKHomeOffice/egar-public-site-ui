@@ -8,7 +8,6 @@ import chai from 'chai';
 import sinonChai from 'sinon-chai';
 import '../../global.test.js';
 import CookieModel from '../../../common/models/Cookie.class.js';
-import { decodeToken } from '../../../common/utils/oneLoginAuth.js';
 import oneLoginApi from '../../../common/services/oneLoginApi.js';
 import userApi from '../../../common/services/userManageApi.js';
 import validator from '../../../common/utils/validator.js';

@@ -7,7 +7,7 @@ import userApi from '../../../common/services/userManageApi.js';
 import organisationApi from '../../../common/services/organisationApi.js';
 import settings from '../../../common/config/index.js';
 
-const adminDeletionType = (orgUsers) => {
+export const adminDeletionType = (orgUsers) => {
   const LAST_ADMIN_IN_ORGANISATION = 1;
 
   const totalAdminsInOrg = orgUsers.filter(user => user.role.name === 'Admin').length;
@@ -50,7 +50,7 @@ const defaultDeletion = async cookie => ({
   text: defaultText,
 });
 
-const deleteAccount = {
+export const deleteAccount = {
   Individual: defaultDeletion,
   User: defaultDeletion,
   Manager: defaultDeletion,
@@ -127,9 +127,4 @@ const deleteAccount = {
       },
     };
   },
-};
-
-export default {
-  adminDeletionType,
-  deleteAccount,
 };

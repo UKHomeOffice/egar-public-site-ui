@@ -2,11 +2,10 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 import sinon from 'sinon';
-
 import { expect } from 'chai';
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
-import rewire from 'rewire';
+import esmock from 'esmock';
 import '../../global.test.js';
 import pagination from '../../../common/utils/pagination.js';
 
@@ -89,72 +88,68 @@ describe('Pagination Module', () => {
   });
 
   describe('getPages', () => {
-    let rewiredPagination;
-    let getPages;
 
-    beforeEach(() => {
-      rewiredPagination = rewire('../../../common/utils/pagination');
-      getPages = rewiredPagination.__get__('getPages');
-    });
+    beforeEach(async () => {
 
-    it('should return null if limit is 0', () => {
-      expect(getPages(0, 5, 1)).to.be.null;
-    });
+      it('should return null if limit is 0', () => {
+        expect(pagination.getPages(0, 5, 1)).to.be.null;
+      });
 
-    it('should return an array of 3 numbers', () => {
-      expect(getPages(3, 5, 1)).to.eql([1, 2, 3]);
-      expect(getPages(3, 5, 2)).to.eql([1, 2, 3]);
-      expect(getPages(3, 5, 3)).to.eql([2, 3, 4]);
-      expect(getPages(3, 5, 4)).to.eql([3, 4, 5]);
-    });
+      it('should return an array of 3 numbers', () => {
+        expect(pagination.getPages(3, 5, 1)).to.eql([1, 2, 3]);
+        expect(pagination.getPages(3, 5, 2)).to.eql([1, 2, 3]);
+        expect(pagination.getPages(3, 5, 3)).to.eql([2, 3, 4]);
+        expect(pagination.getPages(3, 5, 4)).to.eql([3, 4, 5]);
+      });
 
-    it('should return an array of 4 numbers', () => {
-      expect(getPages(4, 5, 1)).to.eql([1, 2, 3, 4]);
-      expect(getPages(4, 5, 2)).to.eql([1, 2, 3, 4]);
-      expect(getPages(4, 5, 3)).to.eql([2, 3, 4, 5]);
-      expect(getPages(4, 5, 4)).to.eql([2, 3, 4, 5]);
-      expect(getPages(4, 5, 5)).to.eql([2, 3, 4, 5]);
-    });
-  });
-
-  describe('build', () => {
-    beforeEach(() => {
-      req.originalUrl = 'http://example.com/examplepath';
-      req.session.currentPage = { '/examplepath': 2 };
-    });
-
-    it('should return a dummy object if totalPages parameter is 0', () => {
-      const result = pagination.build(req, 0, 0);
-      expect(result).to.eql({
-        startItem: 0,
-        endItem: 0,
-        currentPage: 2,
-        totalItems: 0,
-        totalPages: 0,
-        items: [],
+      it('should return an array of 4 numbers', () => {
+        expect(pagination.getPages(4, 5, 1)).to.eql([1, 2, 3, 4]);
+        expect(pagination.getPages(4, 5, 2)).to.eql([1, 2, 3, 4]);
+        expect(pagination.getPages(4, 5, 3)).to.eql([2, 3, 4, 5]);
+        expect(pagination.getPages(4, 5, 4)).to.eql([2, 3, 4, 5]);
+        expect(pagination.getPages(4, 5, 5)).to.eql([2, 3, 4, 5]);
       });
     });
 
-    // throw an error if current > total
-    it('should throw an error if the current greater than totalPages', () => {
-      try {
-        pagination.build(req, 1, 3);
-        sinon.assert.fail('Should not reach here');
-      } catch (err) {
-        expect(err).to.eq(1);
-      }
-    });
+    describe('build', () => {
+      beforeEach(() => {
+        req.originalUrl = 'http://example.com/examplepath';
+        req.session.currentPage = { '/examplepath': 2 };
+      });
 
-    it('should return a block of paging data', () => {
-      const result = pagination.build(req, 4, 17);
-      expect(result).to.eql({
-        startItem: 6,
-        endItem: 10,
-        currentPage: 2,
-        totalItems: 17,
-        totalPages: 4,
-        items: [1, 2, 3],
+      it('should return a dummy object if totalPages parameter is 0', () => {
+        const result = pagination.build(req, 0, 0);
+        expect(result).to.eql({
+          startItem: 0,
+          endItem: 0,
+          currentPage: 2,
+          totalItems: 0,
+          totalPages: 0,
+          items: [],
+        });
+      });
+
+      // throw an error if current > total
+      it('should throw an error if the current greater than totalPages', () => {
+        try {
+          pagination.build(req, 1, 3);
+          sinon.assert.fail('Should not reach here');
+        } catch (err) {
+          expect(err).to.eq(1);
+        }
+      });
+
+      it('should return a block of paging data', () => {
+        const result = pagination.build(req, 4, 17);
+        expect(result).to.eql({
+          startItem: 6,
+          endItem: 10,
+          currentPage: 2,
+          totalItems: 17,
+          totalPages: 4,
+          items: [1, 2, 3],
+        });
       });
     });
-  });
+  })
 });

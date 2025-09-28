@@ -1,7 +1,7 @@
 import loggerFactory from '../../../common/utils/logger.js';
 const logger = loggerFactory(import.meta.url);
 import CookieModel from '../../../common/models/Cookie.class.js';
-import utils from './utils.js';
+import {deleteAccount} from './utils.js';
 import { ONE_LOGIN_SHOW_ONE_LOGIN } from '../../../common/config/index.js';
 
 export default async (req, res) => {
@@ -12,7 +12,7 @@ export default async (req, res) => {
   const errObj = { message: 'Internal Server Error. Please contact support or try again' };
 
   try {
-    const deleteAccountOptions = await utils.deleteAccount[userRole](cookie);
+    const deleteAccountOptions = await deleteAccount[userRole](cookie);
 
     res.locals.text = deleteAccountOptions.text();
     res.render('app/user/deleteAccount/index', { cookie, ONE_LOGIN_SHOW_ONE_LOGIN });

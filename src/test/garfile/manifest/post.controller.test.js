@@ -20,7 +20,7 @@ describe('Manifest Post Controller', () => {
   beforeEach(() => {
     chai.use(sinonChai);
 
-    apiResponse = {
+    const apiResponse = {
       items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],
     };
 
@@ -44,7 +44,7 @@ describe('Manifest Post Controller', () => {
   });
 
   it('should redirect if no ids set and no buttonClicked set', () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(garApi, 'getPeople');
     sinon.stub(manifestUtil, 'getDetailsByIds');
 
@@ -137,7 +137,7 @@ describe('Manifest Post Controller', () => {
 
   it('should redirect if buttonClicked is Save and Exit', () => {
     req.body.buttonClicked = 'Save and Exit';
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(garApi, 'getPeople');
     sinon.stub(manifestUtil, 'getDetailsByIds');
 
@@ -155,7 +155,7 @@ describe('Manifest Post Controller', () => {
   it('should redirect if buttonClicked is Save and Exit even if personId set', () => {
     req.body.buttonClicked = 'Save and Exit';
     req.body.personId = ['ABCDEFG', 'HIJKLMN'];
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(garApi, 'getPeople');
     sinon.stub(manifestUtil, 'getDetailsByIds');
 
@@ -173,7 +173,7 @@ describe('Manifest Post Controller', () => {
   it('Add people button was called', () => {
     req.body.buttonClicked = 'Add to PEOPLE';
     req.body.garPeopleId = ['1234', '5678'];
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(personApi, 'create').resolves(true);
     sinon.stub(manifestUtil, 'getgarPeopleIds').resolves(garPeople());
 
@@ -190,7 +190,7 @@ describe('Manifest Post Controller', () => {
 
   it('should redirect with errors if buttonClicked is Continue and gar api rejects', async () => {
     req.body.buttonClicked = 'Continue';
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
 
     sinon.stub(garApi, 'patch').resolves(true);
     sinon.stub(garApi, 'getPeople').rejects('garApi.getPeople Example Reject');
@@ -207,7 +207,7 @@ describe('Manifest Post Controller', () => {
   //   garApi resolves - manifest valid
   it('should redirect with errors if buttonClicked is Continue and gar api resolves but is invalid', async () => {
     req.body.buttonClicked = 'Continue';
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'patch').resolves(true);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
@@ -229,7 +229,7 @@ describe('Manifest Post Controller', () => {
 
   it('should redirect to next page if buttonClicked is Continue and gar api resolves', async () => {
     req.body.buttonClicked = 'Continue';
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'patch').resolves(true);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
@@ -250,7 +250,7 @@ describe('Manifest Post Controller', () => {
   it('should redirect to next page if buttonClicked is Continue and gar api resolves even if personId set', async () => {
     req.body.buttonClicked = 'Continue';
     req.body.personId = ['ABCDEFG', 'HIJKLMN'];
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'patch').resolves(true);
     sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({

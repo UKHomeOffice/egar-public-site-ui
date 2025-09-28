@@ -17,8 +17,8 @@ import config from '../../../common/config/index.js';
 import roles from '../../../common/seeddata/egar_user_roles.json' with { type: "json"};
 import oneLoginApi from '../../../common/services/oneLoginApi.js';
 import controller from '../../../app/organisation/assignrole/post.controller.js';
-import { cookie } from 'request';
-
+import request from 'request';
+const {cookie} = request;
 
 describe('Organisation Assign Role Post Controller', () => {
   let req; 

@@ -22,7 +22,7 @@ describe('Manifest Edit Person Post Controller', () => {
   beforeEach(() => {
     chai.use(sinonChai);
 
-    apiResponse = {
+    const apiResponse = {
       items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],
     };
 

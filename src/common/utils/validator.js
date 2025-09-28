@@ -768,7 +768,7 @@ function preventZ(value) {
  * @returns {Bool}
  */
 function isValidAirportCode(airportCode) {
-  return autoairportCodeList.includes(airportCode);
+  return autocomplete.airportCodeList.includes(airportCode);
 }
 
 export default {

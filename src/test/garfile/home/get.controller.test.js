@@ -29,7 +29,7 @@ describe('GAR Home Get Controller', () => {
   });
 
   it('should render appropriate page', async () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
 
     await controller(req, res);
 

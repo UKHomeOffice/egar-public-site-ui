@@ -47,7 +47,7 @@ describe('Departure Get Controller', () => {
   });
 
   it('should set cookie values on response', async () => {
-    apiResponse = JSON.stringify({
+    const apiResponse = JSON.stringify({
       departureDate: '2012-30-05',
       departureTime: '15:00',
       departurePort: 'LHR',
@@ -70,7 +70,7 @@ describe('Departure Get Controller', () => {
   });
 
   it('should set cookie values on response, changing if port is ZZZZ', async () => {
-    apiResponse = JSON.stringify({
+    const apiResponse = JSON.stringify({
       departureDate: '2012-30-05',
       departureTime: '15:00',
       departurePort: 'ZZZZ',

@@ -15,7 +15,8 @@ import controller from '../../../app/garfile/cancel/post.controller.js';
 
 describe('GAR Cancel Post Controller', () => {
   let req; let res; let sessionSaveStub;
-  let garApiPatchStub; let emailServiceStub;
+  let garApiPatchStub; let emailServiceStub
+  let garApiGetPeopleStub; let submitGARForExceptionStub;
 
   beforeEach(() => {
     chai.use(sinonChai);

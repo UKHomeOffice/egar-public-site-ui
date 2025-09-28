@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./src/start.js",
-    "test": "nyc  --report-dir=./coverage --reporter=lcov mocha --recursive ./src/test",
+    "dev": "dotenv -e .env.dev -- nodemon ./src/start.js",
+    "test": "dotenv -e .env.dev -- nyc  --report-dir=./coverage --reporter=lcov mocha --recursive ./src/test",
     "test-drone": "nyc --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --recursive ./src/test"
   },
   "nyc": {
@@ -19,9 +19,6 @@
       "node_modules/**",
       "src/public"
     ]
-  },
-  "mocha": {
-    "env": "dotenv_config_path=/.env.dev"
   },
   "overrides": {
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
@@ -79,6 +76,7 @@
     "browserify": "^16.5.0",
     "chai": "^4.2.0",
     "dotenv": "^17.2.2",
+    "dotenv-cli": "^10.0.0",
     "esmock": "^2.7.3",
     "mocha": "11.1.0",
     "nock": "^10.0.0",

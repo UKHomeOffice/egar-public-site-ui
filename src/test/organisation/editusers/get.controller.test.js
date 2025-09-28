@@ -8,7 +8,7 @@ import chai from 'chai';
 import sinonChai from 'sinon-chai';
 import '../../global.test.js';
 import CookieModel from '../../../common/models/Cookie.class.js';
-import roles from '../../../common/seeddata/egar_user_roles';
+import roles from '../../../common/seeddata/egar_user_roles.json' with { type: "json"};
 import orgApi from '../../../common/services/organisationApi.js';
 import controller from '../../../app/organisation/editusers/get.controller.js';
 

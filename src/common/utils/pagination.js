@@ -121,4 +121,4 @@ const build = (req, totalPages, totalItems, optionalPath) => {
   };
 };
 
-export default { getCurrentPage, setCurrentPage, build };
+export default { getCurrentPage, setCurrentPage, build, getPages };

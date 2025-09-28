@@ -1,11 +1,10 @@
 /* eslint-disable no-undef */
 
 import sinon from 'sinon';
-
 import { expect } from 'chai';
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
-const proxyrequire = require('proxyquire').noCallThru();
+import esmock from 'esmock';
 import config from '../../common/config/index.js';
 import oneLoginApi from '../../common/utils/oneLoginAuth.js';
 import '../global.test.js';
@@ -31,17 +30,17 @@ describe('Welcome Get Controller', () => {
       ONE_LOGIN_POST_MIGRATION: false,
       ONE_LOGIN_SHOW_ONE_LOGIN: false,
       HOMEPAGE_MESSAGE: 'Welcome to the new service',
-    }
+    };
   });
 
   afterEach(() => {
     sinon.restore();
-    configMock = {}
+    configMock = {};
   });
 
   it('should render the welcome page', async () => {
-    const controller = proxyrequire('../../app/welcome/get.controller', {
-        '../../common/config/index': configMock,
+    const controller = await esmock('../../app/welcome/get.controller.js', {
+      '../../common/config/index.js': configMock,
     });
 
     await controller(req, res);
@@ -50,15 +49,14 @@ describe('Welcome Get Controller', () => {
   });
 
   it('should render the post migration page when flag is on', async () => {
-    configMock['ONE_LOGIN_POST_MIGRATION']  = true;
-    configMock['ONE_LOGIN_SHOW_ONE_LOGIN']  = false;
+    configMock['ONE_LOGIN_POST_MIGRATION'] = true;
+    configMock['ONE_LOGIN_SHOW_ONE_LOGIN'] = false;
 
     sinon.stub(oneLoginApi, 'getOneLoginAuthUrl').returns('https://onelogin.com');
 
-    const controller = proxyrequire('../../app/welcome/get.controller', {
-        '../../common/config/index': configMock,
+    const controller = await esmock('../../app/welcome/get.controller.js', {
+      '../../common/config/index.js': configMock,
     });
-
 
     await controller(req, res);
 

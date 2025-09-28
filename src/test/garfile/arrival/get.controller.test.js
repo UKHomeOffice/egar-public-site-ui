@@ -47,7 +47,7 @@ describe('Arrival Get Controller', () => {
   });
 
   it('should set cookie values on response', async () => {
-    apiResponse = JSON.stringify({
+    const apiResponse = JSON.stringify({
       arrivalDate: '2012-30-05',
       arrivalTime: '15:00',
       arrivalPort: 'LHR',

@@ -39,7 +39,7 @@ describe('GAR Customs Get Controller', () => {
 
   it('should render with an error message if api rejects', () => {
     sinon.stub(garApi, 'get').rejects('garApi.get Example Reject');
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
 
     const callController = async () => {
       await controller(req, res);

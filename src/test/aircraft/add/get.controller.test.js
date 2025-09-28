@@ -29,7 +29,7 @@ describe('Aircraft Add Get Controller', () => {
   });
 
   it('should render the appropriate page', async () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     await controller(req, res);
 
     expect(res.render).to.have.been.calledWith('app/aircraft/add/index', { cookie });

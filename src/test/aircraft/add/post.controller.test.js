@@ -137,7 +137,7 @@ describe('Aircraft Add Post Controller', () => {
 
   describe('craft api calls', () => {
     it('should return error message if api returns error', () => {
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       craftApiStub.resolves(JSON.stringify({
         message: 'Some sort of error',
       }));
@@ -153,7 +153,7 @@ describe('Aircraft Add Post Controller', () => {
     });
 
     it('should return error message if api does not return JSON', () => {
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       craftApiStub.resolves('Example return');
 
       const craftObj = {
@@ -178,7 +178,7 @@ describe('Aircraft Add Post Controller', () => {
     });
 
     it('should return error message if api does not return JSON and contains DETAIL:  Key (registration)', () => {
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       craftApiStub.resolves('Something containing DETAIL:  Key (registration) ');
 
       const craftObj = {
@@ -203,7 +203,7 @@ describe('Aircraft Add Post Controller', () => {
     });
 
     it('should redirect when ok', () => {
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       craftApiStub.resolves(JSON.stringify({}));
       sinon.stub(paginate, 'setCurrentPage');
 

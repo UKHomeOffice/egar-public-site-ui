@@ -70,7 +70,7 @@ describe('Person Delete Get Controller', () => {
 
   it('should redirect with error messages if api returns one', () => {
     req.body.garPeopleId = 'DELETE-PERSON-ID';
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
 
     garApiStub.resolves(JSON.stringify({
       message: 'Person id not found',
@@ -89,7 +89,7 @@ describe('Person Delete Get Controller', () => {
 
   it('should redirect to people with success message if ok', () => {
     req.body.garPeopleId = 'DELETE-PERSON-ID';
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
 
     garApiStub.resolves(JSON.stringify(apiResponse));
 
@@ -106,7 +106,7 @@ describe('Person Delete Get Controller', () => {
 
   it('Deleting multiple is possible with multiple ids', () => {
     req.body.garPeopleId = ['DELETE-PERSON-ID', 'ANOTHER_DELETE_PERSON_ID'];
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
 
     garApiStub.resolves(JSON.stringify(apiResponse));
 

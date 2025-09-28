@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
 import '../../global.test.js';
-import { nanoid } from '../../../common/utils/utils.js';
+import utils from '../../../common/utils/utils.js';
 import tokenService from '../../../common/services/create-token.js';
 import CookieModel from '../../../common/models/Cookie.class.js';
 import sendTokenService from '../../../common/services/send-token.js';
@@ -35,7 +35,7 @@ describe('User Register Message Get Controller', () => {
       render: sinon.stub(),
     };
 
-    sinon.spy(nanoid);
+    sinon.spy(utils.nanoid);
     sinon.stub(tokenService, 'generateHash').returns('ExampleHash');
     sinon.stub(tokenApi, 'updateToken');
   });

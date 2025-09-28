@@ -19,6 +19,7 @@ import controller from '../../../app/garfile/review/get.controller.js';
 describe('GAR Review Get Controller', () => {
   let req; let res;
   let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub;
+  let sessionSaveStub;
 
   beforeEach(() => {
     chai.use(sinonChai);

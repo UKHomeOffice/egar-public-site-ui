@@ -75,7 +75,7 @@ describe('Aircraft Edit Post Controller', () => {
   });
 
   it('should return an error if message returned by API', () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(craftApi, 'update').rejects('craftApi.update Example Reject');
     const callController = async () => {
       await controller(req, res);
@@ -91,7 +91,7 @@ describe('Aircraft Edit Post Controller', () => {
   });
 
   it('should return an error if message returned by API', () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(craftApi, 'update').resolves(JSON.stringify({
       message: 'Aircraft not found',
     }));
@@ -110,7 +110,7 @@ describe('Aircraft Edit Post Controller', () => {
 
   // Back end needs indices corrected and this should then be obselete
   it('should return an error if message returned by API is not JSON', () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(craftApi, 'update').resolves('<html><head></head><body></body></html>');
     const callController = async () => {
       await controller(req, res);
@@ -127,7 +127,7 @@ describe('Aircraft Edit Post Controller', () => {
 
   // Back end needs indices corrected and this should then be obselete
   it('should return an error if message returned by API is not JSON containing possible duplicate error', () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     sinon.stub(craftApi, 'update').resolves('DETAIL:  Key (registration)');
     const callController = async () => {
       await controller(req, res);

@@ -41,7 +41,7 @@ describe('GAR Craft Get Controller', () => {
   });
 
   it('should return an error if api rejects', async () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
     garApiGetStub.rejects('garApi.get Example Reject');
 
     const callController = async () => {
@@ -65,7 +65,7 @@ describe('GAR Craft Get Controller', () => {
     it('should return an error if craft api rejects', () => {
       // Add referrer to prevent setting current craft
       req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiGetStub.resolves(JSON.stringify({}));
       craftApiGetCraftsStub.rejects('craftApi.getCrafts Example Reject');
 
@@ -83,7 +83,7 @@ describe('GAR Craft Get Controller', () => {
     it('should not set any crafts', () => {
       // Add referrer to prevent setting current craft
       req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiGetStub.resolves(JSON.stringify({}));
       craftApiGetCraftsStub.resolves(JSON.stringify({ items: [] }));
 
@@ -103,7 +103,7 @@ describe('GAR Craft Get Controller', () => {
     it('should not set any crafts if registration is null', () => {
       // Add referrer to prevent setting current craft
       req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiGetStub.resolves(JSON.stringify({ registration: null }));
       craftApiGetCraftsStub.resolves(JSON.stringify({ items: [] }));
 
@@ -127,7 +127,7 @@ describe('GAR Craft Get Controller', () => {
       ];
       req.headers = { referer: 'garfile/anythingelse' };
       req.session.gar.craft = {};
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       cookie.setGarCraft(currentCraft.registration, currentCraft.craftType, currentCraft.craftBase);
       cookie.setSavedCraft(savedCraft);
       garApiGetStub.resolves(JSON.stringify(currentCraft));
@@ -172,7 +172,7 @@ describe('GAR Craft Get Controller', () => {
     it('should return an error if craft api rejects', () => {
       // Add referrer to prevent setting current craft
       req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiGetStub.resolves(JSON.stringify({}));
       craftApiGetOrgCraftsStub.rejects('craftApi.getOrgCrafts Example Reject');
 
@@ -190,7 +190,7 @@ describe('GAR Craft Get Controller', () => {
     it('should not set any crafts', () => {
       // Add referrer to prevent setting current craft
       req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiGetStub.resolves(JSON.stringify({}));
       craftApiGetOrgCraftsStub.resolves(JSON.stringify({ items: [] }));
 
@@ -210,7 +210,7 @@ describe('GAR Craft Get Controller', () => {
     it('should not set any crafts if registration is null', () => {
       // Add referrer to prevent setting current craft
       req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiGetStub.resolves(JSON.stringify({ registration: null }));
       craftApiGetOrgCraftsStub.resolves(JSON.stringify({ items: [] }));
 
@@ -234,7 +234,7 @@ describe('GAR Craft Get Controller', () => {
       ];
       req.headers = { referer: 'garfile/anythingelse' };
       req.session.gar.craft = {};
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       cookie.setGarCraft(currentCraft.registration, currentCraft.craftType, currentCraft.craftBase, 'Yes');
       cookie.setSavedCraft(savedCraft);
       garApiGetStub.resolves(JSON.stringify(currentCraft));

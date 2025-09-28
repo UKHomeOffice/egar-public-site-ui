@@ -63,7 +63,7 @@ describe('GAR Craft Post Controller', () => {
   it('should redirect if nextPage found', () => {
     req.body.nextPage = 6;
 
-    callController = async () => {
+    const callController = async () => {
       await controller(req, res);
     };
 
@@ -85,7 +85,7 @@ describe('GAR Craft Post Controller', () => {
     });
 
     it('should redirect if api rejects', () => {
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       craftApiStub.rejects('craftApi.getDetails Example Reject');
 
       const callController = async () => {
@@ -104,7 +104,7 @@ describe('GAR Craft Post Controller', () => {
         craftType: 'Airbus A380',
         craftBase: 'LAX',
       };
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       cookie.setGarCraft(craftResponse.registration, craftResponse.craftType, craftResponse.craftBase);
       craftApiStub.resolves(JSON.stringify(craftResponse));
 
@@ -128,7 +128,7 @@ describe('GAR Craft Post Controller', () => {
 
     it('should return errors on validation', () => {
       req.body.craftBasePort = '';
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
 
       const callController = async () => {
         await controller(req, res);
@@ -147,7 +147,7 @@ describe('GAR Craft Post Controller', () => {
 
     
     it('should return an error if api rejects', () => {
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiPatchStub.rejects('garApi.patch Example Reject');
 
       const callController = async () => {
@@ -167,7 +167,7 @@ describe('GAR Craft Post Controller', () => {
     });
 
     it('should return an error message if api returns a message', () => {
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiPatchStub.resolves(JSON.stringify({
         message: 'Craft does not exist',
       }));
@@ -190,7 +190,7 @@ describe('GAR Craft Post Controller', () => {
 
     it('should go to the manifest screen if save and continue is buttonClicked', () => {
       req.body.buttonClicked = 'Save and continue';
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiPatchStub.resolves(JSON.stringify({}));
 
       const callController = async () => {
@@ -210,7 +210,7 @@ describe('GAR Craft Post Controller', () => {
     it('should go to the manifest screen if save and continue is buttonClicked even if addCraft is set', () => {
       req.body.addCraft = 'ExampleCraft';
       req.body.buttonClicked = 'Save and continue';
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiPatchStub.resolves(JSON.stringify({}));
 
       const callController = async () => {
@@ -228,7 +228,7 @@ describe('GAR Craft Post Controller', () => {
     });
     // success button clicked save and continue
     it('should go to the dashboard if buttonClicked is not set', () => {
-      cookie = new CookieModel(req);
+      const cookie = new CookieModel(req);
       garApiPatchStub.resolves(JSON.stringify({}));
 
       const callController = async () => {

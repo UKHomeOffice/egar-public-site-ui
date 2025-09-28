@@ -22,7 +22,7 @@ describe('Get message labels from i18n', () => {
     expect(getVoyageFieldLabel('registration')).to.equal(i18n.__('field_aircraft_registration'));
     expect(getVoyageFieldLabel('craftType')).to.equal(i18n.__('field_aircraft_type'));
     expect(getVoyageFieldLabel('craftBase')).to.equal(i18n.__('field_aircraft_base'));
-    expect(getVoyageFieldLabel('OTHER KEY')).to.equal('One of the voyage details (OTHER KEY)');
+    expect(getVoyageFieldLabel('OTHER KEY')).to.equal('Voyage field (OTHER KEY)');
   });
   it('Should get crew / passenger details label from i18n', () => {
     expect(getCrewFieldLabel('documentType')).to.equal(i18n.__('field_travel_document_type'));
