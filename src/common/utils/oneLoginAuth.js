@@ -30,7 +30,7 @@ const getOneLoginAuthUrl = (req, res) => {
       redirect_uri: parseUrlForNonProd(req, config.ONE_LOGIN_REDIRECT_URI),
       scope: ['openid', 'email'].join(' '),
       nonce,
-      vtr: `['Cl']`,
+      vtr: `['Cl.Cm']`,
       ui_locales: 'en',
     };
     const jwt = createJwt(jwtOptions);
