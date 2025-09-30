@@ -33,7 +33,7 @@ const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
-const {IS_HTTPS_SERVER, SAME_SITE_VALUE} = require("./common/config");
+const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require("./common/config");
 
 // Global constants
 const PORT = (process.env.PORT || 3000);
@@ -48,10 +48,12 @@ logger.debug('Secure Flag for Cookie set to: ' + secureFlag);
 
 // Define app views
 const APP_VIEWS = [
-  path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
+  path.join(__dirname, 'node_modules/govuk-frontend/dist/govuk/views/layouts'),
   __dirname,
-  'node_modules/govuk-frontend/',
-  'node_modules/govuk-frontend/components/',
+  'node_modules/govuk-frontend/dist/',
+  // TODO: check if these two paths are needed
+  // 'node_modules/govuk-frontend/dist/govuk/',
+  // 'node_modules/govuk-frontend/dist/govuk/components/',
   'common/templates',
   'common/templates/includes',
 ];
@@ -111,7 +113,8 @@ function initialiseGlobalMiddleware(app) {
     });
   }
 
-  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
+  // app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
+  // app.use(favicon('/assets/images/favicon.ico'));
   app.use(compression());
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
@@ -211,7 +214,7 @@ function initialiseTemplateEngine(app) {
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
   // nunjucksEnvironment.addGlobal("toDate", toDate());
-  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_POSTCODE_LENGTH', config.MAX_POSTCODE_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
@@ -229,14 +232,16 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('ONE_LOGIN_SHOW_ONE_LOGIN', config.ONE_LOGIN_SHOW_ONE_LOGIN);
   nunjucksEnvironment.addGlobal('ONE_LOGIN_POST_MIGRATION', config.ONE_LOGIN_POST_MIGRATION);
 
-  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   logger.info('Set global settings for nunjucks');
 }
 
 function initialisePublic(app) {
   app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')));
-  //app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
-  app.use('/assets', express.static(path.join(__dirname, '/common/assets/')));
+  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/dist/govuk/assets')));
+  // TODO: Check if this is needed
+  // app.use(favicon('/assets/images/favicon.ico'));
+  // app.use('/assets', express.static(path.join(__dirname, '/common/assets/')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
   app.use('/utils', express.static(path.join(__dirname, '/common/utils/')));
@@ -281,7 +286,7 @@ function initialise() {
       initialisePublic(unconfiguredApp);
       initialiseErrorHandling(unconfiguredApp);
       logger.info('Initialised app: ');
-    } catch(e) {
+    } catch (e) {
       logger.error("Prepping the database failed.")
       logger.error(e);
     }
