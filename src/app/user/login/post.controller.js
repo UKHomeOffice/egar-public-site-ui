@@ -18,12 +18,12 @@ module.exports = (req, res) => {
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
-  const redirectUrl = cookie.getRedirectedId();
+  const redirectUrl = cookie.getRedirectUrl();
 
   cookie.reset();
   cookie.initialise();
   req.session.cookie.expires = false;
-  cookie.setRedirectedId(redirectUrl);
+  cookie.setRedirectUrl(redirectUrl);
 
   // Define a validation chain for user registeration fields
   const unameChain = [

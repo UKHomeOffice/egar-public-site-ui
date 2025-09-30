@@ -35,7 +35,7 @@ module.exports = (req, res) => {
                   const parsedResponse = apiResponse;
                   cookie.setOrganisationId(apiResponse?.organisation?.organisationId);
                   cookie.setLoginInfo(parsedResponse);
-                  const redirectUrl = cookie.getRedirectedId(); 
+                  const redirectUrl = cookie.getRedirectUrl(); 
                   if(redirectUrl !== '') { 
                     const garId = new URL(`${settings.BASE_URL}${redirectUrl}`).searchParams.get('gar_id');
                     cookie.setGarId(garId)

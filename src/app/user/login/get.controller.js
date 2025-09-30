@@ -180,7 +180,7 @@ module.exports = async (req, res) => {
     }
 
     return res.render('app/user/login/index', {
-      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res, cookie.getRedirectedId()),
+      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
       ONE_LOGIN_SHOW_ONE_LOGIN,
       viewOnLoginPageForTest
     });
@@ -222,7 +222,7 @@ module.exports = async (req, res) => {
 
           return handleUserAuthentication(req, res, userInfo, cookie)
             .then(({ redirect }) => {
-              const redirectUrl = cookie.getRedirectedId();
+              const redirectUrl = cookie.getRedirectUrl();
               if(redirectUrl!== '') {
                 const garId = new URL(`${settings.BASE_URL}${redirectUrl}`).searchParams.get('gar_id');
                 cookie.setGarId(garId)
