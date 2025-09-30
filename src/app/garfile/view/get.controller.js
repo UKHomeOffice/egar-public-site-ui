@@ -34,23 +34,33 @@ module.exports = async (req, res) => {
 
   const context = { cookie };
 
-  let { garId } = req.body;
+  let garId  =  req.body.garId || req.query.gar_id;
+
   if (garId === undefined) {
     garId = cookie.getGarId();
 
   }
   cookie.setGarId(garId);
   
-  if (!isValidUuid(garId)) {
+  if(req.query.gar_id && !isValidUuid(garId)){
+    logger.error('Gar id is not valid');
     return res.redirect('/home');
   }
 
   const garPeople = garApi.getPeople(garId);
-  const garDetails = garApi.get(garId);
+  const garDetails = JSON.parse(await garApi.get(garId));
   const garDocs = garApi.getSupportingDocs(garId);
+  const resubmitted = req.query.resubmitted;
   const progress = JSON.parse(await garApi.getGarCheckinProgress(garId));
 
-  const resubmitted = req.query.resubmitted;
+
+  
+  // Do the check here
+  if (!checkGARUser(garDetails, cookie.getUserDbId(), cookie.getOrganisationId())) {
+        logger.error(`Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${garDetails.garId} which does not match userId or organisationId! Returning to dashboard.`);
+        res.redirect('/home');
+        return;
+  }
 
   if ('poll' in req.query) {
     logger.info(
@@ -70,19 +80,14 @@ module.exports = async (req, res) => {
 
   Promise.all([garDetails, garPeople, garDocs, progress])
     .then((responseValues) => {
-      const parsedGar = JSON.parse(responseValues[0]);
+      const parsedGar = responseValues[0];
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;
       const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z` : null;
       const durationInDeparture = garApi.getDurationBeforeDeparture(departureDate, departureTime);
       const numberOf0TResponseCodes = parsedPeople.items.filter(x => x.amgCheckinResponseCode === '0T').length;
-      // Do the check here
-      if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
-        logger.error(`Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`);
-        res.redirect('/home');
-        return;
-      }
+     
       cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);

@@ -23,8 +23,7 @@ module.exports = (req, res) => {
     const email = cookie.getUserEmail();
     tokenApi.setMfaToken(email, mfaToken, true)
       .then(() => {
-        console.log(mfaToken);
-        //emailService.send(settings.NOTIFY_MFA_TEMPLATE_ID, email, { mfaToken });
+        emailService.send(settings.NOTIFY_MFA_TEMPLATE_ID, email, { mfaToken });
         res.render('app/verify/mfa/index', context);
       })
       .catch((err) => {

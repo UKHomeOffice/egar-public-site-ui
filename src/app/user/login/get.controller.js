@@ -9,7 +9,7 @@ const organisationApi = require('../../../common/services/organisationApi');
 const verifyUserService = require('../../../common/services/verificationApi');
 const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
 const { getOneLoginLogoutUrl } = require("../../../common/utils/oneLoginAuth");
-const {redirectTo} = require("../../../common/middleware/redirectToPage");
+const settings = require('../../../common/config/index');
 
 
 // Constants
@@ -222,9 +222,11 @@ module.exports = async (req, res) => {
 
           return handleUserAuthentication(req, res, userInfo, cookie)
             .then(({ redirect }) => {
-              cookie.setRedirectedId(req.cookies.state);
-              if(cookie.getRedirectedId() !== '') { 
-                return redirectTo(res, req.cookies.state, cookie);
+              const redirectUrl = cookie.getRedirectedId();
+              if(redirectUrl!== '') {
+                const garId = new URL(`${settings.BASE_URL}${redirectUrl}`).searchParams.get('gar_id');
+                cookie.setGarId(garId)
+                redirect = redirectUrl;
               }
 
               if (redirect === ROUTES.HOME) {

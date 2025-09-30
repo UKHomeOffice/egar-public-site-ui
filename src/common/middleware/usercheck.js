@@ -13,11 +13,8 @@ const checkUserInCookie = (cookie) => {
 module.exports = (req, res, next) => {
   const cookie = new CookieModel(req);
 
-  if(req.query.gar_id){
-    cookie.setRedirectedId(req.query.gar_id);
-    //Need to set a garId here to redirect to gar summary page when the user logged in.
-    cookie.setGarId(req.query.gar_id);
-  }
+  const redirectUrl = req.originalUrl;
+  redirectUrl !== '/welcome/index' ? cookie.setRedirectedId(redirectUrl) : cookie.setRedirectedId('');
   const isLoggedIn = checkUserInCookie(cookie) === false; // weird logic. To be refactored.
 
   if (isLoggedIn) {
@@ -25,6 +22,7 @@ module.exports = (req, res, next) => {
     return;
   }
 
+  
   // Checking for a blank referer appears to prevent a user from entering a URL in the browser
   // which may have been intended, but also seems a little off.
   if (req.headers.referer === undefined) {

@@ -18,12 +18,12 @@ module.exports = (req, res) => {
 
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
-  const redirectId = cookie.getRedirectedId();
+  const redirectUrl = cookie.getRedirectedId();
 
   cookie.reset();
   cookie.initialise();
   req.session.cookie.expires = false;
-  cookie.setRedirectedId(redirectId);
+  cookie.setRedirectedId(redirectUrl);
 
   // Define a validation chain for user registeration fields
   const unameChain = [
@@ -82,8 +82,7 @@ module.exports = (req, res) => {
         cookie.setUserVerified(true);
         tokenApi.setMfaToken(user.email, mfaToken, true)
           .then(() => {
-            console.log(mfaToken);
-           // emailService.send(settings.NOTIFY_MFA_TEMPLATE_ID, usrname, { mfaToken });
+            emailService.send(settings.NOTIFY_MFA_TEMPLATE_ID, usrname, { mfaToken });
             res.redirect('/login/authenticate');
           })
           .catch((err) => {
