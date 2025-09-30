@@ -1,6 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -12,7 +9,8 @@ require('../../global.test');
 const pagination = require('../../../common/utils/pagination');
 
 describe('Pagination Module', () => {
-  let req; let saveSessionStub;
+  let req;
+  let saveSessionStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -84,7 +82,11 @@ describe('Pagination Module', () => {
       expect(saveSessionStub).to.have.been.calledTwice;
 
       pagination.setCurrentPage(req, '/third', '10');
-      expect(req.session.currentPage).to.eql({ '/test': 2, '/another': 4, '/third': 10 });
+      expect(req.session.currentPage).to.eql({
+        '/test': 2,
+        '/another': 4,
+        '/third': 10,
+      });
       expect(saveSessionStub).to.have.been.calledThrice;
     });
   });

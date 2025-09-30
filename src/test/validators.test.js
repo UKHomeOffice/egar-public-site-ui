@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
 const sinon = require('sinon');
@@ -37,9 +36,7 @@ function addDays(date, days) {
   return result;
 }
 
-
 describe('Validator', () => {
-
   it('Should return true when input has leading space', () => {
     expect(validator.hasLeadingSpace(' aa')).to.be.true;
   });
@@ -211,21 +208,31 @@ describe('Validator', () => {
     const nextMonth = currDate.getMonth() + 1;
     const year = currDate.getFullYear();
     const nextYear = currDate.getFullYear() + 1;
-    expect(validator.currentOrPastDate(genDateObj(day, nextMonth, year))).to.be.true;
-    expect(validator.currentOrPastDate(genDateObj(day, nextMonth, nextYear))).to.be.true;
-    expect(validator.currentOrPastDate(genDateObj(nextDay, month, nextYear))).to.be.true;
-    expect(validator.currentOrPastDate(genDateObj('22', '12', '2055'))).to.be.true;
-    expect(validator.currentOrPastDate(genDateObj('01', '01', '2020'))).to.be.true;
+    expect(validator.currentOrPastDate(genDateObj(day, nextMonth, year))).to.be
+      .true;
+    expect(validator.currentOrPastDate(genDateObj(day, nextMonth, nextYear))).to
+      .be.true;
+    expect(validator.currentOrPastDate(genDateObj(nextDay, month, nextYear))).to
+      .be.true;
+    expect(validator.currentOrPastDate(genDateObj('22', '12', '2055'))).to.be
+      .true;
+    expect(validator.currentOrPastDate(genDateObj('01', '01', '2020'))).to.be
+      .true;
 
     clock.restore();
   });
 
   it('Should return false for a date before today', () => {
-    expect(validator.currentOrPastDate(genDateObj('22','12','1999'))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj('16','2','2019'))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj('16','1','2021'))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj('27','7','2023',))).to.be.false;
-    expect(validator.currentOrPastDate(genDateObj('21','2','2024'))).to.be.false;
+    expect(validator.currentOrPastDate(genDateObj('22', '12', '1999'))).to.be
+      .false;
+    expect(validator.currentOrPastDate(genDateObj('16', '2', '2019'))).to.be
+      .false;
+    expect(validator.currentOrPastDate(genDateObj('16', '1', '2021'))).to.be
+      .false;
+    expect(validator.currentOrPastDate(genDateObj('27', '7', '2023'))).to.be
+      .false;
+    expect(validator.currentOrPastDate(genDateObj('21', '2', '2024'))).to.be
+      .false;
   });
 
   it('Should return true for valid times', () => {
@@ -241,7 +248,12 @@ describe('Validator', () => {
   });
 
   it('Should generate an array of 2 validationRules', () => {
-    const validationArr = validator.genValidations(validator.notEmpty, ['1', '2'], ['1', '2'], ['1', '2']);
+    const validationArr = validator.genValidations(
+      validator.notEmpty,
+      ['1', '2'],
+      ['1', '2'],
+      ['1', '2']
+    );
     expect(validationArr).to.be.an('array');
     for (let i = 0; i < validationArr.length; i += 1) {
       expect(validationArr[i]).to.be.an('array');
@@ -277,8 +289,14 @@ describe('Validator', () => {
   });
 
   it('Should validate a chain of rules', () => {
-    const validationArr = validator.genValidations(validator.notEmpty, ['1', '2'], ['1', '2'], ['1', '2']);
-    validator.validateChains(validationArr)
+    const validationArr = validator.genValidations(
+      validator.notEmpty,
+      ['1', '2'],
+      ['1', '2'],
+      ['1', '2']
+    );
+    validator
+      .validateChains(validationArr)
       .then(() => {
         expect(true).to.be.true;
       })
@@ -288,8 +306,14 @@ describe('Validator', () => {
   });
 
   it('Should reject a chain of rules containing validation errors', () => {
-    const validationArr = validator.genValidations(validator.notEmpty, ['1', '2'], ['1', ''], ['1', '2']);
-    validator.validateChains(validationArr)
+    const validationArr = validator.genValidations(
+      validator.notEmpty,
+      ['1', '2'],
+      ['1', ''],
+      ['1', '2']
+    );
+    validator
+      .validateChains(validationArr)
       .then(() => {
         expect(false).to.be.true;
       })
@@ -321,8 +345,6 @@ describe('Validator', () => {
   it('Should allow US landline numbers in international format ', () => {
     expect(validator.validIntlPhone('01017182222222')).to.be.true;
   });
-  
-
 
   it('Should reject numbers beginning double zeros that are less than 10 characters ', () => {
     expect(validator.validIntlPhone('001234567')).to.be.false;
@@ -583,109 +605,130 @@ describe('Validator', () => {
     });
   });
 
-
   describe('realDateInFuture', () => {
-
     var currentDay, currentMonthStr, currentYearStr;
     beforeEach(function () {
       currentDay = new Date().getDate();
       //months are 0 to 11 so adding 1 to it for the normal representation of 1 to 12
       currentMonthStr = (new Date().getMonth() + 1).toString();
-      currentYearStr = (new Date().getFullYear()).toString();
+      currentYearStr = new Date().getFullYear().toString();
     });
 
     it('Should pass if the provided day is in future -- next day', () => {
       let futureDate = addDays(new Date(), 1);
-      
+
       currentDay = futureDate.getDate().toString();
       currentMonthStr = (futureDate.getMonth() + 1).toString();
-      currentYearStr = (futureDate.getFullYear()).toString();
+      currentYearStr = futureDate.getFullYear().toString();
 
       var currentDate = genDateObj(currentDay, currentMonthStr, currentYearStr);
       expect(validator.realDateInFuture(currentDate)).to.be.true;
     });
 
     it('should fail if the provided day is today', () => {
-      var currentDate = genDateObj((currentDay).toString(), currentMonthStr, currentYearStr)
+      var currentDate = genDateObj(
+        currentDay.toString(),
+        currentMonthStr,
+        currentYearStr
+      );
       expect(validator.realDateInFuture(currentDate)).to.be.false;
     });
 
     it('should fail if the provided day is old date -- 14/12/2007', () => {
-      expect(validator.realDateInFuture(genDateObj('14', '12', '2007'))).to.be.false;
+      expect(validator.realDateInFuture(genDateObj('14', '12', '2007'))).to.be
+        .false;
     });
 
     it('Should return false for invalid dates', () => {
       expect(validator.realDateInFuture(null)).to.be.false;
       expect(validator.realDateInFuture(undefined)).to.be.false;
-      expect(validator.realDateInFuture(genDateObj('aa', 'bb', 'cccc'))).to.be.false;
-      expect(validator.realDateInFuture(genDateObj('1f', 'd2', '20S5'))).to.be.false;
+      expect(validator.realDateInFuture(genDateObj('aa', 'bb', 'cccc'))).to.be
+        .false;
+      expect(validator.realDateInFuture(genDateObj('1f', 'd2', '20S5'))).to.be
+        .false;
     });
   });
 
   describe('bornAfter1900', () => {
-
     var currentDay, currentMonthStr, currentYearStr;
     beforeEach(function () {
       currentDay = new Date().getDate();
       //months are 0 to 11 so adding 1 to it for the normal representation of 1 to 12
       currentMonthStr = (new Date().getMonth() + 1).toString();
-      currentYearStr = (new Date().getFullYear()).toString();
+      currentYearStr = new Date().getFullYear().toString();
     });
 
     it('Should pass if the provided day is after 1900 -- 01/01/1900', () => {
-      expect(validator.bornAfter1900(genDateObj('01', '01', '1900'))).to.be.true;
+      expect(validator.bornAfter1900(genDateObj('01', '01', '1900'))).to.be
+        .true;
     });
 
     it('Should pass if the provided day is after 1900 -- 05/06/1980', () => {
-      expect(validator.bornAfter1900(genDateObj('05', '06', '1980'))).to.be.true;
+      expect(validator.bornAfter1900(genDateObj('05', '06', '1980'))).to.be
+        .true;
     });
 
     it('Should pass if the provided day is after 1900 -- 07/10/1990', () => {
-      expect(validator.bornAfter1900(genDateObj('07', '10', '1990'))).to.be.true;
+      expect(validator.bornAfter1900(genDateObj('07', '10', '1990'))).to.be
+        .true;
     });
 
     it('Should pass if the provided day is after 1900 -- 15/03/1995', () => {
-      expect(validator.bornAfter1900(genDateObj('15', '03', '1995'))).to.be.true;
+      expect(validator.bornAfter1900(genDateObj('15', '03', '1995'))).to.be
+        .true;
     });
 
     it('Should pass if the provided day is after 1900 -- 14/08/2006', () => {
-      expect(validator.bornAfter1900(genDateObj('14', '08', '2006'))).to.be.true;
+      expect(validator.bornAfter1900(genDateObj('14', '08', '2006'))).to.be
+        .true;
     });
 
     it('Should pass if the provided day is after 1900 -- 12/03/2010', () => {
-      expect(validator.bornAfter1900(genDateObj('12', '03', '2010'))).to.be.true;
+      expect(validator.bornAfter1900(genDateObj('12', '03', '2010'))).to.be
+        .true;
     });
 
     it('Should pass if the provided day is after 1900 -- 10/05/2012', () => {
-      expect(validator.bornAfter1900(genDateObj('10', '05', '2012'))).to.be.true;
+      expect(validator.bornAfter1900(genDateObj('10', '05', '2012'))).to.be
+        .true;
     });
 
     it('Should pass if the provided day is after 1900 -- 14/07/2015', () => {
-      expect(validator.bornAfter1900(genDateObj('14', '07', '2015'))).to.be.true;
+      expect(validator.bornAfter1900(genDateObj('14', '07', '2015'))).to.be
+        .true;
     });
 
     it('should fail if the provided day is before 1900 -- 31/12/1899', () => {
-      expect(validator.bornAfter1900(genDateObj('31', '12', '1899'))).to.be.false;
+      expect(validator.bornAfter1900(genDateObj('31', '12', '1899'))).to.be
+        .false;
     });
 
     it('should fail if the provided day is before 1900 -- 01/01/0001', () => {
-      expect(validator.bornAfter1900(genDateObj('01', '01', '0001'))).to.be.false;
+      expect(validator.bornAfter1900(genDateObj('01', '01', '0001'))).to.be
+        .false;
     });
 
     it('should fail if the provided day is before 1900 -- 07/10/1750', () => {
-      expect(validator.bornAfter1900(genDateObj('07', '10', '1750'))).to.be.false;
+      expect(validator.bornAfter1900(genDateObj('07', '10', '1750'))).to.be
+        .false;
     });
 
     it('should fail if the provided day is before 1900 -- 15/12/1870', () => {
-      expect(validator.bornAfter1900(genDateObj('15', '12', '1870'))).to.be.false;
+      expect(validator.bornAfter1900(genDateObj('15', '12', '1870'))).to.be
+        .false;
     });
 
     it('should fail if the provided day is before 1900 -- 17/06/1600', () => {
-      expect(validator.bornAfter1900(genDateObj('17', '06', '1600'))).to.be.false;
+      expect(validator.bornAfter1900(genDateObj('17', '06', '1600'))).to.be
+        .false;
     });
 
     it('should pass if the provided day is today', () => {
-      var currentDate = genDateObj((currentDay).toString(), currentMonthStr, currentYearStr)
+      var currentDate = genDateObj(
+        currentDay.toString(),
+        currentMonthStr,
+        currentYearStr
+      );
       expect(validator.bornAfter1900(currentDate)).to.be.true;
     });
 
@@ -696,15 +739,21 @@ describe('Validator', () => {
     // });
 
     it('Should fail if the provided day is in future -- next day', () => {
-      var date = genDateObj((currentDay + 1).toString(), currentMonthStr, currentYearStr);
+      var date = genDateObj(
+        (currentDay + 1).toString(),
+        currentMonthStr,
+        currentYearStr
+      );
       expect(validator.bornAfter1900(date)).to.be.false;
     });
 
     it('Should return false for invalid dates', () => {
       expect(validator.bornAfter1900(null)).to.be.false;
       expect(validator.bornAfter1900(undefined)).to.be.false;
-      expect(validator.bornAfter1900(genDateObj('aa', 'bb', 'cccc'))).to.be.false;
-      expect(validator.bornAfter1900(genDateObj('1f', 'd2', '20S5'))).to.be.false;
+      expect(validator.bornAfter1900(genDateObj('aa', 'bb', 'cccc'))).to.be
+        .false;
+      expect(validator.bornAfter1900(genDateObj('1f', 'd2', '20S5'))).to.be
+        .false;
     });
   });
 
@@ -713,7 +762,6 @@ describe('Validator', () => {
     let type;
     let expectedResult;
     let actualResult;
-
 
     beforeEach(() => {
       testValue = '';
@@ -830,63 +878,82 @@ describe('Validator', () => {
   });
 
   describe('Too far in the future tests', () => {
-
     //const clock = sinon.useFakeTimers(new Date(2020, 04, 11).getTime());
     let clock;
     const APRIL = 3;
-    
+
     beforeEach(() => {
       clock = sinon.useFakeTimers({
         now: new Date(2023, APRIL, 11),
         shouldAdvanceTime: false,
-        toFake: ["Date"],
+        toFake: ['Date'],
       });
-    })
+    });
 
     let actualResult;
 
     it('Should reject a date further than one month in the future in object format', () => {
-      actualResult = validator.dateNotMoreThanMonthInFuture({ d: '1', m: '1', y: '2024' });
+      actualResult = validator.dateNotMoreThanMonthInFuture({
+        d: '1',
+        m: '1',
+        y: '2024',
+      });
       expect(actualResult).to.equal(false);
     });
 
     it('Should accept a date within one month in the future in object format', () => {
-      actualResult = validator.dateNotMoreThanMonthInFuture({ d: '11', m: '5', y: '2023' });
+      actualResult = validator.dateNotMoreThanMonthInFuture({
+        d: '11',
+        m: '5',
+        y: '2023',
+      });
       expect(actualResult).to.equal(true);
     });
 
     it('Should reject a date further than one month in the future in date format', () => {
-      actualResult = validator.dateNotMoreThanMonthInFuture(new Date(2024, 0, 1));
+      actualResult = validator.dateNotMoreThanMonthInFuture(
+        new Date(2024, 0, 1)
+      );
       expect(actualResult).to.equal(false);
     });
 
     it('Should accept a date within one month in the future in date format', () => {
-      actualResult = validator.dateNotMoreThanMonthInFuture(new Date(2023, 4, 11));
+      actualResult = validator.dateNotMoreThanMonthInFuture(
+        new Date(2023, 4, 11)
+      );
       expect(actualResult).to.equal(true);
     });
 
     it('Should allow a date within two days in the future', () => {
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture(validator.convertDateToUTC(new Date(2023, APRIL, 13)));
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(
+        validator.convertDateToUTC(new Date(2023, APRIL, 13))
+      );
       expect(actualResult).to.equal(true);
     });
 
     it('Should reject a date within two days in the future - day', () => {
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2023, APRIL, 14));
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(
+        new Date(2023, APRIL, 14)
+      );
       expect(actualResult).to.equal(false);
     });
 
     it('Should reject a date within two days in the future - month', () => {
       const MAY = 4;
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2023, MAY, 12));
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(
+        new Date(2023, MAY, 12)
+      );
       expect(actualResult).to.equal(false);
     });
 
     it('Should reject a date within two days in the future - year', () => {
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture(new Date(2024, APRIL, 12));
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(
+        new Date(2024, APRIL, 12)
+      );
       expect(actualResult).to.equal(false);
     });
 
-    afterEach(()=>{
+    afterEach(() => {
       clock.restore();
     });
   });
@@ -894,64 +961,84 @@ describe('Validator', () => {
   describe('Is date at least over 2 hours', () => {
     let clock;
     const MARCH = 2;
-    
+
     beforeEach(() => {
       process.env.TZ = 'UTC';
-      
+
       clock = sinon.useFakeTimers({
         now: new Date(2023, MARCH, 27, 14, 15),
         shouldAdvanceTime: false,
-        toFake: ["Date"],
+        toFake: ['Date'],
       });
     });
 
-    afterEach(()=>{
+    afterEach(() => {
       process.env.TZ = 'UTC';
       clock.restore();
     });
 
     it('Works on a valid by a day date', () => {
-      expect(validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 28, 11, 0))).to.equal(true);
+      expect(
+        validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 28, 11, 0))
+      ).to.equal(true);
     });
 
     it('Works on a invalid date a day behind', () => {
-      expect(validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 26, 14, 15))).to.equal(false);
+      expect(
+        validator.isTwoHoursPriorDeparture(new Date(2023, MARCH, 26, 14, 15))
+      ).to.equal(false);
     });
 
     it('Same day but 2 hour prior date is valid', () => {
       const validByHourDate = new Date(2023, MARCH, 27, 17, 15);
-      expect(validator.isTwoHoursPriorDeparture(validByHourDate)).to.equal(true);
+      expect(validator.isTwoHoursPriorDeparture(validByHourDate)).to.equal(
+        true
+      );
 
       const validByMinuteDate = new Date(2023, MARCH, 27, 16, 16);
-      expect(validator.isTwoHoursPriorDeparture(validByMinuteDate)).to.equal(true);
+      expect(validator.isTwoHoursPriorDeparture(validByMinuteDate)).to.equal(
+        true
+      );
 
       process.env.TZ = 'America/Los_Angeles'; // 5 hours and 30 minute offset
       const validInTimezoneByHourDate = new Date(2023, MARCH, 27, 15, 15);
-      expect(validator.isTwoHoursPriorDeparture(validInTimezoneByHourDate)).to.equal(false);
+      expect(
+        validator.isTwoHoursPriorDeparture(validInTimezoneByHourDate)
+      ).to.equal(false);
 
       const validInTimezoneByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
-      expect(validator.isTwoHoursPriorDeparture(validInTimezoneByMinuteDate)).to.equal(false);
-    }); 
+      expect(
+        validator.isTwoHoursPriorDeparture(validInTimezoneByMinuteDate)
+      ).to.equal(false);
+    });
 
     it('Same day but not 2 hour prior date is inaccurate', () => {
       const invalidByHourDate = new Date(2023, MARCH, 27, 15, 15);
-      expect(validator.isTwoHoursPriorDeparture(invalidByHourDate)).to.equal(false);
+      expect(validator.isTwoHoursPriorDeparture(invalidByHourDate)).to.equal(
+        false
+      );
 
       const invalidByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
-      expect(validator.isTwoHoursPriorDeparture(invalidByMinuteDate)).to.equal(false);
+      expect(validator.isTwoHoursPriorDeparture(invalidByMinuteDate)).to.equal(
+        false
+      );
 
       process.env.TZ = 'Asia/Kolkata'; // 5 hours and 30 minute offset
       const invalidInTimezoneByHourDate = new Date(2023, MARCH, 27, 15, 15);
-      expect(validator.isTwoHoursPriorDeparture(invalidInTimezoneByHourDate)).to.equal(false);
+      expect(
+        validator.isTwoHoursPriorDeparture(invalidInTimezoneByHourDate)
+      ).to.equal(false);
 
       const invalidInTimezoneByMinuteDate = new Date(2023, MARCH, 27, 16, 14);
-      expect(validator.isTwoHoursPriorDeparture(invalidInTimezoneByMinuteDate)).to.equal(false);
+      expect(
+        validator.isTwoHoursPriorDeparture(invalidInTimezoneByMinuteDate)
+      ).to.equal(false);
     });
 
     it('Confirm that the timezone offset is converted to UTC', () => {
       process.env.TZ = 'Asia/Kolkata'; // 5 hours and 30 minute offset
       const mumbaiTime = new Date(2023, MARCH, 27, 15, 15);
-      
+
       expect(mumbaiTime.getUTCFullYear()).to.equal(2023);
       expect(mumbaiTime.getMonth()).to.equal(MARCH);
       expect(mumbaiTime.getDate()).to.equal(27);
@@ -969,11 +1056,10 @@ describe('Validator', () => {
       expect(utcEquivalentTime.getMinutes()).to.equal(45);
     });
 
-
     it('Confirm that the timezone offset is converted to UTC', () => {
       process.env.TZ = 'America/Los_Angeles'; // -7 hours
       const sanFranciscoTime = new Date(2023, MARCH, 27, 20, 15);
-      
+
       expect(sanFranciscoTime.getUTCFullYear()).to.equal(2023);
       expect(sanFranciscoTime.getMonth()).to.equal(MARCH);
       expect(sanFranciscoTime.getDate()).to.equal(27);
@@ -993,70 +1079,88 @@ describe('Validator', () => {
   });
 
   describe('Universal Permission to Travel validators to check', () => {
-      it('Validate Alpha string whilst invalidates incorrect ones', () => {
-        const plainString = "Aaron";
-        expect(validator.isAlpha(plainString)).to.eql(true);
+    it('Validate Alpha string whilst invalidates incorrect ones', () => {
+      const plainString = 'Aaron';
+      expect(validator.isAlpha(plainString)).to.eql(true);
 
-        const stringWithSpace = "Aaron Adam";
-        expect(validator.isAlpha(stringWithSpace)).to.eql(true);
+      const stringWithSpace = 'Aaron Adam';
+      expect(validator.isAlpha(stringWithSpace)).to.eql(true);
 
-        const stringWithSpaceAndDash = "Aaron Adam-Kingsbottom";
-        expect(validator.isAlpha(stringWithSpaceAndDash)).to.eql(true);
+      const stringWithSpaceAndDash = 'Aaron Adam-Kingsbottom';
+      expect(validator.isAlpha(stringWithSpaceAndDash)).to.eql(true);
 
-        const stringWithNumberInIt = "Aaron Adam-Kingsbottom 3rd";
-        expect(validator.isAlpha(stringWithNumberInIt)).to.eql(false);
+      const stringWithNumberInIt = 'Aaron Adam-Kingsbottom 3rd';
+      expect(validator.isAlpha(stringWithNumberInIt)).to.eql(false);
 
-        const stringWithSingleQuote = "Aaron O'Kingsbottom";
-        expect(validator.isAlpha(stringWithSingleQuote)).to.eql(false);
+      const stringWithSingleQuote = "Aaron O'Kingsbottom";
+      expect(validator.isAlpha(stringWithSingleQuote)).to.eql(false);
+    });
 
-    })
-
-    it('Validates optional unprovided addresses which are valid', () => { 
+    it('Validates optional unprovided addresses which are valid', () => {
       const blankOptionalStreet = '';
-      expect(validator.isAddressValidCharacters(blankOptionalStreet)).to.eql(true);
+      expect(validator.isAddressValidCharacters(blankOptionalStreet)).to.eql(
+        true
+      );
 
       const nullOptionalStreet = null;
-      expect(validator.isAddressValidCharacters(nullOptionalStreet)).to.eql(true);
+      expect(validator.isAddressValidCharacters(nullOptionalStreet)).to.eql(
+        true
+      );
 
       const undefinedOptionalStreet = undefined;
-      expect(validator.isAddressValidCharacters(undefinedOptionalStreet)).to.eql(true);
+      expect(
+        validator.isAddressValidCharacters(undefinedOptionalStreet)
+      ).to.eql(true);
     });
 
     it('Validates Addresses which are valid', () => {
-      const streetNameWithASpace = "Homestead Road";
-      expect(validator.isAddressValidCharacters(streetNameWithASpace)).to.eql(true);
+      const streetNameWithASpace = 'Homestead Road';
+      expect(validator.isAddressValidCharacters(streetNameWithASpace)).to.eql(
+        true
+      );
 
-      const streetNameWithADash = "Fuller-spark Drive";
-      expect(validator.isAddressValidCharacters(streetNameWithADash)).to.eql(true);
+      const streetNameWithADash = 'Fuller-spark Drive';
+      expect(validator.isAddressValidCharacters(streetNameWithADash)).to.eql(
+        true
+      );
 
       const streetNameWithAnapostrophe = "Pullman's Lane";
-      expect(validator.isAddressValidCharacters(streetNameWithAnapostrophe)).to.eql(false);
+      expect(
+        validator.isAddressValidCharacters(streetNameWithAnapostrophe)
+      ).to.eql(false);
 
-      const houseNumber = "18";
+      const houseNumber = '18';
       expect(validator.isAddressValidCharacters(houseNumber)).to.eql(true);
-    })
-
-    it('Invalidates Addresses which are invalid', () => { 
-      const unicodeCharacterStreet = "Bräut street"
-      expect(validator.isAddressValidCharacters(unicodeCharacterStreet)).to.eql(false);
-
-      const specialCharacterStreet = "$$$ road";
-      expect(validator.isAddressValidCharacters(specialCharacterStreet)).to.eql(false);
-    })
-    
-    it('Validate postcode containing invalid chars', () => { 
-      const unicodeCharacterStreet = "Bräut street"
-      expect(validator.isPostCodeValidCharacters(unicodeCharacterStreet)).to.eql(false);
-
-      const specialCharacterStreet = "LA'SW";
-      expect(validator.isPostCodeValidCharacters(specialCharacterStreet)).to.eql(false);
-
-      const postcode = "SE1 9BG";
-      expect(validator.isPostCodeValidCharacters(postcode)).to.eql(true);
-
     });
 
-    it('Validates airport code list accurate detects codes which are in and not in the list', ()  => {
+    it('Invalidates Addresses which are invalid', () => {
+      const unicodeCharacterStreet = 'Bräut street';
+      expect(validator.isAddressValidCharacters(unicodeCharacterStreet)).to.eql(
+        false
+      );
+
+      const specialCharacterStreet = '$$$ road';
+      expect(validator.isAddressValidCharacters(specialCharacterStreet)).to.eql(
+        false
+      );
+    });
+
+    it('Validate postcode containing invalid chars', () => {
+      const unicodeCharacterStreet = 'Bräut street';
+      expect(
+        validator.isPostCodeValidCharacters(unicodeCharacterStreet)
+      ).to.eql(false);
+
+      const specialCharacterStreet = "LA'SW";
+      expect(
+        validator.isPostCodeValidCharacters(specialCharacterStreet)
+      ).to.eql(false);
+
+      const postcode = 'SE1 9BG';
+      expect(validator.isPostCodeValidCharacters(postcode)).to.eql(true);
+    });
+
+    it('Validates airport code list accurate detects codes which are in and not in the list', () => {
       expect(validator.isValidAirportCode('LGW')).to.eql(true);
       expect(validator.isValidAirportCode('EGXJ')).to.eql(true);
       expect(validator.isValidAirportCode('LAX')).to.eql(true);
@@ -1064,74 +1168,99 @@ describe('Validator', () => {
 
       expect(validator.isValidAirportCode('Not An airport code')).to.eql(false);
       expect(validator.isValidAirportCode('12345')).to.eql(false);
-    })
+    });
 
-    it("Should return a valid document type from a given document type", () => {
-      expect(validator.isValidDocumentType("Passport")).to.eql(true);
-      expect(validator.isValidDocumentType("Identity Card")).to.eql(true);
-      expect(validator.isValidDocumentType("Other")).to.eql(true);
+    it('Should return a valid document type from a given document type', () => {
+      expect(validator.isValidDocumentType('Passport')).to.eql(true);
+      expect(validator.isValidDocumentType('Identity Card')).to.eql(true);
+      expect(validator.isValidDocumentType('Other')).to.eql(true);
 
-      expect(validator.isValidDocumentType("Banana")).to.eql(false);
-      expect(validator.isValidDocumentType("Ice cream")).to.eql(false);
+      expect(validator.isValidDocumentType('Banana')).to.eql(false);
+      expect(validator.isValidDocumentType('Ice cream')).to.eql(false);
       expect(validator.isValidDocumentType(1)).to.eql(false);
       expect(validator.isValidDocumentType(undefined)).to.eql(false);
       expect(validator.isValidDocumentType([])).to.eql(false);
       expect(validator.isValidDocumentType()).to.eql(false);
     });
 
-    it("Should return a valid document type from a given document type", () => {
-      expect(validator.isOtherDocumentWithDocumentDesc(["Other", "UN documents"])).to.eql(true);
-      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", undefined])).to.eql(true);
-      expect(validator.isOtherDocumentWithDocumentDesc(["Identity Card", null])).to.eql(true);
-      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", ""])).to.eql(true);
+    it('Should return a valid document type from a given document type', () => {
+      expect(
+        validator.isOtherDocumentWithDocumentDesc(['Other', 'UN documents'])
+      ).to.eql(true);
+      expect(
+        validator.isOtherDocumentWithDocumentDesc(['Passport', undefined])
+      ).to.eql(true);
+      expect(
+        validator.isOtherDocumentWithDocumentDesc(['Identity Card', null])
+      ).to.eql(true);
+      expect(
+        validator.isOtherDocumentWithDocumentDesc(['Passport', ''])
+      ).to.eql(true);
 
-      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", "Apple"])).to.eql(false);
-      expect(validator.isOtherDocumentWithDocumentDesc(["Identity Card", "Pineapple"])).to.eql(false);
-      expect(validator.isOtherDocumentWithDocumentDesc(["Passport", {}])).to.eql(false);
+      expect(
+        validator.isOtherDocumentWithDocumentDesc(['Passport', 'Apple'])
+      ).to.eql(false);
+      expect(
+        validator.isOtherDocumentWithDocumentDesc([
+          'Identity Card',
+          'Pineapple',
+        ])
+      ).to.eql(false);
+      expect(
+        validator.isOtherDocumentWithDocumentDesc(['Passport', {}])
+      ).to.eql(false);
       expect(validator.isOtherDocumentWithDocumentDesc()).to.eql(false);
     });
-
-  })
+  });
 
   describe('Should determine if a value is cancellable by CBP', () => {
     let clock;
     const MARCH = 2;
     const APRIL = 3;
-    
+
     beforeEach(() => {
       clock = sinon.useFakeTimers({
         now: new Date(2023, APRIL, 11),
         shouldAdvanceTime: false,
-        toFake: ["Date"],
+        toFake: ['Date'],
       });
-    })
+    });
 
     afterEach(() => {
       clock.restore();
     });
 
-    it("Should be valid to cancel GAR by CBP", () => {
-      const currentDate = "2023-04-11T00:00:00.000000";
-      const dayOld = "2023-04-10T00:00:00.000000";
-      const weekOld = "2023-04-11T00:00:00.000000";
-      const twoWeeksOld = "2023-03-29T00:00:00.000000";
-  
+    it('Should be valid to cancel GAR by CBP', () => {
+      const currentDate = '2023-04-11T00:00:00.000000';
+      const dayOld = '2023-04-10T00:00:00.000000';
+      const weekOld = '2023-04-11T00:00:00.000000';
+      const twoWeeksOld = '2023-03-29T00:00:00.000000';
+
       expect(validator.isAbleToCancelGar(currentDate)).to.eql(true);
       expect(validator.isAbleToCancelGar(null)).to.eql(true);
       expect(validator.isAbleToCancelGar(dayOld)).to.eql(true);
       expect(validator.isAbleToCancelGar(weekOld)).to.eql(true);
       expect(validator.isAbleToCancelGar(twoWeeksOld)).to.eql(true);
-    })
+    });
 
-    it("Should be invalid to cancel GAR by CBP", () => {
-      const twoWeeksAndADayOld = "2023-03-28T00:00:00.000000";
-      const yearOld = "2022-04-11T00:00:00.000000";
+    it('Should be invalid to cancel GAR by CBP', () => {
+      const twoWeeksAndADayOld = '2023-03-28T00:00:00.000000';
+      const yearOld = '2022-04-11T00:00:00.000000';
       expect(validator.isAbleToCancelGar(twoWeeksAndADayOld)).to.eql(false);
       expect(validator.isAbleToCancelGar(yearOld)).to.eql(false);
 
-      const blankString = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, '');
-      const undefinedDate = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, undefined);
-      const blankObject = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, {});
+      const blankString = validator.isAbleToCancelGar.bind(
+        validator.isAbleToCancelGar,
+        ''
+      );
+      const undefinedDate = validator.isAbleToCancelGar.bind(
+        validator.isAbleToCancelGar,
+        undefined
+      );
+      const blankObject = validator.isAbleToCancelGar.bind(
+        validator.isAbleToCancelGar,
+        {}
+      );
 
       expect(blankString).to.throw(
         'lastDepartureDateString: "", type: "string", is not null or a valid string'
@@ -1144,6 +1273,6 @@ describe('Validator', () => {
       expect(blankObject).to.throw(
         'lastDepartureDateString: "[object Object]", type: "object", is not null or a valid string'
       );
-    })
-  })
+    });
+  });
 });

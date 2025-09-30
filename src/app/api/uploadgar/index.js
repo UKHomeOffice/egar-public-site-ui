@@ -20,6 +20,12 @@ const upload = multer({ storage });
 
 app.use(bodyParser.json());
 
-router.post('/uploadgar', upload.single('file'), usercheck, csrfcheck, postController);
+router.post(
+  '/uploadgar',
+  upload.single('file'),
+  usercheck,
+  csrfcheck,
+  postController
+);
 
 module.exports = { router, paths };

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -14,11 +13,17 @@ const pagination = require('../../common/utils/pagination');
 controller = require('../../app/aircraft/get.controller');
 
 describe('Saved Aircraft Get Controller', () => {
-  let res; let individualCraftStub; let organisationCraftStub;
-  let paginationBuildStub; let paginationGetCurrentPageStub;
+  let res;
+  let individualCraftStub;
+  let organisationCraftStub;
+  let paginationBuildStub;
+  let paginationGetCurrentPageStub;
 
   const apiResponse = JSON.stringify({
-    items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+    items: [
+      { id: 1, name: 'Craft 1' },
+      { id: 2, name: 'Craft 2' },
+    ],
     _meta: { totalPages: 1, totalItems: 2 },
   });
 
@@ -48,7 +53,7 @@ describe('Saved Aircraft Get Controller', () => {
           dbId: 'example@somewhere.com',
           rl: 'Individual',
         },
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
 
@@ -66,11 +71,18 @@ describe('Saved Aircraft Get Controller', () => {
       };
 
       callController().then(() => {
-        expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
+        expect(individualCraftStub).to.have.been.calledOnceWithExactly(
+          'example@somewhere.com',
+          1
+        );
         expect(organisationCraftStub).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/index', {
-          cookie, errors: [{ message: 'There was a problem fetching data' }],
-        });
+        expect(res.render).to.have.been.calledOnceWithExactly(
+          'app/aircraft/index',
+          {
+            cookie,
+            errors: [{ message: 'There was a problem fetching data' }],
+          }
+        );
       });
     });
 
@@ -79,7 +91,10 @@ describe('Saved Aircraft Get Controller', () => {
       paginationBuildStub.throws('Example');
       await controller(req, res);
 
-      expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
+      expect(individualCraftStub).to.have.been.calledOnceWithExactly(
+        'example@somewhere.com',
+        1
+      );
       expect(req.session.errMsg).to.be.undefined;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
       expect(res.render).to.not.have.been.called;
@@ -90,12 +105,18 @@ describe('Saved Aircraft Get Controller', () => {
       individualCraftStub.resolves(apiResponse);
       await controller(req, res);
 
-      expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
+      expect(individualCraftStub).to.have.been.calledOnceWithExactly(
+        'example@somewhere.com',
+        1
+      );
       expect(req.session.errMsg).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/aircraft/index', {
         cookie,
         savedCrafts: {
-          items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+          items: [
+            { id: 1, name: 'Craft 1' },
+            { id: 2, name: 'Craft 2' },
+          ],
           _meta: { totalPages: 1, totalItems: 2 },
         },
         pages: { startItem: 1, endItem: 1 },
@@ -109,14 +130,20 @@ describe('Saved Aircraft Get Controller', () => {
       individualCraftStub.resolves(apiResponse);
       await controller(req, res);
 
-      expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
+      expect(individualCraftStub).to.have.been.calledOnceWithExactly(
+        'example@somewhere.com',
+        1
+      );
       expect(req.session.errMsg).to.be.undefined;
       expect(req.session.successMsg).to.be.undefined;
       expect(req.session.successHeader).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/aircraft/index', {
         cookie,
         savedCrafts: {
-          items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+          items: [
+            { id: 1, name: 'Craft 1' },
+            { id: 2, name: 'Craft 2' },
+          ],
           _meta: { totalPages: 1, totalItems: 2 },
         },
         pages: { startItem: 1, endItem: 1 },
@@ -129,14 +156,20 @@ describe('Saved Aircraft Get Controller', () => {
       individualCraftStub.resolves(apiResponse);
       await controller(req, res);
 
-      expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
+      expect(individualCraftStub).to.have.been.calledOnceWithExactly(
+        'example@somewhere.com',
+        1
+      );
       expect(req.session.errMsg).to.be.undefined;
       expect(req.session.successMsg).to.be.undefined;
       expect(req.session.successHeader).to.be.undefined;
       expect(res.render).to.have.been.calledWith('app/aircraft/index', {
         cookie,
         savedCrafts: {
-          items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+          items: [
+            { id: 1, name: 'Craft 1' },
+            { id: 2, name: 'Craft 2' },
+          ],
           _meta: { totalPages: 1, totalItems: 2 },
         },
         pages: { startItem: 1, endItem: 1 },
@@ -167,7 +200,10 @@ describe('Saved Aircraft Get Controller', () => {
         expect(individualCraftStub).to.not.have.been.called;
         expect(organisationCraftStub).to.have.been.called;
         expect(res.render).to.have.been.calledWith('app/aircraft/index');
-        res.render('app/aircraft/index', { cookie, errors: [{ message: 'There was a problem fetching data' }] });
+        res.render('app/aircraft/index', {
+          cookie,
+          errors: [{ message: 'There was a problem fetching data' }],
+        });
       });
     });
 
@@ -183,7 +219,10 @@ describe('Saved Aircraft Get Controller', () => {
       expect(res.render).to.have.been.calledWith('app/aircraft/index', {
         cookie,
         savedCrafts: {
-          items: [{ id: 1, name: 'Craft 1' }, { id: 2, name: 'Craft 2' }],
+          items: [
+            { id: 1, name: 'Craft 1' },
+            { id: 2, name: 'Craft 2' },
+          ],
           _meta: { totalPages: 1, totalItems: 2 },
         },
         pages: { startItem: 1, endItem: 2 },

@@ -1,13 +1,17 @@
 const navUtil = require('../../../common/utils/nav');
-const {PHASE_GIVEN_NAME, WORKFLOW_STEPS}  = require('./constants');
+const { PHASE_GIVEN_NAME, WORKFLOW_STEPS } = require('./constants');
 
 const checkKeys = (obj, ...keys) => {
   if (!obj) return false;
-  return keys.every(key => obj.hasOwnProperty(key));
-}
+  return keys.every((key) => obj.hasOwnProperty(key));
+};
 
 module.exports = (req, res) => {
-  if (!checkKeys(req.cookies, 'state', 'id_token', 'nonce') || req.headers.referer === null || !req.session?.access_token) {
+  if (
+    !checkKeys(req.cookies, 'state', 'id_token', 'nonce') ||
+    req.headers.referer === null ||
+    !req.session?.access_token
+  ) {
     return res.redirect('/');
   }
 
@@ -23,5 +27,8 @@ module.exports = (req, res) => {
 
   req.session.step = stepValue;
   const stepData = req.session?.step_data;
-  return res.render('app/user/onelogin/index', {step: `app/user/onelogin/partials/${stepValue}.njk`, ...stepData});
+  return res.render('app/user/onelogin/index', {
+    step: `app/user/onelogin/partials/${stepValue}.njk`,
+    ...stepData,
+  });
 };

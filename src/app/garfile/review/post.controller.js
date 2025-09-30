@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -46,17 +45,32 @@ const performAPICall = async (garId, cookie, req, res) => {
 
 const buildValidations = async (garfile, garpeople, manifest) => {
   const validations = validationList.validations(garfile, garpeople);
-  const departureDateParts = garfile.departureDate ? garfile.departureDate.split('-') : [];
+  const departureDateParts = garfile.departureDate
+    ? garfile.departureDate.split('-')
+    : [];
   const departDateObj = {
     d: departureDateParts[2],
     m: departureDateParts[1],
     y: departureDateParts[0],
   };
- 
 
   validations.push(
-    [new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation'))],
-    [new ValidationRule(validator.currentOrPastDate, 'departureDate', departDateObj, __('field_departure_date_should_not_be_in_the_past'))],
+    [
+      new ValidationRule(
+        validator.realDate,
+        'departureDate',
+        departDateObj,
+        __('field_departure_real_date_validation')
+      ),
+    ],
+    [
+      new ValidationRule(
+        validator.currentOrPastDate,
+        'departureDate',
+        departDateObj,
+        __('field_departure_date_should_not_be_in_the_past')
+      ),
+    ]
   );
 
   // Manifest specific validations does not using generic mechanism, so wrapped in
@@ -66,14 +80,24 @@ const buildValidations = async (garfile, garpeople, manifest) => {
   if (!isManifestValid) {
     const validateFailMsg = 'Resolve manifest errors before submitting';
     validations.push([
-      new ValidationRule(validator.valuetrue, 'resolveError', '', validateFailMsg),
+      new ValidationRule(
+        validator.valuetrue,
+        'resolveError',
+        '',
+        validateFailMsg
+      ),
     ]);
   }
 
   if (!garfile.isMilitaryFlight && !manifest.validateCaptainCrew()) {
     const validateCaptainCrewMsg = __('has_no_crew_or_captains');
     validations.push([
-      new ValidationRule(validator.valuetrue, 'manifest', '', validateCaptainCrewMsg),
+      new ValidationRule(
+        validator.valuetrue,
+        'manifest',
+        '',
+        validateCaptainCrewMsg
+      ),
     ]);
   }
 
@@ -135,7 +159,12 @@ module.exports = async (req, res) => {
   } catch (err) {
     logger.error('Error retrieving GAR for review');
     logger.error(err);
-    return res.render('app/garfile/review/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
+    return res.render('app/garfile/review/index', {
+      cookie,
+      errors: [
+        { message: 'There was an error retrieving the GAR. Try again later' },
+      ],
+    });
   }
 
   try {
@@ -154,15 +183,14 @@ module.exports = async (req, res) => {
         - Journey is coming into UK but no status check: Send to AMG/UPT
         - Journey is coming into UK and status check: Submit GAR
       */
-  const isRequiresPassengerCheck = (
-    airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) 
-        && !statuscheck
-  );
+  const isRequiresPassengerCheck =
+    airportValidation.isJourneyUKInbound(
+      garfile.departurePort,
+      garfile.arrivalPort
+    ) && !statuscheck;
 
-  const isAnAllMilitaryFlight = (
-    garfile.isMilitaryFlight
-        && garpeople.items.length === 0
-  );
+  const isAnAllMilitaryFlight =
+    garfile.isMilitaryFlight && garpeople.items.length === 0;
 
   try {
     await garApi.submitGARForCheckin(garId);

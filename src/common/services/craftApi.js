@@ -3,7 +3,6 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
-
   /**
    * Calls create craft API endpoint.
    *
@@ -15,23 +14,26 @@ module.exports = {
    */
   create(registration, craftType, craftBase, userId) {
     return new Promise((resolve, reject) => {
-      request.post({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.createCraft(userId),
-        body: JSON.stringify({
-          registration,
-          craftType,
-          craftBase,
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call craft creation API');
-          reject(error);
-          return;
+      request.post(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.createCraft(userId),
+          body: JSON.stringify({
+            registration,
+            craftType,
+            craftBase,
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call craft creation API');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called craft creation endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called craft creation endpoint');
-        resolve(body);
-      });
+      );
     });
   },
   /**
@@ -43,19 +45,21 @@ module.exports = {
    */
   getDetails(userId, craftId) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.getCraftData(userId, craftId),
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get craft details endpoint');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getCraftData(userId, craftId),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get craft details endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get craft details API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called get craft details API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
   /**
@@ -66,19 +70,21 @@ module.exports = {
    */
   getCrafts(userId, pageNumber) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: `${endpoints.getCrafts(userId)}?per_page=5&page=${pageNumber}`, // ?per_page=10&page=2`, or via qs
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get crafts API endpoint');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: `${endpoints.getCrafts(userId)}?per_page=5&page=${pageNumber}`, // ?per_page=10&page=2`, or via qs
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get crafts API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get crafts API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called get crafts API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
   /**
@@ -89,23 +95,25 @@ module.exports = {
    */
   getOrgCrafts(orgId, pageNumber) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.getOrgCrafts(orgId),
-        qs: {
-          per_page: 5,
-          page: pageNumber,
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getOrgCrafts(orgId),
+          qs: {
+            per_page: 5,
+            page: pageNumber,
+          },
         },
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get org crafts API endpoint');
-          reject(error);
-          return;
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get org crafts API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get org crafts API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called get org crafts API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
   /**
@@ -120,23 +128,26 @@ module.exports = {
    */
   update(registration, craftType, craftBase, userId, craftId) {
     return new Promise((resolve, reject) => {
-      request.put({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.updateCraft(userId, craftId),
-        body: JSON.stringify({
-          registration,
-          craftType,
-          craftBase,
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call update craft endpoint');
-          reject(error);
-          return;
+      request.put(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.updateCraft(userId, craftId),
+          body: JSON.stringify({
+            registration,
+            craftType,
+            craftBase,
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call update craft endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called update craft API');
+          resolve(body);
         }
-        logger.debug('Successfully called update craft API');
-        resolve(body);
-      });
+      );
     });
   },
   /**
@@ -148,23 +159,25 @@ module.exports = {
    */
   deleteCraft(requesterId, craftId) {
     return new Promise((resolve, reject) => {
-      request.delete({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.deleteCraft(requesterId, craftId),
-        body: JSON.stringify({
-          requesterId,
-          crafts: [{ craftId }],
-        }),
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call delete crafts API endpoint');
-          reject(error);
-          return;
+      request.delete(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.deleteCraft(requesterId, craftId),
+          body: JSON.stringify({
+            requesterId,
+            crafts: [{ craftId }],
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call delete crafts API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called delete crafts API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called delete crafts API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
   /**
@@ -177,23 +190,25 @@ module.exports = {
    */
   deleteOrgCraft(orgId, requesterId, craftId) {
     return new Promise((resolve, reject) => {
-      request.delete({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.getOrgCrafts(orgId),
-        body: JSON.stringify({
-          requesterId,
-          crafts: [{ craftId }],
-        }),
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call delete org crafts endpoint');
-          reject(error);
-          return;
+      request.delete(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getOrgCrafts(orgId),
+          body: JSON.stringify({
+            requesterId,
+            crafts: [{ craftId }],
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call delete org crafts endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called delete org crafts endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called delete org crafts endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 };

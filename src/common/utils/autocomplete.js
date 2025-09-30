@@ -9,12 +9,64 @@ const airportList = require('./airport_codes.json');
  */
 
 const COUNTRY_SKIP_LIST = [
-  'ABW', 'AIA', 'ALA', 'ANT', 'ASM', 'ATA', 'ATF', 'BES', 'BLM', 'BMU', 'BVT',
-  'CCK', 'COK', 'CUW', 'CXR', 'CYM', 'D', 'ESH', 'FLK', 'FRO', 'GGY', 'GIB',
-  'GLP', 'GRL', 'GUF', 'GUM', 'HMD', 'IMN', 'JEY', 'MAF', 'MID', 'MNP', 'MSR',
-  'MTQ', 'MYT', 'NCL', 'NFK', 'NIU', 'PCN', 'PRI', 'PSE', 'PYF', 'REU', 'SGS', 'SHN',
-  'SJM', 'SPM', 'SRB', 'SXM', 'TCA', 'TKL', 'UMI', 'VGB', 'VIR', 'WLF', 'XCT', 'XKK'
-]
+  'ABW',
+  'AIA',
+  'ALA',
+  'ANT',
+  'ASM',
+  'ATA',
+  'ATF',
+  'BES',
+  'BLM',
+  'BMU',
+  'BVT',
+  'CCK',
+  'COK',
+  'CUW',
+  'CXR',
+  'CYM',
+  'D',
+  'ESH',
+  'FLK',
+  'FRO',
+  'GGY',
+  'GIB',
+  'GLP',
+  'GRL',
+  'GUF',
+  'GUM',
+  'HMD',
+  'IMN',
+  'JEY',
+  'MAF',
+  'MID',
+  'MNP',
+  'MSR',
+  'MTQ',
+  'MYT',
+  'NCL',
+  'NFK',
+  'NIU',
+  'PCN',
+  'PRI',
+  'PSE',
+  'PYF',
+  'REU',
+  'SGS',
+  'SHN',
+  'SJM',
+  'SPM',
+  'SRB',
+  'SXM',
+  'TCA',
+  'TKL',
+  'UMI',
+  'VGB',
+  'VIR',
+  'WLF',
+  'XCT',
+  'XKK',
+];
 
 // ISO/IEC 7501-1 codes, not part of ISO 3166/MA
 const customNationalities = [
@@ -23,9 +75,18 @@ const customNationalities = [
   { code: 'GBO', label: 'British Overseas Citizen (GBO)' },
   { code: 'RKS', label: 'Kosovo' },
   { code: 'PSE', label: 'Palestine Authority' },
-  { code: 'XXA', label: 'Stateless as defined in Article 1 of the 1954 Convention' },
-  { code: 'XXB', label: 'Refugee as defined in Article 1 of the 1951 Convention' },
-  { code: 'XXC', label: 'Refugee Other (not defined under 1951 or 1954 Convention)' },
+  {
+    code: 'XXA',
+    label: 'Stateless as defined in Article 1 of the 1954 Convention',
+  },
+  {
+    code: 'XXB',
+    label: 'Refugee as defined in Article 1 of the 1951 Convention',
+  },
+  {
+    code: 'XXC',
+    label: 'Refugee Other (not defined under 1951 or 1954 Convention)',
+  },
   { code: 'XXX', label: 'Person of unspecified nationality' },
 ];
 
@@ -38,7 +99,7 @@ const generateNationalityList = () => {
   customNationalities.forEach((nationality) => {
     alpha3List.push({
       code: nationality.code,
-      label: `${nationality.label} (${nationality.code})`
+      label: `${nationality.label} (${nationality.code})`,
     });
   });
 
@@ -63,7 +124,9 @@ const nationalityList = generateNationalityList();
  * @param  {String} countryCode
  */
 function getCountryFromCode(countryCode) {
-  const countryFromCode = nationalityList.find(country => country.code === countryCode);
+  const countryFromCode = nationalityList.find(
+    (country) => country.code === countryCode
+  );
   return countryFromCode === undefined ? countryCode : countryFromCode.label;
 }
 
@@ -76,7 +139,7 @@ function listOfAirportCodes(airportList) {
   const airportCodes = [];
 
   airportList.forEach((airport) => {
-    const iataCode = airport.id
+    const iataCode = airport.id;
     const icaoCode = airport.id2;
     airportCodes.push(iataCode);
     airportCodes.push(icaoCode);
@@ -87,11 +150,10 @@ function listOfAirportCodes(airportList) {
 
 const airportCodeList = listOfAirportCodes(airportList);
 
-
 module.exports = {
   generateNationalityList,
   getCountryFromCode,
   nationalityList,
   airportList,
-  airportCodeList
+  airportCodeList,
 };

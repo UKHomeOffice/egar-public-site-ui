@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -12,7 +9,9 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const controller = require('../../../app/user/logout/get.controller');
 
 describe('Logout Get Controller', () => {
-  let req; let res; let sessionDestroyStub;
+  let req;
+  let res;
+  let sessionDestroyStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -20,7 +19,7 @@ describe('Logout Get Controller', () => {
     req = {
       session: {
         u: { dbId: 'USER-DB-ID-1' },
-        destroy: callback => callback(),
+        destroy: (callback) => callback(),
       },
     };
     res = {

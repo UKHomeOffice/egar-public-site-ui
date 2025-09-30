@@ -24,7 +24,8 @@ module.exports = (req, res) => {
     cookie,
   };
 
-  garApi.get(garId)
+  garApi
+    .get(garId)
     .then((apiResponse) => {
       const gar = JSON.parse(apiResponse);
       context.gar = gar;
@@ -35,6 +36,4 @@ module.exports = (req, res) => {
       context.errors = [{ message: 'Problems retrieving GAR' }];
       res.render('app/garfile/customs/index', context);
     });
-
-
 };

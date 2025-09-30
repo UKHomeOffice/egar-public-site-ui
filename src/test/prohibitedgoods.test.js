@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
 const nock = require('nock');
@@ -26,7 +25,8 @@ describe('ProhibitedGoods', () => {
   });
 
   it('Should update the GARs prohibited goods detail', (done) => {
-    garApi.patch(garId, 'Draft', garProhibitedGoodsPartial)
+    garApi
+      .patch(garId, 'Draft', garProhibitedGoodsPartial)
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         expect(typeof parsedResponse).to.equal('object');

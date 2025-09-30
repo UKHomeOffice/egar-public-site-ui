@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
 const sinon = require('sinon');
@@ -23,7 +22,9 @@ describe('DateService', () => {
         },
       },
     };
-    const tokenApi = proxyquire('../common/services/tokenApi', { '../utils/db': dbStub });
+    const tokenApi = proxyquire('../common/services/tokenApi', {
+      '../utils/db': dbStub,
+    });
 
     tokenApi.getLastLogin('test@test.com').then(() => {
       sinon.assert.calledOnce(findOneStub);
@@ -32,7 +33,9 @@ describe('DateService', () => {
   });
 
   it('should throw an error when getting last successful login date', async () => {
-    const findOneStub = sinon.stub().rejects(new Error('Example reject getLastLogin'));
+    const findOneStub = sinon
+      .stub()
+      .rejects(new Error('Example reject getLastLogin'));
     const dbStub = {
       sequelize: {
         models: {
@@ -42,7 +45,9 @@ describe('DateService', () => {
         },
       },
     };
-    const tokenApi = proxyquire('../common/services/tokenApi', { '../utils/db': dbStub });
+    const tokenApi = proxyquire('../common/services/tokenApi', {
+      '../utils/db': dbStub,
+    });
 
     try {
       await tokenApi.getLastLogin('test@test.com');

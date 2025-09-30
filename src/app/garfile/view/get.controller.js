@@ -14,10 +14,14 @@ const { isAbleToCancelGar } = require('../../../common/utils/validator');
  * @param {String} userId The user id to check against
  * @param {String} organisationId The organisation to check against
  */
- const checkGARUser = (parsedGar, userId, organisationId) => {
+const checkGARUser = (parsedGar, userId, organisationId) => {
   if (parsedGar === undefined || parsedGar === null) return false;
 
-  if ((parsedGar.organisationId && organisationId) && parsedGar.organisationId === organisationId) {
+  if (
+    parsedGar.organisationId &&
+    organisationId &&
+    parsedGar.organisationId === organisationId
+  ) {
     logger.info('GAR organisation id matches current user ID');
     return true;
   }
@@ -29,27 +33,27 @@ const { isAbleToCancelGar } = require('../../../common/utils/validator');
 };
 
 module.exports = (req, res) => {
-    const cookie = new CookieModel(req);
-    logger.debug('In garfile/view get controller');
-    
-    const context = { cookie };
+  const cookie = new CookieModel(req);
+  logger.debug('In garfile/view get controller');
 
-    let { garId } = req.body;
-    if (garId === undefined) {
-      garId = cookie.getGarId();
-    }
-    cookie.setGarId(garId);
-    const garPeople = garApi.getPeople(garId);
-    const garDetails = garApi.get(garId);
-    const garDocs = garApi.getSupportingDocs(garId);
+  const context = { cookie };
 
-    let renderContext = {
-      cookie,
-      manifestFields,
-      garfile: {},
-      garpeople: {},
-      garsupportingdocs: {},
-    };
+  let { garId } = req.body;
+  if (garId === undefined) {
+    garId = cookie.getGarId();
+  }
+  cookie.setGarId(garId);
+  const garPeople = garApi.getPeople(garId);
+  const garDetails = garApi.get(garId);
+  const garDocs = garApi.getSupportingDocs(garId);
+
+  let renderContext = {
+    cookie,
+    manifestFields,
+    garfile: {},
+    garpeople: {},
+    garsupportingdocs: {},
+  };
 
   Promise.all([garDetails, garPeople, garDocs])
     .then((responseValues) => {
@@ -57,11 +61,22 @@ module.exports = (req, res) => {
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;
-      const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z`: null;
+      const lastDepartureDateString =
+        departureDate && departureTime
+          ? `${departureDate}T${departureTime}.000Z`
+          : null;
 
       // Do the check here
-      if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
-        logger.error(`Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`);
+      if (
+        !checkGARUser(
+          parsedGar,
+          cookie.getUserDbId(),
+          cookie.getOrganisationId()
+        )
+      ) {
+        logger.error(
+          `Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`
+        );
         res.redirect('/home');
         return;
       }
@@ -86,10 +101,16 @@ module.exports = (req, res) => {
         garsupportingdocs: supportingDocuments,
         successMsg,
         successHeader,
-        isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort)
-      }; 
+        isJourneyUKInbound: airportValidation.isJourneyUKInbound(
+          parsedGar.departurePort,
+          parsedGar.arrivalPort
+        ),
+      };
       renderContext.showChangeLinks = true;
-      if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
+      if (
+        parsedGar.status.name === 'Submitted' ||
+        parsedGar.status.name === 'Cancelled'
+      ) {
         renderContext.showChangeLinks = false;
       }
       logger.info('Rendering GAR review page');
@@ -101,4 +122,4 @@ module.exports = (req, res) => {
       renderContext.errors = [{ message: 'Failed to get GAR information' }];
       res.render('app/garfile/view/index', renderContext);
     });
-  };
+};

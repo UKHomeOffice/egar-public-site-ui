@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -13,7 +10,9 @@ const garApi = require('../../../../common/services/garApi');
 const controller = require('../../../../app/garfile/manifest/editperson/get.controller');
 
 describe('Manifest Edit Person Get Controller', () => {
-  let req; let res; let apiResponse;
+  let req;
+  let res;
+  let apiResponse;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -54,7 +53,9 @@ describe('Manifest Edit Person Get Controller', () => {
     await controller(req, res);
 
     expect(res.redirect).to.have.not.been.called;
-    expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index');
+    expect(res.render).to.have.been.calledWith(
+      'app/garfile/manifest/editperson/index'
+    );
   });
 
   it('should redirect if the api has an issue', async () => {
