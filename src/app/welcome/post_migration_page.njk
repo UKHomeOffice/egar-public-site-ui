@@ -2,7 +2,7 @@
 
 {% import "common/templates/includes/macros.njk" as m %}
 
-{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "dist/govuk/components/button/macro.njk" import govukButton %}
 
 {% block pageTitle %}
 	{{__('error_prefix') if errors or unverified or unregistered }} GAR | Sign In

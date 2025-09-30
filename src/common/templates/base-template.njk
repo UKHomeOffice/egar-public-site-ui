@@ -1,42 +1,60 @@
+{% from "dist/govuk/components/skip-link/macro.njk" import govukSkipLink %}
+{% from "dist/govuk/components/header/macro.njk" import govukHeader %}
+{% from "dist/govuk/components/footer/macro.njk" import govukFooter %}
+{% from "dist/govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "dist/govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+{% from "dist/govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "dist/govuk/components/radios/macro.njk" import govukRadios %}
+
+{# {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "govuk/components/skip-link/macro.njk" import govukSkipLink %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
-{% from "govuk/components/footer/macro.njk" import govukFooter %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
-{% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/footer/macro.njk" import govukFooter %} #}
 
 
 
 {# specify absolute url for the static assets folder e.g. http://wwww.domain.com/assets #}
 {%- set assetUrl = assetUrl | default(assetPath) -%}
 <!DOCTYPE html>
-<html lang="{{ htmlLang | default('en') }}" class="govuk-template {{ htmlClasses }}">
+<html lang="{{ htmlLang | default('en') }}" class="govuk-template govuk-template--rebranded app-html-class {{ htmlClasses }}">
   <head>
     <meta charset="utf-8" />
     <title>{% block pageTitle %}GOV.UK - The best place to find government services and information{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="{{ themeColor | default('#0b0c0c') }}" /> {# Hardcoded value of $govuk-black #}
+    {# <meta name="viewport" content="width=device-width, initial-scale=1"> #}
+    {# <meta name="theme-color" content="{{ themeColor | default('#0b0c0c') }}" />  Hardcoded value of $govuk-black #}
     {# Ensure that older IE versions always render with the correct rendering engine #}
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     {# Stack overflow suggests this might help for Edge and issues with empty referer #}
     <meta name="referrer" content="origin-when-cross-origin" />
 
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="blue">
+    <link rel="icon" sizes="48x48" href="/assets/rebrand/images/favicon.ico">
+    <link rel="icon" sizes="any" href="/assets/rebrand/images/favicon.svg" type="image/svg+xml">
+    <link rel="mask-icon" href="/assets/rebrand/images/govuk-icon-mask.svg" color="blue">
+    <link rel="apple-touch-icon" href="/assets/rebrand/images/govuk-icon-180.png">
+    <link rel="manifest" href="/assets/rebrand/manifest.json">
+    <link rel="stylesheet" href="/stylesheets/govuk-frontend.min.css">
+    <meta property="og:image" content="YOUR-DOMAIN/images/govuk-opengraph-image.png">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
 
-    <link href="/stylesheets/application.min.css" rel="stylesheet" />
+    {# <link href="/stylesheets/application.min.css" rel="stylesheet" /> #}
     <link href="/stylesheets/custom.css" rel="stylesheet" />
     <link href="/stylesheets/dialog-polyfill.css" rel="stylesheet" type="text/css" />
     <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet" />
 
     {% block headIcons %}
       <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="{{ assetPath | default('/assets') }}/images/favicon.ico" type="image/x-icon" />
-      <link rel="mask-icon" href="{{ assetPath | default('/assets') }}/images/govuk-mask-icon.svg" color="{{ themeColor | default('#0b0c0c') }}"> {# Hardcoded value of $govuk-black #}
-      <link rel="apple-touch-icon" sizes="180x180" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-180x180.png">
+      {# <link rel="mask-icon" href="{{ assetPath | default('/assets') }}/images/govuk-mask-icon.svg" color="{{ themeColor | default('#0b0c0c') }}"> Hardcoded value of $govuk-black #}
+      {# <link rel="apple-touch-icon" sizes="180x180" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-180x180.png">
       <link rel="apple-touch-icon" sizes="167x167" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-167x167.png">
       <link rel="apple-touch-icon" sizes="152x152" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-152x152.png">
-      <link rel="apple-touch-icon" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon.png">
+      <link rel="apple-touch-icon" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon.png"> #}
     {% endblock %}
 
     {% block head %}{% include "head.njk" %} {% endblock %}
@@ -46,9 +64,11 @@
     <script src="/javascripts/dialog-polyfill.js"></script>
   </head>
 
-  <body class="govuk-template__body {{ bodyClasses }}">
-
-    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+  <body class="govuk-template__body app-body-class {{ bodyClasses }}">
+    <script>
+      document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
+    </script>
+    {# <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script> #}
     {% block bodyStart %}{% endblock %}
 
   {% block cookie_message %}
@@ -123,6 +143,7 @@
       }) }}
     {% endblock %}
 
+{% set themeColor = "blue" %}
 
     {% block header %}
       {{ govukHeader({}) }}
@@ -186,9 +207,15 @@
 
     {% block bodyEnd %}{% endblock %}
 
-  <script src="/javascripts/all.min.js"></script>
+  {# <script src="/javascripts/all.min.js"></script>
   <script>
   GOVUKFrontend.initAll();
+  </script> #}
+
+  <script type="module" src="/javascripts/govuk-frontend.min.js"></script>
+  <script type="module">
+    import { initAll } from '/javascripts/govuk-frontend.min.js'
+    initAll()
   </script>
 
 

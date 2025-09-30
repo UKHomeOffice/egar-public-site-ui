@@ -51,7 +51,7 @@ const APP_VIEWS = [
   path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
   __dirname,
   'node_modules/govuk-frontend/',
-  'node_modules/govuk-frontend/components/',
+  'node_modules/govuk-frontend/dist/govuk/components/',
   'common/templates',
   'common/templates/includes',
 ];
@@ -111,7 +111,7 @@ function initialiseGlobalMiddleware(app) {
     });
   }
 
-  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
+  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'dist', 'govuk', 'assets', 'images', 'favicon.ico')));
   app.use(compression());
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
