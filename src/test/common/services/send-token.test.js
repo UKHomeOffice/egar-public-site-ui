@@ -36,9 +36,7 @@ describe('Send Token Service', () => {
       sendEmail: sinon.stub().resolves('Success'),
     };
 
-    // Mock the notify client dependency
     const sendTokenService = await esmock('../../../common/services/send-token.js', {}, {
-      // Mock the NotifyClient constructor or however the notify client is imported
       'notifications-node-client': {
         NotifyClient: function() {
           return notifyStub;
