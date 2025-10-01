@@ -95,6 +95,7 @@ steps:
     commands:
       - source ./ops/dev_deploy_vars.sh
       - source ./ops/deploy.sh
+      - kubectl apply -k ./ops/kube/dev
     environment:
       INGRESS_CLASS: nginx-internal
       INSECURE_SKIP_TLS_VERIFY: true
@@ -165,6 +166,7 @@ steps:
     commands:
       - source ./ops/sit_deploy_vars.sh
       - source ./ops/deploy.sh
+      - kubectl apply -k ./ops/kube/sit
     environment:
       INGRESS_CLASS: nginx-internal
       INSECURE_SKIP_TLS_VERIFY: true

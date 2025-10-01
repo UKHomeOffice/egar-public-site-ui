@@ -1,0 +1,8 @@
+namespace: egar-dev
+
+resources:
+  - ../base
+
+commonAnnotations:
+  downscaler/uptime: "Mon-Fri 07:00-20:00 Europe/London"
+  
