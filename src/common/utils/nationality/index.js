@@ -7,7 +7,7 @@ const nationalities = {
   // Lookup nationality by code - now much simpler!
   getByCode: (code) => nationalityData[code] || { code, label: code },
 
-  exists: (code) => Boolean(nationalityData[code] !== undefined),
+  exists: (code) => nationalityData[code] !== undefined,
 
   // Search nationalities by text (case-insensitive)
   search: (text) => {
