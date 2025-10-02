@@ -12,8 +12,6 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
 const garApi = require('../../../common/services/garApi');
 const controller = require('../../../app/garfile/view/get.controller');
 const { outboundGar } = require('../../fixtures');
-const { query } = require('express');
-
 
 
 describe('GAR view get controller', () => {

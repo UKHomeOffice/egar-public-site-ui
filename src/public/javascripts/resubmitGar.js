@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   async function pollAndUpdateDOM() {
     try {
       const checkinResponse = await fetch('/garfile/amg/checkin?poll');
-      const progress = await checkinResponse.json();
-      if (progress.progress !== 'Incomplete') {
+      const {progress} = await checkinResponse.json();
+      if (progress !== 'Incomplete') {
         location.reload();
         clearInterval(pollIntervalId);
       }

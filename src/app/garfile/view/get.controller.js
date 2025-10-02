@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
     const garPeople = garApi.getPeople(garId);
     const garDetails = garApi.get(garId);
     const garDocs = garApi.getSupportingDocs(garId);
-    const progress = JSON.parse(await garApi.getGarCheckinProgress(garId));
+    const {progress} = JSON.parse(await garApi.getGarCheckinProgress(garId));
     
     const resubmitted = req.query.resubmitted;
    
@@ -61,7 +61,7 @@ module.exports = async (req, res) => {
       garpeople: {},
       garsupportingdocs: {},
     };
-   console.log(renderContext);
+  
   Promise.all([garDetails, garPeople, garDocs, progress])
     .then((responseValues) => {
       const parsedGar = JSON.parse(responseValues[0]);
@@ -107,12 +107,11 @@ module.exports = async (req, res) => {
         renderContext.showChangeLinks = false;
       }
       
-      
-      logger.info(`Rendering GAR review page`);
-    
-      if(progress.progress === 'Incomplete') {
-    res.render('app/garfile/amg/checkin/resubmit',renderContext);
+    if(progress === 'Incomplete') {
+      logger.info(`Rendering GAR 0T resubmit page`);
+      res.render('app/garfile/amg/checkin/resubmit',renderContext);
   } else{
+      logger.info(`Rendering GAR review page`);
       res.render('app/garfile/view/index', renderContext);
   }
      

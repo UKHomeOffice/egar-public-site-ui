@@ -2,18 +2,22 @@ const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
 const manifestFields = require('../../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../../common/services/garApi');
+const pagination = require('../../../../common/utils/pagination');
 
 module.exports = async (req, res) => {
   logger.debug('In garfile / amg get controller');
 
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
-  const template = req.query.template === 'pane' ? 'app/garfile/amg/checkin/pane' : 'app/garfile/amg/checkin/index';
   const resubmitted = req.query.resubmitted;
+  const template = req.query.template === 'pane' ? 'app/garfile/amg/checkin/pane' : 'app/garfile/amg/checkin/index';
+  
+  const currentPage = pagination.getCurrentPage(req, `/garfile/amg/checkin`);
+
 
   Promise.all([
     garApi.get(garId),
-    garApi.getPeople(garId),
+    garApi.getPeople(garId, currentPage),
     garApi.getSupportingDocs(garId),
   ]).then(async (apiResponse) => {
     const garfile = JSON.parse(apiResponse[0]);
@@ -22,8 +26,12 @@ module.exports = async (req, res) => {
     const numberOf0TResponseCodes = garpeople.items.filter(x => x.amgCheckinResponseCode === '0T').length;
     const statusCheckComplete = garpeople.items.every(x => x.amgCheckinStatus.name === 'Complete');
 
-    const progress = JSON.parse(await garApi.getGarCheckinProgress(garId));
+    const {progress} = JSON.parse(await garApi.getGarCheckinProgress(garId));
     const durationInDeparture = garApi.getDurationBeforeDeparture(garfile.departureDate, garfile.departureTime);
+
+    const { totalPages, totalItems } = garpeople._meta;
+    const paginationData = pagination.build(req, totalPages, totalItems);
+    
 
     if ('poll' in req.query) {
       logger.info(
@@ -45,8 +53,9 @@ module.exports = async (req, res) => {
       numberOf0TResponseCodes,
       resubmitted,
       durationInDeparture,
+      pages: paginationData, currentPage: currentPage,
     };
-    if (progress.progress === 'Incomplete') {
+    if (progress === 'Incomplete') {
       res.render('app/garfile/amg/checkin/resubmit', renderObj);
     }
     else {

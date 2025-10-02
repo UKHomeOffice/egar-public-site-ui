@@ -180,9 +180,9 @@ const endpoints = {
     logger.debug(`Calling get GAR endpoint ${endpoint}`);
     return endpoint;
   },
-  getGarPeople(garId, amg_response_code_priority) {
+  getGarPeople(garId, amg_response_code_priority, page) {
     const priority = (new URLSearchParams(amg_response_code_priority)).toString();
-    const endpoint = new URL(`${API_VERSION}/gar/${garId}/people?page=1&per_page=10000&${priority}`, BASE_URL).href;
+    const endpoint = new URL(`${API_VERSION}/gar/${garId}/people?page=${page}&per_page=10000&${priority}`, BASE_URL).href;
     logger.debug(`Calling get GAR people endpoint ${endpoint}`);
     return endpoint;
   },

@@ -119,7 +119,7 @@ module.exports = async (req, res) => {
       if(resubmit === 'resubmitZeroTOnSummaryPage'){
         await garApi.patch(cookie.getGarId(), 'Draft', {});
       }  
-      await garApi.updateGarPeopleCheckinStauts(garId, people, 'Pending'); 
+      await garApi.updateGarPeopleCheckinStatus(garId, people, 'Pending'); 
       if(resubmit === 'resubmitZeroTOnSummaryPage'){
         await garApi.patch(cookie.getGarId(), 'Submitted', {});
       }
