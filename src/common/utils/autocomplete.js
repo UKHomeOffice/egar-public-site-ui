@@ -9,12 +9,6 @@ const airportList = require('./airport_codes.json');
  */
 
 
-
-const generateNationalityList = () => {
-  logger.info('Get all countries from nationality data');
-  return nationalities.getAll();
-};
-
 const nationalityList = nationalities.getAll();
 
 
@@ -51,7 +45,6 @@ const airportCodeList = listOfAirportCodes(airportList);
 
 
 module.exports = {
-  generateNationalityList,
   getCountryFromCode,
   nationalityList,
   airportList,

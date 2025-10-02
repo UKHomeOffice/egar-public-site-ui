@@ -6,6 +6,7 @@ const { expect } = require('chai');
 require('../../global.test');
 
 const autocomplete = require('../../../common/utils/autocomplete');
+const {nationalityList} = require("../../../common/utils/autocomplete");
 
 /**
  * A true unit test should probably mock the incoming list of country codes,
@@ -13,11 +14,11 @@ const autocomplete = require('../../../common/utils/autocomplete');
  * rely upon for these assertions.
  */
 describe('Autocomplete Utility', () => {
-  describe('generateNationalityList', () => {
+  describe('Nationality List', () => {
     let result;
 
     beforeEach(() => {
-      result = autocomplete.generateNationalityList();
+      result = nationalityList;
     });
 
     it('should generate a list of countries with alpha 3 codes', () => {

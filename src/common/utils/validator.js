@@ -6,7 +6,8 @@ const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT, MAX_ALLOWED_CANCELLATION_TIME_TO_CBP } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
-const { airportCodeList, nationalityList } = require('../../common/utils/autocomplete');
+const { airportCodeList } = require('../../common/utils/autocomplete');
+const nationality = require('../../common/utils/nationality');
 const { documentTypes } = require('./utils');
 
 /**
@@ -226,7 +227,7 @@ function validISOCountryLength(countryCode) {
  * @returns {boolean} True if 3 an nationality code, false otherwise
  */
 function isValidNationality(countryCode) {
-  return nationalityList.map(country => country.code).includes(countryCode);
+  return nationality.exists(countryCode);
 }
 
 
