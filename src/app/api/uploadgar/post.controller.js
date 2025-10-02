@@ -194,7 +194,6 @@ module.exports = async (req, res) => {
   catch (error) {
     logger.error('Failed to upload GAR information, check the original template file rows');
     logger.error(error);
-    logger.info("i got here")
     req.session.failureMsg = 'Failed to upload GAR information. Try again';
     req.session.failureIdentifier = 'file';
     res.redirect('garfile/garupload');
