@@ -190,11 +190,11 @@ module.exports = (req, res) => {
         logger.error(req.session.failureMsg.map(validRule => validRule.message))
         req.session.save(() => res.redirect('/garfile/garupload'));
       });
-
   }
   catch (error) {
     logger.error('Failed to upload GAR information, check the original template file rows');
     logger.error(error);
+    logger.info("i got here")
     req.session.failureMsg = 'Failed to upload GAR information. Try again';
     req.session.failureIdentifier = 'file';
     res.redirect('garfile/garupload');

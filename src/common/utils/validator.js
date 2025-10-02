@@ -8,6 +8,7 @@ const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST
 const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList, nationalityList } = require('../../common/utils/autocomplete');
 const { documentTypes } = require('./utils');
+const nationalities = require('../../common/utils/nationality');
 
 /**
  * isAbleToCancelGar
@@ -223,7 +224,7 @@ function validISOCountryLength(countryCode) {
  * Predicate to check whether the country code is a valid nationality alpha 3 code.
  *
  * @param {String} countryCode
- * @returns {Bool} True if 3 an nationality code, false otherwise
+ * @returns {boolean} True if 3 an nationality code, false otherwise
  */
 function isValidNationality(countryCode) {
   return nationalityList.map(country => country.code).includes(countryCode);

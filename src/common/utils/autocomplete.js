@@ -1,70 +1,32 @@
-const countries = require('i18n-iso-countries');
-const en = require('i18n-iso-countries/langs/en.json');
+const nationalities = require('./nationality');
 const logger = require('./logger')(__filename);
 const airportList = require('./airport_codes.json');
+const nationalityData = require("./nationality/nationality.json");
 /**
  * Utility function for generating the list of country codes in a format for this app.
  * This essentially means taking the more normally used alpha-2 (GB) code and country
  * pair and using instead alpha-3 (GBR) as the key.
  */
 
-const COUNTRY_SKIP_LIST = [
-  'ABW', 'AIA', 'ALA', 'ANT', 'ASM', 'ATA', 'ATF', 'BES', 'BLM', 'BMU', 'BVT',
-  'CCK', 'COK', 'CUW', 'CXR', 'CYM', 'D', 'ESH', 'FLK', 'FRO', 'GGY', 'GIB',
-  'GLP', 'GRL', 'GUF', 'GUM', 'HMD', 'IMN', 'JEY', 'MAF', 'MID', 'MNP', 'MSR',
-  'MTQ', 'MYT', 'NCL', 'NFK', 'NIU', 'PCN', 'PRI', 'PSE', 'PYF', 'REU', 'SGS', 'SHN',
-  'SJM', 'SPM', 'SRB', 'SXM', 'TCA', 'TKL', 'UMI', 'VGB', 'VIR', 'WLF', 'XCT', 'XKK'
-]
 
-// ISO/IEC 7501-1 codes, not part of ISO 3166/MA
-const customNationalities = [
-  { code: 'GBD', label: 'British Overseas Territories Citizen (GBD)' },
-  { code: 'GBN', label: 'British National (Overseas) (GBN)' },
-  { code: 'GBO', label: 'British Overseas Citizen (GBO)' },
-  { code: 'RKS', label: 'Kosovo' },
-  { code: 'PSE', label: 'Palestine Authority' },
-  { code: 'XXA', label: 'Stateless as defined in Article 1 of the 1954 Convention' },
-  { code: 'XXB', label: 'Refugee as defined in Article 1 of the 1951 Convention' },
-  { code: 'XXC', label: 'Refugee Other (not defined under 1951 or 1954 Convention)' },
-  { code: 'XXX', label: 'Person of unspecified nationality' },
-];
 
 const generateNationalityList = () => {
-  logger.info('Obtaining all countries and converting to alpha 3 codes');
-  const alpha3List = [];
-  countries.registerLocale(en);
-  alpha3List.push({ code: '', label: '' });
-
-  customNationalities.forEach((nationality) => {
-    alpha3List.push({
-      code: nationality.code,
-      label: `${nationality.label} (${nationality.code})`
-    });
-  });
-
-  Object.keys(countries.getNames('en')).forEach((key) => {
-    const alpha3 = countries.alpha2ToAlpha3(key);
-
-    if (COUNTRY_SKIP_LIST.includes(alpha3)) {
-      return;
-    }
-
-    const countryName = countries.getNames('en')[key];
-    alpha3List.push({ code: alpha3, label: `${countryName} (${alpha3})` });
-  });
-
-  return alpha3List;
+  logger.info('Get all countries from nationality data');
+  return nationalities.getAll();
 };
 
-const nationalityList = generateNationalityList();
+const nationalityList = nationalities.getAll();
+
+
+const exists = (code) => nationalities.exists(code);
 
 /**
  * get the country label from a country code
  * @param  {String} countryCode
  */
 function getCountryFromCode(countryCode) {
-  const countryFromCode = nationalityList.find(country => country.code === countryCode);
-  return countryFromCode === undefined ? countryCode : countryFromCode.label;
+  const nationality = nationalities.getByCode(countryCode);
+  return nationality.label || countryCode;
 }
 
 /**
