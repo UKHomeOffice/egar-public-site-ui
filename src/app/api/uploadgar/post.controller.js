@@ -106,7 +106,7 @@ const passengerMapConfig = {
   maxRows: 2000,
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   logger.debug('Entering upload GAR post controller', { userId: req.session.u.dbId });
   if (!checkFileIsExcel(req, res)) {
     return;
@@ -144,7 +144,7 @@ module.exports = (req, res) => {
       passenger.peopleType = 'Passenger';
     });
 
-    validator.validateChains(validations(voyageParser.parse(), crew, passengers))
+    await validator.validateChains(validations(voyageParser.parse(), crew, passengers))
       .then(() => {
         logger.info('Uploaded excel sheet is valid, creating GAR via API');
         createGarApi.createGar(cookie.getUserDbId())

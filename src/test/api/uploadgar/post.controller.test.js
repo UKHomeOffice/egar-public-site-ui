@@ -174,12 +174,16 @@ describe('API upload GAR post controller', () => {
       data.Sheets.Sheet1.C20.v = 'USA';
       data.Sheets.Sheet1.G20.v = 'Male';
       data.Sheets.Sheet1.J20.v = 'RUS';
-      sinon.spy(req.session, 'save');
+
+      // Stub session.save to execute callback immediately
+      sinon.stub(req.session, 'save').callsFake((callback) => {
+        if (callback) callback();
+      });
       sinon.stub(XLSX, 'read').returns(data);
 
       await controller(req, res);
 
-      // expect(req.session.save).to.have.been.called;
+      expect(req.session.save).to.have.been.called;
       expect(req.session.failureMsg).to.eql([
         new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk')
       ]);
@@ -209,7 +213,10 @@ describe('API upload GAR post controller', () => {
     });
 
     it('should return error if arrival date too far in advance', async () => {
-      sinon.spy(req.session, 'save');
+      // Stub session.save to execute callback immediately
+      sinon.stub(req.session, 'save').callsFake((callback) => {
+        if (callback) callback();
+      });
       const data = getValidWorkbook();
       data.Sheets.Valid1.D3.v = '2022-07-30';
 
