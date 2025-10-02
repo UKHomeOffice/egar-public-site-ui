@@ -95,7 +95,6 @@ steps:
     commands:
       - source ./ops/dev_deploy_vars.sh
       - source ./ops/deploy.sh
-      - kubectl apply -k ./ops/kube/dev
     environment:
       INGRESS_CLASS: nginx-internal
       INSECURE_SKIP_TLS_VERIFY: true
@@ -166,7 +165,6 @@ steps:
     commands:
       - source ./ops/sit_deploy_vars.sh
       - source ./ops/deploy.sh
-      - kubectl apply -k ./ops/kube/sit
     environment:
       INGRESS_CLASS: nginx-internal
       INSECURE_SKIP_TLS_VERIFY: true
@@ -294,30 +292,7 @@ steps:
       PRODUCTION_KUBE_TOKEN:
         from_secret: PRODUCTION_KUBE_TOKEN
 
-  - name: Notify Slack
-    pull: if-not-exists
-    image: plugins/slack
-    settings:
-      channel: sgar-dev
-      webhook:
-        from_secret: SLACK_WEBHOOK
-      template: >
-        {{#success build.status}}
-          *Deployment* {{repo.name}} - *SUCCESS*
-          Author: {{build.author}}
-          Job: <{{build.link}}|#{{build.number}}>
-          Duration: {{since job.started}}
-          Message: {{build.message}}
-        {{else}}
-          *Deployment* {{repo.name}} - *FAILURE*
-          Author: {{build.author}}
-          Job: <{{build.link}}|#{{build.number}}>
-          Duration: {{since job.started}}
-          Message: {{build.message}}
-        {{/success}}
-    environment:
-      SLACK_WEBHOOK:
-        from_secret: SLACK_WEBHOOK
+  #
 trigger:
   branch:
     - master
