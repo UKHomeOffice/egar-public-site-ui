@@ -8,7 +8,6 @@ const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST
 const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList, nationalityList } = require('../../common/utils/autocomplete');
 const { documentTypes } = require('./utils');
-const nationalities = require('../../common/utils/nationality');
 
 /**
  * isAbleToCancelGar
