@@ -1,51 +1,53 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
 {% block pageTitle %}
-	Submit GAR | Success
+  Submit GAR | Success
 {% endblock %}
-
 {% block header %}
   {% include "header-user.njk" %}
 {% endblock %}
-
 {% block beforeContent %}
-
   {% include "phase.njk" %}
-
 {% endblock %}
-
 {% block content %}
-
   {% import "common/templates/includes/macros.njk" as m %}
-
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}
   {% endif %}
-
-  <div class="govuk-grid-row">
-    <div class="govuk-panel govuk-panel--confirmation">
-      <h1 class="govuk-panel__title">
-          GAR submitted
-      </h1>
-
-      <div class="govuk-panel__body">
-         We've sent your GAR to Border Force.
-       </div>
-    </div>
-
-    <p class="govuk-body-m">
-         We will send you a confirmation email to {{cookie.getUserEmail()}} that will contain your Border Force receipt.
-         This receipt will also be available on the <a href="/home#gars-submitted">Manage GAR</a> page.
-       </p>
-
-    <p class="govuk-body-m">
-             If you need to make any changes to this GAR you will need to submit another GAR with the new information and cancel this one.
-         GARs can be cancelled on the <a href="/home#gars-submitted">Manage GAR</a> page.
-    </p>
-
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  <div class="govuk-width-container">
+    <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <div class="govuk-panel govuk-panel--confirmation">
+            <h1 class="govuk-panel__title">
+              GAR submitted
+            </h1>
+            <div class="govuk-panel__body">
+              We've sent your GAR to Border Force.
+            </div>
+          </div>
+          <form id="signform2" action="/garfile/view" method="post" role="form">
+            <p class="govuk-body">We have sent you a confirmation email to
+              {{ cookie.getUserEmail() }}.</p>
+            <h2 class="govuk-heading-m">What happens next</h2>
+            <p class="govuk-body">
+              You should check the
+              <button id="view-submitted-17" class="govuk-link btn-link cursor" name="garId" value="{{ cookie.getGarId() }}">permission to travel status</button>
+              for all people on this GAR prior to departure.
+            </p>
+            <p class="govuk-body">
+              If you need to make any changes to this GAR, you can edit it up to 2 hours before your expected time of departure. For
+              changes less than 2 hours before your expected time of departure you will need to cancel this GAR and submit a new one.
+            </p>
+            <p class="govuk-body">
+              You can view, edit and cancel your GARs in the
+              <a href="/home#gars-submitted">Manage your GARs</a>
+              section of the service.
+            </p>
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+          </form>
+        </div>
+      </div>
+    </main>
   </div>
-
 {% endblock %}

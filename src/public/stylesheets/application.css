@@ -6961,6 +6961,7 @@ p + .govuk-heading-s,
   padding: 15px 5px 10px 5px;
   margin-right: 15px;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .pagination li a:focus {
