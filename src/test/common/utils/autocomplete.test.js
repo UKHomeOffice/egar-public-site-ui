@@ -6,6 +6,7 @@ const { expect } = require('chai');
 require('../../global.test');
 
 const autocomplete = require('../../../common/utils/autocomplete');
+const {nationalityList} = require("../../../common/utils/autocomplete");
 
 /**
  * A true unit test should probably mock the incoming list of country codes,
@@ -13,11 +14,11 @@ const autocomplete = require('../../../common/utils/autocomplete');
  * rely upon for these assertions.
  */
 describe('Autocomplete Utility', () => {
-  describe('generateNationalityList', () => {
+  describe('Nationality List', () => {
     let result;
 
     beforeEach(() => {
-      result = autocomplete.generateNationalityList();
+      result = nationalityList;
     });
 
     it('should generate a list of countries with alpha 3 codes', () => {
@@ -31,40 +32,6 @@ describe('Autocomplete Utility', () => {
       const jpn = result.find(row => row.code === 'JPN');
       expect(jpn.code).to.eq('JPN');
       expect(jpn.label).to.eq('Japan (JPN)');
-    });
-
-    it('should include custom nationalities at the beginning', () => {
-      // Check for custom nationalities - they should appear after the empty entry
-      const customNationalities = [
-        { code: 'GBD', expectedLabel: 'British Overseas Territories Citizen (GBD) (GBD)' },
-        { code: 'GBN', expectedLabel: 'British National (Overseas) (GBN) (GBN)' },
-        { code: 'GBO', expectedLabel: 'British Overseas Citizen (GBO) (GBO)' },
-        { code: 'RKS', expectedLabel: 'Kosovo (RKS)' },
-        { code: 'PSE', expectedLabel: 'Palestine Authority (PSE)' },
-        { code: 'XXA', expectedLabel: 'Stateless as defined in Article 1 of the 1954 Convention (XXA)' },
-        { code: 'XXB', expectedLabel: 'Refugee as defined in Article 1 of the 1951 Convention (XXB)' },
-        { code: 'XXC', expectedLabel: 'Refugee Other (not defined under 1951 or 1954 Convention) (XXC)' },
-        { code: 'XXX', expectedLabel: 'Person of unspecified nationality (XXX)' }
-      ];
-
-      customNationalities.forEach(nationality => {
-        const found = result.find(row => row.code === nationality.code);
-        expect(found).to.not.be.undefined;
-        expect(found.label).to.eq(nationality.expectedLabel);
-      });
-    });
-
-    it('should exclude countries in the skip list', () => {
-      const skipListSamples = ['ABW', 'AIA', 'ALA', 'ANT', 'ASM', 'ATA', 'BES', 'BMU', 'CCK', 'COK'];
-
-      skipListSamples.forEach(code => {
-        const found = result.find(row => row.code === code);
-        expect(found).to.be.undefined;
-      });
-    });
-
-    it('should include an empty entry at the beginning', () => {
-      expect(result[0]).to.deep.equal({ code: '', label: '' });
     });
 
     it('should have proper structure for each entry', () => {
@@ -85,7 +52,7 @@ describe('Autocomplete Utility', () => {
 
     it('should return correct label for custom nationality code', () => {
       const result = autocomplete.getCountryFromCode('GBD');
-      expect(result).to.eq('British Overseas Territories Citizen (GBD) (GBD)');
+      expect(result).to.eq('British Overseas Territories Citizen (GBD)');
     });
 
     it('should return the code itself for unknown country code', () => {
