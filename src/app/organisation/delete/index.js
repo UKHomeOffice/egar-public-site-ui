@@ -5,7 +5,6 @@ const express = require('express');
 const flagpole = require('../../../common/middleware/flagpole');
 const usercheck = require('../../../common/middleware/usercheck');
 
-
 // Local dependencies
 const getController = require('./get.controller');
 

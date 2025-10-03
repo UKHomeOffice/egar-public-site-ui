@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const { expect } = require('chai');
@@ -19,7 +18,9 @@ describe('Cookie Model', () => {
   const reqExampleData = {
     session: {
       org: {
-        id: 1, name: 'exampleName', users: 'exampleUsers',
+        id: 1,
+        name: 'exampleName',
+        users: 'exampleUsers',
       },
       s: ['exampleSubmission1', 'exampleSubmission2'],
       gar: {
@@ -64,10 +65,23 @@ describe('Cookie Model', () => {
     expect(req.session.org).to.eql({ id: null, name: null, users: null });
     expect(req.session.s).to.eql([]);
     expect(req.session.u).to.eql({
-      dbId: null, fn: null, ln: null, e: null, ip: null, vr: null, rl: null, orgId: null,
+      dbId: null,
+      fn: null,
+      ln: null,
+      e: null,
+      ip: null,
+      vr: null,
+      rl: null,
+      orgId: null,
     });
     expect(req.session.inv).to.eql({
-      fn: null, ln: null, e: null, ip: null, rl: null, orgId: null, token: null,
+      fn: null,
+      ln: null,
+      e: null,
+      ip: null,
+      rl: null,
+      orgId: null,
+      token: null,
     });
     expect(req.session.svc).to.eql([]);
     expect(req.session.svp).to.eql([]);
@@ -84,13 +98,30 @@ describe('Cookie Model', () => {
     expect(cookie.initialise).to.have.been.called;
     expect(cookie.initialiseGar).to.have.been.called;
 
-    expect(req.session.org).to.eql({ id: 1, name: 'exampleName', users: 'exampleUsers' });
+    expect(req.session.org).to.eql({
+      id: 1,
+      name: 'exampleName',
+      users: 'exampleUsers',
+    });
     expect(req.session.s).to.eql(['exampleSubmission1', 'exampleSubmission2']);
     expect(req.session.u).to.eql({
-      dbId: null, fn: null, ln: null, e: null, ip: null, vr: null, rl: null, orgId: null,
+      dbId: null,
+      fn: null,
+      ln: null,
+      e: null,
+      ip: null,
+      vr: null,
+      rl: null,
+      orgId: null,
     });
     expect(req.session.inv).to.eql({
-      fn: null, ln: null, e: null, ip: null, rl: null, orgId: null, token: null,
+      fn: null,
+      ln: null,
+      e: null,
+      ip: null,
+      rl: null,
+      orgId: null,
+      token: null,
     });
     expect(req.session.svc).to.eql([]);
     expect(req.session.svp).to.eql([]);
@@ -107,13 +138,30 @@ describe('Cookie Model', () => {
     expect(cookie.initialise).to.have.been.called;
     expect(cookie.initialiseGar).to.have.been.called;
 
-    expect(req.session.org).to.eql({ id: 1, name: 'exampleName', users: 'exampleUsers' });
+    expect(req.session.org).to.eql({
+      id: 1,
+      name: 'exampleName',
+      users: 'exampleUsers',
+    });
     expect(req.session.s).to.eql(['exampleSubmission1', 'exampleSubmission2']);
     expect(req.session.u).to.eql({
-      dbId: null, fn: null, ln: null, e: null, ip: null, vr: null, rl: null, orgId: null,
+      dbId: null,
+      fn: null,
+      ln: null,
+      e: null,
+      ip: null,
+      vr: null,
+      rl: null,
+      orgId: null,
     });
     expect(req.session.inv).to.eql({
-      fn: null, ln: null, e: null, ip: null, rl: null, orgId: null, token: null,
+      fn: null,
+      ln: null,
+      e: null,
+      ip: null,
+      rl: null,
+      orgId: null,
+      token: null,
     });
     expect(req.session.svc).to.eql([]);
     expect(req.session.svp).to.eql([]);
@@ -136,7 +184,11 @@ describe('Cookie Model', () => {
     const constructor = () => new CookieModel(req);
 
     cookie = constructor();
-    expect(cookie.getGar()).to.eql({ id: 9000, tempAddPersonId: 1, status: 'Draft' });
+    expect(cookie.getGar()).to.eql({
+      id: 9000,
+      tempAddPersonId: 1,
+      status: 'Draft',
+    });
 
     expect(cookie.getGarId()).to.eq(9000);
     cookie.setGarId(9001);
@@ -152,9 +204,20 @@ describe('Cookie Model', () => {
 
     expect(cookie.getEditCraft()).to.eql({});
     cookie.setEditCraft({ registration: 1, craftBase: 'LHR' });
-    expect(cookie.getEditCraft()).to.eql({ registration: 1, craftBase: 'LHR', craftBasePort: 'LHR',  portChoice: 'Yes'});
+    expect(cookie.getEditCraft()).to.eql({
+      registration: 1,
+      craftBase: 'LHR',
+      craftBasePort: 'LHR',
+      portChoice: 'Yes',
+    });
     cookie.updateEditCraft('exampleReg', 'exampleType', 'LHR');
-    expect(cookie.getEditCraft()).to.eql({ registration: 'exampleReg', craftType: 'exampleType', craftBase: 'LHR', craftBasePort: 'LHR',  portChoice: 'Yes' });
+    expect(cookie.getEditCraft()).to.eql({
+      registration: 'exampleReg',
+      craftType: 'exampleType',
+      craftBase: 'LHR',
+      craftBasePort: 'LHR',
+      portChoice: 'Yes',
+    });
     cookie.clearEditCraft();
     expect(cookie.getEditCraft()).to.eql({});
   });
@@ -188,7 +251,9 @@ describe('Cookie Model', () => {
       const dateSliceFunction = () => {
         cookie.dateSlice('oranges', null);
       };
-      expect(dateSliceFunction).to.throw('dateType must be day or month or year');
+      expect(dateSliceFunction).to.throw(
+        'dateType must be day or month or year'
+      );
     });
 
     it('should return empty string when calling dateSlice with null date', () => {

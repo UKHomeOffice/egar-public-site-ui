@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -12,7 +10,8 @@ const craftApi = require('../../../common/services/craftApi');
 const controller = require('../../../app/aircraft/edit/get.controller');
 
 describe('Aircraft Edit Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -44,20 +43,27 @@ describe('Aircraft Edit Get Controller', () => {
   it('should redirect back if API rejects', () => {
     req.session.u = { dbId: 'ABCDEFGH' };
     req.session.editCraftId = '12345678';
-    sinon.stub(craftApi, 'getDetails').rejects('craftApi.getDetails Example Reject');
+    sinon
+      .stub(craftApi, 'getDetails')
+      .rejects('craftApi.getDetails Example Reject');
 
     const callController = async () => {
       await controller(req, res);
     };
     callController().then(() => {
-      expect(craftApi.getDetails).to.have.been.calledWith('ABCDEFGH', '12345678');
+      expect(craftApi.getDetails).to.have.been.calledWith(
+        'ABCDEFGH',
+        '12345678'
+      );
       expect(res.redirect).to.have.been.calledWith('/aircraft');
     });
   });
 
   it('should render the edit page with populated fields', () => {
     const editCraft = {
-      registration: 'Z-YXWV', craftType: 'Hondajet', craftBase: 'LHR',
+      registration: 'Z-YXWV',
+      craftType: 'Hondajet',
+      craftBase: 'LHR',
     };
     req.session.u = { dbId: 'ABCDEFGH' };
     req.session.editCraftId = '12345678';
@@ -69,8 +75,13 @@ describe('Aircraft Edit Get Controller', () => {
     };
     callController().then(() => {
       cookie.setEditCraft(editCraft);
-      expect(craftApi.getDetails).to.have.been.calledWith('ABCDEFGH', '12345678');
-      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', { cookie });
+      expect(craftApi.getDetails).to.have.been.calledWith(
+        'ABCDEFGH',
+        '12345678'
+      );
+      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
+        cookie,
+      });
     });
   });
 });

@@ -8,7 +8,7 @@ const emailService = require('../../../common/services/sendEmail');
 const tokenApi = require('../../../common/services/tokenApi');
 const config = require('../../../common/config/index');
 let roles = require('../../../common/seeddata/egar_user_roles.json');
-const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
+const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
@@ -17,8 +17,8 @@ module.exports = (req, res) => {
   cookie.setInviteUserRole(role);
   logger.debug(`Invitee role: ${role}`);
 
-  if(cookie.getUserRole() !== 'Admin'){
-    roles = roles.filter(role => role.name !== 'Admin');
+  if (cookie.getUserRole() !== 'Admin') {
+    roles = roles.filter((role) => role.name !== 'Admin');
   }
 
   // Generate a token for the user
@@ -36,50 +36,92 @@ module.exports = (req, res) => {
 
   // Define a validation chain for first name
   const roleChain = [
-    new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Select a role'),
+    new ValidationRule(
+      validator.notEmpty,
+      'role',
+      req.body.role,
+      'Select a role'
+    ),
   ];
 
   // Validate chains
-  validator.validateChains([roleChain])
+  validator
+    .validateChains([roleChain])
     .then(() => {
-      tokenApi.setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId, inviteeEmail)
+      tokenApi
+        .setInviteUserToken(
+          hashToken,
+          inviterId,
+          inviteOrgId,
+          roleId,
+          inviteeEmail
+        )
         .then((apiResponse) => {
           const apiResponseObj = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(apiResponseObj, 'message')) {
             // API call unsuccessful
-            res.render('app/organisation/assignrole/index', { cookie, roles, errors: [apiResponseObj] });
+            res.render('app/organisation/assignrole/index', {
+              cookie,
+              roles,
+              errors: [apiResponseObj],
+            });
             return;
           }
           // API call successful
           let notifyTemplate = config.NOTIFY_INVITE_TEMPLATE_ID;
 
-          if(config.ONE_LOGIN_SHOW_ONE_LOGIN || config.ONE_LOGIN_POST_MIGRATION){
+          if (
+            config.ONE_LOGIN_SHOW_ONE_LOGIN ||
+            config.ONE_LOGIN_POST_MIGRATION
+          ) {
             notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
           }
-          
-          emailService.send(notifyTemplate, inviteeEmail, {
-            firstname: firstName,
-            lastname: lastName,
-            user: inviterName,
-            org_name: inviteOrgName,
-            base_url: parseUrlForNonProd(req, config.BASE_URL),
-            token,
-          }).then(() => {
-            res.redirect('/organisation/invite/success');
-          }).catch((err) => {
-            logger.error('Govnotify failed to send an email');
-            logger.error(err);
-            res.render('app/organisation/assignrole/index', { cookie, roles, errors: [{ message: 'Could not send an invitation email, try again later.' }] });
-          });
+
+          emailService
+            .send(notifyTemplate, inviteeEmail, {
+              firstname: firstName,
+              lastname: lastName,
+              user: inviterName,
+              org_name: inviteOrgName,
+              base_url: parseUrlForNonProd(req, config.BASE_URL),
+              token,
+            })
+            .then(() => {
+              res.redirect('/organisation/invite/success');
+            })
+            .catch((err) => {
+              logger.error('Govnotify failed to send an email');
+              logger.error(err);
+              res.render('app/organisation/assignrole/index', {
+                cookie,
+                roles,
+                errors: [
+                  {
+                    message:
+                      'Could not send an invitation email, try again later.',
+                  },
+                ],
+              });
+            });
         })
         .catch((err) => {
           logger.error('Error setting the invite token');
           logger.error(err);
-          res.render('app/organisation/assignrole/index', { cookie, roles, errors: [err] });
+          res.render('app/organisation/assignrole/index', {
+            cookie,
+            roles,
+            errors: [err],
+          });
         });
     })
     .catch((err) => {
-      logger.info('Assign Role post controller - There was a problem with assigning the role');
-      res.render('app/organisation/assignrole/index', { cookie, roles, errors: err });
+      logger.info(
+        'Assign Role post controller - There was a problem with assigning the role'
+      );
+      res.render('app/organisation/assignrole/index', {
+        cookie,
+        roles,
+        errors: err,
+      });
     });
 };

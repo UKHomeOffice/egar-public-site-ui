@@ -35,14 +35,22 @@ module.exports = (req, res) => {
 
   const errMsg = { message: 'Failed to update GAR person. Try again' };
 
-  validator.validateChains(validations.validations(req))
+  validator
+    .validateChains(validations.validations(req))
     .then(() => {
-      garApi.updateGarPerson(cookie.getGarId(), person)
+      garApi
+        .updateGarPerson(cookie.getGarId(), person)
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             return res.render('app/garfile/manifest/editperson/index', {
-              req, cookie, person, persontype, documenttype, genderchoice, errors: [parsedResponse],
+              req,
+              cookie,
+              person,
+              persontype,
+              documenttype,
+              genderchoice,
+              errors: [parsedResponse],
             });
           }
           return res.redirect('/garfile/manifest');
@@ -50,13 +58,25 @@ module.exports = (req, res) => {
         .catch((err) => {
           logger.error(err);
           res.render('app/garfile/manifest/editperson/index', {
-            req, cookie, person, persontype, documenttype, genderchoice, errors: [errMsg],
+            req,
+            cookie,
+            person,
+            persontype,
+            documenttype,
+            genderchoice,
+            errors: [errMsg],
           });
         });
     })
     .catch((err) => {
       res.render('app/garfile/manifest/editperson/index', {
-        req, cookie, person, persontype, documenttype, genderchoice, errors: err,
+        req,
+        cookie,
+        person,
+        persontype,
+        documenttype,
+        genderchoice,
+        errors: err,
       });
     });
 };

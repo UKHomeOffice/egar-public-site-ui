@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -9,7 +7,8 @@ require('../global.test');
 const controller = require('../../app/index/get.controller');
 
 describe('Index Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);

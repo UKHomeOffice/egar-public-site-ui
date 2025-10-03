@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
 const nock = require('nock');
@@ -23,7 +22,7 @@ const garResponsiblePersonPartial = {
   responsiblePostcode: 'SW111A',
   responsibleCountry: 'GBR',
   fixedBasedOperator: 'Captain',
-  fixedBasedOperatorAnswer: ''
+  fixedBasedOperatorAnswer: '',
 };
 
 describe('ResponsiblePerson', () => {
@@ -36,7 +35,8 @@ describe('ResponsiblePerson', () => {
   });
 
   it('Should update the GARs responsible person details', (done) => {
-    garApi.patch(garId, 'Draft', garResponsiblePersonPartial)
+    garApi
+      .patch(garId, 'Draft', garResponsiblePersonPartial)
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         expect(typeof parsedResponse).to.equal('object');

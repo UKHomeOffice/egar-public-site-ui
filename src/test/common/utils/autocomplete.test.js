@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const { expect } = require('chai');
 
 require('../../global.test');
@@ -24,11 +21,11 @@ describe('Autocomplete Utility', () => {
       expect(result).to.not.be.undefined;
       expect(result).to.be.an('array');
 
-      const uk = result.find(row => row.code === 'GBR');
+      const uk = result.find((row) => row.code === 'GBR');
       expect(uk.code).to.eq('GBR');
       expect(uk.label).to.eq('United Kingdom (GBR)');
 
-      const jpn = result.find(row => row.code === 'JPN');
+      const jpn = result.find((row) => row.code === 'JPN');
       expect(jpn.code).to.eq('JPN');
       expect(jpn.label).to.eq('Japan (JPN)');
     });
@@ -36,29 +33,61 @@ describe('Autocomplete Utility', () => {
     it('should include custom nationalities at the beginning', () => {
       // Check for custom nationalities - they should appear after the empty entry
       const customNationalities = [
-        { code: 'GBD', expectedLabel: 'British Overseas Territories Citizen (GBD) (GBD)' },
-        { code: 'GBN', expectedLabel: 'British National (Overseas) (GBN) (GBN)' },
+        {
+          code: 'GBD',
+          expectedLabel: 'British Overseas Territories Citizen (GBD) (GBD)',
+        },
+        {
+          code: 'GBN',
+          expectedLabel: 'British National (Overseas) (GBN) (GBN)',
+        },
         { code: 'GBO', expectedLabel: 'British Overseas Citizen (GBO) (GBO)' },
         { code: 'RKS', expectedLabel: 'Kosovo (RKS)' },
         { code: 'PSE', expectedLabel: 'Palestine Authority (PSE)' },
-        { code: 'XXA', expectedLabel: 'Stateless as defined in Article 1 of the 1954 Convention (XXA)' },
-        { code: 'XXB', expectedLabel: 'Refugee as defined in Article 1 of the 1951 Convention (XXB)' },
-        { code: 'XXC', expectedLabel: 'Refugee Other (not defined under 1951 or 1954 Convention) (XXC)' },
-        { code: 'XXX', expectedLabel: 'Person of unspecified nationality (XXX)' }
+        {
+          code: 'XXA',
+          expectedLabel:
+            'Stateless as defined in Article 1 of the 1954 Convention (XXA)',
+        },
+        {
+          code: 'XXB',
+          expectedLabel:
+            'Refugee as defined in Article 1 of the 1951 Convention (XXB)',
+        },
+        {
+          code: 'XXC',
+          expectedLabel:
+            'Refugee Other (not defined under 1951 or 1954 Convention) (XXC)',
+        },
+        {
+          code: 'XXX',
+          expectedLabel: 'Person of unspecified nationality (XXX)',
+        },
       ];
 
-      customNationalities.forEach(nationality => {
-        const found = result.find(row => row.code === nationality.code);
+      customNationalities.forEach((nationality) => {
+        const found = result.find((row) => row.code === nationality.code);
         expect(found).to.not.be.undefined;
         expect(found.label).to.eq(nationality.expectedLabel);
       });
     });
 
     it('should exclude countries in the skip list', () => {
-      const skipListSamples = ['ABW', 'AIA', 'ALA', 'ANT', 'ASM', 'ATA', 'BES', 'BMU', 'CCK', 'COK'];
+      const skipListSamples = [
+        'ABW',
+        'AIA',
+        'ALA',
+        'ANT',
+        'ASM',
+        'ATA',
+        'BES',
+        'BMU',
+        'CCK',
+        'COK',
+      ];
 
-      skipListSamples.forEach(code => {
-        const found = result.find(row => row.code === code);
+      skipListSamples.forEach((code) => {
+        const found = result.find((row) => row.code === code);
         expect(found).to.be.undefined;
       });
     });
@@ -68,7 +97,7 @@ describe('Autocomplete Utility', () => {
     });
 
     it('should have proper structure for each entry', () => {
-      result.forEach(entry => {
+      result.forEach((entry) => {
         expect(entry).to.have.property('code');
         expect(entry).to.have.property('label');
         expect(entry.code).to.be.a('string');
@@ -124,7 +153,7 @@ describe('Autocomplete Utility', () => {
 
       // Check that it contains both IATA and ICAO codes
       if (autocomplete.airportCodeList.length > 0) {
-        autocomplete.airportCodeList.forEach(code => {
+        autocomplete.airportCodeList.forEach((code) => {
           expect(code).to.be.a('string');
         });
       }

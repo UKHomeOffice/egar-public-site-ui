@@ -3,7 +3,6 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
-
   /**
    * Creates a new saved person. Person object contains:
    * firstName,
@@ -23,19 +22,22 @@ module.exports = {
    */
   create(userId, people) {
     return new Promise((resolve, reject) => {
-      request.post({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.createPerson(userId),
-        body: JSON.stringify(people),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call person creation API endpoint');
-          reject(error);
-          return;
+      request.post(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.createPerson(userId),
+          body: JSON.stringify(people),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call person creation API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called person creation endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called person creation endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -48,19 +50,21 @@ module.exports = {
    */
   getDetails(userId, personId) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.getPersonData(userId, personId),
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get person details endpoint');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getPersonData(userId, personId),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get person details endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get person details API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called get person details API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -76,19 +80,21 @@ module.exports = {
     return new Promise((resolve, reject) => {
       const individualUrl = endpoints.getPeople(id);
       const orgUrl = endpoints.getOrgPeople(id);
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: userType.toLowerCase() === 'individual' ? individualUrl : orgUrl,
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get person details endpoint');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: userType.toLowerCase() === 'individual' ? individualUrl : orgUrl,
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get person details endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get person details API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called get person details API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -112,36 +118,37 @@ module.exports = {
     const { peopleType } = person;
     const { issuingState } = person;
     const { documentDesc } = person;
-    
 
     return new Promise((resolve, reject) => {
-      request.put({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.updatePerson(userId, personId),
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          nationality,
-          placeOfBirth,
-          dateOfBirth,
-          gender,
-          documentType,
-          documentNumber,
-          documentExpiryDate,
-          peopleType,
-          issuingState,
-          documentDesc,
-          
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call update person endpoint');
-          reject(error);
-          return;
+      request.put(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.updatePerson(userId, personId),
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            nationality,
+            placeOfBirth,
+            dateOfBirth,
+            gender,
+            documentType,
+            documentNumber,
+            documentExpiryDate,
+            peopleType,
+            issuingState,
+            documentDesc,
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call update person endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called update person endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called update person endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -154,18 +161,21 @@ module.exports = {
    */
   deletePerson(userId, personId) {
     return new Promise((resolve, reject) => {
-      request.delete({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.deletePerson(userId, personId),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call delete person endpoint');
-          reject(error);
-          return;
+      request.delete(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.deletePerson(userId, personId),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call delete person endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called delete person endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called delete person endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 };

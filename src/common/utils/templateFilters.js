@@ -10,17 +10,17 @@ const uncamelCase = (value) => {
 const containsError = (array, value) => {
   if (array === undefined || value === undefined) return false;
 
-  const result = array.filter(element => element.identifier === value);
+  const result = array.filter((element) => element.identifier === value);
   return result.length > 0;
 };
 
 const expiryDate = () => {
   checkDate = new Date();
-  checkDateExpiry = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-  return checkDateExpiry;  
+  checkDateExpiry =
+    today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+  return checkDateExpiry;
 };
 
 exports.uncamelCase = uncamelCase;
 exports.containsError = containsError;
 exports.expiryDate = expiryDate;
-

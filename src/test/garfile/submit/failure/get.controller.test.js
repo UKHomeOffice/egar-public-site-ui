@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -11,7 +9,8 @@ const CookieModel = require('../../../../common/models/Cookie.class');
 const controller = require('../../../../app/garfile/submit/failure/get.controller');
 
 describe('GAR Submit Failure Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -33,6 +32,9 @@ describe('GAR Submit Failure Get Controller', () => {
 
     await controller(req, res);
 
-    expect(res.render).to.have.been.calledWith('app/garfile/review/failure/index', { cookie });
+    expect(res.render).to.have.been.calledWith(
+      'app/garfile/review/failure/index',
+      { cookie }
+    );
   });
 });

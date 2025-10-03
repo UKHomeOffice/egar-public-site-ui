@@ -20,9 +20,14 @@ class ExcelParser {
   parse() {
     const parsedMap = {};
     Object.keys(this.cellMap).forEach((key) => {
-      let cellValue = this._getValue(this.cellMap[key].location, this.cellMap[key].raw);
+      let cellValue = this._getValue(
+        this.cellMap[key].location,
+        this.cellMap[key].raw
+      );
       if (this.cellMap[key].transform) {
-        this.cellMap[key].transform.every((transformFunc) => cellValue = transformFunc(cellValue));
+        this.cellMap[key].transform.every(
+          (transformFunc) => (cellValue = transformFunc(cellValue))
+        );
       }
       parsedMap[key] = cellValue;
     });
@@ -35,18 +40,30 @@ class ExcelParser {
    */
   rangeParse() {
     const rowArr = [];
-    let rowNum = this.rangeConfig.startRow || this.getRangeStartRow(this.rangeConfig.startIdentifier, this.rangeConfig.startColumn);
-    let rowCount = 0; 
+    let rowNum =
+      this.rangeConfig.startRow ||
+      this.getRangeStartRow(
+        this.rangeConfig.startIdentifier,
+        this.rangeConfig.startColumn
+      );
+    let rowCount = 0;
     let flag = true;
     while (flag) {
       const rowObj = {};
       Object.keys(this.cellMap).forEach((key) => {
-        let cellValue = flag ? this._getValue(`${this.cellMap[key].location}${rowNum}`) : null;
-        if (cellValue === this.rangeConfig.terminator || rowCount === this.rangeConfig.maxRows ) {
+        let cellValue = flag
+          ? this._getValue(`${this.cellMap[key].location}${rowNum}`)
+          : null;
+        if (
+          cellValue === this.rangeConfig.terminator ||
+          rowCount === this.rangeConfig.maxRows
+        ) {
           flag = false;
         }
         if (this.cellMap[key].transform && flag) {
-          this.cellMap[key].transform.every((transformFunc) => cellValue = transformFunc(cellValue));
+          this.cellMap[key].transform.every(
+            (transformFunc) => (cellValue = transformFunc(cellValue))
+          );
         }
         if (cellValue !== undefined) {
           rowObj[key] = cellValue;
@@ -67,7 +84,7 @@ class ExcelParser {
    * @returns {Bool} true if row is empty, else false
    */
   static isRowEmpty(rowObj) {
-    return Object.keys(rowObj).every((key => rowObj[key] === undefined));
+    return Object.keys(rowObj).every((key) => rowObj[key] === undefined);
   }
 
   /**

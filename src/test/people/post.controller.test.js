@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -10,7 +7,9 @@ require('../global.test');
 const controller = require('../../app/people/post.controller');
 
 describe('People Post Controller', () => {
-  let req; let res; let sessionSaveStub;
+  let req;
+  let res;
+  let sessionSaveStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -19,7 +18,7 @@ describe('People Post Controller', () => {
       body: {},
       session: {
         u: { dbId: 'USER-DB-ID-1' },
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
     res = {
@@ -35,7 +34,7 @@ describe('People Post Controller', () => {
 
   it('should just redirect back if body has nothing set', async () => {
     await controller(req, res);
-    
+
     expect(req.session.deletePersonId).to.be.undefined;
     expect(req.session.editPersonId).to.be.undefined;
     expect(sessionSaveStub).to.not.have.been.called;

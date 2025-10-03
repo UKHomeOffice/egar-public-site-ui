@@ -13,10 +13,15 @@ module.exports = (req, res) => {
     return;
   }
   req.session.editResponsiblePersonId = responsiblePersonId;
-  resPersonApi.getResPersonDetails(cookie.getUserDbId(), responsiblePersonId)
+  resPersonApi
+    .getResPersonDetails(cookie.getUserDbId(), responsiblePersonId)
     .then((apiResponse) => {
       const responsiblePerson = JSON.parse(apiResponse);
-      return res.render('app/resperson/edit/index', { cookie, responsiblePerson, fixedBasedOperatorOptions });
+      return res.render('app/resperson/edit/index', {
+        cookie,
+        responsiblePerson,
+        fixedBasedOperatorOptions,
+      });
     })
     .catch((err) => {
       logger.error(err);

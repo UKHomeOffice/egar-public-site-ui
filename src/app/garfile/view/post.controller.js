@@ -17,7 +17,11 @@ const { isAbleToCancelGar } = require('../../../common/utils/validator');
 const checkGARUser = (parsedGar, userId, organisationId) => {
   if (parsedGar === undefined || parsedGar === null) return false;
 
-  if ((parsedGar.organisationId && organisationId) && parsedGar.organisationId === organisationId) {
+  if (
+    parsedGar.organisationId &&
+    organisationId &&
+    parsedGar.organisationId === organisationId
+  ) {
     logger.info('GAR organisation id matches current user ID');
     return true;
   }
@@ -56,16 +60,27 @@ module.exports = (req, res) => {
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;
-      const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z`: null;
+      const lastDepartureDateString =
+        departureDate && departureTime
+          ? `${departureDate}T${departureTime}.000Z`
+          : null;
 
       // Do the check here
-      if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
-        logger.error(`Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`);
+      if (
+        !checkGARUser(
+          parsedGar,
+          cookie.getUserDbId(),
+          cookie.getOrganisationId()
+        )
+      ) {
+        logger.error(
+          `Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`
+        );
         res.redirect('/home');
         return;
       }
-      
-      cookie.setCbpId(parsedGar.cbpId)
+
+      cookie.setCbpId(parsedGar.cbpId);
       cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
@@ -82,10 +97,16 @@ module.exports = (req, res) => {
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         showChangeLinks: true,
-        isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort)
+        isJourneyUKInbound: airportValidation.isJourneyUKInbound(
+          parsedGar.departurePort,
+          parsedGar.arrivalPort
+        ),
       };
 
-      if (parsedGar.status.name === 'Submitted' || parsedGar.status.name === 'Cancelled') {
+      if (
+        parsedGar.status.name === 'Submitted' ||
+        parsedGar.status.name === 'Cancelled'
+      ) {
         renderContext.showChangeLinks = false;
       }
 

@@ -8,7 +8,6 @@ const { Manifest } = require('../../../common/models/Manifest.class');
 const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 
-
 module.exports = async (req, res) => {
   logger.debug('In people / edit get controller');
   const cookie = new CookieModel(req);
@@ -20,29 +19,45 @@ module.exports = async (req, res) => {
     return;
   }
 
-  await personApi.getDetails(cookie.getUserDbId(), id)
+  await personApi
+    .getDetails(cookie.getUserDbId(), id)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
 
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
         return res.render('app/people/edit/index', {
-          cookie, persontype, documenttype, genderchoice, errors: [{ message: 'Failed to get person information' }],
+          cookie,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [{ message: 'Failed to get person information' }],
         });
-      } 
+      }
 
       const requestToValidate = Manifest.turnPersonToRequest(parsedResponse);
       cookie.setEditPerson(parsedResponse);
 
-      validator.validateChains(validations.validations(requestToValidate))
+      validator
+        .validateChains(validations.validations(requestToValidate))
         .then(() => {
           return res.render('app/people/edit/index', {
-            cookie, persontype, documenttype, genderchoice, person: parsedResponse,
+            cookie,
+            persontype,
+            documenttype,
+            genderchoice,
+            person: parsedResponse,
           });
         })
         .catch((err) => {
           logger.error(`gar id (${cookie.getGarId()}): ${JSON.stringify(err)}`);
           return res.render('app/people/edit/index', {
-            req, cookie, person: parsedResponse, persontype, documenttype, genderchoice, errors: err,
+            req,
+            cookie,
+            person: parsedResponse,
+            persontype,
+            documenttype,
+            genderchoice,
+            errors: err,
           });
         });
     })

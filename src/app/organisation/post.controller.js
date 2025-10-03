@@ -18,7 +18,9 @@ module.exports = (req, res) => {
     req.session.deleteUserId = req.body.deleteUser;
     req.session.save(() => res.redirect('/organisation/delete'));
   } else {
-    req.session.errMsg = { message: 'Organisation page failed to perform action.' };
+    req.session.errMsg = {
+      message: 'Organisation page failed to perform action.',
+    };
     req.session.save(() => res.redirect('/organisation'));
   }
 };

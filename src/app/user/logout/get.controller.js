@@ -1,5 +1,5 @@
 const CookieModel = require('../../../common/models/Cookie.class');
-const { getOneLoginLogoutUrl } = require("../../../common/utils/oneLoginAuth");
+const { getOneLoginLogoutUrl } = require('../../../common/utils/oneLoginAuth');
 
 function logoutAndClearCookies(req, res, cookie, redirectUrl) {
   req.session.destroy(() => {
@@ -19,7 +19,7 @@ module.exports = (req, res) => {
 
   // If returning from Onelogin with a "user-deleted" state after delete confirm
   if (req.query?.state === 'user-deleted') {
-    return logoutAndClearCookies(req, res, cookie,'/user/deleteconfirm');
+    return logoutAndClearCookies(req, res, cookie, '/user/deleteconfirm');
   }
 
   // One login sign path

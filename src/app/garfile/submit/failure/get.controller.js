@@ -6,5 +6,5 @@ const garApi = require('../../../../common/services/garApi');
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile / review get controller');
-  res.render('app/garfile/review/failure/index', { cookie })
-}
+  res.render('app/garfile/review/failure/index', { cookie });
+};

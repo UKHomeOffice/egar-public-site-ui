@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -10,8 +7,11 @@ const proxyquire = require('proxyquire');
 require('../../global.test');
 
 describe('CSRF Check Middleware', () => {
-  let res; let req; let next;
-  let proxiedMiddleware; let csurfStub;
+  let res;
+  let req;
+  let next;
+  let proxiedMiddleware;
+  let csurfStub;
 
   beforeEach(() => {
     chai.use(sinonChai);

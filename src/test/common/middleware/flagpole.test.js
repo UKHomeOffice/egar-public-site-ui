@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -11,7 +9,9 @@ const config = require('../../../common/config/index');
 const middleware = require('../../../common/middleware/flagpole');
 
 describe('Flagpole Middleware', () => {
-  let res; let req; let next;
+  let res;
+  let req;
+  let next;
 
   beforeEach(() => {
     chai.use(sinonChai);

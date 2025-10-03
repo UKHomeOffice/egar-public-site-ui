@@ -9,7 +9,6 @@ const config = require('../config/index');
 const { lte } = Sequelize.Op;
 
 module.exports = {
-
   /**
    * Sends user tokenId to API.
    *
@@ -19,22 +18,25 @@ module.exports = {
    */
   setToken(tokenId, userId) {
     return new Promise((resolve, reject) => {
-      request.post({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.setToken(),
-        body: JSON.stringify({
-          tokenId,
-          userId,
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('There was a problem calling the settoken API');
-          logger.error(error);
-          reject(error);
+      request.post(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.setToken(),
+          body: JSON.stringify({
+            tokenId,
+            userId,
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('There was a problem calling the settoken API');
+            logger.error(error);
+            reject(error);
+          }
+          logger.debug('Successfully called settoken API');
+          resolve(body);
         }
-        logger.debug('Successfully called settoken API');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -47,22 +49,25 @@ module.exports = {
    */
   updateToken(tokenId, userId) {
     return new Promise((resolve, reject) => {
-      request.put({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.setToken(),
-        body: JSON.stringify({
-          tokenId,
-          userId,
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('There was a problem calling the updateToken API');
-          reject(error);
-          return;
+      request.put(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.setToken(),
+          body: JSON.stringify({
+            tokenId,
+            userId,
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('There was a problem calling the updateToken API');
+            reject(error);
+            return;
+          }
+          logger.info('Successfully called updateToken API');
+          resolve(body);
         }
-        logger.info('Successfully called updateToken API');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -76,32 +81,43 @@ module.exports = {
    * @param inviteeEmail
    * @returns {Promise} returns response body when resolved.
    */
-  setInviteUserToken(tokenId, inviterId, organisationId, roleName, inviteeEmail = null) {
+  setInviteUserToken(
+    tokenId,
+    inviterId,
+    organisationId,
+    roleName,
+    inviteeEmail = null
+  ) {
     const requestBody = {
       tokenId,
       inviterId,
       organisationId,
       roleName,
-    }
+    };
 
     if (inviteeEmail) {
       requestBody.inviteeEmail = inviteeEmail;
     }
 
     return new Promise((resolve, reject) => {
-      request.post({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.setToken(),
-        body: JSON.stringify(requestBody),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('There was a problem calling the setInviteUserToken API');
-          reject(error);
-          return;
+      request.post(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.setToken(),
+          body: JSON.stringify(requestBody),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error(
+              'There was a problem calling the setInviteUserToken API'
+            );
+            reject(error);
+            return;
+          }
+          logger.info('Successfully called setInviteUserToken API');
+          resolve(body);
         }
-        logger.info('Successfully called setInviteUserToken API');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -116,13 +132,12 @@ module.exports = {
   setMfaToken(Email, MFAToken, Status) {
     logger.info(`Storing MFA token for ${Email}`);
     return new Promise((resolve, reject) => {
-      db.sequelize.models.UserSessions
-        .create({
-          MFAToken,
-          Email,
-          Status,
-          IssuedTimestamp: new Date(),
-        })
+      db.sequelize.models.UserSessions.create({
+        MFAToken,
+        Email,
+        Status,
+        IssuedTimestamp: new Date(),
+      })
         .then((sub) => {
           logger.info('Successfully stored MFA token');
           return resolve(sub);
@@ -154,37 +169,51 @@ module.exports = {
   validateMfaToken(Email, MFAToken) {
     logger.info(`Attempting to validate token for ${Email}`);
     return new Promise((resolve, reject) => {
-      db.sequelize.models.UserSessions
-        .findOne({
-          where: {
-            Email,
-          },
-          order: [
-            ['IssuedTimestamp', 'DESC'],
-          ],
-        })
-        .then((sub) => {
+      db.sequelize.models.UserSessions.findOne({
+        where: {
+          Email,
+        },
+        order: [['IssuedTimestamp', 'DESC']],
+      }).then(
+        (sub) => {
           logger.info('Successfully called validation service');
           if (sub) {
             // Get the existing timestamp
             const issuedTimestamp = moment(sub.get('IssuedTimestamp'));
             // Calculate the expiry
             const { MFA_TOKEN_EXPIRY, MFA_TOKEN_MAX_ATTEMPTS } = config;
-            const expiresTimestamp = issuedTimestamp.add(parseInt(MFA_TOKEN_EXPIRY, 10), 'minutes');
+            const expiresTimestamp = issuedTimestamp.add(
+              parseInt(MFA_TOKEN_EXPIRY, 10),
+              'minutes'
+            );
             const now = moment();
             if (sub.MFAToken !== MFAToken) {
-              logger.info(`Invalid token (token did not match), user entered: '${MFAToken}' which does not match up to UserSession token with id: ${sub.Id}`);
+              logger.info(
+                `Invalid token (token did not match), user entered: '${MFAToken}' which does not match up to UserSession token with id: ${sub.Id}`
+              );
               reject(new Error('Invalid MFA token'));
               return;
             }
             if (now.isAfter(expiresTimestamp)) {
-              logger.info(`Token expired. (Current time ${now}, token expiry time ${expiresTimestamp}`);
-              reject(new Error(`MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`));
+              logger.info(
+                `Token expired. (Current time ${now}, token expiry time ${expiresTimestamp}`
+              );
+              reject(
+                new Error(
+                  `MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`
+                )
+              );
               return;
             }
             if (!this.validNumAttempts(sub)) {
-              logger.info(`Exceeded max token verification attempts (attempt ${sub.NumAttempts})`);
-              reject(new Error(`MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`));
+              logger.info(
+                `Exceeded max token verification attempts (attempt ${sub.NumAttempts})`
+              );
+              reject(
+                new Error(
+                  `MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`
+                )
+              );
               return;
             }
             resolve(true);
@@ -192,11 +221,13 @@ module.exports = {
             logger.info('No matching token found');
             reject(new Error('No MFA token found'));
           }
-        }, (findOneErr) => {
+        },
+        (findOneErr) => {
           logger.error('Failed to connect to db and find token');
           logger.error(findOneErr);
           reject(findOneErr);
-        });
+        }
+      );
     });
   },
   /**
@@ -208,16 +239,15 @@ module.exports = {
   updateMfaToken(Email, MFAToken) {
     logger.info(`Updating MFA token for ${Email}`);
     return new Promise((resolve, reject) => {
-      db.sequelize.models.UserSessions
-        .update(
-          { StatusChangedTimestamp: new Date(), Status: false },
-          {
-            where: {
-              Email,
-              MFAToken,
-            },
+      db.sequelize.models.UserSessions.update(
+        { StatusChangedTimestamp: new Date(), Status: false },
+        {
+          where: {
+            Email,
+            MFAToken,
           },
-        )
+        }
+      )
         .then((sub) => {
           logger.info('Successfully updated MFA token');
           return resolve(sub);
@@ -238,22 +268,20 @@ module.exports = {
   getLastLogin(Email) {
     logger.info(`Get the last login information date for ${Email}`);
     return new Promise((resolve, reject) => {
-      db.sequelize.models.UserSessions
-        .findOne({
-          where: {
-            Email,
-            Status: ['f'], // Inactive
-            NumAttempts: { [lte]: 5 },
-          },
-          order: [
-            ['IssuedTimestamp', 'DESC'],
-          ],
-          offset: 1,
-        })
+      db.sequelize.models.UserSessions.findOne({
+        where: {
+          Email,
+          Status: ['f'], // Inactive
+          NumAttempts: { [lte]: 5 },
+        },
+        order: [['IssuedTimestamp', 'DESC']],
+        offset: 1,
+      })
         .then((resp) => {
           logger.info('Successfully got last logon date');
           resolve(resp);
-        }).catch((err) => {
+        })
+        .catch((err) => {
           logger.error('Failed to get last logon date');
           logger.error(err);
           reject(err);

@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 const i18n = require('i18n');
 
 const logger = require('../../../common/utils/logger')(__filename);
@@ -15,24 +13,38 @@ module.exports = (req, res) => {
   const { mfaCode } = req.body;
 
   const mfaCodeChain = [
-    new ValidationRule(validator.notEmpty, 'mfaCode', mfaCode, 'Enter your code'),
+    new ValidationRule(
+      validator.notEmpty,
+      'mfaCode',
+      mfaCode,
+      'Enter your code'
+    ),
   ];
 
   const cookie = new CookieModel(req);
 
   const mfaTokenLength = settings.MFA_TOKEN_LENGTH;
-  const errMsg = { identifier: 'mfaCode', message: i18n.__('validator_authentication_error') };
+  const errMsg = {
+    identifier: 'mfaCode',
+    message: i18n.__('validator_authentication_error'),
+  };
 
-  validator.validateChains([mfaCodeChain])
+  validator
+    .validateChains([mfaCodeChain])
     .then(() => {
-      tokenApi.validateMfaToken(cookie.getUserEmail(), parseInt(mfaCode, 10))
+      tokenApi
+        .validateMfaToken(cookie.getUserEmail(), parseInt(mfaCode, 10))
         .then(() => {
-          tokenApi.updateMfaToken(cookie.getUserEmail(), parseInt(mfaCode, 10))
+          tokenApi
+            .updateMfaToken(cookie.getUserEmail(), parseInt(mfaCode, 10))
             .then(() => {
-              userApi.getDetails(cookie.getUserEmail())
+              userApi
+                .getDetails(cookie.getUserEmail())
                 .then((apiResponse) => {
                   const parsedResponse = apiResponse;
-                  cookie.setOrganisationId(apiResponse?.organisation?.organisationId);
+                  cookie.setOrganisationId(
+                    apiResponse?.organisation?.organisationId
+                  );
                   cookie.setLoginInfo(parsedResponse);
                   req.session.save(() => {
                     res.redirect('/home');
@@ -40,22 +52,39 @@ module.exports = (req, res) => {
                 })
                 .catch((err) => {
                   logger.error(err);
-                  res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
+                  res.render('app/verify/mfa/index', {
+                    cookie,
+                    mfaTokenLength,
+                    errors: [errMsg],
+                  });
                 });
             })
             .catch((err) => {
               logger.error(err);
-              res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
+              res.render('app/verify/mfa/index', {
+                cookie,
+                mfaTokenLength,
+                errors: [errMsg],
+              });
             });
         })
         .catch((err) => {
           // Token API error
           logger.error(err);
-          res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: [errMsg] });
+          res.render('app/verify/mfa/index', {
+            cookie,
+            mfaTokenLength,
+            errors: [errMsg],
+          });
         });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       // Page validation error
       logger.info(JSON.stringify(err));
-      res.render('app/verify/mfa/index', { cookie, mfaTokenLength, errors: err });
+      res.render('app/verify/mfa/index', {
+        cookie,
+        mfaTokenLength,
+        errors: err,
+      });
     });
 };

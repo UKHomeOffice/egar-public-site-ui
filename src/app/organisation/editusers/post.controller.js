@@ -8,7 +8,6 @@ let roles = require('../../../common/seeddata/egar_user_roles');
 module.exports = (req, res) => {
   logger.debug('In organisation / editusers post controller');
   const cookie = new CookieModel(req);
-  
 
   const orgUser = {
     userId: req.session.editUserId,
@@ -17,31 +16,41 @@ module.exports = (req, res) => {
     role: req.body.role,
   };
 
-  if(cookie.getUserRole() !== 'Admin'){
-     roles = roles.filter(role => role.name !== 'Admin');
+  if (cookie.getUserRole() !== 'Admin') {
+    roles = roles.filter((role) => role.name !== 'Admin');
   }
 
-  validator.validateChains(validations.validations(req))
+  validator
+    .validateChains(validations.validations(req))
     .then(() => {
-      orgApi.editUser(cookie.getUserDbId(), cookie.getOrganisationId(), orgUser)
+      orgApi
+        .editUser(cookie.getUserDbId(), cookie.getOrganisationId(), orgUser)
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-            req.session.errMsg = { message: 'You do not have the permissions to edit this user or perform this action' };
+            req.session.errMsg = {
+              message:
+                'You do not have the permissions to edit this user or perform this action',
+            };
           }
           return req.session.save(() => res.redirect('/organisation'));
         })
         .catch((err) => {
           logger.error('Failed to update org user details');
           logger.error(err);
-          req.session.errMsg = { message: 'Failed to update user details. Try again' };
+          req.session.errMsg = {
+            message: 'Failed to update user details. Try again',
+          };
           return req.session.save(() => res.redirect('/organisation'));
         });
     })
     .catch((err) => {
       logger.info('Failed validations editing an organisation user');
       res.render('app/organisation/editusers/index', {
-        cookie, orgUser, roles, errors: err,
+        cookie,
+        orgUser,
+        roles,
+        errors: err,
       });
     });
 };

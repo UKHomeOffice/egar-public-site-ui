@@ -7,7 +7,6 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 //const airportValidation = require('../../../common/utils/airportValidation');
 
 const createValidationChains = (voyage) => {
-
   // Create validation input objs
   const departPortObj = {
     portCode: voyage.departurePort,
@@ -24,42 +23,93 @@ const createValidationChains = (voyage) => {
     m: voyage.departureMinute,
   };
 
-
   // Define port validations
   const departurePortValidation = [
-    new ValidationRule(validator.notEmpty, 'departurePort', voyage.departurePort, __('field_departure_port_code_validation')),
-    new ValidationRule(validator.isValidAirportCode, 'departurePort', voyage.departurePort, 'Departure port should be an ICAO or IATA code')
+    new ValidationRule(
+      validator.notEmpty,
+      'departurePort',
+      voyage.departurePort,
+      __('field_departure_port_code_validation')
+    ),
+    new ValidationRule(
+      validator.isValidAirportCode,
+      'departurePort',
+      voyage.departurePort,
+      'Departure port should be an ICAO or IATA code'
+    ),
   ];
 
   // Define latitude validations
-  const departureLatValidation = [new ValidationRule(validator.latitude, 'departureLat', voyage.departureLat, __('field_latitude_validation'))];
+  const departureLatValidation = [
+    new ValidationRule(
+      validator.latitude,
+      'departureLat',
+      voyage.departureLat,
+      __('field_latitude_validation')
+    ),
+  ];
 
   // Define latitude validations
-  const departureLongValidation = [new ValidationRule(validator.longitude, 'departureLong', voyage.departureLong, __('field_longitude_validation'))];
+  const departureLongValidation = [
+    new ValidationRule(
+      validator.longitude,
+      'departureLong',
+      voyage.departureLong,
+      __('field_longitude_validation')
+    ),
+  ];
 
   const validations = [
-    [new ValidationRule(validator.realDate, 'departureDate', departDateObj, __('field_departure_real_date_validation'))],
-    [new ValidationRule(validator.currentOrPastDate, 'departureDate', departDateObj, __('field_departure_date_should_not_be_in_the_past'))],
-    [new ValidationRule(validator.validTime, 'departureTime', departureTimeObj, __('field_departure_real_time_validation'))],
-    [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
+    [
+      new ValidationRule(
+        validator.realDate,
+        'departureDate',
+        departDateObj,
+        __('field_departure_real_date_validation')
+      ),
+    ],
+    [
+      new ValidationRule(
+        validator.currentOrPastDate,
+        'departureDate',
+        departDateObj,
+        __('field_departure_date_should_not_be_in_the_past')
+      ),
+    ],
+    [
+      new ValidationRule(
+        validator.validTime,
+        'departureTime',
+        departureTimeObj,
+        __('field_departure_real_time_validation')
+      ),
+    ],
+    [
+      new ValidationRule(
+        validator.notEmpty,
+        'portChoice',
+        voyage.portChoice,
+        __('field_port_choice_message')
+      ),
+    ],
   ];
 
   if (voyage.portChoice === 'Yes') {
-    validations.push(
-      departurePortValidation,
-    );
+    validations.push(departurePortValidation);
   } else {
-    validations.push(
-      departureLatValidation,
-      departureLongValidation,
-    );
+    validations.push(departureLatValidation, departureLongValidation);
   }
 
   return validations;
 };
 
 const performAPICall = (cookie, res, buttonClicked) => {
-  garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarDepartureVoyage())
+  garApi
+    .patch(
+      cookie.getGarId(),
+      cookie.getGarStatus(),
+      cookie.getGarDepartureVoyage()
+    )
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -84,9 +134,11 @@ const performAPICall = (cookie, res, buttonClicked) => {
       logger.error(err);
       res.render('app/garfile/departure/index', {
         cookie,
-        errors: [{
-          message: 'Failed to add to GAR',
-        }],
+        errors: [
+          {
+            message: 'Failed to add to GAR',
+          },
+        ],
       });
     });
 };
@@ -101,10 +153,10 @@ module.exports = async (req, res) => {
   const voyage = req.body;
   delete voyage.buttonClicked;
   if (voyage.portChoice === 'Yes') {
-     voyage.departureLat = '';
-     voyage.departureLong = '';
+    voyage.departureLat = '';
+    voyage.departureLong = '';
   } else {
-    voyage.departurePort = voyage.departureLat + " " + voyage.departureLong;
+    voyage.departurePort = voyage.departureLat + ' ' + voyage.departureLong;
   }
 
   cookie.setGarDepartureVoyage(voyage);
@@ -113,13 +165,17 @@ module.exports = async (req, res) => {
 
   const gar = await garApi.get(cookie.getGarId());
 
-  validations.push(
-    [
-      new ValidationRule(validator.notSameValues, 'departurePort', [voyage.departurePort, JSON.parse(gar).arrivalPort], __('field_same_departure_port_validation')),
-    ],
-  );
+  validations.push([
+    new ValidationRule(
+      validator.notSameValues,
+      'departurePort',
+      [voyage.departurePort, JSON.parse(gar).arrivalPort],
+      __('field_same_departure_port_validation')
+    ),
+  ]);
 
-  validator.validateChains(validations)
+  validator
+    .validateChains(validations)
     .then(() => {
       performAPICall(cookie, res, buttonClicked);
     })
