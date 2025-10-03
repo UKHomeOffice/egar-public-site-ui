@@ -82,6 +82,9 @@ class Cookie {
     if (this.session.editPerson == null) {
       this.session.editPerson = {};
     }
+    if(this.session.redirectUrl == null){
+      this.session.redirectUrl = '';
+    }
   }
 
   initialiseGar() {
@@ -158,6 +161,7 @@ class Cookie {
     this.session.svc = null;
     this.session.svp = null;
     this.session.gar = null;
+    this.session.redirectUrl = null;
   }
 
   getGar() {
@@ -646,6 +650,14 @@ class Cookie {
 
   getEditPerson() {
     return this.session.editPerson;
+  }
+  
+  setRedirectUrl(url) {
+    return this.session.redirectUrl = url;
+  }
+
+  getRedirectUrl(){
+    return this.session.redirectUrl;
   }
 
   getEditPersonDocExpiry(timeType) {

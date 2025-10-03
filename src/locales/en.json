@@ -469,7 +469,7 @@
 	"amg_status_check_response_code_2Z": "SELECTEE REFER TO STANDARD OPERATING PROCEDURES FOR UK",
 	"amg_status_check_response_code_0P": "Authority to carry granted",
 	"amg_status_check_response_code_1Z": "Authority to carry refused. DO NOT BOARD.",
-	"amg_status_check_response_code_0T": "System time out - Refer to Timeout Procedure",
+	"amg_status_check_response_code_0T": "System time out",
 	"amg_status_check_response_code_4Z": "Insufficient data attributes",
 	"amg_status_check_response_code_G-Err": "Unknown Error - Please contact support",
 	"amg_status_check_response_code_0U": "MANUALLY CHECK TRAVEL PERMISSION AND TEST RESULT",
@@ -542,5 +542,6 @@
 	"responsible_person_no_records_create_new": "No saved responsible person records found. Create a new one in the Responsible Person tab.",
 	"heading_edit_responsible_person": "Edit responsible person",
 	"caption_responsible_person_details": "Select the details of a responsible person you have previously added",
-	"prevent_zzzz_or_yyyy_message": "Add ICAO/IATA codes for the location. ZZZZ or YYYY are not accepted codes."
+	"prevent_zzzz_or_yyyy_message": "Add ICAO/IATA codes for the location. ZZZZ or YYYY are not accepted codes.",
+	"guidance": "You must check each passenger has a <a href='https://www.gov.uk/government/publications/recognising-fraudulent-identity-documents' target='_blank'>genuine and valid passport or travel document</a> and that they are the rightful holder. You must also check each passenger's permission to travel status. You will remain liable for any penalties relating to a failure to adequately conduct these checks."
 }

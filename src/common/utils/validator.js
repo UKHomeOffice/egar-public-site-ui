@@ -762,6 +762,19 @@ function isValidAirportCode(airportCode) {
   return airportCodeList.includes(airportCode);
 }
 
+
+/**
+ * 
+ * Validate the uuid is in the correct format before sending it to the backend to prevent SQL query failures.
+ * @param {string} uuid 
+ * @returns {Bool}
+ */
+function isValidUuid(uuid) {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
+}
+
+
 module.exports = {
   hasOnlySymbols,
   hasLeadingSpace,
@@ -826,5 +839,6 @@ module.exports = {
   isValidDocumentType,
   isOtherDocumentWithDocumentDesc,
   isAbleToCancelGar,
-  nameHasNoNumbers
+  nameHasNoNumbers,
+  isValidUuid,
 };

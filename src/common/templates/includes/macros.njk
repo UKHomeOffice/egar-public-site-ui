@@ -117,3 +117,13 @@
     You can enter up to {{ max_length }} characters
   </div>
 {% endmacro %}
+
+{% macro loadingScreen(text, text2)  %}
+    <div class="flex-center">
+        <div id="loader"></div>
+    </div>
+    <div class="center-text govuk-!-padding-top-5">
+      <h2 class="govuk-heading-l">{{text}}</h2>
+      <p class="govuk-body govuk-!-font-size-36">{{text2}}</p>
+    </div>
+{% endmacro %}
