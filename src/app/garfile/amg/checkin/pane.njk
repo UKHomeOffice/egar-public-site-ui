@@ -172,21 +172,7 @@
     </tr>
   </thead>
   <tbody class="govuk-table__body">
-    {% if statusCheckComplete %}
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell"></td>
-        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
-      </tr>
-    {% else %}
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell">
-          <div id="spinner" title="loading..." class="status-disc spinner"></div>
-        </td>
-        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">Awaiting Permission to Travel responses...</td>
-      </tr>
-    {% endif %}
     {% for person in garpeople.items %}
-      {# <pre>{{person | dump(2)}}</pre> #}
       {{ statusRow(person, statusCheckComplete) }}
     {% endfor %}
   </tbody>
@@ -212,4 +198,3 @@
     </button>
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
   </form>
-

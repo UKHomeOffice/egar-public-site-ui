@@ -13,12 +13,18 @@ module.exports = async (req, res) => {
   const template = req.query.template === 'pane' ? 'app/garfile/amg/checkin/pane' : 'app/garfile/amg/checkin/index';
   
   const currentPage = pagination.getCurrentPage(req, `/garfile/amg/checkin`);
-
-
+  const {progress} = JSON.parse(await garApi.getGarCheckinProgress(garId));
+  if ( 'poll' in req.query) {
+      logger.info(
+        `User GAR ${garId}: Checkin progress status is ${progress}`,
+      );
+      res.json(progress);
+      return;
+    }
   Promise.all([
     garApi.get(garId),
     garApi.getPeople(garId, currentPage),
-    garApi.getSupportingDocs(garId),
+    garApi.getSupportingDocs(garId)
   ]).then(async (apiResponse) => {
     const garfile = JSON.parse(apiResponse[0]);
     const garpeople = JSON.parse(apiResponse[1]);
@@ -26,20 +32,16 @@ module.exports = async (req, res) => {
     const numberOf0TResponseCodes = garpeople.items.filter(x => x.amgCheckinResponseCode === '0T').length;
     const statusCheckComplete = garpeople.items.every(x => x.amgCheckinStatus.name === 'Complete');
 
-    const {progress} = JSON.parse(await garApi.getGarCheckinProgress(garId));
+    
     const durationInDeparture = garApi.getDurationBeforeDeparture(garfile.departureDate, garfile.departureTime);
 
     const { totalPages, totalItems } = garpeople._meta;
     const paginationData = pagination.build(req, totalPages, totalItems);
-    
+   
 
-    if ('poll' in req.query) {
-      logger.info(
-        `User GAR ${garId}: Checkin progress status is ${progress}`,
-      );
-      res.json(progress);
-      return;
-    }
+    
+    const showImportantBanner = (statusCheckComplete && resubmitted === 'no' && numberOf0TResponseCodes > 0 && durationInDeparture > 125 );
+  
 
 
     const renderObj = {
@@ -54,13 +56,15 @@ module.exports = async (req, res) => {
       resubmitted,
       durationInDeparture,
       pages: paginationData, currentPage: currentPage,
+      showImportantBanner
     };
-    if (progress === 'Incomplete') {
-      res.render('app/garfile/amg/checkin/resubmit', renderObj);
+
+     if (progress === 'Incomplete') {
+      return res.render('app/garfile/amg/checkin/resubmit', renderObj);
     }
-    else {
-      res.render(template, renderObj);
-    }
+  
+    res.render(template, renderObj);
+    
 
   }).catch((err) => {
     logger.error('Error retrieving GAR for amg');

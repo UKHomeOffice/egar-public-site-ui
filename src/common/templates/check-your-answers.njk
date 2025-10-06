@@ -109,10 +109,11 @@
         {{__('heading_manifest_details')}}
         {% if viewGuidance %}
           <div style="float:right;">
-            <a href="#" id="resubmitZeroT" class="govuk-link govuk-button resubmitZeroT">Resubmit checks for timed out passengers</a>
+            <a href="#" id="resubmit0T" class="govuk-link govuk-button resubmit0T">Resubmit checks for timed out passengers</a>
             <form id="reSubmitGarForm" action="/garfile/review" method="post">
               <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-              <input type="hidden" name="resubmitFor0T" value="resubmitZeroTOnSummaryPage" />
+              <input type="hidden" name="resubmitFor0T" value="resubmit0TOnSummaryPage" />
+              <input type="hidden" name="resubmitFor0TLink" id="resubmitFor0TLink" value="no" />
             </form>
           </div>
         {% endif %}

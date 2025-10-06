@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const bodyElement = document.body;
   let pollIntervalId;
 
-  const resubmitZeroT = document.getElementById("resubmitZeroT");
+  const resubmit0T = document.getElementById("resubmit0T");
   const reSubmitGarForm = document.getElementById("reSubmitGarForm");
-  
+  const resubmitFor0TLink = document.getElementById("resubmitFor0TLink");
 
   async function pollAndUpdateDOM() {
     try {
@@ -22,18 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+ 
   if (loadingScreen) {
     pollIntervalId = setInterval(pollAndUpdateDOM, pollingInterval);
   }
 
-  if(resubmitZeroT){
-  resubmitZeroT.addEventListener("click", (e) => {
+  if(resubmit0T){
+  resubmit0T.addEventListener("click", (e) => {
     e.preventDefault();
-
+    resubmitFor0TLink.value = 'yes';
     reSubmitGarForm.submit();
 
     });
  }
+
+ 
 });
 
 
