@@ -47,10 +47,15 @@ module.exports = {
         body: JSON.stringify({
           organisationName,
         }),
-      }, (error, _response, body) => {
+      }, (error, response, body) => {
         if (error) {
           logger.error('Failed to call update organisation API');
           reject(error);
+          return;
+        }
+        if (response.statusCode >= 400) {
+          logger.error(`Update organisation API returned error status: ${response.statusCode}`);
+          reject(JSON.parse(body));
           return;
         }
         logger.debug('Successfully called update organisation API');
