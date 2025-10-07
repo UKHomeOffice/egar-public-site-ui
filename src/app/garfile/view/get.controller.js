@@ -28,7 +28,7 @@ const { isAbleToCancelGar } = require('../../../common/utils/validator');
   return false;
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
     const cookie = new CookieModel(req);
     logger.debug('In garfile/view get controller');
     
@@ -42,6 +42,17 @@ module.exports = (req, res) => {
     const garPeople = garApi.getPeople(garId);
     const garDetails = garApi.get(garId);
     const garDocs = garApi.getSupportingDocs(garId);
+    const {progress} = JSON.parse(await garApi.getGarCheckinProgress(garId));
+    
+    const resubmitted = req.query.resubmitted;
+   
+    if ('poll' in req.query) {
+        logger.info(
+          `User GAR ${garId}: Checkin progress status is ${progress}`,
+        );
+        res.json(progress);
+        return;
+    }
 
     let renderContext = {
       cookie,
@@ -50,22 +61,22 @@ module.exports = (req, res) => {
       garpeople: {},
       garsupportingdocs: {},
     };
-
-  Promise.all([garDetails, garPeople, garDocs])
+  
+  Promise.all([garDetails, garPeople, garDocs, progress])
     .then((responseValues) => {
       const parsedGar = JSON.parse(responseValues[0]);
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;
       const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z`: null;
-
+      const durationInDeparture = garApi.getDurationBeforeDeparture(departureDate, departureTime);
+      const numberOf0TResponseCodes = parsedPeople.items.filter(x => x.amgCheckinResponseCode === '0T').length;
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
         logger.error(`Detected an attempt by user id: ${cookie.getUserDbId()} to access GAR with id: ${parsedGar.garId} which does not match userId or organisationId! Returning to dashboard.`);
         res.redirect('/home');
         return;
       }
-
       cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
@@ -76,7 +87,7 @@ module.exports = (req, res) => {
       const { successMsg, successHeader } = req.session;
       delete req.session.successHeader;
       delete req.session.successMsg;
-
+      const progress = responseValues[3];
       renderContext = {
         cookie,
         manifestFields,
@@ -86,14 +97,25 @@ module.exports = (req, res) => {
         garsupportingdocs: supportingDocuments,
         successMsg,
         successHeader,
-        isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort)
-      }; 
+        isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort),
+        resubmitted,
+        durationInDeparture,
+        numberOf0TResponseCodes,
+      };
       renderContext.showChangeLinks = true;
       if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {
         renderContext.showChangeLinks = false;
       }
-      logger.info('Rendering GAR review page');
+      
+    if(progress === 'Incomplete') {
+      logger.info(`Rendering GAR 0T resubmit page`);
+      res.render('app/garfile/amg/checkin/resubmit',renderContext);
+  } else{
+      logger.info(`Rendering GAR review page`);
       res.render('app/garfile/view/index', renderContext);
+  }
+     
+      
     })
     .catch((err) => {
       logger.error('Failed to get GAR information');

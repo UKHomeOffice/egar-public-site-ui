@@ -17,14 +17,11 @@
 {% endblock %}
 
 {% block content %}
-  <link rel="stylesheet" href="/stylesheets/amg.css"/>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
-      <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
-      <p class="govuk-body-m">{{__('amg_check_caption')}}</p>
-
-      <div class="custom-govuk-notification-banner" role="region"
+  <link rel="stylesheet" href="/stylesheets/amg.css"/> 
+  <div class="govuk-grid-row" id="checkinpage">
+    {% if showImportantBanner  %}
+  
+       <div class="custom-govuk-notification-banner" role="region"
         aria-labelledby="govuk-notification-banner-title"
         data-module="custom-govuk-notification-banner">
         <div class="govuk-notification-banner__header">
@@ -33,19 +30,36 @@
             </h2>
         </div>
         <div class="govuk-notification-banner__content">
-            <p class="govuk-notification-banner__heading">
-              {{__('amg_check_warning')}}
+            <p class="govuk-body">
+             <strong>{{numberOf0TResponseCodes}} {% if numberOf0TResonseCodes == 1 %} passenger {% else %} passengers {% endif %} have a 'system time out' status.</strong>
+             This means we were unable to check their permission to travel status.
+            </p>
+            <p class="govuk-body">
+              You should <a href="#" id="resubmit0T" class="govuk-link resubmit0T">resubmit permission to travel checks</a> for them if your expected time of departure is more than 2 hours 5 minutes in the future, otherwise you can continue to board the passenger.
             </p>
         </div>
-      </div>
+      </div> 
+
+    {% endif %}
+      
+      <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
+      <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
+     
       <div>
-        <p>You must show that all passengers are travelling with a valid passport and travel document.</p>
+       <p class="govuk-body">Passenger details have been sent for permission to travel checks.</p>
+       <p class="govuk-body">{{__('guidance') | safe}}</p>
       </div>
       <div id="pane">
         {% include "app/garfile/amg/checkin/pane.njk" %}
       </div>
     </div>
   </div>
+  <input type="hidden" value="{{resubmitted}}" id='resubmitted' />
+  <form id="reSubmitGarForm" action="/garfile/review" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <input type="hidden" name="resubmitFor0T" value="resubmit0T" />
+    <input type="hidden" name="resubmitFor0TLink" id="resubmitFor0TLink" value="no" />
+  </form>
 
   <script>
    $(function () {
@@ -55,19 +69,25 @@
         
         $.get('/garfile/amg/checkin?template=pane', null, function (data) {
           const html = $(data);
+           
           if (!html.find('#spinner').length) {
             clearInterval(window.myinterval);
           }
 
           $('#pane').html($(data));
-
+        
           permissionDetails().forEach((el, index) => {
             
             el.toggleAttribute("open", permissionDetailsState[index])
           })
         });
-
+        
       }, 3000);
-    })
-  </script>
+
+     
+    });
+
+
+</script>
+<script type="text/javascript" src="/javascripts/resubmitGar.js"></script>
 {% endblock content %}
