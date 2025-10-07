@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(resubmit0T){
   resubmit0T.addEventListener("click", (e) => {
     e.preventDefault();
-    resubmitFor0TLink.value = "true";
+    resubmitFor0TLink.value = 'yes';
     reSubmitGarForm.submit();
    });
  }
