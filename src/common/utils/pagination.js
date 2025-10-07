@@ -76,7 +76,7 @@ const getPages = (limit, pageCount, currentPage) => {
  * @param {Number} totalItems Total items for the screen
  * @param {String} optionalPath If the url path is not the key, this should be supplied
  */
-const build = (req, totalPages, totalItems, optionalPath) => {
+const build = (req, totalPages, totalItems, optionalPath, PAGE_SIZE) => {
   logger.debug('Entering the pagination module');
 
   const pathName = (typeof optionalArg === 'undefined') ? url.parse(req.originalUrl).pathname : optionalPath;
