@@ -147,7 +147,7 @@ describe('Pagination Module', () => {
     });
 
     it('should return a block of paging data', () => {
-      const result = pagination.build(req, 4, 17);
+      const result = pagination.build(req, 4, 17, '', 5);
       expect(result).to.eql({
         startItem: 6,
         endItem: 10,
