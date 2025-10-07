@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resubmit0T = document.getElementById("resubmit0T");
   const reSubmitGarForm = document.getElementById("reSubmitGarForm");
   const resubmitFor0TLink = document.getElementById("resubmitFor0TLink");
+  const params = new URLSearchParams(window.location.search);
 
   async function pollAndUpdateDOM() {
     try {
@@ -24,19 +25,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
  
   if (loadingScreen) {
+    if(params.get('resubmitted') === 'yes'){
+      loadingScreen.querySelector("h2").textContent = "Resubmitting checks for passengers with 'System time out' status.";
+    }
+    else{
+      loadingScreen.querySelector("h2").textContent = "Loading UPT (Universal Permission to Travel) checks.";
+    }
     pollIntervalId = setInterval(pollAndUpdateDOM, pollingInterval);
   }
 
   if(resubmit0T){
   resubmit0T.addEventListener("click", (e) => {
     e.preventDefault();
-    resubmitFor0TLink.value = 'yes';
+    resubmitFor0TLink.value = "true";
     reSubmitGarForm.submit();
-
-    });
+   });
  }
-
- 
 });
 
 

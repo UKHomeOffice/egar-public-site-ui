@@ -162,7 +162,7 @@
   </tr>
 {% endmacro %}
 
-<form id="passenger-checkin" action="/garfile/amg/checkin" class="form-group" method="post" role="form" >
+<form id="passenger-checkin" action="/garfile/amg/checkin?resubmitted={{resubmitted}}" class="form-group" method="post" role="form" >
 <table class="govuk-table" id="upt-responses" style="">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
@@ -177,11 +177,12 @@
     {% endfor %}
   </tbody>
 </table>
+ <input type="hidden" name="resubmitted" value="{{resubmitted}}" />
  {{ pagination.build('passenger-checkin', pages, __)}}
 
 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> 
 </form> 
-<input type="hidden" id="current-pg" value="{{currentPage}}">
+
 
 
 
