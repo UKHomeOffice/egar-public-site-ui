@@ -5,7 +5,9 @@ const nationalities = {
   getAll: () => Object.values(nationalityData).sort((a, b) => a.label.localeCompare(b.label)),
 
   // Lookup nationality by code - now much simpler!
-  getByCode: (code) => nationalityData[code] || { code, label: code },
+  getByCode: (code) => {
+    return nationalityData[code] || { code, label: code }
+  },
 
   exists: (code) => nationalityData[code] !== undefined,
 

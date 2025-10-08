@@ -1,6 +1,8 @@
 const nationalities = require('./nationality');
+const oldNationality = require('./old_nationality_lib');
 const logger = require('./logger')(__filename);
 const airportList = require('./airport_codes.json');
+const {USE_NEW_NATIONALITY_LIST_PROVIDER} = require("../config");
 
 /**
  * Utility function for generating the list of country codes in a format for this app.
@@ -9,18 +11,39 @@ const airportList = require('./airport_codes.json');
  */
 
 
-const nationalityList = nationalities.getAll();
+class NationalityUtil {
+
+  constructor(useNew = false) {
+    this.useNew = useNew;
+  }
+
+  getAll() {
+    if (this.useNew) {
+      return nationalities.getAll();
+    }
+    console.log("Using old nationality list")
+    return oldNationality.generateNationalityList();
+  }
+
+  getCountryFromCode(countryCode) {
+    const nationality = this.useNew
+      ? nationalities.getByCode(countryCode)
+      : {label: oldNationality.getCountryFromCode(countryCode)};
+
+    return nationality?.label ?? countryCode;
+  }
+}
 
 
-const exists = (code) => nationalities.exists(code);
+const nationalityUtil = new NationalityUtil(USE_NEW_NATIONALITY_LIST_PROVIDER);
+const nationalityList = nationalityUtil.getAll();
 
 /**
  * get the country label from a country code
  * @param  {String} countryCode
  */
 function getCountryFromCode(countryCode) {
-  const nationality = nationalities.getByCode(countryCode);
-  return nationality.label || countryCode;
+  return nationalityUtil.getCountryFromCode(countryCode);
 }
 
 /**
