@@ -117,13 +117,6 @@ module.exports = async (req, res) => {
       .map((s) => ({
             garPeopleId: s.garPeopleId
         }));
-      if(resubmit === 'resubmit0TOnSummaryPage'){
-        await garApi.patch(cookie.getGarId(), 'Draft', {});
-      }  
-      await garApi.updateGarPeopleCheckinStatus(garId, people, 'Pending'); 
-      if(resubmit === 'resubmit0TOnSummaryPage'){
-        await garApi.patch(cookie.getGarId(), 'Submitted', {});
-      }
     }
     const manifest = new Manifest(responseValues[1]);
     validator.handleResponseError(garpeople);
