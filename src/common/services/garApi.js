@@ -91,17 +91,22 @@ module.exports = {
    * @param {String} garId id of GAR being requested
    * @returns {Promise} Resolves with API response.
    */
-  getPeople(garId) {
+  getPeople(garId, pageNumber) {
     const priority = [
         'amg_checkin_response_code:0T',
         'amg_checkin_response_code:0B',
         'amg_checkin_response_code:0Z',
         'amg_checkin_response_code:0A',
       ];
+       
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getGarPeople(garId, { priority }),
+        qs: {
+          per_page: 10,
+          page: pageNumber,
+        }
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call GAR get people API endpoint');
@@ -353,35 +358,6 @@ module.exports = {
         }
 
         logger.debug('Successfully called update garperson endpoint');
-        resolve(body);
-      });
-    });
-  },
-
-  updateGarPeopleCheckinStauts(garId, passengersIds, status) {
-    return new Promise((resolve, reject) => {
-      request.patch({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.updateGarPerson(garId),
-        body: JSON.stringify({
-           people: passengersIds,
-           amgCheckinStatus: status,
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call update garpeople status endpoint');
-          reject(error);
-          return;
-        }
-
-        if (_response.statusCode >= 400) {
-          const responseErrorMessage = getResponseErrorMessage(_response, body);
-          logger.error(`${garId} garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
-          resolve(body);
-          return;
-        }
-
-        logger.debug('Successfully called update garperson status update endpoint');
         resolve(body);
       });
     });

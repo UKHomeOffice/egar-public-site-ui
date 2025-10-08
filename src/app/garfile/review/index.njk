@@ -40,6 +40,7 @@
         <form id="submitGarForm" action="/garfile/review" method="post">
           <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit_amg')}}">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+          <input type="hidden" name="resubmitFor0T" value="resubmitFor0T" />
         </form>
       {% else %}
         <form id="submitGarForm" action="/garfile/review" method="post">

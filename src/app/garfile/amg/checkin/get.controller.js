@@ -2,38 +2,45 @@ const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
 const manifestFields = require('../../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../../common/services/garApi');
+const pagination = require('../../../../common/utils/pagination');
 
 module.exports = async (req, res) => {
   logger.debug('In garfile / amg get controller');
 
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
+  const resubmitted = req.query.resubmitted || 'no';
   const template = req.query.template === 'pane' ? 'app/garfile/amg/checkin/pane' : 'app/garfile/amg/checkin/index';
-  const resubmitted = req.query.resubmitted;
-
-  Promise.all([
-    garApi.get(garId),
-    garApi.getPeople(garId),
-    garApi.getSupportingDocs(garId),
-  ]).then(async (apiResponse) => {
-    const garfile = JSON.parse(apiResponse[0]);
-    const garpeople = JSON.parse(apiResponse[1]);
-    const garsupportingdocs = JSON.parse(apiResponse[2]);
-    const numberOf0TResponseCodes = garpeople.items.filter(x => x.amgCheckinResponseCode === '0T').length;
-    const statusCheckComplete = garpeople.items.every(x => x.amgCheckinStatus.name === 'Complete');
-
-    const progress = JSON.parse(await garApi.getGarCheckinProgress(garId));
-    const durationInDeparture = garApi.getDurationBeforeDeparture(garfile.departureDate, garfile.departureTime);
-
-    if ('poll' in req.query) {
+  const pageUrl = `/garfile/amg/checkin?resubmitted=${resubmitted}`;
+  const currentPage = pagination.getCurrentPage(req, `/garfile/amg/checkin?resubmitted=${resubmitted}`);
+  const {progress} = JSON.parse(await garApi.getGarCheckinProgress(garId));
+  if ( 'poll' in req.query) {
       logger.info(
         `User GAR ${garId}: Checkin progress status is ${progress}`,
       );
       res.json(progress);
       return;
     }
+  Promise.all([
+    garApi.get(garId),
+    garApi.getPeople(garId, currentPage),
+    garApi.getSupportingDocs(garId)
+  ]).then((apiResponse) => {
+    const garfile = JSON.parse(apiResponse[0]);
+    const garpeople = JSON.parse(apiResponse[1]);
+    const garsupportingdocs = JSON.parse(apiResponse[2]);
+    const numberOf0TResponseCodes = garpeople.items.filter(x => x.amgCheckinResponseCode === '0T').length;
+    const statusCheckComplete = garpeople.items.every(x => x.amgCheckinStatus.name === 'Complete');
 
+    
+    const durationInDeparture = garApi.getDurationBeforeDeparture(garfile.departureDate, garfile.departureTime);
 
+    const { totalPages, totalItems } = garpeople._meta;
+    
+    const paginationData = pagination.build(req, totalPages, totalItems, pageUrl, 10);
+    
+    const showImportantBanner = (statusCheckComplete && resubmitted === 'no' && numberOf0TResponseCodes > 0 && durationInDeparture > 125 );
+  
     const renderObj = {
       cookie,
       manifestFields,
@@ -45,13 +52,15 @@ module.exports = async (req, res) => {
       numberOf0TResponseCodes,
       resubmitted,
       durationInDeparture,
+      pages: paginationData, currentPage: currentPage,
+      showImportantBanner
     };
-    if (progress.progress === 'Incomplete') {
-      res.render('app/garfile/amg/checkin/resubmit', renderObj);
+
+     if (progress === 'Incomplete') {
+      return res.render('app/garfile/amg/checkin/resubmit', renderObj);
     }
-    else {
-      res.render(template, renderObj);
-    }
+  
+    res.render(template, renderObj);
 
   }).catch((err) => {
     logger.error('Error retrieving GAR for amg');

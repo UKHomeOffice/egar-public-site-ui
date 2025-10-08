@@ -85,10 +85,11 @@ module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
   const resubmit = req.body.resubmitFor0T;
-  let resubmitZeroTLink = 'no';
-  if(resubmit === 'resubmitZeroT' || resubmit === 'resubmitZeroTOnSummaryPage'){
-    resubmitZeroTLink = 'yes';
-  }
+  
+  const resubmit0TLink = req.body.resubmitFor0TLink ? req.body.resubmitFor0TLink :'no';
+
+  const isResubmit0T = ['resubmit0T', 'resubmit0TOnSummaryPage', 'resubmitFor0T'].includes(resubmit);
+ 
   // Validate GAR to be submitted
   let validations;
   let statuscheck;
@@ -110,19 +111,12 @@ module.exports = async (req, res) => {
 
     garpeople = JSON.parse(responseValues[1]);
     
-    if(resubmit === 'resubmitZeroT' || resubmit === 'resubmitZeroTOnSummaryPage'){  
+    if(isResubmit0T){  
       const people = garpeople.items
       .filter(s=> (s.amgCheckinResponseCode === '0T'))
       .map((s) => ({
             garPeopleId: s.garPeopleId
         }));
-      if(resubmit === 'resubmitZeroTOnSummaryPage'){
-        await garApi.patch(cookie.getGarId(), 'Draft', {});
-      }  
-      await garApi.updateGarPeopleCheckinStauts(garId, people, 'Pending'); 
-      if(resubmit === 'resubmitZeroTOnSummaryPage'){
-        await garApi.patch(cookie.getGarId(), 'Submitted', {});
-      }
     }
     const manifest = new Manifest(responseValues[1]);
     validator.handleResponseError(garpeople);
@@ -132,7 +126,7 @@ module.exports = async (req, res) => {
     validator.handleResponseError(garsupportingdocs);
 
     validations = await buildValidations(garfile, garpeople, manifest);   
-    if (garfile.status.name.toLowerCase() === 'submitted' && resubmit !== 'resubmitZeroTOnSummaryPage') {
+    if (garfile.status.name.toLowerCase() === 'submitted' && resubmit !== 'resubmit0TOnSummaryPage') {
       const submitError = {
         message: 'This GAR has already been submitted',
         identifier: '',
@@ -193,13 +187,13 @@ module.exports = async (req, res) => {
     });
   }
  
- if(resubmit === 'resubmitZeroTOnSummaryPage'){
-    res.redirect(`/garfile/view?resubmitted=${resubmitZeroTLink}`);
+ if(resubmit === 'resubmit0TOnSummaryPage'){
+    res.redirect(`/garfile/view?resubmitted=${resubmit0TLink}`);
   } 
   else{
   if (isRequiresPassengerCheck && !isAnAllMilitaryFlight) {
     logger.info('Submiited GAR people to AMG checkin');
-    res.redirect(`/garfile/amg/checkin?resubmitted=${resubmitZeroTLink}`);
+    res.redirect(`/garfile/amg/checkin?resubmitted=${resubmit0TLink}`);
   }
   else {
     performAPICall(garId, cookie, req, res);
