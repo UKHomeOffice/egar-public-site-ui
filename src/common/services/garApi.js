@@ -363,35 +363,6 @@ module.exports = {
     });
   },
 
-  updateGarPeopleCheckinStatus(garId, passengersIds, status) {
-    return new Promise((resolve, reject) => {
-      request.patch({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.updateGarPerson(garId),
-        body: JSON.stringify({
-           people: passengersIds,
-           amgCheckinStatus: status,
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call update garpeople status endpoint');
-          reject(error);
-          return;
-        }
-
-        if (_response.statusCode >= 400) {
-          const responseErrorMessage = getResponseErrorMessage(_response, body);
-          logger.error(`${garId} garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
-          resolve(body);
-          return;
-        }
-
-        logger.debug('Successfully called update garperson status update endpoint');
-        resolve(body);
-      });
-    });
-  },
-
   getGarCheckinProgress(garId) {
     return new Promise((resolve, reject) => {
       request.get({
