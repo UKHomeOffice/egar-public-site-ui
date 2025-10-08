@@ -21,7 +21,6 @@ class NationalityUtil {
     if (this.useNew) {
       return nationalities.getAll();
     }
-    console.log("Using old nationality list")
     return oldNationality.generateNationalityList();
   }
 
