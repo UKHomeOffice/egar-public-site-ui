@@ -42428,10 +42428,10 @@
   },
   {
     "id": "GZP",
-    "id2": "LTGP",
+    "id2": "LTFG",
     "british": false,
     "crownDependency": false,
-    "label": "Gazipaşa Airport (Turkey) (LTGP / GZP)"
+    "label": "Gazipaşa Airport (Turkey) (LTFG / GZP)"
   },
   {
     "id": "OAA",
@@ -56439,5 +56439,33 @@
     "british": false,
     "crownDependency": false,
     "label": "Dhaalu Airport (Maldives) (VRMU / DDD)"
+  },
+  {
+    "id": "EDHG",
+    "id2": "EDHG",
+    "british": false,
+    "crownDependency": false,
+    "label": "Lüneburg Airport (Germany) (EDHG)"
+  },
+  {
+    "id": "GOX",
+    "id2": "VOGA",
+    "british": false,
+    "crownDependency": false,
+    "label": "Manohar International Airport (India) (VOGA / GOX)"
+  },
+  {
+    "id": "EIBF",
+    "id2": "EIBF",
+    "british": false,
+    "crownDependency": false,
+    "label": "Benfield Aerodrome (Ireland) (EIBF)"
+  },
+  {
+    "id": "ZZZR",
+    "id2": "ZZZR",
+    "british": false,
+    "crownDependency": false,
+    "label": "Oil Rig/Offshore Installation (International Waters) (ZZZR)"
   }
 ]
