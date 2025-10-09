@@ -89,6 +89,7 @@ module.exports = async (req, res) => {
   const resubmit0TLink = req.body.resubmitFor0TLink ? req.body.resubmitFor0TLink :'no';
 
   const isResubmit0T = ['resubmit0T', 'resubmit0TOnSummaryPage', 'resubmitFor0T'].includes(resubmit);
+  const initialSubmit = req.body.initialSubmit ? '&initialSubmit=yes' : '';
  
   // Validate GAR to be submitted
   let validations;
@@ -193,7 +194,7 @@ module.exports = async (req, res) => {
   else{
   if (isRequiresPassengerCheck && !isAnAllMilitaryFlight) {
     logger.info('Submiited GAR people to AMG checkin');
-    res.redirect(`/garfile/amg/checkin?resubmitted=${resubmit0TLink}`);
+    res.redirect(`/garfile/amg/checkin?resubmitted=${resubmit0TLink}${initialSubmit}`);
   }
   else {
     performAPICall(garId, cookie, req, res);

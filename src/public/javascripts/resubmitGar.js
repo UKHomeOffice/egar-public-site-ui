@@ -22,15 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         '<p>Could not load data. Please try again later</p>';
     }
   }
-
  
   if (loadingScreen) {
-    if(params.get('resubmitted') === 'yes'){
-      loadingScreen.querySelector("h2").textContent = "Resubmitting checks for passengers with 'System time out' status.";
-    }
-    else{
-      loadingScreen.querySelector("h2").textContent = "Loading UPT (Universal Permission to Travel) checks.";
-    }
     pollIntervalId = setInterval(pollAndUpdateDOM, pollingInterval);
   }
 
