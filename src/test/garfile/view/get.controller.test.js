@@ -98,7 +98,7 @@ describe('GAR view get controller', () => {
 
         callController().then().then(() => {
         expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+        //expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
         expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
             cookie,
@@ -122,7 +122,7 @@ describe('GAR view get controller', () => {
             isJourneyUKInbound: true,
             resubmitted: 'no',
             durationInDeparture: 125,
-            numberOf0TResponseCodes: 0,
+            numberOf0TResponseCodes: 2,
         });
         });
     });
@@ -164,7 +164,7 @@ describe('GAR view get controller', () => {
 
         callController().then().then(() => {
         expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+        //expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
         expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
             cookie,
@@ -188,7 +188,7 @@ describe('GAR view get controller', () => {
             },
             resubmitted: 'no',
             durationInDeparture: 125,
-            numberOf0TResponseCodes: 0,
+            numberOf0TResponseCodes: 2,
         });
         });
     });

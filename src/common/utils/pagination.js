@@ -3,7 +3,6 @@ const _ = require('lodash');
 
 const logger = require('./logger')(__filename);
 
-const PAGE_SIZE = 5;
 
 /**
  * For a given page (like '/aircraft' or '/people') return the current page as
@@ -76,7 +75,7 @@ const getPages = (limit, pageCount, currentPage) => {
  * @param {Number} totalItems Total items for the screen
  * @param {String} optionalPath If the url path is not the key, this should be supplied
  */
-const build = (req, totalPages, totalItems, optionalPath, PAGE_SIZE) => {
+const build = (req, totalPages, totalItems, optionalPath, pageSize=5) => {
   logger.debug('Entering the pagination module');
 
   const pathName = (typeof optionalArg === 'undefined') ? url.parse(req.originalUrl).pathname : optionalPath;
@@ -107,8 +106,8 @@ const build = (req, totalPages, totalItems, optionalPath, PAGE_SIZE) => {
     throw totalPages;
   }
 
-  const startItem = ((currentPage - 1) * PAGE_SIZE) + 1;
-  const endItem = Math.min((startItem - 1) + PAGE_SIZE, totalItems);
+  const startItem = ((currentPage - 1) * pageSize) + 1;
+  const endItem = Math.min((startItem - 1) + pageSize, totalItems);
   const items = getPages(3, totalPages, currentPage);
 
   return {

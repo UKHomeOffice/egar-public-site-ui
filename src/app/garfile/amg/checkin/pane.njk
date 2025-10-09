@@ -140,7 +140,7 @@
                 <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
                   <p class="govuk-body">If the GAR was submitted at 2 hours before the expected time of departure, no resubmission attempts are required. If the GAR was submitted earlier and on receipt of a ‘system time out’ response for a passenger, a resubmission attempt for that passenger should be made, this should result in the receipt of a successful permission to travel response.</p>
                   <p class="govuk-body">
-                    If a 'system time out' response is received at or later than 2 hours before the expected time of departure, then the passenger may be boarded. There will be no <a href="" target="_blank" class="govuk-link">section 40</a>
+                    If a 'system time out' response is received at or later than 2 hours before the expected time of departure, then the passenger may be boarded. There will be no <a href="https://www.legislation.gov.uk/ukpga/1999/33/part/II/crossheading/passengers-without-proper-documents" target="_blank" class="govuk-link">section 40</a>
                     liability if the passenger is subsequently found not to hold a valid permission to travel.
                   </p>
                 </div>  
@@ -172,6 +172,19 @@
     </tr>
   </thead>
   <tbody class="govuk-table__body">
+    {% if statusCheckComplete %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell"></td>
+        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
+      </tr>
+    {% else %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          <div id="spinner" title="loading..." class="status-disc spinner"></div>
+        </td>
+        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">Awaiting Permission to Travel responses...</td>
+      </tr>
+    {% endif %}
     {% for person in garpeople.items %}
       {{ statusRow(person, statusCheckComplete) }}
     {% endfor %}

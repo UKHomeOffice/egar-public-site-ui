@@ -91,22 +91,22 @@ module.exports = {
    * @param {String} garId id of GAR being requested
    * @returns {Promise} Resolves with API response.
    */
-  getPeople(garId, pageNumber) {
+  getPeople(garId, pageNumber=null, amgResponseCode=null) {
     const priority = [
         'amg_checkin_response_code:0T',
         'amg_checkin_response_code:0B',
         'amg_checkin_response_code:0Z',
         'amg_checkin_response_code:0A',
       ];
-       
+    const pageObj = pageNumber ? {per_page: 10,
+         page: pageNumber} : '';  
+    
+    const options = amgResponseCode ? {amg_response_codes: amgResponseCode} : [''];     
     return new Promise((resolve, reject) => {
       request.get({
         headers: { 'content-type': 'application/json' },
         url: endpoints.getGarPeople(garId, { priority }),
-        qs: {
-          per_page: 10,
-          page: pageNumber,
-        }
+        qs: { ...pageObj, ...options }
       }, (error, _response, body) => {
         if (error) {
           logger.error('Failed to call GAR get people API endpoint');
