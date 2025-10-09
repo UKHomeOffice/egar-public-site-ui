@@ -343,9 +343,8 @@ spec:
             - name: USE_NEW_NATIONALITY_LIST_PROVIDER
               valueFrom:
                 secretKeyRef:
-                  name: egar-one-login
+                  name: environment
                   key: USE_NEW_NATIONALITY_LIST_PROVIDER
-
           ports:
             - name: public-site-prt
               containerPort: 3000
