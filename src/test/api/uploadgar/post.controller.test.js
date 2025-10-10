@@ -174,20 +174,20 @@ describe('API upload GAR post controller', () => {
       data.Sheets.Sheet1.C20.v = 'USA';
       data.Sheets.Sheet1.G20.v = 'Male';
       data.Sheets.Sheet1.J20.v = 'RUS';
-      sinon.spy(req.session, 'save');
+
+      // Stub session.save to execute callback immediately
+      sinon.stub(req.session, 'save').callsFake((callback) => {
+        if (callback) callback();
+      });
       sinon.stub(XLSX, 'read').returns(data);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController().then(() => {
-        expect(req.session.save).to.have.been.called;
-        expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk')
-        ]);
-        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
-      });
+      expect(req.session.save).to.have.been.called;
+      expect(req.session.failureMsg).to.eql([
+        new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk')
+      ]);
+      expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
     });
 
     it('should return message if invalid', async () => {
@@ -213,23 +213,22 @@ describe('API upload GAR post controller', () => {
     });
 
     it('should return error if arrival date too far in advance', async () => {
-      sinon.spy(req.session, 'save');
+      // Stub session.save to execute callback immediately
+      sinon.stub(req.session, 'save').callsFake((callback) => {
+        if (callback) callback();
+      });
       const data = getValidWorkbook();
       data.Sheets.Valid1.D3.v = '2022-07-30';
 
       sinon.stub(XLSX, 'read').returns(data);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController().then(() => {
-        expect(req.session.save).to.have.been.called;
-        expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.dateNotMoreThanMonthInFuture, '', '2022-07-30', 'Arrival date must be in the future and within a month from now'),
-        ]);
-        expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
-      });
+      expect(req.session.save).to.have.been.called;
+      expect(req.session.failureMsg).to.eql([
+        new ValidationRule(validator.dateNotMoreThanMonthInFuture, '', '2022-07-30', 'Arrival date must be in the future and within a month from now'),
+      ]);
+      expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
     });
 
     it('should not throw error if arrival port is empty', async () => {
@@ -376,26 +375,26 @@ describe('API upload GAR post controller', () => {
         });
     });
 
-    it('Phoney document type shoudl be disallowed', () => {	
-      const data = getValidWorkbook();	
+    it('Phoney document type shoudl be disallowed', () => {
+      const data = getValidWorkbook();
 
-      data.Sheets.Valid1.A9.v = "Cipher";	
-      data.Sheets.Valid1.B9.v = undefined;	
+      data.Sheets.Valid1.A9.v = "Cipher";
+      data.Sheets.Valid1.B9.v = undefined;
 
-      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.stub(XLSX, 'read').returns(data);
       sinon.spy(req.session, 'save');
 
-      const callController = async () => {	
-        await controller(req, res);	
-      };	
+      const callController = async () => {
+        await controller(req, res);
+      };
 
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(
-            validator.isValidDocumentType, 
-            "", 
-            "Cipher", 
+            validator.isValidDocumentType,
+            "",
+            "Cipher",
             'Enter a valid document type for crew member James Kirk, it should be "Identity Card", "Passport", "Other", not "Cipher"'
           ),
         ]);
@@ -403,26 +402,26 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it('Phoney document type shoudl be disallowed', () => {	
-      const data = getValidWorkbook();	
+    it('Phoney document type shoudl be disallowed', () => {
+      const data = getValidWorkbook();
 
-      data.Sheets.Valid1.A9.v = "Passport";	
-      data.Sheets.Valid1.B9.v = 'UN document';	
+      data.Sheets.Valid1.A9.v = "Passport";
+      data.Sheets.Valid1.B9.v = 'UN document';
 
-      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.stub(XLSX, 'read').returns(data);
       sinon.spy(req.session, 'save');
 
-      const callController = async () => {	
-        await controller(req, res);	
-      };	
+      const callController = async () => {
+        await controller(req, res);
+      };
 
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(
-            validator.isOtherDocumentWithDocumentDesc, 
-            '', 
-            ["Passport", "UN document"], 
+            validator.isOtherDocumentWithDocumentDesc,
+            '',
+            ["Passport", "UN document"],
             'For crew member James Kirk, "Passport" document type should be "Other" or remove "UN document" value from document description'
           ),
         ]);
@@ -430,18 +429,18 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it('document desc should not be other and raise a validation error', () => {	
-      const data = getValidWorkbook();	
+    it('document desc should not be other and raise a validation error', () => {
+      const data = getValidWorkbook();
 
-      data.Sheets.Valid1.A20.v = "Other";	
-      data.Sheets.Valid1.B20.v = undefined;	
+      data.Sheets.Valid1.A20.v = "Other";
+      data.Sheets.Valid1.B20.v = undefined;
 
-      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.stub(XLSX, 'read').returns(data);
       sinon.spy(req.session, 'save');
 
-      const callController = async () => {	
-        await controller(req, res);	
-      };	
+      const callController = async () => {
+        await controller(req, res);
+      };
 
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
@@ -452,18 +451,18 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it('document description should be a valid text and not symbols', () => {	
-      const data = getValidWorkbook();	
+    it('document description should be a valid text and not symbols', () => {
+      const data = getValidWorkbook();
 
-      data.Sheets.Valid1.A20.v = "Other";	
-      data.Sheets.Valid1.B20.v = "$a$a$";	
+      data.Sheets.Valid1.A20.v = "Other";
+      data.Sheets.Valid1.B20.v = "$a$a$";
 
-      sinon.stub(XLSX, 'read').returns(data);	
+      sinon.stub(XLSX, 'read').returns(data);
       sinon.spy(req.session, 'save');
 
-      const callController = async () => {	
-        await controller(req, res);	
-      };	
+      const callController = async () => {
+        await controller(req, res);
+      };
 
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
