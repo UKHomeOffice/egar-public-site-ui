@@ -1,5 +1,5 @@
 {% import "common/templates/includes/banners.njk" as b %}
-{% set viewGuidance = (garfile.status.name === 'Submitted' and resubmitted != 'yes' and numberOf0TResponseCodes > 0 and durationInDeparture > 125) %}
+{% set viewGuidance = (garfile.status.name === 'Submitted' and resubmitted != 'yes' and numberOf0TResponseCodes > 0) %}
 <div class="govuk-grid-column-full">
   <dl id="departure" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
     <div class="app-check-your-answers__contents">
@@ -107,7 +107,7 @@
     <div class="app-check-your-answers__contents">
       <dt style="border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
         {{__('heading_manifest_details')}}
-        {% if viewGuidance %}
+        {% if viewGuidance and isResubmitted === false and durationInDeparture > 125 %}
           <div style="float:right;">
             <a href="#" id="resubmit0T" class="govuk-link govuk-button resubmit0T">Resubmit checks for timed out passengers</a>
             <form id="reSubmitGarForm" action="/garfile/review" method="post">
@@ -117,11 +117,11 @@
             </form>
           </div>
         {% endif %}
-        <p class="govuk-body" style="padding-top: {% if viewGuidance %} 5% {% else %} 3% {% endif %};font-size: 1.1875rem;">
+        <p class="govuk-body" style="padding-top: {% if viewGuidance and isResubmitted === true %} 5% {% else %} 3% {% endif %};font-size: 1.1875rem;">
           {{__('guidance') | safe}}
         </p>
        
-      {% if (garfile.status.name === 'Submitted' and resubmitted === 'yes' and numberOf0TResponseCodes > 0) or (garfile.status.name === 'Submitted' and numberOf0TResponseCodes > 0 and durationInDeparture < 125)  %}
+      {% if (garfile.status.name === 'Submitted' and numberOf0TResponseCodes > 0 and (durationInDeparture < 125 or isResubmitted === true))  %}
         <div class="box-left-grey-border">
           <div class="email-text">
            <p class="govuk-body"> 

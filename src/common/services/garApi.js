@@ -392,9 +392,9 @@ module.exports = {
   getDurationBeforeDeparture(departureDate, departureTime) {
     const departureDateTimeString = `${departureDate} ${departureTime}`;
     const departureDateTime = new Date(departureDateTimeString);
-    const currentDateTime = new Date();
-    const durationInMinutes = Math.abs(departureDateTime - currentDateTime)/1000/60;
-    return durationInMinutes;
+    const currentDateTimeISO = new Date().toISOString();
+    const currentDateTime = new Date(currentDateTimeISO);
+    return Math.round((departureDateTime-currentDateTime)/1000/60);
   }
  
 };

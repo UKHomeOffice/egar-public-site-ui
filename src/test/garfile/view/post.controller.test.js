@@ -214,6 +214,7 @@ describe('GAR view post controller', () => {
         isJourneyUKInbound: true,
         durationInDeparture: 125,
         numberOf0TResponseCodes: 0,
+        isResubmitted: false,
       });
     });
   });
@@ -267,6 +268,7 @@ describe('GAR view post controller', () => {
         isJourneyUKInbound: true,
         durationInDeparture: 125,
         numberOf0TResponseCodes: 0,
+        isResubmitted: false,
       });
     });
   });
@@ -320,6 +322,7 @@ describe('GAR view post controller', () => {
         },
         numberOf0TResponseCodes: 0,
         durationInDeparture: 125,
+        isResubmitted: false,
       });
     });
   });
@@ -407,6 +410,7 @@ describe('GAR view post controller', () => {
         },
         durationInDeparture: 125,
         numberOf0TResponseCodes: 0,
+        isResubmitted: false,
       });
     });
   });
@@ -460,6 +464,7 @@ describe('GAR view post controller', () => {
         },
         numberOf0TResponseCodes: 0,
         durationInDeparture: 125,
+        isResubmitted: false,
       });
     });
   });
@@ -518,6 +523,7 @@ describe('GAR view post controller', () => {
         },
         numberOf0TResponseCodes: 0,
         durationInDeparture: 125,
+        isResubmitted: false,
       });
     });
   });

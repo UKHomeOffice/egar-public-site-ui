@@ -7,3 +7,26 @@
         Only officially designated GB aerodromes are able to handle international or CTA {{ journeyStage }}s from 01/01/24.
     </span>
 {% endmacro %}
+
+{% macro notificationBannerFor0T(numberOf0TResponseCodes, showImportantBanner) %}
+ {% if showImportantBanner %}
+ <div class="custom-govuk-notification-banner" role="region"
+        aria-labelledby="govuk-notification-banner-title"
+        data-module="custom-govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <p class="govuk-body">
+             <strong>{{numberOf0TResponseCodes}} {% if numberOf0TResonseCodes == 1 %} passenger {% else %} passengers {% endif %} have a 'system time out' status.</strong>
+             This means we were unable to check their permission to travel status.
+            </p>
+            <p class="govuk-body">
+              You should <a href="#" id="resubmit0T" class="govuk-link resubmit0T">resubmit permission to travel checks</a> for them if your expected time of departure is more than 2 hours 5 minutes in the future, otherwise you can continue to board the passenger.
+            </p>
+        </div>
+  </div> 
+ {% endif %}
+{% endmacro %}

@@ -27,13 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
     pollIntervalId = setInterval(pollAndUpdateDOM, pollingInterval);
   }
 
-  if(resubmit0T){
-  resubmit0T.addEventListener("click", (e) => {
-    e.preventDefault();
-    resubmitFor0TLink.value = 'yes';
-    reSubmitGarForm.submit();
-   });
- }
 });
+
+$(document).on('click', '#resubmit0T', function(){
+  resubmitFor0TLink.value = 'yes';
+  reSubmitGarForm.submit();
+
+})
 
 
