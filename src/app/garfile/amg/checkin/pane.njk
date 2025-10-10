@@ -1,5 +1,6 @@
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
+{% import "common/templates/includes/banners.njk" as banner %}
 
 {% macro statusRow(person, statusCheckComplete) %}
   {% set status = person.amgCheckinStatus.name %}
@@ -173,6 +174,10 @@
   </thead>
   <tbody class="govuk-table__body">
     {% if statusCheckComplete %}
+      <div id="banner0T" class="hide-content" >
+        <div id="banner0T-content"> {{ banner.notificationBannerFor0T(numberOf0TResponseCodes, showImportantBanner) }}</div>
+      </div>
+      
       <tr class="govuk-table__row">
         <td class="govuk-table__cell"></td>
         <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
@@ -195,9 +200,6 @@
 
 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> 
 </form> 
-
-
-
 
 <form action="/garfile/review" method="post">
   <h2 class="govuk-heading-m">Declaration</h2>

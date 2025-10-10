@@ -97,6 +97,7 @@ module.exports = async (req, res) => {
   let renderObj;
   let garfile;
   let garpeople;
+  let resubmittedGars = [];
 
   try {
 
@@ -189,6 +190,13 @@ module.exports = async (req, res) => {
   }
  
  if(resubmit === 'resubmit0TOnSummaryPage'){
+    const garsFromSavedSession = cookie.getResubmitFor0T();
+    resubmittedGars = garsFromSavedSession;
+    if (!garsFromSavedSession.includes(garId)) {
+       resubmittedGars.push(garId); 
+    }
+    cookie.setResubmitFor0T(resubmittedGars);
+     
     res.redirect(`/garfile/view?resubmitted=${resubmit0TLink}`);
   } 
   else{

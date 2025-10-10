@@ -82,6 +82,10 @@ class Cookie {
     if (this.session.editPerson == null) {
       this.session.editPerson = {};
     }
+
+    if(this.session.resubmitFor0T == null) {
+      this.session.resubmitFor0T = [];
+    }
   }
 
   initialiseGar() {
@@ -158,6 +162,7 @@ class Cookie {
     this.session.svc = null;
     this.session.svp = null;
     this.session.gar = null;
+    this.session.resubmitFor0T = null;
   }
 
   getGar() {
@@ -745,6 +750,14 @@ class Cookie {
 
   getGarStatus() {
     return this.session.gar.status;
+  }
+
+  setResubmitFor0T(resubmit) {
+    return this.session.resubmitFor0T = resubmit;
+  }
+
+  getResubmitFor0T() {
+    return this.session.resubmitFor0T;
   }
 
   generateDate(day, month, year) {

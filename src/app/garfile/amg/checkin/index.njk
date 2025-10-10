@@ -1,6 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/banners.njk" as banner %}
 
 {% block pageTitle %}
   {{__('error_prefix') if errors}} Create GAR | Passenger Check
@@ -19,29 +20,8 @@
 {% block content %}
   <link rel="stylesheet" href="/stylesheets/amg.css"/> 
   <div class="govuk-grid-row" id="checkinpage">
-    {% if showImportantBanner  %}
-  
-       <div class="custom-govuk-notification-banner" role="region"
-        aria-labelledby="govuk-notification-banner-title"
-        data-module="custom-govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            Important
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <p class="govuk-body">
-             <strong>{{numberOf0TResponseCodes}} {% if numberOf0TResonseCodes == 1 %} passenger {% else %} passengers {% endif %} have a 'system time out' status.</strong>
-             This means we were unable to check their permission to travel status.
-            </p>
-            <p class="govuk-body">
-              You should <a href="#" id="resubmit0T" class="govuk-link resubmit0T">resubmit permission to travel checks</a> for them if your expected time of departure is more than 2 hours 5 minutes in the future, otherwise you can continue to board the passenger.
-            </p>
-        </div>
-      </div> 
+     <div id="top-notification-banner"></div> 
 
-    {% endif %}
-      
       <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
       <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
      
@@ -75,6 +55,8 @@
           }
 
           $('#pane').html($(data));
+          $('#banner0T-content').appendTo('#top-notification-banner');
+          $('#banner0T').empty();
         
           permissionDetails().forEach((el, index) => {
             

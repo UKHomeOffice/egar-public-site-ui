@@ -123,6 +123,7 @@ describe('GAR view get controller', () => {
             resubmitted: 'no',
             durationInDeparture: 125,
             numberOf0TResponseCodes: 2,
+            isResubmitted: false,
         });
         });
     });
@@ -189,6 +190,7 @@ describe('GAR view get controller', () => {
             resubmitted: 'no',
             durationInDeparture: 125,
             numberOf0TResponseCodes: 2,
+            isResubmitted: false,
         });
         });
     });

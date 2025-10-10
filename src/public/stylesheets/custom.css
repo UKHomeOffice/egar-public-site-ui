@@ -259,3 +259,7 @@ h2.govuk-notification-banner__title {
 .cursor{
     cursor: pointer;
 }
+.hide-content{
+    display: none;
+}
+

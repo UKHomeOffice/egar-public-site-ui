@@ -45,6 +45,7 @@ module.exports = async (req, res) => {
     const {progress} = JSON.parse(await garApi.getGarCheckinProgress(garId));
     
     const resubmitted = req.query.resubmitted;
+    const isResubmitted = cookie.getResubmitFor0T().includes(garId);
    
     if ('poll' in req.query) {
         logger.info(
@@ -101,6 +102,7 @@ module.exports = async (req, res) => {
         resubmitted,
         durationInDeparture,
         numberOf0TResponseCodes,
+        isResubmitted,
       };
       renderContext.showChangeLinks = true;
       if ((parsedGar.status.name === 'Submitted') || parsedGar.status.name === 'Cancelled') {

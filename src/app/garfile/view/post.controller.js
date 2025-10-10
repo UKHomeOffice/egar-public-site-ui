@@ -42,6 +42,7 @@ module.exports = (req, res) => {
   const garDetails = garApi.get(garId, true);
   const garDocs = garApi.getSupportingDocs(garId);
   let numberOf0TResponseCodes = 0;
+  const isResubmitted = cookie.getResubmitFor0T().includes(garId);
   
   let renderContext = {
     cookie,
@@ -89,6 +90,7 @@ module.exports = (req, res) => {
         isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort),
         numberOf0TResponseCodes,
         durationInDeparture,
+        isResubmitted,
       };
 
       if (parsedGar.status.name === 'Submitted' || parsedGar.status.name === 'Cancelled') {
