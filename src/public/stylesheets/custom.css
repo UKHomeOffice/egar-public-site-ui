@@ -262,4 +262,7 @@ h2.govuk-notification-banner__title {
 .hide-content{
     display: none;
 }
+.pagination {
+    font-size: 19px !important;
+}
 

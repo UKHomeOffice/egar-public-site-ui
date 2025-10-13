@@ -86,6 +86,9 @@ class Cookie {
     if(this.session.resubmitFor0T == null) {
       this.session.resubmitFor0T = [];
     }
+    if(this.session.redirectUrl == null){
+      this.session.redirectUrl = '';
+    }
   }
 
   initialiseGar() {
@@ -163,6 +166,7 @@ class Cookie {
     this.session.svp = null;
     this.session.gar = null;
     this.session.resubmitFor0T = null;
+    this.session.redirectUrl = null;
   }
 
   getGar() {
@@ -758,6 +762,13 @@ class Cookie {
 
   getResubmitFor0T() {
     return this.session.resubmitFor0T;
+  }
+  setRedirectUrl(url) {
+    return this.session.redirectUrl = url;
+  }
+
+  getRedirectUrl(){
+    return this.session.redirectUrl;
   }
 
   generateDate(day, month, year) {
