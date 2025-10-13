@@ -196,7 +196,9 @@
   </tbody>
 </table>
  <input type="hidden" name="resubmitted" value="{{resubmitted}}" />
- {{ pagination.build('passenger-checkin', pages, __)}}
+ <div class="govuk-body">
+  {{ pagination.build('passenger-checkin', pages, __)}}
+  </div>
 
 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/> 
 </form> 
