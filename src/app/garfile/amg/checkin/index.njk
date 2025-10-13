@@ -43,11 +43,12 @@
 
   <script>
    $(function () {
+      const resubmitted = $('#resubmitted').val();
       window.myinterval = setInterval(function () {
         const permissionDetails = () => Array.from(document.getElementsByClassName('permission-details'));
         const permissionDetailsState = permissionDetails().map(el => el.open);
         
-        $.get('/garfile/amg/checkin?template=pane', null, function (data) {
+        $.get(`/garfile/amg/checkin?template=pane&resubmitted=${resubmitted}`, null, function (data) {
           const html = $(data);
            
           if (!html.find('#spinner').length) {
