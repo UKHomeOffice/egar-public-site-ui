@@ -109,7 +109,7 @@ module.exports = async (req, res) => {
         renderContext.showChangeLinks = false;
       }
       
-    if(progress === 'Incomplete') {
+    if(progress === 'Incomplete' && resubmitted === 'yes') {
       logger.info(`Rendering GAR 0T resubmit page`);
       res.render('app/garfile/amg/checkin/resubmit',renderContext);
   } else{
