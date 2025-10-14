@@ -20,6 +20,7 @@ module.exports = async (req, res) => {
     pagination.setCurrentPage(req, '/garfile/amg/checkin', 1)
   }
  
+  
   const {progress} = JSON.parse(await garApi.getGarCheckinProgress(garId));
   if ( 'poll' in req.query) {
       logger.info(
@@ -63,7 +64,7 @@ module.exports = async (req, res) => {
       showImportantBanner
     };
     
-     if (progress === 'Incomplete' && initialSubmit === '') {
+     if (progress === 'Incomplete' && resubmitted === 'yes') {
       return res.render('app/garfile/amg/checkin/resubmit', renderObj);
     }
   
