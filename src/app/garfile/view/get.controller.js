@@ -38,6 +38,13 @@ module.exports = async (req, res) => {
     if (garId === undefined) {
       garId = cookie.getGarId();
     }
+    if(garId === null){
+      logger.info('GAR id is null, redirect to home page');
+      res.redirect('/home');
+      return;
+    }
+
+    try{
     cookie.setGarId(garId);
     const garPeople = garApi.getPeople(garId);
     const garDetails = garApi.get(garId);
@@ -125,4 +132,10 @@ module.exports = async (req, res) => {
       renderContext.errors = [{ message: 'Failed to get GAR information' }];
       res.render('app/garfile/view/index', renderContext);
     });
+  } catch(err){
+    logger.error('Failed to get GAR information');
+    logger.error(err);
+    renderContext.errors = [{ message: 'Failed to get GAR information' }];
+    res.render('app/garfile/view/index', renderContext)
+  }
   };

@@ -6,14 +6,14 @@ const pagination = require('../../../../common/utils/pagination');
 
 module.exports = async (req, res) => {
   logger.debug('In garfile / amg get controller');
-
+ 
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
   const resubmitted = req.query.resubmitted || 'no';
   const template = req.query.template === 'pane' ? 'app/garfile/amg/checkin/pane' : 'app/garfile/amg/checkin/index';
   const initialSubmit = req.query.initialSubmit ? '&initialSubmit=yes' : '';
   const pageUrl = `/garfile/amg/checkin?resubmitted=${resubmitted}${initialSubmit}`;
-  
+  try{
   let currentPage = pagination.getCurrentPage(req, '/garfile/amg/checkin');
 
   if(initialSubmit !== ''){
@@ -75,4 +75,10 @@ module.exports = async (req, res) => {
     logger.error(err);
     res.render('app/garfile/amg/checkin/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
   });
+}catch(err) {
+    logger.error('Error retrieving GAR for amg');
+    logger.error(err);
+    res.render('app/garfile/amg/checkin/index', { cookie, errors: [{ message: 'There was an error retrieving the GAR. Try again later' }] });
+  };
+
 };

@@ -36,8 +36,10 @@ module.exports = (req, res) => {
                   cookie.setLoginInfo(parsedResponse);
                   const redirectUrl = cookie.getRedirectUrl(); 
                   if(redirectUrl !== '') { 
-                    const garId = new URL(`${settings.BASE_URL}${redirectUrl}`).searchParams.get('gar_id');
-                    cookie.setGarId(garId)
+                    const urlParams = new URL(redirectUrl, settings.BASE_URL);
+                    const garId = urlParams.searchParams.get('gar_id');
+                    logger.info(`Redirected to GAR ${garId}`);
+                    cookie.setGarId(garId);
                     return res.redirect(redirectUrl);
                   }
                   req.session.save(() => {
