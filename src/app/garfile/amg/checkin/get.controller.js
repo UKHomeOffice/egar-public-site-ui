@@ -11,11 +11,16 @@ module.exports = async (req, res) => {
   const garId = cookie.getGarId();
   const resubmitted = req.query.resubmitted || 'no';
   const template = req.query.template === 'pane' ? 'app/garfile/amg/checkin/pane' : 'app/garfile/amg/checkin/index';
-  const initialSubmit = req.query.initialSubmit ? '&initialSubmit=yes' : 'no';
+  const initialSubmit = req.query.initialSubmit ? '&initialSubmit=yes' : '';
   const pageUrl = `/garfile/amg/checkin?resubmitted=${resubmitted}${initialSubmit}`;
   
-  const currentPage = pagination.getCurrentPage(req, '/garfile/amg/checkin');
+  let currentPage = pagination.getCurrentPage(req, '/garfile/amg/checkin');
+
+  if(initialSubmit !== ''){
+    pagination.setCurrentPage(req, '/garfile/amg/checkin', 1)
+  }
  
+  
   const {progress} = JSON.parse(await garApi.getGarCheckinProgress(garId));
   if ( 'poll' in req.query) {
       logger.info(
@@ -59,7 +64,7 @@ module.exports = async (req, res) => {
       showImportantBanner
     };
     
-     if (progress === 'Incomplete' && initialSubmit === 'no') {
+     if (progress === 'Incomplete' && resubmitted === 'yes') {
       return res.render('app/garfile/amg/checkin/resubmit', renderObj);
     }
   

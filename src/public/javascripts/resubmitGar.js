@@ -4,11 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const bodyElement = document.body;
   let pollIntervalId;
 
-  const resubmit0T = document.getElementById("resubmit0T");
-  const reSubmitGarForm = document.getElementById("reSubmitGarForm");
-  const resubmitFor0TLink = document.getElementById("resubmitFor0TLink");
-  const params = new URLSearchParams(window.location.search);
-
   async function pollAndUpdateDOM() {
     try {
       const checkinResponse = await fetch('/garfile/amg/checkin?poll');
@@ -30,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 $(document).on('click', '#resubmit0T', function(){
-  resubmitFor0TLink.value = 'yes';
-  reSubmitGarForm.submit();
+  $('#resubmitFor0TLink').val('yes');
+  $('#reSubmitGarForm').submit();
 
 })
 

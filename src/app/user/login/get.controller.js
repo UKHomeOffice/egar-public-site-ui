@@ -219,6 +219,13 @@ module.exports = async (req, res) => {
 
           return handleUserAuthentication(req, res, userInfo, cookie)
             .then(({ redirect }) => {
+              const redirectUrl = cookie.getRedirectUrl();
+              if(redirectUrl!== '') {
+                const garId = new URL(`${settings.BASE_URL}${redirectUrl}`).searchParams.get('gar_id');
+                cookie.setGarId(garId)
+                redirect = redirectUrl;
+              }
+              
               if (redirect === ROUTES.HOME) {
                 delete req.cookies.nonce;
                 delete req.cookies.state;
