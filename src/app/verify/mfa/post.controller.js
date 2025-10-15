@@ -35,11 +35,9 @@ module.exports = (req, res) => {
                   cookie.setOrganisationId(apiResponse?.organisation?.organisationId);
                   cookie.setLoginInfo(parsedResponse);
                   const redirectUrl = cookie.getRedirectUrl(); 
-                  logger.info(`redirected url: ${redirectUrl}`);
                   if(redirectUrl !== '') { 
-                    logger.info(`Redirecting to GAR Summary page ${settings.BASE_URL}${redirectUrl}`);
-                    const url = new URL('https://public-site.sit.internal.egar-notprod.homeoffice.gov.uk/garfile/view?gar_id=1688efea-f269-4628-b38e-5c364f1e440e');
-                    const garId = url.searchParams.get('gar_id');
+                    const urlParams = new URL(redirectUrl, settings.BASE_URL);
+                    const garId = urlParams.searchParams.get('gar_id');
                     logger.info(`Redirected to GAR ${garId}`);
                     cookie.setGarId(garId);
                     return res.redirect(redirectUrl);

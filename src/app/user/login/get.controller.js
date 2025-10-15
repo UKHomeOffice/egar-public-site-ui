@@ -221,9 +221,8 @@ module.exports = async (req, res) => {
             .then(({ redirect }) => {
               const redirectUrl = cookie.getRedirectUrl();
               if(redirectUrl!== '') {
-                logger.info(`redirected url: ${redirectUrl}`);
-                const url = 'https://public-site.sit.internal.egar-notprod.homeoffice.gov.uk/garfile/view?gar_id=1688efea-f269-4628-b38e-5c364f1e440e';
-                const garId = new URL(url).searchParams.get('gar_id');
+                const urlParams = new URL(redirectUrl, BASE_URL);
+                const garId = urlParams.searchParams.get('gar_id');
                 logger.info(`Redirected to GAR ${garId}`);
                 cookie.setGarId(garId)
                 redirect = redirectUrl;

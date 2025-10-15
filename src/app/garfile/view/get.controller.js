@@ -38,6 +38,11 @@ module.exports = async (req, res) => {
     if (garId === undefined) {
       garId = cookie.getGarId();
     }
+    if(garId === null){
+      logger.info('GAR id is null, redirect to home page');
+      res.redirect('/home');
+      return;
+    }
 
     try{
     cookie.setGarId(garId);
