@@ -221,8 +221,7 @@ module.exports = async (req, res) => {
             .then(({ redirect }) => {
               const redirectUrl = cookie.getRedirectUrl();
               if(redirectUrl!== '') {
-                const baseUrl = parseUrlForNonProd(req, BASE_URL);
-                const urlParams = new URL(redirectUrl, baseUrl);
+                const urlParams = new URL(redirectUrl, BASE_URL);
                 const garId = urlParams.searchParams.get('gar_id');
                 logger.info(`Redirected to GAR ${garId}`);
                 cookie.setGarId(garId)
