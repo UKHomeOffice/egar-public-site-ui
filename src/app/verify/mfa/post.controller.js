@@ -36,7 +36,8 @@ module.exports = (req, res) => {
                   cookie.setLoginInfo(parsedResponse);
                   const redirectUrl = cookie.getRedirectUrl(); 
                   if(redirectUrl !== '') { 
-                    const urlParams = new URL(redirectUrl, settings.BASE_URL);
+                    const baseUrl = `${settings.HTTPS}${settings.BASE_URL}`;
+                    const urlParams = new URL(redirectUrl, baseUrl);
                     const garId = urlParams.searchParams.get('gar_id');
                     logger.info(`Redirected to GAR ${garId}`);
                     cookie.setGarId(garId);
