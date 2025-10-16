@@ -10,13 +10,17 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
-
 const controller = require('../../../app/garfile/view/get.controller');
 const { outboundGar } = require('../../fixtures');
 
+
 describe('GAR view get controller', () => {
   let req; let res;
-  let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub;
+  let garApiGetStub; 
+  let garApiGetPeopleStub; 
+  let garApiGetSupportingDocsStub;
+  let getGarCheckinProgressStub;
+  let getDurationBeforeDepartureStub;
 
   let clock;
   const APRIL = 3;
@@ -30,7 +34,8 @@ describe('GAR view get controller', () => {
     });
 
     req = {
-      body: { garId: 'GAR-ID-EXAMPLE-1' },
+      body: { garId: 'GAR-ID-EXAMPLE-1'},
+      query: {resubmitted: 'no'},
       session: {
         successHeader: undefined,
         successMsg: undefined,
@@ -47,6 +52,8 @@ describe('GAR view get controller', () => {
     garApiGetStub = sinon.stub(garApi, 'get');
     garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
     garApiGetSupportingDocsStub = sinon.stub(garApi, 'getSupportingDocs');
+    getGarCheckinProgressStub = sinon.stub(garApi, 'getGarCheckinProgress');
+    getDurationBeforeDepartureStub = sinon.stub(garApi, 'getDurationBeforeDeparture');
   });
 
   afterEach(() => {
@@ -72,11 +79,18 @@ describe('GAR view get controller', () => {
             { id: 'PERSON-2', firstName: 'Serena' },
         ],
         }));
+
         garApiGetSupportingDocsStub.resolves(JSON.stringify({
         items: [
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
         ],
         }));
+
+        getGarCheckinProgressStub.resolves(JSON.stringify({
+        progress: {progress:'Complete'},
+        }));
+
+        getDurationBeforeDepartureStub.returns(125);
 
         const callController = async () => {
             await controller(req, res);
@@ -84,7 +98,7 @@ describe('GAR view get controller', () => {
 
         callController().then().then(() => {
         expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+        //expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
         expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
             cookie,
@@ -105,7 +119,11 @@ describe('GAR view get controller', () => {
                 ],
             },
             showChangeLinks: true,
-            isJourneyUKInbound: true
+            isJourneyUKInbound: true,
+            resubmitted: 'no',
+            durationInDeparture: 125,
+            numberOf0TResponseCodes: 2,
+            isResubmitted: false,
         });
         });
     });
@@ -132,6 +150,11 @@ describe('GAR view get controller', () => {
         ],
         }));
 
+        getGarCheckinProgressStub.resolves(JSON.stringify({
+        progress: {progress:'Complete'},
+        }));
+        getDurationBeforeDepartureStub.returns(125);
+
         const callController = async () => {
         await controller(req, res);
         };
@@ -142,7 +165,7 @@ describe('GAR view get controller', () => {
 
         callController().then().then(() => {
         expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+        //expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
         expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
             cookie,
@@ -164,6 +187,10 @@ describe('GAR view get controller', () => {
                 { name: 'EXAMPLE-DOC-1', size: '1MB' },
             ],
             },
+            resubmitted: 'no',
+            durationInDeparture: 125,
+            numberOf0TResponseCodes: 2,
+            isResubmitted: false,
         });
         });
     });

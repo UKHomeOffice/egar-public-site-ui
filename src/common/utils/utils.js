@@ -55,10 +55,11 @@ function nanoid(alphabet, tokenLength) {
 }
 
 
+
 module.exports = {
     trimToDecimalPlaces,
     documentTypes,
     getResponsiblePersonFromReq,
     getResponsiblePersonFromGar,
-    nanoid
+    nanoid,
 }

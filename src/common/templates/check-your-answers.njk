@@ -1,5 +1,5 @@
 {% import "common/templates/includes/banners.njk" as b %}
-
+{% set viewGuidance = (garfile.status.name === 'Submitted' and resubmitted != 'yes' and numberOf0TResponseCodes > 0) %}
 <div class="govuk-grid-column-full">
   <dl id="departure" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
     <div class="app-check-your-answers__contents">
@@ -103,13 +103,35 @@
     {{ check_your_answers_row(__('field_aircraft_base'), garfile.craftBase) }}
   </dl>
 
-  <dl id="manifest" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
+  <dl id="manifest" class="app-check-your-answers margin-bottom-10">
     <div class="app-check-your-answers__contents">
-      <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
+      <dt style="border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
         {{__('heading_manifest_details')}}
-        <p class="govuk-body-s" style="white-space: nowrap;padding-top:15px;font-size: 1.1875rem;">
-          {{__('expired_passport_warning')}}
+        {% if viewGuidance and isResubmitted === false and durationInDeparture > 125 %}
+          <div style="float:right;">
+            <a href="#" id="resubmit0T" class="govuk-link govuk-button resubmit0T">Resubmit checks for timed out passengers</a>
+            <form id="reSubmitGarForm" action="/garfile/review" method="post">
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+              <input type="hidden" name="resubmitFor0T" value="resubmit0TOnSummaryPage" />
+              <input type="hidden" name="resubmitFor0TLink" id="resubmitFor0TLink" value="no" />
+            </form>
+          </div>
+        {% endif %}
+        <p class="govuk-body" style="padding-top: {% if viewGuidance and isResubmitted === true %} 5% {% else %} 3% {% endif %};font-size: 1.1875rem;">
+          {{__('guidance') | safe}}
         </p>
+       
+      {% if (garfile.status.name === 'Submitted' and numberOf0TResponseCodes > 0 and (durationInDeparture < 125 or isResubmitted === true))  %}
+        <div class="box-left-grey-border">
+          <div class="email-text">
+           <p class="govuk-body"> 
+            <span class="system-timeout">System time out</span>
+           </p>
+            <p class="govuk-body">This individual may be boarded.</p>
+            <p class="govuk-body">There will be no Section 40 liability if the individual is subsequently found not to hold a valid permission to travel.</p>
+          </div>
+        </div>
+      {% endif %}
       </dt>
             {% if showChangeLinks %}
               <dd style="border-bottom: none;" class="app-check-your-answers__change">
@@ -152,11 +174,13 @@
                     <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                     {% if isJourneyUKInbound %}
                       {% if person.amgCheckinResponseCode === '0B'%}
-                        {% set statusColor = 'no-reocord'%}
+                        {% set statusColor = 'no-record'%}
                       {% elif person.amgCheckinResponseCode === '0A'%}
                         {% set statusColor = 'valid-permission-to-travel'%}
                       {% elif person.amgCheckinResponseCode === '0Z'%}
                         {% set statusColor = 'authority-to-carry-granted'%}
+                      {% elif person.amgCheckinResponseCode === '0T'%}
+                        {% set statusColor = 'system-timeout'%}
                       {% else %}  
                         {% set statusColor = '' %}
                       {% endif %}
@@ -349,4 +373,5 @@
               {% endif %}
             </tbody>
           </table>
+          
         </div>

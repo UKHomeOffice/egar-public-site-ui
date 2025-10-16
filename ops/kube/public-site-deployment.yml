@@ -340,6 +340,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID
+            - name: USE_NEW_NATIONALITY_LIST_PROVIDER
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: USE_NEW_NATIONALITY_LIST_PROVIDER
           ports:
             - name: public-site-prt
               containerPort: 3000

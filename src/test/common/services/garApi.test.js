@@ -58,11 +58,11 @@ describe('GarService', () => {
       });
 
     nock(BASE_URL)
-      .get(`/gar/${garId}/people?page=1&per_page=10000&priority=amg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A`)
+      .get(`/gar/${garId}/people?page=1&per_page=10&priority=amg_checkin_response_code%3A0T%2Camg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A&amg_response_codes=0T`)
       .reply(200, {
         "_meta": {
           "page": 1,
-          "perPage": 100,
+          "perPage": 10,
           "totalPages": 1,
           "totalItems": 4
         },
@@ -152,7 +152,7 @@ describe('GarService', () => {
   });
 
   it('Should fetch the people saved to a GAR', (done) => {
-    garApi.getPeople(garId)
+    garApi.getPeople(garId, 1, '0T')
       .then((apiResponse) => {
         const parsedResponse = JSON.parse(apiResponse);
         expect(typeof parsedResponse).to.equal('object');
@@ -250,10 +250,10 @@ describe('GarService', () => {
   it('should throw an error for getPeople', () => {
     nock.cleanAll();
     nock(BASE_URL)
-      .get(`/gar/${garId}/people?page=1&per_page=10000&priority=amg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A`)
+      .get(`/gar/${garId}/people?page=1&per_page=10&priority=amg_checkin_response_code%3A0T%2Camg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A&amg_response_codes=0T`)
       .replyWithError({ message: 'Example getPeople error', code: 404 });
 
-    garApi.getPeople(garId).then(() => {
+    garApi.getPeople(garId, 1, '0T').then(() => {
       chai.assert.fail('Should not have returned without error');
     }).catch((err) => {
       expect(err.message).to.equal('Example getPeople error');

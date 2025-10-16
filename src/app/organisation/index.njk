@@ -127,8 +127,6 @@
               {{ pagination.build('organisation', pages, __)}}
             {% endif %}
         </form>
-        <input type="hidden" id="current-pg" value="{{currentPage}}" >
-
         {% if orgUsers | length  and pages %}
           <a href="/organisation/users/export" class="govuk-button">Download CSV</a>
         {% endif %}

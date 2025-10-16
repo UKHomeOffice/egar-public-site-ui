@@ -1,0 +1,24 @@
+{% extends "base-template.njk" %}
+
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block pageTitle %}
+  {{__('error_prefix') if errors}} Create GAR | Passenger Check
+{% endblock %}
+
+{% set active = '/home' %}
+
+{% block header %}
+  {% include "header-user.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "phase.njk" %}
+{% endblock %}
+
+{% block content %}
+  <div id="checkin-loading-screen">
+    {{ m.loadingScreen("Resubmitting checks for passengers with 'System time out' status", "This may take up to 5 minutes to complete.") }}
+  </div>  
+<script type="text/javascript" src="/javascripts/resubmitGar.js"></script>
+{% endblock %}

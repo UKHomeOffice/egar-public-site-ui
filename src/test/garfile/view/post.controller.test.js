@@ -16,7 +16,10 @@ const { outboundGar } = require('../../fixtures');
 
 describe('GAR view post controller', () => {
   let req; let res;
-  let garApiGetStub; let garApiGetPeopleStub; let garApiGetSupportingDocsStub;
+  let garApiGetStub; 
+  let garApiGetPeopleStub; 
+  let garApiGetSupportingDocsStub;
+  let getDurationBeforeDepartureStub;
 
   let clock;
   const APRIL = 3;
@@ -45,6 +48,7 @@ describe('GAR view post controller', () => {
     garApiGetStub = sinon.stub(garApi, 'get');
     garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
     garApiGetSupportingDocsStub = sinon.stub(garApi, 'getSupportingDocs');
+    getDurationBeforeDepartureStub = sinon.stub(garApi, 'getDurationBeforeDeparture');
   });
 
   afterEach(() => {
@@ -141,7 +145,6 @@ describe('GAR view post controller', () => {
     garApiGetStub.resolves();
     garApiGetPeopleStub.resolves();
     garApiGetSupportingDocsStub.rejects('garApi.getSupportingDocs Example Reject');
-
     const callController = async () => {
       await controller(req, res);
     };
@@ -157,6 +160,7 @@ describe('GAR view post controller', () => {
         garfile: {},
         garpeople: {},
         garsupportingdocs: {},
+        numberOf0TResponseCodes: 0,
         errors: [{ message: 'Failed to get GAR information' }],
       });
     });
@@ -180,6 +184,7 @@ describe('GAR view post controller', () => {
         { name: 'EXAMPLE-DOC-1', size: '1MB' },
       ],
     }));
+    getDurationBeforeDepartureStub.returns(125);
 
     const callController = async () => {
       await controller(req, res);
@@ -206,7 +211,10 @@ describe('GAR view post controller', () => {
           ],
         },
         showChangeLinks: true,
-        isJourneyUKInbound: true
+        isJourneyUKInbound: true,
+        durationInDeparture: 125,
+        numberOf0TResponseCodes: 0,
+        isResubmitted: false,
       });
     });
   });
@@ -229,6 +237,8 @@ describe('GAR view post controller', () => {
         { name: 'EXAMPLE-DOC-1', size: '1MB' },
       ],
     }));
+
+    getDurationBeforeDepartureStub.returns(125);
 
     const callController = async () => {
       await controller(req, res);
@@ -255,7 +265,10 @@ describe('GAR view post controller', () => {
           ],
         },
         showChangeLinks: true,
-        isJourneyUKInbound: true
+        isJourneyUKInbound: true,
+        durationInDeparture: 125,
+        numberOf0TResponseCodes: 0,
+        isResubmitted: false,
       });
     });
   });
@@ -278,6 +291,8 @@ describe('GAR view post controller', () => {
         { name: 'EXAMPLE-DOC-1', size: '1MB' },
       ],
     }));
+
+    getDurationBeforeDepartureStub.returns(125);
 
     const callController = async () => {
       await controller(req, res);
@@ -305,6 +320,9 @@ describe('GAR view post controller', () => {
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
           ],
         },
+        numberOf0TResponseCodes: 0,
+        durationInDeparture: 125,
+        isResubmitted: false,
       });
     });
   });
@@ -362,6 +380,7 @@ describe('GAR view post controller', () => {
         { name: 'EXAMPLE-DOC-1', size: '1MB' },
       ],
     }));
+    getDurationBeforeDepartureStub.returns(125);
 
     const callController = async () => {
       await controller(req, res);
@@ -389,6 +408,9 @@ describe('GAR view post controller', () => {
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
           ],
         },
+        durationInDeparture: 125,
+        numberOf0TResponseCodes: 0,
+        isResubmitted: false,
       });
     });
   });
@@ -412,6 +434,7 @@ describe('GAR view post controller', () => {
         { name: 'EXAMPLE-DOC-1', size: '1MB' },
       ],
     }));
+    getDurationBeforeDepartureStub.returns(125);
 
     const callController = async () => {
       await controller(req, res);
@@ -439,6 +462,9 @@ describe('GAR view post controller', () => {
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
           ],
         },
+        numberOf0TResponseCodes: 0,
+        durationInDeparture: 125,
+        isResubmitted: false,
       });
     });
   });
@@ -463,6 +489,7 @@ describe('GAR view post controller', () => {
         { name: 'EXAMPLE-DOC-1', size: '1MB' },
       ],
     }));
+    getDurationBeforeDepartureStub.returns(125);
 
     const callController = async () => {
       await controller(req, res);
@@ -494,6 +521,9 @@ describe('GAR view post controller', () => {
             { name: 'EXAMPLE-DOC-1', size: '1MB' },
           ],
         },
+        numberOf0TResponseCodes: 0,
+        durationInDeparture: 125,
+        isResubmitted: false,
       });
     });
   });
