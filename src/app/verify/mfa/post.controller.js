@@ -9,6 +9,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const tokenApi = require('../../../common/services/tokenApi');
 const userApi = require('../../../common/services/userManageApi');
 const settings = require('../../../common/config/index');
+const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 
 module.exports = (req, res) => {
   logger.debug('In verify / mfa post controller');
@@ -36,7 +37,8 @@ module.exports = (req, res) => {
                   cookie.setLoginInfo(parsedResponse);
                   const redirectUrl = cookie.getRedirectUrl(); 
                   if(redirectUrl !== '') { 
-                    const urlParams = new URL(redirectUrl, settings.BASE_URL);
+                    const baseUrl = parseUrlForNonProd(req, settings.BASE_URL);
+                    const urlParams = new URL(redirectUrl, baseUrl);
                     const garId = urlParams.searchParams.get('gar_id');
                     logger.info(`Redirected to GAR ${garId}`);
                     cookie.setGarId(garId);
