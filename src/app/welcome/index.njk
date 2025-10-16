@@ -42,9 +42,13 @@ Create GAR | Start
 				</li>
 			</ul>
 
-			<a id="start_now" href="/login" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">
-				{{__('button_start_now')}}
-			</a>
+			{{ govukButton({
+  			text: __('button_start_now'),
+  			href: "/login",
+  			isStartButton: true,
+				id: "start_now",
+				classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8"
+			}) }}
 
 			<div class="govuk-tabs" data-module="tabs">
 				<h2 class="govuk-tabs__title">
