@@ -55,7 +55,7 @@ steps:
         cpu: 1000
         memory: 1024Mi
     environment:
-      IMAGE_NAME: public-site-ui:${DRONE_COMMIT}
+      IMAGE_NAME: egar-public-site-ui:${DRONE_COMMIT}
       IGNORE_UNFIXED: true
     when:
       event:
