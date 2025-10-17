@@ -47,6 +47,15 @@ steps:
     - npm install
     - npm run test-drone
 
+  - name: linting-formatting
+    pull: if-not-exists
+    image: node:22-alpine3.21
+    failure: ignore
+    commands:
+    - cd src
+    - npm install
+    - npm run check
+
   - name: trivy-scan-image
     pull: always
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
@@ -58,9 +67,6 @@ steps:
     environment:
       IMAGE_NAME: egar-public-site-ui:${DRONE_COMMIT}
       IGNORE_UNFIXED: true
-    when:
-      event:
-      - push
     depends_on:
     - build
 
