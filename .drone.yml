@@ -216,6 +216,16 @@ platform:
   arch: amd64
 
 steps:
+  - name: verify-main # Do not continue pipeline unless the commit is from main. I couldn't find a way to do this using Drone when clauses when tagging.
+    image: alpine/git
+    commands:
+      - git fetch origin main
+      - if [ "$(git rev-parse origin/main)" = "$(git rev-parse $DRONE_COMMIT_SHA)" ]; then
+          echo "Tag is of main, continuing...";
+        else
+          echo "Tag is not of main, skipping.";
+          exit 1;
+        fi
   - name: deploy-to-staging
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
