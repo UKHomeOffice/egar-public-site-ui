@@ -66,9 +66,6 @@ steps:
     environment:
       IMAGE_NAME: egar-public-site-ui:${DRONE_COMMIT}
       IGNORE_UNFIXED: true
-    when:
-      event:
-      - push
     depends_on:
     - build
 
