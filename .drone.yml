@@ -1,3 +1,5 @@
+
+
 ---
 kind: pipeline
 name: build-push-scan
@@ -249,101 +251,9 @@ steps:
       PRODUCTION_KUBE_TOKEN:
         from_secret: PRODUCTION_KUBE_TOKEN
 
-<<<<<<< Updated upstream
-  #
 trigger:
-  branch:
-    - master
-    - hotfix/*
   event:
     - promote
   target:
-    include:
-      - production
+    - production
 
----
-kind: pipeline
-name: CRON Scanning
-type: kubernetes
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-  - name: build_and_push_cron
-    pull: if-not-exists
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
-    environment:
-      AWS_ACCESS_KEY_ID:
-        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_ACCESS_KEY_ID
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_SECRET_ACCESS_KEY
-      DOCKER_REGISTRY_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
-      REPO: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui
-
-    commands:
-      - source ./ops/build_and_push.sh
-    settings:
-      group: build-stage
-
-  - name: scan-image-cron
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
-    resources:
-      limits:
-        cpu: 1000
-        memory: 1024Mi
-    environment:
-      IMAGE_NAME: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:${DRONE_COMMIT}
-      IGNORE_UNFIXED: true
-    when:
-      event:
-      - cron
-      depends_on: build_and_push_cron
-      cron:
-      - scheduled_vulnerability_scan
-
-  - name: Notify Slack CRON
-    pull: if-not-exists
-    image: plugins/slack
-    settings:
-      channel: sgar-dev
-      webhook:
-        from_secret: SLACK_WEBHOOK
-      template: >
-        {{#success build.status}}
-          *Image Security Scan* CRON Job has {{build.status}}
-          Author: {{build.author}}
-          Job: <{{build.link}}|#{{build.number}}>
-          Duration: {{since job.started}}
-          Message: {{build.message}}
-        {{else}}
-          *Image Security Scan* CRON Job has {{build.status}}
-          *Deployment* {{repo.name}} - *FAILURE*
-          Author: {{build.author}}
-          Job: <{{build.link}}|#{{build.number}}>
-          Duration: {{since job.started}}
-          Message: {{build.message}}
-          Event:
-        {{/success}}
-    environment:
-      SLACK_WEBHOOK:
-        from_secret: SLACK_WEBHOOK
-
-services:
-  - name: docker
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-
-volumes:
-  - name: dockersock
-    temp: {}
-
-trigger:
-  branch:
-    - master
-  event:
-    - cron
-  cron:
-    - scheduled_vulnerability_scan
-=======
->>>>>>> Stashed changes
