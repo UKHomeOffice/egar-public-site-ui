@@ -1,6 +1,8 @@
+
+
 ---
 kind: pipeline
-name: Build Image
+name: build-push-scan
 type: kubernetes
 
 
@@ -9,7 +11,13 @@ platform:
   arch: amd64
 
 steps:
-  - name: build_and_push
+  - name: build
+    pull: if-not-exists
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
+    commands:
+      - source ./ops/image_build.sh
+
+  - name: push
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
     environment:
@@ -20,24 +28,17 @@ steps:
       DOCKER_REGISTRY_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
       REPO: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui
     commands:
-      - source ./ops/build_and_push.sh
-    settings:
-      group: build-stage
-
-  - name: sonarqube_scan
-    pull: if-not-exists
-    image: quay.io/ukhomeofficedigital/sonar-scanner-nodejs:latest
-    commands:
-    - sonar-scanner -Dproject.settings=./sonar-project.properties
+      - source ./ops/image_push.sh
+    depends_on:
+      - build
     when:
-      branch:
-        exclude:
-        - debug/**
-        event:
+      event:
         - push
-        - tag
+      branch:
+        - main
+        - dev
 
-  - name: Unit Tests
+  - name: unit-test
     pull: if-not-exists
     image: node:22-alpine3.21
     commands:
@@ -45,14 +46,8 @@ steps:
     - cd src
     - npm install
     - npm run test-drone
-    settings:
-      group: build-stage
-    when:
-      event:
-      - push
-      - pull_request
 
-  - name: scan-image
+  - name: trivy-scan-image
     pull: always
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
     failure: ignore
@@ -61,36 +56,53 @@ steps:
         cpu: 1000
         memory: 1024Mi
     environment:
-      IMAGE_NAME: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:${DRONE_COMMIT}
+      IMAGE_NAME: egar-public-site-ui:${DRONE_COMMIT}
       IGNORE_UNFIXED: true
     when:
       event:
       - push
     depends_on:
-    - build_and_push
+    - build
+
+  - name: sonar-scan
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/sonar-scanner-nodejs:latest
+    commands:
+    - sonar-scanner -Dproject.settings=./sonar-project.properties
+    when:
+      event:
+        - push
+      branch:
+        - main
+trigger:
+  event:
+    - push
+    - pull_request
+  branch:
+    - main
+    - dev
 
 services:
   - name: docker
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
 
 volumes:
   - name: dockersock
     temp: {}
 
-trigger:
-      event:
-        - push
 ---
 kind: pipeline
-name: Dev Deployment
+name: deploy-to-dev
 type: kubernetes
+depends_on:
+  - build-push-scan
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-  - name: Deploy to DEV
+  - name: deploy-to-dev
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -111,13 +123,13 @@ steps:
         from_secret: DEV_URL_SERVICE
 trigger:
   event:
-    - tag
-  ref:
-    - refs/tags/release*
+    - push
+  branch:
+    - dev
 
 ---
 kind: pipeline
-name: Test Deployment
+name: deploy-to-test
 type: kubernetes
 
 platform:
@@ -125,7 +137,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: Deploy to Test
+  - name: deploy-to-test
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -152,15 +164,17 @@ trigger:
 
 ---
 kind: pipeline
-name: SIT Deployment
+name: deploy-to-sit
 type: kubernetes
+depends_on:
+  - build-push-scan
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-  - name: Deploy to SIT
+  - name: deploy-to-sit
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -179,48 +193,15 @@ steps:
         from_secret: SIT_KUBE_SERVER
       SIT_KUBE_TOKEN:
         from_secret: SIT_KUBE_TOKEN
-
-  - name: Get_the_Dynamic_DB_creds
-    pull: if-not-exists
-    image: quay.io/ukhomeofficedigital/kd
-    commands:
-      - export KUBE_SERVER=$${SIT_KUBE_SERVER}
-      - export KUBE_TOKEN=$${SIT_KUBE_TOKEN}
-    #  - echo "export E2E_FRONT_END_DB_USER=$(kd run get secret appdbcreds --template={{.data.FRONTENDDBUSER}} | base64 -d)" > db_creds
-    #  - echo "export E2E_FRONT_END_DB_PASSWORD=$(kd run get secret appdbcreds --template={{.data.FRONTENDDBPASSWORD}} | base64 -d)" >> db_creds
-    #  - echo "export E2E_BACK_END_DB_USER=$(kd run get secret appdbcreds --template={{.data.BACKENDDBUSER}} | base64 -d)" >> db_creds
-    #  - echo "export E2E_BACK_END_DB_PASSWORD=$(kd run get secret appdbcreds --template={{.data.BACKENDDBPASSWORD}} | base64 -d)" >> db_creds
-    environment:
-      INGRESS_CLASS: nginx-internal
-      INSECURE_SKIP_TLS_VERIFY: true
-      KUBE_NAMESPACE: egar-sit
-      NODE_ENV: sit
-      SIT_KUBE_SERVER:
-        from_secret: SIT_KUBE_SERVER
-      SIT_KUBE_TOKEN:
-        from_secret: SIT_KUBE_TOKEN
-
-  #
-services:
-  - name: docker
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-
-
-
-volumes:
-  - name: dockersock
-    temp: {}
-
 trigger:
   branch:
-    - master
-    - hotfix/*
+    - main
   event:
     - push
 ---
 
 kind: pipeline
-name: Staging Deployment
+name: deploy-to-staging
 type: kubernetes
 
 platform:
@@ -228,7 +209,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: Deploy to Staging
+  - name: deploy-to-staging
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -250,22 +231,14 @@ steps:
       STAGING_KUBE_TOKEN:
         from_secret: STAGING_KUBE_TOKEN
 trigger:
-  branch:
-    - master
-    - hotfix/*
-    - sGAR*
   event:
-    - promote
-  target:
-    exclude:
-      - production
-    include:
-      - staging
+    - tag
+  ref:
+    - refs/tags/v*
 
 ---
-
 kind: pipeline
-name: Prod Deployment
+name: deploy-to-production
 type: kubernetes
 
 platform:
@@ -273,7 +246,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: Deploy to Production
+  - name: deploy-to-production
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd
     commands:
@@ -293,98 +266,9 @@ steps:
       PRODUCTION_KUBE_TOKEN:
         from_secret: PRODUCTION_KUBE_TOKEN
 
-  #
 trigger:
-  branch:
-    - master
-    - hotfix/*
   event:
     - promote
   target:
-    include:
-      - production
+    - production
 
----
-kind: pipeline
-name: CRON Scanning
-type: kubernetes
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-  - name: build_and_push_cron
-    pull: if-not-exists
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
-    environment:
-      AWS_ACCESS_KEY_ID:
-        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_ACCESS_KEY_ID
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_SECRET_ACCESS_KEY
-      DOCKER_REGISTRY_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
-      REPO: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui
-
-    commands:
-      - source ./ops/build_and_push.sh
-    settings:
-      group: build-stage
-
-  - name: scan-image-cron
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
-    resources:
-      limits:
-        cpu: 1000
-        memory: 1024Mi
-    environment:
-      IMAGE_NAME: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:${DRONE_COMMIT}
-      IGNORE_UNFIXED: true
-    when:
-      event:
-      - cron
-      depends_on: build_and_push_cron
-      cron:
-      - scheduled_vulnerability_scan
-
-  - name: Notify Slack CRON
-    pull: if-not-exists
-    image: plugins/slack
-    settings:
-      channel: sgar-dev
-      webhook:
-        from_secret: SLACK_WEBHOOK
-      template: >
-        {{#success build.status}}
-          *Image Security Scan* CRON Job has {{build.status}}
-          Author: {{build.author}}
-          Job: <{{build.link}}|#{{build.number}}>
-          Duration: {{since job.started}}
-          Message: {{build.message}}
-        {{else}}
-          *Image Security Scan* CRON Job has {{build.status}}
-          *Deployment* {{repo.name}} - *FAILURE*
-          Author: {{build.author}}
-          Job: <{{build.link}}|#{{build.number}}>
-          Duration: {{since job.started}}
-          Message: {{build.message}}
-          Event:
-        {{/success}}
-    environment:
-      SLACK_WEBHOOK:
-        from_secret: SLACK_WEBHOOK
-
-services:
-  - name: docker
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-
-volumes:
-  - name: dockersock
-    temp: {}
-
-trigger:
-  branch:
-    - master
-  event:
-    - cron
-  cron:
-    - scheduled_vulnerability_scan
