@@ -3,6 +3,7 @@ kind: pipeline
 name: Build Image
 type: kubernetes
 
+
 platform:
   os: linux
   arch: amd64
