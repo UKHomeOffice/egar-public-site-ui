@@ -1,0 +1,30 @@
+{% from "dist/govuk/components/footer/macro.njk" import govukFooter %}
+{% macro footer() %}
+
+  {{ govukFooter({
+    meta: {
+      items: [
+        {
+          text: "Privacy Policy",
+          href: "https://www.gov.uk/government/publications/personal-information-use-in-borders-immigration-and-citizenship"
+        },
+        {
+          text: "Help",
+          href: "/help"
+        },
+        {
+          text: "Cookies",
+          href: "/cookies"
+        },
+        {
+          text: "Accessibility Statement",
+          href: "/accessibility"
+        }
+      ],
+      licence: {
+        html: 'All content is available under the <a class="govuk-footer__link" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated'
+      }
+    }
+  }) }}
+
+{% endmacro %}
