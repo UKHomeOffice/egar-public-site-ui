@@ -1,21 +1,17 @@
 {% from "dist/govuk/components/skip-link/macro.njk" import govukSkipLink %}
-{% from "dist/govuk/components/header/macro.njk" import govukHeader %}
 {% from "dist/govuk/components/footer/macro.njk" import govukFooter %}
 {% from "dist/govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "dist/govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "dist/govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "dist/govuk/components/radios/macro.njk" import govukRadios %}
 {% from "dist/govuk/components/button/macro.njk" import govukButton %}
-
+{% from "includes/navigation.njk" import navigation %}
 {# {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "govuk/components/skip-link/macro.njk" import govukSkipLink %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/footer/macro.njk" import govukFooter %} #}
-
-
-
 {# specify absolute url for the static assets folder e.g. http://wwww.domain.com/assets #}
 {%- set assetUrl = assetUrl | default(assetPath) -%}
 <!DOCTYPE html>

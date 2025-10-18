@@ -1,8 +1,21 @@
-<div class="header-proposition">
-  <div class="content">
-    <nav id="proposition-menu">
-         <a href="{{baseUrl}}/home" id="proposition-name">{{$journeyHeader}}{{/journeyHeader}}</a>
-         <span class="egar-logout"><a href="/oauth/logout?redirect=/sign-out?s=1">Sign out</a></span>
-    </nav>
-  </div>
-</div>
+{% from "dist/govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+{% from "dist/govuk/components/header/macro.njk" import govukHeader %}
+{% macro navigation(pagesList, active)%}
+
+  {{ govukHeader({
+    homepageUrl: "/"
+  }) }}
+
+  {% set pages = [] %}
+  {% for page in pagesList %}
+    {% set _ = pages.push({
+      href: page.href,
+      text: page.text,
+      active: (page.href == active)
+    }) %}
+  {% endfor %}
+
+  {{ govukServiceNavigation({
+    navigation: pages
+  }) }}
+{% endmacro %}
