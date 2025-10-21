@@ -33,7 +33,7 @@ const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
-const {IS_HTTPS_SERVER, SAME_SITE_VALUE} = require("./common/config");
+const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require("./common/config");
 
 // Global constants
 const PORT = (process.env.PORT || 3000);
@@ -199,6 +199,7 @@ function initialiseTemplateEngine(app) {
   app.set('view engine', 'njk');
   logger.info('Set view engine');
 
+  nunjucksEnvironment.addGlobal('govukRebrand', true)
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
   nunjucksEnvironment.addGlobal('travelPermissionCodes', travelPermissionCodes)
@@ -211,7 +212,7 @@ function initialiseTemplateEngine(app) {
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
   // nunjucksEnvironment.addGlobal("toDate", toDate());
-  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_POSTCODE_LENGTH', config.MAX_POSTCODE_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
@@ -229,7 +230,7 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('ONE_LOGIN_SHOW_ONE_LOGIN', config.ONE_LOGIN_SHOW_ONE_LOGIN);
   nunjucksEnvironment.addGlobal('ONE_LOGIN_POST_MIGRATION', config.ONE_LOGIN_POST_MIGRATION);
 
-  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   logger.info('Set global settings for nunjucks');
 }
 
@@ -281,7 +282,7 @@ function initialise() {
       initialisePublic(unconfiguredApp);
       initialiseErrorHandling(unconfiguredApp);
       logger.info('Initialised app: ');
-    } catch(e) {
+    } catch (e) {
       logger.error("Prepping the database failed.")
       logger.error(e);
     }
