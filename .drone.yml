@@ -37,6 +37,7 @@ steps:
       branch:
         - main
         - dev
+        - govuk5-test
 
   - name: unit-test
     pull: if-not-exists
