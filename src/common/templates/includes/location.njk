@@ -17,7 +17,7 @@
             </legend>
             <span id="portChoice-hint" class="govuk-hint">{{__('field_port_choice_hint')}}</span>
             {{ m.error_message('portChoice', errors, __) }}
-            <div class="govuk-radios govuk-radios--conditional" data-module="radios">
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
                 <div class="govuk-radios__item">
                     <input id="portChoiceCode" name="portChoice" class="govuk-radios__input" type="radio" value="Yes" {{ 'checked' if isPortChoice}} data-aria-controls="portChoiceCodeContainer" aria-labelledby="portChoiceCode-label">
                     <label id="portChoiceCode-label" class="govuk-label govuk-radios__label" for="portChoiceCode">{{__('field_choice_yes')}}</label>
@@ -74,7 +74,7 @@
             background-color:#ff9baf;
         }
 
-    
+
     </style>
     {# Start location coords #}
     {# Latitude #}

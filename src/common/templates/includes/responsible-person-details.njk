@@ -111,7 +111,7 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ __('field_fbo_question') }}</legend>
 
         <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
-            <div class="govuk-radios govuk-radio--conditional" data-module="radios">
+            <div class="govuk-radios govuk-radio--conditional" data-module="govuk-radios">
                 {{ m.error_message('fixedBasedOperator', errors, __) }}
                     {% for choice in fixedBasedOperatorOptions %}
                         <div class="govuk-radios__item">
