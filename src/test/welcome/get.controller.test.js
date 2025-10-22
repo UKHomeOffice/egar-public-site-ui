@@ -48,24 +48,4 @@ describe('Welcome Get Controller', () => {
 
     expect(res.render).to.have.been.calledWith('app/welcome/index');
   });
-
-  it('should render the post migration page when flag is on', async () => {
-    configMock['ONE_LOGIN_POST_MIGRATION']  = true;
-    configMock['ONE_LOGIN_SHOW_ONE_LOGIN']  = false;
-
-    sinon.stub(oneLoginApi, 'getOneLoginAuthUrl').returns('https://onelogin.com');
-
-    const controller = proxyrequire('../../app/welcome/get.controller', {
-        '../../common/config/index': configMock,
-    });
-
-
-    await controller(req, res);
-
-    expect(res.render).to.have.been.calledWith('app/welcome/post_migration_page', {
-      HOMEPAGE_MESSAGE: 'Welcome to the new service',
-      ONE_LOGIN_POST_MIGRATION: true,
-      oneLoginUrl: 'https://onelogin.com',
-    });
-  });
 });

@@ -173,9 +173,6 @@ module.exports = async (req, res) => {
   const { code } = req.query;
 
   if (!code) {
-     if (ONE_LOGIN_POST_MIGRATION === true) {
-        return res.redirect(ROUTES.HOME);
-    }
     return res.render('app/user/login/index', {
       oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
       ONE_LOGIN_SHOW_ONE_LOGIN,
@@ -228,7 +225,7 @@ module.exports = async (req, res) => {
                 cookie.setGarId(garId)
                 redirect = redirectUrl;
               }
-              
+
               if (redirect === ROUTES.HOME) {
                 delete req.cookies.nonce;
                 delete req.cookies.state;
