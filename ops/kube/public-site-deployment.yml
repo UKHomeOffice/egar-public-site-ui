@@ -17,6 +17,10 @@ spec:
         name: public-site-svc
         service: public-site-svc
     spec: 
+      volumes:                             
+        - name: bundle-certs
+          configMap:
+            name: bundle   
       containers:
         - name: public-site-proxy
           image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
@@ -352,15 +356,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: environment
-                  key: USE_NEW_NATIONALITY_LIST_PROVIDER
-          volumeMounts:
-              - name: bundle-certs
-                mountPath: /etc/ssl/certs
-                readOnly: true    
-      volumes:                             
-        - name: bundle-certs
-          configMap:
-            name: bundle                
+                  key: USE_NEW_NATIONALITY_LIST_PROVIDER             
           ports:
             - name: public-site-prt
               containerPort: 3000
