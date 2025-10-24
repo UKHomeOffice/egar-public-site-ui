@@ -3,20 +3,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: public-site
-  namespace: {{ .KUBE_NAMESPACE }}
+  namespace: egar-dev
 spec:
   selector:
     matchLabels:
-      name: {{ .APP_NAME }}-svc
-      service: {{ .APP_NAME }}-svc
-  replicas: {{.NUM_REPLICAS}}
+      name: public-site-svc
+      service: public-site-svc
+  replicas: 1
   revisionHistoryLimit: 10
   template:
     metadata:
       labels:
         name: public-site-svc
         service: public-site-svc
-    spec:
+    spec: 
       containers:
         - name: public-site-proxy
           image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
@@ -35,6 +35,10 @@ spec:
           ports:
             - name: public-prxy-prt
               containerPort: 10443
+          volumeMounts:
+            - name: bundle-certs
+              mountPath: /etc/ssl/certs
+              readOnly: true    
           env:
             - name: PROXY_SERVICE_HOST
               value: "127.0.0.1"
@@ -53,6 +57,10 @@ spec:
         - name: public-site
           image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:{{ .TAGGED_VERSION }}
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: certs
+            mountPath: /etc/ssl/certs
+            readOnly: true   
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -345,6 +353,14 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: USE_NEW_NATIONALITY_LIST_PROVIDER
+          volumeMounts:
+              - name: bundle-certs
+                mountPath: /etc/ssl/certs
+                readOnly: true    
+      volumes:                             
+        - name: bundle-certs
+          configMap:
+            name: bundle                
           ports:
             - name: public-site-prt
               containerPort: 3000
