@@ -354,7 +354,7 @@ spec:
                   name: environment
                   key: USE_NEW_NATIONALITY_LIST_PROVIDER 
           volumeMounts:
-          - name: certs
+          - name: bundle-certs
             mountPath: /etc/ssl/certs
             readOnly: true                       
           ports:
