@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -16,7 +13,8 @@ const settings = require('../../../common/config/index');
 const controller = require('../../../app/verify/mfa/get.controller');
 
 describe('Verify MFA Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -57,7 +55,10 @@ describe('Verify MFA Get Controller', () => {
     await controller(emptyReq, res);
 
     expect(tokenApi.setMfaToken).to.not.have.been.called;
-    expect(res.render).to.have.been.calledWith('app/verify/mfa/index', { cookie, mfaTokenLength: 20 });
+    expect(res.render).to.have.been.calledWith('app/verify/mfa/index', {
+      cookie,
+      mfaTokenLength: 20,
+    });
   });
 
   it('should create a token and send an email if verified user', async () => {
@@ -71,9 +72,16 @@ describe('Verify MFA Get Controller', () => {
     await controller(req, res);
 
     expect(tokenApi.setMfaToken).to.have.been.called;
-    expect(emailService.send).to.have.been.calledWith(12345, 'example@somewhere.com', { mfaToken: '123456' });
+    expect(emailService.send).to.have.been.calledWith(
+      12345,
+      'example@somewhere.com',
+      { mfaToken: '123456' }
+    );
     expect(res.render).to.have.been.calledWith('app/verify/mfa/index', {
-      cookie, mfaTokenLength: 20, successHeader: 'We have resent your code', successMsg: 'Check your email',
+      cookie,
+      mfaTokenLength: 20,
+      successHeader: 'We have resent your code',
+      successMsg: 'Check your email',
     });
   });
 
@@ -88,9 +96,17 @@ describe('Verify MFA Get Controller', () => {
     try {
       await controller(req, res);
     } catch (err) {
-      expect(tokenApi.setMfaToken).to.have.been.calledWith('example@somewhere.com', '123456', true);
+      expect(tokenApi.setMfaToken).to.have.been.calledWith(
+        'example@somewhere.com',
+        '123456',
+        true
+      );
       expect(res.render).to.have.been.calledWith('app/verify/mfa/index', {
-        cookie, mfaTokenLength: 20, errors: [{ message: 'There was a problem creating your code. Try again' }],
+        cookie,
+        mfaTokenLength: 20,
+        errors: [
+          { message: 'There was a problem creating your code. Try again' },
+        ],
       });
     }
   });
@@ -113,7 +129,10 @@ describe('Verify MFA Get Controller', () => {
 
     expect(tokenApi.setMfaToken).to.not.have.been.called;
     expect(res.render).to.have.been.calledWith('app/verify/mfa/index', {
-      cookie, mfaTokenLength: 20, successHeader: 'We have resent your code', successMsg: 'Check your email',
+      cookie,
+      mfaTokenLength: 20,
+      successHeader: 'We have resent your code',
+      successMsg: 'Check your email',
     });
   });
 });

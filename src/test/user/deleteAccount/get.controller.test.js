@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -12,7 +10,9 @@ const { deleteAccount } = require('../../../app/user/deleteAccount/utils');
 const controller = require('../../../app/user/deleteAccount/get.controller');
 
 describe('User Delete Account Get Controller', () => {
-  let req; let res; let deleteOptionStub;
+  let req;
+  let res;
+  let deleteOptionStub;
   let textStub;
   const userRole = 'User';
 

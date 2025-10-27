@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
 
@@ -43,9 +42,15 @@ describe('Transformers', () => {
   });
 
   it('Should convert a string to UpperCamelCase', () => {
-    expect(transformer.upperCamelCase('Free circulation')).to.equal('FreeCirculation');
-    expect(transformer.upperCamelCase('Short Term Visit')).to.equal('ShortTermVisit');
-    expect(transformer.upperCamelCase('short term visit')).to.equal('ShortTermVisit');
+    expect(transformer.upperCamelCase('Free circulation')).to.equal(
+      'FreeCirculation'
+    );
+    expect(transformer.upperCamelCase('Short Term Visit')).to.equal(
+      'ShortTermVisit'
+    );
+    expect(transformer.upperCamelCase('short term visit')).to.equal(
+      'ShortTermVisit'
+    );
     expect(transformer.upperCamelCase('based')).to.equal('Based');
   });
 

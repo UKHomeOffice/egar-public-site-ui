@@ -20,7 +20,6 @@ const paths = {
 // Routing
 router.get(paths.index, flagpole, usercheck, csrfcheck, getController);
 
-
 // Export
 module.exports = {
   router,

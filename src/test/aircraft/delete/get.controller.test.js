@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -12,7 +9,10 @@ const craftApi = require('../../../common/services/craftApi');
 const controller = require('../../../app/aircraft/delete/get.controller');
 
 describe('Aircraft Delete Get Controller', () => {
-  let req; let res; let deleteCraftStub; let deleteOrgCraftStub;
+  let req;
+  let res;
+  let deleteCraftStub;
+  let deleteOrgCraftStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -20,7 +20,7 @@ describe('Aircraft Delete Get Controller', () => {
     req = {
       session: {
         deleteCraftId: 'G-ABCD',
-        save: callback => callback(),
+        save: (callback) => callback(),
         u: {
           dbId: 'someone@somewhere.net',
         },
@@ -70,7 +70,11 @@ describe('Aircraft Delete Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.eq('Success');
         expect(req.session.successMsg).to.eq('Your aircraft has been deleted');
-        expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
+        expect(deleteOrgCraftStub).to.have.been.calledWith(
+          12345,
+          'someone@somewhere.net',
+          'G-ABCD'
+        );
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
         expect(res.redirect).to.have.been.calledWith('/aircraft');
@@ -78,9 +82,11 @@ describe('Aircraft Delete Get Controller', () => {
     });
 
     it('should redirect if craft api responds with an error', () => {
-      deleteOrgCraftStub.resolves(JSON.stringify({
-        message: 'Example error message',
-      }));
+      deleteOrgCraftStub.resolves(
+        JSON.stringify({
+          message: 'Example error message',
+        })
+      );
       const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
 
       const callController = async () => {
@@ -88,8 +94,14 @@ describe('Aircraft Delete Get Controller', () => {
       };
 
       callController().then(() => {
-        expect(req.session.errMsg).to.eql({ message: 'Failed to delete craft. Try again' });
-        expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
+        expect(req.session.errMsg).to.eql({
+          message: 'Failed to delete craft. Try again',
+        });
+        expect(deleteOrgCraftStub).to.have.been.calledWith(
+          12345,
+          'someone@somewhere.net',
+          'G-ABCD'
+        );
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
         expect(res.redirect).to.have.been.calledWith('/aircraft');
@@ -105,7 +117,11 @@ describe('Aircraft Delete Get Controller', () => {
       };
 
       callController().then(() => {
-        expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
+        expect(deleteOrgCraftStub).to.have.been.calledWith(
+          12345,
+          'someone@somewhere.net',
+          'G-ABCD'
+        );
         expect(deleteCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
         expect(res.redirect).to.have.been.calledWith('/aircraft');
@@ -130,7 +146,10 @@ describe('Aircraft Delete Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.eq('Success');
         expect(req.session.successMsg).to.eq('Your aircraft has been deleted');
-        expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
+        expect(deleteCraftStub).to.have.been.calledWith(
+          'someone@somewhere.net',
+          'G-ABCD'
+        );
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
         expect(res.redirect).to.have.been.calledWith('/aircraft');
@@ -138,9 +157,11 @@ describe('Aircraft Delete Get Controller', () => {
     });
 
     it('should redirect if craft api responds with an error', () => {
-      deleteCraftStub.resolves(JSON.stringify({
-        message: 'Example error message',
-      }));
+      deleteCraftStub.resolves(
+        JSON.stringify({
+          message: 'Example error message',
+        })
+      );
       const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
 
       const callController = async () => {
@@ -148,8 +169,13 @@ describe('Aircraft Delete Get Controller', () => {
       };
 
       callController().then(() => {
-        expect(req.session.errMsg).to.eql({ message: 'Failed to delete craft. Try again' });
-        expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
+        expect(req.session.errMsg).to.eql({
+          message: 'Failed to delete craft. Try again',
+        });
+        expect(deleteCraftStub).to.have.been.calledWith(
+          'someone@somewhere.net',
+          'G-ABCD'
+        );
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
         expect(res.redirect).to.have.been.calledWith('/aircraft');
@@ -165,7 +191,10 @@ describe('Aircraft Delete Get Controller', () => {
       };
 
       callController().then(() => {
-        expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
+        expect(deleteCraftStub).to.have.been.calledWith(
+          'someone@somewhere.net',
+          'G-ABCD'
+        );
         expect(deleteOrgCraftStub).to.not.have.been.called;
         expect(sessionSaveStub).to.have.been.called;
         expect(res.redirect).to.have.been.calledWith('/aircraft');

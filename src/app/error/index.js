@@ -25,7 +25,7 @@ router.get('/error/oneLoginServiceError', (req, res) => {
 });
 
 router.get('/error/loginError', (req, res) => {
- // res.status(410)
+  // res.status(410)
   res.render('app/error/loginError');
 });
 

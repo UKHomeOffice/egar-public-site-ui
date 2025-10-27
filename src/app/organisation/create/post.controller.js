@@ -13,35 +13,53 @@ module.exports = (req, res) => {
 
   // Define a validation chain for organisation fields
   const orgnameChain = [
-    new ValidationRule(validator.notEmpty, 'orgName', orgname, 'Enter the name of the organisation'),
+    new ValidationRule(
+      validator.notEmpty,
+      'orgName',
+      orgname,
+      'Enter the name of the organisation'
+    ),
   ];
 
   // Validate chains
-  validator.validateChains([orgnameChain]).then(() => {
-    // API should return OrgId
-    logger.debug('Calling create org api endpoint');
-    orgApi.create(orgname, cookie.getUserDbId())
-      .then((apiResponse) => {
-        const responseObj = JSON.parse(apiResponse);
-        if (Object.prototype.hasOwnProperty.call(responseObj, 'message')) {
-          const error = [{ message: responseObj.message }];
-          res.render('app/organisation/create/index', { cookie, errors: error });
-        } else {
-          // Successful. Set org name, id & user role in cookie
-          cookie.setOrganisationName(responseObj.organisation.organisationName);
-          cookie.setOrganisationId(responseObj.organisation.organisationId);
-          cookie.setUserRole(responseObj.role.name);
-          res.render('app/organisation/createsuccess/index', { cookie });
-        }
-      })
-      .catch((err) => {
-        logger.error('Failed to create organisation');
-        logger.error(err);
-        res.render('app/organisation/create/index', { cookie, errors: [err] });
-      });
-  })
+  validator
+    .validateChains([orgnameChain])
+    .then(() => {
+      // API should return OrgId
+      logger.debug('Calling create org api endpoint');
+      orgApi
+        .create(orgname, cookie.getUserDbId())
+        .then((apiResponse) => {
+          const responseObj = JSON.parse(apiResponse);
+          if (Object.prototype.hasOwnProperty.call(responseObj, 'message')) {
+            const error = [{ message: responseObj.message }];
+            res.render('app/organisation/create/index', {
+              cookie,
+              errors: error,
+            });
+          } else {
+            // Successful. Set org name, id & user role in cookie
+            cookie.setOrganisationName(
+              responseObj.organisation.organisationName
+            );
+            cookie.setOrganisationId(responseObj.organisation.organisationId);
+            cookie.setUserRole(responseObj.role.name);
+            res.render('app/organisation/createsuccess/index', { cookie });
+          }
+        })
+        .catch((err) => {
+          logger.error('Failed to create organisation');
+          logger.error(err);
+          res.render('app/organisation/create/index', {
+            cookie,
+            errors: [err],
+          });
+        });
+    })
     .catch((err) => {
-      logger.info('There was a validation problem with creating the organisation');
+      logger.info(
+        'There was a validation problem with creating the organisation'
+      );
       res.render('app/organisation/create/index', { cookie, errors: err });
     });
 };

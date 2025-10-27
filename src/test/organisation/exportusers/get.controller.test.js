@@ -12,7 +12,9 @@ const controller = require('../../../app/organisation/exportusers/get.controller
 const orgApi = require('../../../common/services/organisationApi');
 
 describe('Organisation Export User Controller', () => {
-  let req; let res; let orgApiStub;
+  let req;
+  let res;
+  let orgApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -20,7 +22,7 @@ describe('Organisation Export User Controller', () => {
     clock = sinon.useFakeTimers({
       now: new Date('2024-03-14 GMT'),
       shouldAdvanceTime: false,
-      toFake: ["Date"],
+      toFake: ['Date'],
     });
 
     req = {
@@ -28,11 +30,11 @@ describe('Organisation Export User Controller', () => {
       session: {
         org: {
           i: 'ORG-ID-1',
-          name: 'ORG-ID-1'
+          name: 'ORG-ID-1',
         },
         u: {
-          rl: "User"
-        }
+          rl: 'User',
+        },
       },
     };
 
@@ -56,8 +58,20 @@ describe('Organisation Export User Controller', () => {
 
     const apiResponse = {
       items: [
-        { userId: 'USER-1', firstName: 'Jessica', lastName: 'Person', email: 'jp@test.com', role: { name: "Admin" } },
-        { userId: 'USER-2', firstName: 'Trish', lastName: 'Ity', email: 'tp@test.com', role: { name: "Manager" } },
+        {
+          userId: 'USER-1',
+          firstName: 'Jessica',
+          lastName: 'Person',
+          email: 'jp@test.com',
+          role: { name: 'Admin' },
+        },
+        {
+          userId: 'USER-2',
+          firstName: 'Trish',
+          lastName: 'Ity',
+          email: 'tp@test.com',
+          role: { name: 'Manager' },
+        },
       ],
     };
 
@@ -72,17 +86,28 @@ describe('Organisation Export User Controller', () => {
         await controller(req, res);
       };
 
-      callController()
-        .then(() => {
-          expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 999999999999999 );
-          expect(res.setHeader).to.have.been.calledWith('Content-disposition', 'attachment; filename=ORG-ID-1-users-2024-03-14.csv');
-          expect(res.setHeader).to.have.been.calledWith('Content-Type', 'text/csv');
-          expect(res.write).to.have.been.calledWith('Id,First Name,Last Name,Email,Role,State\n');
-          expect(res.write).to.have.been.calledWith('USER-1,Jessica,Person,jp@test.com,Admin,\nUSER-2,Trish,Ity,tp@test.com,Manager,\n');
-          expect(res.end).to.have.been.called;
-        });
+      callController().then(() => {
+        expect(orgApiStub).to.have.been.calledOnceWithExactly(
+          'ORG-ID-1',
+          1,
+          999999999999999
+        );
+        expect(res.setHeader).to.have.been.calledWith(
+          'Content-disposition',
+          'attachment; filename=ORG-ID-1-users-2024-03-14.csv'
+        );
+        expect(res.setHeader).to.have.been.calledWith(
+          'Content-Type',
+          'text/csv'
+        );
+        expect(res.write).to.have.been.calledWith(
+          'Id,First Name,Last Name,Email,Role,State\n'
+        );
+        expect(res.write).to.have.been.calledWith(
+          'USER-1,Jessica,Person,jp@test.com,Admin,\nUSER-2,Trish,Ity,tp@test.com,Manager,\n'
+        );
+        expect(res.end).to.have.been.called;
+      });
     });
-
   });
-
 });

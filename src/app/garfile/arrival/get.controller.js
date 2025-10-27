@@ -5,7 +5,8 @@ const garApi = require('../../../common/services/garApi');
 module.exports = (req, res) => {
   logger.debug('In garfile/arrival get controller');
   const cookie = new CookieModel(req);
-  garApi.get(cookie.getGarId())
+  garApi
+    .get(cookie.getGarId())
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       cookie.setGarArrivalVoyage(parsedResponse);
@@ -18,9 +19,11 @@ module.exports = (req, res) => {
       logger.error(err);
       res.render('app/garfile/arrival/index', {
         cookie,
-        errors: [{
-          message: 'There was a problem getting GAR information',
-        }],
+        errors: [
+          {
+            message: 'There was a problem getting GAR information',
+          },
+        ],
       });
     });
 };

@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -39,7 +36,8 @@ describe('API healthcheck get controller', () => {
   });
 
   describe('controller code', () => {
-    let req; let res;
+    let req;
+    let res;
 
     beforeEach(() => {
       chai.use(sinonChai);
@@ -63,7 +61,10 @@ describe('API healthcheck get controller', () => {
     it('should populate the cookie if session exists', async () => {
       await controller(req, res);
 
-      expect(res.setHeader).to.have.been.calledOnceWithExactly('Content-Type', 'application/json');
+      expect(res.setHeader).to.have.been.calledOnceWithExactly(
+        'Content-Type',
+        'application/json'
+      );
       expect(res.json).to.have.been.called.calledOnceWithExactly({
         ping: { healthy: true },
         cookie: { u: { dbId: 'U-DBID-1', e: 'example@somewhere.com' } },
@@ -75,7 +76,10 @@ describe('API healthcheck get controller', () => {
 
       await controller(req, res);
 
-      expect(res.setHeader).to.have.been.calledOnceWithExactly('Content-Type', 'application/json');
+      expect(res.setHeader).to.have.been.calledOnceWithExactly(
+        'Content-Type',
+        'application/json'
+      );
       expect(res.json).to.have.been.called.calledOnceWithExactly({
         ping: { healthy: true },
       });

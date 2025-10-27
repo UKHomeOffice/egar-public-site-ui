@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -15,8 +14,11 @@ const pagination = require('../../../common/utils/pagination');
 const controller = require('../../../app/garfile/craft/get.controller');
 
 describe('GAR Craft Get Controller', () => {
-  let req; let res; let garApiGetStub;
-  let paginationBuildStub; let paginationGetCurrentPageStub;
+  let req;
+  let res;
+  let garApiGetStub;
+  let paginationBuildStub;
+  let paginationGetCurrentPageStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -51,7 +53,10 @@ describe('GAR Craft Get Controller', () => {
 
     callController().then(() => {
       expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-      expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie, errors: [{ message: 'There was a problem getting GAR information' }] });
+      expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
+        cookie,
+        errors: [{ message: 'There was a problem getting GAR information' }],
+      });
     });
   });
 
@@ -74,11 +79,21 @@ describe('GAR Craft Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then().then(() => {
-        expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-        expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie, errors: [{ message: 'There was a problem getting aircraft information' }] });
-      });
+      callController()
+        .then()
+        .then(() => {
+          expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
+          expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
+          expect(res.render).to.have.been.calledWith(
+            'app/garfile/craft/index',
+            {
+              cookie,
+              errors: [
+                { message: 'There was a problem getting aircraft information' },
+              ],
+            }
+          );
+        });
     });
 
     it('should not set any crafts', () => {
@@ -97,7 +112,9 @@ describe('GAR Craft Get Controller', () => {
         expect(cookie.getSavedCraft()).to.eql([]);
         expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
         expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie });
+        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
+          cookie,
+        });
       });
     });
 
@@ -117,25 +134,38 @@ describe('GAR Craft Get Controller', () => {
         expect(cookie.getSavedCraft()).to.eql([]);
         expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
         expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie });
+        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
+          cookie,
+        });
       });
     });
 
     it('should populate current and saved craft', () => {
-      const currentCraft = { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' };
+      const currentCraft = {
+        registration: 'Z-AFTC',
+        craftType: 'Hondajet',
+        craftBase: 'EGLL',
+      };
       const savedCraft = [
-        currentCraft, { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
+        currentCraft,
+        { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
       ];
       req.headers = { referer: 'garfile/anythingelse' };
       req.session.gar.craft = {};
       cookie = new CookieModel(req);
-      cookie.setGarCraft(currentCraft.registration, currentCraft.craftType, currentCraft.craftBase);
+      cookie.setGarCraft(
+        currentCraft.registration,
+        currentCraft.craftType,
+        currentCraft.craftBase
+      );
       cookie.setSavedCraft(savedCraft);
       garApiGetStub.resolves(JSON.stringify(currentCraft));
-      craftApiGetCraftsStub.resolves(JSON.stringify({
-        items: savedCraft,
-        _meta: { totalPages: 1, totalItems: 1 },
-      }));
+      craftApiGetCraftsStub.resolves(
+        JSON.stringify({
+          items: savedCraft,
+          _meta: { totalPages: 1, totalItems: 1 },
+        })
+      );
       paginationGetCurrentPageStub.returns(1);
       paginationBuildStub.returns({ startItem: 1, endItem: 1 });
 
@@ -145,18 +175,33 @@ describe('GAR Craft Get Controller', () => {
 
       callController().then(() => {
         expect(cookie.getGarCraft()).to.eql({
-          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', craftBasePort: 'EGLL', portChoice: "Yes"
+          registration: 'Z-AFTC',
+          craftType: 'Hondajet',
+          craftBase: 'EGLL',
+          craftBasePort: 'EGLL',
+          portChoice: 'Yes',
         });
         expect(cookie.getSavedCraft()).to.eql({
           items: [
-            { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' },
-            { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
+            {
+              registration: 'Z-AFTC',
+              craftType: 'Hondajet',
+              craftBase: 'EGLL',
+            },
+            {
+              registration: 'G-ABCD',
+              craftType: 'Gulfstream',
+              craftBase: 'OXF',
+            },
           ],
           _meta: { totalPages: 1, totalItems: 1 },
         });
         expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
         expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie, pages: { startItem: 1, endItem: 1 } });
+        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
+          cookie,
+          pages: { startItem: 1, endItem: 1 },
+        });
       });
     });
   });
@@ -181,11 +226,21 @@ describe('GAR Craft Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then().then(() => {
-        expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-        expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie, errors: [{ message: 'There was a problem getting aircraft information' }] });
-      });
+      callController()
+        .then()
+        .then(() => {
+          expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
+          expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
+          expect(res.render).to.have.been.calledWith(
+            'app/garfile/craft/index',
+            {
+              cookie,
+              errors: [
+                { message: 'There was a problem getting aircraft information' },
+              ],
+            }
+          );
+        });
     });
 
     it('should not set any crafts', () => {
@@ -204,7 +259,9 @@ describe('GAR Craft Get Controller', () => {
         expect(cookie.getSavedCraft()).to.eql([]);
         expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
         expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie });
+        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
+          cookie,
+        });
       });
     });
 
@@ -224,25 +281,39 @@ describe('GAR Craft Get Controller', () => {
         expect(cookie.getSavedCraft()).to.eql([]);
         expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
         expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie });
+        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
+          cookie,
+        });
       });
     });
 
     it('should populate current and saved craft', () => {
-      const currentCraft = { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' };
+      const currentCraft = {
+        registration: 'Z-AFTC',
+        craftType: 'Hondajet',
+        craftBase: 'EGLL',
+      };
       const savedCraft = [
-        currentCraft, { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
+        currentCraft,
+        { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
       ];
       req.headers = { referer: 'garfile/anythingelse' };
       req.session.gar.craft = {};
       cookie = new CookieModel(req);
-      cookie.setGarCraft(currentCraft.registration, currentCraft.craftType, currentCraft.craftBase, 'Yes');
+      cookie.setGarCraft(
+        currentCraft.registration,
+        currentCraft.craftType,
+        currentCraft.craftBase,
+        'Yes'
+      );
       cookie.setSavedCraft(savedCraft);
       garApiGetStub.resolves(JSON.stringify(currentCraft));
-      craftApiGetOrgCraftsStub.resolves(JSON.stringify({
-        items: savedCraft,
-        _meta: { totalPages: 1, totalItems: 1 },
-      }));
+      craftApiGetOrgCraftsStub.resolves(
+        JSON.stringify({
+          items: savedCraft,
+          _meta: { totalPages: 1, totalItems: 1 },
+        })
+      );
       paginationGetCurrentPageStub.returns(1);
       paginationBuildStub.returns({ startItem: 1, endItem: 1 });
 
@@ -252,18 +323,33 @@ describe('GAR Craft Get Controller', () => {
 
       callController().then(() => {
         expect(cookie.getGarCraft()).to.eql({
-          registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL', craftBasePort: "EGLL", portChoice: "Yes"
+          registration: 'Z-AFTC',
+          craftType: 'Hondajet',
+          craftBase: 'EGLL',
+          craftBasePort: 'EGLL',
+          portChoice: 'Yes',
         });
         expect(cookie.getSavedCraft()).to.eql({
           items: [
-            { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' },
-            { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
+            {
+              registration: 'Z-AFTC',
+              craftType: 'Hondajet',
+              craftBase: 'EGLL',
+            },
+            {
+              registration: 'G-ABCD',
+              craftType: 'Gulfstream',
+              craftBase: 'OXF',
+            },
           ],
           _meta: { totalPages: 1, totalItems: 1 },
         });
         expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
         expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie, pages: { startItem: 1, endItem: 1 } });
+        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
+          cookie,
+          pages: { startItem: 1, endItem: 1 },
+        });
       });
     });
   });

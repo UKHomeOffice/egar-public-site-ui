@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -12,7 +11,9 @@ const controller = require('../../app/organisation/post.controller');
 const pagination = require('../../common/utils/pagination');
 
 describe('Organisation Post Controller', () => {
-  let req; let res; let saveSessionStub;
+  let req;
+  let res;
+  let saveSessionStub;
   let paginationStub;
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('Organisation Post Controller', () => {
     req = {
       body: {},
       session: {
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
 
@@ -44,12 +45,14 @@ describe('Organisation Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
-      expect(paginationStub).to.have.been.called;
-      expect(saveSessionStub).to.have.been.called;
-    }).then(() => {
-      expect(res.redirect).to.have.been.calledWith('/organisation');
-    });
+    callController()
+      .then(() => {
+        expect(paginationStub).to.have.been.called;
+        expect(saveSessionStub).to.have.been.called;
+      })
+      .then(() => {
+        expect(res.redirect).to.have.been.calledWith('/organisation');
+      });
   });
 
   it('should redirect to editorganisation if editOrgUser set', () => {
@@ -62,7 +65,9 @@ describe('Organisation Post Controller', () => {
     callController().then(() => {
       expect(req.session.editOrgId).to.eq('ORG-ID-1');
       expect(saveSessionStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/editorganisation');
+      expect(res.redirect).to.have.been.calledOnceWithExactly(
+        '/organisation/editorganisation'
+      );
     });
   });
 
@@ -76,7 +81,9 @@ describe('Organisation Post Controller', () => {
     callController().then(() => {
       expect(req.session.editUserId).to.eq('USER-ID-1');
       expect(saveSessionStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/users/edit');
+      expect(res.redirect).to.have.been.calledOnceWithExactly(
+        '/organisation/users/edit'
+      );
     });
   });
 
@@ -86,7 +93,9 @@ describe('Organisation Post Controller', () => {
     };
 
     callController().then(() => {
-      expect(req.session.errMsg.message).to.eql('Organisation page failed to perform action.');
+      expect(req.session.errMsg.message).to.eql(
+        'Organisation page failed to perform action.'
+      );
       expect(req.session.editUserId).to.be.undefined;
       expect(req.session.editOrgId).to.be.undefined;
       expect(saveSessionStub).to.have.been.called;

@@ -11,12 +11,11 @@ module.exports = {
   isWhitelisted(email) {
     return new Promise((resolve, reject) => {
       logger.info(`Searching ${email} against whitelist`);
-      db.sequelize.models.WhiteList
-        .findOne({
-          where: {
-            email,
-          },
-        })
+      db.sequelize.models.WhiteList.findOne({
+        where: {
+          email,
+        },
+      })
         .then((result) => {
           logger.info(`Whitelist approved: ${result !== null}`);
           return resolve(result !== null);

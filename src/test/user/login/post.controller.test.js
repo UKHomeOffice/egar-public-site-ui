@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -15,14 +12,15 @@ const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const proxyrequire = require('proxyquire').noCallThru();
 
 const controller = require('../../../app/user/login/post.controller');
-const ValidationRule = require("../../../common/models/ValidationRule.class");
-const oneLoginApi = require("../../../common/utils/oneLoginAuth");
+const ValidationRule = require('../../../common/models/ValidationRule.class');
+const oneLoginApi = require('../../../common/utils/oneLoginAuth');
 
 const config = require('../../../common/config/index');
-const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
+const { ONE_LOGIN_SHOW_ONE_LOGIN } = require('../../../common/config');
 
 describe('User Login Post Controller', () => {
-  let req; let res;
+  let req;
+  let res;
   let oneLoginStub;
   let configMock;
 
@@ -59,9 +57,11 @@ describe('User Login Post Controller', () => {
       ONE_LOGIN_POST_MIGRATION: false,
       ONE_LOGIN_SHOW_ONE_LOGIN: false,
       HOMEPAGE_MESSAGE: 'Welcome to the new service',
-    }
+    };
 
-    oneLoginStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns("https://dummy.com")
+    oneLoginStub = sinon
+      .stub(oneLoginUtils, 'getOneLoginAuthUrl')
+      .returns('https://dummy.com');
   });
 
   afterEach(() => {
@@ -94,7 +94,14 @@ describe('User Login Post Controller', () => {
         await controller(req, res);
       } catch (err) {
         expect(err).to.eq('Example Reject');
-        expect(res.render).to.have.been.calledWith('app/user/login/index', { errors: [{ message: 'There was a problem sending your code. Please try again.' }] });
+        expect(res.render).to.have.been.calledWith('app/user/login/index', {
+          errors: [
+            {
+              message:
+                'There was a problem sending your code. Please try again.',
+            },
+          ],
+        });
       }
     });
   });
@@ -114,11 +121,13 @@ describe('User Login Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
-        expect(emailService.send).to.not.have.been.called;
-      }).then(() => {
-        expect(res.render).to.have.been.calledWith('app/user/login/index');
-      });
+      callController()
+        .then(() => {
+          expect(emailService.send).to.not.have.been.called;
+        })
+        .then(() => {
+          expect(res.render).to.have.been.calledWith('app/user/login/index');
+        });
     });
 
     it('should return unregistered back to the page if no user found', () => {
@@ -131,21 +140,29 @@ describe('User Login Post Controller', () => {
       sinon.stub(emailService, 'send').resolves();
       sinon.stub(userApi, 'userSearch').resolves(JSON.stringify(apiResponse));
 
-      const controller = proxyrequire('../../../app/user/login/post.controller', {
-        '../../../common/config/index': configMock,
-      });
+      const controller = proxyrequire(
+        '../../../app/user/login/post.controller',
+        {
+          '../../../common/config/index': configMock,
+        }
+      );
 
       // Promise chain, so controller call is wrapped into its own method
       const callController = async () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
-        expect(emailService.send).to.not.have.been.called;
-      }).then(() => {
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/login/index', { cookie, unregistered: true, oneLoginAuthUrl: null });
-      });
+      callController()
+        .then(() => {
+          expect(emailService.send).to.not.have.been.called;
+        })
+        .then(() => {
+          expect(res.redirect).to.not.have.been.called;
+          expect(res.render).to.have.been.calledOnceWithExactly(
+            'app/user/login/index',
+            { cookie, unregistered: true, oneLoginAuthUrl: null }
+          );
+        });
     });
   });
 
@@ -168,14 +185,16 @@ describe('User Login Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
-        expect(userApi.userSearch).to.have.been.calledWith('ExampleUser');
-        expect(emailService.send).to.not.have.been.called;
-        expect(res.redirect).to.not.have.been.called;
-      }).then(() => {
-        expect(emailService.send).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/login/authenticate');
-      });
+      callController()
+        .then(() => {
+          expect(userApi.userSearch).to.have.been.calledWith('ExampleUser');
+          expect(emailService.send).to.not.have.been.called;
+          expect(res.redirect).to.not.have.been.called;
+        })
+        .then(() => {
+          expect(emailService.send).to.have.been.called;
+          expect(res.redirect).to.have.been.calledWith('/login/authenticate');
+        });
     });
 
     it('should return to the login page with an error message if token is not created', () => {
@@ -196,16 +215,19 @@ describe('User Login Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
-        expect(emailService.send).to.not.have.been.called;
-        expect(res.render).to.not.have.been.called;
-      }).then(() => {
-        expect(emailService.send).to.not.have.been.called;
-        expect(res.render).to.not.have.been.called;
-      }).then(() => {
-        expect(emailService.send).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/user/login/index');
-      });
+      callController()
+        .then(() => {
+          expect(emailService.send).to.not.have.been.called;
+          expect(res.render).to.not.have.been.called;
+        })
+        .then(() => {
+          expect(emailService.send).to.not.have.been.called;
+          expect(res.render).to.not.have.been.called;
+        })
+        .then(() => {
+          expect(emailService.send).to.not.have.been.called;
+          expect(res.render).to.have.been.calledWith('app/user/login/index');
+        });
     });
   });
 
@@ -227,7 +249,10 @@ describe('User Login Post Controller', () => {
       };
 
       callController().then(() => {
-        expect(res.render).to.have.been.calledWith('app/user/login/index', { cookie: expectedCookie, unverified: true });
+        expect(res.render).to.have.been.calledWith('app/user/login/index', {
+          cookie: expectedCookie,
+          unverified: true,
+        });
       });
     });
   });

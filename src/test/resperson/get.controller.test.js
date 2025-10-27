@@ -22,7 +22,7 @@ const responsible_persons = [
     responsibleCountry: 'GBR',
     responsiblePostcode: 'GB66BG',
     fixedBasedOperator: 'Captain',
-    fixedBasedOperatorAnswer: ''
+    fixedBasedOperatorAnswer: '',
   },
   {
     responsiblePersonId: '20bdec29-2a5d-41be-babe-906c80f5335c',
@@ -36,12 +36,14 @@ const responsible_persons = [
     responsibleCountry: 'GBR',
     responsiblePostcode: 'GB66BG',
     fixedBasedOperator: 'Captain',
-    fixedBasedOperatorAnswer: ''
+    fixedBasedOperatorAnswer: '',
   },
 ];
 
 describe('Responsible Person Index Get Controller', () => {
-  let req; let res; let clock;
+  let req;
+  let res;
+  let clock;
   const APRIL = 3;
 
   beforeEach(() => {
@@ -49,7 +51,7 @@ describe('Responsible Person Index Get Controller', () => {
     clock = sinon.useFakeTimers({
       now: new Date(2023, APRIL, 11),
       shouldAdvanceTime: false,
-      toFake: ["Date"],
+      toFake: ['Date'],
     });
 
     req = {
@@ -69,16 +71,21 @@ describe('Responsible Person Index Get Controller', () => {
 
   it('1. should render with error if responsiblePerson api rejects', () => {
     const cookie = new CookieModel(req);
-    sinon.stub(resPersonApi, 'getResPersons').rejects('getResPerson Example Reject');
+    sinon
+      .stub(resPersonApi, 'getResPersons')
+      .rejects('getResPerson Example Reject');
 
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
+      expect(resPersonApi.getResPersons).to.have.been.calledWith(
+        'USER-DB-ID-1'
+      );
       expect(res.render).to.have.been.calledWith('app/resperson/index', {
-        cookie, errors: [{ message: 'Failed to get saved responsible persons' }],
+        cookie,
+        errors: [{ message: 'Failed to get saved responsible persons' }],
       });
     });
   });
@@ -86,16 +93,22 @@ describe('Responsible Person Index Get Controller', () => {
   it('2. should render the message if api returns a message response', () => {
     const cookie = new CookieModel(req);
     resPersons = { message: 'User not registered' };
-    sinon.stub(resPersonApi, 'getResPersons').resolves(JSON.stringify(resPersons));
+    sinon
+      .stub(resPersonApi, 'getResPersons')
+      .resolves(JSON.stringify(resPersons));
 
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
+      expect(resPersonApi.getResPersons).to.have.been.calledWith(
+        'USER-DB-ID-1'
+      );
       expect(res.render).to.have.been.calledWith('app/resperson/index', {
-        cookie, resPersons:[], errors: [{ message: 'Failed to get saved responsible persons' }],
+        cookie,
+        resPersons: [],
+        errors: [{ message: 'Failed to get saved responsible persons' }],
       });
     });
   });
@@ -103,16 +116,21 @@ describe('Responsible Person Index Get Controller', () => {
   it('3. should render the error if any error present in the session', () => {
     const cookie = new CookieModel(req);
     req.session.errMsg = { message: 'Example Error Message' };
-    sinon.stub(resPersonApi, 'getResPersons').resolves({ 'message': 'User not registered' });
+    sinon
+      .stub(resPersonApi, 'getResPersons')
+      .resolves({ message: 'User not registered' });
 
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
+      expect(resPersonApi.getResPersons).to.have.been.calledWith(
+        'USER-DB-ID-1'
+      );
       expect(res.render).to.have.been.calledWith('app/resperson/index', {
-        cookie, errors: [{ message: 'Failed to get saved responsible persons' }],
+        cookie,
+        errors: [{ message: 'Failed to get saved responsible persons' }],
       });
     });
   });
@@ -120,32 +138,45 @@ describe('Responsible Person Index Get Controller', () => {
   it('4. should render the success message if any present in the session', () => {
     const cookie = new CookieModel(req);
     req.session.successMsg = 'Responsible person is deleted';
-    req.session.successHeader = 'success'
+    req.session.successHeader = 'success';
     const { successMsg, successHeader } = req.session;
-    sinon.stub(resPersonApi, 'getResPersons').resolves(JSON.stringify(responsible_persons));
+    sinon
+      .stub(resPersonApi, 'getResPersons')
+      .resolves(JSON.stringify(responsible_persons));
 
     const callController = async () => {
       await controller(req, res);
     };
     callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
-      expect(res.render).to.have.been.calledWith('app/resperson/index', { cookie, resPersons: responsible_persons, successMsg, successHeader });
+      expect(resPersonApi.getResPersons).to.have.been.calledWith(
+        'USER-DB-ID-1'
+      );
+      expect(res.render).to.have.been.calledWith('app/resperson/index', {
+        cookie,
+        resPersons: responsible_persons,
+        successMsg,
+        successHeader,
+      });
     });
-
   });
 
   it('5. should render page with responsible persons on happy path', () => {
     const cookie = new CookieModel(req);
-    sinon.stub(resPersonApi, 'getResPersons').resolves(JSON.stringify(responsible_persons));
+    sinon
+      .stub(resPersonApi, 'getResPersons')
+      .resolves(JSON.stringify(responsible_persons));
 
     const callController = async () => {
       await controller(req, res);
     };
     callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
-      expect(res.render).to.have.been.calledWith('app/resperson/index', { cookie, resPersons: responsible_persons });
+      expect(resPersonApi.getResPersons).to.have.been.calledWith(
+        'USER-DB-ID-1'
+      );
+      expect(res.render).to.have.been.calledWith('app/resperson/index', {
+        cookie,
+        resPersons: responsible_persons,
+      });
     });
-
   });
-
 });
