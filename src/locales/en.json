@@ -82,7 +82,7 @@
 	"create_gar_caption_2": " to complete and upload into the portal.",
 	"button_start_now": "Start now",
 	"heading_manage_gars": "Manage your GARs",
-	"manage_gars_caption": "You can view, edit, cancel or delete GARs.",
+	"manage_gars_caption": "You can view, edit, cancel and delete your GARs.",
 	"tab_gar_draft": "Draft (%s)",
 	"gar_draft_no_records": "There are no draft GARs",
 	"tab_gar_submitted": "Submitted (%s)",
