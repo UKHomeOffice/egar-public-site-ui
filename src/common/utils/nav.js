@@ -20,15 +20,34 @@ const buildRouterAndPaths = (path, getController, postController) => {
   };
 
   // Routing
-  router.get(paths.index, flagpole, usercheck, csrfcheck, pageAccess, getController);
+  router.get(
+    paths.index,
+    flagpole,
+    usercheck,
+    csrfcheck,
+    pageAccess,
+    getController
+  );
   if (postController) {
-    router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, pageAccess, postController);
+    router.post(
+      paths.index,
+      flagpole,
+      usercheck,
+      parseForm,
+      csrfcheck,
+      pageAccess,
+      postController
+    );
   }
 
   return { router, paths };
 };
 
-const buildRouterAndPathsNoUserCheck = (path, getController, postController) => {
+const buildRouterAndPathsNoUserCheck = (
+  path,
+  getController,
+  postController
+) => {
   // Initialisation
   const router = new express.Router();
   const indexPath = path;

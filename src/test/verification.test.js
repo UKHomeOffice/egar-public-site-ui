@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
 const nock = require('nock');
@@ -16,17 +15,14 @@ describe('VerificationService', () => {
   const tokenId = '1ebc7b27-ae9f-4962-8bc4-434cdbc6c7ec';
 
   it('Should successfully call the user verification API', (done) => {
-    nock(BASE_URL)
-      .put(url, { tokenId })
-      .reply(201, {});
+    nock(BASE_URL).put(url, { tokenId }).reply(201, {});
 
-    verificationApi.verifyUser(tokenId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+    verificationApi.verifyUser(tokenId).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.be.empty;
+      done();
+    });
   });
 
   // Catch block handles the rejection, and logs an error

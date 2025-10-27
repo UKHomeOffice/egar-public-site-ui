@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const { expect } = require('chai');
 
 require('../../global.test');

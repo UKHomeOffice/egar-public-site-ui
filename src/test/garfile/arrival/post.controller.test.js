@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -26,7 +23,8 @@ i18n.configure({
 });
 
 describe('Arrival Post Controller', () => {
-  let req; let res;
+  let req;
+  let res;
   let clock;
 
   beforeEach(() => {
@@ -35,7 +33,7 @@ describe('Arrival Post Controller', () => {
     clock = sinon.useFakeTimers({
       now: new Date('2022-05-11 GMT'),
       shouldAdvanceTime: false,
-      toFake: ["Date"],
+      toFake: ['Date'],
     });
 
     req = {
@@ -80,7 +78,7 @@ describe('Arrival Post Controller', () => {
         arrivalPort: 'LHR',
         arrivalLong: '',
         arrivalLat: '',
-        departurePort: 'BFS'
+        departurePort: 'BFS',
       });
     });
 
@@ -99,12 +97,21 @@ describe('Arrival Post Controller', () => {
       callController().then(() => {
         expect(garApi.get).to.have.been.called;
         expect(garApi.patch).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/arrival/index', {
-          cookie,
-          errors: [new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known')],
-        });
+        expect(res.render).to.have.been.calledOnceWithExactly(
+          'app/garfile/arrival/index',
+          {
+            cookie,
+            errors: [
+              new ValidationRule(
+                validator.notEmpty,
+                'portChoice',
+                undefined,
+                'Select whether the port code is known'
+              ),
+            ],
+          }
+        );
       });
-
     });
 
     it('should fail for empty port code', () => {
@@ -122,10 +129,20 @@ describe('Arrival Post Controller', () => {
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
         expect(garApi.patch).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [new ValidationRule(validator.notEmpty, 'arrivalPort', '', 'The arrival airport code must be entered')],
-        });
+        expect(res.render).to.have.been.calledWith(
+          'app/garfile/arrival/index',
+          {
+            cookie,
+            errors: [
+              new ValidationRule(
+                validator.notEmpty,
+                'arrivalPort',
+                '',
+                'The arrival airport code must be entered'
+              ),
+            ],
+          }
+        );
       });
     });
 
@@ -143,10 +160,20 @@ describe('Arrival Post Controller', () => {
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
         expect(garApi.patch).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [new ValidationRule(validator.dateNotMoreThanMonthInFuture, 'arrivalDate', { d: "30", m: "5", y: "2024" }, 'Arrival date must be in the future and within a month from now')],
-        });
+        expect(res.render).to.have.been.calledWith(
+          'app/garfile/arrival/index',
+          {
+            cookie,
+            errors: [
+              new ValidationRule(
+                validator.dateNotMoreThanMonthInFuture,
+                'arrivalDate',
+                { d: '30', m: '5', y: '2024' },
+                'Arrival date must be in the future and within a month from now'
+              ),
+            ],
+          }
+        );
       });
     });
 
@@ -164,10 +191,20 @@ describe('Arrival Post Controller', () => {
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
         expect(garApi.patch).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [new ValidationRule(validator.currentOrPastDate, 'arrivalDate', { d: "30", m: "5", y: "2010" }, 'Arrival date must be in the future and within a month from now')],
-        });
+        expect(res.render).to.have.been.calledWith(
+          'app/garfile/arrival/index',
+          {
+            cookie,
+            errors: [
+              new ValidationRule(
+                validator.currentOrPastDate,
+                'arrivalDate',
+                { d: '30', m: '5', y: '2010' },
+                'Arrival date must be in the future and within a month from now'
+              ),
+            ],
+          }
+        );
       });
     });
 
@@ -188,13 +225,26 @@ describe('Arrival Post Controller', () => {
         callController().then(() => {
           expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
           expect(garApi.patch).to.not.have.been.called;
-          expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-            cookie,
-            errors: [
-              new ValidationRule(validator.latitude, 'arrivalLat', undefined, 'Value entered is incorrect. Enter latitude to 6 decimal places'),
-              new ValidationRule(validator.longitude, 'arrivalLong', undefined, 'Value entered is incorrect. Enter longitude to 6 decimal places'),
-            ],
-          });
+          expect(res.render).to.have.been.calledWith(
+            'app/garfile/arrival/index',
+            {
+              cookie,
+              errors: [
+                new ValidationRule(
+                  validator.latitude,
+                  'arrivalLat',
+                  undefined,
+                  'Value entered is incorrect. Enter latitude to 6 decimal places'
+                ),
+                new ValidationRule(
+                  validator.longitude,
+                  'arrivalLong',
+                  undefined,
+                  'Value entered is incorrect. Enter longitude to 6 decimal places'
+                ),
+              ],
+            }
+          );
         });
       });
     });
@@ -217,12 +267,17 @@ describe('Arrival Post Controller', () => {
       const cookie = new CookieModel(req);
       sinon.stub(garApi, 'get').resolves(apiResponse);
       sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject', () => {
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [{
-            message: 'Failed to add to GAR',
-          }],
-        });
+        expect(res.render).to.have.been.calledWith(
+          'app/garfile/arrival/index',
+          {
+            cookie,
+            errors: [
+              {
+                message: 'Failed to add to GAR',
+              },
+            ],
+          }
+        );
       });
 
       const callController = async () => {
@@ -231,29 +286,44 @@ describe('Arrival Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
+        expect(garApi.patch).to.have.been.calledWith(
+          'ABCDEFGH',
+          cookie.getGarStatus(),
+          cookie.getGarArrivalVoyage()
+        );
       });
     });
 
     it('should return the error message if one is returned from api', () => {
       const cookie = new CookieModel(req);
       sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch').resolves(JSON.stringify({
-        message: 'GAR does not exist',
-      }));
+      sinon.stub(garApi, 'patch').resolves(
+        JSON.stringify({
+          message: 'GAR does not exist',
+        })
+      );
       const callController = async () => {
         await controller(req, res);
       };
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [{
-            message: 'GAR does not exist',
-          }],
-        });
+        expect(garApi.patch).to.have.been.calledWith(
+          'ABCDEFGH',
+          cookie.getGarStatus(),
+          cookie.getGarArrivalVoyage()
+        );
+        expect(res.render).to.have.been.calledWith(
+          'app/garfile/arrival/index',
+          {
+            cookie,
+            errors: [
+              {
+                message: 'GAR does not exist',
+              },
+            ],
+          }
+        );
       });
     });
 
@@ -272,8 +342,15 @@ describe('Arrival Post Controller', () => {
       callController().then(() => {
         expect(req.body.buttonClicked).to.be.undefined;
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
-        expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
+        expect(garApi.patch).to.have.been.calledWith(
+          'ABCDEFGH',
+          cookie.getGarStatus(),
+          cookie.getGarArrivalVoyage()
+        );
+        expect(res.redirect).to.have.been.calledOnceWithExactly(
+          307,
+          '/garfile/view'
+        );
       });
     });
 
@@ -288,7 +365,11 @@ describe('Arrival Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
+        expect(garApi.patch).to.have.been.calledWith(
+          'ABCDEFGH',
+          cookie.getGarStatus(),
+          cookie.getGarArrivalVoyage()
+        );
         expect(res.redirect).to.have.been.calledWith('/garfile/craft');
       });
     });

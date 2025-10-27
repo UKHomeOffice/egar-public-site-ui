@@ -32,37 +32,51 @@ module.exports = (req, res) => {
   cookie.updateEditPerson(person);
 
   // Validate chains
-  validator.validateChains(validations.validations(req))
+  validator
+    .validateChains(validations.validations(req))
     .then(() => {
       // call the API to update the data base and then
-      personApi.update(
-        cookie.getUserDbId(),
-        cookie.getEditPerson().personId,
-        person,
-      ).then((apiResponse) => {
-        const parsedResponse = JSON.parse(apiResponse);
-        if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-          // API returned error
+      personApi
+        .update(cookie.getUserDbId(), cookie.getEditPerson().personId, person)
+        .then((apiResponse) => {
+          const parsedResponse = JSON.parse(apiResponse);
+          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+            // API returned error
+            res.render('app/people/edit/index', {
+              cookie,
+              persontype,
+              documenttype,
+              genderchoice,
+              errors: [parsedResponse],
+            });
+          } else {
+            // Successful
+            res.redirect('/people');
+          }
+        })
+        .catch((err) => {
+          logger.error('There was a problem with calling the API');
+          logger.error(err);
           res.render('app/people/edit/index', {
-            cookie, persontype, documenttype, genderchoice, errors: [parsedResponse],
+            cookie,
+            req,
+            persontype,
+            documenttype,
+            genderchoice,
+            errors: [{ message: 'An error occurred. Please try again' }],
           });
-        } else {
-          // Successful
-          res.redirect('/people');
-        }
-      }).catch((err) => {
-        logger.error('There was a problem with calling the API');
-        logger.error(err);
-        res.render('app/people/edit/index', {
-          cookie, req, persontype, documenttype, genderchoice, errors: [{ message: 'An error occurred. Please try again' }],
         });
-      });
     })
     .catch((err) => {
       logger.error('There was a problem with adding person to saved people');
       logger.error(JSON.stringify(err));
       res.render('app/people/edit/index', {
-        cookie, req, persontype, documenttype, genderchoice, errors: err,
+        cookie,
+        req,
+        persontype,
+        documenttype,
+        genderchoice,
+        errors: err,
       });
     });
 };

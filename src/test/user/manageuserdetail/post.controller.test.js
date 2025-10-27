@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -14,7 +12,8 @@ const userApi = require('../../../common/services/userManageApi');
 const controller = require('../../../app/user/manageuserdetail/post.controller');
 
 describe('Manage User Detail Post Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -56,19 +55,39 @@ describe('Manage User Detail Post Controller', () => {
     };
 
     callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-        cookie,
-        errors: [new ValidationRule(validator.isNotEmpty, 'firstname', '', 'Enter your given names')],
-      });
+      expect(res.render).to.have.been.calledWith(
+        'app/user/manageuserdetail/index',
+        {
+          cookie,
+          errors: [
+            new ValidationRule(
+              validator.isNotEmpty,
+              'firstname',
+              '',
+              'Enter your given names'
+            ),
+          ],
+        }
+      );
     });
 
     delete req.body.firstname;
 
     callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-        cookie,
-        errors: [new ValidationRule(validator.isNotEmpty, 'firstname', undefined, 'Enter your given names')],
-      });
+      expect(res.render).to.have.been.calledWith(
+        'app/user/manageuserdetail/index',
+        {
+          cookie,
+          errors: [
+            new ValidationRule(
+              validator.isNotEmpty,
+              'firstname',
+              undefined,
+              'Enter your given names'
+            ),
+          ],
+        }
+      );
     });
   });
 
@@ -83,15 +102,27 @@ describe('Manage User Detail Post Controller', () => {
     };
 
     callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-        cookie,
-        errors: [new ValidationRule(validator.isNotEmpty, 'lastname', '', 'Enter your family name')],
-      });
+      expect(res.render).to.have.been.calledWith(
+        'app/user/manageuserdetail/index',
+        {
+          cookie,
+          errors: [
+            new ValidationRule(
+              validator.isNotEmpty,
+              'lastname',
+              '',
+              'Enter your family name'
+            ),
+          ],
+        }
+      );
     });
   });
 
   it('should return an error if the user api rejects', () => {
-    sinon.stub(userApi, 'updateDetails').rejects('userApi.updateDetails Example Reject');
+    sinon
+      .stub(userApi, 'updateDetails')
+      .rejects('userApi.updateDetails Example Reject');
     const cookie = new CookieModel(req);
     req.body.firstname = 'Kylo Changed';
 
@@ -99,18 +130,25 @@ describe('Manage User Detail Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-        cookie,
-        errors: [{ message: 'Failed to update. Try again' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(res.render).to.have.been.calledWith(
+          'app/user/manageuserdetail/index',
+          {
+            cookie,
+            errors: [{ message: 'Failed to update. Try again' }],
+          }
+        );
       });
-    });
   });
 
   it('should return the response if the api returns an error message', () => {
-    sinon.stub(userApi, 'updateDetails').resolves(JSON.stringify({
-      message: 'Person does not exist',
-    }));
+    sinon.stub(userApi, 'updateDetails').resolves(
+      JSON.stringify({
+        message: 'Person does not exist',
+      })
+    );
     req.body.firstname = 'Kylo Changed';
     const cookie = new CookieModel(req);
 
@@ -121,23 +159,33 @@ describe('Manage User Detail Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(userApi.updateDetails).to.have.been.calledWith('kylo.ren@firstorder.emp', 'Kylo Changed', 'Ren');
-      expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-        cookie,
-        errors: [{ message: 'Person does not exist' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(userApi.updateDetails).to.have.been.calledWith(
+          'kylo.ren@firstorder.emp',
+          'Kylo Changed',
+          'Ren'
+        );
+        expect(res.render).to.have.been.calledWith(
+          'app/user/manageuserdetail/index',
+          {
+            cookie,
+            errors: [{ message: 'Person does not exist' }],
+          }
+        );
       });
-    });
   });
 
   it('should update the cookie if the api returns ok', () => {
-    sinon.stub(userApi, 'updateDetails').resolves(JSON.stringify({
-      firstName: 'Kylo Changed',
-      lastName: 'Ren',
-    }));
+    sinon.stub(userApi, 'updateDetails').resolves(
+      JSON.stringify({
+        firstName: 'Kylo Changed',
+        lastName: 'Ren',
+      })
+    );
 
     req.body.firstname = 'Kylo Changed';
-
 
     const cookie = new CookieModel(req);
     cookie.setUserFirstName('Kylo');
@@ -147,9 +195,15 @@ describe('Manage User Detail Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(userApi.updateDetails).to.have.been.calledWith('kylo.ren@firstorder.emp', 'Kylo Changed', 'Ren');
-      expect(req.session.save).to.have.been.called;
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(userApi.updateDetails).to.have.been.calledWith(
+          'kylo.ren@firstorder.emp',
+          'Kylo Changed',
+          'Ren'
+        );
+        expect(req.session.save).to.have.been.called;
+      });
   });
 });

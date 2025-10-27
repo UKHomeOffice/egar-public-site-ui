@@ -13,24 +13,33 @@ module.exports = (req, res) => {
 
   // Define a validation chain for our representatives field
   const garChain = [
-    new ValidationRule(validator.notEmpty, 'garoption', req.body.garoption, 'Select how you would like to create a GAR'),
+    new ValidationRule(
+      validator.notEmpty,
+      'garoption',
+      req.body.garoption,
+      'Select how you would like to create a GAR'
+    ),
   ];
 
   // Validate chains
-  validator.validateChains([garChain])
+  validator
+    .validateChains([garChain])
     .then(() => {
       if (req.body.garoption === '1') {
         res.redirect('/garfile/garupload');
         return;
       }
 
-      createGarApi.createGar(cookie.getUserDbId())
+      createGarApi
+        .createGar(cookie.getUserDbId())
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             // API returned error
             res.render('app/garfile/home/index', {
-              cookie, garoptions, errors: [parsedResponse],
+              cookie,
+              garoptions,
+              errors: [parsedResponse],
             });
             return;
           }

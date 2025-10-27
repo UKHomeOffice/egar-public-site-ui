@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -11,7 +9,8 @@ require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
 
 describe('User Login Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -35,6 +34,8 @@ describe('User Login Get Controller', () => {
 
     await controller(req, res);
 
-    expect(res.render).to.have.been.calledWith('app/unavailable/index', { cookie });
+    expect(res.render).to.have.been.calledWith('app/unavailable/index', {
+      cookie,
+    });
   });
 });

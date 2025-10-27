@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { deleteAccount } = require('./utils');
@@ -9,7 +8,9 @@ const postController = async (req, res) => {
   const cookie = new CookieModel(req);
   const userRole = cookie.getUserRole();
 
-  const errObj = { message: 'Failed to delete your account. Contact support or try again' };
+  const errObj = {
+    message: 'Failed to delete your account. Contact support or try again',
+  };
   let deleteAccountOptions;
 
   try {
@@ -20,19 +21,25 @@ const postController = async (req, res) => {
     const parsedResponse = JSON.parse(apiResponse);
 
     if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-      return res.render('app/user/deleteAccount/index', { cookie, errors: [parsedResponse] });
+      return res.render('app/user/deleteAccount/index', {
+        cookie,
+        errors: [parsedResponse],
+      });
     }
   } catch (err) {
     logger.error('Failed to delete user account');
     logger.error(err);
-    return res.render('app/user/deleteAccount/index', { cookie, errors: [errObj] });
+    return res.render('app/user/deleteAccount/index', {
+      cookie,
+      errors: [errObj],
+    });
   }
 
   try {
     await deleteAccountOptions.notifyUser();
 
     if (Object.hasOwn(req.cookies, 'id_token')) {
-      res.redirect('/user/logout?action=user-deleted')
+      res.redirect('/user/logout?action=user-deleted');
       return;
     }
   } catch (err) {

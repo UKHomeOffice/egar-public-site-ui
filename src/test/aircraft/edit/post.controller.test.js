@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -16,7 +15,8 @@ const craftApi = require('../../../common/services/craftApi');
 const controller = require('../../../app/aircraft/edit/post.controller');
 
 describe('Aircraft Edit Post Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -67,9 +67,24 @@ describe('Aircraft Edit Post Controller', () => {
       expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
         cookie,
         errors: [
-          new ValidationRule(validator.notEmpty, 'registration', '', 'Enter a registration'),
-          new ValidationRule(validator.notEmpty, 'craftType', '', 'Enter an aircraft type'),
-          new ValidationRule(validator.notEmpty, 'craftBasePort', '', 'Enter an aircraft home port / location'),
+          new ValidationRule(
+            validator.notEmpty,
+            'registration',
+            '',
+            'Enter a registration'
+          ),
+          new ValidationRule(
+            validator.notEmpty,
+            'craftType',
+            '',
+            'Enter an aircraft type'
+          ),
+          new ValidationRule(
+            validator.notEmpty,
+            'craftBasePort',
+            '',
+            'Enter an aircraft home port / location'
+          ),
         ],
       });
     });
@@ -82,26 +97,38 @@ describe('Aircraft Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
-      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
-        cookie,
-        errors: [{ message: 'An error has occurred. Try again later' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(craftApi.update).to.have.been.calledWith(
+          'G-ABCD',
+          'Hondajet',
+          'LHR'
+        );
+        expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
+          cookie,
+          errors: [{ message: 'An error has occurred. Try again later' }],
+        });
       });
-    });
   });
 
   it('should return an error if message returned by API', () => {
     cookie = new CookieModel(req);
-    sinon.stub(craftApi, 'update').resolves(JSON.stringify({
-      message: 'Aircraft not found',
-    }));
+    sinon.stub(craftApi, 'update').resolves(
+      JSON.stringify({
+        message: 'Aircraft not found',
+      })
+    );
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
+      expect(craftApi.update).to.have.been.calledWith(
+        'G-ABCD',
+        'Hondajet',
+        'LHR'
+      );
       expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
         cookie,
         errors: [{ message: 'Aircraft not found' }],
@@ -112,16 +139,26 @@ describe('Aircraft Edit Post Controller', () => {
   // Back end needs indices corrected and this should then be obselete
   it('should return an error if message returned by API is not JSON', () => {
     cookie = new CookieModel(req);
-    sinon.stub(craftApi, 'update').resolves('<html><head></head><body></body></html>');
+    sinon
+      .stub(craftApi, 'update')
+      .resolves('<html><head></head><body></body></html>');
     const callController = async () => {
       await controller(req, res);
     };
 
     callController().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
+      expect(craftApi.update).to.have.been.calledWith(
+        'G-ABCD',
+        'Hondajet',
+        'LHR'
+      );
       expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
         cookie,
-        errors: [{ message: 'There was a problem saving the aircraft. Try again later' }],
+        errors: [
+          {
+            message: 'There was a problem saving the aircraft. Try again later',
+          },
+        ],
       });
     });
   });
@@ -135,7 +172,11 @@ describe('Aircraft Edit Post Controller', () => {
     };
 
     callController().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
+      expect(craftApi.update).to.have.been.calledWith(
+        'G-ABCD',
+        'Hondajet',
+        'LHR'
+      );
       expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
         cookie,
         errors: [{ message: 'Craft already exists' }],
@@ -150,7 +191,11 @@ describe('Aircraft Edit Post Controller', () => {
     };
 
     callController().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
+      expect(craftApi.update).to.have.been.calledWith(
+        'G-ABCD',
+        'Hondajet',
+        'LHR'
+      );
       expect(res.redirect).to.have.been.calledWith('/aircraft');
     });
   });
