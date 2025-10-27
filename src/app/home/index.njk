@@ -41,6 +41,8 @@
         <a href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Apr_2024_v6.6_SDS_.xlsx">
           <span class="govuk-visually-hidden">{{__('heading_create_gar')}}
           </span>{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
+       <p class="govuk-body-m">GARs must be submitted no earlier than 48 hours and no later than 2 hours before the expected time of departure.</p>
+
       <div class="margin-bottom-40"><a id="start_now" class="govuk-button" href="/garfile/home">Create a GAR</a></div>
     </div>
   </div>
@@ -56,7 +58,7 @@
       {# <form id="signform2" action="/garfile/view" method="post" role="form"> #}
       <h1 class="govuk-heading-l">{{__('heading_manage_gars')}}</h1>
       <p class="govuk-body-m">{{__('manage_gars_caption')}}</p>
-      <div class="padding-bottom-10"> 
+      <div class="padding-bottom-10">
         <div class="govuk-inset-text">Your draft, submitted and cancelled GARs will only be saved for 6 months, after this they will be deleted.</div>
         {% set hasMultipleServerPages = serverPagination.totalPages > 1 %}
         {% set notOnFirstPage = serverPagination.page > 1 %}
@@ -65,7 +67,7 @@
         {% set notOnLastPage = serverPagination.page < serverPagination.totalPages %}
         {% if hasMultipleServerPages %}
         <div class="govuk-inset-text">
-          You are viewing {{serverPagination.perPage * (serverPagination.page-1) +1}} - {{serverPagination.totalItems if onLastPage else serverPagination.perPage * serverPagination.page}}  of your most recent GARs, there are {{serverPagination.totalItems}} total GARs. 
+          You are viewing {{serverPagination.perPage * (serverPagination.page-1) +1}} - {{serverPagination.totalItems if onLastPage else serverPagination.perPage * serverPagination.page}}  of your most recent GARs, there are {{serverPagination.totalItems}} total GARs.
           {% if notOnFirstPage %}
           <br/>To view the previous {{serverPagination.perPage}} GARs <a href="?page={{serverPagination.page-1}}">click here</a>.
           {% endif %}
@@ -96,7 +98,7 @@
             </a>
           </li>
         </ul>
-        
+
         <script type="text/javascript" src="/javascripts/paginator.js"></script>
         <form id="signform2" action="/garfile/view" method="post" role="form">
           {% macro gar_summary_table(name, gars) %}
@@ -199,7 +201,7 @@
               </script>
 
               {{ p.paginator(name, pageSize, gars.length) }}
-              
+
             </section>
           {% endmacro %}
           {{ gar_summary_table('draft', draftGars) }}
