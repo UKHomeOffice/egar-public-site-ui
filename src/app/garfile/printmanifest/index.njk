@@ -46,6 +46,21 @@
 
 <a id="display-manifest" class="govuk-button" onclick="printMyGar()">Print GAR</a>
 <div class="govuk-grid-column-full">
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" width="40%">CBP ID</th>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body" id="printGAR">
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" id="garID_title">{{ garfile.cbpId }}</td>
+            </tr>
+        </tbody>
+      </table>
+</div>
+<div class="govuk-grid-column-full">
       <table class="govuk-table">
         <thead class="govuk-table__head">
           <tbody class="govuk-table__body">
@@ -60,7 +75,7 @@
               <td class="govuk-table__cell" id="garID_title">{{ cookie.getGarId() }}</td>
               <td class="govuk-table__cell">{{ garfile.departureDate }}  {{ garfile.departureTime }}</td>
               <td class="govuk-table__cell">{{ garfile.arrivalDate }}  {{ garfile.arrivalTime }}</td>
-      
+
             </tr>
         </tbody>
       </table>
@@ -81,7 +96,7 @@
               <td class="govuk-table__cell">{{ garfile.registration }}</td>
               <td class="govuk-table__cell">{{ garfile.departurePort }}</td>
               <td class="govuk-table__cell">{{ garfile.arrivalPort }}</td>
-      
+
             </tr>
         </tbody>
       </table>
@@ -89,7 +104,7 @@
 
   <div class="govuk-grid-column-full">
       <table class="govuk-table">
-        
+
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">{{__('field_surname')}}</th>
@@ -166,7 +181,7 @@
         </tbody>
       </table>
     </div>
-          
+
 
 <script>
     function printMyGar(){
@@ -176,5 +191,4 @@
 </script>
 
 {% endblock %}
- 
-    
+
