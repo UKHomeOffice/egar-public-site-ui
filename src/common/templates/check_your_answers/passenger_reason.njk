@@ -1,16 +1,16 @@
-  {% set passengerRows = [] %}
-  {% if garfile.passengerTravellingReason != "" %}
-    {% set _ = passengerRows.push({ key: { html: __('passenger_travelling_reason_review') }, value: { html: garfile.passengerTravellingReason | truncate(50) | default('') } }) %}
-  {% endif %}
+{% set passengerRows = [] %}
+{% if garfile.passengerTravellingReason != "" %}
+  {% set _ = passengerRows.push({ key: { html: __('passenger_travelling_reason_review') }, value: { html: garfile.passengerTravellingReason | truncate(50) | default('') } }) %}
+{% endif %}
 
-  {% set _ = passengerRows.push({ key: { html: __('field_visit_reason_review') }, value: { html: garfile.visitReason | uncamelCase | default('') } }) %}
+{% set _ = passengerRows.push({ key: { html: __('field_visit_reason_review') }, value: { html: garfile.visitReason | uncamelCase | default('') } }) %}
 
-  {% if garfile.supportingInformation != "" %}
-    {% set _ = passengerRows.push({ key: { html: __('field_supporting_information_review') }, value: { html: garfile.supportingInformation | truncate(50) | default('') } }) %}
-  {% endif %}
+{% if garfile.supportingInformation != "" %}
+  {% set _ = passengerRows.push({ key: { html: __('field_supporting_information_review') }, value: { html: garfile.supportingInformation | truncate(50) | default('') } }) %}
+{% endif %}
 
-  {% if passengerRows | length %}
-    {{ govukSummaryList({ rows: passengerRows }) }}
-  {% endif %}
+{% if passengerRows | length %}
+  {{ govukSummaryList({ rows: passengerRows }) }}
+{% endif %}
 
 
