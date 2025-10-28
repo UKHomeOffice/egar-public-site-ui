@@ -1,3 +1,19 @@
+<dl id="customs" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
+  <div class="app-check-your-answers__contents">
+    <dt style="width: 200px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
+      {{__('heading_customs')}}
+    </dt>
+    {% if showChangeLinks %}
+      <dd style="border-bottom: none;" class="app-check-your-answers__change">
+        <a href="/garfile/customs" id="customs-change"  class="govuk-link">
+          {{__('change_prefix')}}
+          <span class="govuk-visually-hidden">{{__('heading_customs')}}</span>
+        </a>
+      </dd>
+    {% endif %}
+  </div>
+</dl>
+
   {% set customsRows = [
     { key: { html: __('field_intention_review') }, value: { html: garfile.intentionValue or '' } }
   ] %}
