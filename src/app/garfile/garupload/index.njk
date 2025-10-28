@@ -29,13 +29,14 @@
     <h1 class="govuk-heading-xl">{{__('title_garupload')}}</h1>
     <form action="/uploadgar?_csrf={{ csrfToken }}" class="form-group" method="post" role="form" enctype="multipart/form-data">
       <p class="govuk-body-m">{{__('garupload_caption')}}</p>
-      <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>
-            {{__('garupload_warning_1')}}<a href="{{__('gar_form_link')}}">{{__('garupload_warning_2')}}</a>{{__('garupload_warning_3')}}
-        </strong>
-      </div>
+
+      {{ govukWarningText({
+        html:
+          __('garupload_warning_1') +
+          '<a href="' + __('gar_form_link') + '">' + __('garupload_warning_2') + '</a>' +
+          __('garupload_warning_3'),
+        iconFallbackText: __('assistive_warning')
+      }) }}
 
       <div class="govuk-form-group {{ m.form_group_class('file', errors) }}">
         <label class="govuk-label" for="file">{{__('field_file')}}</label>
