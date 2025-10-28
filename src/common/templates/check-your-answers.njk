@@ -1,17 +1,15 @@
 {% from "dist/govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% import "common/templates/includes/banners.njk" as b %}
 
-{% set viewGuidance = (garfile.status.name === 'Submitted' and resubmitted != 'yes' and numberOf0TResponseCodes > 0) %}
 
-  {% include "check_your_answers/departure.njk" %}
-  {% include "check_your_answers/arrival.njk" %}
+{% include "check_your_answers/departure.njk" %}
+{% include "check_your_answers/arrival.njk" %}
 
-  {{ m.departure_warning_message(__) }}
+{{ m.departure_warning_message(__) }}
 
-  {% include "check_your_answers/aircraft.njk" %}
-  {% include "check_your_answers/manifest.njk" %}
-  {% include "check_your_answers/military.njk" %}
-  {% include "check_your_answers/responsible.njk" %}
-  {% include "check_your_answers/fbo.njk" %}
-  {% include "check_your_answers/customs.njk" %}
-  {% include "check_your_answers/supporting_documents.njk" %}
+{% include "check_your_answers/aircraft.njk" %}
+{% include "check_your_answers/manifest.njk" %}
+{% include "check_your_answers/military.njk" %}
+{% include "check_your_answers/responsible.njk" %}
+{% include "check_your_answers/customs.njk" %}
+{% include "check_your_answers/supporting_documents.njk" %}
