@@ -1,3 +1,13 @@
+{% from "dist/govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block content %}
+  {{ govukWarningText({
+    html: "<p>Warning text</p>",
+    iconFallbackText: "Warning",
+    classes: "twoHourWarningText",
+    attributes: { hidden: true }
+  }) }}
+{% endblock %}
 {% macro form_group_class(identifier, errors) %}
   {% set class = 'govuk-form-group' %}
   {% for error in errors %}
@@ -36,9 +46,9 @@
           Close and fix departure date
         </button>
     </form>
-    <button 
-        id="continueWithWarnedDate" 
-        type="button" 
+    <button
+        id="continueWithWarnedDate"
+        type="button"
         class="govuk-button warning-button"
         data-module="govuk-button"
         name="buttonClicked"
@@ -49,24 +59,29 @@
 {% endmacro %}
 
 {% macro departure_warning_message(__) %}
-  <div class="govuk-warning-text twoHourWarningText" hidden>
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-visually-hidden">Warning</span>
-      <p>{{ __('departure_date_2_hours_prior__civil_penalty') }}</p>
-      <p>{{ __('departure_date_2_hours_prior__flight_requirements') }}</p>
-      <p>{{ __('note_about_utc_and_daylight_saving_hours') }}</p>
-    </strong>
-  </div>
-  <div class="govuk-warning-text fortyEightHourWarningText" hidden>
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-visually-hidden">Warning</span>
-      <p>{{ __('departure_date_too_far_in_future__civil_penalty') }}</p>
-      <p>{{ __('departure_date_too_far_in_future__flight_requirements') }}</p>
-      <p>{{ __('note_about_utc_and_daylight_saving_hours') }}</p>
-    </strong>
-  </div>
+  {{ govukWarningText({
+    html:
+      __('departure_date_2_hours_prior__civil_penalty') + "<br><br>" +
+      __('departure_date_2_hours_prior__flight_requirements') + "<br><br>" +
+      __('note_about_utc_and_daylight_saving_hours'),
+    iconFallbackText: "Warning",
+    classes: "twoHourWarningText",
+    attributes: {
+      hidden: true
+    }
+  }) }}
+
+  {{ govukWarningText({
+    html:
+      __('departure_date_too_far_in_future__civil_penalty') + "<br><br>" +
+      __('departure_date_too_far_in_future__flight_requirements') + "<br><br>" +
+      __('note_about_utc_and_daylight_saving_hours'),
+    iconFallbackText: "Warning",
+    classes: "fortyEightHourWarningText",
+    attributes: {
+      hidden: true
+    }
+  }) }}
 {% endmacro %}
 
 {% macro empty_table_message(message) %}
