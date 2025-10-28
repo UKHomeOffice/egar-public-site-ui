@@ -1,29 +1,27 @@
+<h2 class="govuk-heading-m">{{ __('heading_departure_details') }}</h2>
+{% if showChangeLinks %}
+  <p>
+    <a href="/garfile/departure" id="departure-change" class="govuk-link">
+      {{ __('change_prefix') }}
+      <span class="govuk-visually-hidden">{{ __('heading_departure_details') }}</span>
+    </a>
+  </p>
+{% endif %}
 
-  <h2 class="govuk-heading-m">{{ __('heading_departure_details') }}</h2>
-  {% if showChangeLinks %}
-    <p>
-      <a href="/garfile/departure" id="departure-change" class="govuk-link">
-        {{ __('change_prefix') }}
-        <span class="govuk-visually-hidden">{{ __('heading_departure_details') }}</span>
-      </a>
-    </p>
-  {% endif %}
+{% set departureCoords = '' %}
+{% if garfile.departureLat %}
+  {% set departureCoords =
+        (garfile.departureLat or '') ~ '<br>' ~
+        (garfile.departureLong or '') %}
+{% endif %}
 
-  {% set departureCoords = '' %}
-  {% if garfile.departureLat %}
-    {% set departureCoords =
-         (garfile.departureLat or '') ~ '<br>' ~
-         (garfile.departureLong or '') %}
-  {% endif %}
+{{ govukSummaryList({
+  rows: [
+    { key: { html: __('field_departure_date') }, value: { html: garfile.departureDate or '' } },
+    { key: { html: __('field_departure_time') }, value: { html: garfile.departureTime or '' } },
+    { key: { html: __('field_departure_port') }, value: { html: garfile.departurePort or '' } },
+    { key: { html: __('field_departure_coordinates') }, value: { html: departureCoords } }
+  ]
+}) }}
 
-  {{ govukSummaryList({
-    rows: [
-      { key: { html: __('field_departure_date') }, value: { html: garfile.departureDate or '' } },
-      { key: { html: __('field_departure_time') }, value: { html: garfile.departureTime or '' } },
-      { key: { html: __('field_departure_port') }, value: { html: garfile.departurePort or '' } },
-      { key: { html: __('field_departure_coordinates') }, value: { html: departureCoords } }
-    ]
-  }) }}
-
-  {{ m.departure_warning_message(__) }}
-
+{{ m.departure_warning_message(__) }}
