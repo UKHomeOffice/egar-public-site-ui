@@ -123,9 +123,9 @@
                       <tr class="govuk-table__row pagination-page pagination-page_{{page}}" id="pagination-row-{{page}}-{{ loop.index }}">
                         <td class="govuk-table__cell">
                           {% if gar.registration === null %}
-                            <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
+                            <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button govuk-button--link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
                           {% else %}
-                            <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
+                            <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button govuk-button--link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
                           {% endif %}
                         </td>
                         <td class="govuk-table__cell">{{ gar.createdDate | truncate(11, true, "") }}</td>

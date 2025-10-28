@@ -88,7 +88,7 @@
                 <tr class="govuk-table__row" id="person-{{loop.index0}}">
               {% endif %}
                 <td class="govuk-table__cell" style="{{ "padding-left: 10px" if isPeopleInvalid }}">
-                  <button id="edit-person-{{ loop.index }}" class="govuk-link btn-link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a>
+                  <button id="edit-person-{{ loop.index }}" class="govuk-button govuk-button--link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a>
                 </td>
                 <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
                 <td class="govuk-table__cell">{{person.peopleType.name}}</td>
@@ -96,7 +96,7 @@
                 <td class="govuk-table__cell">{{person.createdDateTime | truncate(11, true, "")}}</td>
                 {#  {% if cookie.getUserRole() != 'User' %} #}
                 <td class="govuk-table__cell ">
-                  <button class="govuk-link btn-link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button>
+                  <button class="govuk-button govuk-button--link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button>
                 </td>
                 {#   {% endif %} #}
                 {# <td class="govuk-table__cell"></td> #}
