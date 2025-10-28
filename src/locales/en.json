@@ -100,11 +100,11 @@
 	"confirmation_count": "Confirmation %s of %s",
 	"person_search": "Search for Names or Person type",
 	"person_sort": "Click table headers to sort alphabetically",
-  "field_email_label": "Email",
+	"field_email_label": "Email",
 	"field_given_name": "Given names",
 	"field_given_name_hint": "If you have any middle names, you must include them here.",
 	"field_surname": "Surname",
-  "field_family_name": "Family name",
+	"field_family_name": "Family name",
 	"field_day": "Day",
 	"field_month": "Month",
 	"field_month_hint": "Enter a number, between 1 and 12.",
@@ -543,5 +543,6 @@
 	"heading_edit_responsible_person": "Edit responsible person",
 	"caption_responsible_person_details": "Select the details of a responsible person you have previously added",
 	"prevent_zzzz_or_yyyy_message": "Add ICAO/IATA codes for the location. ZZZZ or YYYY are not accepted codes.",
-	"guidance": "You must check each passenger has a <a href='https://www.gov.uk/government/publications/recognising-fraudulent-identity-documents' target='_blank'>genuine and valid passport or travel document</a> and that they are the rightful holder. You must also check each passenger's permission to travel status. You will remain liable for any penalties relating to a failure to adequately conduct these checks."
+	"guidance": "You must check each passenger has a <a href='https://www.gov.uk/government/publications/recognising-fraudulent-identity-documents' target='_blank'>genuine and valid passport or travel document</a> and that they are the rightful holder. You must also check each passenger's permission to travel status. You will remain liable for any penalties relating to a failure to adequately conduct these checks.",
+	"Customs details": "Customs details"
 }

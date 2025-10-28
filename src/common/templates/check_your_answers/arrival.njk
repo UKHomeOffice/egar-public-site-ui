@@ -1,25 +1,17 @@
-  <h2 class="govuk-heading-m">{{ __('heading_arrival_details') }}</h2>
-  {% if showChangeLinks %}
-    <p>
-      <a href="/garfile/arrival" id="arrival-change" class="govuk-link">
-        {{ __('change_prefix') }}
-        <span class="govuk-visually-hidden">{{ __('heading_arrival_details') }}</span>
-      </a>
-    </p>
-  {% endif %}
+{{ cya.sectionHeading('arrival', 'heading_arrival_details', '/garfile/arrival', showChangeLinks, __) }}
 
-  {% set arrivalCoords = '' %}
-  {% if garfile.arrivalLat %}
-    {% set arrivalCoords =
-         (garfile.arrivalLat or '') ~ '<br>' ~
-         (garfile.arrivalLong or '') %}
-  {% endif %}
+{% set arrivalCoords = '' %}
+{% if garfile.arrivalLat %}
+  {% set arrivalCoords =
+        (garfile.arrivalLat or '') ~ '<br>' ~
+        (garfile.arrivalLong or '') %}
+{% endif %}
 
-  {{ govukSummaryList({
-    rows: [
-      { key: { html: __('field_arrival_date') }, value: { html: garfile.arrivalDate or '' } },
-      { key: { html: __('field_arrival_time') }, value: { html: garfile.arrivalTime or '' } },
-      { key: { html: __('field_arrival_port') }, value: { html: garfile.arrivalPort or '' } },
-      { key: { html: __('field_arrival_coordinates') }, value: { html: arrivalCoords } }
-    ]
-  }) }}
+{{ govukSummaryList({
+  rows: [
+    { key: { html: __('field_arrival_date') }, value: { html: garfile.arrivalDate or '' } },
+    { key: { html: __('field_arrival_time') }, value: { html: garfile.arrivalTime or '' } },
+    { key: { html: __('field_arrival_port') }, value: { html: garfile.arrivalPort or '' } },
+    { key: { html: __('field_arrival_coordinates') }, value: { html: arrivalCoords } }
+  ]
+}) }}

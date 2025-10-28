@@ -1,17 +1,4 @@
-<dl id="responsiblePerson" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
-  <dt class="govuk-heading-m app-check-your-answers__question">
-    {{ __('heading_responsible_person_details') }}
-  </dt>
-
-  {% if showChangeLinks %}
-    <dd class="app-check-your-answers__change">
-      <a href="/garfile/resperson" id="responsible-person-change" class="govuk-link">
-        {{ __('change_prefix') }}
-        <span class="govuk-visually-hidden">{{ __('heading_responsible_person_details') }}</span>
-      </a>
-    </dd>
-  {% endif %}
-</dl>
+{{ cya.sectionHeading('responsiblePerson','heading_responsible_person_details', '/garfile/resperson', showChangeLinks, __) }}
 
 {% set responsibleAddress =
       (garfile.responsibleAddressLine1 or '') ~ '<br>' ~

@@ -1,18 +1,4 @@
-<dl class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
-  <div class="app-check-your-answers__contents">
-    <dt style="width: 400px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
-      {{__('heading_supporting_documentation_details')}}
-    </dt>
-    {% if showChangeLinks %}
-      <dd style="border-bottom: none;" class="app-check-your-answers__change">
-        <a href="/garfile/supportingdocuments" id='supporting-documents-change'  class="govuk-link">
-          {{__('change_prefix')}}
-          <span class="govuk-visually-hidden">{{__('heading_supporting_documentation_details')}}</span>
-        </a>
-      </dd>
-    {% endif %}
-  </div>
-</dl>
+{{ cya.sectionHeading('supporting-documents', 'heading_supporting_documentation_details', '/garfile/supportingdocuments', showChangeLinks, __) }}
 
 <table class="govuk-table">
   <thead class="govuk-table__head">
@@ -35,4 +21,4 @@
       {{ m.empty_table_message(__('supportingdocuments_no_records')) }}
     {% endif %}
   </tbody>
-</table>
+</tablegc

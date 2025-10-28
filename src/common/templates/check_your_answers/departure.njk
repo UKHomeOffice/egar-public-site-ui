@@ -1,12 +1,4 @@
-<h2 class="govuk-heading-m">{{ __('heading_departure_details') }}</h2>
-{% if showChangeLinks %}
-  <p>
-    <a href="/garfile/departure" id="departure-change" class="govuk-link">
-      {{ __('change_prefix') }}
-      <span class="govuk-visually-hidden">{{ __('heading_departure_details') }}</span>
-    </a>
-  </p>
-{% endif %}
+{{ cya.sectionHeading('departure', 'heading_departure_details', '/garfile/departure', showChangeLinks,__) }}
 
 {% set departureCoords = '' %}
 {% if garfile.departureLat %}
