@@ -38,7 +38,7 @@ spec:
               cpu: "250m"
           ports:
             - name: public-prxy-prt
-              containerPort: 10443
+              containerPort: 10443 
           env:
             - name: PROXY_SERVICE_HOST
               value: "127.0.0.1"
