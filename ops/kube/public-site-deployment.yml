@@ -16,11 +16,11 @@ spec:
       labels:
         name: public-site-svc
         service: public-site-svc
-    spec: 
-      volumes:                             
+    spec:
+      volumes:
         - name: bundle-certs
           configMap:
-            name: bundle   
+            name: bundle
       containers:
         - name: public-site-proxy
           image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
@@ -57,7 +57,7 @@ spec:
           volumeMounts:
             - name: bundle-certs
               mountPath: /etc/ssl/certs
-              readOnly: true       
+              readOnly: true
         - name: public-site
           image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:{{ .TAGGED_VERSION }}
           imagePullPolicy: IfNotPresent
@@ -352,15 +352,11 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: environment
-<<<<<<< HEAD
-                  key: USE_NEW_NATIONALITY_LIST_PROVIDER 
+                  key: USE_NEW_NATIONALITY_LIST_PROVIDER
           volumeMounts:
-          - name: bundle-certs
-            mountPath: /etc/ssl/certs
-            readOnly: true                       
-=======
-                  key: USE_NEW_NATIONALITY_LIST_PROVIDER             
->>>>>>> 46736879 (Edited entries for clamav volumeMounts and mounthPath in deployment.yml)
+            - name: bundle-certs
+              mountPath: /etc/ssl/certs
+              readOnly: true
           ports:
             - name: public-site-prt
               containerPort: 3000
