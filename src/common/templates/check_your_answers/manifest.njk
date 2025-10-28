@@ -40,16 +40,16 @@
   </div>
   {% endif %}
   </dt>
-  {% if showChangeLinks %}
-  <dd style="border-bottom: none;" class="app-check-your-answers__change">
-    <a href="/garfile/manifest" id='manifest-change' class="govuk-link">
-      {{__('change_prefix')}}
-      <span class="govuk-visually-hidden">{{__('heading_manifest_details')}}</span>
-    </a>
-  </dd>
-  {% endif %}
-  </div>
-</dl>
+
+{% if showChangeLinks %}
+  <p>
+      <a href="/garfile/manifest" id='manifest-change' class="govuk-link">
+        {{__('change_prefix')}}
+        <span class="govuk-visually-hidden">{{__('heading_manifest_details')}}</span>
+      </a>
+  </p>
+{% endif %}
+
 <div class="govuk-form-group {{ m.form_group_class('manifestTable', errors) }}">
   {{ m.error_message('manifestTable', errors, __) }}
 
