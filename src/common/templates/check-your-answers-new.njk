@@ -1,0 +1,233 @@
+{% from "dist/govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% import "common/templates/includes/banners.njk" as b %}
+
+{% set viewGuidance = (garfile.status.name === 'Submitted' and resubmitted != 'yes' and numberOf0TResponseCodes > 0) %}
+
+<div class="govuk-grid-column-full">
+
+  {# ------------------- MACROS ------------------- #}
+  {% macro yesNo(value) %}
+    {{ 'Yes' if value else 'No' }}
+  {% endmacro %}
+
+  {% macro coordRow(id, label, lat, long, __) %}
+    {% if lat %}
+      <div class="app-check-your-answers__contents">
+        <dt id="{{ id }}-label" class="app-check-your-answers__question">{{ label }}</dt>
+        <dd id="{{ id }}-value" class="app-check-your-answers__answer">
+          {{ __('field_latitude') }}: {{ lat }}<br>
+          {{ __('field_longitude') }}: {{ long }}
+        </dd>
+      </div>
+    {% endif %}
+  {% endmacro %}
+
+  {% macro fboRow(label, value) %}
+    {{ govukSummaryList({
+        rows: [
+          { key: { html: label }, value: { html: value } }
+        ]
+    }) }}
+  {% endmacro %}
+
+  {# ------------------- DEPARTURE ------------------- #}
+  <h2 class="govuk-heading-m">{{ __('heading_departure_details') }}</h2>
+  {% if showChangeLinks %}
+    <p>
+      <a href="/garfile/departure" id="departure-change" class="govuk-link">
+        {{ __('change_prefix') }}
+        <span class="govuk-visually-hidden">{{ __('heading_departure_details') }}</span>
+      </a>
+    </p>
+  {% endif %}
+
+  {% set departureCoords = '' %}
+  {% if garfile.departureLat %}
+    {% set departureCoords =
+         (garfile.departureLat or '') ~ '<br>' ~
+         (garfile.departureLong or '') %}
+  {% endif %}
+
+  {{ govukSummaryList({
+    rows: [
+      { key: { html: __('field_departure_date') }, value: { html: garfile.departureDate or '' } },
+      { key: { html: __('field_departure_time') }, value: { html: garfile.departureTime or '' } },
+      { key: { html: __('field_departure_port') }, value: { html: garfile.departurePort or '' } },
+      { key: { html: __('field_departure_coordinates') }, value: { html: departureCoords } }
+    ]
+  }) }}
+
+  {{ m.departure_warning_message(__) }}
+
+  {# ------------------- ARRIVAL ------------------- #}
+  <h2 class="govuk-heading-m">{{ __('heading_arrival_details') }}</h2>
+  {% if showChangeLinks %}
+    <p>
+      <a href="/garfile/arrival" id="arrival-change" class="govuk-link">
+        {{ __('change_prefix') }}
+        <span class="govuk-visually-hidden">{{ __('heading_arrival_details') }}</span>
+      </a>
+    </p>
+  {% endif %}
+
+  {% set arrivalCoords = '' %}
+  {% if garfile.arrivalLat %}
+    {% set arrivalCoords =
+         (garfile.arrivalLat or '') ~ '<br>' ~
+         (garfile.arrivalLong or '') %}
+  {% endif %}
+
+  {{ govukSummaryList({
+    rows: [
+      { key: { html: __('field_arrival_date') }, value: { html: garfile.arrivalDate or '' } },
+      { key: { html: __('field_arrival_time') }, value: { html: garfile.arrivalTime or '' } },
+      { key: { html: __('field_arrival_port') }, value: { html: garfile.arrivalPort or '' } },
+      { key: { html: __('field_arrival_coordinates') }, value: { html: arrivalCoords } }
+    ]
+  }) }}
+
+  {# ------------------- AIRCRAFT ------------------- #}
+  <h2 class="govuk-heading-m">{{ __('heading_aircraft_details') }}</h2>
+  {% if showChangeLinks %}
+    <p>
+      <a href="/garfile/craft" id="aircraft-change" class="govuk-link">
+        {{ __('change_prefix') }}
+        <span class="govuk-visually-hidden">{{ __('heading_aircraft_details') }}</span>
+      </a>
+    </p>
+  {% endif %}
+
+  {{ govukSummaryList({
+    rows: [
+      { key: { html: __('field_aircraft_registration') }, value: { html: garfile.registration or '' } },
+      { key: { html: __('field_aircraft_type') }, value: { html: garfile.craftType or '' } },
+      { key: { html: __('field_aircraft_base') }, value: { html: garfile.craftBase or '' } }
+    ]
+  }) }}
+
+  {# ------------------- MANIFEST ------------------- #}
+  <h2 class="govuk-heading-m">{{ __('heading_manifest_details') }}</h2>
+  {% if showChangeLinks %}
+    <p>
+      <a href="/garfile/manifest" id="manifest-change" class="govuk-link">
+        {{ __('change_prefix') }}
+        <span class="govuk-visually-hidden">{{ __('heading_manifest_details') }}</span>
+      </a>
+    </p>
+  {% endif %}
+
+  {% if viewGuidance and not isResubmitted and durationInDeparture > 125 %}
+    <div style="float:right;">
+      <a href="#" id="resubmit0T" class="govuk-link govuk-button resubmit0T">Resubmit checks for timed out passengers</a>
+      <form id="reSubmitGarForm" action="/garfile/review" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="resubmitFor0T" value="resubmit0TOnSummaryPage" />
+        <input type="hidden" name="resubmitFor0TLink" id="resubmitFor0TLink" value="no" />
+      </form>
+    </div>
+  {% endif %}
+
+  <p class="govuk-body" style="padding-top: {{ '5%' if viewGuidance and isResubmitted else '3%' }}; font-size: 1.1875rem;">
+    {{ __('guidance') | safe }}
+  </p>
+
+  {% if garfile.status.name == 'Submitted' and numberOf0TResponseCodes > 0 and (durationInDeparture < 125 or isResubmitted) %}
+    <div class="box-left-grey-border">
+      <div class="email-text">
+        <p class="govuk-body"><span class="system-timeout">System time out</span></p>
+        <p class="govuk-body">This individual may be boarded.</p>
+        <p class="govuk-body">There will be no Section 40 liability if the individual is subsequently found not to hold a valid permission to travel.</p>
+      </div>
+    </div>
+  {% endif %}
+
+  {# ------------------- RESPONSIBLE PERSON ------------------- #}
+  {% set responsibleAddress =
+       (garfile.responsibleAddressLine1 or '') ~ '<br>' ~
+       (garfile.responsibleAddressLine2 or '') ~ '<br>' ~
+       (garfile.responsibleTown or '') ~ '<br>' ~
+       (garfile.responsibleCountryLabel or '') ~ '<br>' ~
+       (garfile.responsiblePostcode or '') %}
+  {{ govukSummaryList({
+    rows: [
+      { key: { html: __('field_given_name') }, value: { html: garfile.responsibleGivenName or '' } },
+      { key: { html: __('field_surname') }, value: { html: garfile.responsibleSurname or '' } },
+      { key: { html: __('field_address') }, value: { html: responsibleAddress } },
+      { key: { html: __('field_contact_details') }, value: { html: garfile.responsibleContactNo or '' } },
+      { key: { html: __('field_email') }, value: { html: garfile.responsibleEmail or '' } }
+    ]
+  }) }}
+
+  {# ------------------- FBO ------------------- #}
+  {% if garfile.fixedBasedOperator != 'Other' %}
+    {{ fboRow(__('field_fbo_question'), garfile.fixedBasedOperator or '') }}
+  {% else %}
+    {{ fboRow(__('field_fbo_question_review'), garfile.fixedBasedOperatorAnswer | truncate(50) | default('')) }}
+  {% endif %}
+
+  {# ------------------- CUSTOMS ------------------- #}
+  {% set customsRows = [
+    { key: { html: __('field_intention_review') }, value: { html: garfile.intentionValue or '' } }
+  ] %}
+
+  {% if garfile.intentionValue == 'Yes' %}
+    {% set _ = customsRows.push({ key: { html: __('field_prohibited_goods_review') }, value: { html: garfile.prohibitedGoods or '' } }) %}
+
+    {% if garfile.prohibitedGoods == 'Yes' %}
+      {% set _ = customsRows.push({ key: { html: __('field_goods_declaration_review') }, value: { html: garfile.goodsDeclaration | truncate(50) | default('') } }) %}
+    {% endif %}
+
+    {% set _ = customsRows.push({ key: { html: __('field_baggage_review') }, value: { html: garfile.baggage or '' } }) %}
+    {% if garfile.baggage == 'Yes' %}
+      {% set _ = customsRows.push({ key: { html: __('field_baggage_declaration_review') }, value: { html: garfile.baggageDeclaration | truncate(50) | default('') } }) %}
+    {% endif %}
+
+    {% set _ = customsRows.push({ key: { html: __('field_continental_shelf_review') }, value: { html: garfile.continentalShelf or '' } }) %}
+    {% if garfile.continentalShelf == 'Yes' %}
+      {% set _ = customsRows.push({ key: { html: __('field_continental_shelf_declaration_review') }, value: { html: garfile.continentalShelfDeclaration | truncate(50) | default('') } }) %}
+    {% endif %}
+  {% endif %}
+
+  {{ govukSummaryList({ rows: customsRows }) }}
+
+  {# ------------------- PASSENGER REASON ------------------- #}
+  {% set passengerRows = [] %}
+  {% if garfile.passengerTravellingReason != "" %}
+    {% set _ = passengerRows.push({ key: { html: __('passenger_travelling_reason_review') }, value: { html: garfile.passengerTravellingReason | truncate(50) | default('') } }) %}
+  {% endif %}
+
+  {% set _ = passengerRows.push({ key: { html: __('field_visit_reason_review') }, value: { html: garfile.visitReason | uncamelCase | default('') } }) %}
+
+  {% if garfile.supportingInformation != "" %}
+    {% set _ = passengerRows.push({ key: { html: __('field_supporting_information_review') }, value: { html: garfile.supportingInformation | truncate(50) | default('') } }) %}
+  {% endif %}
+
+  {% if passengerRows | length %}
+    {{ govukSummaryList({ rows: passengerRows }) }}
+  {% endif %}
+
+  {# ------------------- SUPPORTING DOCUMENTS ------------------- #}
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header">{{ __('field_file_name') }}</th>
+        <th class="govuk-table__header">{{ __('field_file_size') }}</th>
+        <th class="govuk-table__header">{{ __('field_file_status') }}</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% if garsupportingdocs.items | length %}
+        {% for file in garsupportingdocs.items %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ file.fileName or '' }}</td>
+            <td class="govuk-table__cell">{{ file.size or '' }}</td>
+            <td class="govuk-table__cell">{{ __('field_file_status_done') }}</td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        {{ m.empty_table_message(__('supportingdocuments_no_records')) }}
+      {% endif %}
+    </tbody>
+  </table>
+
+</div>

@@ -1,0 +1,39 @@
+<dl class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
+  <div class="app-check-your-answers__contents">
+    <dt style="width: 400px; border-bottom: none;" class="govuk-heading-m app-check-your-answers__question">
+      {{__('heading_supporting_documentation_details')}}
+    </dt>
+    {% if showChangeLinks %}
+      <dd style="border-bottom: none;" class="app-check-your-answers__change">
+        <a href="/garfile/supportingdocuments" id='supporting-documents-change'  class="a-link-text">
+          {{__('change_prefix')}}
+          <span class="govuk-visually-hidden">{{__('heading_supporting_documentation_details')}}</span>
+        </a>
+      </dd>
+    {% endif %}
+  </div>
+</dl>
+
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" scope="col">{{__('field_file_name')}}</th>
+      <th class="govuk-table__header" scope="col">{{__('field_file_size')}}</th>
+      <th class="govuk-table__header" scope="col">{{__('field_file_status')}}</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    {% if garsupportingdocs.items | length %}
+      {% for file in garsupportingdocs.items %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{file.fileName}}</td>
+          <td class="govuk-table__cell">{{file.size}}</td>
+          <td class="govuk-table__cell">{{__('field_file_status_done')}}</td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      {{ m.empty_table_message(__('supportingdocuments_no_records')) }}
+    {% endif %}
+  </tbody>
+</table>
+

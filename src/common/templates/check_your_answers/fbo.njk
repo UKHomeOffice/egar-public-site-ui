@@ -1,0 +1,15 @@
+  {% macro fboRow(label, value) %}
+    {{ govukSummaryList({
+        rows: [
+          { key: { html: label }, value: { html: value } }
+        ]
+    }) }}
+  {% endmacro %}
+
+  {% if garfile.fixedBasedOperator != 'Other' %}
+    {{ fboRow(__('field_fbo_question'), garfile.fixedBasedOperator or '') }}
+  {% else %}
+    {{ fboRow(__('field_fbo_question_review'), garfile.fixedBasedOperatorAnswer | truncate(50) | default('')) }}
+  {% endif %}
+
+

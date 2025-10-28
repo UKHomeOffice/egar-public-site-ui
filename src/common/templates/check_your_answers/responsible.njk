@@ -1,0 +1,18 @@
+
+  {# ------------------- RESPONSIBLE PERSON ------------------- #}
+  {% set responsibleAddress =
+       (garfile.responsibleAddressLine1 or '') ~ '<br>' ~
+       (garfile.responsibleAddressLine2 or '') ~ '<br>' ~
+       (garfile.responsibleTown or '') ~ '<br>' ~
+       (garfile.responsibleCountryLabel or '') ~ '<br>' ~
+       (garfile.responsiblePostcode or '') %}
+  {{ govukSummaryList({
+    rows: [
+      { key: { html: __('field_given_name') }, value: { html: garfile.responsibleGivenName or '' } },
+      { key: { html: __('field_surname') }, value: { html: garfile.responsibleSurname or '' } },
+      { key: { html: __('field_address') }, value: { html: responsibleAddress } },
+      { key: { html: __('field_contact_details') }, value: { html: garfile.responsibleContactNo or '' } },
+      { key: { html: __('field_email') }, value: { html: garfile.responsibleEmail or '' } }
+    ]
+  }) }}
+

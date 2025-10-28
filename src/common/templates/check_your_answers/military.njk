@@ -1,0 +1,10 @@
+{% set isMilitaryFlightText = 'Yes' if garfile.isMilitaryFlight else 'No' %}
+
+{{ govukSummaryList({
+  rows: [
+    {
+      key: { html: __('is_military_flight') },
+      value: { html: isMilitaryFlightText }
+    }
+  ]
+}) }}

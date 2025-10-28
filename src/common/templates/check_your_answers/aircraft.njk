@@ -1,0 +1,20 @@
+
+  {# ------------------- AIRCRAFT ------------------- #}
+  <h2 class="govuk-heading-m">{{ __('heading_aircraft_details') }}</h2>
+  {% if showChangeLinks %}
+    <p>
+      <a href="/garfile/craft" id="aircraft-change" class="govuk-link">
+        {{ __('change_prefix') }}
+        <span class="govuk-visually-hidden">{{ __('heading_aircraft_details') }}</span>
+      </a>
+    </p>
+  {% endif %}
+
+  {{ govukSummaryList({
+    rows: [
+      { key: { html: __('field_aircraft_registration') }, value: { html: garfile.registration or '' } },
+      { key: { html: __('field_aircraft_type') }, value: { html: garfile.craftType or '' } },
+      { key: { html: __('field_aircraft_base') }, value: { html: garfile.craftBase or '' } }
+    ]
+  }) }}
+
