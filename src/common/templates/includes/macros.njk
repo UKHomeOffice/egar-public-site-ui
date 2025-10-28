@@ -1,13 +1,5 @@
 {% from "dist/govuk/components/warning-text/macro.njk" import govukWarningText %}
 
-{% block content %}
-  {{ govukWarningText({
-    html: "<p>Warning text</p>",
-    iconFallbackText: "Warning",
-    classes: "twoHourWarningText",
-    attributes: { hidden: true }
-  }) }}
-{% endblock %}
 {% macro form_group_class(identifier, errors) %}
   {% set class = 'govuk-form-group' %}
   {% for error in errors %}
