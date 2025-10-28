@@ -1,34 +1,32 @@
 {% set viewGuidance = (garfile.status.name === 'Submitted' and resubmitted != 'yes' and numberOf0TResponseCodes > 0) %}
 
-{{ cya.sectionHeading('manifest', 'heading_manifest_details', '/garfile/manifest', showChangeLinks, __) }}
+{{ sectionHeading('manifest', 'heading_manifest_details', '/garfile/manifest', showChangeLinks, __) }}
 
-{% if viewguidance and isresubmitted === false and durationindeparture > 125 %}
-<div style="float:right;">
-  <a href="#" id="resubmit0t" class="govuk-link govuk-button resubmit0t">resubmit checks for timed out
-    passengers</a>
-  <form id="resubmitgarform" action="/garfile/review" method="post">
-    <input type="hidden" name="_csrf" value="{{ csrftoken }}" />
-    <input type="hidden" name="resubmitfor0t" value="resubmit0tonsummarypage" />
-    <input type="hidden" name="resubmitfor0tlink" id="resubmitfor0tlink" value="no" />
-  </form>
-</div>
+{% if viewGuidance and isResubmitted === false and durationInDeparture > 125 %}
+  <div style="float:right;">
+    <a href="#" id="resubmit0T" class="govuk-link govuk-button resubmit0T">Resubmit checks for timed out passengers</a>
+    <form id="reSubmitGarForm" action="/garfile/review" method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      <input type="hidden" name="resubmitFor0T" value="resubmit0TOnSummaryPage" />
+      <input type="hidden" name="resubmitFor0TLink" id="resubmitFor0TLink" value="no" />
+    </form>
+  </div>
 {% endif %}
 
 <p class="govuk-body">
   {{__('guidance') | safe}}
 </p>
 
-{% if (garfile.status.name === 'submitted' and numberof0tresponsecodes > 0 and (durationindeparture < 125 or isresubmitted===true)) %}
-<div class="box-left-grey-border">
-  <div class="email-text">
-    <p class="govuk-body">
-      <span class="system-timeout">system time out</span>
-    </p>
-    <p class="govuk-body">this individual may be boarded.</p>
-    <p class="govuk-body">there will be no section 40 liability if the individual is subsequently found not to
-      hold a valid permission to travel.</p>
+{% if (garfile.status.name === 'Submitted' and numberOf0TResponseCodes > 0 and (durationInDeparture < 125 or isResubmitted === true))  %}
+  <div class="box-left-grey-border">
+    <div class="email-text">
+      <p class="govuk-body">
+      <span class="system-timeout">System time out</span>
+      </p>
+      <p class="govuk-body">This individual may be boarded.</p>
+      <p class="govuk-body">There will be no Section 40 liability if the individual is subsequently found not to hold a valid permission to travel.</p>
+    </div>
   </div>
-</div>
 {% endif %}
 
 <div class="govuk-form-group {{ m.form_group_class('manifestTable', errors) }}">
