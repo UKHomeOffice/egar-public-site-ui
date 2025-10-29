@@ -67,7 +67,7 @@
         <div class="govuk-inset-text">
           You are viewing {{serverPagination.perPage * (serverPagination.page-1) +1}} - {{serverPagination.totalItems if onLastPage else serverPagination.perPage * serverPagination.page}}  of your most recent GARs, there are {{serverPagination.totalItems}} total GARs.
           {% if notOnFirstPage %}
-          <br/>To view the previous {{serverPagination.perPage}} GARs <heading_manage_garsa href="?page={{serverPagination.page-1}}">click here</a>.
+          <br/>To view the previous {{serverPagination.perPage}} GARs <a class="govuk-link" href="?page={{serverPagination.page-1}}">click here</a>.
           {% endif %}
           {% if notOnLastPage %}
           <br/>To view the next {{serverPagination.totalItems % serverPagination.perPage if onSecondToLastPage else serverPagination.perPage}} GARs <a href="?page={{serverPagination.page+1}}">click here</a>.
