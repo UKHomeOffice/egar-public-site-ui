@@ -61,7 +61,6 @@
 
     <div class="govuk-grid-column-full">
       <p class="govuk-body-s">{{__('person_sort')}}</p>
-      <a href="#" data-toggle="tooltip" title="All the people you have added in the past will have the same person added date. Any newly added people will have the new date according to when they were created.">Person added date information!</p>
     </a>
     <form id="people" action="/people" method="post">
       <table class="govuk-table" id="people_table">
@@ -154,11 +153,11 @@
               .eq(col)
               .text()
               .toUpperCase();
-            if ($.isNumeric(val1) && $.isNumeric(val2)) 
+            if ($.isNumeric(val1) && $.isNumeric(val2))
               return sortOrder == 1
                 ? val1 - val2
                 : val2 - val1;
-            else 
+            else
               return (val1 < val2)
                 ? -sortOrder
                 : (val1 > val2)
