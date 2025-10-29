@@ -1,8 +1,5 @@
 {% extends "base-template.njk" %}
 
-{% from "dist/govuk/components/button/macro.njk" import govukButton%}
-
-{% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
 Manage account | Submit a General Aviation Report (GAR)
@@ -15,7 +12,6 @@ Manage account | Submit a General Aviation Report (GAR)
 {% block beforeContent %}
 {% include "phase.njk" %}
 {% endblock %}
-
 
 {% block content %}
 {% if errors %}
