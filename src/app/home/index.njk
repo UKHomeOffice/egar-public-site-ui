@@ -38,7 +38,7 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">{{__('title')}}</h1>
       <p class="govuk-body-m">{{__('create_gar_caption_1')}}
-        <a href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Apr_2024_v6.6_SDS_.xlsx">
+        <a class="govuk-link" href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Apr_2024_v6.6_SDS_.xlsx">
           <span class="govuk-visually-hidden">{{__('heading_create_gar')}}
           </span>{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
       <div class="margin-bottom-40"><a id="start_now" class="govuk-button" href="/garfile/home">Create a GAR</a></div>
@@ -67,7 +67,7 @@
         <div class="govuk-inset-text">
           You are viewing {{serverPagination.perPage * (serverPagination.page-1) +1}} - {{serverPagination.totalItems if onLastPage else serverPagination.perPage * serverPagination.page}}  of your most recent GARs, there are {{serverPagination.totalItems}} total GARs.
           {% if notOnFirstPage %}
-          <br/>To view the previous {{serverPagination.perPage}} GARs <a href="?page={{serverPagination.page-1}}">click here</a>.
+          <br/>To view the previous {{serverPagination.perPage}} GARs <heading_manage_garsa href="?page={{serverPagination.page-1}}">click here</a>.
           {% endif %}
           {% if notOnLastPage %}
           <br/>To view the next {{serverPagination.totalItems % serverPagination.perPage if onSecondToLastPage else serverPagination.perPage}} GARs <a href="?page={{serverPagination.page+1}}">click here</a>.
