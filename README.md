@@ -1,5 +1,5 @@
 ## Submit a GAR (sGAR)
-# Added thsi comment line /// to push from new feature branch and kick start CI/CD///##
+
 ## Prerequisites
 - Clone the `data-access-api`repo in the same parent folder and set up environment variables as explained in the `data-access-api` README.md.
 
