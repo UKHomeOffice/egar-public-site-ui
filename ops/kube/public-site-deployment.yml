@@ -20,7 +20,7 @@ spec:
       volumes:
         - name: bundle-certs
           configMap:
-            name: bundle
+            name: bundle 
       containers:
         - name: public-site-proxy
           image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
@@ -356,7 +356,7 @@ spec:
           volumeMounts:
             - name: bundle-certs
               mountPath: /etc/ssl/certs
-              readOnly: true
+              readOnly: true                        
           ports:
             - name: public-site-prt
               containerPort: 3000
