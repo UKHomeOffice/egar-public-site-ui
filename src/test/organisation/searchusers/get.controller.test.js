@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -12,7 +9,9 @@ const orgApii = require('../../../common/services/organisationApi');
 const controller = require('../../../app/organisation/searchusers/get.controller');
 
 describe('Organisation Search Users Get Controller', () => {
-  let req; let res; let orgApiStub;
+  let req;
+  let res;
+  let orgApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -20,7 +19,7 @@ describe('Organisation Search Users Get Controller', () => {
     req = {
       body: {},
       query: { searchUserName: 'TEST' },
-      session: { org: { i: 'ORGANISATION-ID-1' } }
+      session: { org: { i: 'ORGANISATION-ID-1' } },
     };
 
     res = {
@@ -46,7 +45,6 @@ describe('Organisation Search Users Get Controller', () => {
     expect(orgApiStub).to.not.have.been.called;
   });
 
-
   it('should redirect with error message if api rejects', () => {
     orgApiStub.rejects('orgApiStub.getSearchUsers Example Reject');
     const callController = async () => {
@@ -54,24 +52,26 @@ describe('Organisation Search Users Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1', 'TEST');
+      expect(orgApiStub).to.have.been.calledOnceWithExactly(
+        'ORGANISATION-ID-1',
+        'TEST'
+      );
     });
   });
 
   describe('api returns ok', () => {
     let cookie;
 
-    const apiResponse = 
-      [
-        { id: 'PERSON-1', first_name: 'PERSON-1-name', role: { name: 'User' } },
-        { id: 'PERSON-4', first_name: 'PERSON-1-name', role: { name: 'User' } },
-        { id: 'PERSON-5', first_name: 'PERSON-3-name', role: { name: 'Admin' } },
-      ];
+    const apiResponse = [
+      { id: 'PERSON-1', first_name: 'PERSON-1-name', role: { name: 'User' } },
+      { id: 'PERSON-4', first_name: 'PERSON-1-name', role: { name: 'User' } },
+      { id: 'PERSON-5', first_name: 'PERSON-3-name', role: { name: 'Admin' } },
+    ];
 
     beforeEach(() => {
       cookie = new CookieModel(req);
       cookie.setOrganisationUsers(apiResponse);
-      orgApiStub.resolves(JSON.stringify(apiResponse));     
+      orgApiStub.resolves(JSON.stringify(apiResponse));
     });
 
     it('should render with no users if no match', () => {
@@ -85,11 +85,17 @@ describe('Organisation Search Users Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
-        expect(res.render).to.not.have.been.calledOnceWithExactly('/organisation/index', {
-          cookie,
-          orgUser: [],  
-        });
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1', 'TEST' );
+        expect(res.render).to.not.have.been.calledOnceWithExactly(
+          '/organisation/index',
+          {
+            cookie,
+            orgUser: [],
+          }
+        );
+        expect(orgApiStub).to.have.been.calledOnceWithExactly(
+          'ORGANISATION-ID-1',
+          'TEST'
+        );
       });
     });
 
@@ -101,20 +107,21 @@ describe('Organisation Search Users Get Controller', () => {
       };
 
       callController().then(() => {
-        expect(res.render).to.not.have.been.calledOnceWithExactly('/organisation/index', {
-          cookie,
-          orgUser: [
-            { id: 'PERSON-2', first_name: 'PERSON-2-name', role: 'User' },
-            { id: 'PERSON-5', first_name: 'PERSON-2-name', role: 'Admin' },
-          ],
-          
-        });
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1','TEST');
-
+        expect(res.render).to.not.have.been.calledOnceWithExactly(
+          '/organisation/index',
+          {
+            cookie,
+            orgUser: [
+              { id: 'PERSON-2', first_name: 'PERSON-2-name', role: 'User' },
+              { id: 'PERSON-5', first_name: 'PERSON-2-name', role: 'Admin' },
+            ],
+          }
+        );
+        expect(orgApiStub).to.have.been.calledOnceWithExactly(
+          'ORGANISATION-ID-1',
+          'TEST'
+        );
       });
     });
-
   });
-
 });
-

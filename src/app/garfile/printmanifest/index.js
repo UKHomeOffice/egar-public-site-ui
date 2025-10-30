@@ -18,7 +18,14 @@ const paths = {
 };
 
 // Routing
-router.get(paths.index, flagpole, usercheck, parseForm, csrfcheck, getController);
+router.get(
+  paths.index,
+  flagpole,
+  usercheck,
+  parseForm,
+  csrfcheck,
+  getController
+);
 
 // Export
 module.exports = {

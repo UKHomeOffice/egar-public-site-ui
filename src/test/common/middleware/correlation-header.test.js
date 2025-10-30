@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -10,7 +8,9 @@ require('../../global.test');
 const middleware = require('../../../common/middleware/correlation-header');
 
 describe('Correlation Header Middleware', () => {
-  let res; let req; let next;
+  let res;
+  let req;
+  let next;
 
   beforeEach(() => {
     chai.use(sinonChai);

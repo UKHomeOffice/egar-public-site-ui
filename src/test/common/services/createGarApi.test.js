@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -56,7 +54,9 @@ describe('Create GAR API Service', () => {
     const apiResponse = {
       garId: 'NEW-ID',
     };
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
+    const requestStub = sinon
+      .stub()
+      .yields(null, apiResponse, JSON.stringify(apiResponse));
     const proxiedService = proxyquire('../../../common/services/createGarApi', {
       request: { post: requestStub },
     });

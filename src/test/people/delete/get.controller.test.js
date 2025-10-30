@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -13,21 +12,24 @@ const personApi = require('../../../common/services/personApi');
 const controller = require('../../../app/people/delete/get.controller');
 
 describe('Person Delete Get Controller', () => {
-  let req; let res;
-  let personApiStub; let sessionSaveStub;
+  let req;
+  let res;
+  let personApiStub;
+  let sessionSaveStub;
   let apiResponse;
 
   beforeEach(() => {
     chai.use(sinonChai);
 
     apiResponse = {
-      firstName: 'Julian', lastName: 'Bashir',
+      firstName: 'Julian',
+      lastName: 'Bashir',
     };
 
     req = {
       session: {
         u: { dbId: '343' },
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
 
@@ -64,7 +66,9 @@ describe('Person Delete Get Controller', () => {
 
     callController().then(() => {
       expect(personApiStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
-      expect(req.session.errMsg).to.eql({ message: 'Failed to delete person. Try again' });
+      expect(req.session.errMsg).to.eql({
+        message: 'Failed to delete person. Try again',
+      });
       expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
     });
   });
@@ -73,9 +77,11 @@ describe('Person Delete Get Controller', () => {
     req.session.deletePersonId = 'DELETE-PERSON-ID';
     cookie = new CookieModel(req);
 
-    personApiStub.resolves(JSON.stringify({
-      message: 'Person id not found',
-    }));
+    personApiStub.resolves(
+      JSON.stringify({
+        message: 'Person id not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
@@ -83,7 +89,9 @@ describe('Person Delete Get Controller', () => {
 
     callController().then(() => {
       expect(personApiStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
-      expect(req.session.errMsg).to.eql({ message: 'Failed to delete person. Try again' });
+      expect(req.session.errMsg).to.eql({
+        message: 'Failed to delete person. Try again',
+      });
       expect(sessionSaveStub).to.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
     });

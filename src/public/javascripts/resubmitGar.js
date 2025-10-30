@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function pollAndUpdateDOM() {
     try {
       const checkinResponse = await fetch('/garfile/amg/checkin?poll');
-      const {progress} = await checkinResponse.json();
+      const { progress } = await checkinResponse.json();
       if (progress !== 'Incomplete') {
         location.reload();
         clearInterval(pollIntervalId);
@@ -17,17 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
         '<p>Could not load data. Please try again later</p>';
     }
   }
- 
+
   if (loadingScreen) {
     pollIntervalId = setInterval(pollAndUpdateDOM, pollingInterval);
   }
-
 });
 
-$(document).on('click', '#resubmit0T', function(){
+$(document).on('click', '#resubmit0T', function () {
   $('#resubmitFor0TLink').val('yes');
   $('#reSubmitGarForm').submit();
-
-})
-
-
+});

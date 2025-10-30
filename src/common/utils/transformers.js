@@ -12,21 +12,23 @@ function transformPerson(personObj) {
  * @returns {String} Undefined if undefined input else the string title case'd
  */
 function titleCase(str) {
-  if (typeof str !== "string") {
+  if (typeof str !== 'string') {
     return str;
   }
-  return str.split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase())
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase())
     .join(' ');
 }
 
 function upperCamelCase(str) {
-  if (typeof str !== "string") {
+  if (typeof str !== 'string') {
     return str;
   }
 
-  return str.split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase())
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase())
     .join('');
 }
 
@@ -43,10 +45,10 @@ function numToString(num) {
 function strToBytes(strSize) {
   let numBytes = 0;
   if (strSize.match(/\dGB$/)) {
-    numBytes = (1024 ** 3) * parseFloat(strSize);
+    numBytes = 1024 ** 3 * parseFloat(strSize);
   }
   if (strSize.match(/\dMB$/)) {
-    numBytes = (1024 ** 2) * parseFloat(strSize);
+    numBytes = 1024 ** 2 * parseFloat(strSize);
   }
   if (strSize.match(/\dKB$/)) {
     numBytes = 1024 * parseFloat(strSize);
@@ -69,11 +71,11 @@ function unknownToUnspecified(aGender) {
 }
 
 function toUpper(aStr) {
-  return typeof aStr !== "string" ? aStr : aStr.toUpperCase();
+  return typeof aStr !== 'string' ? aStr : aStr.toUpperCase();
 }
 
 function trimWhitespace(aStr) {
-  return typeof aStr !== "string" ? aStr : aStr.trim();
+  return typeof aStr !== 'string' ? aStr : aStr.trim();
 }
 
 module.exports = {
@@ -84,5 +86,5 @@ module.exports = {
   strToBytes,
   unknownToUnspecified,
   toUpper,
-  trimWhitespace
+  trimWhitespace,
 };

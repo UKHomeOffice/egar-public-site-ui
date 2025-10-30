@@ -15,7 +15,8 @@ module.exports = (req, res) => {
     const token = nanoid(alphabet, 13);
     const hashtoken = tokenService.generateHash(token);
 
-    sendTokenService.send(cookie.getUserFirstName(), cookie.getUserEmail(), token)
+    sendTokenService
+      .send(cookie.getUserFirstName(), cookie.getUserEmail(), token)
       .then(() => {
         logger.info('Storing new token in db');
         // Updating token renders previous tokens invalid
@@ -29,7 +30,13 @@ module.exports = (req, res) => {
         return res.render('app/user/login/index', {
           cookie,
           unverified: true,
-          errors: [{ identifier: 'Username', message: 'There was an error sending the verification email, please try again later.' }],
+          errors: [
+            {
+              identifier: 'Username',
+              message:
+                'There was an error sending the verification email, please try again later.',
+            },
+          ],
         });
       });
   } else {

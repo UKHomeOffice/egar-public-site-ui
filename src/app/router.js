@@ -48,14 +48,14 @@ const garsubmitfailure = require('./garfile/submit/failure');
 const printmanifest = require('./garfile/printmanifest');
 
 //amg
-const amgcheckin  = require('./garfile/amg/checkin');
+const amgcheckin = require('./garfile/amg/checkin');
 
 // Saved entities
 const people = require('./people');
 const peopleAdd = require('./people/add');
 const peopleEdit = require('./people/edit');
 const peopleDelete = require('./people/delete');
-const peopleExport = require('./people/export')
+const peopleExport = require('./people/export');
 
 // responsible person
 const resperson = require('./resperson');
@@ -90,7 +90,6 @@ const deleteUser = require('./organisation/delete');
 const exportusers = require('./organisation/exportusers');
 const searchUsers = require('./organisation/searchusers');
 
-
 // Export
 module.exports.bind = (app) => {
   app.use(healthcheck.router);
@@ -118,7 +117,7 @@ module.exports.bind = (app) => {
   app.use(orgassignrole.router);
   app.use(verifyInvite.router);
   app.use(orgEditUsers.router);
-  app.use(exportusers.router)
+  app.use(exportusers.router);
   app.use(deleteUser.router);
   app.use(searchUsers.router);
   app.use(usersavedcraftedit.router);
@@ -154,7 +153,7 @@ module.exports.bind = (app) => {
   app.use(peopleExport.router);
   app.use(cookies.router);
   app.use(help.router);
-  app.use(accessibility.router)
+  app.use(accessibility.router);
   app.use(unavailable.router);
   app.use(printmanifest.router);
   app.use(resperson.router);

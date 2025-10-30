@@ -10,7 +10,8 @@ module.exports = (req, res) => {
     res.redirect('/aircraft');
     return;
   }
-  craftApi.getDetails(cookie.getUserDbId(), craftId)
+  craftApi
+    .getDetails(cookie.getUserDbId(), craftId)
     .then((apiResponse) => {
       const editCraft = JSON.parse(apiResponse);
       cookie.setEditCraft(editCraft);

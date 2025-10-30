@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const {
   sequelize,
   dataTypes,

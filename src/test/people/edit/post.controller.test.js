@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -18,7 +17,10 @@ const personApi = require('../../../common/services/personApi');
 const controller = require('../../../app/people/edit/post.controller');
 
 describe('Person Edit Post Controller', () => {
-  let req; let res; let person; let personApiStub;
+  let req;
+  let res;
+  let person;
+  let personApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -89,21 +91,33 @@ describe('Person Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(personApiStub).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/people/edit/index', {
-        req,
-        cookie,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [
-          new ValidationRule(validator.isNotEmpty, 'firstName', req.body.firstName, 'Enter the given names of the person'),
-          new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
-        ],
+    callController()
+      .then()
+      .then(() => {
+        expect(personApiStub).to.not.have.been.called;
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/people/edit/index', {
+          req,
+          cookie,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [
+            new ValidationRule(
+              validator.isNotEmpty,
+              'firstName',
+              req.body.firstName,
+              'Enter the given names of the person'
+            ),
+            new ValidationRule(
+              validator.isNotEmpty,
+              'lastName',
+              req.body.lastName,
+              'Enter the surname of the person'
+            ),
+          ],
+        });
       });
-    });
   });
 
   it('should render with messages if gar api rejects', () => {
@@ -114,43 +128,60 @@ describe('Person Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(personApiStub).to.have.been.calledWith('9001', 'EDIT-PERSON-ID-1', person);
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/people/edit/index', {
-        req,
-        cookie,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [{ message: 'An error occurred. Please try again' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(personApiStub).to.have.been.calledWith(
+          '9001',
+          'EDIT-PERSON-ID-1',
+          person
+        );
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/people/edit/index', {
+          req,
+          cookie,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [{ message: 'An error occurred. Please try again' }],
+        });
       });
-    });
   });
 
   it('should render message if api returns one', () => {
     const cookie = new CookieModel(req);
     cookie.updateEditPerson(person);
 
-    personApiStub.resolves(JSON.stringify({
-      message: 'GAR not found',
-    }));
+    personApiStub.resolves(
+      JSON.stringify({
+        message: 'GAR not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(personApiStub).to.have.been.calledWith('9001', 'EDIT-PERSON-ID-1', person);
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWith('app/people/edit/index', {
-        cookie,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [{ message: 'GAR not found' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(personApiStub).to.have.been.calledWith(
+          '9001',
+          'EDIT-PERSON-ID-1',
+          person
+        );
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWith(
+          'app/people/edit/index',
+          {
+            cookie,
+            persontype,
+            documenttype,
+            genderchoice,
+            errors: [{ message: 'GAR not found' }],
+          }
+        );
       });
-    });
   });
 
   it('should redirect on success', () => {
@@ -160,11 +191,17 @@ describe('Person Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(personApiStub).to.have.been.calledWith('9001', 'EDIT-PERSON-ID-1', person);
-      expect(res.redirect).to.have.been.calledWith('/people');
-      expect(res.render).to.not.have.been.called;
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(personApiStub).to.have.been.calledWith(
+          '9001',
+          'EDIT-PERSON-ID-1',
+          person
+        );
+        expect(res.redirect).to.have.been.calledWith('/people');
+        expect(res.render).to.not.have.been.called;
+      });
   });
   it('should render with validation messages if "Other" document type is selected and special characters, apostrophes or numbers are present in the given names', () => {
     // refers to "GivenName" in the people details form
@@ -178,20 +215,32 @@ describe('Person Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(personApiStub).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/people/edit/index', {
-        req,
-        cookie,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [
-          new ValidationRule(validator.isAlpha, 'firstName', req.body.firstName, 'Given names must not contain special characters, apostrophes or numbers'),
-          new ValidationRule(validator.isAlpha, 'lastName', req.body.lastName, 'Surname must not contain special characters, apostrophes or numbers'),
-        ],
+    callController()
+      .then()
+      .then(() => {
+        expect(personApiStub).to.not.have.been.called;
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/people/edit/index', {
+          req,
+          cookie,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [
+            new ValidationRule(
+              validator.isAlpha,
+              'firstName',
+              req.body.firstName,
+              'Given names must not contain special characters, apostrophes or numbers'
+            ),
+            new ValidationRule(
+              validator.isAlpha,
+              'lastName',
+              req.body.lastName,
+              'Surname must not contain special characters, apostrophes or numbers'
+            ),
+          ],
+        });
       });
-    });
   });
 });

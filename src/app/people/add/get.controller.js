@@ -9,6 +9,9 @@ module.exports = (req, res) => {
 
   const cookie = new CookieModel(req);
   res.render('app/people/add/index', {
-    cookie, genderchoice, persontype, documenttype,
+    cookie,
+    genderchoice,
+    persontype,
+    documenttype,
   });
 };

@@ -2,7 +2,9 @@ const chai = require('chai');
 const { before, after } = require('mocha');
 
 const unhandledRejectionHandler = (reason, promise) => {
-  chai.assert.fail(`Unhandled rejection encountered: ${reason} for promise: ${promise}`);
+  chai.assert.fail(
+    `Unhandled rejection encountered: ${reason} for promise: ${promise}`
+  );
 };
 
 /**

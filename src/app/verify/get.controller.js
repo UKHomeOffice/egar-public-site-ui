@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 const { nanoid } = require('../../common/utils/utils');
 const i18n = require('i18n');
 const logger = require('../../common/utils/logger')(__filename);
@@ -37,7 +35,7 @@ module.exports = async (req, res) => {
       sendTokenService.send(
         parsedResponse.firstName,
         parsedResponse.email,
-        alphabetToken,
+        alphabetToken
       );
       message = i18n.__('verify_user_account_token_expired');
     }
@@ -47,10 +45,9 @@ module.exports = async (req, res) => {
     }
 
     return res.render('app/verify/registeruser/index', { message });
-
   } catch (err) {
     logger.error('Error during user verification');
-    if(token == null) {
+    if (token == null) {
       message = i18n.__('verify_user_account_token_not_provided');
       logger.info(message);
       return res.render('app/verify/registeruser/index', { message });

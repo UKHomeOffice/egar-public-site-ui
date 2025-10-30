@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -16,7 +15,8 @@ const manifestUtil = require('../../../app/garfile/manifest/bulkAdd');
 const controller = require('../../../app/garfile/manifest/post.controller');
 
 describe('Manifest Post Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -30,7 +30,7 @@ describe('Manifest Post Controller', () => {
       session: {
         gar: { id: '9001' },
         u: { dbId: 'USER-12345' },
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
 
@@ -53,11 +53,13 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(garApi.getPeople).to.not.have.been.called;
-      expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(garApi.getPeople).to.not.have.been.called;
+        expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+      });
   });
 
   it('should redirect to editperson', () => {
@@ -70,13 +72,17 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(req.session.editPersonId).to.eq('123456');
-      expect(garApi.getPeople).to.not.have.been.called;
-      expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
-      expect(req.session.save).to.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest/editperson');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(req.session.editPersonId).to.eq('123456');
+        expect(garApi.getPeople).to.not.have.been.called;
+        expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
+        expect(req.session.save).to.have.been.called;
+        expect(res.redirect).to.have.been.calledWith(
+          '/garfile/manifest/editperson'
+        );
+      });
   });
 
   // TODO: It really should inform the user of an issue...
@@ -84,17 +90,24 @@ describe('Manifest Post Controller', () => {
     req.body.buttonClicked = 'Add to GAR';
     req.body.personId = 'ABCDEFG';
     sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject');
-    sinon.stub(manifestUtil, 'getDetailsByIds').rejects('bulkAdd.getDetailsByIds Example Reject');
+    sinon
+      .stub(manifestUtil, 'getDetailsByIds')
+      .rejects('bulkAdd.getDetailsByIds Example Reject');
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345');
-      expect(garApi.patch).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(manifestUtil.getDetailsByIds).to.have.been.calledWith(
+          'ABCDEFG',
+          'USER-12345'
+        );
+        expect(garApi.patch).to.not.have.been.called;
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+      });
   });
 
   // TODO: It really should inform the user of an issue...
@@ -102,38 +115,52 @@ describe('Manifest Post Controller', () => {
     req.body.buttonClicked = 'Add to GAR';
     req.body.personId = 'ABCDEFG';
     sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject');
-    sinon.stub(manifestUtil, 'getDetailsByIds').resolves([
-      { firstName: 'Random', lastName: 'Person' },
-    ]);
+    sinon
+      .stub(manifestUtil, 'getDetailsByIds')
+      .resolves([{ firstName: 'Random', lastName: 'Person' }]);
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345');
-      expect(garApi.patch).to.have.been.calledWith('9001', 'Draft', { people: [{ firstName: 'Random', lastName: 'Person' }] });
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(manifestUtil.getDetailsByIds).to.have.been.calledWith(
+          'ABCDEFG',
+          'USER-12345'
+        );
+        expect(garApi.patch).to.have.been.calledWith('9001', 'Draft', {
+          people: [{ firstName: 'Random', lastName: 'Person' }],
+        });
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+      });
   });
 
   it('should redirect if garApi resolves', () => {
     req.body.buttonClicked = 'Add to GAR';
     req.body.personId = 'ABCDEFG';
     sinon.stub(garApi, 'patch').resolves();
-    sinon.stub(manifestUtil, 'getDetailsByIds').resolves([
-      { firstName: 'Random', lastName: 'Person' },
-    ]);
+    sinon
+      .stub(manifestUtil, 'getDetailsByIds')
+      .resolves([{ firstName: 'Random', lastName: 'Person' }]);
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345');
-      expect(garApi.patch).to.have.been.calledWith('9001', 'Draft', { people: [{ firstName: 'Random', lastName: 'Person' }] });
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(manifestUtil.getDetailsByIds).to.have.been.calledWith(
+          'ABCDEFG',
+          'USER-12345'
+        );
+        expect(garApi.patch).to.have.been.calledWith('9001', 'Draft', {
+          people: [{ firstName: 'Random', lastName: 'Person' }],
+        });
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+      });
   });
 
   it('should redirect if buttonClicked is Save and Exit', () => {
@@ -146,11 +173,13 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(garApi.getPeople).to.not.have.been.called;
-      expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(garApi.getPeople).to.not.have.been.called;
+        expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+      });
   });
 
   it('should redirect if buttonClicked is Save and Exit even if personId set', () => {
@@ -164,11 +193,13 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(garApi.getPeople).to.not.have.been.called;
-      expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(garApi.getPeople).to.not.have.been.called;
+        expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+      });
   });
 
   it('Add people button was called', () => {
@@ -178,15 +209,16 @@ describe('Manifest Post Controller', () => {
     sinon.stub(personApi, 'create').resolves(true);
     sinon.stub(manifestUtil, 'getgarPeopleIds').resolves(garPeople());
 
-  
     const callController = async () => {
       await controller(req, res);
     };
-    callController().then().then(() => {
-      expect(manifestUtil.getgarPeopleIds).to.have.been.called;
-      expect(personApi.create).to.have.been.called;
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(manifestUtil.getgarPeopleIds).to.have.been.called;
+        expect(personApi.create).to.have.been.called;
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+      });
   });
 
   it('should redirect with errors if buttonClicked is Continue and gar api rejects', async () => {
@@ -211,9 +243,11 @@ describe('Manifest Post Controller', () => {
     cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'patch').resolves(true);
-    sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
-      items: invalidPassengersAndCrew(),
-    }));
+    sinon.stub(garApi, 'getPeople').resolves(
+      JSON.stringify({
+        items: invalidPassengersAndCrew(),
+      })
+    );
     sinon.stub(manifestUtil, 'getDetailsByIds');
 
     await controller(req, res);
@@ -221,8 +255,16 @@ describe('Manifest Post Controller', () => {
     expect(garApi.getPeople).to.have.been.calledWith('9001');
     expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
     expect(req.session.manifestErr).to.eql([
-      { message: 'Click the edit link of the person(s) with the errors to edit and correct their details.', identifier: 'person-0' },
-      { message: 'Click the edit link of the person(s) with the errors to edit and correct their details.', identifier: 'person-1' },
+      {
+        message:
+          'Click the edit link of the person(s) with the errors to edit and correct their details.',
+        identifier: 'person-0',
+      },
+      {
+        message:
+          'Click the edit link of the person(s) with the errors to edit and correct their details.',
+        identifier: 'person-1',
+      },
     ]);
     expect(req.session.manifestInvalidPeople).to.eql(['person-0', 'person-1']);
     expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
@@ -233,9 +275,11 @@ describe('Manifest Post Controller', () => {
     cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'patch').resolves(true);
-    sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
-      items: garPeople(),
-    }));
+    sinon.stub(garApi, 'getPeople').resolves(
+      JSON.stringify({
+        items: garPeople(),
+      })
+    );
     sinon.stub(manifestUtil, 'getDetailsByIds');
 
     await controller(req, res);
@@ -254,9 +298,11 @@ describe('Manifest Post Controller', () => {
     cookie = new CookieModel(req);
     // sinon.stub(Manifest.prototype, 'validate').returns(false);
     sinon.stub(garApi, 'patch').resolves(true);
-    sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({
-      items: garPeople(),
-    }));
+    sinon.stub(garApi, 'getPeople').resolves(
+      JSON.stringify({
+        items: garPeople(),
+      })
+    );
     sinon.stub(manifestUtil, 'getDetailsByIds');
 
     await controller(req, res);

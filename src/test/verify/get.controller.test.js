@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -17,7 +16,8 @@ const sendTokenService = require('../../common/services/send-token');
 const controller = require('../../app/verify/get.controller');
 
 describe('Verify Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -65,23 +65,31 @@ describe('Verify Get Controller', () => {
     // Use this test to check the generateHash method
     // i.e. let's ensure crypto is defined!
     const tokenSpy = sinon.spy(tokenService, 'generateHash');
-    sinon.stub(verifyUserService, 'verifyUser').rejects('verificationApi.verifyUser Example Reject');
+    sinon
+      .stub(verifyUserService, 'verifyUser')
+      .rejects('verificationApi.verifyUser Example Reject');
     await controller(req, res);
 
     expect(tokenService.generateHash).to.have.been.calledWith('abcd1234');
-    expect(verifyUserService.verifyUser).to.have.been.calledWith(tokenSpy.returnValues[0]);
+    expect(verifyUserService.verifyUser).to.have.been.calledWith(
+      tokenSpy.returnValues[0]
+    );
     expect(res.render).to.have.been.calledWith('app/verify/registeruser/index');
   });
 
   it('should return an error message when no user registration token is provided in the verification url', async () => {
-
     reqNoQuery = {
       session: {},
     };
 
     await controller(reqNoQuery, res);
-    expect(i18n.__).to.have.been.calledWith('verify_user_account_token_not_provided');
-    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Token Not Provided Message'});
+    expect(i18n.__).to.have.been.calledWith(
+      'verify_user_account_token_not_provided'
+    );
+    expect(res.render).to.have.been.calledWithExactly(
+      'app/verify/registeruser/index',
+      { message: 'Example Token Not Provided Message' }
+    );
   });
 
   it('should return with a success message', async () => {
@@ -90,14 +98,21 @@ describe('Verify Get Controller', () => {
       message: 'Token verified',
     };
     sinon.stub(tokenService, 'generateHash').returns('hashedTokenExample');
-    sinon.stub(verifyUserService, 'verifyUser').resolves(JSON.stringify(apiResponse));
+    sinon
+      .stub(verifyUserService, 'verifyUser')
+      .resolves(JSON.stringify(apiResponse));
 
     await controller(req, res);
 
     expect(tokenService.generateHash).to.have.been.calledWith('abcd1234');
-    expect(verifyUserService.verifyUser).to.have.been.calledWith('hashedTokenExample');
+    expect(verifyUserService.verifyUser).to.have.been.calledWith(
+      'hashedTokenExample'
+    );
     expect(i18n.__).to.have.been.calledWith('verify_user_account_success');
-    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Success Message' });
+    expect(res.render).to.have.been.calledWithExactly(
+      'app/verify/registeruser/index',
+      { message: 'Example Success Message' }
+    );
   });
 
   it('should return with a token invalid message', async () => {
@@ -105,15 +120,24 @@ describe('Verify Get Controller', () => {
       message: 'Token is invalid',
     };
     sinon.stub(tokenService, 'generateHash').returns('hashedTokenExample');
-    sinon.stub(verifyUserService, 'verifyUser').resolves(JSON.stringify(apiResponse));
+    sinon
+      .stub(verifyUserService, 'verifyUser')
+      .resolves(JSON.stringify(apiResponse));
 
     await controller(req, res);
 
     expect(tokenService.generateHash).to.have.been.calledWith('abcd1234');
-    expect(verifyUserService.verifyUser).to.have.been.calledWith('hashedTokenExample');
+    expect(verifyUserService.verifyUser).to.have.been.calledWith(
+      'hashedTokenExample'
+    );
     expect(i18n.__).to.have.been.calledWith('verify_user_account_success');
-    expect(i18n.__).to.have.been.calledWith('verify_user_account_token_invalid');
-    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Invalid Token Message' });
+    expect(i18n.__).to.have.been.calledWith(
+      'verify_user_account_token_invalid'
+    );
+    expect(res.render).to.have.been.calledWithExactly(
+      'app/verify/registeruser/index',
+      { message: 'Example Invalid Token Message' }
+    );
   });
 
   it('should return with a token invalid message', async () => {
@@ -121,15 +145,24 @@ describe('Verify Get Controller', () => {
       message: 'Token is invalid',
     };
     sinon.stub(tokenService, 'generateHash').returns('hashedTokenExample');
-    sinon.stub(verifyUserService, 'verifyUser').resolves(JSON.stringify(apiResponse));
+    sinon
+      .stub(verifyUserService, 'verifyUser')
+      .resolves(JSON.stringify(apiResponse));
 
     await controller(req, res);
 
     expect(tokenService.generateHash).to.have.been.calledWith('abcd1234');
-    expect(verifyUserService.verifyUser).to.have.been.calledWith('hashedTokenExample');
+    expect(verifyUserService.verifyUser).to.have.been.calledWith(
+      'hashedTokenExample'
+    );
     expect(i18n.__).to.have.been.calledWith('verify_user_account_success');
-    expect(i18n.__).to.have.been.calledWith('verify_user_account_token_invalid');
-    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Invalid Token Message' });
+    expect(i18n.__).to.have.been.calledWith(
+      'verify_user_account_token_invalid'
+    );
+    expect(res.render).to.have.been.calledWithExactly(
+      'app/verify/registeruser/index',
+      { message: 'Example Invalid Token Message' }
+    );
   });
 
   // TODO: The block has two asynchronous events with no specific rejection
@@ -142,22 +175,41 @@ describe('Verify Get Controller', () => {
       email: 'someone@somewhere.com',
       message: 'Token has expired',
     };
-    const generateHashStub = sinon.stub(tokenService, 'generateHash').onCall(0).returns('hashedTokenExample');
+    const generateHashStub = sinon
+      .stub(tokenService, 'generateHash')
+      .onCall(0)
+      .returns('hashedTokenExample');
     generateHashStub.onCall(1).returns('secondHashedTokenExample');
-    sinon.stub(verifyUserService, 'verifyUser').resolves(JSON.stringify(apiResponse));
+    sinon
+      .stub(verifyUserService, 'verifyUser')
+      .resolves(JSON.stringify(apiResponse));
 
     await controller(req, res);
 
     expect(generateHashStub).to.have.been.calledWith('abcd1234');
-    expect(verifyUserService.verifyUser).to.have.been.calledWith('hashedTokenExample');
+    expect(verifyUserService.verifyUser).to.have.been.calledWith(
+      'hashedTokenExample'
+    );
     expect(i18n.__).to.have.been.calledWith('verify_user_account_success');
     // Cannot easily mock the nanoid library so easier to stub the generateHash
     // function and retrieve the argument going into it
     const parameter = generateHashStub.getCall(1).args[0];
     expect(generateHashStub).to.have.been.calledWith(parameter);
-    expect(tokenApi.updateToken).to.have.been.calledWith('secondHashedTokenExample', '1234');
-    expect(sendTokenService.send).to.have.been.calledWith('Some First Name', 'someone@somewhere.com', parameter);
-    expect(i18n.__).to.have.been.calledWith('verify_user_account_token_expired');
-    expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', { message: 'Example Token Expired Message' });
+    expect(tokenApi.updateToken).to.have.been.calledWith(
+      'secondHashedTokenExample',
+      '1234'
+    );
+    expect(sendTokenService.send).to.have.been.calledWith(
+      'Some First Name',
+      'someone@somewhere.com',
+      parameter
+    );
+    expect(i18n.__).to.have.been.calledWith(
+      'verify_user_account_token_expired'
+    );
+    expect(res.render).to.have.been.calledWithExactly(
+      'app/verify/registeruser/index',
+      { message: 'Example Token Expired Message' }
+    );
   });
 });

@@ -16,7 +16,9 @@ const getCurrentPage = (req, pageUrl) => {
     req.session.currentPage = {};
   }
   if (req.session.currentPage[pageUrl] === undefined) {
-    logger.debug(`Getting currentPage for ${pageUrl} returned undefined, adding default`);
+    logger.debug(
+      `Getting currentPage for ${pageUrl} returned undefined, adding default`
+    );
     req.session.currentPage[pageUrl] = 1;
     req.session.save();
   }
@@ -54,8 +56,11 @@ const setCurrentPage = (req, pageUrl, pageNumber) => {
 const getPages = (limit, pageCount, currentPage) => {
   if (limit > 0) {
     const pages = [];
-    const end = Math.min(Math.max(currentPage + Math.floor(limit / 2), limit), pageCount);
-    const start = Math.max(1, (currentPage < (limit - 1)) ? 1 : (end - limit) + 1);
+    const end = Math.min(
+      Math.max(currentPage + Math.floor(limit / 2), limit),
+      pageCount
+    );
+    const start = Math.max(1, currentPage < limit - 1 ? 1 : end - limit + 1);
 
     for (let i = start; i <= end; i += 1) {
       pages.push(i);
@@ -76,10 +81,19 @@ const getPages = (limit, pageCount, currentPage) => {
  * @param {Number} totalItems Total items for the screen
  * @param {String} optionalPath If the url path is not the key, this should be supplied
  */
-const build = (req, totalPages, totalItems, optionalPath, pageSize=PAGE_SIZE) => {
+const build = (
+  req,
+  totalPages,
+  totalItems,
+  optionalPath,
+  pageSize = PAGE_SIZE
+) => {
   logger.debug('Entering the pagination module');
 
-  const pathName = (typeof optionalArg === 'undefined') ? url.parse(req.originalUrl).pathname : optionalPath;
+  const pathName =
+    typeof optionalArg === 'undefined'
+      ? url.parse(req.originalUrl).pathname
+      : optionalPath;
   const currentPage = getCurrentPage(req, pathName);
 
   if (totalPages === 0) {
@@ -107,8 +121,8 @@ const build = (req, totalPages, totalItems, optionalPath, pageSize=PAGE_SIZE) =>
     throw totalPages;
   }
 
-  const startItem = ((currentPage - 1) * pageSize) + 1;
-  const endItem = Math.min((startItem - 1) + pageSize, totalItems);
+  const startItem = (currentPage - 1) * pageSize + 1;
+  const endItem = Math.min(startItem - 1 + pageSize, totalItems);
   const items = getPages(3, totalPages, currentPage);
 
   return {

@@ -1,7 +1,7 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const organisationApi = require('../../../common/services/organisationApi');
-const userApi = require('../../../common/services/userManageApi')
+const userApi = require('../../../common/services/userManageApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -21,12 +21,16 @@ module.exports = async (req, res) => {
 
     const userToDelete = await userApi.getDetails(deleteUserEmail);
 
-    const apiResponse = await organisationApi.deleteUser(requesterId, organisationId, {
-      userId: userToDelete.userId,
-      firstName: userToDelete.firstName,
-      lastName: userToDelete.lastName,
-      role: userToDelete.role.name,
-    });
+    const apiResponse = await organisationApi.deleteUser(
+      requesterId,
+      organisationId,
+      {
+        userId: userToDelete.userId,
+        firstName: userToDelete.firstName,
+        lastName: userToDelete.lastName,
+        role: userToDelete.role.name,
+      }
+    );
 
     const parsedResponse = JSON.parse(apiResponse);
     if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -36,7 +40,6 @@ module.exports = async (req, res) => {
     req.session.successHeader = 'Success';
     req.session.successMsg = 'User deleted';
     return req.session.save(() => res.redirect('/organisation'));
-
   } catch (err) {
     logger.error(err);
     req.session.errMsg = errMsg;

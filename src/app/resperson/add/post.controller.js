@@ -9,33 +9,50 @@ const resPersonApi = require('../../../common/services/resPersonApi');
 const utils = require('../../../common/utils/utils');
 
 module.exports = (req, res) => {
-
   const cookie = new CookieModel(req);
   req.body.fixedBasedOperatorAnswer = _.trim(req.body.fixedBasedOperatorAnswer);
   const responsiblePerson = utils.getResponsiblePersonFromReq(req);
 
-  validator.validateChains(validations.validations(req))
-  .then(() => {
-    resPersonApi.create(cookie.getUserDbId(), responsiblePerson).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        res.render('app/resperson/add/index', {
-          cookie, fixedBasedOperatorOptions, errors: [parsedResponse], responsiblePerson
+  validator
+    .validateChains(validations.validations(req))
+    .then(() => {
+      resPersonApi
+        .create(cookie.getUserDbId(), responsiblePerson)
+        .then((apiResponse) => {
+          const parsedResponse = JSON.parse(apiResponse);
+          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+            res.render('app/resperson/add/index', {
+              cookie,
+              fixedBasedOperatorOptions,
+              errors: [parsedResponse],
+              responsiblePerson,
+            });
+          } else {
+            res.redirect('/resperson');
+          }
+        })
+        .catch((err) => {
+          logger.error('There was a problem adding person to saved people');
+          logger.error(err);
+          res.render('app/resperson/add/index', {
+            cookie,
+            fixedBasedOperatorOptions,
+            errors: [
+              {
+                message:
+                  'There was a problem creating the responsible person. Please try again',
+              },
+            ],
+          });
         });
-      } else {
-        res.redirect('/resperson');
-      }
-    }).catch((err) => {
-      logger.error('There was a problem adding person to saved people');
-      logger.error(err);
+    })
+    .catch((err) => {
       res.render('app/resperson/add/index', {
-        cookie, fixedBasedOperatorOptions, errors: [{ message: 'There was a problem creating the responsible person. Please try again' }],
+        cookie,
+        req,
+        fixedBasedOperatorOptions,
+        errors: err,
+        responsiblePerson,
       });
     });
-  })
-  .catch((err) => {
-    res.render('app/resperson/add/index', {
-      cookie, req,  fixedBasedOperatorOptions, errors: err, responsiblePerson
-    });
-  });
 };

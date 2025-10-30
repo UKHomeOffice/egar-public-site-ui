@@ -20,23 +20,37 @@ module.exports = async (req, res) => {
   try {
     const apiResponse = await garApi.getPeople(cookie.getGarId());
     const parsedResponse = JSON.parse(apiResponse).items;
-    const person = parsedResponse.find((garPerson) => garPerson.garPeopleId === personId);
+    const person = parsedResponse.find(
+      (garPerson) => garPerson.garPeopleId === personId
+    );
 
     const requestToValidate = Manifest.turnPersonToRequest(person);
 
-    validator.validateChains(validations.validations(requestToValidate))
-    .then(() => {
-      res.render('app/garfile/manifest/editperson/index', {
-        cookie, persontype, documenttype, genderchoice, req, person,
+    validator
+      .validateChains(validations.validations(requestToValidate))
+      .then(() => {
+        res.render('app/garfile/manifest/editperson/index', {
+          cookie,
+          persontype,
+          documenttype,
+          genderchoice,
+          req,
+          person,
+        });
+      })
+      .catch((err) => {
+        logger.error(`gar id (${cookie.getGarId()}): ${err}`);
+        return res.render('app/garfile/manifest/editperson/index', {
+          req,
+          cookie,
+          person,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: err,
+        });
       });
-    })
-    .catch((err) => {
-      logger.error(`gar id (${cookie.getGarId()}): ${err}`);
-      return res.render('app/garfile/manifest/editperson/index', {
-        req, cookie, person, persontype, documenttype, genderchoice, errors: err,
-      });
-    });
-  } catch(err) {
+  } catch (err) {
     logger.error('Failed to get garperson details');
     logger.error(err);
     return res.redirect('/garfile/manifest');

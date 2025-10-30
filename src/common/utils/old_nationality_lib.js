@@ -23,7 +23,7 @@ const generateNationalityList = () => {
   customNationalities.forEach((nationality) => {
     alpha3List.push({
       code: nationality.code,
-      label: `${nationality.label} (${nationality.code})`
+      label: `${nationality.label} (${nationality.code})`,
     });
   });
 
@@ -43,7 +43,9 @@ const nationalityList = generateNationalityList();
  * @param  {String} countryCode
  */
 function getCountryFromCode(countryCode) {
-  const countryFromCode = nationalityList.find(country => country.code === countryCode);
+  const countryFromCode = nationalityList.find(
+    (country) => country.code === countryCode
+  );
   return countryFromCode === undefined ? countryCode : countryFromCode.label;
 }
 

@@ -3,7 +3,6 @@ const logger = require('../../common/utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
-
   /**
    * Confirms user as verified via API.
    *
@@ -14,20 +13,23 @@ module.exports = {
   verifyUser(tokenId) {
     return new Promise((resolve, reject) => {
       logger.info('Sending request to API to verify token');
-      request.put({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.verifyUser(),
-        body: JSON.stringify({
-          tokenId,
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call token verification service');
-          reject(new Error('Token verification service failed'));
-          return;
+      request.put(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.verifyUser(),
+          body: JSON.stringify({
+            tokenId,
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call token verification service');
+            reject(new Error('Token verification service failed'));
+            return;
+          }
+          resolve(body);
         }
-        resolve(body);
-      });
+      );
     }).catch((err) => {
       logger.error(err);
     });
@@ -35,20 +37,23 @@ module.exports = {
 
   getUserInviteToken(email) {
     return new Promise((resolve, reject) => {
-      const url = new URL(endpoints.verifyUser())
-      url.searchParams.append('invitee_email', email)
+      const url = new URL(endpoints.verifyUser());
+      url.searchParams.append('invitee_email', email);
       logger.info('Sending request to API to verify token');
-      request.get({
-        url: url.toString(),
-        headers: { 'content-type': 'application/json' },
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call token verification service');
-          reject(new Error('Token verification service failed'));
-          return;
+      request.get(
+        {
+          url: url.toString(),
+          headers: { 'content-type': 'application/json' },
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call token verification service');
+            reject(new Error('Token verification service failed'));
+            return;
+          }
+          resolve(JSON.parse(body));
         }
-        resolve(JSON.parse(body));
-      });
+      );
     }).catch((err) => {
       logger.error(err);
     });
@@ -60,20 +65,23 @@ module.exports = {
         const url = new URL(endpoints.verifyUser());
         url.searchParams.append('token_id', tokenId);
         logger.info('Sending request to API to verify token');
-        request.get({
-          url: url.toString(),
-          headers: { 'content-type': 'application/json' },
-        }, (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call token verification service');
-            reject(new Error('Token verification service failed'));
-            return;
+        request.get(
+          {
+            url: url.toString(),
+            headers: { 'content-type': 'application/json' },
+          },
+          (error, _response, body) => {
+            if (error) {
+              logger.error('Failed to call token verification service');
+              reject(new Error('Token verification service failed'));
+              return;
+            }
+            resolve(JSON.parse(body));
           }
-          resolve(JSON.parse(body));
-        });
+        );
       });
     } catch (err) {
       logger.error(err);
     }
-  }
+  },
 };

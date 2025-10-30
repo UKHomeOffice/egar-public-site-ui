@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -10,7 +7,9 @@ const proxyquire = require('proxyquire');
 require('../../global.test');
 
 describe('Parse Form Middleware', () => {
-  let res; let req; let next;
+  let res;
+  let req;
+  let next;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -24,13 +23,18 @@ describe('Parse Form Middleware', () => {
 
   it('should call next and invoke the bodyParser', async () => {
     const bodyParserStub = sinon.stub();
-    const proxiedMiddleware = proxyquire('../../../common/middleware/parseForm', {
-      'body-parser': { urlencoded: bodyParserStub },
-    });
+    const proxiedMiddleware = proxyquire(
+      '../../../common/middleware/parseForm',
+      {
+        'body-parser': { urlencoded: bodyParserStub },
+      }
+    );
 
     await proxiedMiddleware(req, res, next);
 
-    expect(bodyParserStub).to.have.been.calledOnceWithExactly({ extended: false });
+    expect(bodyParserStub).to.have.been.calledOnceWithExactly({
+      extended: false,
+    });
     expect(next).to.have.been.called;
   });
 });

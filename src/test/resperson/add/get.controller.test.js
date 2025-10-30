@@ -10,7 +10,8 @@ const controller = require('../../../app/resperson/add/get.controller');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 
 describe('Responsible Person Add Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -29,12 +30,12 @@ describe('Responsible Person Add Get Controller', () => {
 
   it('should render the responsible person add index page', async () => {
     cookie = new CookieModel(req);
-    
+
     await controller(req, res);
 
     expect(res.render).to.have.been.calledWith('app/resperson/add/index', {
-      fixedBasedOperatorOptions, cookie,
+      fixedBasedOperatorOptions,
+      cookie,
     });
   });
-
 });

@@ -15,19 +15,30 @@ module.exports = (req, res) => {
 
   if (personId === undefined) {
     res.render('app/garfile/manifest/addnewperson/index', {
-      cookie, persontype, documenttype, genderchoice, req, person,
+      cookie,
+      persontype,
+      documenttype,
+      genderchoice,
+      req,
+      person,
     });
     return;
   }
 
-  personApi.getPeople(cookie.getUserDbId(), 'individual')
+  personApi
+    .getPeople(cookie.getUserDbId(), 'individual')
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
-      person = parsedResponse.find(element => element.personId === personId);
+      person = parsedResponse.find((element) => element.personId === personId);
       delete req.session.addPersonId;
       person = transformer.transformPerson(person);
       res.render('app/garfile/manifest/addnewperson/index', {
-        cookie, persontype, documenttype, genderchoice, req, person,
+        cookie,
+        persontype,
+        documenttype,
+        genderchoice,
+        req,
+        person,
       });
     })
     .catch((err) => {

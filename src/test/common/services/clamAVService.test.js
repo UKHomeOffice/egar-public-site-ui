@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -29,9 +26,12 @@ describe('File Upload API Service', () => {
 
   it('should do nothing if request throws error', async () => {
     const requestStub = sinon.stub().throws('request.post Throw Error');
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      request: { post: requestStub },
-    });
+    const proxiedService = proxyquire(
+      '../../../common/services/clamAVService',
+      {
+        request: { post: requestStub },
+      }
+    );
 
     await proxiedService.scanFile(file);
 
@@ -46,10 +46,15 @@ describe('File Upload API Service', () => {
   });
 
   it('should reject if error present', async () => {
-    const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      request: { post: requestStub },
-    });
+    const requestStub = sinon
+      .stub()
+      .yields(new Error('Example Error'), null, null);
+    const proxiedService = proxyquire(
+      '../../../common/services/clamAVService',
+      {
+        request: { post: requestStub },
+      }
+    );
 
     const result = await proxiedService.scanFile(file);
 
@@ -67,10 +72,15 @@ describe('File Upload API Service', () => {
   it('should resolve if ok is true', async () => {
     const apiResponse = 'ok : true';
 
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      request: { post: requestStub },
-    });
+    const requestStub = sinon
+      .stub()
+      .yields(null, apiResponse, JSON.stringify(apiResponse));
+    const proxiedService = proxyquire(
+      '../../../common/services/clamAVService',
+      {
+        request: { post: requestStub },
+      }
+    );
 
     await proxiedService.scanFile(file).then((result) => {
       expect(requestStub).to.have.been.calledOnceWith({
@@ -88,10 +98,15 @@ describe('File Upload API Service', () => {
   it('should resolve if ok is false', async () => {
     const apiResponse = 'ok : false';
 
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      request: { post: requestStub },
-    });
+    const requestStub = sinon
+      .stub()
+      .yields(null, apiResponse, JSON.stringify(apiResponse));
+    const proxiedService = proxyquire(
+      '../../../common/services/clamAVService',
+      {
+        request: { post: requestStub },
+      }
+    );
 
     await proxiedService.scanFile(file).then((result) => {
       expect(requestStub).to.have.been.calledOnceWith({
@@ -109,10 +124,15 @@ describe('File Upload API Service', () => {
   it('should reject if ok is not true or false', async () => {
     const apiResponse = 'something else';
 
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      request: { post: requestStub },
-    });
+    const requestStub = sinon
+      .stub()
+      .yields(null, apiResponse, JSON.stringify(apiResponse));
+    const proxiedService = proxyquire(
+      '../../../common/services/clamAVService',
+      {
+        request: { post: requestStub },
+      }
+    );
 
     await proxiedService.scanFile(file).then((result) => {
       expect(requestStub).to.have.been.calledOnceWith({

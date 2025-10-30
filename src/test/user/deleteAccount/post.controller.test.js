@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -9,14 +6,15 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 
-const { adminDeletionType, deleteAccount } = require('../../../app/user/deleteAccount/utils');
+const {
+  adminDeletionType,
+  deleteAccount,
+} = require('../../../app/user/deleteAccount/utils');
 const controller = require('../../../app/user/deleteAccount/post.controller');
 
 describe('Admin deletion type is correctly determined from organisation users inputted', () => {
   it('Delete organisation if the org users are only 1 admin', () => {
-    const orgUsers = [
-      { role: { name: 'Admin' } },
-    ];
+    const orgUsers = [{ role: { name: 'Admin' } }];
 
     expect(adminDeletionType(orgUsers)).to.equal('DELETE_ORGANISATION');
   });
@@ -38,8 +36,12 @@ describe('Admin deletion type is correctly determined from organisation users in
       { role: { name: 'User' } },
     ];
 
-    expect(adminDeletionType(adminManagerOrgUsers)).to.equal('DO_NOT_DELETE_ADMIN');
-    expect(adminDeletionType(adminUserOrgUsers)).to.equal('DO_NOT_DELETE_ADMIN');
+    expect(adminDeletionType(adminManagerOrgUsers)).to.equal(
+      'DO_NOT_DELETE_ADMIN'
+    );
+    expect(adminDeletionType(adminUserOrgUsers)).to.equal(
+      'DO_NOT_DELETE_ADMIN'
+    );
     expect(adminDeletionType(threeOrgUsers)).to.equal('DO_NOT_DELETE_ADMIN');
   });
 
@@ -62,13 +64,19 @@ describe('Admin deletion type is correctly determined from organisation users in
     ];
 
     expect(adminDeletionType(twoAdmins)).to.equal('DELETE_ADMIN');
-    expect(adminDeletionType(anyOtherCombinationOfUsers)).to.equal('DELETE_ADMIN');
+    expect(adminDeletionType(anyOtherCombinationOfUsers)).to.equal(
+      'DELETE_ADMIN'
+    );
   });
 });
 
 describe('User Delete Account Post Controller', () => {
-  let req; let res; let deleteOptionStub;
-  let textStub; let deleteAccountStub; let notifyUserStub;
+  let req;
+  let res;
+  let deleteOptionStub;
+  let textStub;
+  let deleteAccountStub;
+  let notifyUserStub;
   const userRole = 'User';
 
   beforeEach(() => {
@@ -77,7 +85,9 @@ describe('User Delete Account Post Controller', () => {
     req = {
       session: {
         u: { e: 'exampleuser@somewhere.com', rl: userRole, fn: 'Example' },
-        destroy: (callback)=>{callback()},
+        destroy: (callback) => {
+          callback();
+        },
       },
     };
 
@@ -109,18 +119,28 @@ describe('User Delete Account Post Controller', () => {
     deleteAccountStub.onFirstCall().rejects('Error occured');
     await controller(req, res);
 
-    expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
-      cookie, errors: [{ message: 'Failed to delete your account. Contact support or try again' }],
-    });
+    expect(res.render).to.have.been.calledOnceWithExactly(
+      'app/user/deleteAccount/index',
+      {
+        cookie,
+        errors: [
+          {
+            message:
+              'Failed to delete your account. Contact support or try again',
+          },
+        ],
+      }
+    );
   });
 
   it('should render logout if email service rejects', async () => {
     deleteAccountStub.onFirstCall().resolves(JSON.stringify({}));
     notifyUserStub.onFirstCall().rejects('Error occured');
 
-
     await controller(req, res);
 
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/user/deleteconfirm');
+    expect(res.redirect).to.have.been.calledOnceWithExactly(
+      '/user/deleteconfirm'
+    );
   });
 });

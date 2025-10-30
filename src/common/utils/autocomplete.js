@@ -2,7 +2,7 @@ const nationalities = require('./nationality');
 const oldNationality = require('./old_nationality_lib');
 const logger = require('./logger')(__filename);
 const airportList = require('./airport_codes.json');
-const {USE_NEW_NATIONALITY_LIST_PROVIDER} = require("../config");
+const { USE_NEW_NATIONALITY_LIST_PROVIDER } = require('../config');
 
 /**
  * Utility function for generating the list of country codes in a format for this app.
@@ -10,9 +10,7 @@ const {USE_NEW_NATIONALITY_LIST_PROVIDER} = require("../config");
  * pair and using instead alpha-3 (GBR) as the key.
  */
 
-
 class NationalityUtil {
-
   constructor(useNew = false) {
     this.useNew = useNew;
   }
@@ -27,12 +25,11 @@ class NationalityUtil {
   getCountryFromCode(countryCode) {
     const nationality = this.useNew
       ? nationalities.getByCode(countryCode)
-      : {label: oldNationality.getCountryFromCode(countryCode)};
+      : { label: oldNationality.getCountryFromCode(countryCode) };
 
     return nationality?.label ?? countryCode;
   }
 }
-
 
 const nationalityUtil = new NationalityUtil(USE_NEW_NATIONALITY_LIST_PROVIDER);
 const nationalityList = nationalityUtil.getAll();
@@ -54,7 +51,7 @@ function listOfAirportCodes(airportList) {
   const airportCodes = [];
 
   airportList.forEach((airport) => {
-    const iataCode = airport.id
+    const iataCode = airport.id;
     const icaoCode = airport.id2;
     airportCodes.push(iataCode);
     airportCodes.push(icaoCode);
@@ -65,10 +62,9 @@ function listOfAirportCodes(airportList) {
 
 const airportCodeList = listOfAirportCodes(airportList);
 
-
 module.exports = {
   getCountryFromCode,
   nationalityList,
   airportList,
-  airportCodeList
+  airportCodeList,
 };

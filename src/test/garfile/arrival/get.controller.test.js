@@ -12,7 +12,8 @@ const garApi = require('../../../common/services/garApi');
 const controller = require('../../../app/garfile/arrival/get.controller');
 
 describe('Arrival Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -43,7 +44,10 @@ describe('Arrival Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', { cookie, errors: [{ message: 'There was a problem getting GAR information' }] });
+      expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
+        cookie,
+        errors: [{ message: 'There was a problem getting GAR information' }],
+      });
     });
   });
 
@@ -66,7 +70,9 @@ describe('Arrival Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.get).to.have.been.calledWith('12345');
-      expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', { cookie });
+      expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
+        cookie,
+      });
     });
   });
 });

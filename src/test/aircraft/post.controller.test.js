@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -12,8 +11,10 @@ const pagination = require('../../common/utils/pagination');
 const controller = require('../../app/aircraft/post.controller');
 
 describe('Aircraft Post Controller', () => {
-  let req; let res;
-  let paginationStub; let sessionSaveStub;
+  let req;
+  let res;
+  let paginationStub;
+  let sessionSaveStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -22,7 +23,7 @@ describe('Aircraft Post Controller', () => {
       body: {},
       session: {
         cookie: {},
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
 
@@ -54,12 +55,14 @@ describe('Aircraft Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
-      expect(paginationStub).to.have.been.called;
-      expect(sessionSaveStub).to.have.been.called;
-    }).then(() => {
-      expect(res.redirect).to.have.been.calledWith('/aircraft');
-    });
+    callController()
+      .then(() => {
+        expect(paginationStub).to.have.been.called;
+        expect(sessionSaveStub).to.have.been.called;
+      })
+      .then(() => {
+        expect(res.redirect).to.have.been.calledWith('/aircraft');
+      });
   });
 
   it('should redirect to edit', async () => {
@@ -69,13 +72,15 @@ describe('Aircraft Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
-      expect(req.session.editCraftId).to.eq('1234');
-      expect(paginationStub).to.not.have.been.called;
-      expect(sessionSaveStub).to.have.been.called;
-    }).then(() => {
-      expect(res.redirect).to.have.been.calledWith('/aircraft/edit');
-    });
+    callController()
+      .then(() => {
+        expect(req.session.editCraftId).to.eq('1234');
+        expect(paginationStub).to.not.have.been.called;
+        expect(sessionSaveStub).to.have.been.called;
+      })
+      .then(() => {
+        expect(res.redirect).to.have.been.calledWith('/aircraft/edit');
+      });
   });
 
   it('should redirect to delete', async () => {
@@ -85,12 +90,14 @@ describe('Aircraft Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
-      expect(req.session.deleteCraftId).to.eq('1234');
-      expect(paginationStub).to.not.have.been.called;
-      expect(sessionSaveStub).to.have.been.called;
-    }).then(() => {
-      expect(res.redirect).to.have.been.calledWith('/aircraft/delete');
-    });
+    callController()
+      .then(() => {
+        expect(req.session.deleteCraftId).to.eq('1234');
+        expect(paginationStub).to.not.have.been.called;
+        expect(sessionSaveStub).to.have.been.called;
+      })
+      .then(() => {
+        expect(res.redirect).to.have.been.calledWith('/aircraft/delete');
+      });
   });
 });
