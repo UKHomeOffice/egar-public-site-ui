@@ -543,5 +543,5 @@
   "heading_edit_responsible_person": "Edit responsible person",
   "caption_responsible_person_details": "Select the details of a responsible person you have previously added",
   "prevent_zzzz_or_yyyy_message": "Add ICAO/IATA codes for the location. ZZZZ or YYYY are not accepted codes.",
-  "guidance": "You must check each passenger has a <a href='https://www.gov.uk/government/publications/recognising-fraudulent-identity-documents' target='_blank'>genuine and valid passport or travel document</a> and that they are the rightful holder. You must also check each passenger's permission to travel status. You will remain liable for any penalties relating to a failure to adequately conduct these checks."
+  "guidance": "You must check each passenger has a <a class=\"govuk-link\" href='https://www.gov.uk/government/publications/recognising-fraudulent-identity-documents' target='_blank'>genuine and valid passport or travel document</a> and that they are the rightful holder. You must also check each passenger's permission to travel status. You will remain liable for any penalties relating to a failure to adequately conduct these checks."
 }

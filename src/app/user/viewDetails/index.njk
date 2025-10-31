@@ -1,90 +1,103 @@
 {% extends "base-template.njk" %}
 
-{% from "dist/govuk/components/button/macro.njk" import govukButton%}
-
-{% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Manage account | Submit a General Aviation Report (GAR)
+Manage account | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block header %}
-  {% include "header-user.njk" %}
+{% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-  {% include "phase.njk" %}
+{% include "phase.njk" %}
 {% endblock %}
 
-
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
-  <div class="govuk-grid-row padding-bottom-60">
-    <div class="govuk-grid-column-two-thirds margin-left-50 margin-top-30">
-      {% if successMsg %}
-      <div class="govuk-grid-row">
-        <div class="govuk-column-full">
-          <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" tabindex="-1">
-             <div class="govuk-notification-banner__header">
-             <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+{% if errors %}
+{% include "common/templates/includes/errors.njk" %}
+{% endif %}
+<div class="govuk-grid-row padding-bottom-60">
+  <div class="govuk-grid-column-two-thirds margin-left-50 margin-top-30">
+    {% if successMsg %}
+    <div class="govuk-grid-row">
+      <div class="govuk-column-full">
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert"
+          aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" tabindex="-1">
+          <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
               {{successHeader}}
             </h2>
-            </div>
-            <div class="govuk-notification-banner__content">
-              <h3 class="govuk-notification-banner__heading">
-                {{successMsg}}
-              </h3>
-            </div>
-            </div>
+          </div>
+          <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+              {{successMsg}}
+            </h3>
+          </div>
         </div>
       </div>
-      {% endif %}
-        <div class="govuk-grid-row">
-             <h1 class="govuk-heading-l">Your account</h1>
+    </div>
+    {% endif %}
+    <div class="govuk-grid-row">
+      <h1 class="govuk-heading-l">Your account</h1>
 
-               <dl class="app-check-your-answers app-check-your-answers--short margin-top-20">
-                    <div class="app-check-your-answers__contents">
-                        <dt class="app-check-your-answers__question">{{ __('field_email_label') }}</dt>
-                        <dd class="app-check-your-answers__answer">{{ cookie.getUserEmail() | truncate(50) }}</dd>
-                        <dd class="app-check-your-answers__change"></dd>
-                    </div>
+          {{ govukSummaryList({
+            rows: [
+              {
+                key: {
+                  text: __('field_email_label')
+                },
+                value: {
+                  text: cookie.getUserEmail() | truncate(50),
+                  classes: "govuk-!-width-full"
+                }
+              },
+              {
+                key: {
+                  text: "Your name"
+                },
+                value: {
+                  text: cookie.getUserFirstName() + " " + cookie.getUserLastName()
+                },
+                actions: {
+                  items: [
+                    {
+                      href: "/user/manageuserdetail",
+                      text: "Change",
+                      visuallyHiddenText: "your name"
+                    }
+                  ]
+                }
+              }
+            ]
+          }) }}
+      <div class="margin-top-20">
+        <h2 class="govuk-heading-m">Change your sign in details</h2>
+        <div class="govuk-body">
+          <p>You use your GOV.UK One Login to sign in to Submit a General Aviation Report (GAR).</p>
+          <p>You can change your GOV.UK One Login details including:
+          <ul>
+            <li>email address</li>
+            <li>password</li>
+            <li>how to get security codes to sign in</li>
+          </ul>
+          </p>
+          <p class="govuk-body">
+            <a href="{{ ONE_LOGIN_ACCOUNT_URL }}" target="_blank">Change your sign in details for your GOV.UK One
+              Login</a>
+          </p>
+        </div>
 
-                    <div class="app-check-your-answers__contents">
-                        <dt class="app-check-your-answers__question">Your name</dt>
-                        <dd class="app-check-your-answers__answer">{{cookie.getUserFirstName()}} {{cookie.getUserLastName()}}</dd>
-                        <dd class="app-check-your-answers__change">
-                            <a class="govuk-link" href="/user/manageuserdetail">Change<span class="govuk-visually-hidden"> your name</span></a>
-                        </dd>
-                    </div>
-               </dl>
-
-                <div class="margin-top-20">
-                  <h2 class="govuk-heading-m">Change your sign in details</h2>
-                  <div class="govuk-body">
-                      <p>You use your GOV.UK One Login to sign in to Submit a General Aviation Report (GAR).</p>
-                      <p>You can change your GOV.UK One Login details including:
-                        <ul>
-                            <li>email address</li>
-                            <li>password</li>
-                            <li>how to get security codes to sign in</li>
-                        </ul>
-                      </p>
-                      <p>
-                        <a href="{{ ONE_LOGIN_ACCOUNT_URL }}" target="_blank">Change your sign in  details for your GOV.UK One Login</a>
-                      </p>
-                  </div>
-
-                  <div class="margin-top-30">
-                         <div class="govuk-button-group margin-top-30">
-                           {{ govukButton({element: "a", text: "Delete your account", classes: "govuk-button--warning", href: "/user/delete" }) }}
-                        </div>
-                      <p>
-                      <a class="govuk-link" href="/home">Return to GARs</a>
-                      </p>
-                  </div>
-             </div>
+        <div class="margin-top-30">
+          <div class="govuk-button-group margin-top-30">
+            {{ govukButton({element: "a", text: "Delete your account", classes: "govuk-button--warning", href:
+            "/user/delete" }) }}
+          </div>
+          <p>
+            <a class="govuk-link" href="/home">Return to GARs</a>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
