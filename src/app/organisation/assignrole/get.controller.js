@@ -1,13 +1,9 @@
-
 const CookieModel = require('../../../common/models/Cookie.class');
-let roles = require('../../../common/seeddata/egar_user_roles.json');
+const { getRolesForAssigning } = require('../../../common/utils/utils');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
- 
-  if(cookie.getUserRole() !== 'Admin'){
-    roles = roles.filter(role => role.name !== 'Admin');
-  }
+  const roles = getRolesForAssigning(cookie.getUserRole());
 
   res.render('app/organisation/assignrole/index', { cookie, roles });
 };
