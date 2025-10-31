@@ -32,7 +32,7 @@
             <h2 class="govuk-heading-m">What happens next</h2>
             <p class="govuk-body">
               You should check the
-              <button id="view-submitted-17" class="govuk-link btn-link cursor" name="garId" value="{{ cookie.getGarId() }}">permission to travel status</button>
+              <button id="view-submitted-17" class="govuk-button govuk-button--link cursor" name="garId" value="{{ cookie.getGarId() }}">permission to travel status</button>
               for all people on this GAR prior to departure.
             </p>
             <p class="govuk-body">
@@ -41,7 +41,7 @@
             </p>
             <p class="govuk-body">
               You can view, edit and cancel your GARs in the
-              <a href="/home#gars-submitted">Manage your GARs</a>
+              <a class="govuk-link" href="/home#gars-submitted">Manage your GARs</a>
               section of the service.
             </p>
             <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
