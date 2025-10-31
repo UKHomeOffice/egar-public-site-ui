@@ -1,5 +1,6 @@
 const { customAlphabet } = require('nanoid');
 const documenttype = require('../../common/seeddata/egar_saved_people_travel_document_type.json');
+let allRoles = require('../../common/seeddata/egar_user_roles.json');
 
 function trimToDecimalPlaces(input, places) {
 
@@ -54,12 +55,18 @@ function nanoid(alphabet, tokenLength) {
     return customAlphabet(alphabet, tokenLength)();
 }
 
+function getRolesForAssigning(currentUserRole) {
+  return currentUserRole === 'Admin'
+    ? allRoles
+    : allRoles.filter((role) => role.name !== 'Admin');
+}
 
 
 module.exports = {
-    trimToDecimalPlaces,
-    documentTypes,
-    getResponsiblePersonFromReq,
-    getResponsiblePersonFromGar,
-    nanoid,
+  trimToDecimalPlaces,
+  documentTypes,
+  getResponsiblePersonFromReq,
+  getResponsiblePersonFromGar,
+  nanoid,
+  getRolesForAssigning,
 }
