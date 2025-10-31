@@ -1,13 +1,13 @@
-
 const CookieModel = require('../../../common/models/Cookie.class');
-let roles = require('../../../common/seeddata/egar_user_roles.json');
+let allRoles = require('../../../common/seeddata/egar_user_roles.json');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
- 
-  if(cookie.getUserRole() !== 'Admin'){
-    roles = roles.filter(role => role.name !== 'Admin');
-  }
+  const userIsAdmin = cookie.getUserRole() === 'Admin';
+
+  const roles = userIsAdmin
+    ? allRoles
+    : allRoles.filter((role) => role.name !== 'Admin');
 
   res.render('app/organisation/assignrole/index', { cookie, roles });
 };
