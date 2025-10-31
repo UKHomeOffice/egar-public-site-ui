@@ -104,12 +104,9 @@ Create GAR | Start
 						<a href="{{__('gar_regulations_link')}}" target="_blank">{{__('welcome_tab_2_content_1_block_1_2')}}</a>
 					</p>
 
-					<div class="govuk-warning-text">
-						<span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-						<strong class="govuk-warning-text__text">
-							<span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('welcome_tab_2_content_1_block_1_5')}}
-						</strong>
-					</div>
+          {{ govukWarningText({
+            text: __('welcome_tab_2_content_1_block_1_5')
+          }) }}
 
 					<h3 class="govuk-heading-s">{{__('welcome_tab_2_content_heading_2')}}</h3>
 					<p>{{__('welcome_tab_2_content_2_block_1')}} <a href="{{__('gar_form_link')}}" target="_blank">{{__('gar_form_link_text')}}</a> </p>
