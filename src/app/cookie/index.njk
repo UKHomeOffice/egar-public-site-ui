@@ -143,26 +143,27 @@
       </tbody>
     </table>
    <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-            Do you want to accept analytics cookies?
-          </legend>
-          <div class="govuk-radios" data-module="govuk-radios">
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="radio_cookies_accept" name="analytics-cookies" type="radio" value="yes">
-              <label class="govuk-label govuk-radios__label" for="analytics-cookies">
-                Yes
-              </label>
-            </div>
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="radio_cookies_reject" name="analytics-cookies" type="radio" value="no" checked>
-              <label class="govuk-label govuk-radios__label" for="analytics-cookies-2">
-                No
-              </label>
-            </div>
-          </div>
-
-        </fieldset>
+        {{ govukRadios({
+          name: "analytics-cookies",
+          idPrefix: "radio_cookies",
+          fieldset: {
+            legend: {
+              text: "Do you want to accept analytics cookies?",
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No",
+              checked: true
+            }
+          ]
+        }) }}
       </div>
 
       <button class="govuk-button" data-module="govuk-button" onclick="change_cookie_preference()" >
