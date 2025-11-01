@@ -17,10 +17,10 @@ passed in explicitly it seems.
       return false;
     }
   </script>
-  <div id="{{ formName }}_pagination_summary" class="pagination__summary">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results</div>
-  
-    <ul class="pagination">
+  <div id="{{ formName }}_pagination_summary" class="govuk-body-s">Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results</div>
+
     {% if pages.totalPages > 1 %}
+    <ul class="pagination">
       {% if pages.currentPage > 1 %}
         <li class="pagination__item"><a id="{{formName}}_pagination_previous" class="pagination__link" onclick="transitionToPage({{ pages.currentPage - 1 }})" aria-label="Previous page"><span aria-hidden="true" role="presentation">&laquo;</span>{{__('pagination_previous')}}</a></li>
       {% endif %}
@@ -34,9 +34,7 @@ passed in explicitly it seems.
       {% if pages.currentPage < pages.totalPages %}
         <li class="pagination__item"><a id="{{formName}}_pagination_next" class="pagination__link" onclick="transitionToPage({{ pages.currentPage + 1 }})" aria-label="Next page">{{__('pagination_next')}}<span aria-hidden="true" role="presentation">&raquo;</span></a></li>
       {% endif %}
-    {% else %}
-      <li id="{{ formName }}_pagination_empty" class="pagination__item"><a class="pagination__link current"></a></li>
-    {% endif %}
     </ul>
+    {% endif %}
 </nav>
 {% endmacro %}
