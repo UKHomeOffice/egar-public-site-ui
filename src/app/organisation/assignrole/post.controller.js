@@ -1,4 +1,4 @@
-const { nanoid } = require('../../../common/utils/utils');
+const { nanoid, getRolesForAssigning} = require('../../../common/utils/utils');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -7,8 +7,7 @@ const tokenservice = require('../../../common/services/create-token');
 const emailService = require('../../../common/services/sendEmail');
 const tokenApi = require('../../../common/services/tokenApi');
 const config = require('../../../common/config/index');
-let roles = require('../../../common/seeddata/egar_user_roles.json');
-const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
+const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
@@ -17,9 +16,7 @@ module.exports = (req, res) => {
   cookie.setInviteUserRole(role);
   logger.debug(`Invitee role: ${role}`);
 
-  if(cookie.getUserRole() !== 'Admin'){
-    roles = roles.filter(role => role.name !== 'Admin');
-  }
+  const roles = getRolesForAssigning(cookie.getUserRole());
 
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
@@ -56,7 +53,7 @@ module.exports = (req, res) => {
           if(config.ONE_LOGIN_SHOW_ONE_LOGIN || config.ONE_LOGIN_POST_MIGRATION){
             notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
           }
-          
+
           emailService.send(notifyTemplate, inviteeEmail, {
             firstname: firstName,
             lastname: lastName,
