@@ -1,0 +1,24 @@
+{{ sectionHeading('supporting-documents', 'heading_supporting_documentation_details', '/garfile/supportingdocuments', showChangeLinks, __) }}
+
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" scope="col">{{__('field_file_name')}}</th>
+      <th class="govuk-table__header" scope="col">{{__('field_file_size')}}</th>
+      <th class="govuk-table__header" scope="col">{{__('field_file_status')}}</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    {% if garsupportingdocs.items | length %}
+      {% for file in garsupportingdocs.items %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{file.fileName}}</td>
+          <td class="govuk-table__cell">{{file.size}}</td>
+          <td class="govuk-table__cell">{{__('field_file_status_done')}}</td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      {{ m.empty_table_message(__('supportingdocuments_no_records')) }}
+    {% endif %}
+  </tbody>
+</table>

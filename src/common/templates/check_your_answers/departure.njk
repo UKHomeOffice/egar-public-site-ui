@@ -1,0 +1,19 @@
+{{ sectionHeading('departure', 'heading_departure_details', '/garfile/departure', showChangeLinks,__) }}
+
+{% set departureCoords = '' %}
+{% if garfile.departureLat %}
+  {% set departureCoords =
+        (garfile.departureLat or '') ~ '<br>' ~
+        (garfile.departureLong or '') %}
+{% endif %}
+
+{{ govukSummaryList({
+  rows: [
+    { key: { html: __('field_departure_date') }, value: { html: garfile.departureDate or '' } },
+    { key: { html: __('field_departure_time') }, value: { html: garfile.departureTime or '' } },
+    { key: { html: __('field_departure_port') }, value: { html: garfile.departurePort or '' } },
+    { key: { html: __('field_departure_coordinates') }, value: { html: departureCoords } }
+  ]
+}) }}
+
+{{ m.departure_warning_message(__) }}

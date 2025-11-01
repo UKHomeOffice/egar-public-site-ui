@@ -1,0 +1,125 @@
+{% set viewGuidance = (garfile.status.name === 'Submitted' and resubmitted != 'yes' and numberOf0TResponseCodes > 0) %}
+
+{{ sectionHeading('manifest', 'heading_manifest_details', '/garfile/manifest', showChangeLinks, __) }}
+
+{% if viewGuidance and isResubmitted === false and durationInDeparture > 125 %}
+  <div style="float:right;">
+    <a href="#" id="resubmit0T" class="govuk-link govuk-button resubmit0T">Resubmit checks for timed out passengers</a>
+    <form id="reSubmitGarForm" action="/garfile/review" method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      <input type="hidden" name="resubmitFor0T" value="resubmit0TOnSummaryPage" />
+      <input type="hidden" name="resubmitFor0TLink" id="resubmitFor0TLink" value="no" />
+    </form>
+  </div>
+{% endif %}
+
+<p class="govuk-body">
+  {{__('guidance') | safe}}
+</p>
+
+{% if (garfile.status.name === 'Submitted' and numberOf0TResponseCodes > 0 and (durationInDeparture < 125 or isResubmitted === true))  %}
+  <div class="box-left-grey-border">
+    <div class="email-text">
+      <p class="govuk-body">
+      <span class="system-timeout">System time out</span>
+      </p>
+      <p class="govuk-body">This individual may be boarded.</p>
+      <p class="govuk-body">There will be no Section 40 liability if the individual is subsequently found not to hold a valid permission to travel.</p>
+    </div>
+  </div>
+{% endif %}
+
+<div class="govuk-form-group {{ m.form_group_class('manifestTable', errors) }}">
+  {{ m.error_message('manifestTable', errors, __) }}
+
+  <table class="govuk-table" id="manifestTable">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="col" valign="top">{{__('field_surname')}}</th>
+        <th class="govuk-table__header" scope="col" valign="top">{{__('field_given_name')}}</th>
+        <th class="govuk-table__header" scope="col" valign="top">{{__('field_dob')}}</th>
+        <th class="govuk-table__header" scope="col" valign="top">{{__('field_nationality')}}</th>
+        <th class="govuk-table__header" scope="col" valign="top">{{__('field_gender')}}</th>
+        <th class="govuk-table__header" scope="col" valign="top">{{__('field_birth_place')}}</th>
+        <th class="govuk-table__header" scope="col" valign="top">{{__('field_person_type_short')}}</th>
+        {% if isJourneyUKInbound %}
+        <th class="govuk-table__header" scope="col" valign="top">{{__('field_upt_response')}}</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% if garpeople.items | length %}
+      {% for person in garpeople.items%}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{person.lastName}}</td>
+        <td class="govuk-table__cell">{{person.firstName}}</td>
+        <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+        <td class="govuk-table__cell">{{person.nationality | upper}}</td>
+        <td class="govuk-table__cell">{{person.gender}}</td>
+        <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
+        <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+        {% if isJourneyUKInbound %}
+        {% if person.amgCheckinResponseCode === '0B'%}
+        {% set statusColor = 'no-record'%}
+        {% elif person.amgCheckinResponseCode === '0A'%}
+        {% set statusColor = 'valid-permission-to-travel'%}
+        {% elif person.amgCheckinResponseCode === '0Z'%}
+        {% set statusColor = 'authority-to-carry-granted'%}
+        {% elif person.amgCheckinResponseCode === '0T'%}
+        {% set statusColor = 'system-timeout'%}
+        {% else %}
+        {% set statusColor = '' %}
+        {% endif %}
+        <td class="govuk-table__cell">
+          {% if statusColor %}
+          <div class="{{statusColor}} status-text">{{__('amg_status_check_response_code_' +
+            person.amgCheckinResponseCode)if person.amgCheckinResponseCode}}</div>
+          {% endif%}
+        </td>
+        {% endif%}
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell" colspan="{{8 if isJourneyUKInbound else 7}}">
+          <div>
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary" aria-controls="details-content-{{ loop.index }}"
+                aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
+                <span id="further-information-{{ loop.index }}"
+                  class="govuk-details__summary-text">{{__('label_manifest_further_personal_details')}}</span>
+              </summary>
+              <div class="govuk-details__text" id="details-content-{{ loop.index }}" aria-hidden="true">
+                <table class="govuk-table">
+                  <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
+                      <td class="govuk-table__cell">{{person.documentType}}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
+                      <td class="govuk-table__cell">{{person.issuingState | upper}}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell">{{__('field_travel_document_number')}}</td>
+                      <td class="govuk-table__cell">{{person.documentNumber}}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
+                      <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      {% else %}
+      {{ m.empty_table_message(__('manifest_no_records')) }}
+      {% endif %}
+    </tbody>
+  </table>
+  {% if showChangeLinks %}
+  <p><a href="/garfile/manifest" class="govuk-link">Add a person from current manifest to people</a></p>
+  {% endif %}
+</div>
