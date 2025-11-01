@@ -1,10 +1,6 @@
-<div class="govuk-phase-banner">
-	<p class="govuk-phase-banner__content"><strong class="govuk-tag govuk-phase-banner__content__tag ">
-			beta
-		</strong>
-		<span class="govuk-phase-banner__text">
-			This is a new service – 
-			<a class="govuk-link" href="mailto:{{__('support_email')}}?subject=sGAR FEEDBACK">your feedback</a> will help us to improve it.
-		</span>
-	</p>
-</div>
+{{ govukPhaseBanner({
+  tag: {
+    text: "Beta"
+  },
+  "html": "This is a new service – <a class=\"govuk-link\" href=\"mailto:{{ __('support_email') }}?subject=sGAR FEEDBACK\">your feedback</a> will help us to improve it."
+}) }}
