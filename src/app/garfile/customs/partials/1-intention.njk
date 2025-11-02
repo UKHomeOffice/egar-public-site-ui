@@ -59,7 +59,7 @@
   hint: {
     html: intentionHint
   },
-errorMessage: errors | filterArray('identifier', 'intentionValue') | first | transform({'message': 'text'}),
+  errorMessage: errors | filterArray('identifier', 'intentionValue') | first | transform({'message': 'text'}),
   items: radioItems,
   classes: "govuk-radios--conditional"
 }) }}

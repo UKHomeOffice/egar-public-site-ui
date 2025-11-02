@@ -26,9 +26,6 @@
 	  <div class="govuk-grid-column-two-thirds">
       <form action="/organisation/assignrole" autocomplete="off" class="form-group" method="post" role="form" >
 
-        {% set roleErrorObj = (errors or []) | filterArray('identifier', 'role') | first %}
-        {% set roleError = roleErrorObj and { text: roleErrorObj.message } or false %}
-
         {% set roleItems = [] %}
         {% for role in roles %}
           {% set item = {
@@ -55,7 +52,7 @@
             },
             classes: m.form_group_class('role', errors),
             describedBy: "role-hint",
-            errorMessage: roleError
+            errorMessage: errors | filterArray('identifier', 'role') | first | transform({'message': 'text'})
           },
           items: roleItems
         }) }}
