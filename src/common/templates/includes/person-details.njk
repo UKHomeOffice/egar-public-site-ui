@@ -67,25 +67,30 @@
   </div>
   <!-- End date of birth -->
 
-  <div class="govuk-form-group {{ m.form_group_class('gender', errors) }}" id="gender">
-    <fieldset class="govuk-fieldset"{{ ' aria-describedby=gender-error' if errors | containsError('gender') }}>
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">{{ __('field_gender') }}</h2>
-      </legend>
-      {{ m.error_message('gender', errors, __) }}
-      <div class="govuk-radios">
-        {% for choice in genderchoice %}
-          <div class="govuk-radios__item">
-            <input id={{choice.gender}} name="gender" class="govuk-radios__input" type="radio"
-              value={{choice.gender}}
-              aria-labelledby="gender-label-{{ loop.index }}"
-              {{ 'checked' if choice.gender == person.gender or choice.gender == req.body.gender }}>
-            <label id="gender-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for={{choice.gender}}>{{choice.gender}}</label>
-          </div>
-        {% endfor %}
-      </div>
-    </fieldset>
-  </div>
+  {% set genderItems = [] %}
+
+  {% for choice in genderchoice %}
+    {% set item = {
+      value: choice.gender,
+      text: choice.gender,
+      checked: (person.gender == choice.gender) or (req.body.gender == choice.gender)
+    } %}
+    {% set genderItems = genderItems.concat(item) %}
+  {% endfor %}
+
+  {{ govukRadios({
+    idPrefix: "gender",
+    name: "gender",
+    fieldset: {
+      legend: {
+        text: __("field_gender"),
+        classes: "govuk-fieldset__legend--m"
+      }
+    },
+    classes: m.form_group_class('gender', errors),
+    errorMessage: errors | filterArray('identifier', 'gender') | first | transform({'message': 'text'}),
+    items: genderItems
+  }) }}
 
   <div class="{{ m.form_group_class('birthplace', errors) }}">
     <label class="govuk-label govuk-label--m" for="birthplace">{{ __('field_birth_place') }}</label>
@@ -95,28 +100,35 @@
       {{ 'aria-describedby=birthplace-error' if errors | containsError('birthplace') }}>
     {{ m.character_count_hint('birthplace', MAX_STRING_LENGTH) }}
   </div>
+{% set personTypeHintHtml = __('field_person_type_hint') ~ '<br/> <a class="govuk-link" href="https://www.gov.uk/government/publications/aircrew-crm02" target="_blank">Guidance on Crew and Passengers - GOV.UK (www.gov.uk)</a>' %}
 
-  <div class="{{ m.form_group_class('personType', errors) }}" id="personType">
-    <fieldset class="govuk-fieldset" aria-describedby="personType-hint{{ ' personType-error' if errors | containsError('personType' )}}">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">{{ __('field_person_type') }}</h2>
-      </legend>
-      {% set fieldPersonTypeHint = [__('field_person_type_hint'), '<br/> <a class="govuk-link" href="https://www.gov.uk/government/publications/aircrew-crm02" target="_blank">Guidance on Crew and Passengers - GOV.UK (www.gov.uk) </a>'] | join | safe %}
-      {{ m.hint('personType', fieldPersonTypeHint) }}
-      {{ m.error_message('personType', errors, __) }}
-      <div class="govuk-radios">
-        {% for choice in persontype %}
-          <div class="govuk-radios__item">
-            <input id="{{choice.persontype}}" name="personType" class="govuk-radios__input" type="radio"
-              value={{choice.persontype}}
-              aria-labelledby="personType-label-{{ loop.index }}"
-              {{ 'checked' if choice.persontype == person['peopleType'].name or choice.persontype == req.body.personType }}>
-            <label id="personType-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for={{choice.persontype}}>{{choice.persontype}}</label>
-          </div>
-      {% endfor %}
-      </div>
-    </fieldset>
-  </div>
+{% set personTypeItems = [] %}
+
+{% for choice in persontype %}
+  {% set item = {
+    value: choice.persontype,
+    text: choice.persontype,
+    checked: (person.peopleType.name == choice.persontype) or (req.body.personType == choice.persontype)
+  } %}
+  {% set personTypeItems = personTypeItems.concat(item) %}
+{% endfor %}
+
+{{ govukRadios({
+  idPrefix: "personType",
+  name: "personType",
+  fieldset: {
+    legend: {
+      text: __("field_person_type"),
+      classes: "govuk-fieldset__legend--m"
+    }
+  },
+  classes: m.form_group_class('personType', errors),
+  hint: {
+    html: personTypeHintHtml
+  },
+  errorMessage: errors | filterArray('identifier', 'personType') | first | transform({'message': 'text'}),
+  items: personTypeItems
+}) }}
 
   <h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
   <p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
