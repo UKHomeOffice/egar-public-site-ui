@@ -1,0 +1,16 @@
+{{
+  govukTextarea({
+    id: "passengerTravellingReason",
+    name: "passengerTravellingReason",
+    label: {
+      text: __('passenger_travelling_reason_hint')
+    },
+    attributes: {
+      placeholder: __('passenger_travelling_reason_placeholder')
+    },
+    value: gar.passengerTravellingReason,
+    rows: 5,
+    maxlength: MAX_TEXT_BOX_LENGTH,
+    errorMessage: errors | filterArray('identifier', 'passengerTravellingReason') | first | transform({'message': 'text'})
+  })
+}}

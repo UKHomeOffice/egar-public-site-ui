@@ -1,0 +1,83 @@
+
+<p class="govuk-body-l">{{__('caption_customs')}}</p>
+
+{% set intentionHint %}
+  <p class="govuk-body-m">
+    {{ __('field_prohibited_goods_2') }}
+    <a class="govuk-link" href="https://www.gov.uk/government/publications/travelling-to-the-uk" target="_blank">
+      Travelling to the UK (opens in new tab)
+    </a>,
+    <a class="govuk-link" href="https://www.gov.uk/guidance/bringing-commercial-goods-into-great-britainin-your-baggage" target="_blank">
+      Merchandise in Baggage link (opens in new tab)
+    </a>
+    {{ __('field_prohibited_goods_3') }}
+    <a class="govuk-link" href="https://www.gov.uk/guidance/moving-goods-between-the-uk-and-the-uk-continental-shelf" target="_blank">
+      Moving goods between the UK and the UK Continental Shelf - GOV.UK (opens in new tab)
+    </a>
+  </p>
+{% endset %}
+
+{% set radioItems = [] %}
+{% for choice in intentionValueOptions %}
+  {% set radioItems = radioItems.concat([{
+    value: choice.value | string,
+    text: choice.option,
+    id: choice.option,
+    checked: (gar.intentionValue | default('') == choice.value),
+    attributes: {
+      onchange: "hide()"
+    }
+  }]) %}
+{% endfor %}
+
+{% set intentionHint %}
+  <p class="govuk-body-m">
+    {{ __('field_prohibited_goods_2') }}
+    <a class="govuk-link" href="https://www.gov.uk/government/publications/travelling-to-the-uk" target="_blank">
+      Travelling to the UK (opens in new tab)
+    </a>,
+    <a class="govuk-link" href="https://www.gov.uk/guidance/bringing-commercial-goods-into-great-britainin-your-baggage" target="_blank">
+      Merchandise in Baggage link (opens in new tab)
+    </a>
+    {{ __('field_prohibited_goods_3') }}
+    <a class="govuk-link" href="https://www.gov.uk/guidance/moving-goods-between-the-uk-and-the-uk-continental-shelf" target="_blank">
+      Moving goods between the UK and the UK Continental Shelf - GOV.UK (opens in new tab)
+    </a>
+  </p>
+{% endset %}
+
+{% set intentionErrorObj = (errors or []) | filterArray("identifier", "intentionValue") | first %}
+{% set intentionError = intentionErrorObj and { text: intentionErrorObj.message } or false %}
+
+{{ govukRadios({
+  name: "intentionValue",
+  idPrefix: "intentionValue",
+  fieldset: {
+    legend: {
+      text: __('field_intention'),
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
+    }
+  },
+  hint: {
+    html: intentionHint
+  },
+  errorMessage: intentionError,
+  items: radioItems,
+  classes: "govuk-radios--conditional"
+}) }}
+
+<script>
+  function hide() {
+    if (document.getElementById('Yes  ').checked) {
+      document.getElementById('prohibitedGoods').style.display = 'block';
+      document.getElementById('baggage').style.display = 'block';
+      document.getElementById('continentalShelf').style.display = 'block';
+    }
+    else {
+      document.getElementById('prohibitedGoods').style.display = 'none';
+      document.getElementById('baggage').style.display = 'none';
+      document.getElementById('continentalShelf').style.display = 'none';
+    }
+  }
+</script>

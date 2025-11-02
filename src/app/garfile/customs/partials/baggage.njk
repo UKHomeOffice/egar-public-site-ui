@@ -1,0 +1,34 @@
+<div class="govuk-form-group {{ m.form_group_class('baggage', errors) }}" id="baggage" hidden>
+  <fieldset class="govuk-fieldset" aria-describedby="baggage-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h2 class="govuk-fieldset__heading">{{__('field_baggage_question')}}</h2>
+    </legend>
+
+    <div class="govuk-radios govuk-radio--conditional" data-module="govuk-radios">
+      {% for choice in baggageOptions %}
+      <div class="govuk-radios__item">
+        <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="baggage"
+          value="{{choice.value}}" aria-labelledby="baggage-label-{{ loop.index }}"
+          {{ "data-aria-controls=conditional-baggageDeclaration" if choice.value==='Yes' }} {{ "checked" if
+          choice.value==gar.baggage }}>
+        <label id="baggage-label-{{ loop.index }}" class="govuk-label govuk-radios__label"
+          for="{{choice.option}}">{{choice.option}}</label>
+      </div>
+      {% if choice.value == 'Yes' %}
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+        id="conditional-baggageDeclaration">
+        <div class="govuk-form-group">
+          <span id="baggage-hint" class="govuk-hint">{{__('field_baggage_hint')}}<a
+              href=https://www.gov.uk/government/publications/travelling-to-the-uk target="_blank">Travelling to
+              the UK - GOV.UK (www.gov.uk) </a> </span>
+          <label class="govuk-label" for="baggageDeclaration">{{__('field_goods_declaration_label_150')}}</label>
+          <textarea class="govuk-textarea" id="baggageDeclaration" name="baggageDeclaration"
+            placeholder="e.g. firearms" rows="5" aria-describedby="baggage-hint"
+            maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.baggageDeclaration}}</textarea>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </fieldset>
+</div>

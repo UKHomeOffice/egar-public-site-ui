@@ -4,18 +4,18 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-{{__('error_prefix') if errors}} Create GAR | Customs
+  {{__('error_prefix') if errors}} Create GAR | Customs
 {% endblock %}
 
 {% set active = '/home' %}
 
 {% block header %}
-{% include "header-user.njk" %}
+  {% include "header-user.njk" %}
 {% endblock %}
 
 {% block beforeContent %}
-{% include "phase.njk" %}
-<a href="/garfile/resperson" class="govuk-back-link">{{__('nav_back')}}</a>
+  {% include "phase.njk" %}
+  <a href="/garfile/resperson" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
@@ -23,7 +23,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
+      {% include "common/templates/includes/errors.njk" %}
     {% endif %}
 
     <form action="/garfile/customs" autocomplete="off" class="form-group" method="post" role="form">
@@ -32,294 +32,19 @@
         <span class="govuk-caption-xl">{{__('section_count', 6, 9)}}</span>
         <h1 class="govuk-heading-xl">{{__('heading_customs')}}</h1>
       </legend>
-      <p class="govuk-body-l">{{__('caption_customs')}}</p>
 
-      <div class="govuk-form-group {{ m.form_group_class('intentionValue', errors) }}" id="intentionValue">
-      {% set radioItems = [] %}
-      {% for choice in intentionValueOptions %}
-        {% set radioItems = radioItems.concat([{
-          value: choice.value | string,
-          text: choice.option,
-          id: choice.option,
-          checked: (gar.intentionValue | default('') == choice.value),
-          attributes: {
-            onchange: "hide()"
-          }
-        }]) %}
-      {% endfor %}
-
-      {# Capture the hint/legend content separately #}
-      {% set intentionHint %}
-        <p class="govuk-body-m">
-          {{ __('field_prohibited_goods_2') }}
-          <a class="govuk-link" href="https://www.gov.uk/government/publications/travelling-to-the-uk" target="_blank">
-            Travelling to the UK (opens in new tab)
-          </a>,
-          <a class="govuk-link" href="https://www.gov.uk/guidance/bringing-commercial-goods-into-great-britainin-your-baggage" target="_blank">
-            Merchandise in Baggage link (opens in new tab)
-          </a>
-          {{ __('field_prohibited_goods_3') }}
-          <a class="govuk-link" href="https://www.gov.uk/guidance/moving-goods-between-the-uk-and-the-uk-continental-shelf" target="_blank">
-            Moving goods between the UK and the UK Continental Shelf - GOV.UK (opens in new tab)
-          </a>
-        </p>
-      {% endset %}
-
-      {% set radioItems = [] %}
-      {% for choice in intentionValueOptions %}
-        {% set radioItems = radioItems.concat([{
-          value: choice.value | string,
-          text: choice.option,
-          id: choice.option,
-          checked: (gar.intentionValue | default('') == choice.value),
-          attributes: {
-            onchange: "hide()"
-          }
-        }]) %}
-      {% endfor %}
-
-      {% set intentionHint %}
-        <p class="govuk-body-m">
-          {{ __('field_prohibited_goods_2') }}
-          <a class="govuk-link" href="https://www.gov.uk/government/publications/travelling-to-the-uk" target="_blank">
-            Travelling to the UK (opens in new tab)
-          </a>,
-          <a class="govuk-link" href="https://www.gov.uk/guidance/bringing-commercial-goods-into-great-britainin-your-baggage" target="_blank">
-            Merchandise in Baggage link (opens in new tab)
-          </a>
-          {{ __('field_prohibited_goods_3') }}
-          <a class="govuk-link" href="https://www.gov.uk/guidance/moving-goods-between-the-uk-and-the-uk-continental-shelf" target="_blank">
-            Moving goods between the UK and the UK Continental Shelf - GOV.UK (opens in new tab)
-          </a>
-        </p>
-      {% endset %}
-
-      {% set intentionErrorObj = (errors or []) | selectattr("identifier", "equalto", "intentionValue") | first %}
-      {% set intentionError = intentionErrorObj and { text: intentionErrorObj.message } or false %}
-      {{ govukRadios({
-        name: "intentionValue",
-        idPrefix: "intentionValue",
-        fieldset: {
-          legend: {
-            text: __('field_intention'),
-            classes: "govuk-fieldset__legend--m",
-            isPageHeading: false
-          }
-        },
-        hint: {
-          html: intentionHint
-        },
-        errorMessage: intentionError,
-        items: radioItems,
-        classes: "govuk-radios--conditional"
-      }) }}
-
-      </div>
-      <script>
-        function hide() {
-          if (document.getElementById('Yes  ').checked) {
-            document.getElementById('prohibitedGoods').style.display = 'block';
-            document.getElementById('baggage').style.display = 'block';
-            document.getElementById('continentalShelf').style.display = 'block';
-          }
-          else {
-            document.getElementById('prohibitedGoods').style.display = 'none';
-            document.getElementById('baggage').style.display = 'none';
-            document.getElementById('continentalShelf').style.display = 'none';
-          }
-        }
-      </script>
-
-      <div class="govuk-form-group {{ m.form_group_class('prohibitedGoods', errors) }}" id="prohibitedGoods" hidden>
-        <fieldset class="govuk-fieldset" aria-describedby="prohibitedGoods-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            {{ m.error_message('prohibitedGoods', errors, __) }}
-            <h2 class="govuk-fieldset__heading">{{__('field_allowances_question')}}</h2>
-          </legend>
-
-          <div class="govuk-radios govuk-radio--conditional" data-module="govuk-radios">
-            {% for choice in prohibitedGoodsOptions %}
-            <div class="govuk-radios__item">
-              <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="prohibitedGoods"
-                value="{{choice.value}}" aria-labelledby="prohibitedGoods-label-{{ loop.index }}"
-                {{ "data-aria-controls=conditional-goodsDeclaration" if choice.value==='Yes' }} {{ "checked" if
-                choice.value==gar.prohibitedGoods }}>
-              <label id="prohibitedGoods-label-{{ loop.index }}" class="govuk-label govuk-radios__label"
-                for="{{choice.option}}">{{choice.option}}</label>
-            </div>
-            {% if choice.value == 'Yes' %}
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-goodsDeclaration">
-              <div class="govuk-form-group">
-                <span id="allowances-hint" class="govuk-hint">{{__('field_allowances_hint')}}<a
-                    href=https://www.gov.uk/bringing-goods-into-uk-personal-use target="_blank"> Overview - GOV.UK
-                    (www.gov.uk) </a></span>
-                <label class="govuk-label" for="goodsDeclaration">{{__('field_goods_declaration_label_150')}}</label>
-                <textarea class="govuk-textarea" id="goodsDeclaration" name="goodsDeclaration"
-                  placeholder="e.g. alcohol or tobacco" rows="5" aria-describedby="prohibitedGoods-hint"
-                  maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.goodsDeclaration}}</textarea>
-              </div>
-            </div>
-            {% endif %}
-            {% endfor %}
-          </div>
-        </fieldset>
-      </div>
-
-      <div class="govuk-form-group {{ m.form_group_class('baggage', errors) }}" id="baggage" hidden>
-        <fieldset class="govuk-fieldset" aria-describedby="baggage-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h2 class="govuk-fieldset__heading">{{__('field_baggage_question')}}</h2>
-          </legend>
-
-          <div class="govuk-radios govuk-radio--conditional" data-module="govuk-radios">
-            {% for choice in baggageOptions %}
-            <div class="govuk-radios__item">
-              <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="baggage"
-                value="{{choice.value}}" aria-labelledby="baggage-label-{{ loop.index }}"
-                {{ "data-aria-controls=conditional-baggageDeclaration" if choice.value==='Yes' }} {{ "checked" if
-                choice.value==gar.baggage }}>
-              <label id="baggage-label-{{ loop.index }}" class="govuk-label govuk-radios__label"
-                for="{{choice.option}}">{{choice.option}}</label>
-            </div>
-            {% if choice.value == 'Yes' %}
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-              id="conditional-baggageDeclaration">
-              <div class="govuk-form-group">
-                <span id="baggage-hint" class="govuk-hint">{{__('field_baggage_hint')}}<a
-                    href=https://www.gov.uk/government/publications/travelling-to-the-uk target="_blank">Travelling to
-                    the UK - GOV.UK (www.gov.uk) </a> </span>
-                <label class="govuk-label" for="baggageDeclaration">{{__('field_goods_declaration_label_150')}}</label>
-                <textarea class="govuk-textarea" id="baggageDeclaration" name="baggageDeclaration"
-                  placeholder="e.g. firearms" rows="5" aria-describedby="baggage-hint"
-                  maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.baggageDeclaration}}</textarea>
-              </div>
-            </div>
-            {% endif %}
-            {% endfor %}
-          </div>
-        </fieldset>
-      </div>
-
-      <div class="govuk-form-group {{ m.form_group_class('continentalShelf', errors) }}" id="continentalShelf" hidden>
-        <fieldset class="govuk-fieldset" aria-describedby="continental-shelf-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            {{ m.error_message('continentalShelf', errors, __) }}
-            <h2 class="govuk-fieldset__heading">{{__('field_continental_shelf_question')}}</h2>
-          </legend>
-
-          <div class="govuk-radios govuk-radio--conditional" data-module="govuk-radios">
-            {% for choice in continentalShelfOptions %}
-            <div class="govuk-radios__item">
-              <input id="{{choice.option}}" class="govuk-radios__input" type="radio" name="continentalShelf"
-                value="{{choice.value}}" aria-labelledby="continentalShelf-label-{{ loop.index }}"
-                {{ "data-aria-controls=conditional-continentalShelfDeclaration" if choice.value==='Yes' }} {{ "checked"
-                if choice.value==gar.continentalShelf }}>
-              <label id="continentalShelf-label-{{ loop.index }}" class="govuk-label govuk-radios__label"
-                for="{{choice.option}}">{{choice.option}}</label>
-            </div>
-            {% if choice.value == 'Yes' %}
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-              id="conditional-continentalShelfDeclaration">
-              <div class="govuk-form-group">
-                <span id="continental_shelf-hint" class="govuk-hint">
-                  {{__('field_continental_shelf_hint')}}
-                  <a href=https://www.gov.uk/guidance/moving-goods-between-the-uk-and-the-uk-continental-shelf
-                    target="_blank">Moving goods between the UK and the UK Continental Shelf - GOV.UK (www.gov.uk) </a>
-                </span>
-                <label class="govuk-label" for="continentalShelfDeclaration">
-                  {{__('field_goods_declaration_label_150')}}
-                </label>
-                <textarea class="govuk-textarea" id="continentalShelfDeclaration" name="continentalShelfDeclaration"
-                  placeholder="e.g. Rig Essentials (food, drink, medical supplies, newspapers, sanitary items) "
-                  rows="5" aria-describedby="continentalShelf-hint"
-                  maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}">{{gar.continentalShelfDeclaration}}</textarea>
-              </div>
-            </div>
-            {% endif %}
-            {% endfor %}
-          </div>
-        </fieldset>
-      </div>
-
-
-      <div class="govuk-form-group {{ m.form_group_class('passengerTravellingReasonAnswer', errors) }}"
-        id="passengerTravellingReasonAnswer">
-        <fieldset class="govuk-fieldset" aria-describedby="passengerTravellingReasonAnswer-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h2 class="govuk-fieldset__heading">{{__('passenger_travelling_reason')}}</h2>
-          </legend>
-
-          <div class="govuk-radios govuk-radios" id="conditional-passengerTravellingReason">
-            <div class="govuk-form-group">
-              <label class="govuk-label"
-                for="passengerTravellingReason">{{__('passenger_travelling_reason_hint')}}</label>
-              <textarea class="govuk-textarea" id="passengerTravellingReason" name="passengerTravellingReason"
-                placeholder="{{__('passenger_travelling_reason_placeholder')}}" rows="5"
-                aria-describedby="passengerTravellingReason-hint"
-                maxlength="{{ MAX_TEXT_BOX_LENGTH }}">{{gar.passengerTravellingReason}}</textarea>
-            </div>
-          </div>
-        </fieldset>
-      </div>
-
-      <div class="govuk-form-group {{ m.form_group_class('visitReason', errors) }}" id="visitReason">
-
-        {% set radioItems = [] %}
-        {% for choice in reasonForVisitOptions %}
-        {% set radioItems = radioItems.concat([{
-        value: choice.value | string,
-        text: choice.option,
-        id: choice.option,
-        checked: (gar.visitReason | default('') == choice.value)
-        }]) %}
-        {% endfor %}{% set visitReasonErrorObj = (errors or []) | selectattr("identifier", "equalto", "visitReason") |
-        first %}
-        {% set visitReasonError = visitReasonErrorObj and { text: visitReasonErrorObj.message } or false %}
-
-        {{ govukRadios({
-        name: "visitReason",
-        idPrefix: "visitReason",
-        fieldset: {
-        legend: {
-        text: __('field_visit_reason_question'),
-        classes: "govuk-fieldset__legend--m",
-        isPageHeading: false
-        }
-        },
-        hint: {
-        text: __('field_visit_reason_hint')
-        },
-        errorMessage: visitReasonError,
-        items: radioItems
-        }) }}
-
-      </div>
-
-      <div class="govuk-form-group {{ m.form_group_class('supportingInformationAnswer', errors) }}"
-        id="supportingInformationAnswer">
-        <fieldset class="govuk-fieldset" aria-describedby="supportingInformationAnswer-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h2 class="govuk-fieldset__heading">{{__('field_supporting_information_question')}}</h2>
-          </legend>
-
-          <div class="govuk-radios govuk-radios" id="conditional-supportingInformation">
-            <div class="govuk-form-group">
-              <label class="govuk-label"
-                for="supportingInformation">{{__('field_supporting_information_label')}}</label>
-              <textarea class="govuk-textarea" id="supportingInformation" name="supportingInformation"
-                placeholder="e.g. Unaccompanied minor travelling, animal onboard" rows="5"
-                aria-describedby="supportingInformation-hint"
-                maxlength="{{ MAX_TEXT_BOX_LENGTH - 50 }}">{{gar.supportingInformation}}</textarea>
-            </div>
-          </div>
-        </fieldset>
-      </div>
+      {% include "./partials/intention.njk" %}
+      {% include "./partials/passenger-reason.njk" %}
+      {% include "./partials/prohibited-goods.njk" %}
+      {% include "./partials/baggage.njk" %}
+      {% include "./partials/continental-shelf.njk" %}
+      {% include "./partials/aircraft-reason.njk" %}
+      {% include "./partials/supporting-information.njk" %}
 
       {{ m.submit_buttons('GAR Customs', csrfToken, __) }}
     </form>
     {{ m.exit_without_saving(csrfToken, __) }}
   </div>
-</div>
 </div>
 
 {% endblock %}

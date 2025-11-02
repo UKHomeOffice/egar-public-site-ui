@@ -1,0 +1,19 @@
+<div class="govuk-form-group {{ m.form_group_class('supportingInformationAnswer', errors) }}"
+  id="supportingInformationAnswer">
+  <fieldset class="govuk-fieldset" aria-describedby="supportingInformationAnswer-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h2 class="govuk-fieldset__heading">{{__('field_supporting_information_question')}}</h2>
+    </legend>
+
+    <div class="govuk-radios govuk-radios" id="conditional-supportingInformation">
+      <div class="govuk-form-group">
+        <label class="govuk-label"
+          for="supportingInformation">{{__('field_supporting_information_label')}}</label>
+        <textarea class="govuk-textarea" id="supportingInformation" name="supportingInformation"
+          placeholder="e.g. Unaccompanied minor travelling, animal onboard" rows="5"
+          aria-describedby="supportingInformation-hint"
+          maxlength="{{ MAX_TEXT_BOX_LENGTH - 50 }}">{{gar.supportingInformation}}</textarea>
+      </div>
+    </div>
+  </fieldset>
+</div>
