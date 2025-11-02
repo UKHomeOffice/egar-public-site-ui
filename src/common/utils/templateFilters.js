@@ -34,7 +34,7 @@ const transform = (o, mapping) => {
     }
   }
   return returnValue;
-}
+};
 
 exports.uncamelCase = uncamelCase;
 exports.containsError = containsError;
