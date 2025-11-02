@@ -1,0 +1,31 @@
+{% call govukFieldset({
+  id: "supportingInformationAnswer",
+  legend: {
+    text: __('field_supporting_information_question'),
+    classes: "govuk-fieldset__legend--m"
+  },
+  fieldsetClasses: m.form_group_class('supportingInformationAnswer', errors),
+  describedBy: "supportingInformationAnswer-hint",
+  attributes: {
+    id: 'supportingInformationAnswer'
+  }
+}) %}
+
+  {{ govukTextarea({
+    id: "supportingInformation",
+    name: "supportingInformation",
+    label: {
+      text: __('field_supporting_information_label')
+    },
+    value: gar.supportingInformation,
+  errorMessage: errors | filterArray('identifier', 'supportingInformationAnswer') | first | transform({'message': 'text'}),
+    rows: 5,
+    maxlength: MAX_TEXT_BOX_LENGTH - 50,
+    describedBy: "supportingInformationAnswer-hint",
+    attributes: {
+      placeholder: 'e.g. Unaccompanied minor travelling, animal onboard'
+    }
+  }) }}
+
+{% endcall %}
+

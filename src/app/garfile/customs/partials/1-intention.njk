@@ -17,19 +17,6 @@
   </p>
 {% endset %}
 
-{% set radioItems = [] %}
-{% for choice in intentionValueOptions %}
-  {% set radioItems = radioItems.concat([{
-    value: choice.value | string,
-    text: choice.option,
-    id: choice.option,
-    checked: (gar.intentionValue | default('') == choice.value),
-    attributes: {
-      onchange: "hide()"
-    }
-  }]) %}
-{% endfor %}
-
 {% set intentionHint %}
   <p class="govuk-body-m">
     {{ __('field_prohibited_goods_2') }}
@@ -46,8 +33,18 @@
   </p>
 {% endset %}
 
-{% set intentionErrorObj = (errors or []) | filterArray("identifier", "intentionValue") | first %}
-{% set intentionError = intentionErrorObj and { text: intentionErrorObj.message } or false %}
+{% set radioItems = [] %}
+{% for choice in intentionValueOptions %}
+  {% set radioItems = radioItems.concat([{
+    value: choice.value | string,
+    text: choice.option,
+    id: choice.option,
+    checked: (gar.intentionValue | default('') == choice.value),
+    attributes: {
+      onchange: "hide()"
+    }
+  }]) %}
+{% endfor %}
 
 {{ govukRadios({
   name: "intentionValue",
@@ -62,22 +59,7 @@
   hint: {
     html: intentionHint
   },
-  errorMessage: intentionError,
+errorMessage: errors | filterArray('identifier', 'intentionValue') | first | transform({'message': 'text'}),
   items: radioItems,
   classes: "govuk-radios--conditional"
 }) }}
-
-<script>
-  function hide() {
-    if (document.getElementById('Yes  ').checked) {
-      document.getElementById('prohibitedGoods').style.display = 'block';
-      document.getElementById('baggage').style.display = 'block';
-      document.getElementById('continentalShelf').style.display = 'block';
-    }
-    else {
-      document.getElementById('prohibitedGoods').style.display = 'none';
-      document.getElementById('baggage').style.display = 'none';
-      document.getElementById('continentalShelf').style.display = 'none';
-    }
-  }
-</script>

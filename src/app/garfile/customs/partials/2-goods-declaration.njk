@@ -1,0 +1,51 @@
+{% set prohibitedGoodsItems = [] %}
+
+{% for choice in prohibitedGoodsOptions %}
+  {% set textareaHtml = "" %}
+  {% if choice.value == "Yes" %}
+    {% set textareaHtml = govukTextarea({
+      id: "goodsDeclaration",
+      name: "goodsDeclaration",
+      label: {
+        text: __('field_goods_declaration_label_150')
+      },
+      hint: {
+        html: __('field_allowances_hint') ~
+              ' <a class="govuk-link" href="https://www.gov.uk/bringing-goods-into-uk-personal-use" target="_blank">Overview - GOV.UK (www.gov.uk)</a>'
+      },
+      attributes: {
+        placeholder: "e.g. alcohol or tobacco"
+      },
+      rows: 5,
+      maxlength: (MAX_TEXT_BOX_LENGTH - 100),
+      value: gar.goodsDeclaration
+    }) %}
+  {% endif %}
+
+  {% set item = {
+    value: choice.value,
+    text: choice.option,
+    checked: (gar.prohibitedGoods | default('') == choice.value),
+    conditional: textareaHtml and { html: textareaHtml } or false
+  } %}
+
+  {% set prohibitedGoodsItems = prohibitedGoodsItems.concat(item) %}
+{% endfor %}
+{{ govukRadios({
+  idPrefix: "prohibitedGoods-item",
+  name: "prohibitedGoods",
+  fieldset: {
+    legend: {
+      text: __('field_allowances_question'),
+      classes: "govuk-fieldset__legend--m"
+    },
+    classes: m.form_group_class('prohibitedGoods', errors),
+    describedBy: "prohibitedGoods-hint",
+    attributes: {
+      hidden: true,
+      id: 'prohibitedGoods'
+    }
+  },
+  errorMessage: errors | filterArray('identifier', 'goodsDeclaration') | first | transform({'message': 'text'}),
+  items: prohibitedGoodsItems
+}) }}

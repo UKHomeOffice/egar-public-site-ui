@@ -33,13 +33,13 @@
         <h1 class="govuk-heading-xl">{{__('heading_customs')}}</h1>
       </legend>
 
-      {% include "./partials/intention.njk" %}
-      {% include "./partials/passenger-reason.njk" %}
-      {% include "./partials/prohibited-goods.njk" %}
-      {% include "./partials/baggage.njk" %}
-      {% include "./partials/continental-shelf.njk" %}
-      {% include "./partials/aircraft-reason.njk" %}
-      {% include "./partials/supporting-information.njk" %}
+      {% include "./partials/1-intention.njk" %}
+      {% include "./partials/2-goods-declaration.njk" %}
+      {% include "./partials/3-baggage-declaration.njk" %}
+      {% include "./partials/4-continental-shelf.njk" %}
+      {% include "./partials/5-passenger-reason.njk" %}
+      {% include "./partials/6-aircraft-reason.njk" %}
+      {% include "./partials/7-supporting-information.njk" %}
 
       {{ m.submit_buttons('GAR Customs', csrfToken, __) }}
     </form>
@@ -47,4 +47,19 @@
   </div>
 </div>
 
+<script type="text/javascript">
+  function hide() {
+    if (document.getElementById('Yes  ').checked) {
+      document.getElementById('prohibitedGoods').style.display = 'block';
+      document.getElementById('baggage').style.display = 'block';
+      document.getElementById('continentalShelf').style.display = 'block';
+    }
+    else {
+      document.getElementById('prohibitedGoods').style.display = 'none';
+      document.getElementById('baggage').style.display = 'none';
+      document.getElementById('continentalShelf').style.display = 'none';
+    }
+  }
+  document.addEventListener("DOMContentLoaded", hide);
+</script>
 {% endblock %}

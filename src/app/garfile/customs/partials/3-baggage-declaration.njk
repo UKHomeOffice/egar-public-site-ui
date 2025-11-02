@@ -1,0 +1,49 @@
+{{ govukRadios({
+  idPrefix: "baggage-item",
+  name: "baggage",
+  errorMessage: errors | filterArray('identifier', 'baggageDeclaration') | first | transform({'message': 'text'}),
+  fieldset: {
+    legend: {
+      text: __("field_baggage_question"),
+      classes: "govuk-fieldset__legend--m"
+    },
+    classes: m.form_group_class('baggage', errors),
+    describedBy: "baggage-hint",
+    attributes: {
+      hidden: true,
+      id: 'baggage'
+    }
+  },
+  items: [
+    {
+      value: "Yes",
+      text: "Yes",
+      checked: gar.baggage == "Yes",
+      hint: {
+        html: __("field_baggage_hint") ~
+              '<a class="govuk-link" href="https://www.gov.uk/government/publications/travelling-to-the-uk" target="_blank">Travelling to the UK - GOV.UK (www.gov.uk)</a>'
+      },
+      conditional: {
+        html: govukTextarea({
+          id: "baggageDeclaration",
+          name: "baggageDeclaration",
+          label: __("field_goods_declaration_label_150"),
+          value: gar.baggageDeclaration,
+          rows: 5,
+          maxlength: MAX_TEXT_BOX_LENGTH - 100,
+          attributes: { placeholder: "e.g. firearms" }
+        })
+      }
+    },
+    {
+      value: "No",
+      text: "No",
+      checked: gar.baggage == "No"
+    },
+    {
+      value: "Don't Know",
+      text: "Don't Know",
+      checked: gar.baggage == "Don't Know"
+    }
+  ]
+}) }}
