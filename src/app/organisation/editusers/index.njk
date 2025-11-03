@@ -44,28 +44,36 @@
           value="{{orgUser.lastName}}" {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
       </div>
 
-      <div class="{{ m.form_group_class('role', errors) }}">
-        <fieldset class="govuk-fieldset" aria-describedby="role-hint{{ ' role-error' if errors | containsError('role') }}">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h1 class="govuk-fieldset__heading">{{__('title_assign_role')}}</h1>
-            <span id="role-hint" class="govuk-hint">{{__('assign_role_caption')}}</span>
-          </legend>
-          {{ m.error_message('role', errors, __) }}
-          <div class="govuk-radios">
-            {% for role in roles %}
-              <div class="govuk-radios__item">
-                <input id="option-{{role.id}}" name="role" class="govuk-radios__input" type="radio"
-                  value="{{role.name}}"
-                  aria-labelledby="option-{{role.id}}-label" aria-describedby="option-{{role.id}}-hint" 
-                  {{ 'checked' if role.name == orgUser.role}}>
-                <label id="option-{{role.id}}-label" class="govuk-label govuk-radios__label" for="option-{{role.id}}">{{role.name}}</label>
-                <span id="option-{{role.id}}-hint" class="govuk-hint govuk-radios__hint">{{role.description}}</span>
-              </div>
-            {% endfor %}
-          </div>
-        </fieldset>
-      </div>
+{% set roleItems = [] %}
 
+{% for role in roles %}
+  {% set item = {
+    value: role.name,
+    text: role.name,
+    hint: {
+      text: role.description
+    },
+    checked: orgUser.role == role.name
+  } %}
+  {% set roleItems = roleItems.concat(item) %}
+{% endfor %}
+
+{{ govukRadios({
+  idPrefix: "role",
+  name: "role",
+  fieldset: {
+    legend: {
+      text: __("title_assign_role"),
+      classes: "govuk-fieldset__legend--m"
+    }
+  },
+  classes: m.form_group_class('role', errors),
+  hint: {
+    text: __("assign_role_caption")
+  },
+  errorMessage: errors | filterArray('identifier', 'role') | first | transform({'message': 'text'}),
+  items: roleItems
+}) }}
       <div class="govuk-form-group">
         <button id="save-and-exit" class="govuk-button" type="submit"
           onclick="sendAnalytics(event, 'Edit Organisation User - Save and exit', 'click')">
