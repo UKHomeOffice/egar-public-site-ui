@@ -1,7 +1,7 @@
 
 {% from "dist/govuk/components/date-input/macro.njk" import govukDateInput %}
 
-{% macro dateInput(prefix, cookie, dateObj, errors, __) %}
+{% macro dateInput(prefix, cookie, dateObj, hintName, errors, __) %}
 {{ govukDateInput({
   id: prefix + "Date",
   fieldset: {
@@ -11,7 +11,7 @@
     }
   },
   hint: {
-    text: __("field_date_hint")
+    text: __(hintName)
   },
   items: [
     {
@@ -52,7 +52,7 @@
 }) }}
 {% endmacro %}
 
-{% macro timeInput(prefix, cookie, timeObj, errors, __) %}
+{% macro timeInput(prefix, cookie, timeObj, hintName, errors, __) %}
   {{ govukDateInput({
     id: prefix + "Time",
     fieldset: {
@@ -62,7 +62,7 @@
       }
     },
     hint: {
-      text: __("field_time_hint")
+      text: __(hintName)
     },
     errorMessage: errors | filterArray('identifier', prefix + "Time") | first | transform({'message': 'text'}),
     items: [

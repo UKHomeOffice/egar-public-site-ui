@@ -36,8 +36,8 @@
         <h1 class="govuk-heading-xl">{{__('heading_departure_details')}}</h1>
         <p class="govuk-body-l">{{__('departure_details_caption')}}</p>
 
-        {{ dt.dateInput('departure', cookie, departure.departureDate, errors, __) }}
-        {{ dt.timeInput('departure', cookie, departure.departureTime, errors, __) }}
+        {{ dt.dateInput('departure', cookie, departure.departureDate, "field_date_hint", errors, __) }}
+        {{ dt.timeInput('departure', cookie, departure.departureTime, "field_time_hint", errors, __) }}
 
         {{ m.departure_warning_message(__)}}
 
