@@ -30,14 +30,12 @@
 
       <form id="page-form" action="/garfile/arrival" autocomplete="off" class="form-group" method="post" role="form">
 
-        <div class="govuk-form-group" id="arrivalDate">
           <span class="govuk-caption-xl">{{ __('section_count', 2, 9) }}</span>
           <h1 class="govuk-heading-xl">{{ __('heading_arrival_details') }}</h1>
           <p class="govuk-body-l">{{ __('arrival_details_caption') }}</p>
 
           {{ dt.dateInput('arrival', cookie, arrival.arrivalDate, errors, __) }}
 
-        </div>
 
         {{ dt.timeInput('arrival', cookie, arrival.arrivalTime, errors, __) }}
 
