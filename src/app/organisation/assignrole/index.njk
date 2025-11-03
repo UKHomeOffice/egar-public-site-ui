@@ -40,20 +40,18 @@
         {{ govukRadios({
           idPrefix: "role",
           name: "role",
+          hint: {
+            text: __('assign_role_caption'),
+            id: 'role-hint'
+          },
+          describedBy: "role-hint",
+          errorMessage: errors | filterArray('identifier', 'role') | first | transform({'message': 'text'}),
           fieldset: {
             legend: {
               text: __('title_assign_role'),
               classes: "govuk-fieldset__legend--m",
               isPageHeading: true
-            },
-            hint: {
-              text: __('assign_role_caption'),
-              id: 'role-hint'
-            },
-            classes: m.form_group_class('role', errors),
-            describedBy: "role-hint",
-            errorMessage: errors | filterArray('identifier', 'role') | first | transform({'message': 'text'})
-          },
+            }          },
           items: roleItems
         }) }}
 
