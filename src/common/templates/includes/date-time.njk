@@ -1,0 +1,93 @@
+
+{% from "dist/govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% macro dateInput(prefix, cookie, dateObj, errors, __) %}
+{{ govukDateInput({
+  id: prefix + "Date",
+  fieldset: {
+    legend: {
+      text: __("field_" + prefix + "_date"),
+      classes: "govuk-fieldset__legend--m"
+    }
+  },
+  hint: {
+    text: __("field_date_hint")
+  },
+  items: [
+    {
+      id: prefix + "Day",
+      name: prefix + "Day",
+      label: __("field_day"),
+      classes: "govuk-input--width-2",
+      value: cookie.dateSlice('day', dateObj),
+      attributes: {
+        maxlength: 2,
+        onkeyup: "value = sanitiseDateOrTime(this.value, 'day');autoTab(" + prefix + "Day, 'day', " + prefix + "Month);"
+      }
+    },
+    {
+      id: prefix + "Month",
+      name: prefix + "Month",
+      label: __("field_month"),
+      classes: "govuk-input--width-2",
+      value: cookie.dateSlice('month', dateObj),
+      attributes: {
+        maxlength: 2,
+        onkeyup: "value = sanitiseDateOrTime(this.value, 'month');autoTab(" + prefix + "Month, 'month', " + prefix + "Year);"
+      }
+    },
+    {
+      id: prefix + "Year",
+      name: prefix + "Year",
+      label: __("field_year"),
+      classes: "govuk-input--width-4",
+      value: cookie.dateSlice('year', dateObj),
+      attributes: {
+        maxlength: 4,
+        onkeyup: "value = sanitiseDateOrTime(this.value, 'year');"
+      }
+    }
+  ],
+  errorMessage: errors | filterArray('identifier', prefix + "Date") | first | transform({'message': 'text'})
+}) }}
+{% endmacro %}
+
+{% macro timeInput(prefix, cookie, timeObj, errors, __) %}
+  {{ govukDateInput({
+    id: prefix + "Time",
+    fieldset: {
+      legend: {
+        text: __( "field_" + prefix + "_time" ),
+        classes: "govuk-fieldset__legend--m"
+      }
+    },
+    hint: {
+      text: __("field_time_hint")
+    },
+    errorMessage: errors | filterArray('identifier', prefix + "Time") | first | transform({'message': 'text'}),
+    items: [
+      {
+        id: prefix + "Hour",
+        name: prefix + "Hour",
+        label: __("field_hour"),
+        classes: "govuk-input--width-2",
+        value: cookie.timeSlice('hour', timeObj),
+        attributes: {
+          maxlength: 2,
+          onkeyup: "value = sanitiseDateOrTime(this.value, 'hour');autoTab(" + prefix + "Hour, 'hour', " + prefix + "Minute);"
+        }
+      },
+      {
+        id: prefix + "Minute",
+        name: prefix + "Minute",
+        label: __("field_minute"),
+        classes: "govuk-input--width-2",
+        value: cookie.timeSlice('minute', timeObj),
+        attributes: {
+          maxlength: 2,
+          onkeyup: "value = sanitiseDateOrTime(this.value, 'minute');"
+        }
+      }
+    ]
+  }) }}
+{% endmacro %}

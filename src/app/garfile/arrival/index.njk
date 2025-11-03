@@ -3,6 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/banners.njk" as b %}
 {% import "common/templates/includes/location.njk" as l %}
+{% import "common/templates/includes/date-time.njk" as dt %}
 
 {% block pageTitle %}
   {{__('error_prefix') if errors}} Create GAR | Arrival | {{__('title')}}
@@ -29,99 +30,16 @@
 
       <form id="page-form" action="/garfile/arrival" autocomplete="off" class="form-group" method="post" role="form">
 
-        {# Start Arrival date #}
         <div class="govuk-form-group" id="arrivalDate">
-          <span class="govuk-caption-xl">{{__('section_count', 2, 9)}}</span>
-          <h1 class="govuk-heading-xl">{{__('heading_arrival_details')}}</h1>
-          <p class="govuk-body-l">{{__('arrival_details_caption')}}</p>
-          <div class="{{ m.form_group_class('arrivalDate', errors) }}">
-            <fieldset class="govuk-fieldset" aria-describedby="arrivalDate-hint" role="group">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                <h2 class="govuk-fieldset__heading">{{__('field_arrival_date')}}</h2>
-              </legend>
-              <span id="arrivalDate-hint" class="govuk-hint">{{__('field_date_hint')}}</span>
-              {{ m.error_message('arrivalDate', errors, __) }}
-              <div class="govuk-date-input" id="arrival">
-                <div class="govuk-date-input__item">
-                  <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="arrivalDay">
-                      <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_day')}}
-                    </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalDay"
-                    name="arrivalDay"  type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'day');autoTab(arrivalDay, 'day', arrivalMonth);"
-                    value="{{cookie.dateSlice('day', arrival.arrivalDate)}}"
-                    {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
-                  </div>
-                </div>
+          <span class="govuk-caption-xl">{{ __('section_count', 2, 9) }}</span>
+          <h1 class="govuk-heading-xl">{{ __('heading_arrival_details') }}</h1>
+          <p class="govuk-body-l">{{ __('arrival_details_caption') }}</p>
 
-                <div class="govuk-date-input__item">
-                  <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="arrivalMonth">
-                      <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_month')}}
-                    </label>
-                    <span id="arrival-month-hint" class="govuk-visually-hidden">{{__('field_month_hint')}}</span>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMonth"
-                    name="arrivalMonth" type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'month');autoTab(arrivalMonth, 'month', arrivalYear);" 
-                    value="{{cookie.dateSlice('month', arrival.arrivalDate)}}"
-                    aria-describedby="{{ 'arrivalDate-error ' if errors | containsError('arrivalDate') }}arrival-month-hint">
-                  </div>
-                </div>
+          {{ dt.dateInput('arrival', cookie, arrival.arrivalDate, errors, __) }}
 
-                <div class="govuk-date-input__item">
-                  <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="arrivalYear">
-                      <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_year')}}
-                    </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="arrivalYear"
-                    name="arrivalYear" type="text" maxLength=4  onKeyup="value = sanitiseDateOrTime(this.value, 'year');"
-                    value="{{cookie.dateSlice('year', arrival.arrivalDate)}}"
-                    {{ 'aria-describedby=arrivalDate-error' if errors | containsError('arrivalDate') }}>
-                  </div>
-                </div>
-              </div>
-            </fieldset>
-          </div>
         </div>
-        {# End arrival date #}
 
-        {# Start arrival time #}
-        <div class="govuk-form-group {{ m.form_group_class('arrivalTime', errors) }}" id="arrivalTime">
-          <fieldset class="govuk-fieldset" aria-describedby="arrivalTime-hint" role="group">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h2 class="govuk-fieldset__heading">{{__('field_arrival_time')}}</h2>
-            </legend>
-            <span id="arrivalTime-hint" class="govuk-hint">{{__('field_time_hint')}}</span>
-            {{ m.error_message('arrivalTime', errors, __) }}
-
-            <div class="govuk-date-input" id="arrivalTime">
-              <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalHour">
-                    <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_hour')}}
-                  </label>
-                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalHour"
-                    name="arrivalHour" type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'hour');autoTab(arrivalHour, 'hour', arrivalMinute);"
-                    value="{{cookie.timeSlice('hour', arrival.arrivalTime)}}"
-                    {{ 'aria-describedby=arrivalTime-error' if errors | containsError('arrivalTime') }}>
-                </div>
-              </div>
-
-              <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                  <label class="govuk-label govuk-date-input__label" for="arrivalMinute">
-                    <span class="govuk-visually-hidden">{{__('field_arrival_hint')}}</span>{{__('field_minute')}}
-                  </label>
-                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="arrivalMinute"
-                    name="arrivalMinute" type="text" maxLength=2  onKeyup="value = sanitiseDateOrTime(this.value, 'minute');"
-                    value="{{cookie.timeSlice('minute', arrival.arrivalTime)}}"
-                    {{ 'aria-describedby=arrivalTime-error' if errors | containsError('arrivalTime') }}>
-                </div>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-        {# End arrival time #}
-
+        {{ dt.timeInput('arrival', cookie, arrival.arrivalTime, errors, __) }}
 
         {% set legendLabel = ['<h2 class="govuk-fieldset__heading">', __('field_port_choice_arrival'), '</h2>'] | join %}
         {% set warningMessage = b.coa_designation_regulation_change(false)%}
@@ -131,14 +49,14 @@
         {% set long = arrival.arrivalLong%}
         {% set prefix = 'arrival'%}
 
-        {{ l.location(legendLabel, 
-                      warningMessage, 
-                      isPortChoice, 
-                      portCode, 
-                      lat, 
-                      long, 
-                      prefix, 
-                      errors, 
+        {{ l.location(legendLabel,
+                      warningMessage,
+                      isPortChoice,
+                      portCode,
+                      lat,
+                      long,
+                      prefix,
+                      errors,
                       __) }}
 
         {# Start buttons #}
