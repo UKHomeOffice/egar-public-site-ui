@@ -35,9 +35,6 @@
           }]) %}
         {% endfor %}
 
-        {% set garErrorObj = (errors or []) | selectattr("identifier", "equalto", "garoption") | first %}
-        {% set garError = garErrorObj and { text: garErrorObj.message } or false %}
-
         {{ govukRadios({
           name: "garoption",
           idPrefix: "option",
@@ -51,7 +48,7 @@
           hint: {
             text: __('how_to_create_caption')
           },
-          errorMessage: garError,
+          errorMessage: errors | filterArray('identifier', 'garoption) | first | transform({'message': 'text'}),
           items: radioItems
         }) }}
 
