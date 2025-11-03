@@ -126,14 +126,25 @@
     items: genderItems
   }) }}
 
-  <div class="{{ m.form_group_class('birthplace', errors) }}">
-    <label class="govuk-label govuk-label--m" for="birthplace">{{ __('field_birth_place') }}</label>
-    {{ m.error_message('birthplace', errors, __) }}
-    <input class="govuk-input govuk-input--width-30" id="birthplace" name="birthplace" autocomplete="off" type="text"
-      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}"
-      {{ 'aria-describedby=birthplace-error' if errors | containsError('birthplace') }}>
-    {{ m.character_count_hint('birthplace', MAX_STRING_LENGTH) }}
-  </div>
+{{ govukInput({
+  id: "birthplace",
+  name: "birthplace",
+  classes: "govuk-input--width-30",
+  label: {
+    text: __("field_birth_place"),
+    classes: "govuk-label--m"
+  },
+  value: person.placeOfBirth or req.body.birthplace,
+  attributes: {
+    maxlength: MAX_STRING_LENGTH,
+    autocomplete: "off"
+  },
+  hint: {
+    html: m.character_count_hint('birthplace', MAX_STRING_LENGTH)
+  },
+  errorMessage: errors | filterArray('identifier', 'birthplace') | first | transform({'message': 'text'})
+}) }}
+
 {% set personTypeHintHtml = __('field_person_type_hint') ~ '<br/> <a class="govuk-link" href="https://www.gov.uk/government/publications/aircrew-crm02" target="_blank">Guidance on Crew and Passengers - GOV.UK (www.gov.uk)</a>' %}
 
 {% set personTypeItems = [] %}
@@ -164,17 +175,26 @@
   items: personTypeItems
 }) }}
 
-  <h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
-  <p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
+<h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
+<p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
 
-  <div class="govuk-form-group {{ m.form_group_class('travelDocumentNumber', errors) }}">
-    <label class="govuk-label govuk-label--m" for="travelDocumentNumber">{{ __('field_travel_document_number') }}</label>
-    {{ m.error_message('travelDocumentNumber', errors, __) }}
-    <input id="travelDocumentNumber" name="travelDocumentNumber" class="govuk-input govuk-input--width-20" type="text"
-      maxlength="{{ MAX_STRING_LENGTH }}" value="{{person.documentNumber or req.body.travelDocumentNumber}}"
-      {{ 'aria-describedby=travelDocumentNumber-error' if errors | containsError('travelDocumentNumber') }}>
-    {{ m.character_count_hint('travelDocumentNumber', MAX_STRING_LENGTH) }}
-  </div>
+{{ govukInput({
+  id: "travelDocumentNumber",
+  name: "travelDocumentNumber",
+  classes: "govuk-input--width-20",
+  label: {
+    text: __("field_travel_document_number"),
+    classes: "govuk-label--m"
+  },
+  value: person.documentNumber or req.body.travelDocumentNumber,
+  attributes: {
+    maxlength: MAX_STRING_LENGTH
+  },
+  hint: {
+    html: m.character_count_hint('travelDocumentNumber', MAX_STRING_LENGTH)
+  },
+  errorMessage: errors | filterArray('identifier', 'travelDocumentNumber') | first | transform({'message': 'text'})
+}) }}
 
   <div class="{{ m.form_group_class('documentExpiryDate', errors) }}" id="documentExpiryDate">
     <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
@@ -210,18 +230,29 @@
       </div>
     </fieldset>
   </div>
+{% set issuingStateItems = [{ value: "", text: "" }] %}
 
-  <div class="{{ m.form_group_class('issuingState', errors) }}">
-    <label id="issuingState-label" class="govuk-label govuk-label--m" for="issuingState">{{ __('field_issuing_state') }}</label>
-    {{ m.hint('issuingState', __('field_issuing_state_hint')) }}
-    {{ m.error_message('issuingState', errors, __) }}
-    <select class="govuk-select" id="issuingState" name="issuingState" value="{{ (person.issuingState or req.body.issuingState)}}"  aria-labelledby="issuingState-label"  aria-describedby="issuingState-hint">
-      <option value=""> </option>
-      {% for country in nationalityList|sort(attribute='label') %}
-        <option value="{{ country.code }}" {{ 'selected=selected' if (person.issuingState or req.body.issuingState) == country.code }}>{{ country.label }}</option>
-      {% endfor %}
-    </select>
-  </div>
+{% for country in nationalityList | sort(attribute='label') %}
+  {% set issuingStateItems = issuingStateItems.concat({
+    value: country.code,
+    text: country.label,
+    selected: (person.issuingState or req.body.issuingState) == country.code
+  }) %}
+{% endfor %}
+
+{{ govukSelect({
+  id: "issuingState",
+  name: "issuingState",
+  label: {
+    text: __("field_issuing_state"),
+    classes: "govuk-label--m"
+  },
+  hint: {
+    text: __("field_issuing_state_hint")
+  },
+  items: issuingStateItems,
+  errorMessage: errors | filterArray('identifier', 'issuingState') | first | transform({'message':'text'})
+}) }}
 
   <div class="{{ m.form_group_class('travelDocumentType', errors) }}">
     <label class="govuk-label govuk-label--m" for="travelDocumentType">{{ __('field_travel_document_type') }}</label>
