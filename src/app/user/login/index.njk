@@ -16,13 +16,6 @@
 {% endblock %}
 
 {% block content %}
-<form action="/login" method="post">
-  <input type="text" name="username">
-  <input type="submit">
-
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-  </form>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
           <h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
