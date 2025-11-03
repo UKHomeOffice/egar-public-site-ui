@@ -1,3 +1,7 @@
+{% import "common/templates/includes/date-time.njk" as dt %}
+{% set dateOfBirth = person.dateOfBirth or req.body['dobYear'] ~ "-" ~ req.body['dobMonth'] ~  "-" ~req.body['dobDay'] %}
+{% set documentExpiryDate = person.documentExpiryDate or req.body['expiryYear'] ~ "-" ~ req.body['expiryMonth'] ~  "-" ~req.body['expiryDay'] %}
+
 <div class="{{ m.form_group_class('savedpeople', errors) }}">
   <div class="{{ m.form_group_class('firstName', errors) }}">
     <label class="govuk-label govuk-label--m" for="firstName">{{ __('field_given_name') }}</label>
@@ -30,42 +34,7 @@
     </select>
   </div>
 
-  <!-- Date of birth -->
-  <div class="{{ m.form_group_class('dob', errors) }}">
-    <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h1 class="govuk-fieldset__heading">{{ __('field_dob') }}</h1>
-      </legend>
-      {{ m.hint('dob', __('field_dob_hint')) }}
-      {{ m.error_message('dob', errors, __) }}
-      <div class="govuk-date-input" id="dob">
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="dobDay">{{ __('field_date_day') }}</label>
-            <input id="dobDay" name="dobDay" class="govuk-input govuk-date-input__input govuk-input--width-2"
-            type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'day');autoTab(dobDay, 'day', dobMonth);"
-             value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}" >
-          </div>
-        </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="dobMonth">{{ __('field_date_month') }}</label>
-            <input id="dobMonth" name="dobMonth" class="govuk-input govuk-date-input__input govuk-input--width-2"
-            type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'month');autoTab(dobMonth, 'month', dobYear);"
-            value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}" >
-          </div>
-        </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="dobYear">{{ __('field_date_year') }}</label>
-            <input id="dobYear" name="dobYear" class="govuk-input govuk-date-input__input govuk-input--width-4" type="text" maxLength=4
-            onKeyup="value = sanitiseDateOrTime(this.value, 'year');" value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}">
-          </div>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-  <!-- End date of birth -->
+  {{ dt.dateInput('dob', cookie, dateOfBirth, "field_dob", "field_dob_hint", errors, __) }}
 
   {% set genderItems = [] %}
 
@@ -142,40 +111,7 @@
     {{ m.character_count_hint('travelDocumentNumber', MAX_STRING_LENGTH) }}
   </div>
 
-  <div class="{{ m.form_group_class('documentExpiryDate', errors) }}" id="documentExpiryDate">
-    <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">{{ __('field_document_expiry_date') }}</h2>
-      </legend>
-      <span id="dob-hint" class="govuk-hint">{{ __('field_document_expiry_date_hint') }}{{ futureYear }}.</span>
-      {{ m.error_message('documentExpiryDate', errors, __) }}
-      <div class="govuk-date-input" id="expiry">
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="expiryDay">{{ __('field_date_day') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay"
-            type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'day');autoTab(expiryDay, 'day', expiryMonth);"
-            value="{{ cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay'] }}" >
-          </div>
-        </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="expiryMonth">{{ __('field_date_month') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth"
-            type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'month');autoTab(expiryMonth, 'month', expiryYear);"
-            value="{{ cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}" >
-          </div>
-        </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="expiryYear">{{ __('field_date_year') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="expiryYear" name="expiryYear" type="text" maxLength=4
-            value="{{ cookie.dateSlice('year', person.documentExpiryDate) or req.body['expiryYear'] }}" onKeyup="value = sanitiseDateOrTime(this.value, 'year');">
-          </div>
-        </div>
-      </div>
-    </fieldset>
-  </div>
+  {{ dt.dateInput('expiry', cookie, documentExpiryDate, "field_document_expiry_date", "field_document_expiry_date_hint", errors, __) }}
 
   <div class="{{ m.form_group_class('issuingState', errors) }}">
     <label id="issuingState-label" class="govuk-label govuk-label--m" for="issuingState">{{ __('field_issuing_state') }}</label>

@@ -1,12 +1,12 @@
 
 {% from "dist/govuk/components/date-input/macro.njk" import govukDateInput %}
 
-{% macro dateInput(prefix, cookie, dateObj, hintName, errors, __) %}
+{% macro dateInput(prefix, cookie, dateObj, legendName, hintName, errors, __) %}
 {{ govukDateInput({
   id: prefix + "Date",
   fieldset: {
     legend: {
-      text: __("field_" + prefix + "_date"),
+      text: __(legendName),
       classes: "govuk-fieldset__legend--m"
     }
   },
@@ -62,7 +62,7 @@
       }
     },
     hint: {
-      text: __(hintName)
+      text: __("field_time_hint")
     },
     errorMessage: errors | filterArray('identifier', prefix + "Time") | first | transform({'message': 'text'}),
     items: [
