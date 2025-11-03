@@ -1,7 +1,6 @@
 {{ govukRadios({
   idPrefix: "baggage-item",
   name: "baggage",
-  errorMessage: errors | filterArray('identifier', 'baggageDeclaration') | first | transform({'message': 'text'}),
   fieldset: {
     legend: {
       text: __("field_baggage_question"),
@@ -31,6 +30,7 @@
           value: gar.baggageDeclaration,
           rows: 5,
           maxlength: MAX_TEXT_BOX_LENGTH - 100,
+          errorMessage: errors | filterArray('identifier', 'baggageDeclaration') | first | transform({'message': 'text'}),
           attributes: { placeholder: "e.g. firearms" }
         })
       }

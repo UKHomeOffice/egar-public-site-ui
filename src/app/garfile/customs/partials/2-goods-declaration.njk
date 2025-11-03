@@ -17,6 +17,7 @@
         placeholder: "e.g. alcohol or tobacco"
       },
       rows: 5,
+      errorMessage: errors | filterArray('identifier', 'goodsDeclaration') | first | transform({'message': 'text'}),
       maxlength: (MAX_TEXT_BOX_LENGTH - 100),
       value: gar.goodsDeclaration
     }) %}
@@ -46,6 +47,5 @@
       id: 'prohibitedGoods'
     }
   },
-  errorMessage: errors | filterArray('identifier', 'goodsDeclaration') | first | transform({'message': 'text'}),
   items: prohibitedGoodsItems
 }) }}
