@@ -1,34 +1,68 @@
 <div class="{{ m.form_group_class('savedpeople', errors) }}">
-  <div class="{{ m.form_group_class('firstName', errors) }}">
-    <label class="govuk-label govuk-label--m" for="firstName">{{ __('field_given_name') }}</label>
-    {{ m.hint('firstName', __('field_given_name_hint')) }}
-    {{ m.error_message('firstName', errors, __) }}
-    <input class="govuk-input govuk-input--width-30" id="firstName" name="firstName" autocomplete="off" type="text"
-      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.firstName or req.body.firstName }}"
-      {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
-    {{ m.character_count_hint('firstName', MAX_STRING_LENGTH) }}
-  </div>
 
-  <div class="{{ m.form_group_class('lastName', errors) }}">
-    <label class="govuk-label govuk-label--m" for="lastName">{{ __('field_surname') }}</label>
-    {{ m.error_message('lastName', errors, __) }}
-    <input class="govuk-input govuk-input--width-30" id="lastName" name="lastName" autocomplete="off" type="text"
-      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.lastName or req.body.lastName }}"
-      {{ 'aria-describedby=lastName-error' if errors | containsError('lastName') }}>
-    {{ m.character_count_hint('lastName', MAX_STRING_LENGTH) }}
-  </div>
+{{ govukInput({
+  id: "firstName",
+  name: "firstName",
+  classes: "govuk-input--width-30",
+  label: {
+    text: __("field_given_name"),
+    classes: "govuk-label--m"
+  },
+  hint: {
+    text: __("field_given_name_hint")
+  },
+  value: person.firstName or req.body.firstName,
+  attributes: {
+    maxlength: MAX_STRING_LENGTH,
+    autocomplete: "off"
+  },
+  errorMessage: errors | filterArray('identifier', 'firstName') | first | transform({'message': 'text'})
+}) }}
 
-  <div class="{{ m.form_group_class('nationality', errors) }}">
-    <label id="nationality-label" class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
-    {{ m.hint('nationality', __('field_nationality_hint')) }}
-    {{ m.error_message('nationality', errors, __) }}
-    <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}" aria-labelledby="nationality-label" aria-describedby="nationality-hint">
-      <option value=""></option>
-      {% for country in nationalityList|sort(attribute='label') %}
-        <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
-      {% endfor %}
-    </select>
-  </div>
+{{ govukInput({
+  id: "lastName",
+  name: "lastName",
+  classes: "govuk-input--width-30",
+  label: {
+    text: __("field_surname"),
+    classes: "govuk-label--m"
+  },
+  value: person.lastName or req.body.lastName,
+  attributes: {
+    maxlength: MAX_STRING_LENGTH,
+    autocomplete: "off"
+  },
+  errorMessage: errors | filterArray('identifier', 'lastName') | first | transform({'message': 'text'})
+}) }}
+
+{% set nationalityItems = [{
+  value: "",
+  text: ""
+}] %}
+
+{% for country in nationalityList | sort(attribute='label') %}
+  {% set option = {
+    value: country.code,
+    text: country.label,
+    selected: (person.nationality or req.body.nationality) == country.code
+  } %}
+  {% set nationalityItems = nationalityItems.concat(option) %}
+{% endfor %}
+
+{{ govukSelect({
+  id: "nationality",
+  name: "nationality",
+  classes: "govuk-select",
+  label: {
+    text: __("field_nationality"),
+    classes: "govuk-label--m"
+  },
+  hint: {
+    text: __("field_nationality_hint")
+  },
+  items: nationalityItems,
+  errorMessage: errors | filterArray('identifier', 'nationality') | first | transform({'message': 'text'})
+}) }}
 
   <!-- Date of birth -->
   <div class="{{ m.form_group_class('dob', errors) }}">
