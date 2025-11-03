@@ -107,34 +107,41 @@
         </div>
     </fieldset>
 
-    <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ __('field_fbo_question') }}</legend>
+    {% set fixedBasedOperatorTextarea = govukTextarea({
+      id: "fixedBasedOperatorAnswer",
+      name: "fixedBasedOperatorAnswer",
+      rows: 3,
+      attributes: {
+        placeholder: __("field_fbo_textarea_placeholder")
+      },
+      maxlength: MAX_TEXT_BOX_LENGTH - 100,
+      value: responsiblePerson.fixedBasedOperatorAnswer or "",
+      errorMessage: errors | filterArray('identifier', 'fixedBasedOperatorAnswer') | first | transform({'message': 'text'})
+    }) %}
 
-        <div class="govuk-form-group {{ m.form_group_class('fixedBasedOperator', errors) }}" id="fixedBasedOperator">
-            <div class="govuk-radios govuk-radio--conditional" data-module="govuk-radios">
-                {{ m.error_message('fixedBasedOperator', errors, __) }}
-                    {% for choice in fixedBasedOperatorOptions %}
-                        <div class="govuk-radios__item">
-                            <input id="{{ choice.option }}" class="govuk-radios__input" type="radio" name="fixedBasedOperator"
-                        value="{{ choice.value }}" aria-labelledby="fixedBasedOperator-label-{{ loop.index }}"
-                        {{ "checked" if responsiblePerson.fixedBasedOperator === choice.value }}
-                        {{ "data-aria-controls=conditional-fixedBasedOperatorAnswer" if choice.value === 'Other' }}>
-                            <label id="fixedBasedOperator-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for="{{ choice.option }}" >{{ choice.option }}</label>
-                        </div>
+    {% set fixedBasedOperatorItems = [] %}
 
-                        {% if choice.value === 'Other' %}
-                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-fixedBasedOperatorAnswer">
-                                <div class="govuk-form-group">
-                                    {{ m.error_message('fixedBasedOperatorAnswer', errors, __) }}
-                                    <textarea class="govuk-textarea" id="fixedBasedOperatorAnswer" name="fixedBasedOperatorAnswer"
-                            rows="3" aria-describedby="other-answer-description" placeholder="{{ __('field_fbo_textarea_placeholder') }}"
-                            maxlength="{{ MAX_TEXT_BOX_LENGTH - 100 }}"
-                            >{{ "" if (responsiblePerson.fixedBasedOperatorAnswer === null) else responsiblePerson.fixedBasedOperatorAnswer }}</textarea>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-            </div>
-        </div>
-    </fieldset>
+    {% for choice in fixedBasedOperatorOptions %}
+      {% set item = {
+        value: choice.value,
+        text: choice.option,
+        checked: (responsiblePerson.fixedBasedOperator | default('') == choice.value),
+        conditional: (choice.value == 'Other') and { html: fixedBasedOperatorTextarea } or false
+      } %}
+      {% set fixedBasedOperatorItems = fixedBasedOperatorItems.concat(item) %}
+    {% endfor %}
+
+    {{ govukRadios({
+      idPrefix: "fixedBasedOperator",
+      name: "fixedBasedOperator",
+      fieldset: {
+        legend: {
+          text: __("field_fbo_question"),
+          classes: "govuk-fieldset__legend--m"
+        }
+      },
+      classes: m.form_group_class('fixedBasedOperator', errors),
+      errorMessage: errors | filterArray('identifier', 'fixedBasedOperator') | first | transform({'message': 'text'}),
+      items: fixedBasedOperatorItems
+    }) }}
 </div>

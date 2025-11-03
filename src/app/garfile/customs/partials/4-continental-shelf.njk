@@ -1,0 +1,51 @@
+{% set continentalShelfItems = [] %}
+
+{% for choice in continentalShelfOptions %}
+  {% set textareaHtml = "" %}
+  {% if choice.value == "Yes" %}
+    {% set textareaHtml = govukTextarea({
+      id: "continentalShelfDeclaration",
+      name: "continentalShelfDeclaration",
+      label: {
+        text: __('field_goods_declaration_label_150')
+      },
+      hint: {
+        html: __('field_continental_shelf_hint') ~
+          ' <a class="govuk-link" href="https://www.gov.uk/guidance/moving-goods-between-the-uk-and-the-uk-continental-shelf" target="_blank">Moving goods between the UK and the UK Continental Shelf - GOV.UK (www.gov.uk)</a>'
+      },
+      attributes: {
+        placeholder: "e.g. Rig Essentials (food, drink, medical supplies, newspapers, sanitary items)"
+      },
+      rows: 5,
+      maxlength: (MAX_TEXT_BOX_LENGTH - 100),
+      errorMessage: errors | filterArray('identifier', 'continentalShelfDeclaration') | first | transform({'message': 'text'}),
+      value: gar.continentalShelfDeclaration
+    }) %}
+  {% endif %}
+
+  {% set item = {
+    value: choice.value,
+    text: choice.option,
+    checked: (gar.continentalShelf | default('') == choice.value),
+    conditional: textareaHtml and { html: textareaHtml } or false
+  } %}
+
+  {% set continentalShelfItems = continentalShelfItems.concat([item]) %}
+{% endfor %}
+
+{{ govukRadios({
+  idPrefix: "continentalShelf-item",
+  name: "continentalShelf",
+  fieldset: {
+    legend: {
+      text: __('field_continental_shelf_question'),
+      classes: "govuk-fieldset__legend--m"
+    },
+    attributes: {
+      hidden: true,
+      id: 'continentalShelf'
+    }
+  },
+  errorMessage: errors | filterArray('identifier', 'continentalShelf') | first | transform({'message': 'text'}),
+  items: continentalShelfItems
+}) }}
