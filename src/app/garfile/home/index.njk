@@ -13,14 +13,13 @@
 {% endblock %}
 
 {% block beforeContent %}
-  
+
   <a href="/home" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-    {% import "common/templates/includes/macros.njk" as m %}
     {% if errors %}
       {% include "common/templates/includes/errors.njk" %}
     {% endif %}
