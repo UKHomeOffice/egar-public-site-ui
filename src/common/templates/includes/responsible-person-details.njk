@@ -74,8 +74,11 @@
     id: "responsibleAddressLine1",
     name: "responsibleAddressLine1",
     label: {
-      html: __("field_house_number") ~ ' <span class="govuk-visually-hidden">' ~ __("field_line_1_of_2") ~ '</span>' ~ m.character_count_hint('responsibleAddressLine1', MAX_STRING_LENGTH),
+      text: __("field_house_number"),
       classes: "govuk-label"
+    },
+    hint: {
+      html:  m.character_count_hint('responsibleAddressLine1', MAX_STRING_LENGTH)
     },
     value: responsiblePerson.responsibleAddressLine1,
     attributes: { maxlength: MAX_STRING_LENGTH },
@@ -85,9 +88,8 @@
   {{ govukInput({
     id: "responsibleAddressLine2",
     name: "responsibleAddressLine2",
-    label: {
-      html: '<span class="govuk-visually-hidden">' ~ __("field_line_2_of_2") ~ '</span>' ~ m.character_count_hint('responsibleAddressLine2', MAX_STRING_LENGTH),
-      classes: "govuk-label"
+    hint: {
+      html: m.character_count_hint('responsibleAddressLine2', MAX_STRING_LENGTH)
     },
     value: responsiblePerson.responsibleAddressLine2,
     attributes: { maxlength: MAX_STRING_LENGTH },
@@ -98,8 +100,11 @@
     id: "responsibleTown",
     name: "responsibleTown",
     label: {
-      html: __("field_town") ~ m.character_count_hint('responsibleTown', MAX_STRING_LENGTH),
+      html: __("field_town"),
       classes: "govuk-label"
+    },
+    hint: {
+      html: m.character_count_hint('responsibleTown', MAX_STRING_LENGTH)
     },
     value: responsiblePerson.responsibleTown,
     attributes: { maxlength: MAX_STRING_LENGTH },
