@@ -15,10 +15,7 @@
   {% include "common/templates/includes/back.njk" %}
 {% endblock %}
 
-{% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+{% block content %}{% include "common/templates/includes/errors.njk" %}
 
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">

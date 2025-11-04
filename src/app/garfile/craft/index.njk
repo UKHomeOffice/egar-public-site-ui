@@ -21,10 +21,7 @@
 
 {% block content %}
   <script type="text/javascript" src="/javascripts/craft.js"></script>
-  <div class="govuk-grid-row">
-    {% if errors %}
-      {% include "common/templates/includes/errors.njk" %}
-    {% endif %}
+  <div class="govuk-grid-row">{% include "common/templates/includes/errors.njk" %}
 
     <form id="previous_aircraft" action="/garfile/craft" autocomplete="off" class="form-group" method="post" role="form">
       <div class="govuk-grid-column-two-thirds">

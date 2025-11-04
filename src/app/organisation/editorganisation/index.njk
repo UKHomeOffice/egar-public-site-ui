@@ -30,11 +30,7 @@
 
 {% block content %}
 
-  {% import "common/templates/includes/macros.njk" as m %}
-
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% import "common/templates/includes/macros.njk" as m %}{% include "common/templates/includes/errors.njk" %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

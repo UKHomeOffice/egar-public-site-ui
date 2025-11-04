@@ -16,10 +16,7 @@
   {% include "phase.njk" %}
 {% endblock %}
 
-{% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+{% block content %}{% include "common/templates/includes/errors.njk" %}
 
   <h1 class="govuk-heading-l">
     {{__('heading_cancel_gar')}}

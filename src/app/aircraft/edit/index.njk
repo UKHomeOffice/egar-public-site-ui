@@ -30,10 +30,7 @@
   {% set craft = cookie.getEditCraft() %}
 
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
+    <div class="govuk-grid-column-two-thirds">{% include "common/templates/includes/errors.njk" %}
 
       <form action="/aircraft/edit" autocomplete="off" class="form-group"method="post" role="form" >
         <h1 class="govuk-heading-xl">{{__('title_edit_aircraft')}}</h1>

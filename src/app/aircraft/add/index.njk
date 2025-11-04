@@ -32,11 +32,7 @@
 {% block content %}
   {% import "common/templates/includes/macros.njk" as m %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
+    <div class="govuk-grid-column-two-thirds">{% include "common/templates/includes/errors.njk" %}
 
       <form action="/aircraft/add" autocomplete="off" class="form-group" method="post" role="form">
 

@@ -18,11 +18,7 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-
-    {% if errors %}
-      {% include "common/templates/includes/errors.njk" %}
-    {% endif %}
+	<div class="govuk-grid-column-two-thirds">{% include "common/templates/includes/errors.njk" %}
 
     <h1 class="govuk-heading-xl">{{__('nav_bar_create_organisation')}}</h1>
     <p class="govuk-body-l">{{__('create_organisation_caption_1')}}</p>

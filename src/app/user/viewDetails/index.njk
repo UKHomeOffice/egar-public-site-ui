@@ -13,10 +13,7 @@ Manage account | Submit a General Aviation Report (GAR)
 {% include "phase.njk" %}
 {% endblock %}
 
-{% block content %}
-{% if errors %}
-{% include "common/templates/includes/errors.njk" %}
-{% endif %}
+{% block content %}{% include "common/templates/includes/errors.njk" %}
 <div class="govuk-grid-row padding-bottom-60">
   <div class="govuk-grid-column-two-thirds margin-left-50 margin-top-30">
     {% if successMsg %}
