@@ -10,7 +10,7 @@
 {% macro notificationBannerFor0T(numberOf0TResponseCodes, showImportantBanner) %}
   {% if showImportantBanner %}
     {{ govukNotificationBanner({
-      type: "important",
+      classes: "govuk-notification-banner--important",
       titleText: "Important",
       html: '<p class="govuk-body">' +
         '<strong>' + numberOf0TResponseCodes + ' {% if numberOf0TResponseCodes == 1 %}passenger{% else %}passengers{% endif %} have a \'system time out\' status.</strong>' +
