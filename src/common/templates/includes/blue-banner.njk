@@ -1,17 +1,17 @@
-<div class="govuk-body custom-govuk-notification-banner" role="region"
-        aria-labelledby="govuk-notification-banner-title"
-        data-module="custom-govuk-notification-banner">
-    <div class="govuk-notification-banner__header">
-        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-        Important
-        </h2>
-    </div>
-    <div class="govuk-notification-banner__content">
-        <p class="govuk-notification-banner__heading">
-        The GB departure and arrival ports must be officially designated to handle this flight.
-        </p>
-        <p class="govuk-notification-banner__heading">
-        Check the <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1151707/GOV.UK_GAR-Instructions-April_2023_V1.0_SDS.pdf" class="notification-banner-text-link">General aviation report (GAR) guidance</a> to find out if your intended port is officially approved or confirm with aerodrome authority directly.
-        </p>
-    </div>
-</div>
+{{ govukNotificationBanner({
+  type: "important",
+  titleText: "Important",
+  html: '
+    <p class="govuk-notification-banner__heading">
+      The GB departure and arrival ports must be officially designated to handle this flight.
+    </p>
+    <p class="govuk-notification-banner__heading">
+      Check the <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1151707/GOV.UK_GAR-Instructions-April_2023_V1.0_SDS.pdf" class="notification-banner-text-link">General aviation report (GAR) guidance</a> to find out if your intended port is officially approved or confirm with aerodrome authority directly.
+    </p>
+  ',
+  attributes: {
+    role: "region",
+    id: "important-flight-notice",
+    "aria-labelledby": "govuk-notification-banner-title"
+  }
+}) }}
