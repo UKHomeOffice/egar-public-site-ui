@@ -46,7 +46,6 @@
     text: __("field_contact_number_hint")
   },
   value: responsiblePerson.responsibleContactNo,
-  attributes: {},
   errorMessage: errors | filterArray('identifier', 'responsibleContactNo') | first | transform({'message': 'text'})
 }) }}
 
