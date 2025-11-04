@@ -62,7 +62,7 @@
       }
     },
     hint: {
-      text: __("field_time_hint")
+      text: __(hintName)
     },
     errorMessage: errors | filterArray('identifier', prefix + "Time") | first | transform({'message': 'text'}),
     items: [
