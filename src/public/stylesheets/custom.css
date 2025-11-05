@@ -269,9 +269,6 @@ h2.govuk-notification-banner__title {
 .center-text {
   text-align: center;
 }
-.cursor{
-    cursor: pointer;
-}
 .hide-content{
     display: none;
 }
