@@ -94,7 +94,7 @@
                           {% if person.isInvalid %}
                             <button
                               id="edit-person-{{ loop.index }}"
-                              class="govuk-link btn-link"
+                              class="govuk-button--link"
                               title="Edit details for {{ person.firstName }} {{ person.lastName }}"
                               name="editSavedPerson"
                               value="{{person.personId}}">
@@ -232,7 +232,7 @@
                                   <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
                                   <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                                   <td class="govuk-table__cell">
-                                    <button class="link btn-link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
+                                    <button class="govuk-button--link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
                                   </td>
                                 </tr>
                                 <tr class="govuk-table__row">

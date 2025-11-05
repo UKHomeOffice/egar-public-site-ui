@@ -68,14 +68,14 @@
           {% for craft in savedCrafts.items %}
           <tr class="govuk-table__row">
             {# {% if cookie.getUserRole() != 'User' %} #}
-            <td class="govuk-table__cell" scope="row"><button id="edit_craft_{{ loop.index }}" class="govuk-link btn-link" name="editCraft" value="{{ craft.craftId }}">{{ craft.registration }}</button></th>
+            <td class="govuk-table__cell" scope="row"><button id="edit_craft_{{ loop.index }}" class="govuk-button--link" name="editCraft" value="{{ craft.craftId }}">{{ craft.registration }}</button></th>
             {# {% else %}
             <td class="govuk-table__cell">{{ craft.registration }}</td>
             {% endif %} #}
             <td class="govuk-table__cell">{{ craft.craftType }}</td>
             <td class="govuk-table__cell">{{ craft.craftBase | upper }}</td>
             {# {% if cookie.getUserRole() != 'User' %} #}
-            <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-link btn-link" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
+            <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-button--link" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
             {# {% endif %} #}
           </tr>
           {% endfor %}

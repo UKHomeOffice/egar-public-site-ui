@@ -77,7 +77,7 @@
                   <td class="govuk-table__cell ">{{file.fileName}} </td>
                   <td class="govuk-table__cell ">{{file.size}} </td>
                   <td class="govuk-table__cell ">{{__('field_file_status_done')}}</td>
-                  <td class="govuk-table__cell "><button class="govuk-link btn-link" name="deleteDocId" value="{{ file.supportingDocumentId }}">{{__('table_delete')}}</button></td>
+                  <td class="govuk-table__cell "><button class="govuk-button--link" name="deleteDocId" value="{{ file.supportingDocumentId }}">{{__('table_delete')}}</button></td>
                 </tr lass="govuk-table__cell ">
                 {% endfor %}
               {% else %}

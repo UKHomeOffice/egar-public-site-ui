@@ -54,7 +54,7 @@
               {% for resPerson in resPersons %}
                   <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
-                      <button id="edit-edit_reponsiblePerson-{{ loop.index }}" class="govuk-link btn-link" 
+                      <button id="edit-edit_reponsiblePerson-{{ loop.index }}" class="govuk-button--link" 
                         title="Edit details for {{ resPerson.responsibleGivenName }} {{ resPerson.responsibleSurname }}" 
                         formaction="resperson/edit" formmethod="get"
                         name="editResponsiblePerson" value="{{resPerson.responsiblePersonId}}">{{resPerson.responsibleSurname}}
@@ -64,7 +64,7 @@
                     <td class="govuk-table__cell">{{resPerson.responsibleEmail}}</td>
                     <td class="govuk-table__cell ">
                       <button id="delete_responsible_person_{{ loop.index }}" 
-                        class="govuk-link btn-link" name="deleteResponsiblePerson" 
+                        class="govuk-button--link" name="deleteResponsiblePerson" 
                         formaction="/resperson/delete" formmethod="get"
                         value="{{resPerson.responsiblePersonId}}">{{__('table_delete')}}
                       </button>
