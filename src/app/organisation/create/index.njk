@@ -29,11 +29,9 @@
     <p class="govuk-body-m">{{__('create_organisation_caption_2')}}</p>
 
     <form action="/organisation/create" autocomplete="off" class="form-group" method="post" role="form" >
-      <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text"><span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('create_organisation_warning')}}</strong>
-      </div>
-
+      {{ govukWarningText({
+        text: __('create_organisation_warning')
+      }) }}
       <p class="govuk-body-l">{{__('create_organisation_caption_3')}}</p>
       <div class="{{ m.form_group_class('orgName', errors) }}">
         <label class="govuk-label govuk-label--m" for="orgName">{{__('field_organisation_name')}}</label>

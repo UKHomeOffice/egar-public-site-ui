@@ -6,21 +6,27 @@
       Create Account
     </h1>
 
-   <dl class="app-check-your-answers app-check-your-answers--long">
-        <div class="app-check-your-answers__contents" style="width: 100%;">
-            <dt class="app-check-your-answers__question">Email</dt>
-            <dd class="app-check-your-answers__answer">{{ email | truncate(50) }}</dd>
-            <dd class="app-check-your-answers__change"></dd>
-        </div>
-
-        <div class="app-check-your-answers__contents">
-            <dt class="app-check-your-answers__question">Name</dt>
-            <dd class="app-check-your-answers__answer">{{ firstName }} {{ lastName }}</dd>
-            <dd class="app-check-your-answers__change">
-                <a class="govuk-link" href="/onelogin/register?action=change-name">Change<span class="govuk-visually-hidden"> your name</span></a>
-            </dd>
-        </div>
-    </dl>
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { text: "Email" },
+          value: { html: email | truncate(50) }
+        },
+        {
+          key: { text: "Name" },
+          value: { html: firstName ~ " " ~ lastName },
+          actions: {
+            items: [
+              {
+                href: "/onelogin/register?action=change-name",
+                text: "Change",
+                visuallyHiddenText: "your name"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
 
     <div style="margin-top: -20px;">
       <h2 class="govuk-heading-m">Declaration</h2>

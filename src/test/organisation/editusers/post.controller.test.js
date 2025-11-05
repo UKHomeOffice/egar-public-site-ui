@@ -85,6 +85,40 @@ describe('Organisation Edit Users Post Controller', () => {
             role: '',
 
           },
+          roles: roles,
+          errors: [
+            new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter given names'),
+            new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter a surname'),
+            new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Provide a user role'),
+          ],
+        });
+      });
+    });
+
+   it('logged in manager can only see nonAdmin roles and empty string errors', () => {
+      req.body.firstName = '';
+      req.body.lastName = '';
+      req.body.role = '';
+      cookie = new CookieModel(req);
+      cookie.setUserRole('Manager');
+
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      callController().then(() => {
+        expect(orgApiStub).to.not.have.been.called;
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editusers/index', {
+          cookie,
+          orgUser: {
+            userId: 'EDIT-BADDIE-1',
+            firstName: '',
+            lastName: '',
+            role: '',
+
+          },
           roles: nonAdminRoles,
           errors: [
             new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter given names'),
@@ -97,10 +131,11 @@ describe('Organisation Edit Users Post Controller', () => {
 
     it('should render messages when strings too long', () => {
       req.body.firstName = 'abcdefghijklmnopqrstuvwxyzabcdefghijk';
+      req.body.role = 'Admin';
       req.body.lastName = 'abcdefghijklmnopqrstuvwxyzabcdefghij';
       cookie = new CookieModel(req);
       cookie.setUserRole('Admin');
-      
+
       const callController = async () => {
         await controller(req, res);
       };
@@ -114,10 +149,10 @@ describe('Organisation Edit Users Post Controller', () => {
           orgUser: {
             firstName: 'abcdefghijklmnopqrstuvwxyzabcdefghijk',
             lastName: 'abcdefghijklmnopqrstuvwxyzabcdefghij',
-            role: 'Individual',
+            role: 'Admin',
             userId: 'EDIT-BADDIE-1',
           },
-          roles: nonAdminRoles,
+          roles: roles,
           errors: [
             new ValidationRule(validator.isValidStringLength, 'firstName', 'abcdefghijklmnopqrstuvwxyzabcdefghijk', 'Given names must be 35 characters or less'),
             new ValidationRule(validator.isValidStringLength, 'lastName', 'abcdefghijklmnopqrstuvwxyzabcdefghij', 'Surname must be 35 characters or less'),

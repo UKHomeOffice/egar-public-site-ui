@@ -1,0 +1,10 @@
+{{ sectionHeading('aircraft', 'heading_aircraft_details', '/garfile/craft', showChangeLinks, __) }}
+
+{{ govukSummaryList({
+  rows: [
+    { key: { html: __('field_aircraft_registration') }, value: { html: garfile.registration or '' } },
+    { key: { html: __('field_aircraft_type') }, value: { html: garfile.craftType or '' } },
+    { key: { html: __('field_aircraft_base') }, value: { html: garfile.craftBase or '' } }
+  ]
+}) }}
+

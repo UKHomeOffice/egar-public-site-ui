@@ -30,8 +30,8 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
 module.exports = (req, res) => {
     const cookie = new CookieModel(req);
     logger.debug('In garfile/print manifest get controller');
-    
-  
+
+
     const context = { cookie };
 
     let { garId } = req.body;
@@ -40,7 +40,7 @@ module.exports = (req, res) => {
     }
     cookie.setGarId(garId);
     const garPeople = garApi.getPeople(garId);
-    const garDetails = garApi.get(garId);
+    const garDetails = garApi.get(garId, true);
     const garDocs = garApi.getSupportingDocs(garId);
 
     let renderContext = {
@@ -51,7 +51,7 @@ module.exports = (req, res) => {
       garsupportingdocs: {},
     };
 
-  
+
 
   Promise.all([garDetails, garPeople, garDocs])
     .then((responseValues) => {

@@ -310,13 +310,9 @@
                     <h2 class="govuk-error-message govuk-!-font-size-36">
                       Warning
                     </h2>
-                    <div class="govuk-warning-text">
-                      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                      <strong class="govuk-warning-text__text">
-                        <span class="govuk-visually-hidden">Warning</span>
-                        Are you sure you want to to delete these people?
-                      </strong>
-                    </div>
+                    {{ govukWarningText({
+                      text: "Are you sure you want to delete these people?"
+                    }) }}
                     <ul id="peopleToDeleteList" class="govuk-list govuk-list--bullet"></ul>
                     <form method="dialog">
                       <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">

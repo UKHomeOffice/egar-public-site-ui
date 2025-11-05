@@ -1,0 +1,25 @@
+{{ sectionHeading('customs','heading_customs', '/garfile/customs', showChangeLinks, __) }}
+
+{% set customsRows = [
+  { key: { html: __('field_intention_review') }, value: { html: garfile.intentionValue or '' } }
+] %}
+
+{% if garfile.intentionValue == 'Yes' %}
+  {% set _ = customsRows.push({ key: { html: __('field_prohibited_goods_review') }, value: { html: garfile.prohibitedGoods or '' } }) %}
+
+  {% if garfile.prohibitedGoods == 'Yes' %}
+    {% set _ = customsRows.push({ key: { html: __('field_goods_declaration_review') }, value: { html: garfile.goodsDeclaration | truncate(50) | default('') } }) %}
+  {% endif %}
+
+  {% set _ = customsRows.push({ key: { html: __('field_baggage_review') }, value: { html: garfile.baggage or '' } }) %}
+  {% if garfile.baggage == 'Yes' %}
+    {% set _ = customsRows.push({ key: { html: __('field_baggage_declaration_review') }, value: { html: garfile.baggageDeclaration | truncate(50) | default('') } }) %}
+  {% endif %}
+
+  {% set _ = customsRows.push({ key: { html: __('field_continental_shelf_review') }, value: { html: garfile.continentalShelf or '' } }) %}
+  {% if garfile.continentalShelf == 'Yes' %}
+    {% set _ = customsRows.push({ key: { html: __('field_continental_shelf_declaration_review') }, value: { html: garfile.continentalShelfDeclaration | truncate(50) | default('') } }) %}
+  {% endif %}
+{% endif %}
+
+{{ govukSummaryList({ rows: customsRows }) }}

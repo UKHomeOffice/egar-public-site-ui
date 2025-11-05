@@ -32,12 +32,9 @@
         <div class="govuk-form-group {{ m.form_group_class('supportingdocuments', errors) }}"></div>
           <p class="govuk-body-l">{{__('supporting_documents_caption')}}</p>
 
-          <div class="govuk-warning-text">
-            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-            <strong class="govuk-warning-text__text">
-              <span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('supporting_documents_warning')}}
-            </strong>
-          </div>
+          {{ govukWarningText({
+            text: __('supporting_documents_warning')
+          }) }}
 
           <p>
             <ul class="govuk-list govuk-list--bullet">

@@ -5,54 +5,54 @@ GAR | Help
 {% endblock %}
 
 {% block head %}
-  {% include "head.njk" %}
+{% include "head.njk" %}
 {% endblock %}
 
 {% block header %}
-  {% if isLoggedIn %}
-    {% include "header-user.njk" %}
-  {% else %}
-    {% include "header-pre-user.njk" %}
-  {% endif %}
+{% if isLoggedIn %}
+  {% include "header-user.njk" %}
+{% else %}
+  {% include "header-pre-user.njk" %}
+{% endif %}
 {% endblock %}
 
 {% block beforeContent %}
-  {% include "phase.njk" %}
+{% include "phase.njk" %}
 {% endblock %}
 
 {% macro pilotsOperatorsAgentsGuidance() %}
-  {% if isLoggedIn %}
-    If the individual has no exemption or proof of physical or digital permission, pilots, operators and agents may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub {{ CARRIER_SUPPORT_HUB_UK_NUMBER }} or {{ CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER }} from outside the UK.
-  {% else %}
-    If the individual has no exemption or proof of physical or digital permission, pilots, operators and agents may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub number, which will be available on this help page when you log in.
-  {% endif %}
+{% if isLoggedIn %}
+  If the individual has no exemption or proof of physical or digital permission, pilots, operators and agents may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub {{ CARRIER_SUPPORT_HUB_UK_NUMBER }} or {{ CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER }} from outside the UK.
+{% else %}
+  If the individual has no exemption or proof of physical or digital permission, pilots, operators and agents may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub number, which will be available on this help page when you log in.
+{% endif %}
 {% endmacro %}
 
 {% macro noExemptionOrProof() %}
-  {% if isLoggedIn %}
-    If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub {{ CARRIER_SUPPORT_HUB_UK_NUMBER }} or {{ CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER }} from outside the UK.
-  {% else %}
-    If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub, which will be available on this help page when you log in.
-  {% endif %}
+{% if isLoggedIn %}
+  If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub {{ CARRIER_SUPPORT_HUB_UK_NUMBER }} or {{ CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER }} from outside the UK.
+{% else %}
+  If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub, which will be available on this help page when you log in.
+{% endif %}
 {% endmacro %}
 
 
 {% macro nonTechincalUPTQueries() %}
-  {% if isLoggedIn %}
-    For non-technical UPT related queries, please contact the UK Border Force Carrier Support Hub on {{ CARRIER_SUPPORT_HUB_UK_NUMBER }} or {{ CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER }} from outside the UK.
-  {% else %}
-    For non-technical UPT related queries, please log into sGAR to get contact details.
-  {% endif %}
+{% if isLoggedIn %}
+  For non-technical UPT related queries, please contact the UK Border Force Carrier Support Hub on {{ CARRIER_SUPPORT_HUB_UK_NUMBER }} or {{ CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER }} from outside the UK.
+{% else %}
+  For non-technical UPT related queries, please log into sGAR to get contact details.
+{% endif %}
 {% endmacro %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">Help &amp; Guidance</h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Help &amp; Guidance</h1>
 
-      <p class="govuk-body-m">
-        You are required to complete a GAR prior to your departure. Please follow this link for more
-        <a href="{{__('gar_form_link')}}">information</a>.
+    <p class="govuk-body-m">
+      You are required to complete a GAR prior to your departure. Please follow this link for more
+      <a class="govuk-link" href="{{__('gar_form_link')}}">information</a>.
       </p>
       <h2 class="govuk-heading-m">Passenger Support</h2>
 
@@ -69,8 +69,8 @@ GAR | Help
             <li>The individual is the rightful holder of the passport or travel document.</li>
           </ul>
           <p class="govuk-body-m">
-            For more information on checking passports and travel documents, follow this link 
-              <a href="{{__('upt_guidance_link')}}">Guidance on examining identity documents (publishing.service.gov.uk)</a>.
+            For more information on checking passports and travel documents, follow this link
+              <a class="govuk-link" href="{{__('upt_guidance_link')}}">Guidance on examining identity documents (publishing.service.gov.uk)</a>.
           </p>
         </div>
       </details>
@@ -86,7 +86,7 @@ GAR | Help
             Pilots, operators, and agents bringing passengers to the UK are expected to make sure that visa nationals have a valid immigration permission or exemption.
           </p>
           <p>
-            If you receive a <b>VALID PERMISSION TO TRAVEL</b> response, this is confirmation that the individual has a valid immigration permission 
+            If you receive a <b>VALID PERMISSION TO TRAVEL</b> response, this is confirmation that the individual has a valid immigration permission
             and no other immigration checks are required.
           </p>
           <p>
@@ -98,8 +98,8 @@ GAR | Help
           <ul class="govuk-list govuk-list--bullet">
             <li>Checking for a valid physical immigration document (such as a visa vignette or stamp etc.) </li>
             Or
-            <li>By using a sharecode which the individual can request from their UKVI account. Follow this link to access the service 
-              <a href = 'https://www.gov.uk/check-immigration-status'>https://www.gov.uk/check-immigration-status</a>
+            <li>By using a sharecode which the individual can request from their UKVI account. Follow this link to access the service
+              <a class="govuk-link" href = 'https://www.gov.uk/check-immigration-status'>https://www.gov.uk/check-immigration-status</a>
               </li>
               <li>
                 {{ pilotsOperatorsAgentsGuidance() }}
@@ -107,8 +107,8 @@ GAR | Help
           </ul>
           <p>
             Follow this link for more information on checking immigration documents
-            <a href="https://www.gov.uk/government/publications/document-checks-and-charges-for-carriers" target="_blank">
-            Document checks and charges for carriers (opens in new tab on GOV.UK)</a>. 
+            <a class="govuk-link" href="https://www.gov.uk/government/publications/document-checks-and-charges-for-carriers" target="_blank">
+            Document checks and charges for carriers (opens in new tab on GOV.UK)</a>.
             </p>
       </div>
       </details>
@@ -119,9 +119,9 @@ GAR | Help
         </summary>
         <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
           <p>
-            The submission of advance passenger information (API) enables the operation of the UK’s Authority to Carry Scheme 2023. 
-            This Scheme is a border security measure intended to prevent the travel of certain individuals where it is in the public interest. Follow this link for more information 
-            <a href = "https://www.gov.uk/government/publications/authority-to-carry-scheme-2023">
+            The submission of advance passenger information (API) enables the operation of the UK’s Authority to Carry Scheme 2023.
+            This Scheme is a border security measure intended to prevent the travel of certain individuals where it is in the public interest. Follow this link for more information
+            <a class="govuk-link" href = "https://www.gov.uk/government/publications/authority-to-carry-scheme-2023">
             Authority to Carry Scheme 2023 - GOV.UK (www.gov.uk)
             </a>
             </p>
@@ -134,9 +134,9 @@ GAR | Help
         <div class="govuk-details__text" id="details-content-response-messages" aria-hidden="true">
 
           <p class="govuk-body-m">
-          UPT Response Messages have now been introduced to sGAR. These messages will confirm whether an individual has a valid permission to travel or 
-          if a manual check for a physical immigration or exemption document, or an online check using the sharecode function on an individual’s 
-          UKVI account is required. Every time you submit data for an individual via sGAR we will return a response. 
+          UPT Response Messages have now been introduced to sGAR. These messages will confirm whether an individual has a valid permission to travel or
+          if a manual check for a physical immigration or exemption document, or an online check using the sharecode function on an individual’s
+          UKVI account is required. Every time you submit data for an individual via sGAR we will return a response.
           The response will be displayed on the sGAR service. You will see one of the following responses for each passenger.
           </p>
           <table class="govuk-table">
@@ -153,11 +153,11 @@ GAR | Help
                 This is confirmation that the individual has a valid immigration permission and no other immigration checks are required.
                 </p>
                 <p class="govuk-body-m">
-                You must still check if this individual has a valid passport or travel document and that the passport or travel document presented is genuine and valid, 
+                You must still check if this individual has a valid passport or travel document and that the passport or travel document presented is genuine and valid,
                 and that the person is the rightful holder.
                 </p>
-                For more information on checking passports and travel documents, follow this link 
-                <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">
+                For more information on checking passports and travel documents, follow this link
+                <a class="govuk-link" href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf">
                 Guidance on examining identity documents (publishing.service.gov.uk)
                 </a>
               </td>
@@ -170,7 +170,7 @@ GAR | Help
                 </p>
                 <p class="govuk-body-m">
                 For visa nationals you must also check for a valid immigration or exemption document. Follow this link to check
-                <a href = "https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers">
+                <a class="govuk-link" href = "https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers">
                 UK visa requirements (accessible version) - GOV.UK (www.gov.uk)
                 </a>
                 You should conduct a manual check for an immigration permission by:
@@ -178,7 +178,7 @@ GAR | Help
                 Checking for a valid physical immigration document (such as a visa vignette or stamp etc.)<br/>
                 Or<br/>
                 By using a sharecode which the individual can request from their UKVI account. Follow this link to access the service
-                <a href="https://www.gov.uk/check-immigration-status">
+                <a class="govuk-link" href="https://www.gov.uk/check-immigration-status">
                 https://www.gov.uk/check-immigration-status
                 </a><br/><br/>
                 {{ noExemptionOrProof() }}
@@ -186,7 +186,7 @@ GAR | Help
             </tr>
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">AUTHORITY TO CARRY REFUSED. DO NOT BOARD.</td>
-              <td class="govuk-table__cell">This response message will not be displayed on the screen. Pilots, 
+              <td class="govuk-table__cell">This response message will not be displayed on the screen. Pilots,
                 operators and agents will be instructed not to board an individual (NO BOARD) via a call and email when Authority to Carry (ATC) has been refused.</td>
             </tr>
           </table>
@@ -204,7 +204,7 @@ GAR | Help
           </p>
           <p class="govuk-body-m">
             For technical queries relating to the sGAR web service, please contact the sGAR support team by emailing us at:
-            <a href="mailto:{{__('support_email')}}">{{__('support_email')}}</a>
+            <a class="govuk-link" href="mailto:{{__('support_email')}}">{{__('support_email')}}</a>
           </p>
         </div>
       </details>
@@ -223,14 +223,14 @@ GAR | Help
             If this is not possible, the pilot must divert to the alternative customs and excise designated aerodrome specified on the flight plan.
           </p>
           <p class="govuk-body-m">
-            Flights which the pilot is required to notify in accordance with the Terrorism Act 2000 must use the alternative police designated aerodrome 
-            specified on the flight plan. If circumstances mean the pilot is unable to divert to the alternative customs or police designated aerodrome 
+            Flights which the pilot is required to notify in accordance with the Terrorism Act 2000 must use the alternative police designated aerodrome
+            specified on the flight plan. If circumstances mean the pilot is unable to divert to the alternative customs or police designated aerodrome
             specified on the flight plan, the pilot must redirect to the nearest available airfield, submit a new report and contact local Border Force on arrival.
           </p>
           <p class="govuk-body-m">
-            Further information about reporting in exceptional circumstances in respect of delayed flights can be found in the General Aviation Guidance 
-            by following this link 
-            <a href = "https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights">
+            Further information about reporting in exceptional circumstances in respect of delayed flights can be found in the General Aviation Guidance
+            by following this link
+            <a class="govuk-link" href = "https://www.gov.uk/government/publications/general-aviation-operators-and-pilots-notification-of-flights">
             Providing information about international general aviation flights - GOV.UK (www.gov.uk)
             </a>.
           </p>

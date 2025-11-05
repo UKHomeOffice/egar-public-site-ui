@@ -1,0 +1,28 @@
+{% set radioItems = [] %}
+{% for choice in reasonForVisitOptions %}
+  {% set radioItems = radioItems.concat([{
+  value: choice.value | string,
+  text: choice.option,
+  id: choice.option,
+  checked: (gar.visitReason | default('') == choice.value)
+  }]) %}
+{% endfor %}
+
+{{ govukRadios({
+  name: "visitReason",
+  idPrefix: "visitReason",
+  fieldset: {
+    legend: {
+      text: __('field_visit_reason_question'),
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
+    }
+  },
+  hint: {
+    text: __('field_visit_reason_hint')
+  },
+  errorMessage: errors | filterArray('identifier', 'visitReason') | first | transform({'message': 'text'}),
+  items: radioItems
+}) }}
+
+
