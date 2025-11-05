@@ -18,7 +18,7 @@
 }
 
 
-.table-clickable tbody tr td button.btn-link {
+.table-clickable tbody tr td {
     cursor: pointer;
 }
 
