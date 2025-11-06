@@ -15,23 +15,7 @@ Manage account | Submit a General Aviation Report (GAR)
 <div class="govuk-grid-row padding-bottom-60">
   <div class="govuk-grid-column-two-thirds margin-left-50 margin-top-30">
     {% if successMsg %}
-    <div class="govuk-grid-row">
-      <div class="govuk-column-full">
-        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert"
-          aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" tabindex="-1">
-          <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-              {{successHeader}}
-            </h2>
-          </div>
-          <div class="govuk-notification-banner__content">
-            <h3 class="govuk-notification-banner__heading">
-              {{successMsg}}
-            </h3>
-          </div>
-        </div>
-      </div>
-    </div>
+        {% include "common/templates/includes/success-action.njk" %}
     {% endif %}
     <div class="govuk-grid-row">
       <h1 class="govuk-heading-l">Your account</h1>
