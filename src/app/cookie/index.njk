@@ -12,11 +12,6 @@
   {% include "header-pre-user.njk" %}
 {% endblock %}
 
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
@@ -33,7 +28,6 @@
     </p>
   </div>
   </div>
-
 
 		<h1 class="govuk-heading-xl">{{__('title_cookies')}}</h1>
 
@@ -178,5 +172,4 @@
 
 <script src="/javascripts/cookie-banner.js"></script>
 {% endblock %}
-
 

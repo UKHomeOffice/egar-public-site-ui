@@ -12,10 +12,6 @@
   {% include "header-user.njk" %}
 {% endblock %}
 
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
   {% if errors %}
     {% include "common/templates/includes/errors.njk" %}

@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {% include "phase.njk" %}
+  
   <a href="/garfile/departure" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
@@ -121,7 +121,6 @@
           </fieldset>
         </div>
         {# End arrival time #}
-
 
         {% set legendLabel = ['<h2 class="govuk-fieldset__heading">', __('field_port_choice_arrival'), '</h2>'] | join %}
         {% set warningMessage = b.coa_designation_regulation_change(false)%}

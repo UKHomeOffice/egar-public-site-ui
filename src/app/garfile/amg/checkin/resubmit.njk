@@ -12,10 +12,6 @@
   {% include "header-user.njk" %}
 {% endblock %}
 
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
   <div id="checkin-loading-screen">
     {{ m.loadingScreen("Resubmitting checks for passengers with 'System time out' status", "This may take up to 5 minutes to complete.") }}
