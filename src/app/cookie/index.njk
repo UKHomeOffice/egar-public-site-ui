@@ -12,11 +12,6 @@
   {% include "header-pre-user.njk" %}
 {% endblock %}
 
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
     {{ govukNotificationBanner({
       type: "success",
@@ -172,5 +167,4 @@
 
 <script src="/javascripts/cookie-banner.js"></script>
 {% endblock %}
-
 

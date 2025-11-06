@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {% include "phase.njk" %}
+  
   <a href="/garfile/home" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
@@ -126,11 +126,9 @@
           </fieldset>
         </div>
 
-
         
         
         {{ m.departure_warning_message(__)}}
-
 
         {% set legendLabel = ['<h2 class="govuk-fieldset__heading">', __('field_port_choice_departure'), '</h2>'] | join %}
         {% set warningMessage = b.coa_designation_regulation_change(true)%}
