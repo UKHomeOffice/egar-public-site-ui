@@ -9,7 +9,7 @@
     classes: "govuk-label--m"
   },
   hint: {
-    text: __("field_given_name_hint")
+    html: __("field_given_name_hint") ~ m.character_count_hint('firstName', MAX_STRING_LENGTH)
   },
   value: person.firstName or req.body.firstName,
   attributes: {
