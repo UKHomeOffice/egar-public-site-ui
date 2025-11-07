@@ -1,32 +1,24 @@
 {% macro coa_designation_regulation_change(isDeparture) %}
-
     {% set journeyStage = "departure" if isDeparture else "arrival" %}
     <span class="govuk-body-m" style="background:#00FFFF;">
-        The GB {{ journeyStage }} port must be officially designated to handle this flight, if you are unsure whether your intended port of departure is officially approved please visit 
-        <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1151707/GOV.UK_GAR-Instructions-April_2023_V1.0_SDS.pdf">General Aviation Report (GAR) Guidance – April 2023 (publishing.service.gov.uk)</a> or confirm with the aerodrome authority directly. 
+        The GB {{ journeyStage }} port must be officially designated to handle this flight, if you are unsure whether your intended port of departure is officially approved please visit
+        <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1151707/GOV.UK_GAR-Instructions-April_2023_V1.0_SDS.pdf">General Aviation Report (GAR) Guidance – April 2023 (publishing.service.gov.uk)</a> or confirm with the aerodrome authority directly.
         Only officially designated GB aerodromes are able to handle international or CTA {{ journeyStage }}s from 01/01/24.
     </span>
 {% endmacro %}
 
 {% macro notificationBannerFor0T(numberOf0TResponseCodes, showImportantBanner) %}
- {% if showImportantBanner %}
- <div class="custom-govuk-notification-banner" role="region"
-        aria-labelledby="govuk-notification-banner-title"
-        data-module="custom-govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            Important
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <p class="govuk-body">
-             <strong>{{numberOf0TResponseCodes}} {% if numberOf0TResonseCodes == 1 %} passenger {% else %} passengers {% endif %} have a 'system time out' status.</strong>
-             This means we were unable to check their permission to travel status.
-            </p>
-            <p class="govuk-body">
-              You should <a href="#" id="resubmit0T" class="govuk-link resubmit0T">resubmit permission to travel checks</a> for them if your expected time of departure is more than 2 hours 5 minutes in the future, otherwise you can continue to board the passenger.
-            </p>
-        </div>
-  </div> 
- {% endif %}
+  {% if showImportantBanner %}
+    {{ govukNotificationBanner({
+      classes: "govuk-notification-banner--important",
+      titleText: "Important",
+      html: '<p class="govuk-body">' +
+        '<strong>' + numberOf0TResponseCodes + ' {% if numberOf0TResponseCodes == 1 %}passenger{% else %}passengers{% endif %} have a \'system time out\' status.</strong>' +
+        ' This means we were unable to check their permission to travel status.' +
+        '</p>' +
+        '<p class="govuk-body">' +
+        'You should <a href="#" id="resubmit0T" class="govuk-link resubmit0T">resubmit permission to travel checks</a> for them if your expected time of departure is more than 2 hours 5 minutes in the future, otherwise you can continue to board the passenger.' +
+        '</p>'
+    }) }}
+  {% endif %}
 {% endmacro %}

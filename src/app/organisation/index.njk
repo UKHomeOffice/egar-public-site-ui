@@ -13,10 +13,6 @@
 
 {% set active = '/organisation' %}
 
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
   <script type="text/javascript" src="/javascripts/organisation.js"></script>
   <div class="govuk-grid-row">
@@ -98,7 +94,7 @@
                   <tr class="govuk-table__row">
                     {% if user.isEditable %}
                       <td class="govuk-table__cell">
-                        <button id="edit_user_{{ loop.index }}" class="govuk-link btn-link" name="editOrgUser" value="{{ user.userId }}" type="submit">
+                        <button id="edit_user_{{ loop.index }}" class="govuk-button--link" name="editOrgUser" value="{{ user.userId }}" type="submit">
                           {{ user.lastName }}
                         </button>
                       </td>
@@ -111,7 +107,7 @@
                     <td class="govuk-table__cell">
                       {% if user.isEditable %}
 
-                        <button id="delete_user_{{ loop.index }}" class="govuk-link btn-link" name="deleteUser" value="{{user.email}}" type="submit">
+                        <button id="delete_user_{{ loop.index }}" class="govuk-button--link" name="deleteUser" value="{{user.email}}" type="submit">
                           {{ __('table_delete') }}
                         </button>
                       {% endif %}

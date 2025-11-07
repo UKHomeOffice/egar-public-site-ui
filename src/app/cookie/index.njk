@@ -12,28 +12,17 @@
   {% include "header-pre-user.njk" %}
 {% endblock %}
 
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-
-  <div class="govuk-notification-banner govuk-notification-banner--success" id="preference_changed" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" tabindex="-1" hidden>
-  <div class="govuk-notification-banner__header">
-    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-      Success
-    </h2>
-  </div>
-  <div class="govuk-notification-banner__content">
-    <p class="govuk-notification-banner__heading">
-      You’ve set your cookie preferences. <a class="govuk-notification-banner__link" href="javascript:history.back()">Go back to the page you were looking at</a>.
-    </p>
-  </div>
-  </div>
-
+    {{ govukNotificationBanner({
+      type: "success",
+      titleText: "Success",
+      html: 'You’ve set your cookie preferences. <a class="govuk-notification-banner__link" href="javascript:history.back()">Go back to the page you were looking at</a>.',
+      attributes: {
+        id: "preference_changed",
+        tabindex: "-1",
+        hidden: true
+      }
+    }) }}
 
 		<h1 class="govuk-heading-xl">{{__('title_cookies')}}</h1>
 
@@ -178,5 +167,4 @@
 
 <script src="/javascripts/cookie-banner.js"></script>
 {% endblock %}
-
 
