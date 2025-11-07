@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	{{ __('error_prefix') if errors }} GAR | Invite User
+  {{ __('error_prefix') if errors }} GAR | Invite User
 {% endblock %}
 
 {% set active = '/organisation' %}
@@ -19,66 +19,75 @@
 
 {% block content %}
   {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
+{% endif %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <form action="/organisation/inviteusers" autocomplete="off" class="form-group"
-      method="post" role="form">
-
+    <form action="/organisation/inviteusers" autocomplete="off" class="form-group" method="post" role="form">
       <h1 class="govuk-heading-xl">{{__('title_invite_user')}}</h1>
       <p class="govuk-body-l">{{__('invite_user_caption')}}</p>
 
-      <div class="govuk-form-group {{ m.form_group_class('invite', errors) }}">
+      {{ govukInput({
+      id: "fname",
+      name: "fname",
+      label: { text: __("field_given_name"), classes: "govuk-label--m" },
+      hint: { text: __("invite_user_given_name_hint") },
+      value: fname,
+      errorMessage: errors | filterArray('identifier', 'fname') | first | transform({'message': 'text'})
+      }) }}
 
-        <div class="govuk-form-group {{ m.form_group_class('fname', errors) }}">
-          <label class="govuk-label govuk-label--m" for="fname">{{__('field_given_name')}}</label>
-          {{ m.hint('fname', __('invite_user_given_name_hint')) }}
-          {{ m.error_message('fname', errors, __) }}
-          <input id="fname" name="fname" class="govuk-input" type="text" 
-            value="{{ fname }}" aria-describedby="fname-hint{{ ' fname-error' if errors | containsError('fname') }}">
-        </div>
+      {{ govukInput({
+      id: "lname",
+      name: "lname",
+      label: { text: __("field_surname"), classes: "govuk-label--m" },
+      hint: { text: __("invite_user_surname_hint") },
+      value: lname,
+      attributes: { maxlength: MAX_STRING_LENGTH },
+      errorMessage: errors | filterArray('identifier', 'lname') | first | transform({'message': 'text'})
+      }) }}
 
-        <div class="govuk-form-group {{ m.form_group_class('lname', errors) }}">
-          <label class="govuk-label govuk-label--m" for="lname">{{__('field_surname')}}</label>
-          {{ m.hint('lname', __('invite_user_surname_hint')) }}
-          {{ m.error_message('lname', errors, __) }}
-          <input id="lname" name="lname" class="govuk-input" type="text"
-            maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lname }}" aria-describedby="lname-hint{{ ' lname-error' if errors | containsError('lname') }}">
-        </div>
+      {{ govukInput({
+      id: "email",
+      name: "email",
+      label: { text: __("field_email"), classes: "govuk-label--m" },
+      hint: { text: __("invite_user_email_hint") },
+      value: email,
+      errorMessage: errors | filterArray('identifier', 'email') | first | transform({'message': 'text'})
+      }) }}
 
-        <div class="govuk-form-group {{ m.form_group_class('email', errors) }}">
-          <label class="govuk-label govuk-label--m" for="email">{{__('field_email')}}</label>
-          {{ m.hint('email', __('invite_user_email_hint')) }}
-          {{ m.error_message('email', errors, __) }}
-          <input id="email" name="email" class="govuk-input" type="text"
-            value="{{ email }}" aria-describedby="email-hint{{ ' email-error' if errors | containsError('email') }}">
-        </div>
-
-        <div class="govuk-form-group {{ m.form_group_class('cemail', errors) }}">
-          <label class="govuk-label govuk-label--m" for="cemail">{{__('field_confirm_email')}}</label>
-          {{ m.hint('cemail', __('invite_user_cemail_hint')) }}
-          {{ m.error_message('cemail', errors, __) }}
-          <input id="cemail" name="cemail" class="govuk-input" type="text"
-            value="" aria-describedby="cemail-hint{{ ' cemail-error' if errors | containsError('cemail') }}">
-        </div>
-      </div>
+      {{ govukInput({
+      id: "cemail",
+      name: "cemail",
+      label: { text: __("field_confirm_email"), classes: "govuk-label--m" },
+      hint: { text: __("invite_user_cemail_hint") },
+      value: "",
+      errorMessage: errors | filterArray('identifier', 'cemail') | first | transform({'message': 'text'})
+      }) }}
 
       <div class="govuk-form-group">
-        <button id="continue" class="govuk-button" type="submit"
-          onclick="sendAnalytics(event, 'Invite User - Continue', 'click')">
-          {{__('button_continue')}}
-        </button>
+        {{ govukButton({
+        id: "continue",
+        text: __("button_continue"),
+        type: "submit",
+        attributes: {
+        onclick: "sendAnalytics(event, 'Invite User - Continue', 'click')"
+        }
+        }) }}
+
         <p class="govuk-body-m">
-          <a id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
-            href="/organisation#"
-            onclick="sendAnalytics(event, 'Invite User - Exit', 'click')">
-            {{__('form_exit')}}
-          </a>
+          {{ govukButton({
+          id: "exit",
+          text: __("form_exit"),
+          href: "/organisation#",
+          classes: "govuk-button--secondary",
+          attributes: {
+          "data-module": "govuk-button",
+          onclick: "sendAnalytics(event, 'Invite User - Exit', 'click')"
+          }
+          }) }}
         </p>
       </div>
-      
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
   </div>
