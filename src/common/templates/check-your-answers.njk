@@ -1,7 +1,7 @@
 {% import "common/templates/check_your_answers/macros.njk" as cya %}
 
-{{ cya.transitionDetails('departure', garfile, departureCoords, showChangeLinks, __) }}
-{{ cya.transitionDetails('arrival', garfile, arrivalCoords, showChangeLinks, __) }}
+{{ cya.transitionDetails('departure', garfile, showChangeLinks, __) }}
+{{ cya.transitionDetails('arrival', garfile, showChangeLinks, __) }}
 {{ m.departure_warning_message(__) }}
 
 {% include "check_your_answers/aircraft.njk" %}
