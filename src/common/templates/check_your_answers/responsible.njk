@@ -1,31 +1,44 @@
-{{ sectionHeading('responsiblePerson','heading_responsible_person_details', '/garfile/resperson', showChangeLinks, __) }}
-
 {% set responsibleAddress =
       (garfile.responsibleAddressLine1 or '') ~ '<br>' ~
       (garfile.responsibleAddressLine2 or '') ~ '<br>' ~
       (garfile.responsibleTown or '') ~ '<br>' ~
       (garfile.responsibleCountryLabel or '') ~ '<br>' ~
       (garfile.responsiblePostcode or '') %}
-{{ govukSummaryList({
-  rows: [
-    { key: { html: __('field_given_name') }, value: { html: garfile.responsibleGivenName or '' } },
-    { key: { html: __('field_surname') }, value: { html: garfile.responsibleSurname or '' } },
-    { key: { html: __('field_address') }, value: { html: responsibleAddress } },
-    { key: { html: __('field_contact_details') }, value: { html: garfile.responsibleContactNo or '' } },
-    { key: { html: __('field_email') }, value: { html: garfile.responsibleEmail or '' } }
-  ]
-}) }}
+
+{% set rows = [
+  { key: { html: __('field_given_name') }, value: { html: garfile.responsibleGivenName or '' } },
+  { key: { html: __('field_surname') }, value: { html: garfile.responsibleSurname or '' } },
+  { key: { html: __('field_address') }, value: { html: responsibleAddress } },
+  { key: { html: __('field_contact_details') }, value: { html: garfile.responsibleContactNo or '' } },
+  { key: { html: __('field_email') }, value: { html: garfile.responsibleEmail or '' } }
+] %}
 
 {% if garfile.fixedBasedOperator != 'Other' %}
-  {{ govukSummaryList({
-      rows: [
-        { key: { html: __('field_fbo_question') }, value: { html: garfile.fixedBasedOperator or '' } }
-      ]
-  }) }}
+  {% set _ = rows.push({
+    key: { html: __('field_fbo_question') },
+    value: { html: garfile.fixedBasedOperator or '' }
+  }) %}
 {% else %}
-  {{ govukSummaryList({
-      rows: [
-        { key: { html: __('field_fbo_question_review') }, value: { html: garfile.fixedBasedOperatorAnswer | truncate(50) | default('') } }
-      ]
-  }) }}
+  {% set _ = rows.push({
+    key: { html: __('field_fbo_question_review') },
+    value: { html: garfile.fixedBasedOperatorAnswer | truncate(50) | default('') }
+  }) %}
 {% endif %}
+
+{{ govukSummaryList({
+  card: {
+      title: {
+        text: __('heading_responsible_person_details')
+      },
+      actions: showChangeLinks and {
+        items: [
+          {
+            href: "/garfile/resperson",
+            text: __('change_prefix'),
+            visuallyHiddenText: __('heading_responsible_person_details')
+          }
+        ]
+      }
+    },
+  rows: rows })
+}}

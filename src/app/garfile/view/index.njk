@@ -13,7 +13,6 @@
 {% endblock %}
 
 {% block beforeContent %}
-  
   <a href="/home" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
@@ -23,14 +22,15 @@
       <h1 class="govuk-heading-xl heading-text-spacing">{% if successHeader === 'GAR Amendment' %}Amend your GAR {% else %}  {{__('title_gar_summary')}} {% endif %}</h1>
       {% include "common/templates/includes/blue-banner.njk" %}
     </div>
+    {% if successMsg and successHeader !== 'GAR Amendment' %}
+      <div class="govuk-grid-column-full">
+          {% include "common/templates/includes/success-action.njk" %}
+      </div>
+    {% endif %}
     <div class="govuk-grid-column-full">
-      {% if successMsg and successHeader !== 'GAR Amendment' %}
-        {% include "common/templates/includes/success-action.njk" %}
-      {% endif %}
+      {% include "check-your-answers.njk" %}
     </div>
-    {% include "check-your-answers.njk" %}
     <div class="govuk-grid-column-two-thirds">
-
       {% if garfile.status.name === 'Draft' %}
         <a id="submit-gar" class="govuk-button margin-right-20" href="/garfile/review">{% if successHeader === 'GAR Amendment' %}Resubmit GAR {% else %} {{__('button_submit_this_gar')}} {% endif %}</a>
         <a id="display-manifest" class="govuk-button margin-right-20" href="/garfile/printmanifest">Print GAR</a>
