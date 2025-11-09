@@ -10,9 +10,7 @@
   {% endif %}
 {% endblock %}
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {% if pathName === '/verify/invite/onelogin' %}

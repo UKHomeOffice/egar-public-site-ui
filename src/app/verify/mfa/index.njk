@@ -17,16 +17,12 @@
 
 {% block content %}
 
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
 
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
 
-      {% if successMsg %}
-        {% include "common/templates/includes/success-action.njk" %}
-      {% endif %}
+   {% include "common/templates/includes/success-action.njk" %}
 
       <h1 class="govuk-heading-l">{{__('title_confirm_mfa_code')}}</h1>
 

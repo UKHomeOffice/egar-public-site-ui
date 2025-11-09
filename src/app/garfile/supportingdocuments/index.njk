@@ -16,9 +16,7 @@
 {% endblock %}
 
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
 
   <div class="govuk-grid-row">
     <form action="/upload?_csrf={{csrfToken}}" class="form-group" method="post" role="form" enctype="multipart/form-data">

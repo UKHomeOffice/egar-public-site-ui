@@ -11,9 +11,7 @@
 {% set active = '/home' %}
 {% block content %}
 
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
 
   {% if successMsg %}
     {% include "common/templates/includes/success-action.njk" %}
