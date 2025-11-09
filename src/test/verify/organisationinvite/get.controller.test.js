@@ -9,8 +9,6 @@ const tokenService = require('../../../common/services/create-token');
 
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const controller = require('../../../app/verify/organisationinvite/get.controller');
-const { cookie } = require('request');
-const { config } = require('winston');
 const settings = require('../../../common/config/index');
 const verifyUserService = require('../../../common/services/verificationApi');
 
