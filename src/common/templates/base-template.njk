@@ -143,7 +143,11 @@
 {% set themeColor = "blue" %}
 
     {% block header %}
-      {{ govukHeader({}) }}
+      {% if isLoggedIn %}
+        {% include "header-user.njk" %}
+      {% else %}
+        {% include "header-pre-user.njk" %}
+      {% endif %}
     {% endblock %}
 
     {% block main %}

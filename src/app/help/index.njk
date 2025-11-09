@@ -8,14 +8,6 @@ GAR | Help
 {% include "head.njk" %}
 {% endblock %}
 
-{% block header %}
-{% if isLoggedIn %}
-  {% include "header-user.njk" %}
-{% else %}
-  {% include "header-pre-user.njk" %}
-{% endif %}
-{% endblock %}
-
 {% macro pilotsOperatorsAgentsGuidance() %}
 {% if isLoggedIn %}
   If the individual has no exemption or proof of physical or digital permission, pilots, operators and agents may contact the Home Office for advice by calling the UK Border Force Carrier Support Hub {{ CARRIER_SUPPORT_HUB_UK_NUMBER }} or {{ CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER }} from outside the UK.

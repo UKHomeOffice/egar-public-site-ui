@@ -6,8 +6,5 @@ module.exports = (req, res) => {
 
   const cookie = new CookieModel(req);
 
-  res.render('app/help/index', { 
-    cookie, 
-    isLoggedIn: Boolean(cookie.getUserDbId()) 
-  });
+  res.render('app/help/index');
 };
