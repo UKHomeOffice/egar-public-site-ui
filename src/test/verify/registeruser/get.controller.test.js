@@ -51,7 +51,7 @@ describe('Verify Register User Get Controller', () => {
     const cookie = new CookieModel(req);
     try {
       await controller(req, res);
-    } catch (err) {
+    } catch {
       expect(tokenService.generateHash).to.have.been.called;
       expect(verifyUserService.verifyUser).to.have.been.calledWith('Token123');
       expect(res.render).to.have.been.calledWith('app/verify/registeruser/index', {
