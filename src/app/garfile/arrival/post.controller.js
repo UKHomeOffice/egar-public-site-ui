@@ -6,7 +6,8 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const airportValidation = require('../../../common/utils/airportValidation');
 
 const performAPICall = (cookie, buttonClicked, res) => {
-  garApi.patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
+  garApi
+    .patch(cookie.getGarId(), cookie.getGarStatus(), cookie.getGarArrivalVoyage())
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -31,13 +32,14 @@ const performAPICall = (cookie, buttonClicked, res) => {
       logger.error(err);
       res.render('app/garfile/arrival/index', {
         cookie,
-        errors: [{
-          message: 'Failed to add to GAR',
-        }],
+        errors: [
+          {
+            message: 'Failed to add to GAR',
+          },
+        ],
       });
     });
 };
-
 
 const buildValidations = (voyage) => {
   // Create validation input objs
@@ -53,30 +55,84 @@ const buildValidations = (voyage) => {
 
   // Define port validations
   const arrivalPortValidation = [
-    new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, __('field_arrival_port_code_validation')),
-    new ValidationRule(validator.isValidAirportCode, 'arrivalPort', voyage.arrivalPort, 'Arrival port should be an ICAO or IATA code')
+    new ValidationRule(
+      validator.notEmpty,
+      'arrivalPort',
+      voyage.arrivalPort,
+      __('field_arrival_port_code_validation')
+    ),
+    new ValidationRule(
+      validator.isValidAirportCode,
+      'arrivalPort',
+      voyage.arrivalPort,
+      'Arrival port should be an ICAO or IATA code'
+    ),
   ];
 
-  const arrivalLatValidation = [new ValidationRule(validator.latitude, 'arrivalLat', voyage.arrivalLat, __('field_latitude_validation'))];
-  const arrivalLongValidation = [new ValidationRule(validator.longitude, 'arrivalLong', voyage.arrivalLong, __('field_longitude_validation'))];
+  const arrivalLatValidation = [
+    new ValidationRule(
+      validator.latitude,
+      'arrivalLat',
+      voyage.arrivalLat,
+      __('field_latitude_validation')
+    ),
+  ];
+  const arrivalLongValidation = [
+    new ValidationRule(
+      validator.longitude,
+      'arrivalLong',
+      voyage.arrivalLong,
+      __('field_longitude_validation')
+    ),
+  ];
 
   const validations = [
-    [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, __('field_arrival_date_validation'))],
-    [new ValidationRule(validator.currentOrPastDate, 'arrivalDate', arriveDateObj, __('field_arrival_date_too_far_in_future'))],
-    [new ValidationRule(validator.dateNotMoreThanMonthInFuture, 'arrivalDate', arriveDateObj, __('field_arrival_date_too_far_in_future'))],
-    [new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, __('field_arrival_time_validation'))],
-    [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
+    [
+      new ValidationRule(
+        validator.realDate,
+        'arrivalDate',
+        arriveDateObj,
+        __('field_arrival_date_validation')
+      ),
+    ],
+    [
+      new ValidationRule(
+        validator.currentOrPastDate,
+        'arrivalDate',
+        arriveDateObj,
+        __('field_arrival_date_too_far_in_future')
+      ),
+    ],
+    [
+      new ValidationRule(
+        validator.dateNotMoreThanMonthInFuture,
+        'arrivalDate',
+        arriveDateObj,
+        __('field_arrival_date_too_far_in_future')
+      ),
+    ],
+    [
+      new ValidationRule(
+        validator.validTime,
+        'arrivalTime',
+        arrivalTimeObj,
+        __('field_arrival_time_validation')
+      ),
+    ],
+    [
+      new ValidationRule(
+        validator.notEmpty,
+        'portChoice',
+        voyage.portChoice,
+        __('field_port_choice_message')
+      ),
+    ],
   ];
 
   if (voyage.portChoice === 'Yes') {
-    validations.push(
-      arrivalPortValidation,
-    );
+    validations.push(arrivalPortValidation);
   } else {
-    validations.push(
-      arrivalLatValidation,
-      arrivalLongValidation,
-    );
+    validations.push(arrivalLatValidation, arrivalLongValidation);
   }
 
   return validations;
@@ -106,16 +162,27 @@ module.exports = async (req, res) => {
   const departurePort = JSON.parse(gar).departurePort;
 
   validations.push([
-    new ValidationRule(validator.notSameValues, 'arrivalPort', [voyage.arrivalPort, departurePort], __('field_arrival_port_different_departure')),
+    new ValidationRule(
+      validator.notSameValues,
+      'arrivalPort',
+      [voyage.arrivalPort, departurePort],
+      __('field_arrival_port_different_departure')
+    ),
   ]);
 
   if (voyage.portChoice === 'Yes') {
     validations.push([
-      new ValidationRule(airportValidation.includesOneBritishAirport, 'arrivalPort', [voyage.arrivalPort, departurePort], airportValidation.notBritishMsg),
+      new ValidationRule(
+        airportValidation.includesOneBritishAirport,
+        'arrivalPort',
+        [voyage.arrivalPort, departurePort],
+        airportValidation.notBritishMsg
+      ),
     ]);
   }
 
-  validator.validateChains(validations)
+  validator
+    .validateChains(validations)
     .then(() => {
       performAPICall(cookie, buttonClicked, res);
     })

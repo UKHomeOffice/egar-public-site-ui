@@ -1,4 +1,4 @@
-const { nanoid, getRolesForAssigning} = require('../../../common/utils/utils');
+const { nanoid, getRolesForAssigning } = require('../../../common/utils/utils');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -37,37 +37,50 @@ module.exports = (req, res) => {
   ];
 
   // Validate chains
-  validator.validateChains([roleChain])
+  validator
+    .validateChains([roleChain])
     .then(() => {
-      tokenApi.setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId, inviteeEmail)
+      tokenApi
+        .setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId, inviteeEmail)
         .then((apiResponse) => {
           const apiResponseObj = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(apiResponseObj, 'message')) {
             // API call unsuccessful
-            res.render('app/organisation/assignrole/index', { cookie, roles, errors: [apiResponseObj] });
+            res.render('app/organisation/assignrole/index', {
+              cookie,
+              roles,
+              errors: [apiResponseObj],
+            });
             return;
           }
           // API call successful
           let notifyTemplate = config.NOTIFY_INVITE_TEMPLATE_ID;
 
-          if(config.ONE_LOGIN_SHOW_ONE_LOGIN || config.ONE_LOGIN_POST_MIGRATION){
+          if (config.ONE_LOGIN_SHOW_ONE_LOGIN || config.ONE_LOGIN_POST_MIGRATION) {
             notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
           }
 
-          emailService.send(notifyTemplate, inviteeEmail, {
-            firstname: firstName,
-            lastname: lastName,
-            user: inviterName,
-            org_name: inviteOrgName,
-            base_url: parseUrlForNonProd(req, config.BASE_URL),
-            token,
-          }).then(() => {
-            res.redirect('/organisation/invite/success');
-          }).catch((err) => {
-            logger.error('Govnotify failed to send an email');
-            logger.error(err);
-            res.render('app/organisation/assignrole/index', { cookie, roles, errors: [{ message: 'Could not send an invitation email, try again later.' }] });
-          });
+          emailService
+            .send(notifyTemplate, inviteeEmail, {
+              firstname: firstName,
+              lastname: lastName,
+              user: inviterName,
+              org_name: inviteOrgName,
+              base_url: parseUrlForNonProd(req, config.BASE_URL),
+              token,
+            })
+            .then(() => {
+              res.redirect('/organisation/invite/success');
+            })
+            .catch((err) => {
+              logger.error('Govnotify failed to send an email');
+              logger.error(err);
+              res.render('app/organisation/assignrole/index', {
+                cookie,
+                roles,
+                errors: [{ message: 'Could not send an invitation email, try again later.' }],
+              });
+            });
         })
         .catch((err) => {
           logger.error('Error setting the invite token');

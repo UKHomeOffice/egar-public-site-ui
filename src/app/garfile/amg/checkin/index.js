@@ -1,4 +1,3 @@
-
 const nav = require('../../../../common/utils/nav');
 
 // Local dependencies

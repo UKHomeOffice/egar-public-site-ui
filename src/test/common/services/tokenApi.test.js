@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
 const chai = require('chai');
@@ -47,16 +46,15 @@ describe('UserSessions', () => {
 
   before(() => {
     chai.use(sinonChai);
-    this.clock = date => sinon.useFakeTimers(new Date(date));
+    this.clock = (date) => sinon.useFakeTimers(new Date(date));
     this.clock('2019-04-01');
   });
 
   it('Should create a usersession entry', (done) => {
-    tokenApiProxy.setMfaToken('myemail@email.com', 87654321, true)
-      .then(() => {
-        sinon.assert.calledOnce(createStub);
-        done();
-      });
+    tokenApiProxy.setMfaToken('myemail@email.com', 87654321, true).then(() => {
+      sinon.assert.calledOnce(createStub);
+      done();
+    });
   });
 
   it('setMfaToken rejects', () => {
@@ -65,19 +63,20 @@ describe('UserSessions', () => {
       await tokenApiProxy.setMfaToken('example@email.com', 'tokenId', 'status');
     };
 
-    callSetToken().then(() => {
-      chai.assert.fail('Should have rejected');
-    }).catch((result) => {
-      expect(result.message).to.eq('Test');
-    });
+    callSetToken()
+      .then(() => {
+        chai.assert.fail('Should have rejected');
+      })
+      .catch((result) => {
+        expect(result.message).to.eq('Test');
+      });
   });
 
   it('Should update a usersession entry', (done) => {
-    tokenApiProxy.updateMfaToken('myemail@email.com', 87654321)
-      .then(() => {
-        sinon.assert.calledOnce(updateStub);
-        done();
-      });
+    tokenApiProxy.updateMfaToken('myemail@email.com', 87654321).then(() => {
+      sinon.assert.calledOnce(updateStub);
+      done();
+    });
   });
 
   it('updateMfaToken rejects', () => {
@@ -87,12 +86,14 @@ describe('UserSessions', () => {
       await tokenApiProxy.updateMfaToken('myemail@email.com', 87654321);
     };
 
-    callSetToken().then(() => {
-      chai.assert.fail('Should have rejected');
-    }).catch((result) => {
-      expect(updateStub).to.have.been.calledOnce;
-      expect(result.message).to.eq('Test Update MFA Token');
-    });
+    callSetToken()
+      .then(() => {
+        chai.assert.fail('Should have rejected');
+      })
+      .catch((result) => {
+        expect(updateStub).to.have.been.calledOnce;
+        expect(result.message).to.eq('Test Update MFA Token');
+      });
   });
 
   it('Should not validate an incorrect token', async () => {
@@ -173,9 +174,12 @@ describe('UserSessions', () => {
     const findOneStubFail = sinon.stub().rejects(new Error('Sequelize reject'));
 
     dbStub.sequelize.models.UserSessions.findOne = findOneStubFail;
-    await tokenApiProxy.validateMfaToken('myemail@email.com', 87654322).then().catch((err) => {
-      expect(err.message).to.equal('Sequelize reject');
-    });
+    await tokenApiProxy
+      .validateMfaToken('myemail@email.com', 87654322)
+      .then()
+      .catch((err) => {
+        expect(err.message).to.equal('Sequelize reject');
+      });
   });
 
   it('Should reject a correctly entered token after 5 incorrect attempts', async () => {
@@ -194,7 +198,9 @@ describe('UserSessions', () => {
     try {
       await tokenApiProxy.validateMfaToken('myemail@email.com', 87654321);
     } catch (err) {
-      expect(err.message).to.equal(`MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`);
+      expect(err.message).to.equal(
+        `MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`
+      );
     }
   });
 
@@ -213,7 +219,9 @@ describe('UserSessions', () => {
     try {
       await tokenApiProxy.validateMfaToken('myemail@email.com', 87654321);
     } catch (err) {
-      expect(err.message).to.equal(`MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`);
+      expect(err.message).to.equal(
+        `MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`
+      );
     }
   });
 });
@@ -228,29 +236,27 @@ describe('TokenService', () => {
   const BASE_URL = endpoints.baseUrl();
 
   beforeEach(() => {
-    nock(BASE_URL)
-      .post(url, { tokenId, userId })
-      .reply(201, {});
+    nock(BASE_URL).post(url, { tokenId, userId }).reply(201, {});
 
-    nock(BASE_URL)
-      .put(url, { tokenId: newTokenId, userId })
-      .reply(201, {});
+    nock(BASE_URL).put(url, { tokenId: newTokenId, userId }).reply(201, {});
 
     nock(BASE_URL)
       .post(url, {
-        tokenId, inviterId: userId, organisationId: orgId, roleName,
+        tokenId,
+        inviterId: userId,
+        organisationId: orgId,
+        roleName,
       })
       .reply(201, {});
   });
 
   it('Should successfully call the settoken API', (done) => {
-    tokenApi.setToken(tokenId, userId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+    tokenApi.setToken(tokenId, userId).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.be.empty;
+      done();
+    });
   });
 
   it('should throw an error when calling the settoken API', () => {
@@ -259,21 +265,23 @@ describe('TokenService', () => {
       .post(url, { tokenId, userId })
       .replyWithError({ message: 'Example setToken error', code: 404 });
 
-    tokenApi.setToken(tokenId, userId).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example setToken error');
-    });
+    tokenApi
+      .setToken(tokenId, userId)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example setToken error');
+      });
   });
 
   it('should allow the updating of a tokenId', (done) => {
-    tokenApi.updateToken(newTokenId, userId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+    tokenApi.updateToken(newTokenId, userId).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.be.empty;
+      done();
+    });
   });
 
   it('should throw an error when updating a tokenId', () => {
@@ -282,36 +290,44 @@ describe('TokenService', () => {
       .put(url, { tokenId: newTokenId, userId })
       .replyWithError({ message: 'Example updateToken error', code: 404 });
 
-    tokenApi.updateToken(newTokenId, userId).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example updateToken error');
-    });
+    tokenApi
+      .updateToken(newTokenId, userId)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example updateToken error');
+      });
   });
 
   it('should successfully set the token of an invited org user', (done) => {
-    tokenApi.setInviteUserToken(tokenId, userId, orgId, roleName)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+    tokenApi.setInviteUserToken(tokenId, userId, orgId, roleName).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.be.empty;
+      done();
+    });
   });
 
   it('should throw an error when setting the token of an invited org user', () => {
     nock.cleanAll();
     nock(BASE_URL)
       .post(url, {
-        tokenId, inviterId: userId, organisationId: orgId, roleName,
+        tokenId,
+        inviterId: userId,
+        organisationId: orgId,
+        roleName,
       })
       .replyWithError({ message: 'Example setInviteUserToken error', code: 404 });
 
-    tokenApi.setInviteUserToken(tokenId, userId, orgId, roleName).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example setInviteUserToken error');
-    });
+    tokenApi
+      .setInviteUserToken(tokenId, userId, orgId, roleName)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example setInviteUserToken error');
+      });
   });
 });
 

@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -17,18 +14,23 @@ const controller = require('../../../app/organisation/editusers/post.controller'
 let { cookie } = require('request');
 
 describe('Organisation Edit Users Post Controller', () => {
-  let req; let res; let orgApiStub; let sessionSaveStub;
+  let req;
+  let res;
+  let orgApiStub;
+  let sessionSaveStub;
   const nonAdminRoles = [
     {
       id: '1',
       name: 'Manager',
-      description: 'A manager is able to create, edit, submit or cancel a GAR. A manager can create, edit and delete people or aircraft. A manager can invite, edit or promote users, but cannot promote a user to admin or demote an admin.'
+      description:
+        'A manager is able to create, edit, submit or cancel a GAR. A manager can create, edit and delete people or aircraft. A manager can invite, edit or promote users, but cannot promote a user to admin or demote an admin.',
     },
     {
       id: '2',
       name: 'User',
-      description: 'A user can create, edit, submit or cancel a GAR. A user can create, edit and delete people or aircraft. A user has no ability to edit or view an organisation'
-    }
+      description:
+        'A user can create, edit, submit or cancel a GAR. A user can create, edit and delete people or aircraft. A user has no ability to edit or view an organisation',
+    },
   ];
   beforeEach(() => {
     chai.use(sinonChai);
@@ -43,7 +45,7 @@ describe('Organisation Edit Users Post Controller', () => {
         editUserId: 'EDIT-BADDIE-1',
         u: { dbId: 'BADDIE-1' },
         org: { i: 'FIRST-ORDER-ID' },
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
     res = {
@@ -53,7 +55,6 @@ describe('Organisation Edit Users Post Controller', () => {
 
     orgApiStub = sinon.stub(orgApi, 'editUser');
     sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
-
   });
 
   afterEach(() => {
@@ -83,19 +84,28 @@ describe('Organisation Edit Users Post Controller', () => {
             firstName: '',
             lastName: '',
             role: '',
-
           },
           roles: roles,
           errors: [
-            new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter given names'),
-            new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter a surname'),
+            new ValidationRule(
+              validator.notEmpty,
+              'firstName',
+              req.body.firstName,
+              'Enter given names'
+            ),
+            new ValidationRule(
+              validator.notEmpty,
+              'lastName',
+              req.body.lastName,
+              'Enter a surname'
+            ),
             new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Provide a user role'),
           ],
         });
       });
     });
 
-   it('logged in manager can only see nonAdmin roles and empty string errors', () => {
+    it('logged in manager can only see nonAdmin roles and empty string errors', () => {
       req.body.firstName = '';
       req.body.lastName = '';
       req.body.role = '';
@@ -117,12 +127,21 @@ describe('Organisation Edit Users Post Controller', () => {
             firstName: '',
             lastName: '',
             role: '',
-
           },
           roles: nonAdminRoles,
           errors: [
-            new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter given names'),
-            new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter a surname'),
+            new ValidationRule(
+              validator.notEmpty,
+              'firstName',
+              req.body.firstName,
+              'Enter given names'
+            ),
+            new ValidationRule(
+              validator.notEmpty,
+              'lastName',
+              req.body.lastName,
+              'Enter a surname'
+            ),
             new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Provide a user role'),
           ],
         });
@@ -154,8 +173,18 @@ describe('Organisation Edit Users Post Controller', () => {
           },
           roles: roles,
           errors: [
-            new ValidationRule(validator.isValidStringLength, 'firstName', 'abcdefghijklmnopqrstuvwxyzabcdefghijk', 'Given names must be 35 characters or less'),
-            new ValidationRule(validator.isValidStringLength, 'lastName', 'abcdefghijklmnopqrstuvwxyzabcdefghij', 'Surname must be 35 characters or less'),
+            new ValidationRule(
+              validator.isValidStringLength,
+              'firstName',
+              'abcdefghijklmnopqrstuvwxyzabcdefghijk',
+              'Given names must be 35 characters or less'
+            ),
+            new ValidationRule(
+              validator.isValidStringLength,
+              'lastName',
+              'abcdefghijklmnopqrstuvwxyzabcdefghij',
+              'Surname must be 35 characters or less'
+            ),
           ],
         });
       });
@@ -169,41 +198,49 @@ describe('Organisation Edit Users Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('BADDIE-1', 'FIRST-ORDER-ID', {
-        userId: 'EDIT-BADDIE-1',
-        firstName: 'Kylo',
-        lastName: 'Ren',
-        role: 'Individual',
+    callController()
+      .then()
+      .then(() => {
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('BADDIE-1', 'FIRST-ORDER-ID', {
+          userId: 'EDIT-BADDIE-1',
+          firstName: 'Kylo',
+          lastName: 'Ren',
+          role: 'Individual',
+        });
+        expect(req.session.errMsg).to.eql({ message: 'Failed to update user details. Try again' });
+        expect(sessionSaveStub).to.have.been.called;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
+        expect(res.render).to.not.have.been.called;
       });
-      expect(req.session.errMsg).to.eql({ message: 'Failed to update user details. Try again' });
-      expect(sessionSaveStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
-      expect(res.render).to.not.have.been.called;
-    });
   });
 
   it('should redirect with message if api returns message', () => {
-    orgApiStub.resolves(JSON.stringify({
-      message: 'User ID not found',
-    }));
+    orgApiStub.resolves(
+      JSON.stringify({
+        message: 'User ID not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('BADDIE-1', 'FIRST-ORDER-ID', {
-        userId: 'EDIT-BADDIE-1',
-        firstName: 'Kylo',
-        lastName: 'Ren',
-        role: 'Individual',
+    callController()
+      .then()
+      .then(() => {
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('BADDIE-1', 'FIRST-ORDER-ID', {
+          userId: 'EDIT-BADDIE-1',
+          firstName: 'Kylo',
+          lastName: 'Ren',
+          role: 'Individual',
+        });
+        expect(req.session.errMsg).to.eql({
+          message: 'You do not have the permissions to edit this user or perform this action',
+        });
+        expect(sessionSaveStub).to.have.been.called;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
+        expect(res.render).to.not.have.been.called;
       });
-      expect(req.session.errMsg).to.eql({ message: 'You do not have the permissions to edit this user or perform this action' });
-      expect(sessionSaveStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
-      expect(res.render).to.not.have.been.called;
-    });
   });
 
   it('should redirect with no message if api ok', () => {
@@ -213,17 +250,19 @@ describe('Organisation Edit Users Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('BADDIE-1', 'FIRST-ORDER-ID', {
-        userId: 'EDIT-BADDIE-1',
-        firstName: 'Kylo',
-        lastName: 'Ren',
-        role: 'Individual',
+    callController()
+      .then()
+      .then(() => {
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('BADDIE-1', 'FIRST-ORDER-ID', {
+          userId: 'EDIT-BADDIE-1',
+          firstName: 'Kylo',
+          lastName: 'Ren',
+          role: 'Individual',
+        });
+        expect(req.session.errMsg).to.be.undefined;
+        expect(sessionSaveStub).to.have.been.called;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
+        expect(res.render).to.not.have.been.called;
       });
-      expect(req.session.errMsg).to.be.undefined;
-      expect(sessionSaveStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
-      expect(res.render).to.not.have.been.called;
-    });
   });
 });

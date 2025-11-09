@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -10,16 +9,16 @@ require('../../global.test');
 
 const configMock = {
   ...settings,
-  ONE_LOGIN_SHOW_ONE_LOGIN: false
+  ONE_LOGIN_SHOW_ONE_LOGIN: false,
 };
 
-
 const controller = proxyquire('../../../app/user/detailschanged/get.controller', {
-  '../../../common/config/index': configMock
+  '../../../common/config/index': configMock,
 });
 
 describe('Manage User Detail Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);

@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
-const {expect} = require('chai');
+const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const config = require('../../../common/config/index');
@@ -10,7 +7,6 @@ const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const verification = require('../../../common/services/verificationApi');
-
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -29,7 +25,6 @@ describe.skip('User Login Get Controller', () => {
   let getDetailsStub;
   let getSetInviteTokenStub;
 
-
   beforeEach(() => {
     chai.use(sinonChai);
 
@@ -44,35 +39,35 @@ describe.skip('User Login Get Controller', () => {
     res = {
       redirect: sinon.spy(),
       render: sinon.spy(),
-      cookie: () => true
+      cookie: () => true,
     };
 
-    getSetInviteTokenStub = sinon.stub(verification, 'getUserInviteToken')
+    getSetInviteTokenStub = sinon.stub(verification, 'getUserInviteToken');
 
-    oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl')
-      .returns("https://onelogin_url?code=123&state=valid_state");
+    oneLoginUrlStub = sinon
+      .stub(oneLoginUtils, 'getOneLoginAuthUrl')
+      .returns('https://onelogin_url?code=123&state=valid_state');
 
     // Add the stub for sendOneLoginTokenRequest
-    sendOneLoginTokenRequestStub = sinon.stub(oneLoginApi, 'sendOneLoginTokenRequest')
-      .resolves({
-        access_token: 'mock_access_token',
-        id_token: 'mock_id_token'
-      });
-
-    getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin')
-      .resolves({
-        email_verified: true,
-        email: 'user@email.com',
-        sub: 'onelogin_sid',
-      })
-
-    userSearchStub = sinon.stub(userApi, 'userSearch')
-    updateUserData = sinon.stub(userApi, 'updateDetails')
-    getDetailsStub = sinon.stub(userApi, 'getDetails')
-    oneLoginJwtVerifyStub = sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
-      callback(true); // Simulate successful JWT verification
+    sendOneLoginTokenRequestStub = sinon.stub(oneLoginApi, 'sendOneLoginTokenRequest').resolves({
+      access_token: 'mock_access_token',
+      id_token: 'mock_id_token',
     });
 
+    getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin').resolves({
+      email_verified: true,
+      email: 'user@email.com',
+      sub: 'onelogin_sid',
+    });
+
+    userSearchStub = sinon.stub(userApi, 'userSearch');
+    updateUserData = sinon.stub(userApi, 'updateDetails');
+    getDetailsStub = sinon.stub(userApi, 'getDetails');
+    oneLoginJwtVerifyStub = sinon
+      .stub(oneLoginUtils, 'verifyJwt')
+      .callsFake((idToken, nonce, callback) => {
+        callback(true); // Simulate successful JWT verification
+      });
 
     //Generated just for unit testing, not used anywhere
     config.ONE_LOGIN_PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----
@@ -103,29 +98,30 @@ eHiTPSdhvsj9DwIuCJvgzumxUY+7k4/iGg7ohFMCgYEAnd/vLV+flv5Lu0yi9d2k
 7oEczCmdpLiikYVd2C2+346Tl8HIUWw0a3KcZx7KrjhD0CUu6QVTIyExmkK+3KSo
 FnBdx5XR9zLe40LX3+cbEtw=
 -----END PRIVATE KEY-----`;
-    config.ONE_LOGIN_CLIENT_ID = "test_client_id";
-    config.ONE_LOGIN_INTEGRATION_URL = "www.test_one_login.com"
-
+    config.ONE_LOGIN_CLIENT_ID = 'test_client_id';
+    config.ONE_LOGIN_INTEGRATION_URL = 'www.test_one_login.com';
   });
 
   afterEach(() => {
     sinon.restore();
   });
 
-
   it('should render if referer but no user object in session', async () => {
     req.headers.referer = '/example';
-    req.query = {}
-    req.cookies = {}
+    req.query = {};
+    req.cookies = {};
 
     await controller(req, res);
 
     expect(res.redirect).to.not.have.been.called;
 
     // Verify that the render method was called with the correct arguments
-    expect(res.render).to.have.been.calledOnceWith('app/user/login/index', sinon.match({
-      oneLoginAuthUrl: "https://onelogin_url?code=123&state=valid_state"
-    }));
+    expect(res.render).to.have.been.calledOnceWith(
+      'app/user/login/index',
+      sinon.match({
+        oneLoginAuthUrl: 'https://onelogin_url?code=123&state=valid_state',
+      })
+    );
   });
 
   it('should redirect to /home when user details are complete in session', async () => {
@@ -133,7 +129,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
     req.headers.referer = '/example';
     req.session.u = {
       dbId: 'USER_ID',
-      vr: true,  // verified
+      vr: true, // verified
       rl: 'User', // role
     };
 
@@ -149,21 +145,21 @@ FnBdx5XR9zLe40LX3+cbEtw=
     // Setup
     req.query = {
       code: '123',
-      state: 'valid_state'
+      state: 'valid_state',
     };
 
     req.cookies = {
       state: 'valid_state',
-      nonce: 'valid_nonce'
+      nonce: 'valid_nonce',
     };
 
-    getSetInviteTokenStub.resolves({tokenId: '123'})
+    getSetInviteTokenStub.resolves({ tokenId: '123' });
 
     // Mock user info from OneLogin
     getUserInfoFromOneLogin.resolves({
       email_verified: true,
       email: 'test@example.com',
-      sub: 'onelogin_sid'
+      sub: 'onelogin_sid',
     });
 
     // Mock user search response with a verified user who doesn't have a OneLogin SID yet
@@ -174,20 +170,20 @@ FnBdx5XR9zLe40LX3+cbEtw=
       email: 'test@example.com',
       firstName: 'Test',
       lastName: 'User',
-      role: {name: 'Individual'}
+      role: { name: 'Individual' },
     });
 
     // Mock getDetails to return a valid organization
     getDetailsStub.resolves({
-      organisation: {organisationId: 'org123', organisationName: 'Org 1'},
+      organisation: { organisationId: 'org123', organisationName: 'Org 1' },
       firstName: 'Test',
       lastName: 'User',
       email: 'test@example.com',
       state: 'verified',
-      role: {name: 'Individual'}
+      role: { name: 'Individual' },
     });
 
-    updateUserData.returns(Promise.resolve({'userId': 'userid', redirect: '/home'}));
+    updateUserData.returns(Promise.resolve({ userId: 'userid', redirect: '/home' }));
 
     // Execute
     await controller(req, res);
@@ -197,7 +193,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
       'Test',
       'User',
       'onelogin_sid',
-        'verified'
+      'verified'
     );
 
     expect(res.redirect).to.have.been.calledOnceWith('/home');
@@ -216,18 +212,18 @@ FnBdx5XR9zLe40LX3+cbEtw=
     req.query = {
       state: 'valid_state',
       code: '123',
-    }
+    };
 
     req.cookies = {
       state: 'valid_state', // Matching state
-      nonce: 'valid_nonce'
+      nonce: 'valid_nonce',
     };
 
     userSearchStub.resolves({
       userId: 'test_user_id',
       email: 'user@email.com',
       state: 'unverified',
-      role: 'Admin'
+      role: 'Admin',
     });
 
     // const cookie = new CookieModel(req);
@@ -253,7 +249,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
   });
 
   it('should include a valid one login url', async () => {
-    req.query = {}
+    req.query = {};
 
     await controller(req, res);
 
@@ -261,21 +257,24 @@ FnBdx5XR9zLe40LX3+cbEtw=
     expect(oneLoginUrlStub).to.have.been.calledOnceWith(res);
 
     // Verify that the render method was called with the correct arguments
-    expect(res.render).to.have.been.calledOnceWith('app/user/login/index', sinon.match({
-      oneLoginAuthUrl: "https://onelogin_url?code=123&state=valid_state"
-    }));
+    expect(res.render).to.have.been.calledOnceWith(
+      'app/user/login/index',
+      sinon.match({
+        oneLoginAuthUrl: 'https://onelogin_url?code=123&state=valid_state',
+      })
+    );
   });
 
   it('should redirect to error page if state in query does not match state in cookies', async () => {
     // Setup
     req.query = {
       code: '123',
-      state: 'invalid_state' // Different from cookie state
+      state: 'invalid_state', // Different from cookie state
     };
 
     req.cookies = {
       state: 'valid_state',
-      nonce: 'valid_nonce'
+      nonce: 'valid_nonce',
     };
 
     // Execute controller
@@ -295,18 +294,18 @@ FnBdx5XR9zLe40LX3+cbEtw=
 
     req.cookies = {
       state: 'valid_state',
-      nonce: 'valid_nonce'
+      nonce: 'valid_nonce',
     };
 
     oneLoginJwtVerifyStub.callsFake((idToken, nonce, callback) => {
       callback(false);
     });
 
-    oneLoginUrlStub.returns("https://onelogin_url?code=123&state=valid_state");
+    oneLoginUrlStub.returns('https://onelogin_url?code=123&state=valid_state');
 
     sendOneLoginTokenRequestStub.resolves({
       access_token: 'mock_access_token',
-      id_token: 'mock_id_token'
+      id_token: 'mock_id_token',
     });
 
     // Execute controller
@@ -314,21 +313,20 @@ FnBdx5XR9zLe40LX3+cbEtw=
 
     // Verify that the login page is rendered
     expect(res.render).to.have.been.calledWith('app/user/login/index', {
-      oneLoginAuthUrl: "https://onelogin_url?code=123&state=valid_state"
+      oneLoginAuthUrl: 'https://onelogin_url?code=123&state=valid_state',
     });
-
   });
 
   it('should render login page if user email is not verified in OneLogin', async () => {
     // Setup
     req.query = {
       code: '123',
-      state: 'valid_state'
+      state: 'valid_state',
     };
 
     req.cookies = {
       state: 'valid_state',
-      nonce: 'valid_nonce'
+      nonce: 'valid_nonce',
     };
 
     // Restore the original stubs
@@ -339,22 +337,21 @@ FnBdx5XR9zLe40LX3+cbEtw=
       callback(true); // Simulate successful JWT verification
     });
 
-    oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl')
-      .returns("https://onelogin_url?code=123&state=valid_state");
+    oneLoginUrlStub = sinon
+      .stub(oneLoginUtils, 'getOneLoginAuthUrl')
+      .returns('https://onelogin_url?code=123&state=valid_state');
 
-    sendOneLoginTokenRequestStub = sinon.stub(oneLoginApi, 'sendOneLoginTokenRequest')
-      .resolves({
-        access_token: 'mock_access_token',
-        id_token: 'mock_id_token'
-      });
+    sendOneLoginTokenRequestStub = sinon.stub(oneLoginApi, 'sendOneLoginTokenRequest').resolves({
+      access_token: 'mock_access_token',
+      id_token: 'mock_id_token',
+    });
 
     // Mock user info from OneLogin with email_verified set to false
-    getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin')
-      .resolves({
-        email_verified: false, // Email not verified
-        email: 'test@example.com',
-        sub: 'onelogin_sid'
-      });
+    getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin').resolves({
+      email_verified: false, // Email not verified
+      email: 'test@example.com',
+      sub: 'onelogin_sid',
+    });
 
     // Execute controller
     await controller(req, res);
@@ -367,12 +364,12 @@ FnBdx5XR9zLe40LX3+cbEtw=
     // Setup
     req.query = {
       code: '123',
-      state: 'valid_state'
+      state: 'valid_state',
     };
 
     req.cookies = {
       state: 'valid_state',
-      nonce: 'valid_nonce'
+      nonce: 'valid_nonce',
     };
 
     // Restore the original stubs
@@ -383,22 +380,21 @@ FnBdx5XR9zLe40LX3+cbEtw=
       callback(true); // Simulate successful JWT verification
     });
 
-    oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl')
-      .returns("https://onelogin_url?code=123&state=valid_state");
+    oneLoginUrlStub = sinon
+      .stub(oneLoginUtils, 'getOneLoginAuthUrl')
+      .returns('https://onelogin_url?code=123&state=valid_state');
 
-    sendOneLoginTokenRequestStub = sinon.stub(oneLoginApi, 'sendOneLoginTokenRequest')
-      .resolves({
-        access_token: 'mock_access_token',
-        id_token: 'mock_id_token'
-      });
+    sendOneLoginTokenRequestStub = sinon.stub(oneLoginApi, 'sendOneLoginTokenRequest').resolves({
+      access_token: 'mock_access_token',
+      id_token: 'mock_id_token',
+    });
 
     // Mock user info from OneLogin with email_verified set to true
-    getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin')
-      .resolves({
-        email_verified: true,
-        email: 'test@example.com',
-        sub: 'onelogin_sid'
-      });
+    getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin').resolves({
+      email_verified: true,
+      email: 'test@example.com',
+      sub: 'onelogin_sid',
+    });
 
     // Mock userApi.userSearch to return a result indicating no user was found
     userSearchStub = sinon.stub(userApi, 'userSearch').resolves({
@@ -408,7 +404,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
       email: null,
       firstName: null,
       lastName: null,
-      role: null
+      role: null,
     });
 
     // Execute controller

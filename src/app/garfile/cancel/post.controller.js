@@ -12,20 +12,20 @@ module.exports = async (req, res) => {
   try {
     await garApi.submitGARForException(garId);
     await garApi.patch(cookie.getGarId(), 'Cancelled', {});
-   
+
     if (!cookie.getCbpId()) {
       req.session.successMsg = 'The GAR has been successfully cancelled';
       req.session.successHeader = 'Cancellation Confirmation';
       req.session.save(() => {
         res.redirect('/home');
       });
-  
+
       return;
     }
   } catch (err) {
     logger.error(err);
-    res.render('app/garfile/cancel/index', { 
-      cookie, 
+    res.render('app/garfile/cancel/index', {
+      cookie,
       errors: [{ identifier: '', message: 'Failed to cancel GAR' }],
     });
     return;
@@ -36,14 +36,15 @@ module.exports = async (req, res) => {
       firstName: cookie.getUserFirstName(),
       cancellationReference: cookie.getCbpId(),
     });
-  
+
     req.session.successMsg = 'The GAR has been successfully cancelled';
     req.session.successHeader = 'Cancellation Confirmation';
     req.session.save(() => {
       res.redirect('/home');
     });
   } catch (err) {
-    req.session.successMsg = 'The GAR has been successfully cancelled, but there was a problem with sending the email';
+    req.session.successMsg =
+      'The GAR has been successfully cancelled, but there was a problem with sending the email';
     req.session.successHeader = 'Cancellation Confirmation';
     req.session.save(() => {
       res.redirect('/home');

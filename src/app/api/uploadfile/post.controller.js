@@ -10,35 +10,42 @@ const config = require('../../../common/config/index');
 const { isValidFileMime } = require('../../../common/utils/validator');
 
 const exceedFileNumSizeLimit = (fileSize, garId) => {
-  logger.debug(`Entering exceed file number & size limit function, max size 8MB max number:${config.MAX_NUM_FILES}`);
+  logger.debug(
+    `Entering exceed file number & size limit function, max size 8MB max number:${config.MAX_NUM_FILES}`
+  );
   return new Promise((resolve, reject) => {
     // Get supporting docs and add file size
     //check max number of files not more than 10.
     // Check if fileSize + total >= MAX_SIZE
-    const MAX_SIZE = (1024 ** 2) * 8;
+    const MAX_SIZE = 1024 ** 2 * 8;
     const MAX_NUM = config.MAX_NUM_FILES;
-    garApi.getSupportingDocs(garId).then((gars) => {
-      let total = 0;
-      const parsedGars = JSON.parse(gars);
-      if(parsedGars.items.length>=MAX_NUM){
-        logger.info(`Number of supporting docs exceeds the limit: ${MAX_NUM}, gar:${garId}`);
-        resolve('EXCEEDS_MAX_NUMBER');
-      }
-      // Get total size from gars.items.size
-      parsedGars.items.forEach((gar) => {
-        total += transformers.strToBytes(gar.size);
+    garApi
+      .getSupportingDocs(garId)
+      .then((gars) => {
+        let total = 0;
+        const parsedGars = JSON.parse(gars);
+        if (parsedGars.items.length >= MAX_NUM) {
+          logger.info(`Number of supporting docs exceeds the limit: ${MAX_NUM}, gar:${garId}`);
+          resolve('EXCEEDS_MAX_NUMBER');
+        }
+        // Get total size from gars.items.size
+        parsedGars.items.forEach((gar) => {
+          total += transformers.strToBytes(gar.size);
+        });
+        logger.info(`Total size of supporting documents for gar:${garId}`);
+        if (fileSize + total > MAX_SIZE) {
+          logger.info(
+            `Total size of supporting documents exceeds max size GAR: ${fileSize + total} bytes`
+          );
+          resolve('EXCEEDS_MAX_SIZE');
+        }
+        resolve('SUCCESS');
+      })
+      .catch((err) => {
+        logger.error('Unknown error whilst determining GAR supporting documents file sizes');
+        logger.error(err);
+        reject(err);
       });
-      logger.info(`Total size of supporting documents for gar:${garId}`);
-      if((fileSize + total) > MAX_SIZE){
-        logger.info(`Total size of supporting documents exceeds max size GAR: ${fileSize + total} bytes`);
-        resolve('EXCEEDS_MAX_SIZE');
-      }
-      resolve('SUCCESS');
-    }).catch((err) => {
-      logger.error('Unknown error whilst determining GAR supporting documents file sizes');
-      logger.error(err);
-      reject(err);
-    });
   });
 };
 
@@ -47,7 +54,8 @@ const handleDeleteDocument = (req, res) => {
     return false;
   }
   logger.info('Found delete supporting document request');
-  garApi.deleteGarSupportingDoc(req.body.garid, req.body.deleteDocId)
+  garApi
+    .deleteGarSupportingDoc(req.body.garid, req.body.deleteDocId)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (parsedResponse.message) {
@@ -81,11 +89,11 @@ module.exports = (req, res) => {
   logger.debug('About to check file size');
   exceedFileNumSizeLimit(req.file.size, req.body.garid)
     .then((result) => {
-      if (result==='EXCEEDS_MAX_SIZE') {
+      if (result === 'EXCEEDS_MAX_SIZE') {
         logger.debug('Total file size was greater than the limit');
         res.redirect('/garfile/supportingdocuments?query=limit');
         return;
-      } else if(result==='EXCEEDS_MAX_NUMBER') {
+      } else if (result === 'EXCEEDS_MAX_NUMBER') {
         logger.debug('Total number of files greater than the limit');
         res.redirect('/garfile/supportingdocuments?query=number');
         return;
@@ -120,10 +128,12 @@ module.exports = (req, res) => {
         },
       };
 
-      clamAVService.scanFile(formData)
+      clamAVService
+        .scanFile(formData)
         .then((clamavResp) => {
           if (clamavResp) {
-            uploadFile.postFile(req.body.garid, req.file)
+            uploadFile
+              .postFile(req.body.garid, req.file)
               .then((response) => {
                 const parsedResponse = JSON.parse(response);
                 if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {

@@ -32,23 +32,38 @@ module.exports = (req, res) => {
     documentExpiryDate: expiryDate,
   };
 
-  validator.validateChains(validations.validations(req))
+  validator
+    .validateChains(validations.validations(req))
     .then(() => {
-      garApi.patch(cookie.getGarId(), 'Draft', { people: [person] })
+      garApi
+        .patch(cookie.getGarId(), 'Draft', { people: [person] })
         .then((garResponse) => {
           const parsedResponse = JSON.parse(garResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
             res.render('app/garfile/manifest/addnewperson/index', {
-              req, cookie, person, persontype, documenttype, genderchoice, errors: [parsedResponse],
+              req,
+              cookie,
+              person,
+              persontype,
+              documenttype,
+              genderchoice,
+              errors: [parsedResponse],
             });
           } else {
             res.redirect('/garfile/manifest');
           }
-        }).catch((err) => {
+        })
+        .catch((err) => {
           logger.error('Unexpected error from GAR API when adding new person to the manifest');
           logger.error(err);
           res.render('app/garfile/manifest/addnewperson/index', {
-            req, cookie, person, persontype, documenttype, genderchoice, errors: [{ message: 'Error adding a new person. Try again later' }],
+            req,
+            cookie,
+            person,
+            persontype,
+            documenttype,
+            genderchoice,
+            errors: [{ message: 'Error adding a new person. Try again later' }],
           });
         });
     })
@@ -56,7 +71,13 @@ module.exports = (req, res) => {
       logger.info('There was a problem adding person to saved people');
       logger.debug(JSON.stringify(err));
       res.render('app/garfile/manifest/addnewperson/index', {
-        req, cookie, person, persontype, documenttype, genderchoice, errors: err,
+        req,
+        cookie,
+        person,
+        persontype,
+        documenttype,
+        genderchoice,
+        errors: err,
       });
     });
 };

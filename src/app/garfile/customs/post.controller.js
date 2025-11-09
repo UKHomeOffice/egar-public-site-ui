@@ -22,17 +22,20 @@ module.exports = (req, res) => {
 
   const customs = {
     prohibitedGoods: req.body.prohibitedGoods,
-    goodsDeclaration: (req.body.prohibitedGoods === 'Yes' ? req.body.goodsDeclaration : ''),
+    goodsDeclaration: req.body.prohibitedGoods === 'Yes' ? req.body.goodsDeclaration : '',
     baggage: req.body.baggage,
-    baggageDeclaration: (req.body.baggage === 'Yes' ? req.body.baggageDeclaration : ''),
+    baggageDeclaration: req.body.baggage === 'Yes' ? req.body.baggageDeclaration : '',
     continentalShelf: req.body.continentalShelf,
-    continentalShelfDeclaration: (req.body.continentalShelf === 'Yes' ? req.body.continentalShelfDeclaration : ''),
+    continentalShelfDeclaration:
+      req.body.continentalShelf === 'Yes' ? req.body.continentalShelfDeclaration : '',
     freeCirculation: req.body.freeCirculation,
     visitReason: req.body.visitReason,
     supportingInformation: req.body.supportingInformation,
-    supportingInformationAnswer: (req.body.supportingInformation === 'Yes' ? req.body.supportingInformationAnswer : ''),
+    supportingInformationAnswer:
+      req.body.supportingInformation === 'Yes' ? req.body.supportingInformationAnswer : '',
     passengerTravellingReason: req.body.passengerTravellingReason,
-    passengerTravellingReasonAnswer: (req.body.passengerTravellingReason === 'Yes' ? req.body.passengerTravellingReasonAnswer : ''),
+    passengerTravellingReasonAnswer:
+      req.body.passengerTravellingReason === 'Yes' ? req.body.passengerTravellingReasonAnswer : '',
     intentionValue: req.body.intentionValue,
   };
 
@@ -51,9 +54,11 @@ module.exports = (req, res) => {
 
   const { buttonClicked } = req.body;
 
-  validator.validateChains(validations.validations(req))
+  validator
+    .validateChains(validations.validations(req))
     .then(() => {
-      garApi.patch(cookie.getGarId(), cookie.getGarStatus(), customs)
+      garApi
+        .patch(cookie.getGarId(), cookie.getGarStatus(), customs)
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {

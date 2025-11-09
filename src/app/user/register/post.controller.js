@@ -10,7 +10,10 @@ const userCreateApi = require('../../../common/services/createUserApi');
 const tokenApi = require('../../../common/services/tokenApi');
 const whitelist = require('../../../common/services/whiteList');
 const config = require('../../../common/config');
-const { USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config/index');
+const {
+  USER_FIRST_NAME_CHARACTER_COUNT,
+  USER_SURNAME_CHARACTER_COUNT,
+} = require('../../../common/config/index');
 
 const regFailureError = {
   message: 'Registration failed, try again',
@@ -22,21 +25,41 @@ const createValidationChains = (fname, lname, usrname, cusrname) => {
   const fnameChain = [
     new ValidationRule(validator.notEmpty, 'userFname', fname, 'Please enter your given names'),
     new ValidationRule(validator.validName, 'userFname', fname, 'Please enter valid given names'),
-    new ValidationRule(validator.validFirstNameLength, 'userFname', fname, `Please enter given names of at most ${USER_FIRST_NAME_CHARACTER_COUNT} characters`),
+    new ValidationRule(
+      validator.validFirstNameLength,
+      'userFname',
+      fname,
+      `Please enter given names of at most ${USER_FIRST_NAME_CHARACTER_COUNT} characters`
+    ),
   ];
   const lnameChain = [
     new ValidationRule(validator.notEmpty, 'userLname', lname, 'Please enter your surname'),
     new ValidationRule(validator.validName, 'userLname', lname, 'Please enter a valid surname'),
-    new ValidationRule(validator.validSurnameLength, 'userLname', lname, `Please enter a surname of at most ${USER_SURNAME_CHARACTER_COUNT} characters`),
+    new ValidationRule(
+      validator.validSurnameLength,
+      'userLname',
+      lname,
+      `Please enter a surname of at most ${USER_SURNAME_CHARACTER_COUNT} characters`
+    ),
   ];
   const userChain = [
     new ValidationRule(validator.notEmpty, 'userId', usrname, 'Please enter your email'),
     new ValidationRule(validator.email, 'userId', usrname, 'Please enter a valid email address'),
-    new ValidationRule(validator.valuetrue, 'userId', usrname === cusrname, 'Please ensure the email addresses match'),
+    new ValidationRule(
+      validator.valuetrue,
+      'userId',
+      usrname === cusrname,
+      'Please ensure the email addresses match'
+    ),
   ];
   const confirmuserChain = [
     new ValidationRule(validator.notEmpty, 'cUserId', cusrname, 'Please confirm the email address'),
-    new ValidationRule(validator.valuetrue, 'cUserId', usrname === cusrname, 'Please ensure the email addresses match'),
+    new ValidationRule(
+      validator.valuetrue,
+      'cUserId',
+      usrname === cusrname,
+      'Please ensure the email addresses match'
+    ),
   ];
 
   return [userChain, confirmuserChain, fnameChain, lnameChain];
@@ -54,7 +77,8 @@ const createUser = (req, res, cookie) => {
   const token = nanoid(alphabet, 13);
   const hashtoken = tokenservice.generateHash(token);
 
-  userCreateApi.post(fname, lname, usrname, cookie.getInviteUserToken())
+  userCreateApi
+    .post(fname, lname, usrname, cookie.getInviteUserToken())
     .then((dbUser) => {
       if (Object.prototype.hasOwnProperty.call(JSON.parse(dbUser), 'message')) {
         logger.info('Failed to register user in db');
@@ -64,14 +88,17 @@ const createUser = (req, res, cookie) => {
         if (userAlreadyRegisteredMsg === errMessage) {
           res.render('app/user/register/index', { cookie, errors: [{ message: errMessage }] });
         } else {
-          req.session.save(() => { res.redirect('/user/regmsg'); });
+          req.session.save(() => {
+            res.redirect('/user/regmsg');
+          });
         }
         return;
       }
       const { userId } = JSON.parse(dbUser);
       logger.info('Calling gov notify service');
 
-      sendTokenService.send(fname, usrname, token)
+      sendTokenService
+        .send(fname, usrname, token)
         .then(() => {
           logger.info('Storing token in db');
           tokenApi.setToken(hashtoken, userId);
@@ -103,10 +130,11 @@ module.exports = (req, res) => {
 
   const validationChains = createValidationChains(fname, lname, usrname, cusrname);
 
-  const isWhitelistRequired = (config.WHITELIST_REQUIRED.toLowerCase() === 'true');
+  const isWhitelistRequired = config.WHITELIST_REQUIRED.toLowerCase() === 'true';
 
   logger.info('Validating registration input');
-  validator.validateChains(validationChains)
+  validator
+    .validateChains(validationChains)
     .then(() => {
       // Update the cookie
       cookie.setUserFirstName(fname);
@@ -115,7 +143,8 @@ module.exports = (req, res) => {
 
       if (isWhitelistRequired) {
         logger.info('Starting whitelist check');
-        whitelist.isWhitelisted(usrname)
+        whitelist
+          .isWhitelisted(usrname)
           .then((result) => {
             if (result) {
               createUser(req, res, cookie);
@@ -123,7 +152,9 @@ module.exports = (req, res) => {
             }
             // Not whitelisted
             cookie.setUserEmail(null);
-            req.session.save(() => { res.redirect('/user/regmsg'); });
+            req.session.save(() => {
+              res.redirect('/user/regmsg');
+            });
           })
           .catch((err) => {
             logger.error('Failed to check against whitelist');
@@ -139,7 +170,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Failed registration validations');
-      logger.error(err)
+      logger.error(err);
       res.render('app/user/register/index', {
         cookie,
         fname,

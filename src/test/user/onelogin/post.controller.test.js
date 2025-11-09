@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -16,12 +13,12 @@ const {
   PHASE_GIVEN_NAME,
   PHASE_CONFIRM_NAME,
   PHASE_REGISTRATION_COMPLETE,
-  WORKFLOW_STEPS
+  WORKFLOW_STEPS,
 } = require('../../../app/user/onelogin/constants');
 
 // Import controller
 const postController = require('../../../app/user/onelogin/post.controller');
-const getUserInviteToken = require("../../../common/services/verificationApi");
+const getUserInviteToken = require('../../../common/services/verificationApi');
 
 describe.skip('User OneLogin Post Controller', () => {
   let req;
@@ -38,12 +35,12 @@ describe.skip('User OneLogin Post Controller', () => {
       session: {
         save: sinon.spy(),
         step: PHASE_GIVEN_NAME,
-        step_data: {}
+        step_data: {},
       },
       body: {},
       cookies: {
-        access_token: 'mock_access_token'
-      }
+        access_token: 'mock_access_token',
+      },
     };
 
     res = {
@@ -54,7 +51,7 @@ describe.skip('User OneLogin Post Controller', () => {
     validateChainsStub = sinon.stub(validator, 'validateChains');
     getUserInfoStub = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin');
     createUserStub = sinon.stub(userApi, 'createUser');
-    getUserInviteTokenStub = sinon.stub(getUserInviteToken, 'getUserInviteToken')
+    getUserInviteTokenStub = sinon.stub(getUserInviteToken, 'getUserInviteToken');
   });
 
   afterEach(() => {
@@ -62,7 +59,7 @@ describe.skip('User OneLogin Post Controller', () => {
   });
 
   it('should redirect to 404 if step is not set in session', async () => {
-    getUserInviteTokenStub.resolves({tokenId: '123'})
+    getUserInviteTokenStub.resolves({ tokenId: '123' });
     delete req.session.step;
 
     await postController(req, res);
@@ -85,7 +82,7 @@ describe.skip('User OneLogin Post Controller', () => {
       req.session.step = PHASE_GIVEN_NAME;
       req.body = {
         userFname: 'John',
-        userLname: 'Doe'
+        userLname: 'Doe',
       };
     });
 
@@ -93,7 +90,7 @@ describe.skip('User OneLogin Post Controller', () => {
       validateChainsStub.resolves();
       getUserInfoStub.resolves({
         email: 'john.doe@example.com',
-        sub: 'onelogin_sub_id'
+        sub: 'onelogin_sub_id',
       });
 
       await postController(req, res);
@@ -105,7 +102,7 @@ describe.skip('User OneLogin Post Controller', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
-        sub: 'onelogin_sub_id'
+        sub: 'onelogin_sub_id',
       });
       expect(req.session.save).to.have.been.called;
       expect(res.redirect).to.have.been.calledWith('/onelogin/register');
@@ -113,7 +110,7 @@ describe.skip('User OneLogin Post Controller', () => {
 
     it('should render with validation errors if validation fails', async () => {
       const validationErrors = [
-        { identifier: 'userFname', message: 'Please enter your given names' }
+        { identifier: 'userFname', message: 'Please enter your given names' },
       ];
       validateChainsStub.rejects(validationErrors);
 
@@ -125,7 +122,7 @@ describe.skip('User OneLogin Post Controller', () => {
         step: `app/user/onelogin/partials/${PHASE_GIVEN_NAME}.njk`,
         firstName: '',
         lastName: 'Doe',
-        errors: validationErrors
+        errors: validationErrors,
       });
     });
 
@@ -138,7 +135,7 @@ describe.skip('User OneLogin Post Controller', () => {
       expect(validateChainsStub).to.have.been.called;
       expect(getUserInfoStub).to.have.been.calledWith('mock_access_token');
       expect(req.session.step).to.equal(PHASE_GIVEN_NAME);
-      expect(res.redirect).to.be.calledWith('error/404')
+      expect(res.redirect).to.be.calledWith('error/404');
     });
   });
 
@@ -149,10 +146,10 @@ describe.skip('User OneLogin Post Controller', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
-        sub: 'onelogin_sub_id'
+        sub: 'onelogin_sub_id',
       };
       req.body = {
-        nameConfirmDeclaration: 'on'
+        nameConfirmDeclaration: 'on',
       };
     });
 
@@ -162,7 +159,7 @@ describe.skip('User OneLogin Post Controller', () => {
         state: 'verified',
         firstName: 'dummy',
         lastName: 'dummy',
-        role: { name: 'Individual' }
+        role: { name: 'Individual' },
       });
 
       await postController(req, res);
@@ -180,9 +177,9 @@ describe.skip('User OneLogin Post Controller', () => {
     });
 
     it('should handle error if user creation fails', async () => {
-      validateChainsStub.resolves()
+      validateChainsStub.resolves();
       createUserStub.resolves({
-        message: 'Error creating user'
+        message: 'Error creating user',
       });
 
       await postController(req, res);
@@ -235,15 +232,15 @@ describe.skip('User OneLogin Post Controller', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
-        sub: 'onelogin_sub_id'
+        sub: 'onelogin_sub_id',
       };
       req.body = {
-        nameConfirmDeclaration: 'on'
+        nameConfirmDeclaration: 'on',
       };
     });
 
     it('should set user cookies when creating user successfully', async () => {
-      getUserInviteTokenStub.resolves({tokenId: '123'})
+      getUserInviteTokenStub.resolves({ tokenId: '123' });
 
       const cookieSetSpy = {
         setUserEmail: sinon.spy(),
@@ -252,17 +249,19 @@ describe.skip('User OneLogin Post Controller', () => {
         setUserDbId: sinon.spy(),
         setUserVerified: sinon.spy(),
         setUserRole: sinon.spy(),
-        session: { save: sinon.spy() }
+        session: { save: sinon.spy() },
       };
 
       req.session.step_data = {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
-      }
+      };
 
       sinon.stub(CookieModel.prototype, 'setUserEmail').callsFake(cookieSetSpy.setUserEmail);
-      sinon.stub(CookieModel.prototype, 'setUserFirstName').callsFake(cookieSetSpy.setUserFirstName);
+      sinon
+        .stub(CookieModel.prototype, 'setUserFirstName')
+        .callsFake(cookieSetSpy.setUserFirstName);
       sinon.stub(CookieModel.prototype, 'setUserLastName').callsFake(cookieSetSpy.setUserLastName);
       sinon.stub(CookieModel.prototype, 'setUserDbId').callsFake(cookieSetSpy.setUserDbId);
       sinon.stub(CookieModel.prototype, 'setUserVerified').callsFake(cookieSetSpy.setUserVerified);
@@ -274,7 +273,7 @@ describe.skip('User OneLogin Post Controller', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
-        role: { name: 'Individual' }
+        role: { name: 'Individual' },
       });
 
       await postController(req, res);

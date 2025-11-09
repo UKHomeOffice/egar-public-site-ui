@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 const i18n = require('i18n');
 const XLSX = require('xlsx');
 const stream = require('stream');
@@ -13,14 +11,15 @@ const { validations } = require('./validations');
 const transformers = require('../../../common/utils/transformers');
 const { ExcelParser } = require('../../../common/utils/excelParser');
 
-
 const checkFileIsExcel = (req, res) => {
   if (req.file) {
     const fileName = req.file.originalname;
     const fileSize = req.file.size;
     const mimeType = req.file.mimetype;
 
-    logger.debug(`In Gar File Upload Service. Uploaded File: ${fileName}, Size: ${fileSize}, MIME: ${mimeType}`);
+    logger.debug(
+      `In Gar File Upload Service. Uploaded File: ${fileName}, Size: ${fileSize}, MIME: ${mimeType}`
+    );
 
     logger.debug('Creating a stream of the incoming buffer');
     const readStream = new stream.Readable();
@@ -30,7 +29,10 @@ const checkFileIsExcel = (req, res) => {
 
     const fileExtension = fileName.split('.').pop();
     // Redirect if incorrect file type is uploaded
-    if ((fileExtension !== 'xls' && fileExtension !== 'xlsx') || (typeof fileExtension === 'undefined')) {
+    if (
+      (fileExtension !== 'xls' && fileExtension !== 'xlsx') ||
+      typeof fileExtension === 'undefined'
+    ) {
       req.session.failureMsg = i18n.__('validator_api_uploadgar_incorrect_type');
       req.session.failureIdentifier = 'file';
       res.redirect('garfile/garupload');
@@ -49,9 +51,11 @@ const checkFileIsExcel = (req, res) => {
 const checkFileIsGAR = (req, res, worksheet) => {
   // Check version cell and reject upload if incorrect version found
   const versionCell = worksheet.C1;
-  const versionCellValue = (versionCell ? versionCell.v : undefined);
-  if (versionCellValue === undefined
-    || versionCellValue.trim() !== i18n.__({ phrase: 'upload_gar_file_header', locale: 'en' })) {
+  const versionCellValue = versionCell ? versionCell.v : undefined;
+  if (
+    versionCellValue === undefined ||
+    versionCellValue.trim() !== i18n.__({ phrase: 'upload_gar_file_header', locale: 'en' })
+  ) {
     req.session.failureMsg = i18n.__('validator_api_uploadgar_incorrect_gar_file');
     req.session.failureIdentifier = 'file';
     res.redirect('garfile/garupload');
@@ -83,7 +87,10 @@ const manifestMap = {
   documentNumber: { location: 'D', transform: [transformers.numToString] },
   lastName: { location: 'E' },
   firstName: { location: 'F' },
-  gender: { location: 'G', transform: [transformers.upperCamelCase, transformers.unknownToUnspecified] },
+  gender: {
+    location: 'G',
+    transform: [transformers.upperCamelCase, transformers.unknownToUnspecified],
+  },
   dateOfBirth: { location: 'H' },
   placeOfBirth: { location: 'I' },
   nationality: { location: 'J', transform: [transformers.toUpper] },
@@ -144,10 +151,12 @@ module.exports = async (req, res) => {
       passenger.peopleType = 'Passenger';
     });
 
-    await validator.validateChains(validations(voyageParser.parse(), crew, passengers))
+    await validator
+      .validateChains(validations(voyageParser.parse(), crew, passengers))
       .then(() => {
         logger.info('Uploaded excel sheet is valid, creating GAR via API');
-        createGarApi.createGar(cookie.getUserDbId())
+        createGarApi
+          .createGar(cookie.getUserDbId())
           .then((apiResponse) => {
             const parsedResponse = JSON.parse(apiResponse);
             if (parsedResponse.message) {
@@ -176,7 +185,8 @@ module.exports = async (req, res) => {
                 req.session.failureIdentifier = 'file';
                 res.redirect('garfile/garupload');
               });
-          }).catch((err) => {
+          })
+          .catch((err) => {
             logger.error('Failed to create API with GAR information');
             logger.error(err);
             req.session.failureMsg = 'Failed to create GAR. Try again';
@@ -187,11 +197,10 @@ module.exports = async (req, res) => {
       .catch((validationErrs) => {
         logger.info('Validation errors detected on file upload');
         req.session.failureMsg = validationErrs;
-        logger.error(req.session.failureMsg.map(validRule => validRule.message))
+        logger.error(req.session.failureMsg.map((validRule) => validRule.message));
         req.session.save(() => res.redirect('/garfile/garupload'));
       });
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('Failed to upload GAR information, check the original template file rows');
     logger.error(error);
     req.session.failureMsg = 'Failed to upload GAR information. Try again';

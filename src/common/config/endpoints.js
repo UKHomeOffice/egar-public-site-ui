@@ -71,12 +71,18 @@ const endpoints = {
     return endpoint;
   },
   getListOfOrgUsers(orgId) {
-    const endpoint = new URL(`${API_VERSION}/organisations/${orgId}/users?is_paginated=false`, BASE_URL).href;
+    const endpoint = new URL(
+      `${API_VERSION}/organisations/${orgId}/users?is_paginated=false`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling get org users endpoint ${endpoint}`);
     return endpoint;
   },
   getSearchOrgUsers(orgId, searchUser) {
-    const endpoint = new URL(`${API_VERSION}/organisations/${orgId}/users/search?searchName=${searchUser}`, BASE_URL).href;
+    const endpoint = new URL(
+      `${API_VERSION}/organisations/${orgId}/users/search?searchName=${searchUser}`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling get org search users endpoint ${endpoint}`);
     return endpoint;
   },
@@ -116,12 +122,18 @@ const endpoints = {
     return endpoint;
   },
   getResPersonDetail(userId, responsiblepersonId) {
-    const endpoint = new URL(`${API_VERSION}/user/${userId}/responsibleperson/${responsiblepersonId}`, BASE_URL).href;
+    const endpoint = new URL(
+      `${API_VERSION}/user/${userId}/responsibleperson/${responsiblepersonId}`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling get responsible person details endpoint ${endpoint}`);
     return endpoint;
   },
   deleteResPerson(userId, responsiblepersonId) {
-    const endpoint = new URL(`${API_VERSION}/user/${userId}/responsibleperson/${responsiblepersonId}`, BASE_URL).href;
+    const endpoint = new URL(
+      `${API_VERSION}/user/${userId}/responsibleperson/${responsiblepersonId}`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling delete responsible person details endpoint ${endpoint}`);
     return endpoint;
   },
@@ -161,7 +173,8 @@ const endpoints = {
     return endpoint;
   },
   getGar(garId, isCbpId = false) {
-    const endpoint = new URL(`${API_VERSION}/gar/${garId}?cbp_id=${String(isCbpId)}`, BASE_URL).href;
+    const endpoint = new URL(`${API_VERSION}/gar/${garId}?cbp_id=${String(isCbpId)}`, BASE_URL)
+      .href;
     logger.debug(`Calling get GAR endpoint ${endpoint}`);
     return endpoint;
   },
@@ -171,7 +184,10 @@ const endpoints = {
     return endpoint;
   },
   submitGARForException(garId, onlyIndividuals) {
-    const endpoint = new URL(`${API_VERSION}/gar/${garId}/departure/exception?only_individuals=${onlyIndividuals}`, BASE_URL).href;
+    const endpoint = new URL(
+      `${API_VERSION}/gar/${garId}/departure/exception?only_individuals=${onlyIndividuals}`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling post GAR passenger exceptions endpoint ${endpoint}`);
     return endpoint;
   },
@@ -181,35 +197,47 @@ const endpoints = {
     return endpoint;
   },
   getGarPeople(garId, amg_response_code_priority, page) {
-    const priority = (new URLSearchParams(amg_response_code_priority)).toString();
-    const endpoint = new URL(`${API_VERSION}/gar/${garId}/people?page=${page}&per_page=10000&${priority}`, BASE_URL).href;
+    const priority = new URLSearchParams(amg_response_code_priority).toString();
+    const endpoint = new URL(
+      `${API_VERSION}/gar/${garId}/people?page=${page}&per_page=10000&${priority}`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling get GAR people endpoint ${endpoint}`);
     return endpoint;
   },
   getIndividualGars(userId, page) {
-    const endpoint = new URL(`${API_VERSION}/user/${userId}/gars?page=${page}&per_page=10000`, BASE_URL).href;
+    const endpoint = new URL(
+      `${API_VERSION}/user/${userId}/gars?page=${page}&per_page=10000`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling get individual user GARs endpoint ${endpoint}`);
     return endpoint;
   },
   getOrgGars(userId, orgId, page) {
-    const endpoint = new URL(`${API_VERSION}/user/${userId}/organisation/${orgId}/gars?page=${page}&per_page=10000`, BASE_URL).href;
+    const endpoint = new URL(
+      `${API_VERSION}/user/${userId}/organisation/${orgId}/gars?page=${page}&per_page=10000`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling get org user GARs endpoint ${endpoint}`);
     return endpoint;
   },
   getSupportingDoc(garId) {
-    const url = new URL(`${API_VERSION}/gar/${garId}/supportingdocs?page=1&per_page=10000`, BASE_URL).href;
+    const url = new URL(
+      `${API_VERSION}/gar/${garId}/supportingdocs?page=1&per_page=10000`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling get supporting docs endpoint ${url}`);
     return url;
   },
   userSearch(email, oneLoginSid = null) {
-    let  params = {email}
+    let params = { email };
 
     if (oneLoginSid) {
-      params['one_login_sid'] = oneLoginSid
+      params['one_login_sid'] = oneLoginSid;
     }
 
     const endpoint = new URL(`${API_VERSION}/user/search`, BASE_URL);
-    endpoint.search = (new URLSearchParams(params)).toString();
+    endpoint.search = new URLSearchParams(params).toString();
     logger.debug(`Calling user search endpoint ${endpoint}`);
     return endpoint.href;
   },
@@ -249,14 +277,16 @@ const endpoints = {
     return endpoint;
   },
   deleteGarSupportingDoc(garId, garSupportingDocId) {
-    const endpoint = new URL(`${API_VERSION}/gar/${garId}/supportingdocs/${garSupportingDocId}`, BASE_URL).href;
+    const endpoint = new URL(
+      `${API_VERSION}/gar/${garId}/supportingdocs/${garSupportingDocId}`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling delete supporting document endpoint ${endpoint}`);
     return endpoint;
   },
 
   getGarCheckinProgress(garId) {
-    const endpoint = new URL(`${API_VERSION}/gar/${garId}/progress`, BASE_URL)
-      .href;
+    const endpoint = new URL(`${API_VERSION}/gar/${garId}/progress`, BASE_URL).href;
     logger.debug(`Calling get GAR checkin progress endpoint ${endpoint}`);
     return endpoint;
   },

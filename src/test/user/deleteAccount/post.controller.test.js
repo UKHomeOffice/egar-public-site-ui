@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -14,23 +11,15 @@ const controller = require('../../../app/user/deleteAccount/post.controller');
 
 describe('Admin deletion type is correctly determined from organisation users inputted', () => {
   it('Delete organisation if the org users are only 1 admin', () => {
-    const orgUsers = [
-      { role: { name: 'Admin' } },
-    ];
+    const orgUsers = [{ role: { name: 'Admin' } }];
 
     expect(adminDeletionType(orgUsers)).to.equal('DELETE_ORGANISATION');
   });
 
   it('Do not delete the admin if there is only 1 admin in an organisation', () => {
-    const adminManagerOrgUsers = [
-      { role: { name: 'Admin' } },
-      { role: { name: 'Manager' } },
-    ];
+    const adminManagerOrgUsers = [{ role: { name: 'Admin' } }, { role: { name: 'Manager' } }];
 
-    const adminUserOrgUsers = [
-      { role: { name: 'Admin' } },
-      { role: { name: 'User' } },
-    ];
+    const adminUserOrgUsers = [{ role: { name: 'Admin' } }, { role: { name: 'User' } }];
 
     const threeOrgUsers = [
       { role: { name: 'Admin' } },
@@ -44,10 +33,7 @@ describe('Admin deletion type is correctly determined from organisation users in
   });
 
   it('Delete the admin user if there is more than one admin', () => {
-    const twoAdmins = [
-      { role: { name: 'Admin' } },
-      { role: { name: 'Admin' } },
-    ];
+    const twoAdmins = [{ role: { name: 'Admin' } }, { role: { name: 'Admin' } }];
 
     const anyOtherCombinationOfUsers = [
       { role: { name: 'Admin' } },
@@ -67,8 +53,12 @@ describe('Admin deletion type is correctly determined from organisation users in
 });
 
 describe('User Delete Account Post Controller', () => {
-  let req; let res; let deleteOptionStub;
-  let textStub; let deleteAccountStub; let notifyUserStub;
+  let req;
+  let res;
+  let deleteOptionStub;
+  let textStub;
+  let deleteAccountStub;
+  let notifyUserStub;
   const userRole = 'User';
 
   beforeEach(() => {
@@ -77,7 +67,9 @@ describe('User Delete Account Post Controller', () => {
     req = {
       session: {
         u: { e: 'exampleuser@somewhere.com', rl: userRole, fn: 'Example' },
-        destroy: (callback)=>{callback()},
+        destroy: (callback) => {
+          callback();
+        },
       },
     };
 
@@ -110,14 +102,14 @@ describe('User Delete Account Post Controller', () => {
     await controller(req, res);
 
     expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
-      cookie, errors: [{ message: 'Failed to delete your account. Contact support or try again' }],
+      cookie,
+      errors: [{ message: 'Failed to delete your account. Contact support or try again' }],
     });
   });
 
   it('should render logout if email service rejects', async () => {
     deleteAccountStub.onFirstCall().resolves(JSON.stringify({}));
     notifyUserStub.onFirstCall().rejects('Error occured');
-
 
     await controller(req, res);
 

@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -14,14 +11,14 @@ const verifyUserService = require('../../../common/services/verificationApi');
 const controller = require('../../../app/verify/registeruser/get.controller');
 
 describe('Verify Register User Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
 
     req = {
-      session: {
-      },
+      session: {},
       query: {
         token: 'Example Token',
       },
@@ -57,7 +54,10 @@ describe('Verify Register User Get Controller', () => {
     } catch (err) {
       expect(tokenService.generateHash).to.have.been.called;
       expect(verifyUserService.verifyUser).to.have.been.calledWith('Token123');
-      expect(res.render).to.have.been.calledWith('app/verify/registeruser/index', { cookie, message: 'There was an issue verifying your account. Please try again later.' });
+      expect(res.render).to.have.been.calledWith('app/verify/registeruser/index', {
+        cookie,
+        message: 'There was an issue verifying your account. Please try again later.',
+      });
     }
   });
 });

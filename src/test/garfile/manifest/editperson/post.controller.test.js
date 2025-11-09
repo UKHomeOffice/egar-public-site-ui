@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -18,7 +17,9 @@ const garApi = require('../../../../common/services/garApi');
 const controller = require('../../../../app/garfile/manifest/editperson/post.controller');
 
 describe('Manifest Edit Person Post Controller', () => {
-  let req; let res; let person;
+  let req;
+  let res;
+  let person;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -88,21 +89,28 @@ describe('Manifest Edit Person Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(garApi.updateGarPerson).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index', {
-        req,
-        cookie,
-        person,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [
-          new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
-        ],
+    callController()
+      .then()
+      .then(() => {
+        expect(garApi.updateGarPerson).to.not.have.been.called;
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index', {
+          req,
+          cookie,
+          person,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [
+            new ValidationRule(
+              validator.isNotEmpty,
+              'lastName',
+              req.body.lastName,
+              'Enter the surname of the person'
+            ),
+          ],
+        });
       });
-    });
   });
 
   // render when gar api rejects
@@ -114,44 +122,50 @@ describe('Manifest Edit Person Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(garApi.updateGarPerson).to.have.been.calledWith('9001', person);
-      expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index', {
-        req,
-        cookie,
-        person,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [{ message: 'Failed to update GAR person. Try again' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(garApi.updateGarPerson).to.have.been.calledWith('9001', person);
+        expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index', {
+          req,
+          cookie,
+          person,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [{ message: 'Failed to update GAR person. Try again' }],
+        });
       });
-    });
   });
 
   // render when gar api returns error message
   it('should render message if api returns one', () => {
     const cookie = new CookieModel(req);
-    sinon.stub(garApi, 'updateGarPerson').resolves(JSON.stringify({
-      message: 'GAR not found',
-    }));
+    sinon.stub(garApi, 'updateGarPerson').resolves(
+      JSON.stringify({
+        message: 'GAR not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(garApi.updateGarPerson).to.have.been.calledWith('9001', person);
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index', {
-        req,
-        cookie,
-        person,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [{ message: 'GAR not found' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(garApi.updateGarPerson).to.have.been.calledWith('9001', person);
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index', {
+          req,
+          cookie,
+          person,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [{ message: 'GAR not found' }],
+        });
       });
-    });
   });
 
   it('should redirect on success', () => {
@@ -161,10 +175,12 @@ describe('Manifest Edit Person Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(garApi.updateGarPerson).to.have.been.calledWith('9001', person);
-      expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
-      expect(res.render).to.not.have.been.called;
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(garApi.updateGarPerson).to.have.been.calledWith('9001', person);
+        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
+        expect(res.render).to.not.have.been.called;
+      });
   });
 });

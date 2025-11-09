@@ -6,7 +6,7 @@ const nationalities = {
 
   // Lookup nationality by code - now much simpler!
   getByCode: (code) => {
-    return nationalityData[code] || { code, label: code }
+    return nationalityData[code] || { code, label: code };
   },
 
   exists: (code) => nationalityData[code] !== undefined,
@@ -15,9 +15,10 @@ const nationalities = {
   search: (text) => {
     if (!text) return Object.values(nationalityData);
     const searchTerm = text.toLowerCase();
-    return Object.values(nationalityData).filter(nationality =>
-      nationality.label.toLowerCase().includes(searchTerm) ||
-      nationality.code.toLowerCase().includes(searchTerm)
+    return Object.values(nationalityData).filter(
+      (nationality) =>
+        nationality.label.toLowerCase().includes(searchTerm) ||
+        nationality.code.toLowerCase().includes(searchTerm)
     );
   },
 
@@ -25,7 +26,7 @@ const nationalities = {
   list: Object.values(nationalityData),
 
   // Direct access to the map for advanced usage
-  map: nationalityData
+  map: nationalityData,
 };
 
 module.exports = nationalities;

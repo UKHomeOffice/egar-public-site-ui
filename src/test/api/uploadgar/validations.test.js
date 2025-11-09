@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-
 const { expect } = require('chai');
 
 const i18n = require('i18n');

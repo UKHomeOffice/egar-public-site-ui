@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -15,7 +14,9 @@ const orgApi = require('../../../common/services/organisationApi');
 const controller = require('../../../app/organisation/editorganisation/post.controller');
 
 describe('Organisation Edit Post Controller', () => {
-  let req; let res; let orgApiStub;
+  let req;
+  let res;
+  let orgApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -26,7 +27,7 @@ describe('Organisation Edit Post Controller', () => {
       },
       session: {
         org: { i: 'FIRST-ORDER-ID' },
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
     res = {
@@ -51,13 +52,21 @@ describe('Organisation Edit Post Controller', () => {
 
     callController().then(() => {
       expect(orgApiStub).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
-        cookie,
-        orgName: '',
-        errors: [
-          new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation'),
-        ],
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/organisation/editorganisation/index',
+        {
+          cookie,
+          orgName: '',
+          errors: [
+            new ValidationRule(
+              validator.notEmpty,
+              'orgName',
+              '',
+              'Enter the name of the organisation'
+            ),
+          ],
+        }
+      );
     });
   });
 
@@ -70,14 +79,19 @@ describe('Organisation Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
-        cookie,
-        orgName: 'Evil Empire',
-        errors: [{ message: 'orgApi.update Example Reject' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
+        expect(res.render).to.have.been.calledOnceWithExactly(
+          'app/organisation/editorganisation/index',
+          {
+            cookie,
+            orgName: 'Evil Empire',
+            errors: [{ message: 'orgApi.update Example Reject' }],
+          }
+        );
       });
-    });
   });
 
   // TODO: Should there be one for the api error message...?
@@ -92,12 +106,14 @@ describe('Organisation Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(req.session.org.name).to.eq('Evil Empire');
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
-      expect(res.render).to.not.have.been.called;
-      expect(req.session.save).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(req.session.org.name).to.eq('Evil Empire');
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
+        expect(res.render).to.not.have.been.called;
+        expect(req.session.save).to.have.been.called;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
+      });
   });
 });

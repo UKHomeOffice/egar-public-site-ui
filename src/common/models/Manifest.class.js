@@ -25,12 +25,12 @@ class Manifest {
     }
   }
 
-  static turnPersonToRequest (inputtedPerson) {
+  static turnPersonToRequest(inputtedPerson) {
     const person = structuredClone(inputtedPerson);
     const birtDateObject = Manifest._constructDateObj(person.dateOfBirth);
     const expiryDateObject = Manifest._constructDateObj(person.documentExpiryDate);
 
-    return { 
+    return {
       body: {
         firstName: person.firstName,
         lastName: person.lastName,
@@ -44,45 +44,48 @@ class Manifest {
         travelDocumentNumber: person.documentNumber,
         travelDocumentOther: person.documentDesc,
 
-        issuingState: person.issuingState, 
+        issuingState: person.issuingState,
 
         dobYear: birtDateObject.y,
         dobMonth: birtDateObject.m,
         dobDay: birtDateObject.d,
-    
+
         expiryYear: expiryDateObject.y,
         expiryMonth: expiryDateObject.m,
         expiryDay: expiryDateObject.d,
-      } 
+      },
     };
   }
-  
+
   /**
    * Validate Manifest data cannot be empty and cannot have invalid dates
    * @returns {Bool} true if valid, else false
    */
   async validate() {
     const validatingPeople = Promise.allSettled(
-        this.manifest.map(async (person) => {
-          try {
-            const req = Manifest.turnPersonToRequest(person);
-            return await validator.validateChains(validations.validations(req));
-          } catch (err) {
-            this._recordValidationErr(this.manifest.indexOf(person));
-          }
-        })
-      );
+      this.manifest.map(async (person) => {
+        try {
+          const req = Manifest.turnPersonToRequest(person);
+          return await validator.validateChains(validations.validations(req));
+        } catch (err) {
+          this._recordValidationErr(this.manifest.indexOf(person));
+        }
+      })
+    );
 
     await validatingPeople;
 
     return this.invalidPeople.length === 0;
   }
 
-  validateCaptainCrew() {    
+  validateCaptainCrew() {
     let captainCrewCount = 0;
     this.manifest.forEach((person) => {
       Object.keys(person).forEach((key) => {
-        if (key.toLowerCase().includes('peopletype') && (person[key].name === 'Captain' || person[key].name === 'Crew')) {
+        if (
+          key.toLowerCase().includes('peopletype') &&
+          (person[key].name === 'Captain' || person[key].name === 'Crew')
+        ) {
           captainCrewCount += 1;
         }
       });
@@ -102,7 +105,8 @@ class Manifest {
     logger.debug(`Invalid people: ${this.invalidPeople}`);
     this.invalidPeople.forEach((person) => {
       this.validationArr.push({
-        message: 'Click the edit link of the person(s) with the errors to edit and correct their details.',
+        message:
+          'Click the edit link of the person(s) with the errors to edit and correct their details.',
         identifier: person,
       });
     });

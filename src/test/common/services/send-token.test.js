@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -47,14 +46,17 @@ describe('Send Token Service', () => {
 
     callController().then(() => {
       // Response appears to be undefined.
-      expect(notifyStub.sendEmail).to.have.been.calledOnceWithExactly('EXAMPLE_TEMPLATE_ID',
-        'colin.chapman@lotus.com', {
+      expect(notifyStub.sendEmail).to.have.been.calledOnceWithExactly(
+        'EXAMPLE_TEMPLATE_ID',
+        'colin.chapman@lotus.com',
+        {
           personalisation: {
             first_name: 'Colin',
             token: 'ABCDE12345',
             base_url: 'somewhereovertherainbow.com',
           },
-        });
+        }
+      );
     });
   });
 
@@ -74,18 +76,23 @@ describe('Send Token Service', () => {
       await sendTokenService.send('Jeff', 'jeff@somewhere.com', 'ABC123');
     };
 
-    callController().then(() => {
-      chai.assert.fail('Should not reach here');
-    }).catch((err) => {
-      expect(notifyStub.sendEmail).to.have.been.calledOnceWithExactly('EXAMPLE_TEMPLATE_ID_2',
-        'jeff@somewhere.com', {
-          personalisation: {
-            first_name: 'Jeff',
-            token: 'ABC123',
-            base_url: 'randomsite.com',
-          },
-        });
-      expect(err.name).to.eq('Example Reject');
-    });
+    callController()
+      .then(() => {
+        chai.assert.fail('Should not reach here');
+      })
+      .catch((err) => {
+        expect(notifyStub.sendEmail).to.have.been.calledOnceWithExactly(
+          'EXAMPLE_TEMPLATE_ID_2',
+          'jeff@somewhere.com',
+          {
+            personalisation: {
+              first_name: 'Jeff',
+              token: 'ABC123',
+              base_url: 'randomsite.com',
+            },
+          }
+        );
+        expect(err.name).to.eq('Example Reject');
+      });
   });
 });

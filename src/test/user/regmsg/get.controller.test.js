@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -15,7 +13,8 @@ const tokenApi = require('../../../common/services/tokenApi');
 const controller = require('../../../app/user/regmsg/get.controller');
 
 describe('User Register Message Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);

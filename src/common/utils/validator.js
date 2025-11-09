@@ -4,7 +4,14 @@ const ValidationRule = require('../../common/models/ValidationRule.class');
 const freeCirculationValues = require('../seeddata/egar_craft_eu_free_circulation_options.json');
 const visitReasonValues = require('../seeddata/egar_visit_reason_options.json');
 const genderValues = require('../seeddata/egar_gender_choice.json');
-const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH, MAX_EMAIL_LENGTH, USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT, MAX_ALLOWED_CANCELLATION_TIME_TO_CBP } = require('../config/index');
+const {
+  MAX_STRING_LENGTH,
+  MAX_REGISTRATION_LENGTH,
+  MAX_EMAIL_LENGTH,
+  USER_FIRST_NAME_CHARACTER_COUNT,
+  USER_SURNAME_CHARACTER_COUNT,
+  MAX_ALLOWED_CANCELLATION_TIME_TO_CBP,
+} = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 const { airportCodeList } = require('../../common/utils/autocomplete');
 const nationality = require('../../common/utils/nationality');
@@ -17,27 +24,26 @@ const { documentTypes } = require('./utils');
  */
 const isAbleToCancelGar = (lastDepartureDateString) => {
   if (lastDepartureDateString === null) return true;
-  if (lastDepartureDateString && typeof lastDepartureDateString === "string") {
+  if (lastDepartureDateString && typeof lastDepartureDateString === 'string') {
     const cbpSubmittedDate = new Date(lastDepartureDateString);
     const today = new Date().getTime();
-    return (cbpSubmittedDate.getTime() + MAX_ALLOWED_CANCELLATION_TIME_TO_CBP) > today;
+    return cbpSubmittedDate.getTime() + MAX_ALLOWED_CANCELLATION_TIME_TO_CBP > today;
   } else {
     throw new Error(
       `lastDepartureDateString: "${lastDepartureDateString}", type: "${typeof lastDepartureDateString}", is not null or a valid string`
-    )
+    );
   }
-
-}
+};
 
 function isValidDocumentType(documentType) {
   return documentTypes.includes(documentType);
 }
 
-function isOtherDocumentWithDocumentDesc(args){
+function isOtherDocumentWithDocumentDesc(args) {
   if (!args) return false;
   const [documentType, documentDesc] = args;
 
-  return isEmpty(documentDesc) || documentType === "Other"
+  return isEmpty(documentDesc) || documentType === 'Other';
 }
 
 /**
@@ -57,7 +63,7 @@ function convertDateToUTC(date) {
  * @return {boolean}
  */
 function hasLeadingSpace(value) {
-  return (/^\s/.test(value));
+  return /^\s/.test(value);
 }
 
 /**
@@ -66,7 +72,7 @@ function hasLeadingSpace(value) {
  * @return {boolean}
  */
 function hasOnlySymbols(value) {
-  return (/^[^a-zA-Z0-9]+$/.test(value));
+  return /^[^a-zA-Z0-9]+$/.test(value);
 }
 
 function containTabs(value) {
@@ -102,7 +108,6 @@ function isNotEmpty(value) {
   return isEmpty(value) === false;
 }
 
-
 /**
  * Check if the string is not empty, does not start with a space and does not contain only symbols.
  * @param {String} value
@@ -124,7 +129,7 @@ function notEmpty(value) {
     return false;
   }
 
-  if(containTabs(value)) {
+  if (containTabs(value)) {
     return false;
   }
   return true;
@@ -134,7 +139,7 @@ function notEmpty(value) {
 // must start and end with alpha
 // special characters cannot be placed sequentially
 function validName(value) {
-  const regex = /^[A-z ](?:[A-z ]|[-|\'](?=[A-z ]))*[A-z ]$/
+  const regex = /^[A-z ](?:[A-z ]|[-|\'](?=[A-z ]))*[A-z ]$/;
   return regex.test(value);
 }
 
@@ -163,8 +168,8 @@ function daysInMonth(m, y) {
 }
 
 function isNumeric(input) {
-  if (typeof input === "string") {
-    return (input - parseFloat(input) + 1) >= 0;
+  if (typeof input === 'string') {
+    return input - parseFloat(input) + 1 >= 0;
   }
   return false;
 }
@@ -179,7 +184,7 @@ function isPrintable(value) {
 
 function validDay(d, m, y) {
   if (isNumeric(d)) {
-    return validMonth(m) && (d >= 1 && d <= daysInMonth(m, y));
+    return validMonth(m) && d >= 1 && d <= daysInMonth(m, y);
   }
   return false;
 }
@@ -193,17 +198,17 @@ function validMonth(m) {
 
 function validYear(y) {
   if (isNumeric(y)) {
-    return (y.length === 4) && (y >= 1000 && y <= 9999);
+    return y.length === 4 && y >= 1000 && y <= 9999;
   }
   return false;
 }
 
 function validHour(h) {
-  return (isNumeric(h) && (h >= 0) && (h <= 23));
+  return isNumeric(h) && h >= 0 && h <= 23;
 }
 
 function validMinute(m) {
-  return (isNumeric(m) && (m >= 0) && (m < 60));
+  return isNumeric(m) && m >= 0 && m < 60;
 }
 
 function validTime(timeObj) {
@@ -230,7 +235,6 @@ function isValidNationality(countryCode) {
   return nationality.exists(countryCode);
 }
 
-
 /**
  * Predicate function which checks a given free circulation value.
  *
@@ -238,7 +242,7 @@ function isValidNationality(countryCode) {
  * @returns {Bool} True if contained in freecirulation values else false
  */
 function validFreeCirculation(value) {
-  const validValues = freeCirculationValues.map(item => item.value);
+  const validValues = freeCirculationValues.map((item) => item.value);
   return validValues.includes(value);
 }
 
@@ -248,7 +252,7 @@ function validFreeCirculation(value) {
  * @returns {Bool} True if contained in visitreasons else false
  */
 function validVisitReason(value) {
-  const validValues = visitReasonValues.map(item => item.value);
+  const validValues = visitReasonValues.map((item) => item.value);
   return validValues.includes(value);
 }
 
@@ -258,7 +262,7 @@ function validVisitReason(value) {
  * @returns {Bool} True if contained in gendervalues else false
  */
 function validGender(value) {
-  const validValues = genderValues.map(item => item.gender);
+  const validValues = genderValues.map((item) => item.gender);
   return validValues.includes(value);
 }
 
@@ -275,7 +279,7 @@ function currentOrPastDate(dObj) {
     Returns true if all dates fields are empty to avoid duplicate error messages being displayed.
     The dateNotMoreThanMonthInFuture function will cover this error.
   */
-  if([dObj.d,dObj.m,dObj.y].includes('')) {
+  if ([dObj.d, dObj.m, dObj.y].includes('')) {
     return true;
   }
 
@@ -283,7 +287,11 @@ function currentOrPastDate(dObj) {
     Returns true if supplied dates are invalid to avoid duplicate error messages being displayed.
     The dateNotMoreThanMonthInFuture function will cover this error.
   */
-  if(validDay(dObj.d, dObj.m, dObj.y) === false || validMonth(dObj.m) === false || validYear(dObj.y) === false){
+  if (
+    validDay(dObj.d, dObj.m, dObj.y) === false ||
+    validMonth(dObj.m) === false ||
+    validYear(dObj.y) === false
+  ) {
     return true;
   }
 
@@ -353,33 +361,34 @@ function isTwoHoursPriorDeparture(providedDate) {
  * * @returns {Date} js Date or null if cannot parse
  */
 function getDateFromDynamicInput(input) {
-
-  if (input === null || input === undefined) return null;//we don't have anything to work with
+  if (input === null || input === undefined) return null; //we don't have anything to work with
 
   let providedDate;
 
-  if (input instanceof Date) {//if it's a Date return as is.
+  if (input instanceof Date) {
+    //if it's a Date return as is.
     providedDate = input;
-  }
-  else if (input instanceof String || typeof input === 'string') {//if it is a string literal or object, parse if possible.
+  } else if (input instanceof String || typeof input === 'string') {
+    //if it is a string literal or object, parse if possible.
     providedDate = Date.parse(input);
 
     if (isNaN(providedDate)) {
       providedDate = null;
     }
-  }
-  else if (input.hasOwnProperty('d')) { // if it is an eGAR UI date object, validate properties and parse
-    if (numericDateElements(input)
-      && validDay(input.d, input.m, input.y)
-      && validMonth(input.m)
-      && validYear(input.y)) {
+  } else if (input.hasOwnProperty('d')) {
+    // if it is an eGAR UI date object, validate properties and parse
+    if (
+      numericDateElements(input) &&
+      validDay(input.d, input.m, input.y) &&
+      validMonth(input.m) &&
+      validYear(input.y)
+    ) {
       providedDate = new Date(input.y + '-' + input.m + '-' + input.d);
-    }
-    else {
+    } else {
       providedDate = null;
     }
-  }
-  else {//we've got something but we don't  know what it is. this is likely a calling error rather than data error.
+  } else {
+    //we've got something but we don't  know what it is. this is likely a calling error rather than data error.
     logger.error('Unrecognised date input:' + input);
     providedDate = null;
   }
@@ -387,43 +396,47 @@ function getDateFromDynamicInput(input) {
   return providedDate;
 }
 
-const numericDateElements = dObj => isNumeric(dObj.d)
-  && isNumeric(dObj.m)
-  && isNumeric(dObj.y);
+const numericDateElements = (dObj) => isNumeric(dObj.d) && isNumeric(dObj.m) && isNumeric(dObj.y);
 
 function realDate(dObj) {
   if (dObj === null || dObj === undefined) return false;
-  return numericDateElements(dObj)
-    && validDay(dObj.d, dObj.m, dObj.y)
-    && validMonth(dObj.m)
-    && validYear(dObj.y);
+  return (
+    numericDateElements(dObj) &&
+    validDay(dObj.d, dObj.m, dObj.y) &&
+    validMonth(dObj.m) &&
+    validYear(dObj.y)
+  );
 }
 
 function bornAfter1900(dObj) {
   if (dObj === null || dObj === undefined) return false;
 
-  var nextDay = new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() + 1));
+  var nextDay = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1);
   var providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
 
-  return numericDateElements(dObj)
-    && validDay(dObj.d, dObj.m, dObj.y)
-    && validMonth(dObj.m)
-    && validYear(dObj.y)
-    && (dObj.y >= 1900)
-    && providedDate < nextDay;
+  return (
+    numericDateElements(dObj) &&
+    validDay(dObj.d, dObj.m, dObj.y) &&
+    validMonth(dObj.m) &&
+    validYear(dObj.y) &&
+    dObj.y >= 1900 &&
+    providedDate < nextDay
+  );
 }
 
 function realDateInFuture(dObj) {
   if (dObj === null || dObj === undefined) return false;
 
-  var nextDay = new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() + 1));
+  var nextDay = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1);
   var providedDate = new Date(dObj.y + '-' + dObj.m + '-' + dObj.d);
 
-  return numericDateElements(dObj)
-    && validDay(dObj.d, dObj.m, dObj.y)
-    && validMonth(dObj.m)
-    && validYear(dObj.y)
-    && providedDate >= nextDay;
+  return (
+    numericDateElements(dObj) &&
+    validDay(dObj.d, dObj.m, dObj.y) &&
+    validMonth(dObj.m) &&
+    validYear(dObj.y) &&
+    providedDate >= nextDay
+  );
 }
 
 function realDateFromString(str) {
@@ -434,8 +447,7 @@ function realDateFromString(str) {
 // This function will validate Passport Expiry date while uploading Gar Template
 function passportExpiryDate(value, element) {
   const val = Date.parse(value);
-  if (isNaN(val))
-    return false;
+  if (isNaN(val)) return false;
 
   const d = new Date(val);
   const f = new Date();
@@ -453,8 +465,7 @@ function passportExpiryDate(value, element) {
 // This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
 function birthDate(value, element) {
   const val = Date.parse(value);
-  if (isNaN(val))
-    return false;
+  if (isNaN(val)) return false;
 
   const d = new Date(val);
   const f = new Date();
@@ -469,8 +480,7 @@ function birthDate(value, element) {
 // This function will validate departure date while uploading Gar Template
 function dateNotInPast(value, element) {
   const val = Date.parse(value);
-  if (isNaN(val))
-    return false;
+  if (isNaN(val)) return false;
 
   const d = new Date(val);
   const f = new Date();
@@ -517,11 +527,10 @@ function onlySymbols(value) {
 }
 
 function email(value) {
-  const regex = /^^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
+  const regex =
+    /^^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
   return regex.test(value);
 }
-
-
 
 function latitude(value) {
   const regex = /^-?([1-8]?[0-9]\.{1}\d{6}$|90\.{1}0{6}$)/;
@@ -545,8 +554,7 @@ Min and max lengths depend on format:
 These lengths are a bit arbitrary.
 */
 function validIntlPhone(value) {
-  const regex =  /^(\+|00?)[1-9][0-9]{7,32}$/;
-
+  const regex = /^(\+|00?)[1-9][0-9]{7,32}$/;
 
   return regex.test(value);
 }
@@ -581,7 +589,7 @@ function notSameValues(values) {
   if (values.includes(null) || values.includes(undefined)) {
     return true;
   }
-  return !values.every(v => v.trim().toLowerCase() === values[0].trim().toLowerCase());
+  return !values.every((v) => v.trim().toLowerCase() === values[0].trim().toLowerCase());
 }
 
 /**
@@ -649,10 +657,10 @@ function isValidStringLength(value) {
  * @return {boolean}
  */
 function isValidOptionalStringLength(value) {
-  return isEmpty(value)
-    || (!hasLeadingSpace(value)
-      && !hasOnlySymbols(value)
-      && value.length <= MAX_STRING_LENGTH);
+  return (
+    isEmpty(value) ||
+    (!hasLeadingSpace(value) && !hasOnlySymbols(value) && value.length <= MAX_STRING_LENGTH)
+  );
 }
 
 /**
@@ -709,14 +717,13 @@ function handleResponseError(parsedApiResponse) {
 }
 
 function sanitiseDateOrTime(input, type) {
-  const regex = (type === 'year') ? '[0-9]{1,4}' : '[0-9]{1,2}';
+  const regex = type === 'year' ? '[0-9]{1,4}' : '[0-9]{1,2}';
 
-  return ((input.match(regex) === null) ? '' : input.match(regex)[0]);
+  return input.match(regex) === null ? '' : input.match(regex)[0];
 }
 
 function autoTab(field1, dayMonthOrYear, field2) {
-
-  let len = (dayMonthOrYear === 'year') ? 4 : 2;
+  let len = dayMonthOrYear === 'year' ? 4 : 2;
 
   let field1Value = sanitiseDateOrTime(field1.value, dayMonthOrYear);
 
@@ -724,7 +731,6 @@ function autoTab(field1, dayMonthOrYear, field2) {
     field2.focus();
   }
 }
-
 
 function isAlphanumeric(input) {
   const alphanumericRegex = /^[a-zA-Z0-9]+$/;
@@ -748,7 +754,7 @@ function isPostCodeValidCharacters(input) {
 
 function preventZ(value) {
   value = value || '';
-  if (value.toLowerCase() === "zzzz" || value.toLowerCase() === "yyyy") {
+  if (value.toLowerCase() === 'zzzz' || value.toLowerCase() === 'yyyy') {
     return false;
   }
   return true;
@@ -827,5 +833,5 @@ module.exports = {
   isValidDocumentType,
   isOtherDocumentWithDocumentDesc,
   isAbleToCancelGar,
-  nameHasNoNumbers
+  nameHasNoNumbers,
 };

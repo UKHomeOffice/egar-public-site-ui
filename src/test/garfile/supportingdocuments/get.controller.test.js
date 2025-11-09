@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -13,7 +10,9 @@ const garApi = require('../../../common/services/garApi');
 const controller = require('../../../app/garfile/supportingdocuments/get.controller');
 
 describe('GAR Supporting Documents Get Controller', () => {
-  let req; let res; let apiResponse;
+  let req;
+  let res;
+  let apiResponse;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -49,19 +48,24 @@ describe('GAR Supporting Documents Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
-        cookie,
-        max_num_files: 8,
-        errors: [{ message: 'There was a problem getting GAR supporting documents information' }],
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/garfile/supportingdocuments/index',
+        {
+          cookie,
+          max_num_files: 8,
+          errors: [{ message: 'There was a problem getting GAR supporting documents information' }],
+        }
+      );
     });
   });
 
   it('should render an error message if api returns one', () => {
     const cookie = new CookieModel(req);
-    sinon.stub(garApi, 'getSupportingDocs').resolves(JSON.stringify({
-      message: 'GAR not found',
-    }));
+    sinon.stub(garApi, 'getSupportingDocs').resolves(
+      JSON.stringify({
+        message: 'GAR not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
@@ -69,20 +73,23 @@ describe('GAR Supporting Documents Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
-        cookie,
-        max_num_files: 8,
-        errors: [{ message: 'GAR not found' }],
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/garfile/supportingdocuments/index',
+        {
+          cookie,
+          max_num_files: 8,
+          errors: [{ message: 'GAR not found' }],
+        }
+      );
     });
   });
 
   it('should return an error if query is set to e', () => {
     req.query = { query: 'e' };
-    req.session.errMsg = { 
-      identifier: 'file', 
-      message: 'File not uploaded. There was an error in scanning the file. Please try again' 
-    }
+    req.session.errMsg = {
+      identifier: 'file',
+      message: 'File not uploaded. There was an error in scanning the file. Please try again',
+    };
     const cookie = new CookieModel(req);
     sinon.stub(garApi, 'getSupportingDocs').resolves(JSON.stringify(apiResponse));
 
@@ -92,15 +99,21 @@ describe('GAR Supporting Documents Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
-        cookie,
-        supportingDoc: apiResponse,
-        max_num_files: 8,
-        errors: [{ 
-          identifier: 'file', 
-          message: 'File not uploaded. There was an error in scanning the file. Please try again' 
-        }],
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/garfile/supportingdocuments/index',
+        {
+          cookie,
+          supportingDoc: apiResponse,
+          max_num_files: 8,
+          errors: [
+            {
+              identifier: 'file',
+              message:
+                'File not uploaded. There was an error in scanning the file. Please try again',
+            },
+          ],
+        }
+      );
     });
   });
 
@@ -115,12 +128,15 @@ describe('GAR Supporting Documents Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
-        cookie,
-        supportingDoc: apiResponse,
-        max_num_files: 8,
-        errors: [{ message: 'File cannot be uploaded. The file has a virus' }],
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/garfile/supportingdocuments/index',
+        {
+          cookie,
+          supportingDoc: apiResponse,
+          max_num_files: 8,
+          errors: [{ message: 'File cannot be uploaded. The file has a virus' }],
+        }
+      );
     });
   });
   // query = 0
@@ -135,12 +151,15 @@ describe('GAR Supporting Documents Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
-        cookie,
-        supportingDoc: apiResponse,
-        max_num_files: 8,
-        errors: [{ identifier: 'file', message: 'No file selected for upload' }],
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/garfile/supportingdocuments/index',
+        {
+          cookie,
+          supportingDoc: apiResponse,
+          max_num_files: 8,
+          errors: [{ identifier: 'file', message: 'No file selected for upload' }],
+        }
+      );
     });
   });
 
@@ -155,12 +174,15 @@ describe('GAR Supporting Documents Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
-        cookie,
-        supportingDoc: apiResponse,
-        max_num_files: 8,
-        errors: [{ message: 'File size exceeds total limit' }],
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/garfile/supportingdocuments/index',
+        {
+          cookie,
+          supportingDoc: apiResponse,
+          max_num_files: 8,
+          errors: [{ message: 'File size exceeds total limit' }],
+        }
+      );
     });
   });
 
@@ -175,12 +197,15 @@ describe('GAR Supporting Documents Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
-        cookie,
-        supportingDoc: apiResponse,
-        max_num_files: 8,
-        errors: [{ message: 'Failed to delete document. Try again' }],
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/garfile/supportingdocuments/index',
+        {
+          cookie,
+          supportingDoc: apiResponse,
+          max_num_files: 8,
+          errors: [{ message: 'Failed to delete document. Try again' }],
+        }
+      );
     });
   });
 
@@ -195,12 +220,15 @@ describe('GAR Supporting Documents Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
-        cookie,
-        supportingDoc: apiResponse,
-        max_num_files: 8,
-        errors: [{ message: 'Invalid file type selected' }],
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/garfile/supportingdocuments/index',
+        {
+          cookie,
+          supportingDoc: apiResponse,
+          max_num_files: 8,
+          errors: [{ message: 'Invalid file type selected' }],
+        }
+      );
     });
   });
 
@@ -215,11 +243,14 @@ describe('GAR Supporting Documents Get Controller', () => {
 
     callController().then(() => {
       expect(garApi.getSupportingDocs).to.have.been.calledWith('90210');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/supportingdocuments/index', {
-        cookie,
-        supportingDoc: apiResponse,
-        max_num_files: 8
-      });
+      expect(res.render).to.have.been.calledOnceWithExactly(
+        'app/garfile/supportingdocuments/index',
+        {
+          cookie,
+          supportingDoc: apiResponse,
+          max_num_files: 8,
+        }
+      );
     });
   });
 });

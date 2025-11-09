@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -15,7 +14,9 @@ const orgApi = require('../../../common/services/organisationApi');
 const controller = require('../../../app/organisation/create/post.controller');
 
 describe('Organisation Create Post Controller', () => {
-  let req; let res; let orgApiStub;
+  let req;
+  let res;
+  let orgApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -56,7 +57,12 @@ describe('Organisation Create Post Controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
         cookie,
         errors: [
-          new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation'),
+          new ValidationRule(
+            validator.notEmpty,
+            'orgName',
+            '',
+            'Enter the name of the organisation'
+          ),
         ],
       });
     });
@@ -71,61 +77,77 @@ describe('Organisation Create Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(req.session.org.name).to.eq('New Evil Empire');
-      expect(req.session.org.i).to.be.undefined;
-      expect(req.session.u.rl).to.be.undefined;
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
-        cookie,
-        errors: [{ message: 'orgApi.update Example Reject' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(req.session.org.name).to.eq('New Evil Empire');
+        expect(req.session.org.i).to.be.undefined;
+        expect(req.session.u.rl).to.be.undefined;
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
+        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
+          cookie,
+          errors: [{ message: 'orgApi.update Example Reject' }],
+        });
       });
-    });
   });
 
   it('should render with error message if api returns one', () => {
     cookie = new CookieModel(req);
 
-    orgApiStub.resolves(JSON.stringify({
-      message: 'User ID not found',
-    }));
+    orgApiStub.resolves(
+      JSON.stringify({
+        message: 'User ID not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(req.session.org.name).to.eq('New Evil Empire');
-      expect(req.session.org.i).to.be.undefined;
-      expect(req.session.u.rl).to.be.undefined;
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
-        cookie,
-        errors: [{ message: 'User ID not found' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(req.session.org.name).to.eq('New Evil Empire');
+        expect(req.session.org.i).to.be.undefined;
+        expect(req.session.u.rl).to.be.undefined;
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
+        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
+          cookie,
+          errors: [{ message: 'User ID not found' }],
+        });
       });
-    });
   });
 
   it('should render and sets cookie value when api ok', () => {
     cookie = new CookieModel(req);
 
-    orgApiStub.resolves(JSON.stringify({
-      organisation: { organisationName: 'New Evil Empire From API', organisationId: 'NEW-ORG-ID-123' },
-      role: { name: 'Admin' },
-    }));
+    orgApiStub.resolves(
+      JSON.stringify({
+        organisation: {
+          organisationName: 'New Evil Empire From API',
+          organisationId: 'NEW-ORG-ID-123',
+        },
+        role: { name: 'Admin' },
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(req.session.org.name).to.eq('New Evil Empire From API');
-      expect(req.session.org.i).to.eq('NEW-ORG-ID-123');
-      expect(req.session.u.rl).to.eq('Admin');
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/createsuccess/index', {
-        cookie,
+    callController()
+      .then()
+      .then(() => {
+        expect(req.session.org.name).to.eq('New Evil Empire From API');
+        expect(req.session.org.i).to.eq('NEW-ORG-ID-123');
+        expect(req.session.u.rl).to.eq('Admin');
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
+        expect(res.render).to.have.been.calledOnceWithExactly(
+          'app/organisation/createsuccess/index',
+          {
+            cookie,
+          }
+        );
       });
-    });
   });
 });

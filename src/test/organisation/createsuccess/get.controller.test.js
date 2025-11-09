@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -11,7 +9,8 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const controller = require('../../../app/organisation/createsuccess/get.controller');
 
 describe('Organisation Create Success Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);

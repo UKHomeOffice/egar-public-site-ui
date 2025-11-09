@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
 const chai = require('chai');
@@ -22,21 +21,18 @@ describe('UserGetDetails', () => {
   };
 
   beforeEach(() => {
-    nock(BASE_URL)
-      .get(`/user/${email}`)
-      .reply(200, user);
+    nock(BASE_URL).get(`/user/${email}`).reply(200, user);
   });
 
   it('Should successfully find a user', (done) => {
-    userApi.getDetails(email)
-      .then((response) => {
-        const responseObj = response;
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
-        expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
-        expect(responseObj.email).to.equal(email);
-        done();
-      });
+    userApi.getDetails(email).then((response) => {
+      const responseObj = response;
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
+      expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
+      expect(responseObj.email).to.equal(email);
+      done();
+    });
   });
 
   it('should throw an error', () => {
@@ -45,11 +41,14 @@ describe('UserGetDetails', () => {
       .get(`/user/${email}`)
       .replyWithError({ message: 'Example getDetails error', code: 404 });
 
-    userApi.getDetails(email).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example getDetails error');
-    });
+    userApi
+      .getDetails(email)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example getDetails error');
+      });
   });
 });
 
@@ -59,19 +58,16 @@ describe('UserEdit', () => {
   const lastName = 'Surname';
 
   beforeEach(() => {
-    nock(BASE_URL)
-      .put(`/user/${userId}`, { firstName, lastName })
-      .reply(201, {});
+    nock(BASE_URL).put(`/user/${userId}`, { firstName, lastName }).reply(201, {});
   });
 
   it('should successfully update a users details', (done) => {
-    userApi.updateDetails(userId, firstName, lastName)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+    userApi.updateDetails(userId, firstName, lastName).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.be.empty;
+      done();
+    });
   });
 
   it('should throw an error', () => {
@@ -80,11 +76,14 @@ describe('UserEdit', () => {
       .put(`/user/${userId}`, { firstName, lastName })
       .replyWithError({ message: 'Example updateDetails error', code: 404 });
 
-    userApi.updateDetails(userId, firstName, lastName).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example updateDetails error');
-    });
+    userApi
+      .updateDetails(userId, firstName, lastName)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example updateDetails error');
+      });
   });
 });
 
@@ -92,19 +91,16 @@ describe('DeleteUser', () => {
   const email = 'someemail@server.com';
 
   beforeEach(() => {
-    nock(BASE_URL)
-      .delete(`/user/${email}`)
-      .reply(200, { message: 'User deleted' });
+    nock(BASE_URL).delete(`/user/${email}`).reply(200, { message: 'User deleted' });
   });
 
   it('Should successfully delete a user', (done) => {
-    userApi.deleteUser(email)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.keys(['message']);
-        done();
-      });
+    userApi.deleteUser(email).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.have.keys(['message']);
+      done();
+    });
   });
 
   it('should throw an error', () => {
@@ -113,11 +109,14 @@ describe('DeleteUser', () => {
       .delete(`/user/${email}`)
       .replyWithError({ message: 'Example deleteUser error', code: 404 });
 
-    userApi.deleteUser(email).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example deleteUser error');
-    });
+    userApi
+      .deleteUser(email)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example deleteUser error');
+      });
   });
 });
 
@@ -132,35 +131,34 @@ describe('SearchUser', () => {
   };
 
   beforeEach(() => {
-    nock(BASE_URL)
-      .get('/user/search')
-      .query({email})
-      .reply(200, user);
+    nock(BASE_URL).get('/user/search').query({ email }).reply(200, user);
   });
 
   it('Should successfully find a user', (done) => {
-    userApi.userSearch(email)
-      .then((response) => {
-        const responseObj = response;
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
-        expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
-        expect(responseObj.email).to.equal(email);
-        done();
-      });
+    userApi.userSearch(email).then((response) => {
+      const responseObj = response;
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
+      expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
+      expect(responseObj.email).to.equal(email);
+      done();
+    });
   });
 
   it('should throw an error', () => {
     nock.cleanAll();
     nock(BASE_URL)
       .get(`/user/search`)
-      .query({email})
+      .query({ email })
       .replyWithError({ message: 'Example searchUser error', code: 404 });
 
-    userApi.userSearch(email).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example searchUser error');
-    });
+    userApi
+      .userSearch(email)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example searchUser error');
+      });
   });
 });

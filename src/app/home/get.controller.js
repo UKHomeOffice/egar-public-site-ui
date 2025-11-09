@@ -14,19 +14,21 @@ module.exports = (req, res) => {
   // Delete any GAR stored in the cookie session
   cookie.session.gar = null;
 
-  tokenApi.getLastLogin(cookie.getUserEmail())
+  tokenApi
+    .getLastLogin(cookie.getUserEmail())
     .then((userSession) => {
       const { successHeader, successMsg } = req.session;
       const page = req?.query?.page || 1;
       delete req.session.successHeader;
       delete req.session.successMsg;
 
-      garApi.getGars(userId, role, page, orgId)
+      garApi
+        .getGars(userId, role, page, orgId)
         .then((apiResponse) => {
           const garList = JSON.parse(apiResponse).items;
-          const draftGars = garList.filter(gar => gar.status.name === 'Draft');
-          const submittedGars = garList.filter(gar => gar.status.name === 'Submitted');
-          const cancelledGars = garList.filter(gar => gar.status.name === 'Cancelled');
+          const draftGars = garList.filter((gar) => gar.status.name === 'Draft');
+          const submittedGars = garList.filter((gar) => gar.status.name === 'Submitted');
+          const cancelledGars = garList.filter((gar) => gar.status.name === 'Cancelled');
           const serverPagination = JSON.parse(apiResponse)._meta;
 
           res.render('app/home/index', {
@@ -37,15 +39,18 @@ module.exports = (req, res) => {
             draftGars,
             submittedGars,
             cancelledGars,
-            pageSize: 10, 
-            serverPagination
+            pageSize: 10,
+            serverPagination,
           });
         })
         .catch((err) => {
           logger.error('Failed to get GARS from API');
           logger.error(err);
           res.render('app/home/index', {
-            cookie, successMsg, successHeader, errors: [{ message: 'Failed to get GARs' }],
+            cookie,
+            successMsg,
+            successHeader,
+            errors: [{ message: 'Failed to get GARs' }],
           });
         });
     })

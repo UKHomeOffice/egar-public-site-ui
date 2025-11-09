@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 const _ = require('lodash');
 
 const logger = require('../../../common/utils/logger')(__filename);
@@ -13,13 +11,19 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  let { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes'} = req.body;
-  
-  if(portChoice === 'Yes'){
+  let {
+    registration,
+    craftType,
+    craftBasePort,
+    craftBaseLat,
+    craftBaseLong,
+    portChoice = 'Yes',
+  } = req.body;
+
+  if (portChoice === 'Yes') {
     craftBaseLat = null;
     craftBaseLong = null;
-  }
-  else{
+  } else {
     craftBasePort = null;
   }
 
@@ -30,21 +34,20 @@ module.exports = (req, res) => {
     craftBasePort,
     craftBaseLat,
     craftBaseLong,
-    portChoice
+    portChoice,
   };
-
-
 
   const validationChain = craftValidations.validations(craftObj);
 
   // Validate chains
-  validator.validateChains(validationChain)
+  validator
+    .validateChains(validationChain)
     .then(() => {
-      
       const craftBase = cookie.reduceCraftBase(craftBasePort, craftBaseLat, craftBaseLong);
 
       // call the API to update the data base and then
-      craftApi.create(registration, craftType, craftBase, cookie.getUserDbId())
+      craftApi
+        .create(registration, craftType, craftBase, cookie.getUserDbId())
         .then((apiResponse) => {
           try {
             const parsedResponse = JSON.parse(apiResponse);
@@ -63,16 +66,20 @@ module.exports = (req, res) => {
               errMsg = { message: 'Craft already exists' };
             }
             res.render('app/aircraft/add/index', {
-              cookie, craftObj, errors: [errMsg],
+              cookie,
+              craftObj,
+              errors: [errMsg],
             });
           }
         });
     })
     .catch((err) => {
       logger.info('Add craft postcontroller - There was a problem with adding the saved craft');
-      logger.info(err)
+      logger.info(err);
       res.render('app/aircraft/add/index', {
-        cookie, craftObj, errors: err,
+        cookie,
+        craftObj,
+        errors: err,
       });
     });
 };

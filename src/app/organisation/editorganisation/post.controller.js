@@ -12,14 +12,21 @@ module.exports = (req, res) => {
 
   // Define a validation chain for user registeration fields
   const orgNameChain = [
-    new ValidationRule(validator.notEmpty, 'orgName', orgName, 'Enter the name of the organisation'),
+    new ValidationRule(
+      validator.notEmpty,
+      'orgName',
+      orgName,
+      'Enter the name of the organisation'
+    ),
   ];
 
   // Validate chains
-  validator.validateChains([orgNameChain])
+  validator
+    .validateChains([orgNameChain])
     .then(() => {
       // API should return OrgId
-      organisationApi.update(orgName, cookie.getOrganisationId())
+      organisationApi
+        .update(orgName, cookie.getOrganisationId())
         .then((apiResponse) => {
           const responseObj = JSON.parse(apiResponse);
           logger.debug(`Response from API: ${JSON.stringify(responseObj)}`);
