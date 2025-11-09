@@ -1,44 +1,55 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
 {% block pageTitle %}
-	GAR | Organisation invite
+  GAR | Organisation invite
 {% endblock %}
-
-{% block header %}
-{% include "header-pre-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
+  {% if pathName !== '/verify/invite/onelogin' %}
 
-  {% include "phase.njk" %}
-  {% include "common/templates/includes/back.njk" %}
-
+    {% include "common/templates/includes/back.njk" %}
+  {% endif %}
 {% endblock %}
-
 {% block content %}
-
-
-{% import "common/templates/includes/macros.njk" as m %}
-
-{% if errors %}
-  {% include "common/templates/includes/errors.njk" %}
-{% endif %}
-
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-
+  {% if errors %}
+    {% include "common/templates/includes/errors.njk" %}
+  {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if pathName === '/verify/invite/onelogin' %}
+        <h1 class="govuk-heading-l">
+          You have been invited to join Submit a General Aviation Report (GAR)</h1>
+        <p class="govuk-body">Use this service to:</p>
+        <ul class="govuk-body">
+          <li>submit a GAR</li>
+          <li>view, edit or dance a GAR</li>
+          <li>add, remove or manage people on your flight</li>
+        </ul>
+      </p>
+      <div class="box-left-grey-border">
+        <div class="email-text">
+          <p class="govuk-body">You need a GOV.UK One Login to sign in to this service. You can create one if you do not already
+            have one.</p>
+          <p class="govuk-body">
+            You should use the same email address to create your GOV.UK One Login that you use for your Submit a General Aviation
+            Report (GAR) account.
+          </p>
+        </div>
+      </div>
+      <div>
+      <a id="start_now" href="{{oneLoginAuthUrl}}" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">
+				{{__('button_start_now')}}
+			</a>
+      </div>
+    {% else %}
       <h1 class="govuk-heading-l">
         You have been invited to join an organisation
       </h1>
-
-      <a class="govuk-button" href="/user/register" role="button">Register</a>
-			<p class="govuk-body-m">
-			   If you are having difficulties using this service, please <a href="mailto:egarsupport@homeoffice.gov.uk">contact us</a>.
-			</p>
-	</div>
+      <a id="register" class="govuk-button" href="/user/register">Register</a>
+      <p class="govuk-body-m">
+        If you are having difficulties using this service, please
+        <a href="mailto:{{ __('support_email') }}">contact us</a>.
+      </p>
+    {% endif %}
+  </div>
 </div>
-<input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-{% endblock %}
+<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>{% endblock %}
