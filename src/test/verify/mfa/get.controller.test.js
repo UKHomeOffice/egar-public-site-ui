@@ -93,7 +93,7 @@ describe('Verify MFA Get Controller', () => {
 
     try {
       await controller(req, res);
-    } catch (err) {
+    } catch {
       expect(tokenApi.setMfaToken).to.have.been.calledWith('example@somewhere.com', '123456', true);
       expect(res.render).to.have.been.calledWith('app/verify/mfa/index', {
         cookie,
