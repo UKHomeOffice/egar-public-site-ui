@@ -4,7 +4,6 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const proxyrequire = require('proxyquire').noCallThru();
 const config = require('../../common/config/index');
-const oneLoginApi = require('../../common/utils/oneLoginAuth');
 
 require('../global.test');
 
