@@ -49,6 +49,9 @@ export default defineConfig([
     files: ['app/**/*.js', 'common/**/*.js'],
     languageOptions: {
       sourceType: 'commonjs',
+      globals: {
+        __: 'readonly',
+      },
     },
     rules: {
       'no-unused-vars': [
