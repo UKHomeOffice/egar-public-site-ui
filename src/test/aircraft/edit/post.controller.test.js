@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -16,7 +15,8 @@ const craftApi = require('../../../common/services/craftApi');
 const controller = require('../../../app/aircraft/edit/post.controller');
 
 describe('Aircraft Edit Post Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -82,20 +82,24 @@ describe('Aircraft Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
-      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
-        cookie,
-        errors: [{ message: 'An error has occurred. Try again later' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
+        expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
+          cookie,
+          errors: [{ message: 'An error has occurred. Try again later' }],
+        });
       });
-    });
   });
 
   it('should return an error if message returned by API', () => {
     cookie = new CookieModel(req);
-    sinon.stub(craftApi, 'update').resolves(JSON.stringify({
-      message: 'Aircraft not found',
-    }));
+    sinon.stub(craftApi, 'update').resolves(
+      JSON.stringify({
+        message: 'Aircraft not found',
+      })
+    );
     const callController = async () => {
       await controller(req, res);
     };

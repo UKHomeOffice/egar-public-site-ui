@@ -18,7 +18,8 @@ const continentalShelfOptions = require('../../../common/seeddata/egar_continent
 const controller = require('../../../app/garfile/customs/get.controller');
 
 describe('GAR Customs Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -62,9 +63,11 @@ describe('GAR Customs Get Controller', () => {
   });
 
   it('should render the appropriate page', async () => {
-    sinon.stub(garApi, 'get').resolves(JSON.stringify({
-      id: 'GAR1-ID',
-    }));
+    sinon.stub(garApi, 'get').resolves(
+      JSON.stringify({
+        id: 'GAR1-ID',
+      })
+    );
     const cookie = new CookieModel(req);
 
     await controller(req, res);

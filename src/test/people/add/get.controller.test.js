@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -14,7 +12,8 @@ const genderchoice = require('../../../common/seeddata/egar_gender_choice.json')
 const controller = require('../../../app/people/add/get.controller');
 
 describe('People Add Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -37,7 +36,10 @@ describe('People Add Get Controller', () => {
     await controller(req, res);
 
     expect(res.render).to.have.been.calledWith('app/people/add/index', {
-      cookie, genderchoice, persontype, documenttype,
+      cookie,
+      genderchoice,
+      persontype,
+      documenttype,
     });
   });
 });

@@ -2,8 +2,7 @@ const config = require('../config/index');
 const logger = require('./logger')(__filename);
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
-const {parseUrlForNonProd} = require('../services/oneLoginApi');
-
+const { parseUrlForNonProd } = require('../services/oneLoginApi');
 
 const getOneLoginAuthUrl = (req, res) => {
   try {
@@ -46,7 +45,7 @@ const getOneLoginAuthUrl = (req, res) => {
     logger.error('Failed to create autherize url');
     throw error;
   }
-}
+};
 
 /**
  * Create the log user out request to One Login API.
@@ -54,7 +53,6 @@ const getOneLoginAuthUrl = (req, res) => {
  * @returns returns onelogin logout url
  */
 const getOneLoginLogoutUrl = (req, id_token, state) => {
-
   try {
     logger.info('create a logout url for one Login');
     const url = `${config.ONE_LOGIN_INTEGRATION_URL}/logout`;
@@ -69,7 +67,7 @@ const getOneLoginLogoutUrl = (req, id_token, state) => {
     logger.error('Failed to create oneLogin user logout');
     throw error;
   }
-}
+};
 
 const createJwt = (params) => {
   const privateKey = config.ONE_LOGIN_PRIVATE_KEY;
@@ -90,7 +88,7 @@ const getOneLoginPublicKey = (header, callback) => {
       callback(null, signingKey);
     }
   });
-}
+};
 
 const verifyJwt = (idToken, nonce, callback) => {
   let valid = false;
@@ -106,19 +104,14 @@ const verifyJwt = (idToken, nonce, callback) => {
         nonce,
       },
       (err, decoded) => {
-        if (
-          !err &&
-          decoded !== null &&
-          decodedToken.vot === decoded.vot &&
-          decodedToken.sub === decoded.sub
-        ) {
+        if (!err && decoded !== null && decodedToken.vot === decoded.vot && decodedToken.sub === decoded.sub) {
           valid = true;
         } else {
           logger.error(`Invalid token:${err}`);
           valid = false;
         }
         callback(valid);
-      },
+      }
     );
   } catch (error) {
     logger.error(`Failed to verify oneLogin token: ${error}`);
@@ -126,13 +119,12 @@ const verifyJwt = (idToken, nonce, callback) => {
     // CountLoginError();
     throw error;
   }
-}
+};
 
 const decodeToken = (token) => {
   const decodedToken = jwt.decode(token);
   return decodedToken;
-}
-
+};
 
 module.exports = {
   getOneLoginAuthUrl,
@@ -140,5 +132,5 @@ module.exports = {
   getOneLoginPublicKey,
   verifyJwt,
   decodeToken,
-  createJwt
+  createJwt,
 };

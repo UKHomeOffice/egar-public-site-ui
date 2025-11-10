@@ -10,12 +10,14 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
   // Validate chains
-  validator.validateChains(validations.validations(req))
+  validator
+    .validateChains(validations.validations(req))
     .then(() => {
       cookie.setInviteUserFirstName(fname);
       cookie.setInviteUserLastName(lname);
       cookie.setInviteUserEmail(email);
-      userApi.getDetails(email)
+      userApi
+        .getDetails(email)
         .then((apiResponse) => {
           if (apiResponse.message === 'User not registered') {
             return res.redirect('/organisation/assignrole');
@@ -34,9 +36,11 @@ module.exports = (req, res) => {
       logger.error('Invite Users Organisation postcontroller - There was a problem inviting a user');
       logger.error(JSON.stringify(err));
       res.render('app/organisation/inviteusers/index', {
-        cookie, fname, lname, email, errors: err,
+        cookie,
+        fname,
+        lname,
+        email,
+        errors: err,
       });
     });
 };
-
-

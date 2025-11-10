@@ -13,22 +13,25 @@ module.exports = {
   create(organisationName, userId) {
     logger.info(`User ${userId} creating organisation`);
     return new Promise((resolve, reject) => {
-      request.post({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.registerOrg(),
-        body: JSON.stringify({
-          organisationName,
-          userId,
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call create organisation API');
-          reject(error);
-          return;
+      request.post(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.registerOrg(),
+          body: JSON.stringify({
+            organisationName,
+            userId,
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call create organisation API');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called create organisation API');
+          resolve(body);
         }
-        logger.debug('Successfully called create organisation API');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -41,26 +44,29 @@ module.exports = {
    */
   update(organisationName, orgId) {
     return new Promise((resolve, reject) => {
-      request.put({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.updateOrg(orgId),
-        body: JSON.stringify({
-          organisationName,
-        }),
-      }, (error, response, body) => {
-        if (error) {
-          logger.error('Failed to call update organisation API');
-          reject(error);
-          return;
+      request.put(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.updateOrg(orgId),
+          body: JSON.stringify({
+            organisationName,
+          }),
+        },
+        (error, response, body) => {
+          if (error) {
+            logger.error('Failed to call update organisation API');
+            reject(error);
+            return;
+          }
+          if (response.statusCode >= 400) {
+            logger.error(`Update organisation API returned error status: ${response.statusCode}`);
+            reject(JSON.parse(body));
+            return;
+          }
+          logger.debug('Successfully called update organisation API');
+          resolve(body);
         }
-        if (response.statusCode >= 400) {
-          logger.error(`Update organisation API returned error status: ${response.statusCode}`);
-          reject(JSON.parse(body));
-          return;
-        }
-        logger.debug('Successfully called update organisation API');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -73,18 +79,21 @@ module.exports = {
    */
   get(orgId) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.getOrgDetails(orgId),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get organisation details API');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getOrgDetails(orgId),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get organisation details API');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get organisation details API');
+          resolve(body);
         }
-        logger.debug('Successfully called get organisation details API');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -97,21 +106,24 @@ module.exports = {
    */
   delete(orgId, requesterId) {
     return new Promise((resolve, reject) => {
-      request.delete({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.deleteOrgDetails(orgId),
-        body: JSON.stringify({
-          requesterId,
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call delete organisation details API');
-          reject(error);
-          return;
+      request.delete(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.deleteOrgDetails(orgId),
+          body: JSON.stringify({
+            requesterId,
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call delete organisation details API');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called delete organisation details API');
+          resolve(body);
         }
-        logger.debug('Successfully called delete organisation details API');
-        resolve(body);
-      });
+      );
     });
   },
   /**
@@ -121,22 +133,25 @@ module.exports = {
    */
   getUsers(orgId, pageNumber, numberOfUsers) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.getOrgUsers(orgId),
-        qs: {
-          per_page: numberOfUsers,
-          page: pageNumber,
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getOrgUsers(orgId),
+          qs: {
+            per_page: numberOfUsers,
+            page: pageNumber,
+          },
         },
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get organisation users API endpoint');
-          reject(error);
-          return;
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get organisation users API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get organisation users API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called get organisation users API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -147,25 +162,28 @@ module.exports = {
    * @returns {Promise} resolves with API response.
    */
   getListOfOrgUsers(orgId, role = null) {
-    let url = endpoints.getOrgUsers(orgId)
+    let url = endpoints.getOrgUsers(orgId);
 
     if (role) {
-      url = `${url}?role=${role}`
+      url = `${url}?role=${role}`;
     }
 
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: url,
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get list organisation users API endpoint');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: url,
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get list organisation users API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get list organisation users API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called get list organisation users API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -178,46 +196,48 @@ module.exports = {
    */
   editUser(requesterId, orgId, userObj) {
     return new Promise((resolve, reject) => {
-      request.patch({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.editOrgUser(orgId),
-        body: JSON.stringify({
-          requesterId,
-          users: [
-            userObj,
-          ],
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call edit organisation users API endpoint');
-          reject(error);
-          return;
+      request.patch(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.editOrgUser(orgId),
+          body: JSON.stringify({
+            requesterId,
+            users: [userObj],
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call edit organisation users API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called edit organisation users API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called edit organisation users API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
   deleteUser(requesterId, orgId, userObj) {
     return new Promise((resolve, reject) => {
-      request.delete({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.deleteOrgUser(orgId),
-        body: JSON.stringify({
-          requesterId,
-          users: [
-            userObj,
-          ],
-        }),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call delete user endpoint');
-          reject(error);
-          return;
+      request.delete(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.deleteOrgUser(orgId),
+          body: JSON.stringify({
+            requesterId,
+            users: [userObj],
+          }),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call delete user endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called delete user/person endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called delete user/person endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -229,18 +249,21 @@ module.exports = {
    */
   getSearchOrgUsers(orgId, searchUserName) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.getSearchOrgUsers(orgId, searchUserName),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get search organisation users API endpoint');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getSearchOrgUsers(orgId, searchUserName),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get search organisation users API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get search organisation users API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called get search organisation users API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 
@@ -251,18 +274,21 @@ module.exports = {
    */
   getUserById(userId) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.getUserDataById(userId),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get search organisation users API endpoint');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getUserDataById(userId),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get search organisation users API endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get search organisation users API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called get search organisation users API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
 };

@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const { expect } = require('chai');
 const proxyquire = require('proxyquire');
 
@@ -16,7 +13,7 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as true', 
 
   before(() => {
     autocomplete = proxyquire('../../../common/utils/autocomplete', {
-      '../config': { USE_NEW_NATIONALITY_LIST_PROVIDER: true }
+      '../config': { USE_NEW_NATIONALITY_LIST_PROVIDER: true },
     });
   });
 
@@ -31,17 +28,17 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as true', 
       expect(result).to.not.be.undefined;
       expect(result).to.be.an('array');
 
-      const uk = result.find(row => row.code === 'GBR');
+      const uk = result.find((row) => row.code === 'GBR');
       expect(uk.code).to.eq('GBR');
       expect(uk.label).to.eq('United Kingdom (GBR)');
 
-      const jpn = result.find(row => row.code === 'JPN');
+      const jpn = result.find((row) => row.code === 'JPN');
       expect(jpn.code).to.eq('JPN');
       expect(jpn.label).to.eq('Japan (JPN)');
     });
 
     it('should have proper structure for each entry', () => {
-      result.forEach(entry => {
+      result.forEach((entry) => {
         expect(entry).to.have.property('code');
         expect(entry).to.have.property('label');
         expect(entry.code).to.be.a('string');
@@ -97,7 +94,7 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as true', 
 
       // Check that it contains both IATA and ICAO codes
       if (autocomplete.airportCodeList.length > 0) {
-        autocomplete.airportCodeList.forEach(code => {
+        autocomplete.airportCodeList.forEach((code) => {
           expect(code).to.be.a('string');
         });
       }
@@ -110,7 +107,7 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as false',
 
   before(() => {
     autocomplete = proxyquire('../../../common/utils/autocomplete', {
-      '../config': { USE_NEW_NATIONALITY_LIST_PROVIDER: false }
+      '../config': { USE_NEW_NATIONALITY_LIST_PROVIDER: false },
     });
   });
 
@@ -124,17 +121,17 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as false',
       expect(result).to.not.be.undefined;
       expect(result).to.be.an('array');
 
-      const uk = result.find(row => row.code === 'GBR');
+      const uk = result.find((row) => row.code === 'GBR');
       expect(uk.code).to.eq('GBR');
       expect(uk.label).to.eq('United Kingdom (GBR)');
 
-      const jpn = result.find(row => row.code === 'JPN');
+      const jpn = result.find((row) => row.code === 'JPN');
       expect(jpn.code).to.eq('JPN');
       expect(jpn.label).to.eq('Japan (JPN)');
     });
 
     it('should have proper structure for each entry', () => {
-      result.forEach(entry => {
+      result.forEach((entry) => {
         expect(entry).to.have.property('code');
         expect(entry).to.have.property('label');
         expect(entry.code).to.be.a('string');
@@ -195,7 +192,7 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as false',
 
       // Check that it contains both IATA and ICAO codes
       if (autocomplete.airportCodeList.length > 0) {
-        autocomplete.airportCodeList.forEach(code => {
+        autocomplete.airportCodeList.forEach((code) => {
           expect(code).to.be.a('string');
         });
       }

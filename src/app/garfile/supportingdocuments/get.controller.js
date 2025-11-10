@@ -1,25 +1,30 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
-const config = require('../../../common/config/index'); 
+const config = require('../../../common/config/index');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const max_num_files = config.MAX_NUM_FILES;
   logger.debug('In garfile / supporting documents get controller');
-  garApi.getSupportingDocs(cookie.getGarId())
+  garApi
+    .getSupportingDocs(cookie.getGarId())
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
         const error = [{ message: parsedResponse.message }];
-        res.render('app/garfile/supportingdocuments/index', { cookie, max_num_files, errors: error });
+        res.render('app/garfile/supportingdocuments/index', {
+          cookie,
+          max_num_files,
+          errors: error,
+        });
         return;
       }
       // No error, check the query.query parameter
       const supportingDoc = JSON.parse(apiResponse);
 
       // Bare minimum to send with the render call
-      const context = { cookie, supportingDoc , max_num_files};
+      const context = { cookie, supportingDoc, max_num_files };
       let error = null;
       switch (req.query.query) {
         case 'e': // Error returned
@@ -36,7 +41,7 @@ module.exports = (req, res) => {
           error = [{ message: 'File size exceeds total limit' }];
           break;
         case 'number':
-          error = [{message: 'Total number of files exceeds the limit' }];
+          error = [{ message: 'Total number of files exceeds the limit' }];
           break;
         case 'deletefailed':
           error = [{ message: 'Failed to delete document. Try again' }];
@@ -45,16 +50,21 @@ module.exports = (req, res) => {
           error = [{ message: 'Invalid file type selected' }];
           break;
         default:
-          // No need to set an error
+        // No need to set an error
       }
       if (error !== null) {
         // Add to the errors to be passed to the render call
         context.errors = error;
       }
       res.render('app/garfile/supportingdocuments/index', context);
-    }).catch((err) => {
+    })
+    .catch((err) => {
       logger.error('Failed to get GAR supportingdocuments details');
       logger.error(err);
-      res.render('app/garfile/supportingdocuments/index', { cookie, max_num_files, errors: [{ message: 'There was a problem getting GAR supporting documents information' }] });
+      res.render('app/garfile/supportingdocuments/index', {
+        cookie,
+        max_num_files,
+        errors: [{ message: 'There was a problem getting GAR supporting documents information' }],
+      });
     });
 };

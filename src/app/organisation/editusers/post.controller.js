@@ -18,13 +18,17 @@ module.exports = (req, res) => {
 
   const roles = getRolesForAssigning(cookie.getUserRole());
 
-  validator.validateChains(validations.validations(req))
+  validator
+    .validateChains(validations.validations(req))
     .then(() => {
-      orgApi.editUser(cookie.getUserDbId(), cookie.getOrganisationId(), orgUser)
+      orgApi
+        .editUser(cookie.getUserDbId(), cookie.getOrganisationId(), orgUser)
         .then((apiResponse) => {
           const parsedResponse = JSON.parse(apiResponse);
           if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-            req.session.errMsg = { message: 'You do not have the permissions to edit this user or perform this action' };
+            req.session.errMsg = {
+              message: 'You do not have the permissions to edit this user or perform this action',
+            };
           }
           return req.session.save(() => res.redirect('/organisation'));
         })
@@ -38,7 +42,10 @@ module.exports = (req, res) => {
     .catch((err) => {
       logger.info('Failed validations editing an organisation user');
       res.render('app/organisation/editusers/index', {
-        cookie, orgUser, roles, errors: err,
+        cookie,
+        orgUser,
+        roles,
+        errors: err,
       });
     });
 };

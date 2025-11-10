@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 // Node.js core dependencies
 const path = require('path');
 const express = require('express');
@@ -20,12 +18,10 @@ const uuid = require('uuid/v4');
 const csrf = require('csurf');
 const PgSession = require('connect-pg-simple')(session);
 
-
-
 // Local dependencies
 const logger = require('./common/utils/logger')(__filename);
 const config = require('./common/config/index');
-const availability = require('./common/config/availability')
+const availability = require('./common/config/availability');
 const router = require('./app/router');
 const db = require('./common/utils/db');
 const noCache = require('./common/utils/no-cache');
@@ -33,13 +29,13 @@ const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
-const {IS_HTTPS_SERVER, SAME_SITE_VALUE} = require("./common/config");
+const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require('./common/config');
 
 // Global constants
-const PORT = (process.env.PORT || 3000);
+const PORT = process.env.PORT || 3000;
 const { NODE_ENV } = process.env;
-const G4_ID = (process.env.G4_ID || '');
-const BASE_URL = (process.env.BASE_URL || '');
+const G4_ID = process.env.G4_ID || '';
+const BASE_URL = process.env.BASE_URL || '';
 
 // Set Cookie secure flag depending on environment variable
 let secureFlag = process.env.COOKIE_SECURE_FLAG === 'true';
@@ -59,7 +55,8 @@ const APP_VIEWS = [
 function initialiseDb() {
   return new Promise((resolve, reject) => {
     logger.info('Syncing db');
-    db.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
+    db.sequelize
+      .query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
       .then(() => db.sequelize.sync())
       .then(() => {
         logger.debug('Successfully created tables');
@@ -75,26 +72,27 @@ function initialiseDb() {
 
 function initialisExpressSession(app) {
   app.use(cookieParser());
-  app.use(session({
-    name: 'sess_id',
-    genid: () => uuid(),
-    store: new PgSession({
-      conString: config.PUBLIC_SITE_DB_CONNSTR,
-      ttl: 60 * 60,
-    }),
-    secret: config.SESSION_ENCODE_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      secure: secureFlag,
-      httpOnly: IS_HTTPS_SERVER,
-      sameSite: SAME_SITE_VALUE,
-      maxAge: 60 * 60 * 1000,
-    },
-  }));
+  app.use(
+    session({
+      name: 'sess_id',
+      genid: () => uuid(),
+      store: new PgSession({
+        conString: config.PUBLIC_SITE_DB_CONNSTR,
+        ttl: 60 * 60,
+      }),
+      secret: config.SESSION_ENCODE_SECRET,
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        secure: secureFlag,
+        httpOnly: IS_HTTPS_SERVER,
+        sameSite: SAME_SITE_VALUE,
+        maxAge: 60 * 60 * 1000,
+      },
+    })
+  );
   logger.info('Set express session');
 }
-
 
 function initialiseGlobalMiddleware(app) {
   logger.info('Initalising global middleware');
@@ -103,7 +101,7 @@ function initialiseGlobalMiddleware(app) {
     logger.info('Enabling service unavailable middleware');
     const validRoutes = ['unavailable', 'public', 'javascripts', 'stylesheets'];
     app.use((req, res, next) => {
-      if (!validRoutes.some(el => req.url.includes(el))) {
+      if (!validRoutes.some((el) => req.url.includes(el))) {
         res.redirect('/unavailable');
         return;
       }
@@ -115,24 +113,31 @@ function initialiseGlobalMiddleware(app) {
   app.use(compression());
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
-    app.use(/\/((?!images|public|stylesheets|javascripts).)*/, loggingMiddleware(
-      ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms',
-    ));
+    app.use(
+      /\/((?!images|public|stylesheets|javascripts).)*/,
+      loggingMiddleware(
+        ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'
+      )
+    );
   }
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({
-    extended: true,
-  }));
+  app.use(
+    bodyParser.urlencoded({
+      extended: true,
+    })
+  );
 
-  app.use(csrf({
-    cookie: {
-      httpOnly: true,
-      secure: secureFlag,
-    },
-  }));
+  app.use(
+    csrf({
+      cookie: {
+        httpOnly: true,
+        secure: secureFlag,
+      },
+    })
+  );
 
   app.use((req, res, next) => {
-    res.locals.asset_path = '/public/'; // eslint-disable-line camelcase
+    res.locals.asset_path = '/public/';
     noCache(res);
     const token = req.csrfToken();
     res.locals._csrf = token;
@@ -201,7 +206,7 @@ function initialiseTemplateEngine(app) {
 
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
-  nunjucksEnvironment.addGlobal('travelPermissionCodes', travelPermissionCodes)
+  nunjucksEnvironment.addGlobal('travelPermissionCodes', travelPermissionCodes);
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
   nunjucksEnvironment.addFilter('expiryDate', nunjucksFilters.expiryDate);
@@ -211,7 +216,7 @@ function initialiseTemplateEngine(app) {
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
   // nunjucksEnvironment.addGlobal("toDate", toDate());
-  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_POSTCODE_LENGTH', config.MAX_POSTCODE_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
@@ -224,12 +229,15 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('MAINTENANCE_END_DATETIME', availability.MAINTENANCE_END_DATETIME);
 
   nunjucksEnvironment.addGlobal('CARRIER_SUPPORT_HUB_UK_NUMBER', config.CARRIER_SUPPORT_HUB_UK_NUMBER);
-  nunjucksEnvironment.addGlobal('CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER', config.CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER);
+  nunjucksEnvironment.addGlobal(
+    'CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER',
+    config.CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER
+  );
 
   nunjucksEnvironment.addGlobal('ONE_LOGIN_SHOW_ONE_LOGIN', config.ONE_LOGIN_SHOW_ONE_LOGIN);
   nunjucksEnvironment.addGlobal('ONE_LOGIN_POST_MIGRATION', config.ONE_LOGIN_POST_MIGRATION);
 
-  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/,'').split('-').join('-'));
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   logger.info('Set global settings for nunjucks');
 }
 
@@ -281,8 +289,8 @@ function initialise() {
       initialisePublic(unconfiguredApp);
       initialiseErrorHandling(unconfiguredApp);
       logger.info('Initialised app: ');
-    } catch(e) {
-      logger.error("Prepping the database failed.")
+    } catch (e) {
+      logger.error('Prepping the database failed.');
       logger.error(e);
     }
   }

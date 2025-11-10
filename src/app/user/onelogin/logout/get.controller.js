@@ -1,4 +1,4 @@
-const {getOneLoginLogoutUrl} = require("../../../../common/utils/oneLoginAuth");
+const { getOneLoginLogoutUrl } = require('../../../../common/utils/oneLoginAuth');
 const CookieModel = require('../../../../common/models/Cookie.class');
 
 module.exports = (req, res) => {
@@ -13,9 +13,9 @@ module.exports = (req, res) => {
       for (const cookieName in cookies) {
         res.clearCookie(cookieName);
       }
-      const {state, id_token} = req.cookies;
+      const { state, id_token } = req.cookies;
 
-      if (state && id_token)  {
+      if (state && id_token) {
         const logoutUrl = getOneLoginLogoutUrl(req, id_token, state);
         res.redirect(logoutUrl);
       }

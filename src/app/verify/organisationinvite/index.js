@@ -3,7 +3,7 @@ const express = require('express');
 
 // Middleware
 const flagpole = require('../../../common/middleware/flagpole');
-const csrfcheck = require('../../../common/middleware/csrfcheck')
+const csrfcheck = require('../../../common/middleware/csrfcheck');
 const parseForm = require('../../../common/middleware/parseForm');
 const setting = require('../../../common/config/index');
 
@@ -14,8 +14,8 @@ const getController = require('./get.controller');
 const router = new express.Router();
 let indexPath = '/verify/invite';
 
-if(setting.ONE_LOGIN_SHOW_ONE_LOGIN === true || setting.ONE_LOGIN_POST_MIGRATION === true){
-   indexPath = '/verify/invite/onelogin';
+if (setting.ONE_LOGIN_SHOW_ONE_LOGIN === true || setting.ONE_LOGIN_POST_MIGRATION === true) {
+  indexPath = '/verify/invite/onelogin';
 }
 
 const paths = {
@@ -23,7 +23,7 @@ const paths = {
 };
 
 // Routing
-router.get(paths.index, flagpole,  csrfcheck, getController);
+router.get(paths.index, flagpole, csrfcheck, getController);
 
 // Export
 module.exports = {
