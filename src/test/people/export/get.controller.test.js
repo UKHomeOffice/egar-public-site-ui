@@ -14,7 +14,6 @@ const personApi = require('../../../common/services/personApi');
 describe('Organisation Export User Controller', () => {
   let req;
   let res;
-  let orgApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
