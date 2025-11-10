@@ -120,7 +120,7 @@ module.exports = async (req, res) => {
     garpeople = JSON.parse(responseValues[1]);
 
     if (isResubmit0T) {
-      const people = garpeople.items
+      garpeople.items
         .filter((s) => s.amgCheckinResponseCode === '0T')
         .map((s) => ({
           garPeopleId: s.garPeopleId,
