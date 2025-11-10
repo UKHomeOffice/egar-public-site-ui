@@ -90,7 +90,7 @@ module.exports = {
       reqBody = { ...reqBody, oneLoginSid };
     }
 
-    if (reqBody === {}) {
+    if (reqBody == {}) {
       throw new Error('Provide updateEmail or oneLoginSid');
     }
 
