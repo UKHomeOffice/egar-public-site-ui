@@ -4,22 +4,13 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const { decodeToken } = require('../../../common/utils/oneLoginAuth');
-const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
-const validator = require('../../../common/utils/validator');
 const {
   PHASE_GIVEN_NAME,
   PHASE_CONFIRM_NAME,
-  PHASE_REGISTRATION_COMPLETE,
-  WORKFLOW_STEPS,
 } = require('../../../app/user/onelogin/constants');
 
 // Import controllers
 const getController = require('../../../app/user/onelogin/get.controller');
-const postController = require('../../../app/user/onelogin/post.controller');
-const { getUserInviteToken } = require('../../../common/services/verificationApi');
 
 describe.skip('User OneLogin Get Controller', () => {
   describe('GET Controller Tests', () => {
