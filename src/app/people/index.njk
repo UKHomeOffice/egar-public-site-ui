@@ -13,12 +13,8 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
-
-   {% include "common/templates/includes/success-action.njk" %}
+      {% include "common/templates/includes/errors.njk" %}
+      {% include "common/templates/includes/success-action.njk" %}
 
       <h1 class="govuk-heading-xl">{{ __('title_people') }}</h1>
       <p class="govuk-body-l">

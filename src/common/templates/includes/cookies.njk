@@ -1,1 +1,59 @@
-<p>GOV.UK uses cookies to make the site simpler. <a href="/cookies">Find out more about cookies</a></p>
+<div class="govuk-cookie-banner " data-nosnippet role="region" id="main_cookie_banner"
+  aria-label="Cookies on Submit a GAR" hidden>
+  <div class="govuk-cookie-banner__message govuk-width-container" id="main_cookie_message">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">Cookies on Submit a GAR</h2>
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">We use some essential cookies to make this service work.</p>
+          <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service
+            and make improvements.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button" id="cookies_accept"
+        onclick="accept_cookies()">
+        Accept analytics cookies
+      </button>
+      <button type="button" class="govuk-button" data-module="govuk-button" id="cookies_reject"
+        onclick="reject_cookies()">
+        Reject analytics cookies
+      </button>
+      <a class="govuk-link" href="/cookies">View cookies</a>
+    </div>
+  </div>
+
+  <div class="govuk-cookie-banner__message govuk-width-container" id="cookies_accept_message" role="alert" hidden>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve accepted analytics cookies. You can <a class="govuk-link"
+              href="/cookies">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button class="govuk-button" id="hide_accept_message" data-module="govuk-button" onclick="hide_message()">
+        Hide this message
+      </button>
+    </div>
+  </div>
+
+  <div class="govuk-cookie-banner__message govuk-width-container" id="cookies_reject_message" role="alert" hidden>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-cookie-banner__content">
+          <p class="govuk-body">You’ve rejected analytics cookies. You can <a class="govuk-link"
+              href="/cookies">change your cookie settings</a> at any time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-button-group">
+      <button class="govuk-button" id="hide_reject_message" data-module="govuk-button" onclick="hide_message()">
+        Hide this message
+      </button>
+    </div>
+  </div>
+</div>

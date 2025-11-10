@@ -15,7 +15,7 @@
 {%set departure = cookie.getGarDepartureVoyage() %}
 
 {% block beforeContent %}
-  
+
   <a href="/garfile/home" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
@@ -23,9 +23,7 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
+      {% include "common/templates/includes/errors.njk" %}
 
       <form id="page-form" action="/garfile/departure" autocomplete="off" class="form-group" method="post">
         <span class="govuk-caption-xl">{{__('section_count', 1, 9)}}</span>

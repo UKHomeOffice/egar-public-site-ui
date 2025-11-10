@@ -7,9 +7,7 @@
 {% endblock %}
 
 {% block content %}
-      {% if data.errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
+    {% include "common/templates/includes/errors.njk" %}
 
      <div class="govuk-grid-row padding-bottom-60">
          {% if step %}

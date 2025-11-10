@@ -13,10 +13,7 @@
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
 
-    {% if errors %}
-      {% include "common/templates/includes/errors.njk" %}
-    {% endif %}
-
+  {% include "common/templates/includes/errors.njk" %}
  {% include "common/templates/includes/success-action.njk" %}
 
       <script>
@@ -38,7 +35,7 @@
     {# {% endif %} #}
   </div>
 
-  
+
 
   <div class="govuk-grid-column-full">
     <form id="aircraft" action="/aircraft" class="form-group" method="post" role="form" >
