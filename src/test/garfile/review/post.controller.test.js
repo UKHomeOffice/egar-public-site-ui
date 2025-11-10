@@ -335,6 +335,5 @@ describe('GAR Review Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/review/index.njk', { cookie });
       });
     });
-
   });
 });
