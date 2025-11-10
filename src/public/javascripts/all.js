@@ -1,9 +1,10 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define('GOVUKFrontend', ['exports'], factory) :
-      (factory((global.GOVUKFrontend = {})));
-}(this, (function (exports) {
-
+  typeof exports === 'object' && typeof module !== 'undefined'
+    ? factory(exports)
+    : typeof define === 'function' && define.amd
+      ? define('GOVUKFrontend', ['exports'], factory)
+      : factory((global.GOVUKFrontend = {}));
+})(this, function (exports) {
   /**
    * TODO: Ideally this would be a NodeList.prototype.forEach polyfill
    * This seems to fail in IE8, requires more investigation.
@@ -11,7 +12,7 @@
    */
   function nodeListForEach(nodes, callback) {
     if (window.NodeList.prototype.forEach) {
-      return nodes.forEach(callback)
+      return nodes.forEach(callback);
     }
     for (var i = 0; i < nodes.length; i++) {
       callback.call(window, nodes[i], i, nodes);
@@ -28,40 +29,40 @@
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = (d + Math.random() * 16) % 16 | 0;
       d = Math.floor(d / 16);
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-    })
+      return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
   }
 
   (function (undefined) {
-
     // Detection from https://github.com/Financial-Times/polyfill-service/blob/master/packages/polyfill-library/polyfills/Object/defineProperty/detect.js
-    var detect = (
+    var detect =
       // In IE8, defineProperty could only act on DOM elements, so full support
       // for the feature requires the ability to set a property on an arbitrary object
-      'defineProperty' in Object && (function () {
+      'defineProperty' in Object &&
+      (function () {
         try {
           var a = {};
           Object.defineProperty(a, 'test', { value: 42 });
           return true;
         } catch (e) {
-          return false
+          return false;
         }
-      }())
-    );
+      })();
 
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://cdn.polyfill.io/v2/polyfill.js?features=Object.defineProperty&flags=always
     (function (nativeDefineProperty) {
-
       var supportsAccessors = Object.prototype.hasOwnProperty('__defineGetter__');
       var ERR_ACCESSORS_NOT_SUPPORTED = 'Getters & setters cannot be defined on this javascript engine';
       var ERR_VALUE_ACCESSORS = 'A property cannot both have accessors and be writable or have a value';
 
       Object.defineProperty = function defineProperty(object, property, descriptor) {
-
         // Where native support exists, assume it
-        if (nativeDefineProperty && (object === window || object === document || object === Element.prototype || object instanceof Element)) {
+        if (
+          nativeDefineProperty &&
+          (object === window || object === document || object === Element.prototype || object instanceof Element)
+        ) {
           return nativeDefineProperty(object, property, descriptor);
         }
 
@@ -115,28 +116,54 @@
 
         return object;
       };
-    }(Object.defineProperty));
-  })
-    .call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+    })(Object.defineProperty);
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   (function (undefined) {
     // Detection from https://github.com/Financial-Times/polyfill-service/blob/master/packages/polyfill-library/polyfills/Function/prototype/bind/detect.js
     var detect = 'bind' in Function.prototype;
 
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://cdn.polyfill.io/v2/polyfill.js?features=Function.prototype.bind&flags=always
     Object.defineProperty(Function.prototype, 'bind', {
-      value: function bind(that) { // .length is 1
+      value: function bind(that) {
+        // .length is 1
         // add necessary es5-shim utilities
         var $Array = Array;
         var $Object = Object;
         var ObjectPrototype = $Object.prototype;
         var ArrayPrototype = $Array.prototype;
-        var Empty = function Empty() { };
+        var Empty = function Empty() {};
         var to_string = ObjectPrototype.toString;
         var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
-        var isCallable; /* inlined from https://npmjs.com/is-callable */ var fnToStr = Function.prototype.toString, tryFunctionObject = function tryFunctionObject(value) { try { fnToStr.call(value); return true; } catch (e) { return false; } }, fnClass = '[object Function]', genClass = '[object GeneratorFunction]'; isCallable = function isCallable(value) { if (typeof value !== 'function') { return false; } if (hasToStringTag) { return tryFunctionObject(value); } var strClass = to_string.call(value); return strClass === fnClass || strClass === genClass; };
+        var isCallable;
+        /* inlined from https://npmjs.com/is-callable */ var fnToStr = Function.prototype.toString,
+          tryFunctionObject = function tryFunctionObject(value) {
+            try {
+              fnToStr.call(value);
+              return true;
+            } catch (e) {
+              return false;
+            }
+          },
+          fnClass = '[object Function]',
+          genClass = '[object GeneratorFunction]';
+        isCallable = function isCallable(value) {
+          if (typeof value !== 'function') {
+            return false;
+          }
+          if (hasToStringTag) {
+            return tryFunctionObject(value);
+          }
+          var strClass = to_string.call(value);
+          return strClass === fnClass || strClass === genClass;
+        };
         var array_slice = ArrayPrototype.slice;
         var array_concat = ArrayPrototype.concat;
         var array_push = ArrayPrototype.push;
@@ -164,7 +191,6 @@
         //   15.3.4.5.3.
         var bound;
         var binder = function () {
-
           if (this instanceof bound) {
             // 15.3.4.5.2 [[Construct]]
             // When the [[Construct]] internal method of a function object,
@@ -182,15 +208,11 @@
             // 5. Return the result of calling the [[Construct]] internal
             //   method of target providing args as the arguments.
 
-            var result = target.apply(
-              this,
-              array_concat.call(args, array_slice.call(arguments))
-            );
+            var result = target.apply(this, array_concat.call(args, array_slice.call(arguments)));
             if ($Object(result) === result) {
               return result;
             }
             return this;
-
           } else {
             // 15.3.4.5.1 [[Call]]
             // When the [[Call]] internal method of a function object, F,
@@ -211,13 +233,8 @@
             //   providing args as the arguments.
 
             // equiv: target.call(this, ...boundArgs, ...args)
-            return target.apply(
-              that,
-              array_concat.call(args, array_slice.call(arguments))
-            );
-
+            return target.apply(that, array_concat.call(args, array_slice.call(arguments)));
           }
-
         };
 
         // 15. If the [[Class]] internal property of Target is "Function", then
@@ -241,7 +258,10 @@
         // for ex.) all use of eval or Function costructor throws an exception.
         // However in all of these environments Function.prototype.bind exists
         // and so this code will never be executed.
-        bound = Function('binder', 'return function (' + boundArgs.join(',') + '){ return binder.apply(this, arguments); }')(binder);
+        bound = Function(
+          'binder',
+          'return function (' + boundArgs.join(',') + '){ return binder.apply(this, arguments); }'
+        )(binder);
 
         if (target.prototype) {
           Empty.prototype = target.prototype;
@@ -272,54 +292,52 @@
 
         // 22. Return F.
         return bound;
-      }
+      },
     });
-  })
-    .call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   (function (undefined) {
-
     // Detection from https://raw.githubusercontent.com/Financial-Times/polyfill-service/master/packages/polyfill-library/polyfills/DOMTokenList/detect.js
-    var detect = (
-      'DOMTokenList' in this && (function (x) {
+    var detect =
+      'DOMTokenList' in this &&
+      (function (x) {
         return 'classList' in x ? !x.classList.toggle('x', false) && !x.className : true;
-      })(document.createElement('x'))
-    );
+      })(document.createElement('x'));
 
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://raw.githubusercontent.com/Financial-Times/polyfill-service/master/packages/polyfill-library/polyfills/DOMTokenList/polyfill.js
     (function (global) {
-      var nativeImpl = "DOMTokenList" in global && global.DOMTokenList;
+      var nativeImpl = 'DOMTokenList' in global && global.DOMTokenList;
 
       if (
         !nativeImpl ||
-        (
-          !!document.createElementNS &&
+        (!!document.createElementNS &&
           !!document.createElementNS('http://www.w3.org/2000/svg', 'svg') &&
-          !(document.createElementNS("http://www.w3.org/2000/svg", "svg").classList instanceof DOMTokenList)
-        )
+          !(document.createElementNS('http://www.w3.org/2000/svg', 'svg').classList instanceof DOMTokenList))
       ) {
-        global.DOMTokenList = (function () { // eslint-disable-line no-unused-vars
+        global.DOMTokenList = (function () {
           var dpSupport = true;
           var defineGetter = function (object, name, fn, configurable) {
             if (Object.defineProperty)
               Object.defineProperty(object, name, {
                 configurable: false === dpSupport ? true : !!configurable,
-                get: fn
+                get: fn,
               });
-
             else object.__defineGetter__(name, fn);
           };
 
           /** Ensure the browser allows Object.defineProperty to be used on native JavaScript objects. */
           try {
-            defineGetter({}, "support");
-          }
-          catch (e) {
+            defineGetter({}, 'support');
+          } catch (e) {
             dpSupport = false;
           }
-
 
           var _DOMTokenList = function (el, prop) {
             var that = this;
@@ -328,14 +346,17 @@
             var length = 0;
             var maxLength = 0;
             var addIndexGetter = function (i) {
-              defineGetter(that, i, function () {
-                preop();
-                return tokens[i];
-              }, false);
-
+              defineGetter(
+                that,
+                i,
+                function () {
+                  preop();
+                  return tokens[i];
+                },
+                false
+              );
             };
             var reindex = function () {
-
               /** Define getter functions for array-like access to the tokenList's contents. */
               if (length >= maxLength)
                 for (; maxLength < length; ++maxLength) {
@@ -354,27 +375,25 @@
               if (args.length)
                 for (i = 0; i < args.length; ++i)
                   if (rSpace.test(args[i])) {
-                    error = new SyntaxError('String "' + args[i] + '" ' + "contains" + ' an invalid character');
+                    error = new SyntaxError('String "' + args[i] + '" ' + 'contains' + ' an invalid character');
                     error.code = 5;
-                    error.name = "InvalidCharacterError";
+                    error.name = 'InvalidCharacterError';
                     throw error;
                   }
 
-
               /** Split the new value apart by whitespace*/
-              if (typeof el[prop] === "object") {
-                tokens = ("" + el[prop].baseVal).replace(/^\s+|\s+$/g, "").split(rSpace);
+              if (typeof el[prop] === 'object') {
+                tokens = ('' + el[prop].baseVal).replace(/^\s+|\s+$/g, '').split(rSpace);
               } else {
-                tokens = ("" + el[prop]).replace(/^\s+|\s+$/g, "").split(rSpace);
+                tokens = ('' + el[prop]).replace(/^\s+|\s+$/g, '').split(rSpace);
               }
 
               /** Avoid treating blank strings as single-item token lists */
-              if ("" === tokens[0]) tokens = [];
+              if ('' === tokens[0]) tokens = [];
 
               /** Repopulate the internal token lists */
               tokenMap = {};
-              for (i = 0; i < tokens.length; ++i)
-                tokenMap[tokens[i]] = true;
+              for (i = 0; i < tokens.length; ++i) tokenMap[tokens[i]] = true;
               length = tokens.length;
               reindex();
             };
@@ -383,17 +402,16 @@
             preop();
 
             /** Return the number of tokens in the underlying string. Read-only. */
-            defineGetter(that, "length", function () {
+            defineGetter(that, 'length', function () {
               preop();
               return length;
             });
 
             /** Override the default toString/toLocaleString methods to return a space-delimited list of tokens when typecast. */
-            that.toLocaleString =
-              that.toString = function () {
-                preop();
-                return tokens.join(" ");
-              };
+            that.toLocaleString = that.toString = function () {
+              preop();
+              return tokens.join(' ');
+            };
 
             that.item = function (idx) {
               preop();
@@ -406,7 +424,7 @@
             };
 
             that.add = function () {
-              preop.apply(that, args = arguments);
+              preop.apply(that, (args = arguments));
 
               for (var args, token, i = 0, l = args.length; i < l; ++i) {
                 token = args[i];
@@ -419,17 +437,17 @@
               /** Update the targeted attribute of the attached element if the token list's changed. */
               if (length !== tokens.length) {
                 length = tokens.length >>> 0;
-                if (typeof el[prop] === "object") {
-                  el[prop].baseVal = tokens.join(" ");
+                if (typeof el[prop] === 'object') {
+                  el[prop].baseVal = tokens.join(' ');
                 } else {
-                  el[prop] = tokens.join(" ");
+                  el[prop] = tokens.join(' ');
                 }
                 reindex();
               }
             };
 
             that.remove = function () {
-              preop.apply(that, args = arguments);
+              preop.apply(that, (args = arguments));
 
               /** Build a hash of token names to compare against when recollecting our token list. */
               for (var args, ignore = {}, i = 0, t = []; i < args.length; ++i) {
@@ -438,17 +456,16 @@
               }
 
               /** Run through our tokens list and reassign only those that aren't defined in the hash declared above. */
-              for (i = 0; i < tokens.length; ++i)
-                if (!ignore[tokens[i]]) t.push(tokens[i]);
+              for (i = 0; i < tokens.length; ++i) if (!ignore[tokens[i]]) t.push(tokens[i]);
 
               tokens = t;
               length = t.length >>> 0;
 
               /** Update the targeted attribute of the attached element. */
-              if (typeof el[prop] === "object") {
-                el[prop].baseVal = tokens.join(" ");
+              if (typeof el[prop] === 'object') {
+                el[prop].baseVal = tokens.join(' ');
               } else {
-                el[prop] = tokens.join(" ");
+                el[prop] = tokens.join(' ');
               }
               reindex();
             };
@@ -482,7 +499,7 @@
           };
 
           return _DOMTokenList;
-        }());
+        })();
       }
 
       // Add second argument to native DOMTokenList.toggle() if necessary
@@ -502,7 +519,7 @@
           this[force ? 'add' : 'remove'](token);
           return force;
         };
-      }());
+      })();
 
       // Add multiple arguments to native DOMTokenList.add() if necessary
       (function () {
@@ -518,7 +535,7 @@
             native.call(this, args[i]);
           }
         };
-      }());
+      })();
 
       // Add multiple arguments to native DOMTokenList.remove() if necessary
       (function () {
@@ -536,49 +553,49 @@
             native.call(this, args[i]);
           }
         };
-      }());
-
-    }(this));
-
-  }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+      })();
+    })(this);
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   (function (undefined) {
-
     // Detection from https://github.com/Financial-Times/polyfill-service/blob/master/packages/polyfill-library/polyfills/Document/detect.js
-    var detect = ("Document" in this);
+    var detect = 'Document' in this;
 
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://cdn.polyfill.io/v2/polyfill.js?features=Document&flags=always
-    if ((typeof WorkerGlobalScope === "undefined") && (typeof importScripts !== "function")) {
-
-      if (this.HTMLDocument) { // IE8
+    if (typeof WorkerGlobalScope === 'undefined' && typeof importScripts !== 'function') {
+      if (this.HTMLDocument) {
+        // IE8
 
         // HTMLDocument is an extension of Document.  If the browser has HTMLDocument but not Document, the former will suffice as an alias for the latter.
         this.Document = this.HTMLDocument;
-
       } else {
-
         // Create an empty function to act as the missing constructor for the document object, attach the document object as its prototype.  The function needs to be anonymous else it is hoisted and causes the feature detect to prematurely pass, preventing the assignments below being made.
-        this.Document = this.HTMLDocument = document.constructor = (new Function('return function Document() {}')());
+        this.Document = this.HTMLDocument = document.constructor = new Function('return function Document() {}')();
         this.Document.prototype = document;
       }
     }
-
-
-  })
-    .call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   (function (undefined) {
-
     // Detection from https://github.com/Financial-Times/polyfill-service/blob/master/packages/polyfill-library/polyfills/Element/detect.js
-    var detect = ('Element' in this && 'HTMLElement' in this);
+    var detect = 'Element' in this && 'HTMLElement' in this;
 
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://cdn.polyfill.io/v2/polyfill.js?features=Element&flags=always
     (function () {
-
       // IE8
       if (window.Element && !window.HTMLElement) {
         window.HTMLElement = window.Element;
@@ -594,15 +611,16 @@
 
       // use sandboxed iframe to replicate Element functionality
       var frameDocument = frame.contentWindow.document;
-      var prototype = Element.prototype = frameDocument.appendChild(frameDocument.createElement('*'));
+      var prototype = (Element.prototype = frameDocument.appendChild(frameDocument.createElement('*')));
       var cache = {};
 
       // polyfill Element.prototype on an element
       var shiv = function (element, deep) {
-        var
-          childNodes = element.childNodes || [],
+        var childNodes = element.childNodes || [],
           index = -1,
-          key, value, childNode;
+          key,
+          value,
+          childNode;
 
         if (element.nodeType === 1 && element.constructor !== Element) {
           element.constructor = Element;
@@ -613,7 +631,7 @@
           }
         }
 
-        while (childNode = deep && childNodes[++index]) {
+        while ((childNode = deep && childNodes[++index])) {
           shiv(childNode, deep);
         }
 
@@ -626,15 +644,14 @@
       var loopLimit = 100;
 
       prototype.attachEvent('onpropertychange', function (event) {
-        var
-          propertyName = event.propertyName,
+        var propertyName = event.propertyName,
           nonValue = !cache.hasOwnProperty(propertyName),
           newValue = prototype[propertyName],
           oldValue = cache[propertyName],
           index = -1,
           element;
 
-        while (element = elements[++index]) {
+        while ((element = elements[++index])) {
           if (element.nodeType === 1) {
             if (nonValue || element[propertyName] === oldValue) {
               element[propertyName] = newValue;
@@ -656,11 +673,11 @@
 
       // Apply Element prototype to the pre-existing DOM as soon as the body element appears.
       function bodyCheck() {
-        if (!(loopLimit--)) clearTimeout(interval);
+        if (!loopLimit--) clearTimeout(interval);
         if (document.body && !document.body.prototype && /(complete|interactive)/.test(document.readyState)) {
           shiv(document, true);
           if (interval && document.body.prototype) clearTimeout(interval);
-          return (!!document.body.prototype);
+          return !!document.body.prototype;
         }
         return false;
       }
@@ -677,23 +694,28 @@
 
       // remove sandboxed iframe
       document.removeChild(vbody);
-    }());
-
-  })
-    .call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+    })();
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   (function (undefined) {
-
     // Detection from https://raw.githubusercontent.com/Financial-Times/polyfill-service/8717a9e04ac7aff99b4980fbedead98036b0929a/packages/polyfill-library/polyfills/Element/prototype/classList/detect.js
-    var detect = (
-      'document' in this && "classList" in document.documentElement && 'Element' in this && 'classList' in Element.prototype && (function () {
+    var detect =
+      'document' in this &&
+      'classList' in document.documentElement &&
+      'Element' in this &&
+      'classList' in Element.prototype &&
+      (function () {
         var e = document.createElement('span');
         e.classList.add('a', 'b');
         return e.classList.contains('b');
-      }())
-    );
+      })();
 
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://cdn.polyfill.io/v2/polyfill.js?features=Element.prototype.classList&flags=always
     (function (global) {
@@ -702,75 +724,79 @@
         if (Object.defineProperty)
           Object.defineProperty(object, name, {
             configurable: false === dpSupport ? true : !!configurable,
-            get: fn
+            get: fn,
           });
-
         else object.__defineGetter__(name, fn);
       };
       /** Ensure the browser allows Object.defineProperty to be used on native JavaScript objects. */
       try {
-        defineGetter({}, "support");
-      }
-      catch (e) {
+        defineGetter({}, 'support');
+      } catch (e) {
         dpSupport = false;
       }
       /** Polyfills a property with a DOMTokenList */
       var addProp = function (o, name, attr) {
+        defineGetter(
+          o.prototype,
+          name,
+          function () {
+            var tokenList;
 
-        defineGetter(o.prototype, name, function () {
-          var tokenList;
+            var THIS = this,
+              /** Prevent this from firing twice for some reason. What the hell, IE. */
+              gibberishProperty = '__defineGetter__' + 'DEFINE_PROPERTY' + name;
+            if (THIS[gibberishProperty]) return tokenList;
+            THIS[gibberishProperty] = true;
 
-          var THIS = this,
+            /**
+             * IE8 can't define properties on native JavaScript objects, so we'll use a dumb hack instead.
+             *
+             * What this is doing is creating a dummy element ("reflection") inside a detached phantom node ("mirror")
+             * that serves as the target of Object.defineProperty instead. While we could simply use the subject HTML
+             * element instead, this would conflict with element types which use indexed properties (such as forms and
+             * select lists).
+             */
+            if (false === dpSupport) {
+              var visage;
+              var mirror = addProp.mirror || document.createElement('div');
+              var reflections = mirror.childNodes;
+              var l = reflections.length;
 
-            /** Prevent this from firing twice for some reason. What the hell, IE. */
-            gibberishProperty = "__defineGetter__" + "DEFINE_PROPERTY" + name;
-          if (THIS[gibberishProperty]) return tokenList;
-          THIS[gibberishProperty] = true;
+              for (var i = 0; i < l; ++i)
+                if (reflections[i]._R === THIS) {
+                  visage = reflections[i];
+                  break;
+                }
 
-          /**
-           * IE8 can't define properties on native JavaScript objects, so we'll use a dumb hack instead.
-           *
-           * What this is doing is creating a dummy element ("reflection") inside a detached phantom node ("mirror")
-           * that serves as the target of Object.defineProperty instead. While we could simply use the subject HTML
-           * element instead, this would conflict with element types which use indexed properties (such as forms and
-           * select lists).
-           */
-          if (false === dpSupport) {
+              /** Couldn't find an element's reflection inside the mirror. Materialise one. */
+              visage || (visage = mirror.appendChild(document.createElement('div')));
 
-            var visage;
-            var mirror = addProp.mirror || document.createElement("div");
-            var reflections = mirror.childNodes;
-            var l = reflections.length;
+              tokenList = DOMTokenList.call(visage, THIS, attr);
+            } else tokenList = new DOMTokenList(THIS, attr);
 
-            for (var i = 0; i < l; ++i)
-              if (reflections[i]._R === THIS) {
-                visage = reflections[i];
-                break;
-              }
+            defineGetter(THIS, name, function () {
+              return tokenList;
+            });
+            delete THIS[gibberishProperty];
 
-            /** Couldn't find an element's reflection inside the mirror. Materialise one. */
-            visage || (visage = mirror.appendChild(document.createElement("div")));
-
-            tokenList = DOMTokenList.call(visage, THIS, attr);
-          } else tokenList = new DOMTokenList(THIS, attr);
-
-          defineGetter(THIS, name, function () {
             return tokenList;
-          });
-          delete THIS[gibberishProperty];
-
-          return tokenList;
-        }, true);
+          },
+          true
+        );
       };
 
-      addProp(global.Element, "classList", "className");
-      addProp(global.HTMLElement, "classList", "className");
-      addProp(global.HTMLLinkElement, "relList", "rel");
-      addProp(global.HTMLAnchorElement, "relList", "rel");
-      addProp(global.HTMLAreaElement, "relList", "rel");
-    }(this));
-
-  }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+      addProp(global.Element, 'classList', 'className');
+      addProp(global.HTMLElement, 'classList', 'className');
+      addProp(global.HTMLLinkElement, 'relList', 'rel');
+      addProp(global.HTMLAnchorElement, 'relList', 'rel');
+      addProp(global.HTMLAreaElement, 'relList', 'rel');
+    })(this);
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   function Accordion($module) {
     this.$module = $module;
@@ -795,7 +821,7 @@
   Accordion.prototype.init = function () {
     // Check for module
     if (!this.$module) {
-      return
+      return;
     }
 
     this.initControls();
@@ -830,20 +856,23 @@
   // Initialise section headers
   Accordion.prototype.initSectionHeaders = function () {
     // Loop through section headers
-    nodeListForEach(this.$sections, function ($section, i) {
-      // Set header attributes
-      var header = $section.querySelector('.' + this.sectionHeaderClass);
-      this.initHeaderAttributes(header, i);
+    nodeListForEach(
+      this.$sections,
+      function ($section, i) {
+        // Set header attributes
+        var header = $section.querySelector('.' + this.sectionHeaderClass);
+        this.initHeaderAttributes(header, i);
 
-      this.setExpanded(this.isExpanded($section), $section);
+        this.setExpanded(this.isExpanded($section), $section);
 
-      // Handle events
-      header.addEventListener('click', this.onSectionToggle.bind(this, $section));
+        // Handle events
+        header.addEventListener('click', this.onSectionToggle.bind(this, $section));
 
-      // See if there is any state stored in sessionStorage and set the sections to
-      // open or closed.
-      this.setInitialState($section);
-    }.bind(this));
+        // See if there is any state stored in sessionStorage and set the sections to
+        // open or closed.
+        this.setInitialState($section);
+      }.bind(this)
+    );
   };
 
   // Set individual header attributes
@@ -875,7 +904,7 @@
       $headerWrapper.classList.remove($module.sectionHeaderFocusedClass);
     });
 
-    if (typeof ($summary) !== 'undefined' && $summary !== null) {
+    if (typeof $summary !== 'undefined' && $summary !== null) {
       $button.setAttribute('aria-describedby', this.moduleId + '-summary-' + (index + 1));
     }
 
@@ -936,7 +965,7 @@
 
   // Get state of section
   Accordion.prototype.isExpanded = function ($section) {
-    return $section.classList.contains(this.sectionExpandedClass)
+    return $section.classList.contains(this.sectionExpandedClass);
   };
 
   // Check if all sections are open
@@ -947,7 +976,7 @@
     var expandedSectionCount = this.$module.querySelectorAll('.' + this.sectionExpandedClass).length;
     var areAllSectionsOpen = sectionsCount === expandedSectionCount;
 
-    return areAllSectionsOpen
+    return areAllSectionsOpen;
   };
 
   // Update "Open all" button
@@ -967,13 +996,13 @@
         window.sessionStorage.setItem(testString, testString);
         result = window.sessionStorage.getItem(testString) === testString.toString();
         window.sessionStorage.removeItem(testString);
-        return result
+        return result;
       } catch (exception) {
-        if ((typeof console === 'undefined' || typeof console.log === 'undefined')) {
+        if (typeof console === 'undefined' || typeof console.log === 'undefined') {
           console.log('Notice: sessionStorage not available.');
         }
       }
-    }
+    },
   };
 
   // Set the state of the accordions in sessionStorage
@@ -988,11 +1017,17 @@
         var contentId = $button.getAttribute('aria-controls');
         var contentState = $button.getAttribute('aria-expanded');
 
-        if (typeof contentId === 'undefined' && (typeof console === 'undefined' || typeof console.log === 'undefined')) {
+        if (
+          typeof contentId === 'undefined' &&
+          (typeof console === 'undefined' || typeof console.log === 'undefined')
+        ) {
           console.error(new Error('No aria controls present in accordion section heading.'));
         }
 
-        if (typeof contentState === 'undefined' && (typeof console === 'undefined' || typeof console.log === 'undefined')) {
+        if (
+          typeof contentState === 'undefined' &&
+          (typeof console === 'undefined' || typeof console.log === 'undefined')
+        ) {
           console.error(new Error('No aria expanded present in accordion section heading.'));
         }
 
@@ -1021,47 +1056,44 @@
   };
 
   (function (undefined) {
-
     // Detection from https://github.com/Financial-Times/polyfill-service/blob/master/packages/polyfill-library/polyfills/Window/detect.js
-    var detect = ('Window' in this);
+    var detect = 'Window' in this;
 
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://cdn.polyfill.io/v2/polyfill.js?features=Window&flags=always
-    if ((typeof WorkerGlobalScope === "undefined") && (typeof importScripts !== "function")) {
+    if (typeof WorkerGlobalScope === 'undefined' && typeof importScripts !== 'function') {
       (function (global) {
         if (global.constructor) {
           global.Window = global.constructor;
         } else {
           (global.Window = global.constructor = new Function('return function Window() {}')()).prototype = this;
         }
-      }(this));
+      })(this);
     }
-
-  })
-    .call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   (function (undefined) {
-
     // Detection from https://github.com/Financial-Times/polyfill-service/blob/master/packages/polyfill-library/polyfills/Event/detect.js
-    var detect = (
-      (function (global) {
+    var detect = (function (global) {
+      if (!('Event' in global)) return false;
+      if (typeof global.Event === 'function') return true;
 
-        if (!('Event' in global)) return false;
-        if (typeof global.Event === 'function') return true;
+      try {
+        // In IE 9-11, the Event object exists but cannot be instantiated
+        new Event('click');
+        return true;
+      } catch (e) {
+        return false;
+      }
+    })(this);
 
-        try {
-
-          // In IE 9-11, the Event object exists but cannot be instantiated
-          new Event('click');
-          return true;
-        } catch (e) {
-          return false;
-        }
-      }(this))
-    );
-
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://cdn.polyfill.io/v2/polyfill.js?features=Event&flags=always
     (function () {
@@ -1080,7 +1112,7 @@
         mouseout: 1,
         storage: 1,
         storagecommit: 1,
-        textinput: 1
+        textinput: 1,
       };
 
       // This polyfill depends on availability of `document` so will not run in a worker
@@ -1089,8 +1121,7 @@
       if (typeof document === 'undefined' || typeof window === 'undefined') return;
 
       function indexOf(array, element) {
-        var
-          index = -1,
+        var index = -1,
           length = array.length;
 
         while (++index < length) {
@@ -1133,162 +1164,181 @@
           configurable: false,
           enumerable: false,
           writable: true,
-          value: existingProto
+          value: existingProto,
         });
       }
 
       if (!('createEvent' in document)) {
-        window.addEventListener = Window.prototype.addEventListener = Document.prototype.addEventListener = Element.prototype.addEventListener = function addEventListener() {
-          var
-            element = this,
-            type = arguments[0],
-            listener = arguments[1];
+        window.addEventListener =
+          Window.prototype.addEventListener =
+          Document.prototype.addEventListener =
+          Element.prototype.addEventListener =
+            function addEventListener() {
+              var element = this,
+                type = arguments[0],
+                listener = arguments[1];
 
-          if (element === window && type in unlistenableWindowEvents) {
-            throw new Error('In IE8 the event: ' + type + ' is not available on the window object. Please see https://github.com/Financial-Times/polyfill-service/issues/317 for more information.');
-          }
-
-          if (!element._events) {
-            element._events = {};
-          }
-
-          if (!element._events[type]) {
-            element._events[type] = function (event) {
-              var
-                list = element._events[event.type].list,
-                events = list.slice(),
-                index = -1,
-                length = events.length,
-                eventElement;
-
-              event.preventDefault = function preventDefault() {
-                if (event.cancelable !== false) {
-                  event.returnValue = false;
-                }
-              };
-
-              event.stopPropagation = function stopPropagation() {
-                event.cancelBubble = true;
-              };
-
-              event.stopImmediatePropagation = function stopImmediatePropagation() {
-                event.cancelBubble = true;
-                event.cancelImmediate = true;
-              };
-
-              event.currentTarget = element;
-              event.relatedTarget = event.fromElement || null;
-              event.target = event.target || event.srcElement || element;
-              event.timeStamp = new Date().getTime();
-
-              if (event.clientX) {
-                event.pageX = event.clientX + document.documentElement.scrollLeft;
-                event.pageY = event.clientY + document.documentElement.scrollTop;
+              if (element === window && type in unlistenableWindowEvents) {
+                throw new Error(
+                  'In IE8 the event: ' +
+                    type +
+                    ' is not available on the window object. Please see https://github.com/Financial-Times/polyfill-service/issues/317 for more information.'
+                );
               }
 
-              while (++index < length && !event.cancelImmediate) {
-                if (index in events) {
-                  eventElement = events[index];
+              if (!element._events) {
+                element._events = {};
+              }
 
-                  if (indexOf(list, eventElement) !== -1 && typeof eventElement === 'function') {
-                    eventElement.call(element, event);
+              if (!element._events[type]) {
+                element._events[type] = function (event) {
+                  var list = element._events[event.type].list,
+                    events = list.slice(),
+                    index = -1,
+                    length = events.length,
+                    eventElement;
+
+                  event.preventDefault = function preventDefault() {
+                    if (event.cancelable !== false) {
+                      event.returnValue = false;
+                    }
+                  };
+
+                  event.stopPropagation = function stopPropagation() {
+                    event.cancelBubble = true;
+                  };
+
+                  event.stopImmediatePropagation = function stopImmediatePropagation() {
+                    event.cancelBubble = true;
+                    event.cancelImmediate = true;
+                  };
+
+                  event.currentTarget = element;
+                  event.relatedTarget = event.fromElement || null;
+                  event.target = event.target || event.srcElement || element;
+                  event.timeStamp = new Date().getTime();
+
+                  if (event.clientX) {
+                    event.pageX = event.clientX + document.documentElement.scrollLeft;
+                    event.pageY = event.clientY + document.documentElement.scrollTop;
+                  }
+
+                  while (++index < length && !event.cancelImmediate) {
+                    if (index in events) {
+                      eventElement = events[index];
+
+                      if (indexOf(list, eventElement) !== -1 && typeof eventElement === 'function') {
+                        eventElement.call(element, event);
+                      }
+                    }
+                  }
+                };
+
+                element._events[type].list = [];
+
+                if (element.attachEvent) {
+                  element.attachEvent('on' + type, element._events[type]);
+                }
+              }
+
+              element._events[type].list.push(listener);
+            };
+
+        window.removeEventListener =
+          Window.prototype.removeEventListener =
+          Document.prototype.removeEventListener =
+          Element.prototype.removeEventListener =
+            function removeEventListener() {
+              var element = this,
+                type = arguments[0],
+                listener = arguments[1],
+                index;
+
+              if (element._events && element._events[type] && element._events[type].list) {
+                index = indexOf(element._events[type].list, listener);
+
+                if (index !== -1) {
+                  element._events[type].list.splice(index, 1);
+
+                  if (!element._events[type].list.length) {
+                    if (element.detachEvent) {
+                      element.detachEvent('on' + type, element._events[type]);
+                    }
+                    delete element._events[type];
                   }
                 }
               }
             };
 
-            element._events[type].list = [];
+        window.dispatchEvent =
+          Window.prototype.dispatchEvent =
+          Document.prototype.dispatchEvent =
+          Element.prototype.dispatchEvent =
+            function dispatchEvent(event) {
+              if (!arguments.length) {
+                throw new Error('Not enough arguments');
+              }
 
-            if (element.attachEvent) {
-              element.attachEvent('on' + type, element._events[type]);
-            }
-          }
+              if (!event || typeof event.type !== 'string') {
+                throw new Error('DOM Events Exception 0');
+              }
 
-          element._events[type].list.push(listener);
-        };
+              var element = this,
+                type = event.type;
 
-        window.removeEventListener = Window.prototype.removeEventListener = Document.prototype.removeEventListener = Element.prototype.removeEventListener = function removeEventListener() {
-          var
-            element = this,
-            type = arguments[0],
-            listener = arguments[1],
-            index;
+              try {
+                if (!event.bubbles) {
+                  event.cancelBubble = true;
 
-          if (element._events && element._events[type] && element._events[type].list) {
-            index = indexOf(element._events[type].list, listener);
+                  var cancelBubbleEvent = function (event) {
+                    event.cancelBubble = true;
 
-            if (index !== -1) {
-              element._events[type].list.splice(index, 1);
+                    (element || window).detachEvent('on' + type, cancelBubbleEvent);
+                  };
 
-              if (!element._events[type].list.length) {
-                if (element.detachEvent) {
-                  element.detachEvent('on' + type, element._events[type]);
+                  this.attachEvent('on' + type, cancelBubbleEvent);
                 }
-                delete element._events[type];
-              }
-            }
-          }
-        };
 
-        window.dispatchEvent = Window.prototype.dispatchEvent = Document.prototype.dispatchEvent = Element.prototype.dispatchEvent = function dispatchEvent(event) {
-          if (!arguments.length) {
-            throw new Error('Not enough arguments');
-          }
+                this.fireEvent('on' + type, event);
+              } catch (error) {
+                event.target = element;
 
-          if (!event || typeof event.type !== 'string') {
-            throw new Error('DOM Events Exception 0');
-          }
+                do {
+                  event.currentTarget = element;
 
-          var element = this, type = event.type;
+                  if ('_events' in element && typeof element._events[type] === 'function') {
+                    element._events[type].call(element, event);
+                  }
 
-          try {
-            if (!event.bubbles) {
-              event.cancelBubble = true;
+                  if (typeof element['on' + type] === 'function') {
+                    element['on' + type].call(element, event);
+                  }
 
-              var cancelBubbleEvent = function (event) {
-                event.cancelBubble = true;
-
-                (element || window).detachEvent('on' + type, cancelBubbleEvent);
-              };
-
-              this.attachEvent('on' + type, cancelBubbleEvent);
-            }
-
-            this.fireEvent('on' + type, event);
-          } catch (error) {
-            event.target = element;
-
-            do {
-              event.currentTarget = element;
-
-              if ('_events' in element && typeof element._events[type] === 'function') {
-                element._events[type].call(element, event);
+                  element = element.nodeType === 9 ? element.parentWindow : element.parentNode;
+                } while (element && !event.cancelBubble);
               }
 
-              if (typeof element['on' + type] === 'function') {
-                element['on' + type].call(element, event);
-              }
-
-              element = element.nodeType === 9 ? element.parentWindow : element.parentNode;
-            } while (element && !event.cancelBubble);
-          }
-
-          return true;
-        };
+              return true;
+            };
 
         // Add the DOMContentLoaded Event
         document.attachEvent('onreadystatechange', function () {
           if (document.readyState === 'complete') {
-            document.dispatchEvent(new Event('DOMContentLoaded', {
-              bubbles: true
-            }));
+            document.dispatchEvent(
+              new Event('DOMContentLoaded', {
+                bubbles: true,
+              })
+            );
           }
         });
       }
-    }());
-
-  })
-    .call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+    })();
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   /**
    * JavaScript 'shim' to trigger the click event of element(s) when the space key is pressed.
@@ -1308,11 +1358,11 @@
   }
 
   /**
-  * Add event handler for KeyDown
-  * if the event target element has a role='button' and the event is key space pressed
-  * then it prevents the default event and triggers a click event
-  * @param {object} event event
-  */
+   * Add event handler for KeyDown
+   * if the event target element has a role='button' and the event is key space pressed
+   * then it prevents the default event and triggers a click event
+   * @param {object} event event
+   */
   Button.prototype.handleKeyDown = function (event) {
     // get the target element
     var target = event.target;
@@ -1325,9 +1375,9 @@
   };
 
   /**
-  * Initialise an event listener for keydown at document level
-  * this will help listening for later inserted elements with a role="button"
-  */
+   * Initialise an event listener for keydown at document level
+   * this will help listening for later inserted elements with a role="button"
+   */
   Button.prototype.init = function () {
     this.$module.addEventListener('keydown', this.handleKeyDown);
   };
@@ -1353,10 +1403,10 @@
   }
 
   /**
-  * Handle cross-modal click events
-  * @param {object} node element
-  * @param {function} callback function
-  */
+   * Handle cross-modal click events
+   * @param {object} node element
+   * @param {function} callback function
+   */
   Details.prototype.handleInputs = function (node, callback) {
     node.addEventListener('keypress', function (event) {
       var target = event.target;
@@ -1394,17 +1444,17 @@
     var $module = this.$module;
 
     if (!$module) {
-      return
+      return;
     }
 
     // Save shortcuts to the inner summary and content elements
-    var $summary = this.$summary = $module.getElementsByTagName('summary').item(0);
-    var $content = this.$content = $module.getElementsByTagName('div').item(0);
+    var $summary = (this.$summary = $module.getElementsByTagName('summary').item(0));
+    var $content = (this.$content = $module.getElementsByTagName('div').item(0));
 
     // If <details> doesn't have a <summary> and a <div> representing the content
     // it means the required HTML structure is not met so the script will stop
     if (!$summary || !$content) {
-      return
+      return;
     }
 
     // If the content doesn't have an ID, assign it one now
@@ -1446,9 +1496,9 @@
   };
 
   /**
-  * Define a statechange function that updates aria-expanded and style.display
-  * @param {object} summary element
-  */
+   * Define a statechange function that updates aria-expanded and style.display
+   * @param {object} summary element
+   */
   Details.prototype.setAttributes = function () {
     var $module = this.$module;
     var $summary = this.$summary;
@@ -1457,11 +1507,11 @@
     var expanded = $summary.getAttribute('aria-expanded') === 'true';
     var hidden = $content.getAttribute('aria-hidden') === 'true';
 
-    $summary.setAttribute('aria-expanded', (expanded ? 'false' : 'true'));
-    $content.setAttribute('aria-hidden', (hidden ? 'false' : 'true'));
+    $summary.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    $content.setAttribute('aria-hidden', hidden ? 'false' : 'true');
 
     if (!NATIVE_DETAILS) {
-      $content.style.display = (expanded ? 'none' : '');
+      $content.style.display = expanded ? 'none' : '';
 
       var hasOpenAttr = $module.getAttribute('open') !== null;
       if (!hasOpenAttr) {
@@ -1470,13 +1520,13 @@
         $module.removeAttribute('open');
       }
     }
-    return true
+    return true;
   };
 
   /**
-  * Remove the click event from the node element
-  * @param {object} node element
-  */
+   * Remove the click event from the node element
+   * @param {object} node element
+   */
   Details.prototype.destroy = function (node) {
     node.removeEventListener('keypress');
     node.removeEventListener('keyup');
@@ -1490,7 +1540,7 @@
 
   CharacterCount.prototype.defaults = {
     characterCountAttribute: 'data-maxlength',
-    wordCountAttribute: 'data-maxwords'
+    wordCountAttribute: 'data-maxwords',
   };
 
   // Initialize component
@@ -1499,7 +1549,7 @@
     var $module = this.$module;
     var $textarea = this.$textarea;
     if (!$textarea) {
-      return
+      return;
     }
 
     // Read options set using dataset ('data-' values)
@@ -1516,7 +1566,7 @@
 
     // Check for limit
     if (!this.maxLength) {
-      return
+      return;
     }
 
     // Generate and reference message
@@ -1551,7 +1601,7 @@
         }
       }
     }
-    return dataset
+    return dataset;
   };
 
   // Counts characters or words in text
@@ -1563,7 +1613,7 @@
     } else {
       length = text.length;
     }
-    return length
+    return length;
   };
 
   // Generate count message and bind it to the input
@@ -1575,7 +1625,10 @@
     var countMessage = document.getElementById(elementId + '-info');
     // If there is no existing info count message we add one right after the field
     if (elementId && !countMessage) {
-      countElement.insertAdjacentHTML('afterend', '<span id="' + elementId + '-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>');
+      countElement.insertAdjacentHTML(
+        'afterend',
+        '<span id="' + elementId + '-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>'
+      );
       this.describedBy = countElement.getAttribute('aria-describedby');
       this.describedByInfo = this.describedBy + ' ' + elementId + '-info';
       countElement.setAttribute('aria-describedby', this.describedByInfo);
@@ -1584,7 +1637,7 @@
       // If there is an existing info count message we move it right after the field
       countElement.insertAdjacentElement('afterend', countMessage);
     }
-    return countMessage
+    return countMessage;
   };
 
   // Bind input propertychange to the elements and update based on the change
@@ -1622,7 +1675,7 @@
 
     // Set threshold if presented in options
     var thresholdPercent = options.threshold ? options.threshold : 0;
-    var thresholdValue = maxLength * thresholdPercent / 100;
+    var thresholdValue = (maxLength * thresholdPercent) / 100;
     if (thresholdValue > currentLength) {
       countMessage.classList.add('govuk-character-count__message--disabled');
     } else {
@@ -1647,9 +1700,9 @@
     if (options.maxwords) {
       charNoun = 'word';
     }
-    charNoun = charNoun + ((remainingNumber === -1 || remainingNumber === 1) ? '' : 's');
+    charNoun = charNoun + (remainingNumber === -1 || remainingNumber === 1 ? '' : 's');
 
-    charVerb = (remainingNumber < 0) ? 'too many' : 'remaining';
+    charVerb = remainingNumber < 0 ? 'too many' : 'remaining';
     displayNumber = Math.abs(remainingNumber);
 
     countMessage.innerHTML = 'You have ' + displayNumber + ' ' + charNoun + ' ' + charVerb;
@@ -1675,24 +1728,27 @@
     var $inputs = this.$inputs;
 
     /**
-    * Loop over all items with [data-controls]
-    * Check if they have a matching conditional reveal
-    * If they do, assign attributes.
-    **/
-    nodeListForEach($inputs, function ($input) {
-      var controls = $input.getAttribute('data-aria-controls');
+     * Loop over all items with [data-controls]
+     * Check if they have a matching conditional reveal
+     * If they do, assign attributes.
+     **/
+    nodeListForEach(
+      $inputs,
+      function ($input) {
+        var controls = $input.getAttribute('data-aria-controls');
 
-      // Check if input controls anything
-      // Check if content exists, before setting attributes.
-      if (!controls || !$module.querySelector('#' + controls)) {
-        return
-      }
+        // Check if input controls anything
+        // Check if content exists, before setting attributes.
+        if (!controls || !$module.querySelector('#' + controls)) {
+          return;
+        }
 
-      // If we have content that is controlled, set attributes.
-      $input.setAttribute('aria-controls', controls);
-      $input.removeAttribute('data-aria-controls');
-      this.setAttributes($input);
-    }.bind(this));
+        // If we have content that is controlled, set attributes.
+        $input.setAttribute('aria-controls', controls);
+        $input.removeAttribute('data-aria-controls');
+        this.setAttributes($input);
+      }.bind(this)
+    );
 
     // Handle events
     $module.addEventListener('click', this.handleClick.bind(this));
@@ -1720,37 +1776,40 @@
   };
 
   (function (undefined) {
-
     // Detection from https://raw.githubusercontent.com/Financial-Times/polyfill-service/1f3c09b402f65bf6e393f933a15ba63f1b86ef1f/packages/polyfill-library/polyfills/Element/prototype/matches/detect.js
-    var detect = (
-      'document' in this && "matches" in document.documentElement
-    );
+    var detect = 'document' in this && 'matches' in document.documentElement;
 
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://raw.githubusercontent.com/Financial-Times/polyfill-service/1f3c09b402f65bf6e393f933a15ba63f1b86ef1f/packages/polyfill-library/polyfills/Element/prototype/matches/polyfill.js
-    Element.prototype.matches = Element.prototype.webkitMatchesSelector || Element.prototype.oMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.mozMatchesSelector || function matches(selector) {
-      var element = this;
-      var elements = (element.document || element.ownerDocument).querySelectorAll(selector);
-      var index = 0;
+    Element.prototype.matches =
+      Element.prototype.webkitMatchesSelector ||
+      Element.prototype.oMatchesSelector ||
+      Element.prototype.msMatchesSelector ||
+      Element.prototype.mozMatchesSelector ||
+      function matches(selector) {
+        var element = this;
+        var elements = (element.document || element.ownerDocument).querySelectorAll(selector);
+        var index = 0;
 
-      while (elements[index] && elements[index] !== element) {
-        ++index;
-      }
+        while (elements[index] && elements[index] !== element) {
+          ++index;
+        }
 
-      return !!elements[index];
-    };
-
-  }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+        return !!elements[index];
+      };
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   (function (undefined) {
-
     // Detection from https://raw.githubusercontent.com/Financial-Times/polyfill-service/1f3c09b402f65bf6e393f933a15ba63f1b86ef1f/packages/polyfill-library/polyfills/Element/prototype/closest/detect.js
-    var detect = (
-      'document' in this && "closest" in document.documentElement
-    );
+    var detect = 'document' in this && 'closest' in document.documentElement;
 
-    if (detect) return
+    if (detect) return;
 
     // Polyfill from https://raw.githubusercontent.com/Financial-Times/polyfill-service/1f3c09b402f65bf6e393f933a15ba63f1b86ef1f/packages/polyfill-library/polyfills/Element/prototype/closest/polyfill.js
     Element.prototype.closest = function closest(selector) {
@@ -1763,8 +1822,12 @@
 
       return null;
     };
-
-  }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});
+  }).call(
+    ('object' === typeof window && window) ||
+      ('object' === typeof self && self) ||
+      ('object' === typeof global && global) ||
+      {}
+  );
 
   function ErrorSummary($module) {
     this.$module = $module;
@@ -1773,7 +1836,7 @@
   ErrorSummary.prototype.init = function () {
     var $module = this.$module;
     if (!$module) {
-      return
+      return;
     }
     window.addEventListener('load', function () {
       $module.focus();
@@ -1783,10 +1846,10 @@
   };
 
   /**
-  * Click event handler
-  *
-  * @param {MouseEvent} event - Click event
-  */
+   * Click event handler
+   *
+   * @param {MouseEvent} event - Click event
+   */
   ErrorSummary.prototype.handleClick = function (event) {
     var target = event.target;
     if (this.focusTarget(target)) {
@@ -1815,18 +1878,18 @@
   ErrorSummary.prototype.focusTarget = function ($target) {
     // If the element that was clicked was not a link, return early
     if ($target.tagName !== 'A' || $target.href === false) {
-      return false
+      return false;
     }
 
     var inputId = this.getFragmentFromUrl($target.href);
     var $input = document.getElementById(inputId);
     if (!$input) {
-      return false
+      return false;
     }
 
     var $legendOrLabel = this.getAssociatedLegendOrLabel($input);
     if (!$legendOrLabel) {
-      return false
+      return false;
     }
 
     // Prefer using the history API where possible, as updating
@@ -1845,7 +1908,7 @@
     $legendOrLabel.scrollIntoView();
     $input.focus({ preventScroll: true });
 
-    return true
+    return true;
   };
 
   /**
@@ -1859,10 +1922,10 @@
    */
   ErrorSummary.prototype.getFragmentFromUrl = function (url) {
     if (url.indexOf('#') === -1) {
-      return false
+      return false;
     }
 
-    return url.split('#').pop()
+    return url.split('#').pop();
   };
 
   /**
@@ -1885,12 +1948,11 @@
       var legends = $fieldset.getElementsByTagName('legend');
 
       if (legends.length) {
-        return legends[0]
+        return legends[0];
       }
     }
 
-    return document.querySelector("label[for='" + $input.getAttribute('id') + "']") ||
-      $input.closest('label')
+    return document.querySelector("label[for='" + $input.getAttribute('id') + "']") || $input.closest('label');
   };
 
   function Header($module) {
@@ -1901,13 +1963,13 @@
     // Check for module
     var $module = this.$module;
     if (!$module) {
-      return
+      return;
     }
 
     // Check for button
     var $toggleButton = $module.querySelector('.js-header-toggle');
     if (!$toggleButton) {
-      return
+      return;
     }
 
     // Handle $toggleButton click events
@@ -1915,10 +1977,10 @@
   };
 
   /**
-  * Toggle class
-  * @param {object} node element
-  * @param {string} className to toggle
-  */
+   * Toggle class
+   * @param {object} node element
+   * @param {string} className to toggle
+   */
   Header.prototype.toggleClass = function (node, className) {
     if (node.className.indexOf(className) > 0) {
       node.className = node.className.replace(' ' + className, '');
@@ -1928,9 +1990,9 @@
   };
 
   /**
-  * An event handler for click event on $toggleButton
-  * @param {object} event event
-  */
+   * An event handler for click event on $toggleButton
+   * @param {object} event event
+   */
   Header.prototype.handleClick = function (event) {
     var $module = this.$module;
     var $toggleButton = event.target || event.srcElement;
@@ -1956,24 +2018,27 @@
     var $inputs = this.$inputs;
 
     /**
-    * Loop over all items with [data-controls]
-    * Check if they have a matching conditional reveal
-    * If they do, assign attributes.
-    **/
-    nodeListForEach($inputs, function ($input) {
-      var controls = $input.getAttribute('data-aria-controls');
+     * Loop over all items with [data-controls]
+     * Check if they have a matching conditional reveal
+     * If they do, assign attributes.
+     **/
+    nodeListForEach(
+      $inputs,
+      function ($input) {
+        var controls = $input.getAttribute('data-aria-controls');
 
-      // Check if input controls anything
-      // Check if content exists, before setting attributes.
-      if (!controls || !$module.querySelector('#' + controls)) {
-        return
-      }
+        // Check if input controls anything
+        // Check if content exists, before setting attributes.
+        if (!controls || !$module.querySelector('#' + controls)) {
+          return;
+        }
 
-      // If we have content that is controlled, set attributes.
-      $input.setAttribute('aria-controls', controls);
-      $input.removeAttribute('data-aria-controls');
-      this.setAttributes($input);
-    }.bind(this));
+        // If we have content that is controlled, set attributes.
+        $input.setAttribute('aria-controls', controls);
+        $input.removeAttribute('data-aria-controls');
+        this.setAttributes($input);
+      }.bind(this)
+    );
 
     // Handle events
     $module.addEventListener('click', this.handleClick.bind(this));
@@ -1990,14 +2055,17 @@
   };
 
   Radios.prototype.handleClick = function (event) {
-    nodeListForEach(this.$inputs, function ($input) {
-      // If a radio with aria-controls, handle click
-      var isRadio = $input.getAttribute('type') === 'radio';
-      var hasAriaControls = $input.getAttribute('aria-controls');
-      if (isRadio && hasAriaControls) {
-        this.setAttributes($input);
-      }
-    }.bind(this));
+    nodeListForEach(
+      this.$inputs,
+      function ($input) {
+        // If a radio with aria-controls, handle click
+        var isRadio = $input.getAttribute('type') === 'radio';
+        var hasAriaControls = $input.getAttribute('aria-controls');
+        if (isRadio && hasAriaControls) {
+          this.setAttributes($input);
+        }
+      }.bind(this)
+    );
   };
 
   function Tabs($module) {
@@ -2037,7 +2105,7 @@
     var $tabListItems = $module.querySelectorAll('.govuk-tabs__list-item');
 
     if (!$tabs || !$tabList || !$tabListItems) {
-      return
+      return;
     }
 
     $tabList.setAttribute('role', 'tablist');
@@ -2046,21 +2114,24 @@
       $item.setAttribute('role', 'presentation');
     });
 
-    nodeListForEach($tabs, function ($tab) {
-      // Set HTML attributes
-      this.setAttributes($tab);
+    nodeListForEach(
+      $tabs,
+      function ($tab) {
+        // Set HTML attributes
+        this.setAttributes($tab);
 
-      // Save bounded functions to use when removing event listeners during teardown
-      $tab.boundTabClick = this.onTabClick.bind(this);
-      $tab.boundTabKeydown = this.onTabKeydown.bind(this);
+        // Save bounded functions to use when removing event listeners during teardown
+        $tab.boundTabClick = this.onTabClick.bind(this);
+        $tab.boundTabKeydown = this.onTabKeydown.bind(this);
 
-      // Handle events
-      $tab.addEventListener('click', $tab.boundTabClick, true);
-      $tab.addEventListener('keydown', $tab.boundTabKeydown, true);
+        // Handle events
+        $tab.addEventListener('click', $tab.boundTabClick, true);
+        $tab.addEventListener('keydown', $tab.boundTabKeydown, true);
 
-      // Remove old active panels
-      this.hideTab($tab);
-    }.bind(this));
+        // Remove old active panels
+        this.hideTab($tab);
+      }.bind(this)
+    );
 
     // Show either the active tab according to the URL's hash or the first tab
     var $activeTab = this.getTab(window.location.hash) || this.$tabs[0];
@@ -2078,7 +2149,7 @@
     var $tabListItems = $module.querySelectorAll('.govuk-tabs__list-item');
 
     if (!$tabs || !$tabList || !$tabListItems) {
-      return
+      return;
     }
 
     $tabList.removeAttribute('role');
@@ -2087,14 +2158,17 @@
       $item.removeAttribute('role', 'presentation');
     });
 
-    nodeListForEach($tabs, function ($tab) {
-      // Remove events
-      $tab.removeEventListener('click', $tab.boundTabClick, true);
-      $tab.removeEventListener('keydown', $tab.boundTabKeydown, true);
+    nodeListForEach(
+      $tabs,
+      function ($tab) {
+        // Remove events
+        $tab.removeEventListener('click', $tab.boundTabClick, true);
+        $tab.removeEventListener('keydown', $tab.boundTabKeydown, true);
 
-      // Unset HTML attributes
-      this.unsetAttributes($tab);
-    }.bind(this));
+        // Unset HTML attributes
+        this.unsetAttributes($tab);
+      }.bind(this)
+    );
 
     // Remove hashchange event handler
     window.removeEventListener('hashchange', $module.boundOnHashChange, true);
@@ -2104,13 +2178,13 @@
     var hash = window.location.hash;
     var $tabWithHash = this.getTab(hash);
     if (!$tabWithHash) {
-      return
+      return;
     }
 
     // Prevent changing the hash
     if (this.changingHash) {
       this.changingHash = false;
-      return
+      return;
     }
 
     // Show either the active tab according to the URL's hash or the first tab
@@ -2132,7 +2206,7 @@
   };
 
   Tabs.prototype.getTab = function (hash) {
-    return this.$module.querySelector('.govuk-tabs__tab[href="' + hash + '"]')
+    return this.$module.querySelector('.govuk-tabs__tab[href="' + hash + '"]');
   };
 
   Tabs.prototype.setAttributes = function ($tab) {
@@ -2191,12 +2265,12 @@
       case this.keys.up:
         this.activatePreviousTab();
         e.preventDefault();
-        break
+        break;
       case this.keys.right:
       case this.keys.down:
         this.activateNextTab();
         e.preventDefault();
-        break
+        break;
     }
   };
 
@@ -2230,7 +2304,7 @@
 
   Tabs.prototype.getPanel = function ($tab) {
     var $panel = this.$module.querySelector(this.getHref($tab));
-    return $panel
+    return $panel;
   };
 
   Tabs.prototype.showPanel = function ($tab) {
@@ -2256,7 +2330,7 @@
   };
 
   Tabs.prototype.getCurrentTab = function () {
-    return this.$module.querySelector('.govuk-tabs__tab--selected')
+    return this.$module.querySelector('.govuk-tabs__tab--selected');
   };
 
   // this is because IE doesn't always return the actual value but a relative full path
@@ -2265,7 +2339,7 @@
   Tabs.prototype.getHref = function ($tab) {
     var href = $tab.getAttribute('href');
     var hash = href.slice(href.indexOf('#'), href.length);
-    return hash
+    return hash;
   };
 
   function initAll() {
@@ -2323,5 +2397,4 @@
   exports.Header = Header;
   exports.Radios = Radios;
   exports.Tabs = Tabs;
-
-})));
+});
