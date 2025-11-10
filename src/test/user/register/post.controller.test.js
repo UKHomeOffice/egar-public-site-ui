@@ -178,7 +178,6 @@ describe('User Register Post Controller', () => {
       await controller(request, res);
     };
 
-    const cookie = new CookieModel(request);
     callController()
       .then(() => {
         expect(userCreateApi.post).to.have.been.calledWith(fName, lName, email, request.session.inv.token);
@@ -460,7 +459,7 @@ describe('User Register Post Controller', () => {
           errors: [{ message: 'User already registered' }],
         });
       })
-      .catch(() => {});
+      .catch(() => { });
   });
 
   it('should redirect if createUserApi resolves but with an error', async () => {
