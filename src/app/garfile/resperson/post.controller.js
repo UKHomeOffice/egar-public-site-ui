@@ -17,13 +17,17 @@ module.exports = async (req, res) => {
     } catch (err) {
       logger.error('API failed to retrieve gar responsible person');
       logger.error(err);
-      res.render('app/garfile/resperson/index', context, {
-        errors: [
-          {
-            message: 'Problem retrieving GAR',
-          },
-        ],
-      });
+      res.render(
+        'app/garfile/resperson/index',
+        {},
+        {
+          errors: [
+            {
+              message: 'Problem retrieving GAR',
+            },
+          ],
+        }
+      );
     }
   } else {
     const responsiblePerson = utils.getResponsiblePersonFromReq(req);
