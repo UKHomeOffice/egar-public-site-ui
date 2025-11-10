@@ -50,6 +50,17 @@ export default defineConfig([
     languageOptions: {
       sourceType: 'commonjs',
     },
+    rules: {
+      'no-unused-vars': [
+        'warn',
+        {
+          args: 'all', // check all arguments
+          argsIgnorePattern: '^_', // ignore args starting with _
+          vars: 'all',
+          varsIgnorePattern: '^_', // optional: ignore unused variables starting with _
+        },
+      ],
+    },
   },
   {
     files: ['test/**/*.js'],

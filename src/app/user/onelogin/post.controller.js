@@ -25,7 +25,7 @@ const Outcome = {
  * @param res
  * @returns {Promise<[string,{firstName: *, lastName: *, email: *}]>}
  */
-async function handleGivenNameSubmission(req, res) {
+async function handleGivenNameSubmission(req, _res) {
   let { userFname: firstName, userLname: lastName } = req.body;
 
   const fnameChain = [
