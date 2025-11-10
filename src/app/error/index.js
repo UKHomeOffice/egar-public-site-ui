@@ -1,5 +1,5 @@
 // Npm dependencies
-const express = _require('express');
+const express = require('express');
 
 // Initialisation
 const router = new express.Router();
