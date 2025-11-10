@@ -3,7 +3,6 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
-
   /**
    * Calls create craft API endpoint.
    *
@@ -12,20 +11,22 @@ module.exports = {
    */
   createGar(userId) {
     return new Promise((resolve, reject) => {
-      request.post({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.createGar(userId),
-      }, (error, response, body) => {
-        if (error) {
-          reject(error);
-          return error;
+      request.post(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.createGar(userId),
+        },
+        (error, response, body) => {
+          if (error) {
+            reject(error);
+            return error;
+          }
+          resolve(body);
+          return body;
         }
-        resolve(body);
-        return body;
-      });
-    })
-      .catch((err) => {
-        logger.error(err);
-      });
+      );
+    }).catch((err) => {
+      logger.error(err);
+    });
   },
 };

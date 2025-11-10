@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -39,7 +36,8 @@ describe('API healthcheck get controller', () => {
   });
 
   describe('controller code', () => {
-    let req; let res;
+    let req;
+    let res;
 
     beforeEach(() => {
       chai.use(sinonChai);

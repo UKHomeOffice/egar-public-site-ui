@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -11,7 +8,8 @@ require('../global.test');
 const controller = require('../../app/welcome/post.controller');
 
 describe('Welcome Post Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);

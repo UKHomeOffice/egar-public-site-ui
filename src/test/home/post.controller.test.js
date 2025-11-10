@@ -11,7 +11,8 @@ const CookieModel = require('../../common/models/Cookie.class');
 const controller = require('../../app/home/post.controller');
 
 describe('Home Post Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);

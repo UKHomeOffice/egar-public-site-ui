@@ -4,12 +4,10 @@ const logger = require('./logger')(__filename);
 const notBritishMsg = 'Either the Arrival or Departure port must be a UK port';
 
 function includesOneBritishAirport(airports) {
-
-
-  if(!airports.every(airport => Boolean(airport))){
+  if (!airports.every((airport) => Boolean(airport))) {
     return true;
   }
-  if(!airports.every(airport => airport.match(/^[A-Z]{3,4}$/) )){
+  if (!airports.every((airport) => airport.match(/^[A-Z]{3,4}$/))) {
     //we can only check with airports codes (IATA, ICAO). If our airports are lat/long then we do not apply this restriction.
     return true;
   }
@@ -17,8 +15,7 @@ function includesOneBritishAirport(airports) {
   const airport0 = findAirportForCode(airports[0]);
   const airport1 = findAirportForCode(airports[1]);
 
-  
-  return airport0 && airport0.british || airport1 && airport1.british;
+  return (airport0 && airport0.british) || (airport1 && airport1.british);
 }
 
 function findAirportForCode(airportCode) {
@@ -26,7 +23,7 @@ function findAirportForCode(airportCode) {
     return null;
   }
 
-  const matches = airportCodes.filter(item => [item.id, item.id2].includes(airportCode));
+  const matches = airportCodes.filter((item) => [item.id, item.id2].includes(airportCode));
 
   if (matches.length > 1) {
     throw new Error(`airport code ${airportCode} matched more than one airport`);
@@ -51,19 +48,18 @@ function isBritishAirport(airportCode) {
 }
 
 function isJourneyUKInbound(departureCode, arrivalCode) {
-
   const arrivalAirfield = findAirportForCode(arrivalCode);
   const departureAirfield = findAirportForCode(departureCode);
 
   if (departureAirfield && isAirportBritishOrCrownDependency(departureAirfield)) {
-    return false;// we know departure and is within UK
+    return false; // we know departure and is within UK
   }
 
   if (arrivalAirfield && !isAirportBritishOrCrownDependency(arrivalAirfield)) {
-    return false;// we know arrival airfield and not in UK
+    return false; // we know arrival airfield and not in UK
   }
 
-  return true;//both unkown; don't know arrival but departure outside UK; don't know departure but arrival in UK
+  return true; //both unkown; don't know arrival but departure outside UK; don't know departure but arrival in UK
 }
 
 function isAirportBritishOrCrownDependency(airport) {
@@ -88,5 +84,5 @@ module.exports = {
   includesOneBritishAirport,
   notBritishMsg,
   isBritishAirport,
-  isJourneyUKInbound
+  isJourneyUKInbound,
 };

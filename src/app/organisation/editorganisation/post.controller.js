@@ -16,10 +16,12 @@ module.exports = (req, res) => {
   ];
 
   // Validate chains
-  validator.validateChains([orgNameChain])
+  validator
+    .validateChains([orgNameChain])
     .then(() => {
       // API should return OrgId
-      organisationApi.update(orgName, cookie.getOrganisationId())
+      organisationApi
+        .update(orgName, cookie.getOrganisationId())
         .then((apiResponse) => {
           const responseObj = JSON.parse(apiResponse);
           logger.debug(`Response from API: ${JSON.stringify(responseObj)}`);

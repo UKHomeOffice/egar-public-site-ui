@@ -14,7 +14,8 @@ module.exports = (req, res) => {
     return;
   }
 
-  personApi.deletePerson(cookie.getUserDbId(), personId)
+  personApi
+    .deletePerson(cookie.getUserDbId(), personId)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -16,8 +15,10 @@ const createGarApi = require('../../../common/services/createGarApi.js');
 const controller = require('../../../app/garfile/home/post.controller');
 
 describe('GAR Customs Post Controller', () => {
-  let req; let res;
-  let createGarApiStub; let sessionSaveStub;
+  let req;
+  let res;
+  let createGarApiStub;
+  let sessionSaveStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -26,7 +27,7 @@ describe('GAR Customs Post Controller', () => {
       body: {},
       session: {
         u: { dbId: 'ExampleUser1' },
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
 
@@ -87,55 +88,68 @@ describe('GAR Customs Post Controller', () => {
     };
 
     // TODO: Return the error message?
-    callController().then().then(() => {
-      expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
-      expect(sessionSaveStub).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
-        cookie, garoptions,
+    callController()
+      .then()
+      .then(() => {
+        expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
+          cookie,
+          garoptions,
+        });
       });
-    });
   });
 
   it('should return an error message if api rejects', () => {
     // Back end does not really return any other outcome, contrived example
     cookie = new CookieModel(req);
     req.body.garoption = '0';
-    createGarApiStub.resolves(JSON.stringify({
-      message: 'Example contrived error message',
-    }));
+    createGarApiStub.resolves(
+      JSON.stringify({
+        message: 'Example contrived error message',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
-      expect(sessionSaveStub).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
-        cookie, garoptions, errors: [{ message: 'Example contrived error message' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
+        expect(sessionSaveStub).to.not.have.been.called;
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
+          cookie,
+          garoptions,
+          errors: [{ message: 'Example contrived error message' }],
+        });
       });
-    });
   });
 
   it('should redirect to departure page on success', () => {
     cookie = new CookieModel(req);
     req.body.garoption = '0';
-    createGarApiStub.resolves(JSON.stringify({
-      garId: 'NEWLY-CREATED-ID',
-    }));
+    createGarApiStub.resolves(
+      JSON.stringify({
+        garId: 'NEWLY-CREATED-ID',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
     };
 
     // TODO: Assert that cookie now has status = Draft and garId of the returned response
-    callController().then().then(() => {
-      expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
-      expect(res.render).to.not.have.been.called;
-      expect(sessionSaveStub).to.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/departure');
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
+        expect(res.render).to.not.have.been.called;
+        expect(sessionSaveStub).to.have.been.called;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/departure');
+      });
   });
 });

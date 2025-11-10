@@ -11,19 +11,21 @@ module.exports = {
    */
   getDetails(email) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.getUserData(email),
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get user details endpoint');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.getUserData(email),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get user details endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called get user details API endpoint');
+          resolve(JSON.parse(body));
         }
-        logger.debug('Successfully called get user details API endpoint');
-        resolve(JSON.parse(body));
-      });
+      );
     });
   },
 
@@ -41,7 +43,7 @@ module.exports = {
     const reqBody = {
       firstName,
       lastName,
-    }
+    };
 
     if (oneLoginSid) {
       reqBody.oneLoginSid = oneLoginSid;
@@ -52,20 +54,22 @@ module.exports = {
     }
 
     return new Promise((resolve, reject) => {
-      request.put({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.updateUserData(userId),
-        body: JSON.stringify(reqBody),
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call edit user details endpoint');
-          reject(error);
-          return;
+      request.put(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.updateUserData(userId),
+          body: JSON.stringify(reqBody),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call edit user details endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called edit user details API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called edit user details API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
   /**
@@ -75,69 +79,76 @@ module.exports = {
    * @param oneLoginSid
    * @returns {Promise<unknown>}
    */
-  updateEmailOrOneLoginSid(userEmail, {email,  oneLoginSid }) {
-    let reqBody = {}
+  updateEmailOrOneLoginSid(userEmail, { email, oneLoginSid }) {
+    let reqBody = {};
 
     if (email) {
-      reqBody = {...reqBody, email}
+      reqBody = { ...reqBody, email };
     }
 
     if (oneLoginSid) {
-      reqBody = {...reqBody, oneLoginSid }
+      reqBody = { ...reqBody, oneLoginSid };
     }
 
     if (reqBody === {}) {
-      throw new Error('Provide updateEmail or oneLoginSid')
+      throw new Error('Provide updateEmail or oneLoginSid');
     }
 
     return new Promise((resolve, reject) => {
-      request.put({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.updateUserData(userEmail),
-        body: JSON.stringify(reqBody),
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call edit user details endpoint');
-          reject(error);
-          return;
+      request.put(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.updateUserData(userEmail),
+          body: JSON.stringify(reqBody),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call edit user details endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called update user details API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called update user details API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
   deleteUser(email) {
     return new Promise((resolve, reject) => {
-      request.delete({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.deleteUser(email),
-      },
-      (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call delete user details endpoint');
-          reject(error);
-          return;
+      request.delete(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.deleteUser(email),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call delete user details endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called delete user details API endpoint');
+          resolve(body);
         }
-        logger.debug('Successfully called delete user details API endpoint');
-        resolve(body);
-      });
+      );
     });
   },
   userSearch(email, oneLonginSid = null) {
     return new Promise((resolve, reject) => {
-      request.get({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.userSearch(email, oneLonginSid),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call user search endpoint');
-          reject(error);
-          return;
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.userSearch(email, oneLonginSid),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call user search endpoint');
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called user search endpoint');
+          resolve(JSON.parse(body));
         }
-        logger.debug('Successfully called user search endpoint');
-        resolve(JSON.parse(body));
-      });
+      );
     });
   },
 
@@ -147,7 +158,7 @@ module.exports = {
       firstName,
       lastName,
       oneLoginSid,
-    }
+    };
 
     if (state && ['verified', 'unverified'].includes(state)) {
       reqBody['state'] = state;
@@ -158,20 +169,23 @@ module.exports = {
     }
 
     return new Promise((resolve, reject) => {
-      request.post({
-        url: endpoints.createUser(),
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(reqBody),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call create user endpoint');
-          logger.error(error);
-          reject(error);
-          return;
+      request.post(
+        {
+          url: endpoints.createUser(),
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(reqBody),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call create user endpoint');
+            logger.error(error);
+            reject(error);
+            return;
+          }
+          logger.debug('Successfully called create user endpoint');
+          resolve(JSON.parse(body));
         }
-        logger.debug('Successfully called create user endpoint');
-        resolve(JSON.parse(body));
-      })
-    })
-  }
+      );
+    });
+  },
 };

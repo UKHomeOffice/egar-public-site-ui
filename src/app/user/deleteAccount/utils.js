@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-return-await */
 const i18n = require('i18n');
 const emailService = require('../../../common/services/sendEmail');
 const userApi = require('../../../common/services/userManageApi');
@@ -10,18 +8,13 @@ const settings = require('../../../common/config/index');
 const adminDeletionType = (orgUsers) => {
   const LAST_ADMIN_IN_ORGANISATION = 1;
 
-  const totalAdminsInOrg = orgUsers.filter(user => user.role.name === 'Admin').length;
+  const totalAdminsInOrg = orgUsers.filter((user) => user.role.name === 'Admin').length;
 
-  if (orgUsers.length === LAST_ADMIN_IN_ORGANISATION
-      && totalAdminsInOrg === LAST_ADMIN_IN_ORGANISATION
-  ) {
+  if (orgUsers.length === LAST_ADMIN_IN_ORGANISATION && totalAdminsInOrg === LAST_ADMIN_IN_ORGANISATION) {
     return 'DELETE_ORGANISATION';
   }
 
-  if (
-    orgUsers.length > LAST_ADMIN_IN_ORGANISATION
-      && totalAdminsInOrg === LAST_ADMIN_IN_ORGANISATION
-  ) {
+  if (orgUsers.length > LAST_ADMIN_IN_ORGANISATION && totalAdminsInOrg === LAST_ADMIN_IN_ORGANISATION) {
     return 'DO_NOT_DELETE_ADMIN';
   }
 
@@ -33,7 +26,7 @@ const defaultText = () => ({
   deleteOrgInfo: '',
 });
 
-const defaultDeletion = async cookie => ({
+const defaultDeletion = async (cookie) => ({
   deleteAccount: async () => await userApi.deleteUser(cookie.getUserEmail()),
   notifyUser: async () => {
     let templateId = settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID;
@@ -42,11 +35,11 @@ const defaultDeletion = async cookie => ({
       templateId = settings.NOTIFY_ONELOGIN_ACCOUNT_DELETE_TEMPLATE_ID;
     }
 
-    await emailService.send(
-    templateId,
-    cookie.getUserEmail(),
-    { firstName: cookie.getUserFirstName(), lastName: cookie.getUserLastName() },
-  )},
+    await emailService.send(templateId, cookie.getUserEmail(), {
+      firstName: cookie.getUserFirstName(),
+      lastName: cookie.getUserLastName(),
+    });
+  },
   text: defaultText,
 });
 
@@ -82,24 +75,19 @@ const deleteAccount = {
       notifyUser: async () => {
         switch (deletionType) {
           case 'DELETE_ORGANISATION':
-            return await emailService.send(
-              settings.NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID,
-              cookie.getUserEmail(),
-              {
-                firstName: cookie.getUserFirstName(),
-                orgName: cookie.getOrganisationName(),
-              },
-            );
+            return await emailService.send(settings.NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID, cookie.getUserEmail(), {
+              firstName: cookie.getUserFirstName(),
+              orgName: cookie.getOrganisationName(),
+            });
 
           case 'DO_NOT_DELETE_ADMIN':
             throw new Error('Email should not be sent if admin is not deleted');
 
           case 'DELETE_ADMIN':
-            return await emailService.send(
-              settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
-              cookie.getUserEmail(),
-              { firstName: cookie.getUserFirstName(), lastName: cookie.getUserLastName() },
-            );
+            return await emailService.send(settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID, cookie.getUserEmail(), {
+              firstName: cookie.getUserFirstName(),
+              lastName: cookie.getUserLastName(),
+            });
 
           default:
             throw new Error('Invalid Deletion type provided');

@@ -21,7 +21,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       notifyClient
         .sendEmail(templateId, email, { personalisation })
-        .then(response => resolve(response))
+        .then((response) => resolve(response))
         .catch((err) => {
           logger.error(err);
           reject(err);

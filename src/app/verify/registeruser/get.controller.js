@@ -16,7 +16,8 @@ module.exports = (req, res) => {
   const hashedToken = tokenService.generateHash(token);
 
   logger.debug('Calling verify user endpoint');
-  verifyUserService.verifyUser(hashedToken)
+  verifyUserService
+    .verifyUser(hashedToken)
     .then((response) => {
       logger.debug(response);
       res.render('app/verify/registeruser/index', { cookie });
@@ -24,6 +25,9 @@ module.exports = (req, res) => {
     .catch((err) => {
       logger.debug('Failed to verify token');
       logger.error(err);
-      res.render('app/verify/registeruser/index', { cookie, message: 'There was an issue verifying your account. Please try again later.' });
+      res.render('app/verify/registeruser/index', {
+        cookie,
+        message: 'There was an issue verifying your account. Please try again later.',
+      });
     });
 };
