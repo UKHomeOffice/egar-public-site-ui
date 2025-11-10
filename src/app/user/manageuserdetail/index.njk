@@ -6,17 +6,10 @@
 	{{__('error_prefix') if errors}} GAR | Edit User Details
 {% endblock %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block content %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds margin-left-30">
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
 
       <form id="signform" action="/user/manageuserdetail" autocomplete="new-password" class="form-group" method="post" role="form">
         <h1 class="govuk-heading-l">{{__('title_edit_account')}}</h1>

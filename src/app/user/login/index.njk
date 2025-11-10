@@ -6,10 +6,6 @@
 	{{__('error_prefix') if errors or unverified or unregistered }} GAR | Sign In
 {% endblock %}
 
-{% block header %}
-{% include "header-pre-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
   
   <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>

@@ -6,14 +6,8 @@
 	Error - Invitation expired
 {% endblock %}
 
-{% block header %}
-{% include "header-pre-user.njk" %}
-{% endblock %}
-
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Your Submit a General Aviation Report (GAR) invitation has expired</h1>

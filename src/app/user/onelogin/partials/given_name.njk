@@ -1,9 +1,6 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 <div class="govuk-grid-column-two-thirds margin-left-50 margin-top-30">
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
       <form id="page-form" action="/onelogin/register" autocomplete="off" method="post" role="form">
         <h1 class="govuk-heading-l">{{__('title_create_account_onelogin')}}</h1>
 

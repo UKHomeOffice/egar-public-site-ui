@@ -7,25 +7,12 @@
   Manage organisation | Submit a General Aviation Report (GAR)
 {% endblock %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% set active = '/organisation' %}
 
 {% block content %}
   <script type="text/javascript" src="/javascripts/organisation.js"></script>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
-
-      {% if successMsg %}
-        {% include "common/templates/includes/success-action.njk" %}
-      {% endif %}
-
       <h1 class="govuk-heading-xl">{{__('nav_bar_organisation')}}</h1>
       <p class="govuk-body-l">{{__('organisation_caption')}}</p>
 

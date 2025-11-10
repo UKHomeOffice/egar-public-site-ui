@@ -6,10 +6,6 @@
 	Submit GAR | Failure
 {% endblock %}
 
-{% block header %}
-{% include "header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
 
   
@@ -21,9 +17,7 @@
 
   {% import "common/templates/includes/macros.njk" as m %}
 
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
   <div class="govuk-grid-row">
 
      <h1 class="govuk-heading-xl">

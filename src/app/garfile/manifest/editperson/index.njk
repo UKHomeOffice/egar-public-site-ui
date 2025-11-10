@@ -8,19 +8,13 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
   
   <a href="/garfile/manifest" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>

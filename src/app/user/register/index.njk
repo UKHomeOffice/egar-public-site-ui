@@ -6,10 +6,6 @@
 	{{__('error_prefix') if errors}} GAR | Register
 {% endblock %}
 
-{% block header %}
-  {% include "header-pre-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
   
   <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>
@@ -17,9 +13,7 @@
 
 {% block content %}
 
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
 
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">

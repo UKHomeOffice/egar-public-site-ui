@@ -9,36 +9,18 @@
 
 {% set active = '/people' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
-
-      {% if successMsg %}
-        {% include "common/templates/includes/success-action.njk" %}
-      {% endif %}
-
       <h1 class="govuk-heading-xl">{{ __('title_people') }}</h1>
       <p class="govuk-body-l">
         <span style="background-color: #66ff66">
           {{__('id_card_withdrawl_text')}}
           <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span>
       </p>
-
-      {# {% if cookie.getUserRole() != 'User' %} #}
       <p class="govuk-body-l">{{__('people_caption')}}</p>
       <p class="govuk-body-m">{{__('person_search')}}</p>
-      {# {% endif %} #}
     </div>
-
     <script>
       $(document).ready(function () {
         $("#person-search").on("keyup", function () {
@@ -67,10 +49,7 @@
             <th class="govuk-table__header" id="person_type" scope="col">{{__('field_person_type')}}</th>
             <th class="govuk-table__header" id="document_expiry_date" scope="col">{{__('field_document_expiry_date')}}</th>
             <th class="govuk-table__header" id="created_date_time" scope="col">{{__('field_created_date_time')}}</th>
-            {# {% if cookie.getUserRole() != 'User' %} #}
             <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
-            {#   {% endif %} #}
-            {# <th class="govuk-table__header" scope="col"></th> #}
           </tr>
         </thead>
         <tbody class="govuk-table__body" id="people_table_row">
@@ -89,12 +68,9 @@
                 <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                 <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
                 <td class="govuk-table__cell">{{person.createdDateTime | truncate(11, true, "")}}</td>
-                {#  {% if cookie.getUserRole() != 'User' %} #}
                 <td class="govuk-table__cell ">
                   <button class="govuk-button--link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button>
                 </td>
-                {#   {% endif %} #}
-                {# <td class="govuk-table__cell"></td> #}
               </tr>
             {% endfor %}
           {% else %}
@@ -169,8 +145,6 @@
     });
   </script>
 
-  {# {% if cookie.getUserRole() != 'User' %} #}
-
   <div class="govuk-grid-column-full">
     <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
   </div>
@@ -185,7 +159,6 @@
   <div class="govuk-grid-column-full">
     <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
   </div>
-  {# {% endif %} #}
 </div>
 
 {% endblock %}
