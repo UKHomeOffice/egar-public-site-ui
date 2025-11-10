@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
 
   if (isLoggedIn) {
     res.locals.isLoggedIn = true;
-    next()
+    next();
     return;
   }
 
