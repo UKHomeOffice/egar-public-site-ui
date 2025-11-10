@@ -10,21 +10,13 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "common/templates/includes/header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
-  
   <a href="/garfile/arrival" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
   <script type="text/javascript" src="/javascripts/craft.js"></script>
   <div class="govuk-grid-row">
-    {% if errors %}
-      {% include "common/templates/includes/errors.njk" %}
-    {% endif %}
 
     <form id="previous_aircraft" action="/garfile/craft" autocomplete="off" class="form-group" method="post" role="form">
       <div class="govuk-grid-column-two-thirds">
@@ -124,14 +116,14 @@
             {% set long = craft.craftBaseLong%}
             {% set prefix = 'craftBase'%}
 
-            {{ l.location(legendLabel, 
-                      warningMessage, 
-                      isPortChoice, 
-                      portCode, 
-                      lat, 
-                      long, 
-                      prefix, 
-                      errors, 
+            {{ l.location(legendLabel,
+                      warningMessage,
+                      isPortChoice,
+                      portCode,
+                      lat,
+                      long,
+                      prefix,
+                      errors,
                       __) }}
             {# Start buttons #}
           </div>

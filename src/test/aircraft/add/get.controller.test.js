@@ -11,7 +11,8 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const controller = require('../../../app/aircraft/add/get.controller');
 
 describe('Aircraft Add Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);

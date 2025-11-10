@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -16,7 +13,9 @@ const personApi = require('../../../../common/services/personApi');
 const controller = require('../../../../app/garfile/manifest/addnewperson/get.controller');
 
 describe('GAR Manifest Add Person Get Controller', () => {
-  let req; let res; let personApiStub;
+  let req;
+  let res;
+  let personApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -46,7 +45,12 @@ describe('GAR Manifest Add Person Get Controller', () => {
     expect(personApiStub).to.not.have.been.called;
     expect(res.redirect).to.not.have.been.called;
     expect(res.render).to.have.been.calledWith('app/garfile/manifest/addnewperson/index', {
-      cookie, genderchoice, persontype, documenttype, req, person: {},
+      cookie,
+      genderchoice,
+      persontype,
+      documenttype,
+      req,
+      person: {},
     });
   });
 
@@ -68,14 +72,22 @@ describe('GAR Manifest Add Person Get Controller', () => {
     const cookie = new CookieModel(req);
     req.session.addPersonId = 'PERSON-1';
 
-    personApiStub.resolves(JSON.stringify([
-      {
-        personId: 'PERSON-1', firstName: 'Christopher', lastName: 'Pike', peopleType: { name: 'Captain' },
-      },
-      {
-        personId: 'PERSON-2', firstName: 'James', lastName: 'Kirk', peopleType: { name: 'Captain' },
-      },
-    ]));
+    personApiStub.resolves(
+      JSON.stringify([
+        {
+          personId: 'PERSON-1',
+          firstName: 'Christopher',
+          lastName: 'Pike',
+          peopleType: { name: 'Captain' },
+        },
+        {
+          personId: 'PERSON-2',
+          firstName: 'James',
+          lastName: 'Kirk',
+          peopleType: { name: 'Captain' },
+        },
+      ])
+    );
     const callController = async () => {
       await controller(req, res);
     };
@@ -90,7 +102,10 @@ describe('GAR Manifest Add Person Get Controller', () => {
         genderchoice,
         req,
         person: {
-          personId: 'PERSON-1', firstName: 'Christopher', lastName: 'Pike', peopleType: 'Captain',
+          personId: 'PERSON-1',
+          firstName: 'Christopher',
+          lastName: 'Pike',
+          peopleType: 'Captain',
         },
       });
     });

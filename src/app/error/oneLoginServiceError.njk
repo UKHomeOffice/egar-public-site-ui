@@ -6,14 +6,8 @@
 	Error - One Login service
 {% endblock %}
 
-{% block header %}
-{% include "header-pre-user.njk" %}
-{% endblock %}
-
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l">Sorry, there is a problem with the service</h1>

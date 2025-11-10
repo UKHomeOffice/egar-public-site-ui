@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -34,13 +32,16 @@ describe('Craft API Service', () => {
         request: { post: requestStub },
       });
 
-      await proxiedService.create('RIP-AFTC', 'A380', 'LHR', 'USER-ID-1').then().catch(() => {
-        expect(requestStub).to.have.been.calledOnceWith({
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ registration: 'RIP-AFTC', craftType: 'A380', craftBase: 'LHR' }),
-          url: `${BASE_URL}/user/USER-ID-1/crafts`,
+      await proxiedService
+        .create('RIP-AFTC', 'A380', 'LHR', 'USER-ID-1')
+        .then()
+        .catch(() => {
+          expect(requestStub).to.have.been.calledOnceWith({
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ registration: 'RIP-AFTC', craftType: 'A380', craftBase: 'LHR' }),
+            url: `${BASE_URL}/user/USER-ID-1/crafts`,
+          });
         });
-      });
     });
 
     it('should reject if error present', async () => {
@@ -49,13 +50,16 @@ describe('Craft API Service', () => {
         request: { post: requestStub },
       });
 
-      const result = await proxiedService.create('RIP-AFTC', 'A380', 'LHR', 'USER-ID-1').then().catch(() => {
-        expect(requestStub).to.have.been.calledOnceWith({
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ registration: 'RIP-AFTC', craftType: 'A380', craftBase: 'LHR' }),
-          url: `${BASE_URL}/user/USER-ID-1/crafts`,
+      const result = await proxiedService
+        .create('RIP-AFTC', 'A380', 'LHR', 'USER-ID-1')
+        .then()
+        .catch(() => {
+          expect(requestStub).to.have.been.calledOnceWith({
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ registration: 'RIP-AFTC', craftType: 'A380', craftBase: 'LHR' }),
+            url: `${BASE_URL}/user/USER-ID-1/crafts`,
+          });
         });
-      });
       expect(result).to.be.undefined;
     });
 
@@ -114,67 +118,53 @@ describe('CraftService With Nock', () => {
   const BASE_URL = endpoints.baseUrl();
 
   beforeEach(() => {
-    nock(BASE_URL)
-      .post(`/user/${userId}/crafts`, craft)
-      .reply(201, {
-        craftId: '1',
-        registration: 'C89-yk18',
-        craftType: 'Cessna 89',
-        craftBase: 'Inverness Airport',
-      });
+    nock(BASE_URL).post(`/user/${userId}/crafts`, craft).reply(201, {
+      craftId: '1',
+      registration: 'C89-yk18',
+      craftType: 'Cessna 89',
+      craftBase: 'Inverness Airport',
+    });
 
-    nock(BASE_URL)
-      .get(`/user/${userId}/crafts/${craftId}`)
-      .reply(200, {});
+    nock(BASE_URL).get(`/user/${userId}/crafts/${craftId}`).reply(200, {});
 
-    nock(BASE_URL)
-      .get(`/organisations/${orgId}/crafts?per_page=5&page=1`)
-      .reply(200, {});
+    nock(BASE_URL).get(`/organisations/${orgId}/crafts?per_page=5&page=1`).reply(200, {});
 
-    nock(BASE_URL)
-      .get(`/user/${userId}/crafts?per_page=5&page=1`)
-      .reply(200, {});
+    nock(BASE_URL).get(`/user/${userId}/crafts?per_page=5&page=1`).reply(200, {});
 
-    nock(BASE_URL)
-      .put(`/user/${userId}/crafts/${craftId}`, newCraft)
-      .reply(201, {
-        craftId: '1',
-        registration: 'B20-yk10',
-        craftType: 'Cessna 89',
-        craftBase: 'Inverness Airport',
-      });
+    nock(BASE_URL).put(`/user/${userId}/crafts/${craftId}`, newCraft).reply(201, {
+      craftId: '1',
+      registration: 'B20-yk10',
+      craftType: 'Cessna 89',
+      craftBase: 'Inverness Airport',
+    });
 
-    nock(BASE_URL)
-      .delete(`/user/${userId}/crafts/${craftId}`, deleteCraft)
-      .reply(200, {});
+    nock(BASE_URL).delete(`/user/${userId}/crafts/${craftId}`, deleteCraft).reply(200, {});
 
-    nock(BASE_URL)
-      .delete(`/organisations/${orgId}/crafts`, deleteCraft)
-      .reply(200, {});
+    nock(BASE_URL).delete(`/organisations/${orgId}/crafts`, deleteCraft).reply(200, {});
   });
 
   it('should successfully create a craft', (done) => {
-    craftApi.create(craft.registration, craft.craftType, craft.craftBase, userId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.property('craftId');
-        done();
-      });
+    craftApi.create(craft.registration, craft.craftType, craft.craftBase, userId).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.have.property('craftId');
+      done();
+    });
   });
 
   it('should throw an error when creating a craft', (done) => {
     nock.cleanAll();
-    nock(BASE_URL)
-      .post(`/user/${userId}/crafts`, craft)
-      .replyWithError({ message: 'Example create error', code: 404 });
+    nock(BASE_URL).post(`/user/${userId}/crafts`, craft).replyWithError({ message: 'Example create error', code: 404 });
 
-    craftApi.create(craft.registration, craft.craftType, craft.craftBase, userId).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example create error');
-      done();
-    });
+    craftApi
+      .create(craft.registration, craft.craftType, craft.craftBase, userId)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example create error');
+        done();
+      });
   });
 
   it('should successfully list a crafts details', (done) => {
@@ -192,21 +182,23 @@ describe('CraftService With Nock', () => {
       .get(`/user/${userId}/crafts/${craftId}`)
       .replyWithError({ message: 'Example getDetails error', code: 404 });
 
-    craftApi.getDetails(userId, craftId).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example getDetails error');
-    });
+    craftApi
+      .getDetails(userId, craftId)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example getDetails error');
+      });
   });
 
   it('should successfully list all crafts an individual user is able to see', (done) => {
-    craftApi.getCrafts(userId, 1)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+    craftApi.getCrafts(userId, 1).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.be.empty;
+      done();
+    });
   });
 
   it('should throw an error when getting all crafts for an individual', () => {
@@ -215,21 +207,23 @@ describe('CraftService With Nock', () => {
       .get(`/user/${userId}/crafts?per_page=5&page=1`)
       .replyWithError({ message: 'Example getCrafts error', code: 404 });
 
-    craftApi.getCrafts(userId, 1).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example getCrafts error');
-    });
+    craftApi
+      .getCrafts(userId, 1)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example getCrafts error');
+      });
   });
 
   it('should successfully list all crafts an org user is able to see', (done) => {
-    craftApi.getOrgCrafts(orgId, 1)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+    craftApi.getOrgCrafts(orgId, 1).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.be.empty;
+      done();
+    });
   });
 
   it('should throw an error when getting all crafts for an organisation', () => {
@@ -238,21 +232,23 @@ describe('CraftService With Nock', () => {
       .get(`/organisations/${orgId}/crafts?per_page=5&page=1`)
       .replyWithError({ message: 'Example getCrafts error', code: 404 });
 
-    craftApi.getOrgCrafts(orgId, 1).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example getCrafts error');
-    });
+    craftApi
+      .getOrgCrafts(orgId, 1)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example getCrafts error');
+      });
   });
 
   it("should successfully update a craft's information", (done) => {
-    craftApi.update(newCraft.registration, newCraft.craftType, newCraft.craftBase, userId, craftId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.property('craftId');
-        done();
-      });
+    craftApi.update(newCraft.registration, newCraft.craftType, newCraft.craftBase, userId, craftId).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.have.property('craftId');
+      done();
+    });
   });
 
   it('should throw an error when updating a craft', () => {
@@ -261,21 +257,23 @@ describe('CraftService With Nock', () => {
       .put(`/user/${userId}/crafts/${craftId}`, newCraft)
       .replyWithError({ message: 'Example update error', code: 404 });
 
-    craftApi.update(newCraft.registration, newCraft.craftType, newCraft.craftBase, userId, craftId).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example update error');
-    });
+    craftApi
+      .update(newCraft.registration, newCraft.craftType, newCraft.craftBase, userId, craftId)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example update error');
+      });
   });
 
   it('Should successfully delete a craft', (done) => {
-    craftApi.deleteCraft(userId, craftId)
-      .then((apiResponse) => {
-        const responseObj = JSON.parse(apiResponse);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+    craftApi.deleteCraft(userId, craftId).then((apiResponse) => {
+      const responseObj = JSON.parse(apiResponse);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.be.empty;
+      done();
+    });
   });
 
   it('should throw an error when deleting a craft', () => {
@@ -284,21 +282,23 @@ describe('CraftService With Nock', () => {
       .delete(`/user/${userId}/crafts/${craftId}`, deleteCraft)
       .replyWithError({ message: 'Example deleteCraft error', code: 404 });
 
-    craftApi.deleteCraft(userId, craftId).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example deleteCraft error');
-    });
+    craftApi
+      .deleteCraft(userId, craftId)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example deleteCraft error');
+      });
   });
 
   it('should successfully delete an organisation craft', (done) => {
-    craftApi.deleteOrgCraft(orgId, userId, craftId)
-      .then((apiResponse) => {
-        const responseObj = JSON.parse(apiResponse);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.be.empty;
-        done();
-      });
+    craftApi.deleteOrgCraft(orgId, userId, craftId).then((apiResponse) => {
+      const responseObj = JSON.parse(apiResponse);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.be.empty;
+      done();
+    });
   });
 
   it('should throw an error when deleting an organisation craft', () => {
@@ -307,10 +307,13 @@ describe('CraftService With Nock', () => {
       .delete(`/organisations/${orgId}/crafts`, deleteCraft)
       .replyWithError({ message: 'Example deleteOrgCraft error', code: 404 });
 
-    craftApi.deleteOrgCraft(orgId, userId, craftId).then(() => {
-      chai.assert.fail('Should not have returned without error');
-    }).catch((err) => {
-      expect(err.message).to.equal('Example deleteOrgCraft error');
-    });
+    craftApi
+      .deleteOrgCraft(orgId, userId, craftId)
+      .then(() => {
+        chai.assert.fail('Should not have returned without error');
+      })
+      .catch((err) => {
+        expect(err.message).to.equal('Example deleteOrgCraft error');
+      });
   });
 });

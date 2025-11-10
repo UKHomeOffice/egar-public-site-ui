@@ -9,22 +9,9 @@
 
 {% set active = '/aircraft' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block content %}
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-
-    {% if errors %}
-      {% include "common/templates/includes/errors.njk" %}
-    {% endif %}
-
-    {% if successMsg %}
-      {% include "common/templates/includes/success-action.njk" %}
-    {% endif %}
-
       <script>
       $(document).ready(function(){
         $("#aircraft-search").on("keyup", function() {
@@ -35,16 +22,11 @@
         });
         });
       </script>
-
     <h1 class="govuk-heading-xl">{{__('title_aircraft')}}</h1>
-    {# {% if cookie.getUserRole() != 'User' %} #}
       <p class="govuk-body-l">{{__('aircraft_caption')}}</p>
       <p class="govuk-body-m">Search for aircraft </p>
       <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
-    {# {% endif %} #}
   </div>
-
-  
 
   <div class="govuk-grid-column-full">
     <form id="aircraft" action="/aircraft" class="form-group" method="post" role="form" >
@@ -54,9 +36,7 @@
             <th class="govuk-table__header" scope="col">{{__('field_aircraft_registration')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_aircraft_type')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_aircraft_base')}}</th>
-            {# {% if cookie.getUserRole() != 'User' %} #}
             <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
-            {# {% endif %} #}
           </tr>
         </thead>
         <tbody class="govuk-table__body" id="aircraft_table_row" >
@@ -87,7 +67,6 @@
     </form>
 	</div>
 
-  {# {% if cookie.getUserRole() != 'User' %} #}
     <div class="govuk-grid-column-full">
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
     </div>
@@ -101,7 +80,6 @@
     <div class="govuk-grid-column-full">
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
     </div>
-  {# {% endif %} #}
   	<script>
     $(document).ready(function() {
       $('th').each(function(col) {

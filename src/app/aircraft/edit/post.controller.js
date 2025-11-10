@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 const _ = require('lodash');
 
 const logger = require('../../../common/utils/logger')(__filename);
@@ -12,39 +10,37 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  const { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes'} = req.body;
+  const { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes' } = req.body;
   const { craftId } = cookie.getEditCraft();
-  
+
   const craftObj = {
     registration,
     craftType,
     craftBasePort,
     craftBaseLat,
     craftBaseLong,
-    portChoice
+    portChoice,
   };
 
   const craftBase = cookie.reduceCraftBase(craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong);
   cookie.updateEditCraft(registration, craftType, craftBase);
 
-  if (portChoice === 'Yes'){
-
+  if (portChoice === 'Yes') {
     delete craftObj.craftBaseLat;
     delete craftObj.craftBaseLong;
   } else {
     delete craftObj.craftBasePort;
   }
 
-
-
   const validationChain = craftValidations.validations(craftObj);
 
   // Validate chains
-  validator.validateChains(validationChain)
+  validator
+    .validateChains(validationChain)
     .then(() => {
-
       // call the API to update craft
-      craftApi.update(registration, craftType, craftBase, cookie.getUserDbId(), craftId)
+      craftApi
+        .update(registration, craftType, craftBase, cookie.getUserDbId(), craftId)
         .then((apiResponse) => {
           try {
             const parsedResponse = JSON.parse(apiResponse);
@@ -63,10 +59,14 @@ module.exports = (req, res) => {
             }
             res.render('app/aircraft/edit/index', { cookie, errors: [errMsg] });
           }
-        }).catch((err) => {
+        })
+        .catch((err) => {
           logger.error('Unexpected error updating aircraft');
           logger.error(err);
-          res.render('app/aircraft/edit/index', { cookie, errors: [{ message: 'An error has occurred. Try again later' }] });
+          res.render('app/aircraft/edit/index', {
+            cookie,
+            errors: [{ message: 'An error has occurred. Try again later' }],
+          });
         });
     })
     .catch((err) => {

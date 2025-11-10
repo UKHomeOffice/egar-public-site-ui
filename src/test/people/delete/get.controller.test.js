@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -13,21 +12,24 @@ const personApi = require('../../../common/services/personApi');
 const controller = require('../../../app/people/delete/get.controller');
 
 describe('Person Delete Get Controller', () => {
-  let req; let res;
-  let personApiStub; let sessionSaveStub;
+  let req;
+  let res;
+  let personApiStub;
+  let sessionSaveStub;
   let apiResponse;
 
   beforeEach(() => {
     chai.use(sinonChai);
 
     apiResponse = {
-      firstName: 'Julian', lastName: 'Bashir',
+      firstName: 'Julian',
+      lastName: 'Bashir',
     };
 
     req = {
       session: {
         u: { dbId: '343' },
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
 
@@ -73,9 +75,11 @@ describe('Person Delete Get Controller', () => {
     req.session.deletePersonId = 'DELETE-PERSON-ID';
     cookie = new CookieModel(req);
 
-    personApiStub.resolves(JSON.stringify({
-      message: 'Person id not found',
-    }));
+    personApiStub.resolves(
+      JSON.stringify({
+        message: 'Person id not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);

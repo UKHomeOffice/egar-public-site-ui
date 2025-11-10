@@ -8,21 +8,14 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-    {% include "header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
-    
+
     <a href="/garfile/manifest" class="govuk-back-link">{{ __('nav_back') }}</a>
 {% endblock %}
 
 {% block content %}
 <script type="text/javascript" src="/javascripts/resperson_utils.js"></script>
     <div class="govuk-grid-row">
-        {% if errors %}
-            {% include "common/templates/includes/errors.njk" %}
-        {% endif %}
         <form id="page-form" action="/garfile/resperson" autocomplete="off" class="form-group"
                 method="post" role="form">
             <div class="govuk-grid-column-two-thirds">

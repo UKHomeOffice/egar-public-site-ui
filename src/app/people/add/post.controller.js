@@ -26,37 +26,55 @@ module.exports = (req, res) => {
     documentDesc: req.body.travelDocumentOther,
   };
 
-    logger.info(person.documentType);
-    logger.info(person.documentDesc);
+  logger.info(person.documentType);
+  logger.info(person.documentDesc);
 
   // Validate chains
-  validator.validateChains(validations.validations(req))
+  validator
+    .validateChains(validations.validations(req))
     .then(() => {
       // call the API to update the database and then
-      personApi.create(cookie.getUserDbId(), { people: [person] }).then((apiResponse) => {
-        const parsedResponse = JSON.parse(apiResponse);
-        if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-          // API returned error
+      personApi
+        .create(cookie.getUserDbId(), { people: [person] })
+        .then((apiResponse) => {
+          const parsedResponse = JSON.parse(apiResponse);
+          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+            // API returned error
+            res.render('app/people/add/index', {
+              cookie,
+              persontype,
+              documenttype,
+              genderchoice,
+              errors: [parsedResponse],
+            });
+          } else {
+            // Successful
+            res.redirect('/people');
+          }
+        })
+        .catch((err) => {
+          logger.error('There was a problem adding person to saved people');
+          logger.error(err);
           res.render('app/people/add/index', {
-            cookie, persontype, documenttype, genderchoice, errors: [parsedResponse],
+            cookie,
+            persontype,
+            documenttype,
+            genderchoice,
+            errors: [{ message: 'There was a problem creating the person. Please try again' }],
           });
-        } else {
-          // Successful
-          res.redirect('/people');
-        }
-      }).catch((err) => {
-        logger.error('There was a problem adding person to saved people');
-        logger.error(err);
-        res.render('app/people/add/index', {
-          cookie, persontype, documenttype, genderchoice, errors: [{ message: 'There was a problem creating the person. Please try again' }],
         });
-      });
     })
     .catch((err) => {
       logger.info('Validation errors creating a new person');
       logger.debug(JSON.stringify(err));
       res.render('app/people/add/index', {
-        cookie, req, persontype, documenttype, genderchoice, person: req.body, errors: err,
+        cookie,
+        req,
+        persontype,
+        documenttype,
+        genderchoice,
+        person: req.body,
+        errors: err,
       });
     });
 };

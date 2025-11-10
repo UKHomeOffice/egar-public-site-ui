@@ -9,13 +9,9 @@
 
 {% set active = '/aircraft' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
 
-  
+
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
@@ -33,10 +29,6 @@
   {% import "common/templates/includes/macros.njk" as m %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
 
       <form action="/aircraft/add" autocomplete="off" class="form-group" method="post" role="form">
 
@@ -72,14 +64,14 @@
         {% set long = craftObj.craftBaseLong%}
         {% set prefix = 'craftBase'%}
 
-        {{ l.location(legendLabel, 
-                      warningMessage, 
-                      isPortChoice, 
-                      portCode, 
-                      lat, 
-                      long, 
-                      prefix, 
-                      errors, 
+        {{ l.location(legendLabel,
+                      warningMessage,
+                      isPortChoice,
+                      portCode,
+                      lat,
+                      long,
+                      prefix,
+                      errors,
                       __) }}
 
         <div class="govuk-form-group">

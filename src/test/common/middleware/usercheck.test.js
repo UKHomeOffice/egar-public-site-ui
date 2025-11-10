@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -10,7 +9,9 @@ require('../../global.test');
 const middleware = require('../../../common/middleware/usercheck');
 
 describe('User Check Middleware', () => {
-  let res; let req; let next;
+  let res;
+  let req;
+  let next;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -30,6 +31,7 @@ describe('User Check Middleware', () => {
 
     res = {
       redirect: sinon.spy(),
+      locals: {}
     };
 
     csurfStub = sinon.stub();

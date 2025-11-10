@@ -15,20 +15,22 @@ module.exports = {
         },
       };
 
-      request.post({
-        headers: { 'content-type': 'multipart/form-data' },
-        uri: endpoints.postFile(garId),
-        formData,
-      }, (error, response, body) => {
-        if (error) {
-          reject(error);
-          return error;
+      request.post(
+        {
+          headers: { 'content-type': 'multipart/form-data' },
+          uri: endpoints.postFile(garId),
+          formData,
+        },
+        (error, response, body) => {
+          if (error) {
+            reject(error);
+            return error;
+          }
+          return resolve(body);
         }
-        return resolve(body);
-      });
-    })
-      .catch((err) => {
-        logger.error(err);
-      });
+      );
+    }).catch((err) => {
+      logger.error(err);
+    });
   },
 };

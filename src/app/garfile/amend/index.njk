@@ -8,14 +8,8 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
 
   <h1 class="govuk-heading-l">
     {{__('heading_amend_gar')}}

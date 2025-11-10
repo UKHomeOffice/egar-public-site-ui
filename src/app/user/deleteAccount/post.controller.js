@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { deleteAccount } = require('./utils');
@@ -32,7 +31,7 @@ const postController = async (req, res) => {
     await deleteAccountOptions.notifyUser();
 
     if (Object.hasOwn(req.cookies, 'id_token')) {
-      res.redirect('/user/logout?action=user-deleted')
+      res.redirect('/user/logout?action=user-deleted');
       return;
     }
   } catch (err) {

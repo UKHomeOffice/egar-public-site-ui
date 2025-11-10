@@ -14,30 +14,44 @@ module.exports = (req, res) => {
 
   const responsiblePerson = utils.getResponsiblePersonFromReq(req);
   const resPersonId = req.session.editResponsiblePersonId;
-  validator.validateChains(validations.validations(req))
-  .then(() => {
-    resPersonApi.updateResPerson(cookie.getUserDbId(), resPersonId, responsiblePerson).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        res.render('app/resperson/edit/index', {
-          cookie, responsiblePerson, fixedBasedOperatorOptions, errors: [parsedResponse],
+  validator
+    .validateChains(validations.validations(req))
+    .then(() => {
+      resPersonApi
+        .updateResPerson(cookie.getUserDbId(), resPersonId, responsiblePerson)
+        .then((apiResponse) => {
+          const parsedResponse = JSON.parse(apiResponse);
+          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+            res.render('app/resperson/edit/index', {
+              cookie,
+              responsiblePerson,
+              fixedBasedOperatorOptions,
+              errors: [parsedResponse],
+            });
+          } else {
+            res.redirect('/resperson');
+          }
+        })
+        .catch((err) => {
+          logger.error('There was a problem adding person to saved people');
+          logger.error(err);
+          res.render('app/resperson/edit/index', {
+            cookie,
+            responsiblePerson,
+            fixedBasedOperatorOptions,
+            errors: [{ message: 'There was a problem updating responsible person. Please try again' }],
+          });
         });
-      } else {
-        res.redirect('/resperson');
-      }
-    }).catch((err) => {
-      logger.error('There was a problem adding person to saved people');
-      logger.error(err);
-      res.render('app/resperson/edit/index', {
-        cookie, responsiblePerson, fixedBasedOperatorOptions, errors: [{ message: 'There was a problem updating responsible person. Please try again' }],
-      });
-    });
-  })
-  .catch((err) => {
-    logger.info('Validation errors creating a new responsible person');
+    })
+    .catch((err) => {
+      logger.info('Validation errors creating a new responsible person');
       logger.debug(JSON.stringify(err));
       res.render('app/resperson/edit/index', {
-        cookie, req, responsiblePerson, fixedBasedOperatorOptions, errors: err,
+        cookie,
+        req,
+        responsiblePerson,
+        fixedBasedOperatorOptions,
+        errors: err,
       });
-  });
+    });
 };

@@ -3,14 +3,9 @@
 {% block pageTitle %}
   Submit GAR | Success
 {% endblock %}
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
 
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  {% include "common/templates/includes/errors.njk" %}
   <div class="govuk-width-container">
     <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
       <div class="govuk-grid-row">

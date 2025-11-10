@@ -8,10 +8,6 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block content %}
   <div id="checkin-loading-screen">
     {{ m.loadingScreen("Resubmitting checks for passengers with 'System time out' status", "This may take up to 5 minutes to complete.") }}
