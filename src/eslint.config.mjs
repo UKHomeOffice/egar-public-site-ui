@@ -7,7 +7,7 @@ import prettierConfig from 'eslint-config-prettier';
 export default defineConfig([
   {
     files: ['**/*.{js,cjs,mjs}'],
-    ignores: ['public/javascripts/all.js', '**/*.min.js'],
+    ignores: ['public/javascripts/all.js', '**/*.min.js', 'public/javascripts/cookie-banner.js'],
     plugins: {
       js,
       prettier: eslintPluginPrettier,
@@ -43,7 +43,7 @@ export default defineConfig([
       'no-console': 'off',
       'no-alert': 'off',
     },
-    ignores: ['public/javascripts/all.js', '**/*.min.js'],
+    ignores: ['public/javascripts/all.js', '**/*.min.js', 'public/javascripts/cookie-banner.js'],
   },
   {
     files: ['app/**/*.js', 'common/**/*.js'],

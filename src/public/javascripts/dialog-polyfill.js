@@ -520,7 +520,7 @@
       // Some browsers throw on cssRules.
       try {
         cssRules = styleSheet.cssRules;
-      } catch (e) {}
+      } catch {}
       if (!cssRules) {
         continue;
       }
