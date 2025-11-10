@@ -5,47 +5,60 @@ import eslintPluginPrettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
 export default defineConfig([
-  {
-    ignores: ['public/javascripts/all.js'],
-  },
-  {
-    files: ['**/*.{js,cjs,mjs}'],
-    plugins: {
-      js,
-      prettier: eslintPluginPrettier,
+    {
+        files: ['**/*.{js,cjs,mjs}'],
+        plugins: {
+            js,
+            prettier: eslintPluginPrettier,
+        },
+        extends: [
+            'js/recommended',
+            prettierConfig, // disables rules conflicting with Prettier
+        ],
+        rules: {
+            'prettier/prettier': 'error', // Treat Prettier issues as ESLint errors
+            'max-len': 'off', // Prettier handles line length
+            'unicorn/prefer-module': 'off', // allow require()
+            'unicorn/prevent-abbreviations': 'off', // optional
+        },
+        languageOptions: {
+            globals: {
+                ...globals.node,
+            },
+        },
     },
-    extends: [
-      'js/recommended',
-      prettierConfig, // disables rules conflicting with Prettier
-    ],
-    rules: {
-      'prettier/prettier': 'error', // Treat Prettier issues as ESLint errors
-      'max-len': 'off', // Prettier handles line length
-      'unicorn/prefer-module': 'off', // allow require()
-      'unicorn/prevent-abbreviations': 'off', // optional
+    {
+        files: ['public/javascripts/**/*.js'],
+        languageOptions: {
+            globals: {
+                ...globals.browser, // window, document, etc.
+                $: 'readonly', // jQuery global
+                jQuery: 'readonly',
+            },
+        },
+        rules: {
+            // You can relax some Node-only rules here if needed
+            'n/no-missing-import': 'off',
+            'n/no-unpublished-require': 'off',
+        },
+        ignores: ['public/javascripts/all.js'],
     },
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
+    {
+        files: ['**/*.js'],
+        languageOptions: {
+            sourceType: 'commonjs',
+        },
     },
-  },
-  {
-    files: ['**/*.js'],
-    languageOptions: {
-      sourceType: 'commonjs',
+    {
+        files: ['test/**/*.js'],
+        languageOptions: {
+            globals: {
+                ...globals.mocha,
+            },
+        },
+        rules: {
+            'n/no-unpublished-require': 'off', // devDeps in tests
+        },
     },
-  },
-  {
-    files: ['test/**/*.js'],
-    languageOptions: {
-      globals: {
-        ...globals.mocha,
-      },
-    },
-    rules: {
-      'n/no-unpublished-require': 'off', // devDeps in tests
-    },
-  },
-  prettierConfig,
+    prettierConfig,
 ]);
