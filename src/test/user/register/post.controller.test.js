@@ -459,7 +459,7 @@ describe('User Register Post Controller', () => {
           errors: [{ message: 'User already registered' }],
         });
       })
-      .catch(() => { });
+      .catch(() => {});
   });
 
   it('should redirect if createUserApi resolves but with an error', async () => {
