@@ -2,7 +2,6 @@ const logger = require('../utils/logger')(__filename);
 const config = require('../config/index');
 const request = require('request');
 const qs = require('querystring');
-const { resolve } = require('path');
 
 /**
  * This function is meant to convert URLs in non prod such that if the user is making a request from an internal URL, then a internal URL will be returned.
