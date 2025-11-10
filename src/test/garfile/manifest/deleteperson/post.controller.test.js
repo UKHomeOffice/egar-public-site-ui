@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -13,7 +12,8 @@ const garApi = require('../../../../common/services/garApi');
 const controller = require('../../../../app/garfile/manifest/deleteperson/post.controller');
 
 describe('Person Delete Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
   let garApiStub;
   let apiResponse;
 
@@ -21,7 +21,8 @@ describe('Person Delete Get Controller', () => {
     chai.use(sinonChai);
 
     apiResponse = {
-      firstName: 'Julian', lastName: 'Bashir',
+      firstName: 'Julian',
+      lastName: 'Bashir',
     };
 
     req = {
@@ -73,9 +74,11 @@ describe('Person Delete Get Controller', () => {
     req.body.garPeopleId = 'DELETE-PERSON-ID';
     cookie = new CookieModel(req);
 
-    garApiStub.resolves(JSON.stringify({
-      message: 'Person id not found',
-    }));
+    garApiStub.resolves(
+      JSON.stringify({
+        message: 'Person id not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);

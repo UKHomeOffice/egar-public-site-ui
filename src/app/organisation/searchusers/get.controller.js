@@ -9,20 +9,21 @@ module.exports = (req, res) => {
   const errMsg = { message: 'Failed to fetch user. Try again' };
   const userPermissions = permissionLevels[cookie.getUserRole()];
   const { searchUserName } = req.query;
-    
+
   if (searchUserName === undefined) {
     res.redirect('/organisation');
     return;
   }
-  
-  organisationApi.getSearchOrgUsers(cookie.getOrganisationId(), searchUserName)
+
+  organisationApi
+    .getSearchOrgUsers(cookie.getOrganisationId(), searchUserName)
     .then((apiResponse) => {
       const orgUsers = JSON.parse(apiResponse).map((orgUser) => {
         const isEditable = userPermissions > permissionLevels[orgUser.role.name];
         return { ...orgUser, isEditable };
       });
       cookie.setOrganisationUsers(orgUsers);
-      
+
       return res.render('app/organisation/index', { cookie, orgUsers, searchUserName });
     })
     .catch((err) => {

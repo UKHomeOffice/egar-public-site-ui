@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { deleteAccount } = require('./utils');
-const {ONE_LOGIN_SHOW_ONE_LOGIN} = require("../../../common/config");
+const { ONE_LOGIN_SHOW_ONE_LOGIN } = require('../../../common/config');
 
 module.exports = async (req, res) => {
   logger.info('Rendering page app/user/deleteAccount/index');

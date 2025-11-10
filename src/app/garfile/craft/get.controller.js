@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const craftApi = require('../../../common/services/craftApi');
@@ -15,37 +14,52 @@ module.exports = (req, res) => {
   const userRole = cookie.getUserRole();
   const userId = cookie.getUserDbId();
 
-  garApi.get(cookie.getGarId())
+  garApi
+    .get(cookie.getGarId())
     .then((garApiResponse) => {
       const gar = JSON.parse(garApiResponse);
-      if ((gar.registration !== null || gar.registration !== 'Undefined') && req.headers.referer.indexOf('garfile/craft') < 0) {
+      if (
+        (gar.registration !== null || gar.registration !== 'Undefined') &&
+        req.headers.referer.indexOf('garfile/craft') < 0
+      ) {
         cookie.setGarCraft(gar.registration, gar.craftType, gar.craftBase);
       }
 
       // Create Promise representing the API call, depending on whether it is
       // for an individual or an organisation
-      const apiCall = userRole === 'Individual' ? craftApi.getCrafts(userId, currentPage) : craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage);
-      apiCall.then((values) => {
-        const garCraft = (JSON.parse(values));
+      const apiCall =
+        userRole === 'Individual'
+          ? craftApi.getCrafts(userId, currentPage)
+          : craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage);
+      apiCall
+        .then((values) => {
+          const garCraft = JSON.parse(values);
 
-        if (garCraft.items.length > 0) {
-          const { totalPages, totalItems } = garCraft._meta;
-          const paginationData = pagination.build(req, totalPages, totalItems);
-          cookie.setSavedCraft(JSON.parse(values));
+          if (garCraft.items.length > 0) {
+            const { totalPages, totalItems } = garCraft._meta;
+            const paginationData = pagination.build(req, totalPages, totalItems);
+            cookie.setSavedCraft(JSON.parse(values));
 
-          res.render('app/garfile/craft/index', { cookie, pages: paginationData });
-          return;
-        }
-        res.render('app/garfile/craft/index', { cookie });
-      }).catch((err) => {
-        logger.error('Failed to get Saved Crafts from API');
-        logger.error(err);
-        res.render('app/garfile/craft/index', { cookie, errors: [{ message: 'There was a problem getting aircraft information' }] });
-      });
+            res.render('app/garfile/craft/index', { cookie, pages: paginationData });
+            return;
+          }
+          res.render('app/garfile/craft/index', { cookie });
+        })
+        .catch((err) => {
+          logger.error('Failed to get Saved Crafts from API');
+          logger.error(err);
+          res.render('app/garfile/craft/index', {
+            cookie,
+            errors: [{ message: 'There was a problem getting aircraft information' }],
+          });
+        });
     })
     .catch((err) => {
       logger.error('Failed to get GAR from API');
       logger.error(err);
-      res.render('app/garfile/craft/index', { cookie, errors: [{ message: 'There was a problem getting GAR information' }] });
+      res.render('app/garfile/craft/index', {
+        cookie,
+        errors: [{ message: 'There was a problem getting GAR information' }],
+      });
     });
 };

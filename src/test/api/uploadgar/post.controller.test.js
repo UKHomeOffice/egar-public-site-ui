@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -28,7 +25,8 @@ const controller = require('../../../app/api/uploadgar/post.controller');
 const { getInvalidWorkbook, getValidWorkbook } = require('./workbook-data');
 
 describe('API upload GAR post controller', () => {
-  let req; let res;
+  let req;
+  let res;
   let incorrectWorkbook;
   let clock;
 
@@ -38,7 +36,7 @@ describe('API upload GAR post controller', () => {
     clock = sinon.useFakeTimers({
       now: new Date('2022-05-29 GMT'),
       shouldAdvanceTime: false,
-      toFake: ["Date"],
+      toFake: ['Date'],
     });
 
     incorrectWorkbook = {
@@ -61,7 +59,7 @@ describe('API upload GAR post controller', () => {
         u: {
           dbId: 'khan@augmented.com',
         },
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
     res = {
@@ -185,7 +183,7 @@ describe('API upload GAR post controller', () => {
 
       expect(req.session.save).to.have.been.called;
       expect(req.session.failureMsg).to.eql([
-        new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk')
+        new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk'),
       ]);
       expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
     });
@@ -201,12 +199,32 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.validISOCountryLength, '', 'ISSUING STATE', 'Enter a valid document issuing state for crew member James Kirk. Must be a ISO 3166 country code'),
+          new ValidationRule(
+            validator.validISOCountryLength,
+            '',
+            'ISSUING STATE',
+            'Enter a valid document issuing state for crew member James Kirk. Must be a ISO 3166 country code'
+          ),
           new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk'),
-          new ValidationRule(validator.validISOCountryLength, '', 'NATIONALITY', 'Enter a valid nationality for crew member James Kirk. Must be a ISO 3166 country code'),
-          new ValidationRule(validator.validISOCountryLength, '', 'ISSUING STATE', 'Enter a valid document issuing state for passenger Pavel Chekov. Must be a ISO 3166 country code'),
+          new ValidationRule(
+            validator.validISOCountryLength,
+            '',
+            'NATIONALITY',
+            'Enter a valid nationality for crew member James Kirk. Must be a ISO 3166 country code'
+          ),
+          new ValidationRule(
+            validator.validISOCountryLength,
+            '',
+            'ISSUING STATE',
+            'Enter a valid document issuing state for passenger Pavel Chekov. Must be a ISO 3166 country code'
+          ),
           new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for passenger Pavel Chekov'),
-          new ValidationRule(validator.validISOCountryLength, '', 'NATIONALITY', 'Enter a valid nationality for passenger Pavel Chekov. Must be a ISO 3166 country code'),
+          new ValidationRule(
+            validator.validISOCountryLength,
+            '',
+            'NATIONALITY',
+            'Enter a valid nationality for passenger Pavel Chekov. Must be a ISO 3166 country code'
+          ),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
@@ -226,7 +244,12 @@ describe('API upload GAR post controller', () => {
 
       expect(req.session.save).to.have.been.called;
       expect(req.session.failureMsg).to.eql([
-        new ValidationRule(validator.dateNotMoreThanMonthInFuture, '', '2022-07-30', 'Arrival date must be in the future and within a month from now'),
+        new ValidationRule(
+          validator.dateNotMoreThanMonthInFuture,
+          '',
+          '2022-07-30',
+          'Arrival date must be in the future and within a month from now'
+        ),
       ]);
       expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
     });
@@ -243,11 +266,10 @@ describe('API upload GAR post controller', () => {
       };
 
       callController().then(() => {
-
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(validator.isValidAirportCode, '', null, 'Arrival port should be an ICAO or IATA code'),
-          new ValidationRule(validator.notEmpty, '', null,  'Enter a value for the arrival port'),
+          new ValidationRule(validator.notEmpty, '', null, 'Enter a value for the arrival port'),
         ]);
       });
     });
@@ -266,7 +288,12 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.dateNotInPast, '', '2010-07-30',  'Arrival date must be in the future and within a month from now'),
+          new ValidationRule(
+            validator.dateNotInPast,
+            '',
+            '2010-07-30',
+            'Arrival date must be in the future and within a month from now'
+          ),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
@@ -286,21 +313,25 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController().then().then(() => {
-        expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
-        expect(req.session.save).to.not.have.been.called;
-        expect(req.session.failureMsg).to.eq('Failed to create GAR. Try again');
-        expect(req.session.failureIdentifier).to.eq('file');
-        expect(res.redirect).to.have.been.calledWith('garfile/garupload');
-      });
+      callController()
+        .then()
+        .then(() => {
+          expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
+          expect(req.session.save).to.not.have.been.called;
+          expect(req.session.failureMsg).to.eq('Failed to create GAR. Try again');
+          expect(req.session.failureIdentifier).to.eq('file');
+          expect(res.redirect).to.have.been.calledWith('garfile/garupload');
+        });
     });
 
     it('should return with an error when api returns a message', () => {
       const data = getValidWorkbook();
 
-      sinon.stub(createGarApi, 'createGar').resolves(JSON.stringify({
-        message: 'User does not exist',
-      }));
+      sinon.stub(createGarApi, 'createGar').resolves(
+        JSON.stringify({
+          message: 'User does not exist',
+        })
+      );
       sinon.stub(garApi, 'patch');
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
@@ -322,9 +353,11 @@ describe('API upload GAR post controller', () => {
     it('should mention when on of the update steps rejects', () => {
       const data = getValidWorkbook();
 
-      sinon.stub(createGarApi, 'createGar').resolves(JSON.stringify({
-        garId: 'ABCD-1234',
-      }));
+      sinon.stub(createGarApi, 'createGar').resolves(
+        JSON.stringify({
+          garId: 'ABCD-1234',
+        })
+      );
       const garApiPatch = sinon.stub(garApi, 'patch').onCall(0).resolves();
       garApiPatch.onCall(1).resolves();
       garApiPatch.onCall(2).rejects('garApi.patch for voyageUpdate Example Reject');
@@ -336,7 +369,10 @@ describe('API upload GAR post controller', () => {
       };
 
       // Promise.all for three Promises...
-      callController().then().then().then()
+      callController()
+        .then()
+        .then()
+        .then()
         .then(() => {
           expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
           expect(garApi.patch).to.have.been.calledWith('ABCD-1234');
@@ -352,9 +388,11 @@ describe('API upload GAR post controller', () => {
     it('should go to the departure screen on success', () => {
       const data = getValidWorkbook();
 
-      sinon.stub(createGarApi, 'createGar').resolves(JSON.stringify({
-        garId: 'ABCD-1234',
-      }));
+      sinon.stub(createGarApi, 'createGar').resolves(
+        JSON.stringify({
+          garId: 'ABCD-1234',
+        })
+      );
       const garApiPatch = sinon.stub(garApi, 'patch').resolves();
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
@@ -364,7 +402,10 @@ describe('API upload GAR post controller', () => {
       };
 
       // Promise.all for three Promises...
-      callController().then().then().then()
+      callController()
+        .then()
+        .then()
+        .then()
         .then(() => {
           expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
           expect(garApiPatch).to.have.been.calledWith('ABCD-1234');
@@ -378,7 +419,7 @@ describe('API upload GAR post controller', () => {
     it('Phoney document type shoudl be disallowed', () => {
       const data = getValidWorkbook();
 
-      data.Sheets.Valid1.A9.v = "Cipher";
+      data.Sheets.Valid1.A9.v = 'Cipher';
       data.Sheets.Valid1.B9.v = undefined;
 
       sinon.stub(XLSX, 'read').returns(data);
@@ -393,8 +434,8 @@ describe('API upload GAR post controller', () => {
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(
             validator.isValidDocumentType,
-            "",
-            "Cipher",
+            '',
+            'Cipher',
             'Enter a valid document type for crew member James Kirk, it should be "Identity Card", "Passport", "Other", not "Cipher"'
           ),
         ]);
@@ -405,7 +446,7 @@ describe('API upload GAR post controller', () => {
     it('Phoney document type shoudl be disallowed', () => {
       const data = getValidWorkbook();
 
-      data.Sheets.Valid1.A9.v = "Passport";
+      data.Sheets.Valid1.A9.v = 'Passport';
       data.Sheets.Valid1.B9.v = 'UN document';
 
       sinon.stub(XLSX, 'read').returns(data);
@@ -421,7 +462,7 @@ describe('API upload GAR post controller', () => {
           new ValidationRule(
             validator.isOtherDocumentWithDocumentDesc,
             '',
-            ["Passport", "UN document"],
+            ['Passport', 'UN document'],
             'For crew member James Kirk, "Passport" document type should be "Other" or remove "UN document" value from document description'
           ),
         ]);
@@ -432,7 +473,7 @@ describe('API upload GAR post controller', () => {
     it('document desc should not be other and raise a validation error', () => {
       const data = getValidWorkbook();
 
-      data.Sheets.Valid1.A20.v = "Other";
+      data.Sheets.Valid1.A20.v = 'Other';
       data.Sheets.Valid1.B20.v = undefined;
 
       sinon.stub(XLSX, 'read').returns(data);
@@ -445,7 +486,12 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.notEmpty, 'travelDocumentOther', undefined, 'For passenger Pavel Chekov enter the document description you are using'),
+          new ValidationRule(
+            validator.notEmpty,
+            'travelDocumentOther',
+            undefined,
+            'For passenger Pavel Chekov enter the document description you are using'
+          ),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
@@ -454,8 +500,8 @@ describe('API upload GAR post controller', () => {
     it('document description should be a valid text and not symbols', () => {
       const data = getValidWorkbook();
 
-      data.Sheets.Valid1.A20.v = "Other";
-      data.Sheets.Valid1.B20.v = "$a$a$";
+      data.Sheets.Valid1.A20.v = 'Other';
+      data.Sheets.Valid1.B20.v = '$a$a$';
 
       sinon.stub(XLSX, 'read').returns(data);
       sinon.spy(req.session, 'save');
@@ -467,7 +513,12 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(validator.validName, 'travelDocumentOther', "$a$a$", 'For passenger Pavel Chekov enter a real document description'),
+          new ValidationRule(
+            validator.validName,
+            'travelDocumentOther',
+            '$a$a$',
+            'For passenger Pavel Chekov enter a real document description'
+          ),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });

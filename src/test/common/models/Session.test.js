@@ -1,11 +1,4 @@
-/* eslint-disable no-undef */
-
-const {
-  sequelize,
-  dataTypes,
-  checkModelName,
-  checkPropertyExists,
-} = require('sequelize-test-helpers');
+const { sequelize, dataTypes, checkModelName, checkPropertyExists } = require('sequelize-test-helpers');
 
 require('../../global.test');
 const SessionModel = require('../../../common/models/Session');

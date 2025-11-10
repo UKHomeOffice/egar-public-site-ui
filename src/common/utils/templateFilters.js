@@ -10,7 +10,7 @@ const uncamelCase = (value) => {
 const containsError = (array, value) => {
   if (array === undefined || value === undefined) return false;
 
-  const result = array.filter(element => element.identifier === value);
+  const result = array.filter((element) => element.identifier === value);
   return result.length > 0;
 };
 

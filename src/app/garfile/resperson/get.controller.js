@@ -20,20 +20,32 @@ module.exports = async (req, res) => {
     const resPersonsResponse = await resPersonApi.getResPersons(cookie.getUserDbId());
     const responsiblePersons = await JSON.parse(resPersonsResponse);
     const userId = cookie.getUserDbId();
-    if(req.query.resPersonId) {
+    if (req.query.resPersonId) {
       const resPerResponse = await resPersonApi.getResPersonDetails(userId, req.query.resPersonId);
       const responsible_person = await JSON.parse(resPerResponse);
-      res.render('app/garfile/resperson/index', { cookie, responsiblePerson:responsible_person, responsiblePersons, fixedBasedOperatorOptions });
+      res.render('app/garfile/resperson/index', {
+        cookie,
+        responsiblePerson: responsible_person,
+        responsiblePersons,
+        fixedBasedOperatorOptions,
+      });
     } else {
-      res.render('app/garfile/resperson/index', { cookie, responsiblePerson, responsiblePersons, fixedBasedOperatorOptions });
+      res.render('app/garfile/resperson/index', {
+        cookie,
+        responsiblePerson,
+        responsiblePersons,
+        fixedBasedOperatorOptions,
+      });
     }
-  } catch(err) {
+  } catch (err) {
     logger.error('API failed to retrieve GAR');
     logger.error(err);
     res.render('app/garfile/resperson/index', context, {
-      errors: [{
-        message: 'Problem retrieving GAR',
-      }],
+      errors: [
+        {
+          message: 'Problem retrieving GAR',
+        },
+      ],
     });
-  };
+  }
 };

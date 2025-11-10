@@ -3,7 +3,6 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
 module.exports = {
-
   /**
    * Posts userdata to user creation API endpoint.
    *
@@ -23,19 +22,21 @@ module.exports = {
       reqBody.tokenId = tokenId;
     }
     return new Promise((resolve, reject) => {
-      request.post({
-        headers: { 'content-type': 'application/json' },
-        url: endpoints.register(),
-        body: JSON.stringify(reqBody),
-      }, (error, response, body) => {
-        if (error) {
-          reject(error);
+      request.post(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: endpoints.register(),
+          body: JSON.stringify(reqBody),
+        },
+        (error, response, body) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(body);
         }
-        resolve(body);
-      });
-    })
-      .catch((err) => {
-        logger.error(err);
-      });
+      );
+    }).catch((err) => {
+      logger.error(err);
+    });
   },
 };

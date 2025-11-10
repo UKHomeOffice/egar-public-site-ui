@@ -7,12 +7,12 @@ module.exports = async (req, res) => {
   logger.debug('In people get controller');
   const cookie = new CookieModel(req);
   const errMSg = { message: 'Failed to get saved people' };
-  
+
   try {
-    const response = await personApi.getPeople(cookie.getUserDbId(), 'individual')
+    const response = await personApi.getPeople(cookie.getUserDbId(), 'individual');
     const people = JSON.parse(response);
     const manifest = new Manifest(JSON.stringify({ items: people }));
-    
+
     if (people.message) {
       logger.info('Failed to get saved people');
       logger.info(people.message);
@@ -30,23 +30,24 @@ module.exports = async (req, res) => {
       logger.error(`User ${cookie.getUserDbId()} users are invalid`);
       logger.info('Manifest validation failed, redirecting with error msg');
 
-      return res.render('app/people/index', { 
-        cookie, 
-        people, 
-        errors: manifest.genErrValidations(), 
-        manifestInvalidPeople: manifest.invalidPeople
+      return res.render('app/people/index', {
+        cookie,
+        people,
+        errors: manifest.genErrValidations(),
+        manifestInvalidPeople: manifest.invalidPeople,
       });
-  
-    } 
+    }
 
     if (req.session.successMsg) {
-
       const { successMsg, successHeader } = req.session;
       delete req.session.successHeader;
       delete req.session.successMsg;
 
       return res.render('app/people/index', {
-        cookie, people, successHeader, successMsg,
+        cookie,
+        people,
+        successHeader,
+        successMsg,
       });
     }
     return res.render('app/people/index', { cookie, people });
@@ -54,5 +55,5 @@ module.exports = async (req, res) => {
     logger.info('Failed to get saved people');
     logger.info(err);
     return res.render('app/people/index', { cookie, errors: [errMSg] });
-  };
+  }
 };

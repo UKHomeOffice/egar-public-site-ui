@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -14,7 +11,9 @@ const userApi = require('../../../common/services/userManageApi');
 const controller = require('../../../app/organisation/inviteusers/post.controller');
 
 describe('Organisation Invite User Post Controller', () => {
-  let req; let res; let cookie;
+  let req;
+  let res;
+  let cookie;
   let getDetailsStub;
 
   beforeEach(() => {
@@ -35,7 +34,7 @@ describe('Organisation Invite User Post Controller', () => {
       redirect: sinon.spy(),
     };
 
-    getDetailsStub = sinon.stub(userApi, 'getDetails')
+    getDetailsStub = sinon.stub(userApi, 'getDetails');
   });
 
   afterEach(() => {
@@ -67,7 +66,12 @@ describe('Organisation Invite User Post Controller', () => {
           errors: [
             new ValidationRule(validator.notEmpty, 'fname', req.body.fname, 'Please enter the given names of the user'),
             new ValidationRule(validator.notEmpty, 'lname', req.body.lname, 'Please enter the surname of the user'),
-            new ValidationRule(validator.notEmpty, 'email', req.body.email, 'Please enter the email address of the user'),
+            new ValidationRule(
+              validator.notEmpty,
+              'email',
+              req.body.email,
+              'Please enter the email address of the user'
+            ),
           ],
         });
       });
@@ -76,7 +80,8 @@ describe('Organisation Invite User Post Controller', () => {
     it('should render messages when strings too long', () => {
       req.body.fname = 'abcdefghijklmnopqrstuvwxyzabcdefghijk';
       req.body.lname = 'abcdefghijklmnopqrstuvwxyzabcdefghij';
-      req.body.email = '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com';
+      req.body.email =
+        '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com';
       req.body.cemail = '';
 
       const callController = async () => {
@@ -92,12 +97,27 @@ describe('Organisation Invite User Post Controller', () => {
           cookie,
           fname: 'abcdefghijklmnopqrstuvwxyzabcdefghijk',
           lname: 'abcdefghijklmnopqrstuvwxyzabcdefghij',
-          email: '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com',
+          email:
+            '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com',
           errors: [
-            new ValidationRule(validator.isValidStringLength, 'fname', 'abcdefghijklmnopqrstuvwxyzabcdefghijk', 'Given names must be 35 characters or less'),
-            new ValidationRule(validator.isValidStringLength, 'lname', 'abcdefghijklmnopqrstuvwxyzabcdefghij', 'Surname must be 35 characters or less'),
-            new ValidationRule(validator.isValidEmailLength, 'email',
-              '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com', 'Email must be 150 characters or less'),
+            new ValidationRule(
+              validator.isValidStringLength,
+              'fname',
+              'abcdefghijklmnopqrstuvwxyzabcdefghijk',
+              'Given names must be 35 characters or less'
+            ),
+            new ValidationRule(
+              validator.isValidStringLength,
+              'lname',
+              'abcdefghijklmnopqrstuvwxyzabcdefghij',
+              'Surname must be 35 characters or less'
+            ),
+            new ValidationRule(
+              validator.isValidEmailLength,
+              'email',
+              '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com',
+              'Email must be 150 characters or less'
+            ),
             new ValidationRule(validator.valuetrue, 'cemail', false, 'Please ensure the email addresses match'),
           ],
         });
@@ -124,9 +144,7 @@ describe('Organisation Invite User Post Controller', () => {
           fname: 'Malcolm',
           lname: 'Reynolds',
           email: 'mal@serenity.com',
-          errors: [
-            new ValidationRule(validator.valuetrue, 'cemail', false, 'Please ensure the email addresses match'),
-          ],
+          errors: [new ValidationRule(validator.valuetrue, 'cemail', false, 'Please ensure the email addresses match')],
         });
       });
     });
@@ -137,7 +155,7 @@ describe('Organisation Invite User Post Controller', () => {
       await controller(req, res);
     };
 
-    getDetailsStub.resolves({email: 'prequel@enterprise.net', 'message': 'User not registered'});
+    getDetailsStub.resolves({ email: 'prequel@enterprise.net', message: 'User not registered' });
     callController().then(() => {
       expect(req.session.inv.fn).to.eq('Jonathon');
       expect(req.session.inv.ln).to.eq('Archer');
@@ -153,7 +171,7 @@ describe('Organisation Invite User Post Controller', () => {
       await controller(req, res);
     };
 
-    getDetailsStub.resolves({email: 'prequel@enterprise.net'});
+    getDetailsStub.resolves({ email: 'prequel@enterprise.net' });
     callController().then(() => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/userExistError');
     });

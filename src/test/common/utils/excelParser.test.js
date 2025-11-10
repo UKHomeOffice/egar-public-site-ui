@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const { expect } = require('chai');
 const sinon = require('sinon');
 
@@ -28,7 +25,9 @@ describe('ExcelParser', () => {
 
   it('Should successfully parse a worksheet and apply transformations', () => {
     const transformer = sinon.stub().resolves(123);
-    const parser = new ExcelParser(workbook, { cell1: { location: 'A1', transform: [transformer] } });
+    const parser = new ExcelParser(workbook, {
+      cell1: { location: 'A1', transform: [transformer] },
+    });
     expect(parser.parse()).to.have.keys(['cell1']);
     sinon.assert.calledOnce(transformer);
   });
@@ -36,7 +35,9 @@ describe('ExcelParser', () => {
   it('Should successfully parse a worksheet and apply multiple transformations', () => {
     const transformer = sinon.stub().resolves(123);
     const transformer2 = sinon.stub().resolves(234);
-    const parser = new ExcelParser(workbook, { cell1: { location: 'A1', transform: [transformer, transformer2] } });
+    const parser = new ExcelParser(workbook, {
+      cell1: { location: 'A1', transform: [transformer, transformer2] },
+    });
     expect(parser.parse()).to.have.keys(['cell1']);
     sinon.assert.calledOnce(transformer);
     sinon.assert.calledOnce(transformer2);
@@ -59,7 +60,10 @@ describe('ExcelParser', () => {
   it('Should parse a configured cell-range by searching for start cell', () => {
     const mapConfig = { cell1: { location: 'A' }, cell2: { location: 'B' } };
     const parser = new ExcelParser(rangeWorkbook, mapConfig, {
-      startIdentifier: 'A456', startColumn: 'A', skipNum: 1, terminator: 'STOP',
+      startIdentifier: 'A456',
+      startColumn: 'A',
+      skipNum: 1,
+      terminator: 'STOP',
     });
     expect(parser.rangeParse()).to.have.length(1);
   });

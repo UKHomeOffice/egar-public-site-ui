@@ -12,7 +12,8 @@ const garoptions = require('../../../common/seeddata/egar_create_gar_options.jso
 const controller = require('../../../app/garfile/home/get.controller');
 
 describe('GAR Home Get Controller', () => {
-  let req; let res;
+  let req;
+  let res;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -35,7 +36,8 @@ describe('GAR Home Get Controller', () => {
     await controller(req, res);
 
     expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
-      cookie, garoptions,
+      cookie,
+      garoptions,
     });
   });
 });
