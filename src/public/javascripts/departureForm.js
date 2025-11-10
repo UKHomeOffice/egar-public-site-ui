@@ -11,7 +11,6 @@ const continueWithWarnedDate = document.getElementById('continueWithWarnedDate')
 
 const twoHourWarningTexts = Array.from(document.getElementsByClassName('twoHourWarningText'));
 const fortyEightHourWarningTexts = Array.from(document.getElementsByClassName('fortyEightHourWarningText'));
-const daylightSavingWarningTexts = Array.from(document.getElementsByClassName('daylightSavingWarning'));
 
 let departureFormSubmitter = undefined;
 
