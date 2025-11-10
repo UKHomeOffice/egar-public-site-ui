@@ -7,14 +7,10 @@
 {% endblock %}
 
 {% block beforeContent %}
-  
   <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
-  {% include "common/templates/includes/errors.njk" %}
-
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
     <form id="page-form" action="/user/register" autocomplete="off" method="post" role="form">

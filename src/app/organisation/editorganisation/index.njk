@@ -10,7 +10,7 @@
 
 {% block beforeContent %}
 
-  
+
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
@@ -25,11 +25,6 @@
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
-  {% include "common/templates/includes/errors.njk" %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <form action="/organisation/editorganisation" autocomplete="off" class="form-group"

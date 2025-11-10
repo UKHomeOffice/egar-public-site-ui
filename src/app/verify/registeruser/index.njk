@@ -7,27 +7,21 @@
 {% endblock %}
 
 {% block beforeContent %}
-
-  
   {% include "common/templates/includes/back.njk" %}
-
 {% endblock %}
 
 {% block content %}
-  {% include "common/templates/includes/errors.njk" %}
-
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-		<p class="govuk-body-l">
-      {{message}}
-    </p>
-    <a class="govuk-button" href="/login">
-			{{__('button_sign_in')}}
-		</a>
-		<p class="govuk-body-m">
-			{{__('verify_help_caption_1')}}<a href="mailto:{{__('support_email')}}">{{__('verify_help_caption_2')}}</a>{{__('verify_help_caption_3')}}
-		</p>
-	</div>
-</div>
-
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body-l">
+        {{message}}
+      </p>
+      <a class="govuk-button" href="/login">
+        {{__('button_sign_in')}}
+      </a>
+      <p class="govuk-body-m">
+        {{__('verify_help_caption_1')}}<a href="mailto:{{__('support_email')}}">{{__('verify_help_caption_2')}}</a>{{__('verify_help_caption_3')}}
+      </p>
+    </div>
+  </div>
 {% endblock %}

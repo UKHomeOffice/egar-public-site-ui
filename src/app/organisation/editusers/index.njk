@@ -9,35 +9,28 @@
 {% set active = '/organisation' %}
 
 {% block beforeContent %}
-  
+
   <a href="/organisation" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
-  {% include "common/templates/includes/errors.njk" %}
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <form action="/organisation/users/edit" autocomplete="off" class="form-group" method="post" role="form">
-
       <h1 class="govuk-heading-xl">{{__('title_edit_organisation_user')}}</h1>
       <p class="govuk-body-l">{{__('edit_organisation_user_caption')}}</p>
-
       <div class="{{ m.form_group_class('firstName', errors) }}">
         <label class="govuk-label govuk-label--m" for="firstName">{{__('field_given_name')}}</label>
         {{ m.error_message('firstName', errors, __) }}
         <input id="firstName" name="firstName" class="govuk-input" type="text"
           value="{{orgUser.firstName}}" {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
       </div>
-
       <div class="{{ m.form_group_class('lastName', errors) }}">
         <label class="govuk-label govuk-label--m" for="lastName">{{__('field_surname')}}</label>
         {{ m.error_message('lastName', errors, __) }}
         <input id="lastName" name="lastName" class="govuk-input" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
           value="{{orgUser.lastName}}" {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
       </div>
-
 {% set roleItems = [] %}
 
 {% for role in roles %}

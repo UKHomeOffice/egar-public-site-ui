@@ -9,19 +9,17 @@
 {% set active = '/home' %}
 
 {% block beforeContent %}
-  
   <a href="/garfile/manifest" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-  {% include "common/templates/includes/errors.njk" %}
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
 
       <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
       <h1 class="govuk-heading-xl">{{__('heading_manifest_add_person_details')}}</h1>{# Add new person details #}
-      
+
       <p class="govuk-body-l">{{__('caption_manifest_person_details')}}</p>
 
       <form action="/garfile/manifest/addnewperson" autocomplete="off" class="form-group" method="post" role="form">

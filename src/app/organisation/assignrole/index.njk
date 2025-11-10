@@ -9,13 +9,11 @@
 {% set active = '/organisation' %}
 
 {% block beforeContent %}
-  
+
   <a href="/organisation/inviteusers" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-  {% include "common/templates/includes/errors.njk" %}
-
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
       <form action="/organisation/assignrole" autocomplete="off" class="form-group" method="post" role="form" >

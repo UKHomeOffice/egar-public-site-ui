@@ -9,13 +9,10 @@
 {% set active = '/resperson' %}
 
 {% block beforeContent %}
-  
   <a href="/resperson" class="govuk-back-link">{{ __('nav_back') }}</a>
 {% endblock %}
 
 {% block content %}
-  {% include "common/templates/includes/errors.njk" %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <form action="/resperson/add" autocomplete="off" class="form-group"
