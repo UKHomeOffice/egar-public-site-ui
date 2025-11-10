@@ -7,7 +7,6 @@ const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
-const e = require('express');
 const sendEmail = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 const { getUserInviteToken } = require('../../../common/services/verificationApi');
@@ -95,12 +94,12 @@ async function handleGivenNameSubmission(req, _res) {
   }
 }
 
-async function handleConfirmNameSubmission(req, res) {
+async function handleConfirmNameSubmission(req, _res) {
   if (!req.body.nameConfirmDeclaration) {
     logger.info('Declaration not checked in name confirmation');
     return [Outcome.DECLARATION_NOT_CHECKED, 'Declaration not checked', '/onelogin/register'];
   }
-  const { email, firstName, lastName, sub, tokenId } = req.session.step_data;
+  const { email, firstName, lastName, sub } = req.session.step_data;
   let resp = {};
 
   try {
@@ -142,7 +141,7 @@ async function handleConfirmNameSubmission(req, res) {
   return [Outcome.SUCCESS, {}, null];
 }
 
-function handleCompleteSubmission(req, res) {
+function handleCompleteSubmission(req, _res) {
   delete req.session.access_token;
   delete req.session.step;
   delete req.session.step_data;
