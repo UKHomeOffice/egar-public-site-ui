@@ -31,7 +31,7 @@ describe('User Check Middleware', () => {
 
     res = {
       redirect: sinon.spy(),
-      locals: {}
+      locals: {},
     };
 
     csurfStub = sinon.stub();

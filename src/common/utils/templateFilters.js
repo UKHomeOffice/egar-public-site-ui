@@ -21,7 +21,7 @@ const expiryDate = () => {
 };
 
 const filterArray = (arr, propertyName, propertyValue) => {
-  return (arr || []).filter(e => e[propertyName] === propertyValue);
+  return (arr || []).filter((e) => e[propertyName] === propertyValue);
 };
 const transform = (o, mapping) => {
   const returnValue = {};

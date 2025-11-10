@@ -29,7 +29,7 @@ const autocompleteUtil = require('./common/utils/autocomplete');
 const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
-const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require("./common/config");
+const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require('./common/config');
 
 // Global constants
 const PORT = process.env.PORT || 3000;
@@ -109,7 +109,9 @@ function initialiseGlobalMiddleware(app) {
     });
   }
 
-  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'dist', 'govuk', 'assets', 'images', 'favicon.ico')));
+  app.use(
+    favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'dist', 'govuk', 'assets', 'images', 'favicon.ico'))
+  );
   app.use(compression());
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
@@ -204,7 +206,7 @@ function initialiseTemplateEngine(app) {
   app.set('view engine', 'njk');
   logger.info('Set view engine');
 
-  nunjucksEnvironment.addGlobal('govukRebrand', true)
+  nunjucksEnvironment.addGlobal('govukRebrand', true);
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
   nunjucksEnvironment.addGlobal('travelPermissionCodes', travelPermissionCodes);
