@@ -46,7 +46,7 @@ export default defineConfig([
     ignores: ['public/javascripts/all.js', '**/*.min.js'],
   },
   {
-    files: ['app/**/*.js'],
+    files: ['app/**/*.js', 'common/**/*.js'],
     languageOptions: {
       sourceType: 'commonjs',
     },

@@ -436,7 +436,7 @@ function realDateFromString(str) {
 }
 
 // This function will validate Passport Expiry date while uploading Gar Template
-function passportExpiryDate(value, element) {
+function passportExpiryDate(value, _element) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -454,7 +454,7 @@ function passportExpiryDate(value, element) {
 }
 
 // This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
-function birthDate(value, element) {
+function birthDate(value, _element) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -469,7 +469,7 @@ function birthDate(value, element) {
 }
 
 // This function will validate departure date while uploading Gar Template
-function dateNotInPast(value, element) {
+function dateNotInPast(value, _element) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
