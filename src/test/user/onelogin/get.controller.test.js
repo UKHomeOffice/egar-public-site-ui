@@ -4,10 +4,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const {
-  PHASE_GIVEN_NAME,
-  PHASE_CONFIRM_NAME,
-} = require('../../../app/user/onelogin/constants');
+const { PHASE_GIVEN_NAME, PHASE_CONFIRM_NAME } = require('../../../app/user/onelogin/constants');
 
 // Import controllers
 const getController = require('../../../app/user/onelogin/get.controller');
