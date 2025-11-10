@@ -1,6 +1,5 @@
 const { WORKFLOW_STEPS, PHASE_GIVEN_NAME, PHASE_CONFIRM_NAME, PHASE_REGISTRATION_COMPLETE } = require('./constants');
 const CookieModel = require('../../../common/models/Cookie.class');
-const { decodeToken } = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
