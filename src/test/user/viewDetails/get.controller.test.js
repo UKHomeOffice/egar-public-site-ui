@@ -2,7 +2,6 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
