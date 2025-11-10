@@ -10,14 +10,7 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  const {
-    registration,
-    craftType,
-    craftBasePort,
-    craftBaseLat,
-    craftBaseLong,
-    portChoice = 'Yes',
-  } = req.body;
+  const { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes' } = req.body;
   const { craftId } = cookie.getEditCraft();
 
   const craftObj = {
@@ -29,11 +22,7 @@ module.exports = (req, res) => {
     portChoice,
   };
 
-  const craftBase = cookie.reduceCraftBase(
-    craftObj.craftBasePort,
-    craftObj.craftBaseLat,
-    craftObj.craftBaseLong
-  );
+  const craftBase = cookie.reduceCraftBase(craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong);
   cookie.updateEditCraft(registration, craftType, craftBase);
 
   if (portChoice === 'Yes') {
@@ -81,9 +70,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.info(
-        'Edit SavedCraft postcontroller - There was a problem with editing the saved craft'
-      );
+      logger.info('Edit SavedCraft postcontroller - There was a problem with editing the saved craft');
       logger.info(JSON.stringify(err));
       res.render('app/aircraft/edit/index', { cookie, errors: err });
     });

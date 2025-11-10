@@ -4,10 +4,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const userApi = require('../../../common/services/userManageApi');
 const { MAX_STRING_LENGTH } = require('../../../common/config/index');
-const {
-  USER_GIVEN_NAME_CHARACTER_COUNT,
-  USER_SURNAME_CHARACTER_COUNT,
-} = require('../../../common/config');
+const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
 
 module.exports = (req, res) => {
   const firstName = req.body.firstname?.trim();
@@ -22,12 +19,7 @@ module.exports = (req, res) => {
   // Define a validation chain for user registeration fields
   const firstNameChain = [
     new ValidationRule(validator.isNotEmpty, 'firstname', firstName, 'Enter your given names'),
-    new ValidationRule(
-      validator.nameHasNoNumbers,
-      'firstname',
-      firstName,
-      'Your given names cannot include numbers'
-    ),
+    new ValidationRule(validator.nameHasNoNumbers, 'firstname', firstName, 'Your given names cannot include numbers'),
     new ValidationRule(
       validator.isValidStringLength,
       'firstname',
@@ -50,12 +42,7 @@ module.exports = (req, res) => {
   ];
   const lnameChain = [
     new ValidationRule(validator.isNotEmpty, 'lastname', lastName, 'Enter your family name'),
-    new ValidationRule(
-      validator.nameHasNoNumbers,
-      'lastname',
-      lastName,
-      'Your family name cannot include numbers'
-    ),
+    new ValidationRule(validator.nameHasNoNumbers, 'lastname', lastName, 'Your family name cannot include numbers'),
     new ValidationRule(
       validator.isValidStringLength,
       'lastname',
@@ -80,10 +67,7 @@ module.exports = (req, res) => {
   validator
     .validateChains([firstNameChain, lnameChain])
     .then(() => {
-      if (
-        firstName?.trim() === cookie.getUserFirstName() &&
-        lastName?.trim() === cookie.getUserLastName()
-      ) {
+      if (firstName?.trim() === cookie.getUserFirstName() && lastName?.trim() === cookie.getUserLastName()) {
         logger.debug('Names unchanged - skipping update');
         return res.redirect('/user/details');
       }

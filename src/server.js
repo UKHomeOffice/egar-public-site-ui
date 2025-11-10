@@ -109,19 +109,7 @@ function initialiseGlobalMiddleware(app) {
     });
   }
 
-  app.use(
-    favicon(
-      path.join(
-        __dirname,
-        'node_modules',
-        'govuk-frontend',
-        'govuk',
-        'assets',
-        'images',
-        'favicon.ico'
-      )
-    )
-  );
+  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
   app.use(compression());
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
@@ -228,10 +216,7 @@ function initialiseTemplateEngine(app) {
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
   // nunjucksEnvironment.addGlobal("toDate", toDate());
-  nunjucksEnvironment.addGlobal(
-    'expiryDate',
-    new Date().toISOString().replace(/T.*/, '').split('-').join('-')
-  );
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   nunjucksEnvironment.addGlobal('MAX_STRING_LENGTH', config.MAX_STRING_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_POSTCODE_LENGTH', config.MAX_POSTCODE_LENGTH);
   nunjucksEnvironment.addGlobal('MAX_REGISTRATION_LENGTH', config.MAX_REGISTRATION_LENGTH);
@@ -240,16 +225,10 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('MAX_TEXT_BOX_LENGTH', config.MAX_TEXT_BOX_LENGTH);
   // Add unavailable page variables into nunjucks envrionment
   nunjucksEnvironment.addGlobal('IS_PLANNED_MAINTENANCE', availability.IS_PLANNED_MAINTENANCE);
-  nunjucksEnvironment.addGlobal(
-    'MAINTENANCE_START_DATETIME',
-    availability.MAINTENANCE_START_DATETIME
-  );
+  nunjucksEnvironment.addGlobal('MAINTENANCE_START_DATETIME', availability.MAINTENANCE_START_DATETIME);
   nunjucksEnvironment.addGlobal('MAINTENANCE_END_DATETIME', availability.MAINTENANCE_END_DATETIME);
 
-  nunjucksEnvironment.addGlobal(
-    'CARRIER_SUPPORT_HUB_UK_NUMBER',
-    config.CARRIER_SUPPORT_HUB_UK_NUMBER
-  );
+  nunjucksEnvironment.addGlobal('CARRIER_SUPPORT_HUB_UK_NUMBER', config.CARRIER_SUPPORT_HUB_UK_NUMBER);
   nunjucksEnvironment.addGlobal(
     'CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER',
     config.CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER
@@ -258,18 +237,12 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addGlobal('ONE_LOGIN_SHOW_ONE_LOGIN', config.ONE_LOGIN_SHOW_ONE_LOGIN);
   nunjucksEnvironment.addGlobal('ONE_LOGIN_POST_MIGRATION', config.ONE_LOGIN_POST_MIGRATION);
 
-  nunjucksEnvironment.addGlobal(
-    'expiryDate',
-    new Date().toISOString().replace(/T.*/, '').split('-').join('-')
-  );
+  nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   logger.info('Set global settings for nunjucks');
 }
 
 function initialisePublic(app) {
-  app.use(
-    '/javascripts',
-    express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist'))
-  );
+  app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')));
   //app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
   app.use('/assets', express.static(path.join(__dirname, '/common/assets/')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));

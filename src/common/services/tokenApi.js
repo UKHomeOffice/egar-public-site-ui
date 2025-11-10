@@ -184,21 +184,13 @@ module.exports = {
               return;
             }
             if (now.isAfter(expiresTimestamp)) {
-              logger.info(
-                `Token expired. (Current time ${now}, token expiry time ${expiresTimestamp}`
-              );
-              reject(
-                new Error(`MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`)
-              );
+              logger.info(`Token expired. (Current time ${now}, token expiry time ${expiresTimestamp}`);
+              reject(new Error(`MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`));
               return;
             }
             if (!this.validNumAttempts(sub)) {
               logger.info(`Exceeded max token verification attempts (attempt ${sub.NumAttempts})`);
-              reject(
-                new Error(
-                  `MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`
-                )
-              );
+              reject(new Error(`MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`));
               return;
             }
             resolve(true);

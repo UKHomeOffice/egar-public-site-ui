@@ -109,9 +109,7 @@ describe.skip('User OneLogin Post Controller', () => {
     });
 
     it('should render with validation errors if validation fails', async () => {
-      const validationErrors = [
-        { identifier: 'userFname', message: 'Please enter your given names' },
-      ];
+      const validationErrors = [{ identifier: 'userFname', message: 'Please enter your given names' }];
       validateChainsStub.rejects(validationErrors);
 
       await postController(req, res);
@@ -259,9 +257,7 @@ describe.skip('User OneLogin Post Controller', () => {
       };
 
       sinon.stub(CookieModel.prototype, 'setUserEmail').callsFake(cookieSetSpy.setUserEmail);
-      sinon
-        .stub(CookieModel.prototype, 'setUserFirstName')
-        .callsFake(cookieSetSpy.setUserFirstName);
+      sinon.stub(CookieModel.prototype, 'setUserFirstName').callsFake(cookieSetSpy.setUserFirstName);
       sinon.stub(CookieModel.prototype, 'setUserLastName').callsFake(cookieSetSpy.setUserLastName);
       sinon.stub(CookieModel.prototype, 'setUserDbId').callsFake(cookieSetSpy.setUserDbId);
       sinon.stub(CookieModel.prototype, 'setUserVerified').callsFake(cookieSetSpy.setUserVerified);

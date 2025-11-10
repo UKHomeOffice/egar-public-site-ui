@@ -2,11 +2,7 @@ const i18n = require('i18n');
 
 const ValidationRule = require('../../common/models/ValidationRule.class');
 const validator = require('../../common/utils/validator');
-const {
-  MAX_STRING_LENGTH,
-  MAX_EMAIL_LENGTH,
-  MAX_POSTCODE_LENGTH,
-} = require('../../common/config/index');
+const { MAX_STRING_LENGTH, MAX_EMAIL_LENGTH, MAX_POSTCODE_LENGTH } = require('../../common/config/index');
 
 module.exports.validations = (req) => {
   const {
@@ -91,12 +87,7 @@ module.exports.validations = (req) => {
         responsibleEmail,
         'You must enter an email for the responsible person'
       ),
-      new ValidationRule(
-        validator.email,
-        'responsibleEmail',
-        responsibleEmail,
-        'Please enter a valid email address'
-      ),
+      new ValidationRule(validator.email, 'responsibleEmail', responsibleEmail, 'Please enter a valid email address'),
       new ValidationRule(
         validator.isValidEmailLength,
         'responsibleEmail',

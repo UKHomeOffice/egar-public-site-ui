@@ -68,8 +68,7 @@ describe('GarService', () => {
           totalItems: 4,
         },
         _links: {
-          currentPage:
-            '/v0.2.0/gar/f8ff8083-26cf-48d2-82c1-64eec0fecbb3/people?page=1&per_page=100',
+          currentPage: '/v0.2.0/gar/f8ff8083-26cf-48d2-82c1-64eec0fecbb3/people?page=1&per_page=100',
           next: null,
           prev: null,
         },
@@ -225,9 +224,7 @@ describe('GarService', () => {
 
   it('should throw an error for get', () => {
     nock.cleanAll();
-    nock(BASE_URL)
-      .get(`/gar/${garId}?cbp_id=false`)
-      .replyWithError({ message: 'Example get error', code: 404 });
+    nock(BASE_URL).get(`/gar/${garId}?cbp_id=false`).replyWithError({ message: 'Example get error', code: 404 });
 
     garApi
       .get(garId)

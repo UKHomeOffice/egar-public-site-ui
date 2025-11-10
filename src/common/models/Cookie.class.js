@@ -784,15 +784,10 @@ class Cookie {
 
     voyage[`${type}Date`] =
       voyageObj[`${type}Date`] ||
-      this.generateDate(
-        voyageObj[`${type}Day`],
-        voyageObj[`${type}Month`],
-        voyageObj[`${type}Year`]
-      );
+      this.generateDate(voyageObj[`${type}Day`], voyageObj[`${type}Month`], voyageObj[`${type}Year`]);
 
     voyage[`${type}Time`] =
-      voyageObj[`${type}Time`] ||
-      this.generateTime(voyageObj[`${type}Hour`], voyageObj[`${type}Minute`]);
+      voyageObj[`${type}Time`] || this.generateTime(voyageObj[`${type}Hour`], voyageObj[`${type}Minute`]);
 
     voyage[`${type}Port`] = voyageObj[`${type}Port`];
     voyage[`${type}Long`] = trimToDecimalPlaces(voyageObj[`${type}Long`], 6);

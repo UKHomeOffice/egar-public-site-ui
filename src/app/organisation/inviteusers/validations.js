@@ -5,12 +5,7 @@ const { MAX_EMAIL_LENGTH } = require('../../../common/config/index');
 
 module.exports.validations = (req) => [
   [
-    new ValidationRule(
-      validator.notEmpty,
-      'fname',
-      req.body.fname,
-      'Please enter the given names of the user'
-    ),
+    new ValidationRule(validator.notEmpty, 'fname', req.body.fname, 'Please enter the given names of the user'),
     new ValidationRule(
       validator.isValidStringLength,
       'fname',
@@ -25,12 +20,7 @@ module.exports.validations = (req) => [
     ),
   ],
   [
-    new ValidationRule(
-      validator.notEmpty,
-      'lname',
-      req.body.lname,
-      'Please enter the surname of the user'
-    ),
+    new ValidationRule(validator.notEmpty, 'lname', req.body.lname, 'Please enter the surname of the user'),
     new ValidationRule(
       validator.isValidStringLength,
       'lname',
@@ -45,12 +35,7 @@ module.exports.validations = (req) => [
     ),
   ],
   [
-    new ValidationRule(
-      validator.notEmpty,
-      'email',
-      req.body.email,
-      'Please enter the email address of the user'
-    ),
+    new ValidationRule(validator.notEmpty, 'email', req.body.email, 'Please enter the email address of the user'),
     new ValidationRule(
       validator.isValidEmailLength,
       'email',

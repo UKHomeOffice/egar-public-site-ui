@@ -10,12 +10,8 @@ const confirmWarnedDepartureDialog = document.getElementById('confirmWarnedDepar
 const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
 
 const twoHourWarningTexts = Array.from(document.getElementsByClassName('twoHourWarningText'));
-const fortyEightHourWarningTexts = Array.from(
-  document.getElementsByClassName('fortyEightHourWarningText')
-);
-const daylightSavingWarningTexts = Array.from(
-  document.getElementsByClassName('daylightSavingWarning')
-);
+const fortyEightHourWarningTexts = Array.from(document.getElementsByClassName('fortyEightHourWarningText'));
+const daylightSavingWarningTexts = Array.from(document.getElementsByClassName('daylightSavingWarning'));
 
 let departureFormSubmitter = undefined;
 
@@ -32,12 +28,8 @@ const departureDate = () => {
 };
 
 function showDepartureDateWarningMessages(providedDate) {
-  twoHourWarningTexts.forEach(
-    ($element) => ($element.hidden = isTwoHoursPriorDeparture(providedDate))
-  );
-  fortyEightHourWarningTexts.forEach(
-    ($element) => ($element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate))
-  );
+  twoHourWarningTexts.forEach(($element) => ($element.hidden = isTwoHoursPriorDeparture(providedDate)));
+  fortyEightHourWarningTexts.forEach(($element) => ($element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate)));
 }
 
 window.addEventListener('load', () => {
@@ -75,10 +67,7 @@ pageForm.addEventListener('submit', (e) => {
     return;
   }
 
-  if (
-    isTwoHoursPriorDeparture(departureDate()) &&
-    dateNotMoreThanTwoDaysInFuture(departureDate())
-  ) {
+  if (isTwoHoursPriorDeparture(departureDate()) && dateNotMoreThanTwoDaysInFuture(departureDate())) {
     return;
   }
 

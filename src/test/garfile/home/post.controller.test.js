@@ -57,12 +57,7 @@ describe('GAR Customs Post Controller', () => {
         cookie,
         garoptions,
         errors: [
-          new ValidationRule(
-            validator.notEmpty,
-            'garoption',
-            undefined,
-            'Select how you would like to create a GAR'
-          ),
+          new ValidationRule(validator.notEmpty, 'garoption', undefined, 'Select how you would like to create a GAR'),
         ],
       });
     });

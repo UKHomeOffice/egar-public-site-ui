@@ -27,9 +27,7 @@ describe('User View Details Get Controller', () => {
   let res;
   let craftApiStub;
   let personApiStub;
-  const indexPage = settings.ONE_LOGIN_SHOW_ONE_LOGIN
-    ? 'app/user/viewDetails/index'
-    : 'app/user/viewDetails/old_index';
+  const indexPage = settings.ONE_LOGIN_SHOW_ONE_LOGIN ? 'app/user/viewDetails/index' : 'app/user/viewDetails/old_index';
 
   beforeEach(() => {
     chai.use(sinonChai);

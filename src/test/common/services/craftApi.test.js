@@ -144,21 +144,17 @@ describe('CraftService With Nock', () => {
   });
 
   it('should successfully create a craft', (done) => {
-    craftApi
-      .create(craft.registration, craft.craftType, craft.craftBase, userId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.property('craftId');
-        done();
-      });
+    craftApi.create(craft.registration, craft.craftType, craft.craftBase, userId).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.have.property('craftId');
+      done();
+    });
   });
 
   it('should throw an error when creating a craft', (done) => {
     nock.cleanAll();
-    nock(BASE_URL)
-      .post(`/user/${userId}/crafts`, craft)
-      .replyWithError({ message: 'Example create error', code: 404 });
+    nock(BASE_URL).post(`/user/${userId}/crafts`, craft).replyWithError({ message: 'Example create error', code: 404 });
 
     craftApi
       .create(craft.registration, craft.craftType, craft.craftBase, userId)
@@ -247,14 +243,12 @@ describe('CraftService With Nock', () => {
   });
 
   it("should successfully update a craft's information", (done) => {
-    craftApi
-      .update(newCraft.registration, newCraft.craftType, newCraft.craftBase, userId, craftId)
-      .then((response) => {
-        const responseObj = JSON.parse(response);
-        expect(typeof responseObj).to.equal('object');
-        expect(responseObj).to.have.property('craftId');
-        done();
-      });
+    craftApi.update(newCraft.registration, newCraft.craftType, newCraft.craftBase, userId, craftId).then((response) => {
+      const responseObj = JSON.parse(response);
+      expect(typeof responseObj).to.equal('object');
+      expect(responseObj).to.have.property('craftId');
+      done();
+    });
   });
 
   it('should throw an error when updating a craft', () => {

@@ -16,8 +16,7 @@ const { resolve } = require('path');
  */
 const parseUrlForNonProd = (req, url) => {
   const currentAddress = req.get('host');
-  const internalRegex =
-    '^.*public-site.(dev|sit|staging|test).internal.egar-notprod.homeoffice.gov.uk';
+  const internalRegex = '^.*public-site.(dev|sit|staging|test).internal.egar-notprod.homeoffice.gov.uk';
   const notInternalRegex = '^.*public-site.(dev|sit|staging|test).egar-notprod.homeoffice.gov.uk';
   let returnUrl = url;
 

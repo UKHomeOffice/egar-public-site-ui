@@ -63,11 +63,9 @@ describe.skip('User Login Get Controller', () => {
     userSearchStub = sinon.stub(userApi, 'userSearch');
     updateUserData = sinon.stub(userApi, 'updateDetails');
     getDetailsStub = sinon.stub(userApi, 'getDetails');
-    oneLoginJwtVerifyStub = sinon
-      .stub(oneLoginUtils, 'verifyJwt')
-      .callsFake((idToken, nonce, callback) => {
-        callback(true); // Simulate successful JWT verification
-      });
+    oneLoginJwtVerifyStub = sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
+      callback(true); // Simulate successful JWT verification
+    });
 
     //Generated just for unit testing, not used anywhere
     config.ONE_LOGIN_PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----
@@ -188,13 +186,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
     // Execute
     await controller(req, res);
 
-    expect(updateUserData).to.have.been.calledWith(
-      'test@example.com',
-      'Test',
-      'User',
-      'onelogin_sid',
-      'verified'
-    );
+    expect(updateUserData).to.have.been.calledWith('test@example.com', 'Test', 'User', 'onelogin_sid', 'verified');
 
     expect(res.redirect).to.have.been.calledOnceWith('/home');
     expect(res.render).to.not.have.been.called;

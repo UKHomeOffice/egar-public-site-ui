@@ -41,9 +41,7 @@ function initialisePagination(paginationName, totalResults, maxPages, pageSize) 
   elements.fromNumber = document.querySelector(
     '.pagination__' + paginationName + '_paginator #pagination__from_number'
   );
-  elements.toNumber = document.querySelector(
-    '.pagination__' + paginationName + '_paginator #pagination__to_number'
-  );
+  elements.toNumber = document.querySelector('.pagination__' + paginationName + '_paginator #pagination__to_number');
 
   this.paginationState[paginationName] = {
     currentPage: 1,
@@ -71,10 +69,7 @@ function goToPage(paginationName, page) {
     .forEach((el) => hideElement(el));
   document
     .querySelectorAll(
-      '.pagination__table_' +
-        paginationName +
-        ' .pagination-page.pagination-page_' +
-        paginationData.currentPage
+      '.pagination__table_' + paginationName + ' .pagination-page.pagination-page_' + paginationData.currentPage
     )
     .forEach((el) => showElement(el));
 
@@ -127,14 +122,12 @@ function goToPage(paginationName, page) {
   paginationData.elements.previousNumberLink.textContent = paginationData.currentPage - 1;
   paginationData.elements.previousNumberLink.ariaLabel = 'Page ' + paginationData.currentPage - 1;
   paginationData.elements.currentNumberLink.textContent = paginationData.currentPage;
-  paginationData.elements.currentNumberLink.ariaLabel =
-    'Page ' + paginationData.currentPage + ', current page';
+  paginationData.elements.currentNumberLink.ariaLabel = 'Page ' + paginationData.currentPage + ', current page';
   paginationData.elements.nextNumberLink.textContent = paginationData.currentPage + 1;
   paginationData.elements.nextNumberLink.ariaLabel = 'Page ' + paginationData.currentPage + 1;
 
   //Update the "Showing" text
-  paginationData.elements.fromNumber.textContent =
-    (paginationData.currentPage - 1) * paginationData.pageSize + 1;
+  paginationData.elements.fromNumber.textContent = (paginationData.currentPage - 1) * paginationData.pageSize + 1;
   paginationData.elements.toNumber.textContent = Math.min(
     paginationData.totalResults,
     paginationData.currentPage * paginationData.pageSize

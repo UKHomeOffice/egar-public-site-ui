@@ -11,10 +11,7 @@ const writeUsersAsCSVtoResponse = (res, orgUsers, orgName) => {
   const orgSlug = orgName.replace(/[^A-z]/, '-');
   const dateSlug = new Date().toISOString().slice(0, 10);
 
-  res.setHeader(
-    'Content-disposition',
-    'attachment; filename=' + orgSlug + '-users-' + dateSlug + '.csv'
-  );
+  res.setHeader('Content-disposition', 'attachment; filename=' + orgSlug + '-users-' + dateSlug + '.csv');
   res.setHeader('Content-Type', 'text/csv');
 
   res.write(csvStringifier.getHeaderString());
@@ -30,14 +27,7 @@ module.exports = (req, res) => {
   // set the offset up to the end of the result set (a large number for the second parameter).
   orgApi.getUsers(cookie.getOrganisationId(), 1, 999999999999999).then((values) => {
     const orgUsers = JSON.parse(values).items.map((orgUser) => {
-      return [
-        orgUser.userId,
-        orgUser.firstName,
-        orgUser.lastName,
-        orgUser.email,
-        orgUser.role.name,
-        orgUser.state,
-      ];
+      return [orgUser.userId, orgUser.firstName, orgUser.lastName, orgUser.email, orgUser.role.name, orgUser.state];
     });
 
     writeUsersAsCSVtoResponse(res, orgUsers, cookie.getOrganisationName());

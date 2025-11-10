@@ -32,9 +32,7 @@ module.exports = (req, res) => {
   const roleId = cookie.getInviteUserRole();
 
   // Define a validation chain for first name
-  const roleChain = [
-    new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Select a role'),
-  ];
+  const roleChain = [new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Select a role')];
 
   // Validate chains
   validator

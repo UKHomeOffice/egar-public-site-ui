@@ -69,12 +69,7 @@ describe('Aircraft Edit Post Controller', () => {
         errors: [
           new ValidationRule(validator.notEmpty, 'registration', '', 'Enter a registration'),
           new ValidationRule(validator.notEmpty, 'craftType', '', 'Enter an aircraft type'),
-          new ValidationRule(
-            validator.notEmpty,
-            'craftBasePort',
-            '',
-            'Enter an aircraft home port / location'
-          ),
+          new ValidationRule(validator.notEmpty, 'craftBasePort', '', 'Enter an aircraft home port / location'),
         ],
       });
     });

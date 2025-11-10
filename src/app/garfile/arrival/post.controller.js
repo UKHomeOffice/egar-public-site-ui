@@ -55,12 +55,7 @@ const buildValidations = (voyage) => {
 
   // Define port validations
   const arrivalPortValidation = [
-    new ValidationRule(
-      validator.notEmpty,
-      'arrivalPort',
-      voyage.arrivalPort,
-      __('field_arrival_port_code_validation')
-    ),
+    new ValidationRule(validator.notEmpty, 'arrivalPort', voyage.arrivalPort, __('field_arrival_port_code_validation')),
     new ValidationRule(
       validator.isValidAirportCode,
       'arrivalPort',
@@ -70,31 +65,14 @@ const buildValidations = (voyage) => {
   ];
 
   const arrivalLatValidation = [
-    new ValidationRule(
-      validator.latitude,
-      'arrivalLat',
-      voyage.arrivalLat,
-      __('field_latitude_validation')
-    ),
+    new ValidationRule(validator.latitude, 'arrivalLat', voyage.arrivalLat, __('field_latitude_validation')),
   ];
   const arrivalLongValidation = [
-    new ValidationRule(
-      validator.longitude,
-      'arrivalLong',
-      voyage.arrivalLong,
-      __('field_longitude_validation')
-    ),
+    new ValidationRule(validator.longitude, 'arrivalLong', voyage.arrivalLong, __('field_longitude_validation')),
   ];
 
   const validations = [
-    [
-      new ValidationRule(
-        validator.realDate,
-        'arrivalDate',
-        arriveDateObj,
-        __('field_arrival_date_validation')
-      ),
-    ],
+    [new ValidationRule(validator.realDate, 'arrivalDate', arriveDateObj, __('field_arrival_date_validation'))],
     [
       new ValidationRule(
         validator.currentOrPastDate,
@@ -111,22 +89,8 @@ const buildValidations = (voyage) => {
         __('field_arrival_date_too_far_in_future')
       ),
     ],
-    [
-      new ValidationRule(
-        validator.validTime,
-        'arrivalTime',
-        arrivalTimeObj,
-        __('field_arrival_time_validation')
-      ),
-    ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        'portChoice',
-        voyage.portChoice,
-        __('field_port_choice_message')
-      ),
-    ],
+    [new ValidationRule(validator.validTime, 'arrivalTime', arrivalTimeObj, __('field_arrival_time_validation'))],
+    [new ValidationRule(validator.notEmpty, 'portChoice', voyage.portChoice, __('field_port_choice_message'))],
   ];
 
   if (voyage.portChoice === 'Yes') {

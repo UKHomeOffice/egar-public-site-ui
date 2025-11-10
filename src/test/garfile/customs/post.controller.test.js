@@ -96,12 +96,7 @@ describe('GAR Customs Post Controller', () => {
         },
         errors: [
           new ValidationRule(validator.notEmpty, 'visitReason', '', 'Select a reason for visit'),
-          new ValidationRule(
-            validator.notEmpty,
-            'intentionValue',
-            undefined,
-            'Select a value for customs declaration'
-          ),
+          new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Select a value for customs declaration'),
         ],
       });
     });
@@ -143,12 +138,7 @@ describe('GAR Customs Post Controller', () => {
           visitReason: 2,
         },
         errors: [
-          new ValidationRule(
-            validator.notEmpty,
-            'goodsDeclaration',
-            '',
-            'Please enter customs declaration details'
-          ),
+          new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
         ],
       });
     });
@@ -190,12 +180,7 @@ describe('GAR Customs Post Controller', () => {
           visitReason: 2,
         },
         errors: [
-          new ValidationRule(
-            validator.notEmpty,
-            'goodsDeclaration',
-            '',
-            'Please enter customs declaration details'
-          ),
+          new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
         ],
       });
     });

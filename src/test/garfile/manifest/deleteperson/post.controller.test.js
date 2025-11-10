@@ -119,10 +119,7 @@ describe('Person Delete Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(garApiStub).to.have.been.calledWith('9001', [
-        'DELETE-PERSON-ID',
-        'ANOTHER_DELETE_PERSON_ID',
-      ]);
+      expect(garApiStub).to.have.been.calledWith('9001', ['DELETE-PERSON-ID', 'ANOTHER_DELETE_PERSON_ID']);
       expect(req.session.successMsg).to.eq('Person removed from GAR');
       expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
     });

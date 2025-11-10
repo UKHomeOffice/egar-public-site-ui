@@ -17,8 +17,7 @@ const nationalities = {
     const searchTerm = text.toLowerCase();
     return Object.values(nationalityData).filter(
       (nationality) =>
-        nationality.label.toLowerCase().includes(searchTerm) ||
-        nationality.code.toLowerCase().includes(searchTerm)
+        nationality.label.toLowerCase().includes(searchTerm) || nationality.code.toLowerCase().includes(searchTerm)
     );
   },
 

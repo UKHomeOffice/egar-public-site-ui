@@ -102,12 +102,7 @@ describe('Person Add Post Controller', () => {
           genderchoice,
           person: req.body,
           errors: [
-            new ValidationRule(
-              validator.isNotEmpty,
-              'lastName',
-              req.body.lastName,
-              'Enter the surname of the person'
-            ),
+            new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
           ],
         });
       });

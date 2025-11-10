@@ -142,24 +142,14 @@ describe('GAR Review Get Controller', () => {
               },
               'Arrival time must be after departure time'
             ),
-            new ValidationRule(
-              validator.notEmpty,
-              'aircraft',
-              undefined,
-              'Aircraft registration must be completed'
-            ),
+            new ValidationRule(validator.notEmpty, 'aircraft', undefined, 'Aircraft registration must be completed'),
             new ValidationRule(
               validator.notEmpty,
               'responsiblePerson',
               undefined,
               'Responsible person details must be completed'
             ),
-            new ValidationRule(
-              validator.notEmpty,
-              'customs',
-              undefined,
-              'Visit Reason question not answered'
-            ),
+            new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
             new ValidationRule(
               validator.notEmpty,
               'intentionValue',

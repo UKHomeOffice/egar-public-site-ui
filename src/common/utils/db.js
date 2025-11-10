@@ -1,22 +1,17 @@
 const Sequelize = require('sequelize');
 const config = require('../config/index');
 
-const sequelize = new Sequelize(
-  config.PUBLIC_SITE_DBNAME,
-  config.PUBLIC_SITE_DBUSER,
-  config.PUBLIC_SITE_DBPASSWORD,
-  {
-    host: config.PUBLIC_SITE_DBHOST,
-    port: config.PUBLIC_SITE_DBPORT,
-    dialect: 'postgres',
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000,
-    },
-  }
-);
+const sequelize = new Sequelize(config.PUBLIC_SITE_DBNAME, config.PUBLIC_SITE_DBUSER, config.PUBLIC_SITE_DBPASSWORD, {
+  host: config.PUBLIC_SITE_DBHOST,
+  port: config.PUBLIC_SITE_DBPORT,
+  dialect: 'postgres',
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
+});
 
 module.exports.Sequelize = Sequelize;
 module.exports.sequelize = sequelize;

@@ -13,12 +13,7 @@ module.exports = (req, res) => {
 
   // Define a validation chain for organisation fields
   const orgnameChain = [
-    new ValidationRule(
-      validator.notEmpty,
-      'orgName',
-      orgname,
-      'Enter the name of the organisation'
-    ),
+    new ValidationRule(validator.notEmpty, 'orgName', orgname, 'Enter the name of the organisation'),
   ];
 
   // Validate chains

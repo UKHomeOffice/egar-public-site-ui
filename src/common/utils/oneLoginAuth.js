@@ -104,12 +104,7 @@ const verifyJwt = (idToken, nonce, callback) => {
         nonce,
       },
       (err, decoded) => {
-        if (
-          !err &&
-          decoded !== null &&
-          decodedToken.vot === decoded.vot &&
-          decodedToken.sub === decoded.sub
-        ) {
+        if (!err && decoded !== null && decodedToken.vot === decoded.vot && decodedToken.sub === decoded.sub) {
           valid = true;
         } else {
           logger.error(`Invalid token:${err}`);

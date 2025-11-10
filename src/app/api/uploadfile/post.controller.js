@@ -10,9 +10,7 @@ const config = require('../../../common/config/index');
 const { isValidFileMime } = require('../../../common/utils/validator');
 
 const exceedFileNumSizeLimit = (fileSize, garId) => {
-  logger.debug(
-    `Entering exceed file number & size limit function, max size 8MB max number:${config.MAX_NUM_FILES}`
-  );
+  logger.debug(`Entering exceed file number & size limit function, max size 8MB max number:${config.MAX_NUM_FILES}`);
   return new Promise((resolve, reject) => {
     // Get supporting docs and add file size
     //check max number of files not more than 10.
@@ -34,9 +32,7 @@ const exceedFileNumSizeLimit = (fileSize, garId) => {
         });
         logger.info(`Total size of supporting documents for gar:${garId}`);
         if (fileSize + total > MAX_SIZE) {
-          logger.info(
-            `Total size of supporting documents exceeds max size GAR: ${fileSize + total} bytes`
-          );
+          logger.info(`Total size of supporting documents exceeds max size GAR: ${fileSize + total} bytes`);
           resolve('EXCEEDS_MAX_SIZE');
         }
         resolve('SUCCESS');

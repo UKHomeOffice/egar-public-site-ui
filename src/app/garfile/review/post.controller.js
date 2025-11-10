@@ -77,16 +77,12 @@ const buildValidations = async (garfile, garpeople, manifest) => {
 
   if (!isManifestValid) {
     const validateFailMsg = 'Resolve manifest errors before submitting';
-    validations.push([
-      new ValidationRule(validator.valuetrue, 'resolveError', '', validateFailMsg),
-    ]);
+    validations.push([new ValidationRule(validator.valuetrue, 'resolveError', '', validateFailMsg)]);
   }
 
   if (!garfile.isMilitaryFlight && !manifest.validateCaptainCrew()) {
     const validateCaptainCrewMsg = __('has_no_crew_or_captains');
-    validations.push([
-      new ValidationRule(validator.valuetrue, 'manifest', '', validateCaptainCrewMsg),
-    ]);
+    validations.push([new ValidationRule(validator.valuetrue, 'manifest', '', validateCaptainCrewMsg)]);
   }
 
   return validations;
@@ -100,9 +96,7 @@ module.exports = async (req, res) => {
 
   const resubmit0TLink = req.body.resubmitFor0TLink ? req.body.resubmitFor0TLink : 'no';
 
-  const isResubmit0T = ['resubmit0T', 'resubmit0TOnSummaryPage', 'resubmitFor0T'].includes(
-    resubmit
-  );
+  const isResubmit0T = ['resubmit0T', 'resubmit0TOnSummaryPage', 'resubmitFor0T'].includes(resubmit);
   const initialSubmit = req.body.initialSubmit ? '&initialSubmit=yes' : '';
 
   // Validate GAR to be submitted
@@ -140,10 +134,7 @@ module.exports = async (req, res) => {
     validator.handleResponseError(garsupportingdocs);
 
     validations = await buildValidations(garfile, garpeople, manifest);
-    if (
-      garfile.status.name.toLowerCase() === 'submitted' &&
-      resubmit !== 'resubmit0TOnSummaryPage'
-    ) {
+    if (garfile.status.name.toLowerCase() === 'submitted' && resubmit !== 'resubmit0TOnSummaryPage') {
       const submitError = {
         message: 'This GAR has already been submitted',
         identifier: '',
@@ -188,8 +179,7 @@ module.exports = async (req, res) => {
         - Journey is coming into UK and status check: Submit GAR
       */
   const isRequiresPassengerCheck =
-    airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) &&
-    !statuscheck;
+    airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort) && !statuscheck;
 
   const isAnAllMilitaryFlight = garfile.isMilitaryFlight && garpeople.items.length === 0;
 

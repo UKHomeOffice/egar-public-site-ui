@@ -25,9 +25,7 @@ module.exports = (req, res) => {
   cookie.setRedirectUrl(redirectUrl);
 
   // Define a validation chain for user registeration fields
-  const unameChain = [
-    new ValidationRule(validator.notEmpty, 'username', usrname, 'Enter your email'),
-  ];
+  const unameChain = [new ValidationRule(validator.notEmpty, 'username', usrname, 'Enter your email')];
 
   const errMsg = { message: 'There was a problem sending your code. Please try again.' };
 

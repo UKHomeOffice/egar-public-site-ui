@@ -238,12 +238,7 @@ describe('Validator', () => {
   });
 
   it('Should generate an array of 2 validationRules', () => {
-    const validationArr = validator.genValidations(
-      validator.notEmpty,
-      ['1', '2'],
-      ['1', '2'],
-      ['1', '2']
-    );
+    const validationArr = validator.genValidations(validator.notEmpty, ['1', '2'], ['1', '2'], ['1', '2']);
     expect(validationArr).to.be.an('array');
     for (let i = 0; i < validationArr.length; i += 1) {
       expect(validationArr[i]).to.be.an('array');
@@ -279,12 +274,7 @@ describe('Validator', () => {
   });
 
   it('Should validate a chain of rules', () => {
-    const validationArr = validator.genValidations(
-      validator.notEmpty,
-      ['1', '2'],
-      ['1', '2'],
-      ['1', '2']
-    );
+    const validationArr = validator.genValidations(validator.notEmpty, ['1', '2'], ['1', '2'], ['1', '2']);
     validator
       .validateChains(validationArr)
       .then(() => {
@@ -296,12 +286,7 @@ describe('Validator', () => {
   });
 
   it('Should reject a chain of rules containing validation errors', () => {
-    const validationArr = validator.genValidations(
-      validator.notEmpty,
-      ['1', '2'],
-      ['1', ''],
-      ['1', '2']
-    );
+    const validationArr = validator.genValidations(validator.notEmpty, ['1', '2'], ['1', ''], ['1', '2']);
     validator
       .validateChains(validationArr)
       .then(() => {
@@ -873,9 +858,7 @@ describe('Validator', () => {
     });
 
     it('Should allow a date within two days in the future', () => {
-      actualResult = validator.dateNotMoreThanTwoDaysInFuture(
-        validator.convertDateToUTC(new Date(2023, APRIL, 13))
-      );
+      actualResult = validator.dateNotMoreThanTwoDaysInFuture(validator.convertDateToUTC(new Date(2023, APRIL, 13)));
       expect(actualResult).to.equal(true);
     });
 
@@ -1092,9 +1075,7 @@ describe('Validator', () => {
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', ''])).to.eql(true);
 
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', 'Apple'])).to.eql(false);
-      expect(validator.isOtherDocumentWithDocumentDesc(['Identity Card', 'Pineapple'])).to.eql(
-        false
-      );
+      expect(validator.isOtherDocumentWithDocumentDesc(['Identity Card', 'Pineapple'])).to.eql(false);
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', {}])).to.eql(false);
       expect(validator.isOtherDocumentWithDocumentDesc()).to.eql(false);
     });
@@ -1137,15 +1118,10 @@ describe('Validator', () => {
       expect(validator.isAbleToCancelGar(yearOld)).to.eql(false);
 
       const blankString = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, '');
-      const undefinedDate = validator.isAbleToCancelGar.bind(
-        validator.isAbleToCancelGar,
-        undefined
-      );
+      const undefinedDate = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, undefined);
       const blankObject = validator.isAbleToCancelGar.bind(validator.isAbleToCancelGar, {});
 
-      expect(blankString).to.throw(
-        'lastDepartureDateString: "", type: "string", is not null or a valid string'
-      );
+      expect(blankString).to.throw('lastDepartureDateString: "", type: "string", is not null or a valid string');
 
       expect(undefinedDate).to.throw(
         'lastDepartureDateString: "undefined", type: "undefined", is not null or a valid string'

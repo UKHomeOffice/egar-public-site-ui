@@ -10,10 +10,7 @@ module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   const garId = cookie.getGarId();
   const resubmitted = req.query.resubmitted || 'no';
-  const template =
-    req.query.template === 'pane'
-      ? 'app/garfile/amg/checkin/pane'
-      : 'app/garfile/amg/checkin/index';
+  const template = req.query.template === 'pane' ? 'app/garfile/amg/checkin/pane' : 'app/garfile/amg/checkin/index';
   const initialSubmit = req.query.initialSubmit ? '&initialSubmit=yes' : '';
   const pageUrl = `/garfile/amg/checkin?resubmitted=${resubmitted}${initialSubmit}`;
   try {
@@ -29,32 +26,21 @@ module.exports = async (req, res) => {
       res.json(progress);
       return;
     }
-    Promise.all([
-      garApi.get(garId),
-      garApi.getPeople(garId, currentPage),
-      garApi.getSupportingDocs(garId),
-    ])
+    Promise.all([garApi.get(garId), garApi.getPeople(garId, currentPage), garApi.getSupportingDocs(garId)])
       .then(async (apiResponse) => {
         const garfile = JSON.parse(apiResponse[0]);
         const garpeople = JSON.parse(apiResponse[1]);
         const garsupportingdocs = JSON.parse(apiResponse[2]);
 
-        const statusCheckComplete = garpeople.items.every(
-          (x) => x.amgCheckinStatus.name === 'Complete'
-        );
+        const statusCheckComplete = garpeople.items.every((x) => x.amgCheckinStatus.name === 'Complete');
 
-        const durationInDeparture = garApi.getDurationBeforeDeparture(
-          garfile.departureDate,
-          garfile.departureTime
-        );
+        const durationInDeparture = garApi.getDurationBeforeDeparture(garfile.departureDate, garfile.departureTime);
 
         const { totalPages, totalItems } = garpeople._meta;
 
         const paginationData = pagination.build(req, totalPages, totalItems, pageUrl, 10);
-        const numberOf0TResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0T')).items
-          .length;
-        const showImportantBanner =
-          resubmitted === 'no' && numberOf0TResponseCodes > 0 && durationInDeparture > 125;
+        const numberOf0TResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0T')).items.length;
+        const showImportantBanner = resubmitted === 'no' && numberOf0TResponseCodes > 0 && durationInDeparture > 125;
 
         const renderObj = {
           cookie,

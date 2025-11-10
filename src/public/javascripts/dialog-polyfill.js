@@ -221,8 +221,7 @@
     }
 
     // Prefer formmethod on the button.
-    var formmethod =
-      (submitter && submitter.getAttribute('formmethod')) || form.getAttribute('method');
+    var formmethod = (submitter && submitter.getAttribute('formmethod')) || form.getAttribute('method');
     if (formmethod !== 'dialog') {
       return;
     }
@@ -446,14 +445,10 @@
         );
       }
       if (!isConnected(this.dialog_)) {
-        throw new Error(
-          "Failed to execute 'showModal' on dialog: The element is not in a Document."
-        );
+        throw new Error("Failed to execute 'showModal' on dialog: The element is not in a Document.");
       }
       if (!dialogPolyfill.dm.pushDialog(this)) {
-        throw new Error(
-          "Failed to execute 'showModal' on dialog: There are too many open modal dialogs."
-        );
+        throw new Error("Failed to execute 'showModal' on dialog: There are too many open modal dialogs.");
       }
 
       if (createsStackingContext(this.dialog_.parentElement)) {
@@ -573,10 +568,7 @@
    */
   dialogPolyfill.forceRegisterDialog = function (element) {
     if (window.HTMLDialogElement || element.showModal) {
-      console.warn(
-        'This browser already supports <dialog>, the polyfill ' + 'may not work correctly',
-        element
-      );
+      console.warn('This browser already supports <dialog>, the polyfill ' + 'may not work correctly', element);
     }
     if (element.localName !== 'dialog') {
       throw new Error('Failed to register dialog: The element is not a dialog.');
@@ -901,8 +893,7 @@
       }
 
       var submitter = findFormSubmitter(ev);
-      var formmethod =
-        (submitter && submitter.getAttribute('formmethod')) || form.getAttribute('method');
+      var formmethod = (submitter && submitter.getAttribute('formmethod')) || form.getAttribute('method');
       if (formmethod === 'dialog') {
         ev.preventDefault();
       }

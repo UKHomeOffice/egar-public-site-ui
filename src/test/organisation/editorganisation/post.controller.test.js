@@ -52,21 +52,11 @@ describe('Organisation Edit Post Controller', () => {
 
     callController().then(() => {
       expect(orgApiStub).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly(
-        'app/organisation/editorganisation/index',
-        {
-          cookie,
-          orgName: '',
-          errors: [
-            new ValidationRule(
-              validator.notEmpty,
-              'orgName',
-              '',
-              'Enter the name of the organisation'
-            ),
-          ],
-        }
-      );
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
+        cookie,
+        orgName: '',
+        errors: [new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation')],
+      });
     });
   });
 
@@ -83,14 +73,11 @@ describe('Organisation Edit Post Controller', () => {
       .then()
       .then(() => {
         expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
-        expect(res.render).to.have.been.calledOnceWithExactly(
-          'app/organisation/editorganisation/index',
-          {
-            cookie,
-            orgName: 'Evil Empire',
-            errors: [{ message: 'orgApi.update Example Reject' }],
-          }
-        );
+        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
+          cookie,
+          orgName: 'Evil Empire',
+          errors: [{ message: 'orgApi.update Example Reject' }],
+        });
       });
   });
 

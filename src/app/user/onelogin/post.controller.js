@@ -1,9 +1,4 @@
-const {
-  WORKFLOW_STEPS,
-  PHASE_GIVEN_NAME,
-  PHASE_CONFIRM_NAME,
-  PHASE_REGISTRATION_COMPLETE,
-} = require('./constants');
+const { WORKFLOW_STEPS, PHASE_GIVEN_NAME, PHASE_CONFIRM_NAME, PHASE_REGISTRATION_COMPLETE } = require('./constants');
 const CookieModel = require('../../../common/models/Cookie.class');
 const { decodeToken } = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
@@ -11,10 +6,7 @@ const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
-const {
-  USER_GIVEN_NAME_CHARACTER_COUNT,
-  USER_SURNAME_CHARACTER_COUNT,
-} = require('../../../common/config');
+const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
 const e = require('express');
 const sendEmail = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
@@ -44,12 +36,7 @@ async function handleGivenNameSubmission(req, res) {
       firstName,
       `Enter given names of at most ${USER_GIVEN_NAME_CHARACTER_COUNT} characters`
     ),
-    new ValidationRule(
-      validator.nameHasNoNumbers,
-      'userFname',
-      firstName,
-      'Your given names cannot include numbers'
-    ),
+    new ValidationRule(validator.nameHasNoNumbers, 'userFname', firstName, 'Your given names cannot include numbers'),
     new ValidationRule(
       validator.validName,
       'userFname',
@@ -60,12 +47,7 @@ async function handleGivenNameSubmission(req, res) {
   ];
   const lnameChain = [
     new ValidationRule(validator.isNotEmpty, 'userLname', lastName, 'Enter your family name'),
-    new ValidationRule(
-      validator.nameHasNoNumbers,
-      'userLname',
-      lastName,
-      'Your family name cannot include numbers'
-    ),
+    new ValidationRule(validator.nameHasNoNumbers, 'userLname', lastName, 'Your family name cannot include numbers'),
     new ValidationRule(
       validator.validName,
       'userLname',

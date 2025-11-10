@@ -30,8 +30,7 @@ function getResponsiblePersonFromReq(req) {
     responsibleCountry: req.body.responsibleCountry,
     responsiblePostcode: req.body.responsiblePostcode,
     fixedBasedOperator: req.body.fixedBasedOperator,
-    fixedBasedOperatorAnswer:
-      req.body.fixedBasedOperator === 'Other' ? req.body.fixedBasedOperatorAnswer : '',
+    fixedBasedOperatorAnswer: req.body.fixedBasedOperator === 'Other' ? req.body.fixedBasedOperatorAnswer : '',
   };
 }
 

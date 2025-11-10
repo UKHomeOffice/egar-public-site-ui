@@ -106,9 +106,7 @@ describe('GAR view get controller', () => {
         .then(() => {
           expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
           //expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-          expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly(
-            'GAR-ID-EXAMPLE-1'
-          );
+          expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
           expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
             cookie,
             manifestFields,
@@ -178,9 +176,7 @@ describe('GAR view get controller', () => {
         .then(() => {
           expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
           //expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-          expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly(
-            'GAR-ID-EXAMPLE-1'
-          );
+          expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
           expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
             cookie,
             manifestFields,

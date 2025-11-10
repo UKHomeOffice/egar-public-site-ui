@@ -79,8 +79,7 @@ const getPages = (limit, pageCount, currentPage) => {
 const build = (req, totalPages, totalItems, optionalPath, pageSize = PAGE_SIZE) => {
   logger.debug('Entering the pagination module');
 
-  const pathName =
-    typeof optionalArg === 'undefined' ? url.parse(req.originalUrl).pathname : optionalPath;
+  const pathName = typeof optionalArg === 'undefined' ? url.parse(req.originalUrl).pathname : optionalPath;
   const currentPage = getCurrentPage(req, pathName);
 
   if (totalPages === 0) {

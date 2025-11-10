@@ -10,17 +10,11 @@ const adminDeletionType = (orgUsers) => {
 
   const totalAdminsInOrg = orgUsers.filter((user) => user.role.name === 'Admin').length;
 
-  if (
-    orgUsers.length === LAST_ADMIN_IN_ORGANISATION &&
-    totalAdminsInOrg === LAST_ADMIN_IN_ORGANISATION
-  ) {
+  if (orgUsers.length === LAST_ADMIN_IN_ORGANISATION && totalAdminsInOrg === LAST_ADMIN_IN_ORGANISATION) {
     return 'DELETE_ORGANISATION';
   }
 
-  if (
-    orgUsers.length > LAST_ADMIN_IN_ORGANISATION &&
-    totalAdminsInOrg === LAST_ADMIN_IN_ORGANISATION
-  ) {
+  if (orgUsers.length > LAST_ADMIN_IN_ORGANISATION && totalAdminsInOrg === LAST_ADMIN_IN_ORGANISATION) {
     return 'DO_NOT_DELETE_ADMIN';
   }
 
@@ -81,24 +75,19 @@ const deleteAccount = {
       notifyUser: async () => {
         switch (deletionType) {
           case 'DELETE_ORGANISATION':
-            return await emailService.send(
-              settings.NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID,
-              cookie.getUserEmail(),
-              {
-                firstName: cookie.getUserFirstName(),
-                orgName: cookie.getOrganisationName(),
-              }
-            );
+            return await emailService.send(settings.NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID, cookie.getUserEmail(), {
+              firstName: cookie.getUserFirstName(),
+              orgName: cookie.getOrganisationName(),
+            });
 
           case 'DO_NOT_DELETE_ADMIN':
             throw new Error('Email should not be sent if admin is not deleted');
 
           case 'DELETE_ADMIN':
-            return await emailService.send(
-              settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
-              cookie.getUserEmail(),
-              { firstName: cookie.getUserFirstName(), lastName: cookie.getUserLastName() }
-            );
+            return await emailService.send(settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID, cookie.getUserEmail(), {
+              firstName: cookie.getUserFirstName(),
+              lastName: cookie.getUserLastName(),
+            });
 
           default:
             throw new Error('Invalid Deletion type provided');

@@ -12,12 +12,7 @@ module.exports = (req, res) => {
 
   // Define a validation chain for user registeration fields
   const orgNameChain = [
-    new ValidationRule(
-      validator.notEmpty,
-      'orgName',
-      orgName,
-      'Enter the name of the organisation'
-    ),
+    new ValidationRule(validator.notEmpty, 'orgName', orgName, 'Enter the name of the organisation'),
   ];
 
   // Validate chains

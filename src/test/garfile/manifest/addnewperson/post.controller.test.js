@@ -88,25 +88,17 @@ describe('GAR Manifest Add Person Post Controller', () => {
       .then(() => {
         expect(garApiStub).to.not.have.been.called;
         expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly(
-          'app/garfile/manifest/addnewperson/index',
-          {
-            req,
-            cookie,
-            person,
-            persontype,
-            documenttype,
-            genderchoice,
-            errors: [
-              new ValidationRule(
-                validator.isNotEmpty,
-                'lastName',
-                req.body.lastName,
-                'Enter the surname of the person'
-              ),
-            ],
-          }
-        );
+        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/addnewperson/index', {
+          req,
+          cookie,
+          person,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [
+            new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
+          ],
+        });
       });
   });
 
@@ -124,18 +116,15 @@ describe('GAR Manifest Add Person Post Controller', () => {
       .then(() => {
         expect(garApiStub).to.have.been.calledWith('GAR-ID-1', 'Draft', { people: [person] });
         expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly(
-          'app/garfile/manifest/addnewperson/index',
-          {
-            req,
-            cookie,
-            person,
-            persontype,
-            documenttype,
-            genderchoice,
-            errors: [{ message: 'Error adding a new person. Try again later' }],
-          }
-        );
+        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/addnewperson/index', {
+          req,
+          cookie,
+          person,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [{ message: 'Error adding a new person. Try again later' }],
+        });
       });
   });
 
@@ -157,18 +146,15 @@ describe('GAR Manifest Add Person Post Controller', () => {
         people: [person],
       });
       expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly(
-        'app/garfile/manifest/addnewperson/index',
-        {
-          req,
-          cookie,
-          person,
-          persontype,
-          documenttype,
-          genderchoice,
-          errors: [{ message: 'GAR not found' }],
-        }
-      );
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/addnewperson/index', {
+        req,
+        cookie,
+        person,
+        persontype,
+        documenttype,
+        genderchoice,
+        errors: [{ message: 'GAR not found' }],
+      });
     });
   });
 

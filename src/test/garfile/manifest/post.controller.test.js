@@ -108,9 +108,7 @@ describe('Manifest Post Controller', () => {
     req.body.buttonClicked = 'Add to GAR';
     req.body.personId = 'ABCDEFG';
     sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject');
-    sinon
-      .stub(manifestUtil, 'getDetailsByIds')
-      .resolves([{ firstName: 'Random', lastName: 'Person' }]);
+    sinon.stub(manifestUtil, 'getDetailsByIds').resolves([{ firstName: 'Random', lastName: 'Person' }]);
 
     const callController = async () => {
       await controller(req, res);
@@ -131,9 +129,7 @@ describe('Manifest Post Controller', () => {
     req.body.buttonClicked = 'Add to GAR';
     req.body.personId = 'ABCDEFG';
     sinon.stub(garApi, 'patch').resolves();
-    sinon
-      .stub(manifestUtil, 'getDetailsByIds')
-      .resolves([{ firstName: 'Random', lastName: 'Person' }]);
+    sinon.stub(manifestUtil, 'getDetailsByIds').resolves([{ firstName: 'Random', lastName: 'Person' }]);
 
     const callController = async () => {
       await controller(req, res);
@@ -243,13 +239,11 @@ describe('Manifest Post Controller', () => {
     expect(manifestUtil.getDetailsByIds).to.not.have.been.called;
     expect(req.session.manifestErr).to.eql([
       {
-        message:
-          'Click the edit link of the person(s) with the errors to edit and correct their details.',
+        message: 'Click the edit link of the person(s) with the errors to edit and correct their details.',
         identifier: 'person-0',
       },
       {
-        message:
-          'Click the edit link of the person(s) with the errors to edit and correct their details.',
+        message: 'Click the edit link of the person(s) with the errors to edit and correct their details.',
         identifier: 'person-1',
       },
     ]);

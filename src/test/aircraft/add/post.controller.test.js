@@ -63,12 +63,7 @@ describe('Aircraft Add Post Controller', () => {
   describe('validation chains', () => {
     it('should return message when registration is empty', () => {
       req.body.registration = '';
-      const rule = new ValidationRule(
-        validator.notEmpty,
-        'registration',
-        '',
-        'Enter a registration'
-      );
+      const rule = new ValidationRule(validator.notEmpty, 'registration', '', 'Enter a registration');
       const cookie = new CookieModel(req);
       const craftObj = {
         registration: '',
@@ -94,12 +89,7 @@ describe('Aircraft Add Post Controller', () => {
 
     it('should return message when type is empty', () => {
       req.body.craftType = '';
-      const rule = new ValidationRule(
-        validator.notEmpty,
-        'craftType',
-        '',
-        'Enter an aircraft type'
-      );
+      const rule = new ValidationRule(validator.notEmpty, 'craftType', '', 'Enter an aircraft type');
       const cookie = new CookieModel(req);
       const craftObj = {
         registration: 'G-ABCD',
@@ -246,11 +236,7 @@ describe('Aircraft Add Post Controller', () => {
 
       callController().then(() => {
         expect(sessionSaveStub).to.have.been.called;
-        expect(paginate.setCurrentPage).to.have.been.calledOnceWithExactly(
-          req,
-          '/aircraft',
-          1000000
-        );
+        expect(paginate.setCurrentPage).to.have.been.calledOnceWithExactly(req, '/aircraft', 1000000);
         expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
       });
     });

@@ -101,18 +101,12 @@ describe('Verify MFA Post Controller', () => {
 
     callController()
       .then(() => {
-        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-          'example@somewhere.com',
-          123456
-        );
+        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
         expect(tokenApi.updateMfaToken).to.not.have.been.called;
         expect(res.render).to.not.have.been.called;
       })
       .then(() => {
-        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-          'example@somewhere.com',
-          123456
-        );
+        expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
         expect(tokenApi.updateMfaToken).to.not.have.been.called;
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/verify/mfa/index', {
@@ -145,10 +139,7 @@ describe('Verify MFA Post Controller', () => {
         .then()
         .then()
         .then(() => {
-          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
+          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
           expect(tokenApi.updateMfaToken).to.have.been.called;
           expect(sessionSaveStub).to.not.have.been.called;
           expect(res.render).to.have.been.calledOnceWithExactly('app/verify/mfa/index', {
@@ -181,37 +172,25 @@ describe('Verify MFA Post Controller', () => {
       // assertions. It could be the nested catches perhaps in the code
       callController()
         .then(() => {
-          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
+          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
           expect(tokenApi.updateMfaToken).to.have.been.called;
           expect(userApi.getDetails).to.not.have.been.called;
           expect(res.render).to.not.have.been.called;
         })
         .then(() => {
-          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
+          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
           expect(tokenApi.updateMfaToken).to.have.been.called;
           expect(userApi.getDetails).to.have.been.called;
           expect(res.render).to.not.have.been.called;
         })
         .then(() => {
-          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
+          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
           expect(tokenApi.updateMfaToken).to.have.been.called;
           expect(userApi.getDetails).to.have.been.called;
           expect(res.render).to.not.have.been.called;
         })
         .then(() => {
-          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
+          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
           expect(tokenApi.updateMfaToken).to.have.been.called;
           expect(userApi.getDetails).to.have.been.called;
           expect(sessionSaveStub).to.not.have.been.called;
@@ -253,40 +232,20 @@ describe('Verify MFA Post Controller', () => {
       // assertions. It could be the catches perhaps in the code
       callController()
         .then(() => {
-          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
-          expect(tokenApi.updateMfaToken).to.have.been.called.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
+          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
+          expect(tokenApi.updateMfaToken).to.have.been.called.calledOnceWithExactly('example@somewhere.com', 123456);
           expect(userApi.getDetails).to.not.have.been.called;
           expect(res.redirect).to.not.have.been.called;
         })
         .then(() => {
-          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
-          expect(tokenApi.updateMfaToken).to.have.been.called.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
-          expect(userApi.getDetails).to.have.been.called.calledOnceWithExactly(
-            'example@somewhere.com'
-          );
+          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
+          expect(tokenApi.updateMfaToken).to.have.been.called.calledOnceWithExactly('example@somewhere.com', 123456);
+          expect(userApi.getDetails).to.have.been.called.calledOnceWithExactly('example@somewhere.com');
           expect(res.redirect).to.not.have.been.called;
         })
         .then(() => {
-          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
-          expect(tokenApi.updateMfaToken).to.have.been.called.calledOnceWithExactly(
-            'example@somewhere.com',
-            123456
-          );
+          expect(tokenApi.validateMfaToken).to.have.been.calledOnceWithExactly('example@somewhere.com', 123456);
+          expect(tokenApi.updateMfaToken).to.have.been.called.calledOnceWithExactly('example@somewhere.com', 123456);
           expect(userApi.getDetails).to.have.been.calledOnceWithExactly('example@somewhere.com');
           expect(sessionSaveStub).to.have.been.called;
           expect(res.redirect).to.have.been.calledOnceWithExactly('/home');

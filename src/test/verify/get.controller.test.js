@@ -65,9 +65,7 @@ describe('Verify Get Controller', () => {
     // Use this test to check the generateHash method
     // i.e. let's ensure crypto is defined!
     const tokenSpy = sinon.spy(tokenService, 'generateHash');
-    sinon
-      .stub(verifyUserService, 'verifyUser')
-      .rejects('verificationApi.verifyUser Example Reject');
+    sinon.stub(verifyUserService, 'verifyUser').rejects('verificationApi.verifyUser Example Reject');
     await controller(req, res);
 
     expect(tokenService.generateHash).to.have.been.calledWith('abcd1234');
@@ -151,10 +149,7 @@ describe('Verify Get Controller', () => {
       email: 'someone@somewhere.com',
       message: 'Token has expired',
     };
-    const generateHashStub = sinon
-      .stub(tokenService, 'generateHash')
-      .onCall(0)
-      .returns('hashedTokenExample');
+    const generateHashStub = sinon.stub(tokenService, 'generateHash').onCall(0).returns('hashedTokenExample');
     generateHashStub.onCall(1).returns('secondHashedTokenExample');
     sinon.stub(verifyUserService, 'verifyUser').resolves(JSON.stringify(apiResponse));
 
@@ -168,11 +163,7 @@ describe('Verify Get Controller', () => {
     const parameter = generateHashStub.getCall(1).args[0];
     expect(generateHashStub).to.have.been.calledWith(parameter);
     expect(tokenApi.updateToken).to.have.been.calledWith('secondHashedTokenExample', '1234');
-    expect(sendTokenService.send).to.have.been.calledWith(
-      'Some First Name',
-      'someone@somewhere.com',
-      parameter
-    );
+    expect(sendTokenService.send).to.have.been.calledWith('Some First Name', 'someone@somewhere.com', parameter);
     expect(i18n.__).to.have.been.calledWith('verify_user_account_token_expired');
     expect(res.render).to.have.been.calledWithExactly('app/verify/registeruser/index', {
       message: 'Example Token Expired Message',

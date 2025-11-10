@@ -26,13 +26,11 @@ module.exports = (req, res) => {
     baggage: req.body.baggage,
     baggageDeclaration: req.body.baggage === 'Yes' ? req.body.baggageDeclaration : '',
     continentalShelf: req.body.continentalShelf,
-    continentalShelfDeclaration:
-      req.body.continentalShelf === 'Yes' ? req.body.continentalShelfDeclaration : '',
+    continentalShelfDeclaration: req.body.continentalShelf === 'Yes' ? req.body.continentalShelfDeclaration : '',
     freeCirculation: req.body.freeCirculation,
     visitReason: req.body.visitReason,
     supportingInformation: req.body.supportingInformation,
-    supportingInformationAnswer:
-      req.body.supportingInformation === 'Yes' ? req.body.supportingInformationAnswer : '',
+    supportingInformationAnswer: req.body.supportingInformation === 'Yes' ? req.body.supportingInformationAnswer : '',
     passengerTravellingReason: req.body.passengerTravellingReason,
     passengerTravellingReasonAnswer:
       req.body.passengerTravellingReason === 'Yes' ? req.body.passengerTravellingReasonAnswer : '',

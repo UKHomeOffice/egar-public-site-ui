@@ -270,11 +270,7 @@ describe('Responsible Person API Service', () => {
         request: { put: requestStub },
       });
 
-      const result = await proxiedService.updateResPerson(
-        'USER-ID-1',
-        'RES-PERSON-1',
-        responsible_person
-      );
+      const result = await proxiedService.updateResPerson('USER-ID-1', 'RES-PERSON-1', responsible_person);
 
       expect(requestStub).to.have.been.calledOnceWith({
         headers: { 'content-type': 'application/json' },

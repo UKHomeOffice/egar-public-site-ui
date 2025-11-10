@@ -47,27 +47,25 @@ const sendAdminUpdateEmail = (userObj) => {
     return new Promise((resolve, reject) => resolve(userObj));
   }
 
-  return organisationApi
-    .getListOfOrgUsers(userObj.organisation.organisationId, 'Admin')
-    .then((users) => {
-      const userList = JSON.parse(users);
+  return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((users) => {
+    const userList = JSON.parse(users);
 
-      userList.items.forEach((user) => {
-        try {
-          sendEmail.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
-            firstName: userObj.firstName,
-            lastName: userObj.lastName,
-            accountUrl,
-            adminFirstName: user.firstName,
-            adminLastName: user.lastName,
-            organisationName: userObj.organisation.organisationName,
-          });
-        } catch (error) {
-          logger.error('Exception when sending email to admin');
-          logger.error(error);
-        }
-      });
+    userList.items.forEach((user) => {
+      try {
+        sendEmail.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
+          firstName: userObj.firstName,
+          lastName: userObj.lastName,
+          accountUrl,
+          adminFirstName: user.firstName,
+          adminLastName: user.lastName,
+          organisationName: userObj.organisation.organisationName,
+        });
+      } catch (error) {
+        logger.error('Exception when sending email to admin');
+        logger.error(error);
+      }
     });
+  });
 };
 
 /**
@@ -261,10 +259,7 @@ module.exports = async (req, res) => {
 async function checkUserInvite(req, res, email) {
   try {
     const apiResponse = await verifyUserService.getUserInviteToken(email);
-    if (
-      apiResponse['message'] === 'Token expired' ||
-      apiResponse['message'] === 'Token already used'
-    ) {
+    if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
       logger.error('Invite link to register expired or already used.');
       return redirectErrorPage(req, res, 'invite-expired');
     }

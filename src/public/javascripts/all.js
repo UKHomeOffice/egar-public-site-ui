@@ -54,19 +54,14 @@
     // Polyfill from https://cdn.polyfill.io/v2/polyfill.js?features=Object.defineProperty&flags=always
     (function (nativeDefineProperty) {
       var supportsAccessors = Object.prototype.hasOwnProperty('__defineGetter__');
-      var ERR_ACCESSORS_NOT_SUPPORTED =
-        'Getters & setters cannot be defined on this javascript engine';
-      var ERR_VALUE_ACCESSORS =
-        'A property cannot both have accessors and be writable or have a value';
+      var ERR_ACCESSORS_NOT_SUPPORTED = 'Getters & setters cannot be defined on this javascript engine';
+      var ERR_VALUE_ACCESSORS = 'A property cannot both have accessors and be writable or have a value';
 
       Object.defineProperty = function defineProperty(object, property, descriptor) {
         // Where native support exists, assume it
         if (
           nativeDefineProperty &&
-          (object === window ||
-            object === document ||
-            object === Element.prototype ||
-            object instanceof Element)
+          (object === window || object === document || object === Element.prototype || object instanceof Element)
         ) {
           return nativeDefineProperty(object, property, descriptor);
         }
@@ -324,10 +319,7 @@
         !nativeImpl ||
         (!!document.createElementNS &&
           !!document.createElementNS('http://www.w3.org/2000/svg', 'svg') &&
-          !(
-            document.createElementNS('http://www.w3.org/2000/svg', 'svg').classList instanceof
-            DOMTokenList
-          ))
+          !(document.createElementNS('http://www.w3.org/2000/svg', 'svg').classList instanceof DOMTokenList))
       ) {
         global.DOMTokenList = (function () {
           var dpSupport = true;
@@ -383,9 +375,7 @@
               if (args.length)
                 for (i = 0; i < args.length; ++i)
                   if (rSpace.test(args[i])) {
-                    error = new SyntaxError(
-                      'String "' + args[i] + '" ' + 'contains' + ' an invalid character'
-                    );
+                    error = new SyntaxError('String "' + args[i] + '" ' + 'contains' + ' an invalid character');
                     error.code = 5;
                     error.name = 'InvalidCharacterError';
                     throw error;
@@ -587,10 +577,7 @@
         this.Document = this.HTMLDocument;
       } else {
         // Create an empty function to act as the missing constructor for the document object, attach the document object as its prototype.  The function needs to be anonymous else it is hoisted and causes the feature detect to prematurely pass, preventing the assignments below being made.
-        this.Document =
-          this.HTMLDocument =
-          document.constructor =
-            new Function('return function Document() {}')();
+        this.Document = this.HTMLDocument = document.constructor = new Function('return function Document() {}')();
         this.Document.prototype = document;
       }
     }
@@ -624,9 +611,7 @@
 
       // use sandboxed iframe to replicate Element functionality
       var frameDocument = frame.contentWindow.document;
-      var prototype = (Element.prototype = frameDocument.appendChild(
-        frameDocument.createElement('*')
-      ));
+      var prototype = (Element.prototype = frameDocument.appendChild(frameDocument.createElement('*')));
       var cache = {};
 
       // polyfill Element.prototype on an element
@@ -689,11 +674,7 @@
       // Apply Element prototype to the pre-existing DOM as soon as the body element appears.
       function bodyCheck() {
         if (!loopLimit--) clearTimeout(interval);
-        if (
-          document.body &&
-          !document.body.prototype &&
-          /(complete|interactive)/.test(document.readyState)
-        ) {
+        if (document.body && !document.body.prototype && /(complete|interactive)/.test(document.readyState)) {
           shiv(document, true);
           if (interval && document.body.prototype) clearTimeout(interval);
           return !!document.body.prototype;
@@ -992,9 +973,7 @@
     // Get a count of all the Accordion sections
     var sectionsCount = this.$sections.length;
     // Get a count of all Accordion sections that are expanded
-    var expandedSectionCount = this.$module.querySelectorAll(
-      '.' + this.sectionExpandedClass
-    ).length;
+    var expandedSectionCount = this.$module.querySelectorAll('.' + this.sectionExpandedClass).length;
     var areAllSectionsOpen = sectionsCount === expandedSectionCount;
 
     return areAllSectionsOpen;
@@ -1088,8 +1067,7 @@
         if (global.constructor) {
           global.Window = global.constructor;
         } else {
-          (global.Window = global.constructor =
-            new Function('return function Window() {}')()).prototype = this;
+          (global.Window = global.constructor = new Function('return function Window() {}')()).prototype = this;
         }
       })(this);
     }
@@ -1165,12 +1143,8 @@
         // Shortcut if browser supports createEvent
         if ('createEvent' in document) {
           event = document.createEvent('Event');
-          var bubbles =
-            eventInitDict && eventInitDict.bubbles !== undefined ? eventInitDict.bubbles : false;
-          var cancelable =
-            eventInitDict && eventInitDict.cancelable !== undefined
-              ? eventInitDict.cancelable
-              : false;
+          var bubbles = eventInitDict && eventInitDict.bubbles !== undefined ? eventInitDict.bubbles : false;
+          var cancelable = eventInitDict && eventInitDict.cancelable !== undefined ? eventInitDict.cancelable : false;
 
           event.initEvent(type, bubbles, cancelable);
 
@@ -1180,12 +1154,8 @@
         event = document.createEventObject();
 
         event.type = type;
-        event.bubbles =
-          eventInitDict && eventInitDict.bubbles !== undefined ? eventInitDict.bubbles : false;
-        event.cancelable =
-          eventInitDict && eventInitDict.cancelable !== undefined
-            ? eventInitDict.cancelable
-            : false;
+        event.bubbles = eventInitDict && eventInitDict.bubbles !== undefined ? eventInitDict.bubbles : false;
+        event.cancelable = eventInitDict && eventInitDict.cancelable !== undefined ? eventInitDict.cancelable : false;
 
         return event;
       };
@@ -1257,10 +1227,7 @@
                     if (index in events) {
                       eventElement = events[index];
 
-                      if (
-                        indexOf(list, eventElement) !== -1 &&
-                        typeof eventElement === 'function'
-                      ) {
+                      if (indexOf(list, eventElement) !== -1 && typeof eventElement === 'function') {
                         eventElement.call(element, event);
                       }
                     }
@@ -1660,9 +1627,7 @@
     if (elementId && !countMessage) {
       countElement.insertAdjacentHTML(
         'afterend',
-        '<span id="' +
-          elementId +
-          '-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>'
+        '<span id="' + elementId + '-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>'
       );
       this.describedBy = countElement.getAttribute('aria-describedby');
       this.describedByInfo = this.describedBy + ' ' + elementId + '-info';
@@ -1852,11 +1817,7 @@
 
       while (node) {
         if (node.matches(selector)) return node;
-        else
-          node =
-            'SVGElement' in window && node instanceof SVGElement
-              ? node.parentNode
-              : node.parentElement;
+        else node = 'SVGElement' in window && node instanceof SVGElement ? node.parentNode : node.parentElement;
       }
 
       return null;
@@ -1991,10 +1952,7 @@
       }
     }
 
-    return (
-      document.querySelector("label[for='" + $input.getAttribute('id') + "']") ||
-      $input.closest('label')
-    );
+    return document.querySelector("label[for='" + $input.getAttribute('id') + "']") || $input.closest('label');
   };
 
   function Header($module) {
@@ -2045,10 +2003,7 @@
       this.toggleClass($target, 'govuk-header__navigation--open');
       this.toggleClass($toggleButton, 'govuk-header__menu-button--open');
 
-      $toggleButton.setAttribute(
-        'aria-expanded',
-        $toggleButton.getAttribute('aria-expanded') !== 'true'
-      );
+      $toggleButton.setAttribute('aria-expanded', $toggleButton.getAttribute('aria-expanded') !== 'true');
       $target.setAttribute('aria-hidden', $target.getAttribute('aria-hidden') === 'false');
     }
   };

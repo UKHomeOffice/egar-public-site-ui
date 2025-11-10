@@ -183,12 +183,7 @@ describe('API upload GAR post controller', () => {
 
       expect(req.session.save).to.have.been.called;
       expect(req.session.failureMsg).to.eql([
-        new ValidationRule(
-          validator.validGender,
-          '',
-          'Gender',
-          'Enter a valid sex for crew member James Kirk'
-        ),
+        new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk'),
       ]);
       expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
     });
@@ -210,12 +205,7 @@ describe('API upload GAR post controller', () => {
             'ISSUING STATE',
             'Enter a valid document issuing state for crew member James Kirk. Must be a ISO 3166 country code'
           ),
-          new ValidationRule(
-            validator.validGender,
-            '',
-            'Gender',
-            'Enter a valid sex for crew member James Kirk'
-          ),
+          new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk'),
           new ValidationRule(
             validator.validISOCountryLength,
             '',
@@ -228,12 +218,7 @@ describe('API upload GAR post controller', () => {
             'ISSUING STATE',
             'Enter a valid document issuing state for passenger Pavel Chekov. Must be a ISO 3166 country code'
           ),
-          new ValidationRule(
-            validator.validGender,
-            '',
-            'Gender',
-            'Enter a valid sex for passenger Pavel Chekov'
-          ),
+          new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for passenger Pavel Chekov'),
           new ValidationRule(
             validator.validISOCountryLength,
             '',
@@ -283,12 +268,7 @@ describe('API upload GAR post controller', () => {
       callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
-          new ValidationRule(
-            validator.isValidAirportCode,
-            '',
-            null,
-            'Arrival port should be an ICAO or IATA code'
-          ),
+          new ValidationRule(validator.isValidAirportCode, '', null, 'Arrival port should be an ICAO or IATA code'),
           new ValidationRule(validator.notEmpty, '', null, 'Enter a value for the arrival port'),
         ]);
       });

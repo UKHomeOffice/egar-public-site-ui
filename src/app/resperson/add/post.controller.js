@@ -37,9 +37,7 @@ module.exports = (req, res) => {
           res.render('app/resperson/add/index', {
             cookie,
             fixedBasedOperatorOptions,
-            errors: [
-              { message: 'There was a problem creating the responsible person. Please try again' },
-            ],
+            errors: [{ message: 'There was a problem creating the responsible person. Please try again' }],
           });
         });
     })

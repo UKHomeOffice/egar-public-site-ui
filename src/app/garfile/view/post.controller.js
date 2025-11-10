@@ -59,16 +59,10 @@ module.exports = (req, res) => {
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;
-      const lastDepartureDateString =
-        departureDate && departureTime ? `${departureDate}T${departureTime}.000Z` : null;
+      const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z` : null;
 
-      numberOf0TResponseCodes = (parsedPeople.items || []).filter(
-        (x) => x.amgCheckinResponseCode === '0T'
-      ).length;
-      const durationInDeparture = garApi.getDurationBeforeDeparture(
-        parsedGar.departureDate,
-        parsedGar.departureTime
-      );
+      numberOf0TResponseCodes = (parsedPeople.items || []).filter((x) => x.amgCheckinResponseCode === '0T').length;
+      const durationInDeparture = garApi.getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
         logger.error(
@@ -95,10 +89,7 @@ module.exports = (req, res) => {
         garpeople: parsedPeople,
         garsupportingdocs: supportingDocuments,
         showChangeLinks: true,
-        isJourneyUKInbound: airportValidation.isJourneyUKInbound(
-          parsedGar.departurePort,
-          parsedGar.arrivalPort
-        ),
+        isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort),
         numberOf0TResponseCodes,
         durationInDeparture,
         isResubmitted,

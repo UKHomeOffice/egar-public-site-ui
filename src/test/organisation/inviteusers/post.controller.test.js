@@ -58,35 +58,22 @@ describe('Organisation Invite User Post Controller', () => {
 
       callController().then(() => {
         expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly(
-          'app/organisation/inviteusers/index',
-          {
-            cookie,
-            fname: '',
-            lname: '',
-            email: '',
-            errors: [
-              new ValidationRule(
-                validator.notEmpty,
-                'fname',
-                req.body.fname,
-                'Please enter the given names of the user'
-              ),
-              new ValidationRule(
-                validator.notEmpty,
-                'lname',
-                req.body.lname,
-                'Please enter the surname of the user'
-              ),
-              new ValidationRule(
-                validator.notEmpty,
-                'email',
-                req.body.email,
-                'Please enter the email address of the user'
-              ),
-            ],
-          }
-        );
+        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
+          cookie,
+          fname: '',
+          lname: '',
+          email: '',
+          errors: [
+            new ValidationRule(validator.notEmpty, 'fname', req.body.fname, 'Please enter the given names of the user'),
+            new ValidationRule(validator.notEmpty, 'lname', req.body.lname, 'Please enter the surname of the user'),
+            new ValidationRule(
+              validator.notEmpty,
+              'email',
+              req.body.email,
+              'Please enter the email address of the user'
+            ),
+          ],
+        });
       });
     });
 
@@ -106,42 +93,34 @@ describe('Organisation Invite User Post Controller', () => {
         expect(req.session.inv.ln).to.be.null;
         expect(req.session.inv.e).to.be.null;
         expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly(
-          'app/organisation/inviteusers/index',
-          {
-            cookie,
-            fname: 'abcdefghijklmnopqrstuvwxyzabcdefghijk',
-            lname: 'abcdefghijklmnopqrstuvwxyzabcdefghij',
-            email:
+        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
+          cookie,
+          fname: 'abcdefghijklmnopqrstuvwxyzabcdefghijk',
+          lname: 'abcdefghijklmnopqrstuvwxyzabcdefghij',
+          email:
+            '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com',
+          errors: [
+            new ValidationRule(
+              validator.isValidStringLength,
+              'fname',
+              'abcdefghijklmnopqrstuvwxyzabcdefghijk',
+              'Given names must be 35 characters or less'
+            ),
+            new ValidationRule(
+              validator.isValidStringLength,
+              'lname',
+              'abcdefghijklmnopqrstuvwxyzabcdefghij',
+              'Surname must be 35 characters or less'
+            ),
+            new ValidationRule(
+              validator.isValidEmailLength,
+              'email',
               '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com',
-            errors: [
-              new ValidationRule(
-                validator.isValidStringLength,
-                'fname',
-                'abcdefghijklmnopqrstuvwxyzabcdefghijk',
-                'Given names must be 35 characters or less'
-              ),
-              new ValidationRule(
-                validator.isValidStringLength,
-                'lname',
-                'abcdefghijklmnopqrstuvwxyzabcdefghij',
-                'Surname must be 35 characters or less'
-              ),
-              new ValidationRule(
-                validator.isValidEmailLength,
-                'email',
-                '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@yikes.com',
-                'Email must be 150 characters or less'
-              ),
-              new ValidationRule(
-                validator.valuetrue,
-                'cemail',
-                false,
-                'Please ensure the email addresses match'
-              ),
-            ],
-          }
-        );
+              'Email must be 150 characters or less'
+            ),
+            new ValidationRule(validator.valuetrue, 'cemail', false, 'Please ensure the email addresses match'),
+          ],
+        });
       });
     });
 
@@ -160,23 +139,13 @@ describe('Organisation Invite User Post Controller', () => {
         expect(req.session.inv.ln).to.be.null;
         expect(req.session.inv.e).to.be.null;
         expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly(
-          'app/organisation/inviteusers/index',
-          {
-            cookie,
-            fname: 'Malcolm',
-            lname: 'Reynolds',
-            email: 'mal@serenity.com',
-            errors: [
-              new ValidationRule(
-                validator.valuetrue,
-                'cemail',
-                false,
-                'Please ensure the email addresses match'
-              ),
-            ],
-          }
-        );
+        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
+          cookie,
+          fname: 'Malcolm',
+          lname: 'Reynolds',
+          email: 'mal@serenity.com',
+          errors: [new ValidationRule(validator.valuetrue, 'cemail', false, 'Please ensure the email addresses match')],
+        });
       });
     });
   });
@@ -204,9 +173,7 @@ describe('Organisation Invite User Post Controller', () => {
 
     getDetailsStub.resolves({ email: 'prequel@enterprise.net' });
     callController().then(() => {
-      expect(res.render).to.have.been.calledOnceWithExactly(
-        'app/organisation/inviteusers/userExistError'
-      );
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/userExistError');
     });
   });
 });

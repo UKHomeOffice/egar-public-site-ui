@@ -198,9 +198,7 @@ describe('UserSessions', () => {
     try {
       await tokenApiProxy.validateMfaToken('myemail@email.com', 87654321);
     } catch (err) {
-      expect(err.message).to.equal(
-        `MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`
-      );
+      expect(err.message).to.equal(`MFA token verification attempts exceeded, maximum limit ${MFA_TOKEN_MAX_ATTEMPTS}`);
     }
   });
 
@@ -219,9 +217,7 @@ describe('UserSessions', () => {
     try {
       await tokenApiProxy.validateMfaToken('myemail@email.com', 87654321);
     } catch (err) {
-      expect(err.message).to.equal(
-        `MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`
-      );
+      expect(err.message).to.equal(`MFA token expired, token is valid for ${MFA_TOKEN_EXPIRY} minutes`);
     }
   });
 });
@@ -261,9 +257,7 @@ describe('TokenService', () => {
 
   it('should throw an error when calling the settoken API', () => {
     nock.cleanAll();
-    nock(BASE_URL)
-      .post(url, { tokenId, userId })
-      .replyWithError({ message: 'Example setToken error', code: 404 });
+    nock(BASE_URL).post(url, { tokenId, userId }).replyWithError({ message: 'Example setToken error', code: 404 });
 
     tokenApi
       .setToken(tokenId, userId)

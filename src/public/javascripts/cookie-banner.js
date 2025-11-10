@@ -34,18 +34,10 @@ function getCookie(name) {
 
 function deleteCookie(name) {
   document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+  document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=' + window.location.hostname + ';path=/';
+  document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=.' + window.location.hostname + ';path=/';
   document.cookie =
-    name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=' + window.location.hostname + ';path=/';
-  document.cookie =
-    name +
-    '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=.' +
-    window.location.hostname +
-    ';path=/';
-  document.cookie =
-    name +
-    '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=.' +
-    location.host.replace('www.', '') +
-    ';path=/';
+    name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=.' + location.host.replace('www.', '') + ';path=/';
 }
 
 function Cookie(name, value) {

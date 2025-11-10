@@ -24,9 +24,7 @@ describe('Organisation Assign Role Post Controller', () => {
   let tokenApiStub;
   let emailServiceStub;
   const TEMPLATE_ID =
-    config.ONE_LOGIN_SHOW_ONE_LOGIN === true
-      ? 'NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID'
-      : 'NOTIFY_INVITE_TEMPLATE_ID';
+    config.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID' : 'NOTIFY_INVITE_TEMPLATE_ID';
   const indexPage = config.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'onelogin_page' : 'old_invite_page';
 
   beforeEach(() => {
@@ -167,18 +165,14 @@ describe('Organisation Assign Role Post Controller', () => {
           'SuperUser',
           cookie.getInviteUserEmail()
         );
-        expect(emailServiceStub).to.have.been.calledOnceWithExactly(
-          indexPage,
-          'persontoinvite@random.com',
-          {
-            firstname: 'Anakin',
-            lastname: 'Test',
-            user: 'Sheev',
-            org_name: 'Sith',
-            base_url: 'http://www.somewhere.com',
-            token: generatedToken,
-          }
-        );
+        expect(emailServiceStub).to.have.been.calledOnceWithExactly(indexPage, 'persontoinvite@random.com', {
+          firstname: 'Anakin',
+          lastname: 'Test',
+          user: 'Sheev',
+          org_name: 'Sith',
+          base_url: 'http://www.somewhere.com',
+          token: generatedToken,
+        });
         expect(res.redirect).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
           cookie,
@@ -212,18 +206,14 @@ describe('Organisation Assign Role Post Controller', () => {
           'SuperUser',
           cookie.getInviteUserEmail()
         );
-        expect(emailServiceStub).to.have.been.calledOnceWithExactly(
-          indexPage,
-          'persontoinvite@random.com',
-          {
-            firstname: 'Anakin',
-            lastname: 'Test',
-            user: 'Sheev',
-            org_name: 'Sith',
-            base_url: 'http://www.somewhere.com',
-            token: generatedToken,
-          }
-        );
+        expect(emailServiceStub).to.have.been.calledOnceWithExactly(indexPage, 'persontoinvite@random.com', {
+          firstname: 'Anakin',
+          lastname: 'Test',
+          user: 'Sheev',
+          org_name: 'Sith',
+          base_url: 'http://www.somewhere.com',
+          token: generatedToken,
+        });
         expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/invite/success');
         expect(res.render).to.not.have.been.called;
       });

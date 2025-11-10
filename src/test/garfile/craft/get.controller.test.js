@@ -133,10 +133,7 @@ describe('GAR Craft Get Controller', () => {
 
     it('should populate current and saved craft', () => {
       const currentCraft = { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' };
-      const savedCraft = [
-        currentCraft,
-        { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
-      ];
+      const savedCraft = [currentCraft, { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' }];
       req.headers = { referer: 'garfile/anythingelse' };
       req.session.gar.craft = {};
       cookie = new CookieModel(req);
@@ -255,19 +252,11 @@ describe('GAR Craft Get Controller', () => {
 
     it('should populate current and saved craft', () => {
       const currentCraft = { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' };
-      const savedCraft = [
-        currentCraft,
-        { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
-      ];
+      const savedCraft = [currentCraft, { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' }];
       req.headers = { referer: 'garfile/anythingelse' };
       req.session.gar.craft = {};
       cookie = new CookieModel(req);
-      cookie.setGarCraft(
-        currentCraft.registration,
-        currentCraft.craftType,
-        currentCraft.craftBase,
-        'Yes'
-      );
+      cookie.setGarCraft(currentCraft.registration, currentCraft.craftType, currentCraft.craftBase, 'Yes');
       cookie.setSavedCraft(savedCraft);
       garApiGetStub.resolves(JSON.stringify(currentCraft));
       craftApiGetOrgCraftsStub.resolves(

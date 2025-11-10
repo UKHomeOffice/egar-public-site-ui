@@ -79,9 +79,7 @@ describe('API upload file post controller', () => {
         expect(garApiDeleteDocsStub).to.have.been.calledOnceWithExactly('GAR-1', 'DOCUMENT-1');
         expect(clamAVServiceStub).to.not.have.been.called;
         expect(fileUploadApiStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly(
-          '/garfile/supportingdocuments?query=deletefailed'
-        );
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=deletefailed');
       });
     });
 
@@ -103,9 +101,7 @@ describe('API upload file post controller', () => {
         expect(garApiDeleteDocsStub).to.have.been.calledOnceWithExactly('GAR-1', 'DOCUMENT-1');
         expect(clamAVServiceStub).to.not.have.been.called;
         expect(fileUploadApiStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly(
-          '/garfile/supportingdocuments?query=deletefailed'
-        );
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=deletefailed');
       });
     });
 
@@ -144,9 +140,7 @@ describe('API upload file post controller', () => {
           expect(garApiDeleteDocsStub).to.not.have.been.called;
           expect(clamAVServiceStub).to.not.have.been.called;
           expect(fileUploadApiStub).to.not.have.been.called;
-          expect(res.redirect).to.have.been.calledOnceWithExactly(
-            '/garfile/supportingdocuments?query=e'
-          );
+          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
         });
     });
 
@@ -171,9 +165,7 @@ describe('API upload file post controller', () => {
         expect(garApiDeleteDocsStub).to.not.have.been.called;
         expect(clamAVServiceStub).to.not.have.been.called;
         expect(fileUploadApiStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly(
-          '/garfile/supportingdocuments?query=limit'
-        );
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=limit');
       });
     });
 
@@ -207,9 +199,7 @@ describe('API upload file post controller', () => {
         expect(garApiDeleteDocsStub).to.not.have.been.called;
         expect(clamAVServiceStub).to.not.have.been.called;
         expect(fileUploadApiStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly(
-          '/garfile/supportingdocuments?query=number'
-        );
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=number');
       });
     });
   });
@@ -286,9 +276,7 @@ describe('API upload file post controller', () => {
       expect(garApiDeleteDocsStub).to.not.have.been.called;
       expect(clamAVServiceStub).to.not.have.been.called;
       expect(fileUploadApiStub).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly(
-        '/garfile/supportingdocuments?query=invalid'
-      );
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=invalid');
     });
   });
 
@@ -336,9 +324,7 @@ describe('API upload file post controller', () => {
           expect(garApiDeleteDocsStub).to.not.have.been.called;
           expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
           expect(fileUploadApiStub).to.not.have.been.called;
-          expect(res.redirect).to.have.been.calledOnceWithExactly(
-            '/garfile/supportingdocuments?query=e'
-          );
+          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
         });
     });
 
@@ -357,9 +343,7 @@ describe('API upload file post controller', () => {
           expect(garApiDeleteDocsStub).to.not.have.been.called;
           expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
           expect(fileUploadApiStub).to.not.have.been.called;
-          expect(res.redirect).to.have.been.calledOnceWithExactly(
-            '/garfile/supportingdocuments?query=v'
-          );
+          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=v');
         });
     });
   });
@@ -442,9 +426,7 @@ describe('API upload file post controller', () => {
             buffer: req.file.buffer,
             size: 10000,
           });
-          expect(res.redirect).to.have.been.calledOnceWithExactly(
-            '/garfile/supportingdocuments?query=e'
-          );
+          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
         });
     });
 

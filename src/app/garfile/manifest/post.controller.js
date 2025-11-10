@@ -56,8 +56,7 @@ module.exports = async (req, res) => {
   } else if (req.body.garPeopleId && buttonClicked === 'Add to PEOPLE') {
     logger.debug('Found person(s) to add to people');
 
-    const addPeopleToGarIds =
-      typeof req.body.garPeopleId === 'string' ? [req.body.garPeopleId] : req.body.garPeopleId;
+    const addPeopleToGarIds = typeof req.body.garPeopleId === 'string' ? [req.body.garPeopleId] : req.body.garPeopleId;
 
     manifestUtil
       .getgarPeopleIds(addPeopleToGarIds, cookie.getGarId())
@@ -133,9 +132,7 @@ module.exports = async (req, res) => {
       const manifest = new Manifest(apiResponse);
 
       if (!isMilitaryFlight && !manifest.validateCaptainCrew()) {
-        logger.error(
-          `user ${cookie.getUserDbId()}, gar ${cookie.getGarId()}: Manifest validation no crew`
-        );
+        logger.error(`user ${cookie.getUserDbId()}, gar ${cookie.getGarId()}: Manifest validation no crew`);
         req.session.manifestInvalidPeople = [];
         req.session.manifestErr = [
           {
@@ -157,9 +154,7 @@ module.exports = async (req, res) => {
       req.session.manifestInvalidPeople = manifest.invalidPeople;
       return res.redirect('/garfile/manifest');
     } catch (err) {
-      logger.error(
-        `user ${cookie.getUserDbId()}, gar ${cookie.getGarId()} > ${JSON.stringify(err)}`
-      );
+      logger.error(`user ${cookie.getUserDbId()}, gar ${cookie.getGarId()} > ${JSON.stringify(err)}`);
       req.session.manifestErr = [
         {
           message: 'Failed to submit manifest',

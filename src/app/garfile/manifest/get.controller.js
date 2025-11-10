@@ -66,16 +66,9 @@ module.exports = async (req, res) => {
 
     const isValidSavedPeople = await savedPeopleManifest.validate();
     const isValidGarPeople = await garPeopleManifest.validate();
-    const flaggedDuplicateSavedPeople = flagDuplicatesInSavedPeople(
-      initialSavedPeople,
-      garpeople.items
-    );
-    const savedPeople = flagInvalidSavedPeople(
-      flaggedDuplicateSavedPeople,
-      savedPeopleManifest.invalidPeople
-    );
-    const isInvalidSavedPeople =
-      savedPeople.filter((savedPerson) => savedPerson.isInvalid).length > 0;
+    const flaggedDuplicateSavedPeople = flagDuplicatesInSavedPeople(initialSavedPeople, garpeople.items);
+    const savedPeople = flagInvalidSavedPeople(flaggedDuplicateSavedPeople, savedPeopleManifest.invalidPeople);
+    const isInvalidSavedPeople = savedPeople.filter((savedPerson) => savedPerson.isInvalid).length > 0;
     const isUnableToAddPeople = isAllPeopleUnableToAdd(savedPeople);
 
     if (req.session.errMsg) {

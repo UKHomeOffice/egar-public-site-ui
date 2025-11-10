@@ -22,10 +22,7 @@ module.exports = (req, res) => {
           if (apiResponse.message === 'User not registered') {
             return res.redirect('/organisation/assignrole');
           }
-          if (
-            typeof apiResponse.email !== 'undefined' &&
-            apiResponse.email.toLowerCase() === email.toLowerCase()
-          ) {
+          if (typeof apiResponse.email !== 'undefined' && apiResponse.email.toLowerCase() === email.toLowerCase()) {
             res.render('app/organisation/inviteusers/userExistError');
             return;
           }
@@ -36,9 +33,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.error(
-        'Invite Users Organisation postcontroller - There was a problem inviting a user'
-      );
+      logger.error('Invite Users Organisation postcontroller - There was a problem inviting a user');
       logger.error(JSON.stringify(err));
       res.render('app/organisation/inviteusers/index', {
         cookie,

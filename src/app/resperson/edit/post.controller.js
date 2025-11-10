@@ -39,9 +39,7 @@ module.exports = (req, res) => {
             cookie,
             responsiblePerson,
             fixedBasedOperatorOptions,
-            errors: [
-              { message: 'There was a problem updating responsible person. Please try again' },
-            ],
+            errors: [{ message: 'There was a problem updating responsible person. Please try again' }],
           });
         });
     })

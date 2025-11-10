@@ -69,14 +69,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
         'Arrival port should be an ICAO or IATA code'
       ),
     ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        voyageObj.arrivalPort,
-        'Enter a value for the arrival port'
-      ),
-    ],
+    [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalPort, 'Enter a value for the arrival port')],
     [
       new ValidationRule(
         validator.preventZ,
@@ -93,14 +86,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
         'Departure port should be an ICAO or IATA code'
       ),
     ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        voyageObj.departurePort,
-        'Enter a value for the departure port'
-      ),
-    ],
+    [new ValidationRule(validator.notEmpty, '', voyageObj.departurePort, 'Enter a value for the departure port')],
     [
       new ValidationRule(
         validator.preventZ,
@@ -117,38 +103,10 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
         airportValidation.notBritishMsg
       ),
     ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        voyageObj.arrivalTime,
-        'Enter a value for the arrival time'
-      ),
-    ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        voyageObj.departureTime,
-        'Enter a value for the departure time'
-      ),
-    ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        voyageObj.arrivalDate,
-        'Enter a value for the arrival date'
-      ),
-    ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        voyageObj.departureDate,
-        'Enter a value for the departure date'
-      ),
-    ],
+    [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalTime, 'Enter a value for the arrival time')],
+    [new ValidationRule(validator.notEmpty, '', voyageObj.departureTime, 'Enter a value for the departure time')],
+    [new ValidationRule(validator.notEmpty, '', voyageObj.arrivalDate, 'Enter a value for the arrival date')],
+    [new ValidationRule(validator.notEmpty, '', voyageObj.departureDate, 'Enter a value for the departure date')],
     [
       new ValidationRule(
         validator.dateNotInPast,
@@ -175,12 +133,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     ],
 
     [
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        voyageObj.registration,
-        'Enter the registration of the craft'
-      ),
+      new ValidationRule(validator.notEmpty, '', voyageObj.registration, 'Enter the registration of the craft'),
       new ValidationRule(
         validator.isValidRegistrationLength,
         '',
@@ -189,12 +142,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       ),
     ],
     [
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        voyageObj.craftType,
-        'Enter the type of the craft'
-      ),
+      new ValidationRule(validator.notEmpty, '', voyageObj.craftType, 'Enter the type of the craft'),
       new ValidationRule(
         validator.isValidStringLength,
         '',
@@ -303,12 +251,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     }
 
     validationArr.push([
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        crew.issuingState,
-        `Enter a document issuing state for ${name}`
-      ),
+      new ValidationRule(validator.notEmpty, '', crew.issuingState, `Enter a document issuing state for ${name}`),
     ]);
     validationArr.push([
       new ValidationRule(
@@ -325,12 +268,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       ),
     ]);
     validationArr.push([
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        crew.documentNumber,
-        `Enter a document number for ${name}`
-      ),
+      new ValidationRule(validator.notEmpty, '', crew.documentNumber, `Enter a document number for ${name}`),
       new ValidationRule(
         validator.isValidStringLength,
         '',
@@ -345,12 +283,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       ),
     ]);
     validationArr.push([
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        crew.lastName,
-        `Enter a surname for ${peopleType} ${crew.firstName}`
-      ),
+      new ValidationRule(validator.notEmpty, '', crew.lastName, `Enter a surname for ${peopleType} ${crew.firstName}`),
       new ValidationRule(
         validator.isValidStringLength,
         '',
@@ -384,12 +317,8 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
         `Given names for ${name} must not contain special characters, apostrophes or numbers`
       ),
     ]);
-    validationArr.push([
-      new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a sex for ${name}`),
-    ]);
-    validationArr.push([
-      new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid sex for ${name}`),
-    ]);
+    validationArr.push([new ValidationRule(validator.notEmpty, '', crew.gender, `Enter a sex for ${name}`)]);
+    validationArr.push([new ValidationRule(validator.validGender, '', crew.gender, `Enter a valid sex for ${name}`)]);
     validationArr.push([
       new ValidationRule(
         validator.notEmpty,
@@ -419,12 +348,7 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       ),
     ]);
     validationArr.push([
-      new ValidationRule(
-        validator.notEmpty,
-        '',
-        crew.nationality,
-        `Enter a nationality for ${name}`
-      ),
+      new ValidationRule(validator.notEmpty, '', crew.nationality, `Enter a nationality for ${name}`),
     ]);
     validationArr.push([
       new ValidationRule(

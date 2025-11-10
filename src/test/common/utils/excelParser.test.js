@@ -44,11 +44,7 @@ describe('ExcelParser', () => {
   });
 
   it('Should not parse a non configured range of cells', () => {
-    const parser = new ExcelParser(
-      rangeWorkbook,
-      { cell1: { location: 'A' } },
-      { startRow: 1, terminator: 'STOP' }
-    );
+    const parser = new ExcelParser(rangeWorkbook, { cell1: { location: 'A' } }, { startRow: 1, terminator: 'STOP' });
     expect(typeof parser.rangeParse()).to.have.property('length');
     expect(parser.rangeParse()).to.have.length(3);
     expect(Object.keys(parser.rangeParse()[0])).to.have.length(1);

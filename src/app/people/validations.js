@@ -18,12 +18,7 @@ module.exports.validations = (req) => {
       ),
     ],
     [
-      new ValidationRule(
-        validator.isNotEmpty,
-        'firstName',
-        req.body.firstName,
-        'Enter the given names of the person'
-      ),
+      new ValidationRule(validator.isNotEmpty, 'firstName', req.body.firstName, 'Enter the given names of the person'),
       new ValidationRule(
         validator.isValidStringLength,
         'firstName',
@@ -36,20 +31,10 @@ module.exports.validations = (req) => {
         req.body.firstName,
         `Given names must not contain special characters, apostrophes or numbers`
       ),
-      new ValidationRule(
-        validator.notEmpty,
-        'firstName',
-        req.body.firstName,
-        'Enter the given names of the person'
-      ),
+      new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter the given names of the person'),
     ],
     [
-      new ValidationRule(
-        validator.isNotEmpty,
-        'lastName',
-        req.body.lastName,
-        'Enter the surname of the person'
-      ),
+      new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
       new ValidationRule(
         validator.isValidStringLength,
         'lastName',
@@ -62,12 +47,7 @@ module.exports.validations = (req) => {
         req.body.lastName,
         `Surname must not contain special characters, apostrophes or numbers`
       ),
-      new ValidationRule(
-        validator.notEmpty,
-        'lastName',
-        req.body.lastName,
-        'Enter the surname of the person'
-      ),
+      new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
     ],
     [
       new ValidationRule(
@@ -91,22 +71,8 @@ module.exports.validations = (req) => {
         `Place of birth must be ${MAX_STRING_LENGTH} characters or less`
       ),
     ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        'personType',
-        req.body.personType,
-        'Select the type of person'
-      ),
-    ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        'gender',
-        req.body.gender,
-        'Select the sex of the person'
-      ),
-    ],
+    [new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select the type of person')],
+    [new ValidationRule(validator.notEmpty, 'gender', req.body.gender, 'Select the sex of the person')],
     [
       new ValidationRule(
         validator.notEmpty,

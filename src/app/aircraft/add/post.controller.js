@@ -11,14 +11,7 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  let {
-    registration,
-    craftType,
-    craftBasePort,
-    craftBaseLat,
-    craftBaseLong,
-    portChoice = 'Yes',
-  } = req.body;
+  let { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice = 'Yes' } = req.body;
 
   if (portChoice === 'Yes') {
     craftBaseLat = null;
@@ -46,32 +39,30 @@ module.exports = (req, res) => {
       const craftBase = cookie.reduceCraftBase(craftBasePort, craftBaseLat, craftBaseLong);
 
       // call the API to update the data base and then
-      craftApi
-        .create(registration, craftType, craftBase, cookie.getUserDbId())
-        .then((apiResponse) => {
-          try {
-            const parsedResponse = JSON.parse(apiResponse);
-            if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-              res.render('app/aircraft/add/index', { errors: [parsedResponse], cookie });
-            } else {
-              // Set the page to a large number and expect the page to redirect back to
-              // the correct last page (two calls in exchange for less logic to calculate the last page)
-              pagination.setCurrentPage(req, '/aircraft', 1000000);
-              req.session.save(() => res.redirect('/aircraft'));
-            }
-          } catch (err) {
-            logger.error('Parsing attempt from API caused error, was not JSON');
-            let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
-            if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {
-              errMsg = { message: 'Craft already exists' };
-            }
-            res.render('app/aircraft/add/index', {
-              cookie,
-              craftObj,
-              errors: [errMsg],
-            });
+      craftApi.create(registration, craftType, craftBase, cookie.getUserDbId()).then((apiResponse) => {
+        try {
+          const parsedResponse = JSON.parse(apiResponse);
+          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+            res.render('app/aircraft/add/index', { errors: [parsedResponse], cookie });
+          } else {
+            // Set the page to a large number and expect the page to redirect back to
+            // the correct last page (two calls in exchange for less logic to calculate the last page)
+            pagination.setCurrentPage(req, '/aircraft', 1000000);
+            req.session.save(() => res.redirect('/aircraft'));
           }
-        });
+        } catch (err) {
+          logger.error('Parsing attempt from API caused error, was not JSON');
+          let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
+          if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {
+            errMsg = { message: 'Craft already exists' };
+          }
+          res.render('app/aircraft/add/index', {
+            cookie,
+            craftObj,
+            errors: [errMsg],
+          });
+        }
+      });
     })
     .catch((err) => {
       logger.info('Add craft postcontroller - There was a problem with adding the saved craft');

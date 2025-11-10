@@ -37,9 +37,7 @@ describe('ManifestModel', () => {
       const manifest = new Manifest('This will not work');
       expect(manifest).to.be.undefined;
     } catch (err) {
-      expect(err.message).to.contain(
-        `Unexpected token 'T', "This will not work" is not valid JSON`
-      );
+      expect(err.message).to.contain(`Unexpected token 'T', "This will not work" is not valid JSON`);
     }
   });
 

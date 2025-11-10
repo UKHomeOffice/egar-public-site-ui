@@ -77,14 +77,11 @@ describe('Organisation Edit Users Get Controller', () => {
     callController().then(() => {
       expect(req.session.errMsg).to.be.undefined;
       expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.not.have.been.calledOnceWithExactly(
-        'app/organisation/editusers/index',
-        {
-          cookie,
-          orgUser: [],
-          roles,
-        }
-      );
+      expect(res.render).to.not.have.been.calledOnceWithExactly('app/organisation/editusers/index', {
+        cookie,
+        orgUser: [],
+        roles,
+      });
       expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
     });
   });
@@ -106,18 +103,15 @@ describe('Organisation Edit Users Get Controller', () => {
     callController().then(() => {
       expect(req.session.errMsg).to.be.undefined;
       expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.not.have.been.calledOnceWithExactly(
-        'app/organisation/editusers/index',
-        {
-          cookie,
-          orgUser: {
-            id: 'PERSON-2',
-            userId: 'EXAMPLE-EDIT-USER-ID',
-            role: 'User',
-          },
-          roles,
-        }
-      );
+      expect(res.render).to.not.have.been.calledOnceWithExactly('app/organisation/editusers/index', {
+        cookie,
+        orgUser: {
+          id: 'PERSON-2',
+          userId: 'EXAMPLE-EDIT-USER-ID',
+          role: 'User',
+        },
+        roles,
+      });
       expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
     });
   });

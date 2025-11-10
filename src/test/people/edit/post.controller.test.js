@@ -109,12 +109,7 @@ describe('Person Edit Post Controller', () => {
               req.body.firstName,
               'Enter the given names of the person'
             ),
-            new ValidationRule(
-              validator.isNotEmpty,
-              'lastName',
-              req.body.lastName,
-              'Enter the surname of the person'
-            ),
+            new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
           ],
         });
       });

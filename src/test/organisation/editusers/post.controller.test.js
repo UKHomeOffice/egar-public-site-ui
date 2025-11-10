@@ -87,18 +87,8 @@ describe('Organisation Edit Users Post Controller', () => {
           },
           roles: roles,
           errors: [
-            new ValidationRule(
-              validator.notEmpty,
-              'firstName',
-              req.body.firstName,
-              'Enter given names'
-            ),
-            new ValidationRule(
-              validator.notEmpty,
-              'lastName',
-              req.body.lastName,
-              'Enter a surname'
-            ),
+            new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter given names'),
+            new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter a surname'),
             new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Provide a user role'),
           ],
         });
@@ -130,18 +120,8 @@ describe('Organisation Edit Users Post Controller', () => {
           },
           roles: nonAdminRoles,
           errors: [
-            new ValidationRule(
-              validator.notEmpty,
-              'firstName',
-              req.body.firstName,
-              'Enter given names'
-            ),
-            new ValidationRule(
-              validator.notEmpty,
-              'lastName',
-              req.body.lastName,
-              'Enter a surname'
-            ),
+            new ValidationRule(validator.notEmpty, 'firstName', req.body.firstName, 'Enter given names'),
+            new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter a surname'),
             new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Provide a user role'),
           ],
         });

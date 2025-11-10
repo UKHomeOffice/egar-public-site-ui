@@ -91,14 +91,9 @@ csv({
     });
     logger.info('Resulting output');
     logger.info(JSON.stringify(processedArray));
-    fs.writeFileSync(
-      'airport_codes.json',
-      JSON.stringify(processedArray, null, 2),
-      'utf8',
-      (err) => {
-        if (err) {
-          logger.error('An error occurred while saving to JSON');
-        }
+    fs.writeFileSync('airport_codes.json', JSON.stringify(processedArray, null, 2), 'utf8', (err) => {
+      if (err) {
+        logger.error('An error occurred while saving to JSON');
       }
-    );
+    });
   });

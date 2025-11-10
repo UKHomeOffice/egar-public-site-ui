@@ -57,9 +57,7 @@ describe('Manage User Detail Post Controller', () => {
     callController().then(() => {
       expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
         cookie,
-        errors: [
-          new ValidationRule(validator.isNotEmpty, 'firstname', '', 'Enter your given names'),
-        ],
+        errors: [new ValidationRule(validator.isNotEmpty, 'firstname', '', 'Enter your given names')],
       });
     });
 
@@ -68,14 +66,7 @@ describe('Manage User Detail Post Controller', () => {
     callController().then(() => {
       expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
         cookie,
-        errors: [
-          new ValidationRule(
-            validator.isNotEmpty,
-            'firstname',
-            undefined,
-            'Enter your given names'
-          ),
-        ],
+        errors: [new ValidationRule(validator.isNotEmpty, 'firstname', undefined, 'Enter your given names')],
       });
     });
   });
@@ -93,9 +84,7 @@ describe('Manage User Detail Post Controller', () => {
     callController().then(() => {
       expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
         cookie,
-        errors: [
-          new ValidationRule(validator.isNotEmpty, 'lastname', '', 'Enter your family name'),
-        ],
+        errors: [new ValidationRule(validator.isNotEmpty, 'lastname', '', 'Enter your family name')],
       });
     });
   });
@@ -138,11 +127,7 @@ describe('Manage User Detail Post Controller', () => {
     callController()
       .then()
       .then(() => {
-        expect(userApi.updateDetails).to.have.been.calledWith(
-          'kylo.ren@firstorder.emp',
-          'Kylo Changed',
-          'Ren'
-        );
+        expect(userApi.updateDetails).to.have.been.calledWith('kylo.ren@firstorder.emp', 'Kylo Changed', 'Ren');
         expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
           cookie,
           errors: [{ message: 'Person does not exist' }],
@@ -171,11 +156,7 @@ describe('Manage User Detail Post Controller', () => {
     callController()
       .then()
       .then(() => {
-        expect(userApi.updateDetails).to.have.been.calledWith(
-          'kylo.ren@firstorder.emp',
-          'Kylo Changed',
-          'Ren'
-        );
+        expect(userApi.updateDetails).to.have.been.calledWith('kylo.ren@firstorder.emp', 'Kylo Changed', 'Ren');
         expect(req.session.save).to.have.been.called;
       });
   });

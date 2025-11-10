@@ -11,10 +11,7 @@ module.exports = {
   generateHash(token) {
     logger.debug('Generating hash for token');
     // Replace secret string
-    const hash = crypto
-      .createHmac('sha256', config.NOTIFY_TOKEN_SECRET)
-      .update(token)
-      .digest('hex');
+    const hash = crypto.createHmac('sha256', config.NOTIFY_TOKEN_SECRET).update(token).digest('hex');
     return hash;
   },
 

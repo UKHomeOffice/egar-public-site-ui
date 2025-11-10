@@ -1,9 +1,5 @@
 const logger = require('../../../common/utils/logger')(__filename);
-const {
-  API_BASE,
-  ONE_LOGIN_SHOW_ONE_LOGIN,
-  ONE_LOGIN_POST_MIGRATION,
-} = require('../../../common/config');
+const { API_BASE, ONE_LOGIN_SHOW_ONE_LOGIN, ONE_LOGIN_POST_MIGRATION } = require('../../../common/config');
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
 const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
@@ -33,10 +29,7 @@ module.exports = async (req, res) => {
   try {
     const apiResponse = await verifyUserService.getUserInviteTokenByTokenId(hashedToken);
 
-    if (
-      apiResponse['message'] === 'Token expired' ||
-      apiResponse['message'] === 'Token already used'
-    ) {
+    if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
       return res.redirect('/error/inviteExpiredError');
     }
 

@@ -77,8 +77,7 @@ module.exports = async (req, res) => {
         const lastDepartureDateString =
           departureDate && departureTime ? `${departureDate}T${departureTime}.000Z` : null;
         const durationInDeparture = garApi.getDurationBeforeDeparture(departureDate, departureTime);
-        const numberOf0TResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0T')).items
-          .length;
+        const numberOf0TResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0T')).items.length;
         // Do the check here
         if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
           logger.error(
@@ -107,10 +106,7 @@ module.exports = async (req, res) => {
           garsupportingdocs: supportingDocuments,
           successMsg,
           successHeader,
-          isJourneyUKInbound: airportValidation.isJourneyUKInbound(
-            parsedGar.departurePort,
-            parsedGar.arrivalPort
-          ),
+          isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort),
           resubmitted,
           durationInDeparture,
           numberOf0TResponseCodes,

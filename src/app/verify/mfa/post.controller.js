@@ -12,9 +12,7 @@ module.exports = (req, res) => {
   logger.debug('In verify / mfa post controller');
   const { mfaCode } = req.body;
 
-  const mfaCodeChain = [
-    new ValidationRule(validator.notEmpty, 'mfaCode', mfaCode, 'Enter your code'),
-  ];
+  const mfaCodeChain = [new ValidationRule(validator.notEmpty, 'mfaCode', mfaCode, 'Enter your code')];
 
   const cookie = new CookieModel(req);
 

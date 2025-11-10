@@ -26,18 +26,13 @@ module.exports = (req, res) => {
       const garsupportingdocs = JSON.parse(apiResponse[2]);
       validator.handleResponseError(garsupportingdocs);
 
-      const isJourneyUkInbound = airportValidation.isJourneyUKInbound(
-        garfile.departurePort,
-        garfile.arrivalPort
-      );
+      const isJourneyUkInbound = airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort);
 
       const validations = validationList.validations(garfile, garpeople, frmUpload);
 
       if (!garfile.isMilitaryFlight && !manifest.validateCaptainCrew()) {
         const validateCaptainCrewMsg = __('has_no_crew_or_captains');
-        validations.push([
-          new ValidationRule(validator.valuetrue, 'manifest', '', validateCaptainCrewMsg),
-        ]);
+        validations.push([new ValidationRule(validator.valuetrue, 'manifest', '', validateCaptainCrewMsg)]);
       }
 
       const renderObj = {
@@ -55,8 +50,7 @@ module.exports = (req, res) => {
         .then(() => {
           if (frmUpload) {
             renderObj.successHeader = 'GAR file is uploaded successfully';
-            renderObj.successMsg =
-              'Complete Responsible person details & Customs declarations below';
+            renderObj.successMsg = 'Complete Responsible person details & Customs declarations below';
           }
           res.render('app/garfile/review/index', renderObj);
         })

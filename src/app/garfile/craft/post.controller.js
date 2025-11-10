@@ -46,17 +46,8 @@ module.exports = (req, res) => {
       craftObj.craftBaseLong = req.body.craftBaseLong;
     }
 
-    craftObj.craftBase = cookie.reduceCraftBase(
-      craftObj.craftBasePort,
-      craftObj.craftBaseLat,
-      craftObj.craftBaseLong
-    );
-    cookie.setGarCraft(
-      craftObj.registration,
-      craftObj.craftType,
-      craftObj.craftBase,
-      craftObj.portChoice
-    );
+    craftObj.craftBase = cookie.reduceCraftBase(craftObj.craftBasePort, craftObj.craftBaseLat, craftObj.craftBaseLong);
+    cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase, craftObj.portChoice);
     const validations = validationList.validations(craftObj);
 
     validator

@@ -10,10 +10,7 @@ const userCreateApi = require('../../../common/services/createUserApi');
 const tokenApi = require('../../../common/services/tokenApi');
 const whitelist = require('../../../common/services/whiteList');
 const config = require('../../../common/config');
-const {
-  USER_FIRST_NAME_CHARACTER_COUNT,
-  USER_SURNAME_CHARACTER_COUNT,
-} = require('../../../common/config/index');
+const { USER_FIRST_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config/index');
 
 const regFailureError = {
   message: 'Registration failed, try again',
@@ -45,21 +42,11 @@ const createValidationChains = (fname, lname, usrname, cusrname) => {
   const userChain = [
     new ValidationRule(validator.notEmpty, 'userId', usrname, 'Please enter your email'),
     new ValidationRule(validator.email, 'userId', usrname, 'Please enter a valid email address'),
-    new ValidationRule(
-      validator.valuetrue,
-      'userId',
-      usrname === cusrname,
-      'Please ensure the email addresses match'
-    ),
+    new ValidationRule(validator.valuetrue, 'userId', usrname === cusrname, 'Please ensure the email addresses match'),
   ];
   const confirmuserChain = [
     new ValidationRule(validator.notEmpty, 'cUserId', cusrname, 'Please confirm the email address'),
-    new ValidationRule(
-      validator.valuetrue,
-      'cUserId',
-      usrname === cusrname,
-      'Please ensure the email addresses match'
-    ),
+    new ValidationRule(validator.valuetrue, 'cUserId', usrname === cusrname, 'Please ensure the email addresses match'),
   ];
 
   return [userChain, confirmuserChain, fnameChain, lnameChain];

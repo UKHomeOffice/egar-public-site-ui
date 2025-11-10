@@ -14,17 +14,11 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validations = (craftObj) => {
   logger.info('CraftObj: ' + JSON.stringify(craftObj));
 
-  const { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice } =
-    craftObj;
+  const { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice } = craftObj;
 
   const validationsArray = [
     [
-      new ValidationRule(
-        validator.notEmpty,
-        'registration',
-        registration,
-        i18n.__('validation_aircraft_registration')
-      ),
+      new ValidationRule(validator.notEmpty, 'registration', registration, i18n.__('validation_aircraft_registration')),
       new ValidationRule(
         validator.isValidRegistrationLength,
         'registration',
@@ -33,12 +27,7 @@ const validations = (craftObj) => {
       ),
     ],
     [
-      new ValidationRule(
-        validator.notEmpty,
-        'craftType',
-        craftType,
-        i18n.__('validation_aircraft_type')
-      ),
+      new ValidationRule(validator.notEmpty, 'craftType', craftType, i18n.__('validation_aircraft_type')),
       new ValidationRule(
         validator.isValidStringLength,
         'craftType',
@@ -50,12 +39,7 @@ const validations = (craftObj) => {
 
   if (portChoice === 'Yes') {
     validationsArray.push([
-      new ValidationRule(
-        validator.notEmpty,
-        'craftBasePort',
-        craftBasePort,
-        __('validation_aircraft_base')
-      ),
+      new ValidationRule(validator.notEmpty, 'craftBasePort', craftBasePort, __('validation_aircraft_base')),
       new ValidationRule(
         validator.isValidAirportCode,
         'craftBasePort',
@@ -65,22 +49,8 @@ const validations = (craftObj) => {
     ]);
   } else {
     validationsArray.push(
-      [
-        new ValidationRule(
-          validator.latitude,
-          'craftBaseLat',
-          craftBaseLat,
-          __('field_latitude_validation')
-        ),
-      ],
-      [
-        new ValidationRule(
-          validator.longitude,
-          'craftBaseLong',
-          craftBaseLong,
-          __('field_longitude_validation')
-        ),
-      ]
+      [new ValidationRule(validator.latitude, 'craftBaseLat', craftBaseLat, __('field_latitude_validation'))],
+      [new ValidationRule(validator.longitude, 'craftBaseLong', craftBaseLong, __('field_longitude_validation'))]
     );
   }
   return validationsArray;

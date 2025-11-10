@@ -287,11 +287,7 @@ function currentOrPastDate(dObj) {
     Returns true if supplied dates are invalid to avoid duplicate error messages being displayed.
     The dateNotMoreThanMonthInFuture function will cover this error.
   */
-  if (
-    validDay(dObj.d, dObj.m, dObj.y) === false ||
-    validMonth(dObj.m) === false ||
-    validYear(dObj.y) === false
-  ) {
+  if (validDay(dObj.d, dObj.m, dObj.y) === false || validMonth(dObj.m) === false || validYear(dObj.y) === false) {
     return true;
   }
 
@@ -400,12 +396,7 @@ const numericDateElements = (dObj) => isNumeric(dObj.d) && isNumeric(dObj.m) && 
 
 function realDate(dObj) {
   if (dObj === null || dObj === undefined) return false;
-  return (
-    numericDateElements(dObj) &&
-    validDay(dObj.d, dObj.m, dObj.y) &&
-    validMonth(dObj.m) &&
-    validYear(dObj.y)
-  );
+  return numericDateElements(dObj) && validDay(dObj.d, dObj.m, dObj.y) && validMonth(dObj.m) && validYear(dObj.y);
 }
 
 function bornAfter1900(dObj) {
@@ -657,10 +648,7 @@ function isValidStringLength(value) {
  * @return {boolean}
  */
 function isValidOptionalStringLength(value) {
-  return (
-    isEmpty(value) ||
-    (!hasLeadingSpace(value) && !hasOnlySymbols(value) && value.length <= MAX_STRING_LENGTH)
-  );
+  return isEmpty(value) || (!hasLeadingSpace(value) && !hasOnlySymbols(value) && value.length <= MAX_STRING_LENGTH);
 }
 
 /**

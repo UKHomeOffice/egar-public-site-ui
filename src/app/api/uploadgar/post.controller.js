@@ -17,9 +17,7 @@ const checkFileIsExcel = (req, res) => {
     const fileSize = req.file.size;
     const mimeType = req.file.mimetype;
 
-    logger.debug(
-      `In Gar File Upload Service. Uploaded File: ${fileName}, Size: ${fileSize}, MIME: ${mimeType}`
-    );
+    logger.debug(`In Gar File Upload Service. Uploaded File: ${fileName}, Size: ${fileSize}, MIME: ${mimeType}`);
 
     logger.debug('Creating a stream of the incoming buffer');
     const readStream = new stream.Readable();
@@ -29,10 +27,7 @@ const checkFileIsExcel = (req, res) => {
 
     const fileExtension = fileName.split('.').pop();
     // Redirect if incorrect file type is uploaded
-    if (
-      (fileExtension !== 'xls' && fileExtension !== 'xlsx') ||
-      typeof fileExtension === 'undefined'
-    ) {
+    if ((fileExtension !== 'xls' && fileExtension !== 'xlsx') || typeof fileExtension === 'undefined') {
       req.session.failureMsg = i18n.__('validator_api_uploadgar_incorrect_type');
       req.session.failureIdentifier = 'file';
       res.redirect('garfile/garupload');

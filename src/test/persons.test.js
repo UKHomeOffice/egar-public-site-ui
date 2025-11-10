@@ -130,9 +130,7 @@ describe('PersonService', () => {
 
   it('should throw an error when getting all the saved people for an individual', () => {
     nock.cleanAll();
-    nock(BASE_URL)
-      .get(`/user/${userId}/people`)
-      .replyWithError({ message: 'Example getPeople error', code: 404 });
+    nock(BASE_URL).get(`/user/${userId}/people`).replyWithError({ message: 'Example getPeople error', code: 404 });
 
     personApi
       .getPeople(userId, 'individual')

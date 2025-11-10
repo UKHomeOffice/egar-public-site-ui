@@ -43,9 +43,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} garApi.patch request was not successful : ${responseErrorMessage}`
-            );
+            logger.error(`${garId} garApi.patch request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -78,9 +76,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} garApi.get request was not successful : ${responseErrorMessage}`
-            );
+            logger.error(`${garId} garApi.get request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -126,9 +122,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} garApi.getPeople request was not successful : ${responseErrorMessage}`
-            );
+            logger.error(`${garId} garApi.getPeople request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -163,9 +157,7 @@ module.exports = {
    */
   getGars(userId, userType, page, orgId = null) {
     const garsUrl =
-      userType === 'Individual'
-        ? endpoints.getIndividualGars(userId, 1)
-        : endpoints.getOrgGars(userId, orgId, page);
+      userType === 'Individual' ? endpoints.getIndividualGars(userId, 1) : endpoints.getOrgGars(userId, orgId, page);
     return new Promise((resolve, reject) => {
       request.get(
         {
@@ -181,9 +173,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${userId} garApi.getGars request was not successful : ${responseErrorMessage}`
-            );
+            logger.error(`${userId} garApi.getGars request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -217,9 +207,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} garApi.getSupportingDocs request was not successful : ${responseErrorMessage}`
-            );
+            logger.error(`${garId} garApi.getSupportingDocs request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -283,9 +271,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`
-            );
+            logger.error(`${garId} garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -322,9 +308,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} garApi.submitGARForException request was not successful : ${responseErrorMessage}`
-            );
+            logger.error(`${garId} garApi.submitGARForException request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -363,9 +347,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} garApi.updateGarPerson request was not successful : ${responseErrorMessage}`
-            );
+            logger.error(`${garId} garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }
@@ -434,9 +416,7 @@ module.exports = {
 
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} garApi.progress request was not successful : ${responseErrorMessage}`
-            );
+            logger.error(`${garId} garApi.progress request was not successful : ${responseErrorMessage}`);
             resolve(body);
             return;
           }

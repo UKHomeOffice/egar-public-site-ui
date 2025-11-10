@@ -109,11 +109,7 @@ describe('GAR Craft Post Controller', () => {
         craftBase: 'LAX',
       };
       cookie = new CookieModel(req);
-      cookie.setGarCraft(
-        craftResponse.registration,
-        craftResponse.craftType,
-        craftResponse.craftBase
-      );
+      cookie.setGarCraft(craftResponse.registration, craftResponse.craftType, craftResponse.craftBase);
       craftApiStub.resolves(JSON.stringify(craftResponse));
 
       const callController = async () => {
@@ -151,12 +147,7 @@ describe('GAR Craft Post Controller', () => {
           expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
             cookie,
             errors: [
-              new ValidationRule(
-                validator.notEmpty,
-                'craftBasePort',
-                '',
-                'Enter an aircraft home port / location'
-              ),
+              new ValidationRule(validator.notEmpty, 'craftBasePort', '', 'Enter an aircraft home port / location'),
             ],
           });
         });

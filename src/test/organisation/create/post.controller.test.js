@@ -56,14 +56,7 @@ describe('Organisation Create Post Controller', () => {
       expect(orgApiStub).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
         cookie,
-        errors: [
-          new ValidationRule(
-            validator.notEmpty,
-            'orgName',
-            '',
-            'Enter the name of the organisation'
-          ),
-        ],
+        errors: [new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation')],
       });
     });
   });
@@ -142,12 +135,9 @@ describe('Organisation Create Post Controller', () => {
         expect(req.session.org.i).to.eq('NEW-ORG-ID-123');
         expect(req.session.u.rl).to.eq('Admin');
         expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
-        expect(res.render).to.have.been.calledOnceWithExactly(
-          'app/organisation/createsuccess/index',
-          {
-            cookie,
-          }
-        );
+        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/createsuccess/index', {
+          cookie,
+        });
       });
   });
 });

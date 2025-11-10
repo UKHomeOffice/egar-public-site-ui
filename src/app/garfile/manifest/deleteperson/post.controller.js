@@ -7,8 +7,7 @@ module.exports = (req, res) => {
   const userId = cookie.getUserDbId();
   logger.debug(`User: ${userId} In garfile / manifest / deleteperson post controller`);
 
-  const garpeopleIdsToDelete =
-    typeof req.body.garPeopleId === 'string' ? [req.body.garPeopleId] : req.body.garPeopleId;
+  const garpeopleIdsToDelete = typeof req.body.garPeopleId === 'string' ? [req.body.garPeopleId] : req.body.garPeopleId;
 
   const deleteErr = { message: 'Failed to delete GAR person. Try again' };
 
@@ -18,9 +17,7 @@ module.exports = (req, res) => {
   }
 
   if (!Array.isArray(garpeopleIdsToDelete)) {
-    logger.error(
-      `User: ${userId} ${garpeopleIdsToDelete} Id provided is not array, redirecting to manifest page`
-    );
+    logger.error(`User: ${userId} ${garpeopleIdsToDelete} Id provided is not array, redirecting to manifest page`);
     return res.redirect('/garfile/manifest');
   }
 

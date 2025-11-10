@@ -21,11 +21,7 @@ describe('Admin deletion type is correctly determined from organisation users in
 
     const adminUserOrgUsers = [{ role: { name: 'Admin' } }, { role: { name: 'User' } }];
 
-    const threeOrgUsers = [
-      { role: { name: 'Admin' } },
-      { role: { name: 'Manager' } },
-      { role: { name: 'User' } },
-    ];
+    const threeOrgUsers = [{ role: { name: 'Admin' } }, { role: { name: 'Manager' } }, { role: { name: 'User' } }];
 
     expect(adminDeletionType(adminManagerOrgUsers)).to.equal('DO_NOT_DELETE_ADMIN');
     expect(adminDeletionType(adminUserOrgUsers)).to.equal('DO_NOT_DELETE_ADMIN');

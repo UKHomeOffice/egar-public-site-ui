@@ -4,9 +4,7 @@ const logger = require('../utils/logger')(__filename);
 const checkUserInCookie = (cookie) => {
   const userDbIdNotSet = cookie.getUserDbId() === undefined || cookie.getUserDbId() === null;
   const userVerifiedNotSet =
-    cookie.getUserVerified() === undefined ||
-    cookie.getUserVerified() === null ||
-    !cookie.getUserVerified();
+    cookie.getUserVerified() === undefined || cookie.getUserVerified() === null || !cookie.getUserVerified();
   const userRoleNotSet = cookie.getUserRole() === undefined || cookie.getUserRole() === null;
 
   return userDbIdNotSet || userVerifiedNotSet || userRoleNotSet;

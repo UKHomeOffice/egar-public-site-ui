@@ -52,9 +52,7 @@ describe('OrganisationService', () => {
 
   it('should throw an error when getting an organisations details', () => {
     nock.cleanAll();
-    nock(BASE_URL)
-      .get(`${url}/${orgId}`)
-      .replyWithError({ message: 'Example get error', code: 404 });
+    nock(BASE_URL).get(`${url}/${orgId}`).replyWithError({ message: 'Example get error', code: 404 });
 
     organisationApi
       .get(orgId)

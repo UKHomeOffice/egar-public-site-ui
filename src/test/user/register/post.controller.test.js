@@ -129,18 +129,8 @@ describe('User Register Post Controller', () => {
         lname: lName,
         usrname: email,
         errors: [
-          new ValidationRule(
-            validator.validName,
-            'userFname',
-            fName,
-            'Please enter valid given names'
-          ),
-          new ValidationRule(
-            validator.validName,
-            'userLname',
-            lName,
-            'Please enter a valid surname'
-          ),
+          new ValidationRule(validator.validName, 'userFname', fName, 'Please enter valid given names'),
+          new ValidationRule(validator.validName, 'userLname', lName, 'Please enter a valid surname'),
         ],
       });
     });
@@ -191,12 +181,7 @@ describe('User Register Post Controller', () => {
     const cookie = new CookieModel(request);
     callController()
       .then(() => {
-        expect(userCreateApi.post).to.have.been.calledWith(
-          fName,
-          lName,
-          email,
-          request.session.inv.token
-        );
+        expect(userCreateApi.post).to.have.been.calledWith(fName, lName, email, request.session.inv.token);
         expect(sendTokenService.send).to.have.been.called;
       })
       .then(() => {
@@ -207,8 +192,7 @@ describe('User Register Post Controller', () => {
   function stringGen(len) {
     var text = '';
     var charset = 'abcdefghijklmnopqrstuvwxyz';
-    for (var i = 0; i < len; i++)
-      text += charset.charAt(Math.floor(Math.random() * charset.length));
+    for (var i = 0; i < len; i++) text += charset.charAt(Math.floor(Math.random() * charset.length));
     return text;
   }
 
@@ -287,18 +271,8 @@ describe('User Register Post Controller', () => {
         lname: 'V4D3R',
         usrname: 'dvader@empire.net',
         errors: [
-          new ValidationRule(
-            validator.validName,
-            'userFname',
-            'D4rth',
-            'Please enter valid given names'
-          ),
-          new ValidationRule(
-            validator.validName,
-            'userLname',
-            'V4D3R',
-            'Please enter a valid surname'
-          ),
+          new ValidationRule(validator.validName, 'userFname', 'D4rth', 'Please enter valid given names'),
+          new ValidationRule(validator.validName, 'userLname', 'V4D3R', 'Please enter a valid surname'),
         ],
       });
     });
@@ -354,9 +328,7 @@ describe('User Register Post Controller', () => {
     });
 
     it('should return an error if the whiteListService rejects', () => {
-      sinon
-        .stub(whiteListService, 'isWhitelisted')
-        .rejects('whiteListService.isWhitelisted Example Reject');
+      sinon.stub(whiteListService, 'isWhitelisted').rejects('whiteListService.isWhitelisted Example Reject');
       const cookie = new CookieModel(req);
 
       const callController = async () => {
@@ -395,17 +367,8 @@ describe('User Register Post Controller', () => {
 
       callController()
         .then(() => {
-          expect(userCreateApi.post).to.have.been.calledWith(
-            'Darth',
-            'Vader',
-            'dvader@empire.net',
-            sinon.match.falsy
-          );
-          expect(sendTokenService.send).to.have.been.calledWith(
-            'Darth',
-            'dvader@empire.net',
-            sinon.match.string
-          );
+          expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'dvader@empire.net', sinon.match.falsy);
+          expect(sendTokenService.send).to.have.been.calledWith('Darth', 'dvader@empire.net', sinon.match.string);
         })
         .then(() => {
           expect(res.redirect).to.have.been.calledWith('/user/regmsg');
@@ -430,17 +393,8 @@ describe('User Register Post Controller', () => {
 
       callController()
         .then(() => {
-          expect(userCreateApi.post).to.have.been.calledWith(
-            'Darth',
-            'Vader',
-            'CAPITAL@rAnDoM.net',
-            sinon.match.falsy
-          );
-          expect(sendTokenService.send).to.have.been.calledWith(
-            'Darth',
-            'CAPITAL@rAnDoM.net',
-            sinon.match.string
-          );
+          expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'CAPITAL@rAnDoM.net', sinon.match.falsy);
+          expect(sendTokenService.send).to.have.been.calledWith('Darth', 'CAPITAL@rAnDoM.net', sinon.match.string);
         })
         .then(() => {
           expect(res.redirect).to.have.been.calledWith('/user/regmsg');
@@ -464,17 +418,8 @@ describe('User Register Post Controller', () => {
 
       callController()
         .then(() => {
-          expect(userCreateApi.post).to.have.been.calledWith(
-            'Darth',
-            'Vader',
-            'dvader@empire.net',
-            sinon.match.falsy
-          );
-          expect(sendTokenService.send).to.have.been.calledWith(
-            'Darth',
-            'dvader@empire.net',
-            sinon.match.string
-          );
+          expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'dvader@empire.net', sinon.match.falsy);
+          expect(sendTokenService.send).to.have.been.calledWith('Darth', 'dvader@empire.net', sinon.match.string);
         })
         .then(() => {
           expect(res.render).to.not.been.called;
@@ -505,12 +450,7 @@ describe('User Register Post Controller', () => {
 
     callController()
       .then(() => {
-        expect(userCreateApi.post).to.have.been.calledWith(
-          'Darth',
-          'Vader',
-          'dvader@empire.net',
-          sinon.match.falsy
-        );
+        expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'dvader@empire.net', sinon.match.falsy);
         expect(sendTokenService.send).to.not.have.been.called;
         expect(req.session.save).to.have.been.called;
       })
@@ -540,12 +480,7 @@ describe('User Register Post Controller', () => {
 
     callController()
       .then(() => {
-        expect(userCreateApi.post).to.have.been.calledWith(
-          'Darth',
-          'Vader',
-          'dvader@empire.net',
-          sinon.match.falsy
-        );
+        expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'dvader@empire.net', sinon.match.falsy);
         expect(sendTokenService.send).to.not.have.been.called;
         expect(req.session.save).to.have.been.called;
       })
@@ -567,12 +502,7 @@ describe('User Register Post Controller', () => {
 
     callController()
       .then(() => {
-        expect(userCreateApi.post).to.have.been.calledWith(
-          'Darth',
-          'Vader',
-          'dvader@empire.net',
-          sinon.match.falsy
-        );
+        expect(userCreateApi.post).to.have.been.calledWith('Darth', 'Vader', 'dvader@empire.net', sinon.match.falsy);
         expect(sendTokenService.send).to.not.have.been.called;
         expect(res.render).to.not.have.been.called;
       })

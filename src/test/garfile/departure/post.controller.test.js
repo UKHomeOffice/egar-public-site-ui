@@ -95,12 +95,7 @@ describe('Departure Post Controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/departure/index', {
         cookie,
         errors: [
-          new ValidationRule(
-            validator.notEmpty,
-            'portChoice',
-            undefined,
-            'Select whether the port code is known'
-          ),
+          new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known'),
         ],
       });
     });
@@ -159,12 +154,7 @@ describe('Departure Post Controller', () => {
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/departure/index', {
           cookie,
           errors: [
-            new ValidationRule(
-              validator.notEmpty,
-              'portChoice',
-              undefined,
-              'Select whether the port code is known'
-            ),
+            new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known'),
             new ValidationRule(
               validator.latitude,
               'departureLat',
@@ -277,11 +267,7 @@ describe('Departure Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('12345');
-        expect(garApi.patch).to.have.been.calledWith(
-          '12345',
-          cookie.getGarStatus(),
-          cookie.getGarDepartureVoyage()
-        );
+        expect(garApi.patch).to.have.been.calledWith('12345', cookie.getGarStatus(), cookie.getGarDepartureVoyage());
       });
     });
 
@@ -299,11 +285,7 @@ describe('Departure Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('12345');
-        expect(garApi.patch).to.have.been.calledWith(
-          '12345',
-          cookie.getGarStatus(),
-          cookie.getGarDepartureVoyage()
-        );
+        expect(garApi.patch).to.have.been.calledWith('12345', cookie.getGarStatus(), cookie.getGarDepartureVoyage());
         expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
           cookie,
           errors: [
@@ -330,11 +312,7 @@ describe('Departure Post Controller', () => {
       callController().then(() => {
         expect(req.body.buttonClicked).to.be.undefined;
         expect(garApi.get).to.have.been.calledWith('12345');
-        expect(garApi.patch).to.have.been.calledWith(
-          '12345',
-          cookie.getGarStatus(),
-          cookie.getGarDepartureVoyage()
-        );
+        expect(garApi.patch).to.have.been.calledWith('12345', cookie.getGarStatus(), cookie.getGarDepartureVoyage());
         expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
       });
     });
@@ -350,11 +328,7 @@ describe('Departure Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('12345');
-        expect(garApi.patch).to.have.been.calledWith(
-          '12345',
-          cookie.getGarStatus(),
-          cookie.getGarDepartureVoyage()
-        );
+        expect(garApi.patch).to.have.been.calledWith('12345', cookie.getGarStatus(), cookie.getGarDepartureVoyage());
         expect(res.redirect).to.have.been.calledWith('/garfile/arrival');
       });
     });

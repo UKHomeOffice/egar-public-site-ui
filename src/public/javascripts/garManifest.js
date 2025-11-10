@@ -108,9 +108,7 @@ function setupDeletePeopleDialog() {
   deletePeopleDialogButton.addEventListener('click', (e) => {
     const garPeopleLastNames = Array.from(document.getElementsByClassName('garPersonLastName'));
     const garPeopleFirstNames = Array.from(document.getElementsByClassName('garPersonFirstName'));
-    const garPeopleNationalities = Array.from(
-      document.getElementsByClassName('garPersonNationality')
-    );
+    const garPeopleNationalities = Array.from(document.getElementsByClassName('garPersonNationality'));
 
     const manifestTableRows = Array.from(
       document.querySelectorAll('#manifestTable_row > .govuk-table__row:has(.jsCheckbox:checked)')
@@ -121,15 +119,9 @@ function setupDeletePeopleDialog() {
     });
 
     const listOfPeopleToDelete = manifestTableRows.map((tableRow) => {
-      const [garPersonLastName] = garPeopleLastNames.filter((element) =>
-        tableRow.contains(element)
-      );
-      const [garPersonFirstName] = garPeopleFirstNames.filter((element) =>
-        tableRow.contains(element)
-      );
-      const [garPersonNationality] = garPeopleNationalities.filter((element) =>
-        tableRow.contains(element)
-      );
+      const [garPersonLastName] = garPeopleLastNames.filter((element) => tableRow.contains(element));
+      const [garPersonFirstName] = garPeopleFirstNames.filter((element) => tableRow.contains(element));
+      const [garPersonNationality] = garPeopleNationalities.filter((element) => tableRow.contains(element));
 
       const garPersonToDelete = document.createElement('li');
 

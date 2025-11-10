@@ -105,8 +105,7 @@ class Manifest {
     logger.debug(`Invalid people: ${this.invalidPeople}`);
     this.invalidPeople.forEach((person) => {
       this.validationArr.push({
-        message:
-          'Click the edit link of the person(s) with the errors to edit and correct their details.',
+        message: 'Click the edit link of the person(s) with the errors to edit and correct their details.',
         identifier: person,
       });
     });

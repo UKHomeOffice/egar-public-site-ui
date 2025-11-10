@@ -100,12 +100,7 @@ describe('Arrival Post Controller', () => {
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/arrival/index', {
           cookie,
           errors: [
-            new ValidationRule(
-              validator.notEmpty,
-              'portChoice',
-              undefined,
-              'Select whether the port code is known'
-            ),
+            new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known'),
           ],
         });
       });
@@ -129,12 +124,7 @@ describe('Arrival Post Controller', () => {
         expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
           cookie,
           errors: [
-            new ValidationRule(
-              validator.notEmpty,
-              'arrivalPort',
-              '',
-              'The arrival airport code must be entered'
-            ),
+            new ValidationRule(validator.notEmpty, 'arrivalPort', '', 'The arrival airport code must be entered'),
           ],
         });
       });
@@ -268,11 +258,7 @@ describe('Arrival Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith(
-          'ABCDEFGH',
-          cookie.getGarStatus(),
-          cookie.getGarArrivalVoyage()
-        );
+        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
       });
     });
 
@@ -290,11 +276,7 @@ describe('Arrival Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith(
-          'ABCDEFGH',
-          cookie.getGarStatus(),
-          cookie.getGarArrivalVoyage()
-        );
+        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
         expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
           cookie,
           errors: [
@@ -321,11 +303,7 @@ describe('Arrival Post Controller', () => {
       callController().then(() => {
         expect(req.body.buttonClicked).to.be.undefined;
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith(
-          'ABCDEFGH',
-          cookie.getGarStatus(),
-          cookie.getGarArrivalVoyage()
-        );
+        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
         expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
       });
     });
@@ -341,11 +319,7 @@ describe('Arrival Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith(
-          'ABCDEFGH',
-          cookie.getGarStatus(),
-          cookie.getGarArrivalVoyage()
-        );
+        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
         expect(res.redirect).to.have.been.calledWith('/garfile/craft');
       });
     });

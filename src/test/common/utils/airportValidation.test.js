@@ -6,9 +6,7 @@ const airportValidation = require('../../../common/utils/airportValidation');
 
 describe('Airport Validation', () => {
   it('should return correct `not British message`', () => {
-    expect(airportValidation.notBritishMsg).to.eq(
-      'Either the Arrival or Departure port must be a UK port'
-    );
+    expect(airportValidation.notBritishMsg).to.eq('Either the Arrival or Departure port must be a UK port');
   });
 
   it('should confirm Gatwick as British', () => {

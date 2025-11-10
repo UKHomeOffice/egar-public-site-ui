@@ -81,17 +81,13 @@ describe('Send Token Service', () => {
         chai.assert.fail('Should not reach here');
       })
       .catch((err) => {
-        expect(notifyStub.sendEmail).to.have.been.calledOnceWithExactly(
-          'EXAMPLE_TEMPLATE_ID_2',
-          'jeff@somewhere.com',
-          {
-            personalisation: {
-              first_name: 'Jeff',
-              token: 'ABC123',
-              base_url: 'randomsite.com',
-            },
-          }
-        );
+        expect(notifyStub.sendEmail).to.have.been.calledOnceWithExactly('EXAMPLE_TEMPLATE_ID_2', 'jeff@somewhere.com', {
+          personalisation: {
+            first_name: 'Jeff',
+            token: 'ABC123',
+            base_url: 'randomsite.com',
+          },
+        });
         expect(err.name).to.eq('Example Reject');
       });
   });

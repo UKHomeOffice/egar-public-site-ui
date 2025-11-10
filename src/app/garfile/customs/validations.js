@@ -49,14 +49,7 @@ module.exports.validations = (req) => {
         `Passenger travelling reason must be ${MAX_TEXT_BOX_LENGTH} characters or less`
       ),
     ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        'visitReason',
-        visitReason,
-        'Select a reason for visit'
-      ),
-    ],
+    [new ValidationRule(validator.notEmpty, 'visitReason', visitReason, 'Select a reason for visit')],
     [
       new ValidationRule(
         validator.notEmpty,

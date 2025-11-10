@@ -73,12 +73,7 @@ describe('Home Get Controller', () => {
       .then()
       .then(() => {
         expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
-        expect(garApiStub).to.have.been.calledOnceWithExactly(
-          'abcde-12345',
-          'Individual',
-          1,
-          undefined
-        );
+        expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', 1, undefined);
         expect(res.render).to.have.been.calledOnceWith('app/home/index', {
           cookie,
           successHeader: undefined,
@@ -114,12 +109,7 @@ describe('Home Get Controller', () => {
       .then()
       .then(() => {
         expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
-        expect(garApiStub).to.have.been.calledOnceWithExactly(
-          'abcde-12345',
-          'Individual',
-          1,
-          undefined
-        );
+        expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', 1, undefined);
         expect(res.render).to.have.been.calledOnceWith('app/home/index', {
           cookie,
           successMsg: undefined,
@@ -171,12 +161,7 @@ describe('Home Get Controller', () => {
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
         expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
-        expect(garApiStub).to.have.been.calledOnceWithExactly(
-          'abcde-12345',
-          'Individual',
-          1,
-          undefined
-        );
+        expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', 1, undefined);
         expect(res.render).to.have.been.calledOnceWith('app/home/index', {
           cookie,
           successHeader: 'Windows XP',

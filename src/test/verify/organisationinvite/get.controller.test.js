@@ -16,10 +16,8 @@ describe('Verify Organisation Invite Get Controller', () => {
   let req;
   let res;
   let oneLoginUrlStub;
-  const oneLoginAuthUrl =
-    settings.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'https://onelogin?code=123&state=state' : '';
-  const pathName =
-    settings.ONE_LOGIN_SHOW_ONE_LOGIN === true ? '/verify/invite/onelogin' : '/verify/invite/';
+  const oneLoginAuthUrl = settings.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'https://onelogin?code=123&state=state' : '';
+  const pathName = settings.ONE_LOGIN_SHOW_ONE_LOGIN === true ? '/verify/invite/onelogin' : '/verify/invite/';
   let verifyUserServiceStub;
 
   beforeEach(() => {
@@ -51,16 +49,12 @@ describe('Verify Organisation Invite Get Controller', () => {
     cookie.reset();
     cookie.initialise();
     cookie.setInviteUserToken('HashedToken123');
-    oneLoginUrlStub = sinon
-      .stub(oneLoginUtils, 'getOneLoginAuthUrl')
-      .returns('https://onelogin?code=123&state=state');
+    oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns('https://onelogin?code=123&state=state');
     verifyUserServiceStub.resolves('Token is valid');
     await controller(req, res);
 
     // CookieModel instance created, can that be asserted
-    expect(tokenService.generateHash).to.have.been.calledOnceWithExactly(
-      'Example Incoming Unhashed Token'
-    );
+    expect(tokenService.generateHash).to.have.been.calledOnceWithExactly('Example Incoming Unhashed Token');
     expect(cookie.getInviteUserToken()).to.eq('HashedToken123');
     expect(res.render).to.have.been.calledOnceWithExactly('app/verify/organisationinvite/index', {
       pathName,

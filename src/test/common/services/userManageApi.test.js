@@ -37,9 +37,7 @@ describe('UserGetDetails', () => {
 
   it('should throw an error', () => {
     nock.cleanAll();
-    nock(BASE_URL)
-      .get(`/user/${email}`)
-      .replyWithError({ message: 'Example getDetails error', code: 404 });
+    nock(BASE_URL).get(`/user/${email}`).replyWithError({ message: 'Example getDetails error', code: 404 });
 
     userApi
       .getDetails(email)
@@ -105,9 +103,7 @@ describe('DeleteUser', () => {
 
   it('should throw an error', () => {
     nock.cleanAll();
-    nock(BASE_URL)
-      .delete(`/user/${email}`)
-      .replyWithError({ message: 'Example deleteUser error', code: 404 });
+    nock(BASE_URL).delete(`/user/${email}`).replyWithError({ message: 'Example deleteUser error', code: 404 });
 
     userApi
       .deleteUser(email)

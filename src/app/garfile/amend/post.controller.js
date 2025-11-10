@@ -4,9 +4,7 @@ const garApi = require('../../../common/services/garApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
-  logger.debug(
-    `In garfile / amend post controller - User: ${cookie.getUserDbId()} editing GAR: ${cookie.getGarId()}`
-  );
+  logger.debug(`In garfile / amend post controller - User: ${cookie.getUserDbId()} editing GAR: ${cookie.getGarId()}`);
 
   garApi.patch(cookie.getGarId(), 'Draft', {}).then(() => {
     req.session.successMsg = 'You may now amend the GAR and resubmit it.';
