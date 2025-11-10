@@ -24,7 +24,9 @@
       <h1 class="govuk-heading-xl heading-text-spacing">{% if successHeader === 'GAR Amendment' %}Amend your GAR {% else %}  {{__('title_gar_summary')}} {% endif %}</h1>
       {% include "common/templates/includes/blue-banner.njk" %}
     </div>
+    <div class="govuk-grid-column-full">
     {% include "check-your-answers.njk" %}
+    </div>
     <div class="govuk-grid-column-two-thirds">
       {% if garfile.status.name === 'Draft' %}
         <a id="submit-gar" class="govuk-button margin-right-20" href="/garfile/review">{% if successHeader === 'GAR Amendment' %}Resubmit GAR {% else %} {{__('button_submit_this_gar')}} {% endif %}</a>
