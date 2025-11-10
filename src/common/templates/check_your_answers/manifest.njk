@@ -1,6 +1,6 @@
 {% set viewGuidance = (garfile.status.name === 'Submitted' and resubmitted != 'yes' and numberOf0TResponseCodes > 0) %}
 
-{{ sectionHeading('manifest', 'heading_manifest_details', '/garfile/manifest', showChangeLinks, __) }}
+{{ cya.sectionHeading('manifest', 'heading_manifest_details', '/garfile/manifest', showChangeLinks, __) }}
 
 {% if viewGuidance and isResubmitted === false and durationInDeparture > 125 %}
   <div style="float:right;">
@@ -119,7 +119,4 @@
       {% endif %}
     </tbody>
   </table>
-  {% if showChangeLinks %}
-  <p><a href="/garfile/manifest" class="govuk-link">Add a person from current manifest to people</a></p>
-  {% endif %}
 </div>

@@ -1,0 +1,56 @@
+{% from "dist/govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro sectionHeading(id, label, link, showChangeLinks, __) %}
+<div class="govuk-summary-card">
+  <div class="govuk-summary-card__title-wrapper">
+    <h2 class="govuk-summary-card__title">
+      {{ __(label) }}
+    </h2>
+    {% if showChangeLinks %}
+    <div class="govuk-summary-card__actions">
+        <a href="{{ link }}" id="{{ id }}-change" class="govuk-link">
+          {{ __('change_prefix') }}
+          <span class="govuk-visually-hidden">{{ label }}</span>
+        </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro transitionDetails(prefix, garfile, showChangeLinks, __) %}
+  {% set heading = __( 'heading_' ~ prefix ~ '_details' ) %}
+
+  {% set rows = [
+    { key: { html: __( 'field_' ~ prefix ~ '_date' ) }, value: { html: garfile[prefix + 'Date'] or '' } },
+    { key: { html: __( 'field_' ~ prefix ~ '_time' ) }, value: { html: garfile[prefix + 'Time'] or '' } }
+  ] %}
+
+  {% if garfile[prefix + 'Port'] %}
+    {% set rows = rows.concat([
+      { key: { html: __( 'field_' ~ prefix ~ '_port' ) }, value: { html: garfile[prefix + 'Port'] } }
+    ]) %}
+  {% endif %}
+
+  {% if garfile[prefix + 'Lat'] %}
+    {% set rows = rows.concat([
+      { key: { html: __( 'field_' ~ prefix ~ '_coordinates' ) }, value: { html: garfile[prefix + 'Lat'] ~ '<br>' ~ garfile[prefix + 'Long'] } }
+    ]) %}
+  {% endif %}
+
+  {{ govukSummaryList({
+    card: {
+      title: { text: heading },
+      actions: showChangeLinks and {
+        items: [
+          {
+            href: '/garfile/' ~ prefix,
+            text: __( 'change_prefix' ),
+            visuallyHiddenText: heading
+          }
+        ]
+      }
+    },
+    rows: rows
+  }) }}
+{% endmacro %}

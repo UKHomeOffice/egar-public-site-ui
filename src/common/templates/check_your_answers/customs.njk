@@ -1,5 +1,3 @@
-{{ sectionHeading('customs','heading_customs', '/garfile/customs', showChangeLinks, __) }}
-
 {% set customsRows = [
   { key: { html: __('field_intention_review') }, value: { html: garfile.intentionValue or '' } }
 ] %}
@@ -22,4 +20,30 @@
   {% endif %}
 {% endif %}
 
-{{ govukSummaryList({ rows: customsRows }) }}
+{% if garfile.passengerTravellingReason != "" %}
+  {% set _ = customsRows.push({ key: { html: __('passenger_travelling_reason_review') }, value: { html: garfile.passengerTravellingReason | truncate(50) | default('') } }) %}
+{% endif %}
+
+{% set _ = customsRows.push({ key: { html: __('field_visit_reason_review') }, value: { html: garfile.visitReason | uncamelCase | default('') } }) %}
+
+{% if garfile.supportingInformation != "" %}
+  {% set _ = customsRows.push({ key: { html: __('field_supporting_information_review') }, value: { html: garfile.supportingInformation | truncate(50) | default('') } }) %}
+{% endif %}
+
+{{ govukSummaryList({
+  card: {
+      title: {
+        text: __('heading_customs')
+      },
+      actions: showChangeLinks and {
+        items: [
+          {
+            href: "/garfile/customs",
+            text: __('change_prefix'),
+            visuallyHiddenText: __('heading_customs')
+          }
+        ]
+      }
+    },
+  rows: customsRows })
+}}

@@ -1,20 +1,7 @@
-{% import "common/templates/includes/banners.njk" as b %}
+{% import "common/templates/check_your_answers/macros.njk" as cya %}
 
-{% macro sectionHeading(id, label, link, showChangeLinks, __) %}
-  <h2 class="govuk-heading-m">{{ __(label) }}</h2>
-  {% if showChangeLinks %}
-    <p>
-      <a href="{{ link }}" id="{{ id }}-change" class="govuk-link">
-        {{ __('change_prefix') }}
-        <span class="govuk-visually-hidden">{{ label }}</span>
-      </a>
-    </p>
-  {% endif %}
-{% endmacro %}
-
-{% include "check_your_answers/departure.njk" %}
-{% include "check_your_answers/arrival.njk" %}
-
+{{ cya.transitionDetails('departure', garfile, showChangeLinks, __) }}
+{{ cya.transitionDetails('arrival', garfile, showChangeLinks, __) }}
 {{ m.departure_warning_message(__) }}
 
 {% include "check_your_answers/aircraft.njk" %}
@@ -22,5 +9,4 @@
 {% include "check_your_answers/military.njk" %}
 {% include "check_your_answers/responsible.njk" %}
 {% include "check_your_answers/customs.njk" %}
-{% include "check_your_answers/passenger_reason.njk" %}
 {% include "check_your_answers/supporting_documents.njk" %}
