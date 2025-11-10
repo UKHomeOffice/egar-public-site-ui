@@ -139,7 +139,7 @@ function notEmpty(value) {
 // must start and end with alpha
 // special characters cannot be placed sequentially
 function validName(value) {
-  const regex = /^[A-z ](?:[A-z ]|[-|\'](?=[A-z ]))*[A-z ]$/;
+  const regex = /^[A-z ](?:[A-z ]|[-|'](?=[A-z ]))*[A-z ]$/;
   return regex.test(value);
 }
 
