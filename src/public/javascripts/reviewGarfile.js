@@ -6,7 +6,6 @@ const twoHourWarningTexts = Array.from(document.getElementsByClassName('twoHourW
 const fortyEightHourWarningTexts = Array.from(document.getElementsByClassName('fortyEightHourWarningText'));
 
 const departureDate = document.getElementById('departureDate');
-const departureTimeText = document.getElementById('departureTime');
 
 let departureFormSubmitter = undefined;
 
