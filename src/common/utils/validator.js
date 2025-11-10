@@ -726,7 +726,7 @@ function isAlphanumeric(input) {
 }
 
 function isAlpha(input) {
-  const alphaRegex = /^[a-z\s\-]+$/i;
+  const alphaRegex = /^[a-z\s-]+$/i;
   return alphaRegex.test(input);
 }
 
