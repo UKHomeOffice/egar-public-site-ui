@@ -15,7 +15,6 @@
 {% block content %}
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-    {% include "common/templates/includes/errors.njk" %}
     <form action="" method="post">
       <div class="govuk-form-group {{ m.form_group_class('garoption', errors) }}">
         {% set radioItems = [] %}

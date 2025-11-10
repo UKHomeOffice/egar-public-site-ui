@@ -9,20 +9,8 @@
 {% endblock %}
 
 {% set active = '/home' %}
+
 {% block content %}
-
-  {% include "common/templates/includes/errors.njk" %}
-
-  {% if successMsg %}
-    {% include "common/templates/includes/success-action.njk" %}
-  {% endif %}
-
-  {# <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-    </div>
-  </div> #}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">{{__('title')}}</h1>

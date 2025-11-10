@@ -69,21 +69,28 @@
     {% endif %}
 
     <div class="govuk-width-container">
+
       {% include "phase.njk" %}
+
       {% block beforeContent %}{% endblock %}
+
       <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main">
+        {% include "common/templates/includes/errors.njk" %}
+
+        {% block successAction %}
+          {% include "common/templates/includes/success-action.njk" %}
+        {% endblock %}
+
         {% block content %}{% endblock %}
       </main>
     </div>
 
     {{ footer() }}
 
-    <script type="module" src="/javascripts/govuk-frontend.min.js"></script>
     <script type="module">
       import { initAll } from '/javascripts/govuk-frontend.min.js'
       initAll()
     </script>
-
     <script>
       $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function (eventObj) {
         $("<input />")

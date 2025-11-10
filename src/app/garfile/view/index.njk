@@ -9,7 +9,6 @@
 {% set active = '/home' %}
 
 {% block beforeContent %}
-  
   <a href="/home" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
@@ -20,9 +19,11 @@
       {% include "common/templates/includes/blue-banner.njk" %}
     </div>
     <div class="govuk-grid-column-full">
-      {% if successMsg and successHeader !== 'GAR Amendment' %}
+    {% block successAction %}
+      {% if successHeader !== 'GAR Amendment' %}
         {% include "common/templates/includes/success-action.njk" %}
       {% endif %}
+    {% endblock %}
     </div>
     {% include "check-your-answers.njk" %}
     <div class="govuk-grid-column-two-thirds">

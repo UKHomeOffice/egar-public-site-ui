@@ -9,22 +9,15 @@
 {% set active = '/home' %}
 
 {% block beforeContent %}
-
   <a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-  {# <pre>{{garfile | dump(2)}}</pre> #}
-  {# <pre>{{isJourneyUkInbound | dump(2)}}</pre> #}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <span class="govuk-caption-xl">{{__('section_count', 8, 9)}}</span>
       <h1 class="govuk-heading-xl">{{__('title_review_gar')}}</h1>
-       {% include "common/templates/includes/blue-banner.njk" %}
-      {% include "common/templates/includes/errors.njk" %}
-
-   {% include "common/templates/includes/success-action.njk" %}
+      {% include "common/templates/includes/blue-banner.njk" %}
       {% include "check-your-answers.njk" %}
 
       {% if isJourneyUkInbound%}

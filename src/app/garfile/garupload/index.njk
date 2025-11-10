@@ -15,7 +15,6 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-    {% include "common/templates/includes/errors.njk" %}
 
     <h1 class="govuk-heading-xl">{{__('title_garupload')}}</h1>
     <form action="/uploadgar?_csrf={{ csrfToken }}" class="form-group" method="post" role="form" enctype="multipart/form-data">

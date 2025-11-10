@@ -9,20 +9,11 @@
 {% set active = '/home' %}
 
 {% block beforeContent %}
-  
   <a href="/garfile/craft" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
   <script type="text/javascript"  src="/javascripts/garManifest.js"></script>
-
-  {% include "common/templates/includes/errors.njk" %}
-
-  {% if successMsg %}
-    {% include "common/templates/includes/success-action.njk" %}
-  {% endif %}
-
   <div class="govuk-grid-row">
     <form id="manifestForm" action="/garfile/manifest" method="post">
       <div class="govuk-grid-column-two-thirds">
@@ -35,7 +26,6 @@
         </p>
         <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
         <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
-
       </div>
     <div class="govuk-grid-column-full">
         <p class="govuk-body-l">
