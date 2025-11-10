@@ -371,7 +371,7 @@ function getDateFromDynamicInput(input) {
     if (isNaN(providedDate)) {
       providedDate = null;
     }
-  } else if (input.hasOwnProperty('d')) {
+  } else if (Object.prototype.hasOwnProperty.call(input, 'd')) {
     // if it is an eGAR UI date object, validate properties and parse
     if (
       numericDateElements(input) &&
