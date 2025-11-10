@@ -12,11 +12,8 @@ const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const proxyrequire = require('proxyquire').noCallThru();
 
 const controller = require('../../../app/user/login/post.controller');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const oneLoginApi = require('../../../common/utils/oneLoginAuth');
 
 const config = require('../../../common/config/index');
-const { ONE_LOGIN_SHOW_ONE_LOGIN } = require('../../../common/config');
 
 describe('User Login Post Controller', () => {
   let req;
