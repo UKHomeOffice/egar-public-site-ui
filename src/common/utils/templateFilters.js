@@ -29,7 +29,7 @@ const transform = (o, mapping) => {
     return false;
   }
   for (const key in mapping) {
-    if (o.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(o, key)) {
       returnValue[mapping[key]] = o[key];
     }
   }
