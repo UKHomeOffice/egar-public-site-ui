@@ -13,7 +13,6 @@ const controller = require('../../../app/api/healthcheck/get.controller');
  * created during this test.
  */
 describe('API healthcheck get controller', () => {
-
   afterEach(() => {
     sinon.restore();
   });
