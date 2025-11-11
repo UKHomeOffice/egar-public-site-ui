@@ -39,7 +39,7 @@
           hint: {
             text: __('how_to_create_caption')
           },
-          errorMessage: errors | filterArray('identifier', 'garoption') | first | transform({'message': 'text'}),
+          errorMessage: errors | containsError('garoption'),
           items: radioItems
         }) }}
 

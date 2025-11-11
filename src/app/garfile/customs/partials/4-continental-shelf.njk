@@ -18,7 +18,7 @@
       },
       rows: 5,
       maxlength: (MAX_TEXT_BOX_LENGTH - 100),
-      errorMessage: errors | filterArray('identifier', 'continentalShelfDeclaration') | first | transform({'message': 'text'}),
+      errorMessage: errors | containsError('continentalShelfDeclaration'),
       value: gar.continentalShelfDeclaration
     }) %}
   {% endif %}
@@ -46,6 +46,6 @@
       id: 'continentalShelf'
     }
   },
-  errorMessage: errors | filterArray('identifier', 'continentalShelf') | first | transform({'message': 'text'}),
+  errorMessage: errors | containsError('continentalShelf'),
   items: continentalShelfItems
 }) }}

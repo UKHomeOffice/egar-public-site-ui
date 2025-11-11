@@ -20,7 +20,7 @@
     maxlength: MAX_STRING_LENGTH,
     autocomplete: "off"
   },
-  errorMessage: errors | filterArray('identifier', 'firstName') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('firstName')
 }) }}
 
 {{ govukInput({
@@ -36,7 +36,7 @@
     maxlength: MAX_STRING_LENGTH,
     autocomplete: "off"
   },
-  errorMessage: errors | filterArray('identifier', 'lastName') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('lastName')
 }) }}
 
 {% set nationalityItems = [{
@@ -65,7 +65,7 @@
     text: __("field_nationality_hint")
   },
   items: nationalityItems,
-  errorMessage: errors | filterArray('identifier', 'nationality') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('nationality')
 }) }}
 
   {{ dt.dateInput('dob', cookie, dateOfBirth, "field_dob", "field_dob_hint", errors, __) }}
@@ -91,7 +91,7 @@
       }
     },
     classes: m.form_group_class('gender', errors),
-    errorMessage: errors | filterArray('identifier', 'gender') | first | transform({'message': 'text'}),
+    errorMessage: errors | containsError('gender'),
     items: genderItems
   }) }}
 
@@ -111,7 +111,7 @@
   hint: {
     html: m.character_count_hint('birthplace', MAX_STRING_LENGTH)
   },
-  errorMessage: errors | filterArray('identifier', 'birthplace') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('birthplace')
 }) }}
 
 {% set personTypeHintHtml = __('field_person_type_hint') ~ '<br/> <a class="govuk-link" href="https://www.gov.uk/government/publications/aircrew-crm02" target="_blank">Guidance on Crew and Passengers - GOV.UK (www.gov.uk)</a>' %}
@@ -140,7 +140,7 @@
   hint: {
     html: personTypeHintHtml
   },
-  errorMessage: errors | filterArray('identifier', 'personType') | first | transform({'message': 'text'}),
+  errorMessage: errors | containsError('personType'),
   items: personTypeItems
 }) }}
 
@@ -162,7 +162,7 @@
   hint: {
     html: m.character_count_hint('travelDocumentNumber', MAX_STRING_LENGTH)
   },
-  errorMessage: errors | filterArray('identifier', 'travelDocumentNumber') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('travelDocumentNumber')
 }) }}
 
   {{ dt.dateInput('expiry', cookie, documentExpiryDate, "field_document_expiry_date", "field_document_expiry_date_hint", errors, __) }}
@@ -186,7 +186,7 @@
     text: __("field_issuing_state_hint")
   },
   items: issuingStateItems,
-  errorMessage: errors | filterArray('identifier', 'issuingState') | first | transform({'message':'text'})
+  errorMessage: errors | containsError('issuingState')
 }) }}
 
   <div class="{{ m.form_group_class('travelDocumentType', errors) }}">

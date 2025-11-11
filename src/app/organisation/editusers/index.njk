@@ -58,7 +58,7 @@
   hint: {
     text: __("assign_role_caption")
   },
-  errorMessage: errors | filterArray('identifier', 'role') | first | transform({'message': 'text'}),
+  errorMessage: errors | containsError('role'),
   items: roleItems
 }) }}
       <div class="govuk-form-group">

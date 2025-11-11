@@ -27,7 +27,7 @@
       label: { text: __("field_given_name"), classes: "govuk-label--m" },
       hint: { text: __("invite_user_given_name_hint") },
       value: fname,
-      errorMessage: errors | filterArray('identifier', 'fname') | first | transform({'message': 'text'})
+      errorMessage: errors | containsError('fname')
       }) }}
 
       {{ govukInput({
@@ -37,7 +37,7 @@
       hint: { text: __("invite_user_surname_hint") },
       value: lname,
       attributes: { maxlength: MAX_STRING_LENGTH },
-      errorMessage: errors | filterArray('identifier', 'lname') | first | transform({'message': 'text'})
+      errorMessage: errors | containsError('lname')
       }) }}
 
       {{ govukInput({
@@ -46,7 +46,7 @@
       label: { text: __("field_email"), classes: "govuk-label--m" },
       hint: { text: __("invite_user_email_hint") },
       value: email,
-      errorMessage: errors | filterArray('identifier', 'email') | first | transform({'message': 'text'})
+      errorMessage: errors | containsError('email')
       }) }}
 
       {{ govukInput({
@@ -55,7 +55,7 @@
       label: { text: __("field_confirm_email"), classes: "govuk-label--m" },
       hint: { text: __("invite_user_cemail_hint") },
       value: "",
-      errorMessage: errors | filterArray('identifier', 'cemail') | first | transform({'message': 'text'})
+      errorMessage: errors | containsError('cemail')
       }) }}
 
       <div class="govuk-form-group">
