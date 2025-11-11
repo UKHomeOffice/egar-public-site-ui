@@ -615,7 +615,6 @@ function isValidFileMime(fileName, mimeType) {
     gif: ['image/gif'],
     docx: ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
     doc: ['application/msword'],
-    txt: ['application/text/plain'],
   };
   const fileExtension = fileName.split('.').slice(-1).pop();
   if (fileTypeObj[fileExtension]) {
