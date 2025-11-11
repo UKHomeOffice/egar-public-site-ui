@@ -95,8 +95,6 @@ module.exports = async (req, res) => {
   const resubmit = req.body.resubmitFor0T;
 
   const resubmit0TLink = req.body.resubmitFor0TLink ? req.body.resubmitFor0TLink : 'no';
-
-  const isResubmit0T = ['resubmit0T', 'resubmit0TOnSummaryPage', 'resubmitFor0T'].includes(resubmit);
   const initialSubmit = req.body.initialSubmit ? '&initialSubmit=yes' : '';
 
   // Validate GAR to be submitted
