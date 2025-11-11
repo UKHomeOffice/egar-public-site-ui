@@ -7,7 +7,6 @@ const {
   ONE_LOGIN_SHOW_ONE_LOGIN,
   NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
   BASE_URL,
-  ONE_LOGIN_POST_MIGRATION,
   HTTPS,
 } = require('../../../common/config');
 const sendEmail = require('../../../common/services/sendEmail');
@@ -44,7 +43,7 @@ const isUserAuthenticated = (userSessionObject) => {
 
 const sendAdminUpdateEmail = (userObj) => {
   if (!userObj.organisation) {
-    return new Promise((resolve, reject) => resolve(userObj));
+    return new Promise((resolve, _reject) => resolve(userObj));
   }
 
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((users) => {
@@ -109,8 +108,8 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
           );
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
-          return new Promise((resolve, reject) =>
-            userApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then((e) => {
+          return new Promise((resolve, _reject) =>
+            userApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then((_e) => {
               userData.oneLoginSid = oneLoginSid;
               return resolve(userData);
             })

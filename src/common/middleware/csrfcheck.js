@@ -4,7 +4,7 @@ let secureFlag = false;
 if (process.env.COOKIE_SECURE_FLAG === 'true') {
   secureFlag = true;
 }
-module.exports = (req, res, next) => {
+module.exports = (_req, _res, next) => {
   csurf({
     cookie: {
       httpOnly: true,

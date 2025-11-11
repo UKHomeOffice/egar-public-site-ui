@@ -699,7 +699,7 @@ class Cookie {
       return;
     }
 
-    const craftBaseLatLong = destination.craftBase.match(/^[\+\-]?[\d.]+ [\+\-]?[\d.]+$/);
+    const craftBaseLatLong = destination.craftBase.match(/^[+-]?[\d.]+ [+-]?[\d.]+$/);
     if (craftBaseLatLong) {
       const [craftBaseLat, craftBaseLong] = craftBaseLatLong[0].split(' ');
       destination.craftBaseLat = trimToDecimalPlaces(craftBaseLat, 6);

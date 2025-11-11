@@ -1,4 +1,3 @@
-const { getPeople } = require('../../../common/config/endpoints');
 const CookieModel = require('../../../common/models/Cookie.class');
 const personApi = require('../../../common/services/personApi');
 const logger = require('../../../common/utils/logger')(__filename);

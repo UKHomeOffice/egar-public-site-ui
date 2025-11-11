@@ -6,10 +6,13 @@ import prettierConfig from 'eslint-config-prettier';
 
 export default defineConfig([
   {
-    ignores: ['public/javascripts/all.js'],
-  },
-  {
     files: ['**/*.{js,cjs,mjs}'],
+    ignores: [
+      'public/javascripts/all.js',
+      '**/*.min.js',
+      'public/javascripts/cookie-banner.js',
+      'public/javascripts/paginator.js',
+    ],
     plugins: {
       js,
       prettier: eslintPluginPrettier,
@@ -31,9 +34,45 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.js'],
+    files: ['public/javascripts/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.browser, // window, document, etc.
+        $: 'readonly', // jQuery global
+        jQuery: 'readonly',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['warn', { args: 'none' }],
+      'no-undef': 'off',
+      'no-console': 'off',
+      'no-alert': 'off',
+    },
+    ignores: [
+      'public/javascripts/all.js',
+      '**/*.min.js',
+      'public/javascripts/cookie-banner.js',
+      'public/javascripts/paginator.js',
+    ],
+  },
+  {
+    files: ['app/**/*.js', 'common/**/*.js'],
     languageOptions: {
       sourceType: 'commonjs',
+      globals: {
+        __: 'readonly',
+      },
+    },
+    rules: {
+      'no-unused-vars': [
+        'warn',
+        {
+          args: 'all', // check all arguments
+          argsIgnorePattern: '^_', // ignore args starting with _
+          vars: 'all',
+          varsIgnorePattern: '^_', // optional: ignore unused variables starting with _
+        },
+      ],
     },
   },
   {

@@ -1,7 +1,5 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
 
 const resPersonApi = require('../../../common/services/resPersonApi');
 

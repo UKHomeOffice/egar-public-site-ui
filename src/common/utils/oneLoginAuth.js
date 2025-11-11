@@ -71,12 +71,10 @@ const getOneLoginLogoutUrl = (req, id_token, state) => {
 
 const createJwt = (params) => {
   const privateKey = config.ONE_LOGIN_PRIVATE_KEY;
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   return jwt.sign(params, privateKey, { algorithm: 'RS256' });
 };
 
 const getOneLoginPublicKey = (header, callback) => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const jwksClient = require('jwks-rsa');
   const client = jwksClient({
     jwksUri: `${config.ONE_LOGIN_INTEGRATION_URL}/.well-known/jwks.json`,

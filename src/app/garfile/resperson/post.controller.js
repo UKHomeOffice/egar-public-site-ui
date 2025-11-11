@@ -17,7 +17,9 @@ module.exports = async (req, res) => {
     } catch (err) {
       logger.error('API failed to retrieve gar responsible person');
       logger.error(err);
-      res.render('app/garfile/resperson/index', context, {
+      res.render('app/garfile/resperson/index', {
+        cookie,
+        fixedBasedOperatorOptions,
         errors: [
           {
             message: 'Problem retrieving GAR',

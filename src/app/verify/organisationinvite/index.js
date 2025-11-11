@@ -4,7 +4,6 @@ const express = require('express');
 // Middleware
 const flagpole = require('../../../common/middleware/flagpole');
 const csrfcheck = require('../../../common/middleware/csrfcheck');
-const parseForm = require('../../../common/middleware/parseForm');
 const setting = require('../../../common/config/index');
 
 // Local dependencies

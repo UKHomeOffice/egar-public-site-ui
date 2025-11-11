@@ -16,7 +16,7 @@ module.exports = {
           headers: { 'content-type': 'application/json' },
           url: endpoints.createGar(userId),
         },
-        (error, response, body) => {
+        (error, _response, body) => {
           if (error) {
             reject(error);
             return error;

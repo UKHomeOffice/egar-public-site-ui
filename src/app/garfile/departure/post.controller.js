@@ -4,15 +4,9 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-//const airportValidation = require('../../../common/utils/airportValidation');
 
 const createValidationChains = (voyage) => {
   // Create validation input objs
-  const departPortObj = {
-    portCode: voyage.departurePort,
-    lat: voyage.departureLat,
-    long: voyage.departureLong,
-  };
   const departDateObj = {
     d: voyage.departureDay,
     m: voyage.departureMonth,

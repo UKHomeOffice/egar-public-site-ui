@@ -7,14 +7,6 @@ require('./global.test');
 
 const validator = require('../common/utils/validator');
 
-function genPortObj(portCode, lat, long) {
-  return {
-    portCode,
-    lat,
-    long,
-  };
-}
-
 function genDateObj(d, m, y) {
   return {
     d,
@@ -1083,7 +1075,6 @@ describe('Validator', () => {
 
   describe('Should determine if a value is cancellable by CBP', () => {
     let clock;
-    const MARCH = 2;
     const APRIL = 3;
 
     beforeEach(() => {

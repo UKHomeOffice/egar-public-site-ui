@@ -1,10 +1,12 @@
+const PHASE_GIVEN_NAME = 'given_name';
+const PHASE_CONFIRM_NAME = 'confirm_name';
+const PHASE_REGISTRATION_COMPLETE = 'registration_complete';
 
-export const PHASE_GIVEN_NAME = 'given_name'
-export const PHASE_CONFIRM_NAME = 'confirm_name'
-export const PHASE_REGISTRATION_COMPLETE = 'registration_complete'
+const WORKFLOW_STEPS = [PHASE_GIVEN_NAME, PHASE_CONFIRM_NAME, PHASE_REGISTRATION_COMPLETE];
 
-export const WORKFLOW_STEPS = [
-    PHASE_GIVEN_NAME,
-    PHASE_CONFIRM_NAME,
-    PHASE_REGISTRATION_COMPLETE
-]
+module.exports = {
+  PHASE_GIVEN_NAME,
+  PHASE_CONFIRM_NAME,
+  PHASE_REGISTRATION_COMPLETE,
+  WORKFLOW_STEPS,
+};

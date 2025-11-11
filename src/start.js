@@ -55,7 +55,7 @@ function onInterrupt() {
   logger.info('Cleaning up child processed');
   logger.info(`closing process:${pid}`);
   process.kill(pid, 'SIGTERM');
-  process.exit(); // eslint-disable-line unicorn/no-process-exit
+  process.exit();
 }
 
 /**

@@ -15,6 +15,7 @@ const verifyUserService = require('../../../common/services/verificationApi');
 describe('Verify Organisation Invite Get Controller', () => {
   let req;
   let res;
+  /* eslint-disable-next-line no-unused-vars */
   let oneLoginUrlStub;
   const oneLoginAuthUrl = settings.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'https://onelogin?code=123&state=state' : '';
   const pathName = settings.ONE_LOGIN_SHOW_ONE_LOGIN === true ? '/verify/invite/onelogin' : '/verify/invite/';

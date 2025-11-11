@@ -32,8 +32,6 @@ module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile/view get controller');
 
-  const context = { cookie };
-
   let { garId } = req.body;
   if (garId === undefined) {
     garId = cookie.getGarId();
@@ -43,6 +41,7 @@ module.exports = async (req, res) => {
     res.redirect('/home');
     return;
   }
+  let renderContext;
 
   try {
     cookie.setGarId(garId);
@@ -60,7 +59,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    let renderContext = {
+    renderContext = {
       cookie,
       manifestFields,
       garfile: {},

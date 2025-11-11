@@ -139,7 +139,7 @@ function notEmpty(value) {
 // must start and end with alpha
 // special characters cannot be placed sequentially
 function validName(value) {
-  const regex = /^[A-z ](?:[A-z ]|[-|\'](?=[A-z ]))*[A-z ]$/;
+  const regex = /^[A-z ](?:[A-z ]|[-|'](?=[A-z ]))*[A-z ]$/;
   return regex.test(value);
 }
 
@@ -371,7 +371,7 @@ function getDateFromDynamicInput(input) {
     if (isNaN(providedDate)) {
       providedDate = null;
     }
-  } else if (input.hasOwnProperty('d')) {
+  } else if (Object.prototype.hasOwnProperty.call(input, 'd')) {
     // if it is an eGAR UI date object, validate properties and parse
     if (
       numericDateElements(input) &&
@@ -436,7 +436,7 @@ function realDateFromString(str) {
 }
 
 // This function will validate Passport Expiry date while uploading Gar Template
-function passportExpiryDate(value, element) {
+function passportExpiryDate(value, _element) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -454,7 +454,7 @@ function passportExpiryDate(value, element) {
 }
 
 // This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
-function birthDate(value, element) {
+function birthDate(value, _element) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -469,7 +469,7 @@ function birthDate(value, element) {
 }
 
 // This function will validate departure date while uploading Gar Template
-function dateNotInPast(value, element) {
+function dateNotInPast(value, _element) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -726,7 +726,7 @@ function isAlphanumeric(input) {
 }
 
 function isAlpha(input) {
-  const alphaRegex = /^[a-z\s\-]+$/i;
+  const alphaRegex = /^[a-z\s-]+$/i;
   return alphaRegex.test(input);
 }
 

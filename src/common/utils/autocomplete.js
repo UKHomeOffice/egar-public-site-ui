@@ -1,6 +1,5 @@
 const nationalities = require('./nationality');
 const oldNationality = require('./old_nationality_lib');
-const logger = require('./logger')(__filename);
 const airportList = require('./airport_codes.json');
 const { USE_NEW_NATIONALITY_LIST_PROVIDER } = require('../config');
 
