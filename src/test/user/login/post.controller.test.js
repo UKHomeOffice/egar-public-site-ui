@@ -18,6 +18,7 @@ const config = require('../../../common/config/index');
 describe('User Login Post Controller', () => {
   let req;
   let res;
+  /* eslint-disable-next-line no-unused-vars */
   let oneLoginStub;
   let configMock;
 

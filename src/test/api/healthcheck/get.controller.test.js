@@ -4,6 +4,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
+/* eslint-disable-next-line no-unused-vars */
 const { getApp } = require('../../../server');
 
 const controller = require('../../../app/api/healthcheck/get.controller');
