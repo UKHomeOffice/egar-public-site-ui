@@ -12,6 +12,7 @@ export default defineConfig([
       '**/*.min.js',
       'public/javascripts/cookie-banner.js',
       'public/javascripts/paginator.js',
+      'public/javascripts/all.js',
     ],
     plugins: {
       js,
@@ -53,6 +54,7 @@ export default defineConfig([
       '**/*.min.js',
       'public/javascripts/cookie-banner.js',
       'public/javascripts/paginator.js',
+      'public/javascripts/all.js',
     ],
   },
   {
