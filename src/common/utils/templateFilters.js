@@ -14,12 +14,6 @@ const containsError = (array, value) => {
   return result.length > 0;
 };
 
-const expiryDate = () => {
-  checkDate = new Date();
-  checkDateExpiry = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-  return checkDateExpiry;
-};
-
 const filterArray = (arr, propertyName, propertyValue) => {
   return (arr || []).filter((e) => e[propertyName] === propertyValue);
 };
@@ -38,6 +32,5 @@ const transform = (o, mapping) => {
 
 exports.uncamelCase = uncamelCase;
 exports.containsError = containsError;
-exports.expiryDate = expiryDate;
 exports.filterArray = filterArray;
 exports.transform = transform;
