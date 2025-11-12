@@ -21,8 +21,8 @@ describe('Template Filters Utility', () => {
 
     beforeEach(() => {
       exampleArray = [
-        { identifier: 'firstName', error: 'Not important' },
-        { identifier: 'surname', error: 'Does not matter' },
+        { identifier: 'firstName', message: 'Not important' },
+        { identifier: 'surname', message: 'Does not matter' },
       ];
     });
 
@@ -41,8 +41,8 @@ describe('Template Filters Utility', () => {
     });
 
     it('should return element if found', () => {
-      expect(templateFilters.containsError(exampleArray, 'firstName')).to.deep.equal({ identifier: 'firstName', error: 'Not important' });
-      expect(templateFilters.containsError(exampleArray, 'surname')).to.deep.equal({ identifier: 'surname', error: 'Does not matter' });
+      expect(templateFilters.containsError(exampleArray, 'firstName')).to.deep.equal({ identifier: 'firstName', message: 'Not important' });
+      expect(templateFilters.containsError(exampleArray, 'surname')).to.deep.equal({ identifier: 'surname', message: 'Does not matter' });
     });
     it('should return truthy value if found', () => {
       expect(templateFilters.containsError(exampleArray, 'firstName')).to.be.ok;
