@@ -55,8 +55,11 @@ function nanoid(alphabet, tokenLength) {
 }
 
 function getRolesForAssigning(currentUserRole) {
-  return currentUserRole === 'Admin' ? allRoles : allRoles.filter((role) => role.name !== 'Admin');
+  return currentUserRole === 'Admin'
+    ? allRoles
+    : allRoles.filter((role) => role.name !== 'Admin');
 }
+
 
 module.exports = {
   trimToDecimalPlaces,
