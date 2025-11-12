@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -18,7 +17,10 @@ const personApi = require('../../../common/services/personApi');
 const controller = require('../../../app/people/add/post.controller');
 
 describe('Person Add Post Controller', () => {
-  let req; let res; let person; let personApiStub;
+  let req;
+  let res;
+  let person;
+  let personApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -87,21 +89,23 @@ describe('Person Add Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(personApiStub).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/people/add/index', {
-        req,
-        cookie,
-        persontype,
-        documenttype,
-        genderchoice,
-        person: req.body,
-        errors: [
-          new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
-        ],
+    callController()
+      .then()
+      .then(() => {
+        expect(personApiStub).to.not.have.been.called;
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/people/add/index', {
+          req,
+          cookie,
+          persontype,
+          documenttype,
+          genderchoice,
+          person: req.body,
+          errors: [
+            new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
+          ],
+        });
       });
-    });
   });
 
   it('should render with messages if gar api rejects', () => {
@@ -112,42 +116,48 @@ describe('Person Add Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(personApiStub).to.have.been.calledWith('90210', { people: [ person ] });
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/people/add/index', {
-        cookie,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [{ message: 'There was a problem creating the person. Please try again' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(personApiStub).to.have.been.calledWith('90210', { people: [person] });
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledWith('app/people/add/index', {
+          cookie,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [{ message: 'There was a problem creating the person. Please try again' }],
+        });
       });
-    });
   });
 
   it('should render message if api returns one', () => {
     const cookie = new CookieModel(req);
     cookie.updateEditPerson(person);
 
-    personApiStub.resolves(JSON.stringify({
-      message: 'GAR not found',
-    }));
+    personApiStub.resolves(
+      JSON.stringify({
+        message: 'GAR not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(personApiStub).to.have.been.calledWith('90210', { people: [person] });
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWith('app/people/add/index', {
-        cookie,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [{ message: 'GAR not found' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(personApiStub).to.have.been.calledWith('90210', { people: [person] });
+        expect(res.redirect).to.not.have.been.called;
+        expect(res.render).to.have.been.calledOnceWith('app/people/add/index', {
+          cookie,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [{ message: 'GAR not found' }],
+        });
       });
-    });
   });
 
   it('should redirect on success', () => {
@@ -157,10 +167,12 @@ describe('Person Add Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(personApiStub).to.have.been.calledWith('90210',{ people: [ person ] });
-      expect(res.redirect).to.have.been.calledWith('/people');
-      expect(res.render).to.not.have.been.called;
-    });
+    callController()
+      .then()
+      .then(() => {
+        expect(personApiStub).to.have.been.calledWith('90210', { people: [person] });
+        expect(res.redirect).to.have.been.calledWith('/people');
+        expect(res.render).to.not.have.been.called;
+      });
   });
 });

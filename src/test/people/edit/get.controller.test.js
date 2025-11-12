@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -17,15 +16,19 @@ const personApi = require('../../../common/services/personApi');
 const controller = require('../../../app/people/edit/get.controller');
 
 describe('Person Edit Get Controller', () => {
-  let req; let res; let personApiStub; let apiResponse;
-  let clock; const APRIL = 3;
+  let req;
+  let res;
+  let personApiStub;
+  let apiResponse;
+  let clock;
+  const APRIL = 3;
 
   beforeEach(() => {
     chai.use(sinonChai);
     clock = sinon.useFakeTimers({
       now: new Date(2023, APRIL, 11),
       shouldAdvanceTime: false,
-      toFake: ["Date"],
+      toFake: ['Date'],
     });
 
     apiResponse = savedPeople()[0];
@@ -80,9 +83,11 @@ describe('Person Edit Get Controller', () => {
     req.session.editPersonId = 'EDIT-PERSON-ID';
     cookie = new CookieModel(req);
 
-    personApiStub.resolves(JSON.stringify({
-      message: 'Person id not found',
-    }));
+    personApiStub.resolves(
+      JSON.stringify({
+        message: 'Person id not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
@@ -92,7 +97,11 @@ describe('Person Edit Get Controller', () => {
       expect(personApiStub).to.have.been.calledWith('343', 'EDIT-PERSON-ID');
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/people/edit/index', {
-        cookie, persontype, documenttype, genderchoice, errors: [{ message: 'Failed to get person information' }],
+        cookie,
+        persontype,
+        documenttype,
+        genderchoice,
+        errors: [{ message: 'Failed to get person information' }],
       });
     });
   });
@@ -104,12 +113,16 @@ describe('Person Edit Get Controller', () => {
     personApiStub.resolves(JSON.stringify(apiResponse));
 
     await controller(req, res);
-  
+
     expect(personApiStub).to.have.been.calledWith('343', 'EDIT-PERSON-ID');
     expect(res.redirect).to.not.have.been.called;
     expect(res.render).to.have.been.called;
     expect(res.render).to.have.been.calledOnceWithExactly('app/people/edit/index', {
-      cookie, persontype, documenttype, genderchoice, person: apiResponse,
+      cookie,
+      persontype,
+      documenttype,
+      genderchoice,
+      person: apiResponse,
     });
   });
 });

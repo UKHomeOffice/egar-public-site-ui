@@ -13,11 +13,12 @@ module.exports = (req, res) => {
     return;
   }
 
-  resPersonApi.deleteResponsiblePerson(cookie.getUserDbId(), responsiblePersonId)
+  resPersonApi
+    .deleteResponsiblePerson(cookie.getUserDbId(), responsiblePersonId)
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        logger.error(`Failed to delete the responsible persons: ${parsedResponse.message}`)
+        logger.error(`Failed to delete the responsible persons: ${parsedResponse.message}`);
         req.session.errMsg = errMsg;
         return req.session.save(() => res.redirect('/resperson'));
       }

@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 
 const sinon = require('sinon');
 const { expect } = require('chai');
@@ -15,16 +14,17 @@ const garApi = require('../../../common/services/garApi');
 const controller = require('../../../app/garfile/manifest/get.controller');
 
 describe('Manifest Get Controller', () => {
-  let req; let res; let clock;
+  let req;
+  let res;
+  let clock;
   const APRIL = 3;
-
 
   beforeEach(() => {
     chai.use(sinonChai);
     clock = sinon.useFakeTimers({
       now: new Date(2023, APRIL, 11),
       shouldAdvanceTime: false,
-      toFake: ["Date"],
+      toFake: ['Date'],
     });
 
     apiResponse = {
@@ -57,11 +57,14 @@ describe('Manifest Get Controller', () => {
 
     await controller(req, res);
 
-    callController().then().then(() => {
-      expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
-        cookie, errors: [{ message: 'Failed to get manifest data' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
+          cookie,
+          errors: [{ message: 'Failed to get manifest data' }],
+        });
       });
-    });
   });
 
   it('should return an error if gar api rejects', () => {
@@ -73,21 +76,27 @@ describe('Manifest Get Controller', () => {
       await controller(req, res);
     };
 
-    callController().then().then(() => {
-      expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
-        cookie, errors: [{ message: 'Failed to get manifest data' }],
+    callController()
+      .then()
+      .then(() => {
+        expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
+          cookie,
+          errors: [{ message: 'Failed to get manifest data' }],
+        });
       });
-    });
   });
 
   describe('api calls resolve', () => {
-    let personApiStub; let garApiStub;
+    let personApiStub;
+    let garApiStub;
 
     beforeEach(() => {
       personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(savedPeople()));
-      garApiStub = sinon.stub(garApi, 'getPeople').resolves(JSON.stringify({ 
-        items: garPeople(),
-      }));
+      garApiStub = sinon.stub(garApi, 'getPeople').resolves(
+        JSON.stringify({
+          items: garPeople(),
+        })
+      );
     });
 
     it('should render with errMsg populated', async () => {
@@ -141,7 +150,7 @@ describe('Manifest Get Controller', () => {
       cookie = new CookieModel(req);
 
       await controller(req, res);
-  
+
       expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
       expect(garApiStub).to.have.been.calledWith('9001');
       expect(req.session.successMsg).to.be.undefined;

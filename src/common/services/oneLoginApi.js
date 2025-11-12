@@ -2,8 +2,7 @@ const logger = require('../utils/logger')(__filename);
 const config = require('../config/index');
 const request = require('request');
 const qs = require('querystring');
-const {resolve} = require('path');
-
+const { resolve } = require('path');
 
 /**
  * This function is meant to convert URLs in non prod such that if the user is making a request from an internal URL, then a internal URL will be returned.
@@ -17,19 +16,14 @@ const {resolve} = require('path');
  */
 const parseUrlForNonProd = (req, url) => {
   const currentAddress = req.get('host');
-  const internalRegex =
-    '^.*public-site.(dev|sit|staging|test).internal.egar-notprod.homeoffice.gov.uk';
-  const notInternalRegex =
-    '^.*public-site.(dev|sit|staging|test).egar-notprod.homeoffice.gov.uk';
+  const internalRegex = '^.*public-site.(dev|sit|staging|test).internal.egar-notprod.homeoffice.gov.uk';
+  const notInternalRegex = '^.*public-site.(dev|sit|staging|test).egar-notprod.homeoffice.gov.uk';
   let returnUrl = url;
 
   if (currentAddress?.match(notInternalRegex) && url.match(internalRegex)) {
     returnUrl = url.replace('.internal.egar-notprod', '.egar-notprod');
     logger.info(`We would change URL: '${url}' to '${returnUrl}'`);
-  } else if (
-    currentAddress?.match(internalRegex) &&
-    url.match(notInternalRegex)
-  ) {
+  } else if (currentAddress?.match(internalRegex) && url.match(notInternalRegex)) {
     returnUrl = url.replace('.egar-notprod', '.internal.egar-notprod');
     logger.info(`We would change URL: '${url}' to '${returnUrl}'`);
   }
@@ -37,9 +31,7 @@ const parseUrlForNonProd = (req, url) => {
   return returnUrl;
 };
 
-
 module.exports = {
-
   /**
    * Gets a list of users belonging to an organisation.
    * @param {String} orgId id of an organisation to get users for
@@ -62,30 +54,31 @@ module.exports = {
       const jwt = oneLoginUtil.createJwt(jwtParams);
 
       const params = {
-        // eslint-disable-next-line camelcase
         grant_type: 'authorization_code',
         code,
-        // eslint-disable-next-line camelcase
+
         redirect_uri: parseUrlForNonProd(req, config.ONE_LOGIN_REDIRECT_URI),
-        // eslint-disable-next-line camelcase
-        client_assertion_type:
-          'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-        // eslint-disable-next-line camelcase
+
+        client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+
         client_assertion: jwt,
       };
-      request.post({
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        url: `${oneLoginIntegrationUrl}/token`,
-        body: qs.stringify(params),
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to call get one login API endpoint');
-          reject(JSON.parse(error));
-          return;
+      request.post(
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          url: `${oneLoginIntegrationUrl}/token`,
+          body: qs.stringify(params),
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get one login API endpoint');
+            reject(JSON.parse(error));
+            return;
+          }
+          logger.debug('Successfully called one login API endpoint');
+          resolve(JSON.parse(body));
         }
-        logger.debug('Successfully called one login API endpoint');
-        resolve(JSON.parse(body));
-      });
+      );
     });
   },
 
@@ -98,23 +91,26 @@ module.exports = {
     return new Promise((resolve, reject) => {
       logger.info('Sending request to fetch userinfo from one Login');
       const url = `${config.ONE_LOGIN_INTEGRATION_URL}/userinfo`;
-      request.get({
-        headers: {
-          Authorization: `Bearer ${access_token}`,
+      request.get(
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+          url,
         },
-        url
-      }, (error, _response, body) => {
-        if (error) {
-          logger.error('Failed to fetch userinfo from oneLogin');
-          logger.error(`${error}`);
-          reject(error);
-          return;
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to fetch userinfo from oneLogin');
+            logger.error(`${error}`);
+            reject(error);
+            return;
+          }
+          logger.info(`Successfully called oneLogin user info API`);
+          resolve(JSON.parse(body));
         }
-        logger.info(`Successfully called oneLogin user info API`);
-        resolve(JSON.parse(body));
-      });
+      );
     });
   },
 
   parseUrlForNonProd,
-}
+};

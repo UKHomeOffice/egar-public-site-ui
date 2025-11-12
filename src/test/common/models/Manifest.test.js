@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
 const sinon = require('sinon');
@@ -14,12 +13,12 @@ const apiResponse = JSON.stringify({
 
 describe('ManifestModel', () => {
   const APRIL = 3;
-    
+
   beforeEach(() => {
     clock = sinon.useFakeTimers({
       now: new Date(2024, APRIL, 11),
       shouldAdvanceTime: false,
-      toFake: ["Date"],
+      toFake: ['Date'],
     });
   });
 
@@ -175,7 +174,7 @@ describe('ManifestModel', () => {
     expect(manifest.validateCaptainCrew()).to.be.true;
   });
 
-  afterEach(()=>{
+  afterEach(() => {
     clock.restore();
   });
 });

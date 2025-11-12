@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -12,7 +9,10 @@ const craftApi = require('../../../common/services/craftApi');
 const controller = require('../../../app/aircraft/delete/get.controller');
 
 describe('Aircraft Delete Get Controller', () => {
-  let req; let res; let deleteCraftStub; let deleteOrgCraftStub;
+  let req;
+  let res;
+  let deleteCraftStub;
+  let deleteOrgCraftStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -20,7 +20,7 @@ describe('Aircraft Delete Get Controller', () => {
     req = {
       session: {
         deleteCraftId: 'G-ABCD',
-        save: callback => callback(),
+        save: (callback) => callback(),
         u: {
           dbId: 'someone@somewhere.net',
         },
@@ -78,9 +78,11 @@ describe('Aircraft Delete Get Controller', () => {
     });
 
     it('should redirect if craft api responds with an error', () => {
-      deleteOrgCraftStub.resolves(JSON.stringify({
-        message: 'Example error message',
-      }));
+      deleteOrgCraftStub.resolves(
+        JSON.stringify({
+          message: 'Example error message',
+        })
+      );
       const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
 
       const callController = async () => {
@@ -138,9 +140,11 @@ describe('Aircraft Delete Get Controller', () => {
     });
 
     it('should redirect if craft api responds with an error', () => {
-      deleteCraftStub.resolves(JSON.stringify({
-        message: 'Example error message',
-      }));
+      deleteCraftStub.resolves(
+        JSON.stringify({
+          message: 'Example error message',
+        })
+      );
       const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
 
       const callController = async () => {

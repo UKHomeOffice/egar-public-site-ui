@@ -3,12 +3,18 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const { ONE_LOGIN_SHOW_ONE_LOGIN, NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, ONE_LOGIN_POST_MIGRATION, HTTPS} = require("../../../common/config");
-const sendEmail = require("../../../common/services/sendEmail");
+const {
+  ONE_LOGIN_SHOW_ONE_LOGIN,
+  NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
+  BASE_URL,
+  ONE_LOGIN_POST_MIGRATION,
+  HTTPS,
+} = require('../../../common/config');
+const sendEmail = require('../../../common/services/sendEmail');
 const organisationApi = require('../../../common/services/organisationApi');
 const verifyUserService = require('../../../common/services/verificationApi');
-const {parseUrlForNonProd} = require("../../../common/services/oneLoginApi");
-const { getOneLoginLogoutUrl } = require("../../../common/utils/oneLoginAuth");
+const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
+const { getOneLoginLogoutUrl } = require('../../../common/utils/oneLoginAuth');
 
 // Constants
 const ROUTES = {
@@ -21,10 +27,10 @@ const ROUTES = {
 };
 
 const USER_STATES = {
-  VERIFIED: 'verified'
+  VERIFIED: 'verified',
 };
 
-let accountUrl = BASE_URL + '/organisation'
+let accountUrl = BASE_URL + '/organisation';
 
 /**
  * Checks if user is authenticated in the session
@@ -41,31 +47,26 @@ const sendAdminUpdateEmail = (userObj) => {
     return new Promise((resolve, reject) => resolve(userObj));
   }
 
-  return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then(users => {
-    const userList = JSON.parse(users)
+  return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((users) => {
+    const userList = JSON.parse(users);
 
-    userList.items.forEach(user => {
+    userList.items.forEach((user) => {
       try {
-        sendEmail.send(
-          NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
-          user.email,
-          {
-            firstName: userObj.firstName,
-            lastName: userObj.lastName,
-            accountUrl,
-            adminFirstName: user.firstName,
-            adminLastName: user.lastName,
-            organisationName: userObj.organisation.organisationName,
-          }
-        );
+        sendEmail.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
+          firstName: userObj.firstName,
+          lastName: userObj.lastName,
+          accountUrl,
+          adminFirstName: user.firstName,
+          adminLastName: user.lastName,
+          organisationName: userObj.organisation.organisationName,
+        });
       } catch (error) {
-        logger.error("Exception when sending email to admin");
+        logger.error('Exception when sending email to admin');
         logger.error(error);
       }
-
     });
-  })
-}
+  });
+};
 
 /**
  * Handles user authentication state and cookie management
@@ -75,15 +76,16 @@ const sendAdminUpdateEmail = (userObj) => {
  */
 const handleUserAuthentication = (req, res, userInfo, cookie) => {
   const { email, sub: oneLoginSid } = userInfo;
-  return userApi.userSearch(email, oneLoginSid)
-    .then(async userData => {
+  return userApi
+    .userSearch(email, oneLoginSid)
+    .then(async (userData) => {
       if (!userData?.userId) {
         return { redirect: ROUTES.REGISTER };
       }
 
       if (userData.state !== USER_STATES.VERIFIED) {
         logger.error('User email not verified during onelogin flow.');
-        return { redirect: redirectErrorPage(req, res, 'login-error')};
+        return { redirect: redirectErrorPage(req, res, 'login-error') };
       }
 
       const oneLoginSidMatches = oneLoginSid === userData.oneLoginSid;
@@ -97,44 +99,47 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
         case oneLoginSidMatches && !emailMatches:
           // sid matches but email does not.
           return new Promise((resolve, reject) =>
-            userApi.updateEmailOrOneLoginSid(userData.email, {email}).then(
-              () => {
+            userApi
+              .updateEmailOrOneLoginSid(userData.email, { email })
+              .then(() => {
                 userData.email = email;
-                sendAdminUpdateEmail(userData).then(() => resolve(userData))
-              }).catch((err) => reject(err))
+                sendAdminUpdateEmail(userData).then(() => resolve(userData));
+              })
+              .catch((err) => reject(err))
           );
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
           return new Promise((resolve, reject) =>
-            userApi.updateEmailOrOneLoginSid(userData.email, {oneLoginSid})
-              .then((e) => {
-                userData.oneLoginSid = oneLoginSid;
-                return resolve(userData);
-              }));
+            userApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then((e) => {
+              userData.oneLoginSid = oneLoginSid;
+              return resolve(userData);
+            })
+          );
         case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
           logger.error('login error: User SID does not match but email matches.');
-          return {redirect: redirectErrorPage(req, res, 'login-error')};
+          return { redirect: redirectErrorPage(req, res, 'login-error') };
         default:
           logger.error('User Id not found or email not verified during onelogin flow.');
-          return {redirect: redirectErrorPage(req, res, 'service-error')};
+          return { redirect: redirectErrorPage(req, res, 'service-error') };
       }
     })
-    .then(userData => {
+    .then((userData) => {
       if (userData?.redirect) {
         return userData;
       }
 
-      return userApi.getDetails(email)
-        .then(details => {
-          const { organisation } = details || {};
+      return userApi.getDetails(email).then((details) => {
+        const { organisation } = details || {};
 
-          setUserCookies(cookie, {
-            ...userData, organisation, state: userData.state
-          });
-
-          return { redirect: ROUTES.HOME };
+        setUserCookies(cookie, {
+          ...userData,
+          organisation,
+          state: userData.state,
         });
+
+        return { redirect: ROUTES.HOME };
+      });
     });
 };
 
@@ -167,7 +172,7 @@ module.exports = async (req, res) => {
     return res.redirect(ROUTES.HOME);
   }
 
-  const viewOnLoginPageForTest = req.query.testOneLogin === 'true' ;
+  const viewOnLoginPageForTest = req.query.testOneLogin === 'true';
   const cookie = new CookieModel(req);
 
   const { code } = req.query;
@@ -176,7 +181,7 @@ module.exports = async (req, res) => {
     return res.render('app/user/login/index', {
       oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
       ONE_LOGIN_SHOW_ONE_LOGIN,
-      viewOnLoginPageForTest
+      viewOnLoginPageForTest,
     });
   }
 
@@ -184,11 +189,10 @@ module.exports = async (req, res) => {
     return res.redirect(redirectErrorPage(req, res, 'service-error'));
   }
 
-
-  oneLoginApi.sendOneLoginTokenRequest(req, code, oneLoginUtil)
+  oneLoginApi
+    .sendOneLoginTokenRequest(req, code, oneLoginUtil)
     .then(({ access_token, id_token }) => {
-
-      res.cookie("id_token", id_token);
+      res.cookie('id_token', id_token);
       global_id_token = id_token;
 
       if (!id_token) {
@@ -200,14 +204,14 @@ module.exports = async (req, res) => {
       return new Promise((resolve) => {
         oneLoginUtil.verifyJwt(id_token, req.cookies.nonce, resolve);
       })
-        .then(isValid => {
+        .then((isValid) => {
           if (!isValid) {
             logger.error('Invalid jwt token received from OneLogin.');
             return res.redirect(redirectErrorPage(req, res, 'service-error'));
           }
           return oneLoginApi.getUserInfoFromOneLogin(access_token);
         })
-        .then(userInfo => {
+        .then((userInfo) => {
           if (!userInfo?.email_verified) {
             return res.redirect(redirectErrorPage(req, res, 'login-error'));
           }
@@ -217,12 +221,12 @@ module.exports = async (req, res) => {
           return handleUserAuthentication(req, res, userInfo, cookie)
             .then(({ redirect }) => {
               const redirectUrl = cookie.getRedirectUrl();
-              if(redirectUrl!== '') {
+              if (redirectUrl !== '') {
                 const baseUrl = `${HTTPS}${BASE_URL}`;
                 const urlParams = new URL(redirectUrl, baseUrl);
                 const garId = urlParams.searchParams.get('gar_id');
                 logger.info(`Redirected to GAR ${garId}`);
-                cookie.setGarId(garId)
+                cookie.setGarId(garId);
                 redirect = redirectUrl;
               }
 
@@ -235,23 +239,22 @@ module.exports = async (req, res) => {
               return redirect;
             })
             .then(async (redirect) => {
-              res.set('Referer', req.headers.host)
+              res.set('Referer', req.headers.host);
               if (redirect === ROUTES.REGISTER) {
                 redirect = await checkUserInvite(req, res, userInfo.email);
               }
 
-              req.session.save()
+              req.session.save();
               return res.redirect(redirect);
             });
         });
     })
-    .catch(error => {
+    .catch((error) => {
       if (error) {
         logger.error(`Login process failed ${error}`);
       }
     });
 };
-
 
 async function checkUserInvite(req, res, email) {
   try {
@@ -262,15 +265,13 @@ async function checkUserInvite(req, res, email) {
     }
 
     return ROUTES.REGISTER;
-  }
-  catch (error) {
+  } catch (error) {
     logger.error(`Invite link to register failed ${error}`);
     return redirectErrorPage(req, res, 'login-error');
   }
 }
 
 function redirectErrorPage(req, res, errorPage) {
-  res.cookie("errorPage", errorPage);
+  res.cookie('errorPage', errorPage);
   return getOneLoginLogoutUrl(req, global_id_token, req.cookies.state);
 }
-

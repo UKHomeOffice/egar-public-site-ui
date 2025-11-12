@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 
 const sinon = require('sinon');
@@ -17,7 +16,10 @@ const controller = require('../../../app/aircraft/add/post.controller');
 const paginate = require('../../../common/utils/pagination');
 
 describe('Aircraft Add Post Controller', () => {
-  let req; let res; let craftApiStub; let sessionSaveStub;
+  let req;
+  let res;
+  let craftApiStub;
+  let sessionSaveStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -31,7 +33,7 @@ describe('Aircraft Add Post Controller', () => {
       },
       session: {
         cookie: {},
-        save: callback => callback(),
+        save: (callback) => callback(),
       },
     };
     res = {
@@ -64,12 +66,12 @@ describe('Aircraft Add Post Controller', () => {
       const rule = new ValidationRule(validator.notEmpty, 'registration', '', 'Enter a registration');
       const cookie = new CookieModel(req);
       const craftObj = {
-        registration: '', 
-        craftType: 'Gulfstream', 
-        craftBasePort: 'LHR', 
-        craftBaseLat: null, 
+        registration: '',
+        craftType: 'Gulfstream',
+        craftBasePort: 'LHR',
+        craftBaseLat: null,
         craftBaseLong: null,
-        portChoice: 'Yes'
+        portChoice: 'Yes',
       };
       const callController = async () => {
         await controller(req, res);
@@ -78,7 +80,9 @@ describe('Aircraft Add Post Controller', () => {
       callController().then(() => {
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', {
-          cookie, craftObj, errors: [rule],
+          cookie,
+          craftObj,
+          errors: [rule],
         });
       });
     });
@@ -88,12 +92,12 @@ describe('Aircraft Add Post Controller', () => {
       const rule = new ValidationRule(validator.notEmpty, 'craftType', '', 'Enter an aircraft type');
       const cookie = new CookieModel(req);
       const craftObj = {
-        registration: 'G-ABCD', 
-        craftType: '', 
-        craftBasePort: 'LHR', 
-        craftBaseLat: null, 
+        registration: 'G-ABCD',
+        craftType: '',
+        craftBasePort: 'LHR',
+        craftBaseLat: null,
         craftBaseLong: null,
-        portChoice: 'Yes'
+        portChoice: 'Yes',
       };
 
       const callController = async () => {
@@ -103,23 +107,30 @@ describe('Aircraft Add Post Controller', () => {
       callController().then(() => {
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', {
-          cookie, craftObj, errors: [rule],
+          cookie,
+          craftObj,
+          errors: [rule],
         });
       });
     });
 
     it('should return message when base is empty', () => {
       req.body.craftBasePort = '';
-      const rule = new ValidationRule(validator.notEmpty, 'craftBasePort', '', 'Enter an aircraft home port / location');
+      const rule = new ValidationRule(
+        validator.notEmpty,
+        'craftBasePort',
+        '',
+        'Enter an aircraft home port / location'
+      );
       const cookie = new CookieModel(req);
 
       const craftObj = {
-        registration: 'G-ABCD', 
-        craftType: 'Gulfstream', 
-        craftBasePort: '', 
-        craftBaseLat: null, 
+        registration: 'G-ABCD',
+        craftType: 'Gulfstream',
+        craftBasePort: '',
+        craftBaseLat: null,
         craftBaseLong: null,
-        portChoice: 'Yes'
+        portChoice: 'Yes',
       };
 
       const callController = async () => {
@@ -130,7 +141,9 @@ describe('Aircraft Add Post Controller', () => {
         expect(craftApiStub).to.not.have.been.called;
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', {
-          cookie, craftObj, errors: [rule],
+          cookie,
+          craftObj,
+          errors: [rule],
         });
       });
     });
@@ -139,9 +152,11 @@ describe('Aircraft Add Post Controller', () => {
   describe('craft api calls', () => {
     it('should return error message if api returns error', () => {
       cookie = new CookieModel(req);
-      craftApiStub.resolves(JSON.stringify({
-        message: 'Some sort of error',
-      }));
+      craftApiStub.resolves(
+        JSON.stringify({
+          message: 'Some sort of error',
+        })
+      );
 
       const callController = async () => {
         await controller(req, res);
@@ -149,7 +164,10 @@ describe('Aircraft Add Post Controller', () => {
 
       callController().then(() => {
         expect(sessionSaveStub).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', { errors: [{ message: 'Some sort of error' }], cookie });
+        expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', {
+          errors: [{ message: 'Some sort of error' }],
+          cookie,
+        });
       });
     });
 
@@ -158,12 +176,12 @@ describe('Aircraft Add Post Controller', () => {
       craftApiStub.resolves('Example return');
 
       const craftObj = {
-        registration: 'G-ABCD', 
-        craftType: 'Gulfstream', 
-        craftBasePort: 'LHR', 
-        craftBaseLat: null, 
+        registration: 'G-ABCD',
+        craftType: 'Gulfstream',
+        craftBasePort: 'LHR',
+        craftBaseLat: null,
         craftBaseLong: null,
-        portChoice: 'Yes'
+        portChoice: 'Yes',
       };
 
       const callController = async () => {
@@ -173,7 +191,9 @@ describe('Aircraft Add Post Controller', () => {
       callController().then(() => {
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', {
-          cookie, craftObj, errors: [{ message: 'There was a problem saving the aircraft. Try again later' }],
+          cookie,
+          craftObj,
+          errors: [{ message: 'There was a problem saving the aircraft. Try again later' }],
         });
       });
     });
@@ -183,12 +203,12 @@ describe('Aircraft Add Post Controller', () => {
       craftApiStub.resolves('Something containing DETAIL:  Key (registration) ');
 
       const craftObj = {
-        registration: 'G-ABCD', 
-        craftType: 'Gulfstream', 
-        craftBasePort: 'LHR', 
-        craftBaseLat: null, 
+        registration: 'G-ABCD',
+        craftType: 'Gulfstream',
+        craftBasePort: 'LHR',
+        craftBaseLat: null,
         craftBaseLong: null,
-        portChoice: 'Yes'
+        portChoice: 'Yes',
       };
 
       const callController = async () => {
@@ -198,7 +218,9 @@ describe('Aircraft Add Post Controller', () => {
       callController().then(() => {
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/add/index', {
-          cookie, craftObj, errors: [{ message: 'Craft already exists' }],
+          cookie,
+          craftObj,
+          errors: [{ message: 'Craft already exists' }],
         });
       });
     });

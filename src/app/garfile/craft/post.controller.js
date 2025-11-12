@@ -20,7 +20,8 @@ module.exports = (req, res) => {
   }
 
   if (req.body.addCraft && buttonClicked === 'Add to GAR') {
-    craftApi.getDetails(userId, req.body.addCraft)
+    craftApi
+      .getDetails(userId, req.body.addCraft)
       .then((apiResponse) => {
         const craft = JSON.parse(apiResponse);
         // Overwrite GAR craft info if a user has clicked on a craft
@@ -40,8 +41,7 @@ module.exports = (req, res) => {
 
     if (craftObj.portChoice === 'Yes') {
       craftObj.craftBasePort = req.body.craftBasePort;
-    }
-    else {
+    } else {
       craftObj.craftBaseLat = req.body.craftBaseLat;
       craftObj.craftBaseLong = req.body.craftBaseLong;
     }
@@ -50,11 +50,15 @@ module.exports = (req, res) => {
     cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase, craftObj.portChoice);
     const validations = validationList.validations(craftObj);
 
-    validator.validateChains(validations)
+    validator
+      .validateChains(validations)
       .then(() => {
-
-
-        garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { registration: craftObj.registration, craftType: craftObj.craftType, craftBase: craftObj.craftBase })
+        garApi
+          .patch(cookie.getGarId(), cookie.getGarStatus(), {
+            registration: craftObj.registration,
+            craftType: craftObj.craftType,
+            craftBase: craftObj.craftBase,
+          })
           .then((apiResponse) => {
             const parsedResponse = JSON.parse(apiResponse);
             if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -74,7 +78,10 @@ module.exports = (req, res) => {
           .catch((err) => {
             logger.error('Api failed to update GAR');
             logger.error(err);
-            res.render('app/garfile/craft/index', { cookie, errors: [{ message: 'Failed to add aircraft to GAR' }] });
+            res.render('app/garfile/craft/index', {
+              cookie,
+              errors: [{ message: 'Failed to add aircraft to GAR' }],
+            });
           });
       })
       .catch((err) => {

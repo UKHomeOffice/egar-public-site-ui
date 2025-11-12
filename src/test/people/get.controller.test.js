@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -14,16 +11,17 @@ const personApi = require('../../common/services/personApi');
 const controller = require('../../app/people/get.controller');
 
 describe('People Get Controller', () => {
-  let req; let res; let clock;
+  let req;
+  let res;
+  let clock;
   const APRIL = 3;
-
 
   beforeEach(() => {
     chai.use(sinonChai);
     clock = sinon.useFakeTimers({
       now: new Date(2023, APRIL, 11),
       shouldAdvanceTime: false,
-      toFake: ["Date"],
+      toFake: ['Date'],
     });
 
     req = {
@@ -52,16 +50,19 @@ describe('People Get Controller', () => {
     callController().then(() => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
       expect(res.render).to.have.been.calledWith('app/people/index', {
-        cookie, errors: [{ message: 'Failed to get saved people' }],
+        cookie,
+        errors: [{ message: 'Failed to get saved people' }],
       });
     });
   });
 
   it('should render the message if api returns one', () => {
     const cookie = new CookieModel(req);
-    sinon.stub(personApi, 'getPeople').resolves(JSON.stringify({
-      message: 'User not found',
-    }));
+    sinon.stub(personApi, 'getPeople').resolves(
+      JSON.stringify({
+        message: 'User not found',
+      })
+    );
 
     const callController = async () => {
       await controller(req, res);
@@ -70,7 +71,8 @@ describe('People Get Controller', () => {
     callController().then(() => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
       expect(res.render).to.have.been.calledWith('app/people/index', {
-        cookie, errors: [{ message: 'Failed to get saved people' }],
+        cookie,
+        errors: [{ message: 'Failed to get saved people' }],
       });
     });
   });
@@ -91,7 +93,9 @@ describe('People Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
         expect(res.render).to.have.been.calledWith('app/people/index', {
-          cookie, people: apiResponse, errors: [{ message: 'Example Error Message' }],
+          cookie,
+          people: apiResponse,
+          errors: [{ message: 'Example Error Message' }],
         });
       });
     });
@@ -102,14 +106,16 @@ describe('People Get Controller', () => {
       const cookie = new CookieModel(req);
       sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(apiResponse));
 
-      
       await controller(req, res);
 
       expect(req.session.successMsg).to.be.undefined;
       expect(req.session.successHeader).to.be.undefined;
       expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
       expect(res.render).to.have.been.calledWith('app/people/index', {
-        cookie, people: apiResponse, successHeader: 'Successful Header', successMsg: 'Example Success Message',
+        cookie,
+        people: apiResponse,
+        successHeader: 'Successful Header',
+        successMsg: 'Example Success Message',
       });
     });
 
@@ -125,7 +131,8 @@ describe('People Get Controller', () => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
       expect(res.render).to.have.been.called;
       expect(res.render).to.have.been.calledWith('app/people/index', {
-        cookie, people: apiResponse,
+        cookie,
+        people: apiResponse,
       });
     });
   });

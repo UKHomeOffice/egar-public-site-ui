@@ -10,7 +10,6 @@ if (config.NOTIFY_API_KEY === null) {
 const notifyClient = new notify.NotifyClient(config.NOTIFY_API_KEY);
 
 module.exports = {
-
   /**
    * @param {String} user
    * @param {String} token
@@ -26,7 +25,7 @@ module.exports = {
             base_url: config.BASE_URL,
           },
         })
-        .then(response => resolve(response))
+        .then((response) => resolve(response))
         .catch((err) => {
           logger.error(err);
           reject(err);
