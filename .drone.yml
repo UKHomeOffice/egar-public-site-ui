@@ -51,7 +51,6 @@ steps:
   - name: linting-formatting
     pull: if-not-exists
     image: node:22-alpine3.21
-    failure: ignore
     commands:
     - cd src
     - npm install
