@@ -95,30 +95,27 @@ module.exports = (req, res) => {
         return;
       }
       logger.debug(`In Upload File Service. Uploaded File: ${req.file.originalname}`);
-      //const mimeType = fileType(req.file.buffer);
-      const mimeType = req.file.mimetype || 'application/octet-stream';
+      const mimeType = fileType(req.file.buffer);
+      // const mimeType = req.file.mimetype || 'application/octet-stream';
+
       logger.info(`Detected uploaded file mimetype as: ${JSON.stringify(mimeType)}`);
-      console.log(req.file.mimetype);
-      if (!isValidFileMime(req.file.originalname, mimeType)) {
-       logger.info('Rejecting file due to disallowed mimetype');
-       res.redirect('/garfile/supportingdocuments?query=invalid');
-       return;
-      }
+
       // if (!mimeType || !isValidFileMime(req.file.originalname, mimeType.mime)) {
       //   logger.info('Rejecting file due to disallowed mimetype');
       //   res.redirect('/garfile/supportingdocuments?query=invalid');
       //   return;
       // }
+
       logger.info('Valid mimetype, proceeding');
 
       logger.debug('About to create a Stream of the file buffer');
       const readStream = new stream.Readable();
       readStream.push(req.file.buffer);
       readStream.push(null);
-     logger.debug('Stream created, about to send to AV scan endpoint');
+      logger.debug('Stream created, about to send to AV scan endpoint');
 
-     const uriString = `${process.env.CLAMAV_BASE}:${process.env.CLAMAV_PORT}/scan`;
-     logger.debug(`uri: ${uriString}`);
+      const uriString = `${process.env.CLAMAV_BASE}:${process.env.CLAMAV_PORT}/scan`;
+      logger.debug(`uri: ${uriString}`);
 
       const formData = {
         name: req.file.originalname,
@@ -144,7 +141,8 @@ module.exports = (req, res) => {
                   logger.debug(JSON.stringify(parsedResponse));
                   req.session.errMsg = parsedResponse;
                   res.redirect('/garfile/supportingdocuments?query=e');
-                  return;           }
+                  return;
+                }
                 logger.debug('File uploaded');
                 res.redirect('/garfile/supportingdocuments');
               })
