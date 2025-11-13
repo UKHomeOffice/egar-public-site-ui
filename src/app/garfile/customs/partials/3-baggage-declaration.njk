@@ -29,7 +29,7 @@
           value: gar.baggageDeclaration,
           rows: 5,
           maxlength: MAX_TEXT_BOX_LENGTH - 100,
-          errorMessage: errors | filterArray('identifier', 'baggageDeclaration') | first | transform({'message': 'text'}),
+          errorMessage: errors | containsError('baggageDeclaration'),
           attributes: { placeholder: "e.g. firearms" }
         })
       }

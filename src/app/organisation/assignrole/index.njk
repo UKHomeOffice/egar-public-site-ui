@@ -37,7 +37,7 @@
             id: 'role-hint'
           },
           describedBy: "role-hint",
-          errorMessage: errors | filterArray('identifier', 'role') | first | transform({'message': 'text'}),
+          errorMessage: errors | containsError('role'),
           fieldset: {
             legend: {
               text: __('title_assign_role'),

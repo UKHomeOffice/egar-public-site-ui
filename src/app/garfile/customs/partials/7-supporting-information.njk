@@ -18,7 +18,7 @@
       text: __('field_supporting_information_label')
     },
     value: gar.supportingInformation,
-  errorMessage: errors | filterArray('identifier', 'supportingInformationAnswer') | first | transform({'message': 'text'}),
+  errorMessage: errors | containsError('supportingInformationAnswer'),
     rows: 5,
     maxlength: MAX_TEXT_BOX_LENGTH - 50,
     describedBy: "supportingInformationAnswer-hint",

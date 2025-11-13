@@ -6,31 +6,16 @@ const uncamelCase = (value) => {
 
   return uncamelStr;
 };
-
+/*
+ * Check if there is an error in 'errors' whose identifier matches 'value'.
+ * If not, return false, if so return message in a format govuk macros recognise.
+ * */
 const containsError = (array, value) => {
   if (array === undefined || value === undefined) return false;
 
   const result = array.filter((element) => element.identifier === value);
-  return result.length > 0;
-};
-
-const filterArray = (arr, propertyName, propertyValue) => {
-  return (arr || []).filter((e) => e[propertyName] === propertyValue);
-};
-const transform = (o, mapping) => {
-  const returnValue = {};
-  if (!o) {
-    return false;
-  }
-  for (const key in mapping) {
-    if (Object.prototype.hasOwnProperty.call(o, key)) {
-      returnValue[mapping[key]] = o[key];
-    }
-  }
-  return returnValue;
+  return result.length > 0 && { text: result[0].message };
 };
 
 exports.uncamelCase = uncamelCase;
 exports.containsError = containsError;
-exports.filterArray = filterArray;
-exports.transform = transform;

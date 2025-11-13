@@ -13,7 +13,7 @@
   attributes: {
     maxlength: MAX_STRING_LENGTH
   },
-  errorMessage: errors | filterArray('identifier', 'responsibleGivenName') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('responsibleGivenName')
 }) }}
 
 {{ govukInput({
@@ -31,7 +31,7 @@
   attributes: {
     maxlength: MAX_STRING_LENGTH
   },
-  errorMessage: errors | filterArray('identifier', 'responsibleSurname') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('responsibleSurname')
 }) }}
 
 {{ govukInput({
@@ -46,7 +46,7 @@
     text: __("field_contact_number_hint")
   },
   value: responsiblePerson.responsibleContactNo,
-  errorMessage: errors | filterArray('identifier', 'responsibleContactNo') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('responsibleContactNo')
 }) }}
 
 {{ govukInput({
@@ -65,7 +65,7 @@
   attributes: {
     maxlength: MAX_EMAIL_LENGTH
   },
-  errorMessage: errors | filterArray('identifier', 'responsibleEmail') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('responsibleEmail')
 }) }}
 
 <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
@@ -82,7 +82,7 @@
     },
     value: responsiblePerson.responsibleAddressLine1,
     attributes: { maxlength: MAX_STRING_LENGTH },
-    errorMessage: errors | filterArray('identifier', 'responsibleAddressLine1') | first | transform({'message': 'text'})
+    errorMessage: errors | containsError('responsibleAddressLine1')
   }) }}
 
   {{ govukInput({
@@ -93,7 +93,7 @@
     },
     value: responsiblePerson.responsibleAddressLine2,
     attributes: { maxlength: MAX_STRING_LENGTH },
-    errorMessage: errors | filterArray('identifier', 'responsibleAddressLine2') | first | transform({'message': 'text'})
+    errorMessage: errors | containsError('responsibleAddressLine2')
   }) }}
 
   {{ govukInput({
@@ -108,7 +108,7 @@
     },
     value: responsiblePerson.responsibleTown,
     attributes: { maxlength: MAX_STRING_LENGTH },
-    errorMessage: errors | filterArray('identifier', 'responsibleTown') | first | transform({'message': 'text'})
+    errorMessage: errors | containsError('responsibleTown')
   }) }}
 
   {{ govukInput({
@@ -118,7 +118,7 @@
     label: { text: __("field_postcode"), classes: "govuk-label" },
     value: responsiblePerson.responsiblePostcode,
     attributes: { maxlength: MAX_POSTCODE_LENGTH },
-    errorMessage: errors | filterArray('identifier', 'responsiblePostcode') | first | transform({'message': 'text'})
+    errorMessage: errors | containsError('responsiblePostcode')
   }) }}
 
   {% set countryItems = [] %}
@@ -133,7 +133,7 @@
     label: { text: __("field_address_country"), classes: "govuk-label" },
     items: countryItems,
     selected: responsiblePerson.responsibleCountry,
-    errorMessage: errors | filterArray('identifier', 'responsibleCountry') | first | transform({'message': 'text'})
+    errorMessage: errors | containsError('responsibleCountry')
   }) }}
 </fieldset>
 
@@ -146,7 +146,7 @@
   },
   maxlength: MAX_TEXT_BOX_LENGTH - 100,
   value: responsiblePerson.fixedBasedOperatorAnswer or "",
-  errorMessage: errors | filterArray('identifier', 'fixedBasedOperatorAnswer') | first | transform({'message': 'text'})
+  errorMessage: errors | containsError('fixedBasedOperatorAnswer')
 }) %}
 
 {% set fixedBasedOperatorItems = [] %}
@@ -171,6 +171,6 @@
     }
   },
   classes: m.form_group_class('fixedBasedOperator', errors),
-  errorMessage: errors | filterArray('identifier', 'fixedBasedOperator') | first | transform({'message': 'text'}),
+  errorMessage: errors | containsError('fixedBasedOperator'),
   items: fixedBasedOperatorItems
 }) }}

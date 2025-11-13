@@ -21,7 +21,7 @@
   hint: {
     text: __('field_visit_reason_hint')
   },
-  errorMessage: errors | filterArray('identifier', 'visitReason') | first | transform({'message': 'text'}),
+  errorMessage: errors | containsError('visitReason'),
   items: radioItems
 }) }}
 

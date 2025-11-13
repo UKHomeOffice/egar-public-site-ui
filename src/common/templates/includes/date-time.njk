@@ -48,7 +48,7 @@
       }
     }
   ],
-  errorMessage: errors | filterArray('identifier', prefix + "Date") | first | transform({'message': 'text'})
+  errorMessage: errors | containsError(prefix + 'Date')
 }) }}
 {% endmacro %}
 
@@ -64,7 +64,7 @@
     hint: {
       text: __(hintName)
     },
-    errorMessage: errors | filterArray('identifier', prefix + "Time") | first | transform({'message': 'text'}),
+    errorMessage: errors | containsError(prefix + 'Time'),
     items: [
       {
         id: prefix + "Hour",
