@@ -195,7 +195,10 @@ module.exports = {
     return new Promise((resolve, reject) => {
       request.get(
         {
-          headers: { 'content-type': 'application/json' },
+         // headers: { 'content-type': 'application/json' },
+          headers: {
+          'Accept': 'application/json, application/pdf, image/jpeg, text/plain, application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        },
           url: endpoints.getSupportingDoc(garId),
         },
         (error, _response, body) => {

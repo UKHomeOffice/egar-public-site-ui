@@ -8,6 +8,8 @@ services:
       - .env.dev
     ports:
       - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data  
 
   api:
     build:

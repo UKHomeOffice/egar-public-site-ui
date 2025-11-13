@@ -328,7 +328,7 @@
 	"supporting_documents_warning": "Supporting documentation may include firearms certificates / licences, firearms serial numbers or remote clearance forms.",
 	"supporting_documents_list_1": "The maximum size for the entire GAR submission cannot exceed 8MB.",
 	"supporting_documents_list_2": "You can upload up to",
-	"supporting_documents_list_3": "The following file types can be uploaded: PDF, JPG, JPEG, PNG, GIF, DOC, DOCX.",
+	"supporting_documents_list_3": "The following file types can be uploaded: TXT, PDF, JPG, JPEG, PNG, GIF, DOC, DOCX.",
 	"supporting_documents_list_4": "files within this size limit",
 	"heading_upload_file": "Upload a file",
 	"button_upload_file": "Upload selected file",
