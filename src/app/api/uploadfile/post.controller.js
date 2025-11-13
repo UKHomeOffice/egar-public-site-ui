@@ -97,12 +97,13 @@ module.exports = (req, res) => {
       logger.debug(`In Upload File Service. Uploaded File: ${req.file.originalname}`);
       const mimeType = fileType(req.file.buffer);
       logger.info(`Detected uploaded file mimetype as: ${JSON.stringify(mimeType)}`);
+      console.log(req.file.mimetype);
 
-      if (!mimeType || !isValidFileMime(req.file.originalname, mimeType.mime)) {
-        logger.info('Rejecting file due to disallowed mimetype');
-        res.redirect('/garfile/supportingdocuments?query=invalid');
-        return;
-      }
+      // if (!mimeType || !isValidFileMime(req.file.originalname, mimeType.mime)) {
+      //   logger.info('Rejecting file due to disallowed mimetype');
+      //   res.redirect('/garfile/supportingdocuments?query=invalid');
+      //   return;
+      // }
       logger.info('Valid mimetype, proceeding');
 
       logger.debug('About to create a Stream of the file buffer');
