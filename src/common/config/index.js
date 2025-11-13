@@ -19,7 +19,7 @@ exports.SESSION_ENCODE_SECRET = process.env.SESSION_ENCODE_SECRET || 'thisShould
 exports.SESSION_PARSER_SECRET = process.env.SESSION_PARSER_SECRET || '3169n$*INDUKFIN*s47y4917$p';
 
 // API settings
-exports.API_BASE = process.env.API_BASE || 'http://localhost:5000';
+exports.API_BASE = process.env.API_BASE || 'http://api:5000';
 exports.API_VERSION = process.env.API_VERSION || 'v0.2.0';
 
 // Misc settings

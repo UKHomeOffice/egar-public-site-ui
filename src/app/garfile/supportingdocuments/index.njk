@@ -51,7 +51,7 @@
             <label class="govuk-label govuk-label--m" for="file">{{__('heading_upload_file')}}</label>
             {{ m.error_message('file', errors, __) }}
             <input id="file" name='file' class="govuk-file-upload" type="file" maxlength="25"
-              accept="image/gif, image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              accept="image/gif, image/jpeg, image/png, application/pdf, application/msword, text/plain, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               {{ 'aria-describedby=file-error' if errors | containsError('file') }}>
           </div>
 
