@@ -167,6 +167,9 @@
 
   {{ dt.dateInput('expiry', cookie, documentExpiryDate, "field_document_expiry_date", "field_document_expiry_date_hint", errors, __) }}
 
+
+{% set issuingStateItems = [] %}
+
 {% for country in nationalityList | sort(attribute='label') %}
   {% set issuingStateItems = issuingStateItems.concat({
     value: country.code,
