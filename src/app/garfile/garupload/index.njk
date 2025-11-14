@@ -41,7 +41,7 @@
         <label class="govuk-label" for="file">{{__('field_file')}}</label>
         {{ m.error_message('file', errors, __) }}
         <input id="file" name='file' type="file" class="govuk-file-upload"
-          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain"
+          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
           {{ 'aria-describedby=file-error' if errors | containsError('file') }}>
       </div>
 
