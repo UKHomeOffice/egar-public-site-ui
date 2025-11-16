@@ -38,12 +38,6 @@
     text-decoration: none;
     color: #005ea5 !important;
 }
-.app-check-your-answers-margin-bottom{/*unused */
-    margin-bottom: 10px;
-}
-.margin-bottom-10 {/* unused */
-    margin-bottom: 10px !important;
-}
 
 .margin-bottom-20 {/* used in two places */
     margin-bottom: 20px !important;
