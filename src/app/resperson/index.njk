@@ -13,11 +13,12 @@
 <script type="text/javascript" src="/javascripts/resperson_utils.js"></script>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+
       <h1 class="govuk-heading-xl">{{ __('heading_responsible_person') }}</h1>
       <p class="govuk-body-l">{{__('responsible_person_caption')}}</p>
       <p class="govuk-body-l">{{__('res_person_sub_caption')}}</p>
       <p class="govuk-body-m">Search for responsible person </p>
-      <input class="govuk-input govuk-input--width-20" id="resperson-search" name="resperson-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+      <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2" id="resperson-search" name="resperson-search" type="text" placeholder="Search">
     </div>
 
     <div class="govuk-grid-column-full">
@@ -47,7 +48,7 @@
                     <td class="govuk-table__cell">{{resPerson.responsibleEmail}}</td>
                     <td class="govuk-table__cell ">
                       <button id="delete_responsible_person_{{ loop.index }}"
-                        class="govuk-button--link" name="deleteResponsiblePerson"
+                        class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deleteResponsiblePerson"
                         formaction="/resperson/delete" formmethod="get"
                         value="{{resPerson.responsiblePersonId}}">{{__('table_delete')}}
                       </button>
