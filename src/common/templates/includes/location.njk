@@ -1,3 +1,4 @@
+{% from "dist/govuk/components/radios/macro.njk" import govukRadios %}
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% macro location(legendLabel, warningMessage, isPortChoice, portCode, lat, long, prefix, errors, __) %}
@@ -15,27 +16,37 @@
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                 {{legendLabel | safe  }}
             </legend>
-            <span id="portChoice-hint" class="govuk-hint">{{__('field_port_choice_hint')}}</span>
+            <div id="portChoice-hint" class="govuk-hint govuk-!-margin-bottom-4">{{__('field_port_choice_hint')}}</div>
+
             {{ m.error_message('portChoice', errors, __) }}
-            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-                <div class="govuk-radios__item">
-                    <input id="portChoiceCode" name="portChoice" class="govuk-radios__input" type="radio" value="Yes" {{ 'checked' if isPortChoice}} data-aria-controls="portChoiceCodeContainer" aria-labelledby="portChoiceCode-label">
-                    <label id="portChoiceCode-label" class="govuk-label govuk-radios__label" for="portChoiceCode">{{__('field_choice_yes')}}</label>
-                </div>
-                <div id="portChoiceCodeContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
-                    {{port_choice(portCode, prefix, errors, __)}}
-                </div>
-                <div class="govuk-radios__item">
-                    <input id="portChoiceCoordinates" name="portChoice" class="govuk-radios__input" type="radio" value="No" {{ 'checked' if not isPortChoice}} data-aria-controls="portChoiceCoordinatesContainer" aria-labelledby="portChoiceCoordinates-label">
-                    <label id="portChoiceCoordinates-label" class="govuk-label govuk-radios__label" for="portChoiceCoordinates">{{__('field_choice_no')}}</label>
-                </div>
-                <div id="portChoiceCoordinatesContainer" class="govuk-radios__conditional govuk-radios__conditional--hidden">
-                    <div class="govuk-form-group">
-                        {{ m.hint(prefix + 'Coordinates', __('field_coordinate_hint')) }}
-                    </div>
-                    {{lat_long(lat, long, prefix, errors, __)}}
-                </div>
-            </div>
+
+            {{ govukRadios({
+              idPrefix: "portChoice",
+              name: "portChoice",
+              classes: "govuk-radios--conditional",
+              value: "Yes" if isPortChoice else "No",
+
+              items: [
+                {
+                  value: "Yes",
+                  text: __('field_choice_yes'),
+                  conditional: {
+                    html: port_choice(portCode, prefix, errors, __)
+                  }
+                },
+                {
+                  value: "No",
+                  text: __('field_choice_no'),
+                  conditional: {
+                    html:
+                      '<div class="govuk-form-group">' ~
+                        m.hint(prefix + "Coordinates", __('field_coordinate_hint')) ~
+                      '</div>' ~
+                      lat_long(lat, long, prefix, errors, __)
+                  }
+                }
+              ]
+            }) }}
             {{warningMessage}}
         </fieldset>
     </div>
@@ -65,31 +76,17 @@
 
 {% macro lat_long(lat, long, prefix, errors, __) %}
 
-    <style type="text/css">
-
-        #{{ prefix }}Long:invalid{
-            background-color:#ff9baf;
-        }
-        #{{ prefix }}Lat:invalid{
-            background-color:#ff9baf;
-        }
-
-    </style>
-    {# Start location coords #}
-    {# Latitude #}
     <div class="govuk-form-group {{ m.form_group_class(prefix + 'Lat', errors) }}">
         <label class="govuk-label" for="{{ prefix }}Lat">{{__('field_latitude')}}</label>
         {{ m.hint(prefix + 'Latitude', __('field_latitude_hint')) }}
         {{ m.error_message(prefix + 'Lat', errors, __) }}
-        <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Lat" name="{{ prefix }}Lat" type="text"  maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -180 to 180" value="{{ lat }}">
+        <input class="govuk-input lat-long" id="{{ prefix }}Lat" name="{{ prefix }}Lat" type="text"  maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -180 to 180" value="{{ lat }}">
     </div>
-    {# Longitude #}
     <div class="govuk-form-group {{ m.form_group_class(prefix + 'Long', errors) }}">
         <label class="govuk-label" for="{{ prefix }}Long">{{__('field_longitude')}}</label>
         {{ m.hint(prefix + 'Longitude', __('field_longitude_hint')) }}
         {{ m.error_message(prefix + 'Long', errors, __) }}
-        <input class="govuk-input govuk-date-input__input" id="{{ prefix }}Long" name="{{ prefix }}Long" type="text" maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -90 to 90" value="{{ long }}">
+        <input class="govuk-input lat-long" id="{{ prefix }}Long" name="{{ prefix }}Long" type="text" maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -90 to 90" value="{{ long }}">
     </div>
-    {# End location coords #}
 
 {% endmacro %}
