@@ -141,7 +141,6 @@ h2.govuk-notification-banner__title {
     height: 24px;
 }
 
-
 .govuk-checkboxes--small .govuk-checkboxes__label:after {
     top: 17px;
     left: 6px;
@@ -198,9 +197,6 @@ h2.govuk-notification-banner__title {
   justify-content: center;
 }
 
-.center-text {
-  text-align: center;
-}
 .pagination {
     font-size: 19px !important;
 }
