@@ -62,7 +62,7 @@
                 <tr class="govuk-table__row" id="person-{{loop.index0}}">
               {% endif %}
                 <td class="govuk-table__cell{% if isPeopleInvalid %} govuk-!-padding-left-2{% endif %}">
-                  <button id="edit-person-{{ loop.index }}" class="govuk-button--link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a>
+                  <button id="edit-person-{{ loop.index }}" class="govuk-button--link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</button>
                 </td>
                 <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
                 <td class="govuk-table__cell">{{person.peopleType.name}}</td>
