@@ -7,8 +7,6 @@ const uncamelCase = (value) => {
   return uncamelStr;
 };
 /*
- * Check if there is an error in 'errors' whose identifier matches 'value'.
- * If not, return false, if so return message in a format govuk macros recognise.
  * */
 const containsError = (array, value) => {
   if (array === undefined || value === undefined) return false;
