@@ -201,9 +201,6 @@ h2.govuk-notification-banner__title {
 .center-text {
   text-align: center;
 }
-.hide-content{
-    display: none;
-}
 .pagination {
     font-size: 19px !important;
 }
