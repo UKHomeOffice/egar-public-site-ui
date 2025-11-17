@@ -27,7 +27,7 @@
           name="buttonClicked"
           value="{{__('form_add_and_exit')}}">
           <p class="govuk-body-m">
-            <a class="govuk-button govuk-button--secondary" id="cancel-and-exit" href="/resperson#" onclick="sendAnalytics(event, 'Saved Responsible person Add - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
+            <a class="govuk-button govuk-button--secondary" id="cancel-and-exit" href="/resperson#">{{__('form_exit_without_adding')}}</a>
           </p>
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
