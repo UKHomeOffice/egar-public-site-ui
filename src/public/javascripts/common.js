@@ -16,3 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+window.sendAnalytics = (e, message, event) => {
+  console.log("Send Analytics" + message)
+  // this function is called but not defined.
+  // Adding here so we can reintegrate with GA if necessary.
+}
