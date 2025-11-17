@@ -74,24 +74,12 @@
                         id="savedPerson-{{loop.index0}}">
                       <td class="govuk-table__cell multiple-choice--hod{% if person.isInvalid %} govuk-!-padding-left-2{% endif %}">
                           {% if person.isInvalid %}
-                            <button
-                              id="edit-person-{{ loop.index }}"
-                              class="govuk-button--link"
-                              title="Edit details for {{ person.firstName }} {{ person.lastName }}"
-                              name="editSavedPerson"
-                              value="{{person.personId}}">
+                            <button id="edit-person-{{ loop.index }}" class="govuk-button--link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editSavedPerson" value="{{person.personId}}">
                               Edit
                             </button>
                           {% elif not person.isDuplicate %}
                             <div class="govuk-checkboxes__item">
-                              <input
-                                type="checkbox"
-                                class="govuk-checkboxes__input jsCheckbox"
-                                id="savedPerson-{{loop.index0}}"
-                                name="personId"
-                                value="{{person.personId}}"
-                                autocomplete="off"
-                              >
+                              <input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="savedPerson-{{loop.index0}}" name="personId" value="{{person.personId}}" autocomplete="off" >
                               <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="savedPerson-{{loop.index0}}">
                                 &nbsp;
                               </label>
@@ -110,15 +98,8 @@
               </tbody>
             </table>
           </div>
-
           <div class="govuk-grid-column-two-thirds">
-            <button
-              id="addToManifest"
-              type="submit"
-              name="buttonClicked"
-              value="Add to GAR"
-              class="govuk-button multi-submit-button"
-            >{{__('button_add_to_gar')}}</button>
+            <button id="addToManifest" type="submit" name="buttonClicked" value="Add to GAR" class="govuk-button multi-submit-button" >{{__('button_add_to_gar')}}</button>
           </div>
           <div class="govuk-grid-column-full">
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
@@ -171,187 +152,134 @@
                     {% if (manifestInvalidPeople and (("person-" + loop.index0) in manifestInvalidPeople)) %}
                       <tr class="govuk-table__row govuk-form-group govuk-form-group--error" id="person-{{loop.index0}}">
                         <td class="govuk-table__cell"></td>
-                      {% else %}
-                        <tr class="govuk-table__row" id="person-{{loop.index0}}">
-                          {% if person
-                            .documentExpiryDate
-                            .toString() < expiryDate
-                            .toString() %}
-                            <h3 class="govuk-heading-s govuk-!-color-red" id="expired" hidden>Please be advised, {{person.firstName}}
-                              {{person.lastName}}'s passport has expired </h3>
-                            <script>
-                              document
-                                .getElementById("expired")
-                                .style
-                                .display = "block"
-                            </script>
-                            <tr class="govuk-!-font-weight-bold">
-                            {% endif %}
-                            <tr class="govuk-table__row">
-                              <td class="govuk-table__cell">
-                                <div class="govuk-checkboxes__item">
-                                    <input
-                                      type="checkbox"
-                                      class="govuk-checkboxes__input jsCheckbox"
-                                      id="garperson-{{loop.index0}}"
-                                      name="garPeopleId"
-                                      value="{{person.garPeopleId}}"
-                                      autocomplete="off"
-                                    >
-                                    <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="garperson-{{loop.index0}}">
-                                      &nbsp;
-                                    </label>
-                                  </div>
-                                </td>
-                                {% endif %}
-                                  <td class="govuk-table__cell garPersonLastName{% if isGarPersonInvalid %} govuk-!-padding-left-2{% endif %}"> {{ person.lastName }} </td>
-                                  <td class="govuk-table__cell garPersonFirstName">{{person.firstName}}</td>
-                                  <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
-                                  <td class="govuk-table__cell garPersonNationality">{{person.nationality | upper}}</td>
-                                  <td class="govuk-table__cell">{{person.gender}}</td>
-                                  <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
-                                  <td class="govuk-table__cell">{{person.peopleType.name}}</td>
-                                  <td class="govuk-table__cell">
-                                    <button class="govuk-button--link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
-                                  </td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                  <td class="govuk-table__cell" colspan="9">
-                                    <div>
-                                      <details role="group">
-                                        <summary role="button" aria-controls="details-content-{{ loop.index }}" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
-                                          <span id="further-information-{{ loop.index }}" class="summary">{{__('label_manifest_further_personal_details')}}</span>
-                                        </summary>
-                                        <div class="panel panel-border-narrow" id="details-content-{{ loop.index }}" aria-hidden="true">
-                                          <table class="govuk-table" width="100%">
-                                            <tbody class="govuk-table__body">
-                                              <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
-                                                <td class="govuk-table__cell">{{person.documentType}}</td>
-                                              </tr>
-                                              <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
-                                                <td class="govuk-table__cell">{{person.issuingState | upper }}</td>
-                                              </tr>
-
-                                              <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">{{__('field_travel_document_number')}}</td>
-                                                <td class="govuk-table__cell">{{ person.documentNumber }}</td>
-                                              </tr>
-
-                                              <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
-                                                <td class="govuk-table__cell">{{ person.documentExpiryDate }}</td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                      </details>
-                                    </div>
-                                  </td>
-                                </tr>
-                              {% endfor %}
+                    {% else %}
+                      <tr class="govuk-table__row" id="person-{{loop.index0}}">
+                        <td class="govuk-table__cell">
+                          <div class="govuk-checkboxes__item">
+                              <input type="checkbox" class="govuk-checkboxes__input jsCheckbox" id="garperson-{{loop.index0}}" name="garPeopleId" value="{{person.garPeopleId}}" autocomplete="off" >
+                              <label class="govuk-label govuk-checkboxes__label visuallyhidden" for="garperson-{{loop.index0}}">
+                                &nbsp;
+                              </label>
                             </div>
                           </td>
-                        </tr>
-                      {% else %}
-                        {{ m.empty_table_message(__('manifest_no_records')) }}
                       {% endif %}
-                    </tbody>
-                  </table>
-                </div>
-                <div class="govuk-grid-column-full">
-                  <div class="govuk-form-group">
-                    <label class="govuk-label" for="totalPersonsOnBoard">
-                      {{__('total_persons_on_board')}}
-                    </label>
-
-                    <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
+                        <td class="govuk-table__cell garPersonLastName{% if isGarPersonInvalid %} govuk-!-padding-left-2{% endif %}"> {{ person.lastName }} </td>
+                        <td class="govuk-table__cell garPersonFirstName">{{person.firstName}}</td>
+                        <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+                        <td class="govuk-table__cell garPersonNationality">{{person.nationality | upper}}</td>
+                        <td class="govuk-table__cell">{{person.gender}}</td>
+                        <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
+                        <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+                        <td class="govuk-table__cell">
+                          <button class="govuk-button--link" name="editPersonId" value="{{person.garPeopleId}}">Edit</button>
+                        </td>
+                      </tr>
+                      <tr class="govuk-table__row">
+                        <td class="govuk-table__cell" colspan="9">
+                          <div>
+                            <details role="group">
+                              <summary role="button" aria-controls="details-content-{{ loop.index }}" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
+                                <span id="further-information-{{ loop.index }}" class="summary">{{__('label_manifest_further_personal_details')}}</span>
+                              </summary>
+                              <div class="panel panel-border-narrow" id="details-content-{{ loop.index }}" aria-hidden="true">
+                                <table class="govuk-table" width="100%">
+                                  <tbody class="govuk-table__body">
+                                    <tr class="govuk-table__row">
+                                      <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
+                                      <td class="govuk-table__cell">{{person.documentType}}</td>
+                                    </tr>
+                                    <tr class="govuk-table__row">
+                                      <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
+                                      <td class="govuk-table__cell">{{person.issuingState | upper }}</td>
+                                    </tr>
+                                    <tr class="govuk-table__row">
+                                      <td class="govuk-table__cell">{{__('field_travel_document_number')}}</td>
+                                      <td class="govuk-table__cell">{{ person.documentNumber }}</td>
+                                    </tr>
+                                    <tr class="govuk-table__row">
+                                      <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
+                                      <td class="govuk-table__cell">{{ person.documentExpiryDate }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </details>
+                          </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
                   </div>
-                  <button
-                    id="garPeopleId"
-                    type="submit"
-                    name="buttonClicked"
-                    value="Add to PEOPLE"
-                    class="govuk-button multi-submit-button"
-                    disabled="true"
-                  >
-                    {{__('button_add_to_people')}}
-                  </button>
-                  <button
-                      id="delete-people-dialog-button"
-                      type="button"
-                      class="govuk-button warning-button multi-submit-button"
-                    >
-                      {{__('table_delete_gar_people')}}
-                  </button>
-
-                  <dialog id="deletePeopleDialog" class="govuk-grid-column-two-thirds">
-                    <h2 class="govuk-error-message govuk-!-font-size-36">
-                      Warning
-                    </h2>
-                    {{ govukWarningText({
-                      text: "Are you sure you want to delete these people?"
-                    }) }}
-                    <ul id="peopleToDeleteList" class="govuk-list govuk-list--bullet"></ul>
-                    <form method="dialog">
-                      <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
-                          Close
-                        </button>
-                    </form>
-                    <button
-                      id="delete-people"
-                      type="submit"
-                      class="govuk-button warning-button"
-                      formmethod="post"
-                      formaction="/garfile/manifest/deleteperson"
-                    >
-                      {{__('table_delete_gar_people')}}
-                    </button>
-                  </dialog>
-                <div class="govuk-form-group">
-                  <fieldset class="govuk-fieldset" aria-describedby="isMilitaryFlight-hint">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                      <h1 class="govuk-fieldset__heading">
-                        Military flight
-                      </h1>
-                    </legend>
-                    {{ m.hint("isMilitaryFlight", __("is_military_flight_hint")) }}
-                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                      <div class="govuk-checkboxes__item">
-                        <input
-                          class="govuk-checkboxes__input"
-                          id="isMilitaryFlight"
-                          name="isMilitaryFlight"
-                          type="checkbox"
-                          {{ "checked" if cookie.getIsMilitaryFlight() }}
-                          value="true">
-                        <label class="govuk-label govuk-checkboxes__label" for="isMilitaryFlight">
-                          Is this a Military flight?
-                        </label>
-                      </div>
-                    </div>
-                  </fieldset>
-                </div>
-                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-                  {# Start buttons #}
-                  <input id="continue" type="submit" class="govuk-button"
-        name="buttonClicked"
-        value="{{__('button_continue')}}"
-        onclick="sendAnalytics(event, 'GAR Manifest - Continue', 'click')">
-                  <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-                </form>
-                <form id="cancel-form" action="/garfile/view" method="post">
-                  <p class="govuk-body-m">
-                    <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
-          onclick="sendAnalytics(event, 'GAR Manifest - Exit', 'click')">
-                      {{__('form_exit')}}
-                    </button>
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-                  </p>
-                </form>
-                {# End buttons #}
+                </td>
+                </tr>
+              {% else %}
+                {{ m.empty_table_message(__('manifest_no_records')) }}
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+        <div class="govuk-grid-column-full">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="totalPersonsOnBoard">
+              {{__('total_persons_on_board')}}
+            </label>
+            <input class="govuk-input govuk-input--width-3" id="totalPersonsOnBoard" name="name" readonly type="number" value="{{ manifest.items.length }}">
+          </div>
+          <button id="garPeopleId" type="submit" name="buttonClicked" value="Add to PEOPLE" class="govuk-button multi-submit-button" disabled="true" >
+            {{__('button_add_to_people')}}
+          </button>
+          <button id="delete-people-dialog-button" type="button" class="govuk-button warning-button multi-submit-button" >
+              {{__('table_delete_gar_people')}}
+          </button>
+          <dialog id="deletePeopleDialog" class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-error-message govuk-!-font-size-36">
+              Warning
+            </h2>
+            {{ govukWarningText({
+              text: "Are you sure you want to delete these people?"
+            }) }}
+            <ul id="peopleToDeleteList" class="govuk-list govuk-list--bullet"></ul>
+            <form method="dialog">
+              <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
+                  Close
+                </button>
+            </form>
+            <button id="delete-people" type="submit" class="govuk-button warning-button" formmethod="post" formaction="/garfile/manifest/deleteperson" >
+              {{__('table_delete_gar_people')}}
+            </button>
+          </dialog>
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" aria-describedby="isMilitaryFlight-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+              <h1 class="govuk-fieldset__heading">
+                Military flight
+              </h1>
+            </legend>
+            {{ m.hint("isMilitaryFlight", __("is_military_flight_hint")) }}
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="isMilitaryFlight" name="isMilitaryFlight" type="checkbox" {{ "checked" if cookie.getIsMilitaryFlight() }} value="true">
+                <label class="govuk-label govuk-checkboxes__label" for="isMilitaryFlight">
+                  Is this a Military flight?
+                </label>
               </div>
             </div>
-          </div>
-        {% endblock %}
+          </fieldset>
+        </div>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+          {# Start buttons #}
+          <input id="continue" type="submit" class="govuk-button" name="buttonClicked" value="{{__('button_continue')}}" onclick="sendAnalytics(event, 'GAR Manifest - Continue', 'click')">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        </form>
+        <form id="cancel-form" action="/garfile/view" method="post">
+          <p class="govuk-body-m">
+            <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" onclick="sendAnalytics(event, 'GAR Manifest - Exit', 'click')">
+              {{__('form_exit')}}
+            </button>
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+          </p>
+        </form>
+        {# End buttons #}
+      </div>
+    </div>
+  </div>
+{% endblock %}
