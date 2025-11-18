@@ -87,10 +87,7 @@
 
     {{ footer() }}
 
-    <script type="module">
-      import { initAll } from '/javascripts/govuk-frontend.min.js'
-      initAll()
-    </script>
+    <script src="/javascripts/init.js" type="module"></script>
     <script>
       $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function (eventObj) {
         $("<input />")
