@@ -217,12 +217,3 @@
     maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
     {{ m.character_count_hint('travelDocumentOther', MAX_STRING_LENGTH) }}
   </div>
-{##}
-{# <script type="text/javascript"> #}
-{#   accessibleAutocomplete.enhanceSelectElement({ #}
-{#     selectElement: document.querySelector('#nationality') #}
-{#   }); #}
-{#   accessibleAutocomplete.enhanceSelectElement({ #}
-{#     selectElement: document.querySelector('#issuingState') #}
-{#   }); #}
-{# </script> #}
