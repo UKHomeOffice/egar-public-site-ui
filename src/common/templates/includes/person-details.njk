@@ -3,7 +3,7 @@
 {% set documentExpiryDate = person.documentExpiryDate or req.body['expiryYear'] ~ "-" ~ req.body['expiryMonth'] ~  "-" ~req.body['expiryDay'] %}
 
 <div class="{{ m.form_group_class('savedpeople', errors) }}">
-
+<script type="module" src="/javascripts/includes/person-details.js"></script>
 {{ govukInput({
   id: "firstName",
   name: "firstName",
@@ -217,23 +217,12 @@
     maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
     {{ m.character_count_hint('travelDocumentOther', MAX_STRING_LENGTH) }}
   </div>
-
-<script type="text/javascript" src="/utils/validator.js"></script>
-<script type="text/javascript">
-  accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#nationality')
-  });
-  accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#issuingState')
-  });
-
-  function checkDocumentType(){
-    if (document.getElementById('travelDocumentType').value == 'Other'){
-      document.getElementById('travelDocumentOtherDiv').style.display = 'block';
-    }
-    else{
-      document.getElementById('travelDocumentOtherDiv').style.display = 'none';
-    }
-
-  }
-</script>
+{##}
+{# <script type="text/javascript"> #}
+{#   accessibleAutocomplete.enhanceSelectElement({ #}
+{#     selectElement: document.querySelector('#nationality') #}
+{#   }); #}
+{#   accessibleAutocomplete.enhanceSelectElement({ #}
+{#     selectElement: document.querySelector('#issuingState') #}
+{#   }); #}
+{# </script> #}
