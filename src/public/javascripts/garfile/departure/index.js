@@ -1,112 +1,116 @@
-const departureDay = document.getElementById('departureDay');
-const departureMonth = document.getElementById('departureMonth');
-const departureYear = document.getElementById('departureYear');
+document.addEventListener("DOMContentLoaded", () => {
 
-const departureHourTime = document.getElementById('departureHour');
-const departureMinuteTime = document.getElementById('departureMinute');
+  const departureDay = document.getElementById('departureDay');
+  const departureMonth = document.getElementById('departureMonth');
+  const departureYear = document.getElementById('departureYear');
 
-const pageForm = document.getElementById('page-form');
-const confirmWarnedDepartureDialog = document.getElementById('confirmWarnedDepartureDialog');
-const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
+  const departureHourTime = document.getElementById('departureHour');
+  const departureMinuteTime = document.getElementById('departureMinute');
 
-const twoHourWarningTexts = Array.from(document.getElementsByClassName('twoHourWarningText'));
-const fortyEightHourWarningTexts = Array.from(document.getElementsByClassName('fortyEightHourWarningText'));
+  const pageForm = document.getElementById('page-form');
+  const confirmWarnedDepartureDialog = document.getElementById('confirmWarnedDepartureDialog');
+  const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');
 
-let departureFormSubmitter = undefined;
+  const twoHourWarningTexts = Array.from(document.getElementsByClassName('twoHourWarningText'));
+  const fortyEightHourWarningTexts = Array.from(document.getElementsByClassName('fortyEightHourWarningText'));
 
-dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
+  let departureFormSubmitter = undefined;
 
-const departureDate = () => {
-  return new Date(
-    Number(departureYear.value),
-    Number(departureMonth.value) - 1,
-    Number(departureDay.value),
-    Number(departureHourTime.value),
-    Number(departureMinuteTime.value)
-  );
-};
+  dialogPolyfill.registerDialog(confirmWarnedDepartureDialog);
 
-function showDepartureDateWarningMessages(providedDate) {
-  twoHourWarningTexts.forEach(($element) => ($element.hidden = isTwoHoursPriorDeparture(providedDate)));
-  fortyEightHourWarningTexts.forEach(($element) => ($element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate)));
-}
+  const departureDate = () => {
+    return new Date(
+      Number(departureYear.value),
+      Number(departureMonth.value) - 1,
+      Number(departureDay.value),
+      Number(departureHourTime.value),
+      Number(departureMinuteTime.value)
+    );
+  };
 
-window.addEventListener('load', () => {
-  // So it does not show warning message when form is blank
-  if (
-    [
-      departureYear.value,
-      departureMonth.value,
-      departureDay.value,
-      departureHourTime.value,
-      departureMinuteTime.value,
-    ].includes('')
-  ) {
-    return;
+  function showDepartureDateWarningMessages(providedDate) {
+    twoHourWarningTexts.forEach(($element) => ($element.hidden = isTwoHoursPriorDeparture(providedDate)));
+    fortyEightHourWarningTexts.forEach(($element) => ($element.hidden = dateNotMoreThanTwoDaysInFuture(providedDate)));
   }
 
-  showDepartureDateWarningMessages(departureDate());
-});
+  window.addEventListener('load', () => {
+    // So it does not show warning message when form is blank
+    if (
+      [
+        departureYear.value,
+        departureMonth.value,
+        departureDay.value,
+        departureHourTime.value,
+        departureMinuteTime.value,
+      ].includes('')
+    ) {
+      return;
+    }
 
-pageForm.addEventListener('submit', (e) => {
-  // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
-  if (
-    [
-      departureYear.value,
-      departureMonth.value,
-      departureDay.value,
-      departureHourTime.value,
-      departureMinuteTime.value,
-    ].includes('')
-  ) {
-    return;
-  }
+    showDepartureDateWarningMessages(departureDate());
+  });
 
-  if (departureFormSubmitter) {
-    return;
-  }
+  pageForm.addEventListener('submit', (e) => {
+    // Instead of dialog confirmination, it will submit the form so post controller validations catches this.
+    if (
+      [
+        departureYear.value,
+        departureMonth.value,
+        departureDay.value,
+        departureHourTime.value,
+        departureMinuteTime.value,
+      ].includes('')
+    ) {
+      return;
+    }
 
-  if (isTwoHoursPriorDeparture(departureDate()) && dateNotMoreThanTwoDaysInFuture(departureDate())) {
-    return;
-  }
+    if (departureFormSubmitter) {
+      return;
+    }
 
-  e.preventDefault();
-  departureFormSubmitter = e.submitter;
-  showDepartureDateWarningMessages(departureDate());
-  confirmWarnedDepartureDialog.showModal();
-});
+    if (isTwoHoursPriorDeparture(departureDate()) && dateNotMoreThanTwoDaysInFuture(departureDate())) {
+      return;
+    }
 
-confirmWarnedDepartureDialog.addEventListener('close', (e) => {
-  departureFormSubmitter = undefined;
-});
-continueWithWarnedDate.addEventListener('click', (e) => {
-  pageForm.requestSubmit(departureFormSubmitter);
-});
+    e.preventDefault();
+    departureFormSubmitter = e.submitter;
+    showDepartureDateWarningMessages(departureDate());
+    confirmWarnedDepartureDialog.showModal();
+  });
 
-departureDay.addEventListener('keyup', (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'day');
-  autoTab(departureDay, 'day', departureMonth);
-  showDepartureDateWarningMessages(departureDate());
-});
+  confirmWarnedDepartureDialog.addEventListener('close', (e) => {
+    departureFormSubmitter = undefined;
+  });
+  continueWithWarnedDate.addEventListener('click', (e) => {
+    pageForm.requestSubmit(departureFormSubmitter);
+  });
 
-departureMonth.addEventListener('keyup', (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'month');
-  autoTab(departureMonth, 'month', departureYear);
-  showDepartureDateWarningMessages(departureDate());
-});
+  departureDay.addEventListener('keyup', (e) => {
+    e.target.value = sanitiseDateOrTime(e.target.value, 'day');
+    autoTab(departureDay, 'day', departureMonth);
+    showDepartureDateWarningMessages(departureDate());
+  });
 
-departureYear.addEventListener('keyup', (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'year');
-  showDepartureDateWarningMessages(departureDate());
-});
+  departureMonth.addEventListener('keyup', (e) => {
+    e.target.value = sanitiseDateOrTime(e.target.value, 'month');
+    autoTab(departureMonth, 'month', departureYear);
+    showDepartureDateWarningMessages(departureDate());
+  });
 
-departureHourTime.addEventListener('keyup', (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'hour');
-  autoTab(departureHourTime, 'hour', departureMinuteTime);
-  showDepartureDateWarningMessages(departureDate());
-});
+  departureYear.addEventListener('keyup', (e) => {
+    e.target.value = sanitiseDateOrTime(e.target.value, 'year');
+    showDepartureDateWarningMessages(departureDate());
+  });
 
-departureMinuteTime.addEventListener('keyup', (e) => {
-  e.target.value = sanitiseDateOrTime(e.target.value, 'minute');
-  showDepartureDateWarningMessages(departureDate());
-});
+  departureHourTime.addEventListener('keyup', (e) => {
+    e.target.value = sanitiseDateOrTime(e.target.value, 'hour');
+    autoTab(departureHourTime, 'hour', departureMinuteTime);
+    showDepartureDateWarningMessages(departureDate());
+  });
+
+  departureMinuteTime.addEventListener('keyup', (e) => {
+    e.target.value = sanitiseDateOrTime(e.target.value, 'minute');
+    showDepartureDateWarningMessages(departureDate());
+  });
+
+})
