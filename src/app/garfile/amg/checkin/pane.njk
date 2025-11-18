@@ -144,7 +144,7 @@
                     If a 'system time out' response is received at or later than 2 hours before the expected time of departure, then the passenger may be boarded. There will be no <a href="https://www.legislation.gov.uk/ukpga/1999/33/part/II/crossheading/passengers-without-proper-documents" target="_blank" class="govuk-link">section 40</a>
                     liability if the passenger is subsequently found not to hold a valid permission to travel.
                   </p>
-                </div>  
+                </div>
               </details>
             {% else %}
               <p class="govuk-body"></p>
@@ -164,7 +164,7 @@
 {% endmacro %}
 
 <form id="passenger-checkin" action="/garfile/amg/checkin?resubmitted={{resubmitted}}" class="form-group" method="post" role="form" >
-<table class="govuk-table" id="upt-responses" style="">
+<table class="govuk-table" id="upt-responses">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header" style="width:20%;">Status</th>
@@ -177,7 +177,7 @@
       <div id="banner0T" class="hide-content" >
         <div id="banner0T-content"> {{ banner.notificationBannerFor0T(numberOf0TResponseCodes, showImportantBanner) }}</div>
       </div>
-      
+
       <tr class="govuk-table__row">
         <td class="govuk-table__cell"></td>
         <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
@@ -198,8 +198,8 @@
  <input type="hidden" name="resubmitted" value="{{resubmitted}}" />
  {{ pagination.build('passenger-checkin', pages, __)}}
 
-<input type="hidden" name="_csrf" value="{{ csrfToken }}"/> 
-</form> 
+<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+</form>
 
 <form action="/garfile/review" method="post">
   <h2 class="govuk-heading-m">Declaration</h2>
