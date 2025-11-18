@@ -76,9 +76,13 @@
   }) }}
 {% endmacro %}
 
-{% macro empty_table_message(message) %}
+{% macro empty_table_message(message, colspan=1) %}
   <tr class="govuk-table__row">
-    <caption class="govuk-inset-text" style="caption-side:bottom;"><div style="float:left;">{{ message }}</div></caption>
+    <td class="govuk-table__cell" colspan="{{ colspan }}">
+      <div class="govuk-inset-text">
+        {{ message | safe }}
+      </div>
+    </td>
   </tr>
 {% endmacro %}
 
