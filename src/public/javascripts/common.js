@@ -17,17 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
 window.checkDocumentType = () => {
   if (document.getElementById('travelDocumentType').value == 'Other') {
     document.getElementById('travelDocumentOtherDiv').style.display = 'block';
-  }
-  else {
+  } else {
     document.getElementById('travelDocumentOtherDiv').style.display = 'none';
   }
-}
+};
 window.sendAnalytics = (e, message, event) => {
-  console.log("Send Analytics" + message)
+  console.log('Send Analytics' + message);
   // this function is called but not defined.
   // Adding here so we can reintegrate with GA if necessary.
-}
+};

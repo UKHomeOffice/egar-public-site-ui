@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.myinterval = setInterval(function () {
     const permissionDetails = () => Array.from(document.getElementsByClassName('permission-details'));
-    const permissionDetailsState = permissionDetails().map(el => el.open);
+    const permissionDetailsState = permissionDetails().map((el) => el.open);
 
     $.get(`/garfile/amg/checkin?template=pane&resubmitted=${resubmitted}`, null, function (data) {
       const html = $(data);
@@ -38,11 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
       $('#banner0T').empty();
 
       permissionDetails().forEach((el, index) => {
-
-        el.toggleAttribute("open", permissionDetailsState[index])
-      })
+        el.toggleAttribute('open', permissionDetailsState[index]);
+      });
     });
-
   }, 3000);
 });
 
