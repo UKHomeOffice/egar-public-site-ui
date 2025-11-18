@@ -16,6 +16,9 @@ steps:
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
     commands:
       - source ./ops/image_build.sh
+    depends_on:
+      - linting-formatting
+      - unit-test
 
   - name: push
     pull: if-not-exists
