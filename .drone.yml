@@ -11,6 +11,23 @@ platform:
   arch: amd64
 
 steps:
+  - name: unit-test
+    pull: if-not-exists
+    image: node:22-alpine3.21
+    commands:
+    - export NOTIFY_API_KEY=dummy
+    - cd src
+    - npm install
+    - npm run test-drone
+
+  - name: linting-formatting
+    pull: if-not-exists
+    image: node:22-alpine3.21
+    commands:
+    - cd src
+    - npm install
+    - npm run check
+
   - name: build
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
@@ -41,23 +58,6 @@ steps:
         - main
         - dev
         - govuk5-test
-
-  - name: unit-test
-    pull: if-not-exists
-    image: node:22-alpine3.21
-    commands:
-    - export NOTIFY_API_KEY=dummy
-    - cd src
-    - npm install
-    - npm run test-drone
-
-  - name: linting-formatting
-    pull: if-not-exists
-    image: node:22-alpine3.21
-    commands:
-    - cd src
-    - npm install
-    - npm run check
 
   - name: trivy-scan-image
     pull: always
