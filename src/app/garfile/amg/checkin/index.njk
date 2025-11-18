@@ -10,20 +10,18 @@
 {% set active = '/home' %}
 
 {% block content %}
-  <link rel="stylesheet" href="/stylesheets/amg.css"/> 
+  <link rel="stylesheet" href="/stylesheets/amg.css"/>
+  <script type="text/javascript" src="/javascripts/garfiles/amg/checkin.js"></script>
   <div class="govuk-grid-row" id="checkinpage">
-     <div id="top-notification-banner"></div> 
-
-      <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
-      <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
-     
-      <div>
-       <p class="govuk-body">Passenger details have been sent for permission to travel checks.</p>
-       <p class="govuk-body">{{__('guidance') | safe}}</p>
-      </div>
-      <div id="pane">
-        {% include "app/garfile/amg/checkin/pane.njk" %}
-      </div>
+    <div id="top-notification-banner"></div>
+    <span class="govuk-caption-xl">{{__('section_count', 9, 9)}}</span>
+    <h1 class="govuk-heading-xl">{{__('title_submit_gar_amg')}}</h1>
+    <div>
+      <p class="govuk-body">Passenger details have been sent for permission to travel checks.</p>
+      <p class="govuk-body">{{__('guidance') | safe}}</p>
+    </div>
+    <div id="pane">
+      {% include "app/garfile/amg/checkin/pane.njk" %}
     </div>
   </div>
   <input type="hidden" value="{{resubmitted}}" id='resubmitted' />
@@ -32,36 +30,4 @@
     <input type="hidden" name="resubmitFor0T" value="resubmit0T" />
     <input type="hidden" name="resubmitFor0TLink" id="resubmitFor0TLink" value="no" />
   </form>
-
-  <script>
-   $(function () {
-      const resubmitted = $('#resubmitted').val();
-      window.myinterval = setInterval(function () {
-        const permissionDetails = () => Array.from(document.getElementsByClassName('permission-details'));
-        const permissionDetailsState = permissionDetails().map(el => el.open);
-        
-        $.get(`/garfile/amg/checkin?template=pane&resubmitted=${resubmitted}`, null, function (data) {
-          const html = $(data);
-           
-          if (!html.find('#spinner').length) {
-            clearInterval(window.myinterval);
-          }
-
-          $('#pane').html($(data));
-          $('#banner0T-content').appendTo('#top-notification-banner');
-          $('#banner0T').empty();
-        
-          permissionDetails().forEach((el, index) => {
-            
-            el.toggleAttribute("open", permissionDetailsState[index])
-          })
-        });
-        
-      }, 3000);
-
-     
-    });
-
-</script>
-<script type="text/javascript" src="/javascripts/resubmitGar.js"></script>
 {% endblock content %}
