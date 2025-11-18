@@ -1,6 +1,5 @@
 {% extends "base-template.njk" %}
 
-{# {% from "dist/govuk/components/radios/macro.njk" import govukRadios %} #}
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/banners.njk" as b %}
 {% import "common/templates/includes/location.njk" as l %}
@@ -15,12 +14,10 @@
 {%set departure = cookie.getGarDepartureVoyage() %}
 
 {% block beforeContent %}
-
   <a href="/garfile/home" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -60,7 +57,5 @@
     </div>
   </div>
   {{ m.departure_warning_dialog(__) }}
-
-  <script type="text/javascript"  src="/javascripts/departureForm.js"></script>
-
+  <script type="text/javascript"  src="/javascripts/garfile/departure/index.js"></script>
 {% endblock %}
