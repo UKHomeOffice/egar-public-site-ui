@@ -1,5 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
-
+document.addEventListener('DOMContentLoaded', () => {
   const submitGarForm = document.getElementById('submitGarForm');
   const confirmWarnedDepartureDialog = document.getElementById('confirmWarnedDepartureDialog');
   const continueWithWarnedDate = document.getElementById('continueWithWarnedDate');

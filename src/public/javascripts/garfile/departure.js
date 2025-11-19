@@ -1,5 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
-
+document.addEventListener('DOMContentLoaded', () => {
   const departureDay = document.getElementById('departureDay');
   const departureMonth = document.getElementById('departureMonth');
   const departureYear = document.getElementById('departureYear');
@@ -112,5 +111,4 @@ document.addEventListener("DOMContentLoaded", () => {
     e.target.value = sanitiseDateOrTime(e.target.value, 'minute');
     showDepartureDateWarningMessages(departureDate());
   });
-
-})
+});
