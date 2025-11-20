@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-  <script type="text/javascript"  src="/javascripts/garManifest.js"></script>
+  <script type="text/javascript"  src="/javascripts/garfile/manifest.js"></script>
   <div class="govuk-grid-row">
     <form id="manifestForm" action="/garfile/manifest" method="post">
       <div class="govuk-grid-column-two-thirds">
@@ -46,7 +46,7 @@
               <table class="govuk-table" id="people_table" >
               {% endif %}
               <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2" id="person-search" name="person-search" type="text" placeholder="Search">
-              <p class="govuk-body-s govuk-!-margin-bottom-2">{{__('person_sort')}}</p>
+              <p class="govuk-body-s govuk-!-margin-bottom-2">{{ __('person_sort') }}</p>
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th style="width: 10%;" class="govuk-table__header multiple-choice--hod">

@@ -13,6 +13,7 @@
 {% endblock %}
 
 {% block content %}
+  <script type="module" src="/javascripts/resperson/add.js"></script>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <form action="/resperson/add" autocomplete="off" class="form-group"
@@ -24,17 +25,13 @@
         <div class="govuk-form-group">
           <input id="add-and-exit" class="govuk-button" type="submit"
           name="buttonClicked"
-          value="{{__('form_add_and_exit')}}"
-          onclick="sendAnalytics(event, 'Saved Aircraft Add - Save', 'click')">
+          value="{{__('form_add_and_exit')}}">
           <p class="govuk-body-m">
-            <a class="govuk-button govuk-button--secondary" href="/resperson#" onclick="sendAnalytics(event, 'Saved Responsible person Add - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
+            <a class="govuk-button govuk-button--secondary" id="cancel-and-exit" href="/resperson#">{{__('form_exit_without_adding')}}</a>
           </p>
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       </form>
     </div>
   </div>
-  <script>
-    accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#responsibleCountry')});
-  </script>
 {% endblock %}

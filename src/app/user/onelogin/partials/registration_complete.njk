@@ -1,10 +1,10 @@
 {% from "dist/govuk/components/button/macro.njk" import govukButton %}
 {% from "dist/govuk/components/panel/macro.njk" import govukPanel %}
 
-<div class="govuk-body govuk-grid-column-two-thirds govuk-!-margin-left-8 govuk-!-margin-top-4">
+<div class="govuk-body govuk-grid-column-two-thirds margin-left-50 margin-top-20">
 
-  <div class="govuk-width-container govuk-!-margin-bottom-4">
-    {{ govukPanel({titleHtml: "Account has been <br/> created"}) }}
+  <div class="govuk-width-container govuk-!-padding-top-6 govuk-!-padding-bottom-6 govuk-!-padding-left-6 govuk-!-padding-right-6">
+    {{ govukPanel({ titleHtml: "Account has been <br/> created" }) }}
   </div>
 
   <p>We have sent you a confirmation email</p>
@@ -25,5 +25,4 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {{ govukButton({text: "Continue", element: "button", type: "submit"}) }}
   </form>
-
 </div>

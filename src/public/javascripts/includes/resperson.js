@@ -34,9 +34,7 @@ $(document).ready(function () {
       });
     });
   });
-});
 
-$(document).ready(function () {
   $('#resperson-search').on('keyup', function () {
     var value = $(this).val().toLowerCase();
     $('#resPerson_table_row tr').filter(function () {

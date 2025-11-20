@@ -1,32 +1,33 @@
 {% from "dist/govuk/components/button/macro.njk" import govukButton%}
 {% from "dist/govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-<div class="govuk-grid-column-two-thirds govuk-!-margin-left-8 govuk-!-margin-top-6">
-    <h1 class="govuk-heading-l">
-      Create Account
-    </h1>
+<div class="govuk-grid-column-two-thirds govuk-!-margin-left-12 govuk-!-margin-top-8">
+  <h1 class="govuk-heading-l">
+    Create Account
+  </h1>
 
-    {{ govukSummaryList({
-      rows: [
-        {
-          key: { text: "Email" },
-          value: { html: email | truncate(50) }
-        },
-        {
-          key: { text: "Name" },
-          value: { html: firstName ~ " " ~ lastName },
-          actions: {
-            items: [
-              {
-                href: "/onelogin/register?action=change-name",
-                text: "Change",
-                visuallyHiddenText: "your name"
-              }
-            ]
-          }
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: { text: "Email" },
+        value: { html: email | truncate(50) }
+      },
+      {
+        key: { text: "Name" },
+        value: { html: firstName ~ " " ~ lastName },
+        actions: {
+          items: [
+            {
+              href: "/onelogin/register?action=change-name",
+              text: "Change",
+              visuallyHiddenText: "your name"
+            }
+          ]
         }
-      ]
-    }) }}
+      }
+    ],
+    classes: "govuk-!-margin-bottom-2"
+  }) }}
 
 <div class="govuk-!-margin-top-2">
   <h2 class="govuk-heading-m">Declaration</h2>

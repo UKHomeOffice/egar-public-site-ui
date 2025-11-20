@@ -1,6 +1,5 @@
 {% extends "base-template.njk" %}
 
-{# {% from "dist/govuk/components/radios/macro.njk" import govukRadios %} #}
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/banners.njk" as b %}
 {% import "common/templates/includes/location.njk" as l %}
@@ -11,57 +10,51 @@
 {% endblock %}
 
 {% set active = '/home' %}
-
-{%set departure = cookie.getGarDepartureVoyage() %}
+{% set departure = cookie.getGarDepartureVoyage() %}
 
 {% block beforeContent %}
-
   <a href="/garfile/home" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
+<script type="text/javascript" src="/javascripts/garfile/departure.js"></script>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <form id="page-form" action="/garfile/departure" autocomplete="off" class="form-group" method="post">
+      <span class="govuk-caption-xl">{{__('section_count', 1, 9)}}</span>
+      <h1 class="govuk-heading-xl">{{__('heading_departure_details')}}</h1>
+      <p class="govuk-body-l">{{__('departure_details_caption')}}</p>
 
-      <form id="page-form" action="/garfile/departure" autocomplete="off" class="form-group" method="post">
-        <span class="govuk-caption-xl">{{__('section_count', 1, 9)}}</span>
-        <h1 class="govuk-heading-xl">{{__('heading_departure_details')}}</h1>
-        <p class="govuk-body-l">{{__('departure_details_caption')}}</p>
+      {{ dt.dateInput('departure', cookie, departure.departureDate,"field_departure_date", "field_date_hint", errors, __) }}
+      {{ dt.timeInput('departure', cookie, departure.departureTime, "field_time_hint", errors, __) }}
 
-        {{ dt.dateInput('departure', cookie, departure.departureDate,"field_departure_date", "field_date_hint", errors, __) }}
-        {{ dt.timeInput('departure', cookie, departure.departureTime, "field_time_hint", errors, __) }}
+      {{ m.departure_warning_message(__)}}
 
-        {{ m.departure_warning_message(__)}}
+      {% set legendLabel = ['<h2 class="govuk-fieldset__heading">', __('field_port_choice_departure'), '</h2>'] | join %}
+      {% set warningMessage = b.coa_designation_regulation_change(true)%}
+      {% set isPortChoice = (departure.departurePortChoice === 'Yes') %}
+      {% set portCode = departure.departurePort%}
+      {% set lat = departure.departureLat%}
+      {% set long = departure.departureLong%}
+      {% set prefix = 'departure'%}
 
-        {% set legendLabel = ['<h2 class="govuk-fieldset__heading">', __('field_port_choice_departure'), '</h2>'] | join %}
-        {% set warningMessage = b.coa_designation_regulation_change(true)%}
-        {% set isPortChoice = (departure.departurePortChoice === 'Yes') %}
-        {% set portCode = departure.departurePort%}
-        {% set lat = departure.departureLat%}
-        {% set long = departure.departureLong%}
-        {% set prefix = 'departure'%}
+      {{ l.location(legendLabel,
+                    warningMessage,
+                    isPortChoice,
+                    portCode,
+                    lat,
+                    long,
+                    prefix,
+                    errors,
+                    __) }}
 
-        {{ l.location(legendLabel,
-                      warningMessage,
-                      isPortChoice,
-                      portCode,
-                      lat,
-                      long,
-                      prefix,
-                      errors,
-                      __) }}
-
-        {# Start buttons #}
-        {{ m.submit_buttons('GAR Departure', csrfToken, __) }}
-      </form>
-      {{ m.exit_without_saving(csrfToken, __) }}
-      {# End buttons #}
-    </div>
+      {# Start buttons #}
+      {{ m.submit_buttons('GAR Departure', csrfToken, __) }}
+    </form>
+    {{ m.exit_without_saving(csrfToken, __) }}
+    {# End buttons #}
   </div>
-  {{ m.departure_warning_dialog(__) }}
-
-  <script type="text/javascript" src="/utils/validator.js"></script>
-  <script type="text/javascript"  src="/javascripts/departureForm.js"></script>
-
+</div>
+{{ m.departure_warning_dialog(__) }}
 {% endblock %}

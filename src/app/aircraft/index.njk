@@ -10,18 +10,9 @@
 {% set active = '/aircraft' %}
 
 {% block content %}
+<script src="/javascripts/aircraft/index.js" type="text/javascript"></script>
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-      <script>
-      $(document).ready(function(){
-        $("#aircraft-search").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#aircraft_table_row tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-          });
-        });
-        });
-      </script>
     <h1 class="govuk-heading-xl">{{__('title_aircraft')}}</h1>
       <p class="govuk-body-l">{{__('aircraft_caption')}}</p>
       <p class="govuk-body-m">Search for aircraft </p>

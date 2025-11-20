@@ -10,7 +10,7 @@
 {% set active = '/organisation' %}
 
 {% block content %}
-  <script type="text/javascript" src="/javascripts/organisation.js"></script>
+  <script type="text/javascript" src="/javascripts/organisation/index.js"></script>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-xl">{{__('nav_bar_organisation')}}</h1>
@@ -38,11 +38,11 @@
         ]
       }) }}
 
-        <h2 class="govuk-heading-l">{{__('title_invite_users')}}</h2>
-        <p class="govuk-body-l">{{__('invite_users_caption')}}</p>
-        <a id="invite-users" href="/organisation/inviteusers" role="button" draggable="false" class="govuk-button">
-          {{__('title_invite_user')}}
-        </a>
+      <h2 class="govuk-heading-l">{{__('title_invite_users')}}</h2>
+      <p class="govuk-body-l">{{__('invite_users_caption')}}</p>
+      <a id="invite-users" href="/organisation/inviteusers" role="button" draggable="false" class="govuk-button">
+        {{__('title_invite_user')}}
+      </a>
 
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
 
@@ -107,17 +107,13 @@
             </tbody>
           </table>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-
-            {% if orgUsers | length and pages %}
-              {{ pagination.build('organisation', pages, __)}}
-            {% endif %}
+          {% if orgUsers | length and pages %}
+            {{ pagination.build('organisation', pages, __)}}
+          {% endif %}
         </form>
         {% if orgUsers | length  and pages %}
           <a href="/organisation/users/export" class="govuk-button">Download CSV</a>
         {% endif %}
-
       </div>
-
     </div>
-
   {% endblock %}
