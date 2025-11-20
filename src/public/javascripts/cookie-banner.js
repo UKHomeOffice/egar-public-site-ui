@@ -2,8 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (getCookie('sgar_cookies_policy') === '' || getCookie('sgar_cookies_policy') === null) {
     showCookieBanner();
   }
-  document.getElementById("change_cookie_preference").addEventListener("click", change_cookie_preference);
-
 })
 function setCookie(name, value, expiryDays) {
   const currDate = new Date();
