@@ -14,11 +14,11 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">{{ __('title_people') }}</h1>
-      <p class="govuk-body-l">
-        <span style="background-color: #66ff66">
-          {{__('id_card_withdrawl_text')}}
-          <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span>
-      </p>
+      {# <p class="govuk-body-l"> #}
+      {#   <span class="govuk-tag govuk-tag--yellow"> #}
+      {#     {{__('id_card_withdrawl_text')}} #}
+      {#     <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> #}
+      {# </p> #}
       <p class="govuk-body-l">{{__('people_caption')}}</p>
       <p class="govuk-body-m">{{__('person_search')}}</p>
     </div>
@@ -51,15 +51,15 @@
               {% else %}
                 <tr class="govuk-table__row" id="person-{{loop.index0}}">
               {% endif %}
-                <td class="govuk-table__cell" style="{{ "padding-left: 10px" if isPeopleInvalid }}">
-                  <button id="edit-person-{{ loop.index }}" class="govuk-button--link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</a>
+                <td class="govuk-table__cell{% if isPeopleInvalid %} govuk-!-padding-left-2{% endif %}">
+                  <button id="edit-person-{{ loop.index }}" class="govuk-button--link" title="Edit details for {{ person.firstName }} {{ person.lastName }}" name="editPerson" value="{{person.personId}}">{{person.lastName}}</button>
                 </td>
                 <td class="govuk-table__cell" scope="row">{{person.firstName}}</th>
                 <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                 <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
                 <td class="govuk-table__cell">{{person.createdDateTime | truncate(11, true, "")}}</td>
                 <td class="govuk-table__cell ">
-                  <button class="govuk-button--link" name="deletePerson" value="{{person.personId}}" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button>
+                  <button class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deletePerson" value="{{person.personId}}">{{__('table_delete')}}</button>
                 </td>
               </tr>
             {% endfor %}

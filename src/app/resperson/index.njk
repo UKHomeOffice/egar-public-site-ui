@@ -13,6 +13,7 @@
 <script type="text/javascript" src="/javascripts/includes/resperson.js"></script>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+
       <h1 class="govuk-heading-xl">{{ __('heading_responsible_person') }}</h1>
       <p class="govuk-body-l">{{__('responsible_person_caption')}}</p>
       <p class="govuk-body-l">{{__('res_person_sub_caption')}}</p>
@@ -47,7 +48,7 @@
                     <td class="govuk-table__cell">{{resPerson.responsibleEmail}}</td>
                     <td class="govuk-table__cell ">
                       <button id="delete_responsible_person_{{ loop.index }}"
-                        class="govuk-button--link" name="deleteResponsiblePerson"
+                        class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deleteResponsiblePerson"
                         formaction="/resperson/delete" formmethod="get"
                         value="{{resPerson.responsiblePersonId}}">{{__('table_delete')}}
                       </button>

@@ -42,7 +42,7 @@
             <td class="govuk-table__cell">{{ craft.craftType }}</td>
             <td class="govuk-table__cell">{{ craft.craftBase | upper }}</td>
             {# {% if cookie.getUserRole() != 'User' %} #}
-            <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-button--link" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
+            <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
             {# {% endif %} #}
           </tr>
           {% endfor %}

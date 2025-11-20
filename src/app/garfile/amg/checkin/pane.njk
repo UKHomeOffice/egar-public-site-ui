@@ -23,14 +23,14 @@
   {% endif %}
   {% set statustitle = statustitle %}
   <tr class="govuk-table__row">
-    <td class="govuk-table__cell vertical-align-top">
+    <td class="govuk-table__cell govuk-!-vertical-align-top">
       <div>
         {% if statusColor %}
           <div class="{{ statusColor }} status-text" title="{{ statustitle }}">{{ statustitle }}</div>
         {% endif %}
       </div>
     </td>
-    <td class="govuk-table__cell vertical-align-top">{{ person.firstName }}
+    <td class="govuk-table__cell govuk-!-vertical-align-top">{{ person.firstName }}
       {{ person.lastName }}</td>
     <td class="govuk-table__cell">
       <div>
@@ -154,8 +154,7 @@
           {% endif %}
         {% else %}
           {% if not statusColor and not statusCheckComplete %}
-            <span style="opacity:.5;">
-              Awaiting ...</span>
+            <span style="opacity:.5;"> Awaiting ...</span>
           {% endif %}
         {% endif %}
       </div>
@@ -174,7 +173,7 @@
   </thead>
   <tbody class="govuk-table__body">
     {% if statusCheckComplete %}
-      <div id="banner0T" class="hide-content" >
+      <div id="banner0T" class="govuk-!-display-none" >
         <div id="banner0T-content"> {{ banner.notificationBannerFor0T(numberOf0TResponseCodes, showImportantBanner) }}</div>
       </div>
 

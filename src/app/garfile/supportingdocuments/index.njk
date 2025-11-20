@@ -66,11 +66,11 @@
               {% if supportingDoc.items | length %}
                 {% for file in supportingDoc.items %}
                 <tr class="govuk-table__row">
-                  <td class="govuk-table__cell ">{{file.fileName}} </td>
-                  <td class="govuk-table__cell ">{{file.size}} </td>
-                  <td class="govuk-table__cell ">{{__('field_file_status_done')}}</td>
-                  <td class="govuk-table__cell "><button class="govuk-button--link" name="deleteDocId" value="{{ file.supportingDocumentId }}">{{__('table_delete')}}</button></td>
-                </tr lass="govuk-table__cell ">
+                  <td class="govuk-table__cell">{{file.fileName}} </td>
+                  <td class="govuk-table__cell">{{file.size}} </td>
+                  <td class="govuk-table__cell">{{__('field_file_status_done')}}</td>
+                  <td class="govuk-table__cell"><button class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deleteDocId" value="{{ file.supportingDocumentId }}">{{__('table_delete')}}</button></td>
+                </tr>
                 {% endfor %}
               {% else %}
                 {{ m.empty_table_message(__('supportingdocuments_no_records')) }}

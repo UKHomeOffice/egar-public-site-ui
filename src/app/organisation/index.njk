@@ -93,7 +93,8 @@
                     <td class="govuk-table__cell">{{ user.role.name }}</td>
                     <td class="govuk-table__cell">
                       {% if user.isEditable %}
-                        <button id="delete_user_{{ loop.index }}" class="govuk-button--link" name="deleteUser" value="{{user.email}}" type="submit">
+
+                        <button id="delete_user_{{ loop.index }}" class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deleteUser" value="{{user.email}}" type="submit">
                           {{ __('table_delete') }}
                         </button>
                       {% endif %}

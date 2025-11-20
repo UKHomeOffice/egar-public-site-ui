@@ -29,38 +29,38 @@
     classes: "govuk-!-margin-bottom-2"
   }) }}
 
-  <div class="govuk-!-margin-top-0">
-    <h2 class="govuk-heading-m">Declaration</h2>
-    <div class="govuk-body">
-      <p>I confirm that:</p>
-      <ul>
-        <li>the information I have provided is correct to the best of my knowledge</li>
-        <li>I have read and accept the privacy policy</li>
-      </ul>
-      <p>I understand that the Home Office may carry out checks on information that I submit.</p>
-    </div>
+<div class="govuk-!-margin-top-2">
+  <h2 class="govuk-heading-m">Declaration</h2>
 
-    <div class="govuk-!-margin-top-14">
-      <form method="post" action="/onelogin/register" class="prevent-double-click">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  <div class="govuk-body">
+    <p>I confirm that:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the information I have provided is correct to the best of my knowledge</li>
+      <li>I have read and accept the privacy policy</li>
+    </ul>
+    <p>I understand that the Home Office may carry out checks on information that I submit.</p>
+  </div>
 
-        <div class="govuk-checkboxes govuk-checkboxes--small" id="nameDeclaration">
-          <div class="govuk-checkboxes__item">
-            <input type="checkbox" class="govuk-checkboxes__input" name="nameConfirmDeclaration" id="nameConfirmDeclaration">
-            <label class="govuk-label govuk-checkboxes__label" for="nameConfirmDeclaration">
-              I understand and agree with these declarations
-            </label>
-          </div>
+  <div class="govuk-!-margin-top-6"> <!-- replaces margin-top: 55px -->
+    <form method="post" action="/onelogin/register" class="prevent-double-click">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+      <div class="govuk-checkboxes govuk-checkboxes--small" id="nameDeclaration">
+        <div class="govuk-checkboxes__item">
+          <input type="checkbox" class="govuk-checkboxes__input" id="nameConfirmDeclaration" name="nameConfirmDeclaration">
+          <label class="govuk-label govuk-checkboxes__label" for="nameConfirmDeclaration">
+            I understand and agree with these declarations
+          </label>
         </div>
+      </div>
 
-        <div class="govuk-button-group govuk-!-margin-top-7">
-          {{ govukButton({element: "button", text: "Create Account" }) }}
+      <div class="govuk-button-group govuk-!-margin-top-4">
+        {{ govukButton({element: "button", text: "Create Account" }) }}
 
-          <p class="govuk-link govuk-!-display-inline-block govuk-!-margin-left-6 govuk-!-margin-top-1">
-            <a href="/">Cancel</a>
-          </p>
-        </div>
-      </form>
-    </div>
+        <p class="govuk-!-display-inline-block govuk-!-margin-left-4 govuk-!-margin-top-1">
+          <a class="govuk-link" href="/">Cancel</a>
+        </p>
+      </div>
+    </form>
   </div>
 </div>
