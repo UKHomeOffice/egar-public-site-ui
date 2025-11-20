@@ -1,5 +1,5 @@
 {% import "common/templates/includes/macros.njk" as m %}
-
+<script src="/javascripts/user/onelogin/partials/given_name.js" type="module"></script>
 <div class="govuk-grid-column-two-thirds govuk-!-margin-left-8 govuk-!-margin-top-6">
   <form id="page-form" action="/onelogin/register" autocomplete="off" method="post" role="form">
     <h1 class="govuk-heading-l">{{__('title_create_account_onelogin')}}</h1>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="form-group">
-      <input id="login" class="govuk-button" type="submit" value="Continue" onclick="sendAnalytics(event, 'OneLogin.Register - continue', 'click')">
+      <input id="login" class="govuk-button" type="submit" value="Continue">
       <p class="govuk-link govuk-!-display-inline-block govuk-!-margin-left-4 govuk-!-margin-top-1">
         <a href="/">Cancel</a>
       </p>
