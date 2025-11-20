@@ -62,14 +62,12 @@
       items: roleItems
       }) }}
       <div class="govuk-form-group">
-        <button id="save-and-exit" class="govuk-button" type="submit"
-          onclick="sendAnalytics(event, 'Edit Organisation User - Save and exit', 'click')">
+        <button id="save-and-exit" class="govuk-button" type="submit">
           {{__('form_save_and_exit')}}
         </button>
         <p class="govuk-body-m">
           <a id="exit-without-saving" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
-            href="/organisation#"
-            onclick="sendAnalytics(event, 'Edit Organisation User - Exit without saving', 'click')">
+            href="/organisation#">
             {{__('form_exit_without_saving')}}
           </a>
         </p>
