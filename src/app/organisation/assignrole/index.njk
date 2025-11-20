@@ -48,13 +48,12 @@
         }) }}
 
         <div class="govuk-form-group">
-          <button id="submit" class="govuk-button" onclick="sendAnalytics(event, 'Assign Role - Submit', 'click')">
+          <button id="submit" class="govuk-button">
             {{__('form_submit')}}
           </button>
           <p class="govuk-body-m">
             <a id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
-              href="/organisation#"
-              onclick="sendAnalytics(event, 'Assign Role - Exit', 'click')">
+              href="/organisation#">
               {{__('form_exit')}}
             </a>
           </p>
