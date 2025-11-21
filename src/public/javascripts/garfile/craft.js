@@ -1,4 +1,9 @@
 $(function () {
+
+  document.getElementById("saveCraft").addEventListener("click", (event) => {
+    sendAnalytics(event, 'Add craft to GAR - submit', 'click');
+  })
+
   $('#aircraft-search').on('keyup', function () {
     var value = $(this).val().toLowerCase();
 
