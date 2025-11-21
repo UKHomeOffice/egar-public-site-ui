@@ -13,6 +13,7 @@
 {% endblock %}
 
 {% block content %}
+  <script src="/javascripts/garfile/manifest/editperson.js" type="module"></script>
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
@@ -27,12 +28,11 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% include "person-details.njk" %}
         <br>
-        <input id="add-person-manifest" class="govuk-button" type="submit" value="{{__('form_save_and_add_to_gar')}}" onclick="sendAnalytics(event, 'GAR Manifest Edit Person - Save', 'click')">
+        <input id="add-person-manifest" class="govuk-button" type="submit" value="{{__('form_save_and_add_to_gar')}}">
         <p class="govuk-body-m">
-          <a href="/garfile/manifest" class="govuk-button govuk-button--secondary" onclick="sendAnalytics(event, 'GAR Manifest Edit Person - Cancel', 'click')">{{ __('form_exit_without_saving') }}</a>
+          <a id="exit-person-manifest" href="/garfile/manifest" class="govuk-button govuk-button--secondary" onclick="sendAnalytics(event, 'GAR Manifest Edit Person - Cancel', 'click')">{{ __('form_exit_without_saving') }}</a>
         </p>
       </form>
     </div>
   </div>
-</div>
 {% endblock %}
