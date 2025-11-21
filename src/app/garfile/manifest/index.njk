@@ -272,7 +272,7 @@
         </form>
         <form id="cancel-form" action="/garfile/view" method="post">
           <p class="govuk-body-m">
-            <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" onclick="sendAnalytics(event, 'GAR Manifest - Exit', 'click')">
+            <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
               {{__('form_exit')}}
             </button>
             <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
