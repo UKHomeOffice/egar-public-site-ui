@@ -267,7 +267,7 @@
         </div>
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
           {# Start buttons #}
-          <input id="continue" type="submit" class="govuk-button" name="buttonClicked" value="{{__('button_continue')}}" onclick="sendAnalytics(event, 'GAR Manifest - Continue', 'click')">
+          <input id="continue" type="submit" class="govuk-button" name="buttonClicked" value="{{__('button_continue')}}">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         </form>
         <form id="cancel-form" action="/garfile/view" method="post">
