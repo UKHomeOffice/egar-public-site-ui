@@ -66,10 +66,7 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.4",
     "@eslint/js": "^9.36.0",
-    "babelify": "^10.0.0",
     "browserify": "^16.5.0",
     "chai": "^4.2.0",
     "csvtojson": "^2.0.10",
