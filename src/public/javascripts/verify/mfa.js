@@ -3,5 +3,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sendAnalytics(event, 'Send MFA code - submit', 'click');
   });
 });
-
-

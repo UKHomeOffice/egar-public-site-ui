@@ -6,4 +6,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sendAnalytics(event, 'Assign Role - Exit', 'click');
   });
 });
-

@@ -3,4 +3,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sendAnalytics(event, 'Add resperson to GAR - submit', 'click');
   });
 });
-

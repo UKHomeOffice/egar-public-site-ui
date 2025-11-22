@@ -3,4 +3,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sendAnalytics(event, 'Create Organisation - Submit', 'click');
   });
 });
-

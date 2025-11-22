@@ -6,4 +6,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sendAnalytics(event, 'Edit Organisation User - Exit without saving', 'click');
   });
 });
-

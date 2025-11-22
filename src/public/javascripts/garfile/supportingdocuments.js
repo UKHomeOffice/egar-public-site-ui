@@ -3,5 +3,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sendAnalytics(event, 'GAR Supporting Documents - Exit', 'click');
   });
 });
-
-

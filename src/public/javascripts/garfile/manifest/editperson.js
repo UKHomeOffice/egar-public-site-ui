@@ -6,5 +6,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sendAnalytics(event, 'GAR Manifest Edit Person - Cancel', 'click');
   });
 });
-
-

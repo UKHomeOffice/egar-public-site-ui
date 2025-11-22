@@ -3,4 +3,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sendAnalytics(event, 'OneLogin.Register - continue', 'click');
   });
 });
-

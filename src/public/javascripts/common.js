@@ -16,13 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.querySelectorAll('.govuk-back-link[href="#"]')
-    .forEach(link => {
-      link.addEventListener('click', event => {
-        event.preventDefault();
-        window.history.go(-1);
-      });
+  document.querySelectorAll('.govuk-back-link[href="#"]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.history.go(-1);
     });
+  });
 });
 
 window.checkDocumentType = () => {

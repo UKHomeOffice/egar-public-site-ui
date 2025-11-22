@@ -6,4 +6,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sendAnalytics(event, 'Saved Aircraft Edit - Cancel', 'click');
   });
 });
-
