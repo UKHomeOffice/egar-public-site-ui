@@ -35,7 +35,6 @@
   "dependencies": {
     "accessible-autocomplete": "^3.0.1",
     "body-parser": "^2.2.0",
-    "client-sessions": "^0.8.0",
     "compression": "^1.7.3",
     "connect-pg-simple": "9.0.0",
     "cookie-parser": "^1.4.3",
