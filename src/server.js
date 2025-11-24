@@ -26,7 +26,6 @@ const router = require('./app/router');
 const db = require('./common/utils/db');
 const noCache = require('./common/utils/no-cache');
 const autocompleteUtil = require('./common/utils/autocomplete');
-const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require('./common/config');
@@ -161,7 +160,6 @@ function initialiseGlobalMiddleware(app) {
   logger.info('Set CSRF Token');
   app.use(helmet());
 
-  app.use('*', correlationHeader);
   logger.info('Set global middleware');
 }
 
