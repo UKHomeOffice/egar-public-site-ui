@@ -10,8 +10,6 @@
 {% set active = '/aircraft' %}
 
 {% block beforeContent %}
-
-
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
@@ -22,39 +20,57 @@
       </li>
     </ol>
   </div>
-
 {% endblock %}
 
 {% block content %}
-  {% import "common/templates/includes/macros.njk" as m %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
       <form action="/aircraft/add" autocomplete="off" class="form-group" method="post" role="form">
-
         <h1 class="govuk-heading-xl">{{__('title_add_aircraft')}}</h1>
-
         <p class="govuk-body-l">{{__('add_aircraft_caption')}}</p>
 
-        <div class="{{ m.form_group_class('registration', errors) }}">
-          <label class="govuk-label" for="registration">{{__('field_aircraft_registration')}}</label>
-          {{ m.hint('registration', __('field_aircraft_registration_hint'))}}
-          {{ m.error_message('registration', errors, __) }}
-          <input id="registration" name="registration" class="govuk-input govuk-input--width-10" maxlength="{{ MAX_REGISTRATION_LENGTH }}"
-            type="text" aria-describedby="registration-hint{{ ' registration-error' if errors | containsError('registration') }}"
-            value="{{ craftObj.registration }}">
-          {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
-        </div>
+        {{ govukInput({
+          id: "registration",
+          name: "registration",
+          classes: "govuk-input--width-10",
+          label: {
+            text: __('field_aircraft_registration')
+          },
+          hint: {
+            text: __('field_aircraft_registration_hint')
+          },
+          errorMessage: (
+            errors | containsError('registration')
+          ),
+          value: craftObj.registration,
+          attributes: {
+            maxlength: MAX_REGISTRATION_LENGTH
+          }
+        }) }}
 
-        <div class="{{ m.form_group_class('craftType', errors) }}">
-          <label class="govuk-label" for="craftType">{{__('field_aircraft_type')}}</label>
-          {{ m.hint('craftType', __('field_aircraft_type_hint'))}}
-          {{ m.error_message('craftType', errors, __) }}
-          <input id="craftType" name="craftType" class="govuk-input govuk-input--width-20" maxlength="{{ MAX_STRING_LENGTH }}"
-            type="text" aria-describedby="craftType-hint{{ ' craftType-error' if errors | containsError('craftType') }}"
-            value="{{ craftObj.craftType }}">
-          {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
-        </div>
+        {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
+
+        {{ govukInput({
+          id: "craftType",
+          name: "craftType",
+          classes: "govuk-input--width-20",
+          label: {
+            text: __('field_aircraft_type')
+          },
+          hint: {
+            text: __('field_aircraft_type_hint')
+          },
+          errorMessage: (
+            errors | containsError('craftType')
+          ),
+          value: craftObj.craftType,
+          attributes: {
+            maxlength: MAX_STRING_LENGTH
+          }
+        }) }}
+
+        {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
 
         {% set legendLabel = __('field_aircraft_base')%}
         {% set warningMessage = undefined%}
