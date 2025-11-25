@@ -1,6 +1,6 @@
 {% set viewGuidance = (garfile.status.name === 'Submitted' and resubmitted != 'yes' and numberOf0TResponseCodes > 0) %}
 
-{%call cya.sectionHeading('manifest', 'heading_manifest_details', '/garfile/manifest', showChangeLinks, __) %}
+{% call cya.sectionHeading('manifest', 'heading_manifest_details', '/garfile/manifest', showChangeLinks, __) %}
 
 {% if viewGuidance and isResubmitted === false and durationInDeparture > 125 %}
   <div style="float:right;">
