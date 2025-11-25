@@ -1,6 +1,5 @@
 {% extends "base-template.njk" %}
 
-{% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/location.njk" as l %}
 
 {% block pageTitle %}
@@ -30,65 +29,7 @@
         <h1 class="govuk-heading-xl">{{__('title_add_aircraft')}}</h1>
         <p class="govuk-body-l">{{__('add_aircraft_caption')}}</p>
 
-        {{ govukInput({
-          id: "registration",
-          name: "registration",
-          classes: "govuk-input--width-10",
-          label: {
-            text: __('field_aircraft_registration')
-          },
-          hint: {
-            text: __('field_aircraft_registration_hint')
-          },
-          errorMessage: (
-            errors | containsError('registration')
-          ),
-          value: craftObj.registration,
-          attributes: {
-            maxlength: MAX_REGISTRATION_LENGTH
-          }
-        }) }}
-
-        {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
-
-        {{ govukInput({
-          id: "craftType",
-          name: "craftType",
-          classes: "govuk-input--width-20",
-          label: {
-            text: __('field_aircraft_type')
-          },
-          hint: {
-            text: __('field_aircraft_type_hint')
-          },
-          errorMessage: (
-            errors | containsError('craftType')
-          ),
-          value: craftObj.craftType,
-          attributes: {
-            maxlength: MAX_STRING_LENGTH
-          }
-        }) }}
-
-        {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
-
-        {% set legendLabel = __('field_aircraft_base')%}
-        {% set warningMessage = undefined%}
-        {% set isPortChoice = (craftObj.portChoice === 'Yes' or craftObj.portChoice is undefined)%}
-        {% set portCode = craftObj.craftBasePort%}
-        {% set lat = craftObj.craftBaseLat%}
-        {% set long = craftObj.craftBaseLong%}
-        {% set prefix = 'craftBase'%}
-
-        {{ l.location(legendLabel,
-                      warningMessage,
-                      isPortChoice,
-                      portCode,
-                      lat,
-                      long,
-                      prefix,
-                      errors,
-                      __) }}
+        {{ l.craft_details(craftObj, errors, __)}}
 
         <div class="govuk-form-group">
           <input id="add-and-exit" class="govuk-button" type="submit"
