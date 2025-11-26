@@ -54,7 +54,7 @@
             </tr>
             {% endfor %}
           {% else %}
-            {{ m.empty_table_message(__('responsible_person_no_records_create_new')) }}
+            {{ m.empty_table_message(__('responsible_person_no_records_create_new'), 4) }}
           {% endif %}
         </tbody>
       </table>
