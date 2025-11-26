@@ -143,6 +143,7 @@ function validName(value) {
   return regex.test(value);
 }
 
+
 function nameHasNoNumbers(value) {
   return !/\d/.test(value);
 }
@@ -235,6 +236,7 @@ function isValidNationality(countryCode) {
   return nationality.exists(countryCode);
 }
 
+
 /**
  * Predicate function which checks a given free circulation value.
  *
@@ -255,6 +257,7 @@ function validVisitReason(value) {
   const validValues = visitReasonValues.map((item) => item.value);
   return validValues.includes(value);
 }
+
 
 /**
  * Predicate function which checks a given gender value
@@ -305,6 +308,7 @@ function currentOrPastDate(dObj) {
 
   return true;
 }
+
 
 /**
  * Check that supplied date is within an acceptable range (currently within 1 month from Date.now())
@@ -487,6 +491,7 @@ function dateNotInPast(value, _element) {
   return false;
 }
 
+//unused except tests
 function validFlag(value) {
   if (value) {
     return true;
@@ -494,13 +499,8 @@ function validFlag(value) {
   return false;
 }
 
-function validPort(value) {
-  if (value.length >= 3) {
-    return true;
-  }
-  return false;
-}
 
+//unused except tests
 function confirmPassword(value1, value2) {
   if (value1 === value2) {
     return true;
@@ -508,6 +508,7 @@ function confirmPassword(value1, value2) {
 
   return false;
 }
+
 
 function onlySymbols(value) {
   // check for only symbols
@@ -704,22 +705,6 @@ function handleResponseError(parsedApiResponse) {
   }
 }
 
-function sanitiseDateOrTime(input, type) {
-  const regex = type === 'year' ? '[0-9]{1,4}' : '[0-9]{1,2}';
-
-  return input.match(regex) === null ? '' : input.match(regex)[0];
-}
-
-function autoTab(field1, dayMonthOrYear, field2) {
-  let len = dayMonthOrYear === 'year' ? 4 : 2;
-
-  let field1Value = sanitiseDateOrTime(field1.value, dayMonthOrYear);
-
-  if (field1Value.length == len) {
-    field2.focus();
-  }
-}
-
 function isAlphanumeric(input) {
   const alphanumericRegex = /^[a-zA-Z0-9]+$/;
   return alphanumericRegex.test(input);
@@ -784,7 +769,6 @@ module.exports = {
   currentOrPastDate,
   validTime,
   validFlag,
-  validPort,
   validISOCountryLength,
   isValidNationality,
   validFreeCirculation,
@@ -802,11 +786,9 @@ module.exports = {
   isValidRegistrationLength,
   isValidDepAndArrDate,
   handleResponseError,
-  sanitiseDateOrTime,
   passportExpiryDate,
   birthDate,
   dateNotInPast,
-  autoTab,
   preventZ,
   dateNotMoreThanMonthInFuture,
   isAlphanumeric,
