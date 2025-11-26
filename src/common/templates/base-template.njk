@@ -87,10 +87,7 @@
 
     {{ footer() }}
 
-    <script type="module">
-      import { initAll } from '/javascripts/govuk-frontend.min.js'
-      initAll()
-    </script>
+    <script src="/javascripts/init.js" type="module"></script>
     <script>
       $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function (eventObj) {
         $("<input />")
@@ -109,10 +106,9 @@
         return true;
       });
     </script>
+    <script type="text/javascript" src="/utils/validator.js"></script>
     <script src="/javascripts/table-multiselect.js"></script>
     <script src="/javascripts/cookie-banner.js"></script>
     <script src="/javascripts/common.js"></script>
-    <script type="text/javascript" src="/javascripts/resubmitGar.js"></script>
   </body>
-
 </html>

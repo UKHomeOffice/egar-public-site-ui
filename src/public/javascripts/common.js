@@ -15,4 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  document.querySelectorAll('.govuk-back-link[href="#"]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.history.go(-1);
+    });
+  });
 });
+
+window.checkDocumentType = () => {
+  if (document.getElementById('travelDocumentType').value == 'Other') {
+    document.getElementById('travelDocumentOtherDiv').style.display = 'block';
+  } else {
+    document.getElementById('travelDocumentOtherDiv').style.display = 'none';
+  }
+};
+window.sendAnalytics = (e, message, event) => {
+  console.log('Send Analytics' + message);
+  // this function is called but not defined.
+  // Adding here so we can reintegrate with GA if necessary.
+};

@@ -26,7 +26,7 @@
 {% endblock %}
 
 {% block content %}
-  {% import "common/templates/includes/macros.njk" as m %}
+  <script src="/javascripts/aircraft/add.js" type="module"></script>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -77,12 +77,10 @@
         <div class="govuk-form-group">
           <input id="add-and-exit" class="govuk-button" type="submit"
           name="buttonClicked"
-          value="{{__('form_add_and_exit')}}"
-          onclick="sendAnalytics(event, 'Saved Aircraft Add - Save', 'click')">
+          value="{{__('form_add_and_exit')}}">
           <p class="govuk-body-m">
-            <a class="govuk-button govuk-button--secondary" href="/aircraft#" onclick="sendAnalytics(event, 'Saved Aircraft Add - Cancel', 'click')">{{__('form_exit_without_adding')}}</a>
+            <a id="exit-without-saving" class="govuk-button govuk-button--secondary" href="/aircraft#">{{__('form_exit_without_adding')}}</a>
           </p>
-
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       </form>

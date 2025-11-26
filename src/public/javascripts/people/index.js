@@ -1,12 +1,10 @@
-$(function () {
-  $('#aircraft-search').on('keyup', function () {
+$(document).ready(function () {
+  $('#person-search').on('keyup', function () {
     var value = $(this).val().toLowerCase();
-
-    $('#aircraft_table_row tr').filter(function () {
+    $('#people_table_row tr').filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
   });
-
   $('th').each(function (col) {
     $(this).hover(
       function () {
@@ -16,7 +14,6 @@ $(function () {
         $(this).removeClass('focus');
       }
     );
-
     $(this).click(function () {
       if ($(this).is('.asc')) {
         $(this).removeClass('asc');
@@ -27,7 +24,6 @@ $(function () {
         $(this).removeClass('desc');
         sortOrder = 1;
       }
-
       $(this).siblings().removeClass('asc selected');
       $(this).siblings().removeClass('desc selected');
       var arrData = $('table').find('tbody >tr:has(td)').get();

@@ -9,11 +9,11 @@
 {% set active = '/home' %}
 
 {% block beforeContent %}
-
   <a href="/garfile/customs" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
+  <script src="/javascripts/garfile/supportingdocuments.js" type="module"></script>
   <div class="govuk-grid-row">
     <form action="/upload?_csrf={{csrfToken}}" class="form-group" method="post" role="form" enctype="multipart/form-data">
       <div class="govuk-grid-column-two-thirds">
@@ -66,11 +66,11 @@
               {% if supportingDoc.items | length %}
                 {% for file in supportingDoc.items %}
                 <tr class="govuk-table__row">
-                  <td class="govuk-table__cell ">{{file.fileName}} </td>
-                  <td class="govuk-table__cell ">{{file.size}} </td>
-                  <td class="govuk-table__cell ">{{__('field_file_status_done')}}</td>
-                  <td class="govuk-table__cell "><button class="govuk-button--link" name="deleteDocId" value="{{ file.supportingDocumentId }}">{{__('table_delete')}}</button></td>
-                </tr lass="govuk-table__cell ">
+                  <td class="govuk-table__cell">{{file.fileName}} </td>
+                  <td class="govuk-table__cell">{{file.size}} </td>
+                  <td class="govuk-table__cell">{{__('field_file_status_done')}}</td>
+                  <td class="govuk-table__cell"><button class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deleteDocId" value="{{ file.supportingDocumentId }}">{{__('table_delete')}}</button></td>
+                </tr>
                 {% endfor %}
               {% else %}
                 {{ m.empty_table_message(__('supportingdocuments_no_records')) }}
@@ -91,8 +91,7 @@
       <div class="govuk-grid-column-two-thirds">
         <form id="cancel-form" action="/garfile/view" method="post">
           <p class="govuk-body-m">
-            <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
-              onclick="sendAnalytics(event, 'GAR Supporting Documents - Exit', 'click')">
+            <button id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
               {{__('form_exit')}}
             </button>
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">

@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-  <script type="text/javascript" src="/javascripts/craft.js"></script>
+  <script type="text/javascript" src="/javascripts/garfile/craft.js"></script>
   <div class="govuk-grid-row">
 
     <form id="previous_aircraft" action="/garfile/craft" autocomplete="off" class="form-group" method="post" role="form">
@@ -26,7 +26,7 @@
         <h2 id="saved_aircraft" class="govuk-heading-l">{{__('title_aircraft')}}</h2>
         <p class="govuk-body-l">{{__('caption_aircraft_details')}}</p>
         <p class="govuk-body-m">Search for aircraft </p>
-        <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+        <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search">
       </div>
       <div class="govuk-grid-column-full">
         <table class="govuk-table">
@@ -74,8 +74,7 @@
             .getSavedCraft()
             .items | length %}
             <div class="govuk-form-group">
-              <input id="saveCraft" class="govuk-button" type="submit" name="buttonClicked" value="Add to GAR"
-            onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
+              <input id="saveCraft" class="govuk-button" type="submit" name="buttonClicked" value="Add to GAR">
             </div>
           {% endif %}
 

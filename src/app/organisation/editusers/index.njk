@@ -9,11 +9,11 @@
 {% set active = '/organisation' %}
 
 {% block beforeContent %}
-
   <a href="/organisation" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
+<script src="/javascripts/organisation/editusers.js" type="module"></script>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <form action="/organisation/users/edit" autocomplete="off" class="form-group" method="post" role="form">
@@ -31,45 +31,43 @@
         <input id="lastName" name="lastName" class="govuk-input" type="text" maxlength="{{ MAX_STRING_LENGTH }}"
           value="{{orgUser.lastName}}" {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
       </div>
-{% set roleItems = [] %}
+      {% set roleItems = [] %}
 
-{% for role in roles %}
-  {% set item = {
-    value: role.name,
-    text: role.name,
-    hint: {
+      {% for role in roles %}
+      {% set item = {
+      value: role.name,
+      text: role.name,
+      hint: {
       text: role.description
-    },
-    checked: orgUser.role == role.name
-  } %}
-  {% set roleItems = roleItems.concat(item) %}
-{% endfor %}
+      },
+      checked: orgUser.role == role.name
+      } %}
+      {% set roleItems = roleItems.concat(item) %}
+      {% endfor %}
 
-{{ govukRadios({
-  idPrefix: "role",
-  name: "role",
-  fieldset: {
-    legend: {
+      {{ govukRadios({
+      idPrefix: "role",
+      name: "role",
+      fieldset: {
+      legend: {
       text: __("title_assign_role"),
       classes: "govuk-fieldset__legend--m"
-    }
-  },
-  classes: m.form_group_class('role', errors),
-  hint: {
-    text: __("assign_role_caption")
-  },
-  errorMessage: errors | containsError('role'),
-  items: roleItems
-}) }}
+      }
+      },
+      classes: m.form_group_class('role', errors),
+      hint: {
+      text: __("assign_role_caption")
+      },
+      errorMessage: errors | containsError('role'),
+      items: roleItems
+      }) }}
       <div class="govuk-form-group">
-        <button id="save-and-exit" class="govuk-button" type="submit"
-          onclick="sendAnalytics(event, 'Edit Organisation User - Save and exit', 'click')">
+        <button id="save-and-exit" class="govuk-button" type="submit">
           {{__('form_save_and_exit')}}
         </button>
         <p class="govuk-body-m">
           <a id="exit-without-saving" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
-            href="/organisation#"
-            onclick="sendAnalytics(event, 'Edit Organisation User - Exit without saving', 'click')">
+            href="/organisation#">
             {{__('form_exit_without_saving')}}
           </a>
         </p>

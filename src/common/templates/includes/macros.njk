@@ -76,9 +76,13 @@
   }) }}
 {% endmacro %}
 
-{% macro empty_table_message(message) %}
+{% macro empty_table_message(message, colspan=1) %}
   <tr class="govuk-table__row">
-    <caption class="govuk-inset-text" style="caption-side:bottom;"><div style="float:left;">{{ message }}</div></caption>
+    <td class="govuk-table__cell" colspan="{{ colspan }}">
+      <div class="govuk-inset-text">
+        {{ message | safe }}
+      </div>
+    </td>
   </tr>
 {% endmacro %}
 
@@ -129,7 +133,7 @@
     <div class="flex-center">
         <div id="loader"></div>
     </div>
-    <div class="center-text govuk-!-padding-top-5">
+    <div class="govuk-!-text-align-center govuk-!-padding-top-5">
       <h2 class="govuk-heading-l">{{text}}</h2>
       <p class="govuk-body govuk-!-font-size-36">{{text2}}</p>
     </div>
