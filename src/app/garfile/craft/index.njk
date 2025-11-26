@@ -1,8 +1,8 @@
 {% extends "base-template.njk" %}
 
+{% import "common/templates/includes/location.njk" as l %}
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
-{% import "common/templates/includes/location.njk" as l %}
 
 {% block pageTitle %}
   {{__('error_prefix') if errors}} Create GAR | Aircraft

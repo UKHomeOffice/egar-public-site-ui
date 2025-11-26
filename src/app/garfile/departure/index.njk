@@ -1,9 +1,9 @@
 {% extends "base-template.njk" %}
 
-{% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/banners.njk" as b %}
-{% import "common/templates/includes/location.njk" as l %}
 {% import "common/templates/includes/date-time.njk" as dt %}
+{% import "common/templates/includes/location.njk" as l %}
+{% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
   {{__('error_prefix') if errors}} Create GAR | Departure | {{__('title')}}
