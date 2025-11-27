@@ -1,17 +1,17 @@
-{% from "dist/govuk/components/skip-link/macro.njk" import govukSkipLink %}
-{% from "dist/govuk/components/footer/macro.njk" import govukFooter %}
-{% from "dist/govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
-{% from "dist/govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
-{% from "dist/govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "dist/govuk/components/radios/macro.njk" import govukRadios %}
 {% from "dist/govuk/components/button/macro.njk" import govukButton %}
-{% from "dist/govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "dist/govuk/components/warning-text/macro.njk" import govukWarningText %}
-{% from "dist/govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "dist/govuk/components/textarea/macro.njk" import govukTextarea %}
-{% from "dist/govuk/components/input/macro.njk" import govukInput %}
-{% from "dist/govuk/components/select/macro.njk" import govukSelect %}
+{% from "dist/govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "dist/govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "dist/govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "dist/govuk/components/footer/macro.njk" import govukFooter %}
+{% from "dist/govuk/components/input/macro.njk" import govukInput %}
+{% from "dist/govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "dist/govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "dist/govuk/components/radios/macro.njk" import govukRadios %}
+{% from "dist/govuk/components/select/macro.njk" import govukSelect %}
+{% from "dist/govuk/components/skip-link/macro.njk" import govukSkipLink %}
+{% from "dist/govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "dist/govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "dist/govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% from "includes/footer.njk" import footer %}
 {% from "includes/navigation.njk" import navigation %}
@@ -36,13 +36,13 @@
     <link rel="manifest" href="/assets/rebrand/manifest.json">
     <link rel="stylesheet" href="/stylesheets/govuk-frontend.min.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
-    <script src="/javascripts/dialog-polyfill.js"></script>
-
     <link href="/stylesheets/custom.css" rel="stylesheet" />
     <link href="/stylesheets/dialog-polyfill.css" rel="stylesheet" type="text/css" />
     <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+    <script src="/javascripts/dialog-polyfill.js"></script>
 
     {% include "head.njk" %}
 
@@ -87,10 +87,7 @@
 
     {{ footer() }}
 
-    <script type="module">
-      import { initAll } from '/javascripts/govuk-frontend.min.js'
-      initAll()
-    </script>
+    <script src="/javascripts/init.js" type="module"></script>
     <script>
       $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function (eventObj) {
         $("<input />")
@@ -112,7 +109,5 @@
     <script src="/javascripts/table-multiselect.js"></script>
     <script src="/javascripts/cookie-banner.js"></script>
     <script src="/javascripts/common.js"></script>
-    <script type="text/javascript" src="/javascripts/resubmitGar.js"></script>
   </body>
-
 </html>

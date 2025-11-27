@@ -5,8 +5,8 @@ Manage account | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row padding-bottom-60">
-  <div class="govuk-grid-column-two-thirds margin-left-50 margin-top-30">
+<div class="govuk-grid-row govuk-!-padding-bottom-12">
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-left-8 govuk-!-margin-top-6">
     <div class="govuk-grid-row">
       <h1 class="govuk-heading-l">Your account</h1>
           {{ govukSummaryList({
@@ -39,7 +39,7 @@ Manage account | Submit a General Aviation Report (GAR)
               }
             ]
           }) }}
-      <div class="margin-top-20">
+      <div class="govuk-!-margin-top-4">
         <h2 class="govuk-heading-m">Change your sign in details</h2>
         <div class="govuk-body">
           <p>You use your GOV.UK One Login to sign in to Submit a General Aviation Report (GAR).</p>
@@ -55,8 +55,8 @@ Manage account | Submit a General Aviation Report (GAR)
               Login</a>
           </p>
         </div>
-        <div class="margin-top-30">
-          <div class="govuk-button-group margin-top-30">
+        <div class="govuk-!-margin-top-6">
+          <div class="govuk-button-group govuk-!-margin-top-6">
             {{ govukButton({element: "a", text: "Delete your account", classes: "govuk-button--warning", href:
             "/user/delete" }) }}
           </div>

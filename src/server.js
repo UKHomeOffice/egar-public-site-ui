@@ -248,7 +248,6 @@ function initialisePublic(app) {
   app.use('/assets', express.static(path.join(__dirname, '/common/assets/')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
-  app.use('/utils', express.static(path.join(__dirname, '/common/utils/')));
   logger.info('Initialised public assets');
 }
 

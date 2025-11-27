@@ -10,22 +10,13 @@
 {% set active = '/aircraft' %}
 
 {% block content %}
+<script src="/javascripts/aircraft/index.js" type="text/javascript"></script>
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-      <script>
-      $(document).ready(function(){
-        $("#aircraft-search").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#aircraft_table_row tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-          });
-        });
-        });
-      </script>
     <h1 class="govuk-heading-xl">{{__('title_aircraft')}}</h1>
       <p class="govuk-body-l">{{__('aircraft_caption')}}</p>
       <p class="govuk-body-m">Search for aircraft </p>
-      <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+      <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search">
   </div>
 
   <div class="govuk-grid-column-full">
@@ -51,7 +42,7 @@
             <td class="govuk-table__cell">{{ craft.craftType }}</td>
             <td class="govuk-table__cell">{{ craft.craftBase | upper }}</td>
             {# {% if cookie.getUserRole() != 'User' %} #}
-            <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-button--link" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
+            <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
             {# {% endif %} #}
           </tr>
           {% endfor %}

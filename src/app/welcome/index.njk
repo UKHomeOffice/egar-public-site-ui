@@ -5,19 +5,20 @@ Create GAR | Start
 {% endblock %}
 
 {% block content %}
-	<p class="govuk-body-l">
-		<span style='background-color: #f7d352'>
-		{{HOMEPAGE_MESSAGE | safe}}
-		</span>
-	</p>
+
+  {% if HOMEPAGE_MESSAGE %}
+    {{ govukNotificationBanner({
+      html: (HOMEPAGE_MESSAGE | safe),
+      type: "success",
+      titleText: "Notice",
+      disableAutoFocus: true
+    }) }}
+  {% endif %}
 
 	<div class="govuk-grid-row">
 		<div class="govuk-grid-column-two-thirds">
-
 			<h1 class="govuk-heading-xl">{{__('title')}}</h1>
-
 			<p class="govuk-body-l">{{__('welcome_caption')}}</p>
-
 			<ul class="govuk-list govuk-list--bullet">
 				<li>{{__('welcome_caption_list_1')}}
 					{# Submit a GAR #}
@@ -39,9 +40,7 @@ Create GAR | Start
 			}) }}
 
 			<div class="govuk-tabs" data-module="govuk-tabs">
-				<h2 class="govuk-tabs__title">
-				Contents
-			</h2>
+				<h2 class="govuk-tabs__title">Contents</h2>
 
 				<ul class="govuk-tabs__list">
 					<li class="govuk-tabs__list-item">

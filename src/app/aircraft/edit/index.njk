@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-
+  <script src="/javascripts/aircraft/edit.js" type="module"></script>
   {% set craft = cookie.getEditCraft() %}
 
   <div class="govuk-grid-row">
@@ -35,10 +35,9 @@
         <div class="govuk-form-group">
           <input id="save-and-exit" class="govuk-button" type="submit"
             name="buttonClicked"
-            value="{{__('form_save_and_exit')}}"
-            onclick="sendAnalytics(event, 'Saved Aircraft Edit - Save', 'click')">
+            value="{{__('form_save_and_exit')}}">
           <p class="govuk-body-m">
-            <a id="exit-without-saving" class="govuk-button govuk-button--secondary" href="/aircraft#" onclick="sendAnalytics(event, 'Saved Aircraft Edit - Cancel', 'click')">{{__('form_exit_without_saving')}}</a>
+            <a id="exit-without-saving" class="govuk-button govuk-button--secondary" href="/aircraft#">{{__('form_exit_without_saving')}}</a>
           </p>
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>

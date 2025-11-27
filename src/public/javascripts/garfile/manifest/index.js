@@ -4,6 +4,13 @@ $(function () {
   initPeopleSort();
   handleMultiSelectTableButtons();
   setupDeletePeopleDialog();
+
+  document.getElementById('exit').addEventListener('click', (event) => {
+    sendAnalytics(event, 'GAR Manifest - Exit', 'click');
+  });
+  document.getElementById('continue').addEventListener('click', (event) => {
+    sendAnalytics(event, 'GAR Manifest - Continue', 'click');
+  });
 });
 
 function initPeopleSort() {
