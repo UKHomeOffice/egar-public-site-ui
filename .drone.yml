@@ -292,4 +292,3 @@ trigger:
     - promote
   target:
     - production
-
