@@ -1,72 +1,73 @@
 {% import "common/templates/includes/date-time.njk" as dt %}
+
 {% set dateOfBirth = person.dateOfBirth or req.body['dobYear'] ~ "-" ~ req.body['dobMonth'] ~  "-" ~req.body['dobDay'] %}
 {% set documentExpiryDate = person.documentExpiryDate or req.body['expiryYear'] ~ "-" ~ req.body['expiryMonth'] ~  "-" ~req.body['expiryDay'] %}
 
-<div class="{{ m.form_group_class('savedpeople', errors) }}">
-<script type="module" src="/javascripts/includes/person-details.js"></script>
-{{ govukInput({
-  id: "firstName",
-  name: "firstName",
-  classes: "govuk-input--width-30",
-  label: {
-    text: __("field_given_name"),
-    classes: "govuk-label--m"
-  },
-  hint: {
-    html: __("field_given_name_hint") ~ m.character_count_hint('firstName', MAX_STRING_LENGTH)
-  },
-  value: person.firstName or req.body.firstName,
-  attributes: {
-    maxlength: MAX_STRING_LENGTH,
-    autocomplete: "off"
-  },
-  errorMessage: errors | containsError('firstName')
-}) }}
+<div class="{{ m.form_group_class('savedpeople', errors)}}">
+  <script type="module" src="/javascripts/includes/person-details.js"></script>
+  {{ govukInput({
+    id: "firstName",
+    name: "firstName",
+    classes: "govuk-input--width-30",
+    label: {
+      text: __("field_given_name"),
+      classes: "govuk-label--m"
+    },
+    hint: {
+      html: __("field_given_name_hint") ~ m.character_count_hint('firstName', MAX_STRING_LENGTH)
+    },
+    value: person.firstName or req.body.firstName,
+    attributes: {
+      maxlength: MAX_STRING_LENGTH,
+      autocomplete: "off"
+    },
+    errorMessage: errors | containsError('firstName')
+  }) }}
 
-{{ govukInput({
-  id: "lastName",
-  name: "lastName",
-  classes: "govuk-input--width-30",
-  label: {
-    text: __("field_surname"),
-    classes: "govuk-label--m"
-  },
-  value: person.lastName or req.body.lastName,
-  attributes: {
-    maxlength: MAX_STRING_LENGTH,
-    autocomplete: "off"
-  },
-  errorMessage: errors | containsError('lastName')
-}) }}
+  {{ govukInput({
+    id: "lastName",
+    name: "lastName",
+    classes: "govuk-input--width-30",
+    label: {
+      text: __("field_surname"),
+      classes: "govuk-label--m"
+    },
+    value: person.lastName or req.body.lastName,
+    attributes: {
+      maxlength: MAX_STRING_LENGTH,
+      autocomplete: "off"
+    },
+    errorMessage: errors | containsError('lastName')
+  }) }}
 
-{% set nationalityItems = [{
-  value: "",
-  text: ""
-}] %}
+  {% set nationalityItems = [{
+    value: "",
+    text: ""
+  }] %}
 
-{% for country in nationalityList | sort(attribute='label') %}
-  {% set option = {
-    value: country.code,
-    text: country.label,
-    selected: (person.nationality or req.body.nationality) == country.code
-  } %}
-  {% set nationalityItems = nationalityItems.concat(option) %}
-{% endfor %}
+  {% for country in nationalityList | sort(attribute='label') %}
+    {% set option = {
+      value: country.code,
+      text: country.label,
+      selected: (person.nationality or req.body.nationality) == country.code
+    } %}
+    {% set nationalityItems = nationalityItems.concat(option) %}
+  {% endfor %}
 
-{{ govukSelect({
-  id: "nationality",
-  name: "nationality",
-  classes: "govuk-select",
-  label: {
-    text: __("field_nationality"),
-    classes: "govuk-label--m"
-  },
-  hint: {
-    text: __("field_nationality_hint")
-  },
-  items: nationalityItems,
-  errorMessage: errors | containsError('nationality')
-}) }}
+  {{ govukSelect({
+    id: "nationality",
+    name: "nationality",
+    classes: "govuk-select",
+    label: {
+      text: __("field_nationality"),
+      classes: "govuk-label--m"
+    },
+    hint: {
+      text: __("field_nationality_hint")
+    },
+    items: nationalityItems,
+    errorMessage: errors | containsError('nationality')
+  }) }}
 
   {{ dt.dateInput('dob', cookie, dateOfBirth, "field_dob", "field_dob_hint", errors, __) }}
 
@@ -95,102 +96,100 @@
     items: genderItems
   }) }}
 
-{{ govukInput({
-  id: "birthplace",
-  name: "birthplace",
-  classes: "govuk-input--width-30",
-  label: {
-    text: __("field_birth_place"),
-    classes: "govuk-label--m"
-  },
-  value: person.placeOfBirth or req.body.birthplace,
-  attributes: {
-    maxlength: MAX_STRING_LENGTH,
-    autocomplete: "off"
-  },
-  hint: {
-    html: m.character_count_hint('birthplace', MAX_STRING_LENGTH)
-  },
-  errorMessage: errors | containsError('birthplace')
-}) }}
+  {{ govukInput({
+    id: "birthplace",
+    name: "birthplace",
+    classes: "govuk-input--width-30",
+    label: {
+      text: __("field_birth_place"),
+      classes: "govuk-label--m"
+    },
+    value: person.placeOfBirth or req.body.birthplace,
+    attributes: {
+      maxlength: MAX_STRING_LENGTH,
+      autocomplete: "off"
+    },
+    hint: {
+      html: m.character_count_hint('birthplace', MAX_STRING_LENGTH)
+    },
+    errorMessage: errors | containsError('birthplace')
+  }) }}
 
-{% set personTypeHintHtml = __('field_person_type_hint') ~ '<br/> <a class="govuk-link" href="https://www.gov.uk/government/publications/aircrew-crm02" target="_blank">Guidance on Crew and Passengers - GOV.UK (www.gov.uk)</a>' %}
+  {% set personTypeHintHtml = __('field_person_type_hint') ~ '<br/> <a class="govuk-link" href="https://www.gov.uk/government/publications/aircrew-crm02" target="_blank">Guidance on Crew and Passengers - GOV.UK (www.gov.uk)</a>' %}
+  {% set personTypeItems = [] %}
 
-{% set personTypeItems = [] %}
+  {% for choice in persontype %}
+    {% set item = {
+      value: choice.persontype,
+      text: choice.persontype,
+      checked: (person.peopleType.name == choice.persontype) or (req.body.personType == choice.persontype)
+    } %}
+    {% set personTypeItems = personTypeItems.concat(item) %}
+  {% endfor %}
 
-{% for choice in persontype %}
-  {% set item = {
-    value: choice.persontype,
-    text: choice.persontype,
-    checked: (person.peopleType.name == choice.persontype) or (req.body.personType == choice.persontype)
-  } %}
-  {% set personTypeItems = personTypeItems.concat(item) %}
-{% endfor %}
+  {{ govukRadios({
+    idPrefix: "personType",
+    name: "personType",
+    fieldset: {
+      legend: {
+        text: __("field_person_type"),
+        classes: "govuk-fieldset__legend--m"
+      }
+    },
+    classes: m.form_group_class('personType', errors),
+    hint: {
+      html: personTypeHintHtml
+    },
+    errorMessage: errors | containsError('personType'),
+    items: personTypeItems
+  }) }}
 
-{{ govukRadios({
-  idPrefix: "personType",
-  name: "personType",
-  fieldset: {
-    legend: {
-      text: __("field_person_type"),
-      classes: "govuk-fieldset__legend--m"
-    }
-  },
-  classes: m.form_group_class('personType', errors),
-  hint: {
-    html: personTypeHintHtml
-  },
-  errorMessage: errors | containsError('personType'),
-  items: personTypeItems
-}) }}
+  <h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
+  <p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
 
-<h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
-<p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
-
-{{ govukInput({
-  id: "travelDocumentNumber",
-  name: "travelDocumentNumber",
-  classes: "govuk-input--width-20",
-  label: {
-    text: __("field_travel_document_number"),
-    classes: "govuk-label--m"
-  },
-  value: person.documentNumber or req.body.travelDocumentNumber,
-  attributes: {
-    maxlength: MAX_STRING_LENGTH
-  },
-  hint: {
-    html: m.character_count_hint('travelDocumentNumber', MAX_STRING_LENGTH)
-  },
-  errorMessage: errors | containsError('travelDocumentNumber')
-}) }}
+  {{ govukInput({
+    id: "travelDocumentNumber",
+    name: "travelDocumentNumber",
+    classes: "govuk-input--width-20",
+    label: {
+      text: __("field_travel_document_number"),
+      classes: "govuk-label--m"
+    },
+    value: person.documentNumber or req.body.travelDocumentNumber,
+    attributes: {
+      maxlength: MAX_STRING_LENGTH
+    },
+    hint: {
+      html: m.character_count_hint('travelDocumentNumber', MAX_STRING_LENGTH)
+    },
+    errorMessage: errors | containsError('travelDocumentNumber')
+  }) }}
 
   {{ dt.dateInput('expiry', cookie, documentExpiryDate, "field_document_expiry_date", "field_document_expiry_date_hint", errors, __) }}
 
+  {% set issuingStateItems = [] %}
 
-{% set issuingStateItems = [] %}
+  {% for country in nationalityList | sort(attribute='label') %}
+    {% set issuingStateItems = issuingStateItems.concat({
+      value: country.code,
+      text: country.label,
+      selected: (person.issuingState or req.body.issuingState) == country.code
+    }) %}
+  {% endfor %}
 
-{% for country in nationalityList | sort(attribute='label') %}
-  {% set issuingStateItems = issuingStateItems.concat({
-    value: country.code,
-    text: country.label,
-    selected: (person.issuingState or req.body.issuingState) == country.code
-  }) %}
-{% endfor %}
-
-{{ govukSelect({
-  id: "issuingState",
-  name: "issuingState",
-  label: {
-    text: __("field_issuing_state"),
-    classes: "govuk-label--m"
-  },
-  hint: {
-    text: __("field_issuing_state_hint")
-  },
-  items: issuingStateItems,
-  errorMessage: errors | containsError('issuingState')
-}) }}
+  {{ govukSelect({
+    id: "issuingState",
+    name: "issuingState",
+    label: {
+      text: __("field_issuing_state"),
+      classes: "govuk-label--m"
+    },
+    hint: {
+      text: __("field_issuing_state_hint")
+    },
+    items: issuingStateItems,
+    errorMessage: errors | containsError('issuingState')
+  }) }}
 
   <div class="{{ m.form_group_class('travelDocumentType', errors) }}">
     <label class="govuk-label govuk-label--m" for="travelDocumentType">{{ __('field_travel_document_type') }}</label>
@@ -206,14 +205,11 @@
     {% endfor %}
     </select>
   </div>
-
-  <div
-    class="{{ m.form_group_class('travelDocumentOther', errors) }}"
-    id="travelDocumentOtherDiv"
-    {{ "hidden" if person.documentType  !== 'Other' }}
-  >
-    {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
+  <div class="{{ m.form_group_class('travelDocumentOther', errors) }}"
+    id="travelDocumentOtherDiv" {{ "hidden" if person.documentType  !== 'Other' }}>
+    <label for="travelDocumentOther">    {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
     <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
     maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
     {{ m.character_count_hint('travelDocumentOther', MAX_STRING_LENGTH) }}
   </div>
+</div>
