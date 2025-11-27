@@ -5,65 +5,63 @@ Manage account | Submit a General Aviation Report (GAR)
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row govuk-!-padding-bottom-12">
-  <div class="govuk-grid-column-two-thirds govuk-!-margin-left-8 govuk-!-margin-top-6">
-    <div class="govuk-grid-row">
-      <h1 class="govuk-heading-l">Your account</h1>
-          {{ govukSummaryList({
-            rows: [
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">Your account</h1>
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: __('field_email_label')
+          },
+          value: {
+            text: cookie.getUserEmail() | truncate(50),
+            classes: "govuk-!-width-full"
+          }
+        },
+        {
+          key: {
+            text: "Your name"
+          },
+          value: {
+            text: cookie.getUserFirstName() + " " + cookie.getUserLastName()
+          },
+          actions: {
+            items: [
               {
-                key: {
-                  text: __('field_email_label')
-                },
-                value: {
-                  text: cookie.getUserEmail() | truncate(50),
-                  classes: "govuk-!-width-full"
-                }
-              },
-              {
-                key: {
-                  text: "Your name"
-                },
-                value: {
-                  text: cookie.getUserFirstName() + " " + cookie.getUserLastName()
-                },
-                actions: {
-                  items: [
-                    {
-                      href: "/user/manageuserdetail",
-                      text: "Change",
-                      visuallyHiddenText: "your name"
-                    }
-                  ]
-                }
+                href: "/user/manageuserdetail",
+                text: "Change",
+                visuallyHiddenText: "your name"
               }
             ]
-          }) }}
-      <div class="govuk-!-margin-top-4">
-        <h2 class="govuk-heading-m">Change your sign in details</h2>
-        <div class="govuk-body">
-          <p>You use your GOV.UK One Login to sign in to Submit a General Aviation Report (GAR).</p>
-          <p>You can change your GOV.UK One Login details including:
+          }
+        }
+      ]
+    }) }}
+    <div class="govuk-!-margin-top-4">
+      <h2 class="govuk-heading-m">Change your sign in details</h2>
+      <div class="govuk-body">
+        <p>You use your GOV.UK One Login to sign in to Submit a General Aviation Report (GAR).</p>
+        <p>You can change your GOV.UK One Login details including:
           <ul>
             <li>email address</li>
             <li>password</li>
             <li>how to get security codes to sign in</li>
           </ul>
-          </p>
-          <p>
-            <a class="govuk-link" href="{{ ONE_LOGIN_ACCOUNT_URL }}" target="_blank">Change your sign in details for your GOV.UK One
-              Login</a>
-          </p>
+        </p>
+        <p>
+          <a class="govuk-link" href="{{ ONE_LOGIN_ACCOUNT_URL }}" target="_blank">Change your sign in details for your GOV.UK One
+            Login</a>
+        </p>
+      </div>
+      <div class="govuk-!-margin-top-6">
+        <div class="govuk-button-group govuk-!-margin-top-6">
+          {{ govukButton({element: "a", text: "Delete your account", classes: "govuk-button--warning", href:
+          "/user/delete" }) }}
         </div>
-        <div class="govuk-!-margin-top-6">
-          <div class="govuk-button-group govuk-!-margin-top-6">
-            {{ govukButton({element: "a", text: "Delete your account", classes: "govuk-button--warning", href:
-            "/user/delete" }) }}
-          </div>
-          <p class="govuk-body">
-            <a class="govuk-link" href="/home">Return to GARs</a>
-          </p>
-        </div>
+        <p class="govuk-body">
+          <a class="govuk-link" href="/home">Return to GARs</a>
+        </p>
       </div>
     </div>
   </div>
