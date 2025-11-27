@@ -3,6 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% macro craft_details(craft, errors, __) %}
+<div class="govuk-!-margin-bottom-6">
   {{ govukInput({
     id: "registration",
     name: "registration",
@@ -19,10 +20,14 @@
     value: craft.registration,
     attributes: {
       maxlength: MAX_REGISTRATION_LENGTH
+    },
+    formGroup: {
+      classes: "govuk-!-margin-bottom-0"
     }
   }) }}
   {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
-
+</div>
+<div class="govuk-!-margin-bottom-6">
   {{ govukInput({
     id: "craftType",
     name: "craftType",
@@ -39,9 +44,13 @@
     value: craft.craftType,
     attributes: {
       maxlength: MAX_STRING_LENGTH
+    },
+    formGroup: {
+      classes: "govuk-!-margin-bottom-0"
     }
   }) }}
   {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
+</div>
 
   {% set legendLabel = __('field_aircraft_base')%}
   {% set warningMessage = undefined%}
