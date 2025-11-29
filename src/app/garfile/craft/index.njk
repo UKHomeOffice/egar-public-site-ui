@@ -59,7 +59,7 @@
                   </tr>
                 {% endfor %}
               {% else %}
-                {{ l.empty_table_message(__('aircraft_no_records')) }}
+                {{ m.empty_table_message(__('aircraft_no_records'),3) }}
               {% endif %}
             </tbody>
           </table>
