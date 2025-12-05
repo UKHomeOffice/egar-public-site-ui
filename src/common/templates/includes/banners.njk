@@ -1,3 +1,6 @@
+
+{% from "dist/govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
 {% macro coa_designation_regulation_change(isDeparture) %}
   {% set journeyStage = "departure" if isDeparture else "arrival" %}
   <p class="govuk-body-m">
