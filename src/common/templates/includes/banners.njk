@@ -26,3 +26,10 @@
     }) }}
   {% endif %}
 {% endmacro %}
+
+{% macro id_card_withdrawl_text(__) %}
+  <div class="govuk-inset-text">
+    {{ __('id_card_withdrawl_text') }}
+    <a class="govuk-link" href="https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen">GOV.UK</a>.
+  </div>
+{% endmacro %}

@@ -1,6 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/banners.njk" as b %}
 
 {% block pageTitle %}
 	Create GAR | Manifest
@@ -19,11 +20,7 @@
       <div class="govuk-grid-column-two-thirds">
         <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
         <h1 class="govuk-heading-xl">{{__('heading_manifest_details')}}</h1>
-        {# <p class="govuk-body-l"> #}
-        {#   <span class="govuk-tag govuk-tag--yellow"> #}
-        {#     {{__('id_card_withdrawl_text')}} #}
-        {#     <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> #}
-        {# </p> #}
+        {{ b.id_card_withdrawl_text(__) }}
         <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
         <p class="govuk-body-l">{{__('caption_manifest_details')}}</p>
       </div>

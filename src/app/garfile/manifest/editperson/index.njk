@@ -1,5 +1,6 @@
 {% extends "base-template.njk" %}
 
+{% import "common/templates/includes/banners.njk" as b %}
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
@@ -19,7 +20,7 @@
       <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
 
       <h1 class="govuk-heading-xl">{{__('heading_manifest_edit_person_details')}}</h1>{# Person details #}
-      {# <p class="govuk-body-l"> <span class="govuk-inset-text"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p> #}
+      {{ b.id_card_withdrawl_text(__) }}
 
       <p class="govuk-body-m">{{__('caption_manifest_person_details')}}</p>
 
