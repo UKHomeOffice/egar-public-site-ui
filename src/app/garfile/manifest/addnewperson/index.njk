@@ -1,6 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/banners.njk" as b %}
 
 {% block pageTitle %}
 	{{__('error_prefix') if errors}} Create GAR | Add person
@@ -18,11 +19,9 @@
 	  <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
 
-      {# <p class="govuk-body-l"> <span class="govuk-tag govuk-tag--yellow"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p> #}
       <h1 class="govuk-heading-xl">{{__('heading_manifest_add_person_details')}}</h1>{# Add new person details #}
-
+      {% b.id_card_withdrawl_text(__) %}
       <p class="govuk-body-l">{{__('caption_manifest_person_details')}}</p>
-
       <form action="/garfile/manifest/addnewperson" autocomplete="off" class="form-group" method="post" role="form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% include "person-details.njk" %}
@@ -34,5 +33,4 @@
       </form>
     </div>
   </div>
-</div>
 {% endblock %}

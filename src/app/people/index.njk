@@ -1,5 +1,6 @@
 {% extends "base-template.njk" %}
 
+{% import "common/templates/includes/banners.njk" as b %}
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
 
@@ -14,11 +15,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">{{ __('title_people') }}</h1>
-      {# <p class="govuk-body-l"> #}
-      {#   <span class="govuk-tag govuk-tag--yellow"> #}
-      {#     {{__('id_card_withdrawl_text')}} #}
-      {#     <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> #}
-      {# </p> #}
+      {{ b.id_card_withdrawl_text(__) }}
       <p class="govuk-body-l">{{__('people_caption')}}</p>
       <p class="govuk-body-m">{{__('person_search')}}</p>
     </div>
