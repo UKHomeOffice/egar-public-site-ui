@@ -15,12 +15,13 @@
 {% endmacro %}
 
 {% macro notificationBannerFor0T(numberOf0TResponseCodes, showImportantBanner) %}
+  {% set passengerText = 'passenger has' if numberOf0TResponseCodes == 1 else 'passengers have' %}
   {% if showImportantBanner %}
     {{ govukNotificationBanner({
       classes: "govuk-notification-banner--important",
       titleText: "Important",
       html: '<p class="govuk-body">' +
-        '<strong>' + numberOf0TResponseCodes + ' {% if numberOf0TResponseCodes == 1 %}passenger{% else %}passengers{% endif %} have a \'system time out\' status.</strong>' +
+        '<strong>' + numberOf0TResponseCodes + ' '+ passengerText +' a \'system time out\' status.</strong>' +
         ' This means we were unable to check their permission to travel status.' +
         '</p>' +
         '<p class="govuk-body">' +
