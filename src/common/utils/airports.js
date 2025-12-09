@@ -49,6 +49,7 @@ function buildIndex(list) {
   return idx;
 }
 
+// This is cached at module level per node process to speed up lookup.
 const codeIndex = buildIndex(airports);
 
 /**
