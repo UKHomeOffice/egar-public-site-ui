@@ -201,6 +201,18 @@ function main() {
     const icaoOut = (icao && String(icao).trim() !== '') ? icao : null;
     const otherCodes = otherCodesArr.length ? otherCodesArr : null;
 
+    // Compute value with precedence: iata > icao > first otherCode
+    let value = null;
+    if (iataOut) {
+      value = iataOut;
+    } else if (icaoOut) {
+      value = icaoOut;
+    } else if (Array.isArray(otherCodes) && otherCodes.length > 0) {
+      value = otherCodes[0];
+    } else {
+      value = null;
+    }
+
     return {
       id,
       name,
@@ -208,6 +220,7 @@ function main() {
       iata: iataOut,
       icao: icaoOut,
       otherCodes,
+      value,
       designated,
       british,
       crownDependency,
