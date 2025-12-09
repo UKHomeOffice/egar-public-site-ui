@@ -19,6 +19,23 @@ This should build both the `data-access-api` and `egar-public-site-ui`.
 - The frontend will now be running on port 3000.
 - To see changes on the frontend, reload the page.
 
+## Generate airport codes data (airport_codes.json)
+
+The airport codes used by the app are generated from a CSV file.
+
+- To add or update an airport code: edit `src/common/app_data/airport_codes.csv`.
+- Then run the Node script below to regenerate `src/common/app_data/airport_codes.json`.
+
+```sh
+# From the project root
+node scripts/generate_airport_codes.js
+```
+
+Notes:
+- Do not manually edit `src/common/app_data/airport_codes.json`; it is derived from the CSV.
+- The generator enforces sorting and normalisation and will overwrite the JSON file.
+- The resulting JSON includes an additional `value` field (priority: IATA > ICAO > first otherCode).
+
 ## Unit tests
 
 Run the below to access the node container, which will have all the installed dependencies, so you can run the npm test script.
