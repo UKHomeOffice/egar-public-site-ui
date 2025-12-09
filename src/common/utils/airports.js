@@ -11,6 +11,26 @@ function normCode(v) {
  * Builds a Map index of airports keyed by normalized codes (IATA, ICAO, and otherCodes)
  * @param {object[]} list - Array of airport objects
  * @returns {Map} Map of normalized codes to airport objects (first occurrence wins)
+ *
+ * @example
+ * Given an airport object:
+ * {
+ *   iata: "LHR",
+ *   icao: "EGLL",
+ *   otherCodes: ["LH1", "LOND"],
+ *   name: "London Heathrow",
+ *   british: true
+ * }
+ *
+ * The returned Map will contain:
+ * Map {
+ *  "LHR"  => { iata: "LHR", icao: "EGLL", ... },
+ *  "EGLL" => { iata: "LHR", icao: "EGLL", ... },
+ *  "LH1"  => { iata: "LHR", icao: "EGLL", ... },
+ *  "LOND" => { iata: "LHR", icao: "EGLL", ... }
+ * }
+ * All codes point to the same airport object.
+ * If duplicate codes exist, first occurrence wins.
  */
 function buildIndex(list) {
   const idx = new Map();
