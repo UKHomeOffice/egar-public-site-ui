@@ -254,11 +254,9 @@ function main() {
   console.log(`Wrote ${data.length} records to ${OUT_PATH}`);
 }
 
-if (require.main === module) {
-  try {
-    main();
-  } catch (e) {
-    console.error(e);
-    process.exit(1);
-  }
+try {
+  main();
+} catch (e) {
+  console.error(e);
+  process.exit(1);
 }
