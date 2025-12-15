@@ -96,12 +96,14 @@ function isBritishCode(code) {
  * - designated: true|false
  * - undesignated: true (alias for designated === false)
  * - crownDependency: true|false
+ * - standardAirport: true|false - if true, will filter out airports with IATA or ICAO code.
+ *    else it shows everything.
  * - q: text query (case-insensitive) matched against name, label, iata, icao, otherCodes
  * @param {Object} [opts]
  * @returns {object[]}
  */
 function filterAirports(opts = {}) {
-  const { british, designated, undesignated, crownDependency, q } = opts || {};
+  const { british, designated, undesignated, crownDependency, standardAirport, q } = opts || {};
 
   const qNorm = typeof q === 'string' && q.trim() !== '' ? q.trim().toUpperCase() : null;
 
@@ -110,6 +112,7 @@ function filterAirports(opts = {}) {
     if (typeof crownDependency === 'boolean' && a.crownDependency !== crownDependency) return false;
     if (typeof designated === 'boolean' && a.designated !== designated) return false;
     if (undesignated === true && a.designated !== false) return false;
+    if (standardAirport === true) return a.otherCodes === null;
 
     if (qNorm) {
       const inName = (a.name || '').toUpperCase().includes(qNorm);
@@ -124,7 +127,16 @@ function filterAirports(opts = {}) {
   });
 }
 
+/**
+ *  Fetch all airports
+ * @returns {{}}
+ */
+function allAirports() {
+  return airports;
+}
+
 module.exports = {
+  allAirports,
   findByCode,
   filterBritish,
   filterBritishDesignated,
