@@ -4,9 +4,9 @@
  * JSON to common/app_data/airport_codes.json in the required structure.
  */
 
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
 
 const CSV_PATH = path.join(__dirname, '..', 'src', 'common', 'app_data', 'airport_codes.csv');
 const OUT_PATH = path.join(__dirname, '..', 'src', 'common', 'app_data', 'airport_codes.json');
