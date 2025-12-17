@@ -66,7 +66,7 @@ const deleteAccount = {
             });
 
           case 'DELETE_ADMIN':
-            return userApi.deleteUser(cookie.getUserEmail());
+            return userApi.deleteUser(cookie.getUserEmail(), requesterId);
 
           default:
             throw new Error('Invalid Deletion type provided');

@@ -113,12 +113,13 @@ module.exports = {
       );
     });
   },
-  deleteUser(email) {
+  deleteUser(email, requesterId) {
     return new Promise((resolve, reject) => {
       request.delete(
         {
           headers: { 'content-type': 'application/json' },
           url: endpoints.deleteUser(email),
+          body: JSON.stringify({ requesterId }),
         },
         (error, _response, body) => {
           if (error) {
