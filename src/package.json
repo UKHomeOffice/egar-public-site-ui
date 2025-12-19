@@ -27,7 +27,8 @@
     "cookie": "^0.7.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "send": "0.19.0",
-    "axios": "1.12.0"
+    "axios": "1.12.0",
+    "glob": "10.5.0"
   },
   "author": "",
   "license": "ISC",
@@ -46,7 +47,6 @@
     "express-session": "^1.18.2",
     "file-type": "^12.1.0",
     "gen-uuid": "0.0.1",
-    "glob": "^10.5.0",
     "govuk-frontend": "^4.0.1",
     "helmet": "^3.13.0",
     "i18n": "^0.8.3",
