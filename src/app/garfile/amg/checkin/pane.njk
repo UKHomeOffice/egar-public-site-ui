@@ -25,7 +25,7 @@
     <td class="govuk-table__cell vertical-align-top">
       <div>
         {% if statusColor %}
-          <div class="{{ statusColor }} status-text" title="{{ statustitle }}">{{ statustitle }}</div>
+          <div title="{{ statustitle }}"><span class={{statusColor}}>{{ statustitle }}</span></div>
         {% endif %}
       </div>
     </td>
@@ -139,9 +139,9 @@
   <table class="govuk-table" id="upt-responses" style="">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
-        <th class="govuk-table__header" style="width:20%;">Status</th>
-        <th class="govuk-table__header" style="width:30%;">Passenger</th>
-        <th class="govuk-table__header" style="width:50%;">What you need to do</th>
+        <th scope="col" class="govuk-table__header">Digital permission to travel results</th>
+        <th scope="col" class="govuk-table__header">Passenger</th>
+        <th scope="col" class="govuk-table__header">What you need to do</th>
       </tr>
     </thead>
     <tbody class="govuk-table__body">
