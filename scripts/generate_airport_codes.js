@@ -115,8 +115,7 @@ function arrayToObjects(rows) {
 
 function main() {
   if (!fs.existsSync(CSV_PATH)) {
-    console.error(`CSV not found at ${CSV_PATH}`);
-    process.exit(1);
+    throw new Error(`CSV not found at ${CSV_PATH}`);
   }
   const csvText = fs.readFileSync(CSV_PATH, 'utf8');
   const rows = parseCsv(csvText);
