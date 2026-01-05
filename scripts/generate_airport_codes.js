@@ -113,15 +113,7 @@ function arrayToObjects(rows) {
   return out;
 }
 
-function main() {
-  if (!fs.existsSync(CSV_PATH)) {
-    throw new Error(`CSV not found at ${CSV_PATH}`);
-  }
-  const csvText = fs.readFileSync(CSV_PATH, 'utf8');
-  const rows = parseCsv(csvText);
-  const jsonRows = arrayToObjects(rows);
-
-  function cleanRaw(v) {
+function cleanRaw(v) {
     if (v === null || v === undefined) return '';
     // Trim and strip wrapping quotes that might have leaked into data
     let s = String(v).trim();
@@ -130,7 +122,26 @@ function main() {
     // Remove a dangling trailing comma from names accidentally created by merge
     s = s.replace(/,\s*$/, '');
     return s;
+}
+
+// Sort alphabetically using precedence: IATA > ICAO > otherCodes
+function getSortKey(rec) {
+  const i = rec.iata ? String(rec.iata).trim().toUpperCase() : '';
+  const c = rec.icao ? String(rec.icao).trim().toUpperCase() : '';
+  const o = Array.isArray(rec.otherCodes) && rec.otherCodes.length
+    ? String(rec.otherCodes[0]).trim().toUpperCase()
+    : '';
+  return i || c || o || '';
+}
+
+function main() {
+  if (!fs.existsSync(CSV_PATH)) {
+    console.error(`CSV not found at ${CSV_PATH}`);
+    process.exit(1);
   }
+  const csvText = fs.readFileSync(CSV_PATH, 'utf8');
+  const rows = parseCsv(csvText);
+  const jsonRows = arrayToObjects(rows);
 
   const data = jsonRows.map((row) => {
     const name = cleanRaw(row.name || row.Name || '');
@@ -221,16 +232,6 @@ function main() {
       crownDependency,
     };
   }).filter(Boolean);
-
-  // Sort alphabetically using precedence: IATA > ICAO > otherCodes
-  function getSortKey(rec) {
-    const i = rec.iata ? String(rec.iata).trim().toUpperCase() : '';
-    const c = rec.icao ? String(rec.icao).trim().toUpperCase() : '';
-    const o = Array.isArray(rec.otherCodes) && rec.otherCodes.length
-      ? String(rec.otherCodes[0]).trim().toUpperCase()
-      : '';
-    return i || c || o || '';
-  }
 
   const collator = new Intl.Collator('en', { sensitivity: 'base' });
   data.sort((a, b) => {

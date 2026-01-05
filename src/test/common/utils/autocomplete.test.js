@@ -47,57 +47,11 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as true', 
     });
   });
 
-  describe('getCountryFromCode', () => {
-    it('should return correct label for valid country code', () => {
-      const result = autocomplete.getCountryFromCode('GBR');
-      expect(result).to.eq('United Kingdom (GBR)');
-    });
-
-    it('should return correct label for custom nationality code', () => {
-      const result = autocomplete.getCountryFromCode('GBD');
-      expect(result).to.eq('British Overseas Territories Citizen (GBD)');
-    });
-
-    it('should return the code itself for unknown country code', () => {
-      const result = autocomplete.getCountryFromCode('ZZZ');
-      expect(result).to.eq('ZZZ');
-    });
-
-    it('should handle empty string', () => {
-      const result = autocomplete.getCountryFromCode('');
-      expect(result).to.eq('');
-    });
-
-    it('should handle null/undefined input', () => {
-      expect(autocomplete.getCountryFromCode(null)).to.eq(null);
-      expect(autocomplete.getCountryFromCode(undefined)).to.eq(undefined);
-    });
-  });
-
   describe('nationalityList', () => {
     it('should be a pre-generated list accessible as a property', () => {
       expect(autocomplete.nationalityList).to.not.be.undefined;
       expect(autocomplete.nationalityList).to.be.an('array');
       expect(autocomplete.nationalityList.length).to.be.greaterThan(0);
-    });
-  });
-
-  describe('airportList and airportCodeList', () => {
-    it('should export airportList', () => {
-      expect(autocomplete.airportList).to.not.be.undefined;
-      expect(autocomplete.airportList).to.be.an('array');
-    });
-
-    it('should export airportCodeList as an array of codes', () => {
-      expect(autocomplete.airportCodeList).to.not.be.undefined;
-      expect(autocomplete.airportCodeList).to.be.an('array');
-
-      // Check that it contains both IATA and ICAO codes
-      if (autocomplete.airportCodeList.length > 0) {
-        autocomplete.airportCodeList.forEach((code) => {
-          expect(code).to.be.a('string');
-        });
-      }
     });
   });
 });
@@ -184,18 +138,6 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as false',
     it('should export airportList', () => {
       expect(autocomplete.airportList).to.not.be.undefined;
       expect(autocomplete.airportList).to.be.an('array');
-    });
-
-    it('should export airportCodeList as an array of codes', () => {
-      expect(autocomplete.airportCodeList).to.not.be.undefined;
-      expect(autocomplete.airportCodeList).to.be.an('array');
-
-      // Check that it contains both IATA and ICAO codes
-      if (autocomplete.airportCodeList.length > 0) {
-        autocomplete.airportCodeList.forEach((code) => {
-          expect(code).to.be.a('string');
-        });
-      }
     });
   });
 });

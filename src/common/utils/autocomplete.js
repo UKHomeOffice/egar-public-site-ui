@@ -43,11 +43,9 @@ function getCountryFromCode(countryCode) {
 }
 
 const airportList = airportUtility.allAirports();
-const airportCodeList = airportList.map((airport) => airport.value);
 
 module.exports = {
   getCountryFromCode,
   nationalityList,
   airportList,
-  airportCodeList,
 };
