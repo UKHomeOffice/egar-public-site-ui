@@ -22,11 +22,7 @@ function buildId(iata, icao, otherCode) {
 }
 
 function toBool(v) {
-  const s = String(v ?? '').trim().toLowerCase();
-  if (s === 'true') {
-    return true;
-  }
-  return false;
+return String(v).trim().toLowerCase() === 'true';
 }
 
 // CSV parser supporting double-quoted fields and commas within quotes.
