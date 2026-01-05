@@ -10,6 +10,7 @@ const validator = require('../../../common/utils/validator');
 const { validations } = require('./validations');
 const transformers = require('../../../common/utils/transformers');
 const { ExcelParser } = require('../../../common/utils/excelParser');
+const clamAVService = require('../../../common/services/clamAVService');
 
 const checkFileIsExcel = (req, res) => {
   if (req.file) {
@@ -115,6 +116,16 @@ module.exports = async (req, res) => {
   }
   logger.debug('Determined file to be Excel, beginning to read');
 
+  const formData = {
+    name: req.file.originalname,
+    file: {
+      value: req.file.buffer,
+      options: {
+        filename: req.file.originalname,
+      },
+    },
+  };
+
   try {
     const cookie = new CookieModel(req);
 
@@ -124,6 +135,11 @@ module.exports = async (req, res) => {
     const worksheet = workbook.Sheets[firstSheetName];
 
     if (!checkFileIsGAR(req, res, worksheet)) {
+      return;
+    }
+    if (!(await clamAVService.scanFile(formData))) {
+      logger.info('File rejected as virus detected by ClamAV');
+      res.redirect('/garfile/garupload?query=v');
       return;
     }
     logger.debug('Determined file to be a valid GAR template, beginning to parse');

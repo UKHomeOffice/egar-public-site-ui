@@ -7,6 +7,10 @@ module.exports = (req, res) => {
 
   const context = { cookie };
 
+  if (req.query.query === 'v') {
+    req.session.failureMsg = 'File cannot be uploaded. The file has a virus';
+  }
+
   if (req.session.failureMsg) {
     let errorObj = [{}];
     if (Array.isArray(req.session.failureMsg)) {
