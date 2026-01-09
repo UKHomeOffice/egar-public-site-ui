@@ -111,11 +111,6 @@ const passengerMapConfig = {
 
 module.exports = async (req, res) => {
   logger.debug('Entering upload GAR post controller', { userId: req.session.u.dbId });
-  if (!checkFileIsExcel(req, res)) {
-    return;
-  }
-  logger.debug('Determined file to be Excel, beginning to read');
-
   const formData = {
     name: req.file.originalname,
     file: {
@@ -125,6 +120,15 @@ module.exports = async (req, res) => {
       },
     },
   };
+  if (!(await clamAVService.scanFile(formData))) {
+    logger.info('File rejected as virus detected by ClamAV');
+    res.redirect('/garfile/garupload?query=v');
+    return;
+  }
+  if (!checkFileIsExcel(req, res)) {
+    return;
+  }
+  logger.debug('Determined file to be Excel, beginning to read');
 
   try {
     const cookie = new CookieModel(req);
@@ -135,11 +139,6 @@ module.exports = async (req, res) => {
     const worksheet = workbook.Sheets[firstSheetName];
 
     if (!checkFileIsGAR(req, res, worksheet)) {
-      return;
-    }
-    if (!(await clamAVService.scanFile(formData))) {
-      logger.info('File rejected as virus detected by ClamAV');
-      res.redirect('/garfile/garupload?query=v');
       return;
     }
     logger.debug('Determined file to be a valid GAR template, beginning to parse');
