@@ -173,21 +173,12 @@
                     <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
                     <td class="govuk-table__cell">{{person.peopleType.name}}</td>
                     {% if isJourneyUKInbound %}
-                      {% if person.amgCheckinResponseCode === '0B'%}
-                        {% set statusColor = 'no-record'%}
-                      {% elif person.amgCheckinResponseCode === '0A'%}
-                        {% set statusColor = 'valid-permission-to-travel'%}
-                      {% elif person.amgCheckinResponseCode === '0Z'%}
-                        {% set statusColor = 'authority-to-carry-granted'%}
-                      {% elif person.amgCheckinResponseCode === '0T'%}
+                      {% set statusColor = '' %}
+                      {% if person.amgCheckinResponseCode === '0T'%}
                         {% set statusColor = 'system-timeout'%}
-                      {% else %}  
-                        {% set statusColor = '' %}
                       {% endif %}
                       <td class="govuk-table__cell">
-                        {% if statusColor %}
-                          <div class="{{statusColor}} status-text">{{__('amg_status_check_response_code_' + person.amgCheckinResponseCode)if person.amgCheckinResponseCode}}</div>
-                        {% endif%}
+                          <div class="{{statusColor}}">{{__('amg_status_check_response_code_' + person.amgCheckinResponseCode)if person.amgCheckinResponseCode}}</div>
                       </td>  
                       {% endif%}
                     </tr>
