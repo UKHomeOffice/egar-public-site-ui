@@ -111,9 +111,9 @@ const passengerMapConfig = {
 
 module.exports = async (req, res) => {
   logger.debug('Entering upload GAR post controller', { userId: req.session.u.dbId });
-  // if (!checkFileIsExcel(req, res)) {
-  //   return;
-  // }
+  if (!checkFileIsExcel(req, res)) {
+    return;
+  }
   logger.debug('Determined file to be Excel, beginning to read');
 
   const formData = {
@@ -134,9 +134,9 @@ module.exports = async (req, res) => {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
 
-    // if (!checkFileIsGAR(req, res, worksheet)) {
-    //   return;
-    // }
+    if (!checkFileIsGAR(req, res, worksheet)) {
+      return;
+    }
     if (!(await clamAVService.scanFile(formData))) {
       logger.info('File rejected as virus detected by ClamAV');
       res.redirect('/garfile/garupload?query=v');

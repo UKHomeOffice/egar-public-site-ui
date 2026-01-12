@@ -101,24 +101,24 @@ describe('API upload GAR post controller', () => {
   });
 
   it('return message if not file sent', async () => {
-   // delete req.file;
+    delete req.file;
 
     await controller(req, res);
 
-    // expect(req.session.failureMsg).to.eq('Provide a file');
-    // expect(req.session.failureIdentifier).to.eq('file');
-    // expect(res.redirect).to.have.been.calledWith('/garfile/garupload?query=0');
+    expect(req.session.failureMsg).to.eq('Provide a file');
+    expect(req.session.failureIdentifier).to.eq('file');
+    expect(res.redirect).to.have.been.calledWith('/garfile/garupload?query=0');
   });
 
   describe('file type check', () => {
     it('return message if no file name', async () => {
-      // req.file.originalname = '';
+      req.file.originalname = '';
 
-      // await controller(req, res);
+      await controller(req, res);
 
-      // expect(req.session.failureMsg).to.eq('Incorrect file type');
-      // expect(req.session.failureIdentifier).to.eq('file');
-      // expect(res.redirect).to.have.been.calledWith('garfile/garupload');
+      expect(req.session.failureMsg).to.eq('Incorrect file type');
+      expect(req.session.failureIdentifier).to.eq('file');
+      expect(res.redirect).to.have.been.calledWith('garfile/garupload');
     });
 
     it('return message if no file extension', async () => {
@@ -126,19 +126,19 @@ describe('API upload GAR post controller', () => {
 
       await controller(req, res);
 
-      // expect(req.session.failureMsg).to.eq('Incorrect file type');
-      // expect(req.session.failureIdentifier).to.eq('file');
-      // expect(res.redirect).to.have.been.calledWith('garfile/garupload');
+      expect(req.session.failureMsg).to.eq('Incorrect file type');
+      expect(req.session.failureIdentifier).to.eq('file');
+      expect(res.redirect).to.have.been.calledWith('garfile/garupload');
     });
 
     it('return message if unexpected extension', async () => {
-      // req.file.originalname = 'somedocument.docx';
+      req.file.originalname = 'somedocument.docx';
 
-      // await controller(req, res);
+      await controller(req, res);
 
-      // expect(req.session.failureMsg).to.eq('Incorrect file type');
-      // expect(req.session.failureIdentifier).to.eq('file');
-      // expect(res.redirect).to.have.been.calledWith('garfile/garupload');
+      expect(req.session.failureMsg).to.eq('Incorrect file type');
+      expect(req.session.failureIdentifier).to.eq('file');
+      expect(res.redirect).to.have.been.calledWith('garfile/garupload');
     });
   });
 
@@ -149,9 +149,9 @@ describe('API upload GAR post controller', () => {
 
       await controller(req, res);
 
-      // expect(req.session.failureMsg).to.eq('Incorrect xls or xlsx file');
-      // expect(req.session.failureIdentifier).to.eq('file');
-      // expect(res.redirect).to.have.been.calledWith('garfile/garupload');
+      expect(req.session.failureMsg).to.eq('Incorrect xls or xlsx file');
+      expect(req.session.failureIdentifier).to.eq('file');
+      expect(res.redirect).to.have.been.calledWith('garfile/garupload');
     });
 
     it('return message if cell C1 is undefined', async () => {
@@ -161,9 +161,9 @@ describe('API upload GAR post controller', () => {
 
       await controller(req, res);
 
-      // expect(req.session.failureMsg).to.eq('Incorrect xls or xlsx file');
-      // expect(req.session.failureIdentifier).to.eq('file');
-      // expect(res.redirect).to.have.been.calledWith('garfile/garupload');
+      expect(req.session.failureMsg).to.eq('Incorrect xls or xlsx file');
+      expect(req.session.failureIdentifier).to.eq('file');
+      expect(res.redirect).to.have.been.calledWith('garfile/garupload');
     });
   });
 
