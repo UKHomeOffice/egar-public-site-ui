@@ -17,12 +17,25 @@
 
 {% block content %}
 
+  {% set html %}
+    <p class="govuk-body">There is a problem affecting some international users who are unable to receive a security code by SMS from GOV.UK One Login when trying to sign in to this service.</p>
+
+    <p class="govuk-body">if you are experiencing this issue, read our guidance on <a href="https://www.submit-general-aviation-report.service.gov.uk/help" target="_blank">how to resolve the GOV.UK One Login international SMS issue</a>.</p>
+  {% endset %}
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+
+        {{
+          m.govNotificationBannerBlue({
+            html: html
+          })
+        }}
           <h1 class="govuk-heading-xl">{{ __('button_sign_in') }}</h1>
           <p class="govuk-body">You need to sign in to this service using GOV.UK One Login. You'll be able to create a GOV.UK One Login if you do not already have one.</p>
           <div class="govuk-inset-text">
             <p class="govuk-body">You should use the same email address to create your GOV.UK One Login that you use for your SGAR account. This is so you keep the existing information in your account.</p>
+            <p class="govuk-body">You should also setup an authenticator app as your primary or backup method for receiving security codes. This will ensure you are able to login to your account if their are any problems with receiving security codes by SMS.</p>
           </div>
 
           <a
