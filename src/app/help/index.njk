@@ -177,17 +177,22 @@ GAR | Help
             <li>a <a class="govuk-link" href="https://www.gov.uk/check-immigration-status" target="_blank">share code from their UKVI account (opens in new tab on GOV.UK)</a> that shows their digital permission to travel</li>
             <li>an <a class="govuk-link" href="https://www.gov.uk/check-eta" target="_blank">ETA linked to their passport (opens in new tab on GOV.UK)</a></li>
           </ul>
-          <p class="govuk-body-m">If they have no exemption or proof of physical or digital permission to travel, you can contact the Border Force Carrier Support Hub for advice on 0300 369 0610 or +44 204 619 6020 from outside the UK.</p>
-
+          {% if isLoggedIn %}
+            <p class="govuk-body-m">If they have no exemption or proof of physical or digital permission to travel, you can contact the Border Force Carrier Support Hub for advice on 0300 369 0610 or +44 204 619 6020 from outside the UK.</p>
+          {% else %}
+            <p class="govuk-body-m">If they have no exemption or proof of physical or digital permission to travel, you can contact the Border Force Carrier Support Hub.</p>
+          {% endif %}
           <h3 class="govuk-heading-s">Authority to carry granted</h3>
           <p class="govuk-body-m">We have no record of a digital permission, for example an electronic travel authorisation (ETA) or electronic visa (eVisa), for this person.</p>
 
           <p class="govuk-body-m">For British and Irish nationals, their valid passport is their permission to travel.</p>
 
           <p class="govuk-body-m">For all other nationals, you should check if they need permission to travel to the UK. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers" target="_blank" class="govuk-link">UK visa requirements (opens in new tab on GOV.UK).</a></p>
-          
-          <p class="govuk-body-m">If they have no exemption or proof of physical or digital permission to travel, you can contact the Border Force Carrier Support Hub for advice on 0300 369 0610 or +44 204 619 6020 from outside the UK.</p>
-
+          {% if isLoggedIn %}
+            <p class="govuk-body-m">If they have no exemption or proof of physical or digital permission to travel, you can contact the Border Force Carrier Support Hub for advice on 0300 369 0610 or +44 204 619 6020 from outside the UK.</p>
+          {% else %}
+            <p class="govuk-body-m">If they have no exemption or proof of physical or digital permission to travel, you can contact the Border Force Carrier Support Hub.</p>
+          {% endif %}
           <h3 class="govuk-heading-s">Valid permission to travel</h3>
           <p class="govuk-body-m">This person has a digital permission and can travel to the UK.</p>
         </div>
@@ -209,7 +214,11 @@ GAR | Help
         </summary>
         <div class="govuk-details__text" id="details-content-general-support" aria-hidden="true">
           <p class="govuk-body-m">
-            For non-technical permission to travel related queries, please contact the UK Border Force Carrier Support Hub on 0300 369 0610 or +44 204 619 6020 from outside the UK.
+            {% if isLoggedIn %}
+              For non-technical permission to travel related queries, please contact the UK Border Force Carrier Support Hub on 0300 369 0610 or +44 204 619 6020 from outside the UK.
+            {% else %}
+              For non-technical permission to travel related queries, please contact the UK Border Force Carrier Support Hub.
+            {% endif %}
           </p>
         </div>
       </details>
