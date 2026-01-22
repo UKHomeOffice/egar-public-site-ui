@@ -36,6 +36,7 @@ const PORT = process.env.PORT || 3000;
 const { NODE_ENV } = process.env;
 const G4_ID = process.env.G4_ID || '';
 const BASE_URL = process.env.BASE_URL || '';
+const DOMAIN = IS_HTTPS_SERVER === true ? `https://${BASE_URL}` : BASE_URL;
 
 // Set Cookie secure flag depending on environment variable
 let secureFlag = process.env.COOKIE_SECURE_FLAG === 'true';
@@ -206,6 +207,7 @@ function initialiseTemplateEngine(app) {
 
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
+  nunjucksEnvironment.addGlobal('domain', DOMAIN);
   nunjucksEnvironment.addGlobal('travelPermissionCodes', travelPermissionCodes);
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
