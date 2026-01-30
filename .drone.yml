@@ -161,10 +161,14 @@ steps:
       NODE_ENV: testing
       TEST_BASE_URL:
         from_secret: TEST_BASE_URL
+      TEST_BASE_URL_SERVICE:
+        from_secret: TEST_BASE_URL_SERVICE
       TEST_KUBE_SERVER:
         from_secret: TEST_KUBE_SERVER
       TEST_KUBE_TOKEN:
         from_secret: TEST_KUBE_TOKEN
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
       # DEV_URL_SERVICE:
       #   from_secret: DEV_URL_SERVICE
 trigger:
