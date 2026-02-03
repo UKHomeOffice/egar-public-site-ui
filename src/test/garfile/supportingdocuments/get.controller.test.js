@@ -122,7 +122,7 @@ describe('GAR Supporting Documents Get Controller', () => {
         cookie,
         supportingDoc: apiResponse,
         max_num_files: 8,
-        errors: [{ message: 'File cannot be uploaded. The file has a virus' }],
+        errors: [{ message: 'File cannot be uploaded. The file has a virus', identifier: 'file' }],
       });
     });
   });
@@ -162,7 +162,9 @@ describe('GAR Supporting Documents Get Controller', () => {
         cookie,
         supportingDoc: apiResponse,
         max_num_files: 8,
-        errors: [{ message: 'File size exceeds total limit' }],
+        errors: [
+          { message: 'The total file size of all uploaded documents must be less than 8MB', identifier: 'file' },
+        ],
       });
     });
   });
@@ -202,7 +204,7 @@ describe('GAR Supporting Documents Get Controller', () => {
         cookie,
         supportingDoc: apiResponse,
         max_num_files: 8,
-        errors: [{ message: 'Invalid file type selected' }],
+        errors: [{ message: 'Invalid file type selected', identifier: 'file' }],
       });
     });
   });
