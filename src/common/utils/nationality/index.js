@@ -1,8 +1,12 @@
-const nationalityData = require('./nationality.json');
+const nationalityData = require('./countries.json');
 
 const nationalities = {
   // Get all nationalities as array (for dropdowns/autocomplete)
-  getAll: () => Object.values(nationalityData).sort((a, b) => a.label.localeCompare(b.label)),
+  getAll: () => Object.values(nationalityData).sort((a, b) => a.name.localeCompare(b.name)),
+
+  nationalities: () => Object.values(nationalityData).filter((item) => item?.passport_issuing === true),
+
+  countries: () => Object.values(nationalityData).filter((item) => item?.country === true),
 
   // Lookup nationality by code - now much simpler!
   getByCode: (code) => {
@@ -15,10 +19,7 @@ const nationalities = {
   search: (text) => {
     if (!text) return Object.values(nationalityData);
     const searchTerm = text.toLowerCase();
-    return Object.values(nationalityData).filter(
-      (nationality) =>
-        nationality.label.toLowerCase().includes(searchTerm) || nationality.code.toLowerCase().includes(searchTerm)
-    );
+    return Object.values(nationalityData).filter((nationality) => nationality.label.toLowerCase().includes(searchTerm));
   },
 
   // Get just the list (compatible with current autocomplete.js usage)
