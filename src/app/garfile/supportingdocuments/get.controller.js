@@ -32,22 +32,26 @@ module.exports = (req, res) => {
           delete req.session.errMsg;
           break;
         case 'v': // Virus detected
-          error = [{ message: 'File cannot be uploaded. The file has a virus' }];
+          error = [{ message: 'File cannot be uploaded. The file has a virus', identifier: 'file' }];
           break;
         case '0': // No file
           error = [{ identifier: 'file', message: 'No file selected for upload' }];
           break;
         case 'limit':
-          error = [{ message: 'File size exceeds total limit' }];
+          error = [
+            { message: 'The total file size of all uploaded documents must be less than 8MB', identifier: 'file' },
+          ];
           break;
         case 'number':
-          error = [{ message: 'Total number of files exceeds the limit' }];
+          error = [
+            { message: 'The total file size of all uploaded documents must be less than 8MB', identifier: 'file' },
+          ];
           break;
         case 'deletefailed':
           error = [{ message: 'Failed to delete document. Try again' }];
           break;
         case 'invalid':
-          error = [{ message: 'Invalid file type selected' }];
+          error = [{ message: 'Invalid file type selected', identifier: 'file' }];
           break;
         default:
         // No need to set an error
