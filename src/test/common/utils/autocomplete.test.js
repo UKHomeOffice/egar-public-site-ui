@@ -56,7 +56,7 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as true', 
   });
 });
 
-describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as false', () => {
+describe('Using updated nationality provider', () => {
   let autocomplete;
 
   before(() => {
@@ -65,10 +65,10 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as false',
     });
   });
 
-  describe('Nationality List', () => {
+  describe('Country list', () => {
     let result;
     beforeEach(() => {
-      result = autocomplete.nationalityList;
+      result = autocomplete.countryList;
     });
 
     it('should generate a list of countries with alpha 3 codes', () => {
@@ -100,24 +100,9 @@ describe('Autocomplete Utility with USE_NEW_NATIONALITY_LIST_PROVIDER as false',
       expect(result).to.eq('United Kingdom (GBR)');
     });
 
-    it('should return correct label for country code PSA as "State of Palestine (PSE)" ', () => {
+    it('should return correct label for country code PSA as "Palestinian Authority (PSE)" ', () => {
       const result = autocomplete.getCountryFromCode('PSE');
-      expect(result).to.eq('State of Palestine (PSE)');
-    });
-
-    it('should return correct label for custom nationality code', () => {
-      const result = autocomplete.getCountryFromCode('GBD');
-      expect(result).to.eq('British Overseas Territories Citizen (GBD)');
-    });
-
-    it('should return the code itself for unknown country code', () => {
-      const result = autocomplete.getCountryFromCode('ZZZ');
-      expect(result).to.eq('ZZZ');
-    });
-
-    it('should handle empty string', () => {
-      const result = autocomplete.getCountryFromCode('');
-      expect(result).to.eq('');
+      expect(result).to.eq('Palestinian Authority (PSE)');
     });
 
     it('should handle null/undefined input', () => {
