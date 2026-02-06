@@ -1,4 +1,5 @@
 const airportCodes = require('./airport_codes.json');
+const airports = require('./airports');
 const logger = require('./logger')(__filename);
 
 const notBritishMsg = 'Either the Arrival or Departure port must be a UK port';
@@ -19,26 +20,12 @@ function includesOneBritishAirport(airports) {
 }
 
 function findAirportForCode(airportCode) {
-  if (!isAnAirportCode(airportCode)) {
-    return null;
-  }
-
-  const matches = airportCodes.filter((item) => [item.id, item.id2].includes(airportCode));
-
-  if (matches.length > 1) {
-    throw new Error(`airport code ${airportCode} matched more than one airport`);
-  }
-
-  if (matches.length == 1) {
-    return matches[0];
-  }
-
-  return null;
+  return airports.findByCode(airportCode);
 }
 
 //TODO: include this function into includesOneBritishAirport instead of more confusing logic implemented there
 function isBritishAirport(airportCode) {
-  const airport = findAirportForCode(airportCode);
+  const airport = airports.findByCode(airportCode);
 
   if (airport == null) {
     throw new Error(`no airport matched code ${airportCode}`);
@@ -48,8 +35,8 @@ function isBritishAirport(airportCode) {
 }
 
 function isJourneyUKInbound(departureCode, arrivalCode) {
-  const arrivalAirfield = findAirportForCode(arrivalCode);
-  const departureAirfield = findAirportForCode(departureCode);
+  const arrivalAirfield = airports.findByCode(arrivalCode);
+  const departureAirfield = airports.findByCode(departureCode);
 
   if (departureAirfield && isAirportBritishOrCrownDependency(departureAirfield)) {
     return false; // we know departure and is within UK
