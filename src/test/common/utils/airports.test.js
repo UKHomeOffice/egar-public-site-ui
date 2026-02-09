@@ -9,7 +9,7 @@ describe('airports utils', () => {
       expect(a).to.be.an('object');
       expect(a).to.have.property('icao', 'EGPR');
       expect(a).to.have.property('british', true);
-      expect(a).to.have.property('name').that.includes('BARRA');
+      expect(a).to.have.property('name', 'Barra Airport');
     });
 
     it('finds by IATA (BRR - Barra Airport)', () => {
