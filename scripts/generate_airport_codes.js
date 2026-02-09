@@ -142,6 +142,14 @@ const capitalizeWords = (value) => {
     .join(' ');
 };
 
+const normalizeText = (inputText, replacementText) => {
+  const pattern = new RegExp(
+    replacementText.replace(/[.*?^${}()|[\]\\]/g, "\\$&"),
+    "i"
+  )
+  return inputText.replace(pattern, replacementText);
+}
+
 function main() {
   if (!fs.existsSync(CSV_PATH)) {
     console.error(`CSV not found at ${CSV_PATH}`);
@@ -192,25 +200,27 @@ function main() {
     // - Prefer CSV label if present, EXCEPT when there is no IATA/ICAO and we have multiple OtherCodes;
     //   then force a generated label to include all other codes: "Name (CODE1 / CODE2 / ...)".
     // - If CSV label is empty, generate as before prioritizing IATA/ICAO, else OtherCodes.
-    let label = csvLabelRaw;
+    let label = normalizeText(csvLabelRaw, name);
     const hasIataOrIcao = !!(iataN || icaoN);
-    if (label) {
-      if (!hasIataOrIcao && otherCodesArr.length > 1) {
-        label = `${capitalizeWords(name)} (${otherCodesArr.join(' / ')})`;
-      } else if (!hasIataOrIcao && british) {
-        label = `${capitalizeWords(name)}`;
-      }
-    } else {
-      const labelParts = [];
-      if (iataN) labelParts.push(iataN);
-      if (icaoN) labelParts.push(icaoN);
-      label = name;
-      if (labelParts.length) {
-        label = `${capitalizeWords(name)} (${labelParts.join(' / ')})`;
-      } else if (otherCodesArr.length) {
-        label = `${capitalizeWords(name)} (${otherCodesArr.join(' / ')})`;
-      }
+
+    if (!hasIataOrIcao && otherCodesArr.length > 1) {
+      label = `${capitalizeWords(name)} (${otherCodesArr.join(' / ')})`;
+    } else if (!hasIataOrIcao && british) {
+      label = `${capitalizeWords(name)}`;
     }
+
+    // else {
+    //
+    //   const labelParts = [];
+    //   if (iataN) labelParts.push(iataN);
+    //   if (icaoN) labelParts.push(icaoN);
+    //   label = name;
+    //   if (labelParts.length) {
+    //     label = `${capitalizeWords(name)} (${labelParts.join(' / ')})`;
+    //   } else if (otherCodesArr.length) {
+    //     label = `${capitalizeWords(name)} (${otherCodesArr.join(' / ')})`;
+    //   }
+    // }
 
     // Set iata/icao/otherCodes to null when empty per requirement
     const iataOut = (iata && String(iata).trim() !== '') ? iata : null;
@@ -244,6 +254,7 @@ function main() {
   }).filter(Boolean);
 
   const collator = new Intl.Collator('en', { sensitivity: 'base' });
+
   data.sort((a, b) => {
     const ka = getSortKey(a);
     const kb = getSortKey(b);
