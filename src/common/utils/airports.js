@@ -59,7 +59,6 @@ const codeIndex = buildIndex(airports);
  */
 function findByCode(code) {
   if (!code) return null;
-  console.log(codeIndex.get(normCode(code)));
   return codeIndex.get(normCode(code)) || null;
 }
 
