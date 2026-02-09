@@ -134,6 +134,14 @@ function getSortKey(rec) {
   return i || c || o || '';
 }
 
+const capitalizeWords = (value) => {
+  return value
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 function main() {
   if (!fs.existsSync(CSV_PATH)) {
     console.error(`CSV not found at ${CSV_PATH}`);
@@ -144,7 +152,7 @@ function main() {
   const jsonRows = arrayToObjects(rows);
 
   const data = jsonRows.map((row) => {
-    const name = cleanRaw(row.name || row.Name || '');
+    const name = capitalizeWords(cleanRaw(row.name || row.Name || ''));
     const iata = cleanRaw(row.IATA || row.iata || '');
     const icao = cleanRaw(row.ICAO || row.icao || '');
     const otherCode = cleanRaw(row.OtherCode || row.otherCode || '');
@@ -188,7 +196,9 @@ function main() {
     const hasIataOrIcao = !!(iataN || icaoN);
     if (label) {
       if (!hasIataOrIcao && otherCodesArr.length > 1) {
-        label = `${name} (${otherCodesArr.join(' / ')})`;
+        label = `${capitalizeWords(name)} (${otherCodesArr.join(' / ')})`;
+      } else if (!hasIataOrIcao && british) {
+        label = `${capitalizeWords(name)}`;
       }
     } else {
       const labelParts = [];
@@ -196,9 +206,9 @@ function main() {
       if (icaoN) labelParts.push(icaoN);
       label = name;
       if (labelParts.length) {
-        label = `${name} (${labelParts.join(' / ')})`;
+        label = `${capitalizeWords(name)} (${labelParts.join(' / ')})`;
       } else if (otherCodesArr.length) {
-        label = `${name} (${otherCodesArr.join(' / ')})`;
+        label = `${capitalizeWords(name)} (${otherCodesArr.join(' / ')})`;
       }
     }
 
