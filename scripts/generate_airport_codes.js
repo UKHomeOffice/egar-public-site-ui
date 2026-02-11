@@ -209,19 +209,6 @@ function main() {
       label = `${capitalizeWords(name)}`;
     }
 
-    // else {
-    //
-    //   const labelParts = [];
-    //   if (iataN) labelParts.push(iataN);
-    //   if (icaoN) labelParts.push(icaoN);
-    //   label = name;
-    //   if (labelParts.length) {
-    //     label = `${capitalizeWords(name)} (${labelParts.join(' / ')})`;
-    //   } else if (otherCodesArr.length) {
-    //     label = `${capitalizeWords(name)} (${otherCodesArr.join(' / ')})`;
-    //   }
-    // }
-
     // Set iata/icao/otherCodes to null when empty per requirement
     const iataOut = (iata && String(iata).trim() !== '') ? iata : null;
     const icaoOut = (icao && String(icao).trim() !== '') ? icao : null;
