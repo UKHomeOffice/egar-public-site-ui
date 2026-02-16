@@ -27,8 +27,6 @@ describe('Welcome Get Controller', () => {
 
     configMock = {
       ...config,
-      ONE_LOGIN_POST_MIGRATION: false,
-      ONE_LOGIN_SHOW_ONE_LOGIN: false,
       HOMEPAGE_MESSAGE: 'Welcome to the new service',
     };
   });
