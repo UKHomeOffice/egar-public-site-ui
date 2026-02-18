@@ -33287,8 +33287,8 @@
   },
   {
     "id": "3bbed636731e25e1e352b56ff42dbbebfb18a3e5051b29268d5cdcdf1788db22",
-    "name": "Brawdy / Cawdor Barracks (Domestic Operations Only",
-    "label": "Brawdy / Cawdor Barracks (Domestic Operations Only (EGDA))",
+    "name": "Brawdy / Cawdor Barracks (Domestic Operations Only)",
+    "label": "Brawdy / Cawdor Barracks (Domestic Operations Only) (EGDA)",
     "iata": null,
     "icao": "EGDA",
     "otherCodes": null,
@@ -34464,7 +34464,7 @@
   {
     "id": "222aa96c0202d53f1bb885326afb7310e3a9bf81fb2cf9a696d0ee81b8ba7cb3",
     "name": "RAF Command High Wycombe (Domestic Movements Only)",
-    "label": "RAF Command High Wycombe (Domestic Movements Only) (EGUH))",
+    "label": "RAF Command High Wycombe (Domestic Movements Only) (EGUH)",
     "iata": null,
     "icao": "EGUH",
     "otherCodes": null,
@@ -34619,8 +34619,8 @@
   },
   {
     "id": "790c84bfe78a33d386050a6397cbcf84d04cc447c453c8be9b2a2b17b663e119",
-    "name": "RAF Dishforth Domestic Only***",
-    "label": "RAF Dishforth Domestic Only*** (EGXD)",
+    "name": "RAF Dishforth (Domestic Only)",
+    "label": "RAF Dishforth (Domestic Only) (EGXD)",
     "iata": null,
     "icao": "EGXD",
     "otherCodes": null,
@@ -34679,8 +34679,8 @@
   },
   {
     "id": "e9a382ea2a876204ac45e8ea7557c763f8132805fd0ec67c34da0af1b332a5b7",
-    "name": "Leconfield / Normady Barracks Domestic Only ***",
-    "label": "Leconfield / Normady Barracks Domestic Only *** (EGXV)",
+    "name": "Leconfield / Normady Barracks (Domestic Only)",
+    "label": "Leconfield / Normady Barracks (Domestic Only) (EGXV)",
     "iata": null,
     "icao": "EGXV",
     "otherCodes": null,
@@ -80855,8 +80855,8 @@
   },
   {
     "id": "eea502719605f8ec96582d94a0f1738190fe72d16c7b57de48fcfcebfbcb631a",
-    "name": "Jurby /RAF Jurby",
-    "label": "Jurby /RAF Jurby",
+    "name": "Jurby / RAF  Jurby",
+    "label": "Jurby / RAF  Jurby",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -97701,8 +97701,8 @@
   },
   {
     "id": "8506c5b7113853f60a20cb3cff517f072cd10e55ebc4ce70439b11a289f22f60",
-    "name": "Elizabeth Barracks(Domestic Use Only)",
-    "label": "Elizabeth Barracks(Domestic Use Only)",
+    "name": "Elizabeth Barracks (Domestic Use Only)",
+    "label": "Elizabeth Barracks (Domestic Use Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [

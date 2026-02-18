@@ -136,12 +136,12 @@ function getSortKey(rec) {
 
 const performSubstitution = (value) => {
   const rafStandAlone = /(^|\s)Raf\s/;
-  const rafWithSlash = /\/raf\s/;
+  const rafWithSlash = /\/raf/i;
   const rafWithBrackets = /\(raf\s/;
   let cleanData = value;
 
   cleanData = value.replace(rafStandAlone, 'RAF ');
-  cleanData = cleanData.replace(rafWithSlash, '/RAF ');
+  cleanData = cleanData.replace(rafWithSlash, '/ RAF ');
   cleanData = cleanData.replace(rafWithBrackets, '(RAF ');
   cleanData = cleanData.replace('(domestic', '(Domestic');
 
