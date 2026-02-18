@@ -1108,8 +1108,8 @@
   },
   {
     "id": "945a4a5ebdb54385206694bc3e0cb0d9ec05ca29a8ceb6f61981ab44653aa167",
-    "name": "Thorney Island (domestic Operations Only)",
-    "label": "Thorney Island (domestic Operations Only)",
+    "name": "Thorney Island (Domestic Operations Only)",
+    "label": "Thorney Island (Domestic Operations Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -1598,8 +1598,8 @@
   },
   {
     "id": "e1e5191bf0474fda35bba83f71a58681ea884134f3c5a57d98a873ff0f03b2ca",
-    "name": "Aldershot / Browning Barracks (domestic Only)",
-    "label": "Aldershot / Browning Barracks (domestic Only)",
+    "name": "Aldershot / Browning Barracks (Domestic Only)",
+    "label": "Aldershot / Browning Barracks (Domestic Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -2802,8 +2802,8 @@
   },
   {
     "id": "1d019b5c725b973b6afa4f12794b37bbd0d895a77e2838624e516f2b41971fd8",
-    "name": "Bovington Army Camp (domestic Operations Only)",
-    "label": "Bovington Army Camp (domestic Operations Only)",
+    "name": "Bovington Army Camp (Domestic Operations Only)",
+    "label": "Bovington Army Camp (Domestic Operations Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -2970,8 +2970,8 @@
   },
   {
     "id": "db893e856cc41d1c734a82da0fd12f3066106a308125160a75010d7fa5776d84",
-    "name": "East Fleet /chickerell Training Centre (domestic)",
-    "label": "East Fleet /chickerell Training Centre (domestic)",
+    "name": "East Fleet /chickerell Training Centre (Domestic)",
+    "label": "East Fleet /chickerell Training Centre (Domestic)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -5776,8 +5776,8 @@
   },
   {
     "id": "d3ec880810bbee160411564300f7569c9f8edc20feb95463c77dafb36d575609",
-    "name": "Raf Leuchars",
-    "label": "Raf Leuchars (ADX / EGQL)",
+    "name": "RAF Leuchars",
+    "label": "RAF Leuchars (ADX / EGQL)",
     "iata": "ADX",
     "icao": "EGQL",
     "otherCodes": null,
@@ -6800,8 +6800,8 @@
   },
   {
     "id": "5957991d75df8656266e3e7fab83f08d57042c73079234fd66a89779d3b7d513",
-    "name": "Raf Akrotiri",
-    "label": "Raf Akrotiri (AKT / LCRA)",
+    "name": "RAF Akrotiri",
+    "label": "RAF Akrotiri (AKT / LCRA)",
     "iata": "AKT",
     "icao": "LCRA",
     "otherCodes": null,
@@ -8122,8 +8122,8 @@
   },
   {
     "id": "8cdef3c6518fbaefb5b57219571b4299e348c59137ccf6f15aace5e3911a4d8f",
-    "name": "Raf Ascension Island",
-    "label": "Raf Ascension Island (ASI / FHAW)",
+    "name": "RAF Ascension Island",
+    "label": "RAF Ascension Island (ASI / FHAW)",
     "iata": "ASI",
     "icao": "FHAW",
     "otherCodes": null,
@@ -11550,8 +11550,8 @@
   },
   {
     "id": "6402adfcf4e469f3ea803c944e4672965f73bd953d1db29041d055007c8ab79d",
-    "name": "Raf Honington",
-    "label": "Raf Honington (BEQ / EGXH)",
+    "name": "RAF Honington",
+    "label": "RAF Honington (BEQ / EGXH)",
     "iata": "BEQ",
     "icao": "EGXH",
     "otherCodes": null,
@@ -11634,8 +11634,8 @@
   },
   {
     "id": "45e2707981a12e6a1709a5cddfba28f15b1638d945ec6a9a827c867557ee3cc9",
-    "name": "Raf Benson",
-    "label": "Raf Benson (BEX / EGUB)",
+    "name": "RAF Benson",
+    "label": "RAF Benson (BEX / EGUB)",
     "iata": "BEX",
     "icao": "EGUB",
     "otherCodes": null,
@@ -15990,8 +15990,8 @@
   },
   {
     "id": "9ec29b2b06437ed4b1a3e418686d90549fe7e02d72eb8b8dd5d50ffda4ebf6e1",
-    "name": "Raf Brize Norton",
-    "label": "Raf Brize Norton (BZZ / EGVN)",
+    "name": "RAF Brize Norton",
+    "label": "RAF Brize Norton (BZZ / EGVN)",
     "iata": "BZZ",
     "icao": "EGVN",
     "otherCodes": null,
@@ -21572,8 +21572,8 @@
   },
   {
     "id": "2364743cdb6cc94819dda8f853a53f262758959dfa9acb5fe8b0c01873722f5e",
-    "name": "Raf Coltishall (domestic Only)",
-    "label": "Raf Coltishall (domestic Only) (CLF / EGYC)",
+    "name": "RAF Coltishall (Domestic Only)",
+    "label": "RAF Coltishall (Domestic Only) (CLF / EGYC)",
     "iata": "CLF",
     "icao": "EGYC",
     "otherCodes": null,
@@ -28289,8 +28289,8 @@
   },
   {
     "id": "bc922d11eb0ba071aec5562c016e3214421eb64d2716fc3c38f819f2fcb065b1",
-    "name": "Lavenham Lodge Farm (raf Lavenham)",
-    "label": "Lavenham Lodge Farm (raf Lavenham)",
+    "name": "Lavenham Lodge Farm (RAF Lavenham)",
+    "label": "Lavenham Lodge Farm (RAF Lavenham)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -33287,8 +33287,8 @@
   },
   {
     "id": "3bbed636731e25e1e352b56ff42dbbebfb18a3e5051b29268d5cdcdf1788db22",
-    "name": "Brawdy / Cawdor Barracks (domestic Operations Only",
-    "label": "Brawdy / Cawdor Barracks (domestic Operations Only (EGDA)",
+    "name": "Brawdy / Cawdor Barracks (Domestic Operations Only",
+    "label": "Brawdy / Cawdor Barracks (Domestic Operations Only (EGDA))",
     "iata": null,
     "icao": "EGDA",
     "otherCodes": null,
@@ -34007,8 +34007,8 @@
   },
   {
     "id": "4c01dfcc7af27f02d0a98444f02bd42288ad17c03aae7a3418b5a77bd6fc156a",
-    "name": "Raf Mona",
-    "label": "Raf Mona (EGOQ)",
+    "name": "RAF Mona",
+    "label": "RAF Mona (EGOQ)",
     "iata": null,
     "icao": "EGOQ",
     "otherCodes": null,
@@ -34019,8 +34019,8 @@
   },
   {
     "id": "bc47bc594c932fe029c85cc25c9aa68a16cc3c90a64b81e66a002f9f0242e0a2",
-    "name": "Raf Shawbury",
-    "label": "Raf Shawbury (EGOS)",
+    "name": "RAF Shawbury",
+    "label": "RAF Shawbury (EGOS)",
     "iata": null,
     "icao": "EGOS",
     "otherCodes": null,
@@ -34031,8 +34031,8 @@
   },
   {
     "id": "d8bddbc2ad7837f5a1dbd4ac767518ab7d28a650516c50f233b39f161694ead5",
-    "name": "Raf Woodvale",
-    "label": "Raf Woodvale (EGOW)",
+    "name": "RAF Woodvale",
+    "label": "RAF Woodvale (EGOW)",
     "iata": null,
     "icao": "EGOW",
     "otherCodes": null,
@@ -34103,8 +34103,8 @@
   },
   {
     "id": "e51b91d8ab29acd6140d7002e050264906283ab6d3a586233c30c197124576d0",
-    "name": "Raf Boulmer - Domestic Only",
-    "label": "Raf Boulmer - Domestic Only (EGQM)",
+    "name": "RAF Boulmer - Domestic Only",
+    "label": "RAF Boulmer - Domestic Only (EGQM)",
     "iata": null,
     "icao": "EGQM",
     "otherCodes": null,
@@ -34451,8 +34451,8 @@
   },
   {
     "id": "45322ef2a52b6b724da1b1d788783551005ea2ed1109346b3277f09fd9c40d0e",
-    "name": "Raf Abingdon (domestic Movements Only)",
-    "label": "Raf Abingdon (domestic Movements Only) (EGUD)",
+    "name": "RAF Abingdon (Domestic Movements Only)",
+    "label": "RAF Abingdon (Domestic Movements Only) (EGUD)",
     "iata": null,
     "icao": "EGUD",
     "otherCodes": null,
@@ -34463,8 +34463,8 @@
   },
   {
     "id": "222aa96c0202d53f1bb885326afb7310e3a9bf81fb2cf9a696d0ee81b8ba7cb3",
-    "name": "Raf Command High Wycombe (domestic Movements Only)",
-    "label": "Raf Command High Wycombe (domestic Movements Only) (EGUH)",
+    "name": "RAF Command High Wycombe (Domestic Movements Only)",
+    "label": "RAF Command High Wycombe (Domestic Movements Only) (EGUH))",
     "iata": null,
     "icao": "EGUH",
     "otherCodes": null,
@@ -34523,8 +34523,8 @@
   },
   {
     "id": "4c135006a9a3258543264416ee1d55d7bf24386124fc52d86075f8e59188d945",
-    "name": "Raf Hereford",
-    "label": "Raf Hereford (EGVH)",
+    "name": "RAF Hereford",
+    "label": "RAF Hereford (EGVH)",
     "iata": null,
     "icao": "EGVH",
     "otherCodes": null,
@@ -34559,8 +34559,8 @@
   },
   {
     "id": "26dc2bf59ba784ccb6a8f47a26413963aeaa83f94fcfd714f4558bf9447e2a6b",
-    "name": "Raf Cosford",
-    "label": "Raf Cosford (EGWC)",
+    "name": "RAF Cosford",
+    "label": "RAF Cosford (EGWC)",
     "iata": null,
     "icao": "EGWC",
     "otherCodes": null,
@@ -34571,8 +34571,8 @@
   },
   {
     "id": "c724e65a40bdc8960dccfe482b413730fc58f503ffb0d14c0206b4d49c4a8c09",
-    "name": "Raf Henlow",
-    "label": "Raf Henlow (EGWE)",
+    "name": "RAF Henlow",
+    "label": "RAF Henlow (EGWE)",
     "iata": null,
     "icao": "EGWE",
     "otherCodes": null,
@@ -34583,8 +34583,8 @@
   },
   {
     "id": "0d6f54c0a7e8c77fc31ed44c591f2d863cb9efcb57a8d096b7d21a54884f76e2",
-    "name": "Raf Halton",
-    "label": "Raf Halton (EGWN)",
+    "name": "RAF Halton",
+    "label": "RAF Halton (EGWN)",
     "iata": null,
     "icao": "EGWN",
     "otherCodes": null,
@@ -34607,8 +34607,8 @@
   },
   {
     "id": "dd862445f0150116b102dfcf3aed44c48e7b59421d9c73e5923c65dfc5703074",
-    "name": "Raf Binbrook",
-    "label": "Raf Binbrook (EGXB)",
+    "name": "RAF Binbrook",
+    "label": "RAF Binbrook (EGXB)",
     "iata": null,
     "icao": "EGXB",
     "otherCodes": null,
@@ -34619,8 +34619,8 @@
   },
   {
     "id": "790c84bfe78a33d386050a6397cbcf84d04cc447c453c8be9b2a2b17b663e119",
-    "name": "Raf Dishforth Domestic Only***",
-    "label": "Raf Dishforth Domestic Only*** (EGXD)",
+    "name": "RAF Dishforth Domestic Only***",
+    "label": "RAF Dishforth Domestic Only*** (EGXD)",
     "iata": null,
     "icao": "EGXD",
     "otherCodes": null,
@@ -34631,8 +34631,8 @@
   },
   {
     "id": "951f3a173a2351ddec74f6490071a80cf8f8d17909e5764a937a7366e06ab5f5",
-    "name": "Raf Leeming",
-    "label": "Raf Leeming (EGXE)",
+    "name": "RAF Leeming",
+    "label": "RAF Leeming (EGXE)",
     "iata": null,
     "icao": "EGXE",
     "otherCodes": null,
@@ -34643,8 +34643,8 @@
   },
   {
     "id": "7404f11c632c9a86617c60578531bdb65c4b2c563b0298a75a05c938e0992449",
-    "name": "Raf Cottesmore (domestic Only)",
-    "label": "Raf Cottesmore (domestic Only) (EGXJ)",
+    "name": "RAF Cottesmore (Domestic Only)",
+    "label": "RAF Cottesmore (Domestic Only) (EGXJ)",
     "iata": null,
     "icao": "EGXJ",
     "otherCodes": null,
@@ -34667,8 +34667,8 @@
   },
   {
     "id": "3306d5d1a0044996cad3c14c749583b1da9ed34aeb41b2abc02fdc387ce49260",
-    "name": "Raf Wittering",
-    "label": "Raf Wittering (EGXT)",
+    "name": "RAF Wittering",
+    "label": "RAF Wittering (EGXT)",
     "iata": null,
     "icao": "EGXT",
     "otherCodes": null,
@@ -34691,8 +34691,8 @@
   },
   {
     "id": "770348713d1d6a23df7eb372074120220b4a57271b863d4025dbd42be0a41bef",
-    "name": "Raf Syerston",
-    "label": "Raf Syerston (EGXY)",
+    "name": "RAF Syerston",
+    "label": "RAF Syerston (EGXY)",
     "iata": null,
     "icao": "EGXY",
     "otherCodes": null,
@@ -34703,8 +34703,8 @@
   },
   {
     "id": "7999a62cf901f598cfa142503c9dd8f10eca469f98dc4b3bb0612282fd78e160",
-    "name": "Raf Cranwell",
-    "label": "Raf Cranwell (EGYD)",
+    "name": "RAF Cranwell",
+    "label": "RAF Cranwell (EGYD)",
     "iata": null,
     "icao": "EGYD",
     "otherCodes": null,
@@ -34715,8 +34715,8 @@
   },
   {
     "id": "fabb242b961bdd40d6bcbab4112e5f53ee4cd59b702075d6b4745d64a5e5ecc4",
-    "name": "Raf Barkston Heath",
-    "label": "Raf Barkston Heath (EGYE)",
+    "name": "RAF Barkston Heath",
+    "label": "RAF Barkston Heath (EGYE)",
     "iata": null,
     "icao": "EGYE",
     "otherCodes": null,
@@ -34739,8 +34739,8 @@
   },
   {
     "id": "3b316d075ee95ce58763796881229d940ef6b4b4cf89db6b19172fbdf769fe01",
-    "name": "Raf Watton",
-    "label": "Raf Watton (EGYR)",
+    "name": "RAF Watton",
+    "label": "RAF Watton (EGYR)",
     "iata": null,
     "icao": "EGYR",
     "otherCodes": null,
@@ -39109,8 +39109,8 @@
   },
   {
     "id": "b036c1f242fc15d1386a3a98ee11b3344fc1b709c1b0f4440f321c02c9592b67",
-    "name": "Raf Fairford",
-    "label": "Raf Fairford (FFD / EGVA)",
+    "name": "RAF Fairford",
+    "label": "RAF Fairford (FFD / EGVA)",
     "iata": "FFD",
     "icao": "EGVA",
     "otherCodes": null,
@@ -57583,8 +57583,8 @@
   },
   {
     "id": "9d96eae4715d8e23c064e03bc70c3e37a168fe756488a3c0d483c15182d85e00",
-    "name": "Raf Marham",
-    "label": "Raf Marham (KNF / EGYM)",
+    "name": "RAF Marham",
+    "label": "RAF Marham (KNF / EGYM)",
     "iata": "KNF",
     "icao": "EGYM",
     "otherCodes": null,
@@ -64233,8 +64233,8 @@
   },
   {
     "id": "8bbb6f5f15e4995cb8397f56e8c10bcf9f3fb93549444966469538e0be5a75c9",
-    "name": "Raf Lakenheath",
-    "label": "Raf Lakenheath (LKZ / EGUL)",
+    "name": "RAF Lakenheath",
+    "label": "RAF Lakenheath (LKZ / EGUL)",
     "iata": "LKZ",
     "icao": "EGUL",
     "otherCodes": null,
@@ -64473,8 +64473,8 @@
   },
   {
     "id": "9f4530a1e79a5ec65b885d847c4fe634f0ab22b3768c1bea84ff9e03cfd3036d",
-    "name": "Raf Lossiemouth",
-    "label": "Raf Lossiemouth (LMO / EGQS)",
+    "name": "RAF Lossiemouth",
+    "label": "RAF Lossiemouth (LMO / EGQS)",
     "iata": "LMO",
     "icao": "EGQS",
     "otherCodes": null,
@@ -66851,8 +66851,8 @@
   },
   {
     "id": "3aa5291ce739355cd2f8598f1e5d4029a9c2ad6c31de5bdc045fe825364da162",
-    "name": "Mod Lyneham (domestic)",
-    "label": "Mod Lyneham (domestic) (LYE / EGDL)",
+    "name": "Mod Lyneham (Domestic)",
+    "label": "Mod Lyneham (Domestic) (LYE / EGDL)",
     "iata": "LYE",
     "icao": "EGDL",
     "otherCodes": null,
@@ -70377,8 +70377,8 @@
   },
   {
     "id": "104ae39193067670cfa875f177bc86bf88e249820d3332efed73164076840407",
-    "name": "Raf Mildenhall",
-    "label": "Raf Mildenhall (MHZ / EGUN)",
+    "name": "RAF Mildenhall",
+    "label": "RAF Mildenhall (MHZ / EGUN)",
     "iata": "MHZ",
     "icao": "EGUN",
     "otherCodes": null,
@@ -75993,8 +75993,8 @@
   },
   {
     "id": "610fec0846b1e8379589eef74e2d796e03a845227422770fa970f3d4f1f0863e",
-    "name": "Raf Northolt",
-    "label": "Raf Northolt (NHT / EGWU)",
+    "name": "RAF Northolt",
+    "label": "RAF Northolt (NHT / EGWU)",
     "iata": "NHT",
     "icao": "EGWU",
     "otherCodes": null,
@@ -78317,8 +78317,8 @@
   },
   {
     "id": "444534041cf52fdc79d2fabcac44c399c6e6510944e4bbef67de0f259714d23b",
-    "name": "Raf Odiham",
-    "label": "Raf Odiham (ODH / EGVO)",
+    "name": "RAF Odiham",
+    "label": "RAF Odiham (ODH / EGVO)",
     "iata": "ODH",
     "icao": "EGVO",
     "otherCodes": null,
@@ -80855,8 +80855,8 @@
   },
   {
     "id": "eea502719605f8ec96582d94a0f1738190fe72d16c7b57de48fcfcebfbcb631a",
-    "name": "Jurby / Raf Jurby",
-    "label": "Jurby / Raf Jurby",
+    "name": "Jurby /RAF Jurby",
+    "label": "Jurby /RAF Jurby",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -85161,8 +85161,8 @@
   },
   {
     "id": "f6a6bfd167d778b1c7c021d5ffdb55c1bf8339a8e3ea8f5ece995d8529d21352",
-    "name": "Raf Coningsby",
-    "label": "Raf Coningsby (QCY / EGXC)",
+    "name": "RAF Coningsby",
+    "label": "RAF Coningsby (QCY / EGXC)",
     "iata": "QCY",
     "icao": "EGXC",
     "otherCodes": null,
@@ -97645,8 +97645,8 @@
   },
   {
     "id": "a2d2266c2b6d63e8c90174f20642546788b7519372a070013fb29856a463ebe5",
-    "name": "Deepcut Barracks (domestic Use Only)",
-    "label": "Deepcut Barracks (domestic Use Only)",
+    "name": "Deepcut Barracks (Domestic Use Only)",
+    "label": "Deepcut Barracks (Domestic Use Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -97687,8 +97687,8 @@
   },
   {
     "id": "ead4f14aa3dc6bc3a6a2d21cf1198e2897c0f2c1645d388a24cb3fbb93d7aa90",
-    "name": "Alexander Barracks (domestic Use Only)",
-    "label": "Alexander Barracks (domestic Use Only)",
+    "name": "Alexander Barracks (Domestic Use Only)",
+    "label": "Alexander Barracks (Domestic Use Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -97701,8 +97701,8 @@
   },
   {
     "id": "8506c5b7113853f60a20cb3cff517f072cd10e55ebc4ce70439b11a289f22f60",
-    "name": "Elizabeth Barracks(domestic Use Only)",
-    "label": "Elizabeth Barracks(domestic Use Only)",
+    "name": "Elizabeth Barracks(Domestic Use Only)",
+    "label": "Elizabeth Barracks(Domestic Use Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -97715,8 +97715,8 @@
   },
   {
     "id": "bc96599d9de4da1b31d57650a0b5eaeddaa503d355175fa0d53b411baab88c5f",
-    "name": "Sandhurst (domestic Use Only)",
-    "label": "Sandhurst (domestic Use Only)",
+    "name": "Sandhurst (Domestic Use Only)",
+    "label": "Sandhurst (Domestic Use Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -97729,8 +97729,8 @@
   },
   {
     "id": "ea52f8f988a42577529a9704628f46ffe758170e8c7e7f020e052d5a6d074d74",
-    "name": "Combermere Barracks (domestic Use Only)",
-    "label": "Combermere Barracks (domestic Use Only)",
+    "name": "Combermere Barracks (Domestic Use Only)",
+    "label": "Combermere Barracks (Domestic Use Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -108211,8 +108211,8 @@
   },
   {
     "id": "f34b4ded8cf5f15c2b67ccbf61e26760fb3cca00b919c1c896059463a6182112",
-    "name": "Raf Valley Anglesey",
-    "label": "Raf Valley Anglesey (VLY / EGOV)",
+    "name": "RAF Valley Anglesey",
+    "label": "RAF Valley Anglesey (VLY / EGOV)",
     "iata": "VLY",
     "icao": "EGOV",
     "otherCodes": null,
@@ -109403,8 +109403,8 @@
   },
   {
     "id": "3ed461ba684448cde63b6a593e85fdbf03f1034cf97a96f731bfc67a2f5943be",
-    "name": "Copthorne Barracks (domestic Only)",
-    "label": "Copthorne Barracks (domestic Only)",
+    "name": "Copthorne Barracks (Domestic Only)",
+    "label": "Copthorne Barracks (Domestic Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -109529,8 +109529,8 @@
   },
   {
     "id": "d89872ade3295b59406e492dfe0f353a6971f819c7bbbf0f8d44e1e1802cf511",
-    "name": "Raf Little Rissington (domestic Flights Only)",
-    "label": "Raf Little Rissington (domestic Flights Only)",
+    "name": "RAF Little Rissington (Domestic Flights Only)",
+    "label": "RAF Little Rissington (Domestic Flights Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -110999,8 +110999,8 @@
   },
   {
     "id": "4f760cfe13aed2d39a28d69b5db8eb9c49b677cad5df2033e1fd75eeb44559b2",
-    "name": "Maindy Barracks (domestic Operations Only)",
-    "label": "Maindy Barracks (domestic Operations Only)",
+    "name": "Maindy Barracks (Domestic Operations Only)",
+    "label": "Maindy Barracks (Domestic Operations Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -112551,8 +112551,8 @@
   },
   {
     "id": "c6ce06d39af2226528d10317262529d9117714a859be62e434ec46f05a99b6bc",
-    "name": "Raf Waddington",
-    "label": "Raf Waddington (WTN / EGXW)",
+    "name": "RAF Waddington",
+    "label": "RAF Waddington (WTN / EGXW)",
     "iata": "WTN",
     "icao": "EGXW",
     "otherCodes": null,
@@ -114447,8 +114447,8 @@
   },
   {
     "id": "19e5556bb8e5908db7716ba451e8044d54e2194d05b81298bc63eba8bbdfe268",
-    "name": "Barton Stacey Training Area (domestic Only)",
-    "label": "Barton Stacey Training Area (domestic Only)",
+    "name": "Barton Stacey Training Area (Domestic Only)",
+    "label": "Barton Stacey Training Area (Domestic Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -116799,8 +116799,8 @@
   },
   {
     "id": "acf80c79d7db8f5803bb4209685a6f12608b5984e5506ff08eb2fba0269b6c81",
-    "name": "Mod Marlborough Lines (domestic Use Only)",
-    "label": "Mod Marlborough Lines (domestic Use Only)",
+    "name": "Mod Marlborough Lines (Domestic Use Only)",
+    "label": "Mod Marlborough Lines (Domestic Use Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [
@@ -116813,8 +116813,8 @@
   },
   {
     "id": "79054977dc8bd39a3c9530c86768971cc965f92b127377df8d9f3f698758325d",
-    "name": "Bulford Camp (domestic Use Only)",
-    "label": "Bulford Camp (domestic Use Only)",
+    "name": "Bulford Camp (Domestic Use Only)",
+    "label": "Bulford Camp (Domestic Use Only)",
     "iata": null,
     "icao": null,
     "otherCodes": [

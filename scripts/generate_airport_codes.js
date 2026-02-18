@@ -134,6 +134,20 @@ function getSortKey(rec) {
   return i || c || o || '';
 }
 
+const performSubstitution = (value) => {
+  const rafStandAlone = /(^|\s)Raf\s/;
+  const rafWithSlash = /\/raf\s/;
+  const rafWithBrackets = /\(raf\s/;
+  let cleanData = value;
+
+  cleanData = value.replace(rafStandAlone, 'RAF ');
+  cleanData = cleanData.replace(rafWithSlash, '/RAF ');
+  cleanData = cleanData.replace(rafWithBrackets, '(RAF ');
+  cleanData = cleanData.replace('(domestic', '(Domestic');
+
+  return cleanData;
+}
+
 const capitalizeWords = (value) => {
   return value
     .toLowerCase()
@@ -228,8 +242,8 @@ function main() {
 
     return {
       id,
-      name,
-      label,
+      name: performSubstitution(name),
+      label: performSubstitution(label),
       iata: iataOut,
       icao: icaoOut,
       otherCodes,
