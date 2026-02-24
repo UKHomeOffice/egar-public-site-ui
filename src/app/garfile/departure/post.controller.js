@@ -136,8 +136,8 @@ module.exports = async (req, res) => {
     voyage.departureLat = '';
     voyage.departureLong = '';
     const port = findByCode(voyage.departurePort);
-    voyage.departurePortCode = port.value;
-    voyage.departurePortDesc = port.name;
+    voyage.departurePortCode = port?.value || '';
+    voyage.departurePortDesc = port?.name || null;
   } else {
     voyage.departurePort = voyage.departureLat + ' ' + voyage.departureLong;
   }

@@ -117,8 +117,8 @@ module.exports = async (req, res) => {
     voyage.arrivalLat = '';
     voyage.arrivalLong = '';
     const port = findByCode(voyage.arrivalPort);
-    voyage.arrivalPortDesc = port.name;
-    voyage.arrivalPort = port.value;
+    voyage.arrivalPortDesc = port?.name || null;
+    voyage.arrivalPort = port?.value || '';
   } else {
     voyage.arrivalPort = `${voyage.arrivalLat} ${voyage.arrivalLong}`;
   }
