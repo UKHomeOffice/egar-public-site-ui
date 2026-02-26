@@ -4,6 +4,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
+const { findByCode } = require('../../../common/utils/airports');
 //const airportValidation = require('../../../common/utils/airportValidation');
 
 const createValidationChains = (voyage) => {
@@ -134,6 +135,9 @@ module.exports = async (req, res) => {
   if (voyage.portChoice === 'Yes') {
     voyage.departureLat = '';
     voyage.departureLong = '';
+    const port = findByCode(voyage.departurePort);
+    voyage.departurePortCode = port?.value || '';
+    voyage.departurePortDesc = port?.name || null;
   } else {
     voyage.departurePort = voyage.departureLat + ' ' + voyage.departureLong;
   }
