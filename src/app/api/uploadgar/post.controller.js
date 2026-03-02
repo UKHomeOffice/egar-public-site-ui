@@ -11,6 +11,7 @@ const { validations } = require('./validations');
 const transformers = require('../../../common/utils/transformers');
 const { ExcelParser } = require('../../../common/utils/excelParser');
 const clamAVService = require('../../../common/services/clamAVService');
+const { findByCode } = require('../../../common/utils/airports');
 
 const checkFileIsExcel = (req, res) => {
   if (req.file) {
@@ -182,7 +183,13 @@ module.exports = async (req, res) => {
 
             const crewUpdate = garApi.patch(garId, 'Draft', { people: crew });
             const passengerUpdate = garApi.patch(garId, 'Draft', { people: passengers });
-            const voyageUpdate = garApi.patch(garId, 'Draft', voyageParser.parse());
+            const voyageParsed = voyageParser.parse();
+            voyageParsed['departurePortDesc'] = findByCode(voyageParsed.departurePort)?.name || '';
+            voyageParsed['arrivalPortDesc'] = findByCode(voyageParsed.arrivalPort)?.name || '';
+
+            console.log('voyage detauls ');
+            console.log(voyageParsed);
+            const voyageUpdate = garApi.patch(garId, 'Draft', voyageParsed);
 
             Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
               .then(() => {
