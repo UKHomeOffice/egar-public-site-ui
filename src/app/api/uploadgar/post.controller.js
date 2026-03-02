@@ -186,9 +186,6 @@ module.exports = async (req, res) => {
             const voyageParsed = voyageParser.parse();
             voyageParsed['departurePortDesc'] = findByCode(voyageParsed.departurePort)?.name || '';
             voyageParsed['arrivalPortDesc'] = findByCode(voyageParsed.arrivalPort)?.name || '';
-
-            console.log('voyage detauls ');
-            console.log(voyageParsed);
             const voyageUpdate = garApi.patch(garId, 'Draft', voyageParsed);
 
             Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
