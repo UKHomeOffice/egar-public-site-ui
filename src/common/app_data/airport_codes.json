@@ -82242,6 +82242,18 @@
     "crownDependency": false
   },
   {
+    "id": "c2226630b1bcb5d46de0f1c8a6784ea24335fcba6cfbebdf9dd761cb94fe95d9",
+    "name": "Pokhara International Airport",
+    "label": "Pokhara International Airport (PHH / VNPR)",
+    "iata": "PHH",
+    "icao": "VNPR",
+    "otherCodes": null,
+    "value": "PHH",
+    "designated": false,
+    "british": false,
+    "crownDependency": false
+  },
+  {
     "id": "7b9911b291613a560be1cdddfe5b3243d0b2c608f0bd639c3a9919883b714b0f",
     "name": "Palm Beach County Glades Airport",
     "label": "Palm Beach County Glades Airport (PHK / KPHK)",
