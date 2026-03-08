@@ -11,7 +11,7 @@ jobs:
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y dnsutils netcat
+          sudo apt-get install -y dnsutils netcat-openbsd
 
       - name: Test DNS resolution
         run: |
