@@ -40,6 +40,7 @@ module.exports = async (req, res) => {
 
         const paginationData = pagination.build(req, totalPages, totalItems, pageUrl, 10);
         const numberOf0TResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0T')).items.length;
+        const numberOf0BResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0B')).items.length;
         const showImportantBanner = resubmitted === 'no' && numberOf0TResponseCodes > 0 && durationInDeparture > 125;
 
         const renderObj = {
@@ -56,6 +57,7 @@ module.exports = async (req, res) => {
           pages: paginationData,
           currentPage: currentPage,
           showImportantBanner,
+          numberOf0BResponseCodes,
         };
 
         if (progress === 'Incomplete' && resubmitted === 'yes') {

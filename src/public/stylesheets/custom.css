@@ -27,6 +27,85 @@
     text-decoration: none;
     color: #005ea5 !important;
 }
+.app-check-your-answers-margin-bottom{
+    margin-bottom: 10px;
+}
+.margin-bottom-10 {
+    margin-bottom: 10px !important;
+}
+
+.margin-bottom-20 {
+    margin-bottom: 20px !important;
+}
+
+.margin-top-20 {
+    margin-top: 20px !important;
+}
+
+.margin-top-30 {
+    margin-top: 30px !important;
+}
+.margin-top-60 {
+    margin-top: 60px !important;
+}
+
+.margin-left-30 {
+    margin-left: 30px;
+}
+
+.margin-left-50 {
+    margin-left: 50px;
+}
+
+.margin-left-45 {
+    margin-left: 45px;
+}
+
+.margin-right-20{
+    margin-right: 20px !important;
+}
+
+.heading-text-spacing{
+    margin: 40px 0 50px 0 !important;
+}
+.a-link-text{
+    color: #005ea5 !important;
+}
+.margin-bottom-40{
+    margin-bottom: 40px !important;
+}
+.margin-bottom-60{
+    margin-bottom: 60px !important;
+}
+
+.padding-left-35 {
+    padding-left: 35px !important;
+}
+
+.padding-bottom-60 {
+    padding-bottom: 60px !important;
+}
+
+.padding-left-60 {
+    padding-left: 60px !important;
+}
+.system-timeout{
+    color: #594d00;
+    background-color: #fff7bf;
+    padding: 5px 10px 5px 10px;
+}
+.status-text{
+    font-size: 14px;
+    font-weight: 600;
+}
+.grey-box {
+    background-color: #f3f2f1;
+    padding: 1em 0em 1em 1em;
+}
+
+.bottom-margin-7 {
+    margin-bottom: 7%;
+}
 .box-left-grey-border {
     border-left: 9px solid #b1b4b6;
     margin: 20px 0 20px 0;

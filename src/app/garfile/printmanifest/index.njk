@@ -69,8 +69,8 @@
         <tbody class="govuk-table__body" id="printGAR">
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">{{ garfile.registration }}</td>
-              <td class="govuk-table__cell">{{ garfile.departurePort }}</td>
-              <td class="govuk-table__cell">{{ garfile.arrivalPort }}</td>
+              <td class="govuk-table__cell">{{ codeToAirfield(garfile.departurePort).label }}</td>
+              <td class="govuk-table__cell">{{ codeToAirfield(garfile.arrivalPort).label }}</td>
 
             </tr>
         </tbody>

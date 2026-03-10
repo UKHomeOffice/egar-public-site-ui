@@ -10,6 +10,7 @@ const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const createGarApi = require('../../../common/services/createGarApi.js');
 const garApi = require('../../../common/services/garApi');
+const clamAVService = require('../../../common/services/clamAVService');
 
 const path = require('path');
 
@@ -29,6 +30,7 @@ describe('API upload GAR post controller', () => {
   let res;
   let incorrectWorkbook;
   let clock;
+  let clamAVServiceStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -90,6 +92,7 @@ describe('API upload GAR post controller', () => {
           return 'Unexpected Key';
       }
     });
+    clamAVServiceStub = sinon.stub(clamAVService, 'scanFile');
   });
 
   afterEach(() => {
@@ -178,7 +181,7 @@ describe('API upload GAR post controller', () => {
         if (callback) callback();
       });
       sinon.stub(XLSX, 'read').returns(data);
-
+      clamAVServiceStub.resolves(true);
       await controller(req, res);
 
       expect(req.session.save).to.have.been.called;
@@ -191,7 +194,7 @@ describe('API upload GAR post controller', () => {
     it('should return message if invalid', async () => {
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(getInvalidWorkbook());
-
+      clamAVServiceStub.resolves(true);
       const callController = async () => {
         await controller(req, res);
       };
@@ -235,10 +238,12 @@ describe('API upload GAR post controller', () => {
       sinon.stub(req.session, 'save').callsFake((callback) => {
         if (callback) callback();
       });
+
       const data = getValidWorkbook();
       data.Sheets.Valid1.D3.v = '2022-07-30';
 
       sinon.stub(XLSX, 'read').returns(data);
+      clamAVServiceStub.resolves(true);
 
       await controller(req, res);
 
@@ -260,7 +265,7 @@ describe('API upload GAR post controller', () => {
       data.Sheets.Valid1.B3.v = null;
 
       sinon.stub(XLSX, 'read').returns(data);
-
+      clamAVServiceStub.resolves(true);
       const callController = async () => {
         await controller(req, res);
       };
@@ -280,7 +285,7 @@ describe('API upload GAR post controller', () => {
       data.Sheets.Valid1.D3.v = '2010-07-30';
 
       sinon.stub(XLSX, 'read').returns(data);
-
+      clamAVServiceStub.resolves(true);
       const callController = async () => {
         await controller(req, res);
       };
@@ -308,7 +313,7 @@ describe('API upload GAR post controller', () => {
       sinon.stub(garApi);
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
-
+      clamAVServiceStub.resolves(true);
       const callController = async () => {
         await controller(req, res);
       };
@@ -335,7 +340,7 @@ describe('API upload GAR post controller', () => {
       sinon.stub(garApi, 'patch');
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
-
+      clamAVServiceStub.resolves(true);
       const callController = async () => {
         await controller(req, res);
       };
@@ -363,6 +368,7 @@ describe('API upload GAR post controller', () => {
       garApiPatch.onCall(2).rejects('garApi.patch for voyageUpdate Example Reject');
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
+      clamAVServiceStub.resolves(true);
 
       const callController = async () => {
         await controller(req, res);
@@ -396,6 +402,7 @@ describe('API upload GAR post controller', () => {
       const garApiPatch = sinon.stub(garApi, 'patch').resolves();
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
+      clamAVServiceStub.resolves(true);
 
       const callController = async () => {
         await controller(req, res);
@@ -424,6 +431,7 @@ describe('API upload GAR post controller', () => {
 
       sinon.stub(XLSX, 'read').returns(data);
       sinon.spy(req.session, 'save');
+      clamAVServiceStub.resolves(true);
 
       const callController = async () => {
         await controller(req, res);
@@ -451,6 +459,7 @@ describe('API upload GAR post controller', () => {
 
       sinon.stub(XLSX, 'read').returns(data);
       sinon.spy(req.session, 'save');
+      clamAVServiceStub.resolves(true);
 
       const callController = async () => {
         await controller(req, res);
@@ -478,6 +487,7 @@ describe('API upload GAR post controller', () => {
 
       sinon.stub(XLSX, 'read').returns(data);
       sinon.spy(req.session, 'save');
+      clamAVServiceStub.resolves(true);
 
       const callController = async () => {
         await controller(req, res);
@@ -505,6 +515,7 @@ describe('API upload GAR post controller', () => {
 
       sinon.stub(XLSX, 'read').returns(data);
       sinon.spy(req.session, 'save');
+      clamAVServiceStub.resolves(true);
 
       const callController = async () => {
         await controller(req, res);

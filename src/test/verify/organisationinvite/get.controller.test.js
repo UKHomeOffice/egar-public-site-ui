@@ -50,7 +50,7 @@ describe('Verify Organisation Invite Get Controller', () => {
     cookie.reset();
     cookie.initialise();
     cookie.setInviteUserToken('HashedToken123');
-    oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns('https://onelogin?code=123&state=state');
+    sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns('https://onelogin?code=123&state=state');
     verifyUserServiceStub.resolves('Token is valid');
     await controller(req, res);
 

@@ -14,21 +14,41 @@
   </p>
 {% endmacro %}
 
-{% macro notificationBannerFor0T(numberOf0TResponseCodes, showImportantBanner) %}
-  {% set passengerText = 'passenger has' if numberOf0TResponseCodes == 1 else 'passengers have' %}
-  {% if showImportantBanner %}
-    {{ govukNotificationBanner({
-      classes: "govuk-notification-banner--important",
-      titleText: "Important",
-      html: '<p class="govuk-body">' +
-        '<strong>' + numberOf0TResponseCodes + ' '+ passengerText +' a \'system time out\' status.</strong>' +
-        ' This means we were unable to check their permission to travel status.' +
-        '</p>' +
-        '<p class="govuk-body">' +
-        'You should <a href="#" id="resubmit0T" class="govuk-link resubmit0T">resubmit permission to travel checks</a> for them if your expected time of departure is more than 2 hours 5 minutes in the future, otherwise you can continue to board the passenger.' +
-        '</p>'
-    }) }}
-  {% endif %}
+{% macro notificationBannerForResponseCodes(numberOf0TResponseCodes, numberOf0BResponseCodes, showImportantBanner) %}
+ {% if showImportantBanner or numberOf0BResponseCodes > 0 %}
+ <div class="custom-govuk-notification-banner" role="region"
+        aria-labelledby="govuk-notification-banner-title"
+        data-module="custom-govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+            </h2>
+        </div>
+        {% if numberOf0TResponseCodes > 0 and showImportantBanner %}
+        <div class="govuk-notification-banner__content">
+            <p class="govuk-body">
+             <strong>{{numberOf0TResponseCodes}} {% if numberOf0TResponseCodes == 1 %} person has{% else %} people have{% endif %} a 'system time out' status.</strong>
+            This means we were unable to check their digital permission to travel.
+            </p>
+            <p class="govuk-body">
+              You should <a href="#" id="resubmit0T" class="govuk-link resubmit0T">resubmit digital permission to travel checks</a>
+               for them if your expected time of departure is more than 2 hours 5 minutes in the future, otherwise you can continue to submit your GAR.
+            </p>
+        </div>
+        {% endif %}
+        {% if numberOf0BResponseCodes > 0 %}
+        <div class="govuk-notification-banner__content">
+            <p class="govuk-body">
+            <strong>{{numberOf0BResponseCodes}} {% if numberOf0BResponseCodes == 1 %} person has{% else %} people have{% endif %} 'no record of valid permission to travel'.</strong>
+            This means we have no record of a digital permission for them.
+            </p>
+            <p class="govuk-body">
+            You need to manually check that they have a valid permission to travel to the UK.
+            </p>
+        </div>
+        {% endif %}
+  </div>
+ {% endif %}
 {% endmacro %}
 
 {% macro id_card_withdrawl_text(__) %}

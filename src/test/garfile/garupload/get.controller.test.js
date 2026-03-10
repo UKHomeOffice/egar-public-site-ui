@@ -18,6 +18,7 @@ describe('GAR Upload Get Controller', () => {
     // Example request and response objects with appropriate spies
     req = {
       session: {},
+      query: {},
     };
     res = {
       render: sinon.spy(),

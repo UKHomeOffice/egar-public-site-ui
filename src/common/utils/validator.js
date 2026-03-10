@@ -13,7 +13,7 @@ const {
   MAX_ALLOWED_CANCELLATION_TIME_TO_CBP,
 } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
-const { airportCodeList } = require('../../common/utils/autocomplete');
+const airports = require('../../common/utils/airports');
 const nationality = require('../../common/utils/nationality');
 const { documentTypes } = require('./utils');
 
@@ -139,7 +139,7 @@ function notEmpty(value) {
 // must start and end with alpha
 // special characters cannot be placed sequentially
 function validName(value) {
-  const regex = /^[A-z ](?:[A-z ]|[-|'](?=[A-z ]))*[A-z ]$/;
+  const regex = /^[A-z ](?:[A-z ]|[-|\'](?=[A-z ]))*[A-z ]$/;
   return regex.test(value);
 }
 
@@ -371,7 +371,7 @@ function getDateFromDynamicInput(input) {
     if (isNaN(providedDate)) {
       providedDate = null;
     }
-  } else if (Object.prototype.hasOwnProperty.call(input, 'd')) {
+  } else if (input.hasOwnProperty('d')) {
     // if it is an eGAR UI date object, validate properties and parse
     if (
       numericDateElements(input) &&
@@ -436,12 +436,16 @@ function realDateFromString(str) {
 }
 
 // This function will validate Passport Expiry date while uploading Gar Template
-function passportExpiryDate(value, _element) {
+function passportExpiryDate(value) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
   const d = new Date(val);
   const f = new Date();
+
+  if (d.getFullYear() > 9999) {
+    return false;
+  }
 
   if (d > f) {
     return true;
@@ -454,7 +458,7 @@ function passportExpiryDate(value, _element) {
 }
 
 // This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
-function birthDate(value, _element) {
+function birthDate(value) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -469,7 +473,7 @@ function birthDate(value, _element) {
 }
 
 // This function will validate departure date while uploading Gar Template
-function dateNotInPast(value, _element) {
+function dateNotInPast(value) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -487,7 +491,6 @@ function dateNotInPast(value, _element) {
   return false;
 }
 
-//unused except tests
 function validFlag(value) {
   if (value) {
     return true;
@@ -495,7 +498,13 @@ function validFlag(value) {
   return false;
 }
 
-//unused except tests
+function validPort(value) {
+  if (value.length >= 3) {
+    return true;
+  }
+  return false;
+}
+
 function confirmPassword(value1, value2) {
   if (value1 === value2) {
     return true;
@@ -699,6 +708,22 @@ function handleResponseError(parsedApiResponse) {
   }
 }
 
+function sanitiseDateOrTime(input, type) {
+  const regex = type === 'year' ? '[0-9]{1,4}' : '[0-9]{1,2}';
+
+  return input.match(regex) === null ? '' : input.match(regex)[0];
+}
+
+function autoTab(field1, dayMonthOrYear, field2) {
+  let len = dayMonthOrYear === 'year' ? 4 : 2;
+
+  let field1Value = sanitiseDateOrTime(field1.value, dayMonthOrYear);
+
+  if (field1Value.length == len) {
+    field2.focus();
+  }
+}
+
 function isAlphanumeric(input) {
   const alphanumericRegex = /^[a-zA-Z0-9]+$/;
   return alphanumericRegex.test(input);
@@ -730,10 +755,10 @@ function preventZ(value) {
 /**
  * Verify that airport code is accurate
  * @param {String} airportCode expected to be an  IATA (length 3) or ICAO (length 4) orcode
- * @returns {Bool}
+ * @returns {boolean}
  */
 function isValidAirportCode(airportCode) {
-  return airportCodeList.includes(airportCode);
+  return airports.findByCode(airportCode) !== null;
 }
 
 module.exports = {
@@ -763,6 +788,7 @@ module.exports = {
   currentOrPastDate,
   validTime,
   validFlag,
+  validPort,
   validISOCountryLength,
   isValidNationality,
   validFreeCirculation,
@@ -780,9 +806,11 @@ module.exports = {
   isValidRegistrationLength,
   isValidDepAndArrDate,
   handleResponseError,
+  sanitiseDateOrTime,
   passportExpiryDate,
   birthDate,
   dateNotInPast,
+  autoTab,
   preventZ,
   dateNotMoreThanMonthInFuture,
   isAlphanumeric,

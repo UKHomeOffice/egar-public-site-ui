@@ -138,3 +138,24 @@
       <p class="govuk-body govuk-!-font-size-36">{{text2}}</p>
     </div>
 {% endmacro %}
+
+{% macro govNotificationBannerBlue(params) %}
+  <div class="custom-govuk-notification-banner" role="region"
+          aria-labelledby="govuk-notification-banner-title"
+          data-module="custom-govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            {{ params.title if params.title else 'Important' }}
+          </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        {% if params.html %}
+          {{ params.html | safe }}
+        {% elif params.text %}
+          <p class="govuk-notification-banner__heading">
+            {{ params.text }}
+          </p>
+        {% endif %}
+      </div>
+  </div>
+{% endmacro %}

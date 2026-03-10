@@ -14,8 +14,14 @@ const containsError = (array, value) => {
   if (array === undefined || value === undefined) return false;
 
   const result = array.filter((element) => element.identifier === value);
-  return result.length > 0 && { text: result[0].message };
+  return result.length > 0 && { text: result[0].message };;
+};
+
+const expiryDate = () => {
+  const today = new Date();
+  return today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 };
 
 exports.uncamelCase = uncamelCase;
 exports.containsError = containsError;
+exports.expiryDate = expiryDate;

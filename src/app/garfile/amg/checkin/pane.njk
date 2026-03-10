@@ -1,7 +1,6 @@
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
 {% import "common/templates/includes/banners.njk" as banner %}
-
 {% macro statusRow(person, statusCheckComplete) %}
   {% set status = person.amgCheckinStatus.name %}
   {% set checkin_code = person.amgCheckinResponseCode %}
@@ -26,7 +25,7 @@
     <td class="govuk-table__cell govuk-!-vertical-align-top">
       <div>
         {% if statusColor %}
-          <div class="{{ statusColor }} status-text" title="{{ statustitle }}">{{ statustitle }}</div>
+          <div title="{{ statustitle }}"><span class={{statusColor}}>{{ statustitle }}</span></div>
         {% endif %}
       </div>
     </td>
@@ -37,111 +36,77 @@
         {% if statusColor %}
           {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === '0') %}
             {% if checkin_code === '0B' %}
+              <p class="govuk-body">Check that this person has valid permission to travel to the UK.</p>
               <details class="govuk-details" data-module="govuk-details">
                 <summary
                   class="govuk-details__summary"
                   aria-controls="details-content-documents"
                   aria-expanded="false"
                   title="Checking Passport / Travel Documents">
-                  <span class="govuk-details__summary-text">No record of valid permission to travel</span>
+                  <span class="govuk-details__summary-text">Help with checking their permission to travel</span>
                 </summary>
                 <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
                   <p class="govuk-body">
-                    You must check if this individual has a valid passport or travel document.
+                    We have no record of a digital permission, for example an electronic travel authorisation (ETA) or electronic visa (eVisa), for this person.
                   </p>
-                  <p class="govuk-body">You must also check for a valid immigration or exemption document. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers" target="_blank" class="govuk-link">UK visa requirements
-                    (opens in new tab on GOV.UK)</a>.
-                  </p>
-                  <p class="govuk-body">
-                    You should conduct a manual check for an immigration permission by:</p>
+                  <p class="govuk-body">Before travelling, you should check that they have one of the following:</p>
                   <ul class="govuk-body">
-                    <li>
-                      Checking for a valid physical immigration document (such as a visa vignette or stamp etc.)
+                    <li>a physical permission to travel or exemption document, for example, a visa vignette or stamp in their passport
                     </li>
-                  </ul>
-                  <p class="govuk-body">Or</p>
-                  <ul class="govuk-body">
-                    <li>
-                      By using a share code which the individual can request from their UKVI account. <a href="https://www.gov.uk/check-immigration-status" target="_blank" class="govuk-link">Check their immigration status using a
-                      share code (opens in new tab on GOV.UK)</a>.
+                    <li>a <a href="https://www.gov.uk/check-immigration-status" target="_blank" class="govuk-link">share code from their UKVI account (opens in new tab on GOV.UK)</a> that shows their digital permission to travel
+                    </li>
+                    <li>an <a class="govuk-link" href="https://www.gov.uk/check-eta" target="_blank">ETA linked to their passport (opens in new tab on GOV.UK)</a>
                     </li>
                   </ul>
                   <p class="govuk-body">
-                    If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for
-                    advice by calling the Border Force Carrier Support Hub 0300 369 0610 or +44 204 619 6020 from outside the UK.
+                    If they have no exemption or proof of physical or digital permission to travel, you can contact the Border Force Carrier
+                    Support Hub for advice on 0300 369 0610 or +44 204 619 6020 from outside the UK.
                   </p>
                 </div>
               </details>
             {% elif(checkin_code === '0A') %}
-              <details class="govuk-details" data-module="govuk-details">
-                <summary
-                  class="govuk-details__summary"
-                  aria-controls="details-content-documents"
-                  aria-expanded="false"
-                  title="Checking Passport / Travel Documents">
-                  <span class="govuk-details__summary-text">Valid permission to travel</span>
-                </summary>
-                <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
-                  <p class="govuk-body">
-                    This is confirmation that the individual has a valid immigration permission and no other immigration checks are
-                    required.
-                  </p>
-                  <p class="govuk-body">
-                    You must still check if this individual has a valid passport or travel document and that the passport or travel document
-                    presented is genuine and valid, and that the person is the rightful holder.
-                  </p>
-                  <p class="govuk-body">
-                    For more information on checking passports and travel documents check the <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1134497/Guidance_on_examining_identity_documents.pdf" target="_blank" class="govuk-link">guidance on examining identity documents
-                    (opens in new tab on GOV.UK)</a>.
-                  </p>
-                </div>
-              </details>
+              <p class="govuk-body">This person has digital permission and can travel to the UK.</p>
             {% elif(checkin_code === '0Z') %}
+              <p class="govuk-body">Check if this person needs permission to travel to the UK.</p>
               <details class="govuk-details" data-module="govuk-details">
                 <summary
                   class="govuk-details__summary"
                   aria-controls="details-content-documents"
                   aria-expanded="false"
                   title="Checking Passport / Travel Documents">
-                  <span class="govuk-details__summary-text">Authority to carry granted</span>
+                  <span class="govuk-details__summary-text">Help with checking if they need permission to travel</span>
                 </summary>
                 <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
-                  <p class="govuk-body">You must check if this individual has a valid passport or travel document.</p>
-                  <p class="govuk-body">For visa nationals you must also check for a valid immigration or exemption document. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers/uk-visa-requirements-for-international-carriers" target="_blank" class="govuk-link">UK
-                    visa requirements (opens in new tab on GOV.UK)</a>.</p>
-                  <p class="govuk-body">You should conduct a manual check for an immigration permission by:</p>
-                  <ul class="govuk-body">
-                    <li>
-                      Checking for a valid physical immigration document (such as a visa vignette or stamp etc.)
-                    </li>
-                  </ul>
-                  <p class="govuk-body">Or
-                  </p>
-                  <ul class="govuk-body">
-                    <li>
-                      By using a share code which the individual can request from their UKVI account. <a href="https://www.gov.uk/check-immigration-status" target="_blank" class="govuk-link">Check their immigration status using a
-                      share code (opens in new tab on GOV.UK)</a>.
-                    </li>
-                  </ul>
+                  <p class="govuk-body">We have no record of a digital permission, for example an electronic travel authorisation (ETA) or electronic visa (eVisa), for this person.</p>
+                  <p class="govuk-body">For British and Irish nationals, their valid passport is their permission to travel.</p>
+                  <p class="govuk-body">For all other nationals, you should check if they need permission to travel to the UK. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers" target="_blank" class="govuk-link">UK visa requirements (opens in new tab on GOV.UK).</a></p>
                   <p class="govuk-body">
-                    If the individual has no exemption or proof of physical or digital permission, you may contact the Home Office for
-                    advice by calling the Border Force Carrier Support Hub 0300 369 0610 or +44 204 619 6020 from outside the UK.
-                  </p>
+                   If they have no exemption or proof of physical or digital permission, you can contact the Home Office for advice by calling the Border Force Carrier Support Hub on 0300 369 0610 or +44 204 619 6020 from outside the UK.
+                   </p>
                 </div>
               </details>
             {% elif(checkin_code === '0T') %}
+              <p class="govuk-body">You should resubmit their digital permission to travel checks.</p>
               <details class="govuk-details" data-module="govuk-details">
                 <summary
                   class="govuk-details__summary"
                   aria-controls="details-content-documents"
                   aria-expanded="false"
                   title="Checking Passport / Travel Documents">
-                  <span class="govuk-details__summary-text">System time out</span>
+                  <span class="govuk-details__summary-text">Help with what to do for system time out</span>
                 </summary>
                 <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
-                  <p class="govuk-body">If the GAR was submitted at 2 hours before the expected time of departure, no resubmission attempts are required. If the GAR was submitted earlier and on receipt of a ‘system time out’ response for a passenger, a resubmission attempt for that passenger should be made, this should result in the receipt of a successful permission to travel response.</p>
+                  <p class="govuk-body">If the GAR was submitted at 2 hours before the expected time of departure, no resubmission
+                    attempts are required. If the GAR was submitted earlier and on receipt of a ‘system time out’ response for a passenger,
+                    a resubmission attempt for that passenger should be made, this should result in the receipt of a successful permission
+                    to travel response.</p>
                   <p class="govuk-body">
-                    If a 'system time out' response is received at or later than 2 hours before the expected time of departure, then the passenger may be boarded. There will be no <a href="https://www.legislation.gov.uk/ukpga/1999/33/part/II/crossheading/passengers-without-proper-documents" target="_blank" class="govuk-link">section 40</a>
+                    If a 'system time out' response is received at or later than 2 hours before the expected time of departure, then the
+                    passenger may be boarded. There will be no
+                    <a
+                      href="https://www.legislation.gov.uk/ukpga/1999/33/part/II/crossheading/passengers-without-proper-documents"
+                      target="_blank"
+                      class="govuk-link">section 40</a>
                     liability if the passenger is subsequently found not to hold a valid permission to travel.
                   </p>
                 </div>
@@ -161,45 +126,45 @@
     </td>
   </tr>
 {% endmacro %}
-
-<form id="passenger-checkin" action="/garfile/amg/checkin?resubmitted={{resubmitted}}" class="form-group" method="post" role="form" >
-<table class="govuk-table" id="upt-responses">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th class="govuk-table__header" style="width:20%;">Status</th>
-      <th class="govuk-table__header" style="width:30%;">Passenger</th>
-      <th class="govuk-table__header" style="width:50%;">What you need to do</th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    {% if statusCheckComplete %}
-      <div id="banner0T" class="govuk-!-display-none" >
-        <div id="banner0T-content"> {{ banner.notificationBannerFor0T(numberOf0TResponseCodes, showImportantBanner) }}</div>
-      </div>
-
+<form
+  id="passenger-checkin"
+  action="/garfile/amg/checkin?resubmitted={{ resubmitted }}"
+  class="form-group"
+  method="post"
+  role="form">
+  <table class="govuk-table" id="upt-responses" style="">
+    <thead class="govuk-table__head">
       <tr class="govuk-table__row">
-        <td class="govuk-table__cell"></td>
-        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
+        <th scope="col" class="govuk-table__header">Digital permission to travel</th>
+        <th scope="col" class="govuk-table__header">Passenger</th>
+        <th scope="col" class="govuk-table__header">What you need to do</th>
       </tr>
-    {% else %}
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell">
-          <div id="spinner" title="loading..." class="status-disc spinner"></div>
-        </td>
-        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">Awaiting Permission to Travel responses...</td>
-      </tr>
-    {% endif %}
-    {% for person in garpeople.items %}
-      {{ statusRow(person, statusCheckComplete) }}
-    {% endfor %}
-  </tbody>
-</table>
- <input type="hidden" name="resubmitted" value="{{resubmitted}}" />
- {{ pagination.build('passenger-checkin', pages, __)}}
-
-<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% if statusCheckComplete %}
+        <div id="banner0T" class="hide-content">
+          <div id="banner0T-content">
+            {{ banner.notificationBannerForResponseCodes(numberOf0TResponseCodes, numberOf0BResponseCodes, showImportantBanner) }}</div>
+        </div>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell"></td>
+          <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
+        </tr>
+      {% else %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <div id="spinner" title="loading..." class="status-disc spinner"></div>
+          </td>
+          <td class="govuk-table__cell" colspan="2" style="opacity:.5;">Awaiting Permission to Travel responses...</td>
+        </tr>
+      {% endif %}
+      {% for person in garpeople.items %}
+        {{ statusRow(person, statusCheckComplete) }}
+      {% endfor %}
+    </tbody>
+  </table>
+  <input type="hidden" name="resubmitted" value="{{ resubmitted }}"/> {{ pagination.build('passenger-checkin', pages, __) }} <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 </form>
-
 <form action="/garfile/review" method="post">
   <h2 class="govuk-heading-m">Declaration</h2>
   <p class="govuk-body-m">{{ __('submit_gar_caption') }}</p>
