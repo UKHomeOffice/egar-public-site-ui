@@ -13,6 +13,7 @@ const postusersignin = require('./home');
 const userregister = require('./user/register');
 const registermsg = require('./user/regmsg');
 const oneloginRegister = require('./user/onelogin');
+const metrics = require('./metrics');
 
 // User dependencies
 const aircraft = require('./aircraft');
@@ -163,4 +164,5 @@ module.exports.bind = (app) => {
   app.use(respersonDetail.router);
   app.use(amgcheckin.router);
   app.use(oneloginRegister.router);
+  app.use(metrics.router);
 };
