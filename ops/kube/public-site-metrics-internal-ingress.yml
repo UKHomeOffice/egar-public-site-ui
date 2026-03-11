@@ -35,9 +35,9 @@ spec:
     http:
       paths:
       - path: /metrics
-        pathType: Prefix
+        pathType: ImplementationSpecific
         backend:
           service: 
             name: public-site
             port:
-              number: 10443
+              number: 443
