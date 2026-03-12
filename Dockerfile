@@ -1,4 +1,4 @@
-FROM node:22-alpine3.23 AS development
+FROM node:25-alpine3.23 AS development
 
 RUN apk update \
     && apk upgrade --update-cache --available \
