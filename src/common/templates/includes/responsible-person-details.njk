@@ -121,28 +121,21 @@
     errorMessage: errors | containsError('responsiblePostcode')
   }) }}
 
-            {{ m.error_message('responsiblePostcode', errors, __) }}
+  {% set countryItems = [] %}
+  {% for country in countryList | sort(attribute='name') %}
+    {% set item = { value: country.code, text: country.label } %}
+    {% set countryItems = countryItems.concat(item) %}
+  {% endfor %}
 
-            <input class="govuk-input govuk-input--width-10"
-                id="responsiblePostcode" name="responsiblePostcode" type="text"
-                value="{{ responsiblePerson.responsiblePostcode }}"
-                maxlength="{{ MAX_POSTCODE_LENGTH }}">
-        </div>
-
-        <div class="govuk-form-group {{ m.form_group_class('responsibleCountry', errors) }}">
-            <label id="responsibleCountry-label" class="govuk-label" for="responsibleCountry">{{ __('field_address_country') }}</label>
-            {{ m.error_message('responsibleCountry', errors, __) }}
-            <select class="govuk-select" id="responsibleCountry" name="responsibleCountry"
-                value="{{ responsiblePerson.responsibleCountry }}"
-                aria-labelledby="responsibleCountry-label">
-                <option value=""></option>
-                {% for country in countryList | sort(attribute = 'name') %}
-                    <option value="{{ country.code }}"
-                    {{ 'selected=selected' if responsiblePerson.responsibleCountry == country.code }}>{{ country.label }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </fieldset>
+  {{ govukSelect({
+    id: "responsibleCountry",
+    name: "responsibleCountry",
+    label: { text: __("field_address_country"), classes: "govuk-label" },
+    items: countryItems,
+    selected: responsiblePerson.responsibleCountry,
+    errorMessage: errors | containsError('responsibleCountry')
+  }) }}
+</fieldset>
 
 {% set fixedBasedOperatorTextarea = govukTextarea({
   id: "fixedBasedOperatorAnswer",
