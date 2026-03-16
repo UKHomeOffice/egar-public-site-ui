@@ -139,7 +139,7 @@ function notEmpty(value) {
 // must start and end with alpha
 // special characters cannot be placed sequentially
 function validName(value) {
-  const regex = /^[A-z ](?:[A-z ]|[-|\'](?=[A-z ]))*[A-z ]$/;
+  const regex = /^[A-z ](?:[A-z ]|[-|'](?=[A-z ]))*[A-z ]$/;
   return regex.test(value);
 }
 
@@ -371,7 +371,7 @@ function getDateFromDynamicInput(input) {
     if (isNaN(providedDate)) {
       providedDate = null;
     }
-  } else if (input.hasOwnProperty('d')) {
+  } else if (Object.prototype.hasOwnProperty.call(input, 'd')) {
     // if it is an eGAR UI date object, validate properties and parse
     if (
       numericDateElements(input) &&

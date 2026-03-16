@@ -9,11 +9,6 @@ const { findByCode } = require('../../../common/utils/airports');
 
 const createValidationChains = (voyage) => {
   // Create validation input objs
-  const departPortObj = {
-    portCode: voyage.departurePort,
-    lat: voyage.departureLat,
-    long: voyage.departureLong,
-  };
   const departDateObj = {
     d: voyage.departureDay,
     m: voyage.departureMonth,
