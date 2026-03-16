@@ -1,6 +1,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
 {% import "common/templates/includes/banners.njk" as banner %}
+
 {% macro statusRow(person, statusCheckComplete) %}
   {% set status = person.amgCheckinStatus.name %}
   {% set checkin_code = person.amgCheckinResponseCode %}
@@ -11,10 +12,6 @@
   {% endif %}
   {% if person.amgCheckinResponseCode === '0B' %}
     {% set statusColor = 'no-record' %}
-  {% elif person.amgCheckinResponseCode === '0A' %}
-    {% set statusColor = 'valid-permission-to-travel' %}
-  {% elif person.amgCheckinResponseCode === '0Z' %}
-    {% set statusColor = 'authority-to-carry-granted' %}
   {% elif person.amgCheckinResponseCode === '0T' %}
     {% set statusColor = 'system-timeout' %}
   {% else %}
@@ -24,16 +21,15 @@
   <tr class="govuk-table__row">
     <td class="govuk-table__cell govuk-!-vertical-align-top">
       <div>
-        {% if statusColor %}
-          <div title="{{ statustitle }}"><span class={{statusColor}}>{{ statustitle }}</span></div>
-        {% endif %}
+
+        <div title="{{ statustitle }}"><span class={{statusColor|default("", true)}}>{{ statustitle }}</span></div>
       </div>
     </td>
     <td class="govuk-table__cell govuk-!-vertical-align-top">{{ person.firstName }}
       {{ person.lastName }}</td>
     <td class="govuk-table__cell">
       <div>
-        {% if statusColor %}
+        {% if statusColor or checkin_code %}
           {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === '0') %}
             {% if checkin_code === '0B' %}
               <p class="govuk-body">Check that this person has valid permission to travel to the UK.</p>
@@ -77,9 +73,15 @@
                   <span class="govuk-details__summary-text">Help with checking if they need permission to travel</span>
                 </summary>
                 <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
-                  <p class="govuk-body">We have no record of a digital permission, for example an electronic travel authorisation (ETA) or electronic visa (eVisa), for this person.</p>
-                  <p class="govuk-body">For British and Irish nationals, their valid passport is their permission to travel.</p>
-                  <p class="govuk-body">For all other nationals, you should check if they need permission to travel to the UK. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers" target="_blank" class="govuk-link">UK visa requirements (opens in new tab on GOV.UK).</a></p>
+                  <p class="govuk-body">
+                    We have no record of a digital permission, for example an electronic travel authorisation (ETA) or electronic visa (eVisa), for this person.
+                    </p>
+                  <p class="govuk-body">
+                    For British and Irish nationals, their valid passport is their permission to travel.
+                  </p>
+                  <p class="govuk-body">
+                    For all other nationals, you should check if they need permission to travel to the UK. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers" target="_blank" class="govuk-link">UK visa requirements (opens in new tab on GOV.UK).</a>
+                  </p>
                   <p class="govuk-body">
                    If they have no exemption or proof of physical or digital permission, you can contact the Home Office for advice by calling the Border Force Carrier Support Hub on 0300 369 0610 or +44 204 619 6020 from outside the UK.
                    </p>
@@ -132,7 +134,7 @@
   class="form-group"
   method="post"
   role="form">
-  <table class="govuk-table" id="upt-responses" style="">
+  <table class="govuk-table" id="upt-responses">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
         <th scope="col" class="govuk-table__header">Digital permission to travel</th>
@@ -142,7 +144,7 @@
     </thead>
     <tbody class="govuk-table__body">
       {% if statusCheckComplete %}
-        <div id="banner0T" class="hide-content">
+        <div id="banner0T" class="govuk-!-display-none">
           <div id="banner0T-content">
             {{ banner.notificationBannerForResponseCodes(numberOf0TResponseCodes, numberOf0BResponseCodes, showImportantBanner) }}</div>
         </div>
@@ -163,8 +165,11 @@
       {% endfor %}
     </tbody>
   </table>
-  <input type="hidden" name="resubmitted" value="{{ resubmitted }}"/> {{ pagination.build('passenger-checkin', pages, __) }} <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  <input type="hidden" name="resubmitted" value="{{ resubmitted }}"/>
+  {{ pagination.build('passenger-checkin', pages, __) }}
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 </form>
+
 <form action="/garfile/review" method="post">
   <h2 class="govuk-heading-m">Declaration</h2>
   <p class="govuk-body-m">{{ __('submit_gar_caption') }}</p>
