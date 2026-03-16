@@ -76,8 +76,6 @@ function isTwoHoursPriorDeparture(providedDate) {
   return Boolean(providedDate) && providedDate.getTime() >= twoHoursPriorDepartureDate.getTime();
 }
 
-/* global
-
 /**
  * @param {Date} providedDate
  * @return {Boolean}
