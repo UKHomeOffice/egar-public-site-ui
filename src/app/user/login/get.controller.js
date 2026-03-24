@@ -3,13 +3,7 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const {
-  ONE_LOGIN_SHOW_ONE_LOGIN,
-  NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
-  BASE_URL,
-  ONE_LOGIN_POST_MIGRATION,
-  HTTPS,
-} = require('../../../common/config');
+const { NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, HTTPS } = require('../../../common/config');
 const sendEmail = require('../../../common/services/sendEmail');
 const organisationApi = require('../../../common/services/organisationApi');
 const verifyUserService = require('../../../common/services/verificationApi');
@@ -44,7 +38,7 @@ const isUserAuthenticated = (userSessionObject) => {
 
 const sendAdminUpdateEmail = (userObj) => {
   if (!userObj.organisation) {
-    return new Promise((resolve, reject) => resolve(userObj));
+    return new Promise((resolve) => resolve(userObj));
   }
 
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((users) => {
@@ -109,8 +103,8 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
           );
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
-          return new Promise((resolve, reject) =>
-            userApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then((e) => {
+          return new Promise((resolve) =>
+            userApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then(() => {
               userData.oneLoginSid = oneLoginSid;
               return resolve(userData);
             })
@@ -172,7 +166,6 @@ module.exports = async (req, res) => {
     return res.redirect(ROUTES.HOME);
   }
 
-  const viewOnLoginPageForTest = req.query.testOneLogin === 'true';
   const cookie = new CookieModel(req);
 
   const { code } = req.query;
@@ -180,8 +173,6 @@ module.exports = async (req, res) => {
   if (!code) {
     return res.render('app/user/login/index', {
       oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
-      ONE_LOGIN_SHOW_ONE_LOGIN,
-      viewOnLoginPageForTest,
     });
   }
 
