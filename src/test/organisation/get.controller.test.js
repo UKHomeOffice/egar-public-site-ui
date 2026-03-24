@@ -11,7 +11,6 @@ const pagination = require('../../common/utils/pagination');
 const settings = require('../../common/config/index');
 const configMock = {
   ...settings,
-  ONE_LOGIN_SHOW_ONE_LOGIN: false,
 };
 const controller = require('../../app/organisation/get.controller', {
   '../../common/config/index': configMock,

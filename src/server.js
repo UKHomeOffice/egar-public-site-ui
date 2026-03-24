@@ -30,6 +30,7 @@ const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require('./common/config');
+const airports = require('./common/utils/airports');
 
 // Global constants
 const PORT = process.env.PORT || 3000;
@@ -210,9 +211,13 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
   nunjucksEnvironment.addFilter('expiryDate', nunjucksFilters.expiryDate);
+
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('nationalityList', autocompleteUtil.nationalityList);
+  nunjucksEnvironment.addGlobal('countryList', autocompleteUtil.countryList);
   nunjucksEnvironment.addGlobal('airportList', autocompleteUtil.airportList);
+  nunjucksEnvironment.addGlobal('codeToAirfield', airports.findByCode);
+
   // Just an example year two years into the future
   nunjucksEnvironment.addGlobal('futureYear', new Date().getFullYear() + 2);
   // nunjucksEnvironment.addGlobal("toDate", toDate());
@@ -233,9 +238,6 @@ function initialiseTemplateEngine(app) {
     'CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER',
     config.CARRIER_SUPPORT_HUB_INTERNATIONAL_NUMBER
   );
-
-  nunjucksEnvironment.addGlobal('ONE_LOGIN_SHOW_ONE_LOGIN', config.ONE_LOGIN_SHOW_ONE_LOGIN);
-  nunjucksEnvironment.addGlobal('ONE_LOGIN_POST_MIGRATION', config.ONE_LOGIN_POST_MIGRATION);
 
   nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
   logger.info('Set global settings for nunjucks');

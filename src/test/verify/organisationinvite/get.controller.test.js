@@ -9,15 +9,13 @@ const tokenService = require('../../../common/services/create-token');
 
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const controller = require('../../../app/verify/organisationinvite/get.controller');
-const settings = require('../../../common/config/index');
 const verifyUserService = require('../../../common/services/verificationApi');
 
 describe('Verify Organisation Invite Get Controller', () => {
   let req;
   let res;
-  let oneLoginUrlStub;
-  const oneLoginAuthUrl = settings.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'https://onelogin?code=123&state=state' : '';
-  const pathName = settings.ONE_LOGIN_SHOW_ONE_LOGIN === true ? '/verify/invite/onelogin' : '/verify/invite/';
+  const oneLoginAuthUrl = 'https://onelogin?code=123&state=state';
+  const pathName = '/verify/invite/onelogin';
   let verifyUserServiceStub;
 
   beforeEach(() => {
@@ -49,7 +47,7 @@ describe('Verify Organisation Invite Get Controller', () => {
     cookie.reset();
     cookie.initialise();
     cookie.setInviteUserToken('HashedToken123');
-    oneLoginUrlStub = sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns('https://onelogin?code=123&state=state');
+    sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns('https://onelogin?code=123&state=state');
     verifyUserServiceStub.resolves('Token is valid');
     await controller(req, res);
 

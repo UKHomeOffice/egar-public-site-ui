@@ -2,7 +2,6 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -12,7 +11,6 @@ const personApi = require('../../../common/services/personApi');
 const settings = require('../../../common/config/index');
 const configMock = {
   ...settings,
-  ONE_LOGIN_SHOW_ONE_LOGIN: false,
 };
 
 const controller = require('../../../app/user/viewDetails/get.controller', {
@@ -27,7 +25,7 @@ describe('User View Details Get Controller', () => {
   let res;
   let craftApiStub;
   let personApiStub;
-  const indexPage = settings.ONE_LOGIN_SHOW_ONE_LOGIN ? 'app/user/viewDetails/index' : 'app/user/viewDetails/old_index';
+  const indexPage = 'app/user/viewDetails/index';
 
   beforeEach(() => {
     chai.use(sinonChai);

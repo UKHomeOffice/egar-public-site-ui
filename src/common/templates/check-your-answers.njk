@@ -24,13 +24,13 @@
     </div>
   {% endmacro %}
 
-  {% macro check_your_answers_row_port_code(id, label, value) %}
-    {% if value.length > 4 %}
+  {% macro check_your_answers_row_port_code(id, label, detail) %}
+    {% if detail.value.length > 4 %}
       {# Hide the row #}
     {% else %}
       <div class="app-check-your-answers__contents">
         <dt id="{{ id }}-label" class="app-check-your-answers__question">{{ label }}</dt>
-        <dd id="{{ id }}-value" class="app-check-your-answers__answer">{{ value }}</dd>
+        <dd id="{{ id }}-value" class="app-check-your-answers__answer">{{ detail.label }}</dd>
       </div>
     {% endif %}
 
@@ -52,7 +52,7 @@
   <dl class="app-check-your-answers app-check-your-answers--short">
     {{ check_your_answers_row(__('field_departure_date'), garfile.departureDate, id="departureDate") }}
     {{ check_your_answers_row(__('field_departure_time'), garfile.departureTime, id="departureTime") }}
-    {{ check_your_answers_row_port_code('departurePort', __('field_departure_port'), garfile.departurePort) }}
+    {{ check_your_answers_row_port_code('departurePort', __('field_departure_port'), codeToAirfield(garfile.departurePort) ) }}
     {{ check_your_answers_row_coordinates('departureCoordinates', __('field_departure_coordinates'), garfile.departureLat, garfile.departureLong, __) }}
   </dl>
 
@@ -77,7 +77,7 @@
   <dl class="app-check-your-answers app-check-your-answers--short">
     {{ check_your_answers_row(__('field_arrival_date'), garfile.arrivalDate) }}
     {{ check_your_answers_row(__('field_arrival_time'), garfile.arrivalTime) }}
-    {{ check_your_answers_row_port_code('arrivalPort', __('field_arrival_port'), garfile.arrivalPort) }}
+    {{ check_your_answers_row_port_code('arrivalPort', __('field_arrival_port'), codeToAirfield(garfile.arrivalPort)) }}
     {{ check_your_answers_row_coordinates('arrivalCoordinates', __('field_arrival_coordinates'), garfile.arrivalLat, garfile.arrivalLong, __) }}
   </dl>
 
@@ -100,7 +100,7 @@
   <dl class="app-check-your-answers app-check-your-answers--short">
     {{ check_your_answers_row(__('field_aircraft_registration'), garfile.registration) }}
     {{ check_your_answers_row(__('field_aircraft_type'), garfile.craftType) }}
-    {{ check_your_answers_row(__('field_aircraft_base'), garfile.craftBase) }}
+    {{ check_your_answers_row(__('field_aircraft_base'), codeToAirfield(garfile.craftBase).label) }}
   </dl>
 
   <dl id="manifest" class="app-check-your-answers margin-bottom-10">
@@ -120,11 +120,11 @@
         <p class="govuk-body" style="padding-top: {% if viewGuidance and isResubmitted === true %} 5% {% else %} 3% {% endif %};font-size: 1.1875rem;">
           {{__('guidance') | safe}}
         </p>
-       
+
       {% if (garfile.status.name === 'Submitted' and numberOf0TResponseCodes > 0 and (durationInDeparture < 125 or isResubmitted === true))  %}
         <div class="box-left-grey-border">
           <div class="email-text">
-           <p class="govuk-body"> 
+           <p class="govuk-body">
             <span class="system-timeout">System time out</span>
            </p>
             <p class="govuk-body">This individual may be boarded.</p>
@@ -179,7 +179,7 @@
                       {% endif %}
                       <td class="govuk-table__cell">
                           <div class="{{statusColor}}">{{__('amg_status_check_response_code_' + person.amgCheckinResponseCode)if person.amgCheckinResponseCode}}</div>
-                      </td>  
+                      </td>
                       {% endif%}
                     </tr>
                     <tr class="govuk-table__row">
@@ -226,13 +226,13 @@
             {% endif %}
             <dl class="app-check-your-answers app-check-your-answers--short">
               {{ check_your_answers_row(
-                  __('is_military_flight'), 
+                  __('is_military_flight'),
                   "Yes" if garfile.isMilitaryFlight else "No"
-                ) 
+                )
               }}
             </dl>
   </dl>
-            
+
           </div>
 
           <dl id="responsiblePerson" class="app-check-your-answers app-check-your-answers--short margin-bottom-10">
@@ -364,5 +364,5 @@
               {% endif %}
             </tbody>
           </table>
-          
+
         </div>

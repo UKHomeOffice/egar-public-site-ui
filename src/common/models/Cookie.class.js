@@ -224,6 +224,7 @@ class Cookie {
     this.session.gar.voyageArrival.arrivalTime = arrivalJourney.arrivalTime;
 
     this.session.gar.voyageArrival.arrivalPort = arrivalJourney.arrivalPort;
+    this.session.gar.voyageArrival.arrivalPortDesc = arrivalJourney.arrivalPortDesc;
     this.session.gar.voyageArrival.arrivalLong = arrivalJourney.arrivalLong;
     this.session.gar.voyageArrival.arrivalLat = arrivalJourney.arrivalLat;
 
@@ -244,6 +245,7 @@ class Cookie {
     this.session.gar.voyageDeparture.departureLat = departureJourney.departureLat;
     this.session.gar.voyageDeparture.departureLong = departureJourney.departureLong;
     this.session.gar.voyageDeparture.departurePortChoice = departureJourney.departurePortChoice;
+    this.session.gar.voyageDeparture.departurePortDesc = departureJourney.departurePortDesc;
   }
 
   getGarDepartureVoyage() {
@@ -790,6 +792,7 @@ class Cookie {
       voyageObj[`${type}Time`] || this.generateTime(voyageObj[`${type}Hour`], voyageObj[`${type}Minute`]);
 
     voyage[`${type}Port`] = voyageObj[`${type}Port`];
+    voyage[`${type}PortDesc`] = voyageObj[`${type}PortDesc`];
     voyage[`${type}Long`] = trimToDecimalPlaces(voyageObj[`${type}Long`], 6);
     voyage[`${type}Lat`] = trimToDecimalPlaces(voyageObj[`${type}Lat`], 6);
 

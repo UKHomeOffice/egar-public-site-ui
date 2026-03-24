@@ -1,4 +1,4 @@
-const { nanoid, getRolesForAssigning} = require('../../../common/utils/utils');
+const { nanoid, getRolesForAssigning } = require('../../../common/utils/utils');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -52,11 +52,8 @@ module.exports = (req, res) => {
             return;
           }
           // API call successful
-          let notifyTemplate = config.NOTIFY_INVITE_TEMPLATE_ID;
 
-          if (config.ONE_LOGIN_SHOW_ONE_LOGIN || config.ONE_LOGIN_POST_MIGRATION) {
-            notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
-          }
+          const notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
 
           emailService
             .send(notifyTemplate, inviteeEmail, {

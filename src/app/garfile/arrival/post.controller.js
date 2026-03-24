@@ -4,6 +4,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const airportValidation = require('../../../common/utils/airportValidation');
+const { findByCode } = require('../../../common/utils/airports');
 
 const performAPICall = (cookie, buttonClicked, res) => {
   garApi
@@ -115,6 +116,9 @@ module.exports = async (req, res) => {
   if (voyage.portChoice === 'Yes') {
     voyage.arrivalLat = '';
     voyage.arrivalLong = '';
+    const port = findByCode(voyage.arrivalPort);
+    voyage.arrivalPortDesc = port?.name || null;
+    voyage.arrivalPort = port?.value || '';
   } else {
     voyage.arrivalPort = `${voyage.arrivalLat} ${voyage.arrivalLong}`;
   }
