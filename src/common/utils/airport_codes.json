@@ -56467,5 +56467,26 @@
     "british": false,
     "crownDependency": false,
     "label": "Oil Rig/Offshore Installation (International Waters) (ZZZR)"
+  },
+  {
+    "id": "KLCI",
+    "id2": "LCI",
+    "british": false,
+    "crownDependency": false,
+    "label": "Laconia Municipal Airport (KLCI)"
+  },
+  {
+    "id": "OERS",
+    "id2": "RSI",
+    "british": false,
+    "crownDependency": false,
+    "label": "Red Sea International Airport (OERS)"
+  },
+  {
+    "id": "HLMS",
+    "id2": "MRA",
+    "british": false,
+    "crownDependency": false,
+    "label": "Misrata Airport (HLMS)"
   }
 ]
