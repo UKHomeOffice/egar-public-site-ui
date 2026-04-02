@@ -56473,21 +56473,21 @@
     "id2": "LCI",
     "british": false,
     "crownDependency": false,
-    "label": "Laconia Municipal Airport (KLCI / LCI)"
+    "label": "Laconia Municipal Airport (United States) (KLCI / LCI)"
   },
   {
     "id": "OERS",
     "id2": "RSI",
     "british": false,
     "crownDependency": false,
-    "label": "Red Sea International Airport (OERS / RSI)"
+    "label": "Red Sea International Airport (Saudi Arabia) (OERS / RSI)"
   },
   {
     "id": "HLMS",
     "id2": "MRA",
     "british": false,
     "crownDependency": false,
-    "label": "Misrata Airport (HLMS / MRA)"
+    "label": "Misrata Airport (Libya) (HLMS / MRA)"
   },
   {
     "id": "VNPR",
