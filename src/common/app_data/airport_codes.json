@@ -61040,6 +61040,18 @@
     "crownDependency": false
   },
   {
+    "id": "c5668d13370ad4f708e627ade349b98b4eabeca15f297956af82f9c5dd64fd1a",
+    "name": "Laconia Municipal Airport",
+    "label": "Laconia Municipal Airport (LCI / KLCI)",
+    "iata": "LCI",
+    "icao": "KLCI",
+    "otherCodes": null,
+    "value": "LCI",
+    "designated": false,
+    "british": false,
+    "crownDependency": false
+  },
+  {
     "id": "c7e95f1cb3ad5ce03874a92855ced02896298a321ef7365b28186c9414754ff8",
     "name": "Łódź Władysław Reymont Airport",
     "label": "Łódź Władysław Reymont Airport (LCJ / EPLL)",
@@ -72055,6 +72067,18 @@
     "icao": "KMQY",
     "otherCodes": null,
     "value": "MQY",
+    "designated": false,
+    "british": false,
+    "crownDependency": false
+  },
+  {
+    "id": "e406f2a63e6cdf2dce79b4d9fcb31e82b8d953fb454f342a70bd3cce65e3e3bf",
+    "name": "Misrata Airport",
+    "label": "Misrata Airport (MRA / HLMS)",
+    "iata": "MRA",
+    "icao": "HLMS",
+    "otherCodes": null,
+    "value": "MRA",
     "designated": false,
     "british": false,
     "crownDependency": false
@@ -88373,6 +88397,18 @@
     "icao": "PARS",
     "otherCodes": null,
     "value": "RSH",
+    "designated": false,
+    "british": false,
+    "crownDependency": false
+  },
+  {
+    "id": "2ef914211fa2e7efc13e4803cbe75448115a04942ead217acf5c3ec259c0516c",
+    "name": "Red Sea International Airport",
+    "label": "Red Sea International Airport (RSI / OERS)",
+    "iata": "RSI",
+    "icao": "OERS",
+    "otherCodes": null,
+    "value": "RSI",
     "designated": false,
     "british": false,
     "crownDependency": false
