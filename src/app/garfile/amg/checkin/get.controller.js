@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
       pagination.setCurrentPage(req, '/garfile/amg/checkin', 1);
     }
 
-    console.log(await garApi.getGarCheckinProgress(garId));
     const { progress } = JSON.parse(await garApi.getGarCheckinProgress(garId));
     if ('poll' in req.query) {
       logger.info(`User GAR ${garId}: Checkin progress status is ${progress}`);
@@ -29,7 +28,6 @@ module.exports = async (req, res) => {
     }
     Promise.all([garApi.get(garId), garApi.getPeople(garId, currentPage), garApi.getSupportingDocs(garId)])
       .then(async (apiResponse) => {
-        console.log(apiResponse);
         const garfile = JSON.parse(apiResponse[0]);
         const garpeople = JSON.parse(apiResponse[1]);
         const garsupportingdocs = JSON.parse(apiResponse[2]);
