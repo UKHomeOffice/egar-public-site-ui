@@ -56467,5 +56467,33 @@
     "british": false,
     "crownDependency": false,
     "label": "Oil Rig/Offshore Installation (International Waters) (ZZZR)"
+  },
+  {
+    "id": "KLCI",
+    "id2": "LCI",
+    "british": false,
+    "crownDependency": false,
+    "label": "Laconia Municipal Airport (United States) (KLCI / LCI)"
+  },
+  {
+    "id": "OERS",
+    "id2": "RSI",
+    "british": false,
+    "crownDependency": false,
+    "label": "Red Sea International Airport (Saudi Arabia) (OERS / RSI)"
+  },
+  {
+    "id": "HLMS",
+    "id2": "MRA",
+    "british": false,
+    "crownDependency": false,
+    "label": "Misrata Airport (Libya) (HLMS / MRA)"
+  },
+  {
+    "id": "VNPR",
+    "id2": "PHH",
+    "british": false,
+    "crownDependency": false,
+    "label": "Pokhara International Airport (Nepal) (VNPR / PHH)"
   }
 ]
