@@ -116,9 +116,10 @@ module.exports = async (req, res) => {
   if (voyage.portChoice === 'Yes') {
     voyage.arrivalLat = '';
     voyage.arrivalLong = '';
-    const port = findByCode(voyage.arrivalPort);
-    voyage.arrivalPortDesc = port?.name || null;
-    voyage.arrivalPort = port?.value || '';
+    // NOTE: Comment this out when we finally have the new Airport list ready.
+    // const port = findByCode(voyage.arrivalPort);
+    // voyage.arrivalPortDesc = port?.name || port?.name || null;
+    // voyage.arrivalPort = port?.value || '';
   } else {
     voyage.arrivalPort = `${voyage.arrivalLat} ${voyage.arrivalLong}`;
   }
