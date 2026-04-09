@@ -78,10 +78,6 @@ function trimWhitespace(aStr) {
   return typeof aStr !== 'string' ? aStr : aStr.trim();
 }
 
-function validateInputDate(text) {
-  return typeof text !== 'string' ? text : text.replace(/(\d{2})\\(\d{2})\\(\d{4})/).split('.');
-}
-
 module.exports = {
   transformPerson,
   titleCase,
@@ -90,6 +86,5 @@ module.exports = {
   strToBytes,
   unknownToUnspecified,
   toUpper,
-  trimWhitespace,
-  validateInputDate,
+  trimWhitespace
 };

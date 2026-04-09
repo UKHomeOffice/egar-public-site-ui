@@ -11,6 +11,7 @@ const { validations } = require('./validations');
 const transformers = require('../../../common/utils/transformers');
 const { ExcelParser } = require('../../../common/utils/excelParser');
 const clamAVService = require('../../../common/services/clamAVService');
+const { findByCode } = require('../../../common/utils/airports');
 
 const checkFileIsExcel = (req, res) => {
   if (req.file) {
@@ -63,13 +64,10 @@ const checkFileIsGAR = (req, res, worksheet) => {
 // Define cell configurations for ExcelParser and parse from file read into memory
 const cellMap = {
   arrivalPort: { location: 'B3', transform: [transformers.trimWhitespace] },
-  arrivalDate: {
-    location: 'D3',
-    transform: [transformers.validateInputDate]
-  },
+  arrivalDate: { location: 'D3' },
   arrivalTime: { location: 'F3', raw: true },
   departurePort: { location: 'B4', transform: [transformers.trimWhitespace] },
-  departureDate: { location: 'D4', transform: [transformers.validateInputDate] },
+  departureDate: { location: 'D4' },
   departureTime: { location: 'F4', raw: true },
   registration: { location: 'B5', raw: true },
   craftType: { location: 'D5', raw: true },
@@ -90,16 +88,10 @@ const manifestMap = {
     location: 'G',
     transform: [transformers.upperCamelCase, transformers.unknownToUnspecified],
   },
-  dateOfBirth: {
-    location: 'H',
-    transform: [transformers.validateInputDate]
-  },
+  dateOfBirth: { location: 'H' },
   placeOfBirth: { location: 'I' },
   nationality: { location: 'J', transform: [transformers.toUpper] },
-  documentExpiryDate: {
-    location: 'K',
-    transform: [transformers.validateInputDate]
-  },
+  documentExpiryDate: { location: 'K' }
 };
 
 // Mappings for the rows representing crew
@@ -191,7 +183,10 @@ module.exports = async (req, res) => {
 
             const crewUpdate = garApi.patch(garId, 'Draft', { people: crew });
             const passengerUpdate = garApi.patch(garId, 'Draft', { people: passengers });
-            const voyageUpdate = garApi.patch(garId, 'Draft', voyageParser.parse());
+            const voyageParsed = voyageParser.parse();
+            voyageParsed['departurePortDesc'] = findByCode(voyageParsed.departurePort)?.name || '';
+            voyageParsed['arrivalPortDesc'] = findByCode(voyageParsed.arrivalPort)?.name || '';
+            const voyageUpdate = garApi.patch(garId, 'Draft', voyageParsed);
 
             Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
               .then(() => {
