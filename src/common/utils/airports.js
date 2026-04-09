@@ -51,6 +51,7 @@ function buildIndex(list) {
 }
 
 // This is cached at module level per node process to speed up lookup.
+// eslint-disable-next-line no-unused-vars
 const codeIndex = buildIndex(airports);
 
 /**
@@ -61,11 +62,8 @@ const codeIndex = buildIndex(airports);
 function findByCode(code) {
   if (!code) return null;
   const item = airportList.find((item) => code === item.id || code === item.id2);
-  console.log(item);
 
   return item || null;
-
-  // return codeIndex.get(normCode(code)) || null;
 }
 
 /**
