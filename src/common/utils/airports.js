@@ -1,6 +1,7 @@
 // Simple implementation without mtime-based caching or file watching.
 // Load the dataset once via require (Node caches JSON modules per process).
 const airports = require('../app_data/airport_codes.json');
+const airportList = require('./airport_codes.json');
 
 function normCode(v) {
   if (v === null || v === undefined) return '';
@@ -59,7 +60,12 @@ const codeIndex = buildIndex(airports);
  */
 function findByCode(code) {
   if (!code) return null;
-  return codeIndex.get(normCode(code)) || null;
+  const item = airportList.find((item) => code === item.id || code === item.id2);
+  console.log(item);
+
+  return item || null;
+
+  // return codeIndex.get(normCode(code)) || null;
 }
 
 /**
