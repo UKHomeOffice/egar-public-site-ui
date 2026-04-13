@@ -57,7 +57,7 @@ steps:
       IMAGE_NAME: egar-public-site-ui:${DRONE_COMMIT}
       IGNORE_UNFIXED: true
     depends_on:
-    - build
+    - publish-to-ecr
 
   - name: sonar-scan
     pull: if-not-exists
