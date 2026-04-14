@@ -8,24 +8,11 @@ platform:
   arch: amd64
 
 steps:
-  - name: publish-to-ecr
-    image: plugins/ecr
-    settings:
-      access_key:
-        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_ACCESS_KEY_ID
-      secret_key:
-        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_SECRET_ACCESS_KEY
-      region: eu-west-2
-      repo: egar/public-site-ui
-      registry: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
-      tags:
-        - ${DRONE_COMMIT_SHA}
-    when:
-      event:
-        - push
-      branch:
-        - main
-        - dev
+  - name: build
+    pull: if-not-exists
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
+    commands:
+      - source ./ops/image_build.sh
 
   - name: unit-test
     pull: if-not-exists
@@ -44,6 +31,25 @@ steps:
     - cd src
     - npm install
     - npm run check
+
+  - name: publish-to-ecr
+    image: plugins/ecr
+    settings:
+      access_key:
+        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_ACCESS_KEY_ID
+      secret_key:
+        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_SECRET_ACCESS_KEY
+      region: eu-west-2
+      repo: egar/public-site-ui
+      registry: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
+      tags:
+        - ${DRONE_COMMIT_SHA}
+    when:
+      event:
+        - push
+      branch:
+        - main
+        - dev
 
   - name: trivy-scan-image
     pull: always
