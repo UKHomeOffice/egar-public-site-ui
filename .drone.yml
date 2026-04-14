@@ -43,7 +43,7 @@ steps:
       repo: egar/public-site-ui
       registry: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
       tags:
-        - ${DRONE_COMMIT_SHA}
+        - ${DRONE_COMMIT}
     when:
       event:
         - push
