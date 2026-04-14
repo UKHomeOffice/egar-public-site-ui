@@ -1,10 +1,7 @@
-
-
 ---
 kind: pipeline
 name: build-push-scan
 type: kubernetes
-
 
 platform:
   os: linux
@@ -16,27 +13,6 @@ steps:
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
     commands:
       - source ./ops/image_build.sh
-
-  - name: push
-    pull: if-not-exists
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
-    environment:
-      AWS_ACCESS_KEY_ID:
-        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_ACCESS_KEY_ID
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_SECRET_ACCESS_KEY
-      DOCKER_REGISTRY_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
-      REPO: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui
-    commands:
-      - source ./ops/image_push.sh
-    depends_on:
-      - build
-    when:
-      event:
-        - push
-      branch:
-        - main
-        - dev
 
   - name: unit-test
     pull: if-not-exists
@@ -55,6 +31,25 @@ steps:
     - cd src
     - npm install
     - npm run check
+
+  - name: publish-to-ecr
+    image: plugins/ecr
+    settings:
+      access_key:
+        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_ACCESS_KEY_ID
+      secret_key:
+        from_secret: DEV_EGAR_PUBLIC_SITE_UI_AWS_SECRET_ACCESS_KEY
+      region: eu-west-2
+      repo: egar/public-site-ui
+      registry: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
+      tags:
+        - ${DRONE_COMMIT}
+    when:
+      event:
+        - push
+      branch:
+        - main
+        - dev
 
   - name: trivy-scan-image
     pull: always
