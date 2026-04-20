@@ -17,5 +17,11 @@ const containsError = (array, value) => {
   return result.length > 0 && { text: result[0].message };
 };
 
+const expiryDate = () => {
+  const today = new Date();
+  return today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+};
+
 exports.uncamelCase = uncamelCase;
 exports.containsError = containsError;
+exports.expiryDate = expiryDate;

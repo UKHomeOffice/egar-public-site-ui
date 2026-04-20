@@ -86,8 +86,6 @@ exports.ONE_LOGIN_INTEGRATION_URL = process.env.ONE_LOGIN_INTEGRATION_URL;
 exports.ONE_LOGIN_REDIRECT_URI = process.env.ONE_LOGIN_REDIRECT_URI;
 exports.ONE_LOGIN_LOGOUT_URL = process.env.ONE_LOGIN_LOGOUT_URL;
 exports.ONE_LOGIN_PUBLIC_KEY = process.env.ONE_LOGIN_PUBLIC_KEY;
-exports.ONE_LOGIN_POST_MIGRATION = process.env.ONE_LOGIN_POST_MIGRATION === 'true';
-exports.ONE_LOGIN_SHOW_ONE_LOGIN = process.env.ONE_LOGIN_SHOW_ONE_LOGIN === 'true';
 exports.ONE_LOGIN_ACCOUNT_URL = process.env.ONE_LOGIN_ACCOUNT_URL;
 exports.IS_HTTPS_SERVER = process.env.BASE_URL ? !process.env.BASE_URL.startsWith('http://localhost') : true;
 exports.SAME_SITE_VALUE = this.IS_HTTPS_SERVER ? 'None' : 'Lax';

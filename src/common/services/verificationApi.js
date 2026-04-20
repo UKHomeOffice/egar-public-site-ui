@@ -38,8 +38,12 @@ module.exports = {
   getUserInviteToken(email) {
     return new Promise((resolve, reject) => {
       const url = new URL(endpoints.verifyUser());
-      url.searchParams.append('invitee_email', email);
-      logger.info('Sending request to API to verify token');
+      url.search = new URLSearchParams({
+        invitee_email: email,
+        service: 'sgar',
+      });
+
+      logger.info('Sending request to API to verify token using email');
       request.get(
         {
           url: url.toString(),
@@ -64,7 +68,7 @@ module.exports = {
       return await new Promise((resolve, reject) => {
         const url = new URL(endpoints.verifyUser());
         url.searchParams.append('token_id', tokenId);
-        logger.info('Sending request to API to verify token');
+        logger.info('Sending request to API to verify token using token id');
         request.get(
           {
             url: url.toString(),

@@ -22,9 +22,8 @@ describe('Organisation Assign Role Post Controller', () => {
   let tokenServiceStub;
   let tokenApiStub;
   let emailServiceStub;
-  const TEMPLATE_ID =
-    config.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID' : 'NOTIFY_INVITE_TEMPLATE_ID';
-  const indexPage = config.ONE_LOGIN_SHOW_ONE_LOGIN === true ? 'onelogin_page' : 'old_invite_page';
+  const TEMPLATE_ID = 'NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID';
+  const indexPage = 'onelogin_page';
 
   beforeEach(() => {
     chai.use(sinonChai);

@@ -171,7 +171,6 @@ module.exports = async (req, res) => {
     return res.redirect(ROUTES.HOME);
   }
 
-  const viewOnLoginPageForTest = req.query.testOneLogin === 'true';
   const cookie = new CookieModel(req);
 
   const { code } = req.query;
@@ -179,8 +178,6 @@ module.exports = async (req, res) => {
   if (!code) {
     return res.render('app/user/login/index', {
       oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
-      ONE_LOGIN_SHOW_ONE_LOGIN,
-      viewOnLoginPageForTest,
     });
   }
 

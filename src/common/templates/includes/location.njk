@@ -131,6 +131,7 @@
         {{ m.hint(prefix + 'Port', __('field_port_hint')) }}
         {{ m.error_message(prefix + 'Port', errors, __) }}
         <select id="{{ prefix }}Port" name="{{ prefix }}Port" class="govuk-select" value="{{ portCode }}" aria-labelledby="{{ prefix }}Port-label" aria-describedby="{{ prefix }}Port-hint{{ ' ' + prefix  +'Port-error' if errors | containsError(prefix + 'Port') }}">
+            <option value=""></option>
             {% for airport in airportList | sort(attribute = 'label') %}
                 <option value="{{ airport.id }}" {{ 'selected=selected' if portCode in [airport.id, airport.id2] }}>{{ airport.label }}</option>
             {% endfor %}
