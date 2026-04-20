@@ -116,7 +116,7 @@ const verifyJwt = (idToken, nonce, callback) => {
   } catch (error) {
     logger.error(`Failed to verify oneLogin token: ${error}`);
     //TODO implement metrics
-    // CountLoginError();
+    //CountLoginError();
     throw error;
   }
 };

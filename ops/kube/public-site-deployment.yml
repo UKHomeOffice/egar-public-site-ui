@@ -4,6 +4,9 @@ kind: Deployment
 metadata:
   name: public-site
   namespace: {{ .KUBE_NAMESPACE }}
+  annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: 3000
 spec:
   selector:
     matchLabels:
