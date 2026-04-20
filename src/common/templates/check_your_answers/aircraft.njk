@@ -16,7 +16,7 @@
   rows: [
     { key: { html: __('field_aircraft_registration') }, value: { html: garfile.registration or '' } },
     { key: { html: __('field_aircraft_type') }, value: { html: garfile.craftType or '' } },
-    { key: { html: __('field_aircraft_base') }, value: { html: garfile.craftBase or '' } }
+    { key: { html: __('field_aircraft_base') }, value: { html: codeToAirfield(garfile.craftBase).label or '' } }
   ]
 }) }}
 

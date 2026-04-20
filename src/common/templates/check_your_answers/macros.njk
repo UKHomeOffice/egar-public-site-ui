@@ -31,7 +31,7 @@
 
   {% if garfile[prefix + 'Port'] %}
     {% set rows = rows.concat([
-      { key: { html: __( 'field_' ~ prefix ~ '_port' ) }, value: { html: garfile[prefix + 'Port'] } }
+      { key: { html: __( 'field_' ~ prefix ~ '_port' ) }, value: { html: codeToAirfield(garfile[prefix + 'Port']).label } }
     ]) %}
   {% endif %}
 
