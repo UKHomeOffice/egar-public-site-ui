@@ -4,7 +4,6 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const { findByCode } = require('../../../common/utils/airports');
 
 const createValidationChains = (voyage) => {
   // Create validation input objs
