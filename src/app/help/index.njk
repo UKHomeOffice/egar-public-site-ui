@@ -37,8 +37,8 @@ GAR | Help
       You are required to complete a GAR prior to your departure. Please follow this link for more
       <a class="govuk-link" href="{{__('gar_form_link')}}">information</a>.
       </p>
-      <h2 class="govuk-heading-m">Passenger Support</h2>
 
+      <h2 class="govuk-heading-m">General guidance</h2>
       <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary" aria-controls="details-content-documents" aria-expanded="false" title="Checking Passport / Travel Documents">
           <span class="govuk-details__summary-text">Checking Passport / Travel Documents</span>
@@ -96,9 +96,11 @@ GAR | Help
       </div>
       </details>
 
+
+      <h2 class="govuk-heading-m"> Passport and travel document guidance</h2>
       <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary" aria-controls="details-content-documents" aria-expanded="false" title="Checking Passport / Travel Documents">
-          <span class="govuk-details__summary-text">Authority to Carry</span>
+        <summary class="govuk-details__summary" aria-controls="details-content-documents" aria-expanded="false">
+          <span class="govuk-details__summary-text">Checking passport or travel documents</span>
         </summary>
         <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
           <p>
@@ -110,12 +112,13 @@ GAR | Help
             </p>
         </div>
       </details>
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary" aria-controls="details-content-response-messages" aria-expanded="false" title="Response Messages">
-          <span class="govuk-details__summary-text">Response Messages</span>
-        </summary>
-        <div class="govuk-details__text" id="details-content-response-messages" aria-hidden="true">
 
+      <h2 class="govuk-heading-m">Permission to travel guidance</h2>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary" aria-controls="details-content-checking-permission" aria-expanded="false">
+          <span class="govuk-details__summary-text">Checking permission to travel</span>
+        </summary>
+        <div class="govuk-details__text" id="details-content-checking-permission" aria-hidden="true">
           <p class="govuk-body-m">
           UPT Response Messages have now been introduced to sGAR. These messages will confirm whether an individual has a valid permission to travel or
           if a manual check for a physical immigration or exemption document, or an online check using the sharecode function on an individual’s
@@ -175,13 +178,11 @@ GAR | Help
           </table>
         </div>
       </details>
-
-      <h2 class="govuk-heading-m">Technical Support</h2>
       <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary" aria-controls="details-content-general-support" aria-expanded="false" title="Checking Passport / Travel Documents">
-          <span class="govuk-details__summary-text">General Support</span>
+        <summary class="govuk-details__summary" aria-controls="details-content-authority-to-carry" aria-expanded="false">
+          <span class="govuk-details__summary-text">Authority to Carry</span>
         </summary>
-        <div class="govuk-details__text" id="details-content-general-support" aria-hidden="true">
+        <div class="govuk-details__text" id="details-content-authority-to-carry" aria-hidden="true">
           <p class="govuk-body-m">
             {{ nonTechincalUPTQueries() }}
           </p>
@@ -192,15 +193,26 @@ GAR | Help
         </div>
       </details>
 
+      <h2 class="govuk-heading-m">Support</h2>
       <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary" aria-controls="details-content-emergencies" aria-expanded="false" title="Checking Passport / Travel Documents">
-          <span class="govuk-details__summary-text">Exceptional Circumstances</span>
+        <summary class="govuk-details__summary" aria-controls="details-content-general-support" aria-expanded="false">
+          <span class="govuk-details__summary-text">General support</span>
         </summary>
-        <div class="govuk-details__text" id="details-content-general-emergencies" aria-hidden="true">
-
+        <div class="govuk-details__text" id="details-content-general-support" aria-hidden="true">
           <p class="govuk-body-m">
-            If, due to bad weather or technical issues, a flight is forced to change its arrival location in-flight, the following process may be followed:
+            {% if isLoggedIn %}
+              For non-technical permission to travel related queries, please contact the UK Border Force Carrier Support Hub on 0300 369 0610 or +44 204 619 6020 from outside the UK.
+            {% else %}
+              For non-technical permission to travel related queries, please contact the UK Border Force Carrier Support Hub.
+            {% endif %}
           </p>
+        </div>
+      </details>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary" aria-controls="details-content-technical-support" aria-expanded="false">
+          <span class="govuk-details__summary-text">Technical support</span>
+        </summary>
+        <div class="govuk-details__text" id="details-content-technical-support" aria-hidden="true">
           <p class="govuk-body-m">
             Provided it is practicable to do so, the change may be notified to the HMRC National Co-ordination Unit (NCU) by calling +44 300 123 2012.
             If this is not possible, the pilot must divert to the alternative customs and excise designated aerodrome specified on the flight plan.
@@ -219,6 +231,22 @@ GAR | Help
           </p>
         </div>
       </details>
+
+      <h2 class="govuk-heading-m" id="one-login-sms-issues">Help resolving the GOV.UK One Login international SMS Issue</h2>
+      <p class="govuk-body">
+        Some international users are currently unable to receive security codes by SMS from GOV.UK One Login to sign in to the Submit a GAR service. If you are experiencing this issue, you can resolve it in one of the following ways:
+      </p>
+
+      <h3 class="govuk-heading-s">Change the way you receive security codes</h3>
+      <p class="govuk-body-m"><a href="https://home.account.gov.uk/contact-gov-uk-one-login" class="govuk-link" target="_blank">Contact the GOV.UK One Login support team (opens in new tab on GOV.UK)</a> to change the method that you use to receive security codes to sign in from SMS to an authenticator app. They will do this by deleting and recreating your account with your existing email.</p>
+      <p class="govuk-body-m">This option will not delete your Submit a GAR account and you will keep all of the information in your account. </p>
+      <p class="govuk-body-m">This process can take between 3 and 5 days.</p>
+      <p class="govuk-body-m">Once your account has been recreated, you’ll need to contact the Submit a GAR support team to relink your account by email at <a href="mailto:GARSupport@Homeoffice.gov.uk">GARSupport@Homeoffice.gov.uk</a>.</p>
+
+      <h3 class="govuk-heading-s">Create a new account</h3>
+      <p class="govuk-body-m">Create a new GOV.UK One Login account using a different email address and choose the authenticator app option for receiving security codes.</p>
+      <p class="govuk-body-m">This will create a new account for you on the Submit a GAR service. You will not have access to your existing Submit a GAR account.</p>
+      <p class="govuk-body-m">You will be able to submit a GAR as soon as your new account has been created.</p>
     </div>
   </div>
 

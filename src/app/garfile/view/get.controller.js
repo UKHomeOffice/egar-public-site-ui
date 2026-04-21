@@ -30,6 +30,7 @@ const checkGARUser = (parsedGar, userId, organisationId) => {
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
+  let renderContext = {};
   logger.debug('In garfile/view get controller');
 
   let { garId } = req.body;
@@ -41,7 +42,6 @@ module.exports = async (req, res) => {
     res.redirect('/home');
     return;
   }
-  let renderContext;
 
   try {
     cookie.setGarId(garId);

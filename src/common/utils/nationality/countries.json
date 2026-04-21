@@ -1,0 +1,1843 @@
+{
+  "ABW": {
+    "code": "ABW",
+    "name": "Aruba",
+    "label": "Aruba (ABW)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "AFG": {
+    "code": "AFG",
+    "name": "Afghanistan",
+    "label": "Afghanistan (AFG)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "AGO": {
+    "code": "AGO",
+    "name": "Angola",
+    "label": "Angola (AGO)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "AIA": {
+    "code": "AIA",
+    "name": "Anguilla",
+    "label": "Anguilla (AIA)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "ALA": {
+    "code": "ALA",
+    "name": "Aland Islands",
+    "label": "Aland Islands (ALA)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "ALB": {
+    "code": "ALB",
+    "name": "Albania",
+    "label": "Albania (ALB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "AND": {
+    "code": "AND",
+    "name": "Andorra",
+    "label": "Andorra (AND)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ANT": {
+    "code": "ANT",
+    "name": "Netherlands Antilles",
+    "label": "Netherlands Antilles (ANT)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "ARE": {
+    "code": "ARE",
+    "name": "United Arab Emirates",
+    "label": "United Arab Emirates (ARE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ARG": {
+    "code": "ARG",
+    "name": "Argentina",
+    "label": "Argentina (ARG)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ARM": {
+    "code": "ARM",
+    "name": "Armenia",
+    "label": "Armenia (ARM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ASM": {
+    "code": "ASM",
+    "name": "American Samoa",
+    "label": "American Samoa (ASM)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "ATA": {
+    "code": "ATA",
+    "name": "Antarctica",
+    "label": "Antarctica (ATA)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "ATF": {
+    "code": "ATF",
+    "name": "French Southern Territories",
+    "label": "French Southern Territories (ATF)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "ATG": {
+    "code": "ATG",
+    "name": "Antigua and Barbuda",
+    "label": "Antigua and Barbuda (ATG)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "AUS": {
+    "code": "AUS",
+    "name": "Australia",
+    "label": "Australia (AUS)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "AUT": {
+    "code": "AUT",
+    "name": "Austria",
+    "label": "Austria (AUT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "AZE": {
+    "code": "AZE",
+    "name": "Azerbaijan",
+    "label": "Azerbaijan (AZE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BDI": {
+    "code": "BDI",
+    "name": "Burundi",
+    "label": "Burundi (BDI)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BEL": {
+    "code": "BEL",
+    "name": "Belgium",
+    "label": "Belgium (BEL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BEN": {
+    "code": "BEN",
+    "name": "Benin",
+    "label": "Benin (BEN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BES": {
+    "code": "BES",
+    "name": "Bonaire",
+    "label": "Bonaire (BES)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "BFA": {
+    "code": "BFA",
+    "name": "Burkina Faso",
+    "label": "Burkina Faso (BFA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BGD": {
+    "code": "BGD",
+    "name": "Bangladesh",
+    "label": "Bangladesh (BGD)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BGR": {
+    "code": "BGR",
+    "name": "Bulgaria",
+    "label": "Bulgaria (BGR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BHR": {
+    "code": "BHR",
+    "name": "Bahrain",
+    "label": "Bahrain (BHR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BHS": {
+    "code": "BHS",
+    "name": "The Bahamas",
+    "label": "The Bahamas (BHS)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BIH": {
+    "code": "BIH",
+    "name": "Bosnia and Herzegovina",
+    "label": "Bosnia and Herzegovina (BIH)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BLM": {
+    "code": "BLM",
+    "name": "Saint Barthelemy",
+    "label": "Saint Barthelemy (BLM)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "BLR": {
+    "code": "BLR",
+    "name": "Belarus",
+    "label": "Belarus (BLR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BLZ": {
+    "code": "BLZ",
+    "name": "Belize",
+    "label": "Belize (BLZ)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BMU": {
+    "code": "BMU",
+    "name": "Bermuda",
+    "label": "Bermuda (BMU)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "BOL": {
+    "code": "BOL",
+    "name": "Bolivia",
+    "label": "Bolivia (BOL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BRA": {
+    "code": "BRA",
+    "name": "Brazil",
+    "label": "Brazil (BRA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BRB": {
+    "code": "BRB",
+    "name": "Barbados",
+    "label": "Barbados (BRB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BRN": {
+    "code": "BRN",
+    "name": "Brunei",
+    "label": "Brunei (BRN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BTN": {
+    "code": "BTN",
+    "name": "Bhutan",
+    "label": "Bhutan (BTN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BVT": {
+    "code": "BVT",
+    "name": "Bouvet Island",
+    "label": "Bouvet Island (BVT)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "BWA": {
+    "code": "BWA",
+    "name": "Botswana",
+    "label": "Botswana (BWA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CAF": {
+    "code": "CAF",
+    "name": "Central African Republic",
+    "label": "Central African Republic (CAF)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CAN": {
+    "code": "CAN",
+    "name": "Canada",
+    "label": "Canada (CAN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CCK": {
+    "code": "CCK",
+    "name": "Cocos (Keeling) Islands",
+    "label": "Cocos (Keeling) Islands (CCK)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "CHE": {
+    "code": "CHE",
+    "name": "Switzerland",
+    "label": "Switzerland (CHE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CHL": {
+    "code": "CHL",
+    "name": "Chile",
+    "label": "Chile (CHL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CHN": {
+    "code": "CHN",
+    "name": "China",
+    "label": "China (CHN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CIV": {
+    "code": "CIV",
+    "name": "Ivory Coast",
+    "label": "Ivory Coast (CIV)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CMR": {
+    "code": "CMR",
+    "name": "Cameroon",
+    "label": "Cameroon (CMR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "COD": {
+    "code": "COD",
+    "name": "Congo (Democratic Republic)",
+    "label": "Congo (Democratic Republic) (COD)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "COG": {
+    "code": "COG",
+    "name": "Congo",
+    "label": "Congo (COG)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "COK": {
+    "code": "COK",
+    "name": "Cook Islands",
+    "label": "Cook Islands (COK)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "COL": {
+    "code": "COL",
+    "name": "Colombia",
+    "label": "Colombia (COL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "COM": {
+    "code": "COM",
+    "name": "Comoros",
+    "label": "Comoros (COM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CPV": {
+    "code": "CPV",
+    "name": "Cape Verde",
+    "label": "Cape Verde (CPV)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CRI": {
+    "code": "CRI",
+    "name": "Costa Rica",
+    "label": "Costa Rica (CRI)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CUB": {
+    "code": "CUB",
+    "name": "Cuba",
+    "label": "Cuba (CUB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CUW": {
+    "code": "CUW",
+    "name": "Curacao",
+    "label": "Curacao (CUW)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "CXR": {
+    "code": "CXR",
+    "name": "Christmas Island",
+    "label": "Christmas Island (CXR)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "CYM": {
+    "code": "CYM",
+    "name": "Cayman Islands",
+    "label": "Cayman Islands (CYM)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "CYP": {
+    "code": "CYP",
+    "name": "Cyprus",
+    "label": "Cyprus (CYP)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "CZE": {
+    "code": "CZE",
+    "name": "Czechia",
+    "label": "Czechia (CZE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "DEU": {
+    "code": "DEU",
+    "name": "Germany",
+    "label": "Germany (DEU)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "DJI": {
+    "code": "DJI",
+    "name": "Djibouti",
+    "label": "Djibouti (DJI)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "DMA": {
+    "code": "DMA",
+    "name": "Dominica",
+    "label": "Dominica (DMA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "DNK": {
+    "code": "DNK",
+    "name": "Denmark",
+    "label": "Denmark (DNK)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "DOM": {
+    "code": "DOM",
+    "name": "Dominican Republic",
+    "label": "Dominican Republic (DOM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "DZA": {
+    "code": "DZA",
+    "name": "Algeria",
+    "label": "Algeria (DZA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ECU": {
+    "code": "ECU",
+    "name": "Ecuador",
+    "label": "Ecuador (ECU)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "EGY": {
+    "code": "EGY",
+    "name": "Egypt",
+    "label": "Egypt (EGY)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ERI": {
+    "code": "ERI",
+    "name": "Eritrea",
+    "label": "Eritrea (ERI)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ESH": {
+    "code": "ESH",
+    "name": "Western Sahara",
+    "label": "Western Sahara (ESH)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "ESP": {
+    "code": "ESP",
+    "name": "Spain",
+    "label": "Spain (ESP)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "EST": {
+    "code": "EST",
+    "name": "Estonia",
+    "label": "Estonia (EST)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ETH": {
+    "code": "ETH",
+    "name": "Ethiopia",
+    "label": "Ethiopia (ETH)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "FIN": {
+    "code": "FIN",
+    "name": "Finland",
+    "label": "Finland (FIN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "FJI": {
+    "code": "FJI",
+    "name": "Fiji",
+    "label": "Fiji (FJI)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "FLK": {
+    "code": "FLK",
+    "name": "Falkland Islands",
+    "label": "Falkland Islands (FLK)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "FRA": {
+    "code": "FRA",
+    "name": "France",
+    "label": "France (FRA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "FRO": {
+    "code": "FRO",
+    "name": "Faroe Islands",
+    "label": "Faroe Islands (FRO)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "FSM": {
+    "code": "FSM",
+    "name": "Federated States of Micronesia",
+    "label": "Federated States of Micronesia (FSM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GAB": {
+    "code": "GAB",
+    "name": "Gabon",
+    "label": "Gabon (GAB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GBR": {
+    "code": "GBR",
+    "name": "United Kingdom",
+    "label": "United Kingdom (GBR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GEO": {
+    "code": "GEO",
+    "name": "Georgia",
+    "label": "Georgia (GEO)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GGY": {
+    "code": "GGY",
+    "name": "Guernsey",
+    "label": "Guernsey (GGY)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "GHA": {
+    "code": "GHA",
+    "name": "Ghana",
+    "label": "Ghana (GHA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GIB": {
+    "code": "GIB",
+    "name": "Gibraltar",
+    "label": "Gibraltar (GIB)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "GIN": {
+    "code": "GIN",
+    "name": "Guinea",
+    "label": "Guinea (GIN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GLP": {
+    "code": "GLP",
+    "name": "Guadeloupe",
+    "label": "Guadeloupe (GLP)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "GMB": {
+    "code": "GMB",
+    "name": "The Gambia",
+    "label": "The Gambia (GMB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GNB": {
+    "code": "GNB",
+    "name": "Guinea-Bissau",
+    "label": "Guinea-Bissau (GNB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GNQ": {
+    "code": "GNQ",
+    "name": "Equatorial Guinea",
+    "label": "Equatorial Guinea (GNQ)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GRC": {
+    "code": "GRC",
+    "name": "Greece",
+    "label": "Greece (GRC)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GRD": {
+    "code": "GRD",
+    "name": "Grenada",
+    "label": "Grenada (GRD)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GRL": {
+    "code": "GRL",
+    "name": "Greenland",
+    "label": "Greenland (GRL)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "GTM": {
+    "code": "GTM",
+    "name": "Guatemala",
+    "label": "Guatemala (GTM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "GUF": {
+    "code": "GUF",
+    "name": "French Guiana",
+    "label": "French Guiana (GUF)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "GUM": {
+    "code": "GUM",
+    "name": "Guam",
+    "label": "Guam (GUM)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "GUY": {
+    "code": "GUY",
+    "name": "Guyana",
+    "label": "Guyana (GUY)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "HKG": {
+    "code": "HKG",
+    "name": "Hong Kong  Special Administrative Region of China",
+    "label": "Hong Kong  Special Administrative Region of China (HKG)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "HMD": {
+    "code": "HMD",
+    "name": "Heard and McDonald Islands",
+    "label": "Heard and McDonald Islands (HMD)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "HND": {
+    "code": "HND",
+    "name": "Honduras",
+    "label": "Honduras (HND)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "HRV": {
+    "code": "HRV",
+    "name": "Croatia",
+    "label": "Croatia (HRV)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "HTI": {
+    "code": "HTI",
+    "name": "Haiti",
+    "label": "Haiti (HTI)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "HUN": {
+    "code": "HUN",
+    "name": "Hungary",
+    "label": "Hungary (HUN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "IDN": {
+    "code": "IDN",
+    "name": "Indonesia",
+    "label": "Indonesia (IDN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "IMN": {
+    "code": "IMN",
+    "name": "Isle of Man",
+    "label": "Isle of Man (IMN)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "IND": {
+    "code": "IND",
+    "name": "India",
+    "label": "India (IND)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "IOT": {
+    "code": "IOT",
+    "name": "British Indian Ocean Territory",
+    "label": "British Indian Ocean Territory (IOT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "IRL": {
+    "code": "IRL",
+    "name": "Ireland",
+    "label": "Ireland (IRL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "IRN": {
+    "code": "IRN",
+    "name": "Iran",
+    "label": "Iran (IRN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "IRQ": {
+    "code": "IRQ",
+    "name": "Iraq",
+    "label": "Iraq (IRQ)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ISL": {
+    "code": "ISL",
+    "name": "Iceland",
+    "label": "Iceland (ISL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ISR": {
+    "code": "ISR",
+    "name": "Israel",
+    "label": "Israel (ISR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ITA": {
+    "code": "ITA",
+    "name": "Italy",
+    "label": "Italy (ITA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "JAM": {
+    "code": "JAM",
+    "name": "Jamaica",
+    "label": "Jamaica (JAM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "JEY": {
+    "code": "JEY",
+    "name": "Jersey",
+    "label": "Jersey (JEY)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "JOR": {
+    "code": "JOR",
+    "name": "Jordan",
+    "label": "Jordan (JOR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "JPN": {
+    "code": "JPN",
+    "name": "Japan",
+    "label": "Japan (JPN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "KAZ": {
+    "code": "KAZ",
+    "name": "Kazakhstan",
+    "label": "Kazakhstan (KAZ)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "KEN": {
+    "code": "KEN",
+    "name": "Kenya",
+    "label": "Kenya (KEN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "KGZ": {
+    "code": "KGZ",
+    "name": "Kyrgyzstan",
+    "label": "Kyrgyzstan (KGZ)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "KHM": {
+    "code": "KHM",
+    "name": "Cambodia",
+    "label": "Cambodia (KHM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "KIR": {
+    "code": "KIR",
+    "name": "Kiribati",
+    "label": "Kiribati (KIR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "KNA": {
+    "code": "KNA",
+    "name": "Saint Kitts and Nevis",
+    "label": "Saint Kitts and Nevis (KNA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "KOR": {
+    "code": "KOR",
+    "name": "Republic of  South Korea",
+    "label": "Republic of  South Korea (KOR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "KWT": {
+    "code": "KWT",
+    "name": "Kuwait",
+    "label": "Kuwait (KWT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LAO": {
+    "code": "LAO",
+    "name": "Laos",
+    "label": "Laos (LAO)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LBN": {
+    "code": "LBN",
+    "name": "Lebanon",
+    "label": "Lebanon (LBN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LBR": {
+    "code": "LBR",
+    "name": "Liberia",
+    "label": "Liberia (LBR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LBY": {
+    "code": "LBY",
+    "name": "Libya",
+    "label": "Libya (LBY)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LCA": {
+    "code": "LCA",
+    "name": "Saint Lucia",
+    "label": "Saint Lucia (LCA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LIE": {
+    "code": "LIE",
+    "name": "Liechtenstein",
+    "label": "Liechtenstein (LIE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LKA": {
+    "code": "LKA",
+    "name": "Sri Lanka",
+    "label": "Sri Lanka (LKA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LSO": {
+    "code": "LSO",
+    "name": "Lesotho",
+    "label": "Lesotho (LSO)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LTU": {
+    "code": "LTU",
+    "name": "Lithuania",
+    "label": "Lithuania (LTU)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LUX": {
+    "code": "LUX",
+    "name": "Luxembourg",
+    "label": "Luxembourg (LUX)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "LVA": {
+    "code": "LVA",
+    "name": "Latvia",
+    "label": "Latvia (LVA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MAC": {
+    "code": "MAC",
+    "name": "Macao  Special Administrative Region of China",
+    "label": "Macao  Special Administrative Region of China (MAC)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MAF": {
+    "code": "MAF",
+    "name": "Saint Martin",
+    "label": "Saint Martin (MAF)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "MAR": {
+    "code": "MAR",
+    "name": "Morocco",
+    "label": "Morocco (MAR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MCO": {
+    "code": "MCO",
+    "name": "Monaco",
+    "label": "Monaco (MCO)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MDA": {
+    "code": "MDA",
+    "name": "Moldova",
+    "label": "Moldova (MDA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MDG": {
+    "code": "MDG",
+    "name": "Madagascar",
+    "label": "Madagascar (MDG)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MDV": {
+    "code": "MDV",
+    "name": "Maldives",
+    "label": "Maldives (MDV)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MEX": {
+    "code": "MEX",
+    "name": "Mexico",
+    "label": "Mexico (MEX)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MHL": {
+    "code": "MHL",
+    "name": "Marshall Islands",
+    "label": "Marshall Islands (MHL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MID": {
+    "code": "MID",
+    "name": "Midway Islands",
+    "label": "Midway Islands (MID)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "MKD": {
+    "code": "MKD",
+    "name": "North Macedonia",
+    "label": "North Macedonia (MKD)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MLI": {
+    "code": "MLI",
+    "name": "Mali",
+    "label": "Mali (MLI)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MLT": {
+    "code": "MLT",
+    "name": "Malta",
+    "label": "Malta (MLT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MMR": {
+    "code": "MMR",
+    "name": "Myanmar (Burma)",
+    "label": "Myanmar (Burma) (MMR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MNE": {
+    "code": "MNE",
+    "name": "Montenegro",
+    "label": "Montenegro (MNE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MNG": {
+    "code": "MNG",
+    "name": "Mongolia",
+    "label": "Mongolia (MNG)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MNP": {
+    "code": "MNP",
+    "name": "Northern Mariana Islands",
+    "label": "Northern Mariana Islands (MNP)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "MOZ": {
+    "code": "MOZ",
+    "name": "Mozambique",
+    "label": "Mozambique (MOZ)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MRT": {
+    "code": "MRT",
+    "name": "Mauritania",
+    "label": "Mauritania (MRT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MSR": {
+    "code": "MSR",
+    "name": "Montserrat",
+    "label": "Montserrat (MSR)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "MTQ": {
+    "code": "MTQ",
+    "name": "Martinique",
+    "label": "Martinique (MTQ)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "MUS": {
+    "code": "MUS",
+    "name": "Mauritius",
+    "label": "Mauritius (MUS)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MWI": {
+    "code": "MWI",
+    "name": "Malawi",
+    "label": "Malawi (MWI)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MYS": {
+    "code": "MYS",
+    "name": "Malaysia",
+    "label": "Malaysia (MYS)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "MYT": {
+    "code": "MYT",
+    "name": "Mayotte",
+    "label": "Mayotte (MYT)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "NAM": {
+    "code": "NAM",
+    "name": "Namibia",
+    "label": "Namibia (NAM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "NCL": {
+    "code": "NCL",
+    "name": "New Caledonia",
+    "label": "New Caledonia (NCL)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "NER": {
+    "code": "NER",
+    "name": "Niger",
+    "label": "Niger (NER)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "NFK": {
+    "code": "NFK",
+    "name": "Norfolk Island",
+    "label": "Norfolk Island (NFK)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "NGA": {
+    "code": "NGA",
+    "name": "Nigeria",
+    "label": "Nigeria (NGA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "NIC": {
+    "code": "NIC",
+    "name": "Nicaragua",
+    "label": "Nicaragua (NIC)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "NIU": {
+    "code": "NIU",
+    "name": "Niue",
+    "label": "Niue (NIU)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "NLD": {
+    "code": "NLD",
+    "name": "Netherlands",
+    "label": "Netherlands (NLD)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "NOR": {
+    "code": "NOR",
+    "name": "Norway",
+    "label": "Norway (NOR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "NPL": {
+    "code": "NPL",
+    "name": "Nepal",
+    "label": "Nepal (NPL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "NRU": {
+    "code": "NRU",
+    "name": "Nauru",
+    "label": "Nauru (NRU)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "NZL": {
+    "code": "NZL",
+    "name": "New Zealand",
+    "label": "New Zealand (NZL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "OMN": {
+    "code": "OMN",
+    "name": "Oman",
+    "label": "Oman (OMN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PAK": {
+    "code": "PAK",
+    "name": "Pakistan",
+    "label": "Pakistan (PAK)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PAN": {
+    "code": "PAN",
+    "name": "Panama",
+    "label": "Panama (PAN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PCN": {
+    "code": "PCN",
+    "name": "Pitcairn Islands",
+    "label": "Pitcairn Islands (PCN)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "PER": {
+    "code": "PER",
+    "name": "Peru",
+    "label": "Peru (PER)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PHL": {
+    "code": "PHL",
+    "name": "Philippines",
+    "label": "Philippines (PHL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PLW": {
+    "code": "PLW",
+    "name": "Palau",
+    "label": "Palau (PLW)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PNG": {
+    "code": "PNG",
+    "name": "Papua New Guinea",
+    "label": "Papua New Guinea (PNG)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "POL": {
+    "code": "POL",
+    "name": "Poland",
+    "label": "Poland (POL)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PRI": {
+    "code": "PRI",
+    "name": "Puerto Rico",
+    "label": "Puerto Rico (PRI)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "PRK": {
+    "code": "PRK",
+    "name": " North Korea",
+    "label": " North Korea (PRK)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PRT": {
+    "code": "PRT",
+    "name": "Portugal",
+    "label": "Portugal (PRT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PRY": {
+    "code": "PRY",
+    "name": "Paraguay",
+    "label": "Paraguay (PRY)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PSE": {
+    "code": "PSE",
+    "name": "Palestinian Authority",
+    "label": "Palestinian Authority (PSE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "PYF": {
+    "code": "PYF",
+    "name": "French Polynesia",
+    "label": "French Polynesia (PYF)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "QAT": {
+    "code": "QAT",
+    "name": "Qatar",
+    "label": "Qatar (QAT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "REU": {
+    "code": "REU",
+    "name": "Reunion",
+    "label": "Reunion (REU)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "RKS": {
+    "code": "RKS",
+    "name": "Kosovo",
+    "label": "Kosovo (RKS)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ROU": {
+    "code": "ROU",
+    "name": "Romania",
+    "label": "Romania (ROU)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "RUS": {
+    "code": "RUS",
+    "name": "Russia",
+    "label": "Russia (RUS)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "RWA": {
+    "code": "RWA",
+    "name": "Rwanda",
+    "label": "Rwanda (RWA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SAU": {
+    "code": "SAU",
+    "name": "Saudi Arabia",
+    "label": "Saudi Arabia (SAU)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SRB": {
+    "code": "SRB",
+    "name": "Serbia",
+    "label": "Serbia (SRB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SDN": {
+    "code": "SDN",
+    "name": "Sudan",
+    "label": "Sudan (SDN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SEN": {
+    "code": "SEN",
+    "name": "Senegal",
+    "label": "Senegal (SEN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SGP": {
+    "code": "SGP",
+    "name": "Singapore",
+    "label": "Singapore (SGP)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SGS": {
+    "code": "SGS",
+    "name": "South Georgia and South Sandwich Islands",
+    "label": "South Georgia and South Sandwich Islands (SGS)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "SHN": {
+    "code": "SHN",
+    "name": "Saint Helena",
+    "label": "Saint Helena (SHN)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "SJM": {
+    "code": "SJM",
+    "name": "Svalbard and Jan Mayen Islands",
+    "label": "Svalbard and Jan Mayen Islands (SJM)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "SLB": {
+    "code": "SLB",
+    "name": "Solomon Islands",
+    "label": "Solomon Islands (SLB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SLE": {
+    "code": "SLE",
+    "name": "Sierra Leone",
+    "label": "Sierra Leone (SLE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SLV": {
+    "code": "SLV",
+    "name": "El Salvador",
+    "label": "El Salvador (SLV)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SMR": {
+    "code": "SMR",
+    "name": "San Marino",
+    "label": "San Marino (SMR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SOM": {
+    "code": "SOM",
+    "name": "Somalia",
+    "label": "Somalia (SOM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SPM": {
+    "code": "SPM",
+    "name": "Saint Pierre and Miquelon",
+    "label": "Saint Pierre and Miquelon (SPM)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "SSD": {
+    "code": "SSD",
+    "name": "South Sudan",
+    "label": "South Sudan (SSD)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "STP": {
+    "code": "STP",
+    "name": "Sao Tome and  Principe",
+    "label": "Sao Tome and  Principe (STP)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SUR": {
+    "code": "SUR",
+    "name": "Suriname",
+    "label": "Suriname (SUR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SVK": {
+    "code": "SVK",
+    "name": "Slovakia",
+    "label": "Slovakia (SVK)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SVN": {
+    "code": "SVN",
+    "name": "Slovenia",
+    "label": "Slovenia (SVN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SWE": {
+    "code": "SWE",
+    "name": "Sweden",
+    "label": "Sweden (SWE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SWZ": {
+    "code": "SWZ",
+    "name": "Eswatini",
+    "label": "Eswatini (SWZ)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SXM": {
+    "code": "SXM",
+    "name": "Sint Maarten",
+    "label": "Sint Maarten (SXM)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "SYC": {
+    "code": "SYC",
+    "name": "Seychelles",
+    "label": "Seychelles (SYC)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "SYR": {
+    "code": "SYR",
+    "name": "Syria",
+    "label": "Syria (SYR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TCA": {
+    "code": "TCA",
+    "name": "Turks and Caicos Islands",
+    "label": "Turks and Caicos Islands (TCA)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "TCD": {
+    "code": "TCD",
+    "name": "Chad",
+    "label": "Chad (TCD)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TGO": {
+    "code": "TGO",
+    "name": "Togo",
+    "label": "Togo (TGO)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "THA": {
+    "code": "THA",
+    "name": "Thailand",
+    "label": "Thailand (THA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TJK": {
+    "code": "TJK",
+    "name": "Tajikistan",
+    "label": "Tajikistan (TJK)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TKL": {
+    "code": "TKL",
+    "name": "Tokelau",
+    "label": "Tokelau (TKL)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "TKM": {
+    "code": "TKM",
+    "name": "Turkmenistan",
+    "label": "Turkmenistan (TKM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TLS": {
+    "code": "TLS",
+    "name": "Timor-Leste",
+    "label": "Timor-Leste (TLS)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TON": {
+    "code": "TON",
+    "name": "Tonga",
+    "label": "Tonga (TON)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TTO": {
+    "code": "TTO",
+    "name": "Trinidad and Tobago",
+    "label": "Trinidad and Tobago (TTO)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TUN": {
+    "code": "TUN",
+    "name": "Tunisia",
+    "label": "Tunisia (TUN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TUR": {
+    "code": "TUR",
+    "name": "Turkey",
+    "label": "Turkey (TUR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TUV": {
+    "code": "TUV",
+    "name": "Tuvalu",
+    "label": "Tuvalu (TUV)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TWN": {
+    "code": "TWN",
+    "name": "Taiwan",
+    "label": "Taiwan (TWN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "TZA": {
+    "code": "TZA",
+    "name": "Tanzania",
+    "label": "Tanzania (TZA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "UGA": {
+    "code": "UGA",
+    "name": "Uganda",
+    "label": "Uganda (UGA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "UKR": {
+    "code": "UKR",
+    "name": "Ukraine",
+    "label": "Ukraine (UKR)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "UMI": {
+    "code": "UMI",
+    "name": "United States Minor Outlying Islands",
+    "label": "United States Minor Outlying Islands (UMI)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "URY": {
+    "code": "URY",
+    "name": "Uruguay",
+    "label": "Uruguay (URY)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "USA": {
+    "code": "USA",
+    "name": "United States",
+    "label": "United States (USA)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "UZB": {
+    "code": "UZB",
+    "name": "Uzbekistan",
+    "label": "Uzbekistan (UZB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "VAT": {
+    "code": "VAT",
+    "name": "Vatican City",
+    "label": "Vatican City (VAT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "VCT": {
+    "code": "VCT",
+    "name": "Saint Vincent and the Grenadines",
+    "label": "Saint Vincent and the Grenadines (VCT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "VEN": {
+    "code": "VEN",
+    "name": "Venezuela",
+    "label": "Venezuela (VEN)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "VGB": {
+    "code": "VGB",
+    "name": "British Virgin Islands",
+    "label": "British Virgin Islands (VGB)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "VIR": {
+    "code": "VIR",
+    "name": "United States Virgin Islands",
+    "label": "United States Virgin Islands (VIR)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "VNM": {
+    "code": "VNM",
+    "name": "Vietnam",
+    "label": "Vietnam (VNM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "VUT": {
+    "code": "VUT",
+    "name": "Vanuatu",
+    "label": "Vanuatu (VUT)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "WLF": {
+    "code": "WLF",
+    "name": "Wallis and Futuna Islands",
+    "label": "Wallis and Futuna Islands (WLF)",
+    "country": true,
+    "passport_issuing": false
+  },
+  "WSM": {
+    "code": "WSM",
+    "name": "Samoa",
+    "label": "Samoa (WSM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "YEM": {
+    "code": "YEM",
+    "name": "Yemen",
+    "label": "Yemen (YEM)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ZAF": {
+    "code": "ZAF",
+    "name": "South Africa",
+    "label": "South Africa (ZAF)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ZMB": {
+    "code": "ZMB",
+    "name": "Zambia",
+    "label": "Zambia (ZMB)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "ZWE": {
+    "code": "ZWE",
+    "name": "Zimbabwe",
+    "label": "Zimbabwe (ZWE)",
+    "country": true,
+    "passport_issuing": true
+  },
+  "BDT": {
+    "code": "BDT",
+    "name": "British Dependent Territories Citizen",
+    "label": "British Dependent Territories Citizen (BDT)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "GBD": {
+    "code": "GBD",
+    "name": "British Overseas Territories Citizen",
+    "label": "British Overseas Territories Citizen (GBD)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "GBN": {
+    "code": "GBN",
+    "name": "British National (overseas)",
+    "label": "British National (overseas) (GBN)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "GBO": {
+    "code": "GBO",
+    "name": "British Overseas Citizen",
+    "label": "British Overseas Citizen (GBO)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "GBP": {
+    "code": "GBP",
+    "name": "British Protected Person",
+    "label": "British Protected Person (GBP)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "GBS": {
+    "code": "GBS",
+    "name": "British Subject",
+    "label": "British Subject (GBS)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "UNO": {
+    "code": "UNO",
+    "name": "United Nations",
+    "label": "United Nations (UNO)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "XXA": {
+    "code": "XXA",
+    "name": "Stateless as defined in Article 1 of the 1954 Convention",
+    "label": "Stateless as defined in Article 1 of the 1954 Convention (XXA)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "XXB": {
+    "code": "XXB",
+    "name": "Refugee as defined in Article 1 of the 1951 Convention Relating to the Status of Refugees as amended by the 1967 Protocol",
+    "label": "Refugee as defined in Article 1 of the 1951 Convention Relating to the Status of Refugees as amended by the 1967 Protocol (XXB)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "XXC": {
+    "code": "XXC",
+    "name": " Refugee other than as defined above",
+    "label": " Refugee other than as defined above (XXC)",
+    "passport_issuing": true,
+    "country": false
+  },
+  "XXX": {
+    "code": "XXX",
+    "name": "Person of unspecified nationality",
+    "label": "Person of unspecified nationality (XXX)",
+    "passport_issuing": true,
+    "country": false
+  }
+}

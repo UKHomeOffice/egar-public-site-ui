@@ -14,18 +14,9 @@
         <h1 class="govuk-heading-l">
           {{__('heading_are_you_sure_delete_account')}}
         </h1>
-
-          {% if ONE_LOGIN_SHOW_ONE_LOGIN %}
-            <p class="govuk-body-m">
-              {{__('are_you_sure_delete_account_one_login_caption')}}
-              </p>
-          {% else %}
-          <p class="govuk-body-m">{{ text.deleteOrgInfo or "" }}</p>
-            <p>
-              {{__('are_you_sure_delete_account_caption')}}
-            </p>
-          {% endif %}
-
+        <p class="govuk-body-m">
+            {{__('are_you_sure_delete_account_one_login_caption')}}
+        </p>
         <form action="/user/delete" method="post">
           <input id="delete" class="govuk-button govuk-button--warning" type="submit" value="Yes, delete this account">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />

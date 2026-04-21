@@ -8,7 +8,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const settings = require('../../../common/config/index');
 const configMock = {
   ...settings,
-  ONE_LOGIN_SHOW_ONE_LOGIN: false,
 };
 
 const controller = require('../../../app/user/manageuserdetail/get.controller', {
@@ -18,9 +17,7 @@ const controller = require('../../../app/user/manageuserdetail/get.controller', 
 describe('Manage User Detail Get Controller', () => {
   let req;
   let res;
-  const indexPage = settings.ONE_LOGIN_SHOW_ONE_LOGIN
-    ? 'app/user/manageuserdetail/index'
-    : 'app/user/manageuserdetail/old_index';
+  const indexPage = 'app/user/manageuserdetail/index';
   beforeEach(() => {
     chai.use(sinonChai);
 

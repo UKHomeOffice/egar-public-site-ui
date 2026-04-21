@@ -10,6 +10,8 @@ const validator = require('../../../common/utils/validator');
 const { validations } = require('./validations');
 const transformers = require('../../../common/utils/transformers');
 const { ExcelParser } = require('../../../common/utils/excelParser');
+const clamAVService = require('../../../common/services/clamAVService');
+const { findByCode } = require('../../../common/utils/airports');
 
 const checkFileIsExcel = (req, res) => {
   if (req.file) {
@@ -115,6 +117,16 @@ module.exports = async (req, res) => {
   }
   logger.debug('Determined file to be Excel, beginning to read');
 
+  const formData = {
+    name: req.file.originalname,
+    file: {
+      value: req.file.buffer,
+      options: {
+        filename: req.file.originalname,
+      },
+    },
+  };
+
   try {
     const cookie = new CookieModel(req);
 
@@ -124,6 +136,11 @@ module.exports = async (req, res) => {
     const worksheet = workbook.Sheets[firstSheetName];
 
     if (!checkFileIsGAR(req, res, worksheet)) {
+      return;
+    }
+    if (!(await clamAVService.scanFile(formData))) {
+      logger.info('File rejected as virus detected by ClamAV');
+      res.redirect('/garfile/garupload?query=v');
       return;
     }
     logger.debug('Determined file to be a valid GAR template, beginning to parse');
@@ -166,7 +183,10 @@ module.exports = async (req, res) => {
 
             const crewUpdate = garApi.patch(garId, 'Draft', { people: crew });
             const passengerUpdate = garApi.patch(garId, 'Draft', { people: passengers });
-            const voyageUpdate = garApi.patch(garId, 'Draft', voyageParser.parse());
+            const voyageParsed = voyageParser.parse();
+            voyageParsed['departurePortDesc'] = findByCode(voyageParsed.departurePort)?.name || '';
+            voyageParsed['arrivalPortDesc'] = findByCode(voyageParsed.arrivalPort)?.name || '';
+            const voyageUpdate = garApi.patch(garId, 'Draft', voyageParsed);
 
             Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
               .then(() => {

@@ -9,7 +9,6 @@ require('../../global.test');
 
 const configMock = {
   ...settings,
-  ONE_LOGIN_SHOW_ONE_LOGIN: false,
 };
 
 const controller = proxyquire('../../../app/user/detailschanged/get.controller', {

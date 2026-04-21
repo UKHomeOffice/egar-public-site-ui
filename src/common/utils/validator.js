@@ -13,7 +13,7 @@ const {
   MAX_ALLOWED_CANCELLATION_TIME_TO_CBP,
 } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
-const { airportCodeList } = require('../../common/utils/autocomplete');
+const airports = require('../../common/utils/airports');
 const nationality = require('../../common/utils/nationality');
 const { documentTypes } = require('./utils');
 
@@ -443,6 +443,10 @@ function passportExpiryDate(value, _element) {
   const d = new Date(val);
   const f = new Date();
 
+  if (d.getFullYear() > 9999) {
+    return false;
+  }
+
   if (d > f) {
     return true;
   }
@@ -730,10 +734,10 @@ function preventZ(value) {
 /**
  * Verify that airport code is accurate
  * @param {String} airportCode expected to be an  IATA (length 3) or ICAO (length 4) orcode
- * @returns {Bool}
+ * @returns {boolean}
  */
 function isValidAirportCode(airportCode) {
-  return airportCodeList.includes(airportCode);
+  return airports.findByCode(airportCode) !== null;
 }
 
 module.exports = {

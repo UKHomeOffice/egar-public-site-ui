@@ -328,16 +328,6 @@ spec:
                 secretKeyRef:
                   name: egar-one-login
                   key: ONE_LOGIN_ACCOUNT_URL
-            - name: ONE_LOGIN_POST_MIGRATION
-              valueFrom:
-                secretKeyRef:
-                  name: egar-one-login
-                  key: ONE_LOGIN_POST_MIGRATION
-            - name: ONE_LOGIN_SHOW_ONE_LOGIN
-              valueFrom:
-                secretKeyRef:
-                  name: egar-one-login
-                  key: ONE_LOGIN_SHOW_ONE_LOGIN
             - name: NOTIFY_ONELOGIN_ACCOUNT_DELETE_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:

@@ -3,12 +3,7 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const {
-  ONE_LOGIN_SHOW_ONE_LOGIN,
-  NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID,
-  BASE_URL,
-  HTTPS,
-} = require('../../../common/config');
+const { NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, HTTPS } = require('../../../common/config');
 const sendEmail = require('../../../common/services/sendEmail');
 const organisationApi = require('../../../common/services/organisationApi');
 const verifyUserService = require('../../../common/services/verificationApi');
@@ -171,7 +166,6 @@ module.exports = async (req, res) => {
     return res.redirect(ROUTES.HOME);
   }
 
-  const viewOnLoginPageForTest = req.query.testOneLogin === 'true';
   const cookie = new CookieModel(req);
 
   const { code } = req.query;
@@ -179,8 +173,6 @@ module.exports = async (req, res) => {
   if (!code) {
     return res.render('app/user/login/index', {
       oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
-      ONE_LOGIN_SHOW_ONE_LOGIN,
-      viewOnLoginPageForTest,
     });
   }
 
