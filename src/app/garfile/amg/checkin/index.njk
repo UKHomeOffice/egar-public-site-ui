@@ -9,14 +9,6 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
   <link rel="stylesheet" href="/stylesheets/amg.css"/> 
   <div id="checkinpage">
@@ -44,37 +36,4 @@
     <input type="hidden" name="resubmitFor0T" value="resubmit0T" />
     <input type="hidden" name="resubmitFor0TLink" id="resubmitFor0TLink" value="no" />
   </form>
-
-  <script>
-   $(function () {
-      const resubmitted = $('#resubmitted').val();
-      window.myinterval = setInterval(function () {
-        const permissionDetails = () => Array.from(document.getElementsByClassName('permission-details'));
-        const permissionDetailsState = permissionDetails().map(el => el.open);
-        
-        $.get(`/garfile/amg/checkin?template=pane&resubmitted=${resubmitted}`, null, function (data) {
-          const html = $(data);
-           
-          if (!html.find('#spinner').length) {
-            clearInterval(window.myinterval);
-          }
-
-          $('#pane').html($(data));
-          $('#banner0T-content').appendTo('#top-notification-banner');
-          $('#banner0T').empty();
-        
-          permissionDetails().forEach((el, index) => {
-            
-            el.toggleAttribute("open", permissionDetailsState[index])
-          })
-        });
-        
-      }, 3000);
-
-     
-    });
-
-
-</script>
-<script type="text/javascript" src="/javascripts/resubmitGar.js"></script>
 {% endblock content %}

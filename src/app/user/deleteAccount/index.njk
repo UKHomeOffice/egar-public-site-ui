@@ -8,21 +8,9 @@
 
 {% set active = '/user/details' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
-
-    <div class="govuk-grid-row padding-bottom-60 margin-top-30 ">
-      <div class="govuk-grid-column-two-thirds padding-left-60">
+    <div class="govuk-grid-row govuk-!-padding-bottom-12 govuk-!-margin-top-6 ">
+      <div class="govuk-grid-column-two-thirds govuk-!-padding-left-12">
         <h1 class="govuk-heading-l">
           {{__('heading_are_you_sure_delete_account')}}
         </h1>

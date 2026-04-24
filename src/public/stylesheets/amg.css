@@ -8,26 +8,6 @@
     border: 2px solid rgba(0, 0, 0, 0.125);
 }
 
-.status-disc.green {
-    background-color: green;
-}
-
-.status-disc.blue {
-    background-color: #44b0d4;
-}
-
-.status-disc.amber {
-    background-color: #FFBF00;
-}
-
-.status-disc.red {
-    background-color: red;
-}
-
-.status-disc.black {
-    background-color: black;
-}
-
 @keyframes spinner {
     to {
         transform: rotate(360deg);
@@ -42,4 +22,30 @@
 
 td {
     word-wrap:break-word;
+}
+
+.no-record{
+    color: #74472E;
+    background-color: #F6D7C6;
+    text-transform:uppercase;
+    padding: 5px 10px 5px 10px;
+    font-weight: 600;
+}
+.authority-to-carry-granted{
+    color: #254D7D;
+    background-color: #D5E2EF;
+    text-transform:uppercase;
+    padding: 5px 10px 5px 10px;
+    font-weight: 600;
+}
+.valid-permission-to-travel{
+    color: #2F623F;
+    background-color: #D0E1D9;
+    text-transform:uppercase;
+    padding: 5px 10px 5px 10px;
+    font-weight: 700;
+}
+.status-text{
+    font-size: 14px;
+    font-weight: 600;
 }

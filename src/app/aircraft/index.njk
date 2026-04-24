@@ -9,47 +9,15 @@
 
 {% set active = '/aircraft' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
+<script src="/javascripts/aircraft/index.js" type="text/javascript"></script>
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-
-    {% if errors %}
-      {% include "common/templates/includes/errors.njk" %}
-    {% endif %}
-
-    {% if successMsg %}
-      {% include "common/templates/includes/success-action.njk" %}
-    {% endif %}
-
-      <script>
-      $(document).ready(function(){
-        $("#aircraft-search").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#aircraft_table_row tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-          });
-        });
-        });
-      </script>
-
     <h1 class="govuk-heading-xl">{{__('title_aircraft')}}</h1>
-    {# {% if cookie.getUserRole() != 'User' %} #}
       <p class="govuk-body-l">{{__('aircraft_caption')}}</p>
       <p class="govuk-body-m">Search for aircraft </p>
-      <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
-    {# {% endif %} #}
+      <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search">
   </div>
-
-  
-
   <div class="govuk-grid-column-full">
     <form id="aircraft" action="/aircraft" class="form-group" method="post" role="form" >
       <table class="govuk-table" id="SavedCraft">
@@ -58,9 +26,7 @@
             <th class="govuk-table__header" scope="col">{{__('field_aircraft_registration')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_aircraft_type')}}</th>
             <th class="govuk-table__header" scope="col">{{__('field_aircraft_base')}}</th>
-            {# {% if cookie.getUserRole() != 'User' %} #}
             <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
-            {# {% endif %} #}
           </tr>
         </thead>
         <tbody class="govuk-table__body" id="aircraft_table_row" >
@@ -68,19 +34,19 @@
           {% for craft in savedCrafts.items %}
           <tr class="govuk-table__row">
             {# {% if cookie.getUserRole() != 'User' %} #}
-            <td class="govuk-table__cell" scope="row"><button id="edit_craft_{{ loop.index }}" class="govuk-link btn-link" name="editCraft" value="{{ craft.craftId }}">{{ craft.registration }}</button></th>
+            <td class="govuk-table__cell" scope="row"><button id="edit_craft_{{ loop.index }}" class="govuk-button--link" name="editCraft" value="{{ craft.craftId }}">{{ craft.registration }}</button></th>
             {# {% else %}
             <td class="govuk-table__cell">{{ craft.registration }}</td>
             {% endif %} #}
             <td class="govuk-table__cell">{{ craft.craftType }}</td>
             <td class="govuk-table__cell">{{ craft.craftBase | upper }}</td>
             {# {% if cookie.getUserRole() != 'User' %} #}
-            <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-link btn-link" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
+            <td class="govuk-table__cell"><button id="delete_craft_{{ loop.index }}" class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deleteCraft" value="{{ craft.craftId }}">{{__('table_delete')}}</button></th>
             {# {% endif %} #}
           </tr>
           {% endfor %}
         {% else %}
-          {{ m.empty_table_message(__('aircraft_no_records')) }}
+          {{ m.empty_table_message(__('aircraft_no_records'),4) }}
         {% endif %}
         </tbody>
       </table>
@@ -90,58 +56,16 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>
 	</div>
-
-  {# {% if cookie.getUserRole() != 'User' %} #}
-    <div class="govuk-grid-column-full">
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-    </div>
-
-    <div class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-heading-l">{{__('aircraft_add')}}</h2>
-      <p class="govuk-body-l">{{__('aircraft_add_caption')}}</p>
-      <a href='/aircraft/add' class='govuk-button'>{{__('title_add_aircraft')}}</a>
-    </div>
-
-    <div class="govuk-grid-column-full">
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-    </div>
-  {# {% endif %} #}
-  	<script>
-    $(document).ready(function() {
-      $('th').each(function(col) {
-        $(this).hover(
-        function() { $(this).addClass('focus'); },
-        function() { $(this).removeClass('focus'); }
-      );
-    $(this).click(function() {
-      if ($(this).is('.asc')) {
-        $(this).removeClass('asc');
-        $(this).addClass('desc selected');
-        sortOrder = -1;
-      }
-      else {
-        $(this).addClass('asc selected');
-        $(this).removeClass('desc');
-        sortOrder = 1;
-      }
-      $(this).siblings().removeClass('asc selected');
-      $(this).siblings().removeClass('desc selected');
-      var arrData = $('table').find('tbody >tr:has(td)').get();
-      arrData.sort(function(a, b) {
-        var val1 = $(a).children('td').eq(col).text().toUpperCase();
-        var val2 = $(b).children('td').eq(col).text().toUpperCase();
-        if($.isNumeric(val1) && $.isNumeric(val2))
-        return sortOrder == 1 ? val1-val2 : val2-val1;
-        else
-            return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
-      });
-      $.each(arrData, function(index, row) {
-        $('tbody').append(row);
-      });
-    });
-      });
-    });
-    </script>
+  <div class="govuk-grid-column-full">
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+  </div>
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l">{{__('aircraft_add')}}</h2>
+    <p class="govuk-body-l">{{__('aircraft_add_caption')}}</p>
+    <a href='/aircraft/add' class='govuk-button'>{{__('title_add_aircraft')}}</a>
+  </div>
+  <div class="govuk-grid-column-full">
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+  </div>
 </div>
-
 {% endblock %}

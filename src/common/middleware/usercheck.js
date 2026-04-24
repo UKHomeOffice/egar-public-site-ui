@@ -18,6 +18,7 @@ module.exports = (req, res, next) => {
   const isLoggedIn = checkUserInCookie(cookie) === false; // weird logic. To be refactored.
 
   if (isLoggedIn) {
+    res.locals.isLoggedIn = true;
     next();
     return;
   }

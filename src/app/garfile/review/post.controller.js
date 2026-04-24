@@ -95,8 +95,6 @@ module.exports = async (req, res) => {
   const resubmit = req.body.resubmitFor0T;
 
   const resubmit0TLink = req.body.resubmitFor0TLink ? req.body.resubmitFor0TLink : 'no';
-
-  const isResubmit0T = ['resubmit0T', 'resubmit0TOnSummaryPage', 'resubmitFor0T'].includes(resubmit);
   const initialSubmit = req.body.initialSubmit ? '&initialSubmit=yes' : '';
 
   // Validate GAR to be submitted
@@ -119,13 +117,6 @@ module.exports = async (req, res) => {
 
     garpeople = JSON.parse(responseValues[1]);
 
-    if (isResubmit0T) {
-      const people = garpeople.items
-        .filter((s) => s.amgCheckinResponseCode === '0T')
-        .map((s) => ({
-          garPeopleId: s.garPeopleId,
-        }));
-    }
     const manifest = new Manifest(responseValues[1]);
     validator.handleResponseError(garpeople);
     statuscheck = Boolean(req.body.statuscheck);

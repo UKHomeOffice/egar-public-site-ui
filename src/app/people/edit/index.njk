@@ -8,51 +8,31 @@
 
 {% set active = '/people' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
-
-  {% include "phase.njk" %}
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item"><a class="govuk-breadcrumbs__link" href="/people">{{ __('title_people') }}</a></li>
       <li class="govuk-breadcrumbs__list-item">{{ __('heading_edit_person') }}</li>
     </ol>
   </div>
-
 {% endblock %}
 
 {% block content %}
-
-  {% import "common/templates/includes/macros.njk" as m %}
-
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
-
+<script type="module" src="/javascripts/people/edit.js"></script>
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
       <form action="/people/edit" autocomplete="off" class="form-group" method="post" role="form">
-
       <h1 class="govuk-heading-xl">{{ __('heading_edit_person') }}</h1>
-
       <p class="govuk-body-l">{{ __('caption_edit_person') }}</p>
 
       {% include "person-details.njk" %}
 
-      <script>
-        document.getElementById("travelDocumentType").addEventListener("load", checkDocumentType());
-      </script>
-
       <div class="govuk-form-group">
         <input id="save-and-exit" class="govuk-button" type="submit"
           name="buttonClicked"
-          value="{{__('form_save_and_exit')}}"
-          onclick="sendAnalytics(event, 'Saved People Edit - Save', 'click')">
+          value="{{__('form_save_and_exit')}}">
         <p class="govuk-body-m">
-          <a id="exit-without-saving" class="govuk-button govuk-button--secondary" href="/people#" onclick="sendAnalytics(event, 'Saved People Edit - Cancel', 'click')">{{__('form_exit_without_saving')}}</a>
+          <a id="exit-without-saving" class="govuk-button govuk-button--secondary" href="/people#">{{__('form_exit_without_saving')}}</a>
         </p>
       </div>
 

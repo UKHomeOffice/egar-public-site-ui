@@ -58,7 +58,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    let renderContext = {
+    renderContext = {
       cookie,
       manifestFields,
       garfile: {},

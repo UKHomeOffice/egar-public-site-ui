@@ -4,32 +4,21 @@
 Create GAR | Start
 {% endblock %}
 
-{% block head %}
-	{% include "head.njk" %}
-{% endblock %}
-
-{% block header %}
-	{% include "header-pre-user.njk" %}
-{% endblock %}
-
-{% block beforeContent %}
-	{% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
-	<p class="govuk-body-l">
-		<span style='background-color: #f7d352'>
-		{{HOMEPAGE_MESSAGE | safe}}
-		</span>
-	</p>
+
+  {% if HOMEPAGE_MESSAGE %}
+    {{ govukNotificationBanner({
+      html: (HOMEPAGE_MESSAGE | safe),
+      type: "success",
+      titleText: "Notice",
+      disableAutoFocus: true
+    }) }}
+  {% endif %}
 
 	<div class="govuk-grid-row">
 		<div class="govuk-grid-column-two-thirds">
-
 			<h1 class="govuk-heading-xl">{{__('title')}}</h1>
-
 			<p class="govuk-body-l">{{__('welcome_caption')}}</p>
-
 			<ul class="govuk-list govuk-list--bullet">
 				<li>{{__('welcome_caption_list_1')}}
 					{# Submit a GAR #}
@@ -42,14 +31,16 @@ Create GAR | Start
 				</li>
 			</ul>
 
-			<a id="start_now" href="/login" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">
-				{{__('button_start_now')}}
-			</a>
+			{{ govukButton({
+  			text: __('button_start_now'),
+  			href: "/login",
+  			isStartButton: true,
+				id: "start_now",
+				classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8"
+			}) }}
 
-			<div class="govuk-tabs" data-module="tabs">
-				<h2 class="govuk-tabs__title">
-				Contents
-			</h2>
+			<div class="govuk-tabs" data-module="govuk-tabs">
+				<h2 class="govuk-tabs__title">Contents</h2>
 
 				<ul class="govuk-tabs__list">
 					<li class="govuk-tabs__list-item">
@@ -100,12 +91,9 @@ Create GAR | Start
 						<a href="{{__('gar_regulations_link')}}" target="_blank">{{__('welcome_tab_2_content_1_block_1_2')}}</a>
 					</p>
 
-					<div class="govuk-warning-text">
-						<span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-						<strong class="govuk-warning-text__text">
-							<span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('welcome_tab_2_content_1_block_1_5')}}
-						</strong>
-					</div>
+          {{ govukWarningText({
+            text: __('welcome_tab_2_content_1_block_1_5')
+          }) }}
 
 					<h3 class="govuk-heading-s">{{__('welcome_tab_2_content_heading_2')}}</h3>
 					<p>{{__('welcome_tab_2_content_2_block_1')}} <a href="{{__('gar_form_link')}}" target="_blank">{{__('gar_form_link_text')}}</a> </p>

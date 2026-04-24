@@ -6,21 +6,12 @@
 	{{__('error_prefix') if errors}} GAR | Register
 {% endblock %}
 
-{% block header %}
-  {% include "header-pre-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
-  {% include "phase.njk" %}
   <a href="/" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
-
+<script src="/javascripts/regiser/index.js" type="module"></script>
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
     <form id="page-form" action="/user/register" autocomplete="off" method="post" role="form">
@@ -72,7 +63,7 @@
       </p>
 
       <div class="form-group">
-        <input id="login" class="govuk-button" type="submit" value="Agree and submit" onclick="sendAnalytics(event, 'Register - submit', 'click')">
+        <input id="login" class="govuk-button" type="submit" value="Agree and submit">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       </div>
     </form>

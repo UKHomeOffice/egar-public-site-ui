@@ -8,32 +8,19 @@
 
 {% set active = '/organisation/create' %}
 
-{% block header %}
-  {% include "common/templates/includes/header-user.njk" %}
-{% endblock %}
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
+<script src="/javascripts/organisation/create.js" type="module"></script>
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
-
-    {% if errors %}
-      {% include "common/templates/includes/errors.njk" %}
-    {% endif %}
 
     <h1 class="govuk-heading-xl">{{__('nav_bar_create_organisation')}}</h1>
     <p class="govuk-body-l">{{__('create_organisation_caption_1')}}</p>
     <p class="govuk-body-m">{{__('create_organisation_caption_2')}}</p>
 
     <form action="/organisation/create" autocomplete="off" class="form-group" method="post" role="form" >
-      <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text"><span class="govuk-warning-text__assistive">{{__('assistive_warning')}}</span>{{__('create_organisation_warning')}}</strong>
-      </div>
-
+      {{ govukWarningText({
+        text: __('create_organisation_warning')
+      }) }}
       <p class="govuk-body-l">{{__('create_organisation_caption_3')}}</p>
       <div class="{{ m.form_group_class('orgName', errors) }}">
         <label class="govuk-label govuk-label--m" for="orgName">{{__('field_organisation_name')}}</label>
@@ -42,7 +29,7 @@
           type="text" value="" {{ 'aria-describedby=orgName-error' if errors | containsError('orgName') }}>
       </div>
       <div class="govuk-form-group">
-        <button id="create" class="govuk-button" onclick="sendAnalytics(event, 'Create Organisation - Submit', 'click')">
+        <button id="create" class="govuk-button">
           {{__('nav_bar_create_organisation')}}
         </button>
       </div>

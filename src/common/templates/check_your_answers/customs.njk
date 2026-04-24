@@ -1,0 +1,49 @@
+{% set customsRows = [
+  { key: { html: __('field_intention_review') }, value: { html: garfile.intentionValue or '' } }
+] %}
+
+{% if garfile.intentionValue == 'Yes' %}
+  {% set _ = customsRows.push({ key: { html: __('field_prohibited_goods_review') }, value: { html: garfile.prohibitedGoods or '' } }) %}
+
+  {% if garfile.prohibitedGoods == 'Yes' %}
+    {% set _ = customsRows.push({ key: { html: __('field_goods_declaration_review') }, value: { html: garfile.goodsDeclaration | truncate(50) | default('') } }) %}
+  {% endif %}
+
+  {% set _ = customsRows.push({ key: { html: __('field_baggage_review') }, value: { html: garfile.baggage or '' } }) %}
+  {% if garfile.baggage == 'Yes' %}
+    {% set _ = customsRows.push({ key: { html: __('field_baggage_declaration_review') }, value: { html: garfile.baggageDeclaration | truncate(50) | default('') } }) %}
+  {% endif %}
+
+  {% set _ = customsRows.push({ key: { html: __('field_continental_shelf_review') }, value: { html: garfile.continentalShelf or '' } }) %}
+  {% if garfile.continentalShelf == 'Yes' %}
+    {% set _ = customsRows.push({ key: { html: __('field_continental_shelf_declaration_review') }, value: { html: garfile.continentalShelfDeclaration | truncate(50) | default('') } }) %}
+  {% endif %}
+{% endif %}
+
+{% if garfile.passengerTravellingReason != "" %}
+  {% set _ = customsRows.push({ key: { html: __('passenger_travelling_reason_review') }, value: { html: garfile.passengerTravellingReason | truncate(50) | default('') } }) %}
+{% endif %}
+
+{% set _ = customsRows.push({ key: { html: __('field_visit_reason_review') }, value: { html: garfile.visitReason | uncamelCase | default('') } }) %}
+
+{% if garfile.supportingInformation != "" %}
+  {% set _ = customsRows.push({ key: { html: __('field_supporting_information_review') }, value: { html: garfile.supportingInformation | truncate(50) | default('') } }) %}
+{% endif %}
+
+{{ govukSummaryList({
+  card: {
+      title: {
+        text: __('heading_customs')
+      },
+      actions: showChangeLinks and {
+        items: [
+          {
+            href: "/garfile/customs",
+            text: __('change_prefix'),
+            visuallyHiddenText: __('heading_customs')
+          }
+        ]
+      }
+    },
+  rows: customsRows })
+}}

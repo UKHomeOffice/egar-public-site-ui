@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
     req.session.save(() => {
       res.redirect('/home');
     });
-  } catch (err) {
+  } catch {
     req.session.successMsg = 'The GAR has been successfully cancelled, but there was a problem with sending the email';
     req.session.successHeader = 'Cancellation Confirmation';
     req.session.save(() => {

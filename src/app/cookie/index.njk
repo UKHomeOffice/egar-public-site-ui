@@ -1,180 +1,158 @@
 {% extends "base-template.njk" %}
 
 {% block pageTitle %}
-  GAR | Cookies
-{% endblock %}
-
-{% block head %}
-  {% include "head.njk" %}
-{% endblock %}
-
-{% block header %}
-  {% include "header-pre-user.njk" %}
-{% endblock %}
-
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
+GAR | Cookies
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
+<script src="/javascripts/cookies/index.js"></script>
 
-  <div class="govuk-notification-banner govuk-notification-banner--success" id="preference_changed" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner" tabindex="-1" hidden>
-  <div class="govuk-notification-banner__header">
-    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-      Success
-    </h2>
-  </div>
-  <div class="govuk-notification-banner__content">
-    <p class="govuk-notification-banner__heading">
-      You’ve set your cookie preferences. <a class="govuk-notification-banner__link" href="javascript:history.back()">Go back to the page you were looking at</a>.
-    </p>
-  </div>
-  </div>
+{{ govukNotificationBanner({
+type: "success",
+titleText: "Success",
+html: 'You’ve set your cookie preferences. <a class="govuk-notification-banner__link" href="javascript:history.back()">Go back to the page you were looking at</a>.',
+attributes: {
+id: "preference_changed",
+tabindex: "-1",
+hidden: true
+}
+}) }}
 
+<h1 class="govuk-heading-xl">{{__('title_cookies')}}</h1>
 
-		<h1 class="govuk-heading-xl">{{__('title_cookies')}}</h1>
+<p class="govuk-body-m">
+{{__('cookies_caption')}}
+</p>
+<p class="govuk-body-m">
+{{__('heading_cookies_use_list')}}
+<ul class="govuk-list govuk-list--bullet">
+  <li>{{__('cookies_use_list_1')}}</li>
+  <li>{{__('cookies_use_list_2')}}</li>
+  <li>{{__('cookies_use_list_3')}}</li>
+</ul>
+</p>
 
-		<p class="govuk-body-m">
-      {{__('cookies_caption')}}
-    </p>
-    <p class="govuk-body-m">
-      {{__('heading_cookies_use_list')}}
-      <ul class="govuk-list govuk-list--bullet">
-        <li>{{__('cookies_use_list_1')}}</li>
-        <li>{{__('cookies_use_list_2')}}</li>
-        <li>{{__('cookies_use_list_3')}}</li>
-      </ul>
-    </p>
+<h2 class="govuk-heading-m">{{__('heading_how_cookies_are_used')}}</h2>
 
-    <h2 class="govuk-heading-m">{{__('heading_how_cookies_are_used')}}</h2>
+<h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_1')}}</h2>
 
-    <h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_1')}}</h2>
+<p class="govuk-body-m">{{__('how_cookies_are_used_1_caption_1')}}</p>
+<p class="govuk-body-m">{{__('how_cookies_are_used_1_caption_2')}}</p>
 
-    <p class="govuk-body-m">{{__('how_cookies_are_used_1_caption_1')}}</p>
-    <p class="govuk-body-m">{{__('how_cookies_are_used_1_caption_2')}}</p>
+<ul class="govuk-list govuk-list--bullet">
+<li>{{__('how_cookies_are_used_1_list_item_1')}}</li>
+<li>{{__('how_cookies_are_used_1_list_item_2')}}</li>
+<li>{{__('how_cookies_are_used_1_list_item_3')}}</li>
+<li>{{__('how_cookies_are_used_1_list_item_4')}}</li>
+</ul>
 
-    <ul class="govuk-list govuk-list--bullet">
-      <li>{{__('how_cookies_are_used_1_list_item_1')}}</li>
-      <li>{{__('how_cookies_are_used_1_list_item_2')}}</li>
-      <li>{{__('how_cookies_are_used_1_list_item_3')}}</li>
-      <li>{{__('how_cookies_are_used_1_list_item_4')}}</li>
-    </ul>
+{% macro table_header() %}
+<thead class="govuk-table__head">
+<tr class="govuk-table__row">
+  <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>{{__('table_heading_name')}}</strong></p></th>
+  <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>{{__('table_heading_purpose')}}</strong></p></th>
+  <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>{{__('table_heading_expires')}}</strong></p></th>
+</tr>
+</thead>
+{% endmacro %}
 
-    {% macro table_header() %}
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>{{__('table_heading_name')}}</strong></p></th>
-          <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>{{__('table_heading_purpose')}}</strong></p></th>
-          <th class="govuk-table__header" scope="col"><p class="govuk-body-s"><strong>{{__('table_heading_expires')}}</strong></p></th>
-        </tr>
-      </thead>
-    {% endmacro %}
+{% macro table_row(name, purpose, expires) %}
+<tr class="govuk-table__row">
+<td class="govuk-table__cell"><p class="govuk-body-s">{{ name }}</p></td>
+<td class="govuk-table__cell"><p class="govuk-body-s">{{ purpose }}</p></td>
+<td class="govuk-table__cell"><p class="govuk-body-s">{{ expires }}</p></td>
+</tr>
+{% endmacro %}
 
-    {% macro table_row(name, purpose, expires) %}
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell"><p class="govuk-body-s">{{ name }}</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">{{ purpose }}</p></td>
-        <td class="govuk-table__cell"><p class="govuk-body-s">{{ expires }}</p></td>
-      </tr>
-    {% endmacro %}
+<table class="govuk-table">
+{{ table_header() }}
+<tbody class="govuk-table__body">
+  {{ table_row(
+  __('how_cookies_are_used_1_table_row_1_name'),
+  __('how_cookies_are_used_1_table_row_1_purpose'),
+  __('how_cookies_are_used_1_table_row_1_expires'))}}
+  {{ table_row(
+  __('how_cookies_are_used_1_table_row_2_name'),
+  __('how_cookies_are_used_1_table_row_2_purpose'),
+  __('how_cookies_are_used_1_table_row_2_expires'))}}
+  {{ table_row(
+  __('how_cookies_are_used_1_table_row_3_name'),
+  __('how_cookies_are_used_1_table_row_3_purpose'),
+  __('how_cookies_are_used_1_table_row_3_expires'))}}
+</tbody>
+</table>
 
-    <table class="govuk-table">
-      {{ table_header() }}
-      <tbody class="govuk-table__body">
-        {{ table_row(
-          __('how_cookies_are_used_1_table_row_1_name'),
-          __('how_cookies_are_used_1_table_row_1_purpose'),
-          __('how_cookies_are_used_1_table_row_1_expires'))}}
-        {{ table_row(
-          __('how_cookies_are_used_1_table_row_2_name'),
-          __('how_cookies_are_used_1_table_row_2_purpose'),
-          __('how_cookies_are_used_1_table_row_2_expires'))}}
-        {{ table_row(
-          __('how_cookies_are_used_1_table_row_3_name'),
-          __('how_cookies_are_used_1_table_row_3_purpose'),
-          __('how_cookies_are_used_1_table_row_3_expires'))}}
-      </tbody>
-    </table>
+<h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_2')}}</h2>
 
-    <h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_2')}}</h2>
+<p class="govuk-body-m">
+{{__('how_cookies_are_used_2_caption')}}
+</p>
 
-    <p class="govuk-body-m">
-      {{__('how_cookies_are_used_2_caption')}}
-    </p>
+<table class="govuk-table">
+{{ table_header() }}
+<tbody class="govuk-table__body">
+  {{ table_row(
+  __('how_cookies_are_used_2_table_row_1_name'),
+  __('how_cookies_are_used_2_table_row_1_purpose'),
+  __('how_cookies_are_used_2_table_row_1_expires'))}}
+</tbody>
+</table>
 
-    <table class="govuk-table">
-      {{ table_header() }}
-      <tbody class="govuk-table__body">
-        {{ table_row(
-          __('how_cookies_are_used_2_table_row_1_name'),
-          __('how_cookies_are_used_2_table_row_1_purpose'),
-          __('how_cookies_are_used_2_table_row_1_expires'))}}
-      </tbody>
-    </table>
+<h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_3')}}</h2>
 
-    <h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_3')}}</h2>
+<p class="govuk-body-m">{{__('how_cookies_are_used_3_caption')}}</p>
 
-    <p class="govuk-body-m">{{__('how_cookies_are_used_3_caption')}}</p>
+<table class="govuk-table">
+{{ table_header() }}
+<tbody class="govuk-table__body">
+  {{ table_row(
+  __('how_cookies_are_used_3_table_row_1_name'),
+  __('how_cookies_are_used_3_table_row_1_purpose'),
+  __('how_cookies_are_used_3_table_row_1_expires'))}}
+</tbody>
+</table>
 
-    <table class="govuk-table">
-      {{ table_header() }}
-      <tbody class="govuk-table__body">
-        {{ table_row(
-          __('how_cookies_are_used_3_table_row_1_name'),
-          __('how_cookies_are_used_3_table_row_1_purpose'),
-          __('how_cookies_are_used_3_table_row_1_expires'))}}
-      </tbody>
-    </table>
+<h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_4')}}</h2>
 
-    <h3 class="govuk-heading-s">{{__('subheading_how_cookies_are_used_4')}}</h2>
+<p class="govuk-body-m">{{__('how_cookies_are_used_4_caption')}}</p>
 
-    <p class="govuk-body-m">{{__('how_cookies_are_used_4_caption')}}</p>
-
-    <table class="govuk-table">
-      {{ table_header() }}
-      <tbody class="govuk-table__body">
-        {{ table_row(
-          __('how_cookies_are_used_4_table_row_1_name'),
-          __('how_cookies_are_used_4_table_row_1_purpose'),
-          __('how_cookies_are_used_4_table_row_1_expires'))}}
-      </tbody>
-    </table>
-   <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-            Do you want to accept analytics cookies?
-          </legend>
-          <div class="govuk-radios" data-module="govuk-radios">
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="radio_cookies_accept" name="analytics-cookies" type="radio" value="yes">
-              <label class="govuk-label govuk-radios__label" for="analytics-cookies">
-                Yes
-              </label>
-            </div>
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="radio_cookies_reject" name="analytics-cookies" type="radio" value="no" checked>
-              <label class="govuk-label govuk-radios__label" for="analytics-cookies-2">
-                No
-              </label>
-            </div>
-          </div>
-
-        </fieldset>
-      </div>
-
-      <button class="govuk-button" data-module="govuk-button" onclick="change_cookie_preference()" >
-        Save cookie settings
-      </button>
-    </form>
-  </div>
-</div>
-	</div>
+<table class="govuk-table">
+{{ table_header() }}
+<tbody class="govuk-table__body">
+  {{ table_row(
+  __('how_cookies_are_used_4_table_row_1_name'),
+  __('how_cookies_are_used_4_table_row_1_purpose'),
+  __('how_cookies_are_used_4_table_row_1_expires'))}}
+</tbody>
+</table>
+<div class="govuk-form-group">
+  {{ govukRadios({
+  name: "analytics-cookies",
+  fieldset: {
+  legend: {
+  text: "Do you want to accept analytics cookies?",
+  classes: "govuk-fieldset__legend--s"
+  }
+  },
+  items: [
+  {
+  id: "radio_cookies_accept",
+  value: "yes",
+  text: "Yes"
+  },
+  {
+  id: "radio_cookies_reject",
+  value: "no",
+  text: "No",
+  checked: true
+  }
+  ]
+  }) }}
 </div>
 
-<script src="/javascripts/cookie-banner.js"></script>
+<button class="govuk-button" data-module="govuk-button" id="change_cookie_preference">
+  Save cookie settings
+</button>
+
 {% endblock %}
-
 

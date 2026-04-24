@@ -5,7 +5,6 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const { decodeToken } = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/userManageApi');
 const validator = require('../../../common/utils/validator');
@@ -13,7 +12,6 @@ const {
   PHASE_GIVEN_NAME,
   PHASE_CONFIRM_NAME,
   PHASE_REGISTRATION_COMPLETE,
-  WORKFLOW_STEPS,
 } = require('../../../app/user/onelogin/constants');
 
 // Import controller

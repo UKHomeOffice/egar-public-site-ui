@@ -1,3 +1,5 @@
+{% from "dist/govuk/components/warning-text/macro.njk" import govukWarningText %}
+
 {% macro form_group_class(identifier, errors) %}
   {% set class = 'govuk-form-group' %}
   {% for error in errors %}
@@ -49,29 +51,38 @@
 {% endmacro %}
 
 {% macro departure_warning_message(__) %}
-  <div class="govuk-warning-text twoHourWarningText" hidden>
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-visually-hidden">Warning</span>
-      <p>{{ __('departure_date_2_hours_prior__civil_penalty') }}</p>
-      <p>{{ __('departure_date_2_hours_prior__flight_requirements') }}</p>
-      <p>{{ __('note_about_utc_and_daylight_saving_hours') }}</p>
-    </strong>
-  </div>
-  <div class="govuk-warning-text fortyEightHourWarningText" hidden>
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-visually-hidden">Warning</span>
-      <p>{{ __('departure_date_too_far_in_future__civil_penalty') }}</p>
-      <p>{{ __('departure_date_too_far_in_future__flight_requirements') }}</p>
-      <p>{{ __('note_about_utc_and_daylight_saving_hours') }}</p>
-    </strong>
-  </div>
+  {{ govukWarningText({
+    html:
+      __('departure_date_2_hours_prior__civil_penalty') + "<br><br>" +
+      __('departure_date_2_hours_prior__flight_requirements') + "<br><br>" +
+      __('note_about_utc_and_daylight_saving_hours'),
+    iconFallbackText: "Warning",
+    classes: "twoHourWarningText",
+    attributes: {
+      hidden: true
+    }
+  }) }}
+
+  {{ govukWarningText({
+    html:
+      __('departure_date_too_far_in_future__civil_penalty') + "<br><br>" +
+      __('departure_date_too_far_in_future__flight_requirements') + "<br><br>" +
+      __('note_about_utc_and_daylight_saving_hours'),
+    iconFallbackText: "Warning",
+    classes: "fortyEightHourWarningText",
+    attributes: {
+      hidden: true
+    }
+  }) }}
 {% endmacro %}
 
-{% macro empty_table_message(message) %}
+{% macro empty_table_message(message, colspan=1) %}
   <tr class="govuk-table__row">
-    <caption class="govuk-inset-text" style="caption-side:bottom;"><div style="float:left;">{{ message }}</div></caption>
+    <td class="govuk-table__cell" colspan="{{ colspan }}">
+      <div class="govuk-inset-text">
+        {{ message | safe }}
+      </div>
+    </td>
   </tr>
 {% endmacro %}
 
@@ -122,29 +133,8 @@
     <div class="flex-center">
         <div id="loader"></div>
     </div>
-    <div class="center-text govuk-!-padding-top-5">
+    <div class="govuk-!-text-align-center govuk-!-padding-top-5">
       <h2 class="govuk-heading-l">{{text}}</h2>
       <p class="govuk-body govuk-!-font-size-36">{{text2}}</p>
     </div>
-{% endmacro %}
-
-{% macro govNotificationBannerBlue(params) %}
-  <div class="custom-govuk-notification-banner" role="region"
-          aria-labelledby="govuk-notification-banner-title"
-          data-module="custom-govuk-notification-banner">
-      <div class="govuk-notification-banner__header">
-          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            {{ params.title if params.title else 'Important' }}
-          </h2>
-      </div>
-      <div class="govuk-notification-banner__content">
-        {% if params.html %}
-          {{ params.html | safe }}
-        {% elif params.text %}
-          <p class="govuk-notification-banner__heading">
-            {{ params.text }}
-          </p>
-        {% endif %}
-      </div>
-  </div>
 {% endmacro %}
