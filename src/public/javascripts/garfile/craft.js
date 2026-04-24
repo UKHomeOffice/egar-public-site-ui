@@ -22,6 +22,8 @@ $(function () {
     );
 
     $(this).click(function () {
+      let sortOrder;
+
       if ($(this).is('.asc')) {
         $(this).removeClass('asc');
         $(this).addClass('desc selected');
