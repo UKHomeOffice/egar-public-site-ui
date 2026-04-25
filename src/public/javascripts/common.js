@@ -61,6 +61,18 @@ function autoTab(field1, dayMonthOrYear, field2) {
 }
 
 /**
+ * Converts a date to UTC using the browser's timezone offset.
+ * @param {Date} date
+ * @return {Date}
+ */
+function convertDateToUTC(date) {
+  const UTCOffsetMinutes = new Date().getTimezoneOffset();
+  const UTCOffsetMilliseconds = UTCOffsetMinutes * 60 * 1000;
+
+  return new Date(date.getTime() + UTCOffsetMilliseconds);
+}
+
+/**
  * @param {Date} providedDate
  * @return {Boolean}
  */
