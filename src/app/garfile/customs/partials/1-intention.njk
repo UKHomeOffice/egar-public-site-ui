@@ -22,6 +22,7 @@
   {% set radioItems = radioItems.concat([{
     value: choice.value | string,
     text: choice.option,
+    id: choice.option,
     checked: (gar.intentionValue | default('') == choice.value),
     attributes: {
       onchange: "hide()"
