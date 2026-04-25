@@ -1,5 +1,6 @@
 function hide() {
-  if (document.getElementById('Yes  ').checked) {
+  const yesRadio = document.querySelector('[name="intentionValue"][value="Yes"]');
+  if (yesRadio && yesRadio.checked) {
     document.getElementById('prohibitedGoods').style.display = 'block';
     document.getElementById('baggage').style.display = 'block';
     document.getElementById('continentalShelf').style.display = 'block';
