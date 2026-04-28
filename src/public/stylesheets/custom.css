@@ -20,23 +20,26 @@
 
 /** CSS for Organisation page */
 
-  #organisation-search {
+#organisation-search {
     float: left;
     margin-bottom: 10px;
-  }
+}
 
-  .custom-govuk-notification-banner{
-	background-color: #005ea5 !important;
+.custom-govuk-notification-banner {
+    background-color: #005ea5 !important;
     border: 5px solid #005ea5;
     margin-bottom: 50px;
 }
-.notification-banner-text-link{
+
+.notification-banner-text-link {
     text-decoration: none;
     color: #005ea5 !important;
 }
-.app-check-your-answers-margin-bottom{
+
+.app-check-your-answers-margin-bottom {
     margin-bottom: 10px;
 }
+
 .margin-bottom-10 {
     margin-bottom: 10px !important;
 }
@@ -52,6 +55,7 @@
 .margin-top-30 {
     margin-top: 30px !important;
 }
+
 .margin-top-60 {
     margin-top: 60px !important;
 }
@@ -68,20 +72,23 @@
     margin-left: 45px;
 }
 
-.margin-right-20{
+.margin-right-20 {
     margin-right: 20px !important;
 }
 
-.heading-text-spacing{
+.heading-text-spacing {
     margin: 40px 0 50px 0 !important;
 }
-.a-link-text{
+
+.a-link-text {
     color: #005ea5 !important;
 }
-.margin-bottom-40{
+
+.margin-bottom-40 {
     margin-bottom: 40px !important;
 }
-.margin-bottom-60{
+
+.margin-bottom-60 {
     margin-bottom: 60px !important;
 }
 
@@ -96,15 +103,18 @@
 .padding-left-60 {
     padding-left: 60px !important;
 }
-.system-timeout{
+
+.system-timeout {
     color: #594d00;
     background-color: #fff7bf;
     padding: 5px 10px 5px 10px;
 }
-.status-text{
+
+.status-text {
     font-size: 14px;
     font-weight: 600;
 }
+
 .grey-box {
     background-color: #f3f2f1;
     padding: 1em 0em 1em 1em;
@@ -113,36 +123,45 @@
 .bottom-margin-7 {
     margin-bottom: 7%;
 }
+
 .box-left-grey-border {
     border-left: 9px solid #b1b4b6;
     margin: 20px 0 20px 0;
     padding: 20px 0 1px 0;
 }
+
 .email-text {
     margin-left: 15px;
 }
+
 .top-margin-5 {
     margin-top: 5%;
 }
+
 .bottom-margin-5 {
     margin-bottom: 5%;
 }
+
 .govuk-button.govuk-button--warning {
     background-color: #d4351c;
     box-shadow: 0 2px 0 #55150b;
 }
+
 .govuk-button.govuk-button--warning:hover {
     background-color: #aa2a16;
 }
+
 .govuk-button.govuk-button--warning:focus:active:not(:hover) {
     background-color: #d4351c;
 }
+
 .govuk-button:focus:not(:active):not(:hover) {
     border-color: #fd0;
     color: #0b0c0c;
     background-color: #fd0;
     box-shadow: 0 2px 0 #0b0c0c;
 }
+
 .govuk-panel.govuk-panel--confirmation {
     color: #fff;
     background: #00703c;
@@ -181,7 +200,7 @@ h2.govuk-notification-banner__title {
     border-width: 0 0 3px 3px;
 }
 
-.govuk-checkboxes--small .govuk-checkboxes__input + .govuk-checkboxes__label::after {
+.govuk-checkboxes--small .govuk-checkboxes__input+.govuk-checkboxes__label::after {
     top: 16px;
     left: 6px;
     width: 10px;
@@ -192,57 +211,71 @@ h2.govuk-notification-banner__title {
     vertical-align: top;
 }
 
-.button-link{
+.button-link {
     cursor: pointer;
     user-select: none;
 }
 
 /* loading screen */
 #loader {
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  width: 120px;
-  height: 120px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
-  animation: spin 2s linear infinite;
-  margin: 1em;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    /* Safari */
+    animation: spin 2s linear infinite;
+    margin: 1em;
 }
 
 /* Safari */
 @-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
+
 .flex-center {
-  padding-top: 2%;
-  display: flex;
-  justify-content: center;
+    padding-top: 2%;
+    display: flex;
+    justify-content: center;
 }
 
 .center-text {
-  text-align: center;
+    text-align: center;
 }
-.cursor{
+
+.cursor {
     cursor: pointer;
 }
-.hide-content{
+
+.hide-content {
     display: none;
 }
+
 .pagination {
     font-size: 19px !important;
 }
 
+
+@media (min-width: 300px) {
+    .govuk-grid-row {
+        margin-right: 30px;
+        margin-left: -5px;
+    }
+}
