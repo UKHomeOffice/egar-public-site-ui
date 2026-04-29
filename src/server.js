@@ -241,6 +241,7 @@ function initialiseTemplateEngine(app) {
   );
 
   nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
+  nunjucksEnvironment.addGlobal('govukRebrand', true);
   logger.info('Set global settings for nunjucks');
 }
 
