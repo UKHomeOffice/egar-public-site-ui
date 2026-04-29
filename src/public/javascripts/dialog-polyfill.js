@@ -520,7 +520,9 @@
       // Some browsers throw on cssRules.
       try {
         cssRules = styleSheet.cssRules;
-      } catch (e) {}
+      } catch {
+        cssRules = null;
+      }
       if (!cssRules) {
         continue;
       }
@@ -530,7 +532,9 @@
         // Ignore errors on invalid selector texts.
         try {
           selectedNodes = document.querySelectorAll(rule.selectorText);
-        } catch (e) {}
+        } catch {
+          selectedNodes = null;
+        }
         if (!selectedNodes || !inNodeList(selectedNodes, element)) {
           continue;
         }

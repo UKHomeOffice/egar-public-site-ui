@@ -1,9 +1,8 @@
-const navUtil = require('../../../common/utils/nav');
 const { PHASE_GIVEN_NAME, WORKFLOW_STEPS } = require('./constants');
 
 const checkKeys = (obj, ...keys) => {
   if (!obj) return false;
-  return keys.every((key) => obj.hasOwnProperty(key));
+  return keys.every((key) => Object.prototype.hasOwnProperty.call(obj, key));
 };
 
 module.exports = (req, res) => {

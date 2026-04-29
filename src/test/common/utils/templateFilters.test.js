@@ -21,8 +21,8 @@ describe('Template Filters Utility', () => {
 
     beforeEach(() => {
       exampleArray = [
-        { identifier: 'firstName', error: 'Not important' },
-        { identifier: 'surname', error: 'Does not matter' },
+        { identifier: 'firstName', message: 'Not important' },
+        { identifier: 'surname', message: 'Does not matter' },
       ];
     });
 
@@ -40,9 +40,17 @@ describe('Template Filters Utility', () => {
       expect(templateFilters.containsError(exampleArray, 'firstname')).to.be.false;
     });
 
-    it('should return true if found', () => {
-      expect(templateFilters.containsError(exampleArray, 'firstName')).to.be.true;
-      expect(templateFilters.containsError(exampleArray, 'surname')).to.be.true;
+    it('should return element if found', () => {
+      expect(templateFilters.containsError(exampleArray, 'firstName')).to.deep.equal({
+        text: 'Not important',
+      });
+      expect(templateFilters.containsError(exampleArray, 'surname')).to.deep.equal({
+        text: 'Does not matter',
+      });
+    });
+    it('should return truthy value if found', () => {
+      expect(templateFilters.containsError(exampleArray, 'firstName')).to.be.ok;
+      expect(templateFilters.containsError(exampleArray, 'surname')).to.be.ok;
     });
   });
 });

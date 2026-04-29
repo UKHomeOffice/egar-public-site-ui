@@ -22,14 +22,14 @@
   {% endif %}
   {% set statustitle = statustitle %}
   <tr class="govuk-table__row">
-    <td class="govuk-table__cell vertical-align-top">
+    <td class="govuk-table__cell govuk-!-vertical-align-top">
       <div>
         {% if statusColor %}
           <div title="{{ statustitle }}"><span class={{statusColor}}>{{ statustitle }}</span></div>
         {% endif %}
       </div>
     </td>
-    <td class="govuk-table__cell vertical-align-top">{{ person.firstName }}
+    <td class="govuk-table__cell govuk-!-vertical-align-top">{{ person.firstName }}
       {{ person.lastName }}</td>
     <td class="govuk-table__cell">
       <div>
@@ -119,53 +119,55 @@
           {% endif %}
         {% else %}
           {% if not statusColor and not statusCheckComplete %}
-            <span style="opacity:.5;">
-              Awaiting ...</span>
+            <span style="opacity:.5;"> Awaiting ...</span>
           {% endif %}
         {% endif %}
       </div>
     </td>
   </tr>
 {% endmacro %}
-<form
-  id="passenger-checkin"
-  action="/garfile/amg/checkin?resubmitted={{ resubmitted }}"
-  class="form-group"
-  method="post"
-  role="form">
-  <table class="govuk-table" id="upt-responses" style="">
-    <thead class="govuk-table__head">
+
+<form id="passenger-checkin" action="/garfile/amg/checkin?resubmitted={{resubmitted}}" class="form-group" method="post" role="form" >
+<table class="govuk-table" id="upt-responses">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header" style="width:20%;">Digital permission to travel</th>
+      <th scope="col" class="govuk-table__header" style="width:30%;">Passenger</th>
+      <th scope="col" class="govuk-table__header" style="width:50%;">What you need to do</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    {% if statusCheckComplete %}
+      <div id="banner0T" class="govuk-!-display-none" >
+        <div id="banner0T-content">
+            {{ banner.notificationBannerForResponseCodes(numberOf0TResponseCodes, numberOf0BResponseCodes, showImportantBanner) }}
+        </div>
+      </div>
+
       <tr class="govuk-table__row">
         <th scope="col" class="govuk-table__header">Digital permission to travel</th>
         <th scope="col" class="govuk-table__header">Passenger</th>
         <th scope="col" class="govuk-table__header">What you need to do</th>
       </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      {% if statusCheckComplete %}
-        <div id="banner0T" class="hide-content">
-          <div id="banner0T-content">
-            {{ banner.notificationBannerForResponseCodes(numberOf0TResponseCodes, numberOf0BResponseCodes, showImportantBanner) }}</div>
-        </div>
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell"></td>
-          <td class="govuk-table__cell" colspan="2" style="opacity:.5;">This process is now complete.</td>
-        </tr>
-      {% else %}
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">
-            <div id="spinner" title="loading..." class="status-disc spinner"></div>
-          </td>
-          <td class="govuk-table__cell" colspan="2" style="opacity:.5;">Awaiting Permission to Travel responses...</td>
-        </tr>
-      {% endif %}
-      {% for person in garpeople.items %}
-        {{ statusRow(person, statusCheckComplete) }}
-      {% endfor %}
-    </tbody>
-  </table>
-  <input type="hidden" name="resubmitted" value="{{ resubmitted }}"/> {{ pagination.build('passenger-checkin', pages, __) }} <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    {% else %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          <div id="spinner" title="loading..." class="status-disc spinner"></div>
+        </td>
+        <td class="govuk-table__cell" colspan="2" style="opacity:.5;">Awaiting Permission to Travel responses...</td>
+      </tr>
+    {% endif %}
+    {% for person in garpeople.items %}
+      {{ statusRow(person, statusCheckComplete) }}
+    {% endfor %}
+  </tbody>
+</table>
+ <input type="hidden" name="resubmitted" value="{{resubmitted}}" />
+ {{ pagination.build('passenger-checkin', pages, __)}}
+
+<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 </form>
+
 <form action="/garfile/review" method="post">
   <h2 class="govuk-heading-m">Declaration</h2>
   <p class="govuk-body-m">{{ __('submit_gar_caption') }}</p>

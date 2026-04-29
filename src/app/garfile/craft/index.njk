@@ -1,8 +1,8 @@
 {% extends "base-template.njk" %}
 
+{% import "common/templates/includes/location.njk" as l %}
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
-{% import "common/templates/includes/location.njk" as l %}
 
 {% block pageTitle %}
   {{__('error_prefix') if errors}} Create GAR | Aircraft
@@ -10,21 +10,13 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "common/templates/includes/header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
-  {% include "phase.njk" %}
   <a href="/garfile/arrival" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-  <script type="text/javascript" src="/javascripts/craft.js"></script>
+  <script type="text/javascript" src="/javascripts/garfile/craft.js"></script>
   <div class="govuk-grid-row">
-    {% if errors %}
-      {% include "common/templates/includes/errors.njk" %}
-    {% endif %}
 
     <form id="previous_aircraft" action="/garfile/craft" autocomplete="off" class="form-group" method="post" role="form">
       <div class="govuk-grid-column-two-thirds">
@@ -34,7 +26,7 @@
         <h2 id="saved_aircraft" class="govuk-heading-l">{{__('title_aircraft')}}</h2>
         <p class="govuk-body-l">{{__('caption_aircraft_details')}}</p>
         <p class="govuk-body-m">Search for aircraft </p>
-        <input class="govuk-input govuk-input--width-20" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search" style="margin-bottom: 10px">
+        <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2" id="aircraft-search" name="aircraft-search" type="text" placeholder="Search">
       </div>
       <div class="govuk-grid-column-full">
         <table class="govuk-table">
@@ -67,7 +59,7 @@
                   </tr>
                 {% endfor %}
               {% else %}
-                {{ m.empty_table_message(__('aircraft_no_records')) }}
+                {{ m.empty_table_message(__('aircraft_no_records'),3) }}
               {% endif %}
             </tbody>
           </table>
@@ -82,8 +74,7 @@
             .getSavedCraft()
             .items | length %}
             <div class="govuk-form-group">
-              <input id="saveCraft" class="govuk-button" type="submit" name="buttonClicked" value="Add to GAR"
-            onclick="sendAnalytics(event, 'Add craft to GAR - submit', 'click')">
+              <input id="saveCraft" class="govuk-button" type="submit" name="buttonClicked" value="Add to GAR">
             </div>
           {% endif %}
 
@@ -94,45 +85,9 @@
             {% if not craft.registration %}
               <p class="govuk-body-l">{{__('aircraft_add_caption_garfile')}}</p>
             {% endif %}
-            <div class="govuk-form-group {{ m.form_group_class('registration', errors) }}">
-              <label class="govuk-label" for="registration">{{__('field_aircraft_registration')}}</label>
-              {{ m.hint('registration', __('field_aircraft_registration_hint'))}}
-              {{ m.error_message('registration', errors, __) }}
-              <input id="registration" name="registration" class="govuk-input govuk-input--width-10" autocomplete="off"
-                type="text" maxlength="{{ MAX_REGISTRATION_LENGTH }}"
-                value="{{craft.registration}}"
-                aria-describedby="registration-hint{{ ' registration-error' if errors | containsError('registration') }}">
-              {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
-            </div>
 
-            <div class="govuk-form-group {{ m.form_group_class('craftType', errors) }}">
-              <label class="govuk-label" for="craftType">{{__('field_aircraft_type')}}</label>
-              {{ m.hint('craftType', __('field_aircraft_type_hint'))}}
-              {{ m.error_message('craftType', errors, __) }}
-              <input id="craftType" name="craftType" class="govuk-input govuk-input--width-20" autocomplete="off"
-          type="text" maxlength="{{ MAX_STRING_LENGTH }}"
-          value="{{craft.craftType}}"
-          aria-describedby="craftType-hint{{ ' craftType-error' if errors | containsError('craftType') }}">
-              {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
-            </div>
+            {{ l.craft_details(craft, errors, __)}}
 
-            {% set legendLabel = __('field_aircraft_base')%}
-            {% set warningMessage = undefined%}
-            {% set isPortChoice = (craft.portChoice === 'Yes')%}
-            {% set portCode = craft.craftBasePort%}
-            {% set lat = craft.craftBaseLat%}
-            {% set long = craft.craftBaseLong%}
-            {% set prefix = 'craftBase'%}
-
-            {{ l.location(legendLabel, 
-                      warningMessage, 
-                      isPortChoice, 
-                      portCode, 
-                      lat, 
-                      long, 
-                      prefix, 
-                      errors, 
-                      __) }}
             {# Start buttons #}
           </div>
           {{ m.submit_buttons('Add craft to GAR', csrfToken, __) }}

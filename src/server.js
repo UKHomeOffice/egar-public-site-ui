@@ -26,7 +26,6 @@ const router = require('./app/router');
 const db = require('./common/utils/db');
 const noCache = require('./common/utils/no-cache');
 const autocompleteUtil = require('./common/utils/autocomplete');
-const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require('./common/config');
@@ -48,7 +47,7 @@ const APP_VIEWS = [
   path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
   __dirname,
   'node_modules/govuk-frontend/',
-  'node_modules/govuk-frontend/components/',
+  'node_modules/govuk-frontend/dist/govuk/components/',
   'common/templates',
   'common/templates/includes',
 ];
@@ -110,7 +109,9 @@ function initialiseGlobalMiddleware(app) {
     });
   }
 
-  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
+  app.use(
+    favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'dist', 'govuk', 'assets', 'images', 'favicon.ico'))
+  );
   app.use(compression());
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
@@ -160,7 +161,6 @@ function initialiseGlobalMiddleware(app) {
   logger.info('Set CSRF Token');
   app.use(helmet());
 
-  app.use('*', correlationHeader);
   logger.info('Set global middleware');
 }
 
@@ -205,6 +205,7 @@ function initialiseTemplateEngine(app) {
   app.set('view engine', 'njk');
   logger.info('Set view engine');
 
+  nunjucksEnvironment.addGlobal('govukRebrand', true);
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
   nunjucksEnvironment.addGlobal('travelPermissionCodes', travelPermissionCodes);
@@ -249,7 +250,6 @@ function initialisePublic(app) {
   app.use('/assets', express.static(path.join(__dirname, '/common/assets/')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
-  app.use('/utils', express.static(path.join(__dirname, '/common/utils/')));
   logger.info('Initialised public assets');
 }
 

@@ -9,7 +9,6 @@ const userApi = require('../../../common/services/userManageApi');
 const verification = require('../../../common/services/verificationApi');
 
 require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
 
 const controller = require('../../../app/user/login/get.controller');
 

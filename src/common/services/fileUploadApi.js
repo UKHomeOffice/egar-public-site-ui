@@ -21,7 +21,7 @@ module.exports = {
           uri: endpoints.postFile(garId),
           formData,
         },
-        (error, response, body) => {
+        (error, _response, body) => {
           if (error) {
             reject(error);
             return error;

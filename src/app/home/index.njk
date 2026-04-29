@@ -10,40 +10,17 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
-{% block beforeContent %}
-  {% include "phase.njk" %}
-{% endblock %}
-
 {% block content %}
-
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
-
-  {% if successMsg %}
-    {% include "common/templates/includes/success-action.njk" %}
-  {% endif %}
-
-  {# <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-    </div>
-  </div> #}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">{{__('title')}}</h1>
       <p class="govuk-body-m">{{__('create_gar_caption_1')}}
-        <a href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Apr_2024_v6.6_SDS_.xlsx">
+        <a class="govuk-link" href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Apr_2024_v6.6_SDS_.xlsx">
           <span class="govuk-visually-hidden">{{__('heading_create_gar')}}
           </span>{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
        <p class="govuk-body-m">GARs must be submitted no earlier than 48 hours and no later than 2 hours before the expected time of departure.</p>
 
-      <div class="margin-bottom-40"><a id="start_now" class="govuk-button" href="/garfile/home">Create a GAR</a></div>
+      <div class="govuk-!-margin-bottom-5"><a id="start_now" class="govuk-button" href="/garfile/home">Create a GAR</a></div>
     </div>
   </div>
 
@@ -69,7 +46,7 @@
         <div class="govuk-inset-text">
           You are viewing {{serverPagination.perPage * (serverPagination.page-1) +1}} - {{serverPagination.totalItems if onLastPage else serverPagination.perPage * serverPagination.page}}  of your most recent GARs, there are {{serverPagination.totalItems}} total GARs.
           {% if notOnFirstPage %}
-          <br/>To view the previous {{serverPagination.perPage}} GARs <a href="?page={{serverPagination.page-1}}">click here</a>.
+          <br/>To view the previous {{serverPagination.perPage}} GARs <a class="govuk-link" href="?page={{serverPagination.page-1}}">click here</a>.
           {% endif %}
           {% if notOnLastPage %}
           <br/>To view the next {{serverPagination.totalItems % serverPagination.perPage if onSecondToLastPage else serverPagination.perPage}} GARs <a href="?page={{serverPagination.page+1}}">click here</a>.
@@ -80,7 +57,7 @@
     </div>
 
     <div class="govuk-grid-column-full">
-      <div class="govuk-tabs" data-module="tabs">
+      <div class="govuk-tabs" data-module="govuk-tabs">
         <ul class="govuk-tabs__list">
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft">
@@ -125,9 +102,9 @@
                       <tr class="govuk-table__row pagination-page pagination-page_{{page}}" id="pagination-row-{{page}}-{{ loop.index }}">
                         <td class="govuk-table__cell">
                           {% if gar.registration === null %}
-                            <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
+                            <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
                           {% else %}
-                            <button id="view-{{ name }}-{{ loop.index }}" class="govuk-link btn-link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
+                            <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
                           {% endif %}
                         </td>
                         <td class="govuk-table__cell">{{ gar.createdDate | truncate(11, true, "") }}</td>

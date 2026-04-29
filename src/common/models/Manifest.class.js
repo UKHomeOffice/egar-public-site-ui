@@ -67,7 +67,7 @@ class Manifest {
         try {
           const req = Manifest.turnPersonToRequest(person);
           return await validator.validateChains(validations.validations(req));
-        } catch (err) {
+        } catch {
           this._recordValidationErr(this.manifest.indexOf(person));
         }
       })

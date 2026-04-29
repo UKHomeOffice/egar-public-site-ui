@@ -1,117 +1,31 @@
+.lat-long:invalid{
+    background-color:#ff9baf;
+}
+.autocomplete__wrapper {
+  font-family: "GDS Transport", Arial, sans-serif;
+}
 ::backdrop {
     background: black;
     opacity: 0.5;
 }
-
 .warning-button {
     background: #b10e1e !important;
     color: white !important;
 }
-
 .table-clickable tbody .unselectable-row:hover {
     background-color: inherit;
     cursor: default;
 }
-
-
 .table-clickable tbody tr td button.btn-link {
     cursor: pointer;
 }
-
-/** CSS for Organisation page */
-
-  #organisation-search {
+#organisation-search {
     float: left;
     margin-bottom: 10px;
-  }
-
-  .custom-govuk-notification-banner{
-	background-color: #005ea5 !important;
-    border: 5px solid #005ea5;
-    margin-bottom: 50px;
 }
 .notification-banner-text-link{
     text-decoration: none;
     color: #005ea5 !important;
-}
-.app-check-your-answers-margin-bottom{
-    margin-bottom: 10px;
-}
-.margin-bottom-10 {
-    margin-bottom: 10px !important;
-}
-
-.margin-bottom-20 {
-    margin-bottom: 20px !important;
-}
-
-.margin-top-20 {
-    margin-top: 20px !important;
-}
-
-.margin-top-30 {
-    margin-top: 30px !important;
-}
-.margin-top-60 {
-    margin-top: 60px !important;
-}
-
-.margin-left-30 {
-    margin-left: 30px;
-}
-
-.margin-left-50 {
-    margin-left: 50px;
-}
-
-.margin-left-45 {
-    margin-left: 45px;
-}
-
-.margin-right-20{
-    margin-right: 20px !important;
-}
-
-.heading-text-spacing{
-    margin: 40px 0 50px 0 !important;
-}
-.a-link-text{
-    color: #005ea5 !important;
-}
-.margin-bottom-40{
-    margin-bottom: 40px !important;
-}
-.margin-bottom-60{
-    margin-bottom: 60px !important;
-}
-
-.padding-left-35 {
-    padding-left: 35px !important;
-}
-
-.padding-bottom-60 {
-    padding-bottom: 60px !important;
-}
-
-.padding-left-60 {
-    padding-left: 60px !important;
-}
-.system-timeout{
-    color: #594d00;
-    background-color: #fff7bf;
-    padding: 5px 10px 5px 10px;
-}
-.status-text{
-    font-size: 14px;
-    font-weight: 600;
-}
-.grey-box {
-    background-color: #f3f2f1;
-    padding: 1em 0em 1em 1em;
-}
-
-.bottom-margin-7 {
-    margin-bottom: 7%;
 }
 .box-left-grey-border {
     border-left: 9px solid #b1b4b6;
@@ -121,58 +35,41 @@
 .email-text {
     margin-left: 15px;
 }
-.top-margin-5 {
-    margin-top: 5%;
-}
-.bottom-margin-5 {
-    margin-bottom: 5%;
-}
-.govuk-button.govuk-button--warning {
-    background-color: #d4351c;
-    box-shadow: 0 2px 0 #55150b;
-}
-.govuk-button.govuk-button--warning:hover {
-    background-color: #aa2a16;
-}
-.govuk-button.govuk-button--warning:focus:active:not(:hover) {
-    background-color: #d4351c;
-}
 .govuk-button:focus:not(:active):not(:hover) {
     border-color: #fd0;
     color: #0b0c0c;
     background-color: #fd0;
     box-shadow: 0 2px 0 #0b0c0c;
 }
+.govuk-button--link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    text-decoration: underline;
+    color: #1d70b8;
+    cursor: pointer;
+}
 .govuk-panel.govuk-panel--confirmation {
     color: #fff;
     background: #00703c;
 }
-
 h3.govuk-notification-banner__heading {
     font-weight: 700 !important;
     line-height: 1.25 !important;
     font-size: 1.5rem;
     padding: 0;
 }
-
-h2.govuk-notification-banner__title {
-    font-size: 1.1875rem;
-    line-height: 1.3157894737;
-}
-
 #nameDeclaration .govuk-checkboxes__label {
     margin-left: -12px;
     margin-top: 2px;
 }
-
 .govuk-checkboxes--small .govuk-checkboxes__label:before {
     top: 10px;
     left: 0;
     width: 24px;
     height: 24px;
 }
-
-
 .govuk-checkboxes--small .govuk-checkboxes__label:after {
     top: 17px;
     left: 6px;
@@ -180,23 +77,16 @@ h2.govuk-notification-banner__title {
     height: 6.5px;
     border-width: 0 0 3px 3px;
 }
-
 .govuk-checkboxes--small .govuk-checkboxes__input + .govuk-checkboxes__label::after {
     top: 16px;
     left: 6px;
     width: 10px;
     height: 6.5px;
 }
-
-.vertical-align-top {
-    vertical-align: top;
-}
-
 .button-link{
     cursor: pointer;
     user-select: none;
 }
-
 /* loading screen */
 #loader {
   border: 16px solid #f3f3f3;
@@ -208,7 +98,6 @@ h2.govuk-notification-banner__title {
   animation: spin 2s linear infinite;
   margin: 1em;
 }
-
 /* Safari */
 @-webkit-keyframes spin {
   0% {
@@ -218,7 +107,6 @@ h2.govuk-notification-banner__title {
     -webkit-transform: rotate(360deg);
   }
 }
-
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -232,17 +120,3 @@ h2.govuk-notification-banner__title {
   display: flex;
   justify-content: center;
 }
-
-.center-text {
-  text-align: center;
-}
-.cursor{
-    cursor: pointer;
-}
-.hide-content{
-    display: none;
-}
-.pagination {
-    font-size: 19px !important;
-}
-

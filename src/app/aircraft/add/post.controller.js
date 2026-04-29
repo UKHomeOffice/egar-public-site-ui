@@ -50,7 +50,7 @@ module.exports = (req, res) => {
             pagination.setCurrentPage(req, '/aircraft', 1000000);
             req.session.save(() => res.redirect('/aircraft'));
           }
-        } catch (err) {
+        } catch {
           logger.error('Parsing attempt from API caused error, was not JSON');
           let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
           if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {

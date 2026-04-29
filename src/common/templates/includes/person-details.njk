@@ -1,185 +1,199 @@
-<div class="{{ m.form_group_class('savedpeople', errors) }}">
-  <div class="{{ m.form_group_class('firstName', errors) }}">
-    <label class="govuk-label govuk-label--m" for="firstName">{{ __('field_given_name') }}</label>
-    {{ m.hint('firstName', __('field_given_name_hint')) }}
-    {{ m.error_message('firstName', errors, __) }}
-    <input class="govuk-input govuk-input--width-30" id="firstName" name="firstName" autocomplete="off" type="text"
-      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.firstName or req.body.firstName }}"
-      {{ 'aria-describedby=firstName-error' if errors | containsError('firstName') }}>
-    {{ m.character_count_hint('firstName', MAX_STRING_LENGTH) }}
-  </div>
+{% import "common/templates/includes/date-time.njk" as dt %}
 
-  <div class="{{ m.form_group_class('lastName', errors) }}">
-    <label class="govuk-label govuk-label--m" for="lastName">{{ __('field_surname') }}</label>
-    {{ m.error_message('lastName', errors, __) }}
-    <input class="govuk-input govuk-input--width-30" id="lastName" name="lastName" autocomplete="off" type="text"
-      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person.lastName or req.body.lastName }}"
-      {{ 'aria-describedby=lastName-error' if errors | containsError('lastName') }}>
-    {{ m.character_count_hint('lastName', MAX_STRING_LENGTH) }}
-  </div>
+{% set dateOfBirth = person.dateOfBirth or req.body['dobYear'] ~ "-" ~ req.body['dobMonth'] ~  "-" ~req.body['dobDay'] %}
+{% set documentExpiryDate = person.documentExpiryDate or req.body['expiryYear'] ~ "-" ~ req.body['expiryMonth'] ~  "-" ~req.body['expiryDay'] %}
 
-  <div class="{{ m.form_group_class('nationality', errors) }}">
-    <label id="nationality-label" class="govuk-label govuk-label--m" for="nationality">{{ __('field_nationality') }}</label>
-    {{ m.hint('nationality', __('field_nationality_hint')) }}
-    {{ m.error_message('nationality', errors, __) }}
-    <select class="govuk-select" id="nationality" name="nationality" value="{{ (person['nationality'] or req.body['nationality'])}}" aria-labelledby="nationality-label" aria-describedby="nationality-hint">
-      <option value=""></option>
-      {% for country in nationalityList|sort(attribute='name') %}
-        <option value="{{ country.code }}" {{ 'selected=selected' if (person['nationality'] or req.body['nationality']) == country.code }}>{{ country.label }}</option>
-      {% endfor %}
-    </select>
-  </div>
+<div class="{{ m.form_group_class('savedpeople', errors)}}">
+  <script type="module" src="/javascripts/includes/person-details.js"></script>
+  {{ govukInput({
+    id: "firstName",
+    name: "firstName",
+    classes: "govuk-input--width-30",
+    label: {
+      text: __("field_given_name"),
+      classes: "govuk-label--m"
+    },
+    hint: {
+      html: __("field_given_name_hint") ~ m.character_count_hint('firstName', MAX_STRING_LENGTH)
+    },
+    value: person.firstName or req.body.firstName,
+    attributes: {
+      maxlength: MAX_STRING_LENGTH,
+      autocomplete: "off"
+    },
+    errorMessage: errors | containsError('firstName')
+  }) }}
 
-  <!-- Date of birth -->
-  <div class="{{ m.form_group_class('dob', errors) }}">
-    <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h1 class="govuk-fieldset__heading">{{ __('field_dob') }}</h1>
-      </legend>
-      {{ m.hint('dob', __('field_dob_hint')) }}
-      {{ m.error_message('dob', errors, __) }}
-      <div class="govuk-date-input" id="dob">
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="dobDay">{{ __('field_date_day') }}</label>
-            <input id="dobDay" name="dobDay" class="govuk-input govuk-date-input__input govuk-input--width-2"
-            type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'day');autoTab(dobDay, 'day', dobMonth);"
-             value="{{cookie.dateSlice('day', person.dateOfBirth) or req.body['dobDay']}}" >
-          </div>
-        </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="dobMonth">{{ __('field_date_month') }}</label>
-            <input id="dobMonth" name="dobMonth" class="govuk-input govuk-date-input__input govuk-input--width-2"
-            type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'month');autoTab(dobMonth, 'month', dobYear);"
-            value="{{cookie.dateSlice('month', person.dateOfBirth) or req.body['dobMonth']}}" >
-          </div>
-        </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="dobYear">{{ __('field_date_year') }}</label>
-            <input id="dobYear" name="dobYear" class="govuk-input govuk-date-input__input govuk-input--width-4" type="text" maxLength=4
-            onKeyup="value = sanitiseDateOrTime(this.value, 'year');" value="{{cookie.dateSlice('year', person.dateOfBirth) or req.body['dobYear']}}">
-          </div>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-  <!-- End date of birth -->
+  {{ govukInput({
+    id: "lastName",
+    name: "lastName",
+    classes: "govuk-input--width-30",
+    label: {
+      text: __("field_surname"),
+      classes: "govuk-label--m"
+    },
+    value: person.lastName or req.body.lastName,
+    attributes: {
+      maxlength: MAX_STRING_LENGTH,
+      autocomplete: "off"
+    },
+    errorMessage: errors | containsError('lastName')
+  }) }}
 
-  <div class="govuk-form-group {{ m.form_group_class('gender', errors) }}" id="gender">
-    <fieldset class="govuk-fieldset"{{ ' aria-describedby=gender-error' if errors | containsError('gender') }}>
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">{{ __('field_gender') }}</h2>
-      </legend>
-      {{ m.error_message('gender', errors, __) }}
-      <div class="govuk-radios">
-        {% for choice in genderchoice %}
-          <div class="govuk-radios__item">
-            <input id={{choice.gender}} name="gender" class="govuk-radios__input" type="radio"
-              value={{choice.gender}}
-              aria-labelledby="gender-label-{{ loop.index }}"
-              {{ 'checked' if choice.gender == person.gender or choice.gender == req.body.gender }}>
-            <label id="gender-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for={{choice.gender}}>{{choice.gender}}</label>
-          </div>
-        {% endfor %}
-      </div>
-    </fieldset>
-  </div>
+  {% set nationalityItems = [{
+    value: "",
+    text: ""
+  }] %}
 
-  <div class="{{ m.form_group_class('birthplace', errors) }}">
-    <label class="govuk-label govuk-label--m" for="birthplace">{{ __('field_birth_place') }}</label>
-    {{ m.error_message('birthplace', errors, __) }}
-    <input class="govuk-input govuk-input--width-30" id="birthplace" name="birthplace" autocomplete="off" type="text"
-      maxlength="{{ MAX_STRING_LENGTH }}" value="{{ person['placeOfBirth'] or req.body['birthplace'] }}"
-      {{ 'aria-describedby=birthplace-error' if errors | containsError('birthplace') }}>
-    {{ m.character_count_hint('birthplace', MAX_STRING_LENGTH) }}
-  </div>
+  {% for country in nationalityList | sort(attribute='label') %}
+    {% set option = {
+      value: country.code,
+      text: country.label,
+      selected: (person.nationality or req.body.nationality) == country.code
+    } %}
+    {% set nationalityItems = nationalityItems.concat(option) %}
+  {% endfor %}
 
-  <div class="{{ m.form_group_class('personType', errors) }}" id="personType">
-    <fieldset class="govuk-fieldset" aria-describedby="personType-hint{{ ' personType-error' if errors | containsError('personType' )}}">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">{{ __('field_person_type') }}</h2>
-      </legend>
-      {% set fieldPersonTypeHint = [__('field_person_type_hint'), '<br/> <a href="https://www.gov.uk/government/publications/aircrew-crm02" target="_blank">Guidance on Crew and Passengers - GOV.UK (www.gov.uk) </a>'] | join | safe %}
-      {{ m.hint('personType', fieldPersonTypeHint) }}
-      {{ m.error_message('personType', errors, __) }}
-      <div class="govuk-radios">
-        {% for choice in persontype %}
-          <div class="govuk-radios__item">
-            <input id="{{choice.persontype}}" name="personType" class="govuk-radios__input" type="radio"
-              value={{choice.persontype}}
-              aria-labelledby="personType-label-{{ loop.index }}"
-              {{ 'checked' if choice.persontype == person['peopleType'].name or choice.persontype == req.body.personType }}>
-            <label id="personType-label-{{ loop.index }}" class="govuk-label govuk-radios__label" for={{choice.persontype}}>{{choice.persontype}}</label>
-          </div>
-      {% endfor %}
-      </div>
-    </fieldset>
-  </div>
+  {{ govukSelect({
+    id: "nationality",
+    name: "nationality",
+    classes: "govuk-select",
+    label: {
+      text: __("field_nationality"),
+      classes: "govuk-label--m"
+    },
+    hint: {
+      text: __("field_nationality_hint")
+    },
+    items: nationalityItems,
+    errorMessage: errors | containsError('nationality')
+  }) }}
+
+  {{ dt.dateInput('dob', cookie, dateOfBirth, "field_dob", "field_dob_hint", errors, __) }}
+
+  {% set genderItems = [] %}
+
+  {% for choice in genderchoice %}
+    {% set item = {
+      value: choice.gender,
+      text: choice.gender,
+      checked: (person.gender == choice.gender) or (req.body.gender == choice.gender)
+    } %}
+    {% set genderItems = genderItems.concat(item) %}
+  {% endfor %}
+
+  {{ govukRadios({
+    idPrefix: "gender",
+    name: "gender",
+    fieldset: {
+      legend: {
+        text: __("field_gender"),
+        classes: "govuk-fieldset__legend--m"
+      }
+    },
+    classes: m.form_group_class('gender', errors),
+    errorMessage: errors | containsError('gender'),
+    items: genderItems
+  }) }}
+
+  {{ govukInput({
+    id: "birthplace",
+    name: "birthplace",
+    classes: "govuk-input--width-30",
+    label: {
+      text: __("field_birth_place"),
+      classes: "govuk-label--m"
+    },
+    value: person.placeOfBirth or req.body.birthplace,
+    attributes: {
+      maxlength: MAX_STRING_LENGTH,
+      autocomplete: "off"
+    },
+    hint: {
+      html: m.character_count_hint('birthplace', MAX_STRING_LENGTH)
+    },
+    errorMessage: errors | containsError('birthplace')
+  }) }}
+
+  {% set personTypeHintHtml = __('field_person_type_hint') ~ '<br/> <a class="govuk-link" href="https://www.gov.uk/government/publications/aircrew-crm02" target="_blank">Guidance on Crew and Passengers - GOV.UK (www.gov.uk)</a>' %}
+  {% set personTypeItems = [] %}
+
+  {% for choice in persontype %}
+    {% set item = {
+      value: choice.persontype,
+      text: choice.persontype,
+      checked: (person.peopleType.name == choice.persontype) or (req.body.personType == choice.persontype)
+    } %}
+    {% set personTypeItems = personTypeItems.concat(item) %}
+  {% endfor %}
+
+  {{ govukRadios({
+    idPrefix: "personType",
+    name: "personType",
+    fieldset: {
+      legend: {
+        text: __("field_person_type"),
+        classes: "govuk-fieldset__legend--m"
+      }
+    },
+    classes: m.form_group_class('personType', errors),
+    hint: {
+      html: personTypeHintHtml
+    },
+    errorMessage: errors | containsError('personType'),
+    items: personTypeItems
+  }) }}
 
   <h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
   <p class="govuk-body">{{ __('caption_travel_document_details') }}</p>
 
-  <div class="govuk-form-group {{ m.form_group_class('travelDocumentNumber', errors) }}">
-    <label class="govuk-label govuk-label--m" for="travelDocumentNumber">{{ __('field_travel_document_number') }}</label>
-    {{ m.error_message('travelDocumentNumber', errors, __) }}
-    <input id="travelDocumentNumber" name="travelDocumentNumber" class="govuk-input govuk-input--width-20" type="text"
-      maxlength="{{ MAX_STRING_LENGTH }}" value="{{person.documentNumber or req.body.travelDocumentNumber}}"
-      {{ 'aria-describedby=travelDocumentNumber-error' if errors | containsError('travelDocumentNumber') }}>
-    {{ m.character_count_hint('travelDocumentNumber', MAX_STRING_LENGTH) }}
-  </div>
+  {{ govukInput({
+    id: "travelDocumentNumber",
+    name: "travelDocumentNumber",
+    classes: "govuk-input--width-20",
+    label: {
+      text: __("field_travel_document_number"),
+      classes: "govuk-label--m"
+    },
+    value: person.documentNumber or req.body.travelDocumentNumber,
+    attributes: {
+      maxlength: MAX_STRING_LENGTH
+    },
+    hint: {
+      html: m.character_count_hint('travelDocumentNumber', MAX_STRING_LENGTH)
+    },
+    errorMessage: errors | containsError('travelDocumentNumber')
+  }) }}
 
-  <div class="{{ m.form_group_class('documentExpiryDate', errors) }}" id="documentExpiryDate">
-    <fieldset class="govuk-fieldset" aria-describedby="dob-hint" role="group">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">{{ __('field_document_expiry_date') }}</h2>
-      </legend>
-      <span id="dob-hint" class="govuk-hint">{{ __('field_document_expiry_date_hint') }}{{ futureYear }}.</span>
-      {{ m.error_message('documentExpiryDate', errors, __) }}
-      <div class="govuk-date-input" id="expiry">
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="expiryDay">{{ __('field_date_day') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryDay" name="expiryDay"
-            type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'day');autoTab(expiryDay, 'day', expiryMonth);"
-            value="{{ cookie.dateSlice('day', person.documentExpiryDate) or req.body['expiryDay'] }}" >
-          </div>
-        </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="expiryMonth">{{ __('field_date_month') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="expiryMonth" name="expiryMonth"
-            type="text" maxLength=2 onKeyup="value = sanitiseDateOrTime(this.value, 'month');autoTab(expiryMonth, 'month', expiryYear);"
-            value="{{ cookie.dateSlice('month', person.documentExpiryDate) or req.body['expiryMonth'] }}" >
-          </div>
-        </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="expiryYear">{{ __('field_date_year') }}</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="expiryYear" name="expiryYear" type="text" maxLength=4
-            value="{{ cookie.dateSlice('year', person.documentExpiryDate) or req.body['expiryYear'] }}" onKeyup="value = sanitiseDateOrTime(this.value, 'year');">
-          </div>
-        </div>
-      </div>
-    </fieldset>
-  </div>
+  {{ dt.dateInput('expiry', cookie, documentExpiryDate, "field_document_expiry_date", "field_document_expiry_date_hint", errors, __) }}
 
-  <div class="{{ m.form_group_class('issuingState', errors) }}">
-    <label id="issuingState-label" class="govuk-label govuk-label--m" for="issuingState">{{ __('field_issuing_state') }}</label>
-    {{ m.hint('issuingState', __('field_issuing_state_hint')) }}
-    {{ m.error_message('issuingState', errors, __) }}
-    <select class="govuk-select" id="issuingState" name="issuingState" value="{{ (person.issuingState or req.body.issuingState)}}"  aria-labelledby="issuingState-label"  aria-describedby="issuingState-hint">
-      <option value=""> </option>
-      {% for country in nationalityList|sort(attribute='name') %}
-          <option value="{{ country.code }}" {{ 'selected=selected' if (person.issuingState or req.body.issuingState) == country.code }}>{{ country.label }}</option>
-      {% endfor %}
-    </select>
-  </div>
+  {% set issuingStateItems = [] %}
+
+  {% for country in nationalityList | sort(attribute='label') %}
+    {% set issuingStateItems = issuingStateItems.concat({
+      value: country.code,
+      text: country.label,
+      selected: (person.issuingState or req.body.issuingState) == country.code
+    }) %}
+  {% endfor %}
+
+  {{ govukSelect({
+    id: "issuingState",
+    name: "issuingState",
+    label: {
+      text: __("field_issuing_state"),
+      classes: "govuk-label--m"
+    },
+    hint: {
+      text: __("field_issuing_state_hint")
+    },
+    items: issuingStateItems,
+    errorMessage: errors | containsError('issuingState')
+  }) }}
 
   <div class="{{ m.form_group_class('travelDocumentType', errors) }}">
     <label class="govuk-label govuk-label--m" for="travelDocumentType">{{ __('field_travel_document_type') }}</label>
-    {{ m.hint('travelDocumentType', __('field_travel_document_type_hint')) }} <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text_part')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
+    {# {{ m.hint('travelDocumentType', __('field_travel_document_type_hint')) }} <p class="govuk-body-l"> <span class="govuk-tag govuk-tag--yellow"> {{__('id_card_withdrawl_text_part')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p> #}
     {{ m.error_message('travelDocumentType', errors, __) }}
     <select class="govuk-select" id="travelDocumentType" name="travelDocumentType" onchange="checkDocumentType()">
     {% for document in documenttype %}
@@ -191,34 +205,11 @@
     {% endfor %}
     </select>
   </div>
-
-  <div
-    class="{{ m.form_group_class('travelDocumentOther', errors) }}"
-    id="travelDocumentOtherDiv"
-    {{ "hidden" if person.documentType  !== 'Other' }}
-  >
-    {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
+  <div class="{{ m.form_group_class('travelDocumentOther', errors) }}"
+    id="travelDocumentOtherDiv" {{ "hidden" if person.documentType  !== 'Other' }}>
+    <label for="travelDocumentOther">    {{ m.hint('travelDocumentOther', __('field_travel_document_type_other')) }}</label>
     <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text"
     maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
     {{ m.character_count_hint('travelDocumentOther', MAX_STRING_LENGTH) }}
   </div>
-
-<script type="text/javascript" src="/utils/validator.js"></script>
-<script type="text/javascript">
-  accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#nationality')
-  });
-  accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#issuingState')
-  });
-
-  function checkDocumentType(){
-    if (document.getElementById('travelDocumentType').value == 'Other'){
-      document.getElementById('travelDocumentOtherDiv').style.display = 'block';
-    }
-    else{
-      document.getElementById('travelDocumentOtherDiv').style.display = 'none';
-    }
-
-  }
-</script>
+</div>

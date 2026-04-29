@@ -1,5 +1,6 @@
 {% extends "base-template.njk" %}
 
+{% import "common/templates/includes/banners.njk" as b %}
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
@@ -8,26 +9,19 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
-  {% include "phase.njk" %}
   <a href="/garfile/manifest" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  <script src="/javascripts/garfile/manifest/editperson.js" type="module"></script>
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
 
       <h1 class="govuk-heading-xl">{{__('heading_manifest_edit_person_details')}}</h1>{# Person details #}
-      <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
-      
+      {{ b.id_card_withdrawl_text(__) }}
+
       <p class="govuk-body-m">{{__('caption_manifest_person_details')}}</p>
 
       <form action="/garfile/manifest/editperson" autocomplete="off" class="form-group" method="post" role="form" >
@@ -35,12 +29,11 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% include "person-details.njk" %}
         <br>
-        <input id="add-person-manifest" class="govuk-button" type="submit" value="{{__('form_save_and_add_to_gar')}}" onclick="sendAnalytics(event, 'GAR Manifest Edit Person - Save', 'click')">
+        <input id="add-person-manifest" class="govuk-button" type="submit" value="{{__('form_save_and_add_to_gar')}}">
         <p class="govuk-body-m">
-          <a href="/garfile/manifest" class="govuk-button govuk-button--secondary" onclick="sendAnalytics(event, 'GAR Manifest Edit Person - Cancel', 'click')">{{ __('form_exit_without_saving') }}</a>
+          <a id="exit-person-manifest" href="/garfile/manifest" class="govuk-button govuk-button--secondary">{{ __('form_exit_without_saving') }}</a>
         </p>
       </form>
     </div>
   </div>
-</div>
 {% endblock %}

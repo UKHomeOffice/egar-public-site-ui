@@ -1,0 +1,41 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: service-site-ingress-poise
+  labels:
+    cert-manager.io/solver: http01
+  annotations:
+    cert-manager.io/enabled: "true"
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingress.kubernetes.io/proxy-body-size: "20m"
+    #Ephereal Elliptic Curve Diffie Hellman for perfect forward secrecy.
+    # - That is the 'EECDH+' part of the cipher string
+    # No Cipher-Block-Chaining (CBC) ciphers as these are considered insecure 
+    # - That is '!SHA1:!SHA256:!SHA384' part of the cipher string.
+    # - From this post: https://security.stackexchange.com/questions/166484/how-to-disable-cbc-mode-ciphers
+    # - https://security.stackexchange.com/questions/210072/why-does-ssl-labs-now-consider-cbc-suites-weak
+    ingress.kubernetes.io/ssl-ciphers: '!aNULL:!EXPORT56:!SHA1:!SHA256:!SHA384:EECDH+TLSv1.2+HIGH'
+    ingress.kubernetes.io/ssl-prefer-server-ciphers: "true"
+    ingress.kubernetes.io/ssl-protocols: TLSv1.2 TLSv1.3
+    ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Strict-Transport-Security: max-age=63072000; includeSubDomains";
+    ingress.kubernetes.io/whitelist-source-range: {{ .POISE_CIDR_RANGE }}
+spec:
+  tls:
+  - hosts:
+    - {{ .PUBLIC_SITE_EXTERNAL_URL }}
+    secretName: public-site-external-tls
+  ingressClassName: nginx-external  
+  rules:
+  - host: {{ .PUBLIC_SITE_EXTERNAL_URL }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: public-site-svc
+            port:
+              number: 10443

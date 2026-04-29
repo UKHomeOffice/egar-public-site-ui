@@ -1,199 +1,95 @@
-{% from "govuk/components/skip-link/macro.njk" import govukSkipLink %}
-{% from "govuk/components/header/macro.njk" import govukHeader %}
-{% from "govuk/components/footer/macro.njk" import govukFooter %}
-{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
-{% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "dist/govuk/components/button/macro.njk" import govukButton %}
+{% from "dist/govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+{% from "dist/govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "dist/govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "dist/govuk/components/footer/macro.njk" import govukFooter %}
+{% from "dist/govuk/components/input/macro.njk" import govukInput %}
+{% from "dist/govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "dist/govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "dist/govuk/components/radios/macro.njk" import govukRadios %}
+{% from "dist/govuk/components/select/macro.njk" import govukSelect %}
+{% from "dist/govuk/components/skip-link/macro.njk" import govukSkipLink %}
+{% from "dist/govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "dist/govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "dist/govuk/components/warning-text/macro.njk" import govukWarningText %}
 
+{% from "includes/footer.njk" import footer %}
+{% from "includes/navigation.njk" import navigation %}
 
-
-{# specify absolute url for the static assets folder e.g. http://wwww.domain.com/assets #}
-{%- set assetUrl = assetUrl | default(assetPath) -%}
 <!DOCTYPE html>
-<html lang="{{ htmlLang | default('en') }}" class="govuk-template {{ htmlClasses }}">
+<html lang="{{ htmlLang | default('en') }}"
+  class="govuk-template govuk-template--rebranded app-html-class {{ htmlClasses }}">
+
   <head>
     <meta charset="utf-8" />
-    <title>{% block pageTitle %}GOV.UK - The best place to find government services and information{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="{{ themeColor | default('#0b0c0c') }}" /> {# Hardcoded value of $govuk-black #}
-    {# Ensure that older IE versions always render with the correct rendering engine #}
+    <title>{% block pageTitle %}{% endblock %}</title>
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    {# Stack overflow suggests this might help for Edge and issues with empty referer #}
     <meta name="referrer" content="origin-when-cross-origin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="blue">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+    <link rel="icon" sizes="48x48" href="/assets/rebrand/images/favicon.ico">
+    <link rel="icon" sizes="any" href="/assets/rebrand/images/favicon.svg" type="image/svg+xml">
+    <link rel="mask-icon" href="/assets/rebrand/images/govuk-icon-mask.svg" color="blue">
+    <link rel="apple-touch-icon" href="/assets/rebrand/images/govuk-icon-180.png">
+    <link rel="manifest" href="/assets/rebrand/manifest.json">
+    <link rel="stylesheet" href="/stylesheets/govuk-frontend.min.css">
 
-    <link href="/stylesheets/application.min.css" rel="stylesheet" />
     <link href="/stylesheets/custom.css" rel="stylesheet" />
     <link href="/stylesheets/dialog-polyfill.css" rel="stylesheet" type="text/css" />
     <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet" />
 
-    {% block headIcons %}
-      <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="{{ assetPath | default('/assets') }}/images/favicon.ico" type="image/x-icon" />
-      <link rel="mask-icon" href="{{ assetPath | default('/assets') }}/images/govuk-mask-icon.svg" color="{{ themeColor | default('#0b0c0c') }}"> {# Hardcoded value of $govuk-black #}
-      <link rel="apple-touch-icon" sizes="180x180" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-180x180.png">
-      <link rel="apple-touch-icon" sizes="167x167" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-167x167.png">
-      <link rel="apple-touch-icon" sizes="152x152" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon-152x152.png">
-      <link rel="apple-touch-icon" href="{{ assetPath | default('/assets') }}/images/govuk-apple-touch-icon.png">
-    {% endblock %}
-
-    {% block head %}{% include "head.njk" %} {% endblock %}
-    {# The default og:image is added below head so that scrapers see any custom metatags first, and this is just a fallback #}
-    {# image url needs to be absolute e.g. http://wwww.domain.com/.../govuk-opengraph-image.png #}
-    <meta property="og:image" content="{{ assetUrl | default('/assets') }}/images/govuk-opengraph-image.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
     <script src="/javascripts/dialog-polyfill.js"></script>
+
+    {% include "head.njk" %}
+
   </head>
 
-  <body class="govuk-template__body {{ bodyClasses }}">
+  <body class="govuk-template__body app-body-class {{ bodyClasses }}">
+    <script>
+      document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
+    </script>
 
-    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     {% block bodyStart %}{% endblock %}
 
-  {% block cookie_message %}
-  <div class="govuk-cookie-banner " data-nosnippet role="region" id="main_cookie_banner" aria-label="Cookies on Submit a GAR" hidden>
-  <div class="govuk-cookie-banner__message govuk-width-container" id="main_cookie_message">
+    {% include "cookies.njk" %}
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-cookie-banner__heading govuk-heading-m">Cookies on Submit a GAR</h2>
+    {{ govukSkipLink({
+    href: '#main-content',
+    text: 'Skip to main content'
+    }) }}
 
-        <div class="govuk-cookie-banner__content">
-          <p class="govuk-body">We use some essential cookies to make this service work.</p>
-          <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
-        </div>
-      </div>
+    {% if isLoggedIn %}
+      {% include "header-user.njk" %}
+    {% else %}
+      {% include "header-pre-user.njk" %}
+    {% endif %}
+
+    <div class="govuk-width-container">
+
+      {% include "phase.njk" %}
+
+      {% block beforeContent %}{% endblock %}
+
+      <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content">
+        {% include "common/templates/includes/errors.njk" %}
+
+        {% block successAction %}
+          {% include "common/templates/includes/success-action.njk" %}
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+      </main>
     </div>
 
-    <div class="govuk-button-group">
-      <button type="button" class="govuk-button" data-module="govuk-button" id="cookies_accept" onclick="accept_cookies()">
-        Accept analytics cookies
-      </button>
-      <button type="button" class="govuk-button" data-module="govuk-button" id="cookies_reject" onclick="reject_cookies()">
-        Reject analytics cookies
-      </button>
-      <a class="govuk-link" href="/cookies">View cookies</a>
-    </div>
-  </div>
+    {{ footer() }}
 
-  <div class="govuk-cookie-banner__message govuk-width-container" id="cookies_accept_message" role="alert" hidden>
-
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-
-        <div class="govuk-cookie-banner__content">
-          <p class="govuk-body">You’ve accepted analytics cookies. You can <a class="govuk-link" href="/cookies">change your cookie settings</a> at any time.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="govuk-button-group">
-      <button class="govuk-button" id="hide_accept_message" data-module="govuk-button" onclick= "hide_message()">
-        Hide this message
-      </button>
-    </div>
-  </div>
-
-  <div class="govuk-cookie-banner__message govuk-width-container" id="cookies_reject_message" role="alert" hidden>
-
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-
-        <div class="govuk-cookie-banner__content">
-          <p class="govuk-body">You’ve rejected analytics cookies. You can <a class="govuk-link" href="/cookies">change your cookie settings</a> at any time.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="govuk-button-group">
-      <button class="govuk-button" id="hide_reject_message" data-module="govuk-button" onclick="hide_message()">
-        Hide this message
-      </button>
-    </div>
-  </div>
-</div>
-
-    {% endblock %}
-
-    {% block skipLink %}
-      {{ govukSkipLink({
-        href: '#main-content',
-        text: 'Skip to main content'
-      }) }}
-    {% endblock %}
-
-
-    {% block header %}
-      {{ govukHeader({}) }}
-    {% endblock %}
-
-    {% block main %}
-      <div class="govuk-width-container">
-
-        {% block beforeContent %}{% endblock %}
-        <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main">
-          {% block content %}{% endblock %}
-        </main>
-      </div>
-    {% endblock %}
-
-    {% block footer %}
-    <footer class="govuk-footer " role="contentinfo">
-      <div class="govuk-width-container ">
-        <div class="govuk-footer__meta">
-          <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
-            <h2 class="govuk-visually-hidden">Support links</h2>
-            <ul class="govuk-footer__inline-list">
-              <li class="govuk-footer__inline-list-item">
-                <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/personal-information-use-in-borders-immigration-and-citizenship ">
-                  Privacy Policy
-                </a>
-              </li>
-              <li class="govuk-footer__inline-list-item">
-                <a class="govuk-footer__link" href="/help">
-                  Help
-                </a>
-              </li>
-              <li class="govuk-footer__inline-list-item">
-                <a class="govuk-footer__link" href="/cookies">
-                  Cookies
-                </a>
-              </li>
-              <li class="govuk-footer__inline-list-item">
-                <a class="govuk-footer__link" href="/accessibility">
-                  Accessibility Statement
-                </a>
-              </li>
-            </ul>
-
-            <svg role="presentation" focusable="false" class="govuk-footer__licence-logo" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 483.2 195.7" height="17" width="41">
-              <path fill="currentColor" d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
-              />
-            </svg>
-            <span class="govuk-footer__licence-description">
-              All content is available under the
-              <a class="govuk-footer__link" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
-            </span>
-          </div>
-          <div class="govuk-footer__meta-item">
-            <a class="govuk-footer__link govuk-footer__copyright-logo" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-    {% endblock %}
-
-    {% block bodyEnd %}{% endblock %}
-
-  <script src="/javascripts/all.min.js"></script>
-  <script>
-  GOVUKFrontend.initAll();
-  </script>
-
-
+    <script src="/javascripts/init.js" type="module"></script>
     <script>
-      $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function(eventObj) {
+      $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function (eventObj) {
         $("<input />")
           .attr("type", "hidden")
           .attr("name", "buttonClicked")
@@ -201,7 +97,7 @@
           .appendTo("#page-form");
         return true;
       });
-      $("input[value='{{__('button_add_to_gar')}}'][type='button']").click(function(eventObj) {
+      $("input[value='{{__('button_add_to_gar')}}'][type='button']").click(function (eventObj) {
         $("<input />")
           .attr("type", "hidden")
           .attr("name", "buttonClicked")
@@ -213,6 +109,5 @@
     <script src="/javascripts/table-multiselect.js"></script>
     <script src="/javascripts/cookie-banner.js"></script>
     <script src="/javascripts/common.js"></script>
-    <script type="text/javascript" src="/javascripts/resubmitGar.js"></script>
   </body>
 </html>

@@ -13,6 +13,7 @@ const apiResponse = JSON.stringify({
 
 describe('ManifestModel', () => {
   const APRIL = 3;
+  let clock;
 
   beforeEach(() => {
     clock = sinon.useFakeTimers({

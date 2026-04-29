@@ -88,7 +88,7 @@ describe('Responsible Person Index Get Controller', () => {
 
   it('2. should render the message if api returns a message response', () => {
     const cookie = new CookieModel(req);
-    resPersons = { message: 'User not registered' };
+    const resPersons = { message: 'User not registered' };
     sinon.stub(resPersonApi, 'getResPersons').resolves(JSON.stringify(resPersons));
 
     const callController = async () => {
