@@ -1,0 +1,29 @@
+{% from "dist/govuk/components/select/macro.njk" import govukSelect %}
+
+{% macro countryList(field, countries, selectedValue='', label='', hint='') %}
+  {% set countryItems = [{value: '', text: ''}] %}
+  {% for country in countries | sort(attribute='label') %}
+    {% set option = {
+      value: country.code,
+      text: country.label,
+      selected: selectedValue == country.code
+    } %}
+    {% set countryItems = countryItems.concat(option) %}
+  {% endfor %}
+
+  {{ govukSelect({
+    id: field,
+    name: field,
+    classes: "govuk-select",
+    label: {
+      text: label,
+      classes: "govuk-label--m"
+    },
+    hint: {
+      text: hint
+    },
+    items: countryItems,
+    errorMessage: errors | containsError(field)
+  }) }}
+
+{% endmacro %}

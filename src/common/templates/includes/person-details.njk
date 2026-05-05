@@ -1,4 +1,5 @@
 {% import "common/templates/includes/date-time.njk" as dt %}
+{% import "common/templates/common/macros.njk" as common %}
 
 {% set dateOfBirth = person.dateOfBirth or req.body['dobYear'] ~ "-" ~ req.body['dobMonth'] ~  "-" ~req.body['dobDay'] %}
 {% set documentExpiryDate = person.documentExpiryDate or req.body['expiryYear'] ~ "-" ~ req.body['expiryMonth'] ~  "-" ~req.body['expiryDay'] %}
@@ -45,29 +46,15 @@
     text: ""
   }] %}
 
-  {% for country in nationalityList | sort(attribute='label') %}
-    {% set option = {
-      value: country.code,
-      text: country.label,
-      selected: (person.nationality or req.body.nationality) == country.code
-    } %}
-    {% set nationalityItems = nationalityItems.concat(option) %}
-  {% endfor %}
-
-  {{ govukSelect({
-    id: "nationality",
-    name: "nationality",
-    classes: "govuk-select",
-    label: {
-      text: __("field_nationality"),
-      classes: "govuk-label--m"
-    },
-    hint: {
-      text: __("field_nationality_hint")
-    },
-    items: nationalityItems,
-    errorMessage: errors | containsError('nationality')
-  }) }}
+  {{
+      common.countryList(
+        "nationality",
+        nationalityList,
+        (person.issuingState or req.body.issuingState),
+        __("field_nationality"),
+        __("field_nationality_hint")
+      )
+  }}
 
   {{ dt.dateInput('dob', cookie, dateOfBirth, "field_dob", "field_dob_hint", errors, __) }}
 
@@ -169,27 +156,18 @@
 
   {% set issuingStateItems = [] %}
 
-  {% for country in nationalityList | sort(attribute='label') %}
-    {% set issuingStateItems = issuingStateItems.concat({
-      value: country.code,
-      text: country.label,
-      selected: (person.issuingState or req.body.issuingState) == country.code
-    }) %}
-  {% endfor %}
 
-  {{ govukSelect({
-    id: "issuingState",
-    name: "issuingState",
-    label: {
-      text: __("field_issuing_state"),
-      classes: "govuk-label--m"
-    },
-    hint: {
-      text: __("field_issuing_state_hint")
-    },
-    items: issuingStateItems,
-    errorMessage: errors | containsError('issuingState')
-  }) }}
+  {{
+    common.countryList(
+      "issuingState",
+      nationalityList,
+      (person.issuingState or req.body.issuingState),
+      __("field_issuing_state"),
+      __("field_issuing_state_hint")
+      )
+
+  }}
+
 
   <div class="{{ m.form_group_class('travelDocumentType', errors) }}">
     <label class="govuk-label govuk-label--m" for="travelDocumentType">{{ __('field_travel_document_type') }}</label>

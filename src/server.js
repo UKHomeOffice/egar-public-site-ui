@@ -49,6 +49,7 @@ const APP_VIEWS = [
   'node_modules/govuk-frontend/',
   'node_modules/govuk-frontend/dist/govuk/components/',
   'common/templates',
+  'common/templates/common',
   'common/templates/includes',
 ];
 
