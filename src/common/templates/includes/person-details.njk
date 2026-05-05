@@ -1,5 +1,5 @@
 {% import "common/templates/includes/date-time.njk" as dt %}
-{% import "common/templates/common/macros.njk" as common %}
+{% import "common/templates/includes/macros.njk" as common %}
 
 {% set dateOfBirth = person.dateOfBirth or req.body['dobYear'] ~ "-" ~ req.body['dobMonth'] ~  "-" ~req.body['dobDay'] %}
 {% set documentExpiryDate = person.documentExpiryDate or req.body['expiryYear'] ~ "-" ~ req.body['expiryMonth'] ~  "-" ~req.body['expiryDay'] %}
