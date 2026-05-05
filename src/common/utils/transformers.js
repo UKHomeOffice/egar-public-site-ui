@@ -86,5 +86,5 @@ module.exports = {
   strToBytes,
   unknownToUnspecified,
   toUpper,
-  trimWhitespace,
+  trimWhitespace
 };

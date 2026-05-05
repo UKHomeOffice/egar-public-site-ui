@@ -431,8 +431,12 @@ function realDateInFuture(dObj) {
 }
 
 function realDateFromString(str) {
+  if (typeof str !== 'string') {
+    return false;
+  }
+  const match = str.split(/^(\d{1,2}\/\d{1,2}\/\d{4})/).filter(Boolean);
   moment.suppressDeprecationWarnings = true;
-  return moment(str).isValid();
+  return moment(match).isValid();
 }
 
 // This function will validate Passport Expiry date while uploading Gar Template

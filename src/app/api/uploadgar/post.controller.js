@@ -91,7 +91,7 @@ const manifestMap = {
   dateOfBirth: { location: 'H' },
   placeOfBirth: { location: 'I' },
   nationality: { location: 'J', transform: [transformers.toUpper] },
-  documentExpiryDate: { location: 'K' },
+  documentExpiryDate: { location: 'K' }
 };
 
 // Mappings for the rows representing crew
