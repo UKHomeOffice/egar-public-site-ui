@@ -13,24 +13,26 @@
  {% endfor %}
  
 
- <div>
-  <div>
+ <div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
       {% if pages.totalPages > 1 %}
-          {{ govukPagination({
-              previous: pages.currentPage > 1 ? {
-                href: "?page=" + (pages.currentPage - 1)
-              } : null,
-              next: pages.currentPage < pages.totalPages ? {
-                href: "?page=" + (pages.currentPage + 1)
-              } : null,
-              items: pageList
-            }) 
-          }}
+        {{ govukPagination({
+            previous: pages.currentPage > 1 ? {
+              href: "?page=" + (pages.currentPage - 1)
+            } : null,
+            next: pages.currentPage < pages.totalPages ? {
+              href: "?page=" + (pages.currentPage + 1)
+            } : null,
+            items: pageList
+          }) 
+        }}
       {% endif %}
   </div>
   
-  <div class="govuk-body">
-    Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results
+  <div class="govuk-grid-column-one-half">
+    <p class="govuk-body">
+      Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results
+    </p>
   </div>
  </div>
  
