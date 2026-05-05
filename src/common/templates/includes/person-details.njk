@@ -50,9 +50,10 @@
       common.countryList(
         "nationality",
         nationalityList,
-        (person.issuingState or req.body.issuingState),
+        (person.nationality or req.body.nationality),
         __("field_nationality"),
-        __("field_nationality_hint")
+        __("field_nationality_hint"),
+        errors | containsError('nationality')
       )
   }}
 
@@ -163,7 +164,8 @@
       nationalityList,
       (person.issuingState or req.body.issuingState),
       __("field_issuing_state"),
-      __("field_issuing_state_hint")
+      __("field_issuing_state_hint"),
+      errors | containsError('issuingState')
       )
 
   }}

@@ -128,7 +128,9 @@
       "responsibleCountry",
       countryList,
       responsiblePerson.responsibleCountry,
-      __("field_address_country")
+      __("field_address_country"),
+      '',
+      errors | containsError('responsibleCountry')
       )
   }}
 </fieldset>

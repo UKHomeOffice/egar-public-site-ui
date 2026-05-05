@@ -1,6 +1,6 @@
 {% from "dist/govuk/components/select/macro.njk" import govukSelect %}
 
-{% macro countryList(field, countries, selectedValue='', label='', hint='') %}
+{% macro countryList(field, countries, selectedValue='', label='', hint='', errors='') %}
   {% set countryItems = [{value: '', text: ''}] %}
   {% for country in countries | sort(attribute='label') %}
     {% set option = {
@@ -23,7 +23,7 @@
       text: hint
     },
     items: countryItems,
-    errorMessage: errors | containsError(field)
+    errorMessage: errors
   }) }}
 
 {% endmacro %}
