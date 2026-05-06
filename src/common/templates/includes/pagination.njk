@@ -1,38 +1,70 @@
-{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "dist/govuk/components/pagination/macro.njk" import govukPagination %}
 
 {% macro build(formName, pages, __) %}
- 
- {% set pageList = [] %}
- 
- {% for pageNumber in pages.items %}
-  {% set items = (pageList.push({
-    number: pageNumber,
-    href: "?page=" + pageNumber,
-    current: pageNumber === pages.currentPage
-  }), pageList) %}
- {% endfor %}
- 
 
- <div class="govuk-grid-row">
+{% block header %}
+  <script type="text/javascript">
+    function transitionToPage(pageNumber) {
+      nextPage=document.createElement('input');
+      nextPage.type='hidden';
+      nextPage.name='nextPage';
+      nextPage.value=pageNumber;
+      document.getElementById('{{ formName }}').appendChild(nextPage);
+      document.getElementById('{{ formName }}').submit();
+      return false;
+    }
+  </script>
+{% endblock %}
+
+{% set pageList = [] %}
+{% set previousItem = null %}
+{% set nextItem = null %}
+
+{% if pages.currentPage > 1 %}
+  {% set previousItem = {
+    href: "#",
+    attributes: {
+      onclick: "return transitionToPage(" + (pages.currentPage  - 1) + ")"
+    }
+  } %}
+{% endif %}
+
+{% if pages.currentPage < pages.totalPages %}
+  {% set nextItem = {
+    href: "#",
+    attributes: {
+      onclick: "return transitionToPage(" + (pages.currentPage + 1) + ")"
+    }
+  } %}
+{% endif %}
+
+{% if pages.items.length > 1 %}
+    {% for pageNumber in pages.items %}
+      {% set items = pageList.push({
+          number: pageNumber,
+          href: "#",
+          current: pageNumber === pages.currentPage,
+          attributes: {
+            onclick: "return transitionToPage(" + (pageNumber) + ")"
+          }
+        })
+      %}
+    {% endfor %}
+{% endif %}
+
+
+<div class="govuk-grid-row pagination-wrapper">
   <div class="govuk-grid-column-one-half">
-      {% if pages.totalPages > 1 %}
-        {{ govukPagination({
-            previous: pages.currentPage > 1 ? {
-              href: "?page=" + (pages.currentPage - 1)
-            } : null,
-            next: pages.currentPage < pages.totalPages ? {
-              href: "?page=" + (pages.currentPage + 1)
-            } : null,
-            items: pageList
-          }) 
-        }}
-      {% endif %}
+    {{ govukPagination({
+      previous: previousItem,
+      next: nextItem,
+      items: pageList
+    }) }}
   </div>
-  
   <div class="govuk-grid-column-one-half">
-    <p class="govuk-body">
+    <p class="govuk-body-m govuk-!-text-align-right">
       Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results
     </p>
   </div>
- </div>
- 
+</div>
+{% endmacro %}
