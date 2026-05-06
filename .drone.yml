@@ -44,6 +44,8 @@ steps:
       registry: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
       tags:
         - ${DRONE_COMMIT}
+    depends_on:
+      - build
     when:
       event:
         - push
