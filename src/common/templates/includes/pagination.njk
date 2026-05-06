@@ -1,5 +1,5 @@
 {% from "dist/govuk/components/pagination/macro.njk" import govukPagination %}
-  
+
 {% macro build(formName, pages, __) %}
 
 {% block header %}
@@ -38,26 +38,25 @@
   } %}
 {% endif %}
 
-{% for pageNumber in pages.items %}
-  {% set items = pageList.push({
-      number: pageNumber,
-      href: "#",
-      current: pageNumber === pages.currentPage,
-      attributes: {
-        onclick: "return transitionToPage(" + (pageNumber) + ")"
-      }
-    }) 
-  %}
-{% endfor %} 
+{% if pages.items.length > 1 %}
+    {% for pageNumber in pages.items %}
+      {% set items = pageList.push({
+          number: pageNumber,
+          href: "#",
+          current: pageNumber === pages.currentPage,
+          attributes: {
+            onclick: "return transitionToPage(" + (pageNumber) + ")"
+          }
+        })
+      %}
+    {% endfor %}
+{% endif %}
 
 
-
-
-
-<div class="govuk-grid-row">
+<div class="govuk-grid-row pagination-wrapper">
   <div class="govuk-grid-column-one-half">
     {{ govukPagination({
-      previous: previousItem,  
+      previous: previousItem,
       next: nextItem,
       items: pageList
     }) }}
