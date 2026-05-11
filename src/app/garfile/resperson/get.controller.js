@@ -40,12 +40,14 @@ module.exports = async (req, res) => {
   } catch (err) {
     logger.error('API failed to retrieve GAR');
     logger.error(err);
-    res.render('app/garfile/resperson/index', context, {
+    const payload = {
+      ...context,
       errors: [
         {
           message: 'Problem retrieving GAR',
         },
       ],
-    });
+    };
+    res.render('app/garfile/resperson/index', payload);
   }
 };
