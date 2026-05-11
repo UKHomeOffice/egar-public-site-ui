@@ -48,6 +48,7 @@ const APP_VIEWS = [
   __dirname,
   'node_modules/govuk-frontend/',
   'node_modules/govuk-frontend/dist/govuk/components/',
+  'node_modules/@govuk-one-login/service-header/',
   'common/templates',
   'common/templates/includes',
 ];

@@ -33,6 +33,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@govuk-one-login/service-header": "^5.0.0",
     "accessible-autocomplete": "^3.0.1",
     "body-parser": "^2.2.0",
     "compression": "^1.7.3",
