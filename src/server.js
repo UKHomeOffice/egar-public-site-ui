@@ -270,22 +270,6 @@ function initialiseErrorHandling(app) {
     res.redirect('/error/404');
   });
 
-  app.use((err, req, res) => {
-    const log = {
-      level: 'error',
-      message: err.message,
-      stack: err.stack,
-      method: err.method,
-      path: err.path,
-      body: req.body,
-      query: req.query,
-      params: req.params,
-    };
-
-    logger.error(log);
-    res.status(err.status || 500).send('Internal Server Error');
-  });
-
   logger.info('Initialised error handling');
 }
 
