@@ -283,7 +283,7 @@ function initialiseErrorHandling(app) {
     };
 
     logger.error(log);
-    res.status(err.status || 500);
+    res.status(err.status || 500).send('Internal Server Error');
   });
 
   logger.info('Initialised error handling');
