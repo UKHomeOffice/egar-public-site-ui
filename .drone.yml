@@ -134,6 +134,7 @@ trigger:
     - dev
 
 ---
+#deploy to test
 kind: pipeline
 name: deploy-to-test
 type: kubernetes
