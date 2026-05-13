@@ -52,7 +52,7 @@ steps:
       branch:
         - main
         - dev
-        - govuk5-test
+        - govuk5-test-deploy
 
   - name: trivy-scan-image
     pull: always
@@ -86,7 +86,7 @@ trigger:
   branch:
     - main
     - dev
-    - govuk5-test
+    - govuk5-test-deploy
 
 services:
   - name: docker
