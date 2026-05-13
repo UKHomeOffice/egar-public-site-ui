@@ -40,16 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
           if (!html.find('#spinner').length) {
             clearInterval(window.myinterval);
+          }
+
+          $('#pane').html($(data));
+          $('#banner0T-content').appendTo('#top-notification-banner');
+          $('#banner0T').empty();
+
+          permissionDetails().forEach((el, index) => {
+            el.toggleAttribute('open', permissionDetailsState[index]);
+          });
         }
-
-        $('#pane').html($(data));
-        $('#banner0T-content').appendTo('#top-notification-banner');
-        $('#banner0T').empty();
-
-        permissionDetails().forEach((el, index) => {
-          el.toggleAttribute('open', permissionDetailsState[index]);
-        });
-      });
+      );
     }, 3000);
   });
 });
