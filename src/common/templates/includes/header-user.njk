@@ -1,3 +1,10 @@
+{% from "dist/nunjucks/service-header/service-header.njk" import govukOneLoginServiceHeader %}
+
+
+{{ govukOneLoginServiceHeader({
+  signOutLink: "/user/logout"
+}) }}
+
 {% set pagesList = [
   { href: '/home', text: __('nav_bar_gars') },
   { href: '/aircraft', text: __('title_aircraft') },
@@ -12,7 +19,6 @@
 {% endif %}
 
 {% set _ = pagesList.push({ href: '/user/details', text: __('nav_bar_account') }) %}
-{% set _ = pagesList.push({ href: '/user/logout', text: __('nav_bar_sign_out') }) %}
 {% set _ = pagesList.push({ href: '/help', text: __('nav_bar_upt-help') }) %}
 
 {{ navigation(pagesList, active) }}

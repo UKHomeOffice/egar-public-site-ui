@@ -1,3 +1,10 @@
+{% from "dist/govuk/components/header/macro.njk" import govukHeader %}
+
+{{ govukHeader({
+  homepageUrl: "/"
+}) }}
+
+
 {% set pagesList = [
   { href: '/help', text: __('nav_bar_upt-help') }
 ] %}
