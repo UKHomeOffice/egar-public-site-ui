@@ -3,6 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% import "common/templates/includes/paginator.njk" as p %}
+{% import "common/templates/includes/pagination.njk" as pagination %}
 
 {% block pageTitle %}
 	GAR | Dashboard
@@ -75,9 +76,11 @@
             </a>
           </li>
         </ul>
-
+       
         <script type="text/javascript" src="/javascripts/paginator.js"></script>
+        <script src="/javascripts/initialise-pagination.js"></script>
         <form id="signform2" action="/garfile/view" method="post" role="form">
+          
           {% macro gar_summary_table(name, gars) %}
             {% set maxPage = (gars.length // pageSize)+1 if gars.length % pageSize else gars.length // pageSize %}
             <section class="govuk-tabs__panel" id="gars-{{ name }}">
@@ -125,60 +128,8 @@
               {% else %}
                 {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
               {% endif %}
-              <script>
-                $(document).on("click", "table thead tr th:not(.no-sort)", function () {
-                  var table = $(this).parents("table");
-                  var rows = $(this)
-                    .parents("table")
-                    .find("tbody tr")
-                    .toArray()
-                    .sort(TableComparer($(this).index()));
-                  var dir = ($(this).hasClass("sort-asc"))
-                    ? "desc"
-                    : "asc";
-
-                  if (dir == "desc") {
-                    rows = rows.reverse();
-                  }
-
-                  for (var i = 0; i < rows.length; i++) {
-                    table.append(rows[i]);
-                  }
-
-                  table
-                    .find("thead tr th")
-                    .removeClass("sort-asc")
-                    .removeClass("sort-desc");
-                  $(this)
-                    .removeClass("sort-asc")
-                    .removeClass("sort-desc")
-                    .addClass("sort-" + dir);
-                });
-
-                function TableComparer(index) {
-                  return function (a, b) {
-                    var val_a = TableCellValue(a, index);
-                    var val_b = TableCellValue(b, index);
-                    var result = ($.isNumeric(val_a) && $.isNumeric(val_b))
-                      ? val_a - val_b
-                      : val_a
-                        .toString()
-                        .localeCompare(val_b);
-
-                    return result;
-                  }
-                }
-
-                function TableCellValue(row, index) {
-                  return $(row)
-                    .children("td")
-                    .eq(index)
-                    .text();
-                }
-              </script>
-
+              <script src="/javascripts/table.js"></script>
               {{ p.paginator(name, pageSize, gars.length) }}
-
             </section>
           {% endmacro %}
           {{ gar_summary_table('draft', draftGars) }}
@@ -188,5 +139,8 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       </div>
     </div>
-
+ 
   {% endblock %}
+
+   
+

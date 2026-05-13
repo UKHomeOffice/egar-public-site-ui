@@ -137,9 +137,9 @@
     </tr>
   </thead>
   <tbody class="govuk-table__body">
-    {% if statusCheckComplete %}
+    {% if statusCheckComplete %}  
       <div id="banner0T" class="govuk-!-display-none" >
-        <div id="banner0T-content">
+        <div id="banner0T-content"> 
             {{ banner.notificationBannerForResponseCodes(numberOf0TResponseCodes, numberOf0BResponseCodes, showImportantBanner) }}
         </div>
       </div>
@@ -163,7 +163,7 @@
   </tbody>
 </table>
  <input type="hidden" name="resubmitted" value="{{resubmitted}}" />
- {{ pagination.build('passenger-checkin', pages, __)}}
+ {{ pagination.build(pages, {resubmitted: resubmitted,   initialSubmit:'yes'  if initialSubmit })}}
 
 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 </form>

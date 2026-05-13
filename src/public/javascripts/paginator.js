@@ -1,5 +1,6 @@
 var paginationState = {};
 function initialisePagination(paginationName, totalResults, maxPages, pageSize) {
+
   var elements = {};
 
   elements.previousButton = document.querySelector(
@@ -135,7 +136,7 @@ function goToPage(paginationName, page) {
 }
 
 function goToNextPage(paginationName) {
-  goToPage(paginationName, this.paginationState[paginationName].currentPage + 1);
+  goToPage(paginationName, Number(this.paginationState[paginationName].currentPage) + 1);
 }
 function goToPreviousPage(paginationName) {
   goToPage(paginationName, this.paginationState[paginationName].currentPage - 1);

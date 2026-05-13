@@ -1,7 +1,9 @@
 
+
 {% from "dist/govuk/components/date-input/macro.njk" import govukDateInput %}
 
 {% macro dateInput(prefix, cookie, dateObj, legendName, hintName, errors, __) %}
+<div id="page-prefix" data-prefix={{prefix}}></div>
 {{ govukDateInput({
   id: prefix + "Date",
   fieldset: {
@@ -21,8 +23,7 @@
       classes: "govuk-input--width-2",
       value: cookie.dateSlice('day', dateObj),
       attributes: {
-        maxlength: 2,
-        onkeyup: "value = sanitiseDateOrTime(this.value, 'day');autoTab(" + prefix + "Day, 'day', " + prefix + "Month);"
+        maxlength: 2
       }
     },
     {
@@ -32,9 +33,8 @@
       classes: "govuk-input--width-2",
       value: cookie.dateSlice('month', dateObj),
       attributes: {
-        maxlength: 2,
-        onkeyup: "value = sanitiseDateOrTime(this.value, 'month');autoTab(" + prefix + "Month, 'month', " + prefix + "Year);"
-      }
+        maxlength: 2      
+        }
     },
     {
       id: prefix + "Year",
@@ -43,8 +43,7 @@
       classes: "govuk-input--width-4",
       value: cookie.dateSlice('year', dateObj),
       attributes: {
-        maxlength: 4,
-        onkeyup: "value = sanitiseDateOrTime(this.value, 'year');"
+        maxlength: 4
       }
     }
   ],
@@ -73,8 +72,7 @@
         classes: "govuk-input--width-2",
         value: cookie.timeSlice('hour', timeObj),
         attributes: {
-          maxlength: 2,
-          onkeyup: "value = sanitiseDateOrTime(this.value, 'hour');autoTab(" + prefix + "Hour, 'hour', " + prefix + "Minute);"
+          maxlength: 2
         }
       },
       {
@@ -84,10 +82,10 @@
         classes: "govuk-input--width-2",
         value: cookie.timeSlice('minute', timeObj),
         attributes: {
-          maxlength: 2,
-          onkeyup: "value = sanitiseDateOrTime(this.value, 'minute');"
+          maxlength: 2
         }
       }
     ]
   }) }}
+  
 {% endmacro %}

@@ -3,7 +3,7 @@
 {% call cya.sectionHeading('manifest', 'heading_manifest_details', '/garfile/manifest', showChangeLinks, __) %}
 
 {% if viewGuidance and isResubmitted === false and durationInDeparture > 125 %}
-  <div style="float:right;">
+  <div class="float-right">
     <a href="#" id="resubmit0T" class="govuk-link govuk-button resubmit0T">Resubmit checks for timed out passengers</a>
     <form id="reSubmitGarForm" action="/garfile/review" method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>

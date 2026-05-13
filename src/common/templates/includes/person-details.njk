@@ -175,7 +175,7 @@
     <label class="govuk-label govuk-label--m" for="travelDocumentType">{{ __('field_travel_document_type') }}</label>
     {# {{ m.hint('travelDocumentType', __('field_travel_document_type_hint')) }} <p class="govuk-body-l"> <span class="govuk-tag govuk-tag--yellow"> {{__('id_card_withdrawl_text_part')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p> #}
     {{ m.error_message('travelDocumentType', errors, __) }}
-    <select class="govuk-select" id="travelDocumentType" name="travelDocumentType" onchange="checkDocumentType()">
+    <select class="govuk-select" id="travelDocumentType" name="travelDocumentType">
     {% for document in documenttype %}
       {% if document.documenttype  == person['documentType'] or document.documenttype == req.body.travelDocumentType %}
         <option selected="true">{{document.documenttype}}</option>

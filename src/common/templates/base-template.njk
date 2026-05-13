@@ -27,6 +27,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="referrer" content="origin-when-cross-origin" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com" />
     <meta name="theme-color" content="blue">
 
     <link rel="icon" sizes="48x48" href="/assets/rebrand/images/favicon.ico">
@@ -38,20 +39,23 @@
 
     <link href="/stylesheets/custom.css" rel="stylesheet" />
     <link href="/stylesheets/dialog-polyfill.css" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/jquery-3.7.1.min.js"></script>
     <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet" />
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/javascripts/accessible-autocomplete.min.js"></script>
+    
+    <script src="/javascripts/accessible-autocomplete.min.js"></script>
     <script src="/javascripts/dialog-polyfill.js"></script>
 
-    {% include "head.njk" %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script src="/javascripts/cookie-banner.js"></script>
+    <script id="gaconfig" data-ga-id="{{ g4_id }}"  src="/javascripts/google-analytics.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ g4_id }}"></script>
+
 
   </head>
 
   <body class="govuk-template__body app-body-class {{ bodyClasses }}">
-    <script>
-      document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
-    </script>
+    <script src="/javascripts/js-enabled.js"></script>
 
     {% block bodyStart %}{% endblock %}
 
@@ -88,26 +92,11 @@
     {{ footer() }}
 
     <script src="/javascripts/init.js" type="module"></script>
-    <script>
-      $("input[value='{{__('form_save_and_continue')}}'][type='button']").click(function (eventObj) {
-        $("<input />")
-          .attr("type", "hidden")
-          .attr("name", "buttonClicked")
-          .attr("value", "{{__('form_save_and_continue')}}")
-          .appendTo("#page-form");
-        return true;
-      });
-      $("input[value='{{__('button_add_to_gar')}}'][type='button']").click(function (eventObj) {
-        $("<input />")
-          .attr("type", "hidden")
-          .attr("name", "buttonClicked")
-          .attr("value", "{{__('button_add_to_gar')}}")
-          .appendTo("#page-form");
-        return true;
-      });
-    </script>
+    <script src="/javascripts/button-action.js"></script>
     <script src="/javascripts/table-multiselect.js"></script>
     <script src="/javascripts/cookie-banner.js"></script>
     <script src="/javascripts/common.js"></script>
+    <script src="/javascripts/location.js"></script>
+    <script src="/javascripts/includes/date-time.js"></script>
   </body>
 </html>

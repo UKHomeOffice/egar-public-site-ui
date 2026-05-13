@@ -2,7 +2,6 @@ const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
 const manifestFields = require('../../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../../common/services/garApi');
-const pagination = require('../../../../common/utils/pagination');
 
 module.exports = async (req, res) => {
   logger.debug('In garfile / amg get controller');
@@ -12,14 +11,9 @@ module.exports = async (req, res) => {
   const resubmitted = req.query.resubmitted || 'no';
   const template = req.query.template === 'pane' ? 'app/garfile/amg/checkin/pane' : 'app/garfile/amg/checkin/index';
   const initialSubmit = req.query.initialSubmit ? '&initialSubmit=yes' : '';
-  const pageUrl = `/garfile/amg/checkin?resubmitted=${resubmitted}${initialSubmit}`;
+  const currentPage = req.query.page ? req.query.page : 1;
+
   try {
-    let currentPage = pagination.getCurrentPage(req, '/garfile/amg/checkin');
-
-    if (initialSubmit !== '') {
-      pagination.setCurrentPage(req, '/garfile/amg/checkin', 1);
-    }
-
     const { progress } = JSON.parse(await garApi.getGarCheckinProgress(garId));
     if ('poll' in req.query) {
       logger.info(`User GAR ${garId}: Checkin progress status is ${progress}`);
@@ -35,10 +29,6 @@ module.exports = async (req, res) => {
         const statusCheckComplete = garpeople.items.every((x) => x.amgCheckinStatus.name === 'Complete');
 
         const durationInDeparture = garApi.getDurationBeforeDeparture(garfile.departureDate, garfile.departureTime);
-
-        const { totalPages, totalItems } = garpeople._meta;
-
-        const paginationData = pagination.build(req, totalPages, totalItems, pageUrl, 10);
         const numberOf0TResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0T')).items.length;
         const numberOf0BResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0B')).items.length;
         const showImportantBanner = resubmitted === 'no' && numberOf0TResponseCodes > 0 && durationInDeparture > 125;
@@ -54,10 +44,11 @@ module.exports = async (req, res) => {
           numberOf0TResponseCodes,
           resubmitted,
           durationInDeparture,
-          pages: paginationData,
+          pages: garpeople._meta,
           currentPage: currentPage,
           showImportantBanner,
           numberOf0BResponseCodes,
+          initialSubmit,
         };
 
         if (progress === 'Incomplete' && resubmitted === 'yes') {
