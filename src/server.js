@@ -8,6 +8,7 @@ const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const i18n = require('i18n');
 const loggingMiddleware = require('morgan');
+const { token } = require('morgan');
 const argv = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
 const nunjucks = require('nunjucks');
@@ -95,6 +96,10 @@ function initialisExpressSession(app) {
   logger.info('Set express session');
 }
 
+function setupLoggingContext() {
+  token('session-id', (req) => req.sessionID || '');
+}
+
 function initialiseGlobalMiddleware(app) {
   logger.info('Initalising global middleware');
 
@@ -119,7 +124,7 @@ function initialiseGlobalMiddleware(app) {
     app.use(
       /\/((?!images|public|stylesheets|javascripts).)*/,
       loggingMiddleware(
-        ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'
+        ':remote-addr - :remote-user [:date[clf]] ":session-id :method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'
       )
     );
   }
@@ -264,6 +269,7 @@ function initialiseErrorHandling(app) {
   app.use((req, res) => {
     res.redirect('/error/404');
   });
+
   logger.info('Initialised error handling');
 }
 
@@ -283,6 +289,7 @@ function initialise() {
   async function prepDb() {
     try {
       await initialiseDb();
+      setupLoggingContext();
       initialisExpressSession(unconfiguredApp);
       initialiseProxy(unconfiguredApp);
       initialiseI18n(unconfiguredApp);
