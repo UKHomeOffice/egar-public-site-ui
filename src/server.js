@@ -160,7 +160,21 @@ function initialiseGlobalMiddleware(app) {
   });
 
   logger.info('Set CSRF Token');
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", 'https://www.googletagmanager.com https://www.google-analytics.com'],
+          connectSrc: ["'self'", 'https://www.google-analytics.com', 'https://region1.google-analytics.com/'],
+          imgSrc: ["'self'", 'data:', 'https://www.google-analytics.com'],
+          styleSrc: ["'self'"],
+          objectSrc: ["'none'"],
+          upgradeInsecureRequests: true,
+        },
+      },
+    })
+  );
 
   logger.info('Set global middleware');
 }
