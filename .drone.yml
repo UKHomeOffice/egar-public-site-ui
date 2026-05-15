@@ -53,6 +53,7 @@ steps:
         - main
         - dev
         - govuk5-test
+        - NMSW-3130-add-content-security-policy
 
   - name: trivy-scan-image
     pull: always
