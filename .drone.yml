@@ -88,6 +88,7 @@ trigger:
     - main
     - dev
     - govuk5-test
+    - NMSW-3130-add-content-security-policy
 
 services:
   - name: docker
