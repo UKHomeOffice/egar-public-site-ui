@@ -1,13 +1,12 @@
 const CookieModel = require('../../common/models/Cookie.class');
 const logger = require('../../common/utils/logger')(__filename);
 const craftApi = require('../../common/services/craftApi');
-const pagination = require('../../common/utils/pagination');
 
 module.exports = (req, res) => {
   logger.debug('In user aircraft get controller');
 
   const cookie = new CookieModel(req);
-  const currentPage = pagination.getCurrentPage(req, '/aircraft');
+  const currentPage = Number(req.query.page) || 1;
 
   const crafts =
     cookie.getUserRole() === 'Individual'
@@ -16,16 +15,7 @@ module.exports = (req, res) => {
   crafts
     .then((values) => {
       const savedCrafts = JSON.parse(values);
-      const { totalPages, totalItems } = savedCrafts._meta;
-
-      let paginationData;
-      try {
-        paginationData = pagination.build(req, totalPages, totalItems);
-      } catch {
-        logger.debug('Pagination module threw max page, refreshing page');
-        res.redirect('/aircraft');
-        return;
-      }
+      const paginationData = savedCrafts._meta;
 
       cookie.setSavedCraft(savedCrafts);
       if (req.session.errMsg) {
