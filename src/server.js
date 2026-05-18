@@ -170,7 +170,6 @@ function initialiseGlobalMiddleware(app) {
           imgSrc: ["'self'", 'data:', 'https://www.google-analytics.com', 'https://www.googletagmanager.com'],
           styleSrc: ["'self'"],
           objectSrc: ["'none'"],
-          upgradeInsecureRequests: true,
         },
       },
     })

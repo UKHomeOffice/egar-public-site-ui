@@ -3,7 +3,7 @@
 {% from "dist/govuk/components/date-input/macro.njk" import govukDateInput %}
 
 {% macro dateInput(prefix, cookie, dateObj, legendName, hintName, errors, __) %}
-<div id="date-prefix-{{prefix}}" data-prefix={{prefix}}></div>
+<div id="date-prefix-{{prefix}}" data-prefix="{{prefix}}"></div>
 {{ govukDateInput({
   id: prefix + "Date",
   fieldset: {
