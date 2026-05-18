@@ -2,7 +2,7 @@ const gaConfig = document.getElementById('gaconfig');
 const gaId = gaConfig.dataset.gaId;
 
 window.dataLayer = window.dataLayer || [];
-checkForCookie = getCookie('sgar_cookies_policy');
+const checkForCookie = getCookie('sgar_cookies_policy');
 if (checkForCookie == 'true') {
   function gtag() {
     dataLayer.push(arguments);

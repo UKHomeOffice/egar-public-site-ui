@@ -11,6 +11,7 @@ function hide(intentionValue) {
 }
 document.addEventListener('DOMContentLoaded', () => {
   const customsDeclarationIntetionValues = document.querySelectorAll('input[name="intentionValue"]');
+  hide(document.querySelector('input[name="intentionValue"]:checked')?.value);
   customsDeclarationIntetionValues.forEach((customsDeclarationIntetionValue) => {
     customsDeclarationIntetionValue.addEventListener('change', (e) => {
       hide(e.target.value);

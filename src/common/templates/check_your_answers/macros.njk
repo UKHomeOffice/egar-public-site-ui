@@ -22,7 +22,7 @@
 {% endmacro %}
 
 {% macro transitionDetails(prefix, garfile, showChangeLinks, __) %}
-  <div id={{prefix}}></div>
+  <div id={{prefix}}~Date></div>
   {% set heading = __( 'heading_' ~ prefix ~ '_details' ) %}
 
   {% set rows = [

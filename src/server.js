@@ -165,9 +165,9 @@ function initialiseGlobalMiddleware(app) {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", 'https://www.googletagmanager.com https://www.google-analytics.com'],
-          connectSrc: ["'self'", 'https://www.google-analytics.com', 'https://region1.google-analytics.com/'],
-          imgSrc: ["'self'", 'data:', 'https://www.google-analytics.com'],
+          scriptSrc: ["'self'", 'https://www.googletagmanager.com', 'https://www.google-analytics.com'],
+          connectSrc: ["'self'", 'https://www.google-analytics.com', 'https://region1.google-analytics.com'],
+          imgSrc: ["'self'", 'data:', 'https://www.google-analytics.com', 'https://www.googletagmanager.com'],
           styleSrc: ["'self'"],
           objectSrc: ["'none'"],
           upgradeInsecureRequests: true,

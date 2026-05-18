@@ -8,7 +8,7 @@ module.exports = (req, res) => {
 
   // Clear existing editcraft
   const cookie = new CookieModel(req);
-  const currentPage = req.query.page;
+  const currentPage = Number(req.query.page) || 1;
 
   const userRole = cookie.getUserRole();
   const userId = cookie.getUserDbId();

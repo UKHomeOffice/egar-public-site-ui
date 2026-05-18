@@ -6,7 +6,7 @@ module.exports = (req, res) => {
   logger.debug('In user aircraft get controller');
 
   const cookie = new CookieModel(req);
-  const currentPage = req.query.page;
+  const currentPage = Number(req.query.page) || 1;
 
   const crafts =
     cookie.getUserRole() === 'Individual'

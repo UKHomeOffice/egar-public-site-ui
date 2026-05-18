@@ -75,7 +75,7 @@ function goToPage(paginationName, page) {
     .forEach((el) => showElement(el));
 
   //Hide and show all the paginator buttons
-  if (paginationData.currentPage === 1) {
+  if (paginationData.currentPage < 2) {
     hideElement(paginationData.elements.previousButton);
     hideElement(paginationData.elements.firstNumber);
   } else {

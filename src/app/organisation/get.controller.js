@@ -9,7 +9,7 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const userPermissions = permissionLevels[cookie.getUserRole()];
 
-  const currentPage = req.query.page;
+  const currentPage = Number(req.query.page) || 1;
 
   orgApi
     .getUsers(cookie.getOrganisationId(), currentPage, NUM_OF_USERS)
