@@ -167,13 +167,16 @@ describe('Organisation Invite User Post Controller', () => {
   });
 
   it('should render to error page if user is already exist', () => {
+    const cookie = new CookieModel(req);
     const callController = async () => {
       await controller(req, res);
     };
 
     getDetailsStub.resolves({ email: 'prequel@enterprise.net' });
     callController().then(() => {
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/userExistError');
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/userExistError', {
+        cookie,
+      });
     });
   });
 });
