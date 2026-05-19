@@ -142,3 +142,6 @@ h3.govuk-notification-banner__heading {
 .loader-text-opacity {
  opacity: 0.5;
 }
+.total-paging-items {
+    margin-left: auto;
+}
