@@ -1,8 +1,6 @@
 FROM node:24-alpine3.23  AS development
 
-RUN apk update \
-    && apk upgrade --update-cache --available \
-    && apk add curl
+RUN apk update && apk upgrade --update-cache --available && apk add curl
 
 RUN mkdir -p /public-site/ && \
     mkdir -p /var/log/nodejs/ && \

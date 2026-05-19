@@ -10,7 +10,7 @@
 {% set active = '/aircraft' %}
 
 {% block content %}
-<script src="/javascripts/aircraft/index.js" type="text/javascript"></script>
+<script src="/javascripts/aircraft/index.js"></script>
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">{{__('title_aircraft')}}</h1>
@@ -51,7 +51,7 @@
         </tbody>
       </table>
       {% if savedCrafts.items | length %}
-        {{ pagination.build('aircraft', pages, __)}}
+        {{ pagination.build(pages)}}
       {% endif %}
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </form>

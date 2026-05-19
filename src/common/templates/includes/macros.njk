@@ -1,4 +1,5 @@
 {% from "dist/govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "dist/govuk/components/select/macro.njk" import govukSelect %}
 
 {% macro form_group_class(identifier, errors) %}
   {% set class = 'govuk-form-group' %}
@@ -137,4 +138,32 @@
       <h2 class="govuk-heading-l">{{text}}</h2>
       <p class="govuk-body govuk-!-font-size-36">{{text2}}</p>
     </div>
+{% endmacro %}
+
+{% macro countryList(field, countries, selectedValue='', label='', hint='', errors='') %}
+  {% set countryItems = [{value: '', text: ''}] %}
+  {% for country in countries | sort(attribute='label') %}
+    {% set option = {
+      value: country.code,
+      text: country.label,
+      selected: selectedValue == country.code
+    } %}
+    {% set countryItems = countryItems.concat(option) %}
+  {% endfor %}
+
+  {{ govukSelect({
+    id: field,
+    name: field,
+    classes: "govuk-select",
+    label: {
+      text: label,
+      classes: "govuk-label--m"
+    },
+    hint: {
+      text: hint
+    },
+    items: countryItems,
+    errorMessage: errors
+  }) }}
+
 {% endmacro %}

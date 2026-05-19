@@ -1,5 +1,5 @@
 {% import "common/templates/check_your_answers/macros.njk" as cya %}
-
+<script src="/javascripts/garfile/amg/resubmitGar.js"></script>
 {{ cya.transitionDetails('departure', garfile, showChangeLinks, __) }}
 {{ cya.transitionDetails('arrival', garfile, showChangeLinks, __) }}
 {{ m.departure_warning_message(__) }}

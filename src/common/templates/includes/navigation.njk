@@ -1,10 +1,6 @@
 {% from "dist/govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
-{% from "dist/govuk/components/header/macro.njk" import govukHeader %}
-{% macro navigation(pagesList, active)%}
 
-  {{ govukHeader({
-    homepageUrl: "/"
-  }) }}
+{% macro navigation(pagesList, active)%}
 
   {% set pages = [] %}
   {% for page in pagesList %}

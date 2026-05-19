@@ -8,7 +8,6 @@ const sinonChai = require('sinon-chai');
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
 const craftApi = require('../../common/services/craftApi');
-const pagination = require('../../common/utils/pagination');
 
 controller = require('../../app/aircraft/get.controller');
 
@@ -16,8 +15,6 @@ describe('Saved Aircraft Get Controller', () => {
   let res;
   let individualCraftStub;
   let organisationCraftStub;
-  let paginationBuildStub;
-  let paginationGetCurrentPageStub;
 
   const apiResponse = JSON.stringify({
     items: [
@@ -36,8 +33,6 @@ describe('Saved Aircraft Get Controller', () => {
     };
     individualCraftStub = sinon.stub(craftApi, 'getCrafts');
     organisationCraftStub = sinon.stub(craftApi, 'getOrgCrafts');
-    paginationBuildStub = sinon.stub(pagination, 'build');
-    paginationGetCurrentPageStub = sinon.stub(pagination, 'getCurrentPage');
   });
 
   afterEach(() => {
@@ -59,8 +54,6 @@ describe('Saved Aircraft Get Controller', () => {
 
     beforeEach(() => {
       cookie = new CookieModel(req);
-      paginationBuildStub.returns({ startItem: 1, endItem: 1 });
-      paginationGetCurrentPageStub.returns(1);
     });
 
     it('should return an error message when craft api rejects', async () => {
@@ -80,17 +73,6 @@ describe('Saved Aircraft Get Controller', () => {
       });
     });
 
-    it('should redirect if the pagination module throws an error', async () => {
-      individualCraftStub.resolves(apiResponse);
-      paginationBuildStub.throws('Example');
-      await controller(req, res);
-
-      expect(individualCraftStub).to.have.been.calledOnceWithExactly('example@somewhere.com', 1);
-      expect(req.session.errMsg).to.be.undefined;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
-      expect(res.render).to.not.have.been.called;
-    });
-
     it('should return error messages if in the session', async () => {
       req.session.errMsg = 'Example Error Message';
       individualCraftStub.resolves(apiResponse);
@@ -107,7 +89,7 @@ describe('Saved Aircraft Get Controller', () => {
           ],
           _meta: { totalPages: 1, totalItems: 2 },
         },
-        pages: { startItem: 1, endItem: 1 },
+        pages: { totalPages: 1, totalItems: 2 },
         errors: ['Example Error Message'],
       });
     });
@@ -131,7 +113,7 @@ describe('Saved Aircraft Get Controller', () => {
           ],
           _meta: { totalPages: 1, totalItems: 2 },
         },
-        pages: { startItem: 1, endItem: 1 },
+        pages: { totalPages: 1, totalItems: 2 },
         successMsg: 'Example Success Message',
         successHeader: 'Example Success Header',
       });
@@ -154,7 +136,7 @@ describe('Saved Aircraft Get Controller', () => {
           ],
           _meta: { totalPages: 1, totalItems: 2 },
         },
-        pages: { startItem: 1, endItem: 1 },
+        pages: { totalPages: 1, totalItems: 2 },
       });
     });
   });
@@ -192,7 +174,6 @@ describe('Saved Aircraft Get Controller', () => {
     it('should just go to the page if no messages', async () => {
       const cookie = new CookieModel(req);
       organisationCraftStub.resolves(apiResponse);
-      paginationBuildStub.returns({ startItem: 1, endItem: 2 });
       await controller(req, res);
 
       expect(req.session.errMsg).to.be.undefined;
@@ -207,7 +188,7 @@ describe('Saved Aircraft Get Controller', () => {
           ],
           _meta: { totalPages: 1, totalItems: 2 },
         },
-        pages: { startItem: 1, endItem: 2 },
+        pages: { totalPages: 1, totalItems: 2 },
       });
     });
   });

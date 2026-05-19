@@ -12,18 +12,18 @@ steps:
     pull: if-not-exists
     image: node:22-alpine3.21
     commands:
-    - export NOTIFY_API_KEY=dummy
-    - cd src
-    - npm install
-    - npm run test-drone
+      - export NOTIFY_API_KEY=dummy
+      - cd src
+      - npm install
+      - npm run test-drone
 
   - name: linting-formatting
     pull: if-not-exists
     image: node:22-alpine3.21
     commands:
-    - cd src
-    - npm install
-    - npm run check
+      - cd src
+      - npm install
+      - npm run check
 
   - name: build
     pull: if-not-exists
@@ -53,6 +53,7 @@ steps:
         - main
         - dev
         - govuk5-test
+        - NMSW-3130-add-content-security-policy
 
   - name: trivy-scan-image
     pull: always
@@ -66,14 +67,14 @@ steps:
       IMAGE_NAME: egar-public-site-ui:${DRONE_COMMIT}
       IGNORE_UNFIXED: true
     depends_on:
-    - build
+      - build
 
   - name: sonar-scan
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/sonar-scanner-nodejs:latest
     failure: ignore
     commands:
-    - sonar-scanner -Dproject.settings=./sonar-project.properties
+      - sonar-scanner -Dproject.settings=./sonar-project.properties
     when:
       event:
         - push
@@ -87,6 +88,7 @@ trigger:
     - main
     - dev
     - govuk5-test
+    - NMSW-3130-add-content-security-policy
 
 services:
   - name: docker
@@ -137,6 +139,8 @@ trigger:
 kind: pipeline
 name: deploy-to-test
 type: kubernetes
+depends_on:
+  - build-push-scan
 
 platform:
   os: linux
@@ -209,7 +213,6 @@ trigger:
   event:
     - push
 ---
-
 kind: pipeline
 name: deploy-to-staging
 type: kubernetes

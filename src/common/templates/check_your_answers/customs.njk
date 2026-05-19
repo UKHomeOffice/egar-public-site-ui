@@ -29,7 +29,7 @@
 {% if garfile.supportingInformation != "" %}
   {% set _ = customsRows.push({ key: { html: __('field_supporting_information_review') }, value: { html: garfile.supportingInformation | truncate(50) | default('') } }) %}
 {% endif %}
-
+<div id="intentionValue"></div>
 {{ govukSummaryList({
   card: {
       title: {

@@ -31,7 +31,7 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile/print manifest get controller');
 
-  let { garId } = req.body;
+  let { garId } = req.body || {};
   if (garId === undefined) {
     garId = cookie.getGarId();
   }

@@ -1,3 +1,5 @@
+{% import "common/templates/includes/macros.njk" as common %}
+
 {{ govukInput({
   id: "responsibleGivenName",
   name: "responsibleGivenName",
@@ -121,20 +123,16 @@
     errorMessage: errors | containsError('responsiblePostcode')
   }) }}
 
-  {% set countryItems = [] %}
-  {% for country in nationalityList | sort(attribute='label') %}
-    {% set item = { value: country.code, text: country.label } %}
-    {% set countryItems = countryItems.concat(item) %}
-  {% endfor %}
-
-  {{ govukSelect({
-    id: "responsibleCountry",
-    name: "responsibleCountry",
-    label: { text: __("field_address_country"), classes: "govuk-label" },
-    items: countryItems,
-    selected: responsiblePerson.responsibleCountry,
-    errorMessage: errors | containsError('responsibleCountry')
-  }) }}
+  {{
+    common.countryList(
+      "responsibleCountry",
+      countryList,
+      responsiblePerson.responsibleCountry,
+      __("field_address_country"),
+      '',
+      errors | containsError('responsibleCountry')
+      )
+  }}
 </fieldset>
 
 {% set fixedBasedOperatorTextarea = govukTextarea({
