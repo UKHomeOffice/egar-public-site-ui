@@ -55,19 +55,19 @@ steps:
         - govuk5-test
         - NMSW-3130-add-content-security-policy
 
-#  - name: trivy-scan-image
-#    pull: always
-#    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
-#    failure: ignore
-#    resources:
-#      limits:
-#        cpu: 1000
-#        memory: 1024Mi
-#    environment:
-#      IMAGE_NAME: egar-public-site-ui:${DRONE_COMMIT}
-#      IGNORE_UNFIXED: true
-#    depends_on:
-#      - build
+  - name: trivy-scan-image
+    pull: always
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/trivy/client:latest
+    failure: ignore
+    resources:
+      limits:
+        cpu: 1000
+        memory: 1024Mi
+    environment:
+      IMAGE_NAME: egar-public-site-ui:${DRONE_COMMIT}
+      IGNORE_UNFIXED: true
+    depends_on:
+      - build
 
   - name: sonar-scan
     pull: always
