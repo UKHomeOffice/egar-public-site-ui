@@ -71,7 +71,7 @@ steps:
 
   - name: sonar-scan
     pull: always
-    image: quay.io/ukhomeofficedigital/sonar-scanner-nodejs:latest
+    image: quay.io/ukhomeofficedigital/sonar-scanner:latest
     failure: ignore
     commands:
       - sonar-scanner -Dproject.settings=./sonar-project.properties
