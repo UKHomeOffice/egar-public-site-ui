@@ -79,7 +79,6 @@ steps:
       event:
         - push
       branch:
-        - dev
         - main
 trigger:
   event:
