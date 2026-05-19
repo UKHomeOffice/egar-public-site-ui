@@ -70,7 +70,7 @@ steps:
       - build
 
   - name: sonar-scan
-    pull: if-not-exists
+    pull: always
     image: quay.io/ukhomeofficedigital/sonar-scanner-nodejs:latest
     failure: ignore
     commands:
