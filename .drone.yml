@@ -80,7 +80,6 @@ steps:
         - push
       branch:
         - main
-        - dev
 
 trigger:
   event:
