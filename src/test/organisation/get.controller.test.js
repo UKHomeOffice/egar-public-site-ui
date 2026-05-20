@@ -7,7 +7,6 @@ require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
 const orgApi = require('../../common/services/organisationApi');
 
-const pagination = require('../../common/utils/pagination');
 const settings = require('../../common/config/index');
 const configMock = {
   ...settings,
@@ -20,8 +19,6 @@ describe('Organisation Get Controller', () => {
   let req;
   let res;
   let orgApiStub;
-  let paginationBuildStub;
-  let paginationGetCurrentPageStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -36,6 +33,7 @@ describe('Organisation Get Controller', () => {
           rl: 'User',
         },
       },
+      query: { page: 1 },
     };
 
     res = {
@@ -43,8 +41,6 @@ describe('Organisation Get Controller', () => {
     };
 
     orgApiStub = sinon.stub(orgApi, 'getUsers');
-    paginationBuildStub = sinon.stub(pagination, 'build');
-    paginationGetCurrentPageStub = sinon.stub(pagination, 'getCurrentPage');
   });
 
   afterEach(() => {
@@ -60,7 +56,7 @@ describe('Organisation Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', undefined);
+      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
         cookie,
         errors: [{ message: 'There was a problem fetching organisation users' }],
@@ -84,8 +80,6 @@ describe('Organisation Get Controller', () => {
       cookie.setOrganisationUsers(apiResponse);
 
       orgApiStub.resolves(JSON.stringify(apiResponse));
-      paginationBuildStub.returns({ startItem: 1, endItem: 1 });
-      paginationGetCurrentPageStub.returns(1);
     });
 
     it('should display error message if set', () => {
@@ -97,14 +91,14 @@ describe('Organisation Get Controller', () => {
 
       callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1);
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
           cookie,
           orgUsers: [
             { id: 'USER-1', firstName: 'Jessica', role: { name: 'Admin' }, isEditable: false },
             { id: 'USER-2', firstName: 'Trish', role: { name: 'Manager' }, isEditable: false },
           ],
-          pages: { startItem: 1, endItem: 1 },
+          pages: { totalPages: 1, totalItems: 2 },
           currentPage: 1,
           errors: [{ message: 'Example error message' }],
         });
@@ -123,7 +117,7 @@ describe('Organisation Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1);
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
           cookie,
           orgUsers: [
@@ -132,7 +126,7 @@ describe('Organisation Get Controller', () => {
           ],
           successHeader: 'Successful header',
           successMsg: 'Example success message',
-          pages: { startItem: 1, endItem: 1 },
+          pages: { totalPages: 1, totalItems: 2 },
           currentPage: 1,
         });
       });
@@ -147,14 +141,14 @@ describe('Organisation Get Controller', () => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1);
+        expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
           cookie,
           orgUsers: [
             { id: 'USER-1', firstName: 'Jessica', role: { name: 'Admin' }, isEditable: false },
             { id: 'USER-2', firstName: 'Trish', role: { name: 'Manager' }, isEditable: false },
           ],
-          pages: { startItem: 1, endItem: 1 },
+          pages: { totalPages: 1, totalItems: 2 },
           currentPage: 1,
         });
       });

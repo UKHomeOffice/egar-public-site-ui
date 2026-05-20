@@ -126,3 +126,22 @@ h3.govuk-notification-banner__heading {
   justify-content: space-between;
   align-items: center; /* This is the key */
 }
+.pagination__current_number {
+    font-weight: bold;
+    cursor: default;
+}
+.pagination__summary ul li {
+    cursor: pointer;
+}
+.float-right{
+    float: right;
+}
+.text-background-color{
+   background-color: #00FFFF;
+}
+.loader-text-opacity {
+ opacity: 0.5;
+}
+.total-paging-items {
+    margin-left: auto;
+}

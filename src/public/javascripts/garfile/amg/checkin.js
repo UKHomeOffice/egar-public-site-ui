@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(pollIntervalId);
       }
     } catch {
+      clearInterval(pollIntervalId);
       bodyElement.innerHTML = '<p>Could not load data. Please try again later</p>';
     }
   }

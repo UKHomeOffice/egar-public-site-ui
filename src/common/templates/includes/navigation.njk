@@ -1,7 +1,6 @@
 {% from "dist/govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
 {% macro navigation(pagesList, active)%}
-  
   {% set pages = [] %}
   {% for page in pagesList %}
     {% set _ = pages.push({

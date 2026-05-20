@@ -1,22 +1,75 @@
 {% macro paginator(name, pageSize, totalItems) %}
     {% set maxPage = (totalItems // pageSize)+1 if totalItems % pageSize else totalItems // pageSize %}
-    <nav class="govuk-pagination pagination__{{name}}_paginator" role="navigation" aria-label="Pagination">
-        <div class="pagination__summary">Showing <span id="pagination__from_number">1</span> &ndash; <span id="pagination__to_number">{{pageSize if totalItems > pageSize else totalItems}} </span> of {{totalItems}} results</div>
+    <nav class="govuk-pagination pagination__{{ name }}_paginator" role="navigation" aria-label="Pagination">
         <ul class="pagination">
-            <li class="govuk-pagination__item pagination__previous_button button-link" hidden="true"><a class="pagination__link" onClick="goToPreviousPage('{{name}}')" aria-label="Previous page" hidden="true"><span aria-hidden="true" role="presentation">&laquo;</span> Previous</a></li>
-            <li class="govuk-pagination__item pagination__first_number button-link" hidden="true"><a class="pagination__link" onClick="goToPage('{{name}}',1)" aria-label="Page 1">1</a></li>
+            <li
+                id="pagination__previous_button-{{ name }}"
+                class="govuk-pagination__item pagination__previous_button button-link govuk-pagination__prev">
+                <a class="pagination__link" aria-label="Previous page" href="#gars-{{ name }}">
+                    <svg
+                        class="govuk-pagination__icon govuk-pagination__icon--prev"
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="13"
+                        width="15"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 15 13">
+                        <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+                    </svg>
+                    <span class="govuk-pagination__link-title">Previous</span>
+                </a>
+            </li>
+            <li
+                id="pagination__first_number-{{ name }}"
+                class="govuk-pagination__item pagination__first_number button-link"
+                hidden="true">
+                <a class="pagination__link" aria-label="Page 1" href="#gars-{{ name }}">1</a>
+            </li>
             <li class="govuk-pagination__item pagination__first_ellipses">⋯</li>
-            <li class="govuk-pagination__item pagination__previous_number button-linkbutton-link"><a class="pagination__link" onClick="goToPreviousPage('{{name}}')" aria-label="Page 2">2</a></li>
-            <li class="govuk-pagination__item pagination__current_number button-link"><a class="pagination__link current" aria-current="true" aria-label="Page 3, current page">3</a></li>
-            <li class="govuk-pagination__item pagination__next_number button-link"><a class="pagination__link" onClick="goToNextPage('{{name}}')" aria-label="Page 4">4</a></li>
+            <li class="govuk-pagination__item pagination__previous_number button-linkbutton-link">
+                <a class="pagination__link" aria-label="Page 2" href="#gars-{{ name }}">2</a>
+            </li>
+            <li
+                id="pagination__current_number-{{ name }}"
+                class="govuk-pagination__item govuk-pagination__item--current govuk-pagination__item pagination__current_number
+                    button-link">
+                <a
+                    class="pagination__link current govuk-pagination__link"
+                    aria-current="true"
+                    aria-label="Page 3, current page"
+                    href="#gars-{{ name }}">3</a>
+            </li>
+            <li id="pagination__next_number-{{ name }}" class="govuk-pagination__item pagination__next_number button-link">
+                <a class="pagination__link" aria-label="Page 4" href="#gars-{{ name }}">4</a>
+            </li>
             <li class="govuk-pagination__item pagination__last_ellipses">⋯</li>
-            <li class="govuk-pagination__item pagination__last_number button-link"><a class="pagination__link" onClick="goToPage('{{name}}',{{maxPage}})" aria-label="Page {{maxPage}}">{{maxPage}}</a></li>
-            <li class="govuk-pagination__item pagination__next_button button-link"><a class="pagination__link" onClick="goToNextPage('{{name}}')" aria-label="Next page">Next <span aria-hidden="true" role="presentation">&raquo;</span></a></li>
+            <li id="pagination__last_number-{{ name }}" class="govuk-pagination__item pagination__last_number button-link">
+                <a class="pagination__link" aria-label="Page {{ maxPage }}" href="#gars-{{ name }}">{{ maxPage }}</a>
+            </li>
+            <li
+                id="pagination__next_button-{{ name }}"
+                class="govuk-pagination__item pagination__next_button button-link govuk-pagination__next">
+                <a class="pagination__link" aria-label="Next page" href="#gars-{{ name }}">
+                    <span class="govuk-pagination__link-title">Next</span>
+                    <svg
+                        class="govuk-pagination__icon govuk-pagination__icon--next"
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="13"
+                        width="15"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 15 13">
+                        <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+                    </svg>
+                </a>
+            </li>
         </ul>
-    </nav> 
-
-    <script>
-        initialisePagination('{{name}}', {{totalItems}}, {{maxPage}}, {{pageSize}});
-        goToPage('{{name}}', 1);
-    </script>
+        <div class="pagination__summary govuk-!-padding-left-9 govuk-!-padding-top-6 ">Showing
+            <span id="pagination__from_number">1</span>
+            &ndash;
+            <span id="pagination__to_number">{{ pageSize if totalItems > pageSize else totalItems }}
+            </span>
+            of {{ totalItems }} results</div>
+    </nav>
+    <div id='pagination-init-{{ name }}' data-config='{{ {name:name, totalItems:totalItems, maxPage:maxPage, pageSize:pageSize} | dump | safe }}'></div>
 {% endmacro %}

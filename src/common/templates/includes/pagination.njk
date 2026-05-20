@@ -1,66 +1,130 @@
 {% from "dist/govuk/components/pagination/macro.njk" import govukPagination %}
-  
-{% macro build(formName, pages, __) %}
+{# Accepts a PagedResponse object and returns a pagination component. #}
 
-{% block content %}
-<script src="/javascripts/pagination.js" type="text/javascript"></script>
+{% macro build(pagedResponse,url_params) %}
+    {% if pagedResponse.totalItems > 0 %}
+        <div class="pagination-wrapper">
+          {% if pagedResponse.page*pagedResponse.perPage > pagedResponse.totalItems %}
+            {% set itemCountEndOfPage = pagedResponse.totalItems %}
+            {% else %}
+                {% set itemCountEndOfPage = pagedResponse.page*pagedResponse.perPage %}
+          {% endif %}
+          
+          {% set itemCountBeginningOfPage = (pagedResponse.page - 1) * pagedResponse.perPage + 1 %}
+          <div class="govuk-grid-column-two-third">
+            {% if pagedResponse.totalPages > 1 %}
+                {% set page_numbers = [] %}
+                {% set next = null %}
+                {% set prev = null %}
+                 
+               {% for i in range(1, pagedResponse.totalPages + 1) %}  
+                    {% if pagedResponse.totalPages > 7 %}
+                        {% if i == pagedResponse.page %}
+                            {# When the current page is between 1 and 4, display the first 4 page numbers, followed by an ellipsis, and then the last page number. #}
+                            {% if i <= 4 %}
+                                {% for j in range(1, 7)%}
+                                    {% set page_number = { number: j, href: build_url(url_params, j), current: j == pagedResponse.page } %}
+                                    {% if j > 5  %} 
+                                        {% set ellipsis = {ellipsis: true} %} 
+                                        {% set page_number_last = { number: pagedResponse.totalPages, href: build_url(url_params, pagedResponse.totalPages) } %}  
+                                        {% set page_number = { number: pagedResponse.totalPages, href: build_url(url_params, pagedResponse.totalPages) } %}  
+                                        {% set page_numbers = page_numbers.concat(ellipsis) %}    
+                                    {% endif %}   
+                                    {% set page_numbers = page_numbers.concat(page_number) %}
+                                {% endfor %}
+                            {% endif %}
 
-{% set pageList = [] %}
-{% set previousItem = null %}
-{% set nextItem = null %}
+                           {# When the current page is the last page, display the first page, and then last 5 page numbers followed by an ellipsis.#}
+                            {% if i > pagedResponse.totalPages-4 %}
+                                        {% set page_number = { number: 1, href: build_url(url_params, 1)} %}
+                                        {% set ellipsis = {ellipsis: true} %}
+                                        {% set page_numbers = page_numbers.concat(page_number, ellipsis) %} 
+                            
+                                {% for j in range(pagedResponse.totalPages-4, pagedResponse.totalPages+1)%}
+                                        {% if j <= pagedResponse.totalPages %}
+                                              {% set page_number = { number: j, href: build_url(url_params, j), current: j == pagedResponse.page } %}
+                                        {% endif %} 
+                                    {% set page_numbers = page_numbers.concat(page_number) %}     
+                                {% endfor %}          
+                            {% endif %}
 
-{% if pages.currentPage > 1 %}
-  {% set previousItem = {
-    href: "#",
-    attributes: {
-      onclick: "return transitionToPage(" + (pages.currentPage  - 1) + ", '" + formName + "')"
-    }
-  } %}
-{% endif %}
+                            {# When the current page is between the 4th page and the page before the last one, display the following: 
+                            the first page number, an ellipsis, the current page along with the preceding and succeeding page numbers, another ellipsis, and the last page number. #}
 
-{% if pages.currentPage < pages.totalPages %}
-  {% set nextItem = {
-    href: "#",
-    attributes: {
-      onclick: "return transitionToPage(" + (pages.currentPage + 1) + ", '" + formName + "')"
-    }
-  } %}
-{% endif %}
+                            {% if i > 4 and  i < pagedResponse.totalPages-3 %}
+                                {% for j in range(1, 4)%} 
+                                    {% if j < 2 %}
+                                        {% set page_number = { number: j, href: build_url(url_params, j) } %}
+                                        {% set page_numbers = page_numbers.concat(page_number) %} 
+                                    {% elseif j == 3  %}    
+                                        {% set page_number = { number: pagedResponse.totalPages, href: build_url(url_params, pagedResponse.totalPages) } %}
+                                        {% set page_numbers = page_numbers.concat(page_number) %}    
+                                    {% else %} 
+                                        {% if i > 2 %}
+                                            {% set ellipsis = {ellipsis: true} %}    
+                                            {% set page_numbers = page_numbers.concat(ellipsis) %}  
+                                        {% endif%} 
 
-{% if pages.items.length > 1 %}
-  {% for pageNumber in pages.items %}
-    {% set items = pageList.push({
-        number: pageNumber,
-        href: "#",
-        current: pageNumber === pages.currentPage,
-        attributes: {
-          onclick: "return transitionToPage(" + pageNumber + ", '" + formName + "')"
-        }
-      }) 
-    %}
-  {% endfor %}
-{% endif %} 
+                                        {% set page_number_seconde_last = { number: i-1, href: build_url(url_params, i-1) } %}  
+                                        {% set page_number = { number: i, href: build_url(url_params, i), current: i == pagedResponse.page } %}     
 
+                                        {% if i < pagedResponse.totalPages-1 %} 
+                                            {% set page_number_next = { number: i+1, href: build_url(url_params, i+1) } %}  
+                                            {% set page_numbers = page_numbers.concat(page_number_seconde_last, page_number, page_number_next) %}
+                                        {% else %}
+                                            {% set page_numbers = page_numbers.concat(page_number_seconde_last, page_number) %}
+                                        {% endif %} 
+                                        {% if i <  pagedResponse.totalPages-2 %}
+                                            {% set ellipsis = {ellipsis: true} %}    
+                                            {% set page_numbers = page_numbers.concat(ellipsis) %}    
+                                        {% endif %}
+                                    {% endif %}            
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% else %}   
+                        {% set page_number = { number: i, href: build_url(url_params, i), current: i == pagedResponse.page } %}
+                        {% set page_numbers = page_numbers.concat(page_number) %}
+                    {% endif %}  
+                    
+                {% endfor  %}
+                
+            {% if pagedResponse.page < pagedResponse.totalPages %} 
+                {% set next={ 'number' : pagedResponse.page + 1 , 'href' : build_url(url_params, pagedResponse.page + 1 ) } %} 
+            {% endif %}
+            
+            {% if pagedResponse.page> 1 %}     
+                {% set prev = { 'number': pagedResponse.page - 1, 'href': build_url(url_params, pagedResponse.page - 1) } %}
+            {% endif %}
 
+            {{ govukPagination({
+                previous: prev,
+                next: next,
+                items: page_numbers
+                }) }}
+            {% endif %}
+        </div>
+        <div class="total-paging-items">
+             <p class="govuk-body govuk-body-m govuk-!-text-align-right">Showing {{ itemCountBeginningOfPage }} &ndash; {{ itemCountEndOfPage }} of
+                    {{ pagedResponse.totalItems }} results</p>
+        </div>
+  </div>
 
-
-
-<div class="govuk-grid-row pagination-wrapper">
-  <div class="govuk-grid-column-one-half">
-    {% if pages.totalPages > 1 %}
-      {{ govukPagination({
-        previous: previousItem,  
-        next: nextItem,
-        items: pageList
-      }) }}
     {% endif %}
-  </div>
-  <div class="govuk-grid-column-one-half">
-    <p class="govuk-body-m govuk-!-text-align-right">
-      Showing {{ pages.startItem }} &ndash; {{ pages.endItem }} of {{ pages.totalItems }} results
-    </p>
-  </div>
-</div>
+    
+{% endmacro %}
+{% macro build_url(url_params, page) %}
+    
+    {% set url = '?' %}
 
-{% endblock %}
+    {% for key, value in url_params %}
+        {%if value %}
+            {% set url = url ~ key ~ '=' ~ value ~ '&' %}
+        {% endif %}
+    {% endfor %}
+
+    {% set url = url ~ 'page=' ~ page %}
+
+    {{ url }}
+
 {% endmacro %}

@@ -126,7 +126,7 @@
 
 {% macro port_choice(portCode, prefix, errors, __) %}
 
-    <div class="{{ m.form_group_class(prefix + 'Port', errors) }}">
+    <div id="port-prefix-{{prefix}}" class="{{ m.form_group_class(prefix + 'Port', errors) }}" data-prefix="{{prefix}}" >
         <label id="{{ prefix }}Port-label" class="govuk-label" for="{{ prefix }}Port">{{__('field_port_code')}}</label>
         {{ m.hint(prefix + 'Port', __('field_port_hint')) }}
         {{ m.error_message(prefix + 'Port', errors, __) }}
@@ -136,12 +136,6 @@
                 <option value="{{ airport.id }}" {{ 'selected=selected' if portCode in [airport.id, airport.id2] }}>{{ airport.label }}</option>
             {% endfor %}
         </select>
-        <script type="text/javascript">
-            accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#{{ prefix }}Port'), minLength: 2});
-            document
-                .getElementById("{{ prefix }}Port")
-                .setAttribute('aria-describedby', '{{ prefix }}Port-hint{{ ' ' + prefix + 'Port-error' if errors | containsError(prefix + 'Port') }}');
-        </script>
     </div>
 
 {% endmacro %}
