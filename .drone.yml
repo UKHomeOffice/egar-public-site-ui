@@ -70,8 +70,8 @@ steps:
       - build
 
   - name: sonar-scan
-    pull: if-not-exists
-    image: quay.io/ukhomeofficedigital/sonar-scanner-nodejs:latest
+    pull: always
+    image: quay.io/ukhomeofficedigital/sonar-scanner:latest
     failure: ignore
     commands:
       - sonar-scanner -Dproject.settings=./sonar-project.properties
@@ -80,6 +80,7 @@ steps:
         - push
       branch:
         - main
+
 trigger:
   event:
     - push
