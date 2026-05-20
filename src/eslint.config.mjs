@@ -12,6 +12,7 @@ export default defineConfig([
       'public/javascripts/cookie-banner.js',
       'public/javascripts/paginator.js',
       'public/javascripts/service-header.js',
+      'public/javascripts/init-service-header.js',
     ],
     plugins: {
       js,
