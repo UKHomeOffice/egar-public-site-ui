@@ -3,7 +3,7 @@
 
 {% macro build(pagedResponse,url_params) %}
     {% if pagedResponse.totalItems > 0 %}
-        <div class="govuk-grid-row pagination-wrapper">
+        <div class="pagination-wrapper">
           {% if pagedResponse.page*pagedResponse.perPage > pagedResponse.totalItems %}
             {% set itemCountEndOfPage = pagedResponse.totalItems %}
             {% else %}
