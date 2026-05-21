@@ -4,7 +4,7 @@ RUN apk update && apk upgrade --update-cache --available && apk add curl
 
 RUN mkdir -p /public-site/ && \
     mkdir -p /var/log/nodejs/ && \
-    touch /var/log/nodejs/app.log &&  npm install -g npm@11.15.0
+    touch /var/log/nodejs/app.log
 
 COPY src /public-site
 
