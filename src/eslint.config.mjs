@@ -13,6 +13,7 @@ export default defineConfig([
       'public/javascripts/paginator.js',
       'public/javascripts/service-header.js',
       'public/javascripts/init-service-header.js',
+      'public/javascripts/common.js',
     ],
     plugins: {
       js,
@@ -27,6 +28,7 @@ export default defineConfig([
       'max-len': 'off', // Prettier handles line length
       'unicorn/prefer-module': 'off', // allow require()
       'unicorn/prevent-abbreviations': 'off', // optional
+      'no-unused-vars': ['error', { vars: 'local' }],
     },
     languageOptions: {
       globals: {

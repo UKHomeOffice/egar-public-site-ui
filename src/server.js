@@ -282,7 +282,6 @@ function initialiseErrorHandling(app) {
   app.use((req, res) => {
     res.redirect('/error/404');
   });
-
   logger.info('Initialised error handling');
 }
 
