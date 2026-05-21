@@ -4,7 +4,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const airportValidation = require('../../../common/utils/airportValidation');
-const { findByCode } = require('../../../common/utils/airports');
 
 const performAPICall = (cookie, buttonClicked, res) => {
   garApi
