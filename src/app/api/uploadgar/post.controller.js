@@ -64,10 +64,10 @@ const checkFileIsGAR = (req, res, worksheet) => {
 // Define cell configurations for ExcelParser and parse from file read into memory
 const cellMap = {
   arrivalPort: { location: 'B3', transform: [transformers.trimWhitespace] },
-  arrivalDate: { location: 'D3' },
+  arrivalDate: { location: 'D3', transform: [transformers.trimWhitespace] },
   arrivalTime: { location: 'F3', raw: true },
   departurePort: { location: 'B4', transform: [transformers.trimWhitespace] },
-  departureDate: { location: 'D4' },
+  departureDate: { location: 'D4', transform: [transformers.trimWhitespace] },
   departureTime: { location: 'F4', raw: true },
   registration: { location: 'B5', raw: true },
   craftType: { location: 'D5', raw: true },
@@ -88,10 +88,10 @@ const manifestMap = {
     location: 'G',
     transform: [transformers.upperCamelCase, transformers.unknownToUnspecified],
   },
-  dateOfBirth: { location: 'H' },
+  dateOfBirth: { location: 'H', transform: [transformers.trimWhitespace] },
   placeOfBirth: { location: 'I' },
   nationality: { location: 'J', transform: [transformers.toUpper] },
-  documentExpiryDate: { location: 'K' },
+  documentExpiryDate: { location: 'K', transform: [transformers.trimWhitespace] },
 };
 
 // Mappings for the rows representing crew

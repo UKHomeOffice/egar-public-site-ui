@@ -430,9 +430,29 @@ function realDateInFuture(dObj) {
   );
 }
 
+const dateTransformer = (str) => {
+  if (typeof str !== 'string') {
+    return str;
+  }
+
+  const match = /^(\d{2})\/(\d{2})\/(\d{4})$/.test(str);
+
+  if (match) {
+    const [day, month, year] = str.split('/');
+
+    if (validDay(day, month, year) && validMonth(month) && validYear(year)) {
+      return `${year}-${month}-${day}`;
+    }
+  }
+  return str;
+};
+
 function realDateFromString(str) {
   moment.suppressDeprecationWarnings = true;
-  return moment(str).isValid();
+  if (str instanceof Date) {
+    return moment(str).isValid();
+  }
+  return moment(dateTransformer(str)).isValid();
 }
 
 // This function will validate Passport Expiry date while uploading Gar Template

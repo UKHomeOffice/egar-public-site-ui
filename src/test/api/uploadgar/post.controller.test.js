@@ -199,7 +199,7 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      await callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(
@@ -270,7 +270,7 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      await callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(validator.isValidAirportCode, '', null, 'Arrival port should be an ICAO or IATA code'),
@@ -290,7 +290,7 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      await callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(
@@ -329,7 +329,7 @@ describe('API upload GAR post controller', () => {
         });
     });
 
-    it('should return with an error when api returns a message', () => {
+    it('should return with an error when api returns a message', async () => {
       const data = getValidWorkbook();
 
       sinon.stub(createGarApi, 'createGar').resolves(
@@ -345,7 +345,7 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      await callController().then(() => {
         expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
         expect(garApi.patch).to.not.have.been.called;
         expect(req.session.save).to.have.been.called;
@@ -355,7 +355,7 @@ describe('API upload GAR post controller', () => {
 
     // TODO: Error message informs the GAR could not be updated, but one was created anyways?
     // TODO: There are three calls to update the GAR, but payload could be combined into one? Maybe?
-    it('should mention when on of the update steps rejects', () => {
+    it('should mention when on of the update steps rejects', async () => {
       const data = getValidWorkbook();
 
       sinon.stub(createGarApi, 'createGar').resolves(
@@ -375,7 +375,7 @@ describe('API upload GAR post controller', () => {
       };
 
       // Promise.all for three Promises...
-      callController()
+      await callController()
         .then()
         .then()
         .then()
@@ -423,7 +423,7 @@ describe('API upload GAR post controller', () => {
         });
     });
 
-    it('Phoney document type shoudl be disallowed', () => {
+    it('Phoney document type shoudl be disallowed', async () => {
       const data = getValidWorkbook();
 
       data.Sheets.Valid1.A9.v = 'Cipher';
@@ -437,7 +437,7 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      await callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(
@@ -451,7 +451,7 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it('Phoney document type shoudl be disallowed', () => {
+    it('Phoney document type should be disallowed', async () => {
       const data = getValidWorkbook();
 
       data.Sheets.Valid1.A9.v = 'Passport';
@@ -465,7 +465,7 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      await callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(
@@ -479,7 +479,7 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it('document desc should not be other and raise a validation error', () => {
+    it('document desc should not be other and raise a validation error', async () => {
       const data = getValidWorkbook();
 
       data.Sheets.Valid1.A20.v = 'Other';
@@ -493,7 +493,7 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      await callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(
@@ -507,7 +507,7 @@ describe('API upload GAR post controller', () => {
       });
     });
 
-    it('document description should be a valid text and not symbols', () => {
+    it('document description should be a valid text and not symbols', async () => {
       const data = getValidWorkbook();
 
       data.Sheets.Valid1.A20.v = 'Other';
@@ -521,7 +521,7 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      await callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.eql([
           new ValidationRule(
