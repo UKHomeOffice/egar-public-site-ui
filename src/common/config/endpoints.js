@@ -191,14 +191,20 @@ const endpoints = {
     logger.debug(`Calling get GAR people endpoint ${endpoint}`);
     return endpoint;
   },
-  getIndividualGars(userId, page) {
-    const endpoint = new URL(`${API_VERSION}/user/${userId}/gars?page=${page}&per_page=10000`, BASE_URL).href;
+  getIndividualGars(userId, pages) {
+    const { page, status, perPage } = pages;
+    const endpoint = new URL(
+      `${API_VERSION}/user/${userId}/gars?status=${status}&page=${page}&per_page=${perPage}`,
+      BASE_URL
+    ).href;
     logger.debug(`Calling get individual user GARs endpoint ${endpoint}`);
     return endpoint;
   },
-  getOrgGars(userId, orgId, page) {
+  getOrgGars(userId, orgId, pages) {
+    const { page, status, perPage } = pages;
+
     const endpoint = new URL(
-      `${API_VERSION}/user/${userId}/organisation/${orgId}/gars?page=${page}&per_page=10000`,
+      `${API_VERSION}/user/${userId}/organisation/${orgId}/gars?status=${status}&page=${page}&per_page=${perPage}`,
       BASE_URL
     ).href;
     logger.debug(`Calling get org user GARs endpoint ${endpoint}`);
@@ -265,6 +271,16 @@ const endpoints = {
   getGarCheckinProgress(garId) {
     const endpoint = new URL(`${API_VERSION}/gar/${garId}/progress`, BASE_URL).href;
     logger.debug(`Calling get GAR checkin progress endpoint ${endpoint}`);
+    return endpoint;
+  },
+  getIndividualGarsCount(userId) {
+    const endpoint = new URL(`${API_VERSION}/user/${userId}/gars/count`, BASE_URL).href;
+    logger.debug(`Calling get individual user GARs count endpoint ${endpoint}`);
+    return endpoint;
+  },
+  getOrgGarsCount(userId, orgId) {
+    const endpoint = new URL(`${API_VERSION}/user/${userId}/organisation/${orgId}/gars/count`, BASE_URL).href;
+    logger.debug(`Calling get org GARs count endpoint ${endpoint}`);
     return endpoint;
   },
 };

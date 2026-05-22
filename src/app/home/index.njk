@@ -2,7 +2,7 @@
 
 {% import "common/templates/includes/macros.njk" as m %}
 
-{% import "common/templates/includes/paginator.njk" as p %}
+{% import "common/templates/includes/pagination.njk" as pagination %}
 
 {% block pageTitle %}
 	GAR | Dashboard
@@ -10,6 +10,7 @@
 
 {% set active = '/home' %}
 
+{% set statusName = statusTab| lower %}
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -29,92 +30,74 @@
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
     </div>
   </div>
-
+  <div  id="gars-{{ statusName }}"></div> 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+    
       {# <form id="signform2" action="/garfile/view" method="post" role="form"> #}
       <h1 class="govuk-heading-l">{{__('heading_manage_gars')}}</h1>
       <p class="govuk-body-m">{{__('manage_gars_caption')}}</p>
       <div class="padding-bottom-10">
         <div class="govuk-inset-text">Your draft, submitted and cancelled GARs will only be saved for 6 months, after this they will be deleted.</div>
-        {% set hasMultipleServerPages = serverPagination.totalPages > 1 %}
-        {% set notOnFirstPage = serverPagination.page > 1 %}
-        {% set onLastPage = serverPagination.page == serverPagination.totalPages %}
-        {% set onSecondToLastPage = serverPagination.page == serverPagination.totalPages - 1 %}
-        {% set notOnLastPage = serverPagination.page < serverPagination.totalPages %}
-        {% if hasMultipleServerPages %}
-        <div class="govuk-inset-text">
-          You are viewing {{serverPagination.perPage * (serverPagination.page-1) +1}} - {{serverPagination.totalItems if onLastPage else serverPagination.perPage * serverPagination.page}}  of your most recent GARs, there are {{serverPagination.totalItems}} total GARs.
-          {% if notOnFirstPage %}
-          <br/>To view the previous {{serverPagination.perPage}} GARs <a class="govuk-link" href="?page={{serverPagination.page-1}}">click here</a>.
-          {% endif %}
-          {% if notOnLastPage %}
-          <br/>To view the next {{serverPagination.totalItems % serverPagination.perPage if onSecondToLastPage else serverPagination.perPage}} GARs <a href="?page={{serverPagination.page+1}}">click here</a>.
-          {% endif %}
-        </div>
-        {% endif %}
       </div>
     </div>
-
+   
     <div class="govuk-grid-column-full">
+      
       <div class="govuk-tabs" data-module="govuk-tabs">
         <ul class="govuk-tabs__list">
-          <li class="govuk-tabs__list-item">
+          <li class="govuk-tabs__list-item status_tab">
             <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft">
-              {{__('tab_gar_draft', draftGars.length)}}
+              {{__('tab_gar_draft', garsCountObj.Draft or 0 )}}
             </a>
           </li>
-          <li class="govuk-tabs__list-item">
+          <li class="govuk-tabs__list-item status_tab">
             <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-submitted">
-              {{__('tab_gar_submitted', submittedGars.length)}}
+              {{__('tab_gar_submitted', garsCountObj.Submitted or 0 )}}
             </a>
           </li>
-          <li class="govuk-tabs__list-item">
+          <li class="govuk-tabs__list-item status_tab">
             <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-cancelled">
-              {{__('tab_gar_cancelled', cancelledGars.length)}}
+              {{__('tab_gar_cancelled', garsCountObj.Cancelled or 0 )}}
             </a>
           </li>
         </ul>
        
-        <script type="text/javascript" src="/javascripts/paginator.js"></script>
-        <script src="/javascripts/initialise-pagination.js"></script>
+        <script src="/javascripts/tabs-pagination.js"></script>
         <form id="signform2" action="/garfile/view" method="post" role="form">
-          
-          {% macro gar_summary_table(name, gars) %}
-            {% set maxPage = (gars.length // pageSize)+1 if gars.length % pageSize else gars.length // pageSize %}
-            <section class="govuk-tabs__panel" id="gars-{{ name }}">
+          {% macro gar_summary_table(name, gars, statusTab) %}
+            <section class="govuk-tabs__panel" id="gars-{{name}}">
+             <div class="tabs-table">
               <h2 class="govuk-heading-m">{{ name | capitalize }} GARs</h2>
               {% if gars | length %}
               <table class="govuk-table" id="sortGAR">
                 <thead class="govuk-table__head" >
                   <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="col">{{__('field_aircraft_registration')}}</th>
-                    <th class="govuk-table__header" scope="col" width="150">{{__('field_created_date')}}</th>
-                    <th class="govuk-table__header" scope="col" width="150">{{__('field_departure_date')}}</th>
-                    <th class="govuk-table__header" scope="col">{{__('field_departure_time')}}</th>
-                    <th class="govuk-table__header" scope="col">{{__('field_departure_port')}}</th>
-                    <th class="govuk-table__header" scope="col">{{__('field_arrival_port')}}</th>
-                    <th class="govuk-table__header" scope="col"></th>
-                    <th class="govuk-table__header" scope="col">{{__('field_submission_reference')}}</th>
+                    <th class="govuk-table__header" scope="col" width="15%">{{__('field_aircraft_registration')}}</th>
+                    <th class="govuk-table__header" scope="col" width="15%">{{__('field_created_date')}}</th>
+                    <th class="govuk-table__header" scope="col" width="15%">{{__('field_departure_date')}}</th>
+                    <th class="govuk-table__header" scope="col" width="12%">{{__('field_departure_time')}}</th>
+                    <th class="govuk-table__header" scope="col" width="12%">{{__('field_departure_port')}}</th>
+                    <th class="govuk-table__header" scope="col" width="10%">{{__('field_arrival_port')}}</th>
+                    <th class="govuk-table__header" scope="col" width="21%">{{__('field_submission_reference')}}</th>
                   </tr>
                 </thead>
+                
                 <tbody class="govuk-table__body pagination__table_{{name}}">
                     {% for gar in gars %}
-                      {% set page = ((loop.index-1) // pageSize) + 1 %}
                       <tr class="govuk-table__row pagination-page pagination-page_{{page}}" id="pagination-row-{{page}}-{{ loop.index }}">
                         <td class="govuk-table__cell">
-                          {% if gar.registration === null %}
+                         
                             <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link" name="garId" value="{{ gar.garId }}">{{__('value_aircraft_registration_null')}}</button>
-                          {% else %}
+                         
                             <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link" name="garId" value="{{ gar.garId }}">{{ gar.registration }}</button>
-                          {% endif %}
+                          
                         </td>
                         <td class="govuk-table__cell">{{ gar.createdDate | truncate(11, true, "") }}</td>
                         <td class="govuk-table__cell">{{ gar.departureDate }}</td>
                         <td class="govuk-table__cell">{{ gar.departureTime }}</td>
                         <td class="govuk-table__cell">{{gar.departurePort | upper }}</td>
                         <td class="govuk-table__cell">{{gar.arrivalPort | upper }}</td>
-                        <td class="govuk-table__cell"></td>
                         <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell" >
                           <small>
                             <code>{{m.gar_id_screen_reader(gar.cbp_id) if gar.cbp_id else ('Processing...' if gar.status.name == 'Submitted') }}</code>
@@ -128,12 +111,11 @@
                 {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
               {% endif %}
               <script src="/javascripts/table.js"></script>
-              {{ p.paginator(name, pageSize, gars.length) }}
+               {{ pagination.build(pages, {status: statusTab, hash: '#gars-'~name }) }}
+               </div>
             </section>
           {% endmacro %}
-          {{ gar_summary_table('draft', draftGars) }}
-          {{ gar_summary_table('submitted', submittedGars) }}
-          {{ gar_summary_table('cancelled', cancelledGars) }}
+          {{ gar_summary_table(statusName, garList, statusTab) }}
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       </div>

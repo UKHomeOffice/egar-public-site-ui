@@ -2,6 +2,7 @@ const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
 const tokenApi = require('../../common/services/tokenApi');
 const garApi = require('../../common/services/garApi');
+const PER_PAGE = 10;
 
 module.exports = (req, res) => {
   logger.debug('In register / reguser get controller');
@@ -14,33 +15,33 @@ module.exports = (req, res) => {
   // Delete any GAR stored in the cookie session
   cookie.session.gar = null;
 
+  const statusTab = req.query.status || 'Draft';
+
   tokenApi
     .getLastLogin(cookie.getUserEmail())
     .then((userSession) => {
       const { successHeader, successMsg } = req.session;
-      const page = req?.query?.page || 1;
+      const pageVal = req?.query?.page || 1;
+
+      const pageObj = { page: pageVal, per_page: PER_PAGE, status: statusTab };
       delete req.session.successHeader;
       delete req.session.successMsg;
 
       garApi
-        .getGars(userId, role, page, orgId)
-        .then((apiResponse) => {
+        .getGars(userId, role, pageObj, orgId)
+        .then(async (apiResponse) => {
           const garList = JSON.parse(apiResponse).items;
-          const draftGars = garList.filter((gar) => gar.status.name === 'Draft');
-          const submittedGars = garList.filter((gar) => gar.status.name === 'Submitted');
-          const cancelledGars = garList.filter((gar) => gar.status.name === 'Cancelled');
-          const serverPagination = JSON.parse(apiResponse)._meta;
-
+          const garsCount = await getGarsCount(userId, role, orgId);
+          const garsCountObj = JSON.parse(garsCount);
           res.render('app/home/index', {
             cookie,
             userSession,
             successMsg,
             successHeader,
-            draftGars,
-            submittedGars,
-            cancelledGars,
-            pageSize: 10,
-            serverPagination,
+            pages: JSON.parse(apiResponse)._meta,
+            statusTab,
+            garList,
+            garsCountObj,
           });
         })
         .catch((err) => {
@@ -51,6 +52,8 @@ module.exports = (req, res) => {
             successMsg,
             successHeader,
             errors: [{ message: 'Failed to get GARs' }],
+            statusTab,
+            garsCountObj: 0,
           });
         });
     })
@@ -59,3 +62,8 @@ module.exports = (req, res) => {
       return res.render('app/home/index', { cookie, userSession: [] });
     });
 };
+
+async function getGarsCount(userId, role, orgId) {
+  const gars = await garApi.getGarsCount(userId, role, orgId);
+  return JSON.parse(gars);
+}
