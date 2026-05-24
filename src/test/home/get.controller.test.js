@@ -15,6 +15,7 @@ describe('Home Get Controller', () => {
   let res;
   let tokenApiStub;
   let garApiStub;
+  let garApiStubCount;
   const pages = { page: 1, per_page: 10, status: 'Draft' };
 
   beforeEach(() => {
@@ -24,7 +25,7 @@ describe('Home Get Controller', () => {
       session: {
         u: { dbId: 'abcde-12345', e: 'captain.kirk@enterprise.com', rl: 'Individual' },
       },
-      query: { status: 'Draft' },
+      query: { status: 'Draft', page: 1 },
     };
     res = {
       render: sinon.spy(),
@@ -32,6 +33,7 @@ describe('Home Get Controller', () => {
 
     tokenApiStub = sinon.stub(tokenApi, 'getLastLogin');
     garApiStub = sinon.stub(garApi, 'getGars');
+    garApiStubCount = sinon.stub(garApi, 'getGarsCount');
   });
 
   afterEach(() => {
@@ -93,11 +95,12 @@ describe('Home Get Controller', () => {
         { id: 'GAR-2', status: { name: 'Draft' } },
       ],
     };
+    const apiResponseCount = { Draft: 28, Cancelled: 4, Submitted: 15 };
     tokenApiStub.resolves({
       StatusChangedTimestamp: '2018-11-20',
     });
     garApiStub.resolves(JSON.stringify(apiResponse));
-
+    garApiStubCount.resolves(apiResponseCount);
     const cookie = new CookieModel(req);
 
     const callController = async () => {
@@ -111,16 +114,16 @@ describe('Home Get Controller', () => {
         expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', pages, undefined);
         expect(res.render).to.have.been.calledOnceWith('app/home/index', {
           cookie,
-          successHeader: 'Windows XP',
-          successMsg: 'Task failed successfully.',
+          successHeader: undefined,
+          successMsg: undefined,
           userSession: { StatusChangedTimestamp: '2018-11-20' },
           garList: [
             { id: 'GAR-1', status: { name: 'Draft' } },
             { id: 'GAR-2', status: { name: 'Draft' } },
           ],
-          pages: 10,
+          pages: undefined,
           statusTab: 'Draft',
-          garsCountObj: { Draft: 2, Cancelled: 0, Submitted: 0 },
+          garsCountObj: { Draft: 28, Cancelled: 4, Submitted: 15 },
         });
       });
   });
@@ -132,13 +135,14 @@ describe('Home Get Controller', () => {
         { id: 'GAR-2', status: { name: 'Draft' } },
       ],
     };
+    const apiResponseCount = { Draft: 28, Cancelled: 4, Submitted: 15 };
     req.session.successHeader = 'Windows XP';
     req.session.successMsg = 'Task failed successfully.';
     tokenApiStub.resolves({
       StatusChangedTimestamp: '2018-11-20',
     });
+    garApiStubCount.resolves(apiResponseCount);
     garApiStub.resolves(JSON.stringify(apiResponse));
-
     const cookie = new CookieModel(req);
 
     const callController = async () => {
@@ -157,12 +161,13 @@ describe('Home Get Controller', () => {
           successHeader: 'Windows XP',
           successMsg: 'Task failed successfully.',
           userSession: { StatusChangedTimestamp: '2018-11-20' },
-          pages: { page: 1, perPage: 10, totalPages: 2, totalItems: 12 },
           garList: [
             { id: 'GAR-1', status: { name: 'Draft' } },
             { id: 'GAR-2', status: { name: 'Draft' } },
           ],
-          garsCountObj: { Draft: 1, Cancelled: 1, Submitted: 0 },
+          pages: undefined,
+          statusTab: 'Draft',
+          garsCountObj: { Draft: 28, Cancelled: 4, Submitted: 15 },
         });
       });
   });

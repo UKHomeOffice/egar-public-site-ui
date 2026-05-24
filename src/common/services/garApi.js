@@ -460,12 +460,12 @@ module.exports = {
           if (_response.statusCode >= 400) {
             const responseErrorMessage = getResponseErrorMessage(_response, body);
             logger.error(`${userId} garApi.getGarsCount request was not successful : ${responseErrorMessage}`);
-            resolve(body);
+            resolve(JSON.parse(body));
             return;
           }
 
           logger.debug('Successfully called get GARs endpoint');
-          resolve(body);
+          resolve(JSON.parse(body));
         }
       );
     });

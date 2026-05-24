@@ -31,8 +31,7 @@ module.exports = (req, res) => {
         .getGars(userId, role, pageObj, orgId)
         .then(async (apiResponse) => {
           const garList = JSON.parse(apiResponse).items;
-          const garsCount = await getGarsCount(userId, role, orgId);
-          const garsCountObj = JSON.parse(garsCount);
+          const garsCountObj = await garApi.getGarsCount(userId, role, orgId);
           res.render('app/home/index', {
             cookie,
             userSession,
@@ -62,8 +61,3 @@ module.exports = (req, res) => {
       return res.render('app/home/index', { cookie, userSession: [] });
     });
 };
-
-async function getGarsCount(userId, role, orgId) {
-  const gars = await garApi.getGarsCount(userId, role, orgId);
-  return JSON.parse(gars);
-}
