@@ -1,7 +1,8 @@
 {% from "dist/govuk/components/pagination/macro.njk" import govukPagination %}
 {# Accepts a PagedResponse object and returns a pagination component. #}
 
-{% macro build(pagedResponse,url_params) %}
+{% macro build(pagedResponse,url_params) %} 
+
     {% if pagedResponse.totalItems > 0 %}
         <div class="pagination-wrapper">
           {% if pagedResponse.page*pagedResponse.perPage > pagedResponse.totalItems %}
@@ -116,15 +117,21 @@
 {% macro build_url(url_params, page) %}
     
     {% set url = '?' %}
+    {% set hash = '' %}
 
     {% for key, value in url_params %}
-        {%if value %}
+        {%if value and  key !== 'hash' %}
             {% set url = url ~ key ~ '=' ~ value ~ '&' %}
+        {% endif %}
+        {% if key === 'hash' %}
+           {% set hash = value %}
         {% endif %}
     {% endfor %}
 
-    {% set url = url ~ 'page=' ~ page %}
+    {% set url = url ~ 'page=' ~ page ~ hash %}
 
     {{ url }}
+
+    
 
 {% endmacro %}
