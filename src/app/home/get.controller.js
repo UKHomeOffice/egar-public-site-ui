@@ -3,6 +3,7 @@ const CookieModel = require('../../common/models/Cookie.class');
 const tokenApi = require('../../common/services/tokenApi');
 const garApi = require('../../common/services/garApi');
 const PER_PAGE = 10;
+const PAGE_ONE = 1;
 
 module.exports = (req, res) => {
   logger.debug('In register / reguser get controller');
@@ -15,13 +16,13 @@ module.exports = (req, res) => {
   // Delete any GAR stored in the cookie session
   cookie.session.gar = null;
 
-  const statusTab = req.query.status || 'Draft';
+  const statusTab = req.query?.status || 'Draft';
 
   tokenApi
     .getLastLogin(cookie.getUserEmail())
     .then((userSession) => {
       const { successHeader, successMsg } = req.session;
-      const pageVal = req?.query?.page || 1;
+      const pageVal = req?.query?.page || PAGE_ONE;
 
       const pageObj = { page: pageVal, per_page: PER_PAGE, status: statusTab };
       delete req.session.successHeader;

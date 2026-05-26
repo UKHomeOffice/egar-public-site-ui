@@ -11,6 +11,7 @@
 {% set active = '/home' %}
 
 {% set statusName = statusTab| lower %}
+
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -44,26 +45,25 @@
    
     <div class="govuk-grid-column-full">
       
-      <div class="govuk-tabs" data-module="govuk-tabs">
+      <div class="govuk-tabs">
         <ul class="govuk-tabs__list">
-          <li class="govuk-tabs__list-item status_tab">
-            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-draft">
+          <li class="govuk-tabs__list-item {% if statusName == 'draft' %}  govuk-tabs__list-item--selected {% endif %}">
+            <a class="govuk-tabs__tab" href="/home?status=Draft#gars-draft">
               {{__('tab_gar_draft', garsCountObj.Draft or 0 )}}
             </a>
           </li>
-          <li class="govuk-tabs__list-item status_tab">
-            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-submitted">
+          <li class="govuk-tabs__list-item {% if statusName == 'submitted' %}  govuk-tabs__list-item--selected {% endif %}">
+            <a class="govuk-tabs__tab" href="/home?status=Submitted#gars-submitted">
               {{__('tab_gar_submitted', garsCountObj.Submitted or 0 )}}
             </a>
           </li>
-          <li class="govuk-tabs__list-item status_tab">
-            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#gars-cancelled">
+          <li class="govuk-tabs__list-item {% if statusName == 'cancelled' %}  govuk-tabs__list-item--selected {% endif %}">
+            <a class="govuk-tabs__tab" href="/home?status=Cancelled#gars-cancelled">
               {{__('tab_gar_cancelled', garsCountObj.Cancelled or 0 )}}
             </a>
           </li>
         </ul>
-       
-        <script src="/javascripts/tabs-pagination.js"></script>
+      
         <form id="signform2" action="/garfile/view" method="post" role="form">
           {% macro gar_summary_table(name, gars, statusTab) %}
             <section class="govuk-tabs__panel" id="gars-{{name}}">
