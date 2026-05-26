@@ -17,15 +17,15 @@
       value: "Yes",
       text: "Yes",
       checked: gar.baggage == "Yes",
-      hint: {
-        html: __("field_baggage_hint") ~
-              '<a class="govuk-link" href="https://www.gov.uk/government/publications/travelling-to-the-uk" target="_blank">Travelling to the UK - GOV.UK (www.gov.uk)</a>'
-      },
       conditional: {
         html: govukTextarea({
           id: "baggageDeclaration",
           name: "baggageDeclaration",
           label: { text: __("field_goods_declaration_label_150") },
+          hint: {
+            html: __("field_baggage_hint") ~
+                  '<a class="govuk-link" href="https://www.gov.uk/government/publications/travelling-to-the-uk" target="_blank">Travelling to the UK - GOV.UK (www.gov.uk)</a>'
+          },
           value: gar.baggageDeclaration,
           rows: 5,
           maxlength: MAX_TEXT_BOX_LENGTH - 100,
