@@ -27,7 +27,7 @@ class GarApi {
    */
   async get(garId, isCbpId = false) {
     try {
-      const gar = await this.client.get(garId, isCbpId);
+      const gar = await this.client.get(endpoints.getGar(garId, isCbpId));
 
       gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCountry);
       logger.debug('Successfully called GAR get endpoint');
