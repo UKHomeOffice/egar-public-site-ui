@@ -174,8 +174,8 @@
                       <tr class="govuk-table__row">
                         <td class="govuk-table__cell" colspan="9">
                           <div>
-                            <details class="govuk-details" data-module="govuk-details">
-                              <summary class="govuk-details__summary" aria-controls="details-content-{{ loop.index }}" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
+                            <details role="group">
+                              <summary class="govuk-details__summary"  role="button" aria-controls="details-content-{{ loop.index }}" aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
                                 <span id="further-information-{{ loop.index }}" class="govuk-details__summary-text">{{__('label_manifest_further_personal_details')}}</span>
                               </summary>
                               <div class="panel panel-border-narrow" id="details-content-{{ loop.index }}" aria-hidden="true">
