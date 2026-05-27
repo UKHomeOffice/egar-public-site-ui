@@ -49,71 +49,71 @@
     </thead>
     <tbody class="govuk-table__body">
       {% if garpeople.items | length %}
-      {% for person in garpeople.items%}
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell">{{person.lastName}}</td>
-        <td class="govuk-table__cell">{{person.firstName}}</td>
-        <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
-        <td class="govuk-table__cell">{{person.nationality | upper}}</td>
-        <td class="govuk-table__cell">{{person.gender}}</td>
-        <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
-        <td class="govuk-table__cell">{{person.peopleType.name}}</td>
-        {% if isJourneyUKInbound %}
-        {% if person.amgCheckinResponseCode === '0B'%}
-        {% set statusColor = 'no-record'%}
-        {% elif person.amgCheckinResponseCode === '0A'%}
-        {% set statusColor = 'valid-permission-to-travel'%}
-        {% elif person.amgCheckinResponseCode === '0Z'%}
-        {% set statusColor = 'authority-to-carry-granted'%}
-        {% elif person.amgCheckinResponseCode === '0T'%}
-        {% set statusColor = 'system-timeout'%}
-        {% else %}
-        {% set statusColor = '' %}
-        {% endif %}
-        <td class="govuk-table__cell">
-          {% if statusColor %}
-          <div class="{{statusColor}}">{{__('amg_status_check_response_code_' +
-            person.amgCheckinResponseCode)if person.amgCheckinResponseCode}}</div>
-          {% endif%}
-        </td>
-        {% endif%}
-      </tr>
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell" colspan="{{8 if isJourneyUKInbound else 7}}">
-          <div>
-            <details class="govuk-details" data-module="govuk-details">
-              <summary class="govuk-details__summary" aria-controls="details-content-{{ loop.index }}"
-                aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
-                <span id="further-information-{{ loop.index }}"
-                  class="govuk-details__summary-text">{{__('label_manifest_further_personal_details')}}</span>
-              </summary>
-              <div class="govuk-details__text" id="details-content-{{ loop.index }}" aria-hidden="true">
-                <table class="govuk-table">
-                  <tbody class="govuk-table__body">
-                    <tr class="govuk-table__row">
-                      <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
-                      <td class="govuk-table__cell">{{person.documentType}}</td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                      <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
-                      <td class="govuk-table__cell">{{person.issuingState | upper}}</td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                      <td class="govuk-table__cell">{{__('field_travel_document_number')}}</td>
-                      <td class="govuk-table__cell">{{person.documentNumber}}</td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                      <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
-                      <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
-                    </tr>
-                  </tbody>
-                </table>
+        {% for person in garpeople.items%}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{person.lastName}}</td>
+            <td class="govuk-table__cell">{{person.firstName}}</td>
+            <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.nationality | upper}}</td>
+            <td class="govuk-table__cell">{{person.gender}}</td>
+            <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.peopleType.name}}</td>
+            {% if isJourneyUKInbound %}
+            {% if person.amgCheckinResponseCode === '0B'%}
+            {% set statusColor = 'no-record'%}
+            {% elif person.amgCheckinResponseCode === '0A'%}
+            {% set statusColor = 'valid-permission-to-travel'%}
+            {% elif person.amgCheckinResponseCode === '0Z'%}
+            {% set statusColor = 'authority-to-carry-granted'%}
+            {% elif person.amgCheckinResponseCode === '0T'%}
+            {% set statusColor = 'system-timeout'%}
+            {% else %}
+            {% set statusColor = '' %}
+            {% endif %}
+            <td class="govuk-table__cell">
+              {% if statusColor %}
+              <div class="{{statusColor}}">{{__('amg_status_check_response_code_' +
+                person.amgCheckinResponseCode)if person.amgCheckinResponseCode}}</div>
+              {% endif%}
+            </td>
+            {% endif%}
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" colspan="{{8 if isJourneyUKInbound else 7}}">
+              <div>
+                <details class="govuk-details" data-module="govuk-details">
+                  <summary class="govuk-details__summary" aria-controls="details-content-{{ loop.index }}"
+                    aria-expanded="false" title="{{__('further_information_for', person.firstName, person.lastName)}}">
+                    <span id="further-information-{{ loop.index }}"
+                      class="govuk-details__summary-text">{{__('label_manifest_further_personal_details')}}</span>
+                  </summary>
+                  <div class="govuk-details__text" id="details-content-{{ loop.index }}" aria-hidden="true">
+                    <table class="govuk-table">
+                      <tbody class="govuk-table__body">
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell">{{__('field_travel_document_type')}}</td>
+                          <td class="govuk-table__cell">{{person.documentType}}</td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell">{{__('field_travel_document_issuing_state')}}</td>
+                          <td class="govuk-table__cell">{{person.issuingState | upper}}</td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell">{{__('field_travel_document_number')}}</td>
+                          <td class="govuk-table__cell">{{person.documentNumber}}</td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                          <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
+                          <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </details>
               </div>
-            </details>
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
       {% else %}
       {{ m.empty_table_message(__('manifest_no_records')) }}
       {% endif %}

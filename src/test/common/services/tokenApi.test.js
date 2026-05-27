@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 const { expect } = require('chai');
 const chai = require('chai');
 const sinon = require('sinon');
