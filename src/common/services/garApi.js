@@ -3,50 +3,18 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 const autocompleteUtil = require('../utils/autocomplete');
 const travelPermissionCodes = require('../utils/travel_permission_codes.json');
-const ApiClient = require('./httpClient');
 
-function getResponseErrorMessage(err) {
-  return {
-    statusCode: err.statusCode,
-    statusMessage: err.statusMessage,
-    body: err.body,
-  };
-}
+function getResponseErrorMessage(_response, body) {
+  const responseErrorMessage = JSON.stringify({
+    statusCode: _response.statusCode,
+    statusMessage: _response.statusMessage,
+    body,
+  });
 
-class GarApi {
-  constructor(config) {
-    this.client = new ApiClient(config);
-  }
-
-  /**
-   * Gets a GAR's details.
-   *
-   * @param {String} garId id of GAR being requested
-   * @param isCbpId
-   * @returns {Promise} Resolves with API response.
-   */
-  async get(garId, isCbpId = false) {
-    try {
-      const gar = await this.client.get(garId, isCbpId);
-
-      gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCountry);
-      logger.debug('Successfully called GAR get endpoint');
-
-      return gar;
-    } catch (err) {
-      logger.error('Failed to call GAR get API endpoint');
-      if (err.status >= 400) {
-        const responseErrorMessage = getResponseErrorMessage(err);
-        logger.error(`${garId} garApi.get request was not successful : ${responseErrorMessage}`);
-        return responseErrorMessage;
-      }
-    }
-  }
+  return responseErrorMessage;
 }
 
 module.exports = {
-  GarApi,
-
   /**
    * Updates GAR.
    *

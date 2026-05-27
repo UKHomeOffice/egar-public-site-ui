@@ -4,7 +4,6 @@ const garApi = require('../../../common/services/garApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const airportValidation = require('../../../common/utils/airportValidation');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 /**
  * For a supplied GAR object, check that the user id or organisation id
@@ -46,7 +45,7 @@ module.exports = async (req, res) => {
   try {
     cookie.setGarId(garId);
     const garPeople = garApi.getPeople(garId);
-    const garDetails = dataAccessApi.garApi.get(garId);
+    const garDetails = garApi.get(garId);
     const garDocs = garApi.getSupportingDocs(garId);
     const { progress } = JSON.parse(await garApi.getGarCheckinProgress(garId));
 
