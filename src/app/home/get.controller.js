@@ -42,22 +42,12 @@ module.exports = (req, res) => {
             req.session.garList = garList;
           }
 
-          const draftGarsList = req.session.garList.filter((gar) => {
-            if (gar.status.name === 'Draft') {
-              return gar;
-            }
-          });
+          const {
+            Draft: draftGarsList,
+            Submitted: submittedGarsList,
+            Cancelled: cancelledGarsList,
+          } = Object.groupBy(req.session.garList, (item) => item.status.name);
 
-          const submittedGarsList = req.session.garList.filter((gar) => {
-            if (gar.status.name === 'Submitted') {
-              return gar;
-            }
-          });
-          const cancelledGarsList = req.session.garList.filter((gar) => {
-            if (gar.status.name === 'Cancelled') {
-              return gar;
-            }
-          });
           const draftGars = req.query.status === 'Draft' ? garList : draftGarsList;
           const submittedGars = req.query.status === 'Submitted' ? garList : submittedGarsList;
           const cancelledGars = req.query.status === 'Cancelled' ? garList : cancelledGarsList;
