@@ -145,16 +145,5 @@ h3.govuk-notification-banner__heading {
 .total-paging-items {
     margin-left: auto;
 }
-.tabs-table {
-    width: 100%;
-    overflow-x: auto;
-}
-.tabs-table td, th {
-  word-wrap: break-word;     
-  overflow-wrap: break-word; 
-  white-space: normal;
-}
-#sortGAR{
-  width: 100%;
-  table-layout: fixed;
-}
+
+

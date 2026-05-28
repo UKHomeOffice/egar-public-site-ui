@@ -16,7 +16,7 @@ describe('Home Get Controller', () => {
   let tokenApiStub;
   let garApiStub;
   let garApiStubCount;
-  const pages = { page: 1, per_page: 10, status: 'Draft' };
+  const pages = { page: 1, perPage: 50, status: 'Draft,Submitted,Cancelled' };
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -25,7 +25,7 @@ describe('Home Get Controller', () => {
       session: {
         u: { dbId: 'abcde-12345', e: 'captain.kirk@enterprise.com', rl: 'Individual' },
       },
-      query: { status: 'Draft', page: 1 },
+      query: { status: 'Draft,Submitted,Cancelled', page: 1 },
     };
     res = {
       render: sinon.spy(),
@@ -82,8 +82,8 @@ describe('Home Get Controller', () => {
           successHeader: undefined,
           successMsg: undefined,
           errors: [{ message: 'Failed to get GARs' }],
-          garsCountObj: 0,
-          statusTab: 'Draft',
+          garsCountObj: {},
+          statusTab: 'Draft,Submitted,Cancelled',
         });
       });
   });
@@ -93,9 +93,15 @@ describe('Home Get Controller', () => {
       items: [
         { id: 'GAR-1', status: { name: 'Draft' } },
         { id: 'GAR-2', status: { name: 'Draft' } },
+        { id: 'GAR-3', status: { name: 'Cancelled' } },
+        { id: 'GAR-4', status: { name: 'Submitted' } },
+        { id: 'GAR-5', status: { name: 'Submitted' } },
+        { id: 'GAR-6', status: { name: 'Submitted' } },
       ],
     };
     const apiResponseCount = { Draft: 28, Cancelled: 4, Submitted: 15 };
+    req.session.successHeader = 'Windows XP';
+    req.session.successMsg = 'Task failed successfully.';
     tokenApiStub.resolves({
       StatusChangedTimestamp: '2018-11-20',
     });
@@ -114,15 +120,26 @@ describe('Home Get Controller', () => {
         expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', pages, undefined);
         expect(res.render).to.have.been.calledOnceWith('app/home/index', {
           cookie,
-          successHeader: undefined,
-          successMsg: undefined,
+          successHeader: 'Windows XP',
+          successMsg: 'Task failed successfully.',
           userSession: { StatusChangedTimestamp: '2018-11-20' },
           garList: [
             { id: 'GAR-1', status: { name: 'Draft' } },
             { id: 'GAR-2', status: { name: 'Draft' } },
+            { id: 'GAR-3', status: { name: 'Cancelled' } },
+            { id: 'GAR-4', status: { name: 'Submitted' } },
+            { id: 'GAR-5', status: { name: 'Submitted' } },
+            { id: 'GAR-6', status: { name: 'Submitted' } },
           ],
-          pages: undefined,
-          statusTab: 'Draft',
+          draftGars: [],
+          submittedGars: [],
+          cancelledGars: [],
+          pageMetadata: {
+            Draft: { page: 1, perPage: 10, totalPages: 3, totalItems: 28 },
+            Cancelled: { page: 1, perPage: 10, totalPages: 1, totalItems: 4 },
+            Submitted: { page: 1, perPage: 10, totalPages: 2, totalItems: 15 },
+          },
+          statusTab: 'Draft,Submitted,Cancelled',
           garsCountObj: { Draft: 28, Cancelled: 4, Submitted: 15 },
         });
       });
@@ -165,8 +182,15 @@ describe('Home Get Controller', () => {
             { id: 'GAR-1', status: { name: 'Draft' } },
             { id: 'GAR-2', status: { name: 'Draft' } },
           ],
-          pages: undefined,
-          statusTab: 'Draft',
+          draftGars: [],
+          submittedGars: [],
+          cancelledGars: [],
+          pageMetadata: {
+            Draft: { page: 1, perPage: 10, totalPages: 3, totalItems: 28 },
+            Cancelled: { page: 1, perPage: 10, totalPages: 1, totalItems: 4 },
+            Submitted: { page: 1, perPage: 10, totalPages: 2, totalItems: 15 },
+          },
+          statusTab: 'Draft,Submitted,Cancelled',
           garsCountObj: { Draft: 28, Cancelled: 4, Submitted: 15 },
         });
       });

@@ -88,6 +88,9 @@ class Cookie {
     if (this.session.redirectUrl == null) {
       this.session.redirectUrl = '';
     }
+    if (this.session.garList == null) {
+      this.session.garList = [];
+    }
   }
 
   initialiseGar() {
@@ -166,6 +169,7 @@ class Cookie {
     this.session.gar = null;
     this.session.resubmitFor0T = null;
     this.session.redirectUrl = null;
+    this.session.garList = null;
   }
 
   getGar() {
