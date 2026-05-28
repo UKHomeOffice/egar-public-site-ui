@@ -3,6 +3,7 @@ const airportValidation = require('../../../common/utils/airportValidation');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
 
 /**
@@ -39,7 +40,7 @@ module.exports = (req, res) => {
   cookie.setGarId(garId);
 
   const garPeople = garApi.getPeople(garId);
-  const garDetails = garApi.get(garId, true);
+  const garDetails = dataAccessApi.garApi.get(garId, true);
   const garDocs = garApi.getSupportingDocs(garId);
   let numberOf0TResponseCodes = 0;
   const isResubmitted = cookie.getResubmitFor0T().includes(garId);
@@ -55,7 +56,8 @@ module.exports = (req, res) => {
 
   Promise.all([garDetails, garPeople, garDocs])
     .then((responseValues) => {
-      const parsedGar = JSON.parse(responseValues[0]);
+      console.log(responseValues);
+      const parsedGar = responseValues[0];
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
       const { departureDate, departureTime } = parsedGar;

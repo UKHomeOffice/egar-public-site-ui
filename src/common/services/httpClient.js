@@ -3,6 +3,7 @@ class ApiClient {
     this.baseUrl = baseUrl;
     this.defaultHeaders = {
       'Content-Type': 'application/json',
+      Accept: 'application/json',
       ...defaultHeaders,
     };
 

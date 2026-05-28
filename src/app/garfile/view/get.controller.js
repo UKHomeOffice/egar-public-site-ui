@@ -69,7 +69,7 @@ module.exports = async (req, res) => {
 
     Promise.all([garDetails, garPeople, garDocs, progress])
       .then(async (responseValues) => {
-        const parsedGar = JSON.parse(responseValues[0]);
+        const parsedGar = responseValues[0];
         const parsedPeople = JSON.parse(responseValues[1]);
         const supportingDocuments = JSON.parse(responseValues[2]);
         const { departureDate, departureTime } = parsedGar;

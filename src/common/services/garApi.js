@@ -14,8 +14,8 @@ function getResponseErrorMessage(err) {
 }
 
 class GarApi {
-  constructor(config) {
-    this.client = new ApiClient(config);
+  constructor(client) {
+    this.client = client;
   }
 
   /**
@@ -27,14 +27,14 @@ class GarApi {
    */
   async get(garId, isCbpId = false) {
     try {
-      const gar = await this.client.get(endpoints.getGar(garId, isCbpId));
-
+      const gar = await this.client.get(`/gar/${garId}`, { query: { cbp_id: isCbpId } });
       gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCountry);
-      logger.debug('Successfully called GAR get endpoint');
+      logger.debug('Successfully called GAR get endpoint2');
 
       return gar;
     } catch (err) {
-      logger.error('Failed to call GAR get API endpoint');
+      logger.error('Failed to call GAR get API endpoint2');
+      console.log(err);
       if (err.status >= 400) {
         const responseErrorMessage = getResponseErrorMessage(err);
         logger.error(`${garId} garApi.get request was not successful : ${responseErrorMessage}`);
