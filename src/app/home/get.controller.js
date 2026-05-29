@@ -24,36 +24,34 @@ module.exports = (req, res) => {
     .getLastLogin(cookie.getUserEmail())
     .then(async (userSession) => {
       const { successHeader, successMsg } = req.session;
-      const draftPageObj =
-        statusTab === 'Draft'
-          ? { page: pageVal, perPage: PER_PAGE, status: 'Draft' }
-          : { page: PAGE_ONE, perPage: PER_PAGE, status: 'Draft' };
-
-      const submittedPageObj =
-        statusTab === 'Submitted'
-          ? { page: pageVal, perPage: PER_PAGE, status: 'Submitted' }
-          : { page: PAGE_ONE, perPage: PER_PAGE, status: 'Submitted' };
-
-      const cancelledPageObj =
-        statusTab === 'Cancelled'
-          ? { page: pageVal, perPage: PER_PAGE, status: 'Cancelled' }
-          : { page: PAGE_ONE, perPage: PER_PAGE, status: 'Cancelled' };
+      const getPageObj = (status) => ({
+        page: statusTab === status ? pageVal : PAGE_ONE,
+        perPage: PER_PAGE,
+        status,
+      });
+      const draftPageObj = getPageObj('Draft');
+      const submittedPageObj = getPageObj('Submitted');
+      const cancelledPageObj = getPageObj('Cancelled');
 
       delete req.session.successHeader;
       delete req.session.successMsg;
+
       try {
-        const draftGars = JSON.parse(await garApi.getGars(userId, role, draftPageObj, orgId));
-        const submittedGars = JSON.parse(await garApi.getGars(userId, role, submittedPageObj, orgId));
-        const cancelledGars = JSON.parse(await garApi.getGars(userId, role, cancelledPageObj, orgId));
+        const [draftGars, submittedGars, cancelledGars] = await Promise.all([
+          garApi.getGars(userId, role, draftPageObj, orgId),
+          garApi.getGars(userId, role, submittedPageObj, orgId),
+          garApi.getGars(userId, role, cancelledPageObj, orgId),
+        ]);
+
         res.render('app/home/index', {
           cookie,
           userSession,
           successMsg,
           successHeader,
           statusTab,
-          draftGars,
-          submittedGars,
-          cancelledGars,
+          draftGars: JSON.parse(draftGars),
+          submittedGars: JSON.parse(submittedGars),
+          cancelledGars: JSON.parse(cancelledGars),
         });
       } catch (error) {
         logger.error('Failed to get GARS from API');
@@ -67,7 +65,6 @@ module.exports = (req, res) => {
         });
       }
     })
-
     .catch((err) => {
       logger.error(err);
       return res.render('app/home/index', { cookie, userSession: [] });

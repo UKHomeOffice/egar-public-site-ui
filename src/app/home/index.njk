@@ -83,7 +83,6 @@
                 
                 <tbody class="govuk-table__body pagination__table_{{name}}">
                     {% for gar in gars %}
-                      {% if loop.index <= 10 %}
                       <tr class="govuk-table__row pagination-page pagination-page_{{page}}" id="pagination-row-{{page}}-{{ loop.index }}">
                         <td class="govuk-table__cell">
                           <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link registration-link" name="garId" value="{{ gar.garId }}">{{ gar.registration or __('value_aircraft_registration_null')}}</button>
@@ -99,7 +98,6 @@
                           </small>
                         </td>
                       </tr>
-                      {% endif %}
                     {% endfor %}
                 </tbody>
               </table>
