@@ -11,6 +11,51 @@
 {% set active = '/home' %}
 
 {% set statusName = statusTab| lower %}
+ {% macro gar_summary_table(name, gars, statusTab, pages) %}
+            <section class="govuk-tabs__panel" id="gars-{{name}}">
+              <h2 class="govuk-heading-m">{{ name | capitalize }} GARs</h2>
+              {% if gars | length %}
+              <table class="govuk-table">
+                <thead class="govuk-table__head" >
+                  <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="col" width="21%">{{__('field_aircraft_registration')}}</th>
+                    <th class="govuk-table__header" scope="col" width="15%">{{__('field_created_date')}}</th>
+                    <th class="govuk-table__header" scope="col" width="15%">{{__('field_departure_date')}}</th>
+                    <th class="govuk-table__header" scope="col" width="12%">{{__('field_departure_time')}}</th>
+                    <th class="govuk-table__header" scope="col" width="12%">{{__('field_departure_port')}}</th>
+                    <th class="govuk-table__header" scope="col" width="10%">{{__('field_arrival_port')}}</th>
+                    <th class="govuk-table__header" scope="col" width="20%">{{__('field_submission_reference')}}</th>
+                  </tr>
+                </thead>
+                
+                <tbody class="govuk-table__body">
+                    {% for gar in gars %}
+                      <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                          <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link" name="garId" value="{{ gar.garId }}">{{ gar.registration or __('value_aircraft_registration_null')}}</button>
+                        </td>
+                        <td class="govuk-table__cell">{{ gar.createdDate | truncate(11, true, "") }}</td>
+                        <td class="govuk-table__cell">{{ gar.departureDate }}</td>
+                        <td class="govuk-table__cell">{{ gar.departureTime }}</td>
+                        <td class="govuk-table__cell">{{gar.departurePort | upper }}</td>
+                        <td class="govuk-table__cell">{{gar.arrivalPort | upper }}</td>
+                        <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell" >
+                          <small>
+                            <code>{{m.gar_id_screen_reader(gar.cbp_id) if gar.cbp_id else ('Processing...' if gar.status.name == 'Submitted') }}</code>
+                          </small>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+              {% else %}
+                {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
+              {% endif %}
+              
+               {{ pagination.build(pages, {status: statusTab, hash: '#gars-'~name }) }}
+             
+            </section>
+  {% endmacro %}
 
 {% block content %}
   <div class="govuk-grid-row">
@@ -65,56 +110,13 @@
       
         <form id="signform2" action="/garfile/view" method="post" role="form">
         
-          {% macro gar_summary_table(name, gars, statusTab, pages) %}
-            <section class="govuk-tabs__panel" id="gars-{{name}}">
-              <h2 class="govuk-heading-m">{{ name | capitalize }} GARs</h2>
-              {% if gars | length %}
-              <table class="govuk-table">
-                <thead class="govuk-table__head" >
-                  <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="col" width="21%">{{__('field_aircraft_registration')}}</th>
-                    <th class="govuk-table__header" scope="col" width="15%">{{__('field_created_date')}}</th>
-                    <th class="govuk-table__header" scope="col" width="15%">{{__('field_departure_date')}}</th>
-                    <th class="govuk-table__header" scope="col" width="12%">{{__('field_departure_time')}}</th>
-                    <th class="govuk-table__header" scope="col" width="12%">{{__('field_departure_port')}}</th>
-                    <th class="govuk-table__header" scope="col" width="10%">{{__('field_arrival_port')}}</th>
-                    <th class="govuk-table__header" scope="col" width="20%">{{__('field_submission_reference')}}</th>
-                  </tr>
-                </thead>
-                
-                <tbody class="govuk-table__body">
-                    {% for gar in gars %}
-                      <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">
-                          <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link" name="garId" value="{{ gar.garId }}">{{ gar.registration or __('value_aircraft_registration_null')}}</button>
-                        </td>
-                        <td class="govuk-table__cell">{{ gar.createdDate | truncate(11, true, "") }}</td>
-                        <td class="govuk-table__cell">{{ gar.departureDate }}</td>
-                        <td class="govuk-table__cell">{{ gar.departureTime }}</td>
-                        <td class="govuk-table__cell">{{gar.departurePort | upper }}</td>
-                        <td class="govuk-table__cell">{{gar.arrivalPort | upper }}</td>
-                        <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell" >
-                          <small>
-                            <code>{{m.gar_id_screen_reader(gar.cbp_id) if gar.cbp_id else ('Processing...' if gar.status.name == 'Submitted') }}</code>
-                          </small>
-                        </td>
-                      </tr>
-                    {% endfor %}
-                </tbody>
-              </table>
-              {% else %}
-                {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
-              {% endif %}
-              
-               {{ pagination.build(pages, {status: statusTab, hash: '#gars-'~name }) }}
-             
-            </section>
-          {% endmacro %}
+         
           {{ gar_summary_table('draft', draftGars.items, 'Draft', draftGars._meta) }}
           {{ gar_summary_table('submitted', submittedGars.items, 'Submitted', submittedGars._meta) }}
           {{ gar_summary_table('cancelled', cancelledGars.items, 'Cancelled', cancelledGars._meta) }} 
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        </form>
       </div>
     </div>
  
