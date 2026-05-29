@@ -3,6 +3,7 @@ const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 const autocompleteUtil = require('../utils/autocomplete');
 const travelPermissionCodes = require('../utils/travel_permission_codes.json');
+const { error } = require('node:console');
 
 function getResponseErrorMessage(_response, body) {
   const responseErrorMessage = JSON.stringify({
@@ -156,6 +157,7 @@ module.exports = {
    * @returns {Promise} Resolves with API response.
    */
   getGars(userId, userType, pages, orgId = null) {
+    //throw Error('Gar not found');
     const garsUrl =
       userType === 'Individual'
         ? endpoints.getIndividualGars(userId, pages)
