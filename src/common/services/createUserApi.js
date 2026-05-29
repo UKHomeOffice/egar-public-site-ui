@@ -28,7 +28,7 @@ module.exports = {
           url: endpoints.register(),
           body: JSON.stringify(reqBody),
         },
-        (error, response, body) => {
+        (error, _response, body) => {
           if (error) {
             reject(error);
           }

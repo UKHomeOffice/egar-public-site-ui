@@ -9,7 +9,6 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/garApi');
 const craftApi = require('../../../common/services/craftApi');
-const pagination = require('../../../common/utils/pagination');
 
 const controller = require('../../../app/garfile/craft/get.controller');
 
@@ -17,8 +16,6 @@ describe('GAR Craft Get Controller', () => {
   let req;
   let res;
   let garApiGetStub;
-  let paginationBuildStub;
-  let paginationGetCurrentPageStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -29,14 +26,13 @@ describe('GAR Craft Get Controller', () => {
           id: 'RANDOM-GAR-ID',
         },
       },
+      query: { page: 1 },
     };
     res = {
       render: sinon.spy(),
     };
 
     garApiGetStub = sinon.stub(garApi, 'get');
-    paginationBuildStub = sinon.stub(pagination, 'build');
-    paginationGetCurrentPageStub = sinon.stub(pagination, 'getCurrentPage');
   });
 
   afterEach(() => {
@@ -146,8 +142,6 @@ describe('GAR Craft Get Controller', () => {
           _meta: { totalPages: 1, totalItems: 1 },
         })
       );
-      paginationGetCurrentPageStub.returns(1);
-      paginationBuildStub.returns({ startItem: 1, endItem: 1 });
 
       const callController = async () => {
         await controller(req, res);
@@ -172,7 +166,7 @@ describe('GAR Craft Get Controller', () => {
         expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
         expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
           cookie,
-          pages: { startItem: 1, endItem: 1 },
+          pages: { totalPages: 1, totalItems: 1 },
         });
       });
     });
@@ -265,8 +259,6 @@ describe('GAR Craft Get Controller', () => {
           _meta: { totalPages: 1, totalItems: 1 },
         })
       );
-      paginationGetCurrentPageStub.returns(1);
-      paginationBuildStub.returns({ startItem: 1, endItem: 1 });
 
       const callController = async () => {
         await controller(req, res);
@@ -291,7 +283,7 @@ describe('GAR Craft Get Controller', () => {
         expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
         expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
           cookie,
-          pages: { startItem: 1, endItem: 1 },
+          pages: { totalPages: 1, totalItems: 1 },
         });
       });
     });

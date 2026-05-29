@@ -16,8 +16,6 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
     arrivalTime,
     registration,
     responsibleGivenName,
-    prohibitedGoods,
-    baggage,
     visitReason,
     intentionValue,
   } = garfile;

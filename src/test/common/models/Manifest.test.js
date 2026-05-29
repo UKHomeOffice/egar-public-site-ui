@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { garPeople } = require('../../fixtures');
@@ -13,6 +11,7 @@ const apiResponse = JSON.stringify({
 
 describe('ManifestModel', () => {
   const APRIL = 3;
+  let clock;
 
   beforeEach(() => {
     clock = sinon.useFakeTimers({

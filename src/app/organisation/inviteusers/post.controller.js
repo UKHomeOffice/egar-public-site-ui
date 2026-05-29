@@ -3,7 +3,6 @@ const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
 const userApi = require('../../../common/services/userManageApi');
 const CookieModel = require('../../../common/models/Cookie.class');
-const { response } = require('express');
 
 module.exports = (req, res) => {
   const { fname, lname, email } = req.body;
@@ -23,7 +22,7 @@ module.exports = (req, res) => {
             return res.redirect('/organisation/assignrole');
           }
           if (typeof apiResponse.email !== 'undefined' && apiResponse.email.toLowerCase() === email.toLowerCase()) {
-            res.render('app/organisation/inviteusers/userExistError');
+            res.render('app/organisation/inviteusers/userExistError', { cookie });
             return;
           }
         })

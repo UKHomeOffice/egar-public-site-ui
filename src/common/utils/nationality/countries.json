@@ -1282,8 +1282,8 @@
   },
   "PRK": {
     "code": "PRK",
-    "name": " North Korea",
-    "label": " North Korea (PRK)",
+    "name": "North Korea",
+    "label": "North Korea (PRK)",
     "country": true,
     "passport_issuing": true
   },
@@ -1828,8 +1828,8 @@
   },
   "XXC": {
     "code": "XXC",
-    "name": " Refugee other than as defined above",
-    "label": " Refugee other than as defined above (XXC)",
+    "name": "Refugee other than as defined above",
+    "label": "Refugee other than as defined above (XXC)",
     "passport_issuing": true,
     "country": false
   },

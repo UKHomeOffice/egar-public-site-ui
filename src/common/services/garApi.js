@@ -155,14 +155,17 @@ module.exports = {
    * @param {String} orgId id of organisation a user belongs to. Only required if org user.
    * @returns {Promise} Resolves with API response.
    */
-  getGars(userId, userType, page, orgId = null) {
+  getGars(userId, userType, pages, orgId = null) {
     const garsUrl =
-      userType === 'Individual' ? endpoints.getIndividualGars(userId, 1) : endpoints.getOrgGars(userId, orgId, page);
+      userType === 'Individual'
+        ? endpoints.getIndividualGars(userId, pages)
+        : endpoints.getOrgGars(userId, orgId, pages);
     return new Promise((resolve, reject) => {
       request.get(
         {
           headers: { 'content-type': 'application/json' },
           url: garsUrl,
+          per_page: pages.perPage,
         },
         (error, _response, body) => {
           if (error) {
@@ -434,5 +437,36 @@ module.exports = {
     const currentDateTimeISO = new Date().toISOString();
     const currentDateTime = new Date(currentDateTimeISO);
     return Math.round((departureDateTime - currentDateTime) / 1000 / 60);
+  },
+
+  getGarsCount(userId, userType, orgId = null) {
+    const garsUrl =
+      userType === 'Individual' ? endpoints.getIndividualGarsCount(userId) : endpoints.getOrgGarsCount(userId, orgId);
+
+    return new Promise((resolve, reject) => {
+      request.get(
+        {
+          headers: { 'content-type': 'application/json' },
+          url: garsUrl,
+        },
+        (error, _response, body) => {
+          if (error) {
+            logger.error('Failed to call get GARs Count endpoint');
+            reject(error);
+            return;
+          }
+
+          if (_response.statusCode >= 400) {
+            const responseErrorMessage = getResponseErrorMessage(_response, body);
+            logger.error(`${userId} garApi.getGarsCount request was not successful : ${responseErrorMessage}`);
+            resolve(JSON.parse(body));
+            return;
+          }
+
+          logger.debug('Successfully called get GARs endpoint');
+          resolve(JSON.parse(body));
+        }
+      );
+    });
   },
 };

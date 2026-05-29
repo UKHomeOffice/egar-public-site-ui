@@ -8,6 +8,7 @@ const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const i18n = require('i18n');
 const loggingMiddleware = require('morgan');
+const { token } = require('morgan');
 const argv = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
 const nunjucks = require('nunjucks');
@@ -26,7 +27,6 @@ const router = require('./app/router');
 const db = require('./common/utils/db');
 const noCache = require('./common/utils/no-cache');
 const autocompleteUtil = require('./common/utils/autocomplete');
-const correlationHeader = require('./common/middleware/correlation-header');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require('./common/config');
@@ -48,7 +48,8 @@ const APP_VIEWS = [
   path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
   __dirname,
   'node_modules/govuk-frontend/',
-  'node_modules/govuk-frontend/components/',
+  'node_modules/govuk-frontend/dist/govuk/components/',
+  'node_modules/@govuk-one-login/service-header/',
   'common/templates',
   'common/templates/includes',
 ];
@@ -95,6 +96,10 @@ function initialisExpressSession(app) {
   logger.info('Set express session');
 }
 
+function setupLoggingContext() {
+  token('session-id', (req) => req.sessionID || '');
+}
+
 function initialiseGlobalMiddleware(app) {
   logger.info('Initalising global middleware');
 
@@ -110,14 +115,16 @@ function initialiseGlobalMiddleware(app) {
     });
   }
 
-  app.use(favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'govuk', 'assets', 'images', 'favicon.ico')));
+  app.use(
+    favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'dist', 'govuk', 'assets', 'images', 'favicon.ico'))
+  );
   app.use(compression());
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
     app.use(
       /\/((?!images|public|stylesheets|javascripts).)*/,
       loggingMiddleware(
-        ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'
+        ':remote-addr - :remote-user [:date[clf]] ":session-id :method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'
       )
     );
   }
@@ -158,9 +165,21 @@ function initialiseGlobalMiddleware(app) {
   });
 
   logger.info('Set CSRF Token');
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", 'https://www.googletagmanager.com', 'https://www.google-analytics.com'],
+          connectSrc: ["'self'", 'https://www.google-analytics.com', 'https://region1.google-analytics.com'],
+          imgSrc: ["'self'", 'data:', 'https://www.google-analytics.com', 'https://www.googletagmanager.com'],
+          styleSrc: ["'self'"],
+          objectSrc: ["'none'"],
+        },
+      },
+    })
+  );
 
-  app.use('*', correlationHeader);
   logger.info('Set global middleware');
 }
 
@@ -205,6 +224,7 @@ function initialiseTemplateEngine(app) {
   app.set('view engine', 'njk');
   logger.info('Set view engine');
 
+  nunjucksEnvironment.addGlobal('govukRebrand', true);
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
   nunjucksEnvironment.addGlobal('base_url', BASE_URL);
   nunjucksEnvironment.addGlobal('travelPermissionCodes', travelPermissionCodes);
@@ -249,7 +269,6 @@ function initialisePublic(app) {
   app.use('/assets', express.static(path.join(__dirname, '/common/assets/')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
-  app.use('/utils', express.static(path.join(__dirname, '/common/utils/')));
   logger.info('Initialised public assets');
 }
 
@@ -282,6 +301,7 @@ function initialise() {
   async function prepDb() {
     try {
       await initialiseDb();
+      setupLoggingContext();
       initialisExpressSession(unconfiguredApp);
       initialiseProxy(unconfiguredApp);
       initialiseI18n(unconfiguredApp);

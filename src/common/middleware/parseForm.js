@@ -1,6 +1,6 @@
 const bodyParser = require('body-parser');
 
-module.exports = (req, res, next) => {
+module.exports = (_req, _res, next) => {
   bodyParser.urlencoded({ extended: false });
   next();
 };

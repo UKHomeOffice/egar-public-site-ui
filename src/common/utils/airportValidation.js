@@ -1,6 +1,4 @@
-const airportCodes = require('./airport_codes.json');
 const airports = require('./airports');
-const logger = require('./logger')(__filename);
 
 const notBritishMsg = 'Either the Arrival or Departure port must be a UK port';
 
@@ -51,20 +49,6 @@ function isJourneyUKInbound(departureCode, arrivalCode) {
 
 function isAirportBritishOrCrownDependency(airport) {
   return airport.british || airport.crownDependency;
-}
-
-function isAnAirportCode(airportCode) {
-  //if airportCode is: null, undefined, empty string, return false
-  if (!airportCode) {
-    return false;
-  }
-
-  //if airportCode is one of the magic strings, return false
-  if (['YYYY', 'ZZZZ'].includes(airportCode)) {
-    return false;
-  }
-
-  return true;
 }
 
 module.exports = {

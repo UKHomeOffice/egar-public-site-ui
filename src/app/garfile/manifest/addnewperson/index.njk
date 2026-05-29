@@ -1,6 +1,7 @@
 {% extends "base-template.njk" %}
 
 {% import "common/templates/includes/macros.njk" as m %}
+{% import "common/templates/includes/banners.njk" as b  %}
 
 {% block pageTitle %}
 	{{__('error_prefix') if errors}} Create GAR | Add person
@@ -8,38 +9,28 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
-  {% include "phase.njk" %}
   <a href="/garfile/manifest" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
+  <script src="/javascripts/garfile/manifest/addnewperson.js" type="module"></script>
   <div class="govuk-grid-row">
 	  <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
 
-      <p class="govuk-body-l"> <span style="background-color: #66ff66"> {{__('id_card_withdrawl_text')}} <a href=https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen>GOV.UK</a>. </span> </p>
       <h1 class="govuk-heading-xl">{{__('heading_manifest_add_person_details')}}</h1>{# Add new person details #}
-      
+      {{ b.id_card_withdrawl_text(__) }}
       <p class="govuk-body-l">{{__('caption_manifest_person_details')}}</p>
-
       <form action="/garfile/manifest/addnewperson" autocomplete="off" class="form-group" method="post" role="form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {% include "person-details.njk" %}
         <br>
-        <input id="add-person-manifest" class="govuk-button" type="submit" value="{{__('form_save_and_add_to_gar')}}" onclick="sendAnalytics(event, 'Save and Exit', 'click')">
+        <input id="add-person-manifest" class="govuk-button" type="submit" value="{{__('form_save_and_add_to_gar')}}">
         <p class="govuk-body-m">
           <a href="/garfile/manifest" class="govuk-button govuk-button--secondary">{{__('form_exit_without_saving')}}</a>
         </p>
       </form>
     </div>
   </div>
-</div>
 {% endblock %}

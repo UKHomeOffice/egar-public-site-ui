@@ -1,21 +1,20 @@
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "dist/govuk/components/button/macro.njk" import govukButton %}
+{% from "dist/govuk/components/panel/macro.njk" import govukPanel %}
 
+<div class="govuk-body govuk-grid-column-two-thirds margin-left-50 margin-top-20">
 
-
-<div class="govuk-grid-column-two-thirds margin-left-50 margin-top-20">
-  <div style="width: 630px; height: 225px;">
-  {{ govukPanel({titleHtml: "Account has been <br/> created"}) }}
+  <div class="govuk-width-container govuk-!-padding-top-6 govuk-!-padding-bottom-6 govuk-!-padding-left-6 govuk-!-padding-right-6">
+    {{ govukPanel({ titleHtml: "Account has been <br/> created" }) }}
   </div>
 
   <p>We have sent you a confirmation email</p>
 
-  <h1>What happens next</h1>
+  <h1 class="govuk-heading-l">What happens next</h1>
 
-  <div style="margin-bottom: 29px;">
+  <div class="govuk-!-margin-bottom-7">
     <p>You can use the service to:</p>
 
-    <ul class="govuk-list govuk-list--bullet margin-bottom-20 padding-left-35">
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-4 govuk-!-padding-left-7">
       <li>submit a GAR</li>
       <li>view, edit or cancel a GAR</li>
       <li>add, remove or manage people on your flight</li>
@@ -23,7 +22,7 @@
   </div>
 
   <form method="post" action="/onelogin/register" novalidate>
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-  {{ govukButton({text: "Continue", element: "button", type: "submit"}) }}
-</form>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    {{ govukButton({text: "Continue", element: "button", type: "submit"}) }}
+  </form>
 </div>

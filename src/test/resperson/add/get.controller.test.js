@@ -29,7 +29,7 @@ describe('Responsible Person Add Get Controller', () => {
   });
 
   it('should render the responsible person add index page', async () => {
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
 
     await controller(req, res);
 

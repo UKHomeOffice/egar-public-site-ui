@@ -8,29 +8,31 @@ platform:
   arch: amd64
 
 steps:
+  - name: unit-test
+    pull: if-not-exists
+    image: node:22-alpine3.21
+    commands:
+      - export NOTIFY_API_KEY=dummy
+      - cd src
+      - npm install
+      - npm run test-drone
+
+  - name: linting-formatting
+    pull: if-not-exists
+    image: node:22-alpine3.21
+    commands:
+      - cd src
+      - npm install
+      - npm run check
+
   - name: build
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
     commands:
       - source ./ops/image_build.sh
-
-  - name: unit-test
-    pull: if-not-exists
-    image: node:22-alpine3.21
-    commands:
-    - export NOTIFY_API_KEY=dummy
-    - cd src
-    - npm install
-    - npm run test-drone
-
-  - name: linting-formatting
-    pull: if-not-exists
-    image: node:22-alpine3.21
-    failure: ignore
-    commands:
-    - cd src
-    - npm install
-    - npm run check
+    depends_on:
+      - linting-formatting
+      - unit-test
 
   - name: publish-to-ecr
     image: plugins/ecr
@@ -52,6 +54,8 @@ steps:
       branch:
         - main
         - dev
+        - govuk5-test
+        - NMSW-3130-add-content-security-policy
 
   - name: trivy-scan-image
     pull: always
@@ -65,14 +69,14 @@ steps:
       IMAGE_NAME: egar-public-site-ui:${DRONE_COMMIT}
       IGNORE_UNFIXED: true
     depends_on:
-    - build
+      - build
 
   - name: sonar-scan
     pull: always
     image: quay.io/ukhomeofficedigital/sonar-scanner:latest
     failure: ignore
     commands:
-    - sonar-scanner -Dproject.settings=./sonar-project.properties
+      - sonar-scanner -Dproject.settings=./sonar-project.properties
     when:
       event:
         - push
@@ -86,6 +90,8 @@ trigger:
   branch:
     - main
     - dev
+    - govuk5-test
+    - NMSW-3130-add-content-security-policy
 
 services:
   - name: docker
@@ -136,6 +142,8 @@ trigger:
 kind: pipeline
 name: deploy-to-test
 type: kubernetes
+depends_on:
+  - build-push-scan
 
 platform:
   os: linux
@@ -155,10 +163,14 @@ steps:
       NODE_ENV: testing
       TEST_BASE_URL:
         from_secret: TEST_BASE_URL
+      TEST_BASE_URL_SERVICE:
+        from_secret: TEST_BASE_URL_SERVICE
       TEST_KUBE_SERVER:
         from_secret: TEST_KUBE_SERVER
       TEST_KUBE_TOKEN:
         from_secret: TEST_KUBE_TOKEN
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
       # DEV_URL_SERVICE:
       #   from_secret: DEV_URL_SERVICE
 trigger:
@@ -204,7 +216,6 @@ trigger:
   event:
     - push
 ---
-
 kind: pipeline
 name: deploy-to-staging
 type: kubernetes
@@ -286,4 +297,3 @@ trigger:
     - promote
   target:
     - production
-

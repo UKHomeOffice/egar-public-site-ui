@@ -16,12 +16,13 @@ module.exports = async (req, res) => {
   cookie.initialise();
 
   var token;
+  let message;
   try {
     token = req.query.query;
     const hashedToken = tokenService.generateHash(token);
     const apiResponse = await verifyUserService.verifyUser(hashedToken);
     const parsedResponse = JSON.parse(apiResponse);
-    let message = i18n.__('verify_user_account_success');
+    message = i18n.__('verify_user_account_success');
 
     if (parsedResponse.message === 'Token has expired') {
       logger.info('Token expired, updating');

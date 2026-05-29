@@ -7,6 +7,14 @@ import prettierConfig from 'eslint-config-prettier';
 export default defineConfig([
   {
     files: ['**/*.{js,cjs,mjs}'],
+    ignores: [
+      '**/*.min.js',
+      'public/javascripts/cookie-banner.js',
+      'public/javascripts/paginator.js',
+      'public/javascripts/service-header.js',
+      'public/javascripts/init-service-header.js',
+      'public/javascripts/common.js',
+    ],
     plugins: {
       js,
       prettier: eslintPluginPrettier,
@@ -20,6 +28,7 @@ export default defineConfig([
       'max-len': 'off', // Prettier handles line length
       'unicorn/prefer-module': 'off', // allow require()
       'unicorn/prevent-abbreviations': 'off', // optional
+      'no-unused-vars': ['error', { vars: 'local' }],
     },
     languageOptions: {
       globals: {
@@ -28,9 +37,40 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.js'],
+    files: ['public/javascripts/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.browser, // window, document, etc.
+        $: 'readonly', // jQuery global
+        jQuery: 'readonly',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['warn', { args: 'none' }],
+      'no-undef': 'off',
+      'no-console': 'off',
+      'no-alert': 'off',
+    },
+    ignores: ['**/*.min.js', 'public/javascripts/cookie-banner.js', 'public/javascripts/paginator.js'],
+  },
+  {
+    files: ['app/**/*.js', 'common/**/*.js'],
     languageOptions: {
       sourceType: 'commonjs',
+      globals: {
+        __: 'readonly',
+      },
+    },
+    rules: {
+      'no-unused-vars': [
+        'warn',
+        {
+          args: 'all', // check all arguments
+          argsIgnorePattern: '^_', // ignore args starting with _
+          vars: 'all',
+          varsIgnorePattern: '^_', // optional: ignore unused variables starting with _
+        },
+      ],
     },
   },
   {

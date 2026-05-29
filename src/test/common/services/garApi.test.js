@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 const { expect } = require('chai');
 const chai = require('chai');
 const nock = require('nock');
@@ -43,6 +41,7 @@ const garPeoplePartial = {
 const BASE_URL = endpoints.baseUrl();
 
 describe('GarService', () => {
+  const pages = { page: 1, per_page: undefined, status: 'Draft' };
   beforeEach(() => {
     nock(BASE_URL)
       .patch(`/gar/${garId}`, garCraftPartial)
@@ -87,13 +86,13 @@ describe('GarService', () => {
       });
 
     nock(BASE_URL)
-      .get(`/user/${userId}/gars?page=1&per_page=10000`)
+      .get(`/user/${userId}/gars?status=Draft&page=1&per_page=undefined`)
       .reply(200, {
         items: [{}, {}],
       });
 
     nock(BASE_URL)
-      .get(`/user/${userId}/organisation/${orgId}/gars?page=1&per_page=10000`)
+      .get(`/user/${userId}/organisation/${orgId}/gars?status=Draft&page=1&per_page=undefined`)
       .reply(200, {
         items: [{}],
       });
@@ -153,7 +152,7 @@ describe('GarService', () => {
   });
 
   it('Should return all GARs belonging to an individual', (done) => {
-    garApi.getGars(userId, 'Individual', 1).then((apiResponse) => {
+    garApi.getGars(userId, 'Individual', pages).then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       expect(typeof parsedResponse).to.equal('object');
       expect(parsedResponse).to.have.keys(['items']);
@@ -163,7 +162,7 @@ describe('GarService', () => {
   });
 
   it('Should return all GARs belonging to an organisation', (done) => {
-    garApi.getGars(userId, 'Admin', 1, orgId).then((apiResponse) => {
+    garApi.getGars(userId, 'Admin', pages, orgId).then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       expect(typeof parsedResponse).to.equal('object');
       expect(parsedResponse).to.have.keys(['items']);
@@ -257,11 +256,10 @@ describe('GarService', () => {
   it('should throw an error for getGars', () => {
     nock.cleanAll();
     nock(BASE_URL)
-      .get(`/user/${userId}/gars?page=1&per_page=10000`)
+      .get(`/user/${userId}/gars?status=Draft&page=1&per_page=undefined`)
       .replyWithError({ message: 'Example getGars error', code: 404 });
-
     garApi
-      .getGars(userId, 'Individual', 1)
+      .getGars(userId, 'Individual', pages)
       .then(() => {
         chai.assert.fail('Should not have returned without error');
       })

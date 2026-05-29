@@ -54,7 +54,7 @@ describe('Responsible Person Add Post Controller', () => {
   it('should render with errors if responsibleSurname is empty', () => {
     req.body.responsibleSurname = '';
     const cookie = new CookieModel(req);
-    _responsiblePerson = utils.getResponsiblePersonFromReq(req);
+    responsiblePerson = utils.getResponsiblePersonFromReq(req);
     const callController = async () => {
       await controller(req, res);
     };
@@ -76,7 +76,7 @@ describe('Responsible Person Add Post Controller', () => {
               'Enter a surname for the responsible person'
             ),
           ],
-          responsiblePerson: _responsiblePerson,
+          responsiblePerson: responsiblePerson,
         });
       });
   });

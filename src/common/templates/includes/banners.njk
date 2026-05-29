@@ -1,18 +1,34 @@
+
+{% from "dist/govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% macro coa_designation_regulation_change(isDeparture) %}
+  {% set journeyStage = "departure" if isDeparture else "arrival" %}
+  <p class="govuk-body-m">
+    <mark>
+      The GB {{ journeyStage }} port must be officially designated to handle this flight, if you are unsure whether your intended port of departure is officially approved please visit
+      <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1151707/GOV.UK_GAR-Instructions-April_2023_V1.0_SDS.pdf" class="govuk-link">
+        General Aviation Report (GAR) Guidance – April 2023 (publishing.service.gov.uk)
+      </a> or confirm with the aerodrome authority directly.
+      Only officially designated GB aerodromes are able to handle international or CTA {{ journeyStage }}s from 01/01/24.
+    </mark>
+  </p>
+{% endmacro %}
+
 {% macro coa_designation_regulation_change(isDeparture) %}
 
     {% set journeyStage = "departure" if isDeparture else "arrival" %}
-    <span class="govuk-body-m" style="background:#00FFFF;">
+    <span class="govuk-body-m text-background-color">
         The GB {{ journeyStage }} port must be officially designated to handle this flight, if you are unsure whether your intended port of departure is officially approved please visit 
-        <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1151707/GOV.UK_GAR-Instructions-April_2023_V1.0_SDS.pdf">General Aviation Report (GAR) Guidance – April 2023 (publishing.service.gov.uk)</a> or confirm with the aerodrome authority directly. 
+        <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1151707/GOV.UK_GAR-Instructions-April_2023_V1.0_SDS.pdf" class="govuk-link">General Aviation Report (GAR) Guidance – April 2023 (publishing.service.gov.uk)</a> or confirm with the aerodrome authority directly. 
         Only officially designated GB aerodromes are able to handle international or CTA {{ journeyStage }}s from 01/01/24.
     </span>
 {% endmacro %}
 
 {% macro notificationBannerForResponseCodes(numberOf0TResponseCodes, numberOf0BResponseCodes, showImportantBanner) %}
  {% if showImportantBanner or numberOf0BResponseCodes > 0 %}
- <div class="custom-govuk-notification-banner" role="region"
+ <div class="govuk-notification-banner" role="region"
         aria-labelledby="govuk-notification-banner-title"
-        data-module="custom-govuk-notification-banner">
+        data-module="govuk-notification-banner">
         <div class="govuk-notification-banner__header">
             <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
             Important
@@ -43,4 +59,11 @@
         {% endif %}
   </div> 
  {% endif %}
+{% endmacro %}
+
+{% macro id_card_withdrawl_text(__) %}
+  <div class="govuk-inset-text">
+    {{ __('id_card_withdrawl_text') }}
+    <a class="govuk-link" href="https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen">GOV.UK</a>.
+  </div>
 {% endmacro %}

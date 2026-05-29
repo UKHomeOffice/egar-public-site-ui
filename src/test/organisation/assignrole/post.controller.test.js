@@ -12,7 +12,6 @@ const tokenApi = require('../../../common/services/tokenApi');
 const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config/index');
 let roles = require('../../../common/seeddata/egar_user_roles.json');
-const oneLoginApi = require('../../../common/services/oneLoginApi');
 
 const controller = require('../../../app/organisation/assignrole/post.controller');
 let { cookie } = require('request');

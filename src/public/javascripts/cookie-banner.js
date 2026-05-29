@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", () => {
+  if (getCookie('sgar_cookies_policy') === '' || getCookie('sgar_cookies_policy') === null) {
+    showCookieBanner();
+  }
+})
 function setCookie(name, value, expiryDays) {
   const currDate = new Date();
   currDate.setTime(currDate.getTime() + expiryDays * 24 * 60 * 60 * 1000);
@@ -55,9 +60,6 @@ function Cookie(name, value) {
 //  setCookie('seen_cookie_message', 'yes', 30);
 //};
 
-if (getCookie('sgar_cookies_policy') === '' || getCookie('sgar_cookies_policy') === null) {
-  showCookieBanner();
-}
 
 function accept_cookies() {
   document.getElementById('cookies_accept_message').style.display = 'block';
@@ -84,6 +86,7 @@ function hide_message() {
 }
 
 function change_cookie_preference() {
+  console.log('change_cookie_preference');
   if (document.getElementById('radio_cookies_accept').checked == true) {
     setCookie('sgar_cookies_policy', true, 30);
     document.getElementById('preference_changed').removeAttribute('hidden');

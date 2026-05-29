@@ -7,7 +7,6 @@ const { URL } = require('url');
 
 require('../../global.test');
 
-const endpoints = require('../../../common/config/endpoints');
 const config = require('../../../common/config/index');
 
 describe('Responsible Person API Service', () => {

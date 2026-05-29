@@ -51,7 +51,7 @@ module.exports = (req, res) => {
               // API returned successful
               res.redirect('/aircraft');
             }
-          } catch (err) {
+          } catch {
             logger.error('Error parsing response updating aircraft, may not be JSON');
             let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
             if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {

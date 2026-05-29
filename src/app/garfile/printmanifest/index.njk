@@ -8,43 +8,21 @@
 
 {% set active = '/home' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
-  {% include "phase.njk" %}
+
   <a href="/garfile/view" class="govuk-back-link">{{__('nav_back')}}</a>
 {% endblock %}
 
 {% block content %}
-
-<style type="text/css" media="print">
-@media print {
-    header, footer  {
-      display:none;
-    }
-
-  #display-manifest {
-    display:none;
-  }
-
-  .govuk-phase-banner{
-    display:none;
-  }
-
-  .govuk-back-link{
-    display:none;
-  }
-  }
-  </style>
+<link rel="stylesheet" href="/stylesheets/print.css" type="text/css" media="print"/>
+<script type="module" src="/javascripts/garfile/printmanifest.js"></script>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl" id="pageTitle">Print GAR</h1>
     </div>
 
-<a id="display-manifest" class="govuk-button" onclick="printMyGar()">Print GAR</a>
+<a id="display-manifest" class="govuk-button">Print GAR</a>
 <div class="govuk-grid-column-full">
     <table class="govuk-table">
         <thead class="govuk-table__head">
@@ -177,14 +155,5 @@
         </tbody>
       </table>
     </div>
-
-
-<script>
-    function printMyGar(){
-      document.title=document.getElementById("garID_title").textContent;
-      window.print();
-   }
-</script>
-
 {% endblock %}
 

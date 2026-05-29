@@ -8,15 +8,8 @@ module.exports.validations = (req) => {
   const docTypeOther = req.body.travelDocumentType;
 
   const peopleValidationRules = [
-    [new ValidationRule(validator.bornAfter1900, 'dob', dobObj, 'Enter a real date of birth')],
-    [
-      new ValidationRule(
-        validator.realDateInFuture,
-        'documentExpiryDate',
-        expiryDateObj,
-        'Enter a real document expiry date'
-      ),
-    ],
+    [new ValidationRule(validator.bornAfter1900, 'dobDate', dobObj, 'Enter a real date of birth')],
+    [new ValidationRule(validator.realDateInFuture, 'expiryDate', expiryDateObj, 'Enter a real document expiry date')],
     [
       new ValidationRule(validator.isNotEmpty, 'firstName', req.body.firstName, 'Enter the given names of the person'),
       new ValidationRule(

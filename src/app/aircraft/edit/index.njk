@@ -1,6 +1,5 @@
 {% extends "base-template.njk" %}
 
-{% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/location.njk" as l %}
 
 {% block pageTitle %}
@@ -9,12 +8,7 @@
 
 {% set active = '/aircraft' %}
 
-{% block header %}
-  {% include "header-user.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
-  {% include "phase.njk" %}
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
@@ -26,64 +20,24 @@
 {% endblock %}
 
 {% block content %}
-
+  <script src="/javascripts/aircraft/edit.js" type="module"></script>
   {% set craft = cookie.getEditCraft() %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      {% if errors %}
-        {% include "common/templates/includes/errors.njk" %}
-      {% endif %}
 
       <form action="/aircraft/edit" autocomplete="off" class="form-group"method="post" role="form" >
         <h1 class="govuk-heading-xl">{{__('title_edit_aircraft')}}</h1>
         <p class="govuk-body-l">{{__('edit_aircraft_caption')}}</p>
 
-        <div class="{{ m.form_group_class('registration', errors) }}">
-          <label class="govuk-label" for="registration">{{__('field_aircraft_registration')}}</label>
-          {{ m.hint('registration', __('field_aircraft_registration_hint')) }}
-          {{ m.error_message('registration', errors, __) }}
-          <input id="registration" name="registration"  class="govuk-input govuk-input--width-10"
-            type="text" aria-describedby="registration-hint{{ ' registration-error' if errors | containsError('registration') }}"
-            value="{{craft.registration}}" maxlength="{{ MAX_REGISTRATION_LENGTH }}"/>
-          {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
-        </div>
-
-        <div class="{{ m.form_group_class('craftType', errors) }}">
-          <label class="govuk-label" for="craftType">{{__('field_aircraft_type')}}</label>
-          {{ m.hint('craftType', __('field_aircraft_type_hint')) }}
-          {{ m.error_message('craftType', errors, __) }}
-          <input id="craftType" name="craftType" class="govuk-input govuk-input--width-20"
-            type="text" aria-describedby="craftType-hint{{ ' craftType-error' if errors | containsError('craftType') }}"
-            value="{{craft.craftType}}" maxlength="{{ MAX_STRING_LENGTH }}">
-          {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
-        </div>
-
-        {% set legendLabel = __('field_aircraft_base')%}
-        {% set warningMessage = undefined%}
-        {% set isPortChoice = (craft.portChoice === 'Yes' or craft.portChoice is undefined)%}
-        {% set portCode = craft.craftBasePort%}
-        {% set lat = craft.craftBaseLat%}
-        {% set long = craft.craftBaseLong%}
-        {% set prefix = 'craftBase'%}
-
-        {{ l.location(legendLabel, 
-                      warningMessage, 
-                      isPortChoice, 
-                      portCode, 
-                      lat, 
-                      long, 
-                      prefix, 
-                      errors, 
-                      __) }}
+        {{ l.craft_details(craft, errors, __)}}
 
         <div class="govuk-form-group">
           <input id="save-and-exit" class="govuk-button" type="submit"
             name="buttonClicked"
-            value="{{__('form_save_and_exit')}}"
-            onclick="sendAnalytics(event, 'Saved Aircraft Edit - Save', 'click')">
+            value="{{__('form_save_and_exit')}}">
           <p class="govuk-body-m">
-            <a id="exit-without-saving" class="govuk-button govuk-button--secondary" href="/aircraft#" onclick="sendAnalytics(event, 'Saved Aircraft Edit - Cancel', 'click')">{{__('form_exit_without_saving')}}</a>
+            <a id="exit-without-saving" class="govuk-button govuk-button--secondary" href="/aircraft#">{{__('form_exit_without_saving')}}</a>
           </p>
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>

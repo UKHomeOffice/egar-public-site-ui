@@ -6,19 +6,11 @@
 	Error - Login
 {% endblock %}
 
-{% block header %}
-{% include "header-pre-user.njk" %}
-{% endblock %}
-
-
 {% block content %}
-  {% if errors %}
-    {% include "common/templates/includes/errors.njk" %}
-  {% endif %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Sorry, there is a problem with your account</h1>
-      <p class="govuk-body">You can email the Submit a GAR technical support team at <a href="mailto:garsupport@homeoffice.gov.uk">garsupport@homeoffice.gov.uk</a> for help with your account.</p>
+      <p class="govuk-body">You can email the Submit a GAR technical support team at <a href="mailto:garsupport@homeoffice.gov.uk" class="govuk-link">garsupport@homeoffice.gov.uk</a> for help with your account.</p>
     </div>
 </div>
 {% endblock %}

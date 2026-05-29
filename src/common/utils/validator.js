@@ -139,7 +139,7 @@ function notEmpty(value) {
 // must start and end with alpha
 // special characters cannot be placed sequentially
 function validName(value) {
-  const regex = /^[A-z ](?:[A-z ]|[-|\'](?=[A-z ]))*[A-z ]$/;
+  const regex = /^[A-Za-z ](?:[A-Za-z ]|[-'](?=[A-Za-z ]))*[A-Za-z ]$/;
   return regex.test(value);
 }
 
@@ -371,7 +371,7 @@ function getDateFromDynamicInput(input) {
     if (isNaN(providedDate)) {
       providedDate = null;
     }
-  } else if (input.hasOwnProperty('d')) {
+  } else if (Object.prototype.hasOwnProperty.call(input, 'd')) {
     // if it is an eGAR UI date object, validate properties and parse
     if (
       numericDateElements(input) &&
@@ -430,13 +430,33 @@ function realDateInFuture(dObj) {
   );
 }
 
+const dateTransformer = (str) => {
+  if (typeof str !== 'string') {
+    return str;
+  }
+
+  const match = /^(\d{2})\/(\d{2})\/(\d{4})$/.test(str);
+
+  if (match) {
+    const [day, month, year] = str.split('/');
+
+    if (validDay(day, month, year) && validMonth(month) && validYear(year)) {
+      return `${year}-${month}-${day}`;
+    }
+  }
+  return str;
+};
+
 function realDateFromString(str) {
   moment.suppressDeprecationWarnings = true;
-  return moment(str).isValid();
+  if (str instanceof Date) {
+    return moment(str).isValid();
+  }
+  return moment(dateTransformer(str)).isValid();
 }
 
 // This function will validate Passport Expiry date while uploading Gar Template
-function passportExpiryDate(value) {
+function passportExpiryDate(value, _element) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -458,7 +478,7 @@ function passportExpiryDate(value) {
 }
 
 // This function will validate a Date of Birth making sure it's not in future while uploading Gar Template
-function birthDate(value) {
+function birthDate(value, _element) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -473,7 +493,7 @@ function birthDate(value) {
 }
 
 // This function will validate departure date while uploading Gar Template
-function dateNotInPast(value) {
+function dateNotInPast(value, _element) {
   const val = Date.parse(value);
   if (isNaN(val)) return false;
 
@@ -491,6 +511,7 @@ function dateNotInPast(value) {
   return false;
 }
 
+//unused except tests
 function validFlag(value) {
   if (value) {
     return true;
@@ -498,13 +519,7 @@ function validFlag(value) {
   return false;
 }
 
-function validPort(value) {
-  if (value.length >= 3) {
-    return true;
-  }
-  return false;
-}
-
+//unused except tests
 function confirmPassword(value1, value2) {
   if (value1 === value2) {
     return true;
@@ -708,29 +723,13 @@ function handleResponseError(parsedApiResponse) {
   }
 }
 
-function sanitiseDateOrTime(input, type) {
-  const regex = type === 'year' ? '[0-9]{1,4}' : '[0-9]{1,2}';
-
-  return input.match(regex) === null ? '' : input.match(regex)[0];
-}
-
-function autoTab(field1, dayMonthOrYear, field2) {
-  let len = dayMonthOrYear === 'year' ? 4 : 2;
-
-  let field1Value = sanitiseDateOrTime(field1.value, dayMonthOrYear);
-
-  if (field1Value.length == len) {
-    field2.focus();
-  }
-}
-
 function isAlphanumeric(input) {
   const alphanumericRegex = /^[a-zA-Z0-9]+$/;
   return alphanumericRegex.test(input);
 }
 
 function isAlpha(input) {
-  const alphaRegex = /^[a-z\s\-]+$/i;
+  const alphaRegex = /^[a-z\s-]+$/i;
   return alphaRegex.test(input);
 }
 
@@ -788,7 +787,6 @@ module.exports = {
   currentOrPastDate,
   validTime,
   validFlag,
-  validPort,
   validISOCountryLength,
   isValidNationality,
   validFreeCirculation,
@@ -806,11 +804,9 @@ module.exports = {
   isValidRegistrationLength,
   isValidDepAndArrDate,
   handleResponseError,
-  sanitiseDateOrTime,
   passportExpiryDate,
   birthDate,
   dateNotInPast,
-  autoTab,
   preventZ,
   dateNotMoreThanMonthInFuture,
   isAlphanumeric,

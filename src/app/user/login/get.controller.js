@@ -38,7 +38,7 @@ const isUserAuthenticated = (userSessionObject) => {
 
 const sendAdminUpdateEmail = (userObj) => {
   if (!userObj.organisation) {
-    return new Promise((resolve) => resolve(userObj));
+    return new Promise((resolve, _reject) => resolve(userObj));
   }
 
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((users) => {
@@ -103,8 +103,8 @@ const handleUserAuthentication = (req, res, userInfo, cookie) => {
           );
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
-          return new Promise((resolve) =>
-            userApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then(() => {
+          return new Promise((resolve, _reject) =>
+            userApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then((_e) => {
               userData.oneLoginSid = oneLoginSid;
               return resolve(userData);
             })
