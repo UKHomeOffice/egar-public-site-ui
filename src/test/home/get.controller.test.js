@@ -15,9 +15,6 @@ describe('Home Get Controller', () => {
   let res;
   let tokenApiStub;
   let garApiStub;
-  const pagesDraft = { page: 1, perPage: 10, status: 'Draft' };
-  const pagesSubmitted = { page: 1, perPage: 10, status: 'Submitted' };
-  const pagesCancelled = { page: 1, perPage: 10, status: 'Cancelled' };
 
   beforeEach(() => {
     chai.use(sinonChai);
