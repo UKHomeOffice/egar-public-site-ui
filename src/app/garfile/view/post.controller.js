@@ -39,9 +39,9 @@ module.exports = (req, res) => {
 
   cookie.setGarId(garId);
 
-  const garPeople = garApi.getPeople(garId);
+  const garPeople = dataAccessApi.garApi.getPeople(garId);
   const garDetails = dataAccessApi.garApi.get(garId, true);
-  const garDocs = garApi.getSupportingDocs(garId);
+  const garDocs = dataAccessApi.garApi.getSupportingDocs(garId);
   let numberOf0TResponseCodes = 0;
   const isResubmitted = cookie.getResubmitFor0T().includes(garId);
 
@@ -56,10 +56,9 @@ module.exports = (req, res) => {
 
   Promise.all([garDetails, garPeople, garDocs])
     .then((responseValues) => {
-      console.log(responseValues);
       const parsedGar = responseValues[0];
-      const parsedPeople = JSON.parse(responseValues[1]);
-      const supportingDocuments = JSON.parse(responseValues[2]);
+      const parsedPeople = responseValues[1];
+      const supportingDocuments = responseValues[2];
       const { departureDate, departureTime } = parsedGar;
       const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z` : null;
 
