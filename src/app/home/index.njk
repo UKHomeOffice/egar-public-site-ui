@@ -48,12 +48,12 @@
         <ul class="govuk-tabs__list">
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab" href="#gars-draft">
-              {{__('tab_gar_draft', draftGars._meta.totalItems )}}
+              {{__('tab_gar_draft', draftGars._meta.totalItems or 0 )}}
             </a>
           </li>
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab" href="#gars-submitted">
-              {{__('tab_gar_submitted', submittedGars._meta.totalItems )}}
+              {{__('tab_gar_submitted', submittedGars._meta.totalItems or 0)}}
             </a>
           </li>
           <li class="govuk-tabs__list-item">
@@ -64,11 +64,12 @@
         </ul>
       
         <form id="signform2" action="/garfile/view" method="post" role="form">
+        
           {% macro gar_summary_table(name, gars, statusTab, pages) %}
             <section class="govuk-tabs__panel" id="gars-{{name}}">
               <h2 class="govuk-heading-m">{{ name | capitalize }} GARs</h2>
               {% if gars | length %}
-              <table class="govuk-table" id="sortGAR">
+              <table class="govuk-table">
                 <thead class="govuk-table__head" >
                   <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="col" width="21%">{{__('field_aircraft_registration')}}</th>
@@ -81,18 +82,18 @@
                   </tr>
                 </thead>
                 
-                <tbody class="govuk-table__body pagination__table_{{name}}">
+                <tbody class="govuk-table__body">
                     {% for gar in gars %}
-                      <tr class="govuk-table__row pagination-page pagination-page_{{page}}" id="pagination-row-{{page}}-{{ loop.index }}">
+                      <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
-                          <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link registration-link" name="garId" value="{{ gar.garId }}">{{ gar.registration or __('value_aircraft_registration_null')}}</button>
+                          <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link" name="garId" value="{{ gar.garId }}">{{ gar.registration or __('value_aircraft_registration_null')}}</button>
                         </td>
                         <td class="govuk-table__cell">{{ gar.createdDate | truncate(11, true, "") }}</td>
                         <td class="govuk-table__cell">{{ gar.departureDate }}</td>
                         <td class="govuk-table__cell">{{ gar.departureTime }}</td>
                         <td class="govuk-table__cell">{{gar.departurePort | upper }}</td>
                         <td class="govuk-table__cell">{{gar.arrivalPort | upper }}</td>
-                        <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell cbp-id-column" >
+                        <td id="garid-{{ name }}-{{ loop.index }}" class="govuk-table__cell" >
                           <small>
                             <code>{{m.gar_id_screen_reader(gar.cbp_id) if gar.cbp_id else ('Processing...' if gar.status.name == 'Submitted') }}</code>
                           </small>
@@ -104,7 +105,7 @@
               {% else %}
                 {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
               {% endif %}
-              <script src="/javascripts/table.js"></script>
+              
                {{ pagination.build(pages, {status: statusTab, hash: '#gars-'~name }) }}
              
             </section>

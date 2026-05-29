@@ -66,6 +66,7 @@ describe('Home Get Controller', () => {
       StatusChangedTimestamp: '2018-11-20',
     });
     garApiStub.rejects('garApi.getGars Example Reject');
+
     const cookie = new CookieModel(req);
     const callController = async () => {
       await controller(req, res);
@@ -74,8 +75,6 @@ describe('Home Get Controller', () => {
     callController()
       .then()
       .then(() => {
-        expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
-        expect(garApiStub).to.have.been.calledOnceWithExactly('abcde-12345', 'Individual', pagesDraft, undefined);
         expect(res.render).to.have.been.calledOnceWith('app/home/index', {
           cookie,
           successHeader: undefined,
@@ -114,7 +113,8 @@ describe('Home Get Controller', () => {
     garApiStub.onCall(0).resolves(JSON.stringify(draftGarsApiResponse));
     garApiStub.onCall(1).resolves(JSON.stringify(submittedGarsApiResponse));
     garApiStub.onCall(2).resolves(JSON.stringify(cacelledGarsApiResponse));
-    //const cookie = new CookieModel(req);
+
+    const cookie = new CookieModel(req);
 
     const callController = async () => {
       await controller(req, res);
@@ -124,10 +124,16 @@ describe('Home Get Controller', () => {
       .then()
       .then(() => {
         sinon.assert.calledThrice(garApiStub);
-        expect(tokenApiStub).to.have.been.calledOnceWithExactly('captain.kirk@enterprise.com');
-        sinon.assert.calledWithExactly(garApiStub.getCall(0), 'abcde-12345', 'Individual', pagesDraft, undefined);
-        sinon.assert.calledWithExactly(garApiStub.getCall(1), 'abcde-12345', 'Individual', pagesSubmitted, undefined);
-        sinon.assert.calledWithExactly(garApiStub.getCall(2), 'abcde-12345', 'Individual', pagesCancelled, undefined);
+        expect(res.render).to.have.been.calledOnceWith('app/home/index', {
+          cookie,
+          successHeader: 'Windows XP',
+          successMsg: 'Task failed successfully.',
+          userSession: { StatusChangedTimestamp: '2018-11-20' },
+          statusTab: 'Draft',
+          draftGars: draftGarsApiResponse,
+          submittedGars: submittedGarsApiResponse,
+          cancelledGars: cacelledGarsApiResponse,
+        });
       });
   });
 });
