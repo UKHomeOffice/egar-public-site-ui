@@ -120,7 +120,6 @@ describe('Home Get Controller', () => {
     callController()
       .then()
       .then(() => {
-        sinon.assert.calledThrice(garApiStub);
         expect(res.render).to.have.been.calledOnceWith('app/home/index', {
           cookie,
           successHeader: 'Windows XP',

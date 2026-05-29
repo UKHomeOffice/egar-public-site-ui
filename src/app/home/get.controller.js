@@ -18,7 +18,7 @@ module.exports = (req, res) => {
   cookie.session.gar = null;
 
   const statusTab = req.query?.status || 'Draft';
-  let pageVal = req.query?.page || PAGE_ONE;
+  const pageVal = req.query?.page || PAGE_ONE;
 
   tokenApi
     .getLastLogin(cookie.getUserEmail())
@@ -43,8 +43,6 @@ module.exports = (req, res) => {
           garApi.getGars(userId, role, cancelledPageObj, orgId),
         ]);
 
-        console.log(draftGars, submittedGars, cancelledGars);
-
         res.render('app/home/index', {
           cookie,
           userSession,
@@ -56,7 +54,6 @@ module.exports = (req, res) => {
           cancelledGars: JSON.parse(cancelledGars),
         });
       } catch (error) {
-        console.log(error);
         logger.error('Failed to get GARS from API');
         logger.error(error);
         res.render('app/home/index', {
