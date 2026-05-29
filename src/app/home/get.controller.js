@@ -2,8 +2,9 @@ const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
 const tokenApi = require('../../common/services/tokenApi');
 const garApi = require('../../common/services/garApi');
-const PER_PAGE = 10;
+
 const PAGE_ONE = 1;
+const PER_PAGE = 10;
 
 module.exports = (req, res) => {
   logger.debug('In register / reguser get controller');
@@ -17,45 +18,52 @@ module.exports = (req, res) => {
   cookie.session.gar = null;
 
   const statusTab = req.query?.status || 'Draft';
+  const pageVal = req.query?.page || PAGE_ONE;
 
   tokenApi
     .getLastLogin(cookie.getUserEmail())
-    .then((userSession) => {
+    .then(async (userSession) => {
       const { successHeader, successMsg } = req.session;
-      const pageVal = req?.query?.page || PAGE_ONE;
+      const getPageObj = (status) => ({
+        page: statusTab === status ? pageVal : PAGE_ONE,
+        perPage: PER_PAGE,
+        status,
+      });
+      const draftPageObj = getPageObj('Draft');
+      const submittedPageObj = getPageObj('Submitted');
+      const cancelledPageObj = getPageObj('Cancelled');
 
-      const pageObj = { page: pageVal, per_page: PER_PAGE, status: statusTab };
       delete req.session.successHeader;
       delete req.session.successMsg;
 
-      garApi
-        .getGars(userId, role, pageObj, orgId)
-        .then(async (apiResponse) => {
-          const garList = JSON.parse(apiResponse).items;
-          const garsCountObj = await garApi.getGarsCount(userId, role, orgId);
-          res.render('app/home/index', {
-            cookie,
-            userSession,
-            successMsg,
-            successHeader,
-            pages: JSON.parse(apiResponse)._meta,
-            statusTab,
-            garList,
-            garsCountObj,
-          });
-        })
-        .catch((err) => {
-          logger.error('Failed to get GARS from API');
-          logger.error(err);
-          res.render('app/home/index', {
-            cookie,
-            successMsg,
-            successHeader,
-            errors: [{ message: 'Failed to get GARs' }],
-            statusTab,
-            garsCountObj: 0,
-          });
+      try {
+        const [draftGars, submittedGars, cancelledGars] = await Promise.all([
+          garApi.getGars(userId, role, draftPageObj, orgId),
+          garApi.getGars(userId, role, submittedPageObj, orgId),
+          garApi.getGars(userId, role, cancelledPageObj, orgId),
+        ]);
+
+        res.render('app/home/index', {
+          cookie,
+          userSession,
+          successMsg,
+          successHeader,
+          statusTab,
+          draftGars: JSON.parse(draftGars),
+          submittedGars: JSON.parse(submittedGars),
+          cancelledGars: JSON.parse(cancelledGars),
         });
+      } catch (error) {
+        logger.error('Failed to get GARS from API');
+        logger.error(error);
+        res.render('app/home/index', {
+          cookie,
+          successMsg,
+          successHeader,
+          errors: [{ message: 'Failed to get GARs' }],
+          statusTab,
+        });
+      }
     })
     .catch((err) => {
       logger.error(err);

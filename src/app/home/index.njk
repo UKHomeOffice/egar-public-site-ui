@@ -11,81 +11,26 @@
 {% set active = '/home' %}
 
 {% set statusName = statusTab| lower %}
-
-{% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">{{__('title')}}</h1>
-      <p class="govuk-body-m">{{__('create_gar_caption_1')}}
-        <a class="govuk-link" href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Apr_2024_v6.6_SDS_.xlsx">
-          <span class="govuk-visually-hidden">{{__('heading_create_gar')}}
-          </span>{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
-       <p class="govuk-body-m">GARs must be submitted no earlier than 48 hours and no later than 2 hours before the expected time of departure.</p>
-
-      <div class="govuk-!-margin-bottom-5"><a id="start_now" class="govuk-button" href="/garfile/home">Create a GAR</a></div>
-    </div>
-  </div>
-
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-    </div>
-  </div>
-  <div  id="gars-{{ statusName }}"></div> 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-    
-      {# <form id="signform2" action="/garfile/view" method="post" role="form"> #}
-      <h1 class="govuk-heading-l">{{__('heading_manage_gars')}}</h1>
-      <p class="govuk-body-m">{{__('manage_gars_caption')}}</p>
-      <div class="padding-bottom-10">
-        <div class="govuk-inset-text">Your draft, submitted and cancelled GARs will only be saved for 6 months, after this they will be deleted.</div>
-      </div>
-    </div>
-   
-    <div class="govuk-grid-column-full">
-      
-      <div class="govuk-tabs">
-        <ul class="govuk-tabs__list">
-          <li class="govuk-tabs__list-item {% if statusName == 'draft' %}  govuk-tabs__list-item--selected {% endif %}">
-            <a class="govuk-tabs__tab" href="/home?status=Draft#gars-draft">
-              {{__('tab_gar_draft', garsCountObj.Draft or 0 )}}
-            </a>
-          </li>
-          <li class="govuk-tabs__list-item {% if statusName == 'submitted' %}  govuk-tabs__list-item--selected {% endif %}">
-            <a class="govuk-tabs__tab" href="/home?status=Submitted#gars-submitted">
-              {{__('tab_gar_submitted', garsCountObj.Submitted or 0 )}}
-            </a>
-          </li>
-          <li class="govuk-tabs__list-item {% if statusName == 'cancelled' %}  govuk-tabs__list-item--selected {% endif %}">
-            <a class="govuk-tabs__tab" href="/home?status=Cancelled#gars-cancelled">
-              {{__('tab_gar_cancelled', garsCountObj.Cancelled or 0 )}}
-            </a>
-          </li>
-        </ul>
-      
-        <form id="signform2" action="/garfile/view" method="post" role="form">
-          {% macro gar_summary_table(name, gars, statusTab) %}
+ {% macro gar_summary_table(name, gars, statusTab, pages) %}
             <section class="govuk-tabs__panel" id="gars-{{name}}">
-             <div class="tabs-table">
               <h2 class="govuk-heading-m">{{ name | capitalize }} GARs</h2>
               {% if gars | length %}
-              <table class="govuk-table" id="sortGAR">
+              <table class="govuk-table">
                 <thead class="govuk-table__head" >
                   <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="col" width="15%">{{__('field_aircraft_registration')}}</th>
+                    <th class="govuk-table__header" scope="col" width="21%">{{__('field_aircraft_registration')}}</th>
                     <th class="govuk-table__header" scope="col" width="15%">{{__('field_created_date')}}</th>
                     <th class="govuk-table__header" scope="col" width="15%">{{__('field_departure_date')}}</th>
                     <th class="govuk-table__header" scope="col" width="12%">{{__('field_departure_time')}}</th>
                     <th class="govuk-table__header" scope="col" width="12%">{{__('field_departure_port')}}</th>
                     <th class="govuk-table__header" scope="col" width="10%">{{__('field_arrival_port')}}</th>
-                    <th class="govuk-table__header" scope="col" width="21%">{{__('field_submission_reference')}}</th>
+                    <th class="govuk-table__header" scope="col" width="20%">{{__('field_submission_reference')}}</th>
                   </tr>
                 </thead>
                 
-                <tbody class="govuk-table__body pagination__table_{{name}}">
+                <tbody class="govuk-table__body">
                     {% for gar in gars %}
-                      <tr class="govuk-table__row pagination-page pagination-page_{{page}}" id="pagination-row-{{page}}-{{ loop.index }}">
+                      <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
                           <button id="view-{{ name }}-{{ loop.index }}" class="govuk-button--link" name="garId" value="{{ gar.garId }}">{{ gar.registration or __('value_aircraft_registration_null')}}</button>
                         </td>
@@ -106,14 +51,72 @@
               {% else %}
                 {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
               {% endif %}
-              <script src="/javascripts/table.js"></script>
+              
                {{ pagination.build(pages, {status: statusTab, hash: '#gars-'~name }) }}
-               </div>
+             
             </section>
-          {% endmacro %}
-          {{ gar_summary_table(statusName, garList, statusTab) }}
+  {% endmacro %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{__('title')}}</h1>
+      <p class="govuk-body-m">{{__('create_gar_caption_1')}}
+        <a class="govuk-link" href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Apr_2024_v6.6_SDS_.xlsx">
+          <span class="govuk-visually-hidden">{{__('heading_create_gar')}}
+          </span>{{__('create_gar_caption_link')}}</a>{{__('create_gar_caption_2')}}</p>
+       <p class="govuk-body-m">GARs must be submitted no earlier than 48 hours and no later than 2 hours before the expected time of departure.</p>
+
+      <div class="govuk-!-margin-bottom-5"><a id="start_now" class="govuk-button" href="/garfile/home">Create a GAR</a></div>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    
+      {# <form id="signform2" action="/garfile/view" method="post" role="form"> #}
+      <h1 class="govuk-heading-l">{{__('heading_manage_gars')}}</h1>
+      <p class="govuk-body-m">{{__('manage_gars_caption')}}</p>
+      <div class="padding-bottom-10">
+        <div class="govuk-inset-text">Your draft, submitted and cancelled GARs will only be saved for 6 months, after this they will be deleted.</div>
+      </div>
+    </div>
+    <div class="govuk-grid-column-full">
+      
+      <div class="govuk-tabs" data-module="govuk-tabs">
+        <ul class="govuk-tabs__list">
+          <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab" href="#gars-draft">
+              {{__('tab_gar_draft', draftGars._meta.totalItems or 0 )}}
+            </a>
+          </li>
+          <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab" href="#gars-submitted">
+              {{__('tab_gar_submitted', submittedGars._meta.totalItems or 0)}}
+            </a>
+          </li>
+          <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab" href="#gars-cancelled">
+              {{__('tab_gar_cancelled', cancelledGars._meta.totalItems or 0 )}}
+            </a>
+          </li>
+        </ul>
+      
+        <form id="signform2" action="/garfile/view" method="post" role="form">
+        
+         
+          {{ gar_summary_table('draft', draftGars.items, 'Draft', draftGars._meta) }}
+          {{ gar_summary_table('submitted', submittedGars.items, 'Submitted', submittedGars._meta) }}
+          {{ gar_summary_table('cancelled', cancelledGars.items, 'Cancelled', cancelledGars._meta) }} 
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        </form>
       </div>
     </div>
  
