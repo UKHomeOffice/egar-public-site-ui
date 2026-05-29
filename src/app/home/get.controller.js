@@ -5,7 +5,6 @@ const garApi = require('../../common/services/garApi');
 
 const PAGE_ONE = 1;
 const PER_PAGE = 10;
-const INITIAL_GARS_PER_PAGE = 50;
 
 module.exports = (req, res) => {
   logger.debug('In register / reguser get controller');
@@ -18,91 +17,59 @@ module.exports = (req, res) => {
   // Delete any GAR stored in the cookie session
   cookie.session.gar = null;
 
-  const statusTab = req.query?.status || 'Draft,Submitted,Cancelled';
+  const statusTab = req.query?.status || 'Draft';
   let pageVal = req.query?.page || PAGE_ONE;
-
-  //Override the per-page value to load more table rows initially, so the gars data can be distributed across different tabs when the page first loads.
-  const perPage = statusTab === 'Draft,Submitted,Cancelled' ? INITIAL_GARS_PER_PAGE : PER_PAGE;
 
   tokenApi
     .getLastLogin(cookie.getUserEmail())
-    .then((userSession) => {
+    .then(async (userSession) => {
       const { successHeader, successMsg } = req.session;
+      const draftPageObj =
+        statusTab === 'Draft'
+          ? { page: pageVal, perPage: PER_PAGE, status: 'Draft' }
+          : { page: PAGE_ONE, perPage: PER_PAGE, status: 'Draft' };
 
-      const pageObj = { page: pageVal, perPage: perPage, status: statusTab };
+      const submittedPageObj =
+        statusTab === 'Submitted'
+          ? { page: pageVal, perPage: PER_PAGE, status: 'Submitted' }
+          : { page: PAGE_ONE, perPage: PER_PAGE, status: 'Submitted' };
+
+      const cancelledPageObj =
+        statusTab === 'Cancelled'
+          ? { page: pageVal, perPage: PER_PAGE, status: 'Cancelled' }
+          : { page: PAGE_ONE, perPage: PER_PAGE, status: 'Cancelled' };
+
       delete req.session.successHeader;
       delete req.session.successMsg;
-
-      garApi
-        .getGars(userId, role, pageObj, orgId)
-        .then(async (apiResponse) => {
-          const garList = JSON.parse(apiResponse).items;
-
-          if (Object.keys(req.query).length === 0) {
-            req.session.garList = garList;
-          }
-
-          const {
-            Draft: draftGarsList,
-            Submitted: submittedGarsList,
-            Cancelled: cancelledGarsList,
-          } = Object.groupBy(req.session.garList, (item) => item.status.name);
-
-          const draftGars = req.query.status === 'Draft' ? garList : draftGarsList;
-          const submittedGars = req.query.status === 'Submitted' ? garList : submittedGarsList;
-          const cancelledGars = req.query.status === 'Cancelled' ? garList : cancelledGarsList;
-          const garsCountObj = await garApi.getGarsCount(userId, role, orgId);
-          res.render('app/home/index', {
-            cookie,
-            userSession,
-            successMsg,
-            successHeader,
-            pageMetadata: getPageMetadata(garsCountObj, pageVal, statusTab),
-            statusTab,
-            garList,
-            draftGars,
-            submittedGars,
-            cancelledGars,
-            garsCountObj,
-          });
-        })
-        .catch((err) => {
-          logger.error('Failed to get GARS from API');
-          logger.error(err);
-          res.render('app/home/index', {
-            cookie,
-            successMsg,
-            successHeader,
-            errors: [{ message: 'Failed to get GARs' }],
-            statusTab,
-            garsCountObj: {},
-          });
+      try {
+        const draftGars = JSON.parse(await garApi.getGars(userId, role, draftPageObj, orgId));
+        const submittedGars = JSON.parse(await garApi.getGars(userId, role, submittedPageObj, orgId));
+        const cancelledGars = JSON.parse(await garApi.getGars(userId, role, cancelledPageObj, orgId));
+        res.render('app/home/index', {
+          cookie,
+          userSession,
+          successMsg,
+          successHeader,
+          statusTab,
+          draftGars,
+          submittedGars,
+          cancelledGars,
         });
+      } catch (error) {
+        logger.error('Failed to get GARS from API');
+        logger.error(error);
+        res.render('app/home/index', {
+          cookie,
+          successMsg,
+          successHeader,
+          errors: [{ message: 'Failed to get GARs' }],
+          statusTab,
+        });
+      }
     })
+
     .catch((err) => {
       logger.error(err);
       return res.render('app/home/index', { cookie, userSession: [] });
     });
 };
-
-/**
- *
- * @param {*} garsCount
- * @param {*} pageNum
- * @param {*} statusTab
- * @returns pagingObject with pagination metadata for each tab
- */
-function getPageMetadata(garsCount, pageNum, statusTab) {
-  const pagingObject = {};
-  for (const status in garsCount) {
-    const totalPages = Math.ceil(garsCount[status] / PER_PAGE);
-    const page = status !== statusTab ? PAGE_ONE : pageNum;
-    pagingObject[`${status}`] = {
-      page: page,
-      perPage: PER_PAGE,
-      totalPages: totalPages,
-      totalItems: garsCount[status],
-    };
-  }
-  return pagingObject;
-}

@@ -42,24 +42,23 @@
         <div class="govuk-inset-text">Your draft, submitted and cancelled GARs will only be saved for 6 months, after this they will be deleted.</div>
       </div>
     </div>
-   
     <div class="govuk-grid-column-full">
       
       <div class="govuk-tabs" data-module="govuk-tabs">
         <ul class="govuk-tabs__list">
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab" href="#gars-draft">
-              {{__('tab_gar_draft', garsCountObj.Draft or 0 )}}
+              {{__('tab_gar_draft', draftGars._meta.totalItems )}}
             </a>
           </li>
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab" href="#gars-submitted">
-              {{__('tab_gar_submitted', garsCountObj.Submitted or 0 )}}
+              {{__('tab_gar_submitted', submittedGars._meta.totalItems )}}
             </a>
           </li>
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab" href="#gars-cancelled">
-              {{__('tab_gar_cancelled', garsCountObj.Cancelled or 0 )}}
+              {{__('tab_gar_cancelled', cancelledGars._meta.totalItems or 0 )}}
             </a>
           </li>
         </ul>
@@ -112,9 +111,9 @@
              
             </section>
           {% endmacro %}
-          {{ gar_summary_table('draft', draftGars, 'Draft', pageMetadata.Draft) }}
-          {{ gar_summary_table('submitted', submittedGars, 'Submitted', pageMetadata.Submitted) }}
-          {{ gar_summary_table('cancelled', cancelledGars, 'Cancelled', pageMetadata.Cancelled) }} 
+          {{ gar_summary_table('draft', draftGars.items, 'Draft', draftGars._meta) }}
+          {{ gar_summary_table('submitted', submittedGars.items, 'Submitted', submittedGars._meta) }}
+          {{ gar_summary_table('cancelled', cancelledGars.items, 'Cancelled', cancelledGars._meta) }} 
         </div>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       </div>
