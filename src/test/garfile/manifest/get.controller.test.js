@@ -10,6 +10,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const personApi = require('../../../common/services/personApi');
 const garApi = require('../../../common/services/garApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/garfile/manifest/get.controller');
 
@@ -53,7 +54,7 @@ describe('Manifest Get Controller', () => {
   it('should return an error if person api rejects', async () => {
     cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').rejects('Some reason here');
-    sinon.stub(garApi, 'getPeople').resolves();
+    sinon.stub(dataAccessApi.garApi, 'getPeople').resolves();
 
     await controller(req, res);
 
@@ -70,7 +71,7 @@ describe('Manifest Get Controller', () => {
   it('should return an error if gar api rejects', () => {
     cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').resolves();
-    sinon.stub(garApi, 'getPeople').rejects('garApi.getPeople Example Reject');
+    sinon.stub(dataAccessApi.garApi, 'getPeople').rejects('garApi.getPeople Example Reject');
 
     const callController = async () => {
       await controller(req, res);
@@ -92,11 +93,9 @@ describe('Manifest Get Controller', () => {
 
     beforeEach(() => {
       personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(savedPeople()));
-      garApiStub = sinon.stub(garApi, 'getPeople').resolves(
-        JSON.stringify({
-          items: garPeople(),
-        })
-      );
+      garApiStub = sinon.stub(dataAccessApi.garApi, 'getPeople').resolves({
+        items: garPeople(),
+      });
     });
 
     it('should render with errMsg populated', async () => {
