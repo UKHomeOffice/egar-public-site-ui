@@ -42,7 +42,9 @@ $(document).ready(function () {
     });
   });
 
-  accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#responsibleCountry'),
-  });
+  if (document.getElementById('#responsibleCountry')) {
+    accessibleAutocomplete.enhanceSelectElement({
+      selectElement: document.querySelector('#responsibleCountry'),
+    });
+  }
 });
