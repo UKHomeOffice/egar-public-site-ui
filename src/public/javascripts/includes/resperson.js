@@ -41,10 +41,4 @@ $(document).ready(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
   });
-
-  if (document.getElementById('#responsibleCountry')) {
-    accessibleAutocomplete.enhanceSelectElement({
-      selectElement: document.querySelector('#responsibleCountry'),
-    });
-  }
 });
