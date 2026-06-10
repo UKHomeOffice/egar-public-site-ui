@@ -73,10 +73,11 @@ module.exports = async (req, res) => {
       const parsedGar = garDetails;
       const parsedPeople = garPeople;
       const supportingDocuments = garDocs;
+      console.log('parsed gar', parsedGar);
       const { departureDate, departureTime } = parsedGar;
       const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z` : null;
       const durationInDeparture = garApi.getDurationBeforeDeparture(departureDate, departureTime);
-      const numberOf0TResponseCodes = (await dataAccessApi.garApi.getPeople(garId, '', '0T')).items.length;
+      const numberOf0TResponseCodes = (await dataAccessApi.garApi.getPeople(garId, '', '0T'))?.items?.length;
       // Do the check here
       if (!checkGARUser(parsedGar, cookie.getUserDbId(), cookie.getOrganisationId())) {
         logger.error(
@@ -125,10 +126,12 @@ module.exports = async (req, res) => {
     } catch (err) {
       logger.error('Failed to get GAR information');
       logger.error(err);
+      console.log(err);
       renderContext.errors = [{ message: 'Failed to get GAR information' }];
       res.render('app/garfile/view/index', renderContext);
     }
   } catch (err) {
+    console.log(err);
     logger.error('Failed to get GAR information');
     logger.error(err);
     renderContext.errors = [{ message: 'Failed to get GAR information' }];

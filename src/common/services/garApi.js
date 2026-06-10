@@ -113,7 +113,7 @@ class GarApi {
     logger.debug(`Calling get GAR checkin progress endpoint ${endpoint}`);
 
     try {
-      const { progress } = this.client.get(endpoint);
+      const { progress } = await this.client.get(endpoint);
       return progress;
     } catch (err) {
       const responseErrorMessage = getResponseErrorMessage(err);
@@ -123,6 +123,7 @@ class GarApi {
   }
 }
 
+module.exports.GarApi = GarApi;
 module.exports = {
   GarApi,
 
