@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon start.js",
-    "test": "c8 --reporter=lcov mocha --recursive",
+    "test": "c8 --reporter=lcov mocha --bail --recursive",
     "test-drone": "c8 --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --recursive",
     "check": "eslint .  --ext .js",
     "fix": "eslint --fix .  --ext .js"

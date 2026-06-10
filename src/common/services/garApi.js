@@ -4,17 +4,129 @@ const endpoints = require('../config/endpoints');
 const autocompleteUtil = require('../utils/autocomplete');
 const travelPermissionCodes = require('../utils/travel_permission_codes.json');
 
-function getResponseErrorMessage(_response, body) {
-  const responseErrorMessage = JSON.stringify({
-    statusCode: _response.statusCode,
-    statusMessage: _response.statusMessage,
-    body,
-  });
-
-  return responseErrorMessage;
+function getResponseErrorMessage(err) {
+  return {
+    statusCode: err.statusCode,
+    statusMessage: err.statusMessage,
+    body: err.body,
+  };
 }
 
+class GarApi {
+  constructor(client) {
+    this.client = client;
+  }
+
+  /**
+   * Gets a GAR's details.
+   *
+   * @param {String} garId id of GAR being requested
+   * @param isCbpId
+   * @returns {Promise} Resolves with API response.
+   */
+  async get(garId, isCbpId = false) {
+    try {
+      const gar = await this.client.get(`/gar/${garId}`, { query: { cbp_id: isCbpId } });
+      gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCountry);
+      logger.debug('Successfully called GAR get endpoint');
+
+      return gar;
+    } catch (err) {
+      logger.error('Failed to call GAR get API endpoint');
+      const responseErrorMessage = getResponseErrorMessage(err);
+      logger.error(`${garId} garApi.get request was not successful : ${responseErrorMessage}`);
+      return responseErrorMessage;
+    }
+  }
+
+  /**
+   * Gets a GAR's saved people details.
+   *
+   * @param {String} garId id of GAR being requested
+   * @param pageNumber
+   * @param amgResponseCode
+   * @returns {Promise} Resolves with API response.
+   */
+  async getPeople(garId, pageNumber = null, amgResponseCode = null) {
+    const priority = [
+      'amg_checkin_response_code:0T',
+      'amg_checkin_response_code:0B',
+      'amg_checkin_response_code:0Z',
+      'amg_checkin_response_code:0A',
+    ];
+    const pageObj = pageNumber ? { per_page: 10, page: pageNumber } : '';
+    const options = amgResponseCode ? { amg_response_codes: amgResponseCode } : [''];
+
+    const query = {
+      priority,
+      ...pageObj,
+      ...options,
+    };
+
+    try {
+      const resp = await this.client.get(`/gar/${garId}/people`, { query });
+
+      const noBoardPassengers = resp.items.filter(
+        (garperson) => garperson.amgCheckinResponseCode === travelPermissionCodes['NO_BOARD']
+      );
+      const restOfPassengers = resp.items.filter(
+        (garperson) => garperson.amgCheckinResponseCode !== travelPermissionCodes['NO_BOARD']
+      );
+
+      logger.debug('Successfully called GAR people endpoint222');
+
+      return {
+        ...resp,
+        items: [...noBoardPassengers, ...restOfPassengers],
+      };
+    } catch (err) {
+      logger.error('Failed to call GAR get API endpoint');
+      const responseErrorMessage = getResponseErrorMessage(err);
+      logger.error(`${garId} garApi.getPeople request was not successful : ${responseErrorMessage}`);
+      return responseErrorMessage;
+    }
+  }
+
+  /**
+   * Gets a GAR's supporting people details.
+   *
+   * @param {String} garId id of GAR being requested
+   * @returns {Promise} Resolves with API response.
+   */
+  async getSupportingDocs(garId) {
+    try {
+      const query = { page: 1, per_page: 10000 };
+      const url = `/gar/${garId}/supportingdocs`;
+
+      logger.debug(`Calling get supporting docs endpoint ${url}`);
+      return this.client.get(`/gar/${garId}/supportingdocs`, { query });
+    } catch (err) {
+      logger.error('Failed to call GAR get supporting documents API endpoint');
+      const responseErrorMessage = getResponseErrorMessage(err);
+      logger.error(`${garId} garApi.getSupportingDocs request was not successful : ${responseErrorMessage}`);
+      return responseErrorMessage;
+    }
+  }
+
+  async getGarCheckinProgress(garId) {
+    const endpoint = `/gar/${garId}/progress`;
+    logger.debug(`Calling get GAR checkin progress endpoint ${endpoint}`);
+
+    try {
+      const { progress } = await this.client.get(endpoint);
+      return progress;
+    } catch (err) {
+      const responseErrorMessage = getResponseErrorMessage(err);
+      logger.error(`${garId} garApi.progress request was not successful : ${responseErrorMessage}`);
+      return responseErrorMessage;
+    }
+  }
+}
+
+module.exports.GarApi = GarApi;
 module.exports = {
+  GarApi,
+
   /**
    * Updates GAR.
    *
