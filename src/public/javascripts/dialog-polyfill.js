@@ -725,9 +725,6 @@
       if (this.forwardTab_) {
         // forward
         dpi.focus_();
-      } else if (target !== document.documentElement) {
-        // backwards if we're not already focused on <html>
-        document.documentElement.focus();
       }
     }
 
