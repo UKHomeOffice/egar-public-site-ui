@@ -136,9 +136,6 @@ h3.govuk-notification-banner__heading {
 .float-right{
     float: right;
 }
-.text-background-color{
-   background-color: #00FFFF;
-}
 .loader-text-opacity {
  opacity: 0.5;
 }
