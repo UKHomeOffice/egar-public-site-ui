@@ -697,7 +697,7 @@ function isValidEmailLength(value) {
 function isValidOrganisationNameLength(value) {
   return value.length <= MAX_ORGANISATION_NAME_LENGTH;
 }
- 
+
 function isValidOrganisationName(input) {
   const alphaRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''()@&-]+$/;
   return alphaRegex.test(input);
