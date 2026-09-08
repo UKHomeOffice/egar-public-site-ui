@@ -27,10 +27,6 @@ spec:
             name: bundle
         - name: nginx-openresty
           emptyDir: {}
-        - name: init-temp
-          emptyDir: {}
-        - name: init-var-run
-          emptyDir: {}
         - name: proxy-temp
           emptyDir: {}
         - name: proxy-var-run
@@ -54,12 +50,6 @@ spec:
           volumeMounts:
             - name: nginx-openresty
               mountPath: /work/nginx
-            - name: init-temp
-              mountPath: /tmp
-              readOnly: true
-            - name: init-var-run
-              mountPath: /var/run
-              readOnly: true
       containers:
         - name: public-site-proxy
           image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
@@ -102,10 +92,8 @@ spec:
               mountPath: /usr/local/openresty/nginx
             - name: proxy-temp
               mountPath: /tmp
-              readOnly: true
             - name: proxy-var-run
               mountPath: /var/run
-              readOnly: true
         - name: public-site
           image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:{{ .TAGGED_VERSION }}
           imagePullPolicy: IfNotPresent
@@ -363,10 +351,8 @@ spec:
               readOnly: true
             - name: public-site-temp
               mountPath: /tmp
-              readOnly: true
             - name: public-site-var-run
               mountPath: /var/run
-              readOnly: true
           ports:
             - name: public-site-prt
               containerPort: 3000
