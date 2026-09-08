@@ -690,7 +690,7 @@ function isValidEmailLength(value) {
 }
 
 /**
- * Check if the string length is within the limit. Default limit is 35 characters.
+ * Check if the organisation name length is within the limit.
  * @param {String} value
  * @return {Bool}
  */

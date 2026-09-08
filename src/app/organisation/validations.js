@@ -1,5 +1,3 @@
-const i18n = require('i18n');
-
 const ValidationRule = require('../../common/models/ValidationRule.class');
 const validator = require('../../common/utils/validator');
 const { MAX_ORGANISATION_NAME_LENGTH } = require('../../common/config/index');
@@ -20,7 +18,7 @@ module.exports.validations = (req) => {
         validator.isValidOrganisationName,
         'orgName',
         orgName,
-        `Organisation name must not contain special characters, apostrophes or numbers`
+        `Organisation name must not contain special characters`
       ),
     ],
   ];
