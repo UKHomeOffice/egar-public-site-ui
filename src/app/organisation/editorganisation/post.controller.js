@@ -1,5 +1,5 @@
 const logger = require('../../../common/utils/logger')(__filename);
-const ValidationRule = require('../../../common/models/ValidationRule.class');
+const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const organisationApi = require('../../../common/services/organisationApi');
@@ -10,14 +10,9 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  // Define a validation chain for user registeration fields
-  const orgNameChain = [
-    new ValidationRule(validator.notEmpty, 'orgName', orgName, 'Enter the name of the organisation'),
-  ];
-
   // Validate chains
   validator
-    .validateChains([orgNameChain])
+    .validateChains(validations.validations(req))
     .then(() => {
       // API should return OrgId
       organisationApi

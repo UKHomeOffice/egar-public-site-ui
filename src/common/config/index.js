@@ -91,3 +91,5 @@ exports.SUPPORTING_DOCS_MAX_SIZE = 1024 ** 2 * 7.5; // 7.5MB
 
 // UnAuthorized redirect
 exports.UNAUTHORIZED_REDIRECT = '/garfile/supportingdocuments?query=unauthorized';
+
+exports.MAX_ORGANISATION_NAME_LENGTH = 120;
