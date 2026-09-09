@@ -11,6 +11,7 @@ const {
   USER_FIRST_NAME_CHARACTER_COUNT,
   USER_SURNAME_CHARACTER_COUNT,
   MAX_ALLOWED_CANCELLATION_TIME_TO_CBP,
+  MAX_ORGANISATION_NAME_LENGTH,
 } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 const airports = require('../../common/utils/airports');
@@ -689,6 +690,20 @@ function isValidEmailLength(value) {
 }
 
 /**
+ * Check if the organisation name length is within the limit.
+ * @param {String} value
+ * @return {Bool}
+ */
+function isValidOrganisationNameLength(value) {
+  return value.length <= MAX_ORGANISATION_NAME_LENGTH;
+}
+
+function isValidOrganisationName(input) {
+  const alphaRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''()@&-]+$/;
+  return alphaRegex.test(input);
+}
+
+/**
  * Parse datetime string to moment object
  * @param {String} dateTimeStr 'yyyy-MM-dd HH:mm:ss'
  * @param {String} dateTimeFormat defines the moment format default: 'YYYY-MM-DD HH:mm:ss'
@@ -822,4 +837,6 @@ module.exports = {
   isOtherDocumentWithDocumentDesc,
   isAbleToCancelGar,
   nameHasNoNumbers,
+  isValidOrganisationNameLength,
+  isValidOrganisationName,
 };

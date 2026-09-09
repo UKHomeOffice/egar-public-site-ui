@@ -1001,4 +1001,23 @@ describe('Validator', () => {
       );
     });
   });
+
+  describe('organisation name validations', () => {
+    it('should return false if organisation name is too long', () => {
+      const longOrganisationName = 'A'.repeat(121); //Maximum length exceeded for organisation name validation
+      expect(validator.isValidOrganisationNameLength(longOrganisationName)).to.eql(false);
+    });
+    it('should return true if organisation name is within the valid length', () => {
+      const validOrganisationName = 'A'.repeat(120); // Maximum length for organisation name validation
+      expect(validator.isValidOrganisationNameLength(validOrganisationName)).to.eql(true);
+    });
+    it('should return false if organisation name is invalid', () => {
+      const invalidOrganisationName = 'TestOrganisation$£%%$£';
+      expect(validator.isValidOrganisationName(invalidOrganisationName)).to.eql(false);
+    });
+    it('should return true if organisation name is valid', () => {
+      const validOrganisationName = 'TestOrganisation';
+      expect(validator.isValidOrganisationName(validOrganisationName)).to.eql(true);
+    });
+  });
 });
