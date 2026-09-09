@@ -25,37 +25,11 @@ spec:
         - name: bundle-certs
           configMap:
             name: bundle
-        - name: nginx-openresty
-          emptyDir: {}
-        - name: proxy-temp
-          emptyDir: {}
-        - name: proxy-var-run
-          emptyDir: {}
-        - name: public-site-temp
-          emptyDir: {}
-        - name: public-site-var-run
-          emptyDir: {}
-      initContainers:
-        - name: public-site-proxy-init
-          image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
-          imagePullPolicy: IfNotPresent
-          command: ["sh", "-c", "cp -r /usr/local/openresty/nginx/. /work/nginx/"]
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            privileged: false
-            capabilities:
-              drop:
-                - ALL
-          volumeMounts:
-            - name: nginx-openresty
-              mountPath: /work/nginx
       containers:
         - name: public-site-proxy
           image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
           imagePullPolicy: IfNotPresent
           securityContext:
-            readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1000
             privileged: false
@@ -88,17 +62,10 @@ spec:
             - name: bundle-certs
               mountPath: /etc/ssl/certs
               readOnly: true
-            - name: nginx-openresty
-              mountPath: /usr/local/openresty/nginx
-            - name: proxy-temp
-              mountPath: /tmp
-            - name: proxy-var-run
-              mountPath: /var/run
         - name: public-site
           image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:{{ .TAGGED_VERSION }}
           imagePullPolicy: IfNotPresent
           securityContext:
-            readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1000
             privileged: false
@@ -349,10 +316,6 @@ spec:
             - name: bundle-certs
               mountPath: /etc/ssl/certs
               readOnly: true
-            - name: public-site-temp
-              mountPath: /tmp
-            - name: public-site-var-run
-              mountPath: /var/run
           ports:
             - name: public-site-prt
               containerPort: 3000
