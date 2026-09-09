@@ -11,8 +11,8 @@
   {% if HOMEPAGE_MESSAGE %}
     {{ govukNotificationBanner({
       html: (HOMEPAGE_MESSAGE | safe),
-      type: "success",
-      titleText: "Notice",
+      type: "warning",
+      titleText: "Important",
       disableAutoFocus: true
     }) }}
   {% endif %}
