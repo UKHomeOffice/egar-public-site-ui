@@ -141,7 +141,11 @@ function initialiseGlobalMiddleware(app) {
   app.use(bodyParser.json());
   app.use(
     bodyParser.urlencoded({
-      extended: true,
+      extended: false,
+      limit: '50kb',
+      parameterLimit: 100,
+      inflate: false,
+      type: 'application/x-www-form-urlencoded',
     })
   );
 

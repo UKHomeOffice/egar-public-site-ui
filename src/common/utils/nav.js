@@ -5,7 +5,6 @@ const express = require('express');
 const flagpole = require('../../common/middleware/flagpole');
 const usercheck = require('../../common/middleware/usercheck');
 const csrfcheck = require('../../common/middleware/csrfcheck');
-const parseForm = require('../../common/middleware/parseForm');
 const pageAccess = require('../middleware/pageAccess');
 
 const logger = require('./logger')(__filename);
@@ -22,7 +21,7 @@ const buildRouterAndPaths = (path, getController, postController) => {
   // Routing
   router.get(paths.index, flagpole, usercheck, csrfcheck, pageAccess, getController);
   if (postController) {
-    router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, pageAccess, postController);
+    router.post(paths.index, flagpole, usercheck, csrfcheck, pageAccess, postController);
   }
 
   return { router, paths };
@@ -38,7 +37,7 @@ const buildRouterAndPathsNoUserCheck = (path, getController, postController) => 
   // Routing
   router.get(paths.index, flagpole, csrfcheck, getController);
   if (postController) {
-    router.post(paths.index, flagpole, parseForm, csrfcheck, postController);
+    router.post(paths.index, flagpole, csrfcheck, postController);
   }
 
   return { router, paths };
@@ -59,7 +58,7 @@ const simpleGetRender = (req, res, page) => {
   res.render(page, { cookie });
 };
 
-const defaultMiddleware = [flagpole, usercheck, parseForm, csrfcheck];
+const defaultMiddleware = [flagpole, usercheck, csrfcheck];
 
 const garMiddlewares = (initialMiddleware = []) => {
   let middlewares = defaultMiddleware;
@@ -106,7 +105,7 @@ const buildGarRouterAndPaths = (path, getController, postController, middlewares
   const paths = { index: path };
 
   const getMiddlewares = [flagpole, usercheck, csrfcheck, pageAccess, garAccessCheck, ...middlewares];
-  const postMiddlewares = [flagpole, usercheck, parseForm, csrfcheck, garAccessCheck, ...middlewares];
+  const postMiddlewares = [flagpole, usercheck, csrfcheck, garAccessCheck, ...middlewares];
 
   if (getController) {
     buildRoute(router, paths.index, 'GET', getMiddlewares, getController);
