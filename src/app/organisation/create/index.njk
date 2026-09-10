@@ -26,7 +26,7 @@
         <label class="govuk-label govuk-label--m" for="orgName">{{__('field_organisation_name')}}</label>
         {{ m.error_message('orgName', errors, __) }}
         <input id="orgName" name="orgName" autocomplete="off" class="govuk-input"
-          type="text" value="" {{ 'aria-describedby=orgName-error' if errors | containsError('orgName') }}>
+          type="text" value="{{cookie.getOrganisationName()}}" {{ 'aria-describedby=orgName-error' if errors | containsError('orgName') }}>
       </div>
       <div class="govuk-form-group">
         <button id="create" class="govuk-button">

@@ -18,7 +18,7 @@ module.exports.validations = (req) => {
         validator.isValidOrganisationName,
         'orgName',
         orgName,
-        `Organisation name must not contain special characters`
+        `Organisation name must only include letters, numbers, spaces and these special characters , ; ! / . ' ( ) @ & -`
       ),
     ],
   ];
