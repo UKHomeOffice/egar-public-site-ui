@@ -5,7 +5,6 @@ const paths = {
 
 const express = require('express');
 const multer = require('multer');
-const bodyParser = require('body-parser');
 
 const usercheck = require('../../../common/middleware/usercheck');
 const csrfcheck = require('../../../common/middleware/csrfcheck');
@@ -18,7 +17,7 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 router.post('/uploadgar', upload.single('file'), usercheck, csrfcheck, postController);
 
