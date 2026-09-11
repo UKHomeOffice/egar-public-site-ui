@@ -5,7 +5,6 @@ const session = require('express-session');
 const favicon = require('serve-favicon');
 
 // Npm dependencies
-const bodyParser = require('body-parser');
 const i18n = require('i18n');
 const argv = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
@@ -138,10 +137,12 @@ function initialiseGlobalMiddleware(app) {
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
     app.use(requestLoggingMiddleware);
   }
-  app.use(bodyParser.json());
+  app.use(express.json());
   app.use(
-    bodyParser.urlencoded({
-      extended: true,
+    express.urlencoded({
+      extended: false,
+      parameterLimit: 300,
+      limit: '50kb',
     })
   );
 
