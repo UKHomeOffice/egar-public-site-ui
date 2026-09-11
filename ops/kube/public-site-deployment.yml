@@ -35,6 +35,8 @@ spec:
           emptyDir: {}
         - name: public-site-var-run
           emptyDir: {}
+        - name: public-site
+          emptyDir: {}
       initContainers:
         - name: public-site-proxy-init
           image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
@@ -63,7 +65,7 @@ spec:
                 - ALL
           volumeMounts:
             - name: public-site
-              mountPath: /public-site
+              mountPath: /work/public-site
       containers:
         - name: public-site-proxy
           image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
