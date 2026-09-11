@@ -11,13 +11,10 @@ const csrfcheck = require('../../../common/middleware/csrfcheck');
 
 const postController = require('./post.controller');
 
-const app = express();
 const router = express.Router();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-
-app.use(express.json());
 
 router.post('/uploadgar', upload.single('file'), usercheck, csrfcheck, postController);
 
