@@ -55,7 +55,7 @@ spec:
         - name: public-site-init
           image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:{{ .TAGGED_VERSION }}
           imagePullPolicy: IfNotPresent
-           command: ["sh", "-c", "cp -r /public-site/. /work/public-site/"]
+          command: ["sh", "-c", "cp -r /public-site/. /work/public-site/"]
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
