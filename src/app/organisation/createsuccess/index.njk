@@ -1,24 +1,15 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
 {% block pageTitle %}
-	GAR | Organisation Created
+    GAR | Organisation Created
 {% endblock %}
-
-{% set active = '/organisation' %}
-
+{% set active = "/organisation" %}
 {% block content %}
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-
-  <div class="govuk-panel govuk-panel--confirmation">
-    <h1 class="govuk-panel__title">
-      {{__('organisation_created')}}
-    </h1>
-  </div>
-
-	</div>
-</div>
-
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-panel govuk-panel--confirmation">
+                <h1 class="govuk-panel__title">{{ __("organisation_created") }}</h1>
+            </div>
+        </div>
+    </div>
 {% endblock %}

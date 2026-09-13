@@ -1,12 +1,6 @@
 {% from "dist/govuk/components/header/macro.njk" import govukHeader %}
-
-{{ govukHeader({
-  homepageUrl: "https://www.gov.uk/"
-}) }}
-
-
+{{ govukHeader({"homepageUrl": "https://www.gov.uk/"}) }}
 {% set pagesList = [
-  { href: '/help', text: __('nav_bar_upt-help') }
+    { href: '/help', text: __('nav_bar_upt-help') }
 ] %}
-
 {{ navigation(pagesList, active) }}

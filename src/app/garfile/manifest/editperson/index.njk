@@ -1,39 +1,44 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/banners.njk" as b %}
 {% import "common/templates/includes/macros.njk" as m %}
-
 {% block pageTitle %}
-	Create GAR | Add person
+    Create GAR | Add person
 {% endblock %}
-
-{% set active = '/home' %}
-
+{% set active = "/home" %}
 {% block beforeContent %}
-  <a href="/garfile/manifest" class="govuk-back-link">Back</a>
+    <a href="/garfile/manifest" class="govuk-back-link">Back</a>
 {% endblock %}
-
 {% block content %}
-  <script src="/javascripts/garfile/manifest/editperson.js" type="module"></script>
-  <div class="govuk-grid-row">
-	  <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">{{__('section_count', 4, 9)}}</span>
-
-      <h1 class="govuk-heading-xl">{{__('heading_manifest_edit_person_details')}}</h1>{# Person details #}
-      {{ b.id_card_withdrawl_text(__) }}
-
-      <p class="govuk-body-m">{{__('caption_manifest_person_details')}}</p>
-
-      <form action="/garfile/manifest/editperson" autocomplete="off" class="form-group" method="post" role="form" >
-        <input type="hidden" id="garPeopleId" name="garPeopleId" value="{{person.garPeopleId}}" />
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        {% include "person-details.njk" %}
-        <br>
-        <input id="add-person-manifest" class="govuk-button" type="submit" value="{{__('form_save_and_add_to_gar')}}">
-        <p class="govuk-body-m">
-          <a id="exit-person-manifest" href="/garfile/manifest" class="govuk-button govuk-button--secondary">{{ __('form_exit_without_saving') }}</a>
-        </p>
-      </form>
+    <script src="/javascripts/garfile/manifest/editperson.js" type="module"></script>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">{{ __('section_count', 4, 9) }}</span>
+            <h1 class="govuk-heading-xl">{{ __("heading_manifest_edit_person_details") }}</h1>
+            {# Person details #}
+            {{ b.id_card_withdrawl_text(__) }}
+            <p class="govuk-body-m">{{ __("caption_manifest_person_details") }}</p>
+            <form action="/garfile/manifest/editperson"
+                  autocomplete="off"
+                  class="form-group"
+                  method="post"
+                  role="form">
+                <input type="hidden"
+                       id="garPeopleId"
+                       name="garPeopleId"
+                       value="{{ person.garPeopleId }}" />
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                {% include "person-details.njk" %}
+                <br>
+                <input id="add-person-manifest"
+                       class="govuk-button"
+                       type="submit"
+                       value="{{ __("form_save_and_add_to_gar") }}">
+                <p class="govuk-body-m">
+                    <a id="exit-person-manifest"
+                       href="/garfile/manifest"
+                       class="govuk-button govuk-button--secondary">{{ __("form_exit_without_saving") }}</a>
+                </p>
+            </form>
+        </div>
     </div>
-  </div>
 {% endblock %}

@@ -1,67 +1,58 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
-{% block pageTitle %}
-	{{ __('error_prefix') if errors }} GAR | {{__('title_assign_role')}}
-{% endblock %}
-
-{% set active = '/organisation' %}
-
+{% block pageTitle %}{{ __("error_prefix") if errors }} GAR | {{ __("title_assign_role") }}{% endblock %}
+{% set active = "/organisation" %}
 {% block beforeContent %}
-  <a href="/organisation/inviteusers" class="govuk-back-link">{{__('nav_back')}}</a>
+    <a href="/organisation/inviteusers" class="govuk-back-link">{{ __("nav_back") }}</a>
 {% endblock %}
-
 {% block content %}
-  <script src="/javascripts/organisation/assignrole.js" type="module"></script>
-  <div class="govuk-grid-row">
-	  <div class="govuk-grid-column-two-thirds">
-      <form action="/organisation/assignrole" autocomplete="off" class="form-group" method="post" role="form" >
-
-        {% set roleItems = [] %}
-        {% for role in roles %}
-          {% set item = {
-            value: role.name,
-            text: role.name,
-            id: "option-" ~ role.id,
-            hint: { text: role.description }
-          } %}
-          {% set roleItems = roleItems.concat([item]) %}
-        {% endfor %}
-
-        {{ govukRadios({
-          idPrefix: "role",
-          name: "role",
-          hint: {
-            text: __('assign_role_caption'),
-            id: 'role-hint'
-          },
-          describedBy: "role-hint",
-          errorMessage: errors | containsError('role'),
-          fieldset: {
-            legend: {
-              text: __('title_assign_role'),
-              classes: "govuk-fieldset__legend--m",
-              isPageHeading: true
-            }          },
-          items: roleItems
-        }) }}
-
-        <div class="govuk-form-group">
-          <button id="submit" class="govuk-button">
-            {{__('form_submit')}}
-          </button>
-          <p class="govuk-body-m">
-            <a id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
-              href="/organisation#">
-              {{__('form_exit')}}
-            </a>
-          </p>
+    <script src="/javascripts/organisation/assignrole.js" type="module"></script>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="/organisation/assignrole"
+                  autocomplete="off"
+                  class="form-group"
+                  method="post"
+                  role="form">
+                {% set roleItems = [] %}
+                {% for role in roles %}
+                    {% set item = {
+                        value: role.name,
+                        text: role.name,
+                        id: "option-" ~ role.id,
+                        hint: { text: role.description }
+                    } %}
+                    {% set roleItems = roleItems.concat([item]) %}
+                {% endfor %}
+                {{ govukRadios({
+                    idPrefix: "role",
+                    name: "role",
+                    hint: {
+                        text: __('assign_role_caption'),
+                        id: 'role-hint'
+                    },
+                    describedBy: "role-hint",
+                    errorMessage: errors | containsError('role'),
+                    fieldset: {
+                        legend: {
+                            text: __('title_assign_role'),
+                            classes: "govuk-fieldset__legend--m",
+                            isPageHeading: true
+                        }          },
+                        items: roleItems
+                }) }}
+                <div class="govuk-form-group">
+                    <button id="submit" class="govuk-button">{{ __("form_submit") }}</button>
+                    <p class="govuk-body-m">
+                        <a id="exit"
+                           type="submit"
+                           class="govuk-button govuk-button--secondary"
+                           data-module="govuk-button"
+                           href="/organisation#">{{ __("form_exit") }}</a>
+                    </p>
+                </div>
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            </form>
         </div>
-
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-      </form>
     </div>
-  </div>
-
 {% endblock %}

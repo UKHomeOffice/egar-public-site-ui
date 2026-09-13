@@ -1,48 +1,45 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
-{% block pageTitle %}
-  {{__('error_prefix') if errors}} Create GAR | Review
-{% endblock %}
-
-{% set active = '/home' %}
-
+{% block pageTitle %}{{ __("error_prefix") if errors }} Create GAR | Review{% endblock %}
+{% set active = "/home" %}
 {% block beforeContent %}
-  <a href="/garfile/supportingdocuments" class="govuk-back-link">{{__('nav_back')}}</a>
+    <a href="/garfile/supportingdocuments" class="govuk-back-link">{{ __("nav_back") }}</a>
 {% endblock %}
-
 {% block content %}
-  <script type="text/javascript" src="/javascripts/garfile/review.js"></script>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <span class="govuk-caption-xl">{{__('section_count', 8, 9)}}</span>
-      <h1 class="govuk-heading-xl">{{__('title_review_gar')}}</h1>
-      {% include "common/templates/includes/blue-banner.njk" %}
-      {% include "check-your-answers.njk" %}
-
-      {% if isJourneyUkInbound%}
-        <form id="submitGarForm" action="/garfile/review" method="post">
-          <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit_amg')}}">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-          <input type="hidden" name="resubmitFor0T" value="resubmitFor0T" />
-          <input type="hidden" name="initialSubmit" value="yes"/>
-        </form>
-      {% else %}
-        <form id="submitGarForm" action="/garfile/review" method="post">
-          <input id='review-submit' type="submit" class="govuk-button" value="{{__('review_gar_submit')}}">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-        </form>
-      {% endif %}
-      <form id="cancel-form" action="/garfile/view" method="post" role="form">
-        <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-          {{__('review_gar_exit')}}
-        </button>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      </form>
+    <script src="/javascripts/garfile/review.js"></script>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <span class="govuk-caption-xl">{{ __('section_count', 8, 9) }}</span>
+            <h1 class="govuk-heading-xl">{{ __("title_review_gar") }}</h1>
+            {% include "common/templates/includes/blue-banner.njk" %}
+            {% include "check-your-answers.njk" %}
+            {% if isJourneyUkInbound %}
+                <form id="submitGarForm" action="/garfile/review" method="post">
+                    <input id="review-submit"
+                           type="submit"
+                           class="govuk-button"
+                           value="{{ __("review_gar_submit_amg") }}">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    <input type="hidden" name="resubmitFor0T" value="resubmitFor0T" />
+                    <input type="hidden" name="initialSubmit" value="yes" />
+                </form>
+            {% else %}
+                <form id="submitGarForm" action="/garfile/review" method="post">
+                    <input id="review-submit"
+                           type="submit"
+                           class="govuk-button"
+                           value="{{ __("review_gar_submit") }}">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                </form>
+            {% endif %}
+            <form id="cancel-form" action="/garfile/view" method="post" role="form">
+                <button type="submit"
+                        id="review-exit"
+                        class="govuk-button govuk-button--secondary"
+                        data-module="govuk-button">{{ __("review_gar_exit") }}</button>
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            </form>
+        </div>
     </div>
-  </div>
-  {{ m.departure_warning_dialog(__) }}
-
+    {{ m.departure_warning_dialog(__) }}
 {% endblock %}
-

@@ -1,35 +1,36 @@
 {% extends "base-template.njk" %}
-
 {% block pageTitle %}
-  GAR | Organisation invite
+    GAR | Organisation invite
 {% endblock %}
-
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      You have been invited to join Submit a General Aviation Report (GAR)</h1>
-    <p class="govuk-body">Use this service to:</p>
-    <ul class="govuk-body">
-      <li>submit a GAR</li>
-      <li>view, edit or cancel a GAR</li>
-      <li>add, remove or manage people on your flight</li>
-    </ul>
-    <div class="box-left-grey-border">
-      <div class="email-text">
-        <p class="govuk-body">You need a GOV.UK One Login to sign in to this service. You can create one if you do not already
-          have one.</p>
-        <p class="govuk-body">
-          You should use the same email address to create your GOV.UK One Login that you use for your Submit a General Aviation
-          Report (GAR) account.
-        </p>
-      </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">You have been invited to join Submit a General Aviation Report (GAR)</h1>
+            <p class="govuk-body">Use this service to:</p>
+            <ul class="govuk-body">
+                <li>submit a GAR</li>
+                <li>view, edit or cancel a GAR</li>
+                <li>add, remove or manage people on your flight</li>
+            </ul>
+            <div class="box-left-grey-border">
+                <div class="email-text">
+                    <p class="govuk-body">
+                        You need a GOV.UK One Login to sign in to this service. You can create one if you do not already
+                        have one.
+                    </p>
+                    <p class="govuk-body">
+                        You should use the same email address to create your GOV.UK One Login that you use for your Submit a General Aviation
+                        Report (GAR) account.
+                    </p>
+                </div>
+            </div>
+            <div>
+                <a id="start_now"
+                   href="{{ oneLoginAuthUrl }}"
+                   class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">
+                    {{ __("button_start_now") }}
+                </a>
+            </div>
+        </div>
     </div>
-    <div>
-      <a id="start_now" href="{{oneLoginAuthUrl}}" class="govuk-button govuk-button--start govuk-!-margin-top-2 govuk-!-margin-bottom-8">
-        {{__('button_start_now')}}
-      </a>
-    </div>
-  </div>
-</div>
 {% endblock %}

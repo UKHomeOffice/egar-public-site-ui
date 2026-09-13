@@ -1,0 +1,9 @@
+profile = "nunjucks"
+extension = "njk"
+use_gitignore = true
+extend_exclude = "coverage"
+
+# T001 creates a large whitespace-only migration diff; leave it for a dedicated formatting pass.
+# H036 allows existing <br> spacing until those templates are reviewed intentionally.
+# D004/D018 and J004/J018 are Django/Jinja-specific rules and do not apply to this Nunjucks app.
+ignore = "T001,H036,D004,D018,J004,J018"

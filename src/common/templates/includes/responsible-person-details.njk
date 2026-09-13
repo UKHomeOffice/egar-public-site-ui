@@ -1,174 +1,160 @@
 {% import "common/templates/includes/macros.njk" as common %}
-
 {{ govukInput({
-  id: "responsibleGivenName",
-  name: "responsibleGivenName",
-  classes: "govuk-input--width-30",
-  label: {
-    text: __("field_given_name"),
-    classes: "govuk-label--m"
-  },
-  hint: {
-    html: m.hint('firstName', __('field_given_name_hint')) ~ m.character_count_hint('responsibleGivenName', MAX_STRING_LENGTH)
-  },
-  value: responsiblePerson.responsibleGivenName,
-  attributes: {
-    maxlength: MAX_STRING_LENGTH
-  },
-  errorMessage: errors | containsError('responsibleGivenName')
+    id: "responsibleGivenName",
+    name: "responsibleGivenName",
+    classes: "govuk-input--width-30",
+    label: {
+        text: __("field_given_name"),
+        classes: "govuk-label--m"
+    },
+    hint: {
+        html: m.hint('firstName', __('field_given_name_hint')) ~ m.character_count_hint('responsibleGivenName', MAX_STRING_LENGTH)
+    },
+    value: responsiblePerson.responsibleGivenName,
+    attributes: {
+        maxlength: MAX_STRING_LENGTH
+    },
+    errorMessage: errors | containsError('responsibleGivenName')
 }) }}
-
 {{ govukInput({
-  id: "responsibleSurname",
-  name: "responsibleSurname",
-  classes: "govuk-input--width-30",
-  label: {
-    text: __("field_surname"),
-    classes: "govuk-label--m"
-  },
-  hint: {
-    html: m.character_count_hint('responsibleSurname', MAX_STRING_LENGTH)
-  },
-  value: responsiblePerson.responsibleSurname,
-  attributes: {
-    maxlength: MAX_STRING_LENGTH
-  },
-  errorMessage: errors | containsError('responsibleSurname')
+    id: "responsibleSurname",
+    name: "responsibleSurname",
+    classes: "govuk-input--width-30",
+    label: {
+        text: __("field_surname"),
+        classes: "govuk-label--m"
+    },
+    hint: {
+        html: m.character_count_hint('responsibleSurname', MAX_STRING_LENGTH)
+    },
+    value: responsiblePerson.responsibleSurname,
+    attributes: {
+        maxlength: MAX_STRING_LENGTH
+    },
+    errorMessage: errors | containsError('responsibleSurname')
 }) }}
-
 {{ govukInput({
-  id: "responsibleContactNo",
-  name: "responsibleContactNo",
-  classes: "govuk-input--width-20",
-  label: {
-    text: __("field_contact_number"),
-    classes: "govuk-label--m"
-  },
-  hint: {
-    text: __("field_contact_number_hint")
-  },
-  value: responsiblePerson.responsibleContactNo,
-  errorMessage: errors | containsError('responsibleContactNo')
+    id: "responsibleContactNo",
+    name: "responsibleContactNo",
+    classes: "govuk-input--width-20",
+    label: {
+        text: __("field_contact_number"),
+        classes: "govuk-label--m"
+    },
+    hint: {
+        text: __("field_contact_number_hint")
+    },
+    value: responsiblePerson.responsibleContactNo,
+    errorMessage: errors | containsError('responsibleContactNo')
 }) }}
-
 {{ govukInput({
-  id: "responsibleEmail",
-  name: "responsibleEmail",
-  type: "email",
-  classes: "govuk-input--width-20",
-  label: {
-    text: __("field_email"),
-    classes: "govuk-label--m"
-  },
-  hint: {
-    text: __("responsible_email_hint")
-  },
-  value: responsiblePerson.responsibleEmail,
-  attributes: {
-    maxlength: MAX_EMAIL_LENGTH
-  },
-  errorMessage: errors | containsError('responsibleEmail')
+    id: "responsibleEmail",
+    name: "responsibleEmail",
+    type: "email",
+    classes: "govuk-input--width-20",
+    label: {
+        text: __("field_email"),
+        classes: "govuk-label--m"
+    },
+    hint: {
+        text: __("responsible_email_hint")
+    },
+    value: responsiblePerson.responsibleEmail,
+    attributes: {
+        maxlength: MAX_EMAIL_LENGTH
+    },
+    errorMessage: errors | containsError('responsibleEmail')
 }) }}
-
 <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ __('field_address') }}</legend>
-  {{ govukInput({
-    id: "responsibleAddressLine1",
-    name: "responsibleAddressLine1",
-    label: {
-      text: __("field_house_number"),
-      classes: "govuk-label"
-    },
-    hint: {
-      html:  m.character_count_hint('responsibleAddressLine1', MAX_STRING_LENGTH)
-    },
-    value: responsiblePerson.responsibleAddressLine1,
-    attributes: { maxlength: MAX_STRING_LENGTH },
-    errorMessage: errors | containsError('responsibleAddressLine1')
-  }) }}
-
-  {{ govukInput({
-    id: "responsibleAddressLine2",
-    name: "responsibleAddressLine2",
-    hint: {
-      html: m.character_count_hint('responsibleAddressLine2', MAX_STRING_LENGTH)
-    },
-    value: responsiblePerson.responsibleAddressLine2,
-    attributes: { maxlength: MAX_STRING_LENGTH },
-    errorMessage: errors | containsError('responsibleAddressLine2')
-  }) }}
-
-  {{ govukInput({
-    id: "responsibleTown",
-    name: "responsibleTown",
-    label: {
-      html: __("field_town"),
-      classes: "govuk-label"
-    },
-    hint: {
-      html: m.character_count_hint('responsibleTown', MAX_STRING_LENGTH)
-    },
-    value: responsiblePerson.responsibleTown,
-    attributes: { maxlength: MAX_STRING_LENGTH },
-    errorMessage: errors | containsError('responsibleTown')
-  }) }}
-
-  {{ govukInput({
-    id: "responsiblePostcode",
-    name: "responsiblePostcode",
-    classes: "govuk-input--width-10",
-    label: { text: __("field_postcode"), classes: "govuk-label" },
-    value: responsiblePerson.responsiblePostcode,
-    attributes: { maxlength: MAX_POSTCODE_LENGTH },
-    errorMessage: errors | containsError('responsiblePostcode')
-  }) }}
-
-  {{
-    common.countryList(
-      "responsibleCountry",
-      countryList,
-      responsiblePerson.responsibleCountry,
-      __("field_address_country"),
-      '',
-      errors | containsError('responsibleCountry')
-      )
-  }}
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ __("field_address") }}</legend>
+    {{ govukInput({
+        id: "responsibleAddressLine1",
+        name: "responsibleAddressLine1",
+        label: {
+            text: __("field_house_number"),
+            classes: "govuk-label"
+        },
+        hint: {
+            html:  m.character_count_hint('responsibleAddressLine1', MAX_STRING_LENGTH)
+        },
+        value: responsiblePerson.responsibleAddressLine1,
+        attributes: { maxlength: MAX_STRING_LENGTH },
+        errorMessage: errors | containsError('responsibleAddressLine1')
+    }) }}
+    {{ govukInput({
+        id: "responsibleAddressLine2",
+        name: "responsibleAddressLine2",
+        hint: {
+            html: m.character_count_hint('responsibleAddressLine2', MAX_STRING_LENGTH)
+        },
+        value: responsiblePerson.responsibleAddressLine2,
+        attributes: { maxlength: MAX_STRING_LENGTH },
+        errorMessage: errors | containsError('responsibleAddressLine2')
+    }) }}
+    {{ govukInput({
+        id: "responsibleTown",
+        name: "responsibleTown",
+        label: {
+            html: __("field_town"),
+            classes: "govuk-label"
+        },
+        hint: {
+            html: m.character_count_hint('responsibleTown', MAX_STRING_LENGTH)
+        },
+        value: responsiblePerson.responsibleTown,
+        attributes: { maxlength: MAX_STRING_LENGTH },
+        errorMessage: errors | containsError('responsibleTown')
+    }) }}
+    {{ govukInput({
+        id: "responsiblePostcode",
+        name: "responsiblePostcode",
+        classes: "govuk-input--width-10",
+        label: { text: __("field_postcode"), classes: "govuk-label" },
+        value: responsiblePerson.responsiblePostcode,
+        attributes: { maxlength: MAX_POSTCODE_LENGTH },
+        errorMessage: errors | containsError('responsiblePostcode')
+    }) }}
+    {{ common.countryList(
+            "responsibleCountry",
+            countryList,
+            responsiblePerson.responsibleCountry,
+            __("field_address_country"),
+            '',
+            errors | containsError('responsibleCountry')
+    )
+    }}
 </fieldset>
-
 {% set fixedBasedOperatorTextarea = govukTextarea({
-  id: "fixedBasedOperatorAnswer",
-  name: "fixedBasedOperatorAnswer",
-  rows: 3,
-  attributes: {
-    placeholder: __("field_fbo_textarea_placeholder")
-  },
-  maxlength: MAX_TEXT_BOX_LENGTH - 100,
-  value: responsiblePerson.fixedBasedOperatorAnswer or "",
-  errorMessage: errors | containsError('fixedBasedOperatorAnswer')
+    id: "fixedBasedOperatorAnswer",
+    name: "fixedBasedOperatorAnswer",
+    rows: 3,
+    attributes: {
+        placeholder: __("field_fbo_textarea_placeholder")
+    },
+    maxlength: MAX_TEXT_BOX_LENGTH - 100,
+    value: responsiblePerson.fixedBasedOperatorAnswer or "",
+    errorMessage: errors | containsError('fixedBasedOperatorAnswer')
 }) %}
-
 {% set fixedBasedOperatorItems = [] %}
-
 {% for choice in fixedBasedOperatorOptions %}
-  {% set item = {
-    value: choice.value,
-    text: choice.option,
-    checked: (responsiblePerson.fixedBasedOperator | default('') == choice.value),
-    conditional: (choice.value == 'Other') and { html: fixedBasedOperatorTextarea } or false
-  } %}
-  {% set fixedBasedOperatorItems = fixedBasedOperatorItems.concat(item) %}
+    {% set item = {
+        value: choice.value,
+        text: choice.option,
+        checked: (responsiblePerson.fixedBasedOperator | default('') == choice.value),
+        conditional: (choice.value == 'Other') and { html: fixedBasedOperatorTextarea } or false
+    } %}
+    {% set fixedBasedOperatorItems = fixedBasedOperatorItems.concat(item) %}
 {% endfor %}
-
 {{ govukRadios({
-  idPrefix: "fixedBasedOperator",
-  name: "fixedBasedOperator",
-  fieldset: {
-    legend: {
-      text: __("field_fbo_question"),
-      classes: "govuk-fieldset__legend--m"
-    }
-  },
-  classes: m.form_group_class('fixedBasedOperator', errors),
-  errorMessage: errors | containsError('fixedBasedOperator'),
-  items: fixedBasedOperatorItems
+    idPrefix: "fixedBasedOperator",
+    name: "fixedBasedOperator",
+    fieldset: {
+        legend: {
+            text: __("field_fbo_question"),
+            classes: "govuk-fieldset__legend--m"
+        }
+    },
+    classes: m.form_group_class('fixedBasedOperator', errors),
+    errorMessage: errors | containsError('fixedBasedOperator'),
+    items: fixedBasedOperatorItems
 }) }}

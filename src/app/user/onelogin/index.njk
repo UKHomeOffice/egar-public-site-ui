@@ -1,16 +1,10 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
-{% block pageTitle %}
-	{{__('error_prefix') if data.errors}} GAR | Register
-{% endblock %}
-
+{% block pageTitle %}{{ __("error_prefix") if data.errors }} GAR | Register{% endblock %}
 {% block content %}
-     <div class="govuk-grid-row govuk-!-padding-bottom-12">
-         {% if step %}
+    <div class="govuk-grid-row govuk-!-padding-bottom-12">
+        {% if step %}
             {% include step %}
-         {% endif %}
+        {% endif %}
     </div>
-
 {% endblock %}

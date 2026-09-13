@@ -1,81 +1,70 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
-{% block pageTitle %}
-  {{ __('error_prefix') if errors }} GAR | Invite User
-{% endblock %}
-
-{% set active = '/organisation' %}
-
-{% block beforeContent %}
-  <a href="/organisation" class="govuk-back-link">{{__('nav_back')}}</a>
-{% endblock %}
-
+{% block pageTitle %}{{ __("error_prefix") if errors }} GAR | Invite User{% endblock %}
+{% set active = "/organisation" %}
+{% block beforeContent %}<a href="/organisation" class="govuk-back-link">{{ __("nav_back") }}</a>{% endblock %}
 {% block content %}
-<script src="/javascripts/organisation/inviteusers.js" type="module"></script>
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <form action="/organisation/inviteusers" autocomplete="off" class="form-group" method="post" role="form">
-      <h1 class="govuk-heading-xl">{{__('title_invite_user')}}</h1>
-      <p class="govuk-body-l">{{__('invite_user_caption')}}</p>
-
-      {{ govukInput({
-      id: "fname",
-      name: "fname",
-      label: { text: __("field_given_name"), classes: "govuk-label--m" },
-      hint: { text: __("invite_user_given_name_hint") },
-      value: fname,
-      errorMessage: errors | containsError('fname')
-      }) }}
-
-      {{ govukInput({
-      id: "lname",
-      name: "lname",
-      label: { text: __("field_surname"), classes: "govuk-label--m" },
-      hint: { text: __("invite_user_surname_hint") },
-      value: lname,
-      attributes: { maxlength: MAX_STRING_LENGTH },
-      errorMessage: errors | containsError('lname')
-      }) }}
-
-      {{ govukInput({
-      id: "email",
-      name: "email",
-      label: { text: __("field_email"), classes: "govuk-label--m" },
-      hint: { text: __("invite_user_email_hint") },
-      value: email,
-      errorMessage: errors | containsError('email')
-      }) }}
-
-      {{ govukInput({
-      id: "cemail",
-      name: "cemail",
-      label: { text: __("field_confirm_email"), classes: "govuk-label--m" },
-      hint: { text: __("invite_user_cemail_hint") },
-      value: "",
-      errorMessage: errors | containsError('cemail')
-      }) }}
-
-      <div class="govuk-form-group">
-        {{ govukButton({
-        id: "continue",
-        text: __("button_continue"),
-        type: "submit"
-        }) }}
-
-        <p class="govuk-body-m">
-          {{ govukButton({
-          id: "exit",
-          text: __("form_exit"),
-          href: "/organisation#",
-          classes: "govuk-button--secondary",
-          attributes: {"data-module": "govuk-button"}
-          }) }}
-        </p>
-      </div>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    </form>
-  </div>
-</div>
+    <script src="/javascripts/organisation/inviteusers.js" type="module"></script>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="/organisation/inviteusers"
+                  autocomplete="off"
+                  class="form-group"
+                  method="post"
+                  role="form">
+                <h1 class="govuk-heading-xl">{{ __("title_invite_user") }}</h1>
+                <p class="govuk-body-l">{{ __("invite_user_caption") }}</p>
+                {{ govukInput({
+                    id: "fname",
+                    name: "fname",
+                    label: { text: __("field_given_name"), classes: "govuk-label--m" },
+                    hint: { text: __("invite_user_given_name_hint") },
+                    value: fname,
+                    errorMessage: errors | containsError('fname')
+                }) }}
+                {{ govukInput({
+                    id: "lname",
+                    name: "lname",
+                    label: { text: __("field_surname"), classes: "govuk-label--m" },
+                    hint: { text: __("invite_user_surname_hint") },
+                    value: lname,
+                    attributes: { maxlength: MAX_STRING_LENGTH },
+                    errorMessage: errors | containsError('lname')
+                }) }}
+                {{ govukInput({
+                    id: "email",
+                    name: "email",
+                    label: { text: __("field_email"), classes: "govuk-label--m" },
+                    hint: { text: __("invite_user_email_hint") },
+                    value: email,
+                    errorMessage: errors | containsError('email')
+                }) }}
+                {{ govukInput({
+                    id: "cemail",
+                    name: "cemail",
+                    label: { text: __("field_confirm_email"), classes: "govuk-label--m" },
+                    hint: { text: __("invite_user_cemail_hint") },
+                    value: "",
+                    errorMessage: errors | containsError('cemail')
+                }) }}
+                <div class="govuk-form-group">
+                    {{ govukButton({
+                        id: "continue",
+                        text: __("button_continue"),
+                        type: "submit"
+                    }) }}
+                    <p class="govuk-body-m">
+                        {{ govukButton({
+                            id: "exit",
+                            text: __("form_exit"),
+                            href: "/organisation#",
+                            classes: "govuk-button--secondary",
+                            attributes: {"data-module": "govuk-button"}
+                        }) }}
+                    </p>
+                </div>
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            </form>
+        </div>
+    </div>
 {% endblock %}

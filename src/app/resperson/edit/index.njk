@@ -1,33 +1,34 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
-{% block pageTitle %}
-    {{ __('error_prefix') if errors }} GAR | Edit Responsible person | {{ __('title') }}
-{% endblock %}
-
-{% set active = '/resperson' %}
-
-{% block beforeContent %}
-    <a href="/resperson" class="govuk-back-link">{{ __('nav_back') }}</a>
-{% endblock %}
-
+{% block pageTitle %}{{ __("error_prefix") if errors }} GAR | Edit Responsible person | {{ __("title") }}{% endblock %}
+{% set active = "/resperson" %}
+{% block beforeContent %}<a href="/resperson" class="govuk-back-link">{{ __("nav_back") }}</a>{% endblock %}
 {% block content %}
-  <script type="module" src="/javascripts/resperson/edit.js"></script>
+    <script type="module" src="/javascripts/resperson/edit.js"></script>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <form id="page-form" action="/resperson/edit" autocomplete="off" class="form-group"
-                method="post" role="form">
-                <h1 class="govuk-heading-xl">{{ __('heading_edit_responsible_person') }}</h1>
-                <p class="govuk-body-l">{{ __('responsible_person_caption') }}</p>
+            <form id="page-form"
+                  action="/resperson/edit"
+                  autocomplete="off"
+                  class="form-group"
+                  method="post"
+                  role="form">
+                <h1 class="govuk-heading-xl">{{ __("heading_edit_responsible_person") }}</h1>
+                <p class="govuk-body-l">{{ __("responsible_person_caption") }}</p>
                 {% include "responsible-person-details.njk" %}
                 <div class="govuk-form-group">
-                    <input id="add-and-exit" class="govuk-button" type="submit" name="buttonClicked"  value="{{__('form_save_and_exit')}}">
+                    <input id="add-and-exit"
+                           class="govuk-button"
+                           type="submit"
+                           name="buttonClicked"
+                           value="{{ __("form_save_and_exit") }}">
                     <p class="govuk-body-m">
-                        <a id="cancel-and-exit" class="govuk-button govuk-button--secondary" href="/resperson#">{{__('form_exit_without_saving')}}</a>
+                        <a id="cancel-and-exit"
+                           class="govuk-button govuk-button--secondary"
+                           href="/resperson#">{{ __("form_exit_without_saving") }}</a>
                     </p>
                 </div>
-                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
             </form>
         </div>
     </div>

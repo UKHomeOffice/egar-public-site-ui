@@ -1,19 +1,17 @@
 {% from "dist/govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
-
-{% macro navigation(pagesList, active)%}
-  {% set pages = [] %}
-  {% for page in pagesList %}
-    {% set _ = pages.push({
-      href: page.href,
-      text: page.text,
-      active: (page.href == active)
-    }) %}
-  {% endfor %}
-
-  {{ govukServiceNavigation({
-    serviceName: "Submit a General Aviation Report (GAR)",
-    serviceUrl: "/home",
-    navigation: pages
-  })
-  }}
+{% macro navigation(pagesList, active) %}
+    {% set pages = [] %}
+    {% for page in pagesList %}
+        {% set _ = pages.push({
+            href: page.href,
+            text: page.text,
+            active: (page.href == active)
+        }) %}
+    {% endfor %}
+    {{ govukServiceNavigation({
+        serviceName: "Submit a General Aviation Report (GAR)",
+        serviceUrl: "/home",
+        navigation: pages
+    })
+    }}
 {% endmacro %}
