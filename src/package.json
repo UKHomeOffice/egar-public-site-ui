@@ -7,19 +7,8 @@
     "dev": "nodemon start.js",
     "test": "c8 --reporter=lcov mocha --file test/global.test.js --bail --recursive",
     "test-drone": "c8 --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --file test/global.test.js --recursive",
-    "check": "eslint .  --ext .js",
+    "check": "eslint .  --ext .js && prettier --check .",
     "fix": "eslint --fix .  --ext .js"
-  },
-  "nyc": {
-    "all": true,
-    "exclude": [
-      "public/javascripts/*.js",
-      "**/lcov-report",
-      "common/templates/includes/tabs/*.js",
-      "*.js",
-      "app/router.js",
-      "test/**/*.js"
-    ]
   },
   "overrides": {
     "form-data": "2.5.6",
@@ -34,19 +23,13 @@
     "ip-address": "10.3.1",
     "diff": "8.0.3",
     "picomatch": "4.0.4",
-    "brace-expansion": "5.0.9",
-    "nyc": {
-      "istanbul-lib-processinfo": {
-        "uuid": "$uuid"
-      }
-    }
+    "brace-expansion": "5.0.9"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@govuk-one-login/service-header": "^5.0.0",
     "accessible-autocomplete": "^3.0.1",
-    "body-parser": "^2.3.0",
     "compression": "^1.7.3",
     "connect-pg-simple": "^10.0.0",
     "cookie-parser": "^1.4.7",
@@ -55,11 +38,9 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "file-type": "^12.1.0",
-    "glob": "^10.5.0",
     "govuk-frontend": "^5.14.0",
     "helmet": "^3.13.0",
     "i18n": "0.15.3",
-    "i18n-iso-countries": "^7.12.0",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.2.0",
     "lodash": "4.18.1",
@@ -73,7 +54,6 @@
     "request": "2.88.2",
     "serve-favicon": "^2.5.0",
     "throng": "^4.0.0",
-    "url": "^0.11.0",
     "uuid": "11.1.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
@@ -89,7 +69,6 @@
     "mocha": "^11.8.0",
     "nock": "^10.0.0",
     "nodemon": "^3.1.14",
-    "nyc": "^17.1.0",
     "prettier": "^3.9.6",
     "proxyquire": "^2.1.3",
     "rewire": "^9.0.1",

@@ -2,6 +2,8 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": ["test/**/*.test.js", "public/javascripts/**/*.js"],
   "project": ["**/*.js"],
+  "ignoreDependencies": ["@govuk-one-login/service-header", "accessible-autocomplete", "govuk-frontend"],
+  "ignore": ["public/javascripts/init.js"],
   "rules": {
     "exports": "warn"
   }
