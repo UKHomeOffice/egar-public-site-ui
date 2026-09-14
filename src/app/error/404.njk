@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block page_title %}
-	Error 404
+  Error 404
 {% endblock %}
 
 {% block beforeContent %}
@@ -11,24 +11,23 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-	    	<h1 class="govuk-heading-l">
-				Sorry, something went wrong.
-			</h1>
+      <h1 class="govuk-heading-l">Sorry, something went wrong.</h1>
 
-			<p class="govuk-body-l">
-			  Please <a href="/">go back</a> and try again.
-			</p>
+      <p class="govuk-body-l">
+        Please <a href="/">go back</a> and try again.
+      </p>
 
-			<p class="govuk-body-m">
-			 If you are having difficulties using this service, please <a href="mailto:{{__('support_email')}}" class="govuk-link">contact us</a>.
-			</p>
+      <p class="govuk-body-m">
+        If you are having difficulties using this service, please <a href="mailto:{{ __('support_email') }}"
+    class="govuk-link">contact us</a>.
+      </p>
 
-		</div>
-	</div>
+    </div>
+  </div>
 
- </main>
+  </main>
 
 {% endblock %}

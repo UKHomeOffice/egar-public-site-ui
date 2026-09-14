@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	GAR | Verify Token
+  GAR | Verify Token
 {% endblock %}
 
 {% block beforeContent %}
@@ -13,14 +13,10 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <p class="govuk-body-l">
-        {{message}}
-      </p>
-      <a class="govuk-button" href="/login">
-        {{__('button_sign_in')}}
-      </a>
+      <p class="govuk-body-l">{{ message }}</p>
+      <a class="govuk-button" href="/login">{{ __('button_sign_in') }}</a>
       <p class="govuk-body-m">
-        {{__('verify_help_caption_1')}}<a href="mailto:{{__('support_email')}}">{{__('verify_help_caption_2')}}</a>{{__('verify_help_caption_3')}}
+        {{ __('verify_help_caption_1') }}<a href="mailto:{{ __('support_email') }}">{{ __('verify_help_caption_2') }}</a>{{ __('verify_help_caption_3') }}
       </p>
     </div>
   </div>

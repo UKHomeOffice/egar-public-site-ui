@@ -3,38 +3,45 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	{{ __('error_prefix') if errors }} GAR | Create Organisation
+  {{ __('error_prefix') if errors }} GAR | Create Organisation
 {% endblock %}
 
-{% set active = '/organisation/create' %}
+{% set active = "/organisation/create" %}
 
 {% block content %}
-<script src="/javascripts/organisation/create.js" type="module"></script>
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
+  <script src="/javascripts/organisation/create.js" type="module"></script>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-xl">{{__('nav_bar_create_organisation')}}</h1>
-    <p class="govuk-body-l">{{__('create_organisation_caption_1')}}</p>
-    <p class="govuk-body-m">{{__('create_organisation_caption_2')}}</p>
+      <h1 class="govuk-heading-xl">{{ __('nav_bar_create_organisation') }}</h1>
+      <p class="govuk-body-l">{{ __('create_organisation_caption_1') }}</p>
+      <p class="govuk-body-m">{{ __('create_organisation_caption_2') }}</p>
 
-    <form action="/organisation/create" autocomplete="off" class="form-group" method="post" role="form" >
-      {{ govukWarningText({
-        text: __('create_organisation_warning')
-      }) }}
-      <p class="govuk-body-l">{{__('create_organisation_caption_3')}}</p>
-      <div class="{{ m.form_group_class('orgName', errors) }}">
-        <label class="govuk-label govuk-label--m" for="orgName">{{__('field_organisation_name')}}</label>
-        {{ m.error_message('orgName', errors, __) }}
-        <input id="orgName" name="orgName" autocomplete="off" class="govuk-input"
-          type="text" value="{{cookie.getOrganisationName()}}" {{ 'aria-describedby=orgName-error' if errors | containsError('orgName') }}>
-      </div>
-      <div class="govuk-form-group">
-        <button id="create" class="govuk-button">
-          {{__('nav_bar_create_organisation')}}
-        </button>
-      </div>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    </form>
+      <form action="/organisation/create"
+            autocomplete="off"
+            class="form-group"
+            method="post"
+            role="form">
+        {{ govukWarningText({
+          text: __('create_organisation_warning')
+        }) }}
+        <p class="govuk-body-l">{{ __('create_organisation_caption_3') }}</p>
+        <div class="{{ m.form_group_class('orgName', errors) }}">
+          <label class="govuk-label govuk-label--m" for="orgName">{{ __('field_organisation_name') }}</label>
+          {{ m.error_message('orgName', errors, __) }}
+          <input id="orgName"
+                 name="orgName"
+                 autocomplete="off"
+                 class="govuk-input"
+                 type="text"
+                 value="{{ cookie.getOrganisationName() }}"
+                 {{ 'aria-describedby=orgName-error' if errors | containsError('orgName') }}>
+        </div>
+        <div class="govuk-form-group">
+          <button id="create" class="govuk-button">{{ __('nav_bar_create_organisation') }}</button>
+        </div>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </form>
+    </div>
   </div>
-</div>
 {% endblock %}

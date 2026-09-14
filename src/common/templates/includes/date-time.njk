@@ -1,54 +1,52 @@
-
-
 {% from "dist/govuk/components/date-input/macro.njk" import govukDateInput %}
 
 {% macro dateInput(prefix, cookie, dateObj, legendName, hintName, errors, __) %}
-<div id="date-prefix-{{prefix}}" data-prefix="{{prefix}}"></div>
-{{ govukDateInput({
-  id: prefix + "Date",
-  fieldset: {
-    legend: {
-      text: __(legendName),
-      classes: "govuk-fieldset__legend--m"
-    }
-  },
-  hint: {
-    text: __(hintName)
-  },
-  items: [
-    {
-      id: prefix + "Day",
-      name: prefix + "Day",
-      label: __("field_day"),
-      classes: "govuk-input--width-2",
-      value: cookie.dateSlice('day', dateObj),
-      attributes: {
-        maxlength: 2
+  <div id="date-prefix-{{ prefix }}" data-prefix="{{ prefix }}"></div>
+  {{ govukDateInput({
+    id: prefix + "Date",
+    fieldset: {
+      legend: {
+        text: __(legendName),
+        classes: "govuk-fieldset__legend--m"
       }
     },
-    {
-      id: prefix + "Month",
-      name: prefix + "Month",
-      label: __("field_month"),
-      classes: "govuk-input--width-2",
-      value: cookie.dateSlice('month', dateObj),
-      attributes: {
-        maxlength: 2      
+    hint: {
+      text: __(hintName)
+    },
+    items: [
+      {
+        id: prefix + "Day",
+        name: prefix + "Day",
+        label: __("field_day"),
+        classes: "govuk-input--width-2",
+        value: cookie.dateSlice('day', dateObj),
+        attributes: {
+          maxlength: 2
         }
-    },
-    {
-      id: prefix + "Year",
-      name: prefix + "Year",
-      label: __("field_year"),
-      classes: "govuk-input--width-4",
-      value: cookie.dateSlice('year', dateObj),
-      attributes: {
-        maxlength: 4
+      },
+      {
+        id: prefix + "Month",
+        name: prefix + "Month",
+        label: __("field_month"),
+        classes: "govuk-input--width-2",
+        value: cookie.dateSlice('month', dateObj),
+        attributes: {
+          maxlength: 2
+        }
+      },
+      {
+        id: prefix + "Year",
+        name: prefix + "Year",
+        label: __("field_year"),
+        classes: "govuk-input--width-4",
+        value: cookie.dateSlice('year', dateObj),
+        attributes: {
+          maxlength: 4
+        }
       }
-    }
-  ],
-  errorMessage: errors | containsError(prefix + 'Date')
-}) }}
+    ],
+    errorMessage: errors | containsError(prefix + 'Date')
+  }) }}
 {% endmacro %}
 
 {% macro timeInput(prefix, cookie, timeObj, hintName, errors, __) %}
@@ -87,5 +85,5 @@
       }
     ]
   }) }}
-  
+
 {% endmacro %}

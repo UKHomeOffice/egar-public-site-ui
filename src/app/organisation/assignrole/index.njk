@@ -3,20 +3,24 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	{{ __('error_prefix') if errors }} GAR | {{__('title_assign_role')}}
+  {{ __('error_prefix') if errors }} GAR | {{ __('title_assign_role') }}
 {% endblock %}
 
-{% set active = '/organisation' %}
+{% set active = "/organisation" %}
 
 {% block beforeContent %}
-  <a href="/organisation/inviteusers" class="govuk-back-link">{{__('nav_back')}}</a>
+  <a href="/organisation/inviteusers" class="govuk-back-link">{{ __('nav_back') }}</a>
 {% endblock %}
 
 {% block content %}
   <script src="/javascripts/organisation/assignrole.js" type="module"></script>
   <div class="govuk-grid-row">
-	  <div class="govuk-grid-column-two-thirds">
-      <form action="/organisation/assignrole" autocomplete="off" class="form-group" method="post" role="form" >
+    <div class="govuk-grid-column-two-thirds">
+      <form action="/organisation/assignrole"
+            autocomplete="off"
+            class="form-group"
+            method="post"
+            role="form">
 
         {% set roleItems = [] %}
         {% for role in roles %}
@@ -44,18 +48,17 @@
               classes: "govuk-fieldset__legend--m",
               isPageHeading: true
             }          },
-          items: roleItems
+            items: roleItems
         }) }}
 
         <div class="govuk-form-group">
-          <button id="submit" class="govuk-button">
-            {{__('form_submit')}}
-          </button>
+          <button id="submit" class="govuk-button">{{ __('form_submit') }}</button>
           <p class="govuk-body-m">
-            <a id="exit" type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button"
-              href="/organisation#">
-              {{__('form_exit')}}
-            </a>
+            <a id="exit"
+               type="submit"
+               class="govuk-button govuk-button--secondary"
+               data-module="govuk-button"
+               href="/organisation#">{{ __('form_exit') }}</a>
           </p>
         </div>
 

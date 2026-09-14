@@ -3,156 +3,178 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% macro craft_details(craft, errors, __) %}
-<div class="govuk-!-margin-bottom-6">
-  {{ govukInput({
-    id: "registration",
-    name: "registration",
-    classes: "govuk-input--width-10",
-    label: {
-      text: __('field_aircraft_registration')
-    },
-    hint: {
-      text: __('field_aircraft_registration_hint')
-    },
-    errorMessage: (
-      errors | containsError('registration')
-    ),
-    value: craft.registration,
-    attributes: {
-      maxlength: MAX_REGISTRATION_LENGTH
-    },
-    formGroup: {
-      classes: "govuk-!-margin-bottom-0"
-    }
-  }) }}
-  {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
-</div>
-<div class="govuk-!-margin-bottom-6">
-  {{ govukInput({
-    id: "craftType",
-    name: "craftType",
-    classes: "govuk-input--width-20",
-    label: {
-      text: __('field_aircraft_type')
-    },
-    hint: {
-      text: __('field_aircraft_type_hint')
-    },
-    errorMessage: (
-      errors | containsError('craftType')
-    ),
-    value: craft.craftType,
-    attributes: {
-      maxlength: MAX_STRING_LENGTH
-    },
-    formGroup: {
-      classes: "govuk-!-margin-bottom-0"
-    }
-  }) }}
-  {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
-</div>
+  <div class="govuk-!-margin-bottom-6">
+    {{ govukInput({
+      id: "registration",
+      name: "registration",
+      classes: "govuk-input--width-10",
+      label: {
+        text: __('field_aircraft_registration')
+      },
+      hint: {
+        text: __('field_aircraft_registration_hint')
+      },
+      errorMessage: (
+        errors | containsError('registration')
+      ),
+      value: craft.registration,
+      attributes: {
+        maxlength: MAX_REGISTRATION_LENGTH
+      },
+      formGroup: {
+        classes: "govuk-!-margin-bottom-0"
+      }
+    }) }}
+    {{ m.character_count_hint('registration', MAX_REGISTRATION_LENGTH) }}
+  </div>
+  <div class="govuk-!-margin-bottom-6">
+    {{ govukInput({
+      id: "craftType",
+      name: "craftType",
+      classes: "govuk-input--width-20",
+      label: {
+        text: __('field_aircraft_type')
+      },
+      hint: {
+        text: __('field_aircraft_type_hint')
+      },
+      errorMessage: (
+        errors | containsError('craftType')
+      ),
+      value: craft.craftType,
+      attributes: {
+        maxlength: MAX_STRING_LENGTH
+      },
+      formGroup: {
+        classes: "govuk-!-margin-bottom-0"
+      }
+    }) }}
+    {{ m.character_count_hint('craftType', MAX_STRING_LENGTH) }}
+  </div>
 
-  {% set legendLabel = __('field_aircraft_base')%}
-  {% set warningMessage = undefined%}
-  {% set isPortChoice = (craft.portChoice === 'Yes' or craft.portChoice is undefined)%}
-  {% set portCode = craft.craftBasePort%}
-  {% set lat = craft.craftBaseLat%}
-  {% set long = craft.craftBaseLong%}
-  {% set prefix = 'craftBase'%}
+  {% set legendLabel = __('field_aircraft_base') %}
+  {% set warningMessage = undefined %}
+  {% set isPortChoice = (craft.portChoice === 'Yes' or craft.portChoice is undefined) %}
+  {% set portCode = craft.craftBasePort %}
+  {% set lat = craft.craftBaseLat %}
+  {% set long = craft.craftBaseLong %}
+  {% set prefix = "craftBase" %}
 
   {{ location(legendLabel,
-                warningMessage,
-                isPortChoice,
-                portCode,
-                lat,
-                long,
-                prefix,
-                errors,
-                __) }}
+    warningMessage,
+    isPortChoice,
+    portCode,
+    lat,
+    long,
+    prefix,
+    errors,
+    __) }}
 
 {% endmacro %}
 
 {% macro location(legendLabel, warningMessage, isPortChoice, portCode, lat, long, prefix, errors, __) %}
 
-    {# legendLabel:string html for legend contents#}
-    {# warningMessage:string text for any port warning hint#}
-    {# isPortChoice:bool -  is the location a port:true, or lat/long:false #}
-    {# portCode:string - the IATA or ICAO port code, if used  #}
-    {# lat:string - latitude in decimal  #}
-    {# long:string - latitude in decimal  #}
-    {# prefix:string - prefix to namespace form fields and similar. for arrival, departure, craft etc  #}
-    {# errors:array(Object) - error messages  #}
-    <div class="{{ m.form_group_class('portChoice', errors) }}">
-        <fieldset class="govuk-fieldset" aria-describedby="portChoice-hint">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                {{legendLabel | safe  }}
-            </legend>
-            <div id="portChoice-hint" class="govuk-hint govuk-!-margin-bottom-4">{{__('field_port_choice_hint')}}</div>
+  {# legendLabel:string html for legend contents#}
+  {# warningMessage:string text for any port warning hint#}
+  {# isPortChoice:bool -  is the location a port:true, or lat/long:false #}
+  {# portCode:string - the IATA or ICAO port code, if used  #}
+  {# lat:string - latitude in decimal  #}
+  {# long:string - latitude in decimal  #}
+  {# prefix:string - prefix to namespace form fields and similar. for arrival, departure, craft etc  #}
+  {# errors:array(Object) - error messages  #}
+  <div class="{{ m.form_group_class('portChoice', errors) }}">
+    <fieldset class="govuk-fieldset" aria-describedby="portChoice-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ legendLabel | safe }}</legend>
+      <div id="portChoice-hint" class="govuk-hint govuk-!-margin-bottom-4">{{ __('field_port_choice_hint') }}</div>
 
-            {{ m.error_message('portChoice', errors, __) }}
+      {{ m.error_message('portChoice', errors, __) }}
 
-            {{ govukRadios({
-              idPrefix: "portChoice",
-              name: "portChoice",
-              classes: "govuk-radios--conditional",
-              value: "Yes" if isPortChoice else "No",
+      {{ govukRadios({
+        idPrefix: "portChoice",
+        name: "portChoice",
+        classes: "govuk-radios--conditional",
+        value: "Yes" if isPortChoice else "No",
 
-              items: [
-                {
-                  value: "Yes",
-                  text: __('field_choice_yes'),
-                  conditional: {
-                    html: port_choice(portCode, prefix, errors, __)
-                  }
-                },
-                {
-                  value: "No",
-                  text: __('field_choice_no'),
-                  conditional: {
-                    html:
-                      '<div class="govuk-form-group">' ~
-                        m.hint(prefix + "Coordinates", __('field_coordinate_hint')) ~
-                      '</div>' ~
-                      lat_long(lat, long, prefix, errors, __)
-                  }
-                }
-              ]
-            }) }}
-            {{warningMessage}}
-        </fieldset>
-    </div>
+        items: [
+          {
+            value: "Yes",
+            text: __('field_choice_yes'),
+            conditional: {
+              html: port_choice(portCode, prefix, errors, __)
+            }
+          },
+          {
+            value: "No",
+            text: __('field_choice_no'),
+            conditional: {
+              html:
+              '<div class="govuk-form-group">' ~
+              m.hint(prefix + "Coordinates", __('field_coordinate_hint')) ~
+              '</div>' ~
+              lat_long(lat, long, prefix, errors, __)
+            }
+          }
+        ]
+      }) }}
+      {{ warningMessage }}
+    </fieldset>
+  </div>
 
 {% endmacro %}
 
 {% macro port_choice(portCode, prefix, errors, __) %}
 
-    <div id="port-prefix-{{prefix}}" class="{{ m.form_group_class(prefix + 'Port', errors) }}" data-prefix="{{prefix}}" >
-        <label id="{{ prefix }}Port-label" class="govuk-label" for="{{ prefix }}Port">{{__('field_port_code')}}</label>
-        {{ m.hint(prefix + 'Port', __('field_port_hint')) }}
-        {{ m.error_message(prefix + 'Port', errors, __) }}
-        <select id="{{ prefix }}Port" name="{{ prefix }}Port" class="govuk-select" value="{{ portCode }}" aria-labelledby="{{ prefix }}Port-label" aria-describedby="{{ prefix }}Port-hint{{ ' ' + prefix  +'Port-error' if errors | containsError(prefix + 'Port') }}">
-            <option value=""></option>
-            {% for airport in airportList | sort(attribute = 'label') %}
-                <option value="{{ airport.id }}" {{ 'selected=selected' if portCode in [airport.id, airport.id2] }}>{{ airport.label }}</option>
-            {% endfor %}
-        </select>
-    </div>
+  <div id="port-prefix-{{ prefix }}"
+       class="{{ m.form_group_class(prefix + 'Port', errors) }}"
+       data-prefix="{{ prefix }}">
+    <label id="{{ prefix }}Port-label"
+           class="govuk-label"
+           for="{{ prefix }}Port">{{ __('field_port_code') }}</label>
+    {{ m.hint(prefix + 'Port', __('field_port_hint')) }}
+    {{ m.error_message(prefix + 'Port', errors, __) }}
+    <select id="{{ prefix }}Port"
+            name="{{ prefix }}Port"
+            class="govuk-select"
+            value="{{ portCode }}"
+            aria-labelledby="{{ prefix }}Port-label"
+            aria-describedby="{{ prefix }}Port-hint{{ ' ' + prefix  +'Port-error' if errors | containsError(prefix + 'Port') }}">
+      <option value=""></option>
+      {% for airport in airportList | sort(attribute = 'label') %}
+        <option value="{{ airport.id }}"
+                {{ 'selected=selected' if portCode in [airport.id, airport.id2] }}>{{ airport.label }}</option>
+      {% endfor %}
+    </select>
+  </div>
 
 {% endmacro %}
 
 {% macro lat_long(lat, long, prefix, errors, __) %}
 
-    <div class="govuk-form-group {{ m.form_group_class(prefix + 'Lat', errors) }}">
-        <label class="govuk-label" for="{{ prefix }}Lat">{{__('field_latitude')}}</label>
-        {{ m.hint(prefix + 'Latitude', __('field_latitude_hint')) }}
-        {{ m.error_message(prefix + 'Lat', errors, __) }}
-        <input class="govuk-input lat-long" id="{{ prefix }}Lat" name="{{ prefix }}Lat" type="text"  maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -180 to 180" value="{{ lat }}">
-    </div>
-    <div class="govuk-form-group {{ m.form_group_class(prefix + 'Long', errors) }}">
-        <label class="govuk-label" for="{{ prefix }}Long">{{__('field_longitude')}}</label>
-        {{ m.hint(prefix + 'Longitude', __('field_longitude_hint')) }}
-        {{ m.error_message(prefix + 'Long', errors, __) }}
-        <input class="govuk-input lat-long" id="{{ prefix }}Long" name="{{ prefix }}Long" type="text" maxlength="11" pattern="^[+\-]?\d*\.?\d{6}$" title="Enter a numeric value with 6 decimal places ranging from -90 to 90" value="{{ long }}">
-    </div>
+  <div class="govuk-form-group {{ m.form_group_class(prefix + 'Lat', errors) }}">
+    <label class="govuk-label" for="{{ prefix }}Lat">{{ __('field_latitude') }}</label>
+    {{ m.hint(prefix + 'Latitude', __('field_latitude_hint')) }}
+    {{ m.error_message(prefix + 'Lat', errors, __) }}
+    <input class="govuk-input lat-long"
+           id="{{ prefix }}Lat"
+           name="{{ prefix }}Lat"
+           type="text"
+           maxlength="11"
+           pattern="^[+\-]?\d*\.?\d{6}$"
+           title="Enter a numeric value with 6 decimal places ranging from -180 to 180"
+           value="{{ lat }}">
+  </div>
+  <div class="govuk-form-group {{ m.form_group_class(prefix + 'Long', errors) }}">
+    <label class="govuk-label" for="{{ prefix }}Long">{{ __('field_longitude') }}</label>
+    {{ m.hint(prefix + 'Longitude', __('field_longitude_hint')) }}
+    {{ m.error_message(prefix + 'Long', errors, __) }}
+    <input class="govuk-input lat-long"
+           id="{{ prefix }}Long"
+           name="{{ prefix }}Long"
+           type="text"
+           maxlength="11"
+           pattern="^[+\-]?\d*\.?\d{6}$"
+           title="Enter a numeric value with 6 decimal places ranging from -90 to 90"
+           value="{{ long }}">
+  </div>
 
 {% endmacro %}

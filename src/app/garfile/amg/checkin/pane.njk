@@ -4,21 +4,21 @@
 {% macro statusRow(person, statusCheckComplete) %}
   {% set status = person.amgCheckinStatus.name %}
   {% set checkin_code = person.amgCheckinResponseCode %}
-  {% if (status === 'Complete') %}
+  {% if (status === "Complete") %}
     {% set statustitle = __('amg_status_check_response_code_' + checkin_code) if checkin_code else '' %}
   {% else %}
-    {% set statustitle = '' %}
+    {% set statustitle = "" %}
   {% endif %}
-  {% if person.amgCheckinResponseCode === '0B' %}
-    {% set statusColor = 'no-record' %}
-  {% elif person.amgCheckinResponseCode === '0A' %}
-    {% set statusColor = 'valid-permission-to-travel' %}
-  {% elif person.amgCheckinResponseCode === '0Z' %}
-    {% set statusColor = 'authority-to-carry-granted' %}
-  {% elif person.amgCheckinResponseCode === '0T' %}
-    {% set statusColor = 'system-timeout' %}
+  {% if person.amgCheckinResponseCode === "0B" %}
+    {% set statusColor = "no-record" %}
+  {% elif person.amgCheckinResponseCode === "0A" %}
+    {% set statusColor = "valid-permission-to-travel" %}
+  {% elif person.amgCheckinResponseCode === "0Z" %}
+    {% set statusColor = "authority-to-carry-granted" %}
+  {% elif person.amgCheckinResponseCode === "0T" %}
+    {% set statusColor = "system-timeout" %}
   {% else %}
-    {% set statusColor = '' %}
+    {% set statusColor = "" %}
   {% endif %}
   {% set statustitle = statustitle %}
   <tr class="govuk-table__row">
@@ -29,33 +29,41 @@
         {% endif %}
       </div>
     </td>
-    <td class="govuk-table__cell govuk-!-vertical-align-top">{{ person.firstName }}
-      {{ person.lastName }}</td>
+    <td class="govuk-table__cell govuk-!-vertical-align-top">
+      {{ person.firstName }}
+      {{ person.lastName }}
+    </td>
     <td class="govuk-table__cell">
       <div>
         {% if statusColor %}
-          {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === '0') %}
-            {% if checkin_code === '0B' %}
+          {% if checkin_code | length and(checkin_code === travelPermissionCodes.NO_BOARD or checkin_code | first === "0") %}
+            {% if checkin_code === "0B" %}
               <p class="govuk-body">Check that this person has valid permission to travel to the UK.</p>
               <details class="govuk-details" data-module="govuk-details">
-                <summary
-                  class="govuk-details__summary"
-                  aria-controls="details-content-documents"
-                  aria-expanded="false"
-                  title="Checking Passport / Travel Documents">
+                <summary class="govuk-details__summary"
+                         aria-controls="details-content-documents"
+                         aria-expanded="false"
+                         title="Checking Passport / Travel Documents">
                   <span class="govuk-details__summary-text">Help with checking their permission to travel</span>
                 </summary>
-                <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
+                <div class="govuk-details__text"
+                     id="details-content-documents"
+                     aria-hidden="true">
                   <p class="govuk-body">
                     We have no record of a digital permission, for example an electronic travel authorisation (ETA) or electronic visa (eVisa), for this person.
                   </p>
                   <p class="govuk-body">Before travelling, you should check that they have one of the following:</p>
                   <ul class="govuk-body">
-                    <li>a physical permission to travel or exemption document, for example, a visa vignette or stamp in their passport
+                    <li>a physical permission to travel or exemption document, for example, a visa vignette or stamp in their passport</li>
+                    <li>
+                      a <a href="https://www.gov.uk/check-immigration-status"
+    target="_blank"
+    class="govuk-link">share code from their UKVI account (opens in new tab on GOV.UK)</a> that shows their digital permission to travel
                     </li>
-                    <li>a <a href="https://www.gov.uk/check-immigration-status" target="_blank" class="govuk-link">share code from their UKVI account (opens in new tab on GOV.UK)</a> that shows their digital permission to travel
-                    </li>
-                    <li>an <a class="govuk-link" href="https://www.gov.uk/check-eta" target="_blank">ETA linked to their passport (opens in new tab on GOV.UK)</a>
+                    <li>
+                      an <a class="govuk-link"
+    href="https://www.gov.uk/check-eta"
+    target="_blank">ETA linked to their passport (opens in new tab on GOV.UK)</a>
                     </li>
                   </ul>
                   <p class="govuk-body">
@@ -64,49 +72,54 @@
                   </p>
                 </div>
               </details>
-            {% elif(checkin_code === '0A') %}
+            {% elif(checkin_code === "0A") %}
               <p class="govuk-body">This person has digital permission and can travel to the UK.</p>
-            {% elif(checkin_code === '0Z') %}
+            {% elif(checkin_code === "0Z") %}
               <p class="govuk-body">Check if this person needs permission to travel to the UK.</p>
               <details class="govuk-details" data-module="govuk-details">
-                <summary
-                  class="govuk-details__summary"
-                  aria-controls="details-content-documents"
-                  aria-expanded="false"
-                  title="Checking Passport / Travel Documents">
+                <summary class="govuk-details__summary"
+                         aria-controls="details-content-documents"
+                         aria-expanded="false"
+                         title="Checking Passport / Travel Documents">
                   <span class="govuk-details__summary-text">Help with checking if they need permission to travel</span>
                 </summary>
-                <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
+                <div class="govuk-details__text"
+                     id="details-content-documents"
+                     aria-hidden="true">
                   <p class="govuk-body">We have no record of a digital permission, for example an electronic travel authorisation (ETA) or electronic visa (eVisa), for this person.</p>
                   <p class="govuk-body">For British and Irish nationals, their valid passport is their permission to travel.</p>
-                  <p class="govuk-body">For all other nationals, you should check if they need permission to travel to the UK. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers" target="_blank" class="govuk-link">UK visa requirements (opens in new tab on GOV.UK).</a></p>
+                  <p class="govuk-body">For all other nationals, you should check if they need permission to travel to the UK. Check <a href="https://www.gov.uk/government/publications/uk-visa-requirements-list-for-carriers"
+    target="_blank"
+    class="govuk-link">UK visa requirements (opens in new tab on GOV.UK).</a></p>
                   <p class="govuk-body">
-                   If they have no exemption or proof of physical or digital permission, you can contact the Home Office for advice by calling the Border Force Carrier Support Hub on 0300 369 0610 or +44 204 619 6020 from outside the UK.
-                   </p>
+                    If they have no exemption or proof of physical or digital permission, you can contact the Home Office for advice by calling the Border Force Carrier Support Hub on 0300 369 0610 or +44 204 619 6020 from outside the UK.
+                  </p>
                 </div>
               </details>
-            {% elif(checkin_code === '0T') %}
+            {% elif(checkin_code === "0T") %}
               <p class="govuk-body">You should resubmit their digital permission to travel checks.</p>
               <details class="govuk-details" data-module="govuk-details">
-                <summary
-                  class="govuk-details__summary"
-                  aria-controls="details-content-documents"
-                  aria-expanded="false"
-                  title="Checking Passport / Travel Documents">
+                <summary class="govuk-details__summary"
+                         aria-controls="details-content-documents"
+                         aria-expanded="false"
+                         title="Checking Passport / Travel Documents">
                   <span class="govuk-details__summary-text">Help with what to do for system time out</span>
                 </summary>
-                <div class="govuk-details__text" id="details-content-documents" aria-hidden="true">
-                  <p class="govuk-body">If the GAR was submitted at 2 hours before the expected time of departure, no resubmission
+                <div class="govuk-details__text"
+                     id="details-content-documents"
+                     aria-hidden="true">
+                  <p class="govuk-body">
+                    If the GAR was submitted at 2 hours before the expected time of departure, no resubmission
                     attempts are required. If the GAR was submitted earlier and on receipt of a ‘system time out’ response for a passenger,
                     a resubmission attempt for that passenger should be made, this should result in the receipt of a successful permission
-                    to travel response.</p>
+                    to travel response.
+                  </p>
                   <p class="govuk-body">
                     If a 'system time out' response is received at or later than 2 hours before the expected time of departure, then the
                     passenger may be boarded. There will be no
-                    <a
-                      href="https://www.legislation.gov.uk/ukpga/1999/33/part/II/crossheading/passengers-without-proper-documents"
-                      target="_blank"
-                      class="govuk-link">section 40</a>
+                    <a href="https://www.legislation.gov.uk/ukpga/1999/33/part/II/crossheading/passengers-without-proper-documents"
+                       target="_blank"
+                       class="govuk-link">section 40</a>
                     liability if the passenger is subsequently found not to hold a valid permission to travel.
                   </p>
                 </div>
@@ -119,7 +132,7 @@
           {% endif %}
         {% else %}
           {% if not statusColor and not statusCheckComplete %}
-            <span class="loader-text-opacity"> Awaiting ...</span>
+            <span class="loader-text-opacity">Awaiting ...</span>
           {% endif %}
         {% endif %}
       </div>
@@ -127,51 +140,60 @@
   </tr>
 {% endmacro %}
 
-<form id="passenger-checkin" action="/garfile/amg/checkin?resubmitted={{resubmitted}}" class="form-group" method="post" role="form" >
-<table class="govuk-table" id="upt-responses">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header">Digital permission to travel</th>
-      <th scope="col" class="govuk-table__header">Passenger</th>
-      <th scope="col" class="govuk-table__header">What you need to do</th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    {% if statusCheckComplete %}  
-      <div id="banner0T" class="govuk-!-display-none" >
-        <div id="banner0T-content"> 
-            {{ banner.notificationBannerForResponseCodes(numberOf0TResponseCodes, numberOf0BResponseCodes, showImportantBanner) }}
-        </div>
-      </div>
-    {% else %}
+<form id="passenger-checkin"
+      action="/garfile/amg/checkin?resubmitted={{ resubmitted }}"
+      class="form-group"
+      method="post"
+      role="form">
+  <table class="govuk-table" id="upt-responses">
+    <thead class="govuk-table__head">
       <tr class="govuk-table__row">
-        <td class="govuk-table__cell">
-          <div id="spinner" title="loading..." class="status-disc spinner"></div>
-        </td>
-        <td class="govuk-table__cell loader-text-opacity" colspan="2">Awaiting Permission to Travel responses...</td>
+        <th scope="col" class="govuk-table__header">Digital permission to travel</th>
+        <th scope="col" class="govuk-table__header">Passenger</th>
+        <th scope="col" class="govuk-table__header">What you need to do</th>
       </tr>
-    {% endif %}
-    {% for person in garpeople.items %}
-      {{ statusRow(person, statusCheckComplete) }}
-    {% endfor %}
-  </tbody>
-</table>
- <input type="hidden" name="resubmitted" value="{{resubmitted}}" />
- {{ pagination.build(pages, {resubmitted: resubmitted,   initialSubmit:'yes'  if initialSubmit })}}
+    </thead>
+    <tbody class="govuk-table__body">
+      {% if statusCheckComplete %}
 
-<input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <div id="banner0T" class="govuk-!-display-none">
+          <div id="banner0T-content">
+            {{ banner.notificationBannerForResponseCodes(numberOf0TResponseCodes, numberOf0BResponseCodes, showImportantBanner) }}
+          </div>
+        </div>
+      {% else %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <div id="spinner" title="loading..." class="status-disc spinner"></div>
+          </td>
+          <td class="govuk-table__cell loader-text-opacity" colspan="2">Awaiting Permission to Travel responses...</td>
+        </tr>
+      {% endif %}
+      {% for person in garpeople.items %}
+        {{ statusRow(person, statusCheckComplete) }}
+      {% endfor %}
+    </tbody>
+  </table>
+  <input type="hidden" name="resubmitted" value="{{ resubmitted }}" />
+  {{ pagination.build(pages, {resubmitted: resubmitted, initialSubmit:'yes' if initialSubmit }) }}
+
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 </form>
 
 <form action="/garfile/review" method="post">
   <h2 class="govuk-heading-m">Declaration</h2>
   <p class="govuk-body-m">{{ __('submit_gar_caption') }}</p>
-  <input id='review-submit' type="submit" class="govuk-button" value="{{ __('amg_check_form_submit') }}">
-    <input type="hidden" name="statuscheck" value="true"/>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-  </form>
-  <form id="cancel-form" action="/garfile/view" method="post" role="form">
-    <button type="submit" id="review-exit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-      {{ __('review_gar_exit') }}
-    </button>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-  </form>
+  <input id="review-submit"
+         type="submit"
+         class="govuk-button"
+         value="{{ __('amg_check_form_submit') }}">
+  <input type="hidden" name="statuscheck" value="true" />
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+</form>
+<form id="cancel-form" action="/garfile/view" method="post" role="form">
+  <button type="submit"
+          id="review-exit"
+          class="govuk-button govuk-button--secondary"
+          data-module="govuk-button">{{ __('review_gar_exit') }}</button>
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+</form>
