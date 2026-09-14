@@ -1,19 +1,20 @@
 @media print {
-    header, footer  {
-        display:none;
-    }
-    .govuk-service-navigation{
-        display: none;
-    }
-    #display-manifest {
-        display:none;
-    }
+  header,
+  footer {
+    display: none;
+  }
+  .govuk-service-navigation {
+    display: none;
+  }
+  #display-manifest {
+    display: none;
+  }
 
-    .govuk-phase-banner{
-        display:none;
-    }
+  .govuk-phase-banner {
+    display: none;
+  }
 
-    .govuk-back-link{
-        display:none;
-    }
+  .govuk-back-link {
+    display: none;
+  }
 }
