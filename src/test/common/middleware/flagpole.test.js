@@ -16,6 +16,7 @@ describe('Flagpole Middleware', () => {
   beforeEach(() => {
     chai.use(sinonChai);
 
+    req = {};
     res = {
       redirect: sinon.spy(),
     };
