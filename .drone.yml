@@ -25,6 +25,14 @@ steps:
       - npm install
       - npm run check
 
+  - name: unused-code-scan
+    pull: if-not-exists
+    image: node:24.19-alpine3.23
+    commands:
+      - cd src
+      - npm install
+      - npx knip
+
   - name: build
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest
@@ -33,6 +41,7 @@ steps:
     depends_on:
       - linting-formatting
       - unit-test
+      - unused-code-scan
 
   - name: publish-to-ecr
     image: plugins/ecr
