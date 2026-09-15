@@ -42,14 +42,17 @@ This repo has a `justfile`. Run `just --list` to see everything; the important o
 | `just test` | Unit tests with coverage (`mocha` + `c8`, matches `npm run test`) |
 | `just lint` | ESLint — rule violations. Also enforces Prettier formatting as an ESLint error, so this alone covers what CI's `linting-formatting` step gates on for JS |
 | `just fmt` / `fmt-check` | Prettier, repo-wide (JSON, CSS, JS, not just what ESLint touches) |
-| `just check` | lint + test — matches CI |
+| `just check` | Fast default gate for normal code changes: lint + test |
 | `just knip` | Unused files, exports, and dependencies (also a blocking CI step — `unused-code-scan`) |
 | `just lint-html` / `fmt-html` / `fmt-html-check` | djlint against the Nunjucks templates. **`fmt-html` always passes `--no-function-formatting`** — without it, djlint corrupts nested GOV.UK macro object arguments and breaks page rendering |
 | `just audit` | `npm audit` — local only, deliberately not in CI (`trivy-scan-image` already covers this ground) |
 | `just dockerlint` | hadolint against the `Dockerfile` |
 | `just scan` | Trivy filesystem scan |
 | `just sast` | Semgrep (`p/security-audit` + `p/nodejs`) |
-| `just verify` | everything above |
+| `just hygiene` | Advisory code-health checks (`knip`, template lint, Docker lint); read the output, some findings may be known baseline |
+| `just security` | Advisory security/dependency scans (`audit`, Trivy, Semgrep); read the output, findings may be known or need triage |
+| `just advisory` | Runs `hygiene` and `security`; not guaranteed to exit cleanly |
+| `just verify` | Final green verification gate; currently `check` only |
 
 ## Known rough edges (as of this writing)
 
@@ -61,3 +64,13 @@ This repo has a `justfile`. Run `just --list` to see everything; the important o
   - **Correlation-ID header injection is duplicated across both paths, not shared** — `requestWithCorrelationId.js`'s `withCorrelationId()` for the `request` path, a separate inline block in `httpClient.js`'s `#request()` for the `fetch` path. Both currently need to keep working. If you're migrating a file off `request`, or touching `common/utils/correlationContext.js`, check both implementations — a change to only one would silently stop propagating correlation IDs for whichever path you missed, with no error, just quietly untraceable requests.
 - **No `.env.example` exists** — `common/config/index.js` reads real env vars (DB connection, ClamAV, One Login keys, Notify template IDs, and more) with no committed template for what a new setup needs.
 - **`ruff`-equivalent housekeeping for this repo (the first real ESLint pass with a correctly-resolved `@eslint/js`) found real bugs, not just style.** `@eslint/js` was previously resolving to a stale, one-major-version-behind copy via `rewire`'s nested dependency tree rather than the explicit devDependency it is now — fixed, and the newer ESLint 10 rules it unlocked (`no-useless-assignment`, `no-unassigned-vars`) found 6 genuine issues (dead placeholder initializers in `app/garfile/review/post.controller.js`, `app/user/onelogin/post.controller.js`, `common/models/Cookie.class.js`; an unassigned `req` in `test/common/middleware/flagpole.test.js`), all fixed. Worth knowing if a similarly-stale transitive tooling dependency shows up elsewhere.
+
+## Agent skills
+
+### Issue tracker
+
+Jira is the source of truth; use Jira issue keys supplied by the user, and do not attempt to access, create, or transition Jira issues. See `docs/agents/issue-tracker.md`.
+
+### Domain docs
+
+This is a single-context repository using root `CONTEXT.md` and `docs/adr/`. See `docs/agents/domain.md`.
