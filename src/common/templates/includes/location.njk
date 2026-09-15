@@ -137,7 +137,7 @@
             class="govuk-select"
             value="{{ portCode }}"
             aria-labelledby="{{ prefix }}Port-label"
-            aria-describedby="{{ prefix }}Port-hint{{ ' ' + prefix  +'Port-error' if errors | containsError(prefix + 'Port') }}">
+            aria-describedby="{{ prefix }}Port-hint{{ ' ' + prefix + 'Port-error' if errors | containsError(prefix + 'Port') }}">
       <option value=""></option>
       {% for airport in airportList | sort(attribute = 'label') %}
         <option value="{{ airport.id }}"
