@@ -32,13 +32,11 @@
           text: __('supporting_documents_warning')
         }) }}
 
-        <p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>{{ __('supporting_documents_list_1') }}</li>
-            <li>{{ __('supporting_documents_list_2') }} {{ max_num_files }} {{ __('supporting_documents_list_4') }}</li>
-            <li>{{ __('supporting_documents_list_3') }}</li>
-          </ul>
-        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>{{ __('supporting_documents_list_1') }}</li>
+          <li>{{ __('supporting_documents_list_2') }} {{ max_num_files }} {{ __('supporting_documents_list_4') }}</li>
+          <li>{{ __('supporting_documents_list_3') }}</li>
+        </ul>
 
         <div class="govuk-form-group {{ m.form_group_class('file', errors) }}">
           <label class="govuk-label govuk-label--m" for="file">{{ __('heading_upload_file') }}</label>
@@ -120,6 +118,5 @@
         </p>
       </form>
     </div>
-  </div>
   </div>
 {% endblock %}

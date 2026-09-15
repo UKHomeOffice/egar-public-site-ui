@@ -33,7 +33,6 @@
     </div>
     <div id="pane">{% include "app/garfile/amg/checkin/pane.njk" %}</div>
   </div>
-  </div>
   <input type="hidden" value="{{ resubmitted }}" id="resubmitted" />
   <form id="reSubmitGarForm" action="/garfile/review" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
