@@ -4,55 +4,64 @@
 {% import "common/templates/includes/pagination.njk" as pagination %}
 
 {% block pageTitle %}
-	Manage responsible person | Submit a General Aviation Report (GAR)
+  Manage responsible person | Submit a General Aviation Report (GAR)
 {% endblock %}
 
-{% set active = '/resperson' %}
+{% set active = "/resperson" %}
 
 {% block content %}
-<script type="text/javascript" src="/javascripts/includes/resperson.js"></script>
+  <script src="/javascripts/includes/resperson.js"></script>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
       <h1 class="govuk-heading-xl">{{ __('heading_responsible_person') }}</h1>
-      <p class="govuk-body-l">{{__('responsible_person_caption')}}</p>
-      <p class="govuk-body-l">{{__('res_person_sub_caption')}}</p>
-      <p class="govuk-body-m">Search for responsible person </p>
-      <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2" id="resperson-search" name="resperson-search" type="text" placeholder="Search">
+      <p class="govuk-body-l">{{ __('responsible_person_caption') }}</p>
+      <p class="govuk-body-l">{{ __('res_person_sub_caption') }}</p>
+      <p class="govuk-body-m">Search for responsible person</p>
+      <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2"
+             id="resperson-search"
+             name="resperson-search"
+             type="text"
+             placeholder="Search">
     </div>
 
     <div class="govuk-grid-column-full">
-      <p class="govuk-body-s">{{__('person_sort')}}</p>
+      <p class="govuk-body-s">{{ __('person_sort') }}</p>
       <form id="responsiblePersonId" action="/resperson" method="post">
         <table class="govuk-table" id="res_person_table">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <th class="govuk-table__header" id="surname" scope="col">{{__('field_surname')}}</th>
-              <th class="govuk-table__header" id="given_name" scope="col">{{__('field_given_name')}}</th>
-              <th class="govuk-table__header" id="email" scope="col">{{__('field_email')}}</th>
-              <th class="govuk-table__header" scope="col">{{__('table_action')}}</th>
+              <th class="govuk-table__header" id="surname" scope="col">{{ __('field_surname') }}</th>
+              <th class="govuk-table__header" id="given_name" scope="col">{{ __('field_given_name') }}</th>
+              <th class="govuk-table__header" id="email" scope="col">{{ __('field_email') }}</th>
+              <th class="govuk-table__header" scope="col">{{ __('table_action') }}</th>
             </tr>
           </thead>
           <tbody class="govuk-table__body" id="resPerson_table_row">
             {% if resPersons | length %}
               {% for resPerson in resPersons %}
-                  <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">
-                      <button id="edit-edit_reponsiblePerson-{{ loop.index }}" class="govuk-button--link"
-                        title="Edit details for {{ resPerson.responsibleGivenName }} {{ resPerson.responsibleSurname }}"
-                        formaction="resperson/edit" formmethod="get"
-                        name="editResponsiblePerson" value="{{resPerson.responsiblePersonId}}">{{resPerson.responsibleSurname}}
-                      </button>
-                    </td>
-                    <td class="govuk-table__cell" scope="row">{{resPerson.responsibleGivenName}}</td>
-                    <td class="govuk-table__cell">{{resPerson.responsibleEmail}}</td>
-                    <td class="govuk-table__cell ">
-                      <button id="delete_responsible_person_{{ loop.index }}"
-                        class="govuk-button govuk-button--warning govuk-!-margin-bottom-0" name="deleteResponsiblePerson"
-                        formaction="/resperson/delete" formmethod="get"
-                        value="{{resPerson.responsiblePersonId}}">{{__('table_delete')}}
-                      </button>
-                    </td>
+                <tr class="govuk-table__row">
+                  <td class="govuk-table__cell">
+                    <button id="edit-edit_reponsiblePerson-{{ loop.index }}"
+                            type="submit"
+                            class="govuk-button--link"
+                            title="Edit details for {{ resPerson.responsibleGivenName }} {{ resPerson.responsibleSurname }}"
+                            formaction="resperson/edit"
+                            formmethod="get"
+                            name="editResponsiblePerson"
+                            value="{{ resPerson.responsiblePersonId }}">{{ resPerson.responsibleSurname }}</button>
+                  </td>
+                  <td class="govuk-table__cell" scope="row">{{ resPerson.responsibleGivenName }}</td>
+                  <td class="govuk-table__cell">{{ resPerson.responsibleEmail }}</td>
+                  <td class="govuk-table__cell">
+                    <button id="delete_responsible_person_{{ loop.index }}"
+                            type="submit"
+                            class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
+                            name="deleteResponsiblePerson"
+                            formaction="/resperson/delete"
+                            formmethod="get"
+                            value="{{ resPerson.responsiblePersonId }}">{{ __('table_delete') }}</button>
+                  </td>
                 </tr>
               {% endfor %}
             {% else %}
@@ -60,19 +69,23 @@
             {% endif %}
           </tbody>
         </table>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       </form>
+    </div>
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+    </div>
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-l">{{ __('res_person_add') }}</h2>
+      <p class="govuk-body-l">{{ __('res_person_add_caption') }}</p>
+      <a id="add-person"
+         href="/resperson/add"
+         role="button"
+         draggable="false"
+         class="govuk-button">{{ __('title_add_res_person') }}</a>
+    </div>
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+    </div>
   </div>
-  <div class="govuk-grid-column-full">
-    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-  </div>
-  <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-l">{{__('res_person_add')}}</h2>
-    <p class="govuk-body-l">{{__('res_person_add_caption')}}</p>
-    <a id="add-person" href="/resperson/add" role="button" draggable="false" class="govuk-button">{{__('title_add_res_person')}}</a>
-  </div>
-  <div class="govuk-grid-column-full">
-    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-  </div>
-</div>
 {% endblock %}

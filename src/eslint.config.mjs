@@ -13,6 +13,7 @@ export default defineConfig([
       'public/javascripts/paginator.js',
       'public/javascripts/service-header.js',
       'public/javascripts/init-service-header.js',
+      'public/javascripts/dialog-polyfill.js',
     ],
     plugins: {
       js,

@@ -101,7 +101,7 @@ module.exports = async (req, res) => {
   let renderObj;
   let garfile;
   let garpeople;
-  let resubmittedGars = [];
+  let resubmittedGars;
 
   try {
     const responseValues = await Promise.all([

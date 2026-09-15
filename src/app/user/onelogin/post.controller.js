@@ -62,7 +62,7 @@ async function handleGivenNameSubmission(req, _res) {
     new ValidationRule(validator.notEmpty, 'userLname', lastName, 'Enter your family name'),
   ];
 
-  let errors = [];
+  let errors;
 
   try {
     await validator.validateChains([fnameChain, lnameChain]);
@@ -99,7 +99,7 @@ async function handleConfirmNameSubmission(req, _res) {
     return [Outcome.DECLARATION_NOT_CHECKED, 'Declaration not checked', '/onelogin/register'];
   }
   const { email, firstName, lastName, sub } = req.session.step_data;
-  let resp = {};
+  let resp;
 
   try {
     const { tokenId } = await verificationApi.getUserInviteToken(email);

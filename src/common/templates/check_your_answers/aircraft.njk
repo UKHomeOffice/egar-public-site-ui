@@ -1,6 +1,6 @@
 <div id="aircraft"></div>
 {{ govukSummaryList({
-   card: {
+  card: {
     title: {
       text: __('heading_aircraft_details')
     },
@@ -20,4 +20,3 @@
     { key: { html: __('field_aircraft_base') }, value: { html: codeToAirfield(garfile.craftBase).label or '' } }
   ]
 }) }}
-
