@@ -33,6 +33,7 @@
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
                 <button id="view-{{ name }}-{{ loop.index }}"
+                        type="submit"
                         class="govuk-button--link"
                         name="garId"
                         value="{{ gar.garId }}">{{ gar.registration or __('value_aircraft_registration_null') }}</button>

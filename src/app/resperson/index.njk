@@ -43,6 +43,7 @@
                 <tr class="govuk-table__row">
                   <td class="govuk-table__cell">
                     <button id="edit-edit_reponsiblePerson-{{ loop.index }}"
+                            type="submit"
                             class="govuk-button--link"
                             title="Edit details for {{ resPerson.responsibleGivenName }} {{ resPerson.responsibleSurname }}"
                             formaction="resperson/edit"
@@ -54,6 +55,7 @@
                   <td class="govuk-table__cell">{{ resPerson.responsibleEmail }}</td>
                   <td class="govuk-table__cell">
                     <button id="delete_responsible_person_{{ loop.index }}"
+                            type="submit"
                             class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
                             name="deleteResponsiblePerson"
                             formaction="/resperson/delete"

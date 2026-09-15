@@ -73,6 +73,7 @@
                     <td class="govuk-table__cell multiple-choice--hod{% if person.isInvalid %} govuk-!-padding-left-2{% endif %}">
                       {% if person.isInvalid %}
                         <button id="edit-person-{{ loop.index }}"
+                                type="submit"
                                 class="govuk-button--link"
                                 title="Edit details for {{ person.firstName }} {{ person.lastName }}"
                                 name="editSavedPerson"
@@ -189,6 +190,7 @@
                     <td class="govuk-table__cell">{{ person.peopleType.name }}</td>
                     <td class="govuk-table__cell">
                       <button class="govuk-button--link"
+                              type="submit"
                               name="editPersonId"
                               value="{{ person.garPeopleId }}">Edit</button>
                     </td>

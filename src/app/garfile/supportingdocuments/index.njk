@@ -53,7 +53,7 @@
         </div>
 
         <p class="govuk-body-m">
-          <button id="upload" class="govuk-button">{{ __('button_upload_file') }}</button>
+          <button id="upload" type="submit" class="govuk-button">{{ __('button_upload_file') }}</button>
         </p>
 
         <h2 class="govuk-heading-m">{{ __('heading_uploaded_files') }}</h2>
@@ -79,6 +79,7 @@
                     <td class="govuk-table__cell">{{ __('field_file_status_done') }}</td>
                     <td class="govuk-table__cell">
                       <button class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
+                              type="submit"
                               name="deleteDocId"
                               value="{{ file.supportingDocumentId }}">{{ __('table_delete') }}</button>
                     </td>

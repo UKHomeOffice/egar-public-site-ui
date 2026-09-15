@@ -44,6 +44,7 @@
                   {# {% if cookie.getUserRole() != 'User' %} #}
                   <td class="govuk-table__cell" scope="row">
                     <button id="edit_craft_{{ loop.index }}"
+                            type="submit"
                             class="govuk-button--link"
                             name="editCraft"
                             value="{{ craft.craftId }}">{{ craft.registration }}</button>
@@ -56,6 +57,7 @@
                   {# {% if cookie.getUserRole() != 'User' %} #}
                   <td class="govuk-table__cell">
                     <button id="delete_craft_{{ loop.index }}"
+                            type="submit"
                             class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
                             name="deleteCraft"
                             value="{{ craft.craftId }}">{{ __('table_delete') }}</button>
