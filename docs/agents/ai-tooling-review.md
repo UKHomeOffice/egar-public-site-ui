@@ -14,6 +14,8 @@ This review deliberately excludes branch-structure and bundling concerns. It foc
 
 The `justfile` and `AGENTS.md` now label command tiers explicitly: `check` is the fast default gate, `verify` is a green-only final gate, `hygiene` and `security` hold advisory tools, and `advisory` runs those output-first checks without treating a non-zero result as unexpected.
 
+The Trivy `scan` recipe now skips `.env`/`.env.*` files so default agent runs avoid surfacing local live-config metadata while still scanning the repo tree for vulnerabilities, secrets, and misconfigurations.
+
 ## High-value changes to keep
 
 | Area | Evidence | Why it helps agents |
@@ -36,7 +38,7 @@ The `justfile` and `AGENTS.md` now label command tiers explicitly: `check` is th
 | `just dockerlint` | Failed on `Dockerfile:3` because `apk add curl` is unpinned. | Useful, but currently not green. Either fix the Dockerfile or document this as a known baseline failure. |
 | `just audit` | Failed with 3 vulnerabilities, including `request` and nested `uuid`. | Useful escalation check, but expected to fail until the `request` migration is complete. |
 | `just sast` | Completed and reported 6 findings, but exited 0. | Useful as advisory output, but misleading if agents assume command success means no findings. |
-| Bounded `trivy fs` spot-check | Reported Dockerfile issues and scanned local ignored `.env.dev`. | Valuable but risky/noisy as written. The recipe `trivy fs .` can expose local ignored secrets in output and should be constrained. |
+| Bounded `trivy fs` spot-check | Reported Dockerfile issues and scanned local ignored `.env.dev`. The default `scan` recipe now skips `.env`/`.env.*` files. | Valuable advisory scan; default env-file exclusion reduces the local-secret metadata risk. |
 
 ## Main problems to fix
 
@@ -48,15 +50,17 @@ The practical result is okay right now because ESLint includes `prettier/prettie
 
 **Recommendation:** change the wording to something like: "`just check` is the fast local gate: ESLint plus tests. CI additionally runs `npm run check`, which includes Prettier." Alternatively, update `just check` to include `fmt-check`.
 
-### 2. `just verify` currently aggregates checks that are expected to fail
+### 2. `just verify` has been narrowed to a green final gate
 
-`justfile:64` defines `verify: check knip lint-html dockerlint audit scan sast`. In practice, `lint-html`, `dockerlint`, and `audit` fail today. That makes `verify` a poor "full agent review" command because an agent cannot tell whether it introduced a failure or hit the existing baseline.
+The earlier `verify` recipe bundled green checks with advisory tools. It now runs only `check`, while `knip`, `lint-html`, `dockerlint`, `audit`, `scan`, and `sast` live under the labelled advisory tiers.
 
-**Recommendation:** split checks into tiers:
+That makes `verify` a dependable final gate again. Agents still need to read advisory output when they deliberately run `hygiene`, `security`, or `advisory`.
+
+**Recommendation:** keep this split:
 
 - `just check`: fast green default.
-- `just hygiene`: Knip, formatting, and maybe Docker linting once fixed.
-- `just security`: audit, Trivy, and Semgrep advisory checks.
+- `just hygiene`: Knip, template linting, and Docker linting.
+- `just security`: audit, Semgrep, and the env-file-skipping Trivy recipe.
 - `just verify`: only checks expected to pass on a clean branch.
 
 ### 3. Template linting is useful but not yet actionable enough
@@ -67,9 +71,9 @@ The practical result is okay right now because ESLint includes `prettier/prettie
 
 ### 4. Security tooling needs clearer semantics
 
-`just audit` fails, `just sast` reports blocking findings but exits 0, and Trivy can scan ignored local files such as `.env.dev`. These are valuable tools, but agents need to know whether findings are blocking, advisory, or expected baseline.
+`just audit` fails and `just sast` reports blocking findings but exits 0. Trivy remains advisory too, but the default recipe now skips `.env`/`.env.*` files so local live config is not scanned by ordinary agent runs. These are valuable tools, but agents need to know whether findings are blocking, advisory, or expected baseline.
 
-**Recommendation:** document expected behaviour per tool. For Trivy specifically, consider excluding local env files and dependency directories, or using a safer recipe such as scanning tracked files or container images rather than raw `trivy fs .`.
+**Recommendation:** document expected behaviour per tool. For Trivy specifically, keep the default env-file exclusion and consider scanning container images separately when production-like image risk is the goal.
 
 ### 5. External tool availability is not encoded
 
@@ -92,7 +96,7 @@ The practical result is okay right now because ESLint includes `prettier/prettie
 | Candidate | Recommendation |
 | --- | --- |
 | `just verify` as currently named | Change, not remove. The name implies a green final gate, but it currently includes known failing/advisory checks. |
-| `just scan: trivy fs .` | Change. As written, it can scan ignored local secrets and dependency folders. Make it safer or document it as manual-only. |
+| `just scan` | Keep as advisory. The recipe now skips `.env`/`.env.*` files to avoid scanning local live config by default. |
 | `just lint-html` in ordinary workflow | Downgrade until the baseline is clean or configured. |
 | Long stale-prone operational detail in `AGENTS.md` | Keep for now, but consider moving deeper detail into linked docs if it grows. The current content is still high-signal. |
 
@@ -106,4 +110,4 @@ Keep that follow-on config, but it should sit alongside a concise `AGENTS.md` "A
 
 Keep the AI-tooling direction. It is genuinely useful. The branch gives agents better context, better command discovery, and better warnings about legacy traps than the repo had before.
 
-Before considering it good, make the feedback-loop story sharper: make the default gate reliably green, clearly mark advisory/expensive checks, fix or baseline the checks that currently fail, and protect Trivy from scanning local ignored secrets. That would turn the work from "lots of tools and helpful notes" into a dependable agent operating model.
+Before considering it good, make the feedback-loop story sharper: make the default gate reliably green, clearly mark advisory/expensive checks, and fix or baseline the checks that currently fail. That would turn the work from "lots of tools and helpful notes" into a dependable agent operating model.

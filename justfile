@@ -52,9 +52,10 @@ audit:
 dockerlint:
     hadolint Dockerfile
 
-# Scan the working tree for vulnerabilities, secrets, and misconfig
+# Scan the working tree for vulnerabilities, secrets, and misconfig.
+# Skip local env files so agent/default runs do not surface live config metadata.
 scan:
-    trivy fs .
+    trivy fs --scanners vuln,secret,misconfig --skip-files ".env,.env.*,**/.env,**/.env.*" .
 
 # Static analysis for security and correctness bugs (not just style)
 sast:
