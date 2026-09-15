@@ -87,8 +87,6 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-
-        {# <form id="signform2" action="/garfile/view" method="post" role="form"> #}
         <h2 class="govuk-heading-l">{{ __('heading_manage_gars') }}</h2>
         <p class="govuk-body-m">{{ __('manage_gars_caption') }}</p>
         <div class="padding-bottom-10">
@@ -120,9 +118,9 @@
             {{ gar_summary_table('draft', draftGars.items, 'Draft', draftGars._meta) }}
             {{ gar_summary_table('submitted', submittedGars.items, 'Submitted', submittedGars._meta) }}
             {{ gar_summary_table('cancelled', cancelledGars.items, 'Cancelled', cancelledGars._meta) }}
-          </div>
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        </form>
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          </form>
+        </div>
       </div>
     </div>
     <script src="/javascripts/table.js"></script>
