@@ -44,8 +44,8 @@
   <div class="govuk-!-margin-top-6"> <!-- replaces margin-top: 55px -->
     <form method="post" action="/onelogin/register" class="prevent-double-click">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-      <div class="govuk-checkboxes govuk-checkboxes--small" id="nameDeclaration">
+      
+      <div class="govuk-checkboxes govuk-checkboxes--small">
         <div class="govuk-checkboxes__item">
           <input type="checkbox" class="govuk-checkboxes__input" id="nameConfirmDeclaration" name="nameConfirmDeclaration">
           <label class="govuk-label govuk-checkboxes__label" for="nameConfirmDeclaration">
@@ -53,7 +53,7 @@
           </label>
         </div>
       </div>
-
+      
       <div class="govuk-button-group govuk-!-margin-top-4">
         {{ govukButton({element: "button", text: "Create Account" }) }}
 
