@@ -53,9 +53,9 @@ dockerlint:
     hadolint Dockerfile
 
 # Scan the working tree for vulnerabilities, secrets, and misconfig.
-# Skip local env files so agent/default runs do not surface live config metadata.
+# Skip local env files and generated dependency dirs so default runs avoid local noise.
 scan:
-    trivy fs --scanners vuln,secret,misconfig --skip-files ".env,.env.*,**/.env,**/.env.*" .
+    trivy fs --scanners vuln,secret,misconfig --skip-files ".env,.env.*,**/.env,**/.env.*" --skip-dirs "node_modules,**/node_modules,venv,.venv,**/venv,**/.venv" .
 
 # Static analysis for security and correctness bugs (not just style)
 sast:

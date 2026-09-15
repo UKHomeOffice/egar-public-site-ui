@@ -14,7 +14,7 @@ This review deliberately excludes branch-structure and bundling concerns. It foc
 
 The `justfile` and `AGENTS.md` now label command tiers explicitly: `check` is the fast default gate, `verify` is a green-only final gate, `hygiene` and `security` hold advisory tools, and `advisory` runs those output-first checks without treating a non-zero result as unexpected.
 
-The Trivy `scan` recipe now skips `.env`/`.env.*` files so default agent runs avoid surfacing local live-config metadata while still scanning the repo tree for vulnerabilities, secrets, and misconfigurations.
+The Trivy `scan` recipe now skips `.env`/`.env.*` files plus generated dependency directories (`node_modules`, `venv`, `.venv`) so default agent runs avoid surfacing local live-config metadata and third-party install noise while still scanning the repo tree for vulnerabilities, secrets, and misconfigurations.
 
 ## High-value changes to keep
 
@@ -38,7 +38,7 @@ The Trivy `scan` recipe now skips `.env`/`.env.*` files so default agent runs av
 | `just dockerlint` | Failed on `Dockerfile:3` because `apk add curl` is unpinned. | Useful, but currently not green. Either fix the Dockerfile or document this as a known baseline failure. |
 | `just audit` | Failed with 3 vulnerabilities, including `request` and nested `uuid`. | Useful escalation check, but expected to fail until the `request` migration is complete. |
 | `just sast` | Completed and reported 6 findings, but exited 0. | Useful as advisory output, but misleading if agents assume command success means no findings. |
-| Bounded `trivy fs` spot-check | Reported Dockerfile issues and scanned local ignored `.env.dev`. The default `scan` recipe now skips `.env`/`.env.*` files. | Valuable advisory scan; default env-file exclusion reduces the local-secret metadata risk. |
+| Bounded `trivy fs` spot-check | Reported Dockerfile issues and scanned local ignored `.env.dev`. The default `scan` recipe now skips `.env`/`.env.*` files and generated dependency dirs. | Valuable advisory scan; default exclusions reduce local-secret metadata and third-party install noise. |
 
 ## Main problems to fix
 
@@ -71,9 +71,9 @@ That makes `verify` a dependable final gate again. Agents still need to read adv
 
 ### 4. Security tooling needs clearer semantics
 
-`just audit` fails and `just sast` reports blocking findings but exits 0. Trivy remains advisory too, but the default recipe now skips `.env`/`.env.*` files so local live config is not scanned by ordinary agent runs. These are valuable tools, but agents need to know whether findings are blocking, advisory, or expected baseline.
+`just audit` fails and `just sast` reports blocking findings but exits 0. Trivy remains advisory too, but the default recipe now skips `.env`/`.env.*` files and generated dependency dirs so local live config and third-party install trees are not scanned by ordinary agent runs. These are valuable tools, but agents need to know whether findings are blocking, advisory, or expected baseline.
 
-**Recommendation:** document expected behaviour per tool. For Trivy specifically, keep the default env-file exclusion and consider scanning container images separately when production-like image risk is the goal.
+**Recommendation:** document expected behaviour per tool. For Trivy specifically, keep the default env/dependency-dir exclusions and consider scanning container images separately when production-like image risk is the goal.
 
 ### 5. External tool availability is not encoded
 
@@ -96,7 +96,7 @@ That makes `verify` a dependable final gate again. Agents still need to read adv
 | Candidate | Recommendation |
 | --- | --- |
 | `just verify` as currently named | Change, not remove. The name implies a green final gate, but it currently includes known failing/advisory checks. |
-| `just scan` | Keep as advisory. The recipe now skips `.env`/`.env.*` files to avoid scanning local live config by default. |
+| `just scan` | Keep as advisory. The recipe now skips `.env`/`.env.*` files and generated dependency dirs to avoid scanning local live config and third-party install trees by default. |
 | `just lint-html` in ordinary workflow | Downgrade until the baseline is clean or configured. |
 | Long stale-prone operational detail in `AGENTS.md` | Keep for now, but consider moving deeper detail into linked docs if it grows. The current content is still high-signal. |
 

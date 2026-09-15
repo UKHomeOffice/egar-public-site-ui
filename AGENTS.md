@@ -47,7 +47,7 @@ This repo has a `justfile`. Run `just --list` to see everything; the important o
 | `just lint-html` / `fmt-html` / `fmt-html-check` | djlint against the Nunjucks templates. **`fmt-html` always passes `--no-function-formatting`** — without it, djlint corrupts nested GOV.UK macro object arguments and breaks page rendering |
 | `just audit` | `npm audit` — local only, deliberately not in CI (`trivy-scan-image` already covers this ground) |
 | `just dockerlint` | hadolint against the `Dockerfile` |
-| `just scan` | Trivy filesystem scan; skips local `.env` files by default |
+| `just scan` | Trivy filesystem scan; skips local `.env` files and generated dependency dirs |
 | `just sast` | Semgrep (`p/security-audit` + `p/nodejs`) |
 | `just hygiene` | Advisory code-health checks (`knip`, template lint, Docker lint); read the output, some findings may be known baseline |
 | `just security` | Advisory security/dependency scans (`audit`, Trivy, Semgrep); read the output, findings may be known or need triage |
