@@ -553,6 +553,16 @@ function longitude(value) {
   return regex.test(value);
 }
 
+/**
+ *
+ * @param {Array} latLng
+ * @return {Boolean}
+ */
+function isLatLngWithinUK(latLng) {
+  const [lat, lng] = latLng;
+  return false;
+}
+
 /*
 This function tries to allow:
 Local UK numbers beginning 0 e.g. 01225123456 or 07777777777

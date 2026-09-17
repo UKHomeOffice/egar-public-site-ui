@@ -154,7 +154,7 @@ module.exports.validations = (req) => {
         validator.notEmpty,
         'responsiblePostcode',
         responsiblePostcode,
-        'Enter a postcode for the responsible person.'
+        'Enter a postcode, area code or ZIP code for the responsible person'
       ),
       new ValidationRule(
         validator.validTextLength,
