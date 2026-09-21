@@ -7,7 +7,6 @@ module.exports.validations = (req) => {
 
   return [
     [
-      new ValidationRule(validator.notEmpty, 'orgName', orgName, 'Enter the name of the organisation'),
       new ValidationRule(
         validator.isValidOrganisationNameLength,
         'orgName',
@@ -20,6 +19,7 @@ module.exports.validations = (req) => {
         orgName,
         `Organisation name must only include letters, numbers, spaces and these special characters , ; ! / . ' ( ) @ & -`
       ),
+      new ValidationRule(validator.notEmpty, 'orgName', orgName, 'Enter the name of the organisation'),
     ],
   ];
 };
