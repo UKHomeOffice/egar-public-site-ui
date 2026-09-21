@@ -3,7 +3,7 @@ const validator = require('../../common/utils/validator');
 const { MAX_ORGANISATION_NAME_LENGTH } = require('../../common/config/index');
 
 module.exports.validations = (req) => {
-  const { orgName } = req.body;
+  const orgName = req.body.orgName.trim();
 
   return [
     [
