@@ -1,5 +1,4 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
@@ -9,7 +8,6 @@
 {% set active = "/home" %}
 
 {% block beforeContent %}
-
   <a href="/garfile/view" class="govuk-back-link">{{ __('nav_back') }}</a>
 {% endblock %}
 
@@ -30,9 +28,9 @@
             <th class="govuk-table__header" width="40%">CBP ID</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body" id="printGAR">
+        <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell" id="garID_title">{{ garfile.cbpId }}</td>
+            <td class="govuk-table__cell">{{ garfile.cbpId }}</td>
           </tr>
         </tbody>
       </table>
@@ -46,7 +44,7 @@
             <th class="govuk-table__header" width="30%">Arrival Date & Time</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body" id="printGAR">
+        <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
             <td class="govuk-table__cell" id="garID_title">{{ cookie.getGarId() }}</td>
             <td class="govuk-table__cell">{{ garfile.departureDate }}  {{ garfile.departureTime }}</td>
@@ -66,7 +64,7 @@
             <th class="govuk-table__header" width="30%">{{ __('field_arrival_port') }}</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body" id="printGAR">
+        <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">{{ garfile.registration }}</td>
             <td class="govuk-table__cell">{{ codeToAirfield(garfile.departurePort).label }}</td>
@@ -107,46 +105,43 @@
                 <td class="govuk-table__cell">{{ person.placeOfBirth }}</td>
                 <td class="govuk-table__cell">{{ person.peopleType.name }}</td>
               </tr>
-              </tr>
             {% endfor %}
           {% endif %}
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        </tbody>
+      </table>
+    </div>
 
-  <div class="govuk-grid-column-full">
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" width="25%">Responsible Person Name</th>
-          <th class="govuk-table__header" width="25%">Contact Number</th>
-          <th class="govuk-table__header" width="25%">{{ __('field_email') }}</th>
-          <th class="govuk-table__header" width="25%">Person Submitting GAR</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body" id="printGAR">
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">{{ garfile.responsibleGivenName }} {{ garfile.responsibleSurname }}</td>
-          <td class="govuk-table__cell">{{ garfile.responsibleContactNo }}</td>
-          <td class="govuk-table__cell">{{ garfile.responsibleEmail }}</td>
-          <td class="govuk-table__cell">{{ garfile.fixedBasedOperator }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="govuk-grid-column-full">
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
+    <div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" width="25%">Responsible Person Name</th>
+            <th class="govuk-table__header" width="25%">Contact Number</th>
+            <th class="govuk-table__header" width="25%">{{ __('field_email') }}</th>
+            <th class="govuk-table__header" width="25%">Person Submitting GAR</th>
+          </tr>
+        </thead>
         <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ garfile.responsibleGivenName }} {{ garfile.responsibleSurname }}</td>
+            <td class="govuk-table__cell">{{ garfile.responsibleContactNo }}</td>
+            <td class="govuk-table__cell">{{ garfile.responsibleEmail }}</td>
+            <td class="govuk-table__cell">{{ garfile.fixedBasedOperator }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" width="40%">Customs Intention</th>
             <th class="govuk-table__header" width="30%">Passenger Travelling Reason</th>
             <th class="govuk-table__header" width="30%">Visit Reason</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body" id="printGAR">
+        <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">{{ garfile.intentionValue }}</td>
             <td class="govuk-table__cell">{{ garfile.passengerTravellingReason }}</td>
@@ -155,4 +150,5 @@
         </tbody>
       </table>
     </div>
+  </div>
 {% endblock %}
