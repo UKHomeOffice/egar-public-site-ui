@@ -11431,11 +11431,11 @@
     "label": "Emmen Air Base (Switzerland) (LSME / EML)"
   },
   {
-    "id": "LSMF",
-    "id2": "LSMF",
+    "id": "LSZM",
+    "id2": "LSZM",
     "british": false,
     "crownDependency": false,
-    "label": "Mollis Airport (Switzerland) (LSMF)"
+    "label": "Mollis Airport (Switzerland) (LSZM)"
   },
   {
     "id": "LSMM",
@@ -56516,5 +56516,26 @@
     "british": true,
     "crownDependency": false,
     "label": "Kittyhawk Farm (United Kingdom) (EGKF)"
+  },
+  {
+    "id": "OMU",
+    "id2": "EDCJ",
+    "british": true,
+    "crownDependency": false,
+    "label": "Chemnitz Jahnsdorf Airport (Germany) (OMU / EDCJ)"
+  },
+  {
+    "id": "KVO",
+    "id2": "LYKV",
+    "british": true,
+    "crownDependency": false,
+    "label": "Kraljevo Morava Airport (Serbia) (KVO / LYKV)"
+  },
+  {
+    "id": "XCP",
+    "id2": "LFAD",
+    "british": true,
+    "crownDependency": false,
+    "label": "Compiegne Margny Airport (France) (XCP / LFAD)"
   }
 ]

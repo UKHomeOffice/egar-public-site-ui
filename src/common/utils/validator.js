@@ -700,7 +700,9 @@ function isValidOrganisationNameLength(value) {
 
 function isValidOrganisationName(input) {
   const alphaRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''()@&-]+$/;
-  return alphaRegex.test(input);
+  if (!isEmpty(input)) {
+    return alphaRegex.test(input);
+  }
 }
 
 /**

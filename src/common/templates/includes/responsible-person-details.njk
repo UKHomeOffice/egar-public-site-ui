@@ -79,22 +79,18 @@
       text: __("field_house_number"),
       classes: "govuk-label"
     },
-    hint: {
-      html:  m.character_count_hint('responsibleAddressLine1', MAX_STRING_LENGTH)
-    },
     value: responsiblePerson.responsibleAddressLine1,
-    attributes: { maxlength: MAX_STRING_LENGTH },
     errorMessage: errors | containsError('responsibleAddressLine1')
   }) }}
 
   {{ govukInput({
     id: "responsibleAddressLine2",
     name: "responsibleAddressLine2",
-    hint: {
-      html: m.character_count_hint('responsibleAddressLine2', MAX_STRING_LENGTH)
+    label: {
+      text: __("field_line_2_address"),
+      classes: "govuk-label"
     },
     value: responsiblePerson.responsibleAddressLine2,
-    attributes: { maxlength: MAX_STRING_LENGTH },
     errorMessage: errors | containsError('responsibleAddressLine2')
   }) }}
 
@@ -109,7 +105,6 @@
       html: m.character_count_hint('responsibleTown', MAX_STRING_LENGTH)
     },
     value: responsiblePerson.responsibleTown,
-    attributes: { maxlength: MAX_STRING_LENGTH },
     errorMessage: errors | containsError('responsibleTown')
   }) }}
 
@@ -119,7 +114,6 @@
     classes: "govuk-input--width-10",
     label: { text: __("field_postcode"), classes: "govuk-label" },
     value: responsiblePerson.responsiblePostcode,
-    attributes: { maxlength: MAX_POSTCODE_LENGTH },
     errorMessage: errors | containsError('responsiblePostcode')
   }) }}
 

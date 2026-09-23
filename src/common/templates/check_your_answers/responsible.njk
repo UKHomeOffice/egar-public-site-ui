@@ -6,22 +6,22 @@
 (garfile.responsiblePostcode or '') %}
 
 {% set rows = [
-  { key: { html: __('field_given_name') }, value: { html: garfile.responsibleGivenName or '' } },
-  { key: { html: __('field_surname') }, value: { html: garfile.responsibleSurname or '' } },
+  { key: { html: __('field_given_name') }, value: { text: garfile.responsibleGivenName or '' } },
+  { key: { html: __('field_surname') }, value: { text: garfile.responsibleSurname or '' } },
   { key: { html: __('field_address') }, value: { html: responsibleAddress } },
-  { key: { html: __('field_contact_details') }, value: { html: garfile.responsibleContactNo or '' } },
-  { key: { html: __('field_email') }, value: { html: garfile.responsibleEmail or '' } }
+  { key: { html: __('field_contact_details') }, value: { text: garfile.responsibleContactNo or '' } },
+  { key: { html: __('field_email') }, value: { text: garfile.responsibleEmail or '' } }
 ] %}
 
 {% if garfile.fixedBasedOperator != "Other" %}
   {% set _ = rows.push({
     key: { html: __('field_fbo_question') },
-    value: { html: garfile.fixedBasedOperator or '' }
+    value: { text: garfile.fixedBasedOperator or '' }
   }) %}
 {% else %}
   {% set _ = rows.push({
     key: { html: __('field_fbo_question_review') },
-    value: { html: garfile.fixedBasedOperatorAnswer | truncate(50) | default('') }
+    value: { text: garfile.fixedBasedOperatorAnswer | truncate(50) | default('') }
   }) %}
 {% endif %}
 
