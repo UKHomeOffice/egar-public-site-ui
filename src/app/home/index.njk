@@ -1,16 +1,14 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
 {% import "common/templates/includes/pagination.njk" as pagination %}
+
+{% set active = "/home" %}
+{% set statusName = statusTab| lower %}
 
 {% block pageTitle %}
   GAR | Dashboard
 {% endblock %}
 
-{% set active = "/home" %}
-
-{% set statusName = statusTab| lower %}
 {% macro gar_summary_table(name, gars, statusTab, pages) %}
   <section class="govuk-tabs__panel" id="gars-{{ name }}">
     <h2 class="govuk-heading-m">{{ name | capitalize }} GARs</h2>
@@ -27,7 +25,6 @@
             <th class="govuk-table__header" scope="col" width="20%">{{ __('field_submission_reference') }}</th>
           </tr>
         </thead>
-
         <tbody class="govuk-table__body">
           {% for gar in gars %}
             <tr class="govuk-table__row">
@@ -55,16 +52,14 @@
     {% else %}
       {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
     {% endif %}
-
     {{ pagination.build(pages, {status: statusTab, hash: '#gars-'~name }) }}
-
   </section>
 {% endmacro %}
 
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">{{ __('title') }}</h1>
+      <h1 class="govuk-heading-xl">{{ __('title') }}</h1>
       <p class="govuk-body-m">
         {{ __('create_gar_caption_1') }}
         <a class="govuk-link"
@@ -72,19 +67,12 @@
           <span class="govuk-visually-hidden">{{ __('heading_create_gar') }} </span>{{ __('create_gar_caption_link') }}</a>{{ __('create_gar_caption_2') }}
         </p>
         <p class="govuk-body-m">GARs must be submitted no earlier than 48 hours and no later than 2 hours before the expected time of departure.</p>
-
         <div class="govuk-!-margin-bottom-5"><a id="start_now"
    class="govuk-button"
    href="/garfile/home">Create a GAR</a></div>
       </div>
     </div>
-
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-      </div>
-    </div>
-
+    {{ m.section_break() }}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-l">{{ __('heading_manage_gars') }}</h2>
@@ -94,7 +82,6 @@
         </div>
       </div>
       <div class="govuk-grid-column-full">
-
         <div class="govuk-tabs" data-module="govuk-tabs">
           <ul class="govuk-tabs__list">
             <li class="govuk-tabs__list-item">
@@ -112,7 +99,6 @@
               </a>
             </li>
           </ul>
-
           <form id="signform2" action="/garfile/view" method="post" role="form">
 
             {{ gar_summary_table('draft', draftGars.items, 'Draft', draftGars._meta) }}

@@ -19,7 +19,7 @@
             class="form-group"
             method="post"
             role="form">
-        <h1 class="govuk-heading-l">{{ __('title_edit_account') }}</h1>
+        <h1 class="govuk-heading-xl">{{ __('title_edit_account') }}</h1>
 
         <div class="govuk-form-group {{ m.form_group_class('firstname', errors) }}">
           <label class="govuk-label" for="firstname">{{ __('field_given_name') }}</label>
@@ -57,7 +57,7 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       </form>
 
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {{ m.section_break() }}
     </div>
   </div>
 
