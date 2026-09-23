@@ -105,13 +105,10 @@
 
           {{ l.craft_details(craft, errors, __) }}
 
-          {# Start buttons #}
         </div>
         {{ m.submit_buttons('Add craft to GAR', csrfToken, __) }}
-      </form>
-      {# End buttons #}
-    </div>
+      </div>
+    </form>
     <div class="govuk-grid-column-two-thirds">{{ m.exit_without_saving(csrfToken, __) }}</div>
-
   </div>
 {% endblock %}
