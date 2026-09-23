@@ -53,23 +53,23 @@
               .items | length %}
               {% for craft in cookie.getSavedCraft().items %}
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">
-                      <div class="govuk-radios govuk-radios--inline">
-                        <div class="govuk-radios__item">
-                          <input class="govuk-radios__input"
-                                 id="aircraft_{{ loop.index }}"
-                                 name="addCraft"
-                                 type="radio"
-                                 value="{{ craft.craftId }}">
-                          <label class="govuk-label govuk-radios__label"
-                                 for="aircraft_{{ loop.index }}"></label>
-                        </div>
+                  <td class="govuk-table__cell">
+                    <div class="govuk-radios govuk-radios--inline">
+                      <div class="govuk-radios__item">
+                        <input class="govuk-radios__input"
+                               id="aircraft_{{ loop.index }}"
+                               name="addCraft"
+                               type="radio"
+                               value="{{ craft.craftId }}">
+                        <label class="govuk-label govuk-radios__label"
+                               for="aircraft_{{ loop.index }}"></label>
                       </div>
-                    </td>
-                    <td class="govuk-table__cell">{{ craft.registration }}</td>
-                    <td class="govuk-table__cell">{{ craft.craftType }}</td>
-                    <td class="govuk-table__cell">{{ craft.craftBase }}</td>
-                  </tr>
+                    </div>
+                  </td>
+                  <td class="govuk-table__cell">{{ craft.registration }}</td>
+                  <td class="govuk-table__cell">{{ craft.craftType }}</td>
+                  <td class="govuk-table__cell">{{ craft.craftBase }}</td>
+                </tr>
               {% endfor %}
             {% else %}
               {{ m.empty_table_message(__('aircraft_no_records'),3) }}

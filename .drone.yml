@@ -25,6 +25,17 @@ steps:
       - npm install
       - npm run check
 
+  - name: template-linting
+    pull: if-not-exists
+    image: node:24.19-alpine3.23
+    commands:
+      - apk add --no-cache py3-pip
+      - pip install --break-system-packages --no-cache-dir djlint==1.46.1
+      - cd src
+      - npm install
+      - djlint . --lint
+      - djlint . --check --no-function-formatting
+
   - name: unused-code-scan
     pull: if-not-exists
     image: node:24.19-alpine3.23
@@ -40,6 +51,7 @@ steps:
       - source ./ops/image_build.sh
     depends_on:
       - linting-formatting
+      - template-linting
       - unit-test
       - unused-code-scan
 

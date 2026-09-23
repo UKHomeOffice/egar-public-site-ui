@@ -130,13 +130,13 @@
       </tbody>
     </table>
   </div>
-{{ govukSummaryList({
-  rows: [
-    {
-      key: { html: __('is_military_flight') },
-      value: { text: 'Yes' if garfile.isMilitaryFlight else 'No'}
-    }
-  ]
-}) }}
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: { html: __('is_military_flight') },
+        value: { text: 'Yes' if garfile.isMilitaryFlight else 'No'}
+      }
+    ]
+  }) }}
 {% endcall %}
 <script src="/javascripts/garfile/amg/resubmitGar.js"></script>
