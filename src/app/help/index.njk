@@ -119,9 +119,11 @@
           </ul>
           <p class="govuk-body-m">
             For more information on checking passports and travel documents,
-            read the <a class="govuk-link"
-    href="https://assets.publishing.service.gov.uk/media/6876255188da2e5804bb6a26/2025_Guidance_on_examining_identity_documents_.pdf"
-    target="_blank">guidance on examining identity documents (opens in new tab on GOV.UK)</a>.
+            read the
+            <a class="govuk-link"
+              href="https://assets.publishing.service.gov.uk/media/6876255188da2e5804bb6a26/2025_Guidance_on_examining_identity_documents_.pdf"
+              target="_blank">guidance on examining identity documents (opens in new tab on GOV.UK)
+            </a>.
           </p>
         </div>
       </details>
@@ -246,43 +248,44 @@
             The submission of advance passenger information (API) enables the operation of the UK's <a class="govuk-link"
     href="https://www.gov.uk/government/publications/authority-to-carry-scheme-2023"
     target="_blank">Authority to Carry Scheme 2023 (opens in new tab on GOV.UK)</a>.
-          </div>
-        </details>
+          </p>
+        </div>
+      </details>
 
-        <h2 class="govuk-heading-m">Support</h2>
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary"
-                   aria-controls="details-content-general-support"
-                   aria-expanded="false">
-            <span class="govuk-details__summary-text">General support</span>
-          </summary>
-          <div class="govuk-details__text"
-               id="details-content-general-support"
-               aria-hidden="true">
-            <p class="govuk-body-m">
-              {% if isLoggedIn %}
-                For non-technical permission to travel related queries, please contact the UK Border Force Carrier Support Hub on 0300 369 0610 or +44 204 619 6020 from outside the UK.
-              {% else %}
-                For non-technical permission to travel related queries, please contact the UK Border Force Carrier Support Hub.
-              {% endif %}
-            </p>
-          </div>
-        </details>
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary"
-                   aria-controls="details-content-technical-support"
-                   aria-expanded="false">
-            <span class="govuk-details__summary-text">Technical support</span>
-          </summary>
-          <div class="govuk-details__text"
-               id="details-content-technical-support"
-               aria-hidden="true">
-            <p class="govuk-body-m">
-              For technical queries relating to the Submit a General Aviation Report (GAR) service, please contact the Submit a GAR support team by emailing us at: <a href="mailto:GARSupport@Homeoffice.gov.uk" class="govuk-link">GARSupport@Homeoffice.gov.uk</a>.
-            </p>
-          </div>
-        </details>
-      </div>
+      <h2 class="govuk-heading-m">Support</h2>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary"
+                  aria-controls="details-content-general-support"
+                  aria-expanded="false">
+          <span class="govuk-details__summary-text">General support</span>
+        </summary>
+        <div class="govuk-details__text"
+              id="details-content-general-support"
+              aria-hidden="true">
+          <p class="govuk-body-m">
+            {% if isLoggedIn %}
+              For non-technical permission to travel related queries, please contact the UK Border Force Carrier Support Hub on 0300 369 0610 or +44 204 619 6020 from outside the UK.
+            {% else %}
+              For non-technical permission to travel related queries, please contact the UK Border Force Carrier Support Hub.
+            {% endif %}
+          </p>
+        </div>
+      </details>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary"
+                  aria-controls="details-content-technical-support"
+                  aria-expanded="false">
+          <span class="govuk-details__summary-text">Technical support</span>
+        </summary>
+        <div class="govuk-details__text"
+              id="details-content-technical-support"
+              aria-hidden="true">
+          <p class="govuk-body-m">
+            For technical queries relating to the Submit a General Aviation Report (GAR) service, please contact the Submit a GAR support team by emailing us at: <a href="mailto:GARSupport@Homeoffice.gov.uk" class="govuk-link">GARSupport@Homeoffice.gov.uk</a>.
+          </p>
+        </div>
+      </details>
     </div>
+  </div>
 
 {% endblock %}
