@@ -131,7 +131,7 @@ h3.govuk-notification-banner__heading {
 }
 .total-paging-items {
   margin-left: auto;
-
+}
 
 @media (max-width:40.0625em) {
     .search-results > p {
