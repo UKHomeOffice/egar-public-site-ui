@@ -24,7 +24,7 @@ The local results below are the review snapshot, not a claim about every checkou
 | --- | --- | --- | --- |
 | `just check` | Green: ESLint and 759 tests passed. | Drone blocks on `unit-test` and `linting-formatting`; its `npm run check` also runs Prettier. | The fast local default is limited to stable, everyday checks. CI is the authoritative build gate and adds its production command. |
 | `just verify` | Green: currently runs `check`. | It is a local final check, not a Drone-pipeline substitute. | Kept green so an agent can distinguish a regression from an existing advisory finding. |
-| `just hygiene` | Knip exits 0 with 215 warned exports; `lint-html` had 77 findings; Docker lint had one finding. | Drone configures `template-linting` and `unused-code-scan` as blocking steps. The recorded local template-lint baseline therefore conflicts with that configuration and must be resolved before relying on the alignment. | These tools are useful but their current output needs interpretation or baseline work; they remain advisory locally. |
+| `just hygiene` | Knip exits 0 with 215 warned exports; `lint-html` had 77 findings; Docker lint is clean under the shared Hadolint policy. | Drone configures `template-linting` and `unused-code-scan` as blocking steps, and runs non-blocking `dockerfile-scan`. The recorded local template-lint baseline therefore conflicts with that configuration and must be resolved before relying on the alignment. | These tools are useful but their current output needs interpretation or baseline work; Docker lint is a clean advisory signal. |
 | `just security` | `npm audit` had 3 vulnerabilities; Semgrep reported 6 findings while exiting 0; filesystem Trivy reported Dockerfile findings. | Drone image Trivy is explicitly non-blocking; Sonar is also non-blocking. Drone does not run the local audit or Semgrep commands. | Security output can be valuable without being a reliable pass/fail signal. The local scan excludes `.env` files and generated dependency trees to avoid exposing workstation data. |
 | Docker image build | No equivalent `just` recipe. | Drone blocks on `build` after the configured test, lint, template, and unused-code steps. | A deployable-image failure is a release blocker and belongs in CI, where Docker is available consistently. |
 
@@ -47,7 +47,7 @@ The local results below are the review snapshot, not a claim about every checkou
 | `just fmt-check` | Passed. | Good read-only formatting check. |
 | `just knip` | Exit 0, but reports 215 unused exports and 1 config hint. | Useful only because exports are demoted to warn in `src/knip.json:7-9`; documentation should stress this is noisy and how to interpret it. |
 | `just lint-html` | Failed with 77 djlint findings. | Not ready as an ordinary verification command. Good candidate for advisory/baseline work, not part of a green default loop yet. |
-| `just dockerlint` | Failed on `Dockerfile:3` because `apk add curl` is unpinned. | Useful, but currently not green. Either fix the Dockerfile or document this as a known baseline failure. |
+| `just dockerlint` | Passed. `.hadolint.yaml` accepts Alpine package-version, layer-boundary, and named-user trade-offs. | Drone runs the same command as non-blocking `dockerfile-scan`. | A clean targeted check for Dockerfile changes; the Drone step surfaces regressions without blocking the existing pipeline. |
 | `just audit` | Failed with 3 vulnerabilities, including `request` and nested `uuid`. | Useful escalation check, but expected to fail until the `request` migration is complete. |
 | `just sast` | Completed and reported 6 findings, but exited 0. | Useful as advisory output, but misleading if agents assume command success means no findings. |
 | Bounded `trivy fs` spot-check | Reported Dockerfile issues and scanned local ignored `.env.dev`. The default `scan` recipe now skips `.env`/`.env.*` files and generated dependency dirs. | Valuable advisory scan; default exclusions reduce local-secret metadata and third-party install noise. |
@@ -98,7 +98,7 @@ That makes `verify` a dependable final gate again. Agents still need to read adv
 | Addition | Why |
 | --- | --- |
 | Default agent workflow section | Tell agents: read `AGENTS.md`, run `just --list`, prefer `just check`, run targeted tests where possible, escalate only when touching Docker/security/templates/dependencies. |
-| Known failing/advisory checks section | Prevent agents from wasting time trying to make `audit`, `lint-html`, or `dockerlint` green if those failures are accepted baseline. |
+| Known advisory checks section | Prevent agents from wasting time treating `audit` or `lint-html` output as a regression when it is an accepted baseline. |
 | Test-selection guidance | The repo has 759 unit tests and many controllers; agents would benefit from examples of running one test file or one area before the full suite. |
 | Generated/vendor file warnings | `src/.prettierignore` helps, but agent guidance should explicitly say not to hand-edit generated airport data or vendored/minified JS. |
 | Definition of done for agents | Example: for JS/controller changes, run relevant tests, then `just check`; for template changes, run `just fmt-html-check`/`lint-html` only if the baseline is understood; for dependency changes, run audit. |

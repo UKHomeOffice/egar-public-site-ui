@@ -44,6 +44,13 @@ steps:
       - npm install
       - npx knip
 
+  - name: dockerfile-scan
+    pull: if-not-exists
+    image: hadolint/hadolint:v2.15.1-alpine
+    commands:
+      - hadolint Dockerfile
+    failure: ignore
+
   - name: build
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind:latest

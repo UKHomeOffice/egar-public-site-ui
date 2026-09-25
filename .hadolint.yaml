@@ -1,0 +1,4 @@
+ignored:
+  - DL3018 # Alpine package versions follow the selected base-image repositories.
+  - DL3059 # Separate RUN steps preserve readable build stages and Docker cache boundaries.
+  - DL3066 # Named non-root users are defined by the image and improve readability.
