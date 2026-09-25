@@ -45,7 +45,7 @@ The local results below are the review snapshot, not a claim about every checkou
 | `just check` | Passed; 759 tests passed. | Good fast default loop. Useful for agents. |
 | `cd src && npm run check` | Passed. | CI lint/format script works. |
 | `just fmt-check` | Passed. | Good read-only formatting check. |
-| `just knip` | Exit 0, but reports 215 unused exports and 1 config hint. | Useful only because exports are demoted to warn in `src/knip.json:7-9`; documentation should stress this is noisy and how to interpret it. |
+| `just unused-code` | Exit 0, but reports 215 unused exports and 1 config hint. | Useful only because Knip exports are demoted to warn in `src/knip.json:7-9`; documentation should stress this is noisy and how to interpret it. |
 | `just lint-html` | Failed with 77 djlint findings. | Not ready as an ordinary verification command. Good candidate for advisory/baseline work, not part of a green default loop yet. |
 | `just dockerlint` | Passed. `.hadolint.yaml` accepts Alpine package-version, layer-boundary, and named-user trade-offs. | Drone runs the same command as non-blocking `dockerfile-scan`. | A clean targeted check for Dockerfile changes; the Drone step surfaces regressions without blocking the existing pipeline. |
 | `just audit` | Failed with 3 vulnerabilities, including `request` and nested `uuid`. | Useful escalation check, but expected to fail until the `request` migration is complete. |

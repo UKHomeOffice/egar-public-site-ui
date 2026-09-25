@@ -31,7 +31,7 @@ test:
 check: lint test
 
 # Unused files, exports, and dependencies
-knip:
+unused-code:
     cd src && npx knip
 
 # Lint Nunjucks templates: rule violations, not layout
@@ -71,7 +71,7 @@ sast:
 
 # Advisory code-health checks. Read the output; some checks have known baseline findings.
 hygiene:
-    -just knip
+    -just unused-code
     -just lint-html
     -just dockerlint
 

@@ -66,7 +66,7 @@ Run `just check` for every code change. Run `just verify` before handoff; in thi
 
 | Command | Use |
 |---|---|
-| `just knip` | Unused files, exports, and dependencies; interpret the known CommonJS export baseline |
+| `just unused-code` | Knip: unused files, exports, and dependencies; interpret the known CommonJS export baseline |
 | `just lint-html` | Lint Nunjucks templates |
 | `just fmt-html-check` | Check Nunjucks formatting |
 | `just fmt-html` | Reformat Nunjucks with `--no-function-formatting`; use only on intentional template changes |
@@ -81,7 +81,7 @@ Run `just check` for every code change. Run `just verify` before handoff; in thi
 - `.js` changes: `just check`.
 - `.njk` changes: `just fmt-html-check` and `just lint-html`; preserve GOV.UK macro arguments.
 - Authentication, configuration, upload, or external-integration changes: `just scan` and `just sast`.
-- Dependency changes or deleted/moved modules: `just knip` and `just audit`.
+- Dependency changes or deleted/moved modules: `just unused-code` and `just audit`.
 - Dockerfile changes: `just dockerlint`.
 - Changes to API behavior: check the corresponding `data-access-api` contract and tests.
 
