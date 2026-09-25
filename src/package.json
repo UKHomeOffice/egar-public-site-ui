@@ -8,7 +8,8 @@
     "test": "c8 --reporter=lcov mocha --file test/global.test.js --bail --recursive",
     "test-drone": "c8 --report-dir=/drone/src/coverage --reporter=lcov --reporter=text mocha --file test/global.test.js --recursive",
     "check": "eslint .  --ext .js && prettier --check .",
-    "fix": "eslint --fix .  --ext .js"
+    "prettier-format": "prettier --write .",
+    "fix": "eslint --fix .  --ext .js && npm run prettier-format"
   },
   "overrides": {
     "form-data": "2.5.6",

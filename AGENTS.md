@@ -55,6 +55,7 @@ Run `just check` for every code change. Run `just verify` before handoff; in thi
 | Command | Purpose | Expected status |
 |---|---|---|
 | `just fmt` | Rewrite JS, JSON, CSS, and other Prettier-supported files | Modifies files |
+| `just fix` | Apply safe ESLint fixes, then format code | Modifies files |
 | `just fmt-check` | Check Prettier formatting without changes | Must pass when formatting is in scope |
 | `just lint` | ESLint, including the configured Prettier rule | Must pass |
 | `just test` | Mocha tests with c8 coverage | Must pass |

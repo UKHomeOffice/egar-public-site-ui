@@ -13,7 +13,11 @@ lint:
 
 # Prettier: rewrites files to canonical layout — quotes, wrapping, spacing
 fmt:
-    cd src && npx prettier --write .
+    cd src && npm run prettier-format
+
+# Apply safe ESLint fixes, then format code.
+fix:
+    cd src && npm run fix
 
 # Same as `fmt` but read-only — reports unformatted files instead of rewriting them
 fmt-check:
