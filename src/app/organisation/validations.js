@@ -3,10 +3,11 @@ const validator = require('../../common/utils/validator');
 const { MAX_ORGANISATION_NAME_LENGTH } = require('../../common/config/index');
 
 module.exports.validations = (req) => {
-  const orgName = req.body.orgName.trim();
+  const { orgName } = req.body;
 
   return [
     [
+      new ValidationRule(validator.notEmpty, 'orgName', orgName, 'Enter the name of the organisation'),
       new ValidationRule(
         validator.isValidOrganisationNameLength,
         'orgName',
@@ -19,7 +20,6 @@ module.exports.validations = (req) => {
         orgName,
         `Organisation name must only include letters, numbers, spaces and these special characters , ; ! / . ' ( ) @ & -`
       ),
-      new ValidationRule(validator.notEmpty, 'orgName', orgName, 'Enter the name of the organisation'),
     ],
   ];
 };

@@ -4,38 +4,42 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-  {{__('error_prefix') if errors}} Create GAR | Customs
+  {{ __('error_prefix') if errors }} Create GAR | Customs
 {% endblock %}
 
-{% set active = '/home' %}
+{% set active = "/home" %}
 
 {% block beforeContent %}
-  <a href="/garfile/resperson" class="govuk-back-link">{{__('nav_back')}}</a>
+  <a href="/garfile/resperson" class="govuk-back-link">{{ __('nav_back') }}</a>
 {% endblock %}
 
 {% block content %}
-<script src="/javascripts/garfile/customs.js" type="text/javascript"></script>
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <script src="/javascripts/garfile/customs.js"></script>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-    <form action="/garfile/customs" autocomplete="off" class="form-group" method="post" role="form">
+      <form action="/garfile/customs"
+            autocomplete="off"
+            class="form-group"
+            method="post"
+            role="form">
 
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-        <span class="govuk-caption-xl">{{__('section_count', 6, 9)}}</span>
-        <h1 class="govuk-heading-xl">{{__('heading_customs')}}</h1>
-      </legend>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <span class="govuk-caption-xl">{{ __('section_count', 6, 9) }}</span>
+          <h1 class="govuk-heading-xl">{{ __('heading_customs') }}</h1>
+        </legend>
 
-      {% include "./partials/1-intention.njk" %}
-      {% include "./partials/2-goods-declaration.njk" %}
-      {% include "./partials/3-baggage-declaration.njk" %}
-      {% include "./partials/4-continental-shelf.njk" %}
-      {% include "./partials/5-passenger-reason.njk" %}
-      {% include "./partials/6-aircraft-reason.njk" %}
-      {% include "./partials/7-supporting-information.njk" %}
+        {% include "./partials/1-intention.njk" %}
+        {% include "./partials/2-goods-declaration.njk" %}
+        {% include "./partials/3-baggage-declaration.njk" %}
+        {% include "./partials/4-continental-shelf.njk" %}
+        {% include "./partials/5-passenger-reason.njk" %}
+        {% include "./partials/6-aircraft-reason.njk" %}
+        {% include "./partials/7-supporting-information.njk" %}
 
-      {{ m.submit_buttons('GAR Customs', csrfToken, __) }}
-    </form>
-    {{ m.exit_without_saving(csrfToken, __) }}
+        {{ m.submit_buttons('GAR Customs', csrfToken, __) }}
+      </form>
+      {{ m.exit_without_saving(csrfToken, __) }}
+    </div>
   </div>
-</div>
 {% endblock %}

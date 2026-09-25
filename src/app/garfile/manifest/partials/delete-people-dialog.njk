@@ -1,0 +1,21 @@
+{% from "dist/govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% macro deletePeopleDialog(__) %}
+  <dialog id="deletePeopleDialog" class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-error-message govuk-!-font-size-36">Warning</h2>
+    {{ govukWarningText({
+      text: "Are you sure you want to delete these people?"
+    }) }}
+    <ul id="peopleToDeleteList" class="govuk-list govuk-list--bullet">
+    </ul>
+    <button id="closeDialogButton"
+            type="button"
+            class="govuk-button"
+            data-module="govuk-button">Close</button>
+    <button id="delete-people"
+            type="submit"
+            class="govuk-button warning-button"
+            formmethod="post"
+            formaction="/garfile/manifest/deleteperson">{{ __('table_delete_gar_people') }}</button>
+  </dialog>
+{% endmacro %}

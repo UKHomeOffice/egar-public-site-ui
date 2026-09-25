@@ -10,7 +10,7 @@ platform:
 steps:
   - name: unit-test
     pull: if-not-exists
-    image: node:22-alpine3.21
+    image: node:24.19-alpine3.23
     commands:
       - export NOTIFY_API_KEY=dummy
       - cd src
@@ -19,11 +19,37 @@ steps:
 
   - name: linting-formatting
     pull: if-not-exists
-    image: node:22-alpine3.21
+    image: node:24.19-alpine3.23
     commands:
       - cd src
       - npm install
       - npm run check
+
+  - name: template-linting
+    pull: if-not-exists
+    image: node:24.19-alpine3.23
+    commands:
+      - apk add --no-cache py3-pip
+      - pip install --break-system-packages --no-cache-dir djlint==1.46.1
+      - cd src
+      - npm install
+      - djlint . --lint
+      - djlint . --check --no-function-formatting
+
+  - name: unused-code-scan
+    pull: if-not-exists
+    image: node:24.19-alpine3.23
+    commands:
+      - cd src
+      - npm install
+      - npx knip
+
+  - name: dockerfile-scan
+    pull: if-not-exists
+    image: hadolint/hadolint:v2.15.1-alpine
+    commands:
+      - hadolint Dockerfile
+    failure: ignore
 
   - name: build
     pull: if-not-exists
@@ -32,7 +58,9 @@ steps:
       - source ./ops/image_build.sh
     depends_on:
       - linting-formatting
+      - template-linting
       - unit-test
+      - unused-code-scan
 
   - name: publish-to-ecr
     image: plugins/ecr
