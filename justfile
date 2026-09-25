@@ -7,6 +7,7 @@ default:
 # ESLint: rule violations (unused vars, complexity, deprecated patterns) — not layout.
 # Also enforces Prettier formatting as an ESLint error (eslint-plugin-prettier), so
 # this alone covers what `check` gates on.
+# Lint JavaScript and enforce Prettier formatting.
 lint:
     cd src && npx eslint . --ext .js
 
@@ -36,6 +37,7 @@ lint-html:
 # Reformat Nunjucks templates. --no-function-formatting is required — without it,
 # djlint corrupts nested GOV.UK macro object arguments and breaks page rendering
 # (same reason as ssar-public-site-ui).
+# Reformat Nunjucks templates safely.
 fmt-html:
     djlint src --reformat --no-function-formatting
 
@@ -45,6 +47,7 @@ fmt-html-check:
 
 # Check npm dependencies for known vulnerabilities — local only, deliberately not in CI
 # (trivy-scan-image already covers this ground; see AGENTS.md)
+# Audit Node dependencies for known vulnerabilities.
 audit:
     cd src && npm audit
 
@@ -54,6 +57,7 @@ dockerlint:
 
 # Scan the working tree for vulnerabilities, secrets, and misconfig.
 # Skip local env files and generated dependency dirs so default runs avoid local noise.
+# Scan the working tree for vulnerabilities, secrets, and misconfigurations.
 scan:
     trivy fs --scanners vuln,secret,misconfig --skip-files ".env,.env.*,**/.env,**/.env.*" --skip-dirs "node_modules,**/node_modules,venv,.venv,**/venv,**/.venv" .
 
