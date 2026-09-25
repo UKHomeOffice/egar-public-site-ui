@@ -1,4 +1,4 @@
-# AI Tooling Branch Review
+# Tooling Review
 
 Review of the committed `ai-tooling` branch, focused on whether the changes help agents understand and work safely in this codebase, and whether the added tooling is valuable enough to maintain.
 
@@ -15,6 +15,18 @@ This review deliberately excludes branch-structure and bundling concerns. It foc
 The `justfile` and `AGENTS.md` now label command tiers explicitly: `check` is the fast default gate, `verify` is a green-only final gate, `hygiene` and `security` hold advisory tools, and `advisory` runs those output-first checks without treating a non-zero result as unexpected.
 
 The Trivy `scan` recipe now skips `.env`/`.env.*` files plus generated dependency directories (`node_modules`, `venv`, `.venv`) so default agent runs avoid surfacing local live-config metadata and third-party install noise while still scanning the repo tree for vulnerabilities, secrets, and misconfigurations.
+
+## Gate model and Drone alignment
+
+The local results below are the review snapshot, not a claim about every checkout. Re-run the gate relevant to a change. Local `just` tools overlap deliberately with Drone's build, test, and lint steps: developers use them to find and fix failures before CI. They are also a broader, quicker feedback surface for agents, so they include targeted and exploratory checks that Drone does not run. A non-clean advisory result is useful evidence to inspect, not a failed final gate.
+
+| Gate | Local state recorded in this review | Drone alignment | Why it is blocking or advisory |
+| --- | --- | --- | --- |
+| `just check` | Green: ESLint and 759 tests passed. | Drone blocks on `unit-test` and `linting-formatting`; its `npm run check` also runs Prettier. | The fast local default is limited to stable, everyday checks. CI is the authoritative build gate and adds its production command. |
+| `just verify` | Green: currently runs `check`. | It is a local final check, not a Drone-pipeline substitute. | Kept green so an agent can distinguish a regression from an existing advisory finding. |
+| `just hygiene` | Knip exits 0 with 215 warned exports; `lint-html` had 77 findings; Docker lint had one finding. | Drone configures `template-linting` and `unused-code-scan` as blocking steps. The recorded local template-lint baseline therefore conflicts with that configuration and must be resolved before relying on the alignment. | These tools are useful but their current output needs interpretation or baseline work; they remain advisory locally. |
+| `just security` | `npm audit` had 3 vulnerabilities; Semgrep reported 6 findings while exiting 0; filesystem Trivy reported Dockerfile findings. | Drone image Trivy is explicitly non-blocking; Sonar is also non-blocking. Drone does not run the local audit or Semgrep commands. | Security output can be valuable without being a reliable pass/fail signal. The local scan excludes `.env` files and generated dependency trees to avoid exposing workstation data. |
+| Docker image build | No equivalent `just` recipe. | Drone blocks on `build` after the configured test, lint, template, and unused-code steps. | A deployable-image failure is a release blocker and belongs in CI, where Docker is available consistently. |
 
 ## High-value changes to keep
 
@@ -95,7 +107,6 @@ That makes `verify` a dependable final gate again. Agents still need to read adv
 
 | Candidate | Recommendation |
 | --- | --- |
-| `just verify` as currently named | Change, not remove. The name implies a green final gate, but it currently includes known failing/advisory checks. |
 | `just scan` | Keep as advisory. The recipe now skips `.env`/`.env.*` files and generated dependency dirs to avoid scanning local live config and third-party install trees by default. |
 | `just lint-html` in ordinary workflow | Downgrade until the baseline is clean or configured. |
 | Long stale-prone operational detail in `AGENTS.md` | Keep for now, but consider moving deeper detail into linked docs if it grows. The current content is still high-signal. |
