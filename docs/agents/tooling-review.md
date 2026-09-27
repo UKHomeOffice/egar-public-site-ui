@@ -4,9 +4,9 @@ Review of the committed `ai-tooling` branch, focused on whether the changes help
 
 ## Verdict
 
-The branch is useful for agents, but the feedback-loop documentation needs tightening before it fully earns its maintenance cost.
+The branch is useful for agents and now provides a dependable core feedback loop for JavaScript, tests, formatting, and Nunjucks templates.
 
-The strongest parts are `AGENTS.md` and the `justfile`: they give agents a much better map of the system, known traps, and verification commands. The weakest part is that some advertised checks are not yet dependable agent feedback loops because they fail on known baseline issues, are noisy, or report findings without failing.
+The strongest parts are `AGENTS.md` and the `justfile`: they give agents a much better map of the system, known traps, and verification commands. Template linting and formatting are clean and block the Drone build. Knip and the security tools remain useful but need interpretation because Knip deliberately reports warned exports and some security commands have known findings or non-blocking exit behaviour.
 
 This review deliberately excludes branch-structure and bundling concerns. It focuses on whether the committed content helps agents work better.
 
@@ -16,6 +16,8 @@ The `justfile` and `AGENTS.md` now label command tiers explicitly: `check` is th
 
 The Trivy `scan` recipe now skips `.env`/`.env.*` files plus generated dependency directories (`node_modules`, `venv`, `.venv`) so default agent runs avoid surfacing local live-config metadata and third-party install noise while still scanning the repo tree for vulnerabilities, secrets, and misconfigurations.
 
+The Nunjucks baseline was subsequently fixed. `just lint-html` now lints all 98 templates with no errors, and `just fmt-html-check` reports that no files would be updated. Drone runs both checks as a blocking `template-linting` step before the image build.
+
 ## Gate model and Drone alignment
 
 The local results below are the review snapshot, not a claim about every checkout. Re-run the gate relevant to a change. Local `just` tools overlap deliberately with Drone's build, test, and lint steps: developers use them to find and fix failures before CI. They are also a broader, quicker feedback surface for agents, so they include targeted and exploratory checks that Drone does not run. A non-clean advisory result is useful evidence to inspect, not a failed final gate.
@@ -24,7 +26,7 @@ The local results below are the review snapshot, not a claim about every checkou
 | --- | --- | --- | --- |
 | `just check` | Green: ESLint and 759 tests passed. | Drone blocks on `unit-test` and `linting-formatting`; its `npm run check` also runs Prettier. | The fast local default is limited to stable, everyday checks. CI is the authoritative build gate and adds its production command. |
 | `just verify` | Green: currently runs `check`. | It is a local final check, not a Drone-pipeline substitute. | Kept green so an agent can distinguish a regression from an existing advisory finding. |
-| `just hygiene` | Knip exits 0 with 215 warned exports; `lint-html` had 77 findings; Docker lint is clean under the shared Hadolint policy. | Drone configures `template-linting` and `unused-code-scan` as blocking steps, and runs non-blocking `dockerfile-scan`. The recorded local template-lint baseline therefore conflicts with that configuration and must be resolved before relying on the alignment. | These tools are useful but their current output needs interpretation or baseline work; Docker lint is a clean advisory signal. |
+| `just hygiene` | Template lint and format checks are clean across 98 templates. Knip exits 0 with 215 warned exports; Docker lint is clean under the shared Hadolint policy. | Drone blocks on both template checks and on Knip's exit status, and runs non-blocking `dockerfile-scan`. | Template checks are reliable gates. Knip remains useful but noisy because unused exports are configured as warnings; Docker lint is a clean advisory signal. |
 | `just security` | `npm audit` had 3 vulnerabilities; Semgrep reported 6 findings while exiting 0; filesystem Trivy reported Dockerfile findings. | Drone image Trivy is explicitly non-blocking; Sonar is also non-blocking. Drone does not run the local audit or Semgrep commands. | Security output can be valuable without being a reliable pass/fail signal. The local scan excludes `.env` files and generated dependency trees to avoid exposing workstation data. |
 | Docker image build | No equivalent `just` recipe. | Drone blocks on `build` after the configured test, lint, template, and unused-code steps. | A deployable-image failure is a release blocker and belongs in CI, where Docker is available consistently. |
 
@@ -46,7 +48,8 @@ The local results below are the review snapshot, not a claim about every checkou
 | `cd src && npm run check` | Passed. | CI lint/format script works. |
 | `just fmt-check` | Passed. | Good read-only formatting check. |
 | `just unused-code` | Exit 0, but reports 215 unused exports and 1 config hint. | Useful only because Knip exports are demoted to warn in `src/knip.json:7-9`; documentation should stress this is noisy and how to interpret it. |
-| `just lint-html` | Failed with 77 djlint findings. | Not ready as an ordinary verification command. Good candidate for advisory/baseline work, not part of a green default loop yet. |
+| `just lint-html` | Passed: 98 templates linted with 0 errors. | Reliable targeted check and a blocking Drone gate. |
+| `just fmt-html-check` | Passed: 98 templates checked and 0 files would be updated. | Reliable read-only formatting check and a blocking Drone gate. |
 | `just dockerlint` | Passed. `.hadolint.yaml` accepts Alpine package-version, layer-boundary, and named-user trade-offs. | Drone runs the same command as non-blocking `dockerfile-scan`. | A clean targeted check for Dockerfile changes; the Drone step surfaces regressions without blocking the existing pipeline. |
 | `just audit` | Failed with 3 vulnerabilities, including `request` and nested `uuid`. | Useful escalation check, but expected to fail until the `request` migration is complete. |
 | `just sast` | Reports five Express session-cookie findings while exiting 0. The local `mock_clamav` all-interface bind is narrowly suppressed because its Docker container must be reachable by the app container. | Useful advisory output, but misleading if agents assume command success means no findings. |
@@ -75,11 +78,11 @@ That makes `verify` a dependable final gate again. Agents still need to read adv
 - `just security`: audit, Semgrep, and the env-file-skipping Trivy recipe.
 - `just verify`: only checks expected to pass on a clean branch.
 
-### 3. Template linting is useful but not yet actionable enough
+### 3. Knip's successful exit still includes warnings
 
-`djlint.toml` is thoughtful, especially the `--no-function-formatting` usage in `justfile:36-44`, but `just lint-html` fails with 77 existing findings. That is not a dependable agent feedback loop yet.
+The template baseline is now clean, but `just unused-code` still reports 215 unused exports and one configuration hint while exiting successfully. This is intentional: `src/knip.json` demotes export findings to warnings because the application's dynamic router and test patterns are difficult for Knip to trace reliably.
 
-**Recommendation:** either fix the baseline, add ignores for accepted legacy findings, or document `lint-html` as exploratory/advisory until it is green.
+**Recommendation:** retain Knip in CI for unused files and dependencies, but do not interpret a successful run as having no findings. Continue triaging the warned exports incrementally rather than removing them mechanically.
 
 ### 4. Security tooling needs clearer semantics
 
@@ -98,17 +101,16 @@ That makes `verify` a dependable final gate again. Agents still need to read adv
 | Addition | Why |
 | --- | --- |
 | Default agent workflow section | Tell agents: read `AGENTS.md`, run `just --list`, prefer `just check`, run targeted tests where possible, escalate only when touching Docker/security/templates/dependencies. |
-| Known advisory checks section | Prevent agents from wasting time treating `audit` or `lint-html` output as a regression when it is an accepted baseline. |
+| Known advisory checks section | Prevent agents from wasting time treating known `audit`, Knip, Semgrep, or Trivy output as a new regression. Template linting no longer belongs in this category. |
 | Test-selection guidance | The repo has 759 unit tests and many controllers; agents would benefit from examples of running one test file or one area before the full suite. |
 | Generated/vendor file warnings | `src/.prettierignore` helps, but agent guidance should explicitly say not to hand-edit generated airport data or vendored/minified JS. |
-| Definition of done for agents | Example: for JS/controller changes, run relevant tests, then `just check`; for template changes, run `just fmt-html-check`/`lint-html` only if the baseline is understood; for dependency changes, run audit. |
+| Definition of done for agents | Example: for JS/controller changes, run relevant tests, then `just check`; for template changes, run `just fmt-html-check` and `just lint-html`; for dependency changes, run audit and interpret the known baseline. |
 
 ## Things to remove or downgrade
 
 | Candidate | Recommendation |
 | --- | --- |
 | `just scan` | Keep as advisory. The recipe now skips `.env`/`.env.*` files and generated dependency dirs to avoid scanning local live config and third-party install trees by default. |
-| `just lint-html` in ordinary workflow | Downgrade until the baseline is clean or configured. |
 | Long stale-prone operational detail in `AGENTS.md` | Keep for now, but consider moving deeper detail into linked docs if it grows. The current content is still high-signal. |
 
 ## Planned follow-on Jira and skills setup
@@ -121,4 +123,4 @@ Keep that follow-on config, but it should sit alongside a concise `AGENTS.md` "A
 
 Keep the AI-tooling direction. It is genuinely useful. The branch gives agents better context, better command discovery, and better warnings about legacy traps than the repo had before.
 
-Before considering it good, make the feedback-loop story sharper: make the default gate reliably green, clearly mark advisory/expensive checks, and fix or baseline the checks that currently fail. That would turn the work from "lots of tools and helpful notes" into a dependable agent operating model.
+The core feedback-loop story is now sound: the default JavaScript/test gate is green, the template baseline is clean and enforced in CI, and advisory or noisy checks are separated from the final local gate. The main remaining improvement is to make the documented distinction between a clean check and a successful-but-noisy check—especially Knip and Semgrep—even harder to miss.
