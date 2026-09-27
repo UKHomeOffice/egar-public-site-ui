@@ -18,6 +18,8 @@ The Trivy `scan` recipe now skips `.env`/`.env.*` files plus generated dependenc
 
 The Nunjucks baseline was subsequently fixed. `just lint-html` now lints all 98 templates with no errors, and `just fmt-html-check` reports that no files would be updated. Drone runs both checks as a blocking `template-linting` step before the image build.
 
+Developer prerequisites are now documented in [`docs/setup.md`](../setup.md), linked from the README and `AGENTS.md`. It distinguishes project-managed npm tools from the external Homebrew and pipx tools needed for template, Dockerfile, and security review.
+
 ## Gate model and Drone alignment
 
 The local results below are the review snapshot, not a claim about every checkout. Re-run the gate relevant to a change. Local `just` tools overlap deliberately with Drone's build, test, and lint steps: developers use them to find and fix failures before CI. They are also a broader, quicker feedback surface for agents, so they include targeted and exploratory checks that Drone does not run. A non-clean advisory result is useful evidence to inspect, not a failed final gate.
@@ -35,7 +37,7 @@ The local results below are the review snapshot, not a claim about every checkou
 | Area | Evidence | Why it helps agents |
 | --- | --- | --- |
 | System map and boundaries | `AGENTS.md:5-25` explains the Node/Express/Nunjucks app, `data-access-api`, One Login, ClamAV, and Notify boundaries. | This is exactly the kind of context agents usually infer badly. It reduces wrong assumptions like calling AMG/CBP directly or treating One Login as a single auth check. |
-| Setup reality | `AGENTS.md:27-34` documents sibling `data-access-api`, `.env.dev`, Docker Compose, and the unusual `src/package.json` location. | Very useful. Agents otherwise tend to run commands from the repo root and fail. |
+| Setup reality | [`docs/setup.md`](../setup.md) documents sibling `data-access-api`, `.env.dev`, local startup, tool installation, and the unusual `src/package.json` location; `AGENTS.md` points to it. | Very useful. Agents otherwise tend to run commands from the repo root and fail. |
 | Command entry point | `AGENTS.md:36-52` plus `justfile:4-64`. | `just --list` gives agents a discoverable local command surface. This is a real improvement over hunting through `package.json`, Drone config, and tribal knowledge. |
 | Known rough edges | `AGENTS.md:56-63`, especially 0T coverage, supporting-doc upload limits, Knip false positives, and partial `request` migration. | This is high-signal agent guidance. It names the places where an agent is most likely to make an unsafe simplification. |
 | Tool configs | `src/knip.json`, `djlint.toml`, `src/.prettierignore`, `src/eslint.config.mjs`. | These turn vague quality intentions into runnable checks and encode repo-specific exceptions. |
@@ -90,11 +92,11 @@ The template baseline is now clean, but `just unused-code` still reports 215 unu
 
 **Recommendation:** document expected behaviour per tool. For Trivy specifically, keep the default env/dependency-dir exclusions and consider scanning container images separately when production-like image risk is the goal.
 
-### 5. External tool availability is not encoded
+### 5. External tool availability is now documented
 
-`djlint`, `hadolint`, `trivy`, and `semgrep` are host tools. They are not installed by `npm install`. An agent in a fresh environment may see `just verify` and fail before reaching the code.
+`djlint`, `hadolint`, `trivy`, and `semgrep` are host tools and are not installed by `npm ci`. [`docs/setup.md`](../setup.md) now gives the macOS installation commands, distinguishes required or change-specific tools from optional review tools, and explains which tools are project-managed.
 
-**Recommendation:** add a short tool-prerequisites note to `AGENTS.md` or the `justfile`: Node/npm are project-local; djlint/hadolint/trivy/semgrep are host tools; Docker is needed for Compose/build checks.
+**Recommendation:** keep `docs/setup.md` authoritative and update it whenever the `justfile` gains or removes an external executable.
 
 ## Things to add
 

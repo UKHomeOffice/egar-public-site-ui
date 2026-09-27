@@ -39,14 +39,9 @@ The UI calls `data-access-api` for all report and user state. Supporting documen
 
 Supporting-document limits are enforced here, but the downstream CBP submission also includes generated XLSX/PDF files and base64 encoding. See the corresponding `data-integr-cbp/AGENTS.md` warning before changing upload limits.
 
-## Setup and prerequisites
+## Development setup
 
-1. Clone `data-access-api` beside this repository; `docker-compose.yml` builds it from `../data-access-api`.
-2. Create `.env.dev`; there is no committed `.env.example`. Check `common/config/index.js` for required variables.
-3. Run `docker compose up -d --build`. This starts Postgres, the API, mock ClamAV, and the UI.
-4. Run tests in the container with `docker exec -it node sh`, then `npm run test`, or use the local `just` commands when dependencies and host tools are installed.
-
-`package.json` lives in `src/`. `just` loads `.env.dev` automatically. The broader review tools (`djlint`, `hadolint`, `trivy`, and `semgrep`) are host tools rather than npm dependencies.
+Follow [`docs/setup.md`](docs/setup.md) when preparing a checkout, configuring `.env.dev`, installing project or review tools, or starting the local stack. It is the authoritative developer setup guide; `package.json` lives in `src/`, not at the repository root.
 
 ## Quality gates
 
