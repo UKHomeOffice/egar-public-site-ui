@@ -8,22 +8,31 @@ platform:
   arch: amd64
 
 steps:
+  - name: install-dependencies
+    pull: if-not-exists
+    image: node:24.19-alpine3.23
+    commands:
+      - cd src
+      - npm ci
+
   - name: run-tests
     pull: if-not-exists
     image: node:24.19-alpine3.23
     commands:
       - export NOTIFY_API_KEY=dummy
       - cd src
-      - npm install
       - npm run test-drone
+    depends_on:
+      - install-dependencies
 
   - name: check-code
     pull: if-not-exists
     image: node:24.19-alpine3.23
     commands:
       - cd src
-      - npm install
       - npm run check
+    depends_on:
+      - install-dependencies
 
   - name: check-templates
     pull: if-not-exists
@@ -32,7 +41,6 @@ steps:
       - apk add --no-cache py3-pip
       - pip install --break-system-packages --no-cache-dir djlint==1.46.1
       - cd src
-      - npm install
       - djlint . --lint
       - djlint . --check --no-function-formatting
 
@@ -41,8 +49,9 @@ steps:
     image: node:24.19-alpine3.23
     commands:
       - cd src
-      - npm install
-      - npx knip
+      - npx --no-install knip
+    depends_on:
+      - install-dependencies
 
   - name: lint-dockerfile
     pull: if-not-exists
