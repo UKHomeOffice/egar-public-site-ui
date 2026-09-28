@@ -100,6 +100,7 @@ describe('Server request logging', () => {
         uncamelCase: sinon.spy(),
         containsError: sinon.spy(),
         expiryDate: sinon.spy(),
+        formatGdsDate: sinon.spy(),
       },
       './common/utils/travel_permission_codes.json': {},
       './common/utils/airports': {

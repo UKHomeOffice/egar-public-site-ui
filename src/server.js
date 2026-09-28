@@ -214,6 +214,7 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
   nunjucksEnvironment.addFilter('expiryDate', nunjucksFilters.expiryDate);
+  nunjucksEnvironment.addFilter('formatGdsDate', nunjucksFilters.formatGdsDate);
 
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('nationalityList', autocompleteUtil.nationalityList);
