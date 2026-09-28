@@ -8,7 +8,7 @@ platform:
   arch: amd64
 
 steps:
-  - name: unit-test
+  - name: run-tests
     pull: if-not-exists
     image: node:24.19-alpine3.23
     commands:
@@ -17,7 +17,7 @@ steps:
       - npm install
       - npm run test-drone
 
-  - name: linting-formatting
+  - name: check-code
     pull: if-not-exists
     image: node:24.19-alpine3.23
     commands:
@@ -25,7 +25,7 @@ steps:
       - npm install
       - npm run check
 
-  - name: template-linting
+  - name: check-templates
     pull: if-not-exists
     image: node:24.19-alpine3.23
     commands:
@@ -36,7 +36,7 @@ steps:
       - djlint . --lint
       - djlint . --check --no-function-formatting
 
-  - name: unused-code-scan
+  - name: check-unused-code
     pull: if-not-exists
     image: node:24.19-alpine3.23
     commands:
@@ -44,7 +44,7 @@ steps:
       - npm install
       - npx knip
 
-  - name: dockerfile-scan
+  - name: lint-dockerfile
     pull: if-not-exists
     image: hadolint/hadolint:v2.15.1-alpine
     commands:
@@ -57,10 +57,10 @@ steps:
     commands:
       - source ./ops/image_build.sh
     depends_on:
-      - linting-formatting
-      - template-linting
-      - unit-test
-      - unused-code-scan
+      - check-code
+      - check-templates
+      - run-tests
+      - check-unused-code
 
   - name: publish-to-ecr
     image: plugins/ecr

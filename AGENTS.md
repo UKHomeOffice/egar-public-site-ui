@@ -49,35 +49,35 @@ Run `just check` for every code change. Run `just verify` before handoff; in thi
 
 | Command | Purpose | Expected status |
 |---|---|---|
-| `just fmt` | Rewrite JS, JSON, CSS, and other Prettier-supported files | Modifies files |
-| `just fix` | Apply safe ESLint fixes, then format code | Modifies files |
-| `just fmt-check` | Check Prettier formatting without changes | Must pass when formatting is in scope |
-| `just lint` | ESLint, including the configured Prettier rule | Must pass |
-| `just test` | Mocha tests with c8 coverage | Must pass |
-| `just check` | `lint` + `test` | Required fast gate |
+| `just format-code` | Rewrite JS, JSON, CSS, and other Prettier-supported files | Modifies files |
+| `just fix-code` | Apply safe ESLint fixes, then format code | Modifies files |
+| `just check-code-format` | Check Prettier formatting without changes | Must pass when formatting is in scope |
+| `just lint-code` | ESLint, including the configured Prettier rule | Must pass |
+| `just run-tests` | Mocha tests with c8 coverage | Must pass |
+| `just check` | `lint-code` + `run-tests` | Required fast gate |
 | `just verify` | `check` | Required final gate |
 
 ## Agent review tools
 
 | Command | Use |
 |---|---|
-| `just unused-code` | Knip: unused files, exports, and dependencies; interpret the known CommonJS export baseline |
-| `just lint-html` | Lint Nunjucks templates |
-| `just fmt-html-check` | Check Nunjucks formatting |
-| `just fmt-html` | Reformat Nunjucks with `--no-function-formatting`; use only on intentional template changes |
-| `just dockerlint` | Validate `Dockerfile` changes |
-| `just audit` | Local npm dependency audit |
-| `just scan` | Trivy filesystem scan |
-| `just sast` | Semgrep security and Node.js checks |
-| `just advisory` | Run non-blocking hygiene and security reviews |
+| `just check-unused-code` | Knip: unused files, exports, and dependencies; interpret the known CommonJS export baseline |
+| `just lint-templates` | Lint Nunjucks templates |
+| `just check-template-format` | Check Nunjucks formatting |
+| `just format-templates` | Reformat Nunjucks with `--no-function-formatting`; use only on intentional template changes |
+| `just lint-dockerfile` | Validate `Dockerfile` changes |
+| `just audit-dependencies` | Local npm dependency audit |
+| `just scan-filesystem` | Trivy filesystem scan |
+| `just scan-code` | Semgrep security and Node.js checks |
+| `just review-all` | Run non-blocking hygiene and security reviews |
 
 ## Change-specific validation
 
 - `.js` changes: `just check`.
-- `.njk` changes: `just fmt-html-check` and `just lint-html`; preserve GOV.UK macro arguments.
-- Authentication, configuration, upload, or external-integration changes: `just scan` and `just sast`.
-- Dependency changes or deleted/moved modules: `just unused-code` and `just audit`.
-- Dockerfile changes: `just dockerlint`.
+- `.njk` changes: `just check-template-format` and `just lint-templates`; preserve GOV.UK macro arguments.
+- Authentication, configuration, upload, or external-integration changes: `just scan-filesystem` and `just scan-code`.
+- Dependency changes or deleted/moved modules: `just check-unused-code` and `just audit-dependencies`.
+- Dockerfile changes: `just lint-dockerfile`.
 - Changes to API behavior: check the corresponding `data-access-api` contract and tests.
 
 ## Known rough edges
