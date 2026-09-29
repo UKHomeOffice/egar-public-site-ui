@@ -763,7 +763,7 @@ function isPostCodeValidCharacters(input) {
 
 function isValidAircraftCharacters(input) {
   const validCharactersRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''()@&-]+$/;
-  return isEmpty(input) || validCharactersRegex.test(input);
+  return validCharactersRegex.test(input);
 }
 
 function preventZ(value) {
@@ -782,6 +782,7 @@ function preventZ(value) {
 function isValidAirportCode(airportCode) {
   return airports.findByCode(airportCode) !== null;
 }
+
 function isValidBirthPlaceName(input) {
   const alphaRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,/.()-]+$/;
   if (!isEmpty(input)) {
