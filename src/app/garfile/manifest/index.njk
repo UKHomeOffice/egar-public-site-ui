@@ -19,109 +19,108 @@
 {% block content %}
   <script src="/javascripts/garfile/manifest/index.js"></script>
   <div class="govuk-grid-row">
-    <form id="manifestForm" action="/garfile/manifest" method="post">
-      <div class="govuk-grid-column-two-thirds">
-        <span class="govuk-caption-xl">{{ __('section_count', 4, 9) }}</span>
-        <h1 class="govuk-heading-xl">{{ __('heading_manifest_details') }}</h1>
-        <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
-        <p class="govuk-body-l">{{ __('caption_manifest_details') }}</p>
-      </div>
-      <div class="govuk-grid-column-full">
-        <p class="govuk-body-l">
-          {{ __('people_caption') }}
-          <br />
-          {{ __('people_caption--already_selected_people') }}
-        </p>
-        {% if isInvalidSavedPeople %}
-          <div class="govuk-error-message">{{ __('saved_people_are_invalid__info') }}</div>
-        {% endif %}
-        <form id="manifestForm" action="/garfile/manifest" method="post">
-          <label class="govuk-label" for="person-search">{{ __('person_search') }}</label>
-          <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2"
-                 id="person-search"
-                 type="search"
-                 placeholder="Search">
-          <p class="govuk-body-s govuk-!-margin-bottom-2">{{ __('person_sort') }}</p>
-          {{ savedPeopleTable(savedPeople, isUnableToAddPeople, __) }}
-          <button id="addToManifest"
-                  type="submit"
-                  name="buttonClicked"
-                  value="Add to GAR"
-                  class="govuk-button multi-submit-button"
-                  data-multi-select-group="saved-people">{{ __('button_add_to_gar') }}</button>
-          {{ m.section_break() }}
-          <h2 class="govuk-heading-l">{{ __('heading_manifest_new_people') }}</h2>
-          <p class="govuk-body-m">
-            <a href="/garfile/manifest/addnewperson" class="govuk-button">{{ __('garfile_people_add') }}</a>
-          </p>
-          {{ m.section_break() }}
-          <h2 class="govuk-heading-l">{{ __('heading_current_manifest') }}</h2>
-          <p class="govuk-body-l">{{ __('current_manifest_caption') }}</p>
-          <label class="govuk-label" for="manifest-search">Search for people on the manifest</label>
-          <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2"
-                 id="manifest-search"
-                 type="search"
-                 placeholder="Search">
-          <p class="govuk-body-m">
-            <mark>{{ __('expired_passport_warning') }}</mark>
-          </p>
-          {{ currentManifestTable(manifest, manifestInvalidPeople, pages, __) }}
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="totalPersonsOnBoard">{{ __('total_persons_on_board') }}</label>
-            <input class="govuk-input govuk-input--width-3"
-                   id="totalPersonsOnBoard"
-                   name="name"
-                   readonly
-                   type="number"
-                   value="{{ manifest.items | length }}">
-          </div>
-          <button id="garPeopleId"
-                  type="submit"
-                  name="buttonClicked"
-                  value="Add to PEOPLE"
-                  class="govuk-button multi-submit-button"
-                  data-multi-select-group="manifest"
-                  disabled="true">{{ __('button_add_to_people') }}</button>
-          <button id="delete-people-dialog-button"
-                  type="button"
-                  class="govuk-button warning-button multi-submit-button"
-                  data-multi-select-group="manifest">{{ __('table_delete_gar_people') }}</button>
-          {{ deletePeopleDialog(__) }}
-          <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset" aria-describedby="isMilitaryFlight-hint">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h2 class="govuk-fieldset__heading">Military flight</h2>
-              </legend>
-              {{ m.hint("isMilitaryFlight", __("is_military_flight_hint")) }}
-              <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input"
-                         id="isMilitaryFlight"
-                         name="isMilitaryFlight"
-                         type="checkbox"
-                         {{ "checked" if cookie.getIsMilitaryFlight() }}
-                         value="true">
-                  <label class="govuk-label govuk-checkboxes__label"
-                         for="isMilitaryFlight">Is this a Military flight?</label>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-          {{ m.section_break() }}
-          <input id="continue"
-                 type="submit"
-                 class="govuk-button"
-                 name="buttonClicked"
-                 value="{{ __('button_continue') }}">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        </form>
-        <form id="cancel-form" action="/garfile/view" method="post">
-          <button id="exit"
-                  type="submit"
-                  class="govuk-button govuk-button--secondary"
-                  data-module="govuk-button">{{ __('form_exit') }}</button>
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        </form>
-      </div>
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-xl">{{ __('section_count', 4, 9) }}</span>
+      <h1 class="govuk-heading-xl">{{ __('heading_manifest_details') }}</h1>
+      <h2 class="govuk-heading-l">{{ __('title_people') }}</h2>
+      <p class="govuk-body-l">{{ __('caption_manifest_details') }}</p>
     </div>
+    <div class="govuk-grid-column-full">
+      <p class="govuk-body-l">
+        {{ __('people_caption') }}
+        <br />
+        {{ __('people_caption--already_selected_people') }}
+      </p>
+      {% if isInvalidSavedPeople %}
+        <div class="govuk-error-message">{{ __('saved_people_are_invalid__info') }}</div>
+      {% endif %}
+      <form id="manifestForm" action="/garfile/manifest" method="post">
+        <label class="govuk-label" for="person-search">{{ __('person_search') }}</label>
+        <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2"
+               id="person-search"
+               type="search"
+               placeholder="Search">
+        <p class="govuk-body-s govuk-!-margin-bottom-2">{{ __('person_sort') }}</p>
+        {{ savedPeopleTable(savedPeople, isUnableToAddPeople, __) }}
+        <button id="addToManifest"
+                type="submit"
+                name="buttonClicked"
+                value="Add to GAR"
+                class="govuk-button multi-submit-button"
+                data-multi-select-group="saved-people">{{ __('button_add_to_gar') }}</button>
+        {{ m.section_break() }}
+        <h2 class="govuk-heading-l">{{ __('heading_manifest_new_people') }}</h2>
+        <p class="govuk-body-m">
+          <a href="/garfile/manifest/addnewperson" class="govuk-button">{{ __('garfile_people_add') }}</a>
+        </p>
+        {{ m.section_break() }}
+        <h2 class="govuk-heading-l">{{ __('heading_current_manifest') }}</h2>
+        <p class="govuk-body-l">{{ __('current_manifest_caption') }}</p>
+        <label class="govuk-label" for="manifest-search">Search for people on the manifest</label>
+        <input class="govuk-input govuk-input--width-20 govuk-!-margin-bottom-2"
+               id="manifest-search"
+               type="search"
+               placeholder="Search">
+        <p class="govuk-body-m">
+          <mark>{{ __('expired_passport_warning') }}</mark>
+        </p>
+        {{ currentManifestTable(manifest, manifestInvalidPeople, pages, __) }}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="totalPersonsOnBoard">{{ __('total_persons_on_board') }}</label>
+          <input class="govuk-input govuk-input--width-3"
+                 id="totalPersonsOnBoard"
+                 name="name"
+                 readonly
+                 type="number"
+                 value="{{ manifest.items | length }}">
+        </div>
+        <button id="garPeopleId"
+                type="submit"
+                name="buttonClicked"
+                value="Add to PEOPLE"
+                class="govuk-button multi-submit-button"
+                data-multi-select-group="manifest"
+                disabled="true">{{ __('button_add_to_people') }}</button>
+        <button id="delete-people-dialog-button"
+                type="button"
+                class="govuk-button warning-button multi-submit-button"
+                data-multi-select-group="manifest">{{ __('table_delete_gar_people') }}</button>
+        {{ deletePeopleDialog(__) }}
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" aria-describedby="isMilitaryFlight-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+              <h2 class="govuk-fieldset__heading">Military flight</h2>
+            </legend>
+            {{ m.hint("isMilitaryFlight", __("is_military_flight_hint")) }}
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input"
+                       id="isMilitaryFlight"
+                       name="isMilitaryFlight"
+                       type="checkbox"
+                       {{ "checked" if cookie.getIsMilitaryFlight() }}
+                       value="true">
+                <label class="govuk-label govuk-checkboxes__label"
+                       for="isMilitaryFlight">Is this a Military flight?</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        {{ m.section_break() }}
+        <input id="continue"
+               type="submit"
+               class="govuk-button"
+               name="buttonClicked"
+               value="{{ __('button_continue') }}">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </form>
+      <form id="cancel-form" action="/garfile/view" method="post">
+        <button id="exit"
+                type="submit"
+                class="govuk-button govuk-button--secondary"
+                data-module="govuk-button">{{ __('form_exit') }}</button>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </form>
+    </div>
+  </div>
 {% endblock %}
