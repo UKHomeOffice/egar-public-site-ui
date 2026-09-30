@@ -27,6 +27,7 @@ const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require('./common/config');
 const airports = require('./common/utils/airports');
+const canonicaliseInput = require('./common/middleware/canonicaliseInput');
 
 // Global constants
 const PORT = process.env.PORT || 3000;
@@ -145,7 +146,7 @@ function initialiseGlobalMiddleware(app) {
       limit: '50kb',
     })
   );
-
+  app.use(canonicaliseInput);
   app.use(
     csrf({
       cookie: {
