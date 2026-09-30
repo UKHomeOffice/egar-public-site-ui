@@ -260,7 +260,7 @@ describe('Validator', () => {
     expect(validator.validGender('')).to.be.false;
     expect(validator.validGender(undefined)).to.be.false;
     expect(validator.validGender('Other')).to.be.false;
-    expect(validator.validGender('Unspecified')).to.be.true;
+    expect(validator.validGender('X or other')).to.be.true;
   });
 
   it('Should validate a chain of rules', () => {
