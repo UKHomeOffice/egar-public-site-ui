@@ -22,6 +22,12 @@ const validations = (craftObj) => {
         registration,
         `Registration must be ${MAX_REGISTRATION_LENGTH} characters or less`
       ),
+      new ValidationRule(
+        validator.isValidAircraftCharacters,
+        'registration',
+        registration,
+        `Aircraft registration number must only include letters, numbers, spaces, hyphens, brackets, plus signs, slashes and full stops.`
+      ),
     ],
     [
       new ValidationRule(validator.notEmpty, 'craftType', craftType, i18n.__('validation_aircraft_type')),
@@ -30,6 +36,12 @@ const validations = (craftObj) => {
         'craftType',
         craftType,
         `Aircraft type must be ${MAX_STRING_LENGTH} characters or less`
+      ),
+      new ValidationRule(
+        validator.isValidAircraftCharacters,
+        'craftType',
+        craftType,
+        `Aircraft type must only include letters, numbers, spaces, hyphens, brackets, plus signs, slashes and full stops.`
       ),
     ],
   ];

@@ -9,6 +9,9 @@
   GAR | Dashboard
 {% endblock %}
 
+{% set active = "/home" %}
+
+{% set statusName = statusTab| lower %}
 {% macro gar_summary_table(name, gars, statusTab, pages) %}
   <section class="govuk-tabs__panel" id="gars-{{ name }}">
     <h2 class="govuk-heading-m">{{ name | capitalize }} GARs</h2>
@@ -25,18 +28,18 @@
             <th class="govuk-table__header" scope="col" width="20%">{{ __('field_submission_reference') }}</th>
           </tr>
         </thead>
+
         <tbody class="govuk-table__body">
           {% for gar in gars %}
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
                 <button id="view-{{ name }}-{{ loop.index }}"
-                        type="submit"
                         class="govuk-button--link"
                         name="garId"
                         value="{{ gar.garId }}">{{ gar.registration or __('value_aircraft_registration_null') }}</button>
               </td>
-              <td class="govuk-table__cell">{{ gar.createdDate | truncate(11, true, "") }}</td>
-              <td class="govuk-table__cell">{{ gar.departureDate }}</td>
+              <td class="govuk-table__cell">{{ gar.createdDate | formatGdsDate('short') }}</td>
+              <td class="govuk-table__cell">{{ gar.departureDate | formatGdsDate('short') }}</td>
               <td class="govuk-table__cell">{{ gar.departureTime }}</td>
               <td class="govuk-table__cell">{{ gar.departurePort | upper }}</td>
               <td class="govuk-table__cell">{{ gar.arrivalPort | upper }}</td>
@@ -52,7 +55,9 @@
     {% else %}
       {{ m.empty_table_message(__('gar_' + name + '_no_records')) }}
     {% endif %}
+
     {{ pagination.build(pages, {status: statusTab, hash: '#gars-'~name }) }}
+
   </section>
 {% endmacro %}
 

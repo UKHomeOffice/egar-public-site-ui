@@ -44,11 +44,11 @@
             <th class="govuk-table__header" width="30%">Arrival Date & Time</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body">
+        <tbody class="govuk-table__body" id="printGAR">
           <tr class="govuk-table__row">
             <td class="govuk-table__cell" id="garID_title">{{ cookie.getGarId() }}</td>
-            <td class="govuk-table__cell">{{ garfile.departureDate }}  {{ garfile.departureTime }}</td>
-            <td class="govuk-table__cell">{{ garfile.arrivalDate }}  {{ garfile.arrivalTime }}</td>
+            <td class="govuk-table__cell">{{ garfile.departureDate | formatGdsDate('long') }}  {{ garfile.departureTime }}</td>
+            <td class="govuk-table__cell">{{ garfile.arrivalDate | formatGdsDate('long') }}  {{ garfile.arrivalTime }}</td>
 
           </tr>
         </tbody>
@@ -97,13 +97,14 @@
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">{{ person.lastName }}</td>
                 <td class="govuk-table__cell">{{ person.firstName }}</td>
-                <td class="govuk-table__cell">{{ person.dateOfBirth }}</td>
+                <td class="govuk-table__cell">{{ person.dateOfBirth | gdsDate('short') }}</td>
                 <td class="govuk-table__cell">{{ person.nationality | upper }}</td>
                 <td class="govuk-table__cell">{{ person.documentNumber }}</td>
-                <td class="govuk-table__cell">{{ person.documentExpiryDate }}</td>
+                <td class="govuk-table__cell">{{ person.documentExpiryDate | gdsDate('long') }}</td>
                 <td class="govuk-table__cell">{{ person.gender }}</td>
                 <td class="govuk-table__cell">{{ person.placeOfBirth }}</td>
                 <td class="govuk-table__cell">{{ person.peopleType.name }}</td>
+              </tr>
               </tr>
             {% endfor %}
           {% endif %}
