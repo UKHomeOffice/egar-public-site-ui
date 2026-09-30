@@ -26,6 +26,7 @@
       label: { text: __("field_given_name"), classes: "govuk-label--m" },
       hint: { text: __("invite_user_given_name_hint") },
       value: fname,
+      attributes: { maxlength: MAX_STRING_LENGTH },
       errorMessage: errors | containsError('fname')
       }) }}
 

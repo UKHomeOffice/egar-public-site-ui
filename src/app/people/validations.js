@@ -58,6 +58,12 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(
+        validator.isValidBirthPlaceName,
+        'birthplace',
+        req.body.birthplace,
+        'Enter a valid place of birth for the person'
+      ),
+      new ValidationRule(
         validator.isValidOptionalStringLength,
         'birthplace',
         req.body.birthplace,
