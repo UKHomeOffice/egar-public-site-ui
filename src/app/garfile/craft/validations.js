@@ -26,7 +26,7 @@ const validations = (craftObj) => {
         validator.isValidAircraftCharacters,
         'registration',
         registration,
-        `Aircraft registration number must only include letters, numbers, spaces, hyphens, brackets, plus signs, slashes and full stops.'`
+        `Aircraft registration number must only include letters, numbers, spaces, hyphens, brackets, plus signs, slashes and full stops.`
       ),
     ],
     [
@@ -41,7 +41,7 @@ const validations = (craftObj) => {
         validator.isValidAircraftCharacters,
         'craftType',
         craftType,
-        `Aircraft type must only include letters, numbers, spaces, hyphens, brackets and slashes.`
+        `Aircraft type must only include letters, numbers, spaces, hyphens, brackets, plus signs, slashes and full stops.`
       ),
     ],
   ];

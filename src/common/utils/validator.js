@@ -762,7 +762,7 @@ function isPostCodeValidCharacters(input) {
 }
 
 function isValidAircraftCharacters(input) {
-  const validCharactersRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''()@&-]+$/;
+  const validCharactersRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''+()@&-]+$/;
   return validCharactersRegex.test(input);
 }
 
