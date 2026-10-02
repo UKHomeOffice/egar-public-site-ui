@@ -87,7 +87,6 @@ Run `just check` for every code change. Run `just verify` before handoff; in thi
 - `request` remains a deprecated dependency while the callback-based services are migrated to `HttpClient`; correlation-ID injection exists in both paths.
 - `knip` reports many CommonJS route/config exports that are used through property access; treat that category as a known baseline and inspect new findings.
 - `throng` currently runs one worker because `NODE_WORKER_COUNT` is not configured.
-- There is no `.env.example`.
 - The first ESLint cleanup fixed real stale-tooling findings; preserve the explicit `@eslint/js` dependency and do not reintroduce placeholder assignments.
 
 Detailed domain and tool investigations live under `docs/agents/`. See `docs/agents/issue-tracker.md` and `docs/agents/domain.md` when those branches of work apply.

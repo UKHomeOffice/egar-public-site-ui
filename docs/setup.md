@@ -33,7 +33,7 @@ This installs the project-managed tools, including ESLint, Prettier, Knip, Mocha
 
 ## Configure the environment
 
-Create `.env.dev`. There is no committed example file; ask the team for development values and use `src/common/config/index.js` as the authoritative list of environment reads.
+Obtain the team's local development configuration and save it as `.env.dev`. Use `src/common/config/index.js` to check the application settings. Keep credentials out of version control.
 
 To use the local mock ClamAV container, include:
 
