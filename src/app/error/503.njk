@@ -3,7 +3,7 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block page_title %}
-	Error 503
+  Error 503
 {% endblock %}
 
 {% block beforeContent %}
@@ -11,19 +11,16 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-	  <h1 class="govuk-heading-l">
-			Sorry, the service is currently unavailable
-		</h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Sorry, the service is currently unavailable</h1>
 
-		<p class="govuk-body-l">
-			Please try again later.
-		</p>
+      <p class="govuk-body-l">Please try again later.</p>
 
-		<p class="govuk-body-m">
-			If you have an urgent query whilst the service is unavailable please <a href="mailto:{{__('support_email')}}" class="govuk-link">contact us</a>.
-		</p>
-	</div>
-</div>
+      <p class="govuk-body-m">
+        If you have an urgent query whilst the service is unavailable please <a href="mailto:{{ __('support_email') }}"
+    class="govuk-link">contact us</a>.
+      </p>
+    </div>
+  </div>
 {% endblock %}

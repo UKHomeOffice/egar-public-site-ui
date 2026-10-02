@@ -816,7 +816,7 @@ class Cookie {
   }
 
   dateSlice(dateType, date) {
-    let dateValue = '';
+    let dateValue;
     switch (dateType.toLowerCase()) {
       case 'day':
         dateValue = date == null ? '' : date.split('-')[2];
@@ -837,7 +837,7 @@ class Cookie {
   }
 
   timeSlice(timeType, time) {
-    let timeValue = '';
+    let timeValue;
     switch (timeType.toLowerCase()) {
       case 'hour':
         timeValue = time == null ? '' : time.split(':')[0];

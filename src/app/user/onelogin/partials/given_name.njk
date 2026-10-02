@@ -1,23 +1,37 @@
 {% import "common/templates/includes/macros.njk" as m %}
 <script src="/javascripts/user/onelogin/partials/given_name.js" type="module"></script>
 <div class="govuk-grid-column-two-thirds govuk-!-margin-left-8 govuk-!-margin-top-6">
-  <form id="page-form" action="/onelogin/register" autocomplete="off" method="post" role="form">
-    <h1 class="govuk-heading-l">{{__('title_create_account_onelogin')}}</h1>
+  <form id="page-form"
+        action="/onelogin/register"
+        autocomplete="off"
+        method="post"
+        role="form">
+    <h1 class="govuk-heading-xl">{{ __('title_create_account_onelogin') }}</h1>
 
     <div class="govuk-form-group {{ m.form_group_class('userFname', errors) }}">
       <label class="govuk-label" for="userFname">{{ __('field_given_name') }}</label>
       {{ m.error_message('userFname', errors, __) }}
-      <input id="userFname" name="userFname" autocomplete="off" class="govuk-input govuk-input--width-30"
-        type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ firstName }}"
-        {{ 'aria-describedby=userFname-error' if errors | containsError('userFname') }}>
+      <input id="userFname"
+             name="userFname"
+             autocomplete="off"
+             class="govuk-input govuk-input--width-30"
+             type="text"
+             maxlength="{{ MAX_STRING_LENGTH }}"
+             value="{{ firstName }}"
+             {{ 'aria-describedby=userFname-error' if errors | containsError('userFname') }}>
     </div>
 
     <div class="govuk-form-group {{ m.form_group_class('userLname', errors) }} govuk-!-margin-bottom-12">
       <label class="govuk-label" for="userLname">{{ __('field_family_name') }}</label>
       {{ m.error_message('userLname', errors, __) }}
-      <input id="userLname" name="userLname" autocomplete="off" class="govuk-input govuk-input--width-30"
-        type="text" maxlength="{{ MAX_STRING_LENGTH }}" value="{{ lastName }}"
-        {{ 'aria-describedby=userLname-error' if errors | containsError('userLname') }} >
+      <input id="userLname"
+             name="userLname"
+             autocomplete="off"
+             class="govuk-input govuk-input--width-30"
+             type="text"
+             maxlength="{{ MAX_STRING_LENGTH }}"
+             value="{{ lastName }}"
+             {{ 'aria-describedby=userLname-error' if errors | containsError('userLname') }}>
     </div>
 
     <div class="form-group">

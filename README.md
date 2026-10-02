@@ -1,23 +1,8 @@
 ## Submit a GAR (sGAR)
 
-## Prerequisites
-- Clone the `data-access-api`repo in the same parent folder and set up environment variables as explained in the `data-access-api` README.md.
+## Development setup
 
-## Requirements
-- docker and docker compose.
-- create a `.env.dev` file and input environment variables - ask a developer in the SGAR team for them.
-
-## Run the application
-
-1. Run the following:
-```sh
-docker compose up -d --build
-```
-
-This should build both the `data-access-api` and `egar-public-site-ui`.
-
-- The frontend will now be running on port 3000.
-- To see changes on the frontend, reload the page.
+See [the development setup guide](docs/setup.md) for prerequisites, environment configuration, project dependencies, local startup, tooling installation, and verification.
 
 ## Generate airport codes data (airport_codes.json)
 
@@ -41,16 +26,6 @@ Notes:
 |---|-----------------------------------------------|----------------------------------------------|---------------------------------------------|----------------------------------------|----------------------------------|-----------------------------|------------------------|---|
 |Kautokeino Air Base| ENKA                                          | QKX                                          |                                             | FALSE                                  | FALSE                            | FALSE                       | Kautokeino Air Base (QKX / ENKA) | ICAO/IATA aircodes|
  |Bedwell Hey Farm Ely Rd| | | E201| FALSE| TRUE| TRUE| Bedwell Hey Farm Ely Rd| Not IATA/ICAO airfield|
-
-## Unit tests
-
-Run the below to access the node container, which will have all the installed dependencies, so you can run the npm test script.
-```sh
-docker exec  -it node sh
-
-# Now run the test script
-npm run test
-```
 
 ## Access the database
 

@@ -4,21 +4,19 @@
 {% from "dist/govuk/components/panel/macro.njk" import govukPanel %}
 
 {% block pageTitle %}
-	GAR | Account Deleted
+  GAR | Account Deleted
 {% endblock %}
 
 {% block content %}
 
-<div class="govuk-grid-row govuk-!-margin-top-6">
+  <div class="govuk-grid-row govuk-!-margin-top-6">
     <div class="govuk-grid-column-two-thirds govuk-!-margin-left-7">
       {{ govukPanel({
-          titleText: "Account deleted"
-          })
+        titleText: "Account deleted"
+      })
       }}
 
-      <p class="govuk-body-m">
-        We have sent you a confirmation email.
-      </p>
+      <p class="govuk-body-m">We have sent you a confirmation email.</p>
     </div>
-</div>
+  </div>
 {% endblock %}

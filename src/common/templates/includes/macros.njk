@@ -2,29 +2,29 @@
 {% from "dist/govuk/components/select/macro.njk" import govukSelect %}
 
 {% macro form_group_class(identifier, errors) %}
-  {% set class = 'govuk-form-group' %}
+  {% set class = "govuk-form-group" %}
   {% for error in errors %}
     {% if error.identifier == identifier %}
-      {% set class = 'govuk-form-group govuk-form-group--error' %}
+      {% set class = "govuk-form-group govuk-form-group--error" %}
     {% endif %}
   {% endfor %}
-  {{class}}
+  {{ class }}
 {% endmacro %}
 
 {% macro error_message(identifier, errors, __) %}
   {% for error in errors %}
     {% if error.identifier == identifier %}
       <p id="{{ identifier }}-error" class="govuk-error-message">
-        <span class="govuk-visually-hidden">{{__('error_prefix')}}</span>{{error.message}}</p>
+        <span class="govuk-visually-hidden">{{ __('error_prefix') }}</span>{{ error.message }}
+      </p>
     {% endif %}
   {% endfor %}
 {% endmacro %}
 
 {% macro departure_warning_dialog(__) %}
-  <dialog id="confirmWarnedDepartureDialog" class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-error-message govuk-!-font-size-36">
-        Warning
-      </h2>
+  <dialog id="confirmWarnedDepartureDialog"
+          class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-error-message govuk-!-font-size-36">Warning</h2>
     <div class="twoHourWarningText">
       <p>{{ __('departure_date_2_hours_prior__civil_penalty') }}</p>
       <p>{{ __('departure_date_2_hours_prior__flight_requirements') }}</p>
@@ -35,28 +35,26 @@
     </div>
 
     <form method="dialog">
-      <button id="closeDialogButton" type="submit" class="govuk-button" data-module="govuk-button">
-          Close and fix departure date
-        </button>
+      <button id="closeDialogButton"
+              type="submit"
+              class="govuk-button"
+              data-module="govuk-button">Close and fix departure date</button>
     </form>
-    <button
-        id="continueWithWarnedDate"
-        type="button"
-        class="govuk-button warning-button"
-        data-module="govuk-button"
-        name="buttonClicked"
-        value="">
-        Continue with warned departure date
-      </button>
+    <button id="continueWithWarnedDate"
+            type="button"
+            class="govuk-button warning-button"
+            data-module="govuk-button"
+            name="buttonClicked"
+            value="">Continue with warned departure date</button>
   </dialog>
 {% endmacro %}
 
 {% macro departure_warning_message(__) %}
   {{ govukWarningText({
     html:
-      __('departure_date_2_hours_prior__civil_penalty') + "<br><br>" +
-      __('departure_date_2_hours_prior__flight_requirements') + "<br><br>" +
-      __('note_about_utc_and_daylight_saving_hours'),
+    __('departure_date_2_hours_prior__civil_penalty') + "<br><br>" +
+    __('departure_date_2_hours_prior__flight_requirements') + "<br><br>" +
+    __('note_about_utc_and_daylight_saving_hours'),
     iconFallbackText: "Warning",
     classes: "twoHourWarningText",
     attributes: {
@@ -66,9 +64,9 @@
 
   {{ govukWarningText({
     html:
-      __('departure_date_too_far_in_future__civil_penalty') + "<br><br>" +
-      __('departure_date_too_far_in_future__flight_requirements') + "<br><br>" +
-      __('note_about_utc_and_daylight_saving_hours'),
+    __('departure_date_too_far_in_future__civil_penalty') + "<br><br>" +
+    __('departure_date_too_far_in_future__flight_requirements') + "<br><br>" +
+    __('note_about_utc_and_daylight_saving_hours'),
     iconFallbackText: "Warning",
     classes: "fortyEightHourWarningText",
     attributes: {
@@ -80,33 +78,36 @@
 {% macro empty_table_message(message, colspan=1) %}
   <tr class="govuk-table__row">
     <td class="govuk-table__cell" colspan="{{ colspan }}">
-      <div class="govuk-inset-text">
-        {{ message | safe }}
-      </div>
+      <div class="govuk-inset-text">{{ message | safe }}</div>
     </td>
   </tr>
 {% endmacro %}
 
 {% macro submit_buttons(analyticsPage, csrfToken, __) %}
-  <input id="save-and-continue" class="govuk-button" type="submit"
-    name="buttonClicked"
-    value="{{ __('form_save_and_continue') }}">
+  <input id="save-and-continue"
+         class="govuk-button"
+         type="submit"
+         name="buttonClicked"
+         value="{{ __('form_save_and_continue') }}">
   <p class="govuk-body-m">
-    <input id="save-and-come-back" class="disableAutoFillSubmit govuk-button govuk-button--secondary" type="submit"
-      name="buttonClicked"
-      value="{{ __('form_save_and_come_back') }}">
+    <input id="save-and-come-back"
+           class="disableAutoFillSubmit govuk-button govuk-button--secondary"
+           type="submit"
+           name="buttonClicked"
+           value="{{ __('form_save_and_come_back') }}">
   </p>
 
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 {% endmacro %}
 
 {% macro exit_without_saving(csrfToken, __) %}
   <form id="cancel-form" action="/garfile/view" method="post">
     <p class="govuk-body-m">
-      <button type="submit" id="exit-without-saving" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-        {{__('form_exit_without_saving')}}
-      </button>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      <button type="submit"
+              id="exit-without-saving"
+              class="govuk-button govuk-button--secondary"
+              data-module="govuk-button">{{ __('form_exit_without_saving') }}</button>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </p>
   </form>
 {% endmacro %}
@@ -124,24 +125,28 @@
   <span id="{{ id }}-hint" class="govuk-hint">{{ hint }}</span>
 {% endmacro %}
 
+{% macro section_break() %}
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+{% endmacro %}
+
 {% macro character_count_hint(id, max_length) %}
   <div id="{{ id }}-info" class="govuk-hint govuk-character-count__message">
     You can enter up to {{ max_length }} characters
   </div>
 {% endmacro %}
 
-{% macro loadingScreen(text, text2)  %}
-    <div class="flex-center">
-        <div id="loader"></div>
-    </div>
-    <div class="govuk-!-text-align-center govuk-!-padding-top-5">
-      <h2 class="govuk-heading-l">{{text}}</h2>
-      <p class="govuk-body govuk-!-font-size-36">{{text2}}</p>
-    </div>
+{% macro loadingScreen(text, text2) %}
+  <div class="flex-center">
+    <div id="loader"></div>
+  </div>
+  <div class="govuk-!-text-align-center govuk-!-padding-top-5">
+    <h2 class="govuk-heading-l">{{ text }}</h2>
+    <p class="govuk-body govuk-!-font-size-36">{{ text2 }}</p>
+  </div>
 {% endmacro %}
 
 {% macro countryList(field, countries, selectedValue='', label='', hint='', errors='') %}
-  {% set countryItems = [{value: '', text: ''}] %}
+  {% set countryItems = [{"value": "", "text": ""}] %}
   {% for country in countries | sort(attribute='label') %}
     {% set option = {
       value: country.code,

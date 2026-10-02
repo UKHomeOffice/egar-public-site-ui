@@ -3,24 +3,25 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	{{__('title_cancel_gar')}}
+  {{ __('title_cancel_gar') }}
 {% endblock %}
 
-{% set active = '/home' %}
+{% set active = "/home" %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">{{__('heading_cancel_gar')}}</h1>
-  <p class="govuk-body-m">{{__('cancel_gar_caption')}}</p>
+  <h1 class="govuk-heading-xl">{{ __('heading_cancel_gar') }}</h1>
+  <p class="govuk-body-m">{{ __('cancel_gar_caption') }}</p>
   <br>
   <form action="/garfile/cancel" method="post">
-    <button id="cancel-gar" class="govuk-button" type="submit">{{__('title_cancel_gar')}}</button>
+    <button id="cancel-gar" class="govuk-button" type="submit">{{ __('title_cancel_gar') }}</button>
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   </form>
   <form id="cancel-form" action="/garfile/view" method="post" role="form">
     <p class="govuk-body-m">
-      <button type="submit" id="exit-without-cancelling" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-        {{__('form_exit_without_cancelling')}}
-      </button>
+      <button type="submit"
+              id="exit-without-cancelling"
+              class="govuk-button govuk-button--secondary"
+              data-module="govuk-button">{{ __('form_exit_without_cancelling') }}</button>
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     </p>
   </form>
