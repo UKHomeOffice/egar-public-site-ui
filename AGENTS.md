@@ -9,18 +9,20 @@ The sGAR front end: a Node/Express application in plain JavaScript that renders 
 ```mermaid
 flowchart LR
     UI["egar-public-site-ui (this repo)"]
+    DB[("Postgres — sessions")]
     API["data-access-api"]
     CLAMAV(["External: ClamAV — virus scanning"])
     ONELOGIN(["External: GOV.UK One Login"])
     NOTIFY(["External: GOV.UK Notify"])
 
     UI -- HTTP --> API
+    UI --- DB
     UI -- "scan uploads" --> CLAMAV
     UI -- OIDC --> ONELOGIN
     UI -- HTTP --> NOTIFY
 ```
 
-This repository owns the sGAR web journey, authentication flows, upload scanning, and its own account/registration/invite notifications. `data-access-api` owns GAR, passenger, and organisation state and routes submitted GARs to the queue consumers; this UI does not call CBP, AMG, or either queue directly.
+This repository owns the sGAR web journey, PostgreSQL-backed sessions, authentication flows, upload scanning, and its own account/registration/invite notifications. `data-access-api` owns GAR, passenger, and organisation state and routes submitted GARs to the queue consumers; this UI does not call CBP, AMG, or either queue directly.
 
 If a change adds, removes, or redirects an external call, update the diagram and the relevant contract information in this file.
 
@@ -29,6 +31,7 @@ If a change adds, removes, or redirects an external call, update the diagram and
 | Dependency | Direction | Purpose | Configuration |
 |---|---|---|---|
 | `data-access-api` | HTTP | GAR, passenger, and organisation data | `common/config/index.js` |
+| Postgres | session store | Express session persistence, separate from backend report state | `PUBLIC_SITE_DB*` |
 | GOV.UK One Login | OIDC/HTTP | Login, registration, logout, and organisation invites | `ONE_LOGIN_*` |
 | ClamAV | HTTP | Scan supporting-document uploads | `CLAMAV_BASE`, `CLAMAV_PORT` |
 | GOV.UK Notify | HTTP | Account, registration, and invite messages | `NOTIFY_*` |
@@ -93,7 +96,20 @@ Run `just check` for every code change. Run `just verify` before handoff; it als
 
 Detailed domain and tool investigations live under `docs/agents/`. See `docs/agents/issue-tracker.md` and `docs/agents/domain.md` when those branches of work apply.
 
-## Repository references
+## Logging
 
-- Jira is the source of truth for issue work; use issue keys supplied by the user and do not create or transition Jira issues.
-- This repository uses root `CONTEXT.md` and `docs/adr/` for domain terminology and decisions; read the relevant material before domain-heavy changes.
+Use `common/utils/logger` rather than console output or a separate logger. Log outcomes, not narration, using consistent, concise messages. Use metadata fields for values queried, filtered, aggregated, or useful for incident alerts; less-queryable one-off values can remain in message text.
+
+Preserve the shared envelope (`timestamp`, `level`, `fileName`, `lineNumber`, `correlationId`, `message`); `fileName` identifies source code and `method` is request-log-only. Propagate `correlationId` across services; keep `sessionId` frontend-only, out of backend calls and queue payloads. Shared middleware owns request lifecycle logging.
+
+Use INFO for meaningful state changes/external outcomes, WARNING for recoverable problems or rejected input, ERROR for failures requiring attention, and DEBUG for diagnostic detail. Never demote existing WARNING/ERROR signals to DEBUG to reduce noise; production support cannot rely on DEBUG visibility. Strip or restructure unsafe content instead. Include exception detail only where useful and avoid duplicate error reports. Exclude secrets, direct PII and raw payload dumps. Message email masking does not sanitise metadata or stack traces.
+
+## Working conventions
+
+Prefer the simplest solution that fully addresses the task. Follow existing codebase patterns and avoid unnecessary abstractions or dependencies.
+
+For issue specifications or proposed issue content, follow [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md): Jira is authoritative, and agents use user-supplied details rather than accessing Jira.
+
+Use local test configuration and mocks by default. Obtain explicit approval before contacting live services, changing deployed resources, or pushing commits. Keep secrets out of responses and version control, and preserve unrelated worktree changes.
+
+Read relevant records under `docs/adr/` before changing their area. For domain-heavy work, follow [`docs/agents/domain.md`](docs/agents/domain.md), which describes the vocabulary fallback when a root `CONTEXT.md` is absent.
