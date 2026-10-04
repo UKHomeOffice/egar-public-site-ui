@@ -24,6 +24,11 @@ check-code-format:
 run-tests:
     cd src && npx c8 --reporter=lcov mocha --file test/global.test.js --bail --recursive
 
+# Run selected Mocha files or grep patterns without coverage; paths are relative to src.
+[positional-arguments]
+run-tests-target +args:
+    cd src && npx mocha --file test/global.test.js --bail --recursive --fail-zero "$@"
+
 # Fast default gate for normal code changes. Expected to pass on a clean branch.
 check: lint-code run-tests
 
