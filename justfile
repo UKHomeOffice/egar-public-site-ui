@@ -4,9 +4,6 @@ set dotenv-filename := ".env.dev"
 default:
     @just --list
 
-# ESLint: rule violations (unused vars, complexity, deprecated patterns) — not layout.
-# Also enforces Prettier formatting as an ESLint error (eslint-plugin-prettier), so
-# this alone covers what `check` gates on.
 # Lint JavaScript and enforce Prettier formatting.
 lint-code:
     cd src && npx eslint . --ext .js
@@ -81,8 +78,8 @@ review-security:
     -just scan-filesystem
     -just scan-code
 
-# Final green verification gate. Only includes checks expected to pass.
-verify: check
+# Final gate adds Prettier checks for non-JavaScript files, matching CI.
+verify: check check-code-format
 
 # Run all advisory review tools. Not guaranteed to exit cleanly.
 review-all:

@@ -75,8 +75,9 @@ brew install hadolint trivy semgrep
 ```sh
 just --list
 just check
+just verify
 just lint-templates
 just check-template-format
 ```
 
-`just check` is the normal code gate. The template commands are required when changing Nunjucks files. Run `just review-all` when the broader review tools are installed; its findings may require interpretation.
+`just check` is the normal code gate. `just verify` also checks formatting of non-JavaScript files, matching CI. The template commands are required when changing Nunjucks files. Run `just review-all` when the broader review tools are installed; its findings may require interpretation.

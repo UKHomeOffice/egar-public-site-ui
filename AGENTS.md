@@ -45,17 +45,17 @@ Follow [`docs/setup.md`](docs/setup.md) when preparing a checkout, configuring `
 
 ## Quality gates
 
-Run `just check` for every code change. Run `just verify` before handoff; in this repository it currently aliases `check`.
+Run `just check` for every code change. Run `just verify` before handoff; it also checks formatting of non-JavaScript files, matching CI.
 
 | Command | Purpose | Expected status |
 |---|---|---|
 | `just format-code` | Rewrite JS, JSON, CSS, and other Prettier-supported files | Modifies files |
 | `just fix-code` | Apply safe ESLint fixes, then format code | Modifies files |
-| `just check-code-format` | Check Prettier formatting without changes | Must pass when formatting is in scope |
+| `just check-code-format` | Check Prettier formatting without changes | Must pass |
 | `just lint-code` | ESLint, including the configured Prettier rule | Must pass |
 | `just run-tests` | Mocha tests with c8 coverage | Must pass |
 | `just check` | `lint-code` + `run-tests` | Required fast gate |
-| `just verify` | `check` | Required final gate |
+| `just verify` | `check` + `check-code-format` | Required final gate |
 
 ## Agent review tools
 

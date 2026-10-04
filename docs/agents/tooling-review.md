@@ -29,7 +29,7 @@ The local results below are the review snapshot, not a claim about every checkou
 | Gate | Local state recorded in this review | Drone alignment | Why it is blocking or advisory |
 | --- | --- | --- | --- |
 | `just check` | Green: ESLint and 761 tests passed. | Drone blocks on `run-tests` and `check-code`; its `npm run check` also runs Prettier. | The fast local default is limited to stable, everyday checks. CI is the authoritative build gate and adds its production command. |
-| `just verify` | Green: currently runs `check`. | It is a local final check, not a Drone-pipeline substitute. | Kept green so an agent can distinguish a regression from an existing advisory finding. |
+| `just verify` | Green: `check` and `check-code-format` passed after adding standalone Prettier checking. | Covers CI's JavaScript lint and Prettier checks, but is not a full Drone-pipeline substitute. | Includes non-JavaScript formatting failures that ESLint cannot detect. |
 | `just review-hygiene` | Template lint and format checks are clean across 98 templates. Knip exits 0 with 215 warned exports; Docker lint is clean under the shared Hadolint policy. | Drone blocks on both template checks and on Knip's exit status, and runs non-blocking `lint-dockerfile`. | Template checks are reliable gates. Knip remains useful but noisy because unused exports are configured as warnings; Docker lint is a clean advisory signal. |
 | `just review-security` | `npm audit` had 3 vulnerabilities; Semgrep reported 6 findings while exiting 0; filesystem Trivy reported Dockerfile findings. | Drone image Trivy is explicitly non-blocking; Sonar is also non-blocking. Drone does not run the local audit or Semgrep commands. | Security output can be valuable without being a reliable pass/fail signal. The local scan excludes `.env` files and generated dependency trees to avoid exposing workstation data. |
 | Docker image build | No equivalent `just` recipe. | Drone blocks on `build` after the configured test, lint, template, and unused-code steps. | A deployable-image failure is a release blocker and belongs in CI, where Docker is available consistently. |
@@ -61,17 +61,15 @@ The local results below are the review snapshot, not a claim about every checkou
 
 ## Main problems to fix
 
-### 1. `just check` is described as matching CI, but it does not exactly match CI
+### 1. Final verification now includes CI's standalone formatting check
 
-`AGENTS.md:45` and `justfile:25-26` say `just check` is the local quality gate and matches CI. But CI runs `npm run check` in `.drone.yml:20-26`, and `src/package.json` defines that as `eslint . --ext .js && prettier --check .`. `just check` runs `lint test`, not `check-code-format`.
+CI runs `npm run check`, which includes both ESLint and standalone Prettier. `just check` intentionally remains the fast JavaScript lint/test gate; `just verify` now adds `check-code-format` so JSON, CSS, and other Prettier-supported files are checked before handoff.
 
-The practical result is okay right now because ESLint includes `prettier/prettier`, and `check-code-format` passes, but the documentation is still slightly misleading.
-
-**Recommendation:** change the wording to something like: "`just check` is the fast local gate: ESLint plus tests. CI additionally runs `npm run check`, which includes Prettier." Alternatively, update `just check` to include `check-code-format`.
+ESLint's `prettier/prettier` rule checks JavaScript only; it cannot replace the standalone formatting gate. The agent guide and setup instructions now describe that distinction.
 
 ### 2. `just verify` has been narrowed to a green final gate
 
-The earlier `verify` recipe bundled green checks with advisory tools. It now runs only `check`, while `knip`, `lint-templates`, `lint-dockerfile`, `audit-dependencies`, `scan-filesystem`, and `scan-code` live under the labelled advisory tiers.
+The earlier `verify` recipe bundled green checks with advisory tools. It now runs `check check-code-format`, while `knip`, `lint-templates`, `lint-dockerfile`, `audit-dependencies`, `scan-filesystem`, and `scan-code` live under the labelled advisory tiers.
 
 That makes `verify` a dependable final gate again. Agents still need to read advisory output when they deliberately run `review-hygiene`, `review-security`, or `review-all`.
 
