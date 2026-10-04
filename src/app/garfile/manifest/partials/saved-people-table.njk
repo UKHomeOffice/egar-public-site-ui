@@ -42,7 +42,9 @@
                         class="govuk-button--link"
                         title="Edit details for {{ person.firstName }} {{ person.lastName }}"
                         name="editSavedPerson"
-                        value="{{ person.personId }}">Edit</button>
+                        value="{{ person.personId }}">
+                  Edit <span class="govuk-visually-hidden">{{ person.firstName }} {{ person.lastName }}</span>
+                </button>
               {% elif not person.isDuplicate %}
                 <div class="govuk-checkboxes__item">
                   <input type="checkbox"

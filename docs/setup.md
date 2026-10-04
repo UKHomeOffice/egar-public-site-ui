@@ -46,6 +46,8 @@ CLAMAV_PORT=8080
 
 ## Run the service
 
+The PostgreSQL session store automatically creates its `session` table if missing. The database must already exist, and the configured database user needs permission to create tables in the target schema.
+
 From the repository root:
 
 ```sh

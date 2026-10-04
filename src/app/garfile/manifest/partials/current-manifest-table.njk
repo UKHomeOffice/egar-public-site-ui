@@ -62,7 +62,9 @@
               <button class="govuk-button--link"
                       type="submit"
                       name="editPersonId"
-                      value="{{ person.garPeopleId }}">Edit</button>
+                      value="{{ person.garPeopleId }}">
+                Edit <span class="govuk-visually-hidden">{{ person.firstName }} {{ person.lastName }}</span>
+              </button>
             </td>
           </tr>
           <tr class="govuk-table__row">
