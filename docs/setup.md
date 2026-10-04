@@ -54,6 +54,8 @@ docker compose up -d --build
 
 This builds the UI and its sibling `data-access-api`. The UI is available on port 3000.
 
+The production image installs application dependencies before removing npm/npx and npm's bundled libraries. It starts the service directly with Node and runs as the existing non-root user. The development stage retains npm.
+
 ## Install review tools
 
 djLint is required for Nunjucks changes. Install its CI-pinned version in an isolated environment:
