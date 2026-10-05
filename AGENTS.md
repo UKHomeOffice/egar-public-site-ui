@@ -64,6 +64,8 @@ Run `just check` for every code change. Run `just verify` before handoff; it als
 
 ## Agent review tools
 
+Browser debugging: for UI reproduction, failed browser requests, rendered accessibility, or journey smoke checks, follow [`docs/setup.md#optional-browser-debugging`](docs/setup.md#optional-browser-debugging). Use it when browser tools are available; otherwise report the missing capability rather than claiming browser verification.
+
 | Command | Use |
 |---|---|
 | `just check-unused-code` | Knip: unused files, exports, and dependencies; interpret the known CommonJS export baseline |
