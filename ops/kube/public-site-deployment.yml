@@ -75,6 +75,9 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             privileged: false
+            capabilities:
+              drop:
+                - ALL
           resources:
             limits:
               memory: "512Mi"
@@ -118,6 +121,9 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             privileged: false
+            capabilities:
+              drop:
+                - ALL
           resources:
             limits:
               memory: "4096Mi"
