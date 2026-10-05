@@ -118,6 +118,24 @@ class GarApi {
       return responseErrorMessage;
     }
   }
+
+  async getGars(userId, userType, pages, orgId = null) {
+    const endpoint = userType === 'Individual' ? `/user/${userId}/gars` : `/user/${userId}/organisation/${orgId}/gars`;
+
+    try {
+      return await this.client.get(endpoint, {
+        query: {
+          status: pages.status,
+          page: pages.page,
+          per_page: pages.perPage,
+        },
+      });
+    } catch (err) {
+      const responseErrorMessage = getResponseErrorMessage(err);
+      logger.error(`${userId} garApi.getGars request was not successful : ${responseErrorMessage}`);
+      return responseErrorMessage;
+    }
+  }
 }
 
 module.exports.GarApi = GarApi;

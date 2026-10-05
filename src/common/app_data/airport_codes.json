@@ -59772,6 +59772,18 @@
     "crownDependency": false
   },
   {
+    "id": "d0ee94a48d177837bbe2192c1268349f18a50a076f2e1e36ab73be14bc69df3b",
+    "name": "Kraljevo Morava Airport",
+    "label": "Kraljevo Morava Airport (KVO / LYKV)",
+    "iata": "KVO",
+    "icao": "LYKV",
+    "otherCodes": null,
+    "value": "KVO",
+    "designated": false,
+    "british": false,
+    "crownDependency": false
+  },
+  {
     "id": "3ca13d08e2073497372e9b947782fb21f27b4a0e62904b3ccc5cda21cec8346f",
     "name": "Cartersville Airport",
     "label": "Cartersville Airport (KVPC)",
@@ -65746,18 +65758,6 @@
     "crownDependency": false
   },
   {
-    "id": "36292b92ac4fad3a6930517dcf0b12cfa782f261efcb0c6b597000d3be6093b6",
-    "name": "Mollis Airport",
-    "label": "Mollis Airport (LSMF)",
-    "iata": null,
-    "icao": "LSMF",
-    "otherCodes": null,
-    "value": "LSMF",
-    "designated": false,
-    "british": false,
-    "crownDependency": false
-  },
-  {
     "id": "aef17fc31eb223bd9c0a878bad5ca3c38334a0064fbba506efe264e76358f801",
     "name": "Lodrino Air Base",
     "label": "Lodrino Air Base (LSML)",
@@ -66029,6 +66029,18 @@
     "icao": "LSZK",
     "otherCodes": null,
     "value": "LSZK",
+    "designated": false,
+    "british": false,
+    "crownDependency": false
+  },
+  {
+    "id": "3b7b3aeb09c85eaded68ccc1e971aae041fe5fe8ead4a8b134998e373962a77b",
+    "name": "Mollis Airport",
+    "label": "Mollis Airport (LSZM)",
+    "iata": null,
+    "icao": "LSZM",
+    "otherCodes": null,
+    "value": "LSZM",
     "designated": false,
     "british": false,
     "crownDependency": false
@@ -85467,6 +85479,18 @@
     "icao": "LIRL",
     "otherCodes": null,
     "value": "QLT",
+    "designated": false,
+    "british": false,
+    "crownDependency": false
+  },
+  {
+    "id": "1d8ea56f97deacd4bcbe35d206d6f5e7ef92a7c06d7c7bd5957021ed3776b2e9",
+    "name": "Chemnitz Jahnsdorf Airport",
+    "label": "Chemnitz Jahnsdorf Airport (QMU / EDCJ)",
+    "iata": "QMU",
+    "icao": "EDCJ",
+    "otherCodes": null,
+    "value": "QMU",
     "designated": false,
     "british": false,
     "crownDependency": false
@@ -120150,6 +120174,18 @@
     "crownDependency": false
   },
   {
+    "id": "e1f4c7dc6867988979a52b7c1914bae11e6926faaa4daa7e4d71cd0d83e53d6c",
+    "name": "Compiegne Margny Airport",
+    "label": "Compiegne Margny Airport (XCP / LFAD)",
+    "iata": "XCP",
+    "icao": "LFAD",
+    "otherCodes": null,
+    "value": "XCP",
+    "designated": false,
+    "british": false,
+    "crownDependency": false
+  },
+  {
     "id": "4c6606d28746e43907f394846be084e661a091eb7612ae894c44a7b2fe903619",
     "name": "Châlons-vatry Airport",
     "label": "Châlons-vatry Airport (XCR / LFOK)",
@@ -123476,13 +123512,13 @@
     "crownDependency": false
   },
   {
-    "id": "8f6f3f24316ac34f9ab8234325f55923dad3a705d44488eed34be7b4141e6b10",
+    "id": "7598a29c5e80104dfd0b4aa4af385944b07aaafbfaacd32f1ebe0c348d4552a9",
     "name": "Natuashish Airport",
     "label": "Natuashish Airport (YNP)",
     "iata": "YNP",
     "icao": null,
     "otherCodes": [
-      "CNH2"
+      "CNH 2.00"
     ],
     "value": "YNP",
     "designated": false,

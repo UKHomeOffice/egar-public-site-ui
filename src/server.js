@@ -27,6 +27,7 @@ const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require('./common/config');
 const airports = require('./common/utils/airports');
+const canonicaliseInput = require('./common/middleware/canonicaliseInput');
 
 // Global constants
 const PORT = process.env.PORT || 3000;
@@ -145,7 +146,7 @@ function initialiseGlobalMiddleware(app) {
       limit: '50kb',
     })
   );
-
+  app.use(canonicaliseInput);
   app.use(
     csrf({
       cookie: {
@@ -214,6 +215,7 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
   nunjucksEnvironment.addFilter('expiryDate', nunjucksFilters.expiryDate);
+  nunjucksEnvironment.addFilter('formatGdsDate', nunjucksFilters.formatGdsDate);
 
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('nationalityList', autocompleteUtil.nationalityList);

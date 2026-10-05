@@ -700,7 +700,10 @@ function isValidOrganisationNameLength(value) {
 
 function isValidOrganisationName(input) {
   const alphaRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''()@&-]+$/;
-  return alphaRegex.test(input);
+  if (!isEmpty(input)) {
+    return alphaRegex.test(input);
+  }
+  return true;
 }
 
 /**
@@ -758,6 +761,11 @@ function isPostCodeValidCharacters(input) {
   return isEmpty(input) || addressRegex.test(input);
 }
 
+function isValidAircraftCharacters(input) {
+  const validCharactersRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''+()@&-]+$/;
+  return validCharactersRegex.test(input);
+}
+
 function preventZ(value) {
   value = value || '';
   if (value.toLowerCase() === 'zzzz' || value.toLowerCase() === 'yyyy') {
@@ -773,6 +781,14 @@ function preventZ(value) {
  */
 function isValidAirportCode(airportCode) {
   return airports.findByCode(airportCode) !== null;
+}
+
+function isValidBirthPlaceName(input) {
+  const alphaRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,/.()-]+$/;
+  if (!isEmpty(input)) {
+    return alphaRegex.test(input);
+  }
+  return true;
 }
 
 module.exports = {
@@ -839,4 +855,6 @@ module.exports = {
   nameHasNoNumbers,
   isValidOrganisationNameLength,
   isValidOrganisationName,
+  isValidAircraftCharacters,
+  isValidBirthPlaceName,
 };

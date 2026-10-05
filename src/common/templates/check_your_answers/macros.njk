@@ -28,19 +28,19 @@
   {% set heading = __( 'heading_' ~ prefix ~ '_details' ) %}
 
   {% set rows = [
-    { key: { html: __( 'field_' ~ prefix ~ '_date' ) }, value: { html: garfile[prefix + 'Date'] or '' } },
-    { key: { html: __( 'field_' ~ prefix ~ '_time' ) }, value: { html: garfile[prefix + 'Time'] or '' } }
+    { key: { html: __( 'field_' ~ prefix ~ '_date' ) }, value: { text: garfile[prefix + 'Date'] or '' } },
+    { key: { html: __( 'field_' ~ prefix ~ '_time' ) }, value: { text: garfile[prefix + 'Time'] or '' } }
   ] %}
 
   {% if garfile[prefix + 'Port'] %}
     {% set rows = rows.concat([
-      { key: { html: __( 'field_' ~ prefix ~ '_port' ) }, value: { html: codeToAirfield(garfile[prefix + 'Port']).label } }
+      { key: { html: __( 'field_' ~ prefix ~ '_port' ) }, value: { text: codeToAirfield(garfile[prefix + 'Port']).label } }
     ]) %}
   {% endif %}
 
   {% if garfile[prefix + 'Lat'] %}
     {% set rows = rows.concat([
-      { key: { html: __( 'field_' ~ prefix ~ '_coordinates' ) }, value: { html: garfile[prefix + 'Lat'] ~ '<br>' ~ garfile[prefix + 'Long'] } }
+      { key: { html: __( 'field_' ~ prefix ~ '_coordinates' ) }, value: { text: garfile[prefix + 'Lat'] ~ '<br>' ~ garfile[prefix + 'Long'] } }
     ]) %}
   {% endif %}
 

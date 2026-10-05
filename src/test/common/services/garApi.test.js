@@ -332,3 +332,37 @@ describe('GarService', () => {
       });
   });
 });
+
+describe('GarApi', () => {
+  const pages = { page: 2, perPage: 10, status: 'Submitted' };
+
+  it('should get GARs for an individual using the configured HTTP client', async () => {
+    const response = { items: [{ id: 'GAR-1' }] };
+    const client = {
+      get: async (path, options) => {
+        expect(path).to.equal(`/user/${userId}/gars`);
+        expect(options).to.deep.equal({
+          query: { status: 'Submitted', page: 2, per_page: 10 },
+        });
+        return response;
+      },
+    };
+
+    const api = new garApi.GarApi(client);
+
+    expect(await api.getGars(userId, 'Individual', pages)).to.equal(response);
+  });
+
+  it('should get GARs for an organisation using the configured HTTP client', async () => {
+    const client = {
+      get: async (path) => {
+        expect(path).to.equal(`/user/${userId}/organisation/${orgId}/gars`);
+        return { items: [] };
+      },
+    };
+
+    const api = new garApi.GarApi(client);
+
+    expect(await api.getGars(userId, 'Admin', pages, orgId)).to.deep.equal({ items: [] });
+  });
+});

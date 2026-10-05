@@ -53,7 +53,7 @@
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">{{person.lastName}}</td>
             <td class="govuk-table__cell">{{person.firstName}}</td>
-            <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+            <td class="govuk-table__cell">{{person.dateOfBirth | formatGdsDate('short')}}</td>
             <td class="govuk-table__cell">{{person.nationality | upper}}</td>
             <td class="govuk-table__cell">{{person.gender}}</td>
             <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
@@ -104,7 +104,7 @@
                         </tr>
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
-                          <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+                          <td class="govuk-table__cell">{{person.documentExpiryDate | formatGdsDate('long')}}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -124,7 +124,7 @@
   rows: [
     {
       key: { html: __('is_military_flight') },
-      value: { html: 'Yes' if garfile.isMilitaryFlight else 'No'}
+      value: { text: 'Yes' if garfile.isMilitaryFlight else 'No'}
     }
   ]
 }) }}

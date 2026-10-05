@@ -33,13 +33,11 @@ describe('Server request logging', () => {
     const server = proxyquire('../server', {
       express: Object.assign(() => app, {
         static: sinon.stub().returns(sinon.spy()),
+        json: sinon.stub().returns(sinon.spy()),
+        urlencoded: sinon.stub().returns(sinon.spy()),
       }),
       'express-session': sinon.stub().returns(sinon.spy()),
       'serve-favicon': sinon.stub().returns(sinon.spy()),
-      'body-parser': {
-        json: sinon.stub().returns(sinon.spy()),
-        urlencoded: sinon.stub().returns(sinon.spy()),
-      },
       i18n: {
         configure: sinon.stub(),
         init: sinon.spy(),
@@ -100,6 +98,7 @@ describe('Server request logging', () => {
         uncamelCase: sinon.spy(),
         containsError: sinon.spy(),
         expiryDate: sinon.spy(),
+        formatGdsDate: sinon.spy(),
       },
       './common/utils/travel_permission_codes.json': {},
       './common/utils/airports': {
@@ -154,13 +153,11 @@ describe('Server request logging', () => {
     const server = proxyquire('../server', {
       express: Object.assign(() => app, {
         static: sinon.stub().returns(sinon.spy()),
+        json: sinon.stub().returns(sinon.spy()),
+        urlencoded: sinon.stub().returns(sinon.spy()),
       }),
       'express-session': sinon.stub().returns(sinon.spy()),
       'serve-favicon': sinon.stub().returns(sinon.spy()),
-      'body-parser': {
-        json: sinon.stub().returns(sinon.spy()),
-        urlencoded: sinon.stub().returns(sinon.spy()),
-      },
       i18n: {
         configure: sinon.stub(),
         init: sinon.spy(),
