@@ -10,6 +10,7 @@ const verifyUserService = require('../../../common/services/verificationApi');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { getOneLoginLogoutUrl } = require('../../../common/utils/oneLoginAuth');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
+const { CountLoginSuccess } = require('../../../common/services/metrics');
 
 // Constants
 const ROUTES = {
@@ -230,6 +231,7 @@ module.exports = async (req, res) => {
               if (redirect === ROUTES.REGISTER) {
                 req.session.access_token = access_token;
               }
+              CountLoginSuccess();
               return redirect;
             })
             .then(async (redirect) => {
