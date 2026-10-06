@@ -8,9 +8,9 @@ metadata:
     cert-manager.io/solver: http01
   annotations:
     cert-manager.io/enabled: "true"
-    cert-manager.io/cluster-issuer: zerossl-production
     ingress.kubernetes.io/force-ssl-redirect: "true"
     ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingress.kubernetes.io/proxy-body-size: "20m"
     ingress.kubernetes.io/client_header_buffer_size: "8k"
     ingress.kubernetes.io/proxy-buffer-size: "8k"
     #Ephereal Elliptic Curve Diffie Hellman for perfect forward secrecy.
