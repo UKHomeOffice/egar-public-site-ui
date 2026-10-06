@@ -21,15 +21,14 @@
           <p class="govuk-body">We have sent you a confirmation email to
             {{ cookie.getUserEmail() }}.</p>
           <h2 class="govuk-heading-m">What happens next</h2>
-          {# NMSW-4932 disabled until v14.2.0 release #}
-          {# {% if cookie.getIsInbound() %} #}
+          
+          {% if cookie.getIsInbound() %}
             <p class="govuk-body">
               You should check the
               <button id="view-submitted-17" class="govuk-button--link" name="garId" value="{{ cookie.getGarId() }}">permission to travel status</button>
               for all people on this GAR prior to departure.
             </p>
-          {# NMSW-4932 disabled until v14.2.0 release #}
-          {# {% endif %} #}
+          {% endif %}
           <p class="govuk-body">
             If you need to make any changes to this GAR, you can edit it up to 2 hours before your expected time of departure. For
             changes less than 2 hours before your expected time of departure you will need to cancel this GAR and submit a new one.
