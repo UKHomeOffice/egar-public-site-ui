@@ -1,7 +1,6 @@
 const promClient = require('@prometheus-io/client');
 
 promClient.collectDefaultMetrics();
-// logger.info('Created new metrics register');
 
 const loginSuccessCounter = new promClient.Counter({
   name: 'sgar_login_success',
