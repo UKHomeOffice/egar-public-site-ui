@@ -69,8 +69,8 @@
         <tbody class="govuk-table__body" id="printGAR">
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">{{ garfile.registration }}</td>
-              <td class="govuk-table__cell">{{ codeToAirfield(garfile.departurePort).label }}</td>
-              <td class="govuk-table__cell">{{ codeToAirfield(garfile.arrivalPort).label }}</td>
+              <td class="govuk-table__cell">{{ codeToAirfield(garfile.departurePort | formatGdsDate('short')).label }}</td>
+              <td class="govuk-table__cell">{{ codeToAirfield(garfile.arrivalPort | formatGdsDate('short')).label }}</td>
 
             </tr>
         </tbody>
@@ -99,10 +99,10 @@
             <tr class="govuk-table__row">
             <td class="govuk-table__cell">{{person.lastName}}</td>
             <td class="govuk-table__cell">{{person.firstName}}</td>
-            <td class="govuk-table__cell">{{person.dateOfBirth | gdsDate('short')}}</td>
+            <td class="govuk-table__cell">{{person.dateOfBirth | formatGdsDate('short')}}</td>
             <td class="govuk-table__cell">{{person.nationality | upper}}</td>
             <td class="govuk-table__cell">{{person.documentNumber}}</td>
-            <td class="govuk-table__cell">{{person.documentExpiryDate | gdsDate('long')}}</td>
+            <td class="govuk-table__cell">{{person.documentExpiryDate | formatGdsDate('long')}}</td>
             <td class="govuk-table__cell">{{person.gender}}</td>
             <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
             <td class="govuk-table__cell">{{person.peopleType.name}}</td>
