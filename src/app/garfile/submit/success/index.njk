@@ -19,31 +19,30 @@
             {{ cookie.getUserEmail() }}.
           </p>
           <h2 class="govuk-heading-m">What happens next</h2>
-          {# NMSW-4932 disabled until v14.2.0 release #}
-          {# {% if cookie.getIsInbound() %} #}
+
+          {% if cookie.getIsInbound() %}
+            <p class="govuk-body">
+              You should check the
+              <button id="view-submitted-17"
+                      type="submit"
+                      class="govuk-button--link"
+                      name="garId"
+                      value="{{ cookie.getGarId() }}">permission to travel status</button>
+              for all people on this GAR prior to departure.
+            </p>
+          {% endif %}
           <p class="govuk-body">
-            You should check the
-            <button id="view-submitted-17"
-                    type="submit"
-                    class="govuk-button--link"
-                    name="garId"
-                    value="{{ cookie.getGarId() }}">permission to travel status</button>
-            for all people on this GAR prior to departure.
+            If you need to make any changes to this GAR, you can edit it up to 2 hours before your expected time of departure. For
+            changes less than 2 hours before your expected time of departure you will need to cancel this GAR and submit a new one.
           </p>
-          {# NMSW-4932 disabled until v14.2.0 release #}
-          {# {% endif %} #}
-        <p class="govuk-body">
-          If you need to make any changes to this GAR, you can edit it up to 2 hours before your expected time of departure. For
-          changes less than 2 hours before your expected time of departure you will need to cancel this GAR and submit a new one.
-        </p>
-        <p class="govuk-body">
-          You can view, edit and cancel your GARs in the
-          <a class="govuk-link" href="/home#gars-submitted">Manage your GARs</a>
-          section of the service.
-        </p>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-      </form>
+          <p class="govuk-body">
+            You can view, edit and cancel your GARs in the
+            <a class="govuk-link" href="/home#gars-submitted">Manage your GARs</a>
+            section of the service.
+          </p>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        </form>
+      </div>
     </div>
   </div>
-</div>
 {% endblock %}

@@ -46,6 +46,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             privileged: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -60,6 +61,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             privileged: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -75,6 +77,9 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             privileged: false
+            capabilities:
+              drop:
+                - ALL
           resources:
             limits:
               memory: "512Mi"
@@ -110,6 +115,7 @@ spec:
               mountPath: /tmp
             - name: proxy-var-run
               mountPath: /var/run
+
         - name: public-site
           image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/egar/public-site-ui:{{ .TAGGED_VERSION }}
           imagePullPolicy: IfNotPresent
@@ -118,6 +124,9 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             privileged: false
+            capabilities:
+              drop:
+                - ALL
           resources:
             limits:
               memory: "4096Mi"
