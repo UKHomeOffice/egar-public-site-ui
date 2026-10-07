@@ -109,6 +109,10 @@ function isNotEmpty(value) {
   return isEmpty(value) === false;
 }
 
+function notOnlySymbols(value) {
+  return hasOnlySymbols(value) === false;
+}
+
 /**
  * Check if the string is not empty, does not start with a space and does not contain only symbols.
  * @param {String} value
@@ -762,7 +766,12 @@ function isPostCodeValidCharacters(input) {
 }
 
 function isValidAircraftCharacters(input) {
-  const validCharactersRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''+()@&-]+$/;
+  const validCharactersRegex = /^[A-Za-z0-9\-\d]+$/;
+  return validCharactersRegex.test(input);
+}
+
+function isValidAircraftType(input) {
+  const validCharactersRegex = /^[A-Za-z0-9\s\-\d]+$/;
   return validCharactersRegex.test(input);
 }
 
@@ -784,7 +793,7 @@ function isValidAirportCode(airportCode) {
 }
 
 function isValidBirthPlaceName(input) {
-  const alphaRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,/.()-]+$/;
+  const alphaRegex = /^[A-Za-z0-9\s\-\d]+$/;
   if (!isEmpty(input)) {
     return alphaRegex.test(input);
   }
@@ -857,4 +866,6 @@ module.exports = {
   isValidOrganisationName,
   isValidAircraftCharacters,
   isValidBirthPlaceName,
+  isValidAircraftType,
+  notOnlySymbols,
 };

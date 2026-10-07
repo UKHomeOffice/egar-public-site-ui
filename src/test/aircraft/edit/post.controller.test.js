@@ -67,8 +67,8 @@ describe('Aircraft Edit Post Controller', () => {
       expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
         cookie,
         errors: [
-          new ValidationRule(validator.notEmpty, 'registration', '', 'Enter a registration'),
-          new ValidationRule(validator.notEmpty, 'craftType', '', 'Enter an aircraft type'),
+          new ValidationRule(validator.isNotEmpty, 'registration', '', 'Enter a registration'),
+          new ValidationRule(validator.isNotEmpty, 'craftType', '', 'Enter an aircraft type'),
           new ValidationRule(validator.notEmpty, 'craftBasePort', '', 'Enter an aircraft home port / location'),
         ],
       });
