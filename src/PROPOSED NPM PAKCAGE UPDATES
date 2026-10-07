@@ -1,0 +1,60 @@
+# Proposed NPM Package Updates
+
+Date checked: 2026-09-09
+
+The Node project for `egar-public-site-ui` is located in this `src` directory. The direct dependency declarations in `package.json` and the root dependency declarations in `package-lock.json` match. No manifest/lockfile drift was found. This does not mean the dependency tree is current.
+
+## Direct dependency inventory
+
+This application is a JavaScript/Express application using the GOV.UK One Login service header and GOV.UK Frontend. It is not a GOV.UK Prototype Kit application.
+
+- Runtime dependencies include `@govuk-one-login/service-header`, `express@^4.16.3`, `govuk-frontend@^5.14.0`, `body-parser@^2.3.0`, `glob@^10.5.0`, `multer@2.2.0`, `nanoid@^5.1.4`, `uuid@11.1.1`, and the other packages declared in `package.json`.
+- Development dependencies include ESLint 10, Mocha 11, NYC 17, C8, Sinon, Chai, Nock, and related test tooling.
+- The `xlsx` dependency is a direct SheetJS tarball URL rather than a registry semver range.
+- The `overrides` block pins several transitive packages, including `axios`, `body-parser`, `glob`, `qs`, `send`, `serialize-javascript`, and `xlsx`; any upgrade review must account for those constraints.
+
+## Verified registry updates
+
+| Package | Current declaration | Latest observed | Notes |
+| --- | --- | --- | --- |
+| `govuk-frontend` | `^5.14.0` | `6.5.0` | Major update; review GOV.UK Frontend migration notes and asset paths |
+| `express` | `^4.16.3` | `5.2.1` | Major update; review middleware, routing, and Node.js behavior |
+
+The full direct-package registry comparison was not recorded because the local Docker/npm command produced contaminated output from the workspace environment rather than a clean `npm outdated --json` result. Run the commands below in a clean Node container to obtain the complete current/wanted/latest table.
+
+## Compatibility and sequencing notes
+
+- Do not update `express` and `govuk-frontend` in the same first change. They are independent major migrations and should be tested separately.
+- The current `express` declaration allows Express 4 releases only. Moving to Express 5 may require review of route patterns, middleware behavior, rejected promises, and any code relying on Express 4 internals.
+- `govuk-frontend` 6.x is a major update from the declared 5.x line. Check Sass imports, JavaScript imports, asset paths, and GOV.UK component markup before adopting it.
+- The project uses both `c8` and `nyc` coverage tooling. Keep the existing scripts stable while upgrading test dependencies.
+- `nanoid`, `uuid`, `multer`, `glob`, `helmet`, `file-type`, and `notifications-node-client` should each be checked for API or engine changes before upgrading across major versions.
+- The `xlsx` tarball is pinned to SheetJS 0.20.2 and is not covered by normal semver registry checks.
+
+## Suggested review commands
+
+Run from the actual Node project directory:
+
+```sh
+cd /Users/andygoldschmidt/Documents/GIT/HomeOffice/egar/egar-public-site-ui/src
+
+docker run --rm \
+  -v "$PWD":/app \
+  -v /app/node_modules \
+  -w /app \
+  node:22-bookworm \
+  sh -lc 'npm outdated --json; npm audit --omit=dev'
+```
+
+After reviewing the output, run the existing checks without changing dependencies:
+
+```sh
+docker run --rm -it \
+  -v "$PWD":/app \
+  -v /app/node_modules \
+  -w /app \
+  node:22-bookworm \
+  sh -lc 'npm ci && npm run check && npm test'
+```
+
+No dependency upgrade was performed and `package.json` and `package-lock.json` were not modified.

@@ -1,0 +1,110 @@
+name: egar-public-site-ui CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  actions: read
+  security-events: write
+
+env:
+  AWS_REGION: eu-west-2
+  ECR_REGISTRY: 340268328991.dkr.ecr.eu-west-2.amazonaws.com
+  ECR_REPOSITORY: sgar/sgar-public-site-ui
+  IMAGE_NAME: sgar-public-site-ui
+
+jobs:
+  checkov_scan:
+   name: Scan infrastructure with Checkov
+   uses: >-
+     Home-Office-Digital/core-cloud-workflow-checkov-sast-scan/.github/workflows/checkov-scan-base.yaml@1.21.0
+
+  ci:
+    name: Test, scan, and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AWS_OIDC_ROLE: ${{ secrets.AWS_OIDC_ROLE }}
+    defaults:
+      run:
+        working-directory: src
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: src/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run unit tests
+        env:
+          NOTIFY_API_KEY: dummy
+        run: npm run test-drone
+      
+      - name: Run lint and formatting checks
+        run: npm run check
+      
+      - name: Build Docker image
+        working-directory: .
+        run: docker build -t "${IMAGE_NAME}:${GITHUB_SHA}" .
+      
+      # - name: Scan Docker image with Trivy
+      #   uses: aquasecurity/trivy-action@0.28.0
+      #   continue-on-error: true
+      #   with:
+      #     image-ref: '${{ env.IMAGE_NAME }}:${{ github.sha }}'
+      #     format: table
+      #     severity: CRITICAL,HIGH
+      #     ignore-unfixed: true
+      
+      # - name: SonarQube scan
+      #   if: >-
+      #     github.event_name == 'push' &&
+      #     github.ref == 'refs/heads/main'
+      #   uses: SonarSource/sonarqube-scan-action@v5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      
+      - name: Configure AWS credentials
+        if: >-
+          github.event_name == 'push' &&
+          (github.ref == 'refs/heads/main' ||
+           github.ref == 'refs/heads/dev')
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Log in to Amazon ECR
+        if: >-
+          github.event_name == 'push' &&
+          (github.ref == 'refs/heads/main' ||
+           github.ref == 'refs/heads/dev')
+        uses: aws-actions/amazon-ecr-login@v2
+      
+      - name: Push image to ECR
+        if: >-
+          github.event_name == 'push' &&
+          (github.ref == 'refs/heads/main' ||
+           github.ref == 'refs/heads/dev')
+        working-directory: .
+        run: |
+          docker tag "${IMAGE_NAME}:${GITHUB_SHA}" "${ECR_REGISTRY}/${ECR_REPOSITORY}:${GITHUB_SHA}"
+          docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}:${GITHUB_SHA}"

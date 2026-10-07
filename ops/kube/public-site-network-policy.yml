@@ -6,7 +6,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      name: public-site-svc
+      name: sgar-public-site-svc
   ingress:
     - from:
       - namespaceSelector:

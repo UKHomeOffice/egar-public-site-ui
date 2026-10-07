@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: public-site-svc
+  name: sgar-public-site-svc
   labels:
-    name: public-site-svc
+    name: sgar-public-site-svc
 spec:
   selector:
-    name: public-site-svc
+    name: sgar-public-site-svc
   type: ClusterIP
   ports:
     - name: public-prxy-prt

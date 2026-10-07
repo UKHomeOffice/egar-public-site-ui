@@ -36,8 +36,5 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service: 
-            name: public-site-svc
-            port:
-              number: 10443
-
+                name: sgar-public-site-svc
               
