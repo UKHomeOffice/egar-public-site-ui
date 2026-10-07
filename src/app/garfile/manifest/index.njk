@@ -86,7 +86,7 @@
                         <td class="govuk-table__cell">{{person.lastName}}</td>
                         <td class="govuk-table__cell">{{person.firstName}}</td>
                         <td class="govuk-table__cell">{{person.peopleType.name}}</td>
-                        <td class="govuk-table__cell">{{person.documentExpiryDate}}</td>
+                        <td class="govuk-table__cell">{{person.documentExpiryDate | formatGdsDate('short')}}</td>
                       </tr>
                   {% endfor %}
                 {% else %}
@@ -162,7 +162,7 @@
                       {% endif %}
                         <td class="govuk-table__cell garPersonLastName{% if isGarPersonInvalid %} govuk-!-padding-left-2{% endif %}"> {{ person.lastName }} </td>
                         <td class="govuk-table__cell garPersonFirstName">{{person.firstName}}</td>
-                        <td class="govuk-table__cell">{{person.dateOfBirth}}</td>
+                        <td class="govuk-table__cell">{{person.dateOfBirth | formatGdsDate('short') }}</td>
                         <td class="govuk-table__cell garPersonNationality">{{person.nationality | upper}}</td>
                         <td class="govuk-table__cell">{{person.gender}}</td>
                         <td class="govuk-table__cell">{{person.placeOfBirth}}</td>
@@ -195,7 +195,7 @@
                                     </tr>
                                     <tr class="govuk-table__row">
                                       <td class="govuk-table__cell">{{__('field_document_expiry_date')}}</td>
-                                      <td class="govuk-table__cell">{{ person.documentExpiryDate }}</td>
+                                      <td class="govuk-table__cell">{{ person.documentExpiryDate | formatGdsDate('short') }}</td>
                                     </tr>
                                   </tbody>
                                 </table>

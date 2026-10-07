@@ -15,7 +15,12 @@ const validations = (craftObj) => {
 
   const validationsArray = [
     [
-      new ValidationRule(validator.notEmpty, 'registration', registration, i18n.__('validation_aircraft_registration')),
+      new ValidationRule(
+        validator.isNotEmpty,
+        'registration',
+        registration,
+        i18n.__('validation_aircraft_registration')
+      ),
       new ValidationRule(
         validator.isValidRegistrationLength,
         'registration',
@@ -26,11 +31,17 @@ const validations = (craftObj) => {
         validator.isValidAircraftCharacters,
         'registration',
         registration,
-        `Aircraft registration number must only include letters, numbers, spaces, hyphens, brackets, plus signs, slashes and full stops.`
+        `Aircraft registration must only include English alphabet letters (A to Z), numbers and hyphens (-)`
+      ),
+      new ValidationRule(
+        validator.notOnlySymbols,
+        'registration',
+        registration,
+        `Enter a valid aircraft registration.`
       ),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'craftType', craftType, i18n.__('validation_aircraft_type')),
+      new ValidationRule(validator.isNotEmpty, 'craftType', craftType, i18n.__('validation_aircraft_type')),
       new ValidationRule(
         validator.isValidStringLength,
         'craftType',
@@ -38,11 +49,12 @@ const validations = (craftObj) => {
         `Aircraft type must be ${MAX_STRING_LENGTH} characters or less`
       ),
       new ValidationRule(
-        validator.isValidAircraftCharacters,
+        validator.isValidAircraftType,
         'craftType',
         craftType,
-        `Aircraft type must only include letters, numbers, spaces, hyphens, brackets, plus signs, slashes and full stops.`
+        `Aircraft type must only include English alphabet letters (A to Z), numbers, spaces and hyphens (-)`
       ),
+      new ValidationRule(validator.notOnlySymbols, 'craftType', craftType, `Enter a valid aircraft type.`),
     ],
   ];
 

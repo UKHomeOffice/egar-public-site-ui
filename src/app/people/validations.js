@@ -61,14 +61,15 @@ module.exports.validations = (req) => {
         validator.isValidBirthPlaceName,
         'birthplace',
         req.body.birthplace,
-        'Enter a valid place of birth for the person'
+        'Place of birth must only include English alphabet letters (A to Z), spaces and hyphens (-)'
       ),
       new ValidationRule(
-        validator.isValidOptionalStringLength,
+        validator.isValidStringLength,
         'birthplace',
         req.body.birthplace,
         `Place of birth must be ${MAX_STRING_LENGTH} characters or less`
       ),
+      new ValidationRule(validator.notOnlySymbols, 'birthplace', req.body.birthplace, `Enter a valid place of birth.`),
     ],
     [new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select the type of person')],
     [new ValidationRule(validator.notEmpty, 'gender', req.body.gender, 'Select the sex of the person')],
