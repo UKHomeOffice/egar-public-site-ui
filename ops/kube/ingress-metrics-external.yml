@@ -30,7 +30,7 @@ spec:
   - hosts:
     - {{ .PUBLIC_SITE_EXTERNAL_URL }}
     secretName: public-site-internal-tls
-  ingressClassName: nginx-internal
+  ingressClassName: nginx-external
   rules:
   - host: {{ .PUBLIC_SITE_EXTERNAL_URL }}
     http:
