@@ -39,7 +39,7 @@ spec:
           emptyDir: {}
       initContainers:
         - name: public-site-proxy-init
-          image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
+          image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/shared/acp-nginx-proxy-rocky:0.0.3
           imagePullPolicy: IfNotPresent
           command: ["sh", "-c", "cp -r /usr/local/openresty/nginx/. /work/nginx/"]
           securityContext:
@@ -68,7 +68,7 @@ spec:
               mountPath: /work/public-site
       containers:
         - name: public-site-proxy
-          image: quay.io/ukhomeofficedigital/acp-nginx-proxy-rocky:0.0.3
+          image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/shared/acp-nginx-proxy-rocky:0.0.3
           imagePullPolicy: IfNotPresent
           securityContext:
             readOnlyRootFilesystem: true

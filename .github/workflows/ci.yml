@@ -1,14 +1,14 @@
 name: egar-public-site-ui CI
 
 on:
-  push:
-    branches:
-      - main
-      - dev
-  pull_request:
-    branches:
-      - main
-      - dev
+  # push:
+  #   branches:
+  #     - main
+  #     - dev
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - dev
   workflow_dispatch:
 
 permissions:
@@ -33,14 +33,17 @@ jobs:
     name: Test, scan, and publish
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write
+      id-token: write
+    concurrency:
+      group: image-publish-${{ github.ref }}
+      cancel-in-progress: false
     env:
       AWS_OIDC_ROLE: ${{ secrets.AWS_OIDC_ROLE }}
-    defaults:
-      run:
-        working-directory: src
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -59,6 +62,54 @@ jobs:
       
       - name: Run lint and formatting checks
         run: npm run check
+
+      - name: Install YAML editor
+        run: |
+          python3 -m venv "$RUNNER_TEMP/yaml-venv"
+          "$RUNNER_TEMP/yaml-venv/bin/pip" install 'ruamel.yaml==0.18.15'
+
+      - name: Check out deployment configuration
+        uses: actions/checkout@v7.0.1
+        with:
+          repository: UKHomeOffice/ssar-public-site-ui-deploy
+          ref: main
+          path: deploy-config
+          token: ${{ secrets.DEPLOY_REPO_READ_TOKEN || github.token }}
+
+      # Verify Argo CD image source is a preflight check. Before building, it reads the dev Argo CD Application and confirms two things:
+      # - The dev Application reads its chart from the deployment repository's main branch.
+      # - The dev values file does not override image.tag, so it will use the tag from the shared Helm values.
+      - name: Verify Argo CD image source
+        run: |
+          "$RUNNER_TEMP/yaml-venv/bin/python" - <<'PY'
+          import os
+          from pathlib import Path
+          from ruamel.yaml import YAML
+
+          yaml = YAML()
+          application_path = (
+              Path('deploy-config/ops/argocd')
+              / 'sgar-public-site-ui-dev-application.yaml'
+          )
+          application = yaml.load(application_path)
+          branch = application['spec']['source']['targetRevision']
+          if branch != 'main':
+              raise SystemExit(
+                f'Expected Argo CD to track deployment repo main, found {branch}'
+              )
+          with open(os.environ['GITHUB_ENV'], 'a') as environment_file:
+              environment_file.write(f'DEPLOY_CONFIG_BRANCH={branch}\n')
+          chart_path = Path(application['spec']['source']['path'])
+          value_files = application['spec']['source']['helm'].get('valueFiles', [])
+          for value_file in value_files:
+              values_path = Path('deploy-config') / chart_path / value_file
+              with values_path.open() as stream:
+                  overrides = yaml.load(stream)
+              if 'tag' in overrides.get('image', {}):
+                  raise SystemExit(
+                    f'Remove image.tag override from {values_path} before publishing'
+                  )
+          PY
       
       - name: Build Docker image
         working-directory: .
@@ -108,3 +159,111 @@ jobs:
         run: |
           docker tag "${IMAGE_NAME}:${GITHUB_SHA}" "${ECR_REGISTRY}/${ECR_REPOSITORY}:${GITHUB_SHA}"
           docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}:${GITHUB_SHA}"
+
+      - name: Update DEV image tag on Argo CD branch
+        # if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          git -C deploy-config pull --ff-only origin "$DEPLOY_CONFIG_BRANCH"
+          "$RUNNER_TEMP/yaml-venv/bin/python" - <<'PY'
+          import os
+          from pathlib import Path
+          from ruamel.yaml import YAML
+
+          yaml = YAML()
+          application_path = Path(
+              'deploy-config/ops/argocd/sgar-public-site-ui-dev-application.yaml'
+          )
+          application = yaml.load(application_path)
+          branch = application['spec']['source']['targetRevision']
+          if branch != os.environ['DEPLOY_CONFIG_BRANCH']:
+              raise SystemExit(
+                f'Argo CD tracks {branch}, not {os.environ["DEPLOY_CONFIG_BRANCH"]}'
+              )
+
+          values_path = Path(
+              'deploy-config/ops/helm/sgar-public-site-ui/values.yaml'
+          )
+          with values_path.open() as stream:
+              values = yaml.load(stream)
+          values['image']['tag'] = os.environ['IMAGE_TAG']
+          with values_path.open('w') as stream:
+              yaml.dump(values, stream)
+          PY
+          git -C deploy-config add ops/helm/sgar-public-site-ui/values.yaml
+          if git -C deploy-config diff --cached --quiet; then
+            echo 'Chart already points to this image'
+            exit 0
+          fi
+          git -C deploy-config config user.name 'github-actions[bot]'
+          git -C deploy-config config user.email 'github-actions[bot]@users.noreply.github.com'
+          git -C deploy-config commit -m "Deploy image ${GITHUB_SHA}"
+          git -C deploy-config push origin "HEAD:refs/heads/${DEPLOY_CONFIG_BRANCH}"
+
+      # - name: Update SIT image tag on Argo CD branch
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   env:
+      #     IMAGE_TAG: ${{ github.sha }}
+      #   run: |
+      #     git -C deploy-config pull --ff-only origin "$DEPLOY_CONFIG_BRANCH"
+      #     "$RUNNER_TEMP/yaml-venv/bin/python" - <<'PY'
+      #     import os
+      #     from pathlib import Path
+      #     from ruamel.yaml import YAML
+
+      #     yaml = YAML()
+      #     values_path = Path(
+      #         'deploy-config/ops/helm/sgar-public-site-ui/values-sit.yaml'
+      #     )
+      #     with values_path.open() as stream:
+      #         values = yaml.load(stream)
+      #     values['image']['tag'] = os.environ['IMAGE_TAG']
+      #     with values_path.open('w') as stream:
+      #         yaml.dump(values, stream)
+      #     PY
+      #     git -C deploy-config add ops/helm/sgar-public-site-ui/values-sit.yaml
+      #     if git -C deploy-config diff --cached --quiet; then
+      #       echo 'SIT chart already points to this image'
+      #       exit 0
+      #     fi
+      #     git -C deploy-config config user.name 'github-actions[bot]'
+      #     git -C deploy-config config user.email 'github-actions[bot]@users.noreply.github.com'
+      #     git -C deploy-config commit -m "Deploy image ${GITHUB_SHA} to SIT"
+      #     git -C deploy-config push origin "HEAD:refs/heads/${DEPLOY_CONFIG_BRANCH}"
+
+      # - name: Update TEST image tag on Argo CD branch
+      #   if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/deploy-test')
+      #   env:
+      #     IMAGE_TAG: ${{ github.sha }}
+      #   run: |
+      #     aws ecr describe-images \
+      #       --repository-name "$ECR_REPOSITORY" \
+      #       --image-ids "imageTag=$IMAGE_TAG" \
+      #       --region "$AWS_REGION"
+      #     git -C deploy-config pull --ff-only origin "$DEPLOY_CONFIG_BRANCH"
+      #     "$RUNNER_TEMP/yaml-venv/bin/python" - <<'PY'
+      #     import os
+      #     from pathlib import Path
+      #     from ruamel.yaml import YAML
+
+      #     yaml = YAML()
+      #     values_path = Path(
+      #         'deploy-config/ops/helm/sgar-public-site-ui/values-test.yaml'
+      #     )
+      #     with values_path.open() as stream:
+      #         values = yaml.load(stream)
+      #     values['image']['tag'] = os.environ['IMAGE_TAG']
+      #     with values_path.open('w') as stream:
+      #         yaml.dump(values, stream)
+      #     PY
+      #     git -C deploy-config add ops/helm/sgar-public-site-ui/values-test.yaml
+      #     if git -C deploy-config diff --cached --quiet; then
+      #       echo 'TEST chart already points to this image'
+      #       exit 0
+      #     fi
+      #     git -C deploy-config config user.name 'github-actions[bot]'
+      #     git -C deploy-config config user.email 'github-actions[bot]@users.noreply.github.com'
+      #     git -C deploy-config commit -m "Deploy image ${GITHUB_SHA} to TEST"
+      #     git -C deploy-config push origin "HEAD:refs/heads/${DEPLOY_CONFIG_BRANCH}"
+
