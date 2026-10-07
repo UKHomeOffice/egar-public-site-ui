@@ -1,4 +1,4 @@
-name: egar-public-site-ui CI
+name: sgar-public-site-ui CI
 
 on:
   # push:
@@ -71,7 +71,7 @@ jobs:
       - name: Check out deployment configuration
         uses: actions/checkout@v7.0.1
         with:
-          repository: UKHomeOffice/ssar-public-site-ui-deploy
+          repository: UKHomeOffice/sgar-public-site-ui-deploy
           ref: main
           path: deploy-config
           token: ${{ secrets.DEPLOY_REPO_READ_TOKEN || github.token }}
