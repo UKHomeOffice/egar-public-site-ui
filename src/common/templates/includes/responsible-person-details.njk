@@ -79,6 +79,9 @@
       text: __("field_house_number"),
       classes: "govuk-label"
     },
+    hint: {
+      html:  m.character_count_hint('responsibleAddressLine1', MAX_STRING_LENGTH)
+    },
     value: responsiblePerson.responsibleAddressLine1,
     errorMessage: errors | containsError('responsibleAddressLine1')
   }) }}
@@ -89,6 +92,9 @@
     label: {
       text: __("field_line_2_address"),
       classes: "govuk-label"
+    },
+    hint: {
+      html: m.character_count_hint('responsibleAddressLine2', MAX_STRING_LENGTH)
     },
     value: responsiblePerson.responsibleAddressLine2,
     errorMessage: errors | containsError('responsibleAddressLine2')
