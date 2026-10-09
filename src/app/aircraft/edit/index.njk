@@ -6,15 +6,15 @@
   {{ __('error_prefix') if errors }} GAR | Edit an Aircraft
 {% endblock %}
 
-{% set active = '/aircraft' %}
+{% set active = "/aircraft" %}
 
 {% block beforeContent %}
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
       <li class="govuk-breadcrumbs__list-item">
-        <a class="govuk-breadcrumbs__link" href="/aircraft">{{__('title_aircraft')}}</a>
+        <a class="govuk-breadcrumbs__link" href="/aircraft">{{ __('title_aircraft') }}</a>
       </li>
-      <li class="govuk-breadcrumbs__list-item">{{__('title_edit_aircraft')}}</li>
+      <li class="govuk-breadcrumbs__list-item">{{ __('title_edit_aircraft') }}</li>
     </ol>
   </div>
 {% endblock %}
@@ -26,21 +26,29 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <form action="/aircraft/edit" autocomplete="off" class="form-group"method="post" role="form" >
-        <h1 class="govuk-heading-xl">{{__('title_edit_aircraft')}}</h1>
-        <p class="govuk-body-l">{{__('edit_aircraft_caption')}}</p>
+      <form action="/aircraft/edit"
+            autocomplete="off"
+            class="form-group"
+            method="post"
+            role="form">
+        <h1 class="govuk-heading-xl">{{ __('title_edit_aircraft') }}</h1>
+        <p class="govuk-body-l">{{ __('edit_aircraft_caption') }}</p>
 
-        {{ l.craft_details(craft, errors, __)}}
+        {{ l.craft_details(craft, errors, __) }}
 
         <div class="govuk-form-group">
-          <input id="save-and-exit" class="govuk-button" type="submit"
-            name="buttonClicked"
-            value="{{__('form_save_and_exit')}}">
+          <input id="save-and-exit"
+                 class="govuk-button"
+                 type="submit"
+                 name="buttonClicked"
+                 value="{{ __('form_save_and_exit') }}">
           <p class="govuk-body-m">
-            <a id="exit-without-saving" class="govuk-button govuk-button--secondary" href="/aircraft#">{{__('form_exit_without_saving')}}</a>
+            <a id="exit-without-saving"
+               class="govuk-button govuk-button--secondary"
+               href="/aircraft#">{{ __('form_exit_without_saving') }}</a>
           </p>
         </div>
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       </form>
     </div>
   </div>

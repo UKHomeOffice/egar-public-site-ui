@@ -1,25 +1,25 @@
 .status-disc {
-    position: relative;
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    margin-left: .5em;
-    border-radius: 50%;
-    border: 2px solid rgba(0, 0, 0, 0.125);
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 0.5em;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.125);
 }
 
 @keyframes spinner {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .spinner {
-    border: 2px solid #ccc;
-    border-top-color: #999;
-    animation: spinner 0.6s linear infinite;
+  border: 2px solid #ccc;
+  border-top-color: #999;
+  animation: spinner 0.6s linear infinite;
 }
 
 td {
-    word-wrap:break-word;
+  word-wrap: break-word;
 }

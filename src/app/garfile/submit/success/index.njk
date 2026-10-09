@@ -6,26 +6,28 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-width-container">
+  <div class="govuk-width-container">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         <div class="govuk-panel govuk-panel--confirmation">
-          <h1 class="govuk-panel__title">
-            GAR submitted
-          </h1>
-          <div class="govuk-panel__body">
-            We've sent your GAR to Border Force.
-          </div>
+          <h1 class="govuk-panel__title">GAR submitted</h1>
+          <div class="govuk-panel__body">We've sent your GAR to Border Force.</div>
         </div>
         <form id="signform2" action="/garfile/view" method="post" role="form">
-          <p class="govuk-body">We have sent you a confirmation email to
-            {{ cookie.getUserEmail() }}.</p>
+          <p class="govuk-body">
+            We have sent you a confirmation email to
+            {{ cookie.getUserEmail() }}.
+          </p>
           <h2 class="govuk-heading-m">What happens next</h2>
-          
+
           {% if cookie.getIsInbound() %}
             <p class="govuk-body">
               You should check the
-              <button id="view-submitted-17" class="govuk-button--link" name="garId" value="{{ cookie.getGarId() }}">permission to travel status</button>
+              <button id="view-submitted-17"
+                      type="submit"
+                      class="govuk-button--link"
+                      name="garId"
+                      value="{{ cookie.getGarId() }}">permission to travel status</button>
               for all people on this GAR prior to departure.
             </p>
           {% endif %}
@@ -38,9 +40,9 @@
             <a class="govuk-link" href="/home#gars-submitted">Manage your GARs</a>
             section of the service.
           </p>
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         </form>
       </div>
     </div>
-</div>
+  </div>
 {% endblock %}

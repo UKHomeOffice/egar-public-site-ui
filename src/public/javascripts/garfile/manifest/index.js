@@ -1,8 +1,8 @@
 $(function () {
-  initManifestSearch();
-  initPeopleSearch();
+  setupTableSearch('manifest-search', 'manifestTable_row');
+  setupTableSearch('person-search', 'people_table_row');
   initPeopleSort();
-  handleMultiSelectTableButtons();
+  setupMultiSelectActions();
   setupDeletePeopleDialog();
 
   document.getElementById('exit').addEventListener('click', (event) => {
@@ -57,88 +57,77 @@ function initPeopleSort() {
   });
 }
 
-function initManifestSearch() {
-  $('#manifest-search').on('keyup', function () {
+function setupTableSearch(inputId, rowsId) {
+  $(`#${inputId}`).on('keyup', function () {
     var value = $(this).val().toLowerCase();
-    $('#manifestTable_row tr').filter(function () {
+    $(`#${rowsId} tr`).filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
   });
 }
 
-function initPeopleSearch() {
-  $('#person-search').on('keyup', function () {
-    var value = $(this).val().toLowerCase();
-    $('#people_table_row tr').filter(function () {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+function setupMultiSelectActions() {
+  document.querySelectorAll('table[data-multi-select-group]').forEach((table) => {
+    const group = table.dataset.multiSelectGroup;
+    const actionButtons = Array.from(document.querySelectorAll('.multi-submit-button')).filter(
+      (button) => button.dataset.multiSelectGroup === group
+    );
+    const checkboxes = table.querySelectorAll('.jsCheckbox');
+
+    const updateActions = () => {
+      const hasSelection = Array.from(checkboxes).some((checkbox) => checkbox.checked);
+
+      actionButtons.forEach((button) => {
+        button.disabled = !hasSelection;
+      });
+    };
+
+    table.addEventListener('change', (event) => {
+      if (event.target.matches('.jsCheckboxAll')) {
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = event.target.checked;
+        });
+      }
+
+      if (event.target.matches('.jsCheckboxAll, .jsCheckbox')) {
+        updateActions();
+      }
     });
-  });
-}
 
-function handleMultiSelectTableButtons() {
-  $('.multi-submit-button').each((index, element) => {
-    element.disabled = true;
-  });
-  const isAnyCheckboxesChecked = () => {
-    const checkedBoxes = $('.jsCheckbox').filter((index, element) => {
-      return element.checked;
-    });
-
-    return checkedBoxes.length > 0;
-  };
-  // Select all checkbox change
-  $('.jsCheckboxAll').change(function () {
-    const currentTableCheckboxButtons = $(this).parents('form').find('.multi-submit-button');
-
-    currentTableCheckboxButtons.each(function (index, element) {
-      element.disabled = !isAnyCheckboxesChecked();
-    });
-  });
-
-  //".jsCheckbox" change
-  $('.jsCheckbox').change(function () {
-    const currentTableCheckboxButtons = $(this).parents('form').find('.multi-submit-button');
-
-    currentTableCheckboxButtons.each(function (index, element) {
-      element.disabled = !isAnyCheckboxesChecked();
-    });
+    updateActions();
   });
 }
 
 function setupDeletePeopleDialog() {
   const deletePeopleDialog = document.getElementById('deletePeopleDialog');
   const deletePeopleDialogButton = document.getElementById('delete-people-dialog-button');
+  const closeDialogButton = document.getElementById('closeDialogButton');
+  const manifestTable = document.getElementById('manifest_table');
   const peopleToDeleteList = document.getElementById('peopleToDeleteList');
 
   dialogPolyfill.registerDialog(deletePeopleDialog);
 
-  deletePeopleDialogButton.addEventListener('click', (e) => {
-    const garPeopleLastNames = Array.from(document.getElementsByClassName('garPersonLastName'));
-    const garPeopleFirstNames = Array.from(document.getElementsByClassName('garPersonFirstName'));
-    const garPeopleNationalities = Array.from(document.getElementsByClassName('garPersonNationality'));
+  closeDialogButton.addEventListener('click', () => {
+    deletePeopleDialog.close();
+  });
 
-    const manifestTableRows = Array.from(
-      document.querySelectorAll('#manifestTable_row > .govuk-table__row:has(.jsCheckbox:checked)')
+  deletePeopleDialogButton.addEventListener('click', () => {
+    const manifestTableRows = Array.from(manifestTable.querySelectorAll('.jsCheckbox:checked')).map((checkbox) =>
+      checkbox.closest('tr')
     );
 
-    Array.from(peopleToDeleteList.children).forEach((element) => {
-      peopleToDeleteList.removeChild(element);
-    });
+    peopleToDeleteList.replaceChildren(
+      ...manifestTableRows.map((tableRow) => {
+        const garPersonLastName = tableRow.querySelector('.garPersonLastName');
+        const garPersonFirstName = tableRow.querySelector('.garPersonFirstName');
+        const garPersonNationality = tableRow.querySelector('.garPersonNationality');
 
-    const listOfPeopleToDelete = manifestTableRows.map((tableRow) => {
-      const [garPersonLastName] = garPeopleLastNames.filter((element) => tableRow.contains(element));
-      const [garPersonFirstName] = garPeopleFirstNames.filter((element) => tableRow.contains(element));
-      const [garPersonNationality] = garPeopleNationalities.filter((element) => tableRow.contains(element));
+        const garPersonToDelete = document.createElement('li');
 
-      const garPersonToDelete = document.createElement('li');
-
-      garPersonToDelete.textContent = `${garPersonLastName.textContent}, ${garPersonFirstName.textContent}, ${garPersonNationality.textContent}`;
-      return garPersonToDelete;
-    });
-
-    listOfPeopleToDelete.forEach((personToDelete) => {
-      peopleToDeleteList.appendChild(personToDelete);
-    });
+        garPersonToDelete.textContent = `${garPersonLastName.textContent}, ${garPersonFirstName.textContent}, ${garPersonNationality.textContent}`;
+        return garPersonToDelete;
+      })
+    );
 
     deletePeopleDialog.showModal();
   });

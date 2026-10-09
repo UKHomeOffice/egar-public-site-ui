@@ -11,6 +11,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ../data-access-api
+      target: development
     container_name: api
     env_file:
       - .env.dev

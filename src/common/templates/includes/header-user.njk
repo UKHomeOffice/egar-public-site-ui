@@ -1,6 +1,5 @@
 {% from "dist/nunjucks/service-header/service-header.njk" import govukOneLoginServiceHeader %}
 
-
 {{ govukOneLoginServiceHeader({
   signOutLink: "/user/logout"
 }) }}
@@ -12,7 +11,7 @@
   { href: '/resperson', text: __('nav_bar_responsible_person') }
 ] %}
 
-{% if cookie.getUserRole() == 'Individual' %}
+{% if cookie.getUserRole() == "Individual" %}
   {% set _ = pagesList.push({ href: '/organisation/create', text: __('nav_bar_create_organisation') }) %}
 {% elseif cookie.getUserRole() == 'Admin' or cookie.getUserRole() == 'Manager' %}
   {% set _ = pagesList.push({ href: '/organisation', text: __('nav_bar_organisation') }) %}
