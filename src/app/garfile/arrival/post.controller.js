@@ -7,7 +7,10 @@ const airportValidation = require('../../../common/utils/airportValidation');
 
 const performAPICall = (cookie, buttonClicked, res) => {
   garApi
-    .patch(res.locals.gar.garId, cookie.getGarStatus(), cookie.getGarArrivalVoyage())
+    .patch(res.locals.gar.garId, cookie.getGarStatus(), {
+      ...cookie.getGarArrivalVoyage(),
+      isInbound: cookie.getIsInbound(),
+    })
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -129,8 +132,6 @@ module.exports = async (req, res) => {
 
   const gar = await garApi.get(res.locals.gar.garId);
   const departurePort = JSON.parse(gar).departurePort;
-  cookie.setIsInbound(airportValidation.isJourneyUKInbound(departurePort, voyage.arrivalPort));
-
   validations.push([
     new ValidationRule(
       validator.notSameValues,
@@ -150,6 +151,9 @@ module.exports = async (req, res) => {
       ),
     ]);
   }
+
+  const isInbound = airportValidation.isJourneyUKInbound(departurePort, voyage.arrivalPort);
+  cookie.setIsInbound(isInbound);
 
   validator
     .validateChains(validations)

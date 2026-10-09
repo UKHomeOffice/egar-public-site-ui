@@ -1,5 +1,4 @@
 const _ = require('lodash');
-
 const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('./validations');
 const validator = require('../../../common/utils/validator');
