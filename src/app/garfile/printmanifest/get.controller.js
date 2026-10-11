@@ -6,12 +6,8 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile/print manifest get controller');
+  const garId = cookie.getGarId();
 
-  let { garId } = req.body || {};
-  if (garId === undefined) {
-    garId = cookie.getGarId();
-  }
-  cookie.setGarId(garId);
   const garPeople = garApi.getPeople(garId);
   const garDetails = garApi.get(garId, true);
   const garDocs = garApi.getSupportingDocs(garId);
