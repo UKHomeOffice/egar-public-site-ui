@@ -47,7 +47,9 @@
                          value="{{ person.garPeopleId }}"
                          autocomplete="off">
                   <label class="govuk-label govuk-checkboxes__label"
-                         for="garperson-{{ loop.index0 }}">&nbsp;</label>
+                         for="garperson-{{ loop.index0 }}">
+                    <span class="govuk-visually-hidden">Select {{ person.firstName }} {{ person.lastName }}</span>
+                  </label>
                 </div>
               </td>
           {% endif %}
