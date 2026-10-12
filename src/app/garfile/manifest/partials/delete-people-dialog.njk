@@ -1,8 +1,11 @@
 {% from "dist/govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% macro deletePeopleDialog(__) %}
-  <dialog id="deletePeopleDialog" class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-error-message govuk-!-font-size-36">Warning</h2>
+  <dialog id="deletePeopleDialog"
+          class="govuk-grid-column-two-thirds"
+          aria-labelledby="deletePeopleDialogTitle">
+    <h2 id="deletePeopleDialogTitle"
+        class="govuk-error-message govuk-!-font-size-36">Warning</h2>
     {{ govukWarningText({
       text: "Are you sure you want to delete these people?"
     }) }}
