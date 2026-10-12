@@ -29,7 +29,7 @@ spec:
   tls:
   - hosts:
     - {{ .PUBLIC_SITE_EXTERNAL_URL }}
-    secretName: public-site-internal-tls
+    secretName: public-site-external-tls
   ingressClassName: nginx-external
   rules:
   - host: {{ .PUBLIC_SITE_EXTERNAL_URL }}
