@@ -206,6 +206,8 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     }
   });
   const manifest = crewArr.concat(passengersArr);
+  const seenRows = new Set();
+  const seenDocumentNumbers = new Set();
   manifest.forEach((crew) => {
     const crewLabel = i18n.__('validator_api_uploadgar_people_type_crew');
     const passengerLabel = i18n.__('validator_api_uploadgar_people_type_passenger');
@@ -215,6 +217,42 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       firstName: crew.firstName,
       lastName: crew.lastName,
     });
+
+    const rowKey = JSON.stringify(
+      Object.keys(crew)
+        .filter((key) => key !== 'peopleType' && crew[key] !== undefined)
+        .sort()
+        .map((key) => [key, crew[key]])
+    );
+
+    const documentType = String(crew.documentType ?? '')
+      .trim()
+      .toUpperCase();
+    const documentNumber = String(crew.documentNumber ?? '')
+      .trim()
+      .toUpperCase();
+    if (documentType && documentNumber) {
+      const documentKey = JSON.stringify([documentType, documentNumber]);
+      validationArr.push([
+        new ValidationRule(
+          Boolean,
+          'file',
+          !seenDocumentNumbers.has(documentKey),
+          i18n.__('validator_api_uploadgar_duplicate_document_number')
+        ),
+      ]);
+      seenDocumentNumbers.add(documentKey);
+    }
+
+    validationArr.push([
+      new ValidationRule(
+        Boolean,
+        'file',
+        !seenRows.has(rowKey),
+        i18n.__('validator_api_uploadgar_duplicate_row', { name })
+      ),
+    ]);
+    seenRows.add(rowKey);
 
     validationArr.push([
       new ValidationRule(
