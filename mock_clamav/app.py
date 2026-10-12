@@ -15,4 +15,8 @@ def clamav():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0',port=8080)
+    # Local Docker mock: bind all interfaces so the app container can reach it.
+    app.run(  # nosemgrep: python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host
+        '0.0.0.0',
+        port=8080,
+    )

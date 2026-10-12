@@ -3,53 +3,55 @@
 {% import "common/templates/includes/macros.njk" as m %}
 
 {% block pageTitle %}
-	Create GAR | Landing | Submit a General Aviation Report (GAR)
+  Create GAR | Landing | Submit a General Aviation Report (GAR)
 {% endblock %}
 
-{% set active = '/home' %}
+{% set active = "/home" %}
 
 {% block beforeContent %}
-  <a href="/home" class="govuk-back-link">{{__('nav_back')}}</a>
+  <a href="/home" class="govuk-back-link">{{ __('nav_back') }}</a>
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
-	<div class="govuk-grid-column-two-thirds">
-    <form action="" method="post">
-      <div class="govuk-form-group {{ m.form_group_class('garoption', errors) }}">
-        {% set radioItems = [] %}
-        {% for gar in garoptions %}
-          {% set radioItems = radioItems.concat([{
-            value: gar.id | string,
-            text: gar.option,
-            checked: (form.garoption | default('') == gar.id)
-          }]) %}
-        {% endfor %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="" method="post">
+        <div class="govuk-form-group {{ m.form_group_class('garoption', errors) }}">
+          {% set radioItems = [] %}
+          {% for gar in garoptions %}
+            {% set radioItems = radioItems.concat([{
+              value: gar.id | string,
+              text: gar.option,
+              checked: (form.garoption | default('') == gar.id)
+            }]) %}
+          {% endfor %}
 
-        {{ govukRadios({
-          name: "garoption",
-          idPrefix: "option",
-          fieldset: {
-            legend: {
-              text: __('heading_how_to_create'),
-              classes: "govuk-fieldset__legend--xl",
-              isPageHeading: true
-            }
-          },
-          hint: {
-            text: __('how_to_create_caption')
-          },
-          errorMessage: errors | containsError('garoption'),
-          items: radioItems
-        }) }}
+          {{ govukRadios({
+            name: "garoption",
+            idPrefix: "option",
+            fieldset: {
+              legend: {
+                text: __('heading_how_to_create'),
+                classes: "govuk-fieldset__legend--xl",
+                isPageHeading: true
+              }
+            },
+            hint: {
+              text: __('how_to_create_caption')
+            },
+            errorMessage: errors | containsError('garoption'),
+            items: radioItems
+          }) }}
 
-      </div>
+        </div>
 
-      <div class="form-group">
-        <input type="submit" class="govuk-button" value="{{__('button_continue')}}">
-      </div>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    </form>
+        <div class="form-group">
+          <input type="submit"
+                 class="govuk-button"
+                 value="{{ __('button_continue') }}">
+        </div>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      </form>
+    </div>
   </div>
-</div>
 {% endblock %}

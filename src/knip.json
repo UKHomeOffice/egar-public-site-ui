@@ -1,0 +1,10 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["test/**/*.test.js", "public/javascripts/**/*.js"],
+  "project": ["**/*.js"],
+  "ignore": ["coverage/**", "public/javascripts/init.js"],
+  "ignoreDependencies": ["@govuk-one-login/service-header", "accessible-autocomplete", "govuk-frontend"],
+  "rules": {
+    "exports": "warn"
+  }
+}
