@@ -9,12 +9,8 @@ const { isAbleToCancelGar } = require('../../../common/utils/validator');
 module.exports = async (req, res) => {
   logger.debug('In garfile / view post controller');
   const cookie = new CookieModel(req);
-  let { garId } = req.body;
-  if (garId === undefined) {
-    garId = cookie.getGarId();
-  }
+  const garId = cookie.getGarId();
 
-  cookie.setGarId(garId);
   let numberOf0TResponseCodes = 0;
   const isResubmitted = cookie.getResubmitFor0T().includes(garId);
 
