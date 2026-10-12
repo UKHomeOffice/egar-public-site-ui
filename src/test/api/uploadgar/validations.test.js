@@ -33,34 +33,53 @@ describe('Upload GAR duplicate rows', () => {
       .flat()
       .filter((rule) => rule.identifier === 'file');
 
-  const documentNumberRules = (crew, passengers) =>
-    validations
-      .validations({}, crew, passengers)
-      .flat()
-      .filter((rule) => rule.message === 'The file contains duplicate travel document numbers.');
-
   it('rejects duplicate crew rows with an actionable message', async () => {
     const rules = duplicateRules([person, { ...person }], []);
-    expect(rules.map((rule) => rule.value)).to.deep.equal([true, false]);
+    expect(rules.map((rule) => rule.value)).to.deep.equal([false]);
     try {
       await validator.validateChains(rules.map((rule) => [rule]));
       expect.fail('Expected duplicate row validation to reject');
     } catch (errors) {
-      expect(errors).to.deep.equal([rules[1]]);
-      expect(errors[0].message).to.equal('The file contains duplicate row entry');
+      expect(errors).to.deep.equal(rules);
+      expect(errors[0].message).to.equal('The file has 2 entries for people with the same document details.');
     }
+  });
+
+  it('reports the total number of matching rows', () => {
+    const rules = duplicateRules([person, { ...person }, { ...person }], []);
+    expect(rules.map((rule) => rule.value)).to.deep.equal([false]);
+    expect(rules.map((rule) => rule.message)).to.deep.equal([
+      'The file has 3 entries for people with the same document details.',
+    ]);
+  });
+
+  it('counts rows across all duplicate groups', () => {
+    const otherPerson = { ...person, firstName: 'Alex' };
+    const rules = duplicateRules([person, { ...person }, otherPerson, { ...otherPerson }, { ...otherPerson }], []);
+
+    expect(rules).to.have.lengthOf(1);
+    expect(rules[0].message).to.equal('The file has 5 entries for people with the same document details.');
+    expect(rules[0].value).to.equal(false);
+  });
+
+  it('accepts a manifest without duplicate rows', () => {
+    const rules = duplicateRules([person, { ...person, documentNumber: '654321' }], []);
+    expect(rules.map((rule) => rule.value)).to.deep.equal([true]);
+  });
+
+  it('rejects duplicate rows copied between crew and passengers once', () => {
+    const rules = duplicateRules([person], [{ ...person, peopleType: 'Passenger' }]);
+
+    expect(rules).to.have.lengthOf(1);
+    expect(rules[0].value).to.equal(false);
   });
 
   it('rejects duplicate passenger rows', () => {
     const passenger = { ...person, peopleType: 'Passenger' };
     const rules = duplicateRules([], [passenger, { ...passenger }]);
-    expect(rules.map((rule) => rule.value)).to.deep.equal([true, false]);
-    expect(rules[1].message).to.include('duplicate row entry');
-  });
-
-  it('rejects a row copied between crew and passengers', () => {
-    const rules = duplicateRules([person], [{ ...person, peopleType: 'Passenger' }]);
-    expect(rules.map((rule) => rule.value)).to.deep.equal([true, false]);
+    expect(rules).to.have.lengthOf(1);
+    expect(rules[0].value).to.equal(false);
+    expect(rules[0].message).to.equal('The file has 2 entries for people with the same document details.');
   });
 
   it('accepts rows with the same name but different details', async () => {
@@ -70,40 +89,6 @@ describe('Upload GAR duplicate rows', () => {
 
   it('accepts an empty manifest', () => {
     expect(duplicateRules([], [])).to.deep.equal([]);
-  });
-
-  it('rejects a repeated document number when the document type is the same', async () => {
-    const crew = [
-      { ...person, documentType: 'Passport' },
-      { ...person, firstName: 'Alex', documentType: 'Passport' },
-    ];
-    const rules = documentNumberRules(crew, []);
-    expect(rules.map((rule) => rule.value)).to.deep.equal([true, false]);
-    try {
-      await validator.validateChains(rules.map((rule) => [rule]));
-      expect.fail('Expected duplicate document number validation to reject');
-    } catch (errors) {
-      expect(errors).to.deep.equal([rules[1]]);
-      expect(errors[0].message).to.equal('The file contains duplicate travel document numbers.');
-    }
-  });
-
-  it('allows the same document number under a different document type', async () => {
-    const crew = [
-      { ...person, documentType: 'Passport' },
-      { ...person, firstName: 'Alex', documentType: 'Identity Card' },
-    ];
-    const rules = documentNumberRules(crew, []);
-    expect(rules.map((rule) => rule.value)).to.deep.equal([true, true]);
-    await validator.validateChains(rules.map((rule) => [rule]));
-  });
-
-  it('does not report duplicate numbers when either document field is empty', () => {
-    const crew = [
-      { ...person, documentType: 'Passport', documentNumber: '' },
-      { ...person, firstName: 'Alex', documentType: 'Passport', documentNumber: '' },
-    ];
-    expect(documentNumberRules(crew, [])).to.deep.equal([]);
   });
 });
 
