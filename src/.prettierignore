@@ -1,0 +1,17 @@
+# Generated test output
+coverage
+.nyc_output
+
+# Minified/vendored third-party assets — not meant to be reformatted
+**/*.min.js
+**/*.min.css
+public/javascripts/jquery-3.7.1.min.js
+public/javascripts/cookie-banner.js
+public/javascripts/paginator.js
+public/javascripts/service-header.js
+public/javascripts/init-service-header.js
+public/stylesheets/dialog-polyfill.css
+
+# Machine-generated from airport_codes.csv by scripts/generate_airport_codes.js —
+# do not hand-format, see README.md
+common/app_data/airport_codes.json

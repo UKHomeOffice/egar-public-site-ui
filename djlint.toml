@@ -1,0 +1,13 @@
+profile = "nunjucks"
+extension = "njk"
+use_gitignore = true
+extend_exclude = "coverage"
+linter_output_format = "{filename}:{line}: {code} {message} {match}"
+
+# Preserve single blank lines from source on reformat instead of stripping all of them (the default, 0).
+max_blank_lines = 1
+
+# T001 creates a large whitespace-only migration diff; leave it for a dedicated formatting pass
+# (same reasoning as ssar-public-site-ui).
+# D004/D018 and J004/J018 are Django/Jinja-specific rules and do not apply to this Nunjucks app.
+ignore = "T001,D004,D018,J004,J018"

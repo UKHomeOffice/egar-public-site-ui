@@ -26,4 +26,9 @@ WORKDIR /public-site/
 
 RUN npm ci --omit dev
 
+USER root
+RUN rm -rf /usr/local/lib/node_modules/npm && \
+    rm -f /usr/local/bin/npm /usr/local/bin/npx
+USER 1000
+
 CMD ["node", "start"]

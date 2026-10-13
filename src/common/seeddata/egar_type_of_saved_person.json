@@ -1,5 +1,5 @@
 [
-	{ "id": "0", "persontype": "Captain"},
-	{ "id": "1", "persontype": "Crew" },
-	{ "id": "2", "persontype": "Passenger" }
+  { "id": "0", "persontype": "Captain" },
+  { "id": "1", "persontype": "Crew" },
+  { "id": "2", "persontype": "Passenger" }
 ]
