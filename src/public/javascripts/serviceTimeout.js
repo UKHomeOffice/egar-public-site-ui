@@ -66,7 +66,6 @@ class SessionTimeoutManager {
         this.lastFocusedElement = document.activeElement;
         this.showTimeoutPopup(this.sessionExpiryTimeLeft);
       }
-      console.log(this.sessionExpiryTimeLeft);
     }, 1000);
   }
 
@@ -154,7 +153,6 @@ class SessionTimeoutManager {
 
   handleKeyActions(e) {
     const activeId = document.activeElement.id;
-    console.log(e.key, activeId);
     if (e.key === 'Escape' || (activeId === 'stay-signed-in' && e.key === 'Enter')) {
       this.stopTimer();
       this.extendLoginSession();
