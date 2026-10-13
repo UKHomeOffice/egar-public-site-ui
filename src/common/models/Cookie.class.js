@@ -834,6 +834,20 @@ class Cookie {
     return dateValue;
   }
 
+  setAttributes(key, value) {
+    this.session[key] = value;
+  }
+
+  getAttributes(key) {
+    return this.session[key];
+  }
+
+  getSessionRemainingTimeInSeconds() {
+    const expiryDate = this.getAttributes('cookie').expires;
+    const expiryTime = new Date(expiryDate).getTime();
+    return Math.floor((expiryTime - Date.now()) / 1000);
+  }
+
   timeSlice(timeType, time) {
     let timeValue = '';
     switch (timeType.toLowerCase()) {

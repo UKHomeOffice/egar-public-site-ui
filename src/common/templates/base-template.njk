@@ -15,6 +15,7 @@
 
 {% from "includes/footer.njk" import footer %}
 {% from "includes/navigation.njk" import navigation %}
+{% from "./serviceTimeout.njk" import serviceTimeout %}
 
 <!DOCTYPE html>
 <html lang="{{ htmlLang | default('en') }}"
@@ -49,7 +50,11 @@
     <script src="/javascripts/cookie-banner.js"></script>
     <script id="gaconfig" data-ga-id="{{ g4_id }}"  src="/javascripts/google-analytics.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ g4_id }}"></script>
-
+    {% if isLoggedIn %}
+      <noscript>
+          <meta http-equiv="refresh" content="{{cookie.getSessionRemainingTimeInSeconds()}};url={{base_url}}/logout?servicetimeout=yes"/>
+      </noscript>
+   {% endif %}
 
   </head>
 
@@ -75,7 +80,9 @@
 
       {% include "phase.njk" %}
 
-      {% block beforeContent %}{% endblock %}
+      {% block beforeContent %}
+        {{ serviceTimeout(govukButton, cookie)}}
+      {% endblock %}
 
       <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content">
         {% include "common/templates/includes/errors.njk" %}
@@ -96,5 +103,6 @@
     <script src="/javascripts/location.js"></script>
     <script src="/javascripts/includes/date-time.js"></script>
     <script src="/javascripts/init-service-header.js"></script>
+    <script src="/javascripts/serviceTimeout.js"></script>
   </body>
 </html>

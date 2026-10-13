@@ -1,0 +1,17 @@
+{% macro serviceTimeout(govukButton, cookie) %}
+    <div class="govuk-body" id="serviceTimeout" aria-live="polite">
+        <div class="popupText govuk-body" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="stay-signed-in logout">
+            <h1 class="govuk-heading-2">
+                You will be signed out soon.</h1>
+            <p class="govuk-body">For security reasons, you'll be signed out in
+                <span id="countDownServiceTimeout" class="govuk-!-font-weight-bold">5 minutes</span>.</p>
+            <p class="govuk-body">If you want to continue using the service you'll need to stay signed in.</p>
+            <div class="govuk-button-group">
+                <form class="prevent-double-click" id="refreshSessionForm">
+                    <a class="govuk-button" href="#" id="stay-signed-in">Stay signed in</a>
+                    <a class="govuk-link logout" href="/logout" id="logout">Sign out</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
