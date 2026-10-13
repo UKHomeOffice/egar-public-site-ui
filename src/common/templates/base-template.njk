@@ -63,7 +63,7 @@
 
     {% if isLoggedIn %}
       <noscript>
-          <meta http-equiv="refresh" content="{{cookie.getSessionRemainingTimeInSeconds()}};url={{base_url}}/servicetimeout?action=logout"/>
+          <meta http-equiv="refresh" content="{{cookie.getSessionRemainingTimeInSeconds()}};url={{base_url}}/servicetimeout/logout"/>
       </noscript>
    {% endif %}
 
