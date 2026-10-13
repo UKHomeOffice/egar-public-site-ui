@@ -26,7 +26,6 @@ module.exports = (req, res) => {
       const parsedPeople = JSON.parse(responseValues[1]);
       const supportingDocuments = JSON.parse(responseValues[2]);
 
-      cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
 
