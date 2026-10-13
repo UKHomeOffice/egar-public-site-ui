@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
     if (action === 'refreshsession') {
       req.session.touch();
       cookie.setAttributes('newSessionStartAt', new Date().toISOString());
-      res.json(req.getAttributes('cookie').expires);
+      res.json(cookie.getAttributes('cookie').expires);
       return;
     }
 
@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
         secure: IS_HTTPS_SERVER,
         sameSite: SAME_SITE_VALUE,
       });
-      return res.redirect('/logout');
+      return res.redirect('/user/logout');
     }
   } catch (error) {
     logger.error('An error occurred', error);

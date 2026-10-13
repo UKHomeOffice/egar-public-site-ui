@@ -1,171 +1,220 @@
 /**
- *  This js code shows the service time out popup 5 minutes before login session expires
+ * Manages the session timeout warning popup and user inactivity.
  */
+class SessionTimeoutManager {
+  constructor() {
+    this.STORAGE_KEY = 'sessionTimeoutWarningDisplayTime';
+    this.inertSelectors = [
+      '#main-content',
+      '.govuk-header__container',
+      '.govuk-footer',
+      '.govuk-skip-link',
+      '.govuk-phase-banner',
+      '.govuk-back-link',
+    ];
 
-document.addEventListener('DOMContentLoaded', async () => {
-  if (!localStorage.getItem('sessionTimeoutWarningDisplayTime')) {
-    try {
-      const sessionTimeoutWarningDisplayTime = await fetch('/servicetimeout/inactivetime');
-      console.log(sessionTimeoutWarningDisplayTime);
-      const time = await sessionTimeoutWarningDisplayTime.json();
-      localStorage.setItem('sessionTimeoutWarningDisplayTime', time);
-    } catch (error) {
-      logErrorsOnServer(error);
+    // Cache DOM Elements
+    this.serviceTimeoutEl = document.querySelector('#serviceTimeout');
+    this.userLoggedInEl = document.querySelector('#user-logged-in');
+    this.staySignedInBtn = document.querySelector('#stay-signed-in');
+    this.countdownEl = document.getElementById('countDownServiceTimeout');
+
+    // State variables
+    this.initialInterval = null;
+    this.logoutTimer = null;
+    this.lastFocusedElement = null;
+    this.sessionExpiryTimeLeft = 0;
+
+    this.init();
+  }
+
+  async init() {
+    if (!this.userLoggedInEl) {
+      localStorage.removeItem(this.STORAGE_KEY);
+      return;
     }
-  }
-  const SESSION_TIMEOUT_DISPLAY_TIME = localStorage.getItem('sessionTimeoutWarningDisplayTime');
 
-  let initialInterval = null;
-  const serviceTimeoutId = document.querySelector('#serviceTimeout');
-  const userLoggedIn = document.querySelector('#user-logged-in');
-  const staySignedInVar = document.querySelector('#stay-signed-in');
+    if (this.serviceTimeoutEl) {
+      this.serviceTimeoutEl.style.display = 'none';
+    }
 
-  let sessionExpiryTimeLeft = 0;
-  let logoutTimer = 0;
-  let lastFocusedElement = null;
-
-  if (serviceTimeoutId) {
-    serviceTimeoutId.style.display = 'none';
+    await this.initializeDisplayTime();
+    this.bindEvents();
+    this.checkServiceTimeOut();
   }
 
-  if (userLoggedIn !== null) {
-    checkServiceTimeOut();
-  } else {
-    localStorage.removeItem('sessionTimeoutWarningDisplayTime');
-  }
-
-  async function checkServiceTimeOut() {
-    document.getElementById('serviceTimeout').style.setProperty('display', 'none', 'important');
-    sessionExpiryTimeLeft = await getSessionTime();
-
-    initialInterval = setInterval(() => {
-      sessionExpiryTimeLeft--;
-      if (sessionExpiryTimeLeft <= SESSION_TIMEOUT_DISPLAY_TIME) {
-        lastFocusedElement = document.activeElement;
-        showTimeoutPopup(sessionExpiryTimeLeft);
+  async initializeDisplayTime() {
+    if (!localStorage.getItem(this.STORAGE_KEY)) {
+      try {
+        const response = await fetch('/servicetimeout/inactivetime');
+        const time = await response.json();
+        localStorage.setItem(this.STORAGE_KEY, time);
+      } catch (error) {
+        this.logErrorOnServer(error);
       }
+    }
+    this.displayThreshold = Number(localStorage.getItem(this.STORAGE_KEY));
+  }
+
+  async checkServiceTimeOut() {
+    this.setElementDisplay(this.serviceTimeoutEl, 'none');
+    this.sessionExpiryTimeLeft = await this.getSessionTime();
+
+    this.initialInterval = setInterval(() => {
+      this.sessionExpiryTimeLeft--;
+      if (this.sessionExpiryTimeLeft <= this.displayThreshold) {
+        this.lastFocusedElement = document.activeElement;
+        this.showTimeoutPopup(this.sessionExpiryTimeLeft);
+      }
+      console.log(this.sessionExpiryTimeLeft);
     }, 1000);
   }
 
-  if (staySignedInVar) {
-    staySignedInVar.addEventListener('click', (e) => {
-      e.preventDefault();
-      clearInterval(logoutTimer);
-      extendLoginSession();
-      document.body.style.overflow = 'auto';
-    });
-  }
-  document.addEventListener('visibilitychange', async () => {
-    if (!document.hidden) {
-      sessionExpiryTimeLeft = await getSessionTime();
-      if (
-        window.getComputedStyle(serviceTimeoutId).display !== 'none' &&
-        window.getComputedStyle(serviceTimeoutId).visibility !== 'hidden'
-      ) {
-        if (sessionExpiryTimeLeft <= 0) {
-          window.location.href = `${window.location.origin}/servicetimeout/logout`;
-        } else {
-          setLogoutTimerCountdown(sessionExpiryTimeLeft);
-        }
-      }
-    }
-  });
-
-  async function extendLoginSession() {
+  async extendLoginSession() {
     try {
       await fetch('/servicetimeout/refreshsession');
       document.documentElement.classList.remove('serviceTimeout');
-      document.removeEventListener('keyup', getKeyActions);
-      document.querySelector('#main-content').inert = false;
-      document.querySelector('.rebranded-one-login-header__container').inert = false;
-      document.querySelector('.govuk-footer').inert = false;
-      document.querySelector('.govuk-skip-link').inert = false;
-      document.querySelector('.govuk-phase-banner').inert = false;
-      // eslint-disable-next-line no-unused-expressions
-      document.querySelector('.govuk-back-link') ? (document.querySelector('.govuk-back-link').inert = false) : '';
-      lastFocusedElement.focus();
-      checkServiceTimeOut();
+      document.removeEventListener('keyup', this.handleKeyActions);
+
+      this.setInertState(false);
+
+      if (this.lastFocusedElement) {
+        this.lastFocusedElement.focus();
+      }
+
+      this.checkServiceTimeOut();
     } catch (error) {
-      logErrorsOnServer(error);
+      this.logErrorOnServer(error);
     }
   }
 
-  async function getSessionTime() {
+  async getSessionTime() {
     try {
-      const sessionTimeCall = await fetch('/servicetimeout/sessiontime');
-      const sessionTime = await sessionTimeCall.json();
-      return sessionTime;
+      const response = await fetch('/servicetimeout/sessiontime');
+      return await response.json();
     } catch (error) {
-      logErrorsOnServer(error);
+      this.logErrorOnServer(error);
+      return 0;
     }
   }
 
-  function showTimeoutPopup(sessionExpiryTimeLeft) {
-    stopTimer();
-
-    //Disable the elements outside the popup using inert.
-    document.querySelector('#main-content').inert = true;
-    document.querySelector('.rebranded-one-login-header__container').inert = true;
-    document.querySelector('.govuk-footer').inert = true;
-    document.querySelector('.govuk-skip-link').inert = true;
-    document.querySelector('.govuk-phase-banner').inert = true;
-    // eslint-disable-next-line no-unused-expressions
-    document.querySelector('.govuk-back-link') ? (document.querySelector('.govuk-back-link').inert = true) : '';
+  showTimeoutPopup(timeLeft) {
+    this.stopTimer();
+    this.setInertState(true);
 
     document.documentElement.classList.add('serviceTimeout');
-    document.getElementById('serviceTimeout').style.setProperty('display', 'flex', 'important');
-    setLogoutTimerCountdown(sessionExpiryTimeLeft);
-    staySignedInVar.focus();
-    document.addEventListener('keyup', getKeyActions);
+    this.setElementDisplay(this.serviceTimeoutEl, 'flex');
+
+    this.setLogoutTimerCountdown(timeLeft);
+
+    if (this.staySignedInBtn) {
+      this.staySignedInBtn.focus();
+    }
+
+    // Bind context to event listener so 'this' works properly
+    document.addEventListener('keyup', this.handleKeyActions.bind(this));
   }
 
-  function stopTimer() {
-    if (initialInterval !== null) {
-      clearInterval(initialInterval);
-      initialInterval = null;
+  stopTimer() {
+    if (this.initialInterval) {
+      clearInterval(this.initialInterval);
+      this.initialInterval = null;
+    }
+    if (this.logoutTimer) {
+      clearInterval(this.logoutTimer);
+      this.logoutTimer = null;
     }
   }
 
-  function setLogoutTimerCountdown(sessionExpiryTimeLeft) {
-    if (logoutTimer) {
-      clearTimeout(logoutTimer);
+  setLogoutTimerCountdown(timeLeft) {
+    if (this.logoutTimer) {
+      clearInterval(this.logoutTimer);
     }
-    logoutTimer = setInterval(() => {
-      const minutes = Math.ceil(sessionExpiryTimeLeft / 60);
-      if (minutes === 1) {
-        if (sessionExpiryTimeLeft === 60 || sessionExpiryTimeLeft === 40 || sessionExpiryTimeLeft === 20) {
-          document.getElementById('countDownServiceTimeout').textContent = `${sessionExpiryTimeLeft} seconds`;
+
+    this.logoutTimer = setInterval(() => {
+      const minutes = Math.ceil(timeLeft / 60);
+
+      if (this.countdownEl) {
+        if (minutes === 1 && [60, 40, 20].includes(timeLeft)) {
+          this.countdownEl.textContent = `${timeLeft} seconds`;
+        } else {
+          this.countdownEl.textContent = `${minutes} minutes`;
         }
-      } else {
-        document.getElementById('countDownServiceTimeout').textContent = `${minutes} minutes`;
       }
-      sessionExpiryTimeLeft--;
-      if (sessionExpiryTimeLeft <= 0) {
-        clearInterval(initialInterval);
-        localStorage.removeItem('sessionTimeoutWarningDisplayTime');
+
+      timeLeft--;
+
+      if (timeLeft <= 0) {
+        this.stopTimer();
+        localStorage.removeItem(this.STORAGE_KEY);
         window.location.href = `${window.location.origin}/servicetimeout/logout`;
       }
     }, 1000);
   }
 
-  // 'esc' key use to extend session time and let user access the service
-  function getKeyActions(e) {
-    if (e.key === 'Escape' || (document.activeElement.id === 'stay-signed-in' && e.key === 'Enter')) {
-      clearInterval(logoutTimer);
-      extendLoginSession();
+  handleKeyActions(e) {
+    const activeId = document.activeElement.id;
+    console.log(e.key, activeId);
+    if (e.key === 'Escape' || (activeId === 'stay-signed-in' && e.key === 'Enter')) {
+      this.stopTimer();
+      this.extendLoginSession();
     }
-    if (document.activeElement.id === 'logout' && e.key === 'Enter') {
-      localStorage.removeItem('sessionTimeoutWarningDisplayTime');
+
+    if (activeId === 'logout' && e.key === 'Enter') {
+      localStorage.removeItem(this.STORAGE_KEY);
       window.location.href = `${window.location.origin}/servicetimeout/logout`;
     }
   }
-  function logErrorsOnServer(error) {
-    fetch('/servicetimeout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ serviceTimeoutPageError: error.message }),
+
+  setInertState(isInert) {
+    this.inertSelectors.forEach((selector) => {
+      const el = document.querySelector(selector);
+      if (el) el.inert = isInert;
     });
   }
+
+  setElementDisplay(element, displayValue) {
+    if (element) {
+      element.style.setProperty('display', displayValue, 'important');
+    }
+  }
+
+  logErrorOnServer(error) {
+    fetch('/servicetimeout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ serviceTimeoutPageError: error.message }),
+    }).catch(() => {});
+  }
+
+  bindEvents() {
+    if (this.staySignedInBtn) {
+      this.staySignedInBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopTimer();
+        this.extendLoginSession();
+        document.body.style.overflow = 'auto';
+        this.setElementDisplay(this.serviceTimeoutEl, 'none');
+      });
+    }
+
+    document.addEventListener('visibilitychange', async () => {
+      if (!document.hidden && this.serviceTimeoutEl) {
+        this.sessionExpiryTimeLeft = await this.getSessionTime();
+        const computedStyle = window.getComputedStyle(this.serviceTimeoutEl);
+        if (computedStyle.display !== 'none' && computedStyle.visibility !== 'hidden') {
+          if (this.sessionExpiryTimeLeft <= 0) {
+            window.location.href = `${window.location.origin}/servicetimeout/logout`;
+          } else {
+            this.setLogoutTimerCountdown(this.sessionExpiryTimeLeft);
+          }
+        }
+      }
+    });
+  }
+}
+
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', () => {
+  new SessionTimeoutManager();
 });

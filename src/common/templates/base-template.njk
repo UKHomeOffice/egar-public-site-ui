@@ -52,7 +52,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ g4_id }}"></script>
     {% if isLoggedIn %}
       <noscript>
-          <meta http-equiv="refresh" content="{{cookie.getSessionRemainingTimeInSeconds()}};url={{base_url}}/logout?servicetimeout=yes"/>
+          <meta http-equiv="refresh" content="{{cookie.getSessionRemainingTimeInSeconds()}};url={{base_url}}/servicetimeout?action=logout"/>
       </noscript>
    {% endif %}
 
