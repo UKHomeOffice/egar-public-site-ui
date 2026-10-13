@@ -27,7 +27,6 @@ describe('GAR Print Manifest Get Controller', () => {
 
     cookieInstance = {
       getGarId: sinon.stub().returns('gar-1'),
-      setGarId: sinon.spy(),
       setGarStatus: sinon.spy(),
     };
     garApiStub = {
@@ -55,7 +54,6 @@ describe('GAR Print Manifest Get Controller', () => {
     expect(garApiStub.get).to.have.been.calledWith('gar-1', true);
     expect(garApiStub.getPeople).to.have.been.calledWith('gar-1');
     expect(garApiStub.getSupportingDocs).to.have.been.calledWith('gar-1');
-    expect(cookieInstance.setGarId).to.have.been.calledWith('gar-1');
     expect(cookieInstance.setGarStatus).to.have.been.calledWith('Draft');
     expect(res.render).to.have.been.calledOnceWith('app/garfile/printmanifest/index', {
       cookie: cookieInstance,
@@ -92,7 +90,6 @@ describe('GAR Print Manifest Get Controller', () => {
       garsupportingdocs: {},
       errors: [{ message: 'Failed to get GAR information' }],
     });
-    expect(cookieInstance.setGarId).to.not.have.been.called;
   });
 
   it('should render an error when the response is not valid JSON', async () => {

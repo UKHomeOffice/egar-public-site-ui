@@ -47,7 +47,6 @@ module.exports = async (req, res) => {
     const durationInDeparture = garApi.getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
 
     cookie.setCbpId(parsedGar.cbpId);
-    cookie.setGarId(parsedGar.garId);
     cookie.setGarStatus(parsedGar.status.name);
     logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
 
