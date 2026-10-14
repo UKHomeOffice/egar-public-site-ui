@@ -41,4 +41,4 @@ spec:
           service:
             name: public-site-svc
             port:
-              number: 443
+              number: 10443
