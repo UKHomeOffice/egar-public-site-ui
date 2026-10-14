@@ -92,7 +92,7 @@
       {% include "phase.njk" %}
 
       {% block beforeContent %}
-        {{ serviceTimeout(govukButton, cookie)}}
+        {{ serviceTimeout(govukButton)}}
       {% endblock %}
 
       <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content">

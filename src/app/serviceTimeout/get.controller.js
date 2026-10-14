@@ -38,6 +38,6 @@ module.exports = async (req, res) => {
     }
   } catch (error) {
     logger.error('An error occurred', error);
-    // add 500 template
+    res.render('500');
   }
 };
