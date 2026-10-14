@@ -43,6 +43,8 @@ describe('GAR Customs Post Controller', () => {
         gar: {
           id: 'ABCD-1234',
           status: 'Draft',
+          voyageArrival: { arrivalPort: null },
+          voyageDeparture: { departurePort: null },
         },
       },
     };

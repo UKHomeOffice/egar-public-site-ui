@@ -103,3 +103,12 @@ window.dateNotMoreThanTwoDaysInFuture = (providedDate) => {
 
   return Boolean(providedDate) && providedDate.getTime() <= maxDepartureDate.getTime();
 };
+
+window.addEventListener('pageshow', () => {
+  if (sessionStorage.getItem('scrollTop') === 'true') {
+    sessionStorage.removeItem('scrollTop');
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+  }
+});

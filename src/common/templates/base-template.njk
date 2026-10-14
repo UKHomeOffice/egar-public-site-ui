@@ -18,38 +18,47 @@
 
 <!DOCTYPE html>
 <html lang="{{ htmlLang | default('en') }}"
-  class="govuk-template govuk-template--rebranded app-html-class {{ htmlClasses }}">
+      class="govuk-template govuk-template--rebranded app-html-class {{ htmlClasses }}">
 
   <head>
     <meta charset="utf-8" />
-    <title>{% block pageTitle %}{% endblock %}</title>
+    <title>
+      {% block pageTitle %}{% endblock %}
+    </title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="referrer" content="origin-when-cross-origin" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="blue">
 
     <link rel="icon" sizes="48x48" href="/assets/rebrand/images/favicon.ico">
-    <link rel="icon" sizes="any" href="/assets/rebrand/images/favicon.svg" type="image/svg+xml">
-    <link rel="mask-icon" href="/assets/rebrand/images/govuk-icon-mask.svg" color="blue">
-    <link rel="apple-touch-icon" href="/assets/rebrand/images/govuk-icon-180.png">
+    <link rel="icon"
+          sizes="any"
+          href="/assets/rebrand/images/favicon.svg"
+          type="image/svg+xml">
+    <link rel="mask-icon"
+          href="/assets/rebrand/images/govuk-icon-mask.svg"
+          color="blue">
+    <link rel="apple-touch-icon"
+          href="/assets/rebrand/images/govuk-icon-180.png">
     <link rel="manifest" href="/assets/rebrand/manifest.json">
     <link rel="stylesheet" href="/stylesheets/govuk-frontend.min.css">
     <link rel="stylesheet" href="/stylesheets/service-header.min.css">
     <link href="/stylesheets/custom.css" rel="stylesheet" />
-    <link href="/stylesheets/dialog-polyfill.css" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/dialog-polyfill.css" rel="stylesheet" />
     <script src="/javascripts/jquery-3.7.1.min.js"></script>
     <link href="/javascripts/accessible-autocomplete.min.css" rel="stylesheet" />
-
 
     <script src="/javascripts/accessible-autocomplete.min.js"></script>
     <script src="/javascripts/dialog-polyfill.js"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script src="/javascripts/cookie-banner.js"></script>
-    <script id="gaconfig" data-ga-id="{{ g4_id }}"  src="/javascripts/google-analytics.js"></script>
+    <script id="gaconfig"
+            data-ga-id="{{ g4_id }}"
+            src="/javascripts/google-analytics.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ g4_id }}"></script>
-
 
   </head>
 
@@ -61,8 +70,8 @@
     {% include "cookies.njk" %}
 
     {{ govukSkipLink({
-    href: '#main-content',
-    text: 'Skip to main content'
+      href: '#main-content',
+      text: 'Skip to main content'
     }) }}
 
     {% if isLoggedIn %}

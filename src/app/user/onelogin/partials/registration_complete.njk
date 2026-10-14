@@ -1,18 +1,17 @@
 {% from "dist/govuk/components/button/macro.njk" import govukButton %}
 {% from "dist/govuk/components/panel/macro.njk" import govukPanel %}
 
-
 <div class="govuk-width-container">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-    
-      {{ govukPanel({ 
-          titleHtml: "Account has been <br/> created" 
-        }) 
+
+      {{ govukPanel({
+        titleHtml: "Account has been <br/> created"
+      })
       }}
-      
+
       <p class="govuk-body">We have sent you a confirmation email</p>
-      
+
       <h1 class="govuk-heading-l">What happens next</h1>
 
       <div class="govuk-!-margin-bottom-7">
@@ -24,12 +23,12 @@
           <li>add, remove or manage people on your flight</li>
         </ul>
       </div>
-      
+
       <form method="post" action="/onelogin/register" novalidate>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukButton({text: "Continue", element: "button", type: "submit"}) }}
       </form>
-    
+
     </div>
   </div>
 </div>

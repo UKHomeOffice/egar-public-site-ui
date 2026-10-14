@@ -83,6 +83,7 @@ function initialisExpressSession(app) {
       store: new PgSession({
         conString: config.PUBLIC_SITE_DB_CONNSTR,
         ttl: 60 * 60,
+        createTableIfMissing: true,
       }),
       secret: config.SESSION_ENCODE_SECRET,
       resave: false,

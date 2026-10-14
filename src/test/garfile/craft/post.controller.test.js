@@ -42,7 +42,13 @@ describe('GAR Craft Post Controller', () => {
         portChoice: 'Yes',
       },
       session: {
-        gar: { id: 'GAR1-ID', status: 'Draft', craft: {} },
+        gar: {
+          id: 'GAR1-ID',
+          status: 'Draft',
+          craft: {},
+          voyageArrival: { arrivalPort: null },
+          voyageDeparture: { departurePort: null },
+        },
         u: { dbId: 'USER1-ID' },
         cookie: {},
         save: (callback) => callback(),
