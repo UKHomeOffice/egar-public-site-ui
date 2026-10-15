@@ -63,9 +63,10 @@
 
     {% if isLoggedIn %}
       <noscript>
-          <meta http-equiv="refresh" content="{{cookie.getSessionRemainingTimeInSeconds()}};url={{base_url}}/servicetimeout/logout"/>
+        <meta http-equiv="refresh"
+              content="{{ cookie.getSessionRemainingTimeInSeconds() }};url={{ base_url }}/servicetimeout/logout" />
       </noscript>
-   {% endif %}
+    {% endif %}
 
   </head>
 
@@ -92,7 +93,7 @@
       {% include "phase.njk" %}
 
       {% block beforeContent %}
-        {{ serviceTimeout(govukButton)}}
+        {{ serviceTimeout(govukButton) }}
       {% endblock %}
 
       <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content">
