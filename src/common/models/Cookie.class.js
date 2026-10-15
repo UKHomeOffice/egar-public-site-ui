@@ -845,7 +845,9 @@ class Cookie {
   getSessionRemainingTimeInSeconds() {
     const expiryDate = this.session.cookie.expires;
     const expiryTime = new Date(expiryDate).getTime();
-    return Math.floor((expiryTime - Date.now()) / 1000);
+    const remainingSeconds = Math.floor((expiryTime - Date.now()) / 1000);
+
+    return Math.max(0, remainingSeconds);
   }
 
   timeSlice(timeType, time) {
