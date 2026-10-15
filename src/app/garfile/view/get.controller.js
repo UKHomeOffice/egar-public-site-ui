@@ -9,18 +9,10 @@ const dataAccessApi = require('../../../common/services/dataAccessApi');
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   let renderContext = {};
-  let { garId } = req.body || {};
-  if (garId === undefined) {
-    garId = cookie.getGarId();
-  }
-  if (garId === null) {
-    logger.debug('GAR ID is null; redirecting to home page');
-    res.redirect('/home');
-    return;
-  }
+  logger.debug('In garfile/view get controller');
+  const garId = cookie.getGarId();
 
   try {
-    cookie.setGarId(garId);
     const [garPeople, garDetails, garDocs, progress] = await Promise.all([
       dataAccessApi.garApi.getPeople(garId),
       dataAccessApi.garApi.get(garId),
@@ -54,7 +46,6 @@ module.exports = async (req, res) => {
       const durationInDeparture = garApi.getDurationBeforeDeparture(departureDate, departureTime);
       const numberOf0TResponseCodes = (await dataAccessApi.garApi.getPeople(garId, '', '0T'))?.items?.length;
 
-      cookie.setGarId(parsedGar.garId);
       cookie.setGarStatus(parsedGar.status.name);
       logger.debug(`Retrieved GAR ID: ${parsedGar.garId}`);
 
