@@ -8,7 +8,10 @@ const { isAbleToCancelGar } = require('../../../common/utils/validator');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
-  const garId = cookie.getGarId();
+  let { garId } = req.body;
+  if (garId === undefined) {
+    garId = cookie.getGarId();
+  }
 
   let numberOf0TResponseCodes = 0;
   const isResubmitted = cookie.getResubmitFor0T().includes(garId);
@@ -52,6 +55,9 @@ module.exports = async (req, res) => {
     // Maybe not necessary but delete the ids as the template does not need them
     delete parsedGar.userId;
     delete parsedGar.organisationId;
+
+    const isInbound = airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort);
+    cookie.setIsInbound(isInbound);
 
     renderContext = {
       cookie,
