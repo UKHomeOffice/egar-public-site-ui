@@ -31,6 +31,6 @@ module.exports = async (req, res) => {
     }
   } catch (error) {
     logger.error('An error occurred', error);
-    // res.render('app/error/500');
+    res.render('app/error/500');
   }
 };
