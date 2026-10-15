@@ -25,6 +25,7 @@ class SessionTimeoutManager {
     this.lastFocusedElement = null;
     this.sessionExpiryTimeLeft = 0;
     this.boundHandleKeyActions = this.handleKeyActions.bind(this);
+    this.isRefreshing = false;
 
     this.init();
   }
@@ -57,40 +58,60 @@ class SessionTimeoutManager {
     this.displayThreshold = Number(localStorage.getItem(this.STORAGE_KEY));
   }
 
-  async checkServiceTimeOut() {
+  async checkServiceTimeOut(startingTimeLeft) {
     this.setElementDisplay(this.serviceTimeoutEl, 'none');
-    this.sessionExpiryTimeLeft = await this.getSessionTime();
+    this.sessionExpiryTimeLeft = startingTimeLeft ?? (await this.getSessionTime());
 
+    this.stopTimer();
     this.initialInterval = setInterval(() => {
       this.sessionExpiryTimeLeft--;
       if (this.sessionExpiryTimeLeft <= this.displayThreshold) {
-        this.lastFocusedElement = document.activeElement;
         this.showTimeoutPopup(this.sessionExpiryTimeLeft);
       }
     }, 1000);
   }
 
   async extendLoginSession() {
+    if (this.isRefreshing) return;
+    this.isRefreshing = true;
+
     try {
-      await fetch('/servicetimeout/refreshsession');
-      document.documentElement.classList.remove('serviceTimeout');
-      document.removeEventListener('keyup', this.handleKeyActions);
+      const response = await fetch('/servicetimeout/refreshsession');
 
-      this.setInertState(false);
-
-      if (this.lastFocusedElement) {
-        this.lastFocusedElement.focus();
+      if (!response.ok) {
+        throw new Error(`Session refreshed failed with status ${response.status}`);
       }
+
+      const timeLeft = await response.json();
       this.stopTimer();
-      this.checkServiceTimeOut();
+      this.hideTimeoutPopup();
+      this.checkServiceTimeOut(timeLeft);
     } catch (error) {
       this.logErrorOnServer(error);
+    } finally {
+      this.isRefreshing = false;
+    }
+  }
+
+  hideTimeoutPopup() {
+    document.documentElement.classList.remove('serviceTimeout');
+    document.removeEventListener('keyup', this.boundHandleKeyActions);
+    document.body.style.overflowY = 'auto';
+    this.setElementDisplay(this.serviceTimeoutEl, 'none');
+    this.setInertState(false);
+
+    if (this.lastFocusedElement) {
+      this.lastFocusedElement.focus();
+      this.lastFocusedElement = null;
     }
   }
 
   async getSessionTime() {
     try {
       const response = await fetch('/servicetimeout/sessiontime');
+      if (!response.ok) {
+        throw new Error(`Session refreshed failed with status ${response.status}`);
+      }
       return await response.json();
     } catch (error) {
       this.logErrorOnServer(error);
@@ -100,11 +121,14 @@ class SessionTimeoutManager {
 
   showTimeoutPopup(timeLeft) {
     this.stopTimer();
-    this.setInertState(true);
 
+    if (!document.documentElement.classList.contains('serviceTimeout')) {
+      this.lastFocusedElement = document.activeElement;
+    }
+
+    this.setInertState(true);
     document.documentElement.classList.add('serviceTimeout');
     this.setElementDisplay(this.serviceTimeoutEl, 'flex');
-
     this.setLogoutTimerCountdown(timeLeft);
 
     if (this.staySignedInBtn) {
@@ -155,7 +179,6 @@ class SessionTimeoutManager {
   handleKeyActions(e) {
     const activeId = document.activeElement.id;
     if (e.key === 'Escape' || (activeId === 'stay-signed-in' && e.key === 'Enter')) {
-      this.stopTimer();
       this.extendLoginSession();
     }
 
@@ -190,10 +213,7 @@ class SessionTimeoutManager {
     if (this.staySignedInBtn) {
       this.staySignedInBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        this.stopTimer();
         this.extendLoginSession();
-        document.body.style.overflow = 'auto';
-        this.setElementDisplay(this.serviceTimeoutEl, 'none');
       });
     }
 

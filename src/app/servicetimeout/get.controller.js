@@ -5,7 +5,7 @@ const logger = require('../../common/utils/logger')(__filename);
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   const { action } = req.params;
-  const hour = 60 * 60 * 1000;
+  const hour = 60;
 
   try {
     switch (action) {
@@ -17,8 +17,10 @@ module.exports = async (req, res) => {
         }
         return res.json(cookie.getSessionRemainingTimeInSeconds());
       case 'refreshsession':
-        req.session.cookie.expires = Date.now() + hour;
         req.session.cookie.maxAge = hour;
+        req.session.lastRefreshedAt = Date.now();
+        res.set('Cache-Control', 'no-store');
+        req.session.cookie.expires = Date.now() + hour;
         return res.json(req.session.cookie.expires);
       case 'logout':
         res.cookie('serviceTimeout', 'yes', {
