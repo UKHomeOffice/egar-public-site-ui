@@ -843,7 +843,7 @@ class Cookie {
   }
 
   getSessionRemainingTimeInSeconds() {
-    const expiryDate = this.getAttributes('cookie').expires;
+    const expiryDate = this.session.cookie.expires;
     const expiryTime = new Date(expiryDate).getTime();
     return Math.floor((expiryTime - Date.now()) / 1000);
   }

@@ -5,39 +5,59 @@ const logger = require('../../common/utils/logger')(__filename);
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   const { action } = req.params;
+  const hour = 3 * 60 * 1000;
 
   try {
-    if (action === 'inactivetime') {
-      res.json(SESSION_TIMEOUT_WARNING_DISPLAY_TIME);
-      return;
+    switch (action) {
+      case 'inactivetime':
+        return res.json(SESSION_TIMEOUT_WARNING_DISPLAY_TIME);
+      case 'sessiontime':
+        if (!cookie.getUserDbId()) {
+          return res.json(0); //Set a session length to 0 if user is not loggedIn
+        }
+        return res.json(cookie.getSessionRemainingTimeInSeconds());
+      case 'refreshsession':
+        req.session.cookie.expires = Date.now() + hour;
+        req.session.cookie.maxAge = hour;
+        return res.json(req.session.cookie.expires);
+      case 'logout':
+        res.cookie('serviceTimeout', 'yes', {
+          httpOnly: true,
+          secure: IS_HTTPS_SERVER,
+          sameSite: SAME_SITE_VALUE,
+        });
+        return res.redirect('/user/logout');
     }
+    // if (action === 'inactivetime') {
+    //   res.json(SESSION_TIMEOUT_WARNING_DISPLAY_TIME);
+    //   return;
+    // }
 
-    if (action === 'sessiontime') {
-      if (!cookie.getUserDbId()) {
-        res.json(0); //Set a session length to 0 if user is not loggedIn
-        return;
-      }
-      res.json(cookie.getSessionRemainingTimeInSeconds());
-      return;
-    }
+    // if (action === 'sessiontime') {
+    //   if (!cookie.getUserDbId()) {
+    //     res.json(0); //Set a session length to 0 if user is not loggedIn
+    //     return;
+    //   }
+    //   res.json(cookie.getSessionRemainingTimeInSeconds());
+    //   return;
+    // }
 
-    if (action === 'refreshsession') {
-      req.session.touch();
-      cookie.setAttributes('newSessionStartAt', new Date().toISOString());
-      res.json(cookie.getAttributes('cookie').expires);
-      return;
-    }
+    // if (action === 'refreshsession') {
+    //   req.session.cookie.expires = new Date(Date.now() + hour);
+    //   req.session.cookie.maxAge = hour;
+    //   return res.send(req.session.cookie.expires);
+    // }
 
-    if (action === 'logout') {
-      res.cookie('serviceTimeout', 'yes', {
-        httpOnly: true,
-        secure: IS_HTTPS_SERVER,
-        sameSite: SAME_SITE_VALUE,
-      });
-      return res.redirect('/user/logout');
-    }
+    // if (action === 'logout') {
+    //   res.cookie('serviceTimeout', 'yes', {
+    //     httpOnly: true,
+    //     secure: IS_HTTPS_SERVER,
+    //     sameSite: SAME_SITE_VALUE,
+    //   });
+    //   return res.redirect('/user/logout');
+    // }
   } catch (error) {
     logger.error('An error occurred', error);
-    res.render('500');
+    // res.render('app/error/500');
   }
 };

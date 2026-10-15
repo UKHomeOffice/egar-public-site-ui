@@ -24,6 +24,7 @@ class SessionTimeoutManager {
     this.logoutTimer = null;
     this.lastFocusedElement = null;
     this.sessionExpiryTimeLeft = 0;
+    this.boundHandleKeyActions = this.handleKeyActions.bind(this);
 
     this.init();
   }
@@ -80,7 +81,7 @@ class SessionTimeoutManager {
       if (this.lastFocusedElement) {
         this.lastFocusedElement.focus();
       }
-
+      this.stopTimer();
       this.checkServiceTimeOut();
     } catch (error) {
       this.logErrorOnServer(error);
@@ -111,7 +112,7 @@ class SessionTimeoutManager {
     }
 
     // Bind context to event listener so 'this' works properly
-    document.addEventListener('keyup', this.handleKeyActions.bind(this));
+    document.addEventListener('keyup', this.boundHandleKeyActions);
   }
 
   stopTimer() {

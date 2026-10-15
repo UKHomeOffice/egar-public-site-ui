@@ -1,15 +1,20 @@
-{% extends "../../common/templates/layouts/main.njk" %}
+{% extends "base-template.njk" %}
 
-{% block pageTitle%}
-       Error
+{% import "common/templates/includes/macros.njk" as m %}
+
+{% block page_title %}
+  Error 500
+{% endblock %}
+
+{% block beforeContent %}
+  {% include "common/templates/includes/back.njk" %}
 {% endblock %}
 
 {% block content %}
-
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-xl">Error</h1>
-      <p class="govuk-body-l">Something has gone wrong. Click <a href="/">here</a> to resume your journey.</p>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Error</h1>
+        <p class="govuk-body-l">Something has gone wrong. Click <a href="/">here</a> to resume your journey.</p>
+      </div>
     </div>
-  </div>
 {% endblock %}
