@@ -5,7 +5,7 @@ const logger = require('../../common/utils/logger')(__filename);
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   const { action } = req.params;
-  const hour = 3 * 60 * 1000;
+  const hour = 60 * 60 * 1000;
 
   try {
     switch (action) {
