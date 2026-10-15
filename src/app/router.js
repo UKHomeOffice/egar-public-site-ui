@@ -87,7 +87,7 @@ const exportusers = require('./organisation/exportusers');
 const searchUsers = require('./organisation/searchusers');
 
 // serviceTimeout
-const serviceTimeout = require('./servicetimeout');
+const serviceTimeout = require('./serviceTimeout');
 
 // Export
 module.exports.bind = (app) => {
