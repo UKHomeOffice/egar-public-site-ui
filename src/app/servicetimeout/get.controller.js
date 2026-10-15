@@ -28,34 +28,6 @@ module.exports = async (req, res) => {
         });
         return res.redirect('/user/logout');
     }
-    // if (action === 'inactivetime') {
-    //   res.json(SESSION_TIMEOUT_WARNING_DISPLAY_TIME);
-    //   return;
-    // }
-
-    // if (action === 'sessiontime') {
-    //   if (!cookie.getUserDbId()) {
-    //     res.json(0); //Set a session length to 0 if user is not loggedIn
-    //     return;
-    //   }
-    //   res.json(cookie.getSessionRemainingTimeInSeconds());
-    //   return;
-    // }
-
-    // if (action === 'refreshsession') {
-    //   req.session.cookie.expires = new Date(Date.now() + hour);
-    //   req.session.cookie.maxAge = hour;
-    //   return res.send(req.session.cookie.expires);
-    // }
-
-    // if (action === 'logout') {
-    //   res.cookie('serviceTimeout', 'yes', {
-    //     httpOnly: true,
-    //     secure: IS_HTTPS_SERVER,
-    //     sameSite: SAME_SITE_VALUE,
-    //   });
-    //   return res.redirect('/user/logout');
-    // }
   } catch (error) {
     logger.error('An error occurred', error);
     // res.render('app/error/500');
