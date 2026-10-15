@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
         req.session.cookie.maxAge = hour;
         req.session.lastRefreshedAt = Date.now();
         res.set('Cache-Control', 'no-store');
-        req.session.cookie.expires = Date.now() + hour;
         return res.json(req.session.cookie.expires);
       case 'logout':
         res.cookie('serviceTimeout', 'yes', {
