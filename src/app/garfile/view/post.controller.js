@@ -53,6 +53,9 @@ module.exports = async (req, res) => {
     delete parsedGar.userId;
     delete parsedGar.organisationId;
 
+    const isInbound = airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort);
+    cookie.setIsInbound(isInbound);
+
     renderContext = {
       cookie,
       manifestFields,
