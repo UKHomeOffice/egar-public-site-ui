@@ -177,12 +177,11 @@ class SessionTimeoutManager {
   }
 
   handleKeyActions(e) {
-    const activeId = document.activeElement.id;
-    if (e.key === 'Escape' || (activeId === 'stay-signed-in' && e.key === 'Enter')) {
+    if (e.key === 'Escape') {
       this.extendLoginSession();
     }
 
-    if (activeId === 'logout' && e.key === 'Enter') {
+    if (document.activeElement.id === 'logout' && e.key === 'Enter') {
       localStorage.removeItem(this.STORAGE_KEY);
       window.location.href = `${window.location.origin}/servicetimeout/logout`;
     }
@@ -214,6 +213,16 @@ class SessionTimeoutManager {
       this.staySignedInBtn.addEventListener('click', (e) => {
         e.preventDefault();
         this.extendLoginSession();
+      });
+    }
+
+    const logoutLink = document.querySelector('#logout');
+
+    if (logoutLink) {
+      logoutLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem(this.STORAGE_KEY);
+        window.location.href = `${window.location.origin}/servicetimeout/logout`;
       });
     }
 
