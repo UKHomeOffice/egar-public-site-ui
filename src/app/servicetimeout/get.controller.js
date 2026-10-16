@@ -28,6 +28,8 @@ module.exports = async (req, res) => {
           sameSite: SAME_SITE_VALUE,
         });
         return res.redirect('/user/logout');
+      default:
+        throw new Error('Unrecognized action action');
     }
   } catch (error) {
     logger.error('An error occurred', error);
