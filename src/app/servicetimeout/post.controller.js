@@ -7,5 +7,5 @@ module.exports = (req, res) => {
     logger.error(`An error occurred:${req.body.serviceTimeoutPageError}`);
   }
 
-  res.render('500.njk');
+  res.status(500).render('app/error/500');
 };
