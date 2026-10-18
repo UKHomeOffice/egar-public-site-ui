@@ -71,7 +71,7 @@ module.exports.validations = (req) => {
       ),
       new ValidationRule(validator.notOnlySymbols, 'birthplace', req.body.birthplace, `Enter a valid place of birth.`),
     ],
-    [new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select the type of person')],
+    [new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select who you are adding')],
     [new ValidationRule(validator.notEmpty, 'gender', req.body.gender, 'Select the sex of the person')],
     [
       new ValidationRule(
