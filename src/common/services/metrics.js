@@ -6,13 +6,13 @@ const loginSuccessCounter = new promClient.Counter({
   name: 'sgar_login_success',
   help: 'Increments each time a user succesfully logs into the service',
 });
+promClient.register.registerMetric(loginSuccessCounter);
 
 const newRegistrationCounter = new promClient.Counter({
   name: 'sgar_new_registration_success',
   help: 'Increments each time a user creates an account on SGAR',
 });
-
-promClient.register.registerMetric(loginSuccessCounter);
+promClient.register.registerMetric(newRegistrationCounter);
 
 function CountLoginSuccess() {
   loginSuccessCounter.inc();
