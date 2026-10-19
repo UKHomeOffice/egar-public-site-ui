@@ -33,9 +33,12 @@
     items: personTypeItems
   }) }}
   <h2 class="govuk-heading-m">{{ __('heading_travel_document_details') }}</h2>
-  <p class="govuk-body">Provide the details as shown on their travel document. Check the
-    <a href="https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen" target="_blank" class="govuk-link">
-    guidance on travel documents that can be used to enter the UK</a>.</p>
+  <p class="govuk-body">
+    Provide the details as shown on their travel document. Check the
+    <a href="https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen"
+       target="_blank"
+       class="govuk-link">guidance on travel documents that can be used to enter the UK</a>.
+  </p>
   {% set documentTypeItems = [] %}
   {% for choice in documenttype %}
     {% set item = {
@@ -61,14 +64,21 @@
     errorMessage: errors | containsError('travelDocumentType'),
     items: documentTypeItems
   }) }}
-  <div class="{{ m.form_group_class('travelDocumentOther', errors) }} govuk-!-margin-left-3" id="travelDocumentOtherDiv" {{ "hidden" if person.documentType !== 'Other' }}>
+  <div class="{{ m.form_group_class('travelDocumentOther', errors) }} govuk-!-margin-left-3"
+       id="travelDocumentOtherDiv"
+       {{ "hidden" if person.documentType !== 'Other' }}>
     {% call govukInsetText() %}
-    <label for="travelDocumentOther" class="govuk-label">{{ __('field_travel_document_type_other') }}</label>
-    <br>
-      <input id="travelDocumentOther" name="travelDocumentOther" class="govuk-input govuk-input--width-20" type="text" maxlength="{{ MAX_STRING_LENGTH - 10 }}" value="{{ person.documentDesc or req.body.documentDesc }}">
-        {% endcall %}
-      </div>
-      {{ govukInput({
+      <label for="travelDocumentOther" class="govuk-label">{{ __('field_travel_document_type_other') }}</label>
+      <br>
+      <input id="travelDocumentOther"
+             name="travelDocumentOther"
+             class="govuk-input govuk-input--width-20"
+             type="text"
+             maxlength="{{ MAX_STRING_LENGTH - 10 }}"
+             value="{{ person.documentDesc or req.body.documentDesc }}">
+    {% endcall %}
+  </div>
+  {{ govukInput({
     id: "travelDocumentNumber",
     name: "travelDocumentNumber",
     classes: "govuk-input--width-20",
@@ -85,7 +95,7 @@
     },
     errorMessage: errors | containsError('travelDocumentNumber')
   }) }}
-      {{ govukInput({
+  {{ govukInput({
     id: "firstName",
     name: "firstName",
     classes: "govuk-input--width-30",
@@ -103,7 +113,7 @@
     },
     errorMessage: errors | containsError('firstName')
   }) }}
-      {{ govukInput({
+  {{ govukInput({
     id: "lastName",
     name: "lastName",
     classes: "govuk-input--width-30",
@@ -121,8 +131,8 @@
     },
     errorMessage: errors | containsError('lastName')
   }) }}
-      {{ dt.dateInput('dob', cookie, dateOfBirth, "field_dob", "field_dob_hint", errors, __) }}
-      {{ govukInput({
+  {{ dt.dateInput('dob', cookie, dateOfBirth, "field_dob", "field_dob_hint", errors, __) }}
+  {{ govukInput({
     id: "birthplace",
     name: "birthplace",
     classes: "govuk-input--width-30",
@@ -137,16 +147,16 @@
     },
     errorMessage: errors | containsError('birthplace')
   }) }}
-      {% set genderItems = [] %}
-      {% for choice in genderchoice %}
-        {% set item = {
+  {% set genderItems = [] %}
+  {% for choice in genderchoice %}
+    {% set item = {
       value: choice.gender,
       text: choice.gender,
       checked: (person.gender == choice.gender) or (req.body.gender == choice.gender)
     } %}
-        {% set genderItems = genderItems.concat(item) %}
-      {% endfor %}
-      {{ govukRadios({
+    {% set genderItems = genderItems.concat(item) %}
+  {% endfor %}
+  {{ govukRadios({
     idPrefix: "gender",
     name: "gender",
     fieldset: {
@@ -156,29 +166,29 @@
       }
     },
     classes: m.form_group_class('gender', errors),
-     hint: {
-        text: __("field_gender_hint")
+    hint: {
+      text: __("field_gender_hint")
     },
     errorMessage: errors | containsError('gender'),
     items: genderItems
   }) }}
-      {% set nationalityItems = [{"value": "", "text": ""}] %}
-      {{ common.countryList(
-      "nationality",
-      nationalityList,
-      (person.nationality or req.body.nationality),
-      __("field_nationality"),
-      __("field_nationality_hint"),
-      errors | containsError('nationality')
-    ) }}
-      {% set issuingStateItems = [] %}
-      {{ common.countryList(
-      "issuingState",
-      nationalityList,
-      (person.issuingState or req.body.issuingState),
-      __("field_issuing_state"),
-      __("field_issuing_state_hint"),
-      errors | containsError('issuingState')
-    ) }}
-      {{ dt.dateInput('expiry', cookie, documentExpiryDate, "field_document_expiry_date", "field_document_expiry_date_hint", errors, __) }}
-    </div>
+  {% set nationalityItems = [{"value": "", "text": ""}] %}
+  {{ common.countryList(
+    "nationality",
+    nationalityList,
+    (person.nationality or req.body.nationality),
+    __("field_nationality"),
+    __("field_nationality_hint"),
+    errors | containsError('nationality')
+  ) }}
+  {% set issuingStateItems = [] %}
+  {{ common.countryList(
+    "issuingState",
+    nationalityList,
+    (person.issuingState or req.body.issuingState),
+    __("field_issuing_state"),
+    __("field_issuing_state_hint"),
+    errors | containsError('issuingState')
+  ) }}
+  {{ dt.dateInput('expiry', cookie, documentExpiryDate, "field_document_expiry_date", "field_document_expiry_date_hint", errors, __) }}
+</div>
