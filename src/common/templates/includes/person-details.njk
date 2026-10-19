@@ -39,13 +39,39 @@
        target="_blank"
        class="govuk-link">guidance on travel documents that can be used to enter the UK</a>.
   </p>
+  {% set otherDocumentTypeHtml %}
+    <div class="{{ m.form_group_class('travelDocumentOther', errors) }} govuk-!-margin-left-3"
+         id="travelDocumentOtherDiv"
+         {{ "hidden" if person.documentType !== 'Other' }}>
+      {{ govukInput({
+        id: "travelDocumentOther",
+        name: "travelDocumentOther",
+        value: person.documentDesc or req.body.documentDesc,
+        maxlength: MAX_STRING_LENGTH - 10,
+        type: "text",
+        autocomplete: "off",
+        spellcheck: false,
+        classes: "govuk-!-width-one-half",
+        label: {
+          text: "Travel document type"
+        },
+        errorMessage: errors | containsError('travelDocumentOther')
+
+      }) }}
+    </div>
+  {% endset %}
+
   {% set documentTypeItems = [] %}
   {% for choice in documenttype %}
+
     {% set item = {
       value: choice.documenttype,
       text: choice.documenttype,
       hint: {
         text: choice.description
+      },
+      conditional: {
+        html: otherDocumentTypeHtml if choice.documenttype == 'Other'
       },
       checked: (person.documentType == choice.documenttype) or (req.body.travelDocumentType == choice.documenttype)
     } %}
@@ -64,20 +90,6 @@
     errorMessage: errors | containsError('travelDocumentType'),
     items: documentTypeItems
   }) }}
-  <div class="{{ m.form_group_class('travelDocumentOther', errors) }} govuk-!-margin-left-3"
-       id="travelDocumentOtherDiv"
-       {{ "hidden" if person.documentType !== 'Other' }}>
-    {% call govukInsetText() %}
-      <label for="travelDocumentOther" class="govuk-label">{{ __('field_travel_document_type_other') }}</label>
-      <br>
-      <input id="travelDocumentOther"
-             name="travelDocumentOther"
-             class="govuk-input govuk-input--width-20"
-             type="text"
-             maxlength="{{ MAX_STRING_LENGTH - 10 }}"
-             value="{{ person.documentDesc or req.body.documentDesc }}">
-    {% endcall %}
-  </div>
   {{ govukInput({
     id: "travelDocumentNumber",
     name: "travelDocumentNumber",
