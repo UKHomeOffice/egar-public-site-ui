@@ -8,12 +8,8 @@ const { isAbleToCancelGar } = require('../../../common/utils/validator');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
-  let { garId } = req.body;
-  if (garId === undefined) {
-    garId = cookie.getGarId();
-  }
+  const garId = cookie.getGarId();
 
-  cookie.setGarId(garId);
   let numberOf0TResponseCodes = 0;
   const isResubmitted = cookie.getResubmitFor0T().includes(garId);
 
@@ -50,7 +46,6 @@ module.exports = async (req, res) => {
     const durationInDeparture = garApi.getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
 
     cookie.setCbpId(parsedGar.cbpId);
-    cookie.setGarId(parsedGar.garId);
     cookie.setGarStatus(parsedGar.status.name);
     logger.debug(`Retrieved GAR ID: ${parsedGar.garId}`);
 

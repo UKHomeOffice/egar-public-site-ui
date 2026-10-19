@@ -23,6 +23,15 @@ const checkGARUser = (parsedGar, userId, organisationId) => {
       return false;
     }
   }
+  if (parsedGar.individualId) {
+    const isIndividualUser = userId !== null && parsedGar.individualId === userId;
+
+    // if a gar has an individual, then we can just check if the user and gar are the same individual
+    if (!isIndividualUser) {
+      logger.info('GAR Individual does not match the user ID of user');
+      return false;
+    }
+  }
 
   // organisationId is null for individual users, so we check the userId match.
   // all organisation user's will have their organisationId set.

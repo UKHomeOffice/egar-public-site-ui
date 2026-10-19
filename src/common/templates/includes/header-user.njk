@@ -19,5 +19,6 @@
 
 {% set _ = pagesList.push({ href: '/user/details', text: __('nav_bar_account') }) %}
 {% set _ = pagesList.push({ href: '/help', text: __('nav_bar_upt-help') }) %}
+<input type="hidden" id="user-logged-in" value="true" />
 
 {{ navigation(pagesList, active) }}
