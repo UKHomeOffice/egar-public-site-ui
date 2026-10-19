@@ -370,6 +370,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: USE_NEW_NATIONALITY_LIST_PROVIDER
+            - name: SESSION_TIMEOUT_WARNING_DISPLAY_TIME
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: SESSION_TIMEOUT_WARNING_DISPLAY_TIME
           volumeMounts:
             - name: bundle-certs
               mountPath: /etc/ssl/certs
