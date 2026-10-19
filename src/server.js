@@ -249,11 +249,11 @@ function initialiseTemplateEngine(app) {
 }
 
 function initialisePublic(app) {
-  app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist')));
+  app.use('/javascripts', express.static(path.join(__dirname, '/node_modules/accessible-autocomplete/dist'), { dotfiles: 'allow' /* Express 5: preserve v4 behavior */ }));
   //app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/assets')));
-  app.use('/assets', express.static(path.join(__dirname, '/common/assets/')));
-  app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
-  app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
+  app.use('/assets', express.static(path.join(__dirname, '/common/assets/'), { dotfiles: 'allow' /* Express 5: preserve v4 behavior */ }));
+  app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/'), { dotfiles: 'allow' /* Express 5: preserve v4 behavior */ }));
+  app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/'), { dotfiles: 'allow' /* Express 5: preserve v4 behavior */ }));
 }
 
 function initialiseRoutes(app) {
