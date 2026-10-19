@@ -1,13 +1,9 @@
 {% extends "base-template.njk" %}
-
 {% import "common/templates/includes/macros.njk" as m %}
-
 {% block pageTitle %}
   {{ __('error_prefix') if errors }} GAR | Save Person Details
 {% endblock %}
-
 {% set active = "/people" %}
-
 {% block beforeContent %}
   <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
@@ -18,36 +14,22 @@
     </ol>
   </div>
 {% endblock %}
-
 {% block content %}
   <script type="module" src="/javascripts/people/add.js"></script>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form action="/people/add"
-            autocomplete="off"
-            class="form-group"
-            method="post"
-            role="form">
+      <form action="/people/add" autocomplete="off" class="form-group" method="post" role="form">
         <h1 class="govuk-heading-xl">{{ __('title_add_person') }}</h1>
         <p class="govuk-body-l">{{ __('people_add_caption') }}</p>
-
         {% include "person-details.njk" %}
-
         <div class="govuk-form-group">
-          <input id="add-and-exit"
-                 class="govuk-button"
-                 type="submit"
-                 name="buttonClicked"
-                 value="{{ __('form_add_and_exit') }}">
-          <p class="govuk-body-m">
-            <a id="exit-without-adding"
-               class="govuk-link"
-               href="/people#">{{ __('form_exit_without_saving') }}</a>
-          </p>
-        </div>
-
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-      </form>
+          <input id="add-and-exit" class="govuk-button" type="submit" name="buttonClicked" value="{{ __('form_add_and_exit') }}">
+            <p class="govuk-body-m">
+              <a id="exit-without-adding" class="govuk-link" href="/people#">{{ __('form_exit_without_saving') }}</a>
+            </p>
+          </div>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        </form>
+      </div>
     </div>
-  </div>
-{% endblock %}
+  {% endblock %}
