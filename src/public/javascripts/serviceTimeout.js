@@ -4,14 +4,6 @@
 class SessionTimeoutManager {
   constructor() {
     this.STORAGE_KEY = 'sessionTimeoutWarningDisplayTime';
-    this.inertSelectors = [
-      '#main-content',
-      '.govuk-header__container',
-      '.govuk-footer',
-      '.govuk-skip-link',
-      '.govuk-phase-banner',
-      '.govuk-back-link',
-    ];
 
     // Cache DOM Elements
     this.serviceTimeoutEl = document.querySelector('#serviceTimeout');
@@ -207,9 +199,10 @@ class SessionTimeoutManager {
   }
 
   setInertState(isInert) {
-    this.inertSelectors.forEach((selector) => {
-      const el = document.querySelector(selector);
-      if (el) el.inert = isInert;
+    if (!this.serviceTimeoutEl) return;
+
+    Array.from(document.body.children).forEach((el) => {
+      if (el !== this.serviceTimeoutEl) el.inert = isInert;
     });
   }
 

@@ -92,9 +92,7 @@
 
       {% include "phase.njk" %}
 
-      {% block beforeContent %}
-        {{ serviceTimeout(govukButton) }}
-      {% endblock %}
+      {% block beforeContent %}{% endblock %}
 
       <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content">
         {% include "common/templates/includes/errors.njk" %}
@@ -108,6 +106,8 @@
     </div>
 
     {{ footer() }}
+
+    {{ serviceTimeout(govukButton) }}
 
     <script src="/javascripts/init.js" type="module"></script>
     <script src="/javascripts/table-multiselect.js"></script>
