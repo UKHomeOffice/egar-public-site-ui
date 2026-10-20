@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
       case 'signout':
         return res.render('app/servicetimeout/signedout', { oneLoginAuthUrl: getOneLoginAuthUrl(req, res) });
       default:
-        throw new Error('Unrecognized action action');
+        throw new Error('Unrecognized action');
     }
   } catch (error) {
     logger.error('An error occurred', error);
