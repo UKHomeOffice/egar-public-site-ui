@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
         });
         return res.redirect('/user/logout');
       case 'signout':
-        return res.render('app/servicetimeout/signedout', { oneLoginAuthUrl: getOneLoginAuthUrl(req, res) });
+        return res.render('app/servicetimeout/signedout');
       default:
         throw new Error('Unrecognized action');
     }
