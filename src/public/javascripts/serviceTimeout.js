@@ -187,7 +187,7 @@ class SessionTimeoutManager {
   }
 
   updateCountDownText(timeLeft) {
-    if (!this.countdownEl.textContent) return;
+    if (!this.countdownEl) return;
 
     const text = this.formatTimeLeft(timeLeft);
     if (this.countdownEl.textContent !== text) {
