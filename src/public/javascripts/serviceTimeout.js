@@ -150,39 +150,49 @@ class SessionTimeoutManager {
     }
   }
 
+  logout() {
+    this.stopTimer();
+    localStorage.removeItem(this.STORAGE_KEY);
+    window.location.href = `${window.location.origin}/servicetimeout/logout`;
+  }
+
   setLogoutTimerCountdown(timeLeft) {
     if (this.logoutTimer) {
       clearInterval(this.logoutTimer);
     }
 
     this.logoutTimer = setInterval(() => {
-      const minutes = Math.ceil(timeLeft / 60);
-      let timeText;
-
-      switch (true) {
-        case 40 < this.sessionExpiryTimeLeft <= 60:
-          timeText = `60 seconds`;
-          break;
-        case 20 < this.sessionExpiryTimeLeft <= 40:
-          timeText = `40 minutes`;
-          break;
-        case 0 < this.sessionExpiryTimeLeft <= 20:
-          timeText = `20 minutes`;
-          break;
-        default:
-          timeText = `${minutes} minutes`;
-      }
-
-      this.countdownEl.textContent = timeText;
-
       timeLeft--;
+      this.updateCountDownText(timeLeft);
 
       if (timeLeft <= 0) {
-        this.stopTimer();
-        localStorage.removeItem(this.STORAGE_KEY);
-        window.location.href = `${window.location.origin}/servicetimeout/logout`;
+        this.logout();
       }
     }, 1000);
+  }
+
+  formatTimeLeft(timeLeft) {
+    if (timeLeft > 60) {
+      return `${Math.ceil(timeLeft / 60)} minutes`;
+    }
+    if (timeLeft > 40) {
+      return '60 seconds';
+    }
+
+    if (timeLeft > 20) {
+      return '40 seconds';
+    }
+
+    return '20 seconds';
+  }
+
+  updateCountDownText(timeLeft) {
+    if (!this.countdownEl.textContent) return;
+
+    const text = this.formatTimeLeft(timeLeft);
+    if (this.countdownEl.textContent !== text) {
+      this.countdownEl.textContent = text;
+    }
   }
 
   handleKeyActions(e) {
@@ -231,7 +241,7 @@ class SessionTimeoutManager {
       logoutLink.addEventListener('click', (e) => {
         e.preventDefault();
         localStorage.removeItem(this.STORAGE_KEY);
-        window.location.href = `${window.location.origin}/servicetimeout/logout`;
+        window.location.href = `${window.location.origin}/user/logout`;
       });
     }
 

@@ -92,7 +92,7 @@ function initialisExpressSession(app) {
         secure: secureFlag,
         httpOnly: IS_HTTPS_SERVER,
         sameSite: SAME_SITE_VALUE,
-        maxAge: 60 * 3 * 1000, // will be removed
+        maxAge: 60 * 5 * 1000, // will be removed
       },
     })
   );

@@ -34,6 +34,9 @@ module.exports = (req, res) => {
     return res.redirect(logoutUrl);
   }
 
+  if (req.cookies.serviceTimeout && req.cookies.serviceTimeout === 'yes') {
+    return logoutAndClearCookies(req, res, cookie, '/servicetimeout/signout');
+  }
   // Default logout path
   return logoutAndClearCookies(req, res, cookie, '/welcome/index');
 };

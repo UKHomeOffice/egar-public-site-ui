@@ -1,5 +1,6 @@
 const CookieModel = require('../../common/models/Cookie.class');
 const { IS_HTTPS_SERVER, SAME_SITE_VALUE, SESSION_TIMEOUT_WARNING_DISPLAY_TIME } = require('../../common/config');
+const { getOneLoginAuthUrl } = require('../../common/utils/oneLoginAuth');
 const logger = require('../../common/utils/logger')(__filename);
 
 module.exports = async (req, res) => {
@@ -27,6 +28,8 @@ module.exports = async (req, res) => {
           sameSite: SAME_SITE_VALUE,
         });
         return res.redirect('/user/logout');
+      case 'signout':
+        return res.render('app/servicetimeout/signedout', { oneLoginAuthUrl: getOneLoginAuthUrl(req, res) });
       default:
         throw new Error('Unrecognized action action');
     }
