@@ -150,30 +150,49 @@ class SessionTimeoutManager {
     }
   }
 
+  logout() {
+    this.stopTimer();
+    localStorage.removeItem(this.STORAGE_KEY);
+    window.location.href = `${window.location.origin}/servicetimeout/logout`;
+  }
+
   setLogoutTimerCountdown(timeLeft) {
     if (this.logoutTimer) {
       clearInterval(this.logoutTimer);
     }
 
     this.logoutTimer = setInterval(() => {
-      const minutes = Math.ceil(timeLeft / 60);
-
-      if (this.countdownEl) {
-        if (minutes === 1 && [60, 40, 20].includes(timeLeft)) {
-          this.countdownEl.textContent = `${timeLeft} seconds`;
-        } else {
-          this.countdownEl.textContent = `${minutes} minutes`;
-        }
-      }
-
       timeLeft--;
+      this.updateCountDownText(timeLeft);
 
       if (timeLeft <= 0) {
-        this.stopTimer();
-        localStorage.removeItem(this.STORAGE_KEY);
-        window.location.href = `${window.location.origin}/servicetimeout/logout`;
+        this.logout();
       }
     }, 1000);
+  }
+
+  formatTimeLeft(timeLeft) {
+    if (timeLeft > 60) {
+      return `${Math.ceil(timeLeft / 60)} minutes`;
+    }
+    if (timeLeft > 40) {
+      return '60 seconds';
+    }
+
+    if (timeLeft > 20) {
+      return '40 seconds';
+    }
+
+    return '20 seconds';
+  }
+
+  updateCountDownText(timeLeft) {
+    if (!this.countdownEl) return;
+
+    const text = this.formatTimeLeft(timeLeft);
+    if (this.countdownEl.textContent !== text) {
+      this.countdownEl.textContent = text;
+    }
   }
 
   handleKeyActions(e) {
@@ -222,7 +241,7 @@ class SessionTimeoutManager {
       logoutLink.addEventListener('click', (e) => {
         e.preventDefault();
         localStorage.removeItem(this.STORAGE_KEY);
-        window.location.href = `${window.location.origin}/servicetimeout/logout`;
+        window.location.href = `${window.location.origin}/user/logout`;
       });
     }
 
