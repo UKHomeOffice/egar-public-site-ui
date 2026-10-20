@@ -157,14 +157,23 @@ class SessionTimeoutManager {
 
     this.logoutTimer = setInterval(() => {
       const minutes = Math.ceil(timeLeft / 60);
+      let timeText;
 
-      if (this.countdownEl) {
-        if (minutes === 1 && [60, 40, 20].includes(timeLeft)) {
-          this.countdownEl.textContent = `${timeLeft} seconds`;
-        } else {
-          this.countdownEl.textContent = `${minutes} minutes`;
-        }
+      switch (true) {
+        case 40 < this.sessionExpiryTimeLeft <= 60:
+          timeText = `60 seconds`;
+          break;
+        case 20 < this.sessionExpiryTimeLeft <= 40:
+          timeText = `40 minutes`;
+          break;
+        case 0 < this.sessionExpiryTimeLeft <= 20:
+          timeText = `20 minutes`;
+          break;
+        default:
+          timeText = `${minutes} minutes`;
       }
+
+      this.countdownEl.textContent = timeText;
 
       timeLeft--;
 
