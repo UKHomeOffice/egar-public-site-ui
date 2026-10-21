@@ -1,6 +1,6 @@
 const service = require('../../common/services/metrics');
 
-module.exports = (req, res) => {
+module.exports = (_req, res) => {
   res.set('Content-Type', service.promClient.register.contentType);
   service.promClient.register
     .metrics()
