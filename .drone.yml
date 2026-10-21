@@ -169,6 +169,9 @@ steps:
         from_secret: DEV_KUBE_TOKEN
       DEV_URL_SERVICE:
         from_secret: DEV_URL_SERVICE
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
+
 trigger:
   event:
     - push
