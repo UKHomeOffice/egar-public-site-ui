@@ -22,7 +22,7 @@ spec:
         service: public-site-svc
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: 3000
+        prometheus.io/port: "3000"
     spec:
       volumes:
         - name: bundle-certs
