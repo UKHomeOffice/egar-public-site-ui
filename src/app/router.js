@@ -89,9 +89,13 @@ const searchUsers = require('./organisation/searchusers');
 // serviceTimeout
 const serviceTimeout = require('./servicetimeout');
 
+// metrics
+const metrics = require('./metrics');
+
 // Export
 module.exports.bind = (app) => {
   app.use(healthcheck.router);
+  app.use(metrics.router);
   app.use(index.router);
   app.use(welcome.router);
   app.use(usersignin.router);
