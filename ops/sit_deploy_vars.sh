@@ -4,5 +4,6 @@ export KUBE_SERVER=${SIT_KUBE_SERVER}
 export KUBE_TOKEN=${SIT_KUBE_TOKEN}
 export PUBLIC_SITE_EXTERNAL_URL=${SIT_BASE_URL_SERVICE}
 export PUBLIC_SITE_INTERNAL_URL=${SIT_BASE_URL}
+export POISE_CIDR_RANGE=${POISE_CIDR_RANGE}
 source ./ops/common_lib
 source ./ops/notprod_values
