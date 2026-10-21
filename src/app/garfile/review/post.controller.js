@@ -197,6 +197,7 @@ module.exports = async (req, res) => {
       logger.info('Submitted GAR people to AMG check-in', { garId });
       res.redirect(`/garfile/amg/checkin?resubmitted=${resubmit0TLink}${initialSubmit}`);
     } else {
+      cookie.setIsInbound(garfile.isInbound);
       performAPICall(garId, cookie, req, res);
     }
   }
