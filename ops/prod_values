@@ -1,2 +1,3 @@
 #values for prod deployments
 export NUM_REPLICAS=3
+export POISE_RANGE="52.56.62.128/25"

@@ -1,3 +1,4 @@
 #values for notprod deployments
 export NUM_REPLICAS=1
 export DOWN_SCALER_ANNOTATIONS="Mon-Fri 06:00-20:00 Europe/London"
+export POISE_RANGE="52.56.62.128/25"
