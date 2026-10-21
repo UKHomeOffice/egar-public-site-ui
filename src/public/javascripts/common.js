@@ -25,11 +25,20 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.checkDocumentType = () => {
-  if (document.getElementById('travelDocumentType').value == 'Other') {
-    document.getElementById('travelDocumentOtherDiv').style.display = 'block';
-  } else {
-    document.getElementById('travelDocumentOtherDiv').style.display = 'none';
-  }
+  const documentTypeElement = document.querySelectorAll('input[name="travelDocumentType"]');
+  documentTypeElement.forEach((documentType) => {
+    documentType.addEventListener('change', () => {
+      if (documentType.value == 'Other') {
+        document.getElementById('travelDocumentOtherDiv').style.display = 'block';
+      } else {
+        document.getElementById('travelDocumentOtherDiv').style.display = 'none';
+      }
+    });
+    const checkedDocumentTypeChecked = document.querySelector('input[name="travelDocumentType"]:checked');
+    if (checkedDocumentTypeChecked && checkedDocumentTypeChecked.value === 'Other') {
+      document.getElementById('travelDocumentOtherDiv').style.display = 'block';
+    }
+  });
 };
 window.sendAnalytics = (e, message, event) => {
   console.log('Send Analytics' + message);
