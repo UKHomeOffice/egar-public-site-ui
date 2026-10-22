@@ -32,7 +32,7 @@
     errorMessage: errors | containsError('personType'),
     items: personTypeItems
   }) }}
-  <h2 class="govuk-heading-m">{{ __('heading_travel_document_details') }}</h2>
+  <h2 class="govuk-heading-l">{{ __('heading_travel_document_details') }}</h2>
   <p class="govuk-body">
     Provide the details as shown on their travel document. Check the
     <a href="https://www.gov.uk/guidance/visiting-the-uk-as-an-eu-eea-or-swiss-citizen"
@@ -93,17 +93,14 @@
   {{ govukInput({
     id: "travelDocumentNumber",
     name: "travelDocumentNumber",
-    classes: "govuk-input--width-20",
+    classes: "govuk-input--width-10",
     label: {
       text: __("field_travel_document_number"),
       classes: "govuk-label--m"
     },
     value: person.documentNumber or req.body.travelDocumentNumber,
-    attributes: {
-      maxlength: MAX_STRING_LENGTH
-    },
     hint: {
-      text: 'For example, 50213526'
+      text: 'For example, 502135326'
     },
     errorMessage: errors | containsError('travelDocumentNumber')
   }) }}
