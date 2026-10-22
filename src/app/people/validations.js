@@ -78,19 +78,19 @@ module.exports.validations = (req) => {
         validator.notEmpty,
         'travelDocumentNumber',
         req.body.travelDocumentNumber,
-        'Enter the travel document number'
+        'Enter the document number'
       ),
       new ValidationRule(
         validator.isValidStringLength,
         'travelDocumentNumber',
         req.body.travelDocumentNumber,
-        `Travel document number must be ${MAX_STRING_LENGTH} characters or less`
+        `Document number must be ${MAX_STRING_LENGTH} characters or less`
       ),
       new ValidationRule(
         validator.isAlphanumeric,
         'travelDocumentNumber',
         req.body.travelDocumentNumber,
-        `Travel document number must be alphanumeric only.`
+        `Document number must be alphanumeric only.`
       ),
     ],
     [
