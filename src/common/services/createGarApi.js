@@ -1,32 +1,24 @@
-const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
+
+function serializeResponse(response) {
+  if (response && typeof response === 'object' && !Array.isArray(response) && 'ok' in response) {
+    response = { ...response };
+    delete response.ok;
+  }
+  return typeof response === 'string' ? response : JSON.stringify(response);
+}
 
 module.exports = {
-  /**
-   * Calls create craft API endpoint.
-   *
-   * @param {String} userId id of user creating the gar
-   * @returns {Promise} returns API response when resolved
-   */
-  createGar(userId) {
-    return new Promise((resolve, reject) => {
-      request.post(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.createGar(userId),
-        },
-        (error, _response, body) => {
-          if (error) {
-            reject(error);
-            return error;
-          }
-          resolve(body);
-          return body;
-        }
-      );
-    }).catch((err) => {
+  async createGar(userId) {
+    try {
+      const result = await require('./dataAccessApi').garApi.createGar(userId);
+      return serializeResponse(result);
+    } catch (err) {
       logger.error('Failed to create GAR', { userId, errorMessage: err?.message, stack: err?.stack });
-    });
+      if (err?.type === 'http_error') {
+        return typeof err.body === 'string' ? err.body : JSON.stringify(err.body);
+      }
+      return undefined;
+    }
   },
 };

@@ -1,6 +1,4 @@
-const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
 const autocompleteUtil = require('../utils/autocomplete');
 const travelPermissionCodes = require('../utils/travel_permission_codes.json');
 
@@ -12,39 +10,39 @@ function getResponseErrorMessage(err) {
   };
 }
 
+function getDurationBeforeDeparture(departureDate, departureTime) {
+  const departureDateTimeString = `${departureDate} ${departureTime}`;
+  const departureDateTime = new Date(departureDateTimeString);
+  const currentDateTimeISO = new Date().toISOString();
+  const currentDateTime = new Date(currentDateTimeISO);
+  return Math.round((departureDateTime - currentDateTime) / 1000 / 60);
+}
+
 class GarApi {
   constructor(client) {
     this.client = client;
   }
 
-  /**
-   * Gets a GAR's details.
-   *
-   * @param {String} garId id of GAR being requested
-   * @param isCbpId
-   * @returns {Promise} Resolves with API response.
-   */
   async get(garId, isCbpId = false) {
     try {
       const gar = await this.client.get(`/gar/${garId}`, { query: { cbp_id: isCbpId } });
       gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCountry);
       return gar;
     } catch (err) {
+      if (err?.type !== 'http_error') {
+        throw err;
+      }
       logger.error('Failed to call GAR get API endpoint');
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(`${garId} garApi.get request was not successful : ${responseErrorMessage}`);
+      logger.error(`${garId} garApi.get request was not successful : ${JSON.stringify(responseErrorMessage)}`);
       return responseErrorMessage;
     }
   }
 
-  /**
-   * Gets a GAR's saved people details.
-   *
-   * @param {String} garId id of GAR being requested
-   * @param pageNumber
-   * @param amgResponseCode
-   * @returns {Promise} Resolves with API response.
-   */
+  async patch(garId, status, partial) {
+    return this.client.patch(`/gar/${garId}`, { ...partial, status });
+  }
+
   async getPeople(garId, pageNumber = null, amgResponseCode = null) {
     const priority = [
       'amg_checkin_response_code:0T',
@@ -55,14 +53,10 @@ class GarApi {
     const pageObj = pageNumber ? { per_page: 10, page: pageNumber } : '';
     const options = amgResponseCode ? { amg_response_codes: amgResponseCode } : [''];
 
-    const query = {
-      priority,
-      ...pageObj,
-      ...options,
-    };
-
     try {
-      const resp = await this.client.get(`/gar/${garId}/people`, { query });
+      const resp = await this.client.get(`/gar/${garId}/people`, {
+        query: { priority, ...pageObj, ...options },
+      });
 
       const noBoardPassengers = resp.items.filter(
         (garperson) => garperson.amgCheckinResponseCode === travelPermissionCodes['NO_BOARD']
@@ -71,36 +65,33 @@ class GarApi {
         (garperson) => garperson.amgCheckinResponseCode !== travelPermissionCodes['NO_BOARD']
       );
 
-      return {
-        ...resp,
-        items: [...noBoardPassengers, ...restOfPassengers],
-      };
+      return { ...resp, items: [...noBoardPassengers, ...restOfPassengers] };
     } catch (err) {
+      if (err?.type !== 'http_error') {
+        throw err;
+      }
       logger.error('Failed to call GAR get API endpoint');
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(`${garId} garApi.getPeople request was not successful : ${responseErrorMessage}`);
+      logger.error(`${garId} garApi.getPeople request was not successful : ${JSON.stringify(responseErrorMessage)}`);
       return responseErrorMessage;
     }
   }
 
-  /**
-   * Gets a GAR's supporting people details.
-   *
-   * @param {String} garId id of GAR being requested
-   * @returns {Promise} Resolves with API response.
-   */
   async getSupportingDocs(garId) {
     try {
       const query = { page: 1, per_page: 10000 };
       const url = `/gar/${garId}/supportingdocs`;
-
       logger.debug(`Calling get supporting docs endpoint ${url}`);
-      const result = await this.client.get(`/gar/${garId}/supportingdocs`, { query });
-      return result;
+      return await this.client.get(url, { query });
     } catch (err) {
+      if (err?.type !== 'http_error') {
+        throw err;
+      }
       logger.error('Failed to call GAR get supporting documents API endpoint');
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(`${garId} garApi.getSupportingDocs request was not successful : ${responseErrorMessage}`);
+      logger.error(
+        `${garId} garApi.getSupportingDocs request was not successful : ${JSON.stringify(responseErrorMessage)}`
+      );
       return responseErrorMessage;
     }
   }
@@ -113,8 +104,11 @@ class GarApi {
       const { progress } = await this.client.get(endpoint);
       return progress;
     } catch (err) {
+      if (err?.type !== 'http_error') {
+        throw err;
+      }
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(`${garId} garApi.progress request was not successful : ${responseErrorMessage}`);
+      logger.error(`${garId} garApi.progress request was not successful : ${JSON.stringify(responseErrorMessage)}`);
       return responseErrorMessage;
     }
   }
@@ -131,456 +125,113 @@ class GarApi {
         },
       });
     } catch (err) {
+      if (err?.type !== 'http_error') {
+        throw err;
+      }
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(`${userId} garApi.getGars request was not successful : ${responseErrorMessage}`);
+      logger.error(`${userId} garApi.getGars request was not successful : ${JSON.stringify(responseErrorMessage)}`);
       return responseErrorMessage;
     }
   }
+
+  async getGarsCount(userId, userType, orgId = null) {
+    const endpoint =
+      userType === 'Individual' ? `/user/${userId}/gars/count` : `/user/${userId}/organisation/${orgId}/gars/count`;
+    return this.client.get(endpoint);
+  }
+
+  async submitGARForCheckin(garId) {
+    return this.client.post(`/gar/${garId}/checkin`);
+  }
+
+  async submitGARForException(garId, passengerIds = []) {
+    const onlyIndividuals = passengerIds.length > 0;
+    return this.client.post(
+      `/gar/${garId}/departure/exception`,
+      { passengerIds },
+      { query: { only_individuals: onlyIndividuals } }
+    );
+  }
+
+  async updateGarPerson(garId, personDetails) {
+    return this.client.patch(`/gar/${garId}/people`, { people: [personDetails] });
+  }
+
+  async deleteGarPeople(garId, garPersonId) {
+    return this.client.delete(`/gar/${garId}/people`, { body: { garPeopleId: garPersonId } });
+  }
+
+  async deleteGarSupportingDoc(garId, garSupportingDocId) {
+    return this.client.delete(`/gar/${garId}/supportingdocs/${garSupportingDocId}`);
+  }
+
+  async createGar(userId) {
+    return this.client.post(`/user/${userId}/gar`);
+  }
 }
 
-module.exports.GarApi = GarApi;
-module.exports = {
+async function callConfiguredGarApi(method, args, { count = false, progress = false } = {}) {
+  try {
+    const result = await require('./dataAccessApi').garApi[method](...args);
+
+    if (result && typeof result === 'object' && 'statusCode' in result && 'body' in result) {
+      return count ? parseJsonResponse(result.body) : serializeResponse(result.body);
+    }
+
+    if (count) {
+      return normalizeClientResponse(parseJsonResponse(result));
+    }
+    return progress ? JSON.stringify({ progress: result }) : serializeResponse(normalizeClientResponse(result));
+  } catch (err) {
+    if (err?.type === 'http_error') {
+      return count ? parseJsonResponse(err.body) : serializeResponse(err.body);
+    }
+    throw err;
+  }
+}
+
+function serializeResponse(response) {
+  return typeof response === 'string' ? response : JSON.stringify(response);
+}
+
+function parseJsonResponse(response) {
+  return typeof response === 'string' ? JSON.parse(response) : response;
+}
+
+function normalizeClientResponse(response) {
+  if (!response || typeof response !== 'object' || Array.isArray(response) || !('ok' in response)) {
+    return response;
+  }
+
+  const body = { ...response };
+  delete body.ok;
+  return body;
+}
+
+const legacyApi = {
   GarApi,
-
-  /**
-   * Updates GAR.
-   *
-   * @param {String} garId id of GAR to be patched
-   * @param {String} status new status of GAR
-   * @param {Object} partial new GAR fields
-   * @returns {Promise} resolves with API response
-   */
-  patch(garId, status, partial) {
-    const reqBody = partial;
-    reqBody.status = status;
-    return new Promise((resolve, reject) => {
-      request.patch(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.updateGar(garId),
-          body: JSON.stringify(reqBody),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call GAR put API endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.patch request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-  /**
-   * Gets a GAR's details.
-   *
-   * @param {String} garId id of GAR being requested
-   * @returns {Promise} Resolves with API response.
-   */
-  get(garId, isCbpId = false) {
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getGar(garId, isCbpId),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call GAR get API endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.get request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-
-          let gar = JSON.parse(body);
-          gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCountry);
-
-          resolve(JSON.stringify(gar));
-        }
-      );
-    });
-  },
-  /**
-   * Gets a GAR's saved people details.
-   *
-   * @param {String} garId id of GAR being requested
-   * @returns {Promise} Resolves with API response.
-   */
-  getPeople(garId, pageNumber = null, amgResponseCode = null) {
-    const priority = [
-      'amg_checkin_response_code:0T',
-      'amg_checkin_response_code:0B',
-      'amg_checkin_response_code:0Z',
-      'amg_checkin_response_code:0A',
-    ];
-    const pageObj = pageNumber ? { per_page: 10, page: pageNumber } : '';
-
-    const options = amgResponseCode ? { amg_response_codes: amgResponseCode } : [''];
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getGarPeople(garId, { priority }),
-          qs: { ...pageObj, ...options },
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call GAR get people API endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.getPeople request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-
-          const garpeople = JSON.parse(body);
-
-          const noBoardPassengers = garpeople.items.filter(
-            (garperson) => garperson.amgCheckinResponseCode === travelPermissionCodes['NO_BOARD']
-          );
-          const restOfPassengers = garpeople.items.filter(
-            (garperson) => garperson.amgCheckinResponseCode !== travelPermissionCodes['NO_BOARD']
-          );
-
-          resolve(
-            JSON.stringify({
-              ...garpeople,
-              items: [...noBoardPassengers, ...restOfPassengers],
-            })
-          );
-        }
-      );
-    });
-  },
-  /**
-   * Gets the GARs belonging to an individual or organisation.
-   *
-   * @param {String} userId id of user making the request
-   * @param {String} userType type of user ['Individual', 'Admin', 'Manager', 'User']
-   * @param {String} orgId id of organisation a user belongs to. Only required if org user.
-   * @returns {Promise} Resolves with API response.
-   */
-  getGars(userId, userType, pages, orgId = null) {
-    const garsUrl =
-      userType === 'Individual'
-        ? endpoints.getIndividualGars(userId, pages)
-        : endpoints.getOrgGars(userId, orgId, pages);
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: garsUrl,
-          per_page: pages.perPage,
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call get GARs endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${userId} garApi.getGars request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-
-  /**
-   * Gets a GAR's supporting people details.
-   *
-   * @param {String} garId id of GAR being requested
-   * @returns {Promise} Resolves with API response.
-   */
-  getSupportingDocs(garId) {
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getSupportingDoc(garId),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call GAR get supporting documents API endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.getSupportingDocs request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-
-  deleteGarSupportingDoc(garId, garSupportingDocId) {
-    return new Promise((resolve, reject) => {
-      request.delete(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.deleteGarSupportingDoc(garId, garSupportingDocId),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call delete gar supporting document endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} ${garSupportingDocId} garApi.deleteGarSupportingDoc request was not successful : ${responseErrorMessage}`
-            );
-            resolve(body);
-            return;
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-
-  /**
-   * Submits GARPeople for AMG checkin
-   *
-   * @param {String} garId the id of the gar the person is associated with
-   * @returns {Promise} resolves with API response.
-   */
-  submitGARForCheckin(garId) {
-    return new Promise((resolve, reject) => {
-      request.post(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.submitGARForCheckin(garId),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed call passenger checkin endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.submitGARForCheckin request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-
-  /**
-   * Submits data about whether passengers left with the craft or not.
-   *
-   * @param {String} garId the id of the gar the person is associated with
-   * @param {String[]} exceptions uuids of garpeople that did not depart
-   * @returns {Promise} resolves with API response.
-   */
-  submitGARForException(garId, passengerIds = []) {
-    const onlyIndividuals = passengerIds.length > 0;
-    return new Promise((resolve, reject) => {
-      request.post(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.submitGARForException(garId, onlyIndividuals),
-          body: JSON.stringify({ passengerIds }),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed call passenger exception endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.submitGARForException request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-
-  /**
-   * Updates the details of a person on a GAR.
-   *
-   * @param {String} garId the id of the gar the person is associated with
-   * @param {String} garPersonId the id of the person
-   * @param {String} personDetails the updated details of the person
-   * @returns {Promise} resolves with API response.
-   */
-  updateGarPerson(garId, personDetails) {
-    return new Promise((resolve, reject) => {
-      request.patch(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.updateGarPerson(garId),
-          body: JSON.stringify({
-            people: [personDetails],
-          }),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call update garperson endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.updateGarPerson request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-
-  /**
-   * Updates the details of a person on a GAR.
-   *
-   * @param {String} garId the id of the gar the person is associated with
-   * @param {String} garPersonId the id of the person
-   * @param {String} personDetails the updated details of the person
-   * @returns {Promise} resolves with API response.
-   */
-  deleteGarPeople(garId, garPersonId) {
-    return new Promise((resolve, reject) => {
-      request.delete(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.deleteGarPeople(garId),
-          body: JSON.stringify({
-            garPeopleId: garPersonId,
-          }),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call delete garperson endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(
-              `${garId} ${garPersonId} garApi.deleteGarPeople request was not successful : ${responseErrorMessage}`
-            );
-            resolve(body);
-            return;
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-
-  getGarCheckinProgress(garId) {
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getGarCheckinProgress(garId),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call GAR progress API endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${garId} garApi.progress request was not successful : ${responseErrorMessage}`);
-            resolve(body);
-            return;
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-
-  getDurationBeforeDeparture(departureDate, departureTime) {
-    const departureDateTimeString = `${departureDate} ${departureTime}`;
-    const departureDateTime = new Date(departureDateTimeString);
-    const currentDateTimeISO = new Date().toISOString();
-    const currentDateTime = new Date(currentDateTimeISO);
-    return Math.round((departureDateTime - currentDateTime) / 1000 / 60);
-  },
-
-  getGarsCount(userId, userType, orgId = null) {
-    const garsUrl =
-      userType === 'Individual' ? endpoints.getIndividualGarsCount(userId) : endpoints.getOrgGarsCount(userId, orgId);
-
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: garsUrl,
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call get GARs Count endpoint');
-            reject(error);
-            return;
-          }
-
-          if (_response.statusCode >= 400) {
-            const responseErrorMessage = getResponseErrorMessage(_response, body);
-            logger.error(`${userId} garApi.getGarsCount request was not successful : ${responseErrorMessage}`);
-            resolve(JSON.parse(body));
-            return;
-          }
-
-          resolve(JSON.parse(body));
-        }
-      );
-    });
-  },
+  getDurationBeforeDeparture,
 };
+
+[
+  'patch',
+  'get',
+  'getPeople',
+  'getGars',
+  'getSupportingDocs',
+  'deleteGarSupportingDoc',
+  'submitGARForCheckin',
+  'submitGARForException',
+  'updateGarPerson',
+  'deleteGarPeople',
+  'getGarCheckinProgress',
+  'getGarsCount',
+].forEach((method) => {
+  legacyApi[method] = (...args) =>
+    callConfiguredGarApi(method, args, {
+      count: method === 'getGarsCount',
+      progress: method === 'getGarCheckinProgress',
+    });
+});
+
+module.exports = legacyApi;

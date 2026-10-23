@@ -1,359 +1,39 @@
 const { expect } = require('chai');
-const chai = require('chai');
-const nock = require('nock');
+const sinon = require('sinon');
 
 require('../../global.test');
-const endpoints = require('../../../common/config/endpoints');
-const garApi = require('../../../common/services/garApi');
+const garApiService = require('../../../common/services/garApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const garId = 'c2d86db6-006c-4f5e-9e22-e039c8b1ddc7';
 const userId = 'f058e37b-3fa2-4c05-a057-6c810d6c6bd6';
 const personId = 'e5d94814-0d1e-4532-9f91-164f1ab77be3';
 const orgId = 'c5c9fd4d-ae4d-4008-8358-2e74841e89d6';
-const garSupportingDocId = '578c71f2-9601-4cb3-a569-3d70100781a6';
-
-const garCraftPartial = {
-  status: 'Draft',
-  registration: 'UNIT01',
-  craftType: 'EVA',
-  craftBase: 'Tokyo',
-};
-
-const garPeoplePartial = {
-  status: 'Draft',
-  people: [
-    {
-      firstName: 'Shinobu',
-      lastName: 'Oshino',
-      gender: 'F',
-      dateOfBirth: '1494-12-12',
-      placeOfBirth: 'Berlin',
-      nationality: 'German',
-      peopleType: 'Crew',
-      documentType: 'Passport',
-      documentNumber: '1921231',
-      documentExpiryDate: '2020-12-12',
-      issuingState: 'TOK',
-    },
-  ],
-};
-
-const BASE_URL = endpoints.baseUrl();
-
-describe('GarService', () => {
-  const pages = { page: 1, per_page: undefined, status: 'Draft' };
-  beforeEach(() => {
-    nock(BASE_URL)
-      .patch(`/gar/${garId}`, garCraftPartial)
-      .reply(200, {
-        status: { name: 'Draft' },
-      });
-
-    nock(BASE_URL)
-      .get(`/gar/${garId}?cbp_id=false`)
-      .reply(200, {
-        status: { name: 'Draft' },
-      });
-
-    nock(BASE_URL)
-      .get(
-        `/gar/${garId}/people?page=1&per_page=10&priority=amg_checkin_response_code%3A0T%2Camg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A&amg_response_codes=0T`
-      )
-      .reply(200, {
-        _meta: {
-          page: 1,
-          perPage: 10,
-          totalPages: 1,
-          totalItems: 4,
-        },
-        _links: {
-          currentPage: '/v0.2.0/gar/f8ff8083-26cf-48d2-82c1-64eec0fecbb3/people?page=1&per_page=100',
-          next: null,
-          prev: null,
-        },
-        garId: 'f8ff8083-26cf-48d2-82c1-64eec0fecbb3',
-        status: {
-          name: 'Draft',
-        },
-        items: [],
-      });
-
-    nock(BASE_URL)
-      .patch(`/gar/${garId}`, garPeoplePartial)
-      .reply(200, {
-        status: { name: 'Draft' },
-        people: [],
-      });
-
-    nock(BASE_URL)
-      .get(`/user/${userId}/gars?status=Draft&page=1&per_page=undefined`)
-      .reply(200, {
-        items: [{}, {}],
-      });
-
-    nock(BASE_URL)
-      .get(`/user/${userId}/organisation/${orgId}/gars?status=Draft&page=1&per_page=undefined`)
-      .reply(200, {
-        items: [{}],
-      });
-
-    nock(BASE_URL).get(`/gar/${garId}/supportingdocs?page=1&per_page=10000`).reply(200, {
-      status: 'Draft',
-      items: [],
-    });
-
-    nock(BASE_URL)
-      .patch(`/gar/${garId}/people`, { people: [garPeoplePartial.people[0]] })
-      .reply(200, {
-        status: 'Draft',
-      });
-
-    nock(BASE_URL).delete(`/gar/${garId}/supportingdocs/${garSupportingDocId}`).reply(200, {});
-
-    nock(BASE_URL).delete(`/gar/${garId}/people`).reply(200, {});
-  });
-
-  it('Should update the GARs craft details', (done) => {
-    garApi.patch(garId, 'Draft', garCraftPartial).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.have.keys(['status']);
-      expect(parsedResponse.status).to.have.keys(['name']);
-      done();
-    });
-  });
-
-  it('Should get the GAR details', (done) => {
-    garApi.get(garId).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.have.keys(['status']);
-      expect(parsedResponse.status).to.have.keys(['name']);
-      done();
-    });
-  });
-
-  it('Should update the GARs manifest', (done) => {
-    garApi.patch(garId, 'Draft', garPeoplePartial).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.have.keys(['status', 'people']);
-      done();
-    });
-  });
-
-  it('Should fetch the people saved to a GAR', (done) => {
-    garApi.getPeople(garId, 1, '0T').then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.include.all.keys(['status', 'items']);
-      done();
-    });
-  });
-
-  it('Should return all GARs belonging to an individual', (done) => {
-    garApi.getGars(userId, 'Individual', pages).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.have.keys(['items']);
-      expect(parsedResponse.items).to.have.length(2);
-      done();
-    });
-  });
-
-  it('Should return all GARs belonging to an organisation', (done) => {
-    garApi.getGars(userId, 'Admin', pages, orgId).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.have.keys(['items']);
-      expect(parsedResponse.items).to.have.length(1);
-      done();
-    });
-  });
-
-  it('Should fetch the supportingdocuments saved to a GAR', (done) => {
-    garApi.getSupportingDocs(garId).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.have.keys(['status', 'items']);
-      done();
-    });
-  });
-
-  it('Should update the details of a person on a GARs manifest', (done) => {
-    garApi.updateGarPerson(garId, garPeoplePartial.people[0]).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.have.keys(['status']);
-      done();
-    });
-  });
-
-  it('should delete the supporting document from a GAR', () => {
-    garApi.deleteGarSupportingDoc(garId, garSupportingDocId).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.be.empty;
-    });
-  });
-
-  it('Should delete the person from a GARs manifest', () => {
-    garApi.deleteGarPeople(garId, personId).then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      expect(typeof parsedResponse).to.equal('object');
-      expect(parsedResponse).to.be.empty;
-    });
-  });
-
-  it('should throw an error for patch', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .patch(`/gar/${garId}`, garCraftPartial)
-      .replyWithError({ message: 'Example patch error', code: 404 });
-
-    garApi
-      .patch(garId, 'Draft', garCraftPartial)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example patch error');
-      });
-  });
-
-  it('should throw an error for get', () => {
-    nock.cleanAll();
-    nock(BASE_URL).get(`/gar/${garId}?cbp_id=false`).replyWithError({ message: 'Example get error', code: 404 });
-
-    garApi
-      .get(garId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example get error');
-      });
-  });
-
-  it('should throw an error for getPeople', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .get(
-        `/gar/${garId}/people?page=1&per_page=10&priority=amg_checkin_response_code%3A0T%2Camg_checkin_response_code%3A0B%2Camg_checkin_response_code%3A0Z%2Camg_checkin_response_code%3A0A&amg_response_codes=0T`
-      )
-      .replyWithError({ message: 'Example getPeople error', code: 404 });
-
-    garApi
-      .getPeople(garId, 1, '0T')
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example getPeople error');
-      });
-  });
-
-  it('should throw an error for getGars', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .get(`/user/${userId}/gars?status=Draft&page=1&per_page=undefined`)
-      .replyWithError({ message: 'Example getGars error', code: 404 });
-    garApi
-      .getGars(userId, 'Individual', pages)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example getGars error');
-      });
-  });
-
-  it('should throw an error for getSupportingDocs', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .get(`/gar/${garId}/supportingdocs?page=1&per_page=10000`)
-      .replyWithError({ message: 'Example getSupportingDocs error', code: 404 });
-
-    garApi
-      .getSupportingDocs(garId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example getSupportingDocs error');
-      });
-  });
-
-  it('should throw an error for deleteGarSupportingDoc', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .delete(`/gar/${garId}/supportingdocs/${garSupportingDocId}`)
-      .replyWithError({ message: 'Example deleteGarSupportingDoc error', code: 404 });
-
-    garApi
-      .deleteGarSupportingDoc(garId, garSupportingDocId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example deleteGarSupportingDoc error');
-      });
-  });
-
-  it('should throw an error for updateGarPerson', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .patch(`/gar/${garId}/people`, { people: [garPeoplePartial.people[0]] })
-      .replyWithError({ message: 'Example updateGarPerson error', code: 404 });
-
-    garApi
-      .updateGarPerson(garId, garPeoplePartial.people[0])
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example updateGarPerson error');
-      });
-  });
-
-  it('should throw an error for deleteGarPeople', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .delete(`/gar/${garId}/people`)
-      .replyWithError({ message: 'Example deleteGarPeople error', code: 404 });
-
-    garApi
-      .deleteGarPeople(garId, personId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example deleteGarPeople error');
-      });
-  });
-});
+const supportingDocId = '578c71f2-9601-4cb3-a569-3d70100781a6';
+const person = { firstName: 'Ada', lastName: 'Lovelace' };
 
 describe('GarApi', () => {
   const pages = { page: 2, perPage: 10, status: 'Submitted' };
 
-  it('gets GAR details through the injected HTTP client', async () => {
+  afterEach(() => sinon.restore());
+
+  it('gets GAR details through the injected HTTP client and enriches the country label', async () => {
     const gar = { garId, responsibleCountry: 'GBR' };
     const client = {
       get: async (path, options) => {
         expect(path).to.equal(`/gar/${garId}`);
         expect(options).to.deep.equal({ query: { cbp_id: false } });
-        return { ok: true, ...gar };
+        return { ...gar };
       },
     };
-    const api = new garApi.GarApi(client);
 
-    const result = await api.get(garId);
+    const result = await new garApiService.GarApi(client).get(garId);
 
     expect(result).to.include(gar);
     expect(result.responsibleCountryLabel).to.be.a('string');
   });
 
-  it('gets GAR people through the injected HTTP client and preserves no-board ordering', async () => {
+  it('gets GAR people with pagination and response-code filters and preserves NO_BOARD ordering', async () => {
     const noBoardCode = require('../../../common/utils/travel_permission_codes.json')['NO_BOARD'];
     const response = {
       items: [
@@ -379,14 +59,13 @@ describe('GarApi', () => {
         return response;
       },
     };
-    const api = new garApi.GarApi(client);
 
-    const result = await api.getPeople(garId, 2, '0T');
+    const result = await new garApiService.GarApi(client).getPeople(garId, 2, '0T');
 
     expect(result.items.map(({ id }) => id)).to.deep.equal(['no-board', 'allowed', 'pending']);
   });
 
-  it('gets supporting documents through the injected HTTP client', async () => {
+  it('gets supporting documents with the existing pagination query', async () => {
     const response = { items: [{ id: 'document-1' }] };
     const client = {
       get: async (path, options) => {
@@ -395,12 +74,11 @@ describe('GarApi', () => {
         return response;
       },
     };
-    const api = new garApi.GarApi(client);
 
-    expect(await api.getSupportingDocs(garId)).to.equal(response);
+    expect(await new garApiService.GarApi(client).getSupportingDocs(garId)).to.equal(response);
   });
 
-  it('gets check-in progress through the injected HTTP client', async () => {
+  it('extracts check-in progress through the injected HTTP client', async () => {
     const progress = { completed: 2, total: 4 };
     const client = {
       get: async (path) => {
@@ -408,39 +86,131 @@ describe('GarApi', () => {
         return { progress };
       },
     };
-    const api = new garApi.GarApi(client);
 
-    expect(await api.getGarCheckinProgress(garId)).to.equal(progress);
+    expect(await new garApiService.GarApi(client).getGarCheckinProgress(garId)).to.equal(progress);
   });
 
-  it('should get GARs for an individual using the configured HTTP client', async () => {
+  it('gets GARs for individuals and organisations with pagination', async () => {
     const response = { items: [{ id: 'GAR-1' }] };
     const client = {
       get: async (path, options) => {
         expect(path).to.equal(`/user/${userId}/gars`);
-        expect(options).to.deep.equal({
-          query: { status: 'Submitted', page: 2, per_page: 10 },
-        });
+        expect(options).to.deep.equal({ query: { status: 'Submitted', page: 2, per_page: 10 } });
         return response;
       },
     };
 
-    const api = new garApi.GarApi(client);
+    expect(await new garApiService.GarApi(client).getGars(userId, 'Individual', pages)).to.equal(response);
 
-    expect(await api.getGars(userId, 'Individual', pages)).to.equal(response);
-  });
-
-  it('should get GARs for an organisation using the configured HTTP client', async () => {
-    const client = {
+    const organisationClient = {
       get: async (path) => {
         expect(path).to.equal(`/user/${userId}/organisation/${orgId}/gars`);
-        return { items: [] };
+        return response;
+      },
+    };
+    expect(await new garApiService.GarApi(organisationClient).getGars(userId, 'Admin', pages, orgId)).to.equal(
+      response
+    );
+  });
+
+  it('gets GAR counts for individuals and organisations', async () => {
+    const client = {
+      get: async (path) => {
+        expect(path).to.equal(`/user/${userId}/gars/count`);
+        return { count: 1 };
+      },
+    };
+    const api = new garApiService.GarApi(client);
+
+    expect(await api.getGarsCount(userId, 'Individual')).to.deep.equal({ count: 1 });
+    const organisationClient = {
+      get: async (path) => {
+        expect(path).to.equal(`/user/${userId}/organisation/${orgId}/gars/count`);
+        return { count: 2 };
+      },
+    };
+    expect(await new garApiService.GarApi(organisationClient).getGarsCount(userId, 'Admin', orgId)).to.deep.equal({
+      count: 2,
+    });
+  });
+
+  it('patches GAR updates without mutating the caller payload', async () => {
+    const update = { registration: 'UNIT01' };
+    const client = {
+      patch: async (path, body) => {
+        expect(path).to.equal(`/gar/${garId}`);
+        expect(body).to.deep.equal({ registration: 'UNIT01', status: 'Draft' });
+        return { status: { name: 'Draft' } };
       },
     };
 
-    const api = new garApi.GarApi(client);
+    await new garApiService.GarApi(client).patch(garId, 'Draft', update);
+    expect(update).to.deep.equal({ registration: 'UNIT01' });
+  });
 
-    expect(await api.getGars(userId, 'Admin', pages, orgId)).to.deep.equal({ items: [] });
+  it('submits check-in and departure exception requests', async () => {
+    const client = {
+      post: async (path, body, options) => {
+        if (path.endsWith('/checkin')) {
+          expect(path).to.equal(`/gar/${garId}/checkin`);
+          expect(body).to.be.undefined;
+          expect(options).to.be.undefined;
+        } else {
+          expect(path).to.equal(`/gar/${garId}/departure/exception`);
+          expect(body).to.deep.equal({ passengerIds: [personId] });
+          expect(options).to.deep.equal({ query: { only_individuals: true } });
+        }
+        return {};
+      },
+    };
+    const api = new garApiService.GarApi(client);
+
+    await api.submitGARForCheckin(garId);
+    await api.submitGARForException(garId, [personId]);
+  });
+
+  it('submits departure exceptions for the whole GAR when no passenger IDs are provided', async () => {
+    const client = {
+      post: async (path, body, options) => {
+        expect(path).to.equal(`/gar/${garId}/departure/exception`);
+        expect(body).to.deep.equal({ passengerIds: [] });
+        expect(options).to.deep.equal({ query: { only_individuals: false } });
+        return {};
+      },
+    };
+
+    await new garApiService.GarApi(client).submitGARForException(garId);
+  });
+
+  it('updates people and deletes people and supporting documents through the injected client', async () => {
+    const calls = [];
+    const client = {
+      patch: async (...args) => calls.push(['patch', ...args]),
+      delete: async (...args) => calls.push(['delete', ...args]),
+    };
+    const api = new garApiService.GarApi(client);
+
+    await api.updateGarPerson(garId, person);
+    await api.deleteGarPeople(garId, personId);
+    await api.deleteGarSupportingDoc(garId, supportingDocId);
+
+    expect(calls).to.deep.equal([
+      ['patch', `/gar/${garId}/people`, { people: [person] }],
+      ['delete', `/gar/${garId}/people`, { body: { garPeopleId: personId } }],
+      ['delete', `/gar/${garId}/supportingdocs/${supportingDocId}`],
+    ]);
+  });
+
+  it('creates GARs through the injected client', async () => {
+    const client = {
+      post: async (path, body) => {
+        expect(path).to.equal(`/user/${userId}/gar`);
+        expect(body).to.be.undefined;
+        return { garId };
+      },
+    };
+
+    expect(await new garApiService.GarApi(client).createGar(userId)).to.deep.equal({ garId });
   });
 
   it('preserves the existing GAR read failure shape for Fetch HTTP errors', async () => {
@@ -448,6 +218,7 @@ describe('GarApi', () => {
       get: async () => {
         const error = new Error('Unavailable');
         Object.assign(error, {
+          type: 'http_error',
           status: 503,
           statusText: 'Service Unavailable',
           body: { message: 'Maintenance' },
@@ -455,12 +226,42 @@ describe('GarApi', () => {
         throw error;
       },
     };
-    const api = new garApi.GarApi(client);
 
-    expect(await api.get(garId)).to.deep.equal({
+    expect(await new garApiService.GarApi(client).get(garId)).to.deep.equal({
       statusCode: 503,
       statusMessage: 'Service Unavailable',
       body: { message: 'Maintenance' },
     });
+  });
+
+  it('propagates network errors instead of returning a success-shaped fallback', async () => {
+    const networkError = new Error('offline');
+    const client = { get: async () => Promise.reject(networkError) };
+
+    try {
+      await new garApiService.GarApi(client).get(garId);
+      expect.fail('Expected network error to be propagated');
+    } catch (err) {
+      expect(err).to.equal(networkError);
+    }
+  });
+
+  it('keeps legacy service calls as a string boundary over the configured GarApi', async () => {
+    const getStub = sinon.stub(dataAccessApi.garApi, 'get').resolves({ ok: true, garId });
+
+    expect(await garApiService.get(garId)).to.equal(JSON.stringify({ garId }));
+    expect(getStub.calledOnceWithExactly(garId)).to.equal(true);
+  });
+
+  it('preserves the legacy JSON object and body-string boundaries for counts and HTTP errors', async () => {
+    const countStub = sinon.stub(dataAccessApi.garApi, 'getGarsCount').resolves('{"ok":true,"count":3}');
+    expect(await garApiService.getGarsCount(userId, 'Individual')).to.deep.equal({ count: 3 });
+    expect(countStub.calledOnceWithExactly(userId, 'Individual')).to.equal(true);
+
+    const error = new Error('Request failed');
+    Object.assign(error, { type: 'http_error', body: { message: 'GAR update failed' } });
+    const patchStub = sinon.stub(dataAccessApi.garApi, 'patch').rejects(error);
+    expect(await garApiService.patch(garId, 'Draft', {})).to.equal(JSON.stringify(error.body));
+    expect(patchStub.calledOnceWithExactly(garId, 'Draft', {})).to.equal(true);
   });
 });

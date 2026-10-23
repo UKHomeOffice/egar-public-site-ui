@@ -294,6 +294,43 @@ describe('GAR Review Post Controller', () => {
   });
 
   describe('perform API call', () => {
+    it('adds a resubmitted 0T GAR to the session list and returns to the GAR view', async () => {
+      req.body.resubmitFor0T = 'resubmit0TOnSummaryPage';
+      req.body.resubmitFor0TLink = 'yes';
+      req.session.resubmitFor0T = ['OTHER-GAR'];
+
+      const THREE_HOURS = 60 * 60 * 1000 * 3;
+      const FOUR_HOURS = 60 * 60 * 1000 * 10;
+      const today = new Date();
+      const threeHourDate = moment.utc(new Date(today.getTime() + THREE_HOURS));
+      const fourHoursDate = moment.utc(new Date(today.getTime() + FOUR_HOURS));
+
+      garApiGetStub.resolves(
+        JSON.stringify({
+          registration: 'Z-AFTC',
+          departureDate: threeHourDate.format('YYYY-MM-DD'),
+          departureTime: threeHourDate.format('HH:mm:ss'),
+          arrivalDate: fourHoursDate.format('YYYY-MM-DD'),
+          arrivalTime: fourHoursDate.format('HH:mm:ss'),
+          status: { name: 'draft' },
+          responsibleGivenName: 'James',
+          prohibitedGoods: 'No',
+          freeCirculation: 'No',
+          visitReason: 'No',
+          intentionValue: 'No',
+        })
+      );
+      garApiGetPeopleStub.resolves(JSON.stringify({ items: garPeople() }));
+      garApiGetSupportingDocsStub.resolves(JSON.stringify({}));
+
+      await controller(req, res);
+
+      const cookie = new CookieModel(req);
+      expect(garAPISubmitForCheckinStub.calledOnceWithExactly('ABCDE')).to.equal(true);
+      expect(cookie.getResubmitFor0T()).to.deep.equal(['OTHER-GAR', 'ABCDE']);
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/view?resubmitted=yes');
+    });
+
     it('should go to failure if API rejects', () => {
       const cookie = new CookieModel(req);
 
