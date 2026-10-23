@@ -6,9 +6,9 @@ const travelPermissionCodes = require('../utils/travel_permission_codes.json');
 
 function getResponseErrorMessage(err) {
   return {
-    statusCode: err?.statusCode,
-    statusMessage: err.statusMessage,
-    body: err.body,
+    statusCode: err?.status ?? err?.statusCode,
+    statusMessage: err?.statusText ?? err?.statusMessage,
+    body: err?.body,
   };
 }
 
