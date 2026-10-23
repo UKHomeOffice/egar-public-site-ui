@@ -336,6 +336,83 @@ describe('GarService', () => {
 describe('GarApi', () => {
   const pages = { page: 2, perPage: 10, status: 'Submitted' };
 
+  it('gets GAR details through the injected HTTP client', async () => {
+    const gar = { garId, responsibleCountry: 'GBR' };
+    const client = {
+      get: async (path, options) => {
+        expect(path).to.equal(`/gar/${garId}`);
+        expect(options).to.deep.equal({ query: { cbp_id: false } });
+        return { ok: true, ...gar };
+      },
+    };
+    const api = new garApi.GarApi(client);
+
+    const result = await api.get(garId);
+
+    expect(result).to.include(gar);
+    expect(result.responsibleCountryLabel).to.be.a('string');
+  });
+
+  it('gets GAR people through the injected HTTP client and preserves no-board ordering', async () => {
+    const noBoardCode = require('../../../common/utils/travel_permission_codes.json')['NO_BOARD'];
+    const response = {
+      items: [
+        { id: 'allowed', amgCheckinResponseCode: '0A' },
+        { id: 'no-board', amgCheckinResponseCode: noBoardCode },
+        { id: 'pending', amgCheckinResponseCode: '0T' },
+      ],
+    };
+    const client = {
+      get: async (path, options) => {
+        expect(path).to.equal(`/gar/${garId}/people`);
+        expect(options.query).to.deep.equal({
+          priority: [
+            'amg_checkin_response_code:0T',
+            'amg_checkin_response_code:0B',
+            'amg_checkin_response_code:0Z',
+            'amg_checkin_response_code:0A',
+          ],
+          per_page: 10,
+          page: 2,
+          amg_response_codes: '0T',
+        });
+        return response;
+      },
+    };
+    const api = new garApi.GarApi(client);
+
+    const result = await api.getPeople(garId, 2, '0T');
+
+    expect(result.items.map(({ id }) => id)).to.deep.equal(['no-board', 'allowed', 'pending']);
+  });
+
+  it('gets supporting documents through the injected HTTP client', async () => {
+    const response = { items: [{ id: 'document-1' }] };
+    const client = {
+      get: async (path, options) => {
+        expect(path).to.equal(`/gar/${garId}/supportingdocs`);
+        expect(options).to.deep.equal({ query: { page: 1, per_page: 10000 } });
+        return response;
+      },
+    };
+    const api = new garApi.GarApi(client);
+
+    expect(await api.getSupportingDocs(garId)).to.equal(response);
+  });
+
+  it('gets check-in progress through the injected HTTP client', async () => {
+    const progress = { completed: 2, total: 4 };
+    const client = {
+      get: async (path) => {
+        expect(path).to.equal(`/gar/${garId}/progress`);
+        return { progress };
+      },
+    };
+    const api = new garApi.GarApi(client);
+
+    expect(await api.getGarCheckinProgress(garId)).to.equal(progress);
+  });
+
   it('should get GARs for an individual using the configured HTTP client', async () => {
     const response = { items: [{ id: 'GAR-1' }] };
     const client = {
@@ -364,5 +441,26 @@ describe('GarApi', () => {
     const api = new garApi.GarApi(client);
 
     expect(await api.getGars(userId, 'Admin', pages, orgId)).to.deep.equal({ items: [] });
+  });
+
+  it('preserves the existing GAR read failure shape for Fetch HTTP errors', async () => {
+    const client = {
+      get: async () => {
+        const error = new Error('Unavailable');
+        Object.assign(error, {
+          status: 503,
+          statusText: 'Service Unavailable',
+          body: { message: 'Maintenance' },
+        });
+        throw error;
+      },
+    };
+    const api = new garApi.GarApi(client);
+
+    expect(await api.get(garId)).to.deep.equal({
+      statusCode: 503,
+      statusMessage: 'Service Unavailable',
+      body: { message: 'Maintenance' },
+    });
   });
 });
