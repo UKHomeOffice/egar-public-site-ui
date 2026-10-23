@@ -71,26 +71,26 @@ module.exports.validations = (req) => {
       ),
       new ValidationRule(validator.notOnlySymbols, 'birthplace', req.body.birthplace, `Enter a valid place of birth.`),
     ],
-    [new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select the type of person')],
+    [new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select who you are adding')],
     [new ValidationRule(validator.notEmpty, 'gender', req.body.gender, 'Select the sex of the person')],
     [
       new ValidationRule(
         validator.notEmpty,
         'travelDocumentNumber',
         req.body.travelDocumentNumber,
-        'Enter the travel document number'
+        'Enter the document number'
       ),
       new ValidationRule(
         validator.isValidStringLength,
         'travelDocumentNumber',
         req.body.travelDocumentNumber,
-        `Travel document number must be ${MAX_STRING_LENGTH} characters or less`
+        `Document number must be ${MAX_STRING_LENGTH} characters or less`
       ),
       new ValidationRule(
         validator.isAlphanumeric,
         'travelDocumentNumber',
         req.body.travelDocumentNumber,
-        `Travel document number must be alphanumeric only.`
+        `Document number must be alphanumeric only.`
       ),
     ],
     [

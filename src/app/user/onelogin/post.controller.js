@@ -10,6 +10,7 @@ const sendEmail = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 const verificationApi = require('../../../common/services/verificationApi');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
+const { NewRegistrationSuccess } = require('../../../common/services/metrics');
 
 const Outcome = {
   SUCCESS: 'success',
@@ -164,6 +165,7 @@ function handleCompleteSubmission(req) {
   delete req.session.access_token;
   delete req.session.step;
   delete req.session.step_data;
+  NewRegistrationSuccess();
   return [Outcome.SUCCESS, null, '/home'];
 }
 

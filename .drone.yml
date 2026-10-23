@@ -169,6 +169,9 @@ steps:
         from_secret: DEV_KUBE_TOKEN
       DEV_URL_SERVICE:
         from_secret: DEV_URL_SERVICE
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
+
 trigger:
   event:
     - push
@@ -247,6 +250,8 @@ steps:
         from_secret: SIT_KUBE_SERVER
       SIT_KUBE_TOKEN:
         from_secret: SIT_KUBE_TOKEN
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
 trigger:
   branch:
     - main
@@ -293,6 +298,8 @@ steps:
         from_secret: STAGING_KUBE_SERVER
       STAGING_KUBE_TOKEN:
         from_secret: STAGING_KUBE_TOKEN
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
 trigger:
   event:
     - tag
@@ -328,6 +335,8 @@ steps:
         from_secret: PRODUCTION_KUBE_SERVER
       PRODUCTION_KUBE_TOKEN:
         from_secret: PRODUCTION_KUBE_TOKEN
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
 
 trigger:
   event:

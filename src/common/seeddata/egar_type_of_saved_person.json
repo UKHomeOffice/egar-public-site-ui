@@ -1,5 +1,9 @@
 [
   { "id": "0", "persontype": "Captain" },
-  { "id": "1", "persontype": "Crew" },
+  {
+    "id": "1",
+    "persontype": "Crew",
+    "description": "This includes co-pilot, first officer, cabin crew and other air crew"
+  },
   { "id": "2", "persontype": "Passenger" }
 ]

@@ -20,6 +20,10 @@ spec:
       labels:
         name: public-site-svc
         service: public-site-svc
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+        prometheus.io/path: /metrics
     spec:
       volumes:
         - name: bundle-certs
