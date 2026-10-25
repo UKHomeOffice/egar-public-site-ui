@@ -114,16 +114,6 @@ module.exports = async (req, res) => {
   }
   logger.debug('Determined file to be Excel, beginning to read');
 
-  const formData = {
-    name: req.file.originalname,
-    file: {
-      value: req.file.buffer,
-      options: {
-        filename: req.file.originalname,
-      },
-    },
-  };
-
   try {
     const cookie = new CookieModel(req);
 
@@ -132,7 +122,7 @@ module.exports = async (req, res) => {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
 
-    if (!(await clamAVService.scanFile(formData))) {
+    if (!(await clamAVService.scanFile(req.file))) {
       logger.warn('File rejected because ClamAV detected a virus');
       res.redirect('/garfile/garupload?query=v');
       return;

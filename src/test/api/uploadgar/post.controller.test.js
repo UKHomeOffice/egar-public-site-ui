@@ -173,6 +173,64 @@ describe('API upload GAR post controller', () => {
     });
   });
 
+  describe('workbook virus scanning', () => {
+    [
+      ['clean', 'ok : true'], // Confirmed clean: allow the workbook import.
+      ['infected', 'ok : false'], // Virus detected: block the workbook import.
+      ['unexpected', 'unrecognised scan response'], // No confirmed clean result: block the workbook import.
+      ['failed', null], // Simulate a rejected scanner request below: block the workbook import.
+    ].forEach(([outcome, response]) => {
+      it(`scans the original workbook and ${outcome === 'clean' ? 'imports' : 'blocks'} it when the scan is ${outcome}`, async () => {
+        const workbook = getValidWorkbook();
+        const worksheet = workbook.Sheets.Valid1;
+        // Add cell types, raw values, and a sheet range so the fixture can round-trip through a real XLS file.
+        Object.values(worksheet).forEach((cell) => {
+          cell.t = 's';
+          if (cell.v === undefined) {
+            cell.v = cell.w;
+          }
+        });
+        worksheet['!ref'] = 'A1:L40';
+        req.file.buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xls' });
+        const client = { post: sinon.stub() };
+        if (outcome === 'failed') {
+          client.post.rejects(new Error('Scanner unavailable'));
+        } else {
+          client.post.resolves(response);
+        }
+        // Keep the real controller-to-scanner boundary; only the scanner's HTTP transport is stubbed.
+        const scanner = new clamAVService.ClamAVService(client);
+        clamAVServiceStub.callsFake((file) => scanner.scanFile(file));
+        const createGarStub = sinon.stub(createGarApi, 'createGar').resolves('{"garId":"SCANNED-GAR"}');
+        const patchStub = sinon.stub(garApi, 'patch').resolves();
+        // The controller does not await its nested import promises, so wait for the final redirect too.
+        const redirected = new Promise((resolve) => res.redirect.callsFake(resolve));
+
+        await controller(req, res);
+        await redirected;
+
+        expect(client.post).to.have.been.calledOnce;
+        const [endpoint, formData] = client.post.firstCall.args;
+        const scannedFile = formData.get('file');
+        expect(endpoint).to.equal('/scan');
+        expect(formData.get('name')).to.equal(req.file.originalname);
+        expect(scannedFile.name).to.equal(req.file.originalname);
+        // The old multipart argument shape scanned the string "undefined" instead of these workbook bytes.
+        expect(Buffer.from(await scannedFile.arrayBuffer())).to.deep.equal(req.file.buffer);
+        if (outcome === 'clean') {
+          expect(req.session.failureMsg).to.be.undefined;
+          expect(createGarStub).to.have.been.calledOnceWithExactly('khan@augmented.com');
+          expect(patchStub).to.have.been.calledThrice;
+          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/review?from=uploadGar');
+        } else {
+          expect(createGarStub).to.not.have.been.called;
+          expect(patchStub).to.not.have.been.called;
+          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/garupload?query=v');
+        }
+      });
+    });
+  });
+
   describe('validations', () => {
     it('return message if one thing invalid', async () => {
       const data = getInvalidWorkbook();
