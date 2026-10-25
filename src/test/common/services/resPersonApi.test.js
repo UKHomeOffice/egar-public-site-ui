@@ -8,7 +8,7 @@ chai.use(sinonChai);
 const resPersonApi = require('../../../common/services/resPersonApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const endpoints = require('../../../common/config/endpoints');
-const API_PREFIX = new URL(endpoints.baseUrl()).pathname.replace(/\/$/, '');
+const API_PREFIX = endpoints.baseUrl().replace(/\/$/, '');
 
 describe('ResPersonApi', () => {
   const userId = 'user-1';

@@ -7,8 +7,9 @@ require('./global.test');
 chai.use(sinonChai);
 const personApi = require('../common/services/personApi');
 const dataAccessApi = require('../common/services/dataAccessApi');
+const { HttpClient } = require('../common/services/httpClient');
 const endpoints = require('../common/config/endpoints');
-const API_PREFIX = new URL(endpoints.baseUrl()).pathname.replace(/\/$/, '');
+const API_PREFIX = endpoints.baseUrl().replace(/\/$/, '');
 
 describe('PersonApi', () => {
   const userId = 'user-1';
@@ -53,6 +54,20 @@ describe('PersonApi', () => {
   it('gets saved person details', async () => {
     await api.getDetails(userId, personId);
     expect(client.get).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/people/person-1`);
+  });
+
+  it('sends the absolute endpoint to Fetch without duplicating the API version', async () => {
+    const fetchStub = sinon.stub(global, 'fetch').resolves({
+      status: 200,
+      ok: true,
+      headers: { get: () => 'application/json' },
+      text: async () => JSON.stringify(response),
+    });
+    const fetchApi = new personApi.PersonApi(new HttpClient({ baseUrl: endpoints.baseUrl() }));
+
+    await fetchApi.getDetails(userId, personId);
+
+    expect(fetchStub.firstCall.args[0].href).to.equal(endpoints.getPersonData(userId, personId));
   });
 
   it('gets saved people for individuals and organisations', async () => {

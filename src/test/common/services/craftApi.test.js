@@ -8,7 +8,7 @@ chai.use(sinonChai);
 const craftApi = require('../../../common/services/craftApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const endpoints = require('../../../common/config/endpoints');
-const API_PREFIX = new URL(endpoints.baseUrl()).pathname.replace(/\/$/, '');
+const API_PREFIX = endpoints.baseUrl().replace(/\/$/, '');
 
 describe('CraftApi', () => {
   const userId = 'user-1';
