@@ -137,6 +137,20 @@ describe('HttpClient', () => {
       expect(requests[1].headers).to.not.have.property('Content-Type');
     });
 
+    it('uses configured redirect behavior and supports per-request overrides', async () => {
+      const requests = [];
+      global.fetch = async (url, options) => {
+        requests.push({ url, ...options });
+        return response({ body: {} });
+      };
+      const client = new HttpClient({ baseUrl: 'https://api.example.test', redirect: 'error' });
+
+      await client.get('/restricted');
+      await client.get('/manual', { redirect: 'manual' });
+
+      expect(requests.map(({ redirect }) => redirect)).to.deep.equal(['error', 'manual']);
+    });
+
     it('propagates one correlation ID across requests in a request context', async () => {
       const requests = [];
       global.fetch = async (url, options) => {

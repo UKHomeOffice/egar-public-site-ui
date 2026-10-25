@@ -79,7 +79,7 @@ function decodeResponseBody(response) {
 }
 
 class HttpClient {
-  constructor({ baseUrl, defaultHeaders = {}, timeout } = {}) {
+  constructor({ baseUrl, defaultHeaders = {}, timeout, redirect } = {}) {
     let parsedBaseUrl;
     try {
       parsedBaseUrl = new URL(baseUrl);
@@ -101,12 +101,20 @@ class HttpClient {
       defaultHeaders
     );
     this.timeout = timeout;
+    this.redirect = redirect;
     this.#validateTimeout(timeout);
+    this.#validateRedirect(redirect);
   }
 
   #validateTimeout(timeout) {
     if (timeout !== undefined && timeout !== null && (!Number.isFinite(timeout) || timeout < 0)) {
       throw new TypeError('timeout must be a non-negative finite number or null');
+    }
+  }
+
+  #validateRedirect(redirect) {
+    if (redirect !== undefined && !['error', 'follow', 'manual'].includes(redirect)) {
+      throw new TypeError('redirect must be "error", "follow", or "manual"');
     }
   }
 
@@ -146,10 +154,12 @@ class HttpClient {
     return url;
   }
 
-  async #request(path, { method = 'GET', headers = {}, body, query, timeout, signal } = {}) {
+  async #request(path, { method = 'GET', headers = {}, body, query, timeout, signal, redirect } = {}) {
     const url = this.#buildUrl(path, query);
     const timeoutMs = timeout === undefined ? this.timeout : timeout;
     this.#validateTimeout(timeoutMs);
+    const redirectMode = redirect === undefined ? this.redirect : redirect;
+    this.#validateRedirect(redirectMode);
 
     const requestHeaders = mergeHeaders(this.defaultHeaders, headers);
 
@@ -171,6 +181,10 @@ class HttpClient {
       method,
       headers: requestHeaders,
     };
+
+    if (redirectMode !== undefined) {
+      requestOptions.redirect = redirectMode;
+    }
 
     if (body !== undefined) {
       requestOptions.body = isUrlSearchParams(body)
