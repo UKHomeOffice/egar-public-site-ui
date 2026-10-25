@@ -7,8 +7,6 @@ require('../../global.test');
 chai.use(sinonChai);
 const craftApi = require('../../../common/services/craftApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const endpoints = require('../../../common/config/endpoints');
-const API_PREFIX = endpoints.baseUrl().replace(/\/$/, '');
 
 describe('CraftApi', () => {
   const userId = 'user-1';
@@ -32,43 +30,43 @@ describe('CraftApi', () => {
 
   it('creates a craft', async () => {
     await api.create(craft.registration, craft.craftType, craft.craftBase, userId);
-    expect(client.post).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/crafts`, craft);
+    expect(client.post).to.have.been.calledOnceWithExactly('/user/user-1/crafts', craft);
   });
 
   it('gets a craft by ID', async () => {
     await api.getDetails(userId, craftId);
-    expect(client.get).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/crafts/craft-1`);
+    expect(client.get).to.have.been.calledOnceWithExactly('/user/user-1/crafts/craft-1');
   });
 
   it('gets individual crafts with pagination', async () => {
     await api.getCrafts(userId, 3);
-    expect(client.get).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/crafts`, {
+    expect(client.get).to.have.been.calledOnceWithExactly('/user/user-1/crafts', {
       query: { per_page: 5, page: 3 },
     });
   });
 
   it('gets organisation crafts with pagination', async () => {
     await api.getOrgCrafts(orgId, 4);
-    expect(client.get).to.have.been.calledOnceWithExactly(`${API_PREFIX}/organisations/org-1/crafts`, {
+    expect(client.get).to.have.been.calledOnceWithExactly('/organisations/org-1/crafts', {
       query: { per_page: 5, page: 4 },
     });
   });
 
   it('updates a craft', async () => {
     await api.update(craft.registration, craft.craftType, craft.craftBase, userId, craftId);
-    expect(client.put).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/crafts/craft-1`, craft);
+    expect(client.put).to.have.been.calledOnceWithExactly('/user/user-1/crafts/craft-1', craft);
   });
 
   it('deletes an individual craft with the original requester payload', async () => {
     await api.deleteCraft(userId, craftId);
-    expect(client.delete).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/crafts/craft-1`, {
+    expect(client.delete).to.have.been.calledOnceWithExactly('/user/user-1/crafts/craft-1', {
       body: { requesterId: userId, crafts: [{ craftId }] },
     });
   });
 
   it('deletes an organisation craft from its collection endpoint', async () => {
     await api.deleteOrgCraft(orgId, userId, craftId);
-    expect(client.delete).to.have.been.calledOnceWithExactly(`${API_PREFIX}/organisations/org-1/crafts`, {
+    expect(client.delete).to.have.been.calledOnceWithExactly('/organisations/org-1/crafts', {
       body: { requesterId: userId, crafts: [{ craftId }] },
     });
   });

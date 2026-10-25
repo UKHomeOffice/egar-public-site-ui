@@ -1,6 +1,5 @@
 const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
-const { apiPath, serializeResponse } = require('./legacyApiResponse');
+const { serializeResponse } = require('./legacyApiResponse');
 
 class CreateUserApi {
   constructor(client) {
@@ -15,7 +14,7 @@ class CreateUserApi {
       requestBody.tokenId = tokenId;
     }
 
-    return this.client.post(apiPath(endpoints.register()), requestBody);
+    return this.client.post('/user/register', requestBody);
   }
 }
 

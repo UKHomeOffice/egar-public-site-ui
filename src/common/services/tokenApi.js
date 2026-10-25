@@ -1,6 +1,5 @@
 const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
-const { apiPath, callConfiguredApi } = require('./legacyApiResponse');
+const { callConfiguredApi } = require('./legacyApiResponse');
 
 class TokenApi {
   constructor(client) {
@@ -8,11 +7,11 @@ class TokenApi {
   }
 
   setToken(tokenId, userId) {
-    return this.client.post(apiPath(endpoints.setToken()), { tokenId, userId });
+    return this.client.post('/user/settoken', { tokenId, userId });
   }
 
   updateToken(tokenId, userId) {
-    return this.client.put(apiPath(endpoints.setToken()), { tokenId, userId });
+    return this.client.put('/user/settoken', { tokenId, userId });
   }
 
   setInviteUserToken(tokenId, inviterId, organisationId, roleName, inviteeEmail = null) {
@@ -27,7 +26,7 @@ class TokenApi {
       requestBody.inviteeEmail = inviteeEmail;
     }
 
-    return this.client.post(apiPath(endpoints.setToken()), requestBody);
+    return this.client.post('/user/settoken', requestBody);
   }
 }
 

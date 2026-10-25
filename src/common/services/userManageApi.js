@@ -1,6 +1,5 @@
 const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
-const { apiPath, parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
+const { parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
 
 class UserManageApi {
   constructor(client) {
@@ -8,7 +7,7 @@ class UserManageApi {
   }
 
   getDetails(email) {
-    return this.client.get(apiPath(endpoints.getUserData(email)));
+    return this.client.get(`/user/${email}`);
   }
 
   updateDetails(userId, firstName, lastName, oneLoginSid = null, state = null) {
@@ -22,7 +21,7 @@ class UserManageApi {
       requestBody.state = state;
     }
 
-    return this.client.put(apiPath(endpoints.updateUserData(userId)), requestBody);
+    return this.client.put(`/user/${userId}`, requestBody);
   }
 
   updateEmailOrOneLoginSid(userEmail, { email, oneLoginSid }) {
@@ -40,15 +39,19 @@ class UserManageApi {
       throw new Error('Provide updateEmail or oneLoginSid');
     }
 
-    return this.client.put(apiPath(endpoints.updateUserData(userEmail)), requestBody);
+    return this.client.put(`/user/${userEmail}`, requestBody);
   }
 
   deleteUser(email, requesterId) {
-    return this.client.delete(apiPath(endpoints.deleteUser(email)), { body: { requesterId } });
+    return this.client.delete(`/user/${email}`, { body: { requesterId } });
   }
 
   userSearch(email, oneLoginSid = null) {
-    return this.client.get(apiPath(endpoints.userSearch(email, oneLoginSid)));
+    const query = { email };
+    if (oneLoginSid) {
+      query.one_login_sid = oneLoginSid;
+    }
+    return this.client.get('/user/search', { query });
   }
 
   createUser(email, firstName, lastName, oneLoginSid, state = null, tokenId = null) {
@@ -67,7 +70,7 @@ class UserManageApi {
       requestBody.tokenId = tokenId;
     }
 
-    return this.client.post(apiPath(endpoints.createUser()), requestBody);
+    return this.client.post('/user/register', requestBody);
   }
 }
 

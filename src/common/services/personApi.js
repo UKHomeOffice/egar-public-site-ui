@@ -1,6 +1,5 @@
 const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
-const { apiPath, callConfiguredApi } = require('./legacyApiResponse');
+const { callConfiguredApi } = require('./legacyApiResponse');
 
 class PersonApi {
   constructor(client) {
@@ -8,16 +7,16 @@ class PersonApi {
   }
 
   create(userId, people) {
-    return this.client.post(apiPath(endpoints.createPerson(userId)), people);
+    return this.client.post(`/user/${userId}/people`, people);
   }
 
   getDetails(userId, personId) {
-    return this.client.get(apiPath(endpoints.getPersonData(userId, personId)));
+    return this.client.get(`/user/${userId}/people/${personId}`);
   }
 
   getPeople(id, userType) {
-    const endpoint = userType.toLowerCase() === 'individual' ? endpoints.getPeople(id) : endpoints.getOrgPeople(id);
-    return this.client.get(apiPath(endpoint));
+    const endpoint = userType.toLowerCase() === 'individual' ? `/user/${id}/people` : `/organisations/${id}/people`;
+    return this.client.get(endpoint);
   }
 
   update(userId, personId, person) {
@@ -36,7 +35,7 @@ class PersonApi {
       documentDesc,
     } = person;
 
-    return this.client.put(apiPath(endpoints.updatePerson(userId, personId)), {
+    return this.client.put(`/user/${userId}/people/${personId}`, {
       firstName,
       lastName,
       nationality,
@@ -53,7 +52,7 @@ class PersonApi {
   }
 
   deletePerson(userId, personId) {
-    return this.client.delete(apiPath(endpoints.deletePerson(userId, personId)));
+    return this.client.delete(`/user/${userId}/people/${personId}`);
   }
 }
 

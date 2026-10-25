@@ -2,7 +2,6 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 
 require('./global.test');
-const endpoints = require('../common/config/endpoints');
 const dataAccessApi = require('../common/services/dataAccessApi');
 const verificationApi = require('../common/services/verificationApi');
 
@@ -22,20 +21,17 @@ describe('VerificationApi', () => {
 
   it('verifies a user with the token ID', async () => {
     await api.verifyUser('token-1');
-    expect(client.put).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/verify`, { tokenId: 'token-1' });
+    expect(client.put).to.have.been.calledWithExactly('/user/verify', { tokenId: 'token-1' });
   });
 
   it('looks up invite tokens with the expected email, service, and token filters', async () => {
     await api.getUserInviteToken('invitee@example.com');
-    expect(client.get).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/verify`, {
+    expect(client.get).to.have.been.calledWithExactly('/user/verify', {
       query: { invitee_email: 'invitee@example.com', service: 'sgar' },
     });
 
     await api.getUserInviteTokenByTokenId('token-1');
-    expect(client.get.secondCall.args).to.deep.equal([
-      `${endpoints.baseUrl()}/user/verify`,
-      { query: { token_id: 'token-1' } },
-    ]);
+    expect(client.get.secondCall.args).to.deep.equal(['/user/verify', { query: { token_id: 'token-1' } }]);
   });
 
   it('returns successful verification and invite responses in their established shapes', async () => {

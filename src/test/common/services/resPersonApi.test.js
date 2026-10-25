@@ -7,8 +7,6 @@ require('../../global.test');
 chai.use(sinonChai);
 const resPersonApi = require('../../../common/services/resPersonApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const endpoints = require('../../../common/config/endpoints');
-const API_PREFIX = endpoints.baseUrl().replace(/\/$/, '');
 
 describe('ResPersonApi', () => {
   const userId = 'user-1';
@@ -31,34 +29,30 @@ describe('ResPersonApi', () => {
 
   it('creates a responsible person', async () => {
     await api.create(userId, person);
-    expect(client.post).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/responsiblepersons`, person);
+    expect(client.post).to.have.been.calledOnceWithExactly('/user/user-1/responsiblepersons', person);
   });
 
   it('lists saved responsible persons', async () => {
     await api.getResPersons(userId);
-    expect(client.get).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/responsiblepersons`);
+    expect(client.get).to.have.been.calledOnceWithExactly('/user/user-1/responsiblepersons');
   });
 
   it('gets responsible person details', async () => {
     await api.getResPersonDetails(userId, responsiblePersonId);
-    expect(client.get).to.have.been.calledOnceWithExactly(
-      `${API_PREFIX}/user/user-1/responsibleperson/responsible-person-1`
-    );
+    expect(client.get).to.have.been.calledOnceWithExactly('/user/user-1/responsibleperson/responsible-person-1');
   });
 
   it('updates responsible person details', async () => {
     await api.updateResPerson(userId, responsiblePersonId, person);
     expect(client.put).to.have.been.calledOnceWithExactly(
-      `${API_PREFIX}/user/user-1/responsibleperson/responsible-person-1`,
+      '/user/user-1/responsibleperson/responsible-person-1',
       person
     );
   });
 
   it('deletes a responsible person', async () => {
     await api.deleteResponsiblePerson(userId, responsiblePersonId);
-    expect(client.delete).to.have.been.calledOnceWithExactly(
-      `${API_PREFIX}/user/user-1/responsibleperson/responsible-person-1`
-    );
+    expect(client.delete).to.have.been.calledOnceWithExactly('/user/user-1/responsibleperson/responsible-person-1');
   });
 
   it('preserves the legacy string response and maps HTTP failures to their response body', async () => {

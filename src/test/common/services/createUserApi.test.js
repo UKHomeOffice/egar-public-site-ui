@@ -4,7 +4,6 @@ const { expect } = chai;
 chai.use(require('sinon-chai'));
 
 require('../../global.test');
-const endpoints = require('../../../common/config/endpoints');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const registerApi = require('../../../common/services/createUserApi');
 
@@ -21,7 +20,7 @@ describe('CreateUserApi', () => {
 
   it('creates users with optional invite tokens through the injected client', async () => {
     await api.post('Ada', 'Lovelace', 'ada@example.com', 'invite-token');
-    expect(client.post).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/register`, {
+    expect(client.post).to.have.been.calledWithExactly('/user/register', {
       firstName: 'Ada',
       lastName: 'Lovelace',
       email: 'ada@example.com',

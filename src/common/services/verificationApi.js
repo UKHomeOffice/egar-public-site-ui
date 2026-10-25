@@ -1,6 +1,5 @@
 const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
-const { apiPath, parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
+const { parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
 
 class VerificationApi {
   constructor(client) {
@@ -9,19 +8,19 @@ class VerificationApi {
 
   verifyUser(tokenId) {
     logger.debug('Sending request to verify token');
-    return this.client.put(apiPath(endpoints.verifyUser()), { tokenId });
+    return this.client.put('/user/verify', { tokenId });
   }
 
   getUserInviteToken(email) {
     logger.debug('Sending request to verify token using email');
-    return this.client.get(apiPath(endpoints.verifyUser()), {
+    return this.client.get('/user/verify', {
       query: { invitee_email: email, service: 'sgar' },
     });
   }
 
   getUserInviteTokenByTokenId(tokenId) {
     logger.debug('Sending request to verify token using token id');
-    return this.client.get(apiPath(endpoints.verifyUser()), {
+    return this.client.get('/user/verify', {
       query: { token_id: tokenId },
     });
   }

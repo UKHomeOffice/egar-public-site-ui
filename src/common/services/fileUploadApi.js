@@ -1,5 +1,5 @@
 const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
+const { API_BASE, API_VERSION } = require('../config');
 const { HttpClient } = require('./httpClient');
 const { serializeResponse } = require('./legacyApiResponse');
 
@@ -14,7 +14,7 @@ class FileUploadApi {
     formData.append('file', new Blob([file.buffer]), file.originalname);
 
     try {
-      return serializeResponse(await this.client.post(endpoints.postFile(garId), formData));
+      return serializeResponse(await this.client.post(`/gar/${garId}`, formData));
     } catch (err) {
       if (err?.type === 'http_error') {
         return serializeResponse(err.body);
@@ -30,7 +30,7 @@ class FileUploadApi {
   }
 }
 
-const fileUploadApi = new FileUploadApi(new HttpClient({ baseUrl: endpoints.baseUrl() }));
+const fileUploadApi = new FileUploadApi(new HttpClient({ baseUrl: new URL(API_VERSION, API_BASE).href }));
 
 module.exports = {
   FileUploadApi,

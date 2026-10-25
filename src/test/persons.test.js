@@ -8,8 +8,6 @@ chai.use(sinonChai);
 const personApi = require('../common/services/personApi');
 const dataAccessApi = require('../common/services/dataAccessApi');
 const { HttpClient } = require('../common/services/httpClient');
-const endpoints = require('../common/config/endpoints');
-const API_PREFIX = endpoints.baseUrl().replace(/\/$/, '');
 
 describe('PersonApi', () => {
   const userId = 'user-1';
@@ -48,40 +46,40 @@ describe('PersonApi', () => {
 
   it('creates a saved person with the existing endpoint and request body', async () => {
     await api.create(userId, person);
-    expect(client.post).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/people`, person);
+    expect(client.post).to.have.been.calledOnceWithExactly('/user/user-1/people', person);
   });
 
   it('gets saved person details', async () => {
     await api.getDetails(userId, personId);
-    expect(client.get).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/people/person-1`);
+    expect(client.get).to.have.been.calledOnceWithExactly('/user/user-1/people/person-1');
   });
 
-  it('sends the absolute endpoint to Fetch without duplicating the API version', async () => {
+  it('resolves a base-relative path to the original endpoint without duplicating the API version', async () => {
     const fetchStub = sinon.stub(global, 'fetch').resolves({
       status: 200,
       ok: true,
       headers: { get: () => 'application/json' },
       text: async () => JSON.stringify(response),
     });
-    const fetchApi = new personApi.PersonApi(new HttpClient({ baseUrl: endpoints.baseUrl() }));
+    const fetchApi = new personApi.PersonApi(new HttpClient({ baseUrl: 'https://api.example.test/v1' }));
 
     await fetchApi.getDetails(userId, personId);
 
-    expect(fetchStub.firstCall.args[0].href).to.equal(endpoints.getPersonData(userId, personId));
+    expect(fetchStub.firstCall.args[0].href).to.equal('https://api.example.test/v1/user/user-1/people/person-1');
   });
 
   it('gets saved people for individuals and organisations', async () => {
     await api.getPeople(userId, 'individual');
     await api.getPeople(orgId, 'ORGANISATION');
 
-    expect(client.get.firstCall.args).to.deep.equal([`${API_PREFIX}/user/user-1/people`]);
-    expect(client.get.secondCall.args).to.deep.equal([`${API_PREFIX}/organisations/org-1/people`]);
+    expect(client.get.firstCall.args).to.deep.equal(['/user/user-1/people']);
+    expect(client.get.secondCall.args).to.deep.equal(['/organisations/org-1/people']);
   });
 
   it('updates only the supported saved-person fields', async () => {
     await api.update(userId, personId, person);
 
-    expect(client.put).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/people/person-1`, {
+    expect(client.put).to.have.been.calledOnceWithExactly('/user/user-1/people/person-1', {
       firstName: 'Ada',
       lastName: 'Lovelace',
       nationality: 'GBR',
@@ -99,7 +97,7 @@ describe('PersonApi', () => {
 
   it('deletes a saved person', async () => {
     await api.deletePerson(userId, personId);
-    expect(client.delete).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/people/person-1`);
+    expect(client.delete).to.have.been.calledOnceWithExactly('/user/user-1/people/person-1');
   });
 
   it('preserves the legacy string response and maps HTTP failures to their response body', async () => {
@@ -122,10 +120,5 @@ describe('PersonApi', () => {
     } catch (error) {
       expect(error).to.equal(networkError);
     }
-  });
-
-  it('uses the configured API endpoint origin', () => {
-    const endpoint = new URL(endpoints.getPeople(userId));
-    expect(endpoint.href).to.equal(`${API_PREFIX}/user/user-1/people`);
   });
 });

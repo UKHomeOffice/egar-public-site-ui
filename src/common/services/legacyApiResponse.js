@@ -47,9 +47,4 @@ async function callConfiguredApi(api, method, args, logger, errorMessage) {
   }
 }
 
-function apiPath(endpoint) {
-  const url = new URL(endpoint);
-  return url.href;
-}
-
-module.exports = { apiPath, callConfiguredApi, parseJsonResponse, serializeResponse, unwrapResponse };
+module.exports = { callConfiguredApi, parseJsonResponse, serializeResponse, unwrapResponse };

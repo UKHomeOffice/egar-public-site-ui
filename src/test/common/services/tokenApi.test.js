@@ -25,26 +25,21 @@ describe('TokenApi', () => {
 
   it('sets and updates user tokens', async () => {
     await api.setToken('token-1', 'user-1');
-    expect(client.post).to.have.been.calledWithExactly(
-      `${require('../../../common/config/endpoints').baseUrl()}/user/settoken`,
-      {
-        tokenId: 'token-1',
-        userId: 'user-1',
-      }
-    );
+    expect(client.post).to.have.been.calledWithExactly('/user/settoken', {
+      tokenId: 'token-1',
+      userId: 'user-1',
+    });
 
     await api.updateToken('token-2', 'user-1');
-    expect(client.put).to.have.been.calledWithExactly(
-      `${require('../../../common/config/endpoints').baseUrl()}/user/settoken`,
-      {
-        tokenId: 'token-2',
-        userId: 'user-1',
-      }
-    );
+    expect(client.put).to.have.been.calledWithExactly('/user/settoken', {
+      tokenId: 'token-2',
+      userId: 'user-1',
+    });
   });
 
   it('preserves optional invitee email in organisation invite tokens', async () => {
     await api.setInviteUserToken('token-1', 'inviter-1', 'org-1', 'Owner', 'invitee@example.com');
+    expect(client.post.firstCall.args[0]).to.equal('/user/settoken');
     expect(client.post.firstCall.args[1]).to.deep.equal({
       tokenId: 'token-1',
       inviterId: 'inviter-1',

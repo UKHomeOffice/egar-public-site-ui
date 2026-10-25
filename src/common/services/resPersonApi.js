@@ -1,6 +1,5 @@
 const logger = require('../utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
-const { apiPath, callConfiguredApi } = require('./legacyApiResponse');
+const { callConfiguredApi } = require('./legacyApiResponse');
 
 class ResPersonApi {
   constructor(client) {
@@ -8,23 +7,23 @@ class ResPersonApi {
   }
 
   create(userId, resPerson) {
-    return this.client.post(apiPath(endpoints.createResPerson(userId)), resPerson);
+    return this.client.post(`/user/${userId}/responsiblepersons`, resPerson);
   }
 
   getResPersons(id) {
-    return this.client.get(apiPath(endpoints.getResPersons(id)));
+    return this.client.get(`/user/${id}/responsiblepersons`);
   }
 
   getResPersonDetails(userId, responsiblePersonId) {
-    return this.client.get(apiPath(endpoints.getResPersonDetail(userId, responsiblePersonId)));
+    return this.client.get(`/user/${userId}/responsibleperson/${responsiblePersonId}`);
   }
 
   updateResPerson(userId, responsiblePersonId, resPerson) {
-    return this.client.put(apiPath(endpoints.getResPersonDetail(userId, responsiblePersonId)), resPerson);
+    return this.client.put(`/user/${userId}/responsibleperson/${responsiblePersonId}`, resPerson);
   }
 
   deleteResponsiblePerson(userId, responsiblePersonId) {
-    return this.client.delete(apiPath(endpoints.deleteResPerson(userId, responsiblePersonId)));
+    return this.client.delete(`/user/${userId}/responsibleperson/${responsiblePersonId}`);
   }
 }
 
