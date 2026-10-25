@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const airportValidation = require('../../../common/utils/airportValidation');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');

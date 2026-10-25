@@ -1,4 +1,4 @@
-const logger = require('../utils/logger')(__filename);
+const logger = require('../../utils/logger')(__filename);
 const { callConfiguredApi } = require('./legacyApiResponse');
 
 class TokenApi {
@@ -31,7 +31,7 @@ class TokenApi {
 }
 
 async function callConfiguredTokenApi(method, args) {
-  return callConfiguredApi(require('./dataAccessApi').tokenApi, method, args, logger, 'Token API request failed');
+  return callConfiguredApi(require('../dataAccessApi').tokenApi, method, args, logger, 'Token API request failed');
 }
 
 module.exports = { TokenApi };

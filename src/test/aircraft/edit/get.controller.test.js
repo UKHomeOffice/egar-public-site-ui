@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const craftApi = require('../../../common/services/craftApi');
+const craftApi = require('../../../common/services/data-access/craftApi');
 
 const controller = require('../../../app/aircraft/edit/get.controller');
 

@@ -7,7 +7,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const userApi = require('../../../common/services/userManageApi');
+const userApi = require('../../../common/services/data-access/userManageApi');
 
 const controller = require('../../../app/user/manageuserdetail/post.controller');
 

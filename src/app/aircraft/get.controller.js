@@ -1,6 +1,6 @@
 const CookieModel = require('../../common/models/Cookie.class');
 const logger = require('../../common/utils/logger')(__filename);
-const craftApi = require('../../common/services/craftApi');
+const craftApi = require('../../common/services/data-access/craftApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);

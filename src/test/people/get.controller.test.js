@@ -6,7 +6,7 @@ const { savedPeople } = require('../fixtures');
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const personApi = require('../../common/services/personApi');
+const personApi = require('../../common/services/data-access/personApi');
 
 const controller = require('../../app/people/get.controller');
 

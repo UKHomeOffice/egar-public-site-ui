@@ -3,7 +3,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
-const createGarApi = require('../../../common/services/createGarApi.js');
+const createGarApi = require('../../../common/services/data-access/createGarApi.js');
 
 module.exports = (req, res) => {
   const garStatus = 'Draft';

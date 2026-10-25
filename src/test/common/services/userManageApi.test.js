@@ -5,7 +5,7 @@ chai.use(require('sinon-chai'));
 
 require('../../global.test');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const userManageApi = require('../../../common/services/userManageApi');
+const userManageApi = require('../../../common/services/data-access/userManageApi');
 const { HttpClient } = require('../../../common/services/httpClient');
 
 describe('UserManageApi', () => {

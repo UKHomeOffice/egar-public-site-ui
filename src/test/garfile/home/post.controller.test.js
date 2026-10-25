@@ -10,7 +10,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const createGarApi = require('../../../common/services/createGarApi.js');
+const createGarApi = require('../../../common/services/data-access/createGarApi.js');
 
 const controller = require('../../../app/garfile/home/post.controller');
 

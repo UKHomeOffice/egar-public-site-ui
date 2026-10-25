@@ -9,7 +9,7 @@ const tokenService = require('../../../common/services/create-token');
 
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const controller = require('../../../app/verify/organisationinvite/get.controller');
-const verifyUserService = require('../../../common/services/verificationApi');
+const verifyUserService = require('../../../common/services/data-access/verificationApi');
 
 describe('Verify Organisation Invite Get Controller', () => {
   let req;

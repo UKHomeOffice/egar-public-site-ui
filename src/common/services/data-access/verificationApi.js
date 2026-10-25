@@ -1,4 +1,4 @@
-const logger = require('../utils/logger')(__filename);
+const logger = require('../../utils/logger')(__filename);
 const { parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
 
 class VerificationApi {
@@ -28,7 +28,7 @@ class VerificationApi {
 
 async function callConfiguredVerificationApi(method, args, parseJson = false) {
   try {
-    const result = await require('./dataAccessApi').verificationApi[method](...args);
+    const result = await require('../dataAccessApi').verificationApi[method](...args);
     const body = unwrapResponse(result);
     return parseJson ? parseJsonResponse(body) : serializeResponse(body);
   } catch (error) {

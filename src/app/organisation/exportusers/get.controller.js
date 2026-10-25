@@ -1,5 +1,5 @@
 const CookieModel = require('../../../common/models/Cookie.class');
-const orgApi = require('../../../common/services/organisationApi');
+const orgApi = require('../../../common/services/data-access/organisationApi');
 const createArrayCsvStringifier = require('csv-writer').createArrayCsvStringifier;
 
 const writeUsersAsCSVtoResponse = (res, orgUsers, orgName) => {

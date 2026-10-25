@@ -1,4 +1,4 @@
-const logger = require('../utils/logger')(__filename);
+const logger = require('../../utils/logger')(__filename);
 const { parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
 
 class UserManageApi {
@@ -76,7 +76,7 @@ class UserManageApi {
 
 async function callConfiguredUserApi(method, args, parseJson = false) {
   try {
-    const result = await require('./dataAccessApi').userManageApi[method](...args);
+    const result = await require('../dataAccessApi').userManageApi[method](...args);
     return parseJson ? parseJsonResponse(result) : serializeResponse(unwrapResponse(result));
   } catch (error) {
     if (error?.type === 'http_error') {

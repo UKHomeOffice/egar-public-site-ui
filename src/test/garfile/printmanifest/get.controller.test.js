@@ -37,7 +37,7 @@ describe('GAR Print Manifest Get Controller', () => {
 
     controller = proxyquire('../../../app/garfile/printmanifest/get.controller', {
       '../../../common/models/Cookie.class': sinon.stub().returns(cookieInstance),
-      '../../../common/services/garApi': garApiStub,
+      '../../../common/services/data-access/garApi': garApiStub,
     });
   });
 

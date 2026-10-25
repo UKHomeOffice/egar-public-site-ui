@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('./global.test');
 chai.use(sinonChai);
-const personApi = require('../common/services/personApi');
+const personApi = require('../common/services/data-access/personApi');
 const dataAccessApi = require('../common/services/dataAccessApi');
 const { HttpClient } = require('../common/services/httpClient');
 

@@ -8,8 +8,8 @@ const i18n = require('i18n');
 const path = require('path');
 
 require('../../global.test');
-const craftApi = require('../../../common/services/craftApi');
-const garApi = require('../../../common/services/garApi');
+const craftApi = require('../../../common/services/data-access/craftApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');

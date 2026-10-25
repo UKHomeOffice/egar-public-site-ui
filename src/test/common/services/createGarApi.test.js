@@ -3,7 +3,7 @@ const { expect } = require('chai');
 
 require('../../global.test');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const createGarApi = require('../../../common/services/createGarApi');
+const createGarApi = require('../../../common/services/data-access/createGarApi');
 
 describe('Create GAR API Service', () => {
   afterEach(() => sinon.restore());

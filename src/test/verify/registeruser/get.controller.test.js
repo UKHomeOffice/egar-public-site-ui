@@ -6,7 +6,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
-const verifyUserService = require('../../../common/services/verificationApi');
+const verifyUserService = require('../../../common/services/data-access/verificationApi');
 
 const controller = require('../../../app/verify/registeruser/get.controller');
 

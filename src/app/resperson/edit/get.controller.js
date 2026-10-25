@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const resPersonApi = require('../../../common/services/resPersonApi');
+const resPersonApi = require('../../../common/services/data-access/resPersonApi');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 
 module.exports = (req, res) => {

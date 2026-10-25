@@ -1,4 +1,4 @@
-const logger = require('../utils/logger')(__filename);
+const logger = require('../../utils/logger')(__filename);
 const { callConfiguredApi } = require('./legacyApiResponse');
 
 class ResPersonApi {
@@ -28,7 +28,7 @@ class ResPersonApi {
 }
 
 async function callConfiguredResPersonApi(method, args) {
-  const api = require('./dataAccessApi').resPersonApi;
+  const api = require('../dataAccessApi').resPersonApi;
   return callConfiguredApi(api, method, args, logger, 'Responsible person API request failed');
 }
 

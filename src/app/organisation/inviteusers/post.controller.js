@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
-const userApi = require('../../../common/services/userManageApi');
+const userApi = require('../../../common/services/data-access/userManageApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 module.exports = (req, res) => {

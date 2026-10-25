@@ -5,8 +5,8 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const craftApi = require('../../../common/services/craftApi');
-const personApi = require('../../../common/services/personApi');
+const craftApi = require('../../../common/services/data-access/craftApi');
+const personApi = require('../../../common/services/data-access/personApi');
 
 const settings = require('../../../common/config/index');
 const configMock = {

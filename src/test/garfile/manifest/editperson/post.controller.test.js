@@ -12,7 +12,7 @@ const documenttype = require('../../../../common/seeddata/egar_saved_people_trav
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
 const validator = require('../../../../common/utils/validator');
 const ValidationRule = require('../../../../common/models/ValidationRule.class');
-const garApi = require('../../../../common/services/garApi');
+const garApi = require('../../../../common/services/data-access/garApi');
 
 const controller = require('../../../../app/garfile/manifest/editperson/post.controller');
 

@@ -3,7 +3,7 @@ const { expect } = require('chai');
 
 require('../../global.test');
 
-const fileUploadApi = require('../../../common/services/fileUploadApi');
+const fileUploadApi = require('../../../common/services/data-access/fileUploadApi');
 const { FileUploadApi } = fileUploadApi;
 const { API_BASE, API_VERSION } = require('../../../common/config');
 

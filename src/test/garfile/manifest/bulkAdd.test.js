@@ -4,7 +4,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const personApi = require('../../../common/services/personApi');
+const personApi = require('../../../common/services/data-access/personApi');
 
 const { getDetailsByIds } = require('../../../app/garfile/manifest/bulkAdd');
 

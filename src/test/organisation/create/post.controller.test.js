@@ -9,7 +9,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const orgApi = require('../../../common/services/organisationApi');
+const orgApi = require('../../../common/services/data-access/organisationApi');
 
 const controller = require('../../../app/organisation/create/post.controller');
 

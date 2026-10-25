@@ -1,5 +1,5 @@
-const personApi = require('../../../common/services/personApi');
-const garApi = require('../../../common/services/garApi');
+const personApi = require('../../../common/services/data-access/personApi');
+const garApi = require('../../../common/services/data-access/garApi');
 
 function getDetailsByIds(ids, userId) {
   return new Promise((resolve, reject) => {

@@ -1,4 +1,4 @@
-const logger = require('../utils/logger')(__filename);
+const logger = require('../../utils/logger')(__filename);
 
 function serializeResponse(response) {
   if (response && typeof response === 'object' && !Array.isArray(response) && 'ok' in response) {
@@ -11,7 +11,7 @@ function serializeResponse(response) {
 module.exports = {
   async createGar(userId) {
     try {
-      const result = await require('./dataAccessApi').garApi.createGar(userId);
+      const result = await require('../dataAccessApi').garApi.createGar(userId);
       return serializeResponse(result);
     } catch (err) {
       logger.error('Failed to create GAR', { userId, errorMessage: err?.message, stack: err?.stack });

@@ -7,8 +7,8 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const craftApi = require('../../../common/services/craftApi');
+const garApi = require('../../../common/services/data-access/garApi');
+const craftApi = require('../../../common/services/data-access/craftApi');
 
 const controller = require('../../../app/garfile/craft/get.controller');
 

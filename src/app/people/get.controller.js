@@ -1,5 +1,5 @@
 const logger = require('../../common/utils/logger')(__filename);
-const personApi = require('../../common/services/personApi');
+const personApi = require('../../common/services/data-access/personApi');
 const CookieModel = require('../../common/models/Cookie.class');
 const { Manifest } = require('../../common/models/Manifest.class');
 

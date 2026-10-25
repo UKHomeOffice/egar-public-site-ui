@@ -5,7 +5,7 @@ chai.use(require('sinon-chai'));
 
 require('../../global.test');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const registerApi = require('../../../common/services/createUserApi');
+const registerApi = require('../../../common/services/data-access/createUserApi');
 
 describe('CreateUserApi', () => {
   let client;

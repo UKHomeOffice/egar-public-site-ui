@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const orgApi = require('../../common/services/organisationApi');
+const orgApi = require('../../common/services/data-access/organisationApi');
 
 const settings = require('../../common/config/index');
 const configMock = {

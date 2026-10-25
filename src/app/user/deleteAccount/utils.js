@@ -1,7 +1,7 @@
 const i18n = require('i18n');
 const emailService = require('../../../common/services/sendEmail');
-const userApi = require('../../../common/services/userManageApi');
-const organisationApi = require('../../../common/services/organisationApi');
+const userApi = require('../../../common/services/data-access/userManageApi');
+const organisationApi = require('../../../common/services/data-access/organisationApi');
 
 const settings = require('../../../common/config/index');
 

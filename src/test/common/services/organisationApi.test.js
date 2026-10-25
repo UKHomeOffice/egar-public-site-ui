@@ -4,7 +4,7 @@ const sinon = require('sinon');
 chai.use(require('sinon-chai'));
 const { expect } = chai;
 require('../../global.test');
-const organisationApiService = require('../../../common/services/organisationApi');
+const organisationApiService = require('../../../common/services/data-access/organisationApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const orgId = 'organisation-1';

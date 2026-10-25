@@ -6,7 +6,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const garApi = require('../../../common/services/garApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/garfile/view/post.controller');

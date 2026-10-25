@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const userApi = require('../../../common/services/userManageApi');
+const userApi = require('../../../common/services/data-access/userManageApi');
 const { MAX_STRING_LENGTH } = require('../../../common/config/index');
 const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
 

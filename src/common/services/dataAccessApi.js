@@ -5,15 +5,15 @@ const { API_BASE } = settings;
 const { API_VERSION } = settings;
 const BASE_URL = new URL(API_VERSION, API_BASE).href;
 const { HttpClient } = require('./httpClient');
-const garApi = require('./garApi');
-const organisationApi = require('./organisationApi');
-const personApi = require('./personApi');
-const craftApi = require('./craftApi');
-const resPersonApi = require('./resPersonApi');
-const userManageApi = require('./userManageApi');
-const createUserApi = require('./createUserApi');
-const tokenApi = require('./tokenApi');
-const verificationApi = require('./verificationApi');
+const garApi = require('./data-access/garApi');
+const organisationApi = require('./data-access/organisationApi');
+const personApi = require('./data-access/personApi');
+const craftApi = require('./data-access/craftApi');
+const resPersonApi = require('./data-access/resPersonApi');
+const userManageApi = require('./data-access/userManageApi');
+const createUserApi = require('./data-access/createUserApi');
+const tokenApi = require('./data-access/tokenApi');
+const verificationApi = require('./data-access/verificationApi');
 
 const client = new HttpClient({ baseUrl: BASE_URL });
 

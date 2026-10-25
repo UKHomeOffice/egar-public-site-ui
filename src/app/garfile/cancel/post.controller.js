@@ -1,6 +1,6 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 

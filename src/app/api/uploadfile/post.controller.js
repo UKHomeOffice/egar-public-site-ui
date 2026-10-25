@@ -1,10 +1,10 @@
 const fileType = require('file-type');
 
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const transformers = require('../../../common/utils/transformers');
 const clamAVService = require('../../../common/services/clamAVService');
-const uploadFile = require('../../../common/services/fileUploadApi');
+const uploadFile = require('../../../common/services/data-access/fileUploadApi');
 const config = require('../../../common/config/index');
 const { isValidFileMime } = require('../../../common/utils/validator');
 

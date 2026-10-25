@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const orgApi = require('../../../common/services/organisationApi');
+const orgApi = require('../../../common/services/data-access/organisationApi');
 const { getRolesForAssigning } = require('../../../common/utils/utils');
 
 module.exports = (req, res) => {

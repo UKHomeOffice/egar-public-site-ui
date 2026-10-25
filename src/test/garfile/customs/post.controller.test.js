@@ -6,7 +6,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const garApi = require('../../../common/services/garApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const emailService = require('../../../common/services/sendEmail');
 const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options');

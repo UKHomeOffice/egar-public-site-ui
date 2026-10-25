@@ -3,7 +3,7 @@ const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const craftApi = require('../../../common/services/craftApi');
+const craftApi = require('../../../common/services/data-access/craftApi');
 const craftValidations = require('../../../app/garfile/craft/validations');
 
 module.exports = (req, res) => {

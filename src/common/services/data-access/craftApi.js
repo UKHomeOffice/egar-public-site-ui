@@ -1,4 +1,4 @@
-const logger = require('../utils/logger')(__filename);
+const logger = require('../../utils/logger')(__filename);
 const { callConfiguredApi } = require('./legacyApiResponse');
 
 class CraftApi {
@@ -52,7 +52,7 @@ class CraftApi {
 }
 
 async function callConfiguredCraftApi(method, args) {
-  const api = require('./dataAccessApi').craftApi;
+  const api = require('../dataAccessApi').craftApi;
   return callConfiguredApi(api, method, args, logger, 'Craft API request failed');
 }
 

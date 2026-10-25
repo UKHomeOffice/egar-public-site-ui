@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const orgApii = require('../../../common/services/organisationApi');
+const orgApii = require('../../../common/services/data-access/organisationApi');
 const controller = require('../../../app/organisation/searchusers/get.controller');
 
 describe('Organisation Search Users Get Controller', () => {

@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 
-const resPersonApi = require('../../../common/services/resPersonApi');
+const resPersonApi = require('../../../common/services/data-access/resPersonApi');
 
 const controller = require('../../../app/resperson/delete/get.controller');
 

@@ -8,8 +8,8 @@ const { garPeople, invalidPassengersAndCrew } = require('../../fixtures');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const personApi = require('../../../common/services/personApi');
+const garApi = require('../../../common/services/data-access/garApi');
+const personApi = require('../../../common/services/data-access/personApi');
 const manifestUtil = require('../../../app/garfile/manifest/bulkAdd');
 
 const controller = require('../../../app/garfile/manifest/post.controller');

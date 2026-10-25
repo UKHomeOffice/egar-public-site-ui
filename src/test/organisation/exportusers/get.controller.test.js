@@ -9,7 +9,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const controller = require('../../../app/organisation/exportusers/get.controller');
-const orgApi = require('../../../common/services/organisationApi');
+const orgApi = require('../../../common/services/data-access/organisationApi');
 
 describe('Organisation Export User Controller', () => {
   let req;

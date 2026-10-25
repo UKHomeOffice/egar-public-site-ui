@@ -11,7 +11,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
-const personApi = require('../../../common/services/personApi');
+const personApi = require('../../../common/services/data-access/personApi');
 
 const controller = require('../../../app/people/edit/get.controller');
 

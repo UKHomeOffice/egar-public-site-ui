@@ -1,5 +1,5 @@
 const CookieModel = require('../../common/models/Cookie.class');
-const orgApi = require('../../common/services/organisationApi');
+const orgApi = require('../../common/services/data-access/organisationApi');
 const logger = require('../../common/utils/logger')(__filename);
 const { permissionLevels } = require('../../common/utils/permissionLevels');
 const NUM_OF_USERS = 5;

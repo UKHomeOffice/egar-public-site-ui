@@ -3,7 +3,7 @@ const { expect } = require('chai');
 
 require('./global.test');
 const dataAccessApi = require('../common/services/dataAccessApi');
-const verificationApi = require('../common/services/verificationApi');
+const verificationApi = require('../common/services/data-access/verificationApi');
 
 describe('VerificationApi', () => {
   let client;

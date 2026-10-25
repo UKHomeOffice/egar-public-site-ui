@@ -1,4 +1,4 @@
-const logger = require('../utils/logger')(__filename);
+const logger = require('../../utils/logger')(__filename);
 const { serializeResponse } = require('./legacyApiResponse');
 
 class CreateUserApi {
@@ -20,7 +20,7 @@ class CreateUserApi {
 
 async function post(firstName, lastName, email, tokenId = null) {
   try {
-    return serializeResponse(await require('./dataAccessApi').createUserApi.post(firstName, lastName, email, tokenId));
+    return serializeResponse(await require('../dataAccessApi').createUserApi.post(firstName, lastName, email, tokenId));
   } catch (error) {
     if (error?.type === 'http_error') {
       return serializeResponse(error.body);

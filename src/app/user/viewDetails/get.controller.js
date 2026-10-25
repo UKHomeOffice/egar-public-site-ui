@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const personApi = require('../../../common/services/personApi');
+const personApi = require('../../../common/services/data-access/personApi');
 const { ONE_LOGIN_ACCOUNT_URL } = require('../../../common/config');
 
 module.exports = (req, res) => {

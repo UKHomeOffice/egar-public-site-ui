@@ -2,8 +2,8 @@ const i18n = require('i18n');
 const XLSX = require('xlsx');
 
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
-const createGarApi = require('../../../common/services/createGarApi.js');
+const garApi = require('../../../common/services/data-access/garApi');
+const createGarApi = require('../../../common/services/data-access/createGarApi.js');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const { validations } = require('./validations');

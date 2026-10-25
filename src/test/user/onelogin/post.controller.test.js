@@ -6,7 +6,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
+const userApi = require('../../../common/services/data-access/userManageApi');
 const sendEmail = require('../../../common/services/sendEmail');
 const validator = require('../../../common/utils/validator');
 const {
@@ -17,7 +17,7 @@ const {
 
 // Import controller
 const postController = require('../../../app/user/onelogin/post.controller');
-const getUserInviteToken = require('../../../common/services/verificationApi');
+const getUserInviteToken = require('../../../common/services/data-access/verificationApi');
 
 describe('User OneLogin Post Controller', () => {
   let req;

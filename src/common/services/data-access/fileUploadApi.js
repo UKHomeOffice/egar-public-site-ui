@@ -1,6 +1,6 @@
-const logger = require('../utils/logger')(__filename);
-const { API_BASE, API_VERSION } = require('../config');
-const { HttpClient } = require('./httpClient');
+const logger = require('../../utils/logger')(__filename);
+const { API_BASE, API_VERSION } = require('../../config');
+const { HttpClient } = require('../httpClient');
 const { serializeResponse } = require('./legacyApiResponse');
 
 class FileUploadApi {

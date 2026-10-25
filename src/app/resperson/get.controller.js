@@ -1,6 +1,6 @@
 const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
-const resPersonApi = require('../../common/services/resPersonApi');
+const resPersonApi = require('../../common/services/data-access/resPersonApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);

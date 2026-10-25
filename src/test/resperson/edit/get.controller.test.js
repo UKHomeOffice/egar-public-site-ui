@@ -4,7 +4,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 const CookieModel = require('../../../common/models/Cookie.class');
-const resPersonApi = require('../../../common/services/resPersonApi');
+const resPersonApi = require('../../../common/services/data-access/resPersonApi');
 const controller = require('../../../app/resperson/edit/get.controller');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const utils = require('../../../common/utils/utils');

@@ -5,8 +5,8 @@ const sinonChai = require('sinon-chai');
 const config = require('../../../common/config/index');
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
-const verification = require('../../../common/services/verificationApi');
+const userApi = require('../../../common/services/data-access/userManageApi');
+const verification = require('../../../common/services/data-access/verificationApi');
 
 require('../../global.test');
 

@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
-const verifyUserService = require('../../../common/services/verificationApi');
+const verifyUserService = require('../../../common/services/data-access/verificationApi');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising

@@ -5,7 +5,7 @@ const validations = require('../validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const utils = require('../../../common/utils/utils');
-const resPersonApi = require('../../../common/services/resPersonApi');
+const resPersonApi = require('../../../common/services/data-access/resPersonApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);

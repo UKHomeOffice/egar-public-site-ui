@@ -8,8 +8,8 @@ const { savedPeople, garPeople, flaggedSavedPeople } = require('../../fixtures')
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/personApi');
-const garApi = require('../../../common/services/garApi');
+const personApi = require('../../../common/services/data-access/personApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/garfile/manifest/get.controller');

@@ -7,7 +7,7 @@ const sinonChai = require('sinon-chai');
 
 const i18n = require('i18n');
 require('../../global.test');
-const craftApi = require('../../../common/services/craftApi');
+const craftApi = require('../../../common/services/data-access/craftApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');

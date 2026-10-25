@@ -6,7 +6,7 @@ chai.use(require('sinon-chai'));
 require('../../global.test');
 const config = require('../../../common/config/index');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const tokenApi = require('../../../common/services/tokenApi');
+const tokenApi = require('../../../common/services/data-access/tokenApi');
 const genToken = require('../../../common/services/create-token');
 
 describe('TokenApi', () => {

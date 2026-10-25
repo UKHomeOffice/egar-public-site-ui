@@ -1,5 +1,5 @@
 const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/personApi');
+const personApi = require('../../../common/services/data-access/personApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const createArrayCsvStringifier = require('csv-writer').createArrayCsvStringifier;
 

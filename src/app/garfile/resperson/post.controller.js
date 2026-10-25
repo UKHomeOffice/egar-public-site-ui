@@ -4,8 +4,8 @@ const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_
 const utils = require('../../../common/utils/utils');
 const validator = require('../../../common/utils/validator');
 const validations = require('../../resperson/validations');
-const resPersonApi = require('../../../common/services/resPersonApi');
-const garApi = require('../../../common/services/garApi');
+const resPersonApi = require('../../../common/services/data-access/resPersonApi');
+const garApi = require('../../../common/services/data-access/garApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);

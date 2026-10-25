@@ -1,8 +1,8 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const craftApi = require('../../../common/services/craftApi');
+const garApi = require('../../../common/services/data-access/garApi');
+const craftApi = require('../../../common/services/data-access/craftApi');
 const validationList = require('./validations');
 const pagination = require('../../../common/utils/pagination');
 

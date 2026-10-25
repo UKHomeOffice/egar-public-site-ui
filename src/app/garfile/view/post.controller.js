@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const airportValidation = require('../../../common/utils/airportValidation');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const garApi = require('../../../common/services/garApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
 

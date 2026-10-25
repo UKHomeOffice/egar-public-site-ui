@@ -7,7 +7,7 @@ const sinonChai = require('sinon-chai');
 
 require('../../../global.test');
 const CookieModel = require('../../../../common/models/Cookie.class');
-const garApi = require('../../../../common/services/garApi');
+const garApi = require('../../../../common/services/data-access/garApi');
 
 const controller = require('../../../../app/garfile/manifest/deleteperson/post.controller');
 

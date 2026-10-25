@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { parseJsonResponse, unwrapResponse } = require('../../../common/services/legacyApiResponse');
+const { parseJsonResponse, unwrapResponse } = require('../../../common/services/data-access/legacyApiResponse');
 
 describe('legacyApiResponse', () => {
   describe('unwrapResponse', () => {

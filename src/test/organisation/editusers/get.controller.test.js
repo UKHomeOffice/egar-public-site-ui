@@ -6,7 +6,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const roles = require('../../../common/seeddata/egar_user_roles');
-const orgApi = require('../../../common/services/organisationApi');
+const orgApi = require('../../../common/services/data-access/organisationApi');
 
 const controller = require('../../../app/organisation/editusers/get.controller');
 

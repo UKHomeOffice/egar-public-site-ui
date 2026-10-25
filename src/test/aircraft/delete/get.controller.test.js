@@ -4,7 +4,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const craftApi = require('../../../common/services/craftApi');
+const craftApi = require('../../../common/services/data-access/craftApi');
 
 const controller = require('../../../app/aircraft/delete/get.controller');
 

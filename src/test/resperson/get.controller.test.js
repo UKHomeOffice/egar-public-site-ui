@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const resPersonApi = require('../../common/services/resPersonApi');
+const resPersonApi = require('../../common/services/data-access/resPersonApi');
 
 const controller = require('../../app/resperson/get.controller');
 

@@ -1,4 +1,4 @@
-const logger = require('../../common/utils/logger')(__filename);
+const logger = require('../../utils/logger')(__filename);
 
 function serializeResponse(response) {
   if (typeof response === 'string') {
@@ -74,7 +74,7 @@ class OrganisationApi {
 
 async function callConfiguredOrganisationApi(method, args) {
   try {
-    const result = await require('./dataAccessApi').organisationApi[method](...args);
+    const result = await require('../dataAccessApi').organisationApi[method](...args);
     return serializeResponse(result);
   } catch (err) {
     logger.error('Organisation API request failed', {

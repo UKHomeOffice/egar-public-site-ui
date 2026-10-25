@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 require('../../global.test');
-const garApiService = require('../../../common/services/garApi');
+const garApiService = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const garId = 'c2d86db6-006c-4f5e-9e22-e039c8b1ddc7';

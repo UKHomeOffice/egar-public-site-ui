@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const organisationApi = require('../../../common/services/organisationApi');
+const organisationApi = require('../../../common/services/data-access/organisationApi');
 
 module.exports = (req, res) => {
   const { orgName } = req.body;

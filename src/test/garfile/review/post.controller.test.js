@@ -8,7 +8,7 @@ const sinonChai = require('sinon-chai');
 const moment = require('moment');
 
 require('../../global.test');
-const garApi = require('../../../common/services/garApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');

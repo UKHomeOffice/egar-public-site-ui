@@ -1,6 +1,6 @@
-const logger = require('../utils/logger')(__filename);
-const autocompleteUtil = require('../utils/autocomplete');
-const travelPermissionCodes = require('../utils/travel_permission_codes.json');
+const logger = require('../../utils/logger')(__filename);
+const autocompleteUtil = require('../../utils/autocomplete');
+const travelPermissionCodes = require('../../utils/travel_permission_codes.json');
 
 function getResponseErrorMessage(err) {
   return {
@@ -175,7 +175,7 @@ class GarApi {
 
 async function callConfiguredGarApi(method, args, { count = false, progress = false } = {}) {
   try {
-    const result = await require('./dataAccessApi').garApi[method](...args);
+    const result = await require('../dataAccessApi').garApi[method](...args);
 
     // GAR reads resolve HTTP error envelopes, so they bypass the catch below.
     // Preserve legacy error bodies before success serialization can wrap them as progress.

@@ -8,8 +8,8 @@ const XLSX = require('xlsx');
 require('../../global.test');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const createGarApi = require('../../../common/services/createGarApi.js');
-const garApi = require('../../../common/services/garApi');
+const createGarApi = require('../../../common/services/data-access/createGarApi.js');
+const garApi = require('../../../common/services/data-access/garApi');
 const clamAVService = require('../../../common/services/clamAVService');
 
 const path = require('path');

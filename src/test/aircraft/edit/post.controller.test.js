@@ -10,7 +10,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
-const craftApi = require('../../../common/services/craftApi');
+const craftApi = require('../../../common/services/data-access/craftApi');
 
 const controller = require('../../../app/aircraft/edit/post.controller');
 

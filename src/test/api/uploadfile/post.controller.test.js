@@ -4,9 +4,9 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const garApi = require('../../../common/services/garApi');
+const garApi = require('../../../common/services/data-access/garApi');
 const clamAVService = require('../../../common/services/clamAVService');
-const fileUploadApi = require('../../../common/services/fileUploadApi');
+const fileUploadApi = require('../../../common/services/data-access/fileUploadApi');
 
 const controller = require('../../../app/api/uploadfile/post.controller');
 
