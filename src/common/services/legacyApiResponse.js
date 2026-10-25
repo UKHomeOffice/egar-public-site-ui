@@ -35,7 +35,7 @@ async function callConfiguredApi(api, method, args, logger, errorMessage) {
 
 function apiPath(endpoint) {
   const url = new URL(endpoint);
-  return `${url.pathname}${url.search}`;
+  return url.href;
 }
 
 module.exports = { apiPath, callConfiguredApi, serializeResponse };
