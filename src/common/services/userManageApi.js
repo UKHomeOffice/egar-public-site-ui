@@ -1,6 +1,6 @@
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
-const { apiPath, serializeResponse } = require('./legacyApiResponse');
+const { apiPath, parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
 
 class UserManageApi {
   constructor(client) {
@@ -69,20 +69,6 @@ class UserManageApi {
 
     return this.client.post(apiPath(endpoints.createUser()), requestBody);
   }
-}
-
-function unwrapResponse(response) {
-  if (response && typeof response === 'object' && !Array.isArray(response) && 'ok' in response) {
-    const body = { ...response };
-    delete body.ok;
-    return body;
-  }
-  return response;
-}
-
-function parseJsonResponse(response) {
-  const body = unwrapResponse(response);
-  return typeof body === 'string' ? JSON.parse(body) : body;
 }
 
 async function callConfiguredUserApi(method, args, parseJson = false) {

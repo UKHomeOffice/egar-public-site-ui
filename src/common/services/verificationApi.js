@@ -1,6 +1,6 @@
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
-const { apiPath, serializeResponse } = require('./legacyApiResponse');
+const { apiPath, parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
 
 class VerificationApi {
   constructor(client) {
@@ -25,20 +25,6 @@ class VerificationApi {
       query: { token_id: tokenId },
     });
   }
-}
-
-function unwrapResponse(response) {
-  if (response && typeof response === 'object' && !Array.isArray(response) && 'ok' in response) {
-    const body = { ...response };
-    delete body.ok;
-    return body;
-  }
-  return response;
-}
-
-function parseJsonResponse(response) {
-  const body = unwrapResponse(response);
-  return typeof body === 'string' ? JSON.parse(body) : body;
 }
 
 async function callConfiguredVerificationApi(method, args, parseJson = false) {
