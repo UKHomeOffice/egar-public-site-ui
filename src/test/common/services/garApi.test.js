@@ -267,6 +267,27 @@ describe('GarApi', () => {
     expect(getStub.calledOnceWithExactly(garId)).to.equal(true);
   });
 
+  [
+    ['get', [garId]],
+    ['getPeople', [garId]],
+    ['getSupportingDocs', [garId]],
+    ['getGars', [userId, 'Individual', pages]],
+    ['getGarCheckinProgress', [garId]],
+  ].forEach(([method, args]) => {
+    it(`returns only the serialized HTTP error body through the legacy ${method} export`, async () => {
+      const error = Object.assign(new Error('Unavailable'), {
+        type: 'http_error',
+        status: 503,
+        statusText: 'Service Unavailable',
+        body: { message: 'Maintenance' },
+      });
+      const client = { get: sinon.stub().rejects(error) };
+      sinon.stub(dataAccessApi, 'garApi').value(new garApiService.GarApi(client));
+
+      expect(await garApiService[method](...args)).to.equal(JSON.stringify(error.body));
+    });
+  });
+
   it('preserves the legacy JSON object and body-string boundaries for counts and HTTP errors', async () => {
     const countStub = sinon.stub(dataAccessApi.garApi, 'getGarsCount').resolves('{"ok":true,"count":3}');
     expect(await garApiService.getGarsCount(userId, 'Individual')).to.deep.equal({ count: 3 });

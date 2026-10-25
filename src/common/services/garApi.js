@@ -177,6 +177,12 @@ async function callConfiguredGarApi(method, args, { count = false, progress = fa
   try {
     const result = await require('./dataAccessApi').garApi[method](...args);
 
+    // GAR reads resolve HTTP error envelopes, so they bypass the catch below.
+    // Preserve legacy error bodies before success serialization can wrap them as progress.
+    if (result && typeof result === 'object' && 'statusCode' in result && 'body' in result) {
+      return count ? parseJsonResponse(result.body) : serializeResponse(result.body);
+    }
+
     if (count) {
       return normalizeClientResponse(parseJsonResponse(result));
     }
