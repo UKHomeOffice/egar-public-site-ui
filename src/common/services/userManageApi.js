@@ -83,7 +83,7 @@ async function callConfiguredUserApi(method, args, parseJson = false) {
     logger.error('User API request failed', {
       operation: method,
       errorMessage: error?.message,
-      statusCode: error?.status,
+      status: error?.status,
     });
     throw error;
   }

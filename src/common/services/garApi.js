@@ -4,7 +4,7 @@ const travelPermissionCodes = require('../utils/travel_permission_codes.json');
 
 function getResponseErrorMessage(err) {
   return {
-    statusCode: err?.status ?? err?.statusCode,
+    statusCode: err?.status,
     statusMessage: err?.statusText ?? err?.statusMessage,
     body: err?.body,
   };
@@ -14,7 +14,7 @@ function logHttpError(operation, resourceId, err) {
   logger.error('GAR API request failed', {
     operation,
     resourceId,
-    statusCode: err?.status ?? err?.statusCode,
+    status: err?.status,
   });
 }
 
@@ -177,6 +177,8 @@ async function callConfiguredGarApi(method, args, { count = false, progress = fa
   try {
     const result = await require('./dataAccessApi').garApi[method](...args);
 
+    // GAR reads resolve HTTP error envelopes, so they bypass the catch below.
+    // Preserve legacy error bodies before success serialization can wrap them as progress.
     if (result && typeof result === 'object' && 'statusCode' in result && 'body' in result) {
       return count ? parseJsonResponse(result.body) : serializeResponse(result.body);
     }

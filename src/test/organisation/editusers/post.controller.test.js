@@ -11,11 +11,11 @@ const orgApi = require('../../../common/services/organisationApi');
 let roles = require('../../../common/seeddata/egar_user_roles.json');
 
 const controller = require('../../../app/organisation/editusers/post.controller');
-let { cookie } = require('request');
 
 describe('Organisation Edit Users Post Controller', () => {
   let req;
   let res;
+  let cookie;
   let orgApiStub;
   let sessionSaveStub;
   const nonAdminRoles = [

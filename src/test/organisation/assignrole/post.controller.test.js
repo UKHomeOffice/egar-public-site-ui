@@ -14,11 +14,11 @@ const config = require('../../../common/config/index');
 let roles = require('../../../common/seeddata/egar_user_roles.json');
 
 const controller = require('../../../app/organisation/assignrole/post.controller');
-let { cookie } = require('request');
 
 describe('Organisation Assign Role Post Controller', () => {
   let req;
   let res;
+  let cookie;
   let tokenServiceStub;
   let tokenApiStub;
   let emailServiceStub;

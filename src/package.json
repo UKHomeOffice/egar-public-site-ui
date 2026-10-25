@@ -53,7 +53,6 @@
     "notifications-node-client": "^7.0.6",
     "nunjucks": "^3.2.4",
     "pino": "^9.10.0",
-    "request": "2.88.2",
     "serve-favicon": "^2.5.0",
     "throng": "^4.0.0",
     "uuid": "11.1.1",
