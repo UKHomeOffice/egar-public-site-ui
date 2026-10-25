@@ -1,70 +1,34 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const { URL } = require('url');
 
 require('../../global.test');
-
-const config = require('../../../common/config/index');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
+const createGarApi = require('../../../common/services/createGarApi');
 
 describe('Create GAR API Service', () => {
-  const { API_VERSION, API_BASE } = config;
-  const BASE_URL = new URL(API_VERSION, API_BASE).href;
+  afterEach(() => sinon.restore());
 
-  beforeEach(() => {
-    chai.use(sinonChai);
+  it('returns the created GAR response from the configured GarApi as JSON', async () => {
+    const response = { ok: true, garId: 'NEW-ID' };
+    const createGarStub = sinon.stub(dataAccessApi.garApi, 'createGar').resolves(response);
+
+    expect(await createGarApi.createGar('USER-ID-1')).to.equal(JSON.stringify({ garId: 'NEW-ID' }));
+    expect(createGarStub.calledOnceWithExactly('USER-ID-1')).to.equal(true);
   });
 
-  afterEach(() => {
-    sinon.restore();
+  it('preserves the existing undefined response when GAR creation fails', async () => {
+    const createGarStub = sinon.stub(dataAccessApi.garApi, 'createGar').rejects(new Error('Unavailable'));
+
+    expect(await createGarApi.createGar('USER-ID-1')).to.be.undefined;
+    expect(createGarStub.calledOnceWithExactly('USER-ID-1')).to.equal(true);
   });
 
-  it('should do nothing if request throws error', async () => {
-    const requestStub = sinon.stub().throws('request.post Throw Error');
-    const proxiedService = proxyquire('../../../common/services/createGarApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
+  it('returns an HTTP error body in the legacy JSON string shape', async () => {
+    const error = new Error('GAR creation failed');
+    Object.assign(error, { type: 'http_error', body: { message: 'User cannot create GAR' } });
+    const createGarStub = sinon.stub(dataAccessApi.garApi, 'createGar').rejects(error);
 
-    await proxiedService.createGar('USER-ID-1');
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'application/json' },
-      url: `${BASE_URL}/user/USER-ID-1/gar`,
-    });
-  });
-
-  it('should reject if error present', async () => {
-    const requestStub = sinon.stub().yields('Example Error', null, null);
-    const proxiedService = proxyquire('../../../common/services/createGarApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
-
-    const result = await proxiedService.createGar('USER-ID-1');
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'application/json' },
-      url: `${BASE_URL}/user/USER-ID-1/gar`,
-    });
-    expect(result).to.be.undefined;
-  });
-
-  it('should return if ok', async () => {
-    const apiResponse = {
-      garId: 'NEW-ID',
-    };
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/createGarApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
-
-    const result = await proxiedService.createGar('USER-ID-1');
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'application/json' },
-      url: `${BASE_URL}/user/USER-ID-1/gar`,
-    });
-    expect(result).to.eql(JSON.stringify(apiResponse));
+    expect(await createGarApi.createGar('USER-ID-1')).to.equal(JSON.stringify(error.body));
+    expect(createGarStub.calledOnceWithExactly('USER-ID-1')).to.equal(true);
   });
 });
