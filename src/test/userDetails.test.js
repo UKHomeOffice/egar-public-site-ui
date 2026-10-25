@@ -1,27 +1,26 @@
+const sinon = require('sinon');
 const { expect } = require('chai');
-const nock = require('nock');
 
 require('./global.test');
-const endpoints = require('../common/config/endpoints');
-
+const dataAccessApi = require('../common/services/dataAccessApi');
 const userManageApi = require('../common/services/userManageApi');
 
-const BASE_URL = endpoints.baseUrl();
-
 describe('LoginService', () => {
-  const email = 'test@mail.com';
-  const user = { firstName: 'Shinobu', lastName: 'Oshino', email: 'soshino@email.com' };
+  afterEach(() => sinon.restore());
 
-  beforeEach(() => {
-    nock(BASE_URL).get(`/user/${email}`).reply(200, user);
-  });
+  it('gets user details through the configured Fetch client', async () => {
+    sinon.stub(dataAccessApi.userManageApi, 'getDetails').resolves({
+      ok: true,
+      firstName: 'Shinobu',
+      lastName: 'Oshino',
+      email: 'test@mail.com',
+    });
 
-  it('Should get the user details', (done) => {
-    userManageApi.getDetails(email).then((response) => {
-      const responseObj = response;
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['firstName', 'lastName', 'email']);
-      done();
+    const user = await userManageApi.getDetails('test@mail.com');
+    expect(user).to.deep.equal({
+      firstName: 'Shinobu',
+      lastName: 'Oshino',
+      email: 'test@mail.com',
     });
   });
 });

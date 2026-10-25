@@ -1,163 +1,58 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const nock = require('nock');
+const { expect } = chai;
+chai.use(require('sinon-chai'));
 
 require('../../global.test');
 const endpoints = require('../../../common/config/endpoints');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const registerApi = require('../../../common/services/createUserApi');
 
-const BASE_URL = endpoints.baseUrl();
+describe('CreateUserApi', () => {
+  let client;
+  let api;
 
-describe('UserCreationService', () => {
-  const user = {
-    firstName: 'Shinobu',
-    lastName: 'Oshino',
-    email: 'soshino@email.com',
-  };
-
-  it('Should create a user and return the tokenId', (done) => {
-    nock(BASE_URL).post('/user/register', user).reply(201, { tokenId: '43f70daa-dc2e-4c88-af9c-f0dc1ff13a8e' });
-
-    registerApi.post(user.firstName, user.lastName, user.email).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['tokenId']);
-      done();
-    });
-  });
-
-  it('Should not create a user that already exists', (done) => {
-    nock(BASE_URL).post('/user/register', user).reply(400, { message: 'User already registered' });
-
-    registerApi.post(user.firstName, user.lastName, user.email).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['message']);
-      expect(responseObj.message).to.eq('User already registered');
-      done();
-    });
-  });
-
-  it('Should enforce mandatory fields', (done) => {
-    const badUser = {
-      firstName: 'Shinobu',
-      lastName: 'Oshino',
-    };
-    nock(BASE_URL)
-      .post('/user/register', badUser)
-      .reply(400, { message: { email: 'This field is required' } });
-
-    registerApi.post(user.firstName, user.lastName).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['message']);
-      expect(responseObj.message.email).to.eq('This field is required');
-      done();
-    });
-  });
-
-  it('Should successfully create an organisational user', (done) => {
-    const orgUser = {
-      firstName: 'Shinobu',
-      lastName: 'Oshino',
-      email: 'soshino@email.com',
-      tokenId: '1be8ed60-fd12-400b-9dc1-350447272199',
-    };
-
-    nock(BASE_URL).post('/user/register', orgUser).reply(201, { tokenId: '43f70daa-dc2e-4c88-af9c-f0dc1ff13aae' });
-
-    registerApi.post(orgUser.firstName, orgUser.lastName, orgUser.email, orgUser.tokenId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['tokenId']);
-      done();
-    });
-  });
-});
-
-describe('Create User API Service', () => {
   beforeEach(() => {
-    chai.use(sinonChai);
+    client = { post: sinon.stub().resolves({ userId: 'user-1' }) };
+    api = new registerApi.CreateUserApi(client);
   });
 
-  afterEach(() => {
-    sinon.restore();
+  afterEach(() => sinon.restore());
+
+  it('creates users with optional invite tokens through the injected client', async () => {
+    await api.post('Ada', 'Lovelace', 'ada@example.com', 'invite-token');
+    expect(client.post).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/register`, {
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      email: 'ada@example.com',
+      tokenId: 'invite-token',
+    });
+
+    await api.post('Ada', 'Lovelace', 'ada@example.com');
+    expect(client.post.secondCall.args[1]).to.deep.equal({
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      email: 'ada@example.com',
+    });
   });
 
-  it('should do nothing if request throws error', async () => {
-    const requestStub = sinon.stub().throws('request.post Throw Error');
-    const proxiedService = proxyquire('../../../common/services/createUserApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
+  it('preserves the serialized success shape and returns HTTP error bodies', async () => {
+    sinon.stub(dataAccessApi.createUserApi, 'post').resolves({ ok: true, tokenId: 'token-1' });
+    expect(await registerApi.post('Ada', 'Lovelace', 'ada@example.com')).to.equal('{"tokenId":"token-1"}');
 
-    await proxiedService.post('Darth', 'Vader', 'vader@sith.net');
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ firstName: 'Darth', lastName: 'Vader', email: 'vader@sith.net' }),
-      url: `${BASE_URL}/user/register`,
+    const error = Object.assign(new Error('Already registered'), {
+      type: 'http_error',
+      status: 400,
+      body: { message: 'User already registered' },
     });
+    dataAccessApi.createUserApi.post.rejects(error);
+    expect(await registerApi.post('Ada', 'Lovelace', 'ada@example.com')).to.equal(
+      '{"message":"User already registered"}'
+    );
   });
 
-  it('should reject if error present', async () => {
-    const requestStub = sinon.stub().yields('Example Error', null, null);
-    const proxiedService = proxyquire('../../../common/services/createUserApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
-
-    const result = await proxiedService.post('Darth', 'Vader', 'vader@sith.net');
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ firstName: 'Darth', lastName: 'Vader', email: 'vader@sith.net' }),
-      url: `${BASE_URL}/user/register`,
-    });
-    expect(result).to.be.undefined;
-  });
-
-  it('should return if ok', async () => {
-    const apiResponse = {
-      garId: 'NEW-ID',
-    };
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/createUserApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
-
-    const result = await proxiedService.post('Darth', 'Vader', 'vader@sith.net');
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ firstName: 'Darth', lastName: 'Vader', email: 'vader@sith.net' }),
-      url: `${BASE_URL}/user/register`,
-    });
-    expect(result).to.eql(JSON.stringify(apiResponse));
-  });
-
-  it('should return if ok with token', async () => {
-    const apiResponse = {
-      userId: 'NEW-ID',
-    };
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/createUserApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
-
-    const result = await proxiedService.post('Darth', 'Vader', 'vader@sith.net', 'TOKEN12345');
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        firstName: 'Darth',
-        lastName: 'Vader',
-        email: 'vader@sith.net',
-        tokenId: 'TOKEN12345',
-      }),
-      url: `${BASE_URL}/user/register`,
-    });
-    expect(result).to.eql(JSON.stringify(apiResponse));
+  it('preserves the existing swallowed network failure behavior', async () => {
+    sinon.stub(dataAccessApi.createUserApi, 'post').rejects(new Error('offline'));
+    expect(await registerApi.post('Ada', 'Lovelace', 'ada@example.com')).to.be.undefined;
   });
 });

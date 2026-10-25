@@ -1,155 +1,58 @@
-const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
+const { apiPath, parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
 
-module.exports = {
-  /**
-   * Calls get user details API endpoint.
-   *
-   * @param {String} email email of user to get details for
-   * @returns {Promise} returns JSON parsed response content
-   */
+class UserManageApi {
+  constructor(client) {
+    this.client = client;
+  }
+
   getDetails(email) {
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getUserData(email),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call get user details endpoint');
-            reject(error);
-            return;
-          }
-          resolve(JSON.parse(body));
-        }
-      );
-    });
-  },
+    return this.client.get(apiPath(endpoints.getUserData(email)));
+  }
 
-  /**
-   * Sends PUT request to API to update user's first and / or last name.
-   *
-   * @param {String} userId id of user to update
-   * @param {String} firstName new first name of user
-   * @param {String} lastName new last name of user
-   * @param oneLoginSid
-   * @param state
-   * @returns {Promise} returns JSON parsed response when resolved
-   */
   updateDetails(userId, firstName, lastName, oneLoginSid = null, state = null) {
-    const reqBody = {
-      firstName,
-      lastName,
-    };
+    const requestBody = { firstName, lastName };
 
     if (oneLoginSid) {
-      reqBody.oneLoginSid = oneLoginSid;
+      requestBody.oneLoginSid = oneLoginSid;
     }
 
     if (state) {
-      reqBody.state = state;
+      requestBody.state = state;
     }
 
-    return new Promise((resolve, reject) => {
-      request.put(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.updateUserData(userId),
-          body: JSON.stringify(reqBody),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call edit user details endpoint');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
-  /**
-   *
-   * @param userEmail
-   * @param email
-   * @param oneLoginSid
-   * @returns {Promise<unknown>}
-   */
+    return this.client.put(apiPath(endpoints.updateUserData(userId)), requestBody);
+  }
+
   updateEmailOrOneLoginSid(userEmail, { email, oneLoginSid }) {
-    let reqBody = {};
+    const requestBody = {};
 
     if (email) {
-      reqBody = { ...reqBody, email };
+      requestBody.email = email;
     }
 
     if (oneLoginSid) {
-      reqBody = { ...reqBody, oneLoginSid };
+      requestBody.oneLoginSid = oneLoginSid;
     }
 
-    if (Object.keys(reqBody).length === 0) {
+    if (Object.keys(requestBody).length === 0) {
       throw new Error('Provide updateEmail or oneLoginSid');
     }
 
-    return new Promise((resolve, reject) => {
-      request.put(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.updateUserData(userEmail),
-          body: JSON.stringify(reqBody),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call edit user details endpoint');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
+    return this.client.put(apiPath(endpoints.updateUserData(userEmail)), requestBody);
+  }
+
   deleteUser(email, requesterId) {
-    return new Promise((resolve, reject) => {
-      request.delete(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.deleteUser(email),
-          body: JSON.stringify({ requesterId }),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call delete user details endpoint');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
-  userSearch(email, oneLonginSid = null) {
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.userSearch(email, oneLonginSid),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call user search endpoint');
-            reject(error);
-            return;
-          }
-          resolve(JSON.parse(body));
-        }
-      );
-    });
-  },
+    return this.client.delete(apiPath(endpoints.deleteUser(email)), { body: { requesterId } });
+  }
+
+  userSearch(email, oneLoginSid = null) {
+    return this.client.get(apiPath(endpoints.userSearch(email, oneLoginSid)));
+  }
 
   createUser(email, firstName, lastName, oneLoginSid, state = null, tokenId = null) {
-    const reqBody = {
+    const requestBody = {
       email,
       firstName,
       lastName,
@@ -157,29 +60,41 @@ module.exports = {
     };
 
     if (state && ['verified', 'unverified'].includes(state)) {
-      reqBody['state'] = state;
+      requestBody.state = state;
     }
 
     if (tokenId) {
-      reqBody['tokenId'] = tokenId;
+      requestBody.tokenId = tokenId;
     }
 
-    return new Promise((resolve, reject) => {
-      request.post(
-        {
-          url: endpoints.createUser(),
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(reqBody),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call create user endpoint', { errorMessage: error?.message, stack: error?.stack });
-            reject(error);
-            return;
-          }
-          resolve(JSON.parse(body));
-        }
-      );
+    return this.client.post(apiPath(endpoints.createUser()), requestBody);
+  }
+}
+
+async function callConfiguredUserApi(method, args, parseJson = false) {
+  try {
+    const result = await require('./dataAccessApi').userManageApi[method](...args);
+    return parseJson ? parseJsonResponse(result) : serializeResponse(unwrapResponse(result));
+  } catch (error) {
+    if (error?.type === 'http_error') {
+      return parseJson ? parseJsonResponse(error.body) : serializeResponse(error.body);
+    }
+
+    logger.error('User API request failed', {
+      operation: method,
+      errorMessage: error?.message,
+      statusCode: error?.status,
     });
-  },
-};
+    throw error;
+  }
+}
+
+module.exports = { UserManageApi };
+
+['getDetails', 'userSearch', 'createUser'].forEach((method) => {
+  module.exports[method] = (...args) => callConfiguredUserApi(method, args, true);
+});
+
+['updateDetails', 'updateEmailOrOneLoginSid', 'deleteUser'].forEach((method) => {
+  module.exports[method] = (...args) => callConfiguredUserApi(method, args);
+});

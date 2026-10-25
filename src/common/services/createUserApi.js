@@ -1,42 +1,34 @@
-const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
+const { apiPath, serializeResponse } = require('./legacyApiResponse');
 
-module.exports = {
-  /**
-   * Posts userdata to user creation API endpoint.
-   *
-   * @param {String} fname First name of user
-   * @param {String} lname Last name of user
-   * @param {String} userEmail Email of user
-   * @param {String=null} tokenId tokenId sent to invited user
-   * @return {Promise}
-   */
+class CreateUserApi {
+  constructor(client) {
+    this.client = client;
+  }
+
   post(firstName, lastName, email, tokenId = null) {
-    const reqBody = { firstName, lastName, email };
-    // The tokenId sent to an invited user by an org is required
-    // by the API
-    // add to req body if provided.
+    const requestBody = { firstName, lastName, email };
+
     if (tokenId !== null) {
       logger.debug('Creating org user');
-      reqBody.tokenId = tokenId;
+      requestBody.tokenId = tokenId;
     }
-    return new Promise((resolve, reject) => {
-      request.post(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.register(),
-          body: JSON.stringify(reqBody),
-        },
-        (error, _response, body) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(body);
-        }
-      );
-    }).catch((err) => {
-      logger.error('Failed to create user', { errorMessage: err?.message, stack: err?.stack });
-    });
-  },
-};
+
+    return this.client.post(apiPath(endpoints.register()), requestBody);
+  }
+}
+
+async function post(firstName, lastName, email, tokenId = null) {
+  try {
+    return serializeResponse(await require('./dataAccessApi').createUserApi.post(firstName, lastName, email, tokenId));
+  } catch (error) {
+    if (error?.type === 'http_error') {
+      return serializeResponse(error.body);
+    }
+
+    logger.error('Failed to create user', { errorMessage: error?.message, stack: error?.stack });
+  }
+}
+
+module.exports = { CreateUserApi, post };

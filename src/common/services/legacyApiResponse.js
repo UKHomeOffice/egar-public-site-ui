@@ -1,3 +1,17 @@
+function unwrapResponse(response) {
+  if (response && typeof response === 'object' && !Array.isArray(response) && 'ok' in response) {
+    const body = { ...response };
+    delete body.ok;
+    return body;
+  }
+  return response;
+}
+
+function parseJsonResponse(response) {
+  const body = unwrapResponse(response);
+  return typeof body === 'string' ? JSON.parse(body) : body;
+}
+
 function serializeResponse(response) {
   if (typeof response === 'string') {
     return response;
@@ -38,4 +52,4 @@ function apiPath(endpoint) {
   return url.href;
 }
 
-module.exports = { apiPath, callConfiguredApi, serializeResponse };
+module.exports = { apiPath, callConfiguredApi, parseJsonResponse, serializeResponse, unwrapResponse };

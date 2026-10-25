@@ -1,158 +1,99 @@
-const { expect } = require('chai');
+const sinon = require('sinon');
 const chai = require('chai');
-const nock = require('nock');
+const { expect } = chai;
+chai.use(require('sinon-chai'));
 
 require('../../global.test');
 const endpoints = require('../../../common/config/endpoints');
-const userApi = require('../../../common/services/userManageApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
+const userManageApi = require('../../../common/services/userManageApi');
 
-const BASE_URL = endpoints.baseUrl();
-
-describe('UserGetDetails', () => {
-  const email = 'hannibal@ateam.com';
-  const user = {
-    state: 'verified',
-    lastName: 'Smith',
-    userId: '0b17f70d-3984-40cd-a8eb-9bfbd32719e4',
-    firstName: 'John',
-    email: 'hannibal@ateam.com',
-  };
+describe('UserManageApi', () => {
+  let client;
+  let api;
 
   beforeEach(() => {
-    nock(BASE_URL).get(`/user/${email}`).reply(200, user);
+    client = {
+      get: sinon.stub().resolves({ userId: 'user-1' }),
+      put: sinon.stub().resolves({ updated: true }),
+      post: sinon.stub().resolves({ userId: 'user-1' }),
+      delete: sinon.stub().resolves({ deleted: true }),
+    };
+    api = new userManageApi.UserManageApi(client);
   });
 
-  it('Should successfully find a user', (done) => {
-    userApi.getDetails(email).then((response) => {
-      const responseObj = response;
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
-      expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
-      expect(responseObj.email).to.equal(email);
-      done();
+  afterEach(() => sinon.restore());
+
+  it('looks up and searches users using optional One Login filters', async () => {
+    await api.getDetails('user@example.com');
+    expect(client.get).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/user@example.com`);
+
+    await api.userSearch('user@example.com', 'sid-1');
+    expect(client.get).to.have.been.calledWithExactly(
+      `${endpoints.baseUrl()}/user/search?email=user%40example.com&one_login_sid=sid-1`
+    );
+  });
+
+  it('creates and updates users while preserving optional fields', async () => {
+    await api.createUser('user@example.com', 'Ada', 'Lovelace', 'sid-1', 'verified', 'token-1');
+    expect(client.post).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/register`, {
+      email: 'user@example.com',
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      oneLoginSid: 'sid-1',
+      state: 'verified',
+      tokenId: 'token-1',
+    });
+
+    await api.updateDetails('user-1', 'Ada', 'Lovelace', 'sid-1', 'verified');
+    expect(client.put).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/user-1`, {
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      oneLoginSid: 'sid-1',
+      state: 'verified',
     });
   });
 
-  it('should throw an error', () => {
-    nock.cleanAll();
-    nock(BASE_URL).get(`/user/${email}`).replyWithError({ message: 'Example getDetails error', code: 404 });
+  it('updates email or One Login SID, and rejects empty updates', async () => {
+    await api.updateEmailOrOneLoginSid('user-1', { email: 'new@example.com' });
+    expect(client.put).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/user-1`, {
+      email: 'new@example.com',
+    });
 
-    userApi
-      .getDetails(email)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example getDetails error');
-      });
-  });
-});
-
-describe('UserEdit', () => {
-  const userId = 'a066ca4e-9d08-49e4-8888-881daf9f1099';
-  const firstName = 'Megumin';
-  const lastName = 'Surname';
-
-  beforeEach(() => {
-    nock(BASE_URL).put(`/user/${userId}`, { firstName, lastName }).reply(201, {});
+    expect(() => api.updateEmailOrOneLoginSid('user-1', {})).to.throw('Provide updateEmail or oneLoginSid');
   });
 
-  it('should successfully update a users details', (done) => {
-    userApi.updateDetails(userId, firstName, lastName).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
+  it('deletes users with the requester ID', async () => {
+    await api.deleteUser('user@example.com', 'requester-1');
+    expect(client.delete).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/user@example.com`, {
+      body: { requesterId: 'requester-1' },
     });
   });
 
-  it('should throw an error', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .put(`/user/${userId}`, { firstName, lastName })
-      .replyWithError({ message: 'Example updateDetails error', code: 404 });
+  it('preserves object and string response shapes and maps HTTP errors to their response body', async () => {
+    sinon.stub(dataAccessApi.userManageApi, 'getDetails').resolves({ ok: true, userId: 'user-1' });
+    sinon.stub(dataAccessApi.userManageApi, 'updateDetails').resolves({ ok: true, updated: true });
+    expect(await userManageApi.getDetails('user@example.com')).to.deep.equal({ userId: 'user-1' });
+    expect(await userManageApi.updateDetails('user-1', 'Ada', 'Lovelace')).to.equal('{"updated":true}');
 
-    userApi
-      .updateDetails(userId, firstName, lastName)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example updateDetails error');
-      });
-  });
-});
-
-describe('DeleteUser', () => {
-  const email = 'someemail@server.com';
-
-  beforeEach(() => {
-    nock(BASE_URL).delete(`/user/${email}`).reply(200, { message: 'User deleted' });
-  });
-
-  it('Should successfully delete a user', (done) => {
-    userApi.deleteUser(email).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['message']);
-      done();
+    const error = Object.assign(new Error('Not found'), {
+      type: 'http_error',
+      status: 404,
+      body: { message: 'User not found' },
     });
+    dataAccessApi.userManageApi.getDetails.rejects(error);
+    expect(await userManageApi.getDetails('missing@example.com')).to.deep.equal({ message: 'User not found' });
   });
 
-  it('should throw an error', () => {
-    nock.cleanAll();
-    nock(BASE_URL).delete(`/user/${email}`).replyWithError({ message: 'Example deleteUser error', code: 404 });
+  it('propagates network failures', async () => {
+    const error = new Error('offline');
+    sinon.stub(dataAccessApi.userManageApi, 'getDetails').rejects(error);
 
-    userApi
-      .deleteUser(email)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example deleteUser error');
-      });
-  });
-});
-
-describe('SearchUser', () => {
-  const email = 'ba@ateam.com';
-  const user = {
-    state: 'verified',
-    lastName: 'Baracas',
-    userId: '0b17f70d-3984-40cd-a8eb-9bfbd32719e4',
-    firstName: 'Bosco',
-    email: 'ba@ateam.com',
-  };
-
-  beforeEach(() => {
-    nock(BASE_URL).get('/user/search').query({ email }).reply(200, user);
-  });
-
-  it('Should successfully find a user', (done) => {
-    userApi.userSearch(email).then((response) => {
-      const responseObj = response;
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
-      expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
-      expect(responseObj.email).to.equal(email);
-      done();
-    });
-  });
-
-  it('should throw an error', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .get(`/user/search`)
-      .query({ email })
-      .replyWithError({ message: 'Example searchUser error', code: 404 });
-
-    userApi
-      .userSearch(email)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example searchUser error');
-      });
+    try {
+      await userManageApi.getDetails('user@example.com');
+      expect.fail('Expected network failure to reject');
+    } catch (actual) {
+      expect(actual).to.equal(error);
+    }
   });
 });
