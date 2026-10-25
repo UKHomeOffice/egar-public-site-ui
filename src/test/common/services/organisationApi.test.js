@@ -1,167 +1,143 @@
-const { expect } = require('chai');
 const chai = require('chai');
-const nock = require('nock');
+const sinon = require('sinon');
 
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 require('../../global.test');
-const endpoints = require('../../../common/config/endpoints');
-const organisationApi = require('../../../common/services/organisationApi');
+const organisationApiService = require('../../../common/services/organisationApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
-const BASE_URL = endpoints.baseUrl();
+const orgId = 'organisation-1';
+const userId = 'user-1';
+const user = { userId, firstName: 'Ada', lastName: 'Lovelace', role: 'Manager' };
 
-describe('OrganisationService', () => {
-  const url = '/organisations';
-  const userId = '1be8ed60-fd12-400b-9dc1-350447272199';
-  const orgId = '1be8ed60-fd12-400b-9dc1-3504472722222';
-  const orgName = 'Capsule Corp';
-  const newOrgName = 'NASA';
-  const updateUrl = `${url}/${userId}`;
-  const updatedOrgUser = {
-    userId: '4f732dbb-ba41-4d9b-b0b3-4a7da0f356c4',
-    firstName: 'Oshino',
-    lastName: 'Shinobu',
-    role: 'Manager',
-  };
+describe('OrganisationApi', () => {
+  let client;
+  let api;
 
   beforeEach(() => {
-    nock(BASE_URL).post(url, { organisationName: orgName, userId }).reply(201, {});
-
-    nock(BASE_URL).put(updateUrl, { organisationName: newOrgName }).reply(201, {});
-
-    nock(BASE_URL).get(`${url}/${orgId}`).reply(200, {});
-
-    nock(BASE_URL).get(`${url}/${orgId}/users`).reply(200, {});
-
-    nock(BASE_URL)
-      .patch(`${url}/${orgId}/users`, {
-        requesterId: userId,
-        users: [updatedOrgUser],
-      })
-      .reply(200, {});
+    client = {
+      post: sinon.stub().resolves({ organisationId: orgId }),
+      put: sinon.stub().resolves({ organisationName: 'New name' }),
+      get: sinon.stub().resolves({ items: [] }),
+      delete: sinon.stub().resolves({ deleted: true }),
+      patch: sinon.stub().resolves({ updated: true }),
+    };
+    api = new organisationApiService.OrganisationApi(client);
   });
 
-  it('should successfully get an organisations details', (done) => {
-    organisationApi.get(orgId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
+  afterEach(() => sinon.restore());
+
+  it('creates an organisation with the owner ID', async () => {
+    await api.create('Example organisation', userId);
+    expect(client.post).to.have.been.calledOnceWithExactly('/organisations', {
+      organisationName: 'Example organisation',
+      userId,
     });
   });
 
-  it('should throw an error when getting an organisations details', () => {
-    nock.cleanAll();
-    nock(BASE_URL).get(`${url}/${orgId}`).replyWithError({ message: 'Example get error', code: 404 });
-
-    organisationApi
-      .get(orgId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example get error');
-      });
-  });
-
-  it('should successfully create an organisation', (done) => {
-    organisationApi.create(orgName, userId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
+  it('updates an organisation name', async () => {
+    await api.update('New name', orgId);
+    expect(client.put).to.have.been.calledOnceWithExactly(`/organisations/${orgId}`, {
+      organisationName: 'New name',
     });
   });
 
-  it('should throw an error when creating an organisation', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .post(url, { organisationName: orgName, userId })
-      .replyWithError({ message: 'Example create error', code: 404 });
-
-    organisationApi
-      .create(orgName, userId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example create error');
-      });
+  it('gets an organisation', async () => {
+    await api.get(orgId);
+    expect(client.get).to.have.been.calledOnceWithExactly(`/organisations/${orgId}`);
   });
 
-  it('Should successfully update the organisations name', (done) => {
-    organisationApi.update(newOrgName, userId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
+  it('deletes an organisation with the requesting user ID', async () => {
+    await api.delete(orgId, userId);
+    expect(client.delete).to.have.been.calledOnceWithExactly(`/organisations/${orgId}`, {
+      body: { requesterId: userId },
     });
   });
 
-  it('should throw an error when updating an organisations name', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .put(updateUrl, { organisationName: newOrgName })
-      .replyWithError({ message: 'Example update error', code: 404 });
-
-    organisationApi
-      .update(newOrgName, userId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example update error');
-      });
-  });
-
-  it('should successfully get an organisations users', (done) => {
-    organisationApi.getUsers(orgId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
+  it('gets paginated organisation users', async () => {
+    await api.getUsers(orgId, 3, 10);
+    expect(client.get).to.have.been.calledOnceWithExactly(`/organisations/${orgId}/users`, {
+      query: { per_page: 10, page: 3 },
     });
   });
 
-  it('should throw an error when getting an organisations users', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .get(`${url}/${orgId}/users?per_page=10&page=1`)
-      .replyWithError({ message: 'Example getUsers error', code: 404 });
+  it('gets all organisation users with an optional role filter', async () => {
+    await api.getListOfOrgUsers(orgId, 'Admin');
+    expect(client.get).to.have.been.calledOnceWithExactly(`/organisations/${orgId}/users`, {
+      query: { role: 'Admin' },
+    });
 
-    organisationApi
-      .getUsers(orgId, 1, 10)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example getUsers error');
-      });
-  });
-
-  it('Should successfully edit an organisation users details', (done) => {
-    organisationApi.editUser(userId, orgId, updatedOrgUser).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
+    client.get.resetHistory();
+    await api.getListOfOrgUsers(orgId);
+    expect(client.get).to.have.been.calledOnceWithExactly(`/organisations/${orgId}/users`, {
+      query: undefined,
     });
   });
 
-  it('should throw an error when editing an organisations user', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .patch(`${url}/${orgId}/users`, {
-        requesterId: userId,
-        users: [updatedOrgUser],
-      })
-      .replyWithError({ message: 'Example editUser error', code: 404 });
+  it('edits an organisation user with the requesting ID and user details', async () => {
+    await api.editUser(userId, orgId, user);
+    expect(client.patch).to.have.been.calledOnceWithExactly(`/organisations/${orgId}/users`, {
+      requesterId: userId,
+      users: [user],
+    });
+  });
 
-    organisationApi
-      .editUser(userId, orgId, updatedOrgUser)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
+  it('deletes an organisation user with the requesting ID and user details', async () => {
+    await api.deleteUser(userId, orgId, user);
+    expect(client.delete).to.have.been.calledOnceWithExactly(`/organisations/${orgId}/users`, {
+      body: { requesterId: userId, users: [user] },
+    });
+  });
+
+  it('searches organisation users by name', async () => {
+    await api.getSearchOrgUsers(orgId, 'Ada Lovelace');
+    expect(client.get).to.have.been.calledOnceWithExactly(`/organisations/${orgId}/users/search`, {
+      query: { searchName: 'Ada Lovelace' },
+    });
+  });
+
+  it('looks up a user by ID', async () => {
+    await api.getUserById(userId);
+    expect(client.get).to.have.been.calledOnceWithExactly('/user/search', {
+      query: { user_id: userId },
+    });
+  });
+
+  it('keeps the legacy string response and rejects organisation-update HTTP failures with the response body', async () => {
+    const updateStub = sinon.stub(dataAccessApi.organisationApi, 'update').resolves({ ok: true, updated: true });
+    expect(await organisationApiService.update('New name', orgId)).to.equal(JSON.stringify({ updated: true }));
+    expect(updateStub).to.have.been.calledOnceWithExactly('New name', orgId);
+
+    const error = new Error('Update failed');
+    Object.assign(error, { type: 'http_error', status: 409, body: { message: 'Name already exists' } });
+    updateStub.rejects(error);
+
+    try {
+      await organisationApiService.update('New name', orgId);
+      expect.fail('Expected organisation update to reject');
+    } catch (err) {
+      expect(err).to.deep.equal({ message: 'Name already exists' });
+    }
+  });
+
+  it('preserves legacy response bodies for other HTTP failures and propagates network failures', async () => {
+    const getStub = sinon.stub(dataAccessApi.organisationApi, 'get').rejects(
+      Object.assign(new Error('Not found'), {
+        type: 'http_error',
+        status: 404,
+        body: { message: 'Organisation not found' },
       })
-      .catch((err) => {
-        expect(err.message).to.equal('Example editUser error');
-      });
+    );
+    expect(await organisationApiService.get(orgId)).to.equal(JSON.stringify({ message: 'Organisation not found' }));
+
+    const networkError = new Error('offline');
+    getStub.rejects(networkError);
+    try {
+      await organisationApiService.get(orgId);
+      expect.fail('Expected network failure to propagate');
+    } catch (err) {
+      expect(err).to.equal(networkError);
+    }
   });
 });

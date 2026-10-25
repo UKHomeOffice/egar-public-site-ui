@@ -1,284 +1,114 @@
-const request = require('../utils/requestWithCorrelationId');
 const logger = require('../../common/utils/logger')(__filename);
-const endpoints = require('../config/endpoints');
 
-module.exports = {
-  /**
-   * Call the create organisation endpoint.
-   *
-   * @param {String} organisationName Name of organisation to be created
-   * @param {String} userId user id of owner of the organisation to be created
-   * @returns {Promise} returns response body when resolved.
-   */
+function serializeResponse(response) {
+  if (typeof response === 'string') {
+    return response;
+  }
+
+  if (response && typeof response === 'object' && !Array.isArray(response) && 'ok' in response) {
+    const body = { ...response };
+    delete body.ok;
+    return JSON.stringify(body);
+  }
+
+  return JSON.stringify(response);
+}
+
+class OrganisationApi {
+  constructor(client) {
+    this.client = client;
+  }
+
   create(organisationName, userId) {
     logger.info(`User ${userId} creating organisation`);
-    return new Promise((resolve, reject) => {
-      request.post(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.registerOrg(),
-          body: JSON.stringify({
-            organisationName,
-            userId,
-          }),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call create organisation API');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
+    return this.client.post('/organisations', { organisationName, userId });
+  }
 
-  /**
-   * Calls organisation update endpoint and provides new organisation name.
-   *
-   * @param {String} newOrganisationName new name of organisation
-   * @param {String} orgId id of organisation to update
-   * @returns {Promise} returns response body when resolved
-   */
   update(organisationName, orgId) {
-    return new Promise((resolve, reject) => {
-      request.put(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.updateOrg(orgId),
-          body: JSON.stringify({
-            organisationName,
-          }),
-        },
-        (error, response, body) => {
-          if (error) {
-            logger.error('Failed to call update organisation API');
-            reject(error);
-            return;
-          }
-          if (response.statusCode >= 400) {
-            logger.error(`Update organisation API returned error status: ${response.statusCode}`);
-            reject(JSON.parse(body));
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
+    return this.client.put(`/organisations/${orgId}`, { organisationName });
+  }
 
-  // TODO: I don't think this endpoint is even used. To double check.
-  /**
-   * Calls get organisation API endpoint and returns organisation details.
-   *
-   * @param {String} orgId
-   * @returns {Promise} returns response body when resolved
-   */
   get(orgId) {
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getOrgDetails(orgId),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call get organisation details API');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
+    return this.client.get(`/organisations/${orgId}`);
+  }
 
-  /**
-   * Calls delete organisation api, deleting the organisation and any associated users & data
-   *
-   * @param {String} orgId
-   * @param {String} requesterId
-   * @returns {Promise} returns response body when resolved
-   */
   delete(orgId, requesterId) {
-    return new Promise((resolve, reject) => {
-      request.delete(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.deleteOrgDetails(orgId),
-          body: JSON.stringify({
-            requesterId,
-          }),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call delete organisation details API');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
-  /**
-   * Gets a **paginated** list of users belonging to an organisation.
-   * @param {String} orgId id of an organisation to get users for
-   * @returns {Promise} resolves with API response.
-   */
+    return this.client.delete(`/organisations/${orgId}`, { body: { requesterId } });
+  }
+
   getUsers(orgId, pageNumber, numberOfUsers) {
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getOrgUsers(orgId),
-          qs: {
-            per_page: numberOfUsers,
-            page: pageNumber,
-          },
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call get organisation users API endpoint');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
+    return this.client.get(`/organisations/${orgId}/users`, {
+      query: { per_page: numberOfUsers, page: pageNumber },
     });
-  },
+  }
 
-  /**
-   * Gets a **non** paginated list of users belonging to an organisation.
-   * @param {String} orgId id of an organisation to get users for
-   * @param role
-   * @returns {Promise} resolves with API response.
-   */
   getListOfOrgUsers(orgId, role = null) {
-    let url = endpoints.getOrgUsers(orgId);
+    return this.client.get(`/organisations/${orgId}/users`, {
+      query: role ? { role } : undefined,
+    });
+  }
 
-    if (role) {
-      url = `${url}?role=${role}`;
+  editUser(requesterId, orgId, userObj) {
+    return this.client.patch(`/organisations/${orgId}/users`, {
+      requesterId,
+      users: [userObj],
+    });
+  }
+
+  deleteUser(requesterId, orgId, userObj) {
+    return this.client.delete(`/organisations/${orgId}/users`, {
+      body: { requesterId, users: [userObj] },
+    });
+  }
+
+  getSearchOrgUsers(orgId, searchUserName) {
+    return this.client.get(`/organisations/${orgId}/users/search`, {
+      query: { searchName: searchUserName },
+    });
+  }
+
+  getUserById(userId) {
+    return this.client.get('/user/search', { query: { user_id: userId } });
+  }
+}
+
+async function callConfiguredOrganisationApi(method, args) {
+  try {
+    const result = await require('./dataAccessApi').organisationApi[method](...args);
+    return serializeResponse(result);
+  } catch (err) {
+    logger.error('Organisation API request failed', {
+      operation: method,
+      statusCode: err?.status,
+    });
+
+    if (err?.type !== 'http_error') {
+      throw err;
     }
 
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: url,
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call get list organisation users API endpoint');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
+    if (method === 'update') {
+      throw err.body;
+    }
 
-  /**
-   * Update the details of an organisational user.
-   *
-   * @param {String} requesterId The id of the user performing the edit
-   * @param {Object} userObj The user object containing: ['firstName', 'lastName', 'userId', 'role']
-   * @returns {Promise} Resolves with API response
-   */
-  editUser(requesterId, orgId, userObj) {
-    return new Promise((resolve, reject) => {
-      request.patch(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.editOrgUser(orgId),
-          body: JSON.stringify({
-            requesterId,
-            users: [userObj],
-          }),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call edit organisation users API endpoint');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
-  deleteUser(requesterId, orgId, userObj) {
-    return new Promise((resolve, reject) => {
-      request.delete(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.deleteOrgUser(orgId),
-          body: JSON.stringify({
-            requesterId,
-            users: [userObj],
-          }),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call delete user endpoint');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
+    return serializeResponse(err.body);
+  }
+}
 
-  /**
-   * Gets a list of users belonging to an organisation.
-   * @param {String} orgId id of an organisation to get users for
-   * @param {String} organisationName
-   * @returns {Promise} resolves with API response.
-   */
-  getSearchOrgUsers(orgId, searchUserName) {
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getSearchOrgUsers(orgId, searchUserName),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call get search organisation users API endpoint');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
+const legacyApi = { OrganisationApi };
 
-  /**
-   * Get a user based on user_id.
-   * @param {String} user_id id for user
-   * @returns {Promise} resolves with API response.
-   */
-  getUserById(userId) {
-    return new Promise((resolve, reject) => {
-      request.get(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.getUserDataById(userId),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call get search organisation users API endpoint');
-            reject(error);
-            return;
-          }
-          resolve(body);
-        }
-      );
-    });
-  },
-};
+[
+  'create',
+  'update',
+  'get',
+  'delete',
+  'getUsers',
+  'getListOfOrgUsers',
+  'editUser',
+  'deleteUser',
+  'getSearchOrgUsers',
+  'getUserById',
+].forEach((method) => {
+  legacyApi[method] = (...args) => callConfiguredOrganisationApi(method, args);
+});
+
+module.exports = legacyApi;

@@ -10,6 +10,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const orgApi = require('../../../common/services/organisationApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/organisation/editorganisation/post.controller');
 
@@ -79,6 +80,33 @@ describe('Organisation Edit Post Controller', () => {
           errors: [{ message: 'orgApi.update Example Reject' }],
         });
       });
+  });
+
+  it('renders an injected Fetch HTTP failure from the organisation update API', async () => {
+    orgApiStub.restore();
+    const updateStub = sinon.stub(dataAccessApi.organisationApi, 'update').rejects(
+      Object.assign(new Error('Organisation update failed'), {
+        type: 'http_error',
+        status: 409,
+        body: { message: 'Organisation name already exists' },
+      })
+    );
+
+    let finishRender;
+    const renderCompleted = new Promise((resolve) => {
+      finishRender = resolve;
+    });
+    res.render = sinon.spy((...args) => finishRender(args));
+    controller(req, res);
+
+    const [template, renderData] = await renderCompleted;
+    expect(updateStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
+    expect(res.render).to.have.been.calledOnce;
+    expect(template).to.equal('app/organisation/editorganisation/index');
+    expect(renderData.cookie).to.be.instanceof(CookieModel);
+    expect(renderData.orgName).to.equal('Evil Empire');
+    expect(renderData.errors).to.deep.equal([{ message: 'Organisation name already exists' }]);
+    expect(res.redirect).to.not.have.been.called;
   });
 
   // TODO: Should there be one for the api error message...?
