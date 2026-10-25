@@ -1,335 +1,75 @@
-const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
+const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const { URL } = require('url');
 
 require('../../global.test');
+chai.use(sinonChai);
+const resPersonApi = require('../../../common/services/resPersonApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
+const endpoints = require('../../../common/config/endpoints');
+const API_PREFIX = endpoints.baseUrl().replace(/\/$/, '');
 
-const config = require('../../../common/config/index');
-
-describe('Responsible Person API Service', () => {
-  const { API_VERSION, API_BASE } = config;
-  const BASE_URL = new URL(API_VERSION, API_BASE).href;
+describe('ResPersonApi', () => {
+  const userId = 'user-1';
+  const responsiblePersonId = 'responsible-person-1';
+  const person = { responsibleGivenName: 'Ada', responsibleSurname: 'Lovelace' };
+  let client;
+  let api;
 
   beforeEach(() => {
-    chai.use(sinonChai);
+    client = {
+      get: sinon.stub().resolves({ responsiblePerson: person }),
+      post: sinon.stub().resolves({ responsiblePersonId }),
+      put: sinon.stub().resolves({ responsiblePersonId }),
+      delete: sinon.stub().resolves({}),
+    };
+    api = new resPersonApi.ResPersonApi(client);
   });
 
-  const responsible_persons = [
-    {
-      responsiblePersonId: 'bc45f7d8-75e4-484d-9422-4a7c864e6bc9',
-      responsibleGivenName: 'Sally',
-      responsibleSurname: 'Smith',
-      responsibleContactNo: '07878787878',
-      responsibleEmail: 'testmail@181test.com',
-      responsibleAddressLine1: 'House44',
-      responsibleAddressLine2: 'Street33',
-      responsibleTown: 'London',
-      responsibleCountry: 'GBR',
-      responsiblePostcode: 'GB66BG',
-      fixedBasedOperator: 'Captain',
-      fixedBasedOperatorAnswer: '',
-    },
-    {
-      responsiblePersonId: '20bdec29-2a5d-41be-babe-906c80f5335c',
-      responsibleGivenName: 'John',
-      responsibleSurname: 'Smith',
-      responsibleContactNo: '07878787878',
-      responsibleEmail: 'testmail@816test.com',
-      responsibleAddressLine1: 'House44',
-      responsibleAddressLine2: 'Street33',
-      responsibleTown: 'London',
-      responsibleCountry: 'GBR',
-      responsiblePostcode: 'GB66BG',
-      fixedBasedOperator: 'Captain',
-      fixedBasedOperatorAnswer: '',
-    },
-  ];
+  afterEach(() => sinon.restore());
 
-  const responsible_person = responsible_persons[0];
-
-  afterEach(() => {
-    sinon.restore();
+  it('creates a responsible person', async () => {
+    await api.create(userId, person);
+    expect(client.post).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/responsiblepersons`, person);
   });
 
-  describe('create responsible person', () => {
-    it('should do nothing if request throws error', async () => {
-      const requestStub = sinon.stub().throws('request.post Throw Error');
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { post: requestStub },
-      });
-
-      await proxiedService
-        .create('USER-ID-1', responsible_person)
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(responsible_person),
-            url: `${BASE_URL}/user/USER-ID-1/responsiblepersons`,
-          });
-        });
-    });
-
-    it('should reject if error present', async () => {
-      const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { post: requestStub },
-      });
-
-      const result = await proxiedService
-        .create('USER-ID-1', responsible_person)
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(responsible_person),
-            url: `${BASE_URL}/user/USER-ID-1/responsiblepersons`,
-          });
-        });
-      expect(result).to.be.undefined;
-    });
-
-    it('should return if ok', async () => {
-      const apiResponse = {
-        responsible_person,
-      };
-      const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { post: requestStub },
-      });
-
-      const result = await proxiedService.create('USER-ID-1', responsible_person);
-
-      expect(requestStub).to.have.been.calledOnceWith({
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(responsible_person),
-        url: `${BASE_URL}/user/USER-ID-1/responsiblepersons`,
-      });
-      expect(result).to.eql(JSON.stringify(apiResponse));
-    });
+  it('lists saved responsible persons', async () => {
+    await api.getResPersons(userId);
+    expect(client.get).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/responsiblepersons`);
   });
 
-  describe('get responsible persons', () => {
-    it('should do nothing if request throws error', async () => {
-      const requestStub = sinon.stub().throws('request.get Throw Error');
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { get: requestStub },
-      });
-
-      await proxiedService
-        .getResPersons('USER-ID-1')
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            url: `${BASE_URL}/user/USER-ID-1/responsiblepersons`,
-          });
-        });
-    });
-
-    it('should reject if error present', async () => {
-      const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { get: requestStub },
-      });
-
-      const result = await proxiedService
-        .getResPersons('USER-ID-1')
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            url: `${BASE_URL}/user/USER-ID-1/responsiblepersons`,
-          });
-        });
-      expect(result).to.be.undefined;
-    });
-
-    it('resPersonApi getResPersons should return if ok', async () => {
-      const apiResponse = {
-        responsible_persons,
-      };
-      const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { get: requestStub },
-      });
-
-      const result = await proxiedService.getResPersons('USER-ID-1');
-
-      expect(requestStub).to.have.been.calledOnceWith({
-        headers: { 'content-type': 'application/json' },
-        url: `${BASE_URL}/user/USER-ID-1/responsiblepersons`,
-      });
-      expect(result).to.eql(JSON.stringify(apiResponse));
-    });
+  it('gets responsible person details', async () => {
+    await api.getResPersonDetails(userId, responsiblePersonId);
+    expect(client.get).to.have.been.calledOnceWithExactly(
+      `${API_PREFIX}/user/user-1/responsibleperson/responsible-person-1`
+    );
   });
 
-  describe('get responsible person details', () => {
-    it('should do nothing if request throws error', async () => {
-      const requestStub = sinon.stub().throws('request.get Throw Error');
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { get: requestStub },
-      });
-
-      await proxiedService
-        .getResPersonDetails('USER-ID-1', 'RES-PERSON-1')
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            url: `${BASE_URL}/user/USER-ID-1/responsibleperson/RES-PERSON-1`,
-          });
-        });
-    });
-
-    it('should reject if error present', async () => {
-      const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { get: requestStub },
-      });
-
-      const result = await proxiedService
-        .getResPersonDetails('USER-ID-1', 'RES-PERSON-1')
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            url: `${BASE_URL}/user/USER-ID-1/responsibleperson/RES-PERSON-1`,
-          });
-        });
-      expect(result).to.be.undefined;
-    });
-
-    it('resPersonApi getResPersons should return if ok', async () => {
-      const apiResponse = {
-        responsible_person,
-      };
-      const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { get: requestStub },
-      });
-
-      const result = await proxiedService.getResPersonDetails('USER-ID-1', 'RES-PERSON-1');
-
-      expect(requestStub).to.have.been.calledOnceWith({
-        headers: { 'content-type': 'application/json' },
-        url: `${BASE_URL}/user/USER-ID-1/responsibleperson/RES-PERSON-1`,
-      });
-      expect(result).to.eql(JSON.stringify(apiResponse));
-    });
+  it('updates responsible person details', async () => {
+    await api.updateResPerson(userId, responsiblePersonId, person);
+    expect(client.put).to.have.been.calledOnceWithExactly(
+      `${API_PREFIX}/user/user-1/responsibleperson/responsible-person-1`,
+      person
+    );
   });
 
-  describe('update responsible person details', () => {
-    it('resPersonApi updateResPerson should do nothing if request throws error', async () => {
-      const requestStub = sinon.stub().throws('request.post Throw Error');
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { put: requestStub },
-      });
-
-      await proxiedService
-        .updateResPerson('USER-ID-1', 'RES-PERSON-1', responsible_person)
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(responsible_person),
-            url: `${BASE_URL}/user/USER-ID-1/responsibleperson/RES-PERSON-1`,
-          });
-        });
-    });
-
-    it('resPersonApi updateResPerson should reject if error present', async () => {
-      const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { put: requestStub },
-      });
-
-      const result = await proxiedService
-        .updateResPerson('USER-ID-1', 'RES-PERSON-1', responsible_person)
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(responsible_person),
-            url: `${BASE_URL}/user/USER-ID-1/responsibleperson/RES-PERSON-1`,
-          });
-        });
-      expect(result).to.be.undefined;
-    });
-
-    it('resPersonApi updateResPerson should return if ok', async () => {
-      const apiResponse = {
-        responsible_person,
-      };
-      const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { put: requestStub },
-      });
-
-      const result = await proxiedService.updateResPerson('USER-ID-1', 'RES-PERSON-1', responsible_person);
-
-      expect(requestStub).to.have.been.calledOnceWith({
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(responsible_person),
-        url: `${BASE_URL}/user/USER-ID-1/responsibleperson/RES-PERSON-1`,
-      });
-      expect(result).to.eql(JSON.stringify(apiResponse));
-    });
+  it('deletes a responsible person', async () => {
+    await api.deleteResponsiblePerson(userId, responsiblePersonId);
+    expect(client.delete).to.have.been.calledOnceWithExactly(
+      `${API_PREFIX}/user/user-1/responsibleperson/responsible-person-1`
+    );
   });
 
-  describe('delete responsible person details', () => {
-    it('resPersonApi deleteResponsiblePerson should do nothing if request throws error', async () => {
-      const requestStub = sinon.stub().throws('request.delete Throw Error');
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { delete: requestStub },
-      });
+  it('preserves the legacy string response and maps HTTP failures to their response body', async () => {
+    const getStub = sinon.stub(dataAccessApi.resPersonApi, 'getResPersonDetails').resolves({ ok: true, person });
+    expect(await resPersonApi.getResPersonDetails(userId, responsiblePersonId)).to.equal(JSON.stringify({ person }));
 
-      await proxiedService
-        .deleteResponsiblePerson('USER-ID-1', 'RES-PERSON-1')
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            url: `${BASE_URL}/user/USER-ID-1/responsibleperson/RES-PERSON-1`,
-          });
-        });
+    const error = Object.assign(new Error('Unavailable'), {
+      type: 'http_error',
+      body: { message: 'Unavailable' },
     });
-
-    it('resPersonApi deleteResponsiblePerson should reject if error present', async () => {
-      const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { delete: requestStub },
-      });
-
-      const result = await proxiedService
-        .deleteResponsiblePerson('USER-ID-1', 'RES-PERSON-1')
-        .then()
-        .catch(() => {
-          expect(requestStub).to.have.been.calledOnceWith({
-            headers: { 'content-type': 'application/json' },
-            url: `${BASE_URL}/user/USER-ID-1/responsibleperson/RES-PERSON-1`,
-          });
-        });
-      expect(result).to.be.undefined;
-    });
-
-    it('resPersonApi deleteResponsiblePerson should return if ok', async () => {
-      const apiResponse = {};
-      const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-      const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        '../utils/requestWithCorrelationId': { delete: requestStub },
-      });
-
-      const result = await proxiedService.deleteResponsiblePerson('USER-ID-1', 'RES-PERSON-1');
-
-      expect(requestStub).to.have.been.calledOnceWith({
-        headers: { 'content-type': 'application/json' },
-        url: `${BASE_URL}/user/USER-ID-1/responsibleperson/RES-PERSON-1`,
-      });
-      expect(result).to.eql(JSON.stringify(apiResponse));
-    });
+    getStub.rejects(error);
+    expect(await resPersonApi.getResPersonDetails(userId, responsiblePersonId)).to.equal(JSON.stringify(error.body));
   });
 });
