@@ -79,7 +79,7 @@ async function callConfiguredOrganisationApi(method, args) {
   } catch (err) {
     logger.error('Organisation API request failed', {
       operation: method,
-      statusCode: err?.status,
+      status: err?.status,
     });
 
     if (err?.type !== 'http_error') {

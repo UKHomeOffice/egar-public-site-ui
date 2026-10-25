@@ -41,7 +41,7 @@ async function callConfiguredApi(api, method, args, logger, errorMessage) {
     logger.error(errorMessage, {
       operation: method,
       errorMessage: error?.message,
-      statusCode: error?.status,
+      status: error?.status,
     });
     throw error;
   }
