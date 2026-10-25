@@ -121,7 +121,9 @@ describe('HttpClient', () => {
       };
       const client = new HttpClient({ baseUrl: 'https://api.example.test' });
       const formData = new FormData();
-      formData.append('document', new Blob(['file content']), 'evidence.txt');
+      const fileBytes = Buffer.from('file content');
+      formData.append('name', 'evidence.txt');
+      formData.append('document', new Blob([fileBytes]), 'evidence.txt');
 
       await client.post('/encoded', new URLSearchParams({ name: 'A & B' }));
       await client.post('/multipart', formData);
@@ -129,7 +131,9 @@ describe('HttpClient', () => {
       expect(requests[0].body).to.equal('name=A+%26+B');
       expect(requests[0].headers['Content-Type']).to.equal('application/x-www-form-urlencoded;charset=UTF-8');
       expect(requests[1].body).to.equal(formData);
+      expect(requests[1].body.get('name')).to.equal('evidence.txt');
       expect(requests[1].body.get('document').name).to.equal('evidence.txt');
+      expect(Buffer.from(await requests[1].body.get('document').arrayBuffer())).to.deep.equal(fileBytes);
       expect(requests[1].headers).to.not.have.property('Content-Type');
     });
 

@@ -1,40 +1,38 @@
-const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
+const { HttpClient } = require('./httpClient');
+const { serializeResponse } = require('./legacyApiResponse');
 
-module.exports = {
-  postFile(garId, file) {
+class FileUploadApi {
+  constructor(client) {
+    this.client = client;
+  }
+
+  async postFile(garId, file) {
     logger.debug('SupportingDocuments upload API');
-    return new Promise((resolve, reject) => {
-      const formData = {
-        file: {
-          value: file.buffer, // Upload the file in the multi-part post
-          options: {
-            filename: file.originalname,
-          },
-        },
-      };
+    const formData = new FormData();
+    formData.append('file', new Blob([file.buffer]), file.originalname);
 
-      request.post(
-        {
-          headers: { 'content-type': 'multipart/form-data' },
-          uri: endpoints.postFile(garId),
-          formData,
-        },
-        (error, _response, body) => {
-          if (error) {
-            reject(error);
-            return error;
-          }
-          return resolve(body);
-        }
-      );
-    }).catch((err) => {
+    try {
+      return serializeResponse(await this.client.post(endpoints.postFile(garId), formData));
+    } catch (err) {
+      if (err?.type === 'http_error') {
+        return serializeResponse(err.body);
+      }
+
       logger.error('Failed to upload supporting document', {
         garId,
         errorMessage: err?.message,
         stack: err?.stack,
       });
-    });
-  },
+      return undefined;
+    }
+  }
+}
+
+const fileUploadApi = new FileUploadApi(new HttpClient({ baseUrl: endpoints.baseUrl() }));
+
+module.exports = {
+  FileUploadApi,
+  postFile: (...args) => fileUploadApi.postFile(...args),
 };

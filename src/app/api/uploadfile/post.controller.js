@@ -1,5 +1,4 @@
 const fileType = require('file-type');
-const stream = require('stream');
 
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
@@ -130,26 +129,7 @@ module.exports = async (req, res) => {
     }
     logger.info('Valid mimetype, proceeding');
 
-    logger.debug('About to create a Stream of the file buffer');
-    const readStream = new stream.Readable();
-    readStream.push(req.file.buffer);
-    readStream.push(null);
-    logger.debug('Stream created, about to send to AV scan endpoint');
-
-    const uriString = `${process.env.CLAMAV_BASE}:${process.env.CLAMAV_PORT}/scan`;
-    logger.debug(`uri: ${uriString}`);
-
-    const formData = {
-      name: req.file.originalname,
-      file: {
-        value: req.file.buffer, // Upload the file in the multi-part post
-        options: {
-          filename: req.file.originalname,
-        },
-      },
-    };
-
-    const clamavResp = await clamAVService.scanFile(formData);
+    const clamavResp = await clamAVService.scanFile(req.file);
     logger.debug('User is authorized to upload supporting documents');
     if (!clamavResp) {
       res.redirect('/garfile/supportingdocuments?query=v');

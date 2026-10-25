@@ -1,127 +1,69 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
 
 require('../../global.test');
 
-const config = require('../../../common/config/index');
+const { ClamAVService } = require('../../../common/services/clamAVService');
 
-describe('File Upload API Service', () => {
+describe('ClamAV Service', () => {
   const file = {
     originalname: 'example.doc',
-    buffer: Buffer.alloc(10000),
+    buffer: Buffer.from('supporting document bytes'),
   };
+  let client;
+  let service;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-    sinon.stub(config, 'CLAMAV_BASE').value('clamav');
-    sinon.stub(config, 'CLAMAV_PORT').value('5555');
+    client = { post: sinon.stub() };
+    service = new ClamAVService(client);
   });
 
   afterEach(() => {
     sinon.restore();
   });
 
-  it('should do nothing if request throws error', async () => {
-    const requestStub = sinon.stub().throws('request.post Throw Error');
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
+  async function expectMultipartFile() {
+    const [path, formData] = client.post.firstCall.args;
+    const uploadedFile = formData.get('file');
 
-    await proxiedService.scanFile(file);
+    expect(path).to.equal('/scan');
+    expect(formData.get('name')).to.equal(file.originalname);
+    expect(uploadedFile.name).to.equal(file.originalname);
+    expect(Buffer.from(await uploadedFile.arrayBuffer())).to.deep.equal(file.buffer);
+  }
 
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'multipart/form-data' },
-      uri: 'clamav:5555/scan',
-      formData: {
-        originalname: 'example.doc',
-        buffer: file.buffer,
-      },
-    });
+  it('resolves true when ClamAV reports a clean file', async () => {
+    client.post.resolves('ok : true');
+
+    expect(await service.scanFile(file)).to.be.true;
+    await expectMultipartFile();
   });
 
-  it('should reject if error present', async () => {
-    const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
+  it('resolves false when ClamAV reports an infected file', async () => {
+    client.post.resolves('ok : false');
 
-    const result = await proxiedService.scanFile(file);
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'multipart/form-data' },
-      uri: 'clamav:5555/scan',
-      formData: {
-        originalname: 'example.doc',
-        buffer: file.buffer,
-      },
-    });
-    expect(result).to.be.undefined;
+    expect(await service.scanFile(file)).to.be.false;
+    await expectMultipartFile();
   });
 
-  it('should resolve if ok is true', async () => {
-    const apiResponse = 'ok : true';
+  it('returns undefined for an unexpected text response', async () => {
+    client.post.resolves('unexpected response');
 
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
-
-    await proxiedService.scanFile(file).then((result) => {
-      expect(requestStub).to.have.been.calledOnceWith({
-        headers: { 'content-type': 'multipart/form-data' },
-        uri: 'clamav:5555/scan',
-        formData: {
-          originalname: 'example.doc',
-          buffer: file.buffer,
-        },
-      });
-      expect(result).to.be.true;
-    });
+    expect(await service.scanFile(file)).to.be.undefined;
+    await expectMultipartFile();
   });
 
-  it('should resolve if ok is false', async () => {
-    const apiResponse = 'ok : false';
+  it('interprets text response bodies returned with an HTTP error', async () => {
+    client.post.rejects(Object.assign(new Error('HTTP error'), { type: 'http_error', body: 'ok : true' }));
 
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
-
-    await proxiedService.scanFile(file).then((result) => {
-      expect(requestStub).to.have.been.calledOnceWith({
-        headers: { 'content-type': 'multipart/form-data' },
-        uri: 'clamav:5555/scan',
-        formData: {
-          originalname: 'example.doc',
-          buffer: file.buffer,
-        },
-      });
-      expect(result).to.be.false;
-    });
+    expect(await service.scanFile(file)).to.be.true;
+    await expectMultipartFile();
   });
 
-  it('should reject if ok is not true or false', async () => {
-    const apiResponse = 'something else';
+  it('returns undefined when the scan request fails', async () => {
+    client.post.rejects(new Error('Network unavailable'));
 
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/clamAVService', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
-
-    await proxiedService.scanFile(file).then((result) => {
-      expect(requestStub).to.have.been.calledOnceWith({
-        headers: { 'content-type': 'multipart/form-data' },
-        uri: 'clamav:5555/scan',
-        formData: {
-          originalname: 'example.doc',
-          buffer: file.buffer,
-        },
-      });
-      // chai-as-promised would probably inspect if its rejected?
-      expect(result).to.be.undefined;
-    });
+    expect(await service.scanFile(file)).to.be.undefined;
+    await expectMultipartFile();
   });
 });
