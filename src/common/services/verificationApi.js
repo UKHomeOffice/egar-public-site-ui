@@ -1,91 +1,66 @@
-const request = require('../utils/requestWithCorrelationId');
-const logger = require('../../common/utils/logger')(__filename);
+const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
+const { apiPath, serializeResponse } = require('./legacyApiResponse');
 
-module.exports = {
-  /**
-   * Confirms user as verified via API.
-   *
-   * @param {String} tokenId tokenId sent to user to be verified
-   * @param {String} userId userId of user to be verified
-   * @returns {Promise} returns response body when resolved
-   */
+class VerificationApi {
+  constructor(client) {
+    this.client = client;
+  }
+
   verifyUser(tokenId) {
-    return new Promise((resolve, reject) => {
-      logger.debug('Sending request to verify token');
-      request.put(
-        {
-          headers: { 'content-type': 'application/json' },
-          url: endpoints.verifyUser(),
-          body: JSON.stringify({
-            tokenId,
-          }),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call token verification API');
-            reject(new Error('Token verification API failed'));
-            return;
-          }
-          resolve(body);
-        }
-      );
-    }).catch((err) => {
-      logger.warn('Token verification request failed', { errorMessage: err?.message });
-    });
-  },
+    logger.debug('Sending request to verify token');
+    return this.client.put(apiPath(endpoints.verifyUser()), { tokenId });
+  }
 
   getUserInviteToken(email) {
-    return new Promise((resolve, reject) => {
-      const url = new URL(endpoints.verifyUser());
-      url.search = new URLSearchParams({
-        invitee_email: email,
-        service: 'sgar',
-      });
-
-      logger.debug('Sending request to verify token using email');
-      request.get(
-        {
-          url: url.toString(),
-          headers: { 'content-type': 'application/json' },
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call token verification API');
-            reject(new Error('Token verification API failed'));
-            return;
-          }
-          resolve(JSON.parse(body));
-        }
-      );
-    }).catch((err) => {
-      logger.warn('Token verification request failed', { errorMessage: err?.message });
+    logger.debug('Sending request to verify token using email');
+    return this.client.get(apiPath(endpoints.verifyUser()), {
+      query: { invitee_email: email, service: 'sgar' },
     });
-  },
+  }
 
-  async getUserInviteTokenByTokenId(tokenId) {
-    try {
-      return await new Promise((resolve, reject) => {
-        const url = new URL(endpoints.verifyUser());
-        url.searchParams.append('token_id', tokenId);
-        logger.debug('Sending request to verify token using token id');
-        request.get(
-          {
-            url: url.toString(),
-            headers: { 'content-type': 'application/json' },
-          },
-          (error, _response, body) => {
-            if (error) {
-              logger.error('Failed to call token verification API');
-              reject(new Error('Token verification API failed'));
-              return;
-            }
-            resolve(JSON.parse(body));
-          }
-        );
-      });
-    } catch (err) {
-      logger.warn('Token verification request failed', { errorMessage: err?.message });
+  getUserInviteTokenByTokenId(tokenId) {
+    logger.debug('Sending request to verify token using token id');
+    return this.client.get(apiPath(endpoints.verifyUser()), {
+      query: { token_id: tokenId },
+    });
+  }
+}
+
+function unwrapResponse(response) {
+  if (response && typeof response === 'object' && !Array.isArray(response) && 'ok' in response) {
+    const body = { ...response };
+    delete body.ok;
+    return body;
+  }
+  return response;
+}
+
+function parseJsonResponse(response) {
+  const body = unwrapResponse(response);
+  return typeof body === 'string' ? JSON.parse(body) : body;
+}
+
+async function callConfiguredVerificationApi(method, args, parseJson = false) {
+  try {
+    const result = await require('./dataAccessApi').verificationApi[method](...args);
+    const body = unwrapResponse(result);
+    return parseJson ? parseJsonResponse(body) : serializeResponse(body);
+  } catch (error) {
+    if (error?.type === 'http_error') {
+      return parseJson ? parseJsonResponse(error.body) : serializeResponse(error.body);
     }
-  },
-};
+
+    if (method === 'verifyUser') {
+      logger.error('Failed to call token verification API');
+    }
+    logger.warn('Token verification request failed', { errorMessage: error?.message });
+  }
+}
+
+module.exports = { VerificationApi };
+
+module.exports.verifyUser = (...args) => callConfiguredVerificationApi('verifyUser', args);
+module.exports.getUserInviteToken = (...args) => callConfiguredVerificationApi('getUserInviteToken', args, true);
+module.exports.getUserInviteTokenByTokenId = (...args) =>
+  callConfiguredVerificationApi('getUserInviteTokenByTokenId', args, true);

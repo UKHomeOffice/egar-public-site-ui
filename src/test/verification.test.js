@@ -1,34 +1,64 @@
+const sinon = require('sinon');
 const { expect } = require('chai');
-const nock = require('nock');
 
 require('./global.test');
 const endpoints = require('../common/config/endpoints');
-
+const dataAccessApi = require('../common/services/dataAccessApi');
 const verificationApi = require('../common/services/verificationApi');
 
-const BASE_URL = endpoints.baseUrl();
+describe('VerificationApi', () => {
+  let client;
+  let api;
 
-describe('VerificationService', () => {
-  const url = '/user/verify';
-  const tokenId = '1ebc7b27-ae9f-4962-8bc4-434cdbc6c7ec';
-
-  it('Should successfully call the user verification API', (done) => {
-    nock(BASE_URL).put(url, { tokenId }).reply(201, {});
-
-    verificationApi.verifyUser(tokenId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
-    });
+  beforeEach(() => {
+    client = {
+      put: sinon.stub().resolves({ verified: true }),
+      get: sinon.stub().resolves({ tokenId: 'token-1' }),
+    };
+    api = new verificationApi.VerificationApi(client);
   });
 
-  // Catch block handles the rejection, and logs an error
-  it('Should return a string on error', (done) => {
-    nock(BASE_URL).put(url, { tokenId }).replyWithError('Example error to test');
+  afterEach(() => sinon.restore());
 
-    verificationApi.verifyUser(tokenId).then(() => {
-      done();
+  it('verifies a user with the token ID', async () => {
+    await api.verifyUser('token-1');
+    expect(client.put).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/verify`, { tokenId: 'token-1' });
+  });
+
+  it('looks up invite tokens with the expected email, service, and token filters', async () => {
+    await api.getUserInviteToken('invitee@example.com');
+    expect(client.get).to.have.been.calledWithExactly(`${endpoints.baseUrl()}/user/verify`, {
+      query: { invitee_email: 'invitee@example.com', service: 'sgar' },
     });
+
+    await api.getUserInviteTokenByTokenId('token-1');
+    expect(client.get.secondCall.args).to.deep.equal([
+      `${endpoints.baseUrl()}/user/verify`,
+      { query: { token_id: 'token-1' } },
+    ]);
+  });
+
+  it('returns successful verification and invite responses in their established shapes', async () => {
+    sinon.stub(dataAccessApi.verificationApi, 'verifyUser').resolves({ ok: true, verified: true });
+    sinon.stub(dataAccessApi.verificationApi, 'getUserInviteToken').resolves({ ok: true, tokenId: 'token-1' });
+
+    expect(await verificationApi.verifyUser('token-1')).to.equal('{"verified":true}');
+    expect(await verificationApi.getUserInviteToken('invitee@example.com')).to.deep.equal({ tokenId: 'token-1' });
+  });
+
+  it('returns HTTP failure bodies but swallows network failures', async () => {
+    const httpError = Object.assign(new Error('Not found'), {
+      type: 'http_error',
+      status: 404,
+      body: { message: 'Invite not found' },
+    });
+    sinon.stub(dataAccessApi.verificationApi, 'getUserInviteTokenByTokenId').rejects(httpError);
+    expect(await verificationApi.getUserInviteTokenByTokenId('missing-token')).to.deep.equal({
+      message: 'Invite not found',
+    });
+
+    const networkError = new Error('offline');
+    dataAccessApi.verificationApi.getUserInviteTokenByTokenId.rejects(networkError);
+    expect(await verificationApi.getUserInviteTokenByTokenId('missing-token')).to.be.undefined;
   });
 });
