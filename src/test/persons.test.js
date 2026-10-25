@@ -126,6 +126,6 @@ describe('PersonApi', () => {
 
   it('uses the configured API endpoint origin', () => {
     const endpoint = new URL(endpoints.getPeople(userId));
-    expect(endpoint.pathname).to.equal(`${API_PREFIX}/user/user-1/people`);
+    expect(endpoint.href).to.equal(`${API_PREFIX}/user/user-1/people`);
   });
 });
