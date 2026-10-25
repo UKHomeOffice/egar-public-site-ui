@@ -1,208 +1,116 @@
 const { expect } = require('chai');
 const chai = require('chai');
-const nock = require('nock');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 
 require('./global.test');
+chai.use(sinonChai);
 const personApi = require('../common/services/personApi');
+const dataAccessApi = require('../common/services/dataAccessApi');
 const endpoints = require('../common/config/endpoints');
+const API_PREFIX = new URL(endpoints.baseUrl()).pathname.replace(/\/$/, '');
 
-const BASE_URL = endpoints.baseUrl();
-
-describe('PersonService', () => {
-  const userId = '43f70daa-dc2e-4c88-af9c-f0dc1ff13a8e';
-  const orgId = '43f70daa-dc2e-4c88-af9c-f0dc1ff13a8e';
-  const personId = '43f70daa-dc2e-1234-321c-f0dc1ff13a8e';
-
+describe('PersonApi', () => {
+  const userId = 'user-1';
+  const orgId = 'org-1';
+  const personId = 'person-1';
   const person = {
-    firstName: 'Asuka',
-    lastName: 'Langley',
-    nationality: 'USA',
-    placeOfBirth: 'USA',
-    dateOfBirth: '1988-12-12',
-    gender: 'Male',
+    firstName: 'Ada',
+    lastName: 'Lovelace',
+    nationality: 'GBR',
+    placeOfBirth: 'London',
+    dateOfBirth: '1815-12-10',
+    gender: 'Female',
     documentType: 'Passport',
-    documentNumber: '141231231',
-    documentExpiryDate: '2021-12-12',
+    documentNumber: '12345',
+    documentExpiryDate: '2030-01-01',
     peopleType: 'Crew',
-    issuingState: 'USA',
+    issuingState: 'GBR',
+    documentDesc: 'Passport',
+    ignored: true,
   };
-
-  const newPerson = {
-    firstName: 'Rei',
-    lastName: 'Ayanami',
-    nationality: 'USA',
-    placeOfBirth: 'USA',
-    dateOfBirth: '1988-12-12',
-    gender: 'Male',
-    documentType: 'Passport',
-    documentNumber: '31231231311',
-    documentExpiryDate: '2021-01-12',
-    peopleType: 'Captain',
-    issuingState: 'USA',
-  };
+  const response = { people: [] };
+  let client;
+  let api;
 
   beforeEach(() => {
-    nock(BASE_URL)
-      .post(`/user/${userId}/people`, person)
-      .reply(201, {
-        firstName: 'Asuka',
-        lastName: 'Langley',
-        nationality: 'USA',
-        birthplace: 'USA',
-        dob: '1988-12-12',
-        gender: 'Male',
-        peopleType: { name: 'Crew' },
-        documentType: 'Passport',
-        documentNumber: '141231231',
-        issuingState: 'USA',
-      });
-
-    nock(BASE_URL).put(`/user/${userId}/people/${personId}`, newPerson).reply(201, {});
-
-    nock(BASE_URL).get(`/user/${userId}/people/${personId}`).reply(200, {});
-
-    nock(BASE_URL).get(`/user/${userId}/people`).reply(200, {});
-
-    nock(BASE_URL).get(`/organisations/${orgId}/people`).reply(200, {});
-
-    nock(BASE_URL).delete(`/user/${userId}/people/${personId}`).reply(200, {});
+    client = {
+      get: sinon.stub().resolves(response),
+      post: sinon.stub().resolves(response),
+      put: sinon.stub().resolves(response),
+      delete: sinon.stub().resolves(response),
+    };
+    api = new personApi.PersonApi(client);
   });
 
-  it('should successfully create a person for an individual user', (done) => {
-    personApi.create(userId, person).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.property('peopleType');
-      done();
+  afterEach(() => sinon.restore());
+
+  it('creates a saved person with the existing endpoint and request body', async () => {
+    await api.create(userId, person);
+    expect(client.post).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/people`, person);
+  });
+
+  it('gets saved person details', async () => {
+    await api.getDetails(userId, personId);
+    expect(client.get).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/people/person-1`);
+  });
+
+  it('gets saved people for individuals and organisations', async () => {
+    await api.getPeople(userId, 'individual');
+    await api.getPeople(orgId, 'ORGANISATION');
+
+    expect(client.get.firstCall.args).to.deep.equal([`${API_PREFIX}/user/user-1/people`]);
+    expect(client.get.secondCall.args).to.deep.equal([`${API_PREFIX}/organisations/org-1/people`]);
+  });
+
+  it('updates only the supported saved-person fields', async () => {
+    await api.update(userId, personId, person);
+
+    expect(client.put).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/people/person-1`, {
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      nationality: 'GBR',
+      placeOfBirth: 'London',
+      dateOfBirth: '1815-12-10',
+      gender: 'Female',
+      documentType: 'Passport',
+      documentNumber: '12345',
+      documentExpiryDate: '2030-01-01',
+      peopleType: 'Crew',
+      issuingState: 'GBR',
+      documentDesc: 'Passport',
     });
   });
 
-  it('should throw an error when creating a person for an individual user', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .post(`/user/${userId}/people`, person)
-      .replyWithError({ message: 'Example create error', code: 404 });
-
-    personApi
-      .create(userId, person)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example create error');
-      });
+  it('deletes a saved person', async () => {
+    await api.deletePerson(userId, personId);
+    expect(client.delete).to.have.been.calledOnceWithExactly(`${API_PREFIX}/user/user-1/people/person-1`);
   });
 
-  it('Should successfully get the details of a saved person', (done) => {
-    personApi.getDetails(userId, personId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
-    });
+  it('preserves the legacy string response and maps HTTP failures to their response body', async () => {
+    const getStub = sinon.stub(dataAccessApi.personApi, 'getDetails').resolves({ ok: true, personId });
+    expect(await personApi.getDetails(userId, personId)).to.equal(JSON.stringify({ personId }));
+    expect(getStub).to.have.been.calledOnceWithExactly(userId, personId);
+
+    const error = Object.assign(new Error('Not found'), { type: 'http_error', body: { message: 'Not found' } });
+    getStub.rejects(error);
+    expect(await personApi.getDetails(userId, personId)).to.equal(JSON.stringify(error.body));
   });
 
-  it('should throw an error when getting the details of a saved person', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .get(`/user/${userId}/people/${personId}`)
-      .replyWithError({ message: 'Example getDetails error', code: 404 });
+  it('propagates network errors from the configured client', async () => {
+    const networkError = new Error('offline');
+    sinon.stub(dataAccessApi.personApi, 'getDetails').rejects(networkError);
 
-    personApi
-      .getDetails(userId, personId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example getDetails error');
-      });
+    try {
+      await personApi.getDetails(userId, personId);
+      expect.fail('Expected the network error to be propagated');
+    } catch (error) {
+      expect(error).to.equal(networkError);
+    }
   });
 
-  it('should successfully get all the saved people for an individual', (done) => {
-    personApi.getPeople(userId, 'individual').then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      done();
-    });
-  });
-
-  it('should throw an error when getting all the saved people for an individual', () => {
-    nock.cleanAll();
-    nock(BASE_URL).get(`/user/${userId}/people`).replyWithError({ message: 'Example getPeople error', code: 404 });
-
-    personApi
-      .getPeople(userId, 'individual')
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example getPeople error');
-      });
-  });
-
-  it('should successfully get all the saved persons for an org', (done) => {
-    personApi.getPeople(orgId, 'organisation').then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      done();
-    });
-  });
-
-  it('should successfully update a saved persons information', (done) => {
-    personApi.update(userId, personId, newPerson).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      done();
-    });
-  });
-
-  it('should throw an error when updating a saved persons information', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .put(`/user/${userId}/people/${personId}`, newPerson)
-      .replyWithError({ message: 'Example update error', code: 404 });
-
-    personApi
-      .update(userId, personId, newPerson)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example update error');
-      });
-  });
-
-  it('Should delete a saved person for an individual', (done) => {
-    personApi.deletePerson(userId, personId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
-    });
-  });
-
-  it('should throw an error when deleting a saved person for an individual', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .delete(`/user/${userId}/people/${personId}`)
-      .replyWithError({ message: 'Example deletePerson error', code: 404 });
-
-    personApi
-      .deletePerson(userId, personId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example deletePerson error');
-      });
-  });
-
-  it('Should delete a saved person for an organisation', (done) => {
-    personApi.deletePerson(orgId, personId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
-    });
+  it('uses the configured API endpoint origin', () => {
+    const endpoint = new URL(endpoints.getPeople(userId));
+    expect(endpoint.pathname).to.equal(`${API_PREFIX}/user/user-1/people`);
   });
 });
