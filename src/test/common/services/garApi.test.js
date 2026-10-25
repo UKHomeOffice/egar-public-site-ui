@@ -65,6 +65,20 @@ describe('GarApi', () => {
     expect(result.items.map(({ id }) => id)).to.deep.equal(['no-board', 'allowed', 'pending']);
   });
 
+  it('requests up to 10000 people when no page is specified', async () => {
+    const response = { items: [] };
+    const client = {
+      get: async (path, options) => {
+        expect(path).to.equal(`/gar/${garId}/people`);
+        expect(options.query).to.include({ per_page: 10000 });
+        expect(options.query).not.to.have.property('page');
+        return response;
+      },
+    };
+
+    expect(await new garApiService.GarApi(client).getPeople(garId)).to.deep.equal(response);
+  });
+
   it('gets supporting documents with the existing pagination query', async () => {
     const response = { items: [{ id: 'document-1' }] };
     const client = {

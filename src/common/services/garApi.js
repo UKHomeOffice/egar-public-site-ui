@@ -10,6 +10,14 @@ function getResponseErrorMessage(err) {
   };
 }
 
+function logHttpError(operation, resourceId, err) {
+  logger.error('GAR API request failed', {
+    operation,
+    resourceId,
+    statusCode: err?.status ?? err?.statusCode,
+  });
+}
+
 function getDurationBeforeDeparture(departureDate, departureTime) {
   const departureDateTimeString = `${departureDate} ${departureTime}`;
   const departureDateTime = new Date(departureDateTimeString);
@@ -32,9 +40,8 @@ class GarApi {
       if (err?.type !== 'http_error') {
         throw err;
       }
-      logger.error('Failed to call GAR get API endpoint');
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(`${garId} garApi.get request was not successful : ${JSON.stringify(responseErrorMessage)}`);
+      logHttpError('get', garId, err);
       return responseErrorMessage;
     }
   }
@@ -50,7 +57,7 @@ class GarApi {
       'amg_checkin_response_code:0Z',
       'amg_checkin_response_code:0A',
     ];
-    const pageObj = pageNumber ? { per_page: 10, page: pageNumber } : '';
+    const pageObj = pageNumber ? { per_page: 10, page: pageNumber } : { per_page: 10000 };
     const options = amgResponseCode ? { amg_response_codes: amgResponseCode } : [''];
 
     try {
@@ -70,9 +77,8 @@ class GarApi {
       if (err?.type !== 'http_error') {
         throw err;
       }
-      logger.error('Failed to call GAR get API endpoint');
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(`${garId} garApi.getPeople request was not successful : ${JSON.stringify(responseErrorMessage)}`);
+      logHttpError('getPeople', garId, err);
       return responseErrorMessage;
     }
   }
@@ -87,11 +93,8 @@ class GarApi {
       if (err?.type !== 'http_error') {
         throw err;
       }
-      logger.error('Failed to call GAR get supporting documents API endpoint');
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(
-        `${garId} garApi.getSupportingDocs request was not successful : ${JSON.stringify(responseErrorMessage)}`
-      );
+      logHttpError('getSupportingDocs', garId, err);
       return responseErrorMessage;
     }
   }
@@ -108,7 +111,7 @@ class GarApi {
         throw err;
       }
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(`${garId} garApi.progress request was not successful : ${JSON.stringify(responseErrorMessage)}`);
+      logHttpError('getGarCheckinProgress', garId, err);
       return responseErrorMessage;
     }
   }
@@ -129,7 +132,7 @@ class GarApi {
         throw err;
       }
       const responseErrorMessage = getResponseErrorMessage(err);
-      logger.error(`${userId} garApi.getGars request was not successful : ${JSON.stringify(responseErrorMessage)}`);
+      logHttpError('getGars', userId, err);
       return responseErrorMessage;
     }
   }
@@ -184,6 +187,7 @@ async function callConfiguredGarApi(method, args, { count = false, progress = fa
     return progress ? JSON.stringify({ progress: result }) : serializeResponse(normalizeClientResponse(result));
   } catch (err) {
     if (err?.type === 'http_error') {
+      logHttpError(method, args[0], err);
       return count ? parseJsonResponse(err.body) : serializeResponse(err.body);
     }
     throw err;
