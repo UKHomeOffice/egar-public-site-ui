@@ -300,7 +300,7 @@ describe('GAR Review Post Controller', () => {
       req.session.resubmitFor0T = ['OTHER-GAR'];
 
       const THREE_HOURS = 60 * 60 * 1000 * 3;
-      const FOUR_HOURS = 60 * 60 * 1000 * 10;
+      const FOUR_HOURS = 60 * 60 * 1000 * 4;
       const today = new Date();
       const threeHourDate = moment.utc(new Date(today.getTime() + THREE_HOURS));
       const fourHoursDate = moment.utc(new Date(today.getTime() + FOUR_HOURS));
@@ -335,7 +335,7 @@ describe('GAR Review Post Controller', () => {
       const cookie = new CookieModel(req);
 
       const THREE_HOURS = 60 * 60 * 1000 * 3;
-      const FOUR_HOURS = 60 * 60 * 1000 * 10;
+      const FOUR_HOURS = 60 * 60 * 1000 * 4;
       const today = new Date();
       const threeHourDate = moment.utc(new Date(today.getTime() + THREE_HOURS));
       const fourHoursDate = moment.utc(new Date(today.getTime() + FOUR_HOURS));
