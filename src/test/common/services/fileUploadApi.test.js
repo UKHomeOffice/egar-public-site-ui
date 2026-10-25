@@ -1,93 +1,51 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const { URL } = require('url');
 
 require('../../global.test');
 
-const config = require('../../../common/config/index');
+const endpoints = require('../../../common/config/endpoints');
+const { FileUploadApi } = require('../../../common/services/fileUploadApi');
 
 describe('File Upload API Service', () => {
-  const { API_VERSION, API_BASE } = config;
-  const BASE_URL = new URL(API_VERSION, API_BASE).href;
   const file = {
     originalname: 'example.doc',
-    buffer: Buffer.alloc(10000),
+    buffer: Buffer.from('supporting document bytes'),
   };
+  let client;
+  let service;
 
   beforeEach(() => {
-    chai.use(sinonChai);
+    client = { post: sinon.stub() };
+    service = new FileUploadApi(client);
   });
 
   afterEach(() => {
     sinon.restore();
   });
 
-  it('should do nothing if request throws error', async () => {
-    const requestStub = sinon.stub().throws('request.post Throw Error');
-    const proxiedService = proxyquire('../../../common/services/fileUploadApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
+  it('uploads the original file bytes and filename as multipart form data', async () => {
+    client.post.resolves('{"garId":"NEW-ID"}');
 
-    await proxiedService.postFile('GAR-ID-1', file);
+    const result = await service.postFile('GAR-ID-1', file);
+    const [url, formData] = client.post.firstCall.args;
+    const uploadedFile = formData.get('file');
 
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'multipart/form-data' },
-      uri: `${BASE_URL}/gar/GAR-ID-1`,
-      formData: {
-        file: {
-          options: { filename: 'example.doc' },
-          value: file.buffer,
-        },
-      },
-    });
+    expect(result).to.equal('{"garId":"NEW-ID"}');
+    expect(url).to.equal(endpoints.postFile('GAR-ID-1'));
+    expect(client.post.calledOnce).to.be.true;
+    expect(uploadedFile.name).to.equal(file.originalname);
+    expect(Buffer.from(await uploadedFile.arrayBuffer())).to.deep.equal(file.buffer);
   });
 
-  it('should reject if error present', async () => {
-    const requestStub = sinon.stub().yields('Example Error', null, null);
-    const proxiedService = proxyquire('../../../common/services/fileUploadApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
+  it('returns the response body for an HTTP error, as the previous upload client did', async () => {
+    client.post.rejects(Object.assign(new Error('Upload rejected'), { type: 'http_error', body: 'not accepted' }));
 
-    const result = await proxiedService.postFile('GAR-ID-1', file);
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'multipart/form-data' },
-      uri: `${BASE_URL}/gar/GAR-ID-1`,
-      formData: {
-        file: {
-          options: { filename: 'example.doc' },
-          value: file.buffer,
-        },
-      },
-    });
-    expect(result).to.be.undefined;
+    expect(await service.postFile('GAR-ID-1', file)).to.equal('not accepted');
   });
 
-  it('should return if ok', async () => {
-    const apiResponse = {
-      garId: 'NEW-ID',
-    };
+  it('resolves undefined when the upload request fails', async () => {
+    client.post.rejects(new Error('Network unavailable'));
 
-    const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
-    const proxiedService = proxyquire('../../../common/services/fileUploadApi', {
-      '../utils/requestWithCorrelationId': { post: requestStub },
-    });
-
-    const result = await proxiedService.postFile('GAR-ID-1', file);
-
-    expect(requestStub).to.have.been.calledOnceWith({
-      headers: { 'content-type': 'multipart/form-data' },
-      uri: `${BASE_URL}/gar/GAR-ID-1`,
-      formData: {
-        file: {
-          options: { filename: 'example.doc' },
-          value: file.buffer,
-        },
-      },
-    });
-    expect(result).to.eql(JSON.stringify(apiResponse));
+    expect(await service.postFile('GAR-ID-1', file)).to.be.undefined;
   });
 });

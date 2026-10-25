@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -206,17 +204,6 @@ describe('API upload file post controller', () => {
 
   describe('valid files less than max number', () => {
     it('should redirect without any parameter when number of files less than the max number', () => {
-      // Create form data for ClamAV
-      formData = {
-        name: req.file.originalname,
-        file: {
-          value: req.file.buffer, // Upload the  file in the multi-part post
-          options: {
-            filename: req.file.originalname,
-          },
-        },
-      };
-
       // Set the first four bytes of the buffer to convince fileType library it is a PDF
       req.file.buffer.writeUInt8(0x25, 0);
       req.file.buffer.writeUInt8(0x50, 1);
@@ -249,7 +236,7 @@ describe('API upload file post controller', () => {
         .then(() => {
           expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
           expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
+          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(req.file);
           expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
             originalname: 'test-gar.pdf',
             buffer: req.file.buffer,
@@ -281,19 +268,7 @@ describe('API upload file post controller', () => {
   });
 
   describe('valid file, av service failures', () => {
-    let formData;
-
     beforeEach(() => {
-      formData = {
-        name: req.file.originalname,
-        file: {
-          value: req.file.buffer, // Upload the  file in the multi-part post
-          options: {
-            filename: req.file.originalname,
-          },
-        },
-      };
-
       // Set the first four bytes of the buffer to convince fileType library it is a PDF
       req.file.buffer.writeUInt8(0x25, 0);
       req.file.buffer.writeUInt8(0x50, 1);
@@ -321,7 +296,7 @@ describe('API upload file post controller', () => {
         .then(() => {
           expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
           expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
+          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(req.file);
           expect(fileUploadApiStub).to.not.have.been.called;
           expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
         });
@@ -340,7 +315,7 @@ describe('API upload file post controller', () => {
         .then(() => {
           expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
           expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
+          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(req.file);
           expect(fileUploadApiStub).to.not.have.been.called;
           expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=v');
         });
@@ -348,19 +323,7 @@ describe('API upload file post controller', () => {
   });
 
   describe('valid file, av service ok', () => {
-    let formData;
-
     beforeEach(() => {
-      formData = {
-        name: req.file.originalname,
-        file: {
-          value: req.file.buffer, // Upload the  file in the multi-part post
-          options: {
-            filename: req.file.originalname,
-          },
-        },
-      };
-
       // Set the first four bytes of the buffer to convince fileType library it is a PDF
       req.file.buffer.writeUInt8(0x25, 0);
       req.file.buffer.writeUInt8(0x50, 1);
@@ -391,7 +354,7 @@ describe('API upload file post controller', () => {
         .then(() => {
           expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
           expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
+          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(req.file);
           expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
             originalname: 'test-gar.pdf',
             buffer: req.file.buffer,
@@ -418,7 +381,7 @@ describe('API upload file post controller', () => {
         .then(() => {
           expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
           expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
+          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(req.file);
           expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
             originalname: 'test-gar.pdf',
             buffer: req.file.buffer,
@@ -441,7 +404,7 @@ describe('API upload file post controller', () => {
         .then(() => {
           expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
           expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
+          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(req.file);
           expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
             originalname: 'test-gar.pdf',
             buffer: req.file.buffer,
