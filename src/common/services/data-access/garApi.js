@@ -18,14 +18,6 @@ function logHttpError(operation, resourceId, err) {
   });
 }
 
-function getDurationBeforeDeparture(departureDate, departureTime) {
-  const departureDateTimeString = `${departureDate} ${departureTime}`;
-  const departureDateTime = new Date(departureDateTimeString);
-  const currentDateTimeISO = new Date().toISOString();
-  const currentDateTime = new Date(currentDateTimeISO);
-  return Math.round((departureDateTime - currentDateTime) / 1000 / 60);
-}
-
 class GarApi {
   constructor(client) {
     this.client = client;
@@ -216,7 +208,6 @@ function normalizeClientResponse(response) {
 
 const legacyApi = {
   GarApi,
-  getDurationBeforeDeparture,
 };
 
 [

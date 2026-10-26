@@ -1,10 +1,10 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/data-access/garApi');
+const utils = require('../../../common/utils/utils');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const airportValidation = require('../../../common/utils/airportValidation');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
-const { garApi: facadeGarApi } = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -14,10 +14,10 @@ module.exports = async (req, res) => {
 
   try {
     const [garPeople, garDetails, garDocs, progress] = await Promise.all([
-      facadeGarApi.getPeople(garId),
-      facadeGarApi.get(garId),
-      facadeGarApi.getSupportingDocs(garId),
-      facadeGarApi.getGarCheckinProgress(garId),
+      garApi.getPeople(garId),
+      garApi.get(garId),
+      garApi.getSupportingDocs(garId),
+      garApi.getGarCheckinProgress(garId),
     ]);
 
     const resubmitted = req.query.resubmitted;
@@ -43,8 +43,8 @@ module.exports = async (req, res) => {
       const supportingDocuments = garDocs;
       const { departureDate, departureTime } = parsedGar;
       const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z` : null;
-      const durationInDeparture = garApi.getDurationBeforeDeparture(departureDate, departureTime);
-      const numberOf0TResponseCodes = (await facadeGarApi.getPeople(garId, '', '0T'))?.items?.length;
+      const durationInDeparture = utils.getDurationBeforeDeparture(departureDate, departureTime);
+      const numberOf0TResponseCodes = (await garApi.getPeople(garId, '', '0T'))?.items?.length;
 
       cookie.setGarStatus(parsedGar.status.name);
       logger.debug(`Retrieved GAR ID: ${parsedGar.garId}`);

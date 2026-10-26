@@ -2,7 +2,7 @@ const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
 const manifestFields = require('../../../../common/seeddata/gar_manifest_fields.json');
 const { garApi } = require('../../../../common/services/dataAccessApi');
-const { getDurationBeforeDeparture } = require('../../../../common/services/data-access/garApi');
+const { getDurationBeforeDeparture } = require('../../../../common/utils/utils');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);

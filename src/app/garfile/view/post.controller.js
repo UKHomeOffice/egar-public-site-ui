@@ -2,8 +2,8 @@ const logger = require('../../../common/utils/logger')(__filename);
 const airportValidation = require('../../../common/utils/airportValidation');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const garApi = require('../../../common/services/data-access/garApi');
-const { garApi: facadeGarApi } = require('../../../common/services/dataAccessApi');
+const utils = require('../../../common/utils/utils');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
 
 module.exports = async (req, res) => {
@@ -24,9 +24,9 @@ module.exports = async (req, res) => {
 
   try {
     const [garPeople, garDetails, garDocs] = await Promise.all([
-      facadeGarApi.getPeople(garId),
-      facadeGarApi.get(garId, true),
-      facadeGarApi.getSupportingDocs(garId),
+      garApi.getPeople(garId),
+      garApi.get(garId, true),
+      garApi.getSupportingDocs(garId),
     ]);
 
     const parsedGar = garDetails;
@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
     }
 
     numberOf0TResponseCodes = (parsedPeople.items || []).filter((x) => x.amgCheckinResponseCode === '0T').length;
-    const durationInDeparture = garApi.getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
+    const durationInDeparture = utils.getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
 
     cookie.setCbpId(parsedGar.cbpId);
     cookie.setGarStatus(parsedGar.status.name);
