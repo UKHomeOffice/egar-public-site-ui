@@ -5,7 +5,6 @@ chai.use(require('sinon-chai'));
 const { expect } = chai;
 require('../../global.test');
 const organisationApiService = require('../../../common/services/data-access/organisationApi');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const orgId = 'organisation-1';
 const userId = 'user-1';
@@ -104,40 +103,43 @@ describe('OrganisationApi', () => {
     });
   });
 
-  it('keeps the legacy string response and rejects organisation-update HTTP failures with the response body', async () => {
-    const updateStub = sinon.stub(dataAccessApi.organisationApi, 'update').resolves({ ok: true, updated: true });
-    expect(await organisationApiService.update('New name', orgId)).to.equal(JSON.stringify({ updated: true }));
-    expect(updateStub).to.have.been.calledOnceWithExactly('New name', orgId);
-
-    const error = new Error('Update failed');
-    Object.assign(error, { type: 'http_error', status: 409, body: { message: 'Name already exists' } });
-    updateStub.rejects(error);
-
-    try {
-      await organisationApiService.update('New name', orgId);
-      expect.fail('Expected organisation update to reject');
-    } catch (err) {
-      expect(err).to.deep.equal({ message: 'Name already exists' });
-    }
+  it('exports only the class for construction by dataAccessApi', () => {
+    expect(Object.keys(organisationApiService)).to.deep.equal(['OrganisationApi']);
   });
 
-  it('preserves legacy response bodies for other HTTP failures and propagates network failures', async () => {
-    const getStub = sinon.stub(dataAccessApi.organisationApi, 'get').rejects(
-      Object.assign(new Error('Not found'), {
-        type: 'http_error',
-        status: 404,
-        body: { message: 'Organisation not found' },
-      })
-    );
-    expect(await organisationApiService.get(orgId)).to.equal(JSON.stringify({ message: 'Organisation not found' }));
+  [
+    ['create', 'post', ['Example', userId]],
+    ['update', 'put', ['New name', orgId]],
+    ['get', 'get', [orgId]],
+    ['delete', 'delete', [orgId, userId]],
+    ['getUsers', 'get', [orgId, 1, 5]],
+    ['getListOfOrgUsers', 'get', [orgId]],
+    ['editUser', 'patch', [userId, orgId, user]],
+    ['deleteUser', 'delete', [userId, orgId, user]],
+    ['getSearchOrgUsers', 'get', [orgId, 'Ada']],
+    ['getUserById', 'get', [userId]],
+  ].forEach(([method, verb, args]) => {
+    it(`returns the client response unchanged from ${method}`, async () => {
+      const response = { result: true };
+      client[verb].resolves(response);
+      expect(await api[method](...args)).to.equal(response);
+    });
 
-    const networkError = new Error('offline');
-    getStub.rejects(networkError);
-    try {
-      await organisationApiService.get(orgId);
-      expect.fail('Expected network failure to propagate');
-    } catch (err) {
-      expect(err).to.equal(networkError);
-    }
+    ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+      it(`propagates ${type} failures unchanged from ${method}`, async () => {
+        const failure = Object.assign(new Error('Request failed'), {
+          type,
+          status: 409,
+          body: { message: 'Conflict' },
+        });
+        client[verb].rejects(failure);
+        try {
+          await api[method](...args);
+          expect.fail('Expected the request to reject');
+        } catch (err) {
+          expect(err).to.equal(failure);
+        }
+      });
+    });
   });
 });

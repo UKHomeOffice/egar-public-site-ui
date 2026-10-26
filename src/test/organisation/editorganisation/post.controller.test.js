@@ -9,7 +9,6 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const orgApi = require('../../../common/services/data-access/organisationApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/organisation/editorganisation/post.controller');
@@ -36,11 +35,35 @@ describe('Organisation Edit Post Controller', () => {
       render: sinon.stub(),
     };
 
-    orgApiStub = sinon.stub(orgApi, 'update');
+    orgApiStub = sinon.stub(dataAccessApi.organisationApi, 'update');
   });
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`retains the organisation name and form input on a ${type}`, async () => {
+      req.session.org.name = 'Original name';
+      const saveStub = sinon.stub(req.session, 'save').callsArg(0);
+      const failure = Object.assign(new Error('Request failed'), {
+        type,
+        status: 409,
+        body: { message: 'Organisation name already exists' },
+      });
+      orgApiStub.rejects(failure);
+
+      await controller(req, res);
+
+      expect(req.session.org.name).to.equal('Original name');
+      expect(saveStub).not.to.have.been.called;
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
+        cookie: new CookieModel(req),
+        orgName: 'Evil Empire',
+        errors: [type === 'http_error' ? failure.body : failure],
+      });
+    });
   });
 
   it('should render message when name empty', () => {
@@ -51,7 +74,7 @@ describe('Organisation Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(orgApiStub).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
         cookie,
@@ -70,7 +93,7 @@ describe('Organisation Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
@@ -115,13 +138,13 @@ describe('Organisation Edit Post Controller', () => {
     cookie = new CookieModel(req);
 
     sinon.stub(req.session, 'save').callsArg(0);
-    orgApiStub.resolves(JSON.stringify({}));
+    orgApiStub.resolves({});
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(req.session.org.name).to.eq('Evil Empire');

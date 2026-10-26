@@ -5,6 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const { deleteAccount } = require('../../../app/user/deleteAccount/utils');
 const controller = require('../../../app/user/deleteAccount/get.controller');
@@ -30,6 +31,7 @@ describe('User Delete Account Get Controller', () => {
     };
 
     deleteOptionStub = sinon.stub(deleteAccount, userRole);
+    sinon.stub(dataAccessApi.organisationApi, 'getListOfOrgUsers').rejects(new Error('Unavailable'));
     textStub = sinon.stub();
 
     deleteOptionStub.onFirstCall().resolves({

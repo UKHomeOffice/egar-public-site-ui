@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const orgApii = require('../../../common/services/data-access/organisationApi');
+const { organisationApi: orgApii } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/organisation/searchusers/get.controller');
 
 describe('Organisation Search Users Get Controller', () => {
@@ -34,6 +34,32 @@ describe('Organisation Search Users Get Controller', () => {
     sinon.restore();
   });
 
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`redirects with a search error on a ${type}`, async () => {
+      orgApiStub.rejects(Object.assign(new Error('Request failed'), { type, status: 503 }));
+
+      await controller(req, res);
+
+      expect(req.session.errMsg).to.deep.equal({ message: 'Failed to fetch user. Try again' });
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
+      expect(res.render).not.to.have.been.called;
+    });
+  });
+
+  it('renders the returned array without mutating the user objects', async () => {
+    const users = [{ userId: 'user-1', role: { name: 'User' } }];
+    orgApiStub.resolves(users);
+
+    await controller(req, res);
+
+    expect(users[0]).not.to.have.property('isEditable');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
+      cookie: new CookieModel(req),
+      orgUsers: [{ ...users[0], isEditable: false }],
+      searchUserName: 'TEST',
+    });
+  });
+
   it('redirects if no searchUserName set', async () => {
     delete req.query.searchUserName;
 
@@ -51,7 +77,7 @@ describe('Organisation Search Users Get Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(orgApiStub).to.have.been.calledOnceWithExactly('ORGANISATION-ID-1', 'TEST');
     });
   });
@@ -68,7 +94,7 @@ describe('Organisation Search Users Get Controller', () => {
     beforeEach(() => {
       cookie = new CookieModel(req);
       cookie.setOrganisationUsers(apiResponse);
-      orgApiStub.resolves(JSON.stringify(apiResponse));
+      orgApiStub.resolves(apiResponse);
     });
 
     it('should render with no users if no match', () => {
@@ -78,7 +104,7 @@ describe('Organisation Search Users Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
@@ -97,7 +123,7 @@ describe('Organisation Search Users Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(res.render).to.not.have.been.calledOnceWithExactly('/organisation/index', {
           cookie,
           orgUser: [

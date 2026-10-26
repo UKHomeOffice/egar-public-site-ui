@@ -5,7 +5,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, HTTPS } = require('../../../common/config');
 const sendEmail = require('../../../common/services/sendEmail');
-const organisationApi = require('../../../common/services/data-access/organisationApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const verifyUserService = require('../../../common/services/data-access/verificationApi');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { getOneLoginLogoutUrl } = require('../../../common/utils/oneLoginAuth');
@@ -41,24 +41,24 @@ const sendAdminUpdateEmail = (userObj, accountUrl) => {
     return new Promise((resolve, _reject) => resolve(userObj));
   }
 
-  return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((users) => {
-    const userList = JSON.parse(users);
-
-    userList.items.forEach((user) => {
-      try {
-        sendEmail.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
-          firstName: userObj.firstName,
-          lastName: userObj.lastName,
-          accountUrl,
-          adminFirstName: user.firstName,
-          adminLastName: user.lastName,
-          organisationName: userObj.organisation.organisationName,
-        });
-      } catch (error) {
-        logger.error('Failed to send email to admin', { errorMessage: error?.message, stack: error?.stack });
-      }
+  return dataAccessApi.organisationApi
+    .getListOfOrgUsers(userObj.organisation.organisationId, 'Admin')
+    .then((userList) => {
+      userList.items.forEach((user) => {
+        try {
+          sendEmail.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
+            firstName: userObj.firstName,
+            lastName: userObj.lastName,
+            accountUrl,
+            adminFirstName: user.firstName,
+            adminLastName: user.lastName,
+            organisationName: userObj.organisation.organisationName,
+          });
+        } catch (error) {
+          logger.error('Failed to send email to admin', { errorMessage: error?.message, stack: error?.stack });
+        }
+      });
     });
-  });
 };
 
 /**
@@ -92,15 +92,10 @@ const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
 
         case oneLoginSidMatches && !emailMatches:
           // sid matches but email does not.
-          return new Promise((resolve, reject) =>
-            userApi
-              .updateEmailOrOneLoginSid(userData.email, { email })
-              .then(() => {
-                userData.email = email;
-                sendAdminUpdateEmail(userData, accountUrl).then(() => resolve(userData));
-              })
-              .catch((err) => reject(err))
-          );
+          return userApi.updateEmailOrOneLoginSid(userData.email, { email }).then(() => {
+            userData.email = email;
+            return sendAdminUpdateEmail(userData, accountUrl).then(() => userData);
+          });
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
           return new Promise((resolve, _reject) =>

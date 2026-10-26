@@ -7,6 +7,8 @@ const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
 const userApi = require('../../../common/services/data-access/userManageApi');
 const verification = require('../../../common/services/data-access/verificationApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
+const sendEmail = require('../../../common/services/sendEmail');
 
 require('../../global.test');
 
@@ -105,6 +107,61 @@ FnBdx5XR9zLe40LX3+cbEtw=
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  describe('notifying organisation admins when the One Login email changes', () => {
+    let adminsStub;
+    let emailStub;
+
+    beforeEach(() => {
+      req.query = { code: '123', state: 'valid_state' };
+      req.cookies = { state: 'valid_state', nonce: 'valid_nonce' };
+      userSearchStub.resolves({
+        userId: 'user-1',
+        state: 'verified',
+        oneLoginSid: 'onelogin_sid',
+        email: 'old@example.com',
+        firstName: 'Test',
+        lastName: 'User',
+        role: { name: 'User' },
+        organisation: { organisationId: 'org-1', organisationName: 'Test organisation' },
+      });
+      updateEmailOrOneLoginSidStub.resolves({});
+      getDetailsStub.resolves({ organisation: { organisationId: 'org-1', organisationName: 'Test organisation' } });
+      adminsStub = sinon.stub(dataAccessApi.organisationApi, 'getListOfOrgUsers').resolves({
+        items: [{ email: 'admin@example.com', firstName: 'Test', lastName: 'Admin' }],
+      });
+      emailStub = sinon.stub(sendEmail, 'send').resolves();
+    });
+
+    it('uses the object response to notify admins and completes login', async () => {
+      await controller(req, res);
+
+      expect(adminsStub).to.have.been.calledOnceWithExactly('org-1', 'Admin');
+      expect(emailStub).to.have.been.calledOnce;
+      expect(emailStub.firstCall.args[1]).to.equal('admin@example.com');
+      expect(emailStub.firstCall.args[2]).to.include({
+        firstName: 'Test',
+        lastName: 'User',
+        adminFirstName: 'Test',
+        adminLastName: 'Admin',
+        organisationName: 'Test organisation',
+      });
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
+    });
+
+    ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+      it(`finishes through the login failure path instead of hanging on an admin lookup ${type}`, async () => {
+        adminsStub.rejects(Object.assign(new Error('Request failed'), { type, status: 503 }));
+
+        await controller(req, res);
+
+        expect(emailStub).not.to.have.been.called;
+        expect(getDetailsStub).not.to.have.been.called;
+        expect(res.redirect).to.have.been.calledOnce;
+        expect(res.redirect.firstCall.args[0]).not.to.equal('/home');
+      });
+    });
   });
 
   it('should render if referer but no user object in session', async () => {

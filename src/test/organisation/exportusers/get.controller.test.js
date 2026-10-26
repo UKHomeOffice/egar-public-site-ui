@@ -9,7 +9,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const controller = require('../../../app/organisation/exportusers/get.controller');
-const orgApi = require('../../../common/services/data-access/organisationApi');
+const { organisationApi: orgApi } = require('../../../common/services/dataAccessApi');
 
 describe('Organisation Export User Controller', () => {
   let req;
@@ -39,6 +39,7 @@ describe('Organisation Export User Controller', () => {
     };
 
     res = {
+      redirect: sinon.spy(),
       render: sinon.spy(),
       setHeader: sinon.spy(),
       write: sinon.spy(),
@@ -51,6 +52,22 @@ describe('Organisation Export User Controller', () => {
   afterEach(() => {
     clock.restore();
     sinon.restore();
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`redirects with an export error without sending CSV on a ${type}`, async () => {
+      req.session.save = sinon.stub().callsArg(0);
+      orgApiStub.rejects(Object.assign(new Error('Request failed'), { type, status: 503 }));
+
+      await controller(req, res);
+
+      expect(req.session.errMsg).to.deep.equal({ message: 'Failed to export organisation users. Try again' });
+      expect(req.session.save).to.have.been.calledOnce;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
+      expect(res.setHeader).not.to.have.been.called;
+      expect(res.write).not.to.have.been.called;
+      expect(res.end).not.to.have.been.called;
+    });
   });
 
   describe('api returns ok', () => {
@@ -78,7 +95,7 @@ describe('Organisation Export User Controller', () => {
     beforeEach(() => {
       cookie = new CookieModel(req);
       cookie.setOrganisationUsers(apiResponse);
-      orgApiStub.resolves(JSON.stringify(apiResponse));
+      orgApiStub.resolves(apiResponse);
     });
 
     it('should display success message if set', () => {
@@ -86,7 +103,7 @@ describe('Organisation Export User Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 999999999999999);
         expect(res.setHeader).to.have.been.calledWith(
           'Content-disposition',

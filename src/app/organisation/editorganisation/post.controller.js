@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const organisationApi = require('../../../common/services/data-access/organisationApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const { orgName } = req.body;
@@ -11,14 +11,13 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
   // Validate chains
-  validator
+  return validator
     .validateChains(validations.validations(req))
     .then(() => {
       // API should return OrgId
-      organisationApi
+      return dataAccessApi.organisationApi
         .update(orgName, cookie.getOrganisationId())
-        .then((apiResponse) => {
-          const responseObj = JSON.parse(apiResponse);
+        .then((responseObj) => {
           logger.debug(`Response from API: ${JSON.stringify(responseObj)}`);
           // Check for error
           cookie.setOrganisationName(req.body.orgName);
@@ -32,7 +31,11 @@ module.exports = (req, res) => {
             errorMessage: err?.message,
             stack: err?.stack,
           });
-          res.render('app/organisation/editorganisation/index', { cookie, orgName, errors: [err] });
+          res.render('app/organisation/editorganisation/index', {
+            cookie,
+            orgName,
+            errors: [err?.type === 'http_error' ? err.body : err],
+          });
         });
     })
     .catch((err) => {

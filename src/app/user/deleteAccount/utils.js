@@ -1,7 +1,7 @@
 const i18n = require('i18n');
 const emailService = require('../../../common/services/sendEmail');
 const userApi = require('../../../common/services/data-access/userManageApi');
-const organisationApi = require('../../../common/services/data-access/organisationApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const settings = require('../../../common/config/index');
 
@@ -45,15 +45,15 @@ const deleteAccount = {
   Admin: async (cookie) => {
     const requesterId = cookie.getUserDbId();
     const orgId = cookie.getOrganisationId();
-    const orgUsersRes = await organisationApi.getListOfOrgUsers(orgId);
-    const orgUsers = JSON.parse(orgUsersRes).items;
+    const orgUsersRes = await dataAccessApi.organisationApi.getListOfOrgUsers(orgId);
+    const orgUsers = orgUsersRes.items;
     const deletionType = adminDeletionType(orgUsers);
 
     return {
       deleteAccount: async () => {
         switch (deletionType) {
           case 'DELETE_ORGANISATION':
-            return organisationApi.delete(orgId, requesterId);
+            return dataAccessApi.organisationApi.delete(orgId, requesterId);
 
           case 'DO_NOT_DELETE_ADMIN':
             return JSON.stringify({

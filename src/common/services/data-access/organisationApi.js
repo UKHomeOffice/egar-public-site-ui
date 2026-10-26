@@ -1,19 +1,5 @@
 const logger = require('../../utils/logger')(__filename);
 
-function serializeResponse(response) {
-  if (typeof response === 'string') {
-    return response;
-  }
-
-  if (response && typeof response === 'object' && !Array.isArray(response) && 'ok' in response) {
-    const body = { ...response };
-    delete body.ok;
-    return JSON.stringify(body);
-  }
-
-  return JSON.stringify(response);
-}
-
 class OrganisationApi {
   constructor(client) {
     this.client = client;
@@ -72,43 +58,4 @@ class OrganisationApi {
   }
 }
 
-async function callConfiguredOrganisationApi(method, args) {
-  try {
-    const result = await require('../dataAccessApi').organisationApi[method](...args);
-    return serializeResponse(result);
-  } catch (err) {
-    logger.error('Organisation API request failed', {
-      operation: method,
-      status: err?.status,
-    });
-
-    if (err?.type !== 'http_error') {
-      throw err;
-    }
-
-    if (method === 'update') {
-      throw err.body;
-    }
-
-    return serializeResponse(err.body);
-  }
-}
-
-const legacyApi = { OrganisationApi };
-
-[
-  'create',
-  'update',
-  'get',
-  'delete',
-  'getUsers',
-  'getListOfOrgUsers',
-  'editUser',
-  'deleteUser',
-  'getSearchOrgUsers',
-  'getUserById',
-].forEach((method) => {
-  legacyApi[method] = (...args) => callConfiguredOrganisationApi(method, args);
-});
-
-module.exports = legacyApi;
+module.exports = { OrganisationApi };

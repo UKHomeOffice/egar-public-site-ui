@@ -9,7 +9,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const orgApi = require('../../../common/services/data-access/organisationApi');
+const { organisationApi: orgApi } = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/organisation/create/post.controller');
 
@@ -41,6 +41,26 @@ describe('Organisation Create Post Controller', () => {
     sinon.restore();
   });
 
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`renders a ${type} without assigning an organisation or role`, async () => {
+      const failure = Object.assign(new Error('Request failed'), {
+        type,
+        status: 400,
+        body: { message: 'Organisation name already exists' },
+      });
+      orgApiStub.rejects(failure);
+
+      await controller(req, res);
+
+      expect(req.session.org.i).to.be.undefined;
+      expect(req.session.u.rl).to.be.undefined;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
+        cookie: new CookieModel(req),
+        errors: [type === 'http_error' ? { message: failure.body.message } : failure],
+      });
+    });
+  });
+
   it('should render message when name empty', () => {
     req.body.orgName = '';
     cookie = new CookieModel(req);
@@ -49,7 +69,7 @@ describe('Organisation Create Post Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(req.session.org.name).to.eq('');
       expect(req.session.org.i).to.be.undefined;
       expect(req.session.u.rl).to.be.undefined;
@@ -70,7 +90,7 @@ describe('Organisation Create Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(req.session.org.name).to.eq('New Evil Empire');
@@ -87,17 +107,15 @@ describe('Organisation Create Post Controller', () => {
   it('should render with error message if api returns one', () => {
     cookie = new CookieModel(req);
 
-    orgApiStub.resolves(
-      JSON.stringify({
-        message: 'User ID not found',
-      })
-    );
+    orgApiStub.resolves({
+      message: 'User ID not found',
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(req.session.org.name).to.eq('New Evil Empire');
@@ -114,21 +132,19 @@ describe('Organisation Create Post Controller', () => {
   it('should render and sets cookie value when api ok', () => {
     cookie = new CookieModel(req);
 
-    orgApiStub.resolves(
-      JSON.stringify({
-        organisation: {
-          organisationName: 'New Evil Empire From API',
-          organisationId: 'NEW-ORG-ID-123',
-        },
-        role: { name: 'Admin' },
-      })
-    );
+    orgApiStub.resolves({
+      organisation: {
+        organisationName: 'New Evil Empire From API',
+        organisationId: 'NEW-ORG-ID-123',
+      },
+      role: { name: 'Admin' },
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(req.session.org.name).to.eq('New Evil Empire From API');

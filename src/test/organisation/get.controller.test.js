@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const orgApi = require('../../common/services/data-access/organisationApi');
+const { organisationApi: orgApi } = require('../../common/services/dataAccessApi');
 
 const settings = require('../../common/config/index');
 const configMock = {
@@ -47,6 +47,20 @@ describe('Organisation Get Controller', () => {
     sinon.restore();
   });
 
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`renders the users fetch error on a ${type}`, async () => {
+      orgApiStub.rejects(Object.assign(new Error('Request failed'), { type, status: 503 }));
+
+      await controller(req, res);
+
+      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
+      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
+        cookie: new CookieModel(req),
+        errors: [{ message: 'There was a problem fetching organisation users' }],
+      });
+    });
+  });
+
   it('should redirect with errors if api rejects', () => {
     const cookie = new CookieModel(req);
     orgApiStub.rejects('orgApi.getUsers Example Reject');
@@ -55,7 +69,7 @@ describe('Organisation Get Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
         cookie,
@@ -79,7 +93,7 @@ describe('Organisation Get Controller', () => {
       cookie = new CookieModel(req);
       cookie.setOrganisationUsers(apiResponse);
 
-      orgApiStub.resolves(JSON.stringify(apiResponse));
+      orgApiStub.resolves(apiResponse);
     });
 
     it('should display error message if set', () => {
@@ -89,7 +103,7 @@ describe('Organisation Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
@@ -113,7 +127,7 @@ describe('Organisation Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
@@ -137,7 +151,7 @@ describe('Organisation Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
