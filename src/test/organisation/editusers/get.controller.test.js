@@ -40,6 +40,7 @@ describe('Organisation Edit Users Get Controller', () => {
 
       await controller(req, res);
 
+      expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
       expect(req.session.errMsg).to.deep.equal({ message: 'Failed to find user details. Try again' });
       expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
       expect(res.render).not.to.have.been.called;
@@ -54,6 +55,8 @@ describe('Organisation Edit Users Get Controller', () => {
     await controller(req, res);
 
     expect(user.role).to.deep.equal({ name: 'User' });
+    expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
+    expect(res.redirect).not.to.have.been.called;
     expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editusers/index', {
       cookie: new CookieModel(req),
       orgUser: { ...user, role: 'User' },
@@ -70,72 +73,5 @@ describe('Organisation Edit Users Get Controller', () => {
     expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
     expect(res.render).to.not.have.been.called;
     expect(orgApiStub).to.not.have.been.called;
-  });
-
-  // org users
-  it('should redirect with error message if api rejects', () => {
-    orgApiStub.rejects('orgApiStub.getUsers Example Reject');
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    return callController().then(() => {
-      expect(req.session.errMsg).to.eql({ message: 'Failed to find user details. Try again' });
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
-      expect(res.render).to.not.have.been.called;
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
-    });
-  });
-
-  it('should render with no users if no match', () => {
-    const cookie = new CookieModel(req);
-
-    orgApiStub.resolves({
-      id: 'PERSON-1',
-      userId: 'EXAMPLE-EDIT-USER-ID-2',
-      role: { name: 'User' },
-    });
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    return callController().then(() => {
-      expect(req.session.errMsg).to.be.undefined;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.not.have.been.calledOnceWithExactly('app/organisation/editusers/index', {
-        cookie,
-        orgUser: [],
-        roles,
-      });
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
-    });
-  });
-
-  it('should render with users if matches', () => {
-    const cookie = new CookieModel(req);
-
-    orgApiStub.resolves({
-      id: 'PERSON-1',
-      userId: 'EXAMPLE-EDIT-USER-ID-2',
-      role: { name: 'User' },
-    });
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    return callController().then(() => {
-      expect(req.session.errMsg).to.be.undefined;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.not.have.been.calledOnceWithExactly('app/organisation/editusers/index', {
-        cookie,
-        orgUser: {
-          id: 'PERSON-2',
-          userId: 'EXAMPLE-EDIT-USER-ID',
-          role: 'User',
-        },
-        roles,
-      });
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('EXAMPLE-EDIT-USER-ID');
-    });
   });
 });

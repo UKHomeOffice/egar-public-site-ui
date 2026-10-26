@@ -42,7 +42,7 @@ describe('User Login Get Controller', () => {
     res = {
       redirect: sinon.spy(),
       render: sinon.spy(),
-      cookie: () => true,
+      cookie: sinon.spy(),
       clearCookie: sinon.spy(),
       set: sinon.spy(),
     };
@@ -147,6 +147,10 @@ FnBdx5XR9zLe40LX3+cbEtw=
         adminLastName: 'Admin',
         organisationName: 'Test organisation',
       });
+      expect(updateEmailOrOneLoginSidStub).to.have.been.calledOnceWithExactly('old@example.com', {
+        email: 'user@email.com',
+      });
+      expect(emailStub).to.have.been.calledWith(config.NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID);
       expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
     });
 
@@ -158,8 +162,15 @@ FnBdx5XR9zLe40LX3+cbEtw=
 
         expect(emailStub).not.to.have.been.called;
         expect(getDetailsStub).not.to.have.been.called;
-        expect(res.redirect).to.have.been.calledOnce;
-        expect(res.redirect.firstCall.args[0]).not.to.equal('/home');
+        const logoutQuery = new URLSearchParams({
+          id_token_hint: 'mock_id_token',
+          post_logout_redirect_uri: config.ONE_LOGIN_LOGOUT_URL,
+          state: 'valid_state',
+        });
+        expect(res.redirect).to.have.been.calledOnceWithExactly(`www.test_one_login.com/logout?${logoutQuery}`);
+        expect(res.cookie).to.have.been.calledWith('errorPage', 'service-error');
+        expect(req.session).not.to.have.property('id_token');
+        expect(req.session).not.to.have.property('access_token');
       });
     });
   });

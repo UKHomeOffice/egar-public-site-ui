@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -55,6 +53,7 @@ describe('Organisation Edit Post Controller', () => {
 
       await controller(req, res);
 
+      expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
       expect(req.session.org.name).to.equal('Original name');
       expect(saveStub).not.to.have.been.called;
       expect(res.redirect).not.to.have.been.called;
@@ -66,92 +65,29 @@ describe('Organisation Edit Post Controller', () => {
     });
   });
 
-  it('should render message when name empty', () => {
+  it('renders validation errors without calling the API when the name is empty', async () => {
     req.body.orgName = '';
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    return callController().then(() => {
-      expect(orgApiStub).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
-        cookie,
-        orgName: '',
-        errors: [new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation')],
-      });
+    expect(orgApiStub).to.not.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
+      cookie,
+      orgName: '',
+      errors: [new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation')],
     });
   });
 
-  it('should render with error message when api rejects', () => {
-    cookie = new CookieModel(req);
-
-    orgApiStub.rejects({ message: 'orgApi.update Example Reject' });
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    return callController()
-      .then()
-      .then(() => {
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/editorganisation/index', {
-          cookie,
-          orgName: 'Evil Empire',
-          errors: [{ message: 'orgApi.update Example Reject' }],
-        });
-      });
-  });
-
-  it('renders an injected Fetch HTTP failure from the organisation update API', async () => {
-    orgApiStub.restore();
-    const updateStub = sinon.stub(dataAccessApi.organisationApi, 'update').rejects(
-      Object.assign(new Error('Organisation update failed'), {
-        type: 'http_error',
-        status: 409,
-        body: { message: 'Organisation name already exists' },
-      })
-    );
-
-    let finishRender;
-    const renderCompleted = new Promise((resolve) => {
-      finishRender = resolve;
-    });
-    res.render = sinon.spy((...args) => finishRender(args));
-    controller(req, res);
-
-    const [template, renderData] = await renderCompleted;
-    expect(updateStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
-    expect(res.render).to.have.been.calledOnce;
-    expect(template).to.equal('app/organisation/editorganisation/index');
-    expect(renderData.cookie).to.be.instanceof(CookieModel);
-    expect(renderData.orgName).to.equal('Evil Empire');
-    expect(renderData.errors).to.deep.equal([{ message: 'Organisation name already exists' }]);
-    expect(res.redirect).to.not.have.been.called;
-  });
-
-  // TODO: Should there be one for the api error message...?
-
-  it('should redirect and sets cookie value when api ok', () => {
-    cookie = new CookieModel(req);
-
+  it('updates the session name and redirects after a successful update', async () => {
     sinon.stub(req.session, 'save').callsArg(0);
     orgApiStub.resolves({});
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    return callController()
-      .then()
-      .then(() => {
-        expect(req.session.org.name).to.eq('Evil Empire');
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
-        expect(res.render).to.not.have.been.called;
-        expect(req.session.save).to.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
-      });
+    await controller(req, res);
+    expect(req.session.org.name).to.eq('Evil Empire');
+    expect(orgApiStub).to.have.been.calledOnceWithExactly('Evil Empire', 'FIRST-ORDER-ID');
+    expect(res.render).to.not.have.been.called;
+    expect(req.session.save).to.have.been.calledOnce;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
   });
 });

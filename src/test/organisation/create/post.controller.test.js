@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
@@ -61,76 +59,42 @@ describe('Organisation Create Post Controller', () => {
     });
   });
 
-  it('should render message when name empty', () => {
+  it('renders validation errors without creating an organisation when the name is empty', async () => {
     req.body.orgName = '';
-    cookie = new CookieModel(req);
+    const cookie = new CookieModel(req);
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    return callController().then(() => {
-      expect(req.session.org.name).to.eq('');
-      expect(req.session.org.i).to.be.undefined;
-      expect(req.session.u.rl).to.be.undefined;
-      expect(orgApiStub).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
-        cookie,
-        errors: [new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation')],
-      });
+    expect(req.session.org.name).to.eq('');
+    expect(req.session.org.i).to.be.undefined;
+    expect(req.session.u.rl).to.be.undefined;
+    expect(orgApiStub).to.not.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
+      cookie,
+      errors: [new ValidationRule(validator.notEmpty, 'orgName', '', 'Enter the name of the organisation')],
     });
   });
 
-  it('should render with error message when api rejects', () => {
-    cookie = new CookieModel(req);
-
-    orgApiStub.rejects({ message: 'orgApi.update Example Reject' });
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    return callController()
-      .then()
-      .then(() => {
-        expect(req.session.org.name).to.eq('New Evil Empire');
-        expect(req.session.org.i).to.be.undefined;
-        expect(req.session.u.rl).to.be.undefined;
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
-          cookie,
-          errors: [{ message: 'orgApi.update Example Reject' }],
-        });
-      });
-  });
-
-  it('should render with error message if api returns one', () => {
-    cookie = new CookieModel(req);
+  it('renders a returned backend message without assigning an organisation or role', async () => {
+    const cookie = new CookieModel(req);
 
     orgApiStub.resolves({
       message: 'User ID not found',
     });
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    return callController()
-      .then()
-      .then(() => {
-        expect(req.session.org.name).to.eq('New Evil Empire');
-        expect(req.session.org.i).to.be.undefined;
-        expect(req.session.u.rl).to.be.undefined;
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
-          cookie,
-          errors: [{ message: 'User ID not found' }],
-        });
-      });
+    await controller(req, res);
+    expect(req.session.org.name).to.eq('New Evil Empire');
+    expect(req.session.org.i).to.be.undefined;
+    expect(req.session.u.rl).to.be.undefined;
+    expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/create/index', {
+      cookie,
+      errors: [{ message: 'User ID not found' }],
+    });
   });
 
-  it('should render and sets cookie value when api ok', () => {
-    cookie = new CookieModel(req);
+  it('stores the returned organisation and role before rendering success', async () => {
+    const cookie = new CookieModel(req);
 
     orgApiStub.resolves({
       organisation: {
@@ -140,20 +104,13 @@ describe('Organisation Create Post Controller', () => {
       role: { name: 'Admin' },
     });
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    return callController()
-      .then()
-      .then(() => {
-        expect(req.session.org.name).to.eq('New Evil Empire From API');
-        expect(req.session.org.i).to.eq('NEW-ORG-ID-123');
-        expect(req.session.u.rl).to.eq('Admin');
-        expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/createsuccess/index', {
-          cookie,
-        });
-      });
+    await controller(req, res);
+    expect(req.session.org.name).to.eq('New Evil Empire From API');
+    expect(req.session.org.i).to.eq('NEW-ORG-ID-123');
+    expect(req.session.u.rl).to.eq('Admin');
+    expect(orgApiStub).to.have.been.calledOnceWithExactly('New Evil Empire', 'USER-DB-ID-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/createsuccess/index', {
+      cookie,
+    });
   });
 });

@@ -8,6 +8,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const userApi = require('../../../common/services/data-access/userManageApi');
 const sendEmail = require('../../../common/services/sendEmail');
+const config = require('../../../common/config');
 
 const { adminDeletionType, deleteAccount } = require('../../../app/user/deleteAccount/utils');
 const controller = require('../../../app/user/deleteAccount/post.controller');
@@ -88,121 +89,136 @@ describe('User Delete Account Post Controller', () => {
       deleteAccount: deleteAccountStub,
       notifyUser: notifyUserStub,
     });
+  });
 
-    describe('Admin organisation account deletion through dataAccessApi', () => {
-      let req;
-      let res;
-      let listStub;
-      let deleteStub;
-      let deleteUserStub;
-      let notifyStub;
-      let destroyStub;
+  describe('Admin organisation account deletion through dataAccessApi', () => {
+    let req;
+    let res;
+    let listStub;
+    let deleteStub;
+    let deleteUserStub;
+    let notifyStub;
+    let destroyStub;
 
-      beforeEach(() => {
-        req = {
-          session: {
-            u: { dbId: 'admin-1', e: 'admin@example.com', rl: 'Admin', fn: 'Test', ln: 'Admin' },
-            org: { i: 'org-1', name: 'Test organisation' },
-            id_token: 'test-id-token',
-            destroy: (callback) => callback(),
+    beforeEach(() => {
+      req = {
+        session: {
+          u: { dbId: 'admin-1', e: 'admin@example.com', rl: 'Admin', fn: 'Test', ln: 'Admin' },
+          org: { i: 'org-1', name: 'Test organisation' },
+          id_token: 'test-id-token',
+          destroy: (callback) => callback(),
+        },
+      };
+      res = { render: sinon.spy(), redirect: sinon.spy(), locals: {} };
+      listStub = sinon.stub(dataAccessApi.organisationApi, 'getListOfOrgUsers').resolves({
+        items: [{ userId: 'admin-1', role: { name: 'Admin' } }],
+      });
+      deleteStub = sinon.stub(dataAccessApi.organisationApi, 'delete').resolves({});
+      deleteUserStub = sinon.stub(userApi, 'deleteUser').resolves(JSON.stringify({}));
+      notifyStub = sinon.stub(sendEmail, 'send').resolves();
+      destroyStub = sinon.stub(req.session, 'destroy').callsArg(0);
+    });
+
+    it('deletes a sole-admin organisation using the object response before notifying and logging out', async () => {
+      await controller(req, res);
+
+      expect(listStub).to.have.been.calledOnceWithExactly('org-1');
+      expect(deleteStub).to.have.been.calledOnceWithExactly('org-1', 'admin-1');
+      expect(deleteUserStub).not.to.have.been.called;
+      expect(notifyStub).to.have.been.calledOnceWithExactly(
+        config.NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID,
+        'admin@example.com',
+        { firstName: 'Test', orgName: 'Test organisation' }
+      );
+      sinon.assert.callOrder(listStub, deleteStub, notifyStub, res.redirect);
+      expect(destroyStub).not.to.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/user/logout?action=user-deleted');
+      expect(res.render).not.to.have.been.called;
+    });
+
+    it('does not delete the last admin when other organisation users remain', async () => {
+      listStub.resolves({ items: [{ role: { name: 'Admin' } }, { role: { name: 'User' } }] });
+
+      await controller(req, res);
+
+      expect(deleteStub).not.to.have.been.called;
+      expect(deleteUserStub).not.to.have.been.called;
+      expect(notifyStub).not.to.have.been.called;
+      expect(destroyStub).not.to.have.been.called;
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
+        cookie: new CookieModel(req),
+        errors: [
+          {
+            message:
+              'Please add another Admin account before deleting your account or confirm to delete your Account and the Organisation',
           },
-        };
-        res = { render: sinon.spy(), redirect: sinon.spy(), locals: {} };
-        listStub = sinon.stub(dataAccessApi.organisationApi, 'getListOfOrgUsers').resolves({
-          items: [{ userId: 'admin-1', role: { name: 'Admin' } }],
-        });
-        deleteStub = sinon.stub(dataAccessApi.organisationApi, 'delete').resolves({});
-        deleteUserStub = sinon.stub(userApi, 'deleteUser').resolves(JSON.stringify({}));
-        notifyStub = sinon.stub(sendEmail, 'send').resolves();
-        destroyStub = sinon.stub(req.session, 'destroy').callsArg(0);
+        ],
       });
+    });
 
-      afterEach(() => sinon.restore());
+    it('uses the unchanged user-deletion path when another admin remains', async () => {
+      listStub.resolves({ items: [{ role: { name: 'Admin' } }, { role: { name: 'Admin' } }] });
 
-      it('deletes a sole-admin organisation using the object response before notifying and logging out', async () => {
-        await controller(req, res);
+      await controller(req, res);
 
-        expect(listStub).to.have.been.calledOnceWithExactly('org-1');
-        expect(deleteStub).to.have.been.calledOnceWithExactly('org-1', 'admin-1');
-        expect(deleteUserStub).not.to.have.been.called;
-        expect(notifyStub).to.have.been.calledOnce;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/user/logout?action=user-deleted');
-        expect(res.render).not.to.have.been.called;
+      expect(deleteStub).not.to.have.been.called;
+      expect(deleteUserStub).to.have.been.calledOnceWithExactly('admin@example.com', 'admin-1');
+      expect(notifyStub).to.have.been.calledOnceWithExactly(
+        config.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID,
+        'admin@example.com',
+        { firstName: 'Test', lastName: 'Admin' }
+      );
+      sinon.assert.callOrder(listStub, deleteUserStub, notifyStub, res.redirect);
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/user/logout?action=user-deleted');
+    });
+
+    it('does not notify or log out when deletion returns a message object', async () => {
+      deleteStub.resolves({ message: 'Deletion denied' });
+
+      await controller(req, res);
+
+      expect(notifyStub).not.to.have.been.called;
+      expect(destroyStub).not.to.have.been.called;
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
+        cookie: new CookieModel(req),
+        errors: [{ message: 'Deletion denied' }],
       });
+    });
 
-      it('does not delete the last admin when other organisation users remain', async () => {
-        listStub.resolves({ items: [{ role: { name: 'Admin' } }, { role: { name: 'User' } }] });
+    it('preserves the backend deletion message from an HTTP rejection', async () => {
+      const body = { message: 'Deletion denied' };
+      deleteStub.rejects(Object.assign(new Error('Forbidden'), { type: 'http_error', status: 403, body }));
 
-        await controller(req, res);
+      await controller(req, res);
 
-        expect(deleteStub).not.to.have.been.called;
-        expect(deleteUserStub).not.to.have.been.called;
-        expect(notifyStub).not.to.have.been.called;
-        expect(destroyStub).not.to.have.been.called;
-        expect(res.redirect).not.to.have.been.called;
-        expect(res.render).to.have.been.calledOnce;
-        expect(res.render.firstCall.args[0]).to.equal('app/user/deleteAccount/index');
-        expect(res.render.firstCall.args[1].errors[0].message).to.be.a('string').and.not.to.equal('');
+      expect(notifyStub).not.to.have.been.called;
+      expect(destroyStub).not.to.have.been.called;
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
+        cookie: new CookieModel(req),
+        errors: [body],
       });
+    });
 
-      it('uses the unchanged user-deletion path when another admin remains', async () => {
-        listStub.resolves({ items: [{ role: { name: 'Admin' } }, { role: { name: 'Admin' } }] });
+    ['list', 'delete'].forEach((operation) => {
+      ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+        it(`does not notify or log out on a ${operation} ${type}`, async () => {
+          const stub = operation === 'list' ? listStub : deleteStub;
+          stub.rejects(Object.assign(new Error('Request failed'), { type, status: 503 }));
 
-        await controller(req, res);
+          await controller(req, res);
 
-        expect(deleteStub).not.to.have.been.called;
-        expect(deleteUserStub).to.have.been.calledOnceWithExactly('admin@example.com', 'admin-1');
-        expect(notifyStub).to.have.been.calledOnce;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/user/logout?action=user-deleted');
-      });
-
-      it('does not notify or log out when deletion returns a message object', async () => {
-        deleteStub.resolves({ message: 'Deletion denied' });
-
-        await controller(req, res);
-
-        expect(notifyStub).not.to.have.been.called;
-        expect(destroyStub).not.to.have.been.called;
-        expect(res.redirect).not.to.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
-          cookie: new CookieModel(req),
-          errors: [{ message: 'Deletion denied' }],
-        });
-      });
-
-      it('preserves the backend deletion message from an HTTP rejection', async () => {
-        const body = { message: 'Deletion denied' };
-        deleteStub.rejects(Object.assign(new Error('Forbidden'), { type: 'http_error', status: 403, body }));
-
-        await controller(req, res);
-
-        expect(notifyStub).not.to.have.been.called;
-        expect(destroyStub).not.to.have.been.called;
-        expect(res.redirect).not.to.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
-          cookie: new CookieModel(req),
-          errors: [body],
-        });
-      });
-
-      ['list', 'delete'].forEach((operation) => {
-        ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
-          it(`does not notify or log out on a ${operation} ${type}`, async () => {
-            const stub = operation === 'list' ? listStub : deleteStub;
-            stub.rejects(Object.assign(new Error('Request failed'), { type, status: 503 }));
-
-            await controller(req, res);
-
-            if (operation === 'list') {
-              expect(deleteStub).not.to.have.been.called;
-            }
-            expect(notifyStub).not.to.have.been.called;
-            expect(destroyStub).not.to.have.been.called;
-            expect(res.redirect).not.to.have.been.called;
-            expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
-              cookie: new CookieModel(req),
-              errors: [{ message: 'Failed to delete your account. Contact support or try again' }],
-            });
+          if (operation === 'list') {
+            expect(deleteStub).not.to.have.been.called;
+          }
+          expect(notifyStub).not.to.have.been.called;
+          expect(destroyStub).not.to.have.been.called;
+          expect(res.redirect).not.to.have.been.called;
+          expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
+            cookie: new CookieModel(req),
+            errors: [{ message: 'Failed to delete your account. Contact support or try again' }],
           });
         });
       });

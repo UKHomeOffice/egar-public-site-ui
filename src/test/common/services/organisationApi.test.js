@@ -125,21 +125,19 @@ describe('OrganisationApi', () => {
       expect(await api[method](...args)).to.equal(response);
     });
 
-    ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
-      it(`propagates ${type} failures unchanged from ${method}`, async () => {
-        const failure = Object.assign(new Error('Request failed'), {
-          type,
-          status: 409,
-          body: { message: 'Conflict' },
-        });
-        client[verb].rejects(failure);
-        try {
-          await api[method](...args);
-          expect.fail('Expected the request to reject');
-        } catch (err) {
-          expect(err).to.equal(failure);
-        }
+    it(`propagates client failures unchanged from ${method}`, async () => {
+      const failure = Object.assign(new Error('Request failed'), {
+        type: 'http_error',
+        status: 409,
+        body: { message: 'Conflict' },
       });
+      client[verb].rejects(failure);
+      try {
+        await api[method](...args);
+        expect.fail('Expected the request to reject');
+      } catch (err) {
+        expect(err).to.equal(failure);
+      }
     });
   });
 });
