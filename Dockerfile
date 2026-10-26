@@ -1,4 +1,4 @@
-FROM node:24.19-alpine3.23 AS development
+FROM node:24.22.1-alpine3.24 AS development
 
 RUN apk upgrade --no-cache && \
     apk add --no-cache curl
