@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
@@ -13,11 +13,7 @@ module.exports = (req, res) => {
   const garId = res?.locals?.gar?.garId;
   const frmUpload = req.query?.from === 'uploadGar';
 
-  Promise.all([
-    dataAccessApi.garApi.get(garId),
-    dataAccessApi.garApi.getPeople(garId),
-    dataAccessApi.garApi.getSupportingDocs(garId),
-  ])
+  Promise.all([garApi.get(garId), garApi.getPeople(garId), garApi.getSupportingDocs(garId)])
     .then((apiResponse) => {
       const garfile = apiResponse[0];
       validator.handleResponseError(garfile);

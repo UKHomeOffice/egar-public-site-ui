@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 const permissionLevels = require('../../../common/utils/permissionLevels');
 
 module.exports = (req, res) => {
@@ -14,7 +14,7 @@ module.exports = (req, res) => {
     return;
   }
 
-  return dataAccessApi.organisationApi
+  return organisationApi
     .getSearchOrgUsers(cookie.getOrganisationId(), searchUserName)
     .then((apiResponse) => {
       const orgUsers = apiResponse.map((orgUser) => {

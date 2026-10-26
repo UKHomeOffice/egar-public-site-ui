@@ -5,7 +5,7 @@ chai.use(require('sinon-chai'));
 const { expect } = chai;
 
 require('../../global.test');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi, craftApi } = require('../../../common/services/dataAccessApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
@@ -41,8 +41,8 @@ describe('GAR Craft Post Controller', () => {
     };
     cookie = new CookieModel(req);
     save = req.session.save;
-    patch = sinon.stub(dataAccessApi.garApi, 'patch').resolves({});
-    craftDetails = sinon.stub(dataAccessApi.craftApi, 'getDetails');
+    patch = sinon.stub(garApi, 'patch').resolves({});
+    craftDetails = sinon.stub(craftApi, 'getDetails');
   });
 
   afterEach(() => sinon.restore());

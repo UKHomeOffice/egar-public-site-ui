@@ -7,7 +7,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/organisation/editorganisation/post.controller');
 
@@ -33,7 +33,7 @@ describe('Organisation Edit Post Controller', () => {
       render: sinon.stub(),
     };
 
-    orgApiStub = sinon.stub(dataAccessApi.organisationApi, 'update');
+    orgApiStub = sinon.stub(organisationApi, 'update');
   });
 
   afterEach(() => {

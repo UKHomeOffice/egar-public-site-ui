@@ -5,7 +5,7 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const validator = require('../../../common/utils/validator');
@@ -49,9 +49,9 @@ describe('GAR Review Get Controller', () => {
     };
 
     sinon.stub(req.session, 'save').callsArg(0);
-    garApiGetStub = sinon.stub(dataAccessApi.garApi, 'get');
-    garApiGetPeopleStub = sinon.stub(dataAccessApi.garApi, 'getPeople');
-    garApiGetSupportingDocsStub = sinon.stub(dataAccessApi.garApi, 'getSupportingDocs');
+    garApiGetStub = sinon.stub(garApi, 'get');
+    garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
+    garApiGetSupportingDocsStub = sinon.stub(garApi, 'getSupportingDocs');
 
     sinon.stub(i18n, '__').callsFake((key) => {
       switch (key) {

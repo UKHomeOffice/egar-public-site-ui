@@ -7,7 +7,7 @@ const { expect } = chai;
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { resPersonApi } = require('../../../common/services/dataAccessApi');
 const utils = require('../../../common/utils/utils');
 const controller = require('../../../app/resperson/edit/post.controller');
 
@@ -37,7 +37,7 @@ describe('Responsible Person Edit Post Controller', () => {
     res = { redirect: sinon.spy(), render: sinon.spy() };
     cookie = new CookieModel(req);
     responsiblePerson = utils.getResponsiblePersonFromReq(req);
-    updateStub = sinon.stub(dataAccessApi.resPersonApi, 'updateResPerson').resolves({});
+    updateStub = sinon.stub(resPersonApi, 'updateResPerson').resolves({});
   });
 
   afterEach(() => sinon.restore());

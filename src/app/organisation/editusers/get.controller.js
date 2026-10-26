@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 const { getRolesForAssigning } = require('../../../common/utils/utils');
 
 module.exports = (req, res) => {
@@ -14,7 +14,7 @@ module.exports = (req, res) => {
 
   const roles = getRolesForAssigning(cookie.getUserRole());
 
-  return dataAccessApi.organisationApi
+  return organisationApi
     .getUserById(userId)
     .then((apiResponse) => {
       const orgUser = apiResponse === undefined ? undefined : { ...apiResponse, role: apiResponse.role.name };

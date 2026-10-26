@@ -6,7 +6,7 @@ const { expect } = chai;
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const dataAccessApi = require('../../common/services/dataAccessApi');
+const { craftApi } = require('../../common/services/dataAccessApi');
 const controller = require('../../app/aircraft/get.controller');
 
 describe('Saved Aircraft Get Controller', () => {
@@ -34,8 +34,8 @@ describe('Saved Aircraft Get Controller', () => {
       ],
       _meta: { totalPages: 2, totalItems: 4 },
     };
-    individualCraftStub = sinon.stub(dataAccessApi.craftApi, 'getCrafts');
-    organisationCraftStub = sinon.stub(dataAccessApi.craftApi, 'getOrgCrafts');
+    individualCraftStub = sinon.stub(craftApi, 'getCrafts');
+    organisationCraftStub = sinon.stub(craftApi, 'getOrgCrafts');
   });
 
   afterEach(() => sinon.restore());

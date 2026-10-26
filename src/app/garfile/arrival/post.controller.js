@@ -1,12 +1,12 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const airportValidation = require('../../../common/utils/airportValidation');
 
 const performAPICall = (cookie, buttonClicked, res) => {
-  return dataAccessApi.garApi
+  return garApi
     .patch(res.locals.gar.garId, cookie.getGarStatus(), {
       ...cookie.getGarArrivalVoyage(),
       isInbound: cookie.getIsInbound(),

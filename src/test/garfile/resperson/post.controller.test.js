@@ -6,7 +6,7 @@ const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { resPersonApi, garApi } = require('../../../common/services/dataAccessApi');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const utils = require('../../../common/utils/utils');
 const controller = require('../../../app/garfile/resperson/post.controller');
@@ -48,8 +48,8 @@ describe('GAR Responsible Person Post Controller', () => {
     cookie = new CookieModel(req);
     responsiblePerson = utils.getResponsiblePersonFromReq(req);
     responsiblePersons = [{ responsiblePersonId: 'person-1', responsibleGivenName: 'Sally' }];
-    listStub = sinon.stub(dataAccessApi.resPersonApi, 'getResPersons').resolves(responsiblePersons);
-    patchStub = sinon.stub(dataAccessApi.garApi, 'patch').resolves({});
+    listStub = sinon.stub(resPersonApi, 'getResPersons').resolves(responsiblePersons);
+    patchStub = sinon.stub(garApi, 'patch').resolves({});
   });
 
   afterEach(() => sinon.restore());

@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { Manifest } = require('../../../common/models/Manifest.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { personApi, garApi } = require('../../../common/services/dataAccessApi');
 
 function flagDuplicatesInSavedPeople(savedPeople, garPeople) {
   if (garPeople === undefined) return savedPeople;
@@ -49,9 +49,9 @@ module.exports = async (req, res) => {
   const garId = res.locals.gar.garId;
 
   try {
-    const initialSavedPeople = await dataAccessApi.personApi.getPeople(userId, 'individual');
-    const garpeople = await dataAccessApi.garApi.getPeople(garId);
-    const garfile = await dataAccessApi.garApi.get(garId);
+    const initialSavedPeople = await personApi.getPeople(userId, 'individual');
+    const garpeople = await garApi.getPeople(garId);
+    const garfile = await garApi.get(garId);
     const savedPeopleManifest = new Manifest({ items: initialSavedPeople });
     const garPeopleManifest = new Manifest(garpeople);
 

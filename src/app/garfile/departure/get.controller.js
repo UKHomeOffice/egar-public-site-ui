@@ -1,11 +1,11 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
-  return dataAccessApi.garApi
+  return garApi
     .get(res.locals.gar.garId)
     .then((apiResponse) => {
       cookie.setGarDepartureVoyage(apiResponse);

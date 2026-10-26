@@ -3,7 +3,7 @@ const sinon = require('sinon');
 
 require('./global.test');
 const garApi = require('../common/services/data-access/garApi');
-const dataAccessApi = require('../common/services/dataAccessApi');
+const { garApi: facadeGarApi } = require('../common/services/dataAccessApi');
 
 const garId = 'c2d86db6-006c-4f5e-9e22-e039c8b1ddc7';
 
@@ -18,7 +18,7 @@ describe('ProhibitedGoods', () => {
   });
 
   it('Should update the GARs prohibited goods detail through the configured GarApi', async () => {
-    const patchStub = sinon.stub(dataAccessApi.garApi, 'patch').resolves({ status: { name: 'Draft' } });
+    const patchStub = sinon.stub(facadeGarApi, 'patch').resolves({ status: { name: 'Draft' } });
 
     const apiResponse = await garApi.patch(garId, 'Draft', garProhibitedGoodsPartial);
 

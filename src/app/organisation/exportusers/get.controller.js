@@ -1,5 +1,5 @@
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const createArrayCsvStringifier = require('csv-writer').createArrayCsvStringifier;
 
@@ -24,7 +24,7 @@ module.exports = (req, res) => {
 
   // to retrieve all rows, the 1st to the last row from the users table
   // set the offset up to the end of the result set (a large number for the second parameter).
-  return dataAccessApi.organisationApi
+  return organisationApi
     .getUsers(cookie.getOrganisationId(), 1, 999999999999999)
     .then((values) => {
       const orgUsers = values.items.map((orgUser) => {

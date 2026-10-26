@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 
 const createValidationChains = (voyage) => {
@@ -80,7 +80,7 @@ const createValidationChains = (voyage) => {
 };
 
 const performAPICall = (cookie, res, buttonClicked) => {
-  return dataAccessApi.garApi
+  return garApi
     .patch(res.locals.gar.garId, cookie.getGarStatus(), cookie.getGarDepartureVoyage())
     .then((apiResponse) => {
       if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

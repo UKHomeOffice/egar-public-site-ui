@@ -1,13 +1,13 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 const { ONE_LOGIN_ACCOUNT_URL } = require('../../../common/config');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const userId = cookie.getUserDbId();
 
-  return dataAccessApi.personApi
+  return personApi
     .getPeople(userId, 'individual')
     .then((savedPeople) => {
       if (req.session.errMsg) {

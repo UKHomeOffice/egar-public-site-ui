@@ -5,7 +5,7 @@ chai.use(require('sinon-chai'));
 const { expect } = chai;
 
 require('../../global.test');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { craftApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/aircraft/delete/get.controller');
 
 describe('Aircraft Delete Get Controller', () => {
@@ -25,8 +25,8 @@ describe('Aircraft Delete Get Controller', () => {
       },
     };
     res = { redirect: sinon.spy() };
-    individualStub = sinon.stub(dataAccessApi.craftApi, 'deleteCraft');
-    organisationStub = sinon.stub(dataAccessApi.craftApi, 'deleteOrgCraft');
+    individualStub = sinon.stub(craftApi, 'deleteCraft');
+    organisationStub = sinon.stub(craftApi, 'deleteOrgCraft');
     saveStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 

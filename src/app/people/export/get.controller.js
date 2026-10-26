@@ -1,5 +1,5 @@
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const createArrayCsvStringifier = require('csv-writer').createArrayCsvStringifier;
 
@@ -33,7 +33,7 @@ module.exports = (req, res) => {
   const userId = cookie.getUserDbId();
   logger.debug(`In people export get controller, user ${userId} is exporting data.`);
 
-  return dataAccessApi.personApi
+  return personApi
     .getPeople(userId, 'individual')
     .then((values) => {
       const people = values.map((person) => {

@@ -5,7 +5,7 @@ const validations = require('../validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const utils = require('../../../common/utils/utils');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { resPersonApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -17,7 +17,7 @@ module.exports = (req, res) => {
   return validator
     .validateChains(validations.validations(req))
     .then(() => {
-      return dataAccessApi.resPersonApi
+      return resPersonApi
         .updateResPerson(cookie.getUserDbId(), resPersonId, responsiblePerson)
         .then((apiResponse) => {
           if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

@@ -3,7 +3,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const garStatus = 'Draft';
@@ -28,7 +28,7 @@ module.exports = (req, res) => {
         return;
       }
 
-      return dataAccessApi.garApi
+      return garApi
         .createGar(cookie.getUserDbId())
         .then((apiResponse) => {
           if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

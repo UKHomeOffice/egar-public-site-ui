@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { userManageApi, organisationApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -17,9 +17,9 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const userToDelete = await dataAccessApi.userManageApi.getDetails(deleteUserEmail);
+    const userToDelete = await userManageApi.getDetails(deleteUserEmail);
 
-    const apiResponse = await dataAccessApi.organisationApi.deleteUser(requesterId, organisationId, {
+    const apiResponse = await organisationApi.deleteUser(requesterId, organisationId, {
       userId: userToDelete.userId,
       firstName: userToDelete.firstName,
       lastName: userToDelete.lastName,

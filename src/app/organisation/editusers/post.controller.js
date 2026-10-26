@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 const { getRolesForAssigning } = require('../../../common/utils/utils');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { ROLE_PERMISSION_ERROR_MSG } = require('../constants');
@@ -35,7 +35,7 @@ module.exports = (req, res) => {
   return validator
     .validateChains(validations.validations(req))
     .then(() => {
-      return dataAccessApi.organisationApi
+      return organisationApi
         .editUser(cookie.getUserDbId(), cookie.getOrganisationId(), orgUser)
         .then((apiResponse) => {
           if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

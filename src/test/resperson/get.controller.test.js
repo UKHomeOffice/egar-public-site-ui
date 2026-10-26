@@ -6,7 +6,7 @@ const { expect } = chai;
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const dataAccessApi = require('../../common/services/dataAccessApi');
+const { resPersonApi } = require('../../common/services/dataAccessApi');
 const controller = require('../../app/resperson/get.controller');
 
 describe('Responsible Person Index Get Controller', () => {
@@ -24,7 +24,7 @@ describe('Responsible Person Index Get Controller', () => {
       { responsiblePersonId: 'person-1', responsibleGivenName: 'Sally', responsibleSurname: 'Smith' },
       { responsiblePersonId: 'person-2', responsibleGivenName: 'John', responsibleSurname: 'Smith' },
     ];
-    listStub = sinon.stub(dataAccessApi.resPersonApi, 'getResPersons').resolves(resPersons);
+    listStub = sinon.stub(resPersonApi, 'getResPersons').resolves(resPersons);
   });
 
   afterEach(() => sinon.restore());

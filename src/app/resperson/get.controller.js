@@ -1,12 +1,12 @@
 const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
-const dataAccessApi = require('../../common/services/dataAccessApi');
+const { resPersonApi } = require('../../common/services/dataAccessApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   const errMessage = { message: 'Failed to get saved responsible persons' };
   try {
-    const resPersons = await dataAccessApi.resPersonApi.getResPersons(cookie.getUserDbId());
+    const resPersons = await resPersonApi.getResPersons(cookie.getUserDbId());
     if (req.session.successMsg) {
       const { successMsg, successHeader } = req.session;
       delete req.session.successHeader;

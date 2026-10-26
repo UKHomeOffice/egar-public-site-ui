@@ -3,7 +3,7 @@ const { expect } = require('chai');
 require('chai').use(require('sinon-chai'));
 require('../../global.test');
 
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const controller = require('../../../app/garfile/departure/post.controller');
 
@@ -33,7 +33,7 @@ describe('Departure Post Controller', () => {
       render: sinon.spy(),
       locals: { gar: { garId: '12345', arrivalPort: 'LHR' } },
     };
-    patch = sinon.stub(dataAccessApi.garApi, 'patch').resolves({});
+    patch = sinon.stub(garApi, 'patch').resolves({});
   });
 
   afterEach(() => sinon.restore());

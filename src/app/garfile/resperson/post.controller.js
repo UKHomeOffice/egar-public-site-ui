@@ -4,7 +4,7 @@ const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_
 const utils = require('../../../common/utils/utils');
 const validator = require('../../../common/utils/validator');
 const validations = require('../../resperson/validations');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { resPersonApi, garApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
     const responsiblePerson = utils.getResponsiblePersonFromReq(req);
     let responsiblePersons;
     try {
-      responsiblePersons = await dataAccessApi.resPersonApi.getResPersons(cookie.getUserDbId());
+      responsiblePersons = await resPersonApi.getResPersons(cookie.getUserDbId());
     } catch (err) {
       logger.error('Failed to get saved responsible persons', {
         errorMessage: err?.message,
@@ -49,7 +49,7 @@ module.exports = async (req, res) => {
     return validator
       .validateChains(validations.validations(req))
       .then(() => {
-        return dataAccessApi.garApi
+        return garApi
           .patch(res.locals.gar.garId, cookie.getGarStatus(), responsiblePerson)
           .then((apiResponse) => {
             if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

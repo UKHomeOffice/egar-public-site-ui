@@ -1,6 +1,6 @@
 const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../../common/services/dataAccessApi');
+const { garApi } = require('../../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -23,7 +23,7 @@ module.exports = (req, res) => {
 
   logger.info(`User: ${userId} Removing ${garpeopleIdsToDelete} from manifest`);
 
-  return dataAccessApi.garApi
+  return garApi
     .deleteGarPeople(res.locals.gar.garId, garpeopleIdsToDelete)
     .then((apiResponse) => {
       if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

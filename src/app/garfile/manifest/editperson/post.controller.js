@@ -3,7 +3,7 @@ const _ = require('lodash');
 const logger = require('../../../../common/utils/logger')(__filename);
 const validator = require('../../../../common/utils/validator');
 const CookieModel = require('../../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../../common/services/dataAccessApi');
+const { garApi } = require('../../../../common/services/dataAccessApi');
 const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
@@ -36,7 +36,7 @@ module.exports = (req, res) => {
   return validator
     .validateChains(validations.validations(req))
     .then(() => {
-      return dataAccessApi.garApi
+      return garApi
         .updateGarPerson(res?.locals?.gar?.garId, person)
         .then((apiResponse) => {
           if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

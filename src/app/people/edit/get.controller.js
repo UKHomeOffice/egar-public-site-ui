@@ -3,7 +3,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  return dataAccessApi.personApi
+  return personApi
     .getDetails(cookie.getUserDbId(), id)
     .then((parsedResponse) => {
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {

@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 const { garPeople } = require('../../../fixtures');
 
 require('../../../global.test');
-const dataAccessApi = require('../../../../common/services/dataAccessApi');
+const { garApi } = require('../../../../common/services/dataAccessApi');
 
 const controller = require('../../../../app/garfile/manifest/editperson/get.controller');
 
@@ -48,7 +48,7 @@ describe('Manifest Edit Person Get Controller', () => {
 
   it('should render the appropriate page', async () => {
     req.session.editPersonId = 1;
-    sinon.stub(dataAccessApi.garApi, 'getPeople').resolves(apiResponse);
+    sinon.stub(garApi, 'getPeople').resolves(apiResponse);
 
     await controller(req, res);
 
@@ -58,7 +58,7 @@ describe('Manifest Edit Person Get Controller', () => {
 
   it('should redirect if the api has an issue', async () => {
     req.session.editPersonId = 1;
-    sinon.stub(dataAccessApi.garApi, 'getPeople').rejects('Some reason here');
+    sinon.stub(garApi, 'getPeople').rejects('Some reason here');
 
     // Promise chain, so controller call is wrapped into its own method
     const callController = async () => {

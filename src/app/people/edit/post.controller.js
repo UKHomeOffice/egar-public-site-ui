@@ -6,7 +6,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -33,7 +33,7 @@ module.exports = (req, res) => {
     .validateChains(validations.validations(req))
     .then(() => {
       // call the API to update the data base and then
-      return dataAccessApi.personApi
+      return personApi
         .update(cookie.getUserDbId(), cookie.getEditPerson().personId, person)
         .then((apiResponse) => {
           if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

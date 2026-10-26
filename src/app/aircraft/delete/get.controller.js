@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { craftApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -16,8 +16,8 @@ module.exports = (req, res) => {
 
   const craft =
     cookie.getUserRole() === 'Individual'
-      ? dataAccessApi.craftApi.deleteCraft(cookie.getUserDbId(), craftId)
-      : dataAccessApi.craftApi.deleteOrgCraft(cookie.getOrganisationId(), cookie.getUserDbId(), craftId);
+      ? craftApi.deleteCraft(cookie.getUserDbId(), craftId)
+      : craftApi.deleteOrgCraft(cookie.getOrganisationId(), cookie.getUserDbId(), craftId);
 
   return craft
     .then((apiResponse) => {

@@ -3,7 +3,7 @@ const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { craftApi } = require('../../../common/services/dataAccessApi');
 const pagination = require('../../../common/utils/pagination');
 const craftValidations = require('../../../app/garfile/craft/validations');
 
@@ -39,7 +39,7 @@ module.exports = (req, res) => {
       const craftBase = cookie.reduceCraftBase(craftBasePort, craftBaseLat, craftBaseLong);
 
       // call the API to update the data base and then
-      return dataAccessApi.craftApi
+      return craftApi
         .create(registration, craftType, craftBase, cookie.getUserDbId())
         .then((apiResponse) => {
           if (apiResponse && typeof apiResponse === 'object') {

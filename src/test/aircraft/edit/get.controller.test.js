@@ -6,7 +6,7 @@ const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { craftApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/aircraft/edit/get.controller');
 
 describe('Aircraft Edit Get Controller', () => {
@@ -17,7 +17,7 @@ describe('Aircraft Edit Get Controller', () => {
   beforeEach(() => {
     req = { session: { u: { dbId: 'user-1' }, editCraftId: 'craft-1' } };
     res = { redirect: sinon.spy(), render: sinon.spy() };
-    getStub = sinon.stub(dataAccessApi.craftApi, 'getDetails');
+    getStub = sinon.stub(craftApi, 'getDetails');
   });
 
   afterEach(() => sinon.restore());

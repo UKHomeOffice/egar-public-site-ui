@@ -4,7 +4,7 @@ const garApi = require('../../../common/services/data-access/garApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const airportValidation = require('../../../common/utils/airportValidation');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi: facadeGarApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -14,10 +14,10 @@ module.exports = async (req, res) => {
 
   try {
     const [garPeople, garDetails, garDocs, progress] = await Promise.all([
-      dataAccessApi.garApi.getPeople(garId),
-      dataAccessApi.garApi.get(garId),
-      dataAccessApi.garApi.getSupportingDocs(garId),
-      dataAccessApi.garApi.getGarCheckinProgress(garId),
+      facadeGarApi.getPeople(garId),
+      facadeGarApi.get(garId),
+      facadeGarApi.getSupportingDocs(garId),
+      facadeGarApi.getGarCheckinProgress(garId),
     ]);
 
     const resubmitted = req.query.resubmitted;
@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
       const { departureDate, departureTime } = parsedGar;
       const lastDepartureDateString = departureDate && departureTime ? `${departureDate}T${departureTime}.000Z` : null;
       const durationInDeparture = garApi.getDurationBeforeDeparture(departureDate, departureTime);
-      const numberOf0TResponseCodes = (await dataAccessApi.garApi.getPeople(garId, '', '0T'))?.items?.length;
+      const numberOf0TResponseCodes = (await facadeGarApi.getPeople(garId, '', '0T'))?.items?.length;
 
       cookie.setGarStatus(parsedGar.status.name);
       logger.debug(`Retrieved GAR ID: ${parsedGar.garId}`);

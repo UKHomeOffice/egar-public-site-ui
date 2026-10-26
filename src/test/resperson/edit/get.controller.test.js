@@ -6,7 +6,7 @@ const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { resPersonApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/resperson/edit/get.controller');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 
@@ -23,7 +23,7 @@ describe('Responsible Person Edit Get Controller', () => {
     };
     res = { redirect: sinon.spy(), render: sinon.spy() };
     saveStub = sinon.stub(req.session, 'save').callsArg(0);
-    getStub = sinon.stub(dataAccessApi.resPersonApi, 'getResPersonDetails');
+    getStub = sinon.stub(resPersonApi, 'getResPersonDetails');
   });
 
   afterEach(() => sinon.restore());

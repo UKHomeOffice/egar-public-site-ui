@@ -5,7 +5,7 @@ chai.use(require('sinon-chai'));
 const { expect } = chai;
 
 require('../../global.test');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { resPersonApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/resperson/delete/get.controller');
 
 describe('Responsible Person Delete Get Controller', () => {
@@ -21,7 +21,7 @@ describe('Responsible Person Delete Get Controller', () => {
     };
     res = { redirect: sinon.spy() };
     saveStub = sinon.stub(req.session, 'save').callsArg(0);
-    deleteStub = sinon.stub(dataAccessApi.resPersonApi, 'deleteResponsiblePerson');
+    deleteStub = sinon.stub(resPersonApi, 'deleteResponsiblePerson');
   });
 
   afterEach(() => sinon.restore());

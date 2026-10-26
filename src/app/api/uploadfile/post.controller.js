@@ -1,7 +1,7 @@
 const fileType = require('file-type');
 
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/data-access/garApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const transformers = require('../../../common/utils/transformers');
 const clamAVService = require('../../../common/services/clamAVService');
 const uploadFile = require('../../../common/services/data-access/fileUploadApi');
@@ -25,17 +25,16 @@ const exceedFileNumSizeLimit = (fileSize, garId) => {
       .getSupportingDocs(garId)
       .then((gars) => {
         let total = 0;
-        const parsedGars = JSON.parse(gars);
-        if (parsedGars.items.length >= MAX_NUM) {
+        if (gars.items.length >= MAX_NUM) {
           logger.warn('Number of supporting documents exceeds the maximum allowed', {
             garId,
             maxNumFiles: MAX_NUM,
-            existingNumFiles: parsedGars.items.length,
+            existingNumFiles: gars.items.length,
           });
           resolve('EXCEEDS_MAX_NUMBER');
         }
         // Get total size from gars.items.size
-        parsedGars.items.forEach((gar) => {
+        gars.items.forEach((gar) => {
           total += transformers.strToBytes(gar.size);
         });
         logger.debug('Computed total supporting document size', {
@@ -72,8 +71,7 @@ const handleDeleteDocument = async (req, res, garId) => {
 
   try {
     const apiResponse = await garApi.deleteGarSupportingDoc(garId, req.body.deleteDocId);
-    const parsedResponse = JSON.parse(apiResponse);
-    if (parsedResponse.message) {
+    if (apiResponse.message) {
       res.redirect('/garfile/supportingdocuments?query=deletefailed');
       return true;
     }

@@ -3,7 +3,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('./validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options.json');
 const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
@@ -52,7 +52,7 @@ module.exports = (req, res) => {
   return validator
     .validateChains(validations.validations(req))
     .then(() => {
-      return dataAccessApi.garApi
+      return garApi
         .patch(res.locals.gar.garId, cookie.getGarStatus(), customs)
         .then((apiResponse) => {
           if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

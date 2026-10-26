@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const { orgName } = req.body;
@@ -15,7 +15,7 @@ module.exports = (req, res) => {
     .validateChains(validations.validations(req))
     .then(() => {
       // API should return OrgId
-      return dataAccessApi.organisationApi
+      return organisationApi
         .update(orgName, cookie.getOrganisationId())
         .then((responseObj) => {
           logger.debug(`Response from API: ${JSON.stringify(responseObj)}`);

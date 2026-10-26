@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { craftApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -9,7 +9,7 @@ module.exports = (req, res) => {
     res.redirect('/aircraft');
     return;
   }
-  return dataAccessApi.craftApi
+  return craftApi
     .getDetails(cookie.getUserDbId(), craftId)
     .then((editCraft) => {
       cookie.setEditCraft(editCraft);

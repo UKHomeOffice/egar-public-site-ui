@@ -4,7 +4,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, HTTPS } = require('../../../common/config');
 const sendEmail = require('../../../common/services/sendEmail');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { organisationApi, userManageApi, verificationApi } = require('../../../common/services/dataAccessApi');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { getOneLoginLogoutUrl } = require('../../../common/utils/oneLoginAuth');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
@@ -39,24 +39,22 @@ const sendAdminUpdateEmail = (userObj, accountUrl) => {
     return new Promise((resolve, _reject) => resolve(userObj));
   }
 
-  return dataAccessApi.organisationApi
-    .getListOfOrgUsers(userObj.organisation.organisationId, 'Admin')
-    .then((userList) => {
-      userList.items.forEach((user) => {
-        try {
-          sendEmail.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
-            firstName: userObj.firstName,
-            lastName: userObj.lastName,
-            accountUrl,
-            adminFirstName: user.firstName,
-            adminLastName: user.lastName,
-            organisationName: userObj.organisation.organisationName,
-          });
-        } catch (error) {
-          logger.error('Failed to send email to admin', { errorMessage: error?.message, stack: error?.stack });
-        }
-      });
+  return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((userList) => {
+    userList.items.forEach((user) => {
+      try {
+        sendEmail.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
+          firstName: userObj.firstName,
+          lastName: userObj.lastName,
+          accountUrl,
+          adminFirstName: user.firstName,
+          adminLastName: user.lastName,
+          organisationName: userObj.organisation.organisationName,
+        });
+      } catch (error) {
+        logger.error('Failed to send email to admin', { errorMessage: error?.message, stack: error?.stack });
+      }
     });
+  });
 };
 
 /**
@@ -67,7 +65,7 @@ const sendAdminUpdateEmail = (userObj, accountUrl) => {
  */
 const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
   const { email, sub: oneLoginSid } = userInfo;
-  return dataAccessApi.userManageApi
+  return userManageApi
     .userSearch(email, oneLoginSid)
     .then(async (userData) => {
       if (!userData?.userId) {
@@ -90,13 +88,13 @@ const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
 
         case oneLoginSidMatches && !emailMatches:
           // sid matches but email does not.
-          return dataAccessApi.userManageApi.updateEmailOrOneLoginSid(userData.email, { email }).then(() => {
+          return userManageApi.updateEmailOrOneLoginSid(userData.email, { email }).then(() => {
             userData.email = email;
             return sendAdminUpdateEmail(userData, accountUrl).then(() => userData);
           });
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
-          return dataAccessApi.userManageApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then(() => {
+          return userManageApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then(() => {
             userData.oneLoginSid = oneLoginSid;
             return userData;
           });
@@ -114,7 +112,7 @@ const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
         return userData;
       }
 
-      return dataAccessApi.userManageApi.getDetails(email).then((details) => {
+      return userManageApi.getDetails(email).then((details) => {
         const { organisation } = details || {};
         const cookie = new CookieModel(req);
 
@@ -247,7 +245,7 @@ module.exports = async (req, res) => {
 
 async function checkUserInvite(req, res, email) {
   try {
-    await dataAccessApi.verificationApi.getUserInviteToken(email);
+    await verificationApi.getUserInviteToken(email);
     return ROUTES.REGISTER;
   } catch (error) {
     if (

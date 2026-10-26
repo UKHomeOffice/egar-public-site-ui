@@ -1,6 +1,6 @@
 const CookieModel = require('../../common/models/Cookie.class');
 const logger = require('../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../common/services/dataAccessApi');
+const { craftApi } = require('../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -8,8 +8,8 @@ module.exports = (req, res) => {
 
   const crafts =
     cookie.getUserRole() === 'Individual'
-      ? dataAccessApi.craftApi.getCrafts(cookie.getUserDbId(), currentPage)
-      : dataAccessApi.craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage);
+      ? craftApi.getCrafts(cookie.getUserDbId(), currentPage)
+      : craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage);
   return crafts
     .then((savedCrafts) => {
       const paginationData = savedCrafts._meta;

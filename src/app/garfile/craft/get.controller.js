@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi, craftApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   // Clear existing editcraft
@@ -10,7 +10,7 @@ module.exports = (req, res) => {
   const userRole = cookie.getUserRole();
   const userId = cookie.getUserDbId();
 
-  return dataAccessApi.garApi
+  return garApi
     .get(res?.locals?.gar?.garId)
     .then((gar) => {
       if (
@@ -24,8 +24,8 @@ module.exports = (req, res) => {
       // for an individual or an organisation
       const apiCall =
         userRole === 'Individual'
-          ? dataAccessApi.craftApi.getCrafts(userId, currentPage)
-          : dataAccessApi.craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage);
+          ? craftApi.getCrafts(userId, currentPage)
+          : craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage);
       return apiCall
         .then((garCraft) => {
           if (garCraft.items.length > 0) {

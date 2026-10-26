@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const orgname = req.body.orgName;
@@ -17,7 +17,7 @@ module.exports = (req, res) => {
     .then(() => {
       // API should return OrgId
       logger.debug('Calling create org api endpoint');
-      return dataAccessApi.organisationApi
+      return organisationApi
         .create(orgname, cookie.getUserDbId())
         .then((responseObj) => {
           if (Object.prototype.hasOwnProperty.call(responseObj, 'message')) {

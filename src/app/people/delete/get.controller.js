@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -13,7 +13,7 @@ module.exports = (req, res) => {
     return;
   }
 
-  return dataAccessApi.personApi
+  return personApi
     .deletePerson(cookie.getUserDbId(), personId)
     .then((apiResponse) => {
       if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

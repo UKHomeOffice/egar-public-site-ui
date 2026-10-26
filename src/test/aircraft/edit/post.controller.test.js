@@ -6,7 +6,7 @@ const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { craftApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/aircraft/edit/post.controller');
 
 describe('Aircraft Edit Post Controller', () => {
@@ -23,7 +23,7 @@ describe('Aircraft Edit Post Controller', () => {
     cookie = new CookieModel(req);
     cookie.setEditCraft({ craftId: 'craft-1', registration: 'G-OLD', craftType: 'Old', craftBase: 'LHR' });
     res = { redirect: sinon.spy(), render: sinon.spy() };
-    updateStub = sinon.stub(dataAccessApi.craftApi, 'update').resolves({});
+    updateStub = sinon.stub(craftApi, 'update').resolves({});
   });
 
   afterEach(() => sinon.restore());

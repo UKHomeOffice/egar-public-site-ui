@@ -3,7 +3,7 @@ const { expect } = require('chai');
 require('chai').use(require('sinon-chai'));
 require('../../global.test');
 
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const controller = require('../../../app/garfile/departure/get.controller');
 
@@ -19,7 +19,7 @@ describe('Departure Get Controller', () => {
   afterEach(() => sinon.restore());
 
   it('displays an error if the GAR lookup rejects', async () => {
-    sinon.stub(dataAccessApi.garApi, 'get').rejects(new Error('Connection unavailable'));
+    sinon.stub(garApi, 'get').rejects(new Error('Connection unavailable'));
     await controller(req, res);
     expect(res.render).to.have.been.calledOnce;
     expect(res.render.firstCall.args[0]).to.equal('app/garfile/departure/index');
@@ -29,7 +29,7 @@ describe('Departure Get Controller', () => {
   });
 
   it('loads a decoded GAR into the departure form', async () => {
-    const get = sinon.stub(dataAccessApi.garApi, 'get').resolves({
+    const get = sinon.stub(garApi, 'get').resolves({
       departureDate: '2022-05-30',
       departureTime: '15:00:00',
       departurePort: 'LHR',
@@ -52,7 +52,7 @@ describe('Departure Get Controller', () => {
   });
 
   it('loads coordinates as an unknown port rather than a port code', async () => {
-    sinon.stub(dataAccessApi.garApi, 'get').resolves({
+    sinon.stub(garApi, 'get').resolves({
       departureDate: '2022-05-30',
       departureTime: '15:00:00',
       departurePort: 'ZZZZ',

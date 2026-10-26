@@ -7,7 +7,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/data-access/garApi');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi: facadeGarApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/garfile/view/get.controller');
 const { outboundGar } = require('../../fixtures');
 
@@ -47,10 +47,10 @@ describe('GAR view get controller', () => {
       render: sinon.spy(),
     };
 
-    garApiGetStub = sinon.stub(dataAccessApi.garApi, 'get');
-    garApiGetPeopleStub = sinon.stub(dataAccessApi.garApi, 'getPeople');
-    garApiGetSupportingDocsStub = sinon.stub(dataAccessApi.garApi, 'getSupportingDocs');
-    getGarCheckinProgressStub = sinon.stub(dataAccessApi.garApi, 'getGarCheckinProgress');
+    garApiGetStub = sinon.stub(facadeGarApi, 'get');
+    garApiGetPeopleStub = sinon.stub(facadeGarApi, 'getPeople');
+    garApiGetSupportingDocsStub = sinon.stub(facadeGarApi, 'getSupportingDocs');
+    getGarCheckinProgressStub = sinon.stub(facadeGarApi, 'getGarCheckinProgress');
     getDurationBeforeDepartureStub = sinon.stub(garApi, 'getDurationBeforeDeparture');
   });
 

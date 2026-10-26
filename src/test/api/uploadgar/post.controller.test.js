@@ -8,7 +8,7 @@ const XLSX = require('xlsx');
 require('../../global.test');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi: facadeGarApi } = require('../../../common/services/dataAccessApi');
 const garApi = require('../../../common/services/data-access/garApi');
 const clamAVService = require('../../../common/services/clamAVService');
 
@@ -201,7 +201,7 @@ describe('API upload GAR post controller', () => {
         // Keep the real controller-to-scanner boundary; only the scanner's HTTP transport is stubbed.
         const scanner = new clamAVService.ClamAVService(client);
         clamAVServiceStub.callsFake((file) => scanner.scanFile(file));
-        const createGarStub = sinon.stub(dataAccessApi.garApi, 'createGar').resolves({ garId: 'SCANNED-GAR' });
+        const createGarStub = sinon.stub(facadeGarApi, 'createGar').resolves({ garId: 'SCANNED-GAR' });
         const patchStub = sinon.stub(garApi, 'patch').resolves();
         await controller(req, res);
 
@@ -410,7 +410,7 @@ describe('API upload GAR post controller', () => {
     });
     sinon.stub(XLSX, 'read').returns(data);
     clamAVServiceStub.resolves(true);
-    const createGarStub = sinon.stub(dataAccessApi.garApi, 'createGar');
+    const createGarStub = sinon.stub(facadeGarApi, 'createGar');
     const patchStub = sinon.stub(garApi, 'patch');
     sinon.spy(req.session, 'save');
 
@@ -436,14 +436,14 @@ describe('API upload GAR post controller', () => {
     it('redirects without updating a GAR when creation rejects', async () => {
       const data = getValidWorkbook();
 
-      sinon.stub(dataAccessApi.garApi, 'createGar').rejects(new Error('Creation unavailable'));
+      sinon.stub(facadeGarApi, 'createGar').rejects(new Error('Creation unavailable'));
       const patchStub = sinon.stub(garApi, 'patch');
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
       clamAVServiceStub.resolves(true);
       await controller(req, res);
 
-      expect(dataAccessApi.garApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
+      expect(facadeGarApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
       expect(patchStub).not.to.have.been.called;
       expect(req.session.save).to.not.have.been.called;
       expect(req.session.failureMsg).to.eq('Failed to create GAR. Try again');
@@ -454,7 +454,7 @@ describe('API upload GAR post controller', () => {
     it('preserves the creation-failure journey for an HTTP rejection without updating a GAR', async () => {
       sinon.stub(XLSX, 'read').returns(getValidWorkbook());
       clamAVServiceStub.resolves(true);
-      sinon.stub(dataAccessApi.garApi, 'createGar').rejects(
+      sinon.stub(facadeGarApi, 'createGar').rejects(
         Object.assign(new Error('Bad Request'), {
           type: 'http_error',
           status: 400,
@@ -476,7 +476,7 @@ describe('API upload GAR post controller', () => {
     it('should return with an error when api returns a message', async () => {
       const data = getValidWorkbook();
 
-      sinon.stub(dataAccessApi.garApi, 'createGar').resolves({
+      sinon.stub(facadeGarApi, 'createGar').resolves({
         message: 'User does not exist',
       });
       sinon.stub(garApi, 'patch');
@@ -485,7 +485,7 @@ describe('API upload GAR post controller', () => {
       clamAVServiceStub.resolves(true);
       await controller(req, res);
 
-      expect(dataAccessApi.garApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
+      expect(facadeGarApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
       expect(garApi.patch).to.not.have.been.called;
       expect(req.session.save).to.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly('garfile/garupload');
@@ -496,7 +496,7 @@ describe('API upload GAR post controller', () => {
     it('reports an update failure rather than success when an import update rejects', async () => {
       const data = getValidWorkbook();
 
-      sinon.stub(dataAccessApi.garApi, 'createGar').resolves({
+      sinon.stub(facadeGarApi, 'createGar').resolves({
         garId: 'ABCD-1234',
       });
       const garApiPatch = sinon.stub(garApi, 'patch').onCall(0).resolves();
@@ -507,7 +507,7 @@ describe('API upload GAR post controller', () => {
       clamAVServiceStub.resolves(true);
 
       await controller(req, res);
-      expect(dataAccessApi.garApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
+      expect(facadeGarApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
       expect(garApi.patch).to.have.been.calledWith('ABCD-1234');
       expect(req.session.failureMsg).to.eq('Failed to update GAR. Try again');
       expect(req.session.failureIdentifier).to.eq('file');
@@ -518,7 +518,7 @@ describe('API upload GAR post controller', () => {
     it('stores the created draft and redirects to review after all import updates finish', async () => {
       const data = getValidWorkbook();
 
-      sinon.stub(dataAccessApi.garApi, 'createGar').resolves({
+      sinon.stub(facadeGarApi, 'createGar').resolves({
         garId: 'ABCD-1234',
       });
       const garApiPatch = sinon.stub(garApi, 'patch').resolves();
@@ -527,7 +527,7 @@ describe('API upload GAR post controller', () => {
       clamAVServiceStub.resolves(true);
 
       await controller(req, res);
-      expect(dataAccessApi.garApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
+      expect(facadeGarApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
       expect(garApiPatch).to.have.been.calledWith('ABCD-1234');
       expect(garApiPatch).to.have.been.calledThrice;
       expect(req.session.gar.id).to.equal('ABCD-1234');

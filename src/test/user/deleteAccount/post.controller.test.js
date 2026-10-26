@@ -5,8 +5,8 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
-const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
+
+const { userManageApi: userApi, organisationApi } = require('../../../common/services/dataAccessApi');
 const sendEmail = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 
@@ -167,10 +167,10 @@ describe('User Delete Account Post Controller', () => {
         },
       };
       res = { render: sinon.spy(), redirect: sinon.spy(), locals: {} };
-      listStub = sinon.stub(dataAccessApi.organisationApi, 'getListOfOrgUsers').resolves({
+      listStub = sinon.stub(organisationApi, 'getListOfOrgUsers').resolves({
         items: [{ userId: 'admin-1', role: { name: 'Admin' } }],
       });
-      deleteStub = sinon.stub(dataAccessApi.organisationApi, 'delete').resolves({});
+      deleteStub = sinon.stub(organisationApi, 'delete').resolves({});
       deleteUserStub = sinon.stub(userApi, 'deleteUser').resolves({});
       notifyStub = sinon.stub(sendEmail, 'send').resolves();
       destroyStub = sinon.stub(req.session, 'destroy').callsArg(0);

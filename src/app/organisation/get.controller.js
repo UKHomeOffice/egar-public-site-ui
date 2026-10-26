@@ -1,5 +1,5 @@
 const CookieModel = require('../../common/models/Cookie.class');
-const dataAccessApi = require('../../common/services/dataAccessApi');
+const { organisationApi } = require('../../common/services/dataAccessApi');
 const logger = require('../../common/utils/logger')(__filename);
 const { permissionLevels } = require('../../common/utils/permissionLevels');
 const NUM_OF_USERS = 5;
@@ -10,7 +10,7 @@ module.exports = (req, res) => {
 
   const currentPage = Number(req.query.page) || 1;
 
-  return dataAccessApi.organisationApi
+  return organisationApi
     .getUsers(cookie.getOrganisationId(), currentPage, NUM_OF_USERS)
     .then((values) => {
       const orgUsers = values.items.map((orgUser) => {

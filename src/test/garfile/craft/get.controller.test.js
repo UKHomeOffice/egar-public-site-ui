@@ -6,7 +6,7 @@ const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi, craftApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/garfile/craft/get.controller');
 
 describe('GAR Craft Get Controller', () => {
@@ -29,9 +29,9 @@ describe('GAR Craft Get Controller', () => {
     };
     res = { render: sinon.spy(), locals: { gar: { garId: 'gar-1' } } };
     cookie = new CookieModel(req);
-    garStub = sinon.stub(dataAccessApi.garApi, 'get').resolves({});
-    individualStub = sinon.stub(dataAccessApi.craftApi, 'getCrafts');
-    organisationStub = sinon.stub(dataAccessApi.craftApi, 'getOrgCrafts');
+    garStub = sinon.stub(garApi, 'get').resolves({});
+    individualStub = sinon.stub(craftApi, 'getCrafts');
+    organisationStub = sinon.stub(craftApi, 'getOrgCrafts');
   });
 
   afterEach(() => sinon.restore());

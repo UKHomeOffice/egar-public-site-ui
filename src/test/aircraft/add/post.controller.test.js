@@ -5,7 +5,7 @@ chai.use(require('sinon-chai'));
 const { expect } = chai;
 
 require('../../global.test');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { craftApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const controller = require('../../../app/aircraft/add/post.controller');
 const pagination = require('../../../common/utils/pagination');
@@ -27,7 +27,7 @@ describe('Aircraft Add Post Controller', () => {
     res = { redirect: sinon.spy(), render: sinon.spy() };
     cookie = new CookieModel(req);
     craftObj = { ...req.body, craftBaseLat: null, craftBaseLong: null, portChoice: 'Yes' };
-    createStub = sinon.stub(dataAccessApi.craftApi, 'create').resolves({});
+    createStub = sinon.stub(craftApi, 'create').resolves({});
     saveStub = sinon.stub(req.session, 'save').callsArg(0);
     pageStub = sinon.stub(pagination, 'setCurrentPage');
   });

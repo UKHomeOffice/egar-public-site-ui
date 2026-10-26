@@ -8,7 +8,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/garfile/home/post.controller');
 
 describe('GAR Creation Post Controller', () => {
@@ -22,7 +22,7 @@ describe('GAR Creation Post Controller', () => {
       session: { u: { dbId: 'user-1' }, save: sinon.stub().callsArg(0) },
     };
     res = { redirect: sinon.spy(), render: sinon.spy() };
-    createStub = sinon.stub(dataAccessApi.garApi, 'createGar').resolves({ garId: 'new-gar' });
+    createStub = sinon.stub(garApi, 'createGar').resolves({ garId: 'new-gar' });
   });
 
   afterEach(() => sinon.restore());

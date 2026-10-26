@@ -5,9 +5,9 @@ const sinonChai = require('sinon-chai');
 const config = require('../../../common/config/index');
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
+const { userManageApi: userApi, organisationApi } = require('../../../common/services/dataAccessApi');
 const { verificationApi: verification } = require('../../../common/services/dataAccessApi');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+
 const sendEmail = require('../../../common/services/sendEmail');
 
 require('../../global.test');
@@ -247,7 +247,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
       });
       updateEmailOrOneLoginSidStub.resolves({});
       getDetailsStub.resolves({ organisation: { organisationId: 'org-1', organisationName: 'Test organisation' } });
-      adminsStub = sinon.stub(dataAccessApi.organisationApi, 'getListOfOrgUsers').resolves({
+      adminsStub = sinon.stub(organisationApi, 'getListOfOrgUsers').resolves({
         items: [{ email: 'admin@example.com', firstName: 'Test', lastName: 'Admin' }],
       });
       emailStub = sinon.stub(sendEmail, 'send').resolves();
