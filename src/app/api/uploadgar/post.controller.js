@@ -2,8 +2,7 @@ const i18n = require('i18n');
 const XLSX = require('xlsx');
 
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/data-access/garApi');
-const { garApi: facadeGarApi } = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const { validations } = require('./validations');
@@ -155,7 +154,7 @@ module.exports = async (req, res) => {
       .validateChains(validations(voyageParser.parse(), crew, passengers))
       .then(() => {
         logger.debug('Uploaded Excel sheet is valid; creating GAR via API');
-        return facadeGarApi
+        return garApi
           .createGar(cookie.getUserDbId())
           .then((apiResponse) => {
             if (apiResponse.message) {
