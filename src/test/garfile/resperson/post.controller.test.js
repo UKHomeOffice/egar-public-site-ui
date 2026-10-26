@@ -6,7 +6,6 @@ const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const utils = require('../../../common/utils/utils');
@@ -50,7 +49,7 @@ describe('GAR Responsible Person Post Controller', () => {
     responsiblePerson = utils.getResponsiblePersonFromReq(req);
     responsiblePersons = [{ responsiblePersonId: 'person-1', responsibleGivenName: 'Sally' }];
     listStub = sinon.stub(dataAccessApi.resPersonApi, 'getResPersons').resolves(responsiblePersons);
-    patchStub = sinon.stub(garApi, 'patch').resolves(JSON.stringify({}));
+    patchStub = sinon.stub(dataAccessApi.garApi, 'patch').resolves({});
   });
 
   afterEach(() => sinon.restore());
@@ -67,7 +66,7 @@ describe('GAR Responsible Person Post Controller', () => {
     expect(res.render).not.to.have.been.called;
   });
 
-  it('retains the existing GAR patch and advances to customs on success', async () => {
+  it('updates the verified GAR and advances to customs on success', async () => {
     await controller(req, res);
 
     expect(listStub).to.have.been.calledOnceWithExactly('user-1');
@@ -106,8 +105,8 @@ describe('GAR Responsible Person Post Controller', () => {
     });
   });
 
-  it('preserves backend messages from the unchanged GAR patch wrapper', async () => {
-    patchStub.resolves(JSON.stringify({ message: 'Invalid responsible person' }));
+  it('renders a decoded backend message rather than continuing', async () => {
+    patchStub.resolves({ message: 'Invalid responsible person' });
 
     await controller(req, res);
 
@@ -132,6 +131,28 @@ describe('GAR Responsible Person Post Controller', () => {
       errors: [{ message: 'Failed to add to GAR' }],
     });
     expect(res.redirect).not.to.have.been.called;
+  });
+
+  it('preserves the HTTP error message and retains submitted values and saved persons', async () => {
+    patchStub.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'Invalid responsible person' },
+      })
+    );
+
+    await controller(req, res);
+
+    expect(res.redirect).not.to.have.been.called;
+    expect(cookie.getGarResponsiblePerson()).to.deep.equal({});
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/resperson/index', {
+      cookie,
+      responsiblePerson,
+      responsiblePersons,
+      fixedBasedOperatorOptions,
+      errors: [{ message: 'Invalid responsible person' }],
+    });
   });
 
   ['http_error', 'network_error', 'timeout_error'].forEach((type) => {

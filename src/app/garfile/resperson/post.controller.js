@@ -5,7 +5,6 @@ const utils = require('../../../common/utils/utils');
 const validator = require('../../../common/utils/validator');
 const validations = require('../../resperson/validations');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const garApi = require('../../../common/services/data-access/garApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -50,15 +49,14 @@ module.exports = async (req, res) => {
     return validator
       .validateChains(validations.validations(req))
       .then(() => {
-        return garApi
+        return dataAccessApi.garApi
           .patch(res.locals.gar.garId, cookie.getGarStatus(), responsiblePerson)
           .then((apiResponse) => {
-            const parsedResponse = JSON.parse(apiResponse);
-            if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+            if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
               res.render('app/garfile/resperson/index', {
                 cookie,
                 fixedBasedOperatorOptions,
-                errors: [parsedResponse],
+                errors: [apiResponse],
               });
               return;
             }
@@ -81,7 +79,11 @@ module.exports = async (req, res) => {
               responsiblePerson,
               responsiblePersons,
               fixedBasedOperatorOptions,
-              errors: [{ message: 'Failed to add to GAR' }],
+              errors: [
+                err?.type === 'http_error' && typeof err.body?.message === 'string'
+                  ? err.body
+                  : { message: 'Failed to add to GAR' },
+              ],
             });
           });
       })

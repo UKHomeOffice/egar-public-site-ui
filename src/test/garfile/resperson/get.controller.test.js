@@ -6,7 +6,6 @@ const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const utils = require('../../../common/utils/utils');
@@ -32,7 +31,7 @@ describe('GAR Responsible Person Get Controller', () => {
       responsibleCountry: 'GBR',
     });
     responsiblePersons = [{ responsiblePersonId: 'person-1', responsibleGivenName: 'Sally' }];
-    garStub = sinon.stub(garApi, 'get').resolves(JSON.stringify(responsiblePerson));
+    garStub = sinon.stub(dataAccessApi.garApi, 'get').resolves(responsiblePerson);
     listStub = sinon.stub(dataAccessApi.resPersonApi, 'getResPersons').resolves(responsiblePersons);
     detailsStub = sinon.stub(dataAccessApi.resPersonApi, 'getResPersonDetails');
   });
