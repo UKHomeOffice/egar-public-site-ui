@@ -1,117 +1,124 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/data-access/garApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const config = require('../../../common/config');
 const emailService = require('../../../common/services/sendEmail');
-
 const controller = require('../../../app/garfile/cancel/post.controller');
 
 describe('GAR Cancel Post Controller', () => {
   let req;
   let res;
-  let sessionSaveStub;
-  let garApiPatchStub;
-  let emailServiceStub;
+  let exception;
+  let patch;
+  let email;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
     req = {
       session: {
-        gar: {
-          id: 'ABCDE-CANCEL',
-          cbpId: 'CBP-ID',
-        },
-        u: {
-          fn: 'Roberto Baggio',
-          e: 'missed@usa94.fifa.com',
-        },
-        save: (callback) => callback(),
+        gar: { id: 'session-gar', cbpId: 'CBP-ID' },
+        u: { fn: 'Alex', e: 'alex@example.com' },
+        save: sinon.stub().callsArg(0),
       },
     };
-
     res = {
       redirect: sinon.spy(),
       render: sinon.spy(),
-      locals: { gar: { garId: '12345' } },
+      locals: { gar: { garId: 'verified-gar' } },
     };
-
-    garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
-    submitGARForExceptionStub = sinon.stub(garApi, 'submitGARForException');
-    garApiPatchStub = sinon.stub(garApi, 'patch');
-    emailServiceStub = sinon.stub(emailService, 'send');
-    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
+    exception = sinon.stub(garApi, 'submitGARForException').resolves({});
+    patch = sinon.stub(garApi, 'patch').resolves({ status: { name: 'Cancelled' } });
+    email = sinon.stub(emailService, 'send').resolves();
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should return an error message if api rejects', async () => {
-    const cookie = new CookieModel(req);
-    res.locals.gar = { garId: cookie.getGarId() };
-    garApiPatchStub.rejects('garApi.patch Example Reject');
-    garApiGetPeopleStub.resolves('{"items": []}');
-    submitGARForExceptionStub.resolves();
-
-    await controller(req, res);
-
-    expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
-    expect(emailServiceStub).to.not.have.been.called;
-    expect(sessionSaveStub).to.not.have.been.called;
+  function expectCancellationFailure() {
+    expect(email).not.to.have.been.called;
+    expect(req.session.save).not.to.have.been.called;
+    expect(req.session.successMsg).to.be.undefined;
+    expect(req.session.successHeader).to.be.undefined;
+    expect(res.redirect).not.to.have.been.called;
     expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/cancel/index', {
-      cookie,
+      cookie: new CookieModel(req),
       errors: [{ identifier: '', message: 'Failed to cancel GAR' }],
     });
-  });
+  }
 
-  it('should send an email and redirect with message', async () => {
-    garApiPatchStub.resolves();
-    emailServiceStub.resolves();
-    garApiGetPeopleStub.resolves('{"items": []}');
-    submitGARForExceptionStub.resolves();
-    res.locals.gar = { garId: '12345' };
+  function expectConfirmation(message) {
+    expect(exception).to.have.been.calledOnceWithExactly('verified-gar');
+    expect(patch).to.have.been.calledOnceWithExactly('verified-gar', 'Cancelled', {});
+    expect(exception).to.have.been.calledBefore(patch);
+    expect(req.session.successMsg).to.equal(message);
+    expect(req.session.successHeader).to.equal('Cancellation Confirmation');
+    expect(req.session.save).to.have.been.calledOnce;
+    expect(req.session.save).to.have.been.calledBefore(res.redirect);
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
+  }
+
+  it('stops cancellation when the exception request rejects with an HTTP error', async () => {
+    exception.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'GAR does not exist' },
+      })
+    );
 
     await controller(req, res);
 
-    expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
-    expect(emailServiceStub).to.have.been.calledOnceWithExactly(
-      config.NOTIFY_GAR_CANCEL_TEMPLATE_ID,
-      'missed@usa94.fifa.com',
-      { firstName: 'Roberto Baggio', cancellationReference: 'CBP-ID' }
-    );
-    expect(req.session.successMsg).to.eq('The GAR has been successfully cancelled');
-    expect(req.session.successHeader).to.eq('Cancellation Confirmation');
-    expect(sessionSaveStub).to.have.been.called;
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
+    expect(exception).to.have.been.calledOnceWithExactly('verified-gar');
+    expect(patch).not.to.have.been.called;
+    expectCancellationFailure();
   });
 
-  it('should redirect with error message', async () => {
-    garApiPatchStub.resolves();
-    emailServiceStub.rejects('emailService.send Example Reject');
-    garApiGetPeopleStub.resolves('{"items": []}');
-    submitGARForExceptionStub.resolves();
+  it('does not send confirmation when the cancellation update rejects with an HTTP error', async () => {
+    patch.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'Cancellation rejected' },
+      })
+    );
 
     await controller(req, res);
 
-    expect(garApiPatchStub).to.have.been.calledOnceWithExactly('ABCDE-CANCEL', 'Cancelled', {});
-    expect(emailServiceStub).to.have.been.calledOnceWithExactly(
-      config.NOTIFY_GAR_CANCEL_TEMPLATE_ID,
-      'missed@usa94.fifa.com',
-      { firstName: 'Roberto Baggio', cancellationReference: 'CBP-ID' }
-    );
-    expect(req.session.successMsg).to.eq(
-      'The GAR has been successfully cancelled, but there was a problem with sending the email'
-    );
-    expect(req.session.successHeader).to.eq('Cancellation Confirmation');
-    expect(sessionSaveStub).to.have.been.called;
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
+    expect(patch).to.have.been.calledOnceWithExactly('verified-gar', 'Cancelled', {});
+    expectCancellationFailure();
+  });
+
+  it('cancels the verified GAR before sending the confirmation email', async () => {
+    await controller(req, res);
+
+    expect(patch).to.have.been.calledBefore(email);
+    expect(email).to.have.been.calledOnceWithExactly(config.NOTIFY_GAR_CANCEL_TEMPLATE_ID, 'alex@example.com', {
+      firstName: 'Alex',
+      cancellationReference: 'CBP-ID',
+    });
+    expectConfirmation('The GAR has been successfully cancelled');
+  });
+
+  it('confirms cancellation without sending an email when there is no CBP reference', async () => {
+    req.session.gar.cbpId = null;
+
+    await controller(req, res);
+
+    expect(email).not.to.have.been.called;
+    expectConfirmation('The GAR has been successfully cancelled');
+  });
+
+  it('retains the cancellation confirmation with a warning when the email fails', async () => {
+    email.rejects(new Error('Notify unavailable'));
+
+    await controller(req, res);
+
+    expect(email).to.have.been.calledOnce;
+    expectConfirmation('The GAR has been successfully cancelled, but there was a problem with sending the email');
   });
 });
