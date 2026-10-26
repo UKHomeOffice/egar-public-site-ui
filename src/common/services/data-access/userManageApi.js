@@ -1,6 +1,3 @@
-const logger = require('../../utils/logger')(__filename);
-const { parseJsonResponse, serializeResponse, unwrapResponse } = require('./legacyApiResponse');
-
 class UserManageApi {
   constructor(client) {
     this.client = client;
@@ -74,30 +71,4 @@ class UserManageApi {
   }
 }
 
-async function callConfiguredUserApi(method, args, parseJson = false) {
-  try {
-    const result = await require('../dataAccessApi').userManageApi[method](...args);
-    return parseJson ? parseJsonResponse(result) : serializeResponse(unwrapResponse(result));
-  } catch (error) {
-    if (error?.type === 'http_error') {
-      return parseJson ? parseJsonResponse(error.body) : serializeResponse(error.body);
-    }
-
-    logger.error('User API request failed', {
-      operation: method,
-      errorMessage: error?.message,
-      status: error?.status,
-    });
-    throw error;
-  }
-}
-
 module.exports = { UserManageApi };
-
-['getDetails', 'userSearch', 'createUser'].forEach((method) => {
-  module.exports[method] = (...args) => callConfiguredUserApi(method, args, true);
-});
-
-['updateDetails', 'updateEmailOrOneLoginSid', 'deleteUser'].forEach((method) => {
-  module.exports[method] = (...args) => callConfiguredUserApi(method, args);
-});

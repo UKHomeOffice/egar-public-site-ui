@@ -6,7 +6,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const userApi = require('../../../common/services/data-access/userManageApi');
+const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
 const sendEmail = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 
@@ -49,6 +49,63 @@ describe('Admin deletion type is correctly determined from organisation users in
 
     expect(adminDeletionType(twoAdmins)).to.equal('DELETE_ADMIN');
     expect(adminDeletionType(anyOtherCombinationOfUsers)).to.equal('DELETE_ADMIN');
+  });
+});
+
+describe('Individual and organisation-member account deletion through dataAccessApi', () => {
+  let req;
+  let res;
+  let removeStub;
+  let notifyStub;
+
+  beforeEach(() => {
+    req = {
+      session: {
+        u: { e: 'user@example.com', rl: 'User', fn: 'Test', ln: 'User' },
+        id_token: 'test-id-token',
+        destroy: sinon.spy(),
+      },
+    };
+    res = { render: sinon.spy(), redirect: sinon.spy(), locals: {} };
+    removeStub = sinon.stub(userApi, 'deleteUser').resolves({});
+    notifyStub = sinon.stub(sendEmail, 'send').resolves();
+  });
+
+  afterEach(() => sinon.restore());
+
+  it('deletes a user account using the object response before notifying and logging out', async () => {
+    await controller(req, res);
+
+    expect(removeStub).to.have.been.calledOnceWithExactly('user@example.com');
+    expect(notifyStub).to.have.been.calledOnceWithExactly(
+      config.NOTIFY_ONELOGIN_ACCOUNT_DELETE_TEMPLATE_ID,
+      'user@example.com',
+      { firstName: 'Test', lastName: 'User' }
+    );
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/user/logout?action=user-deleted');
+    sinon.assert.callOrder(removeStub, notifyStub, res.redirect);
+  });
+
+  [
+    ['message response', { message: 'Deletion denied' }],
+    ['http_error', { message: 'Deletion denied' }],
+    ['network_error', null],
+  ].forEach(([type, body]) => {
+    it(`does not notify or log out after a user-deletion ${type}`, async () => {
+      if (type === 'message response') removeStub.resolves(body);
+      else removeStub.rejects(Object.assign(new Error('Request failed'), { type, status: 403, body }));
+
+      await controller(req, res);
+
+      expect(notifyStub).not.to.have.been.called;
+      expect(req.session.destroy).not.to.have.been.called;
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/deleteAccount/index', {
+        cookie: new CookieModel(req),
+        errors: [body || { message: 'Failed to delete your account. Contact support or try again' }],
+      });
+    });
   });
 });
 
@@ -114,7 +171,7 @@ describe('User Delete Account Post Controller', () => {
         items: [{ userId: 'admin-1', role: { name: 'Admin' } }],
       });
       deleteStub = sinon.stub(dataAccessApi.organisationApi, 'delete').resolves({});
-      deleteUserStub = sinon.stub(userApi, 'deleteUser').resolves(JSON.stringify({}));
+      deleteUserStub = sinon.stub(userApi, 'deleteUser').resolves({});
       notifyStub = sinon.stub(sendEmail, 'send').resolves();
       destroyStub = sinon.stub(req.session, 'destroy').callsArg(0);
     });
@@ -242,7 +299,7 @@ describe('User Delete Account Post Controller', () => {
   });
 
   it('should render logout if email service rejects', async () => {
-    deleteAccountStub.onFirstCall().resolves(JSON.stringify({}));
+    deleteAccountStub.onFirstCall().resolves({});
     notifyUserStub.onFirstCall().rejects('Error occured');
 
     await controller(req, res);
@@ -252,7 +309,7 @@ describe('User Delete Account Post Controller', () => {
 
   it('should redirect to logout route when session has OneLogin id token', async () => {
     req.session.id_token = 'session-id-token';
-    deleteAccountStub.onFirstCall().resolves(JSON.stringify({}));
+    deleteAccountStub.onFirstCall().resolves({});
     notifyUserStub.onFirstCall().resolves();
 
     await controller(req, res);

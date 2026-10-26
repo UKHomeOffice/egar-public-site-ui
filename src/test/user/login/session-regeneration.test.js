@@ -7,7 +7,7 @@ const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils
 const config = require('../../../common/config/index');
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/data-access/userManageApi');
+const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
 
 require('../../global.test');
 

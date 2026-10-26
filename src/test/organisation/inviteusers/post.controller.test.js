@@ -7,7 +7,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const userApi = require('../../../common/services/data-access/userManageApi');
+const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/organisation/inviteusers/post.controller');
 
 describe('Organisation Invite User Post Controller', () => {
@@ -41,6 +41,38 @@ describe('Organisation Invite User Post Controller', () => {
     sinon.restore();
   });
 
+  it('continues to role assignment for the backend unregistered-user HTTP response', async () => {
+    getDetailsStub.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'User not registered' },
+      })
+    );
+
+    await controller(req, res);
+
+    expect(getDetailsStub).to.have.been.calledOnceWithExactly('prequel@enterprise.net');
+    expect(req.session.inv).to.include({ fn: 'Jonathon', ln: 'Archer', e: 'prequel@enterprise.net' });
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/assignrole');
+    expect(res.render).not.to.have.been.called;
+  });
+
+  [
+    ['http_error', 400, { message: 'User email not verified' }],
+    ['http_error', 503, { message: 'User not registered' }],
+    ['network_error', undefined, undefined],
+  ].forEach(([type, status, body]) => {
+    it(`does not proceed to role assignment on ${type} ${status || ''} ${body?.message || ''}`, async () => {
+      getDetailsStub.rejects(Object.assign(new Error('Request failed'), { type, status, body }));
+
+      await controller(req, res);
+
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/inviteuser');
+      expect(res.render).not.to.have.been.called;
+    });
+  });
+
   describe('validations', () => {
     beforeEach(() => {
       cookie = new CookieModel(req);
@@ -56,7 +88,7 @@ describe('Organisation Invite User Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(res.redirect).to.not.have.been.called;
         expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/index', {
           cookie,
@@ -88,7 +120,7 @@ describe('Organisation Invite User Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.inv.fn).to.be.null;
         expect(req.session.inv.ln).to.be.null;
         expect(req.session.inv.e).to.be.null;
@@ -134,7 +166,7 @@ describe('Organisation Invite User Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.inv.fn).to.be.null;
         expect(req.session.inv.ln).to.be.null;
         expect(req.session.inv.e).to.be.null;
@@ -156,7 +188,7 @@ describe('Organisation Invite User Post Controller', () => {
     };
 
     getDetailsStub.resolves({ email: 'prequel@enterprise.net', message: 'User not registered' });
-    callController().then(() => {
+    return callController().then(() => {
       expect(req.session.inv.fn).to.eq('Jonathon');
       expect(req.session.inv.ln).to.eq('Archer');
       expect(req.session.inv.e).to.eq('prequel@enterprise.net');
@@ -173,7 +205,7 @@ describe('Organisation Invite User Post Controller', () => {
     };
 
     getDetailsStub.resolves({ email: 'prequel@enterprise.net' });
-    callController().then(() => {
+    return callController().then(() => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/inviteusers/userExistError', {
         cookie,
       });

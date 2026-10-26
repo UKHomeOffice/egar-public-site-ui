@@ -6,7 +6,7 @@ const { expect } = chai;
 
 require('../../global.test');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const userApi = require('../../../common/services/data-access/userManageApi');
+const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/organisation/delete/get.controller');
 
 describe('Organisation Delete User Get Controller', () => {
@@ -57,6 +57,24 @@ describe('Organisation Delete User Get Controller', () => {
     expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
   });
 
+  it('does not delete or report success when the user lookup rejects', async () => {
+    getStub.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'User not registered' },
+      })
+    );
+
+    await controller(req, res);
+
+    expect(deleteStub).not.to.have.been.called;
+    expect(req.session.errMsg).to.deep.equal({ message: 'Failed to delete user. Try again' });
+    expect(req.session.successMsg).to.be.undefined;
+    expect(req.session.successHeader).to.be.undefined;
+    expect(saveStub).to.have.been.calledOnce;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
+  });
   ['message response', 'http_error', 'network_error', 'timeout_error'].forEach((type) => {
     it(`saves a deletion error without reporting success on a ${type}`, async () => {
       if (type === 'message response') {

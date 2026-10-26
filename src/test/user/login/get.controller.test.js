@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 const config = require('../../../common/config/index');
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/data-access/userManageApi');
+const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
 const verification = require('../../../common/services/data-access/verificationApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const sendEmail = require('../../../common/services/sendEmail');
@@ -107,6 +107,78 @@ FnBdx5XR9zLe40LX3+cbEtw=
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  describe('data-access failures during authentication', () => {
+    beforeEach(() => {
+      req.query = { code: '123', state: 'valid_state' };
+      req.cookies = { state: 'valid_state', nonce: 'valid_nonce' };
+      userSearchStub.resolves({
+        userId: 'user-1',
+        state: 'verified',
+        oneLoginSid: 'onelogin_sid',
+        email: 'user@email.com',
+        firstName: 'Test',
+        lastName: 'User',
+        role: { name: 'Individual' },
+      });
+      getDetailsStub.resolves({});
+      updateEmailOrOneLoginSidStub.resolves({});
+    });
+
+    [
+      ['search', 'http_error'],
+      ['details', 'http_error'],
+      ['email update', 'http_error'],
+      ['SID update', 'http_error'],
+      ['SID update', 'network_error'],
+    ].forEach(([operation, type]) => {
+      it(`clears authentication and logs out on a ${operation} ${type}`, async () => {
+        if (operation === 'email update') {
+          userSearchStub.resolves({
+            userId: 'user-1',
+            state: 'verified',
+            oneLoginSid: 'onelogin_sid',
+            email: 'old@example.com',
+          });
+        } else if (operation === 'SID update') {
+          userSearchStub.resolves({
+            userId: 'user-1',
+            state: 'verified',
+            oneLoginSid: null,
+            email: 'user@email.com',
+          });
+        }
+        const failingStub =
+          operation === 'search'
+            ? userSearchStub
+            : operation === 'details'
+              ? getDetailsStub
+              : updateEmailOrOneLoginSidStub;
+        failingStub.rejects(
+          Object.assign(new Error('Request failed'), {
+            type,
+            status: 400,
+            body: { message: 'User not registered' },
+          })
+        );
+
+        await controller(req, res);
+
+        expect(failingStub).to.have.been.calledOnce;
+        if (operation !== 'details') expect(getDetailsStub).not.to.have.been.called;
+        expect(req.session.u?.dbId).not.to.exist;
+        expect(req.session).not.to.have.property('id_token');
+        expect(req.session).not.to.have.property('access_token');
+        expect(res.cookie).to.have.been.calledWith('errorPage', 'service-error');
+        const logoutQuery = new URLSearchParams({
+          id_token_hint: 'mock_id_token',
+          post_logout_redirect_uri: config.ONE_LOGIN_LOGOUT_URL,
+          state: 'valid_state',
+        });
+        expect(res.redirect).to.have.been.calledOnceWithExactly(`www.test_one_login.com/logout?${logoutQuery}`);
+      });
+    });
   });
 
   describe('notifying organisation admins when the One Login email changes', () => {

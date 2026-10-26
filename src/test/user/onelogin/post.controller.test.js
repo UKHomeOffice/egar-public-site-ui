@@ -6,7 +6,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/data-access/userManageApi');
+const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
 const sendEmail = require('../../../common/services/sendEmail');
 const validator = require('../../../common/utils/validator');
 const {
@@ -187,6 +187,35 @@ describe('User OneLogin Post Controller', () => {
       expect(createUserStub).to.have.been.called;
       expect(req.session.step).to.equal(PHASE_CONFIRM_NAME);
       expect(res.redirect).to.have.been.calledWith('error/404');
+    });
+
+    ['http_error', 'network_error'].forEach((type) => {
+      it(`does not authenticate, notify or advance registration on a create-user ${type}`, async () => {
+        createUserStub.rejects(
+          Object.assign(new Error('Request failed'), {
+            type,
+            status: 400,
+            body: { message: 'User already registered' },
+          })
+        );
+
+        await postController(req, res);
+
+        expect(createUserStub).to.have.been.calledOnceWithExactly(
+          'john.doe@example.com',
+          'John',
+          'Doe',
+          'onelogin_sub_id',
+          'verified',
+          '123'
+        );
+        expect(req.session.regenerate).not.to.have.been.called;
+        expect(req.session.save).not.to.have.been.called;
+        expect(req.session.u?.dbId).not.to.exist;
+        expect(req.session.step).to.equal(PHASE_CONFIRM_NAME);
+        expect(sendEmail.send).not.to.have.been.called;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('error/404');
+      });
     });
 
     it('should handle error if nameConfirmDeclaration is not checked', async () => {

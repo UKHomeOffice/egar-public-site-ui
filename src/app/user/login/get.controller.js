@@ -1,6 +1,5 @@
 const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/data-access/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, HTTPS } = require('../../../common/config');
@@ -69,7 +68,7 @@ const sendAdminUpdateEmail = (userObj, accountUrl) => {
  */
 const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
   const { email, sub: oneLoginSid } = userInfo;
-  return userApi
+  return dataAccessApi.userManageApi
     .userSearch(email, oneLoginSid)
     .then(async (userData) => {
       if (!userData?.userId) {
@@ -92,18 +91,16 @@ const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
 
         case oneLoginSidMatches && !emailMatches:
           // sid matches but email does not.
-          return userApi.updateEmailOrOneLoginSid(userData.email, { email }).then(() => {
+          return dataAccessApi.userManageApi.updateEmailOrOneLoginSid(userData.email, { email }).then(() => {
             userData.email = email;
             return sendAdminUpdateEmail(userData, accountUrl).then(() => userData);
           });
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
-          return new Promise((resolve, _reject) =>
-            userApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then((_e) => {
-              userData.oneLoginSid = oneLoginSid;
-              return resolve(userData);
-            })
-          );
+          return dataAccessApi.userManageApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then(() => {
+            userData.oneLoginSid = oneLoginSid;
+            return userData;
+          });
         case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
           logger.error('Login error: User SID does not match but email matches.');
@@ -118,7 +115,7 @@ const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
         return userData;
       }
 
-      return userApi.getDetails(email).then((details) => {
+      return dataAccessApi.userManageApi.getDetails(email).then((details) => {
         const { organisation } = details || {};
         const cookie = new CookieModel(req);
 
