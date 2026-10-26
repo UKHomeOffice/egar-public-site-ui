@@ -1,34 +1,28 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../global.test');
-const garApi = require('../../../common/services/data-access/garApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
-const emailService = require('../../../common/services/sendEmail');
 const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
 const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const intentionValueOptions = require('../../../common/seeddata/egar_intention_value_options.json');
 const freeCirculationOptions = require('../../../common/seeddata/egar_craft_eu_free_circulation_options.json');
 const continentalShelfOptions = require('../../../common/seeddata/egar_continental_shelf_options.json');
-
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-
 const controller = require('../../../app/garfile/customs/post.controller');
 
 describe('GAR Customs Post Controller', () => {
   let req;
   let res;
-  let garApiPatchStub;
+  let patch;
+  let customs;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
     req = {
       body: {
         continentalShelf: 'No',
@@ -38,450 +32,146 @@ describe('GAR Customs Post Controller', () => {
         freeCirculation: 0,
         visitReason: 2,
         intentionValue: 'Yes',
+        buttonClicked: 'Save and continue',
       },
-      session: {
-        gar: {
-          id: 'ABCD-1234',
-          status: 'Draft',
-          voyageArrival: { arrivalPort: null },
-          voyageDeparture: { departurePort: null },
-        },
-      },
+      session: { gar: { id: 'stale-session-id', status: 'Draft' } },
     };
-
-    res = {
-      redirect: sinon.spy(),
-      render: sinon.spy(),
-      locals: {},
+    res = { redirect: sinon.spy(), render: sinon.spy(), locals: { gar: { garId: 'ABCD-1234' } } };
+    patch = sinon.stub(garApi, 'patch').resolves({});
+    customs = {
+      baggage: undefined,
+      baggageDeclaration: '',
+      continentalShelf: 'No',
+      continentalShelfDeclaration: '',
+      freeCirculation: 0,
+      goodsDeclaration: 'Duty Free',
+      intentionValue: 'Yes',
+      passengerTravellingReason: '',
+      passengerTravellingReasonAnswer: '',
+      prohibitedGoods: 'Yes',
+      supportingInformation: undefined,
+      supportingInformationAnswer: '',
+      visitReason: 2,
     };
-
-    garApiPatchStub = sinon.stub(garApi, 'patch');
-    emailServiceStub = sinon.stub(emailService, 'send');
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should error on validation', () => {
+  function expectErrors(errors) {
+    expect(res.redirect).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/customs/index', {
+      freeCirculationOptions,
+      reasonForVisitOptions,
+      prohibitedGoodsOptions,
+      baggageOptions,
+      intentionValueOptions,
+      continentalShelfOptions,
+      cookie: new CookieModel(req),
+      gar: customs,
+      errors,
+    });
+  }
+
+  it('retains submitted declarations and renders validation errors without updating the GAR', async () => {
     req.body.visitReason = '';
     delete req.body.intentionValue;
-    const cookie = new CookieModel(req);
-    const callController = async () => {
-      await controller(req, res);
-    };
+    customs.visitReason = '';
+    customs.intentionValue = undefined;
 
-    callController().then(() => {
-      expect(req.body.buttonClicked).to.be.undefined;
-      expect(garApiPatchStub).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
-        freeCirculationOptions,
-        reasonForVisitOptions,
-        prohibitedGoodsOptions,
-        baggageOptions,
-        intentionValueOptions,
-        continentalShelfOptions,
-        cookie,
-        gar: {
-          baggage: undefined,
-          baggageDeclaration: '',
-          continentalShelf: 'No',
-          continentalShelfDeclaration: '',
-          prohibitedGoods: 'Yes',
-          goodsDeclaration: 'Duty Free',
-          intentionValue: undefined,
-          passengerTravellingReason: '',
-          passengerTravellingReasonAnswer: '',
-          supportingInformation: undefined,
-          supportingInformationAnswer: '',
-          freeCirculation: 0,
-          visitReason: '',
-        },
-        errors: [
-          new ValidationRule(validator.notEmpty, 'visitReason', '', 'Select a reason for visit'),
-          new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Select a value for customs declaration'),
-        ],
-      });
-    });
+    await controller(req, res);
+
+    expect(patch).not.to.have.been.called;
+    expectErrors([
+      new ValidationRule(validator.notEmpty, 'visitReason', '', 'Select a reason for visit'),
+      new ValidationRule(validator.notEmpty, 'intentionValue', undefined, 'Select a value for customs declaration'),
+    ]);
   });
 
-  it('should render with validation message if customs declaration is "Yes" and declaration details is empty string', () => {
-    req.body.prohibitedGoods = 'Yes';
+  it('requires declaration details after trimming whitespace', async () => {
     req.body.goodsDeclaration = '          ';
-    const cookie = new CookieModel(req);
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiPatchStub).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
-        freeCirculationOptions,
-        reasonForVisitOptions,
-        prohibitedGoodsOptions,
-        intentionValueOptions,
-        baggageOptions,
-        continentalShelfOptions,
-        cookie,
-        gar: {
-          baggage: undefined,
-          baggageDeclaration: '',
-          continentalShelf: 'No',
-          continentalShelfDeclaration: '',
-          freeCirculation: 0,
-          goodsDeclaration: '',
-          intentionValue: 'Yes',
-          passengerTravellingReason: '',
-          passengerTravellingReasonAnswer: '',
-          prohibitedGoods: 'Yes',
-          supportingInformation: undefined,
-          supportingInformationAnswer: '',
-          visitReason: 2,
-        },
-        errors: [
-          new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
-        ],
-      });
-    });
+    customs.goodsDeclaration = '';
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors([
+      new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
+    ]);
   });
 
-  it('should render with validation message if customs declaration is "Yes" and declaration details is undefined', () => {
-    req.body.prohibitedGoods = 'Yes';
+  it('requires declaration details when missing', async () => {
     delete req.body.goodsDeclaration;
-    const cookie = new CookieModel(req);
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiPatchStub).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
-        freeCirculationOptions,
-        reasonForVisitOptions,
-        prohibitedGoodsOptions,
-        baggageOptions,
-        intentionValueOptions,
-        continentalShelfOptions,
-        cookie,
-        gar: {
-          baggage: undefined,
-          baggageDeclaration: '',
-          continentalShelf: 'No',
-          continentalShelfDeclaration: '',
-          freeCirculation: 0,
-          goodsDeclaration: '',
-          intentionValue: 'Yes',
-          passengerTravellingReason: '',
-          passengerTravellingReasonAnswer: '',
-          prohibitedGoods: 'Yes',
-          supportingInformation: undefined,
-          supportingInformationAnswer: '',
-          visitReason: 2,
-        },
-        errors: [
-          new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
-        ],
-      });
-    });
+    customs.goodsDeclaration = '';
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors([
+      new ValidationRule(validator.notEmpty, 'goodsDeclaration', '', 'Please enter customs declaration details'),
+    ]);
   });
 
-  it('should show error if api rejects', () => {
-    const cookie = new CookieModel(req);
-    garApiPatchStub.rejects('garApi.patch Example Reject');
-    res.locals.gar = { garId: 'ABCD-1234' };
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-          baggage: undefined,
-          baggageDeclaration: '',
-          continentalShelf: 'No',
-          continentalShelfDeclaration: '',
-          freeCirculation: 0,
-          goodsDeclaration: 'Duty Free',
-          intentionValue: 'Yes',
-          passengerTravellingReason: '',
-          passengerTravellingReasonAnswer: '',
-          prohibitedGoods: 'Yes',
-          supportingInformation: undefined,
-          supportingInformationAnswer: '',
-          visitReason: 2,
-        });
-        expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
-          freeCirculationOptions,
-          reasonForVisitOptions,
-          prohibitedGoodsOptions,
-          baggageOptions,
-          intentionValueOptions,
-          continentalShelfOptions,
-          cookie,
-          gar: {
-            baggage: undefined,
-            baggageDeclaration: '',
-            continentalShelf: 'No',
-            continentalShelfDeclaration: '',
-            freeCirculation: 0,
-            goodsDeclaration: 'Duty Free',
-            intentionValue: 'Yes',
-            passengerTravellingReason: '',
-            passengerTravellingReasonAnswer: '',
-            prohibitedGoods: 'Yes',
-            supportingInformation: undefined,
-            supportingInformationAnswer: '',
-            visitReason: 2,
-          },
-          errors: [{ message: 'Failed to save customs information. Try again' }],
-        });
-      });
+  it('retains declarations and shows a generic error when saving fails', async () => {
+    patch.rejects(new Error('Connection unavailable'));
+    await controller(req, res);
+    expectErrors([{ message: 'Failed to save customs information. Try again' }]);
   });
 
-  it('should show error if api returns error message', () => {
-    const cookie = new CookieModel(req);
-    garApiPatchStub.resolves(
-      JSON.stringify({
-        message: 'GAR not found',
+  it('preserves the backend message when saving rejects with an HTTP error', async () => {
+    patch.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'GAR not found' },
       })
     );
-    res.locals.gar = { garId: 'ABCD-1234' };
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        baggage: undefined,
-        baggageDeclaration: '',
-        continentalShelf: 'No',
-        continentalShelfDeclaration: '',
-        freeCirculation: 0,
-        goodsDeclaration: 'Duty Free',
-        intentionValue: 'Yes',
-        passengerTravellingReason: '',
-        passengerTravellingReasonAnswer: '',
-        prohibitedGoods: 'Yes',
-        supportingInformation: undefined,
-        supportingInformationAnswer: '',
-        visitReason: 2,
-      });
-      expect(res.render).to.have.been.calledWith('app/garfile/customs/index', {
-        prohibitedGoodsOptions,
-        freeCirculationOptions,
-        reasonForVisitOptions,
-        intentionValueOptions,
-        baggageOptions,
-        continentalShelfOptions,
-        cookie,
-        gar: {
-          baggage: undefined,
-          baggageDeclaration: '',
-          continentalShelf: 'No',
-          continentalShelfDeclaration: '',
-          freeCirculation: 0,
-          goodsDeclaration: 'Duty Free',
-          intentionValue: 'Yes',
-          passengerTravellingReason: '',
-          passengerTravellingReasonAnswer: '',
-          prohibitedGoods: 'Yes',
-          supportingInformation: undefined,
-          supportingInformationAnswer: '',
-          visitReason: 2,
-        },
-        errors: [{ message: 'GAR not found' }],
-      });
-    });
+    await controller(req, res);
+    expectErrors([{ message: 'GAR not found' }]);
   });
 
-  it('should go to the home page if no buttonClicked property', () => {
-    garApiPatchStub.resolves(JSON.stringify({}));
-    res.locals.gar = { garId: 'ABCD-1234' };
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(req.body.buttonClicked).to.be.undefined;
-      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        baggage: undefined,
-        baggageDeclaration: '',
-        continentalShelf: 'No',
-        continentalShelfDeclaration: '',
-        freeCirculation: 0,
-        goodsDeclaration: 'Duty Free',
-        intentionValue: 'Yes',
-        passengerTravellingReason: '',
-        passengerTravellingReasonAnswer: '',
-        prohibitedGoods: 'Yes',
-        supportingInformation: undefined,
-        supportingInformationAnswer: '',
-        visitReason: 2,
-      });
-      expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
-    });
+  it('renders a decoded API error rather than continuing', async () => {
+    patch.resolves({ message: 'GAR not found' });
+    await controller(req, res);
+    expectErrors([{ message: 'GAR not found' }]);
   });
 
-  it('should go to craft page if buttonClicked property is set', () => {
-    req.body.buttonClicked = 'Save and continue';
-    garApiPatchStub.resolves(JSON.stringify({}));
-    res.locals.gar = { garId: 'ABCD-1234' };
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(req.body.buttonClicked).to.eq('Save and continue');
-      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        baggage: undefined,
-        baggageDeclaration: '',
-        continentalShelf: 'No',
-        continentalShelfDeclaration: '',
-        freeCirculation: 0,
-        goodsDeclaration: 'Duty Free',
-        intentionValue: 'Yes',
-        passengerTravellingReason: '',
-        passengerTravellingReasonAnswer: '',
-        prohibitedGoods: 'Yes',
-        supportingInformation: undefined,
-        supportingInformationAnswer: '',
-        visitReason: 2,
-      });
-      expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
-    });
+  it('saves declarations to the verified GAR and continues to supporting documents', async () => {
+    req.body.goodsDeclaration = '   Duty Free   ';
+    await controller(req, res);
+    expect(patch).to.have.been.calledOnceWithExactly('ABCD-1234', 'Draft', customs);
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
   });
 
-  it('should set goodsDeclaration=empty string if prohibitedGoods!=Yes', () => {
-    req.body.buttonClicked = 'Save and continue';
-    req.body.prohibitedGoods = 'No';
-    garApiPatchStub.resolves(JSON.stringify({}));
-    res.locals.gar = { garId: 'ABCD-1234' };
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(req.body.buttonClicked).to.eq('Save and continue');
-      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        baggage: undefined,
-        baggageDeclaration: '',
-        continentalShelf: 'No',
-        continentalShelfDeclaration: '',
-        freeCirculation: 0,
-        goodsDeclaration: '',
-        intentionValue: 'Yes',
-        passengerTravellingReason: '',
-        passengerTravellingReasonAnswer: '',
-        prohibitedGoods: 'No',
-        supportingInformation: undefined,
-        supportingInformationAnswer: '',
-        visitReason: 2,
-      });
-      expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
-    });
+  it('returns to the GAR view for the other save action', async () => {
+    req.body.buttonClicked = 'Save';
+    await controller(req, res);
+    expect(patch).to.have.been.calledOnceWithExactly('ABCD-1234', 'Draft', customs);
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
   });
 
-  it('should set goodsDeclaration=empty string if prohibitedGoods=random string', () => {
-    req.body.buttonClicked = 'Save and continue';
-    req.body.prohibitedGoods = 'adFnjKekNnveAiej1324mk';
-    garApiPatchStub.resolves(JSON.stringify({}));
-    res.locals.gar = { garId: 'ABCD-1234' };
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(req.body.buttonClicked).to.eq('Save and continue');
-      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        baggage: undefined,
-        baggageDeclaration: '',
-        continentalShelf: 'No',
-        continentalShelfDeclaration: '',
-        freeCirculation: 0,
-        goodsDeclaration: '',
-        intentionValue: 'Yes',
-        passengerTravellingReason: '',
-        passengerTravellingReasonAnswer: '',
-        prohibitedGoods: 'adFnjKekNnveAiej1324mk',
-        supportingInformation: undefined,
-        supportingInformationAnswer: '',
-        visitReason: 2,
-      });
-      expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
+  it('clears stale conditional answers when the corresponding selections are No', async () => {
+    Object.assign(req.body, {
+      prohibitedGoods: 'No',
+      goodsDeclaration: 'Old goods',
+      baggage: 'No',
+      baggageDeclaration: 'Old baggage',
+      continentalShelf: 'No',
+      continentalShelfDeclaration: 'Old shelf details',
+      supportingInformation: 'No',
+      supportingInformationAnswer: 'Old information',
+      passengerTravellingReason: 'No',
+      passengerTravellingReasonAnswer: 'Old reason',
     });
-  });
-
-  it('should set goodsDeclaration=empty string if prohibitedGoods=No', () => {
-    req.body.buttonClicked = 'Save and continue';
-    req.body.prohibitedGoods = 'No';
-    req.body.goodsDeclaration = 'adFnjKekNnveAiej1324mk';
-    garApiPatchStub.resolves(JSON.stringify({}));
-    res.locals.gar = { garId: 'ABCD-1234' };
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(req.body.buttonClicked).to.eq('Save and continue');
-      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        baggage: undefined,
-        baggageDeclaration: '',
-        continentalShelf: 'No',
-        continentalShelfDeclaration: '',
-        freeCirculation: 0,
-        goodsDeclaration: '',
-        intentionValue: 'Yes',
-        passengerTravellingReason: '',
-        passengerTravellingReasonAnswer: '',
-        prohibitedGoods: 'No',
-        supportingInformation: undefined,
-        supportingInformationAnswer: '',
-        visitReason: 2,
-      });
-      expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
+    Object.assign(customs, {
+      prohibitedGoods: 'No',
+      goodsDeclaration: '',
+      baggage: 'No',
+      baggageDeclaration: '',
+      supportingInformation: 'No',
+      supportingInformationAnswer: '',
+      passengerTravellingReason: 'No',
+      passengerTravellingReasonAnswer: '',
     });
-  });
-
-  it('should trim white spaces for goodsDeclaration', () => {
-    req.body.buttonClicked = 'Save and continue';
-    req.body.prohibitedGoods = 'Yes';
-    req.body.goodsDeclaration = '      a      ';
-    garApiPatchStub.resolves(JSON.stringify({}));
-    res.locals.gar = { garId: 'ABCD-1234' };
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiPatchStub).to.have.been.calledWith('ABCD-1234', 'Draft', {
-        baggage: undefined,
-        baggageDeclaration: '',
-        continentalShelf: 'No',
-        continentalShelfDeclaration: '',
-        prohibitedGoods: 'Yes',
-        goodsDeclaration: 'a',
-        freeCirculation: 0,
-        visitReason: 2,
-        intentionValue: 'Yes',
-        passengerTravellingReason: '',
-        passengerTravellingReasonAnswer: '',
-        supportingInformation: undefined,
-        supportingInformationAnswer: '',
-      });
-      expect(res.redirect).to.have.been.calledWith('/garfile/supportingdocuments');
-    });
+    await controller(req, res);
+    expect(patch).to.have.been.calledOnceWithExactly('ABCD-1234', 'Draft', customs);
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
   });
 });

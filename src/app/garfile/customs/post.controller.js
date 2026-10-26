@@ -3,7 +3,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('./validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/data-access/garApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options.json');
 const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
@@ -49,15 +49,14 @@ module.exports = (req, res) => {
 
   const { buttonClicked } = req.body;
 
-  validator
+  return validator
     .validateChains(validations.validations(req))
     .then(() => {
-      garApi
+      return dataAccessApi.garApi
         .patch(res.locals.gar.garId, cookie.getGarStatus(), customs)
         .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-            context.errors = [parsedResponse];
+          if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
+            context.errors = [apiResponse];
             res.render('app/garfile/customs/index', context);
             return;
           }
@@ -73,7 +72,11 @@ module.exports = (req, res) => {
             errorMessage: err?.message,
             stack: err?.stack,
           });
-          context.errors = [{ message: 'Failed to save customs information. Try again' }];
+          context.errors = [
+            err?.type === 'http_error' && typeof err.body?.message === 'string'
+              ? err.body
+              : { message: 'Failed to save customs information. Try again' },
+          ];
           res.render('app/garfile/customs/index', context);
         });
     })

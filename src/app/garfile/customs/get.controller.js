@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/data-access/garApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options.json');
 const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
@@ -23,11 +23,10 @@ module.exports = (req, res) => {
     cookie,
   };
 
-  garApi
+  return dataAccessApi.garApi
     .get(garId)
     .then((apiResponse) => {
-      const gar = JSON.parse(apiResponse);
-      context.gar = gar;
+      context.gar = apiResponse;
       res.render('app/garfile/customs/index', context);
     })
     .catch(() => {
