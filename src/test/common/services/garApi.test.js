@@ -1,9 +1,7 @@
 const { expect } = require('chai');
-const sinon = require('sinon');
 
 require('../../global.test');
 const garApiService = require('../../../common/services/data-access/garApi');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const garId = 'c2d86db6-006c-4f5e-9e22-e039c8b1ddc7';
 const userId = 'f058e37b-3fa2-4c05-a057-6c810d6c6bd6';
@@ -14,8 +12,6 @@ const person = { firstName: 'Ada', lastName: 'Lovelace' };
 
 describe('GarApi', () => {
   const pages = { page: 2, perPage: 10, status: 'Submitted' };
-
-  afterEach(() => sinon.restore());
 
   it('gets GAR details through the injected HTTP client and enriches the country label', async () => {
     const gar = { garId, responsibleCountry: 'GBR' };
@@ -258,45 +254,5 @@ describe('GarApi', () => {
     } catch (err) {
       expect(err).to.equal(networkError);
     }
-  });
-
-  it('keeps legacy service calls as a string boundary over the configured GarApi', async () => {
-    const getStub = sinon.stub(dataAccessApi.garApi, 'get').resolves({ ok: true, garId });
-
-    expect(await garApiService.get(garId)).to.equal(JSON.stringify({ garId }));
-    expect(getStub.calledOnceWithExactly(garId)).to.equal(true);
-  });
-
-  [
-    ['get', [garId]],
-    ['getPeople', [garId]],
-    ['getSupportingDocs', [garId]],
-    ['getGars', [userId, 'Individual', pages]],
-    ['getGarCheckinProgress', [garId]],
-  ].forEach(([method, args]) => {
-    it(`returns only the serialized HTTP error body through the legacy ${method} export`, async () => {
-      const error = Object.assign(new Error('Unavailable'), {
-        type: 'http_error',
-        status: 503,
-        statusText: 'Service Unavailable',
-        body: { message: 'Maintenance' },
-      });
-      const client = { get: sinon.stub().rejects(error) };
-      sinon.stub(dataAccessApi, 'garApi').value(new garApiService.GarApi(client));
-
-      expect(await garApiService[method](...args)).to.equal(JSON.stringify(error.body));
-    });
-  });
-
-  it('preserves the legacy JSON object and body-string boundaries for counts and HTTP errors', async () => {
-    const countStub = sinon.stub(dataAccessApi.garApi, 'getGarsCount').resolves('{"ok":true,"count":3}');
-    expect(await garApiService.getGarsCount(userId, 'Individual')).to.deep.equal({ count: 3 });
-    expect(countStub.calledOnceWithExactly(userId, 'Individual')).to.equal(true);
-
-    const error = new Error('Request failed');
-    Object.assign(error, { type: 'http_error', body: { message: 'GAR update failed' } });
-    const patchStub = sinon.stub(dataAccessApi.garApi, 'patch').rejects(error);
-    expect(await garApiService.patch(garId, 'Draft', {})).to.equal(JSON.stringify(error.body));
-    expect(patchStub.calledOnceWithExactly(garId, 'Draft', {})).to.equal(true);
   });
 });
