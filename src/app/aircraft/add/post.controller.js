@@ -3,7 +3,7 @@ const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const craftApi = require('../../../common/services/data-access/craftApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const pagination = require('../../../common/utils/pagination');
 const craftValidations = require('../../../app/garfile/craft/validations');
 
@@ -33,36 +33,34 @@ module.exports = (req, res) => {
   const validationChain = craftValidations.validations(craftObj);
 
   // Validate chains
-  validator
+  return validator
     .validateChains(validationChain)
     .then(() => {
       const craftBase = cookie.reduceCraftBase(craftBasePort, craftBaseLat, craftBaseLong);
 
       // call the API to update the data base and then
-      craftApi.create(registration, craftType, craftBase, cookie.getUserDbId()).then((apiResponse) => {
-        try {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-            res.render('app/aircraft/add/index', { errors: [parsedResponse], cookie });
-          } else {
+      return dataAccessApi.craftApi
+        .create(registration, craftType, craftBase, cookie.getUserDbId())
+        .then((apiResponse) => {
+          if (apiResponse && typeof apiResponse === 'object') {
+            if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
+              return res.render('app/aircraft/add/index', { errors: [apiResponse], cookie });
+            }
             // Set the page to a large number and expect the page to redirect back to
             // the correct last page (two calls in exchange for less logic to calculate the last page)
             pagination.setCurrentPage(req, '/aircraft', 1000000);
-            req.session.save(() => res.redirect('/aircraft'));
+            return req.session.save(() => res.redirect('/aircraft'));
           }
-        } catch {
-          logger.error('Parsing attempt from API caused error, was not JSON');
-          let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
-          if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {
-            errMsg = { message: 'Craft already exists' };
-          }
-          res.render('app/aircraft/add/index', {
-            cookie,
-            craftObj,
-            errors: [errMsg],
+          logger.error('Unexpected response saving aircraft');
+          return renderApiError(apiResponse);
+        })
+        .catch((err) => {
+          logger.error('Failed to add craft', {
+            errorMessage: err?.message,
+            stack: err?.stack,
           });
-        }
-      });
+          return renderApiError(err?.type === 'http_error' ? err.body : undefined);
+        });
     })
     .catch((err) => {
       logger.error('Failed to add craft');
@@ -72,4 +70,14 @@ module.exports = (req, res) => {
         errors: err,
       });
     });
+
+  function renderApiError(body) {
+    if (body && typeof body === 'object' && Object.prototype.hasOwnProperty.call(body, 'message')) {
+      return res.render('app/aircraft/add/index', { errors: [body], cookie });
+    }
+    const message = _.toString(body).includes('DETAIL:  Key (registration)')
+      ? 'Craft already exists'
+      : 'There was a problem saving the aircraft. Try again later';
+    return res.render('app/aircraft/add/index', { cookie, craftObj, errors: [{ message }] });
+  }
 };

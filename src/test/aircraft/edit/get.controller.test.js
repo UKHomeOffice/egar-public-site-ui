@@ -1,77 +1,60 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const craftApi = require('../../../common/services/data-access/craftApi');
-
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/aircraft/edit/get.controller');
 
 describe('Aircraft Edit Get Controller', () => {
   let req;
   let res;
+  let getStub;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
-    req = {
-      body: {
-        departureDate: null,
-        departurePort: 'ZZZZ',
-      },
-      session: {},
-    };
-
-    res = {
-      redirect: sinon.spy(),
-      render: sinon.spy(),
-    };
+    req = { session: { u: { dbId: 'user-1' }, editCraftId: 'craft-1' } };
+    res = { redirect: sinon.spy(), render: sinon.spy() };
+    getStub = sinon.stub(dataAccessApi.craftApi, 'getDetails');
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should redirect back if no id set', async () => {
+  it('redirects without calling the API if no ID is set', async () => {
+    delete req.session.editCraftId;
+
     await controller(req, res);
 
-    expect(res.redirect).to.have.been.calledWith('/aircraft');
+    expect(getStub).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
   });
 
-  it('should redirect back if API rejects', () => {
-    req.session.u = { dbId: 'ABCDEFGH' };
-    req.session.editCraftId = '12345678';
-    sinon.stub(craftApi, 'getDetails').rejects('craftApi.getDetails Example Reject');
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`redirects without populating the form on a ${type}`, async () => {
+      getStub.rejects(
+        Object.assign(new Error('Request failed'), { type, status: 503, body: { message: 'Unavailable' } })
+      );
 
-    const callController = async () => {
       await controller(req, res);
-    };
-    callController().then(() => {
-      expect(craftApi.getDetails).to.have.been.calledWith('ABCDEFGH', '12345678');
-      expect(res.redirect).to.have.been.calledWith('/aircraft');
+
+      expect(getStub).to.have.been.calledOnceWithExactly('user-1', 'craft-1');
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
+      expect(res.render).not.to.have.been.called;
     });
   });
 
-  it('should render the edit page with populated fields', () => {
-    const editCraft = {
-      registration: 'Z-YXWV',
-      craftType: 'Hondajet',
-      craftBase: 'LHR',
-    };
-    req.session.u = { dbId: 'ABCDEFGH' };
-    req.session.editCraftId = '12345678';
+  it('stores the aircraft object and renders populated fields', async () => {
+    const editCraft = { craftId: 'craft-1', registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'LHR' };
+    getStub.resolves(editCraft);
+
+    await controller(req, res);
+
     const cookie = new CookieModel(req);
-    sinon.stub(craftApi, 'getDetails').resolves(JSON.stringify(editCraft));
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-    callController().then(() => {
-      cookie.setEditCraft(editCraft);
-      expect(craftApi.getDetails).to.have.been.calledWith('ABCDEFGH', '12345678');
-      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', { cookie });
-    });
+    expect(cookie.getEditCraft()).to.deep.equal(editCraft);
+    expect(getStub).to.have.been.calledOnceWithExactly('user-1', 'craft-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/edit/index', { cookie });
+    expect(res.redirect).not.to.have.been.called;
   });
 });

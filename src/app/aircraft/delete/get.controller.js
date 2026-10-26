@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const craftApi = require('../../../common/services/data-access/craftApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -16,13 +16,12 @@ module.exports = (req, res) => {
 
   const craft =
     cookie.getUserRole() === 'Individual'
-      ? craftApi.deleteCraft(cookie.getUserDbId(), craftId)
-      : craftApi.deleteOrgCraft(cookie.getOrganisationId(), cookie.getUserDbId(), craftId);
+      ? dataAccessApi.craftApi.deleteCraft(cookie.getUserDbId(), craftId)
+      : dataAccessApi.craftApi.deleteOrgCraft(cookie.getOrganisationId(), cookie.getUserDbId(), craftId);
 
-  craft
+  return craft
     .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+      if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
         req.session.errMsg = errMsg;
         return req.session.save(() => {
           res.redirect(redirectUrl);
