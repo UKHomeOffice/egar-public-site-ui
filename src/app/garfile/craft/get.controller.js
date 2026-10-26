@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const craftApi = require('../../../common/services/data-access/craftApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const garApi = require('../../../common/services/data-access/garApi');
 
 module.exports = (req, res) => {
@@ -11,7 +11,7 @@ module.exports = (req, res) => {
   const userRole = cookie.getUserRole();
   const userId = cookie.getUserDbId();
 
-  garApi
+  return garApi
     .get(res?.locals?.gar?.garId)
     .then((garApiResponse) => {
       const gar = JSON.parse(garApiResponse);
@@ -26,15 +26,13 @@ module.exports = (req, res) => {
       // for an individual or an organisation
       const apiCall =
         userRole === 'Individual'
-          ? craftApi.getCrafts(userId, currentPage)
-          : craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage);
-      apiCall
-        .then((values) => {
-          const garCraft = JSON.parse(values);
-
+          ? dataAccessApi.craftApi.getCrafts(userId, currentPage)
+          : dataAccessApi.craftApi.getOrgCrafts(cookie.getOrganisationId(), currentPage);
+      return apiCall
+        .then((garCraft) => {
           if (garCraft.items.length > 0) {
             const paginationData = garCraft._meta;
-            cookie.setSavedCraft(JSON.parse(values));
+            cookie.setSavedCraft(garCraft);
 
             res.render('app/garfile/craft/index', { cookie, pages: paginationData });
             return;

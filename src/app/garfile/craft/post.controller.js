@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/data-access/garApi');
-const craftApi = require('../../../common/services/data-access/craftApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const validationList = require('./validations');
 const pagination = require('../../../common/utils/pagination');
 
@@ -18,10 +18,9 @@ module.exports = (req, res) => {
   }
 
   if (req.body.addCraft && buttonClicked === 'Add to GAR') {
-    craftApi
+    return dataAccessApi.craftApi
       .getDetails(userId, req.body.addCraft)
-      .then((apiResponse) => {
-        const craft = JSON.parse(apiResponse);
+      .then((craft) => {
         // Overwrite GAR craft info if a user has clicked on a craft
         cookie.setGarCraft(craft.registration, craft.craftType, craft.craftBase);
         req.session.save(() => res.redirect('/garfile/craft'));

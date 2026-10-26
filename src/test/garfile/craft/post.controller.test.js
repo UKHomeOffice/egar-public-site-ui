@@ -8,7 +8,7 @@ const i18n = require('i18n');
 const path = require('path');
 
 require('../../global.test');
-const craftApi = require('../../../common/services/data-access/craftApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const garApi = require('../../../common/services/data-access/garApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -90,45 +90,42 @@ describe('GAR Craft Post Controller', () => {
     beforeEach(() => {
       req.body.buttonClicked = 'Add to GAR';
       req.body.addCraft = 'ExampleCraft';
-      craftApiStub = sinon.stub(craftApi, 'getDetails');
+      craftApiStub = sinon.stub(dataAccessApi.craftApi, 'getDetails');
     });
 
-    it('should redirect if api rejects', () => {
-      cookie = new CookieModel(req);
-      craftApiStub.rejects('craftApi.getDetails Example Reject');
+    ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+      it(`redirects without changing the selected craft on a ${type}`, async () => {
+        const cookie = new CookieModel(req);
+        cookie.setGarCraft('G-OLD', 'Hondajet', 'LHR');
+        const previousCraft = { ...cookie.getGarCraft() };
+        craftApiStub.rejects(
+          Object.assign(new Error('Request failed'), { type, status: 404, body: { message: 'Craft not found' } })
+        );
 
-      const callController = async () => {
         await controller(req, res);
-      };
 
-      callController()
-        .then()
-        .then(() => {
-          expect(craftApiStub).to.have.been.calledWith('USER1-ID', 'ExampleCraft');
-          expect(res.redirect).to.have.been.calledWith('/garfile/craft');
-        });
+        expect(craftApiStub).to.have.been.calledOnceWithExactly('USER1-ID', 'ExampleCraft');
+        expect(cookie.getGarCraft()).to.deep.equal(previousCraft);
+        expect(saveSessionStub).not.to.have.been.called;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/craft');
+      });
     });
 
-    it('should set the craft and redirect', () => {
+    it('should set the craft and redirect', async () => {
       const craftResponse = {
         registration: 'E-GETC',
         craftType: 'Airbus A380',
         craftBase: 'LAX',
       };
-      cookie = new CookieModel(req);
-      cookie.setGarCraft(craftResponse.registration, craftResponse.craftType, craftResponse.craftBase);
-      craftApiStub.resolves(JSON.stringify(craftResponse));
+      const cookie = new CookieModel(req);
+      craftApiStub.resolves(craftResponse);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController()
-        .then()
-        .then(() => {
-          expect(craftApiStub).to.have.been.calledWith('USER1-ID', 'ExampleCraft');
-          expect(res.redirect).to.have.been.calledWith('/garfile/craft');
-        });
+      expect(cookie.getGarCraft()).to.include(craftResponse);
+      expect(craftApiStub).to.have.been.calledOnceWithExactly('USER1-ID', 'ExampleCraft');
+      expect(saveSessionStub).to.have.been.calledOnce;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/craft');
     });
   });
 

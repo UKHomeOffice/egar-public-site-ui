@@ -1,290 +1,147 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/data-access/garApi');
-const craftApi = require('../../../common/services/data-access/craftApi');
-
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/garfile/craft/get.controller');
 
 describe('GAR Craft Get Controller', () => {
   let req;
   let res;
-  let garApiGetStub;
+  let cookie;
+  let garStub;
+  let individualStub;
+  let organisationStub;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
     req = {
       session: {
-        gar: {
-          id: 'RANDOM-GAR-ID',
-        },
+        gar: { id: 'gar-1' },
+        u: { dbId: 'user-1' },
+        org: { i: 'organisation-1' },
       },
-      query: { page: 1 },
+      query: { page: '2' },
+      headers: { referer: 'garfile/craft' },
     };
-    res = {
-      render: sinon.spy(),
-      locals: { gar: { garId: 'RANDOM-GAR-ID' } },
-    };
-
-    garApiGetStub = sinon.stub(garApi, 'get');
-  });
-
-  afterEach(() => {
-    sinon.restore();
-  });
-
-  it('should return an error if api rejects', async () => {
+    res = { render: sinon.spy(), locals: { gar: { garId: 'gar-1' } } };
     cookie = new CookieModel(req);
-    garApiGetStub.rejects('garApi.get Example Reject');
+    garStub = sinon.stub(garApi, 'get').resolves(JSON.stringify({}));
+    individualStub = sinon.stub(dataAccessApi.craftApi, 'getCrafts');
+    organisationStub = sinon.stub(dataAccessApi.craftApi, 'getOrgCrafts');
+  });
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+  afterEach(() => sinon.restore());
 
-    callController().then(() => {
-      expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-      expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
-        cookie,
-        errors: [{ message: 'There was a problem getting GAR information' }],
-      });
+  it('renders a GAR error without requesting saved aircraft when the GAR request rejects', async () => {
+    garStub.rejects(new Error('GAR unavailable'));
+
+    await controller(req, res);
+
+    expect(garStub).to.have.been.calledOnceWithExactly('gar-1');
+    expect(individualStub).not.to.have.been.called;
+    expect(organisationStub).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/craft/index', {
+      cookie,
+      errors: [{ message: 'There was a problem getting GAR information' }],
     });
   });
 
-  describe('individuals', () => {
-    let craftApiGetCraftsStub;
+  [
+    ['individuals', 'Individual'],
+    ['organisations', 'Admin'],
+  ].forEach(([description, role]) => {
+    describe(description, () => {
+      let craftStub;
+      let unusedStub;
+      let ownerId;
 
-    beforeEach(() => {
-      req.session.u = { dbId: 'USER1-ID', rl: 'Individual' };
-      craftApiGetCraftsStub = sinon.stub(craftApi, 'getCrafts');
-    });
-
-    it('should return an error if craft api rejects', () => {
-      // Add referrer to prevent setting current craft
-      req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
-      garApiGetStub.resolves(JSON.stringify({}));
-      craftApiGetCraftsStub.rejects('craftApi.getCrafts Example Reject');
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController()
-        .then()
-        .then(() => {
-          expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-          expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
-          expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
-            cookie,
-            errors: [{ message: 'There was a problem getting aircraft information' }],
-          });
-        });
-    });
-
-    it('should not set any crafts', () => {
-      // Add referrer to prevent setting current craft
-      req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
-      garApiGetStub.resolves(JSON.stringify({}));
-      craftApiGetCraftsStub.resolves(JSON.stringify({ items: [] }));
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(cookie.getGarCraft()).to.be.undefined;
-        expect(cookie.getSavedCraft()).to.eql([]);
-        expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-        expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie });
+      beforeEach(() => {
+        req.session.u.rl = role;
+        craftStub = role === 'Individual' ? individualStub : organisationStub;
+        unusedStub = role === 'Individual' ? organisationStub : individualStub;
+        ownerId = role === 'Individual' ? 'user-1' : 'organisation-1';
       });
-    });
 
-    it('should not set any crafts if registration is null', () => {
-      // Add referrer to prevent setting current craft
-      req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
-      garApiGetStub.resolves(JSON.stringify({ registration: null }));
-      craftApiGetCraftsStub.resolves(JSON.stringify({ items: [] }));
+      it('renders without pagination when no saved aircraft are returned', async () => {
+        craftStub.resolves({ items: [] });
 
-      const callController = async () => {
         await controller(req, res);
-      };
 
-      callController().then(() => {
+        expect(craftStub).to.have.been.calledOnceWithExactly(ownerId, 2);
+        expect(unusedStub).not.to.have.been.called;
         expect(cookie.getGarCraft()).to.be.undefined;
-        expect(cookie.getSavedCraft()).to.eql([]);
-        expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-        expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie });
+        expect(cookie.getSavedCraft()).to.deep.equal([]);
+        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/craft/index', { cookie });
       });
-    });
 
-    it('should populate current and saved craft', () => {
-      const currentCraft = { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' };
-      const savedCraft = [currentCraft, { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' }];
-      req.headers = { referer: 'garfile/anythingelse' };
-      req.session.gar.craft = {};
-      cookie = new CookieModel(req);
-      cookie.setGarCraft(currentCraft.registration, currentCraft.craftType, currentCraft.craftBase);
-      cookie.setSavedCraft(savedCraft);
-      garApiGetStub.resolves(JSON.stringify(currentCraft));
-      craftApiGetCraftsStub.resolves(
-        JSON.stringify({
-          items: savedCraft,
-          _meta: { totalPages: 1, totalItems: 1 },
-        })
-      );
+      it('leaves the current craft unchanged when returning from the craft page', async () => {
+        garStub.resolves(JSON.stringify({ registration: null }));
+        craftStub.resolves({ items: [] });
 
-      const callController = async () => {
         await controller(req, res);
-      };
 
-      callController().then(() => {
-        expect(cookie.getGarCraft()).to.eql({
-          registration: 'Z-AFTC',
-          craftType: 'Hondajet',
-          craftBase: 'EGLL',
+        expect(cookie.getGarCraft()).to.be.undefined;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/craft/index', { cookie });
+      });
+
+      it('populates the current craft and stores the saved-aircraft object with pagination', async () => {
+        const currentCraft = { registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'EGLL' };
+        const savedCrafts = {
+          items: [currentCraft, { registration: 'G-EFGH', craftType: 'Gulfstream', craftBase: 'OXF' }],
+          _meta: { totalPages: 3, totalItems: 12 },
+        };
+        req.headers.referer = 'garfile/anythingelse';
+        req.session.gar.craft = {};
+        garStub.resolves(JSON.stringify(currentCraft));
+        craftStub.resolves(savedCrafts);
+
+        await controller(req, res);
+
+        expect(cookie.getGarCraft()).to.deep.equal({
+          ...currentCraft,
           craftBasePort: 'EGLL',
           portChoice: 'Yes',
         });
-        expect(cookie.getSavedCraft()).to.eql({
-          items: [
-            { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' },
-            { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
-          ],
-          _meta: { totalPages: 1, totalItems: 1 },
-        });
-        expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-        expect(craftApiGetCraftsStub).to.have.been.calledWith('USER1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
+        expect(cookie.getSavedCraft()).to.equal(savedCrafts);
+        expect(craftStub).to.have.been.calledOnceWithExactly(ownerId, 2);
+        expect(unusedStub).not.to.have.been.called;
+        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/craft/index', {
           cookie,
-          pages: { totalPages: 1, totalItems: 1 },
+          pages: savedCrafts._meta,
         });
       });
-    });
-  });
 
-  describe('organisations', () => {
-    let craftApiGetOrgCraftsStub;
+      it('defaults to page one when no page is supplied', async () => {
+        delete req.query.page;
+        craftStub.resolves({ items: [] });
 
-    beforeEach(() => {
-      req.session.u = { dbId: 'USER1-ID', rl: 'Admin' };
-      req.session.org = { i: 'ORG1-ID' };
-      craftApiGetOrgCraftsStub = sinon.stub(craftApi, 'getOrgCrafts');
-    });
-
-    it('should return an error if craft api rejects', () => {
-      // Add referrer to prevent setting current craft
-      req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
-      garApiGetStub.resolves(JSON.stringify({}));
-      craftApiGetOrgCraftsStub.rejects('craftApi.getOrgCrafts Example Reject');
-
-      const callController = async () => {
         await controller(req, res);
-      };
 
-      callController()
-        .then()
-        .then(() => {
-          expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-          expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
-          expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
+        expect(craftStub).to.have.been.calledOnceWithExactly(ownerId, 1);
+      });
+
+      ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+        it(`renders an aircraft error on a ${type} without replacing saved aircraft`, async () => {
+          const previousCrafts = { items: [{ registration: 'G-OLD' }] };
+          cookie.setSavedCraft(previousCrafts);
+          craftStub.rejects(
+            Object.assign(new Error('Request failed'), { type, status: 503, body: { message: 'Unavailable' } })
+          );
+
+          await controller(req, res);
+
+          expect(craftStub).to.have.been.calledOnceWithExactly(ownerId, 2);
+          expect(unusedStub).not.to.have.been.called;
+          expect(cookie.getSavedCraft()).to.equal(previousCrafts);
+          expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/craft/index', {
             cookie,
             errors: [{ message: 'There was a problem getting aircraft information' }],
           });
-        });
-    });
-
-    it('should not set any crafts', () => {
-      // Add referrer to prevent setting current craft
-      req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
-      garApiGetStub.resolves(JSON.stringify({}));
-      craftApiGetOrgCraftsStub.resolves(JSON.stringify({ items: [] }));
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(cookie.getGarCraft()).to.be.undefined;
-        expect(cookie.getSavedCraft()).to.eql([]);
-        expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-        expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie });
-      });
-    });
-
-    it('should not set any crafts if registration is null', () => {
-      // Add referrer to prevent setting current craft
-      req.headers = { referer: 'garfile/craft' };
-      cookie = new CookieModel(req);
-      garApiGetStub.resolves(JSON.stringify({ registration: null }));
-      craftApiGetOrgCraftsStub.resolves(JSON.stringify({ items: [] }));
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(cookie.getGarCraft()).to.be.undefined;
-        expect(cookie.getSavedCraft()).to.eql([]);
-        expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-        expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', { cookie });
-      });
-    });
-
-    it('should populate current and saved craft', () => {
-      const currentCraft = { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' };
-      const savedCraft = [currentCraft, { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' }];
-      req.headers = { referer: 'garfile/anythingelse' };
-      req.session.gar.craft = {};
-      cookie = new CookieModel(req);
-      cookie.setGarCraft(currentCraft.registration, currentCraft.craftType, currentCraft.craftBase, 'Yes');
-      cookie.setSavedCraft(savedCraft);
-      garApiGetStub.resolves(JSON.stringify(currentCraft));
-      craftApiGetOrgCraftsStub.resolves(
-        JSON.stringify({
-          items: savedCraft,
-          _meta: { totalPages: 1, totalItems: 1 },
-        })
-      );
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(cookie.getGarCraft()).to.eql({
-          registration: 'Z-AFTC',
-          craftType: 'Hondajet',
-          craftBase: 'EGLL',
-          craftBasePort: 'EGLL',
-          portChoice: 'Yes',
-        });
-        expect(cookie.getSavedCraft()).to.eql({
-          items: [
-            { registration: 'Z-AFTC', craftType: 'Hondajet', craftBase: 'EGLL' },
-            { registration: 'G-ABCD', craftType: 'Gulfstream', craftBase: 'OXF' },
-          ],
-          _meta: { totalPages: 1, totalItems: 1 },
-        });
-        expect(garApiGetStub).to.have.been.calledWith('RANDOM-GAR-ID');
-        expect(craftApiGetOrgCraftsStub).to.have.been.calledWith('ORG1-ID');
-        expect(res.render).to.have.been.calledWith('app/garfile/craft/index', {
-          cookie,
-          pages: { totalPages: 1, totalItems: 1 },
         });
       });
     });

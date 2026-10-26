@@ -1,6 +1,3 @@
-const logger = require('../../utils/logger')(__filename);
-const { callConfiguredApi } = require('./legacyApiResponse');
-
 class CraftApi {
   constructor(client) {
     this.client = client;
@@ -51,13 +48,4 @@ class CraftApi {
   }
 }
 
-async function callConfiguredCraftApi(method, args) {
-  const api = require('../dataAccessApi').craftApi;
-  return callConfiguredApi(api, method, args, logger, 'Craft API request failed');
-}
-
 module.exports = { CraftApi };
-
-['create', 'getDetails', 'getCrafts', 'getOrgCrafts', 'update', 'deleteCraft', 'deleteOrgCraft'].forEach((method) => {
-  module.exports[method] = (...args) => callConfiguredCraftApi(method, args);
-});

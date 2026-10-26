@@ -6,7 +6,6 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 chai.use(sinonChai);
 const craftApi = require('../../../common/services/data-access/craftApi');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 describe('CraftApi', () => {
   const userId = 'user-1';
@@ -71,17 +70,31 @@ describe('CraftApi', () => {
     });
   });
 
-  it('preserves the legacy string response and propagates network errors', async () => {
-    const getStub = sinon.stub(dataAccessApi.craftApi, 'getDetails').resolves({ ok: true, craftId });
-    expect(await craftApi.getDetails(userId, craftId)).to.equal(JSON.stringify({ craftId }));
+  it('exports only the class for construction by dataAccessApi', () => {
+    expect(Object.keys(craftApi)).to.deep.equal(['CraftApi']);
+  });
 
-    const networkError = new Error('offline');
-    getStub.rejects(networkError);
-    try {
-      await craftApi.getDetails(userId, craftId);
-      expect.fail('Expected the network error to be propagated');
-    } catch (error) {
-      expect(error).to.equal(networkError);
-    }
+  it('returns the client response without serialization', async () => {
+    client.get.resolves(craft);
+
+    expect(await api.getDetails(userId, craftId)).to.equal(craft);
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`propagates ${type} failures unchanged`, async () => {
+      const failure = Object.assign(new Error('Request failed'), {
+        type,
+        status: 400,
+        body: { message: 'Invalid aircraft' },
+      });
+      client.get.rejects(failure);
+
+      try {
+        await api.getDetails(userId, craftId);
+        expect.fail('Expected the client error to be propagated');
+      } catch (error) {
+        expect(error).to.equal(failure);
+      }
+    });
   });
 });

@@ -5,7 +5,6 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const craftApi = require('../../../common/services/data-access/craftApi');
 const personApi = require('../../../common/services/data-access/personApi');
 
 const settings = require('../../../common/config/index');
@@ -17,13 +16,12 @@ const controller = require('../../../app/user/viewDetails/get.controller', {
   '../../../common/config/index': configMock,
 });
 
-// TODO: Most of this logic handles obtaining craft and people, which are not
+// TODO: Most of this logic handles obtaining people, which are not
 // displayed on the resulting template! These unit tests are to reduce
 // regressions should any code end up not running.
 describe('User View Details Get Controller', () => {
   let req;
   let res;
-  let craftApiStub;
   let personApiStub;
   const indexPage = 'app/user/viewDetails/index';
 
@@ -41,7 +39,6 @@ describe('User View Details Get Controller', () => {
       render: sinon.spy(),
     };
 
-    craftApiStub = sinon.stub(craftApi, 'getCrafts');
     personApiStub = sinon.stub(personApi, 'getPeople');
   });
 
@@ -79,15 +76,8 @@ describe('User View Details Get Controller', () => {
       ],
     };
 
-    const craftApiResponse = {
-      items: [{ registration: 'G-ABCD', craftType: 'Hondajet', craftBase: 'OXF' }],
-    };
-
     beforeEach(() => {
       cookie = new CookieModel(req);
-      cookie.setSavedCraft(craftApiResponse);
-
-      craftApiStub.resolves(JSON.stringify(craftApiResponse));
       personApiStub.resolves(JSON.stringify(personApiResponse));
     });
 
