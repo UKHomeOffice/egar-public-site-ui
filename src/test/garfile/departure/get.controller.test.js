@@ -1,14 +1,10 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
 const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-
+require('chai').use(require('sinon-chai'));
 require('../../global.test');
-const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/data-access/garApi');
 
+const dataAccessApi = require('../../../common/services/dataAccessApi');
+const CookieModel = require('../../../common/models/Cookie.class');
 const controller = require('../../../app/garfile/departure/get.controller');
 
 describe('Departure Get Controller', () => {
@@ -16,86 +12,59 @@ describe('Departure Get Controller', () => {
   let res;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
-    req = {
-      body: {
-        departureDate: null,
-        departurePort: 'ZZZZ',
-      },
-      session: {},
-    };
-
-    res = {
-      render: sinon.spy(),
-      locals: { gar: { garId: '12345' } },
-    };
+    req = { session: {} };
+    res = { render: sinon.spy(), locals: { gar: { garId: '12345' } } };
   });
 
-  afterEach(() => {
-    sinon.restore();
+  afterEach(() => sinon.restore());
+
+  it('displays an error if the GAR lookup rejects', async () => {
+    sinon.stub(dataAccessApi.garApi, 'get').rejects(new Error('Connection unavailable'));
+    await controller(req, res);
+    expect(res.render).to.have.been.calledOnce;
+    expect(res.render.firstCall.args[0]).to.equal('app/garfile/departure/index');
+    expect(res.render.firstCall.args[1].errors).to.deep.equal([
+      { message: 'There was a problem getting GAR information' },
+    ]);
   });
 
-  it('should display a message if gar api rejects', async () => {
-    const cookie = new CookieModel(req);
-    sinon.stub(garApi, 'get').rejects('garApi.get Example Reject');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/garfile/departure/index', {
-        cookie,
-        errors: [{ message: 'There was a problem getting GAR information' }],
-      });
-    });
-  });
-
-  it('should set cookie values on response', async () => {
-    apiResponse = JSON.stringify({
-      departureDate: '2012-30-05',
-      departureTime: '15:00',
+  it('loads a decoded GAR into the departure form', async () => {
+    const get = sinon.stub(dataAccessApi.garApi, 'get').resolves({
+      departureDate: '2022-05-30',
+      departureTime: '15:00:00',
       departurePort: 'LHR',
       departureLong: '',
       departureLat: '',
     });
-    const cookie = new CookieModel(req);
-    cookie.setGarId('12345');
-    cookie.setGarDepartureVoyage(apiResponse);
-    sinon.stub(garApi, 'get').resolves(apiResponse);
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApi.get).to.have.been.calledWith('12345');
-      expect(res.render).to.have.been.calledWith('app/garfile/departure/index', { cookie });
+    await controller(req, res);
+    expect(get).to.have.been.calledOnceWithExactly('12345');
+    expect(req.session.gar.voyageDeparture).to.include({
+      departureDate: '2022-05-30',
+      departureTime: '15:00:00',
+      departurePort: 'LHR',
+      departureLat: '',
+      departureLong: '',
+      departurePortChoice: 'Yes',
+    });
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/departure/index', {
+      cookie: new CookieModel(req),
     });
   });
 
-  it('should set cookie values on response, changing if port is ZZZZ', async () => {
-    apiResponse = JSON.stringify({
-      departureDate: '2012-30-05',
-      departureTime: '15:00',
+  it('loads coordinates as an unknown port rather than a port code', async () => {
+    sinon.stub(dataAccessApi.garApi, 'get').resolves({
+      departureDate: '2022-05-30',
+      departureTime: '15:00:00',
       departurePort: 'ZZZZ',
-      departureLong: '12.4000',
-      departureLat: '-4.1234',
+      departureLong: '12.400000',
+      departureLat: '-4.123400',
     });
-    const cookie = new CookieModel(req);
-    cookie.setGarId('12345');
-    cookie.setGarDepartureVoyage(apiResponse);
-    cookie.session.gar.voyageDeparture.departurePort = 'YYYY';
-    sinon.stub(garApi, 'get').resolves(apiResponse);
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApi.get).to.have.been.calledWith('12345');
-      expect(res.render).to.have.been.calledWith('app/garfile/departure/index', { cookie });
+    await controller(req, res);
+    expect(req.session.gar.voyageDeparture).to.include({
+      departurePortChoice: 'No',
+      departureLong: '12.400000',
+      departureLat: '-4.123400',
     });
+    expect(res.render).to.have.been.calledOnce;
   });
 });

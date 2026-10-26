@@ -1,8 +1,7 @@
-const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/data-access/garApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 
 const createValidationChains = (voyage) => {
@@ -81,16 +80,14 @@ const createValidationChains = (voyage) => {
 };
 
 const performAPICall = (cookie, res, buttonClicked) => {
-  garApi
+  return dataAccessApi.garApi
     .patch(res.locals.gar.garId, cookie.getGarStatus(), cookie.getGarDepartureVoyage())
     .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+      if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
         // API returned error
-        logger.debug(`Api returned: ${parsedResponse}`);
         res.render('app/garfile/departure/index', {
           cookie,
-          errors: [parsedResponse],
+          errors: [apiResponse],
         });
         return;
       }
@@ -111,9 +108,9 @@ const performAPICall = (cookie, res, buttonClicked) => {
       res.render('app/garfile/departure/index', {
         cookie,
         errors: [
-          {
-            message: 'Failed to add to GAR',
-          },
+          err?.type === 'http_error' && typeof err.body?.message === 'string'
+            ? err.body
+            : { message: 'Failed to add to GAR' },
         ],
       });
     });
@@ -141,21 +138,19 @@ module.exports = async (req, res) => {
 
   const validations = createValidationChains(voyage);
 
-  const gar = await garApi.get(cookie.getGarId());
-
   validations.push([
     new ValidationRule(
       validator.notSameValues,
       'departurePort',
-      [voyage.departurePort, JSON.parse(gar).arrivalPort],
+      [voyage.departurePort, res.locals.gar.arrivalPort],
       __('field_same_departure_port_validation')
     ),
   ]);
 
-  validator
+  return validator
     .validateChains(validations)
     .then(() => {
-      performAPICall(cookie, res, buttonClicked);
+      return performAPICall(cookie, res, buttonClicked);
     })
     .catch((err) => {
       logger.warn('GAR departure validation failed', { garId: cookie.getGarId() });
