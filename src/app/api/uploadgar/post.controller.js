@@ -3,7 +3,7 @@ const XLSX = require('xlsx');
 
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/data-access/garApi');
-const createGarApi = require('../../../common/services/data-access/createGarApi.js');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const { validations } = require('./validations');
@@ -155,17 +155,16 @@ module.exports = async (req, res) => {
       .validateChains(validations(voyageParser.parse(), crew, passengers))
       .then(() => {
         logger.debug('Uploaded Excel sheet is valid; creating GAR via API');
-        createGarApi
+        return dataAccessApi.garApi
           .createGar(cookie.getUserDbId())
           .then((apiResponse) => {
-            const parsedResponse = JSON.parse(apiResponse);
-            if (parsedResponse.message) {
+            if (apiResponse.message) {
               req.session.failureMsg = 'Failed to create GAR';
               req.session.save(() => res.redirect('garfile/garupload'));
               return;
             }
             logger.info('Created new GAR');
-            const { garId } = parsedResponse;
+            const { garId } = apiResponse;
             cookie.setGarId(garId);
             cookie.setGarStatus('Draft');
 
@@ -182,7 +181,7 @@ module.exports = async (req, res) => {
 
             const voyageUpdate = garApi.patch(garId, 'Draft', voyageParsed);
 
-            Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
+            return Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
               .then(() => {
                 logger.info('Updated GAR with Excel data');
                 req.session.save(() => res.redirect('/garfile/review?from=uploadGar'));
@@ -200,6 +199,10 @@ module.exports = async (req, res) => {
           })
           .catch((err) => {
             logger.error('Failed to create GAR from Excel data', { errorMessage: err?.message, stack: err?.stack });
+            if (err?.type === 'http_error' && typeof err.body?.message === 'string') {
+              req.session.failureMsg = 'Failed to create GAR';
+              return req.session.save(() => res.redirect('garfile/garupload'));
+            }
             req.session.failureMsg = 'Failed to create GAR. Try again';
             req.session.failureIdentifier = 'file';
             res.redirect('garfile/garupload');
