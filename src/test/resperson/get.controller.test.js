@@ -1,161 +1,102 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const resPersonApi = require('../../common/services/data-access/resPersonApi');
-
+const dataAccessApi = require('../../common/services/dataAccessApi');
 const controller = require('../../app/resperson/get.controller');
-
-const responsible_persons = [
-  {
-    responsiblePersonId: 'bc45f7d8-75e4-484d-9422-4a7c864e6bc9',
-    responsibleGivenName: 'Sally',
-    responsibleSurname: 'Smith',
-    responsibleContactNo: '07878787878',
-    responsibleEmail: 'testmail@181test.com',
-    responsibleAddressLine1: 'House44',
-    responsibleAddressLine2: 'Street33',
-    responsibleTown: 'London',
-    responsibleCountry: 'GBR',
-    responsiblePostcode: 'GB66BG',
-    fixedBasedOperator: 'Captain',
-    fixedBasedOperatorAnswer: '',
-  },
-  {
-    responsiblePersonId: '20bdec29-2a5d-41be-babe-906c80f5335c',
-    responsibleGivenName: 'John',
-    responsibleSurname: 'Smith',
-    responsibleContactNo: '07878787878',
-    responsibleEmail: 'testmail@816test.com',
-    responsibleAddressLine1: 'House44',
-    responsibleAddressLine2: 'Street33',
-    responsibleTown: 'London',
-    responsibleCountry: 'GBR',
-    responsiblePostcode: 'GB66BG',
-    fixedBasedOperator: 'Captain',
-    fixedBasedOperatorAnswer: '',
-  },
-];
 
 describe('Responsible Person Index Get Controller', () => {
   let req;
   let res;
-  let clock;
-  const APRIL = 3;
+  let cookie;
+  let listStub;
+  let resPersons;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-    clock = sinon.useFakeTimers({
-      now: new Date(2023, APRIL, 11),
-      shouldAdvanceTime: false,
-      toFake: ['Date'],
-    });
-
-    req = {
-      session: {
-        u: { dbId: 'USER-DB-ID-1' },
-      },
-    };
-    res = {
-      render: sinon.spy(),
-    };
+    req = { session: { u: { dbId: 'user-1' } } };
+    res = { render: sinon.spy() };
+    cookie = new CookieModel(req);
+    resPersons = [
+      { responsiblePersonId: 'person-1', responsibleGivenName: 'Sally', responsibleSurname: 'Smith' },
+      { responsiblePersonId: 'person-2', responsibleGivenName: 'John', responsibleSurname: 'Smith' },
+    ];
+    listStub = sinon.stub(dataAccessApi.resPersonApi, 'getResPersons').resolves(resPersons);
   });
 
-  afterEach(() => {
-    sinon.restore();
-    clock.restore();
+  afterEach(() => sinon.restore());
+
+  it('renders the saved responsible-person array', async () => {
+    await controller(req, res);
+
+    expect(listStub).to.have.been.calledOnceWithExactly('user-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/resperson/index', { cookie, resPersons });
   });
 
-  it('1. should render with error if responsiblePerson api rejects', () => {
-    const cookie = new CookieModel(req);
-    sinon.stub(resPersonApi, 'getResPersons').rejects('getResPerson Example Reject');
+  it('renders an empty list', async () => {
+    listStub.resolves([]);
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
-      expect(res.render).to.have.been.calledWith('app/resperson/index', {
-        cookie,
-        errors: [{ message: 'Failed to get saved responsible persons' }],
-      });
-    });
+    expect(res.render).to.have.been.calledOnceWithExactly('app/resperson/index', { cookie, resPersons: [] });
   });
 
-  it('2. should render the message if api returns a message response', () => {
-    const cookie = new CookieModel(req);
-    const resPersons = { message: 'User not registered' };
-    sinon.stub(resPersonApi, 'getResPersons').resolves(JSON.stringify(resPersons));
+  it('renders and clears a session error after fetching the list', async () => {
+    req.session.errMsg = { message: 'Example error' };
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
-      expect(res.render).to.have.been.calledWith('app/resperson/index', {
-        cookie,
-        resPersons: [],
-        errors: [{ message: 'Failed to get saved responsible persons' }],
-      });
+    expect(req.session.errMsg).to.be.undefined;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/resperson/index', {
+      cookie,
+      resPersons,
+      errors: [{ message: 'Example error' }],
     });
   });
 
-  it('3. should render the error if any error present in the session', () => {
-    const cookie = new CookieModel(req);
-    req.session.errMsg = { message: 'Example Error Message' };
-    sinon.stub(resPersonApi, 'getResPersons').resolves({ message: 'User not registered' });
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
-      expect(res.render).to.have.been.calledWith('app/resperson/index', {
-        cookie,
-        errors: [{ message: 'Failed to get saved responsible persons' }],
-      });
-    });
-  });
-
-  it('4. should render the success message if any present in the session', () => {
-    const cookie = new CookieModel(req);
+  it('renders and clears a session success message and header', async () => {
     req.session.successMsg = 'Responsible person is deleted';
-    req.session.successHeader = 'success';
-    const { successMsg, successHeader } = req.session;
-    sinon.stub(resPersonApi, 'getResPersons').resolves(JSON.stringify(responsible_persons));
+    req.session.successHeader = 'Success';
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-    callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
-      expect(res.render).to.have.been.calledWith('app/resperson/index', {
-        cookie,
-        resPersons: responsible_persons,
-        successMsg,
-        successHeader,
-      });
+    await controller(req, res);
+
+    expect(req.session.successMsg).to.be.undefined;
+    expect(req.session.successHeader).to.be.undefined;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/resperson/index', {
+      cookie,
+      resPersons,
+      successMsg: 'Responsible person is deleted',
+      successHeader: 'Success',
     });
   });
 
-  it('5. should render page with responsible persons on happy path', () => {
-    const cookie = new CookieModel(req);
-    sinon.stub(resPersonApi, 'getResPersons').resolves(JSON.stringify(responsible_persons));
+  it('renders the existing error when a successful HTTP response contains a message', async () => {
+    listStub.resolves({ message: 'User not registered' });
 
-    const callController = async () => {
+    await controller(req, res);
+
+    expect(res.render).to.have.been.calledOnceWithExactly('app/resperson/index', {
+      cookie,
+      resPersons: [],
+      errors: [{ message: 'Failed to get saved responsible persons' }],
+    });
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`renders a fetch error on a ${type}`, async () => {
+      listStub.rejects(
+        Object.assign(new Error('Request failed'), { type, status: 503, body: { message: 'Unavailable' } })
+      );
+
       await controller(req, res);
-    };
-    callController().then(() => {
-      expect(resPersonApi.getResPersons).to.have.been.calledWith('USER-DB-ID-1');
-      expect(res.render).to.have.been.calledWith('app/resperson/index', {
+
+      expect(listStub).to.have.been.calledOnceWithExactly('user-1');
+      expect(res.render).to.have.been.calledOnceWithExactly('app/resperson/index', {
         cookie,
-        resPersons: responsible_persons,
+        errors: [{ message: 'Failed to get saved responsible persons' }],
       });
     });
   });

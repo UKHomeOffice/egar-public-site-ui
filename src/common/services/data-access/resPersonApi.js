@@ -1,6 +1,3 @@
-const logger = require('../../utils/logger')(__filename);
-const { callConfiguredApi } = require('./legacyApiResponse');
-
 class ResPersonApi {
   constructor(client) {
     this.client = client;
@@ -27,13 +24,4 @@ class ResPersonApi {
   }
 }
 
-async function callConfiguredResPersonApi(method, args) {
-  const api = require('../dataAccessApi').resPersonApi;
-  return callConfiguredApi(api, method, args, logger, 'Responsible person API request failed');
-}
-
 module.exports = { ResPersonApi };
-
-['create', 'getResPersons', 'getResPersonDetails', 'updateResPerson', 'deleteResponsiblePerson'].forEach((method) => {
-  module.exports[method] = (...args) => callConfiguredResPersonApi(method, args);
-});

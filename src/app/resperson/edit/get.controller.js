@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const resPersonApi = require('../../../common/services/data-access/resPersonApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 
 module.exports = (req, res) => {
@@ -12,10 +12,9 @@ module.exports = (req, res) => {
     return;
   }
   req.session.editResponsiblePersonId = responsiblePersonId;
-  resPersonApi
+  return dataAccessApi.resPersonApi
     .getResPersonDetails(cookie.getUserDbId(), responsiblePersonId)
-    .then((apiResponse) => {
-      const responsiblePerson = JSON.parse(apiResponse);
+    .then((responsiblePerson) => {
       return res.render('app/resperson/edit/index', {
         cookie,
         responsiblePerson,

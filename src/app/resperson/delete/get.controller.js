@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const resPersonApi = require('../../../common/services/data-access/resPersonApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -12,12 +12,11 @@ module.exports = (req, res) => {
     return;
   }
 
-  resPersonApi
+  return dataAccessApi.resPersonApi
     .deleteResponsiblePerson(cookie.getUserDbId(), responsiblePersonId)
     .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        logger.error(`Failed to delete the responsible persons: ${parsedResponse.message}`);
+      if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
+        logger.error(`Failed to delete the responsible persons: ${apiResponse.message}`);
         req.session.errMsg = errMsg;
         return req.session.save(() => res.redirect('/resperson'));
       }

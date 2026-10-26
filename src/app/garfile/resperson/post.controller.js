@@ -4,7 +4,7 @@ const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_
 const utils = require('../../../common/utils/utils');
 const validator = require('../../../common/utils/validator');
 const validations = require('../../resperson/validations');
-const resPersonApi = require('../../../common/services/data-access/resPersonApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const garApi = require('../../../common/services/data-access/garApi');
 
 module.exports = async (req, res) => {
@@ -32,12 +32,25 @@ module.exports = async (req, res) => {
     }
   } else {
     const responsiblePerson = utils.getResponsiblePersonFromReq(req);
-    const resPersonsResponse = await resPersonApi.getResPersons(cookie.getUserDbId());
-    const responsiblePersons = await JSON.parse(resPersonsResponse);
-    validator
+    let responsiblePersons;
+    try {
+      responsiblePersons = await dataAccessApi.resPersonApi.getResPersons(cookie.getUserDbId());
+    } catch (err) {
+      logger.error('Failed to get saved responsible persons', {
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
+      return res.render('app/garfile/resperson/index', {
+        cookie,
+        responsiblePerson,
+        fixedBasedOperatorOptions,
+        errors: [{ message: 'Failed to get saved responsible persons' }],
+      });
+    }
+    return validator
       .validateChains(validations.validations(req))
       .then(() => {
-        garApi
+        return garApi
           .patch(res.locals.gar.garId, cookie.getGarStatus(), responsiblePerson)
           .then((apiResponse) => {
             const parsedResponse = JSON.parse(apiResponse);

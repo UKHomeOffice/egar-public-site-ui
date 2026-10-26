@@ -1,7 +1,7 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/data-access/garApi');
-const resPersonApi = require('../../../common/services/data-access/resPersonApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const utils = require('../../../common/utils/utils');
 
@@ -16,12 +16,10 @@ module.exports = async (req, res) => {
     const response = await garApi.get(garId);
     const gar = await JSON.parse(response);
     const responsiblePerson = utils.getResponsiblePersonFromGar(gar);
-    const resPersonsResponse = await resPersonApi.getResPersons(cookie.getUserDbId());
-    const responsiblePersons = await JSON.parse(resPersonsResponse);
+    const responsiblePersons = await dataAccessApi.resPersonApi.getResPersons(cookie.getUserDbId());
     const userId = cookie.getUserDbId();
     if (req.query.resPersonId) {
-      const resPerResponse = await resPersonApi.getResPersonDetails(userId, req.query.resPersonId);
-      const responsible_person = await JSON.parse(resPerResponse);
+      const responsible_person = await dataAccessApi.resPersonApi.getResPersonDetails(userId, req.query.resPersonId);
       res.render('app/garfile/resperson/index', {
         cookie,
         responsiblePerson: responsible_person,

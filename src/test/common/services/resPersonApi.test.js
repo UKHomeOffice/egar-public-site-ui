@@ -6,7 +6,6 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 chai.use(sinonChai);
 const resPersonApi = require('../../../common/services/data-access/resPersonApi');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 describe('ResPersonApi', () => {
   const userId = 'user-1';
@@ -55,15 +54,40 @@ describe('ResPersonApi', () => {
     expect(client.delete).to.have.been.calledOnceWithExactly('/user/user-1/responsibleperson/responsible-person-1');
   });
 
-  it('preserves the legacy string response and maps HTTP failures to their response body', async () => {
-    const getStub = sinon.stub(dataAccessApi.resPersonApi, 'getResPersonDetails').resolves({ ok: true, person });
-    expect(await resPersonApi.getResPersonDetails(userId, responsiblePersonId)).to.equal(JSON.stringify({ person }));
+  it('exports only the class for construction by dataAccessApi', () => {
+    expect(Object.keys(resPersonApi)).to.deep.equal(['ResPersonApi']);
+  });
 
-    const error = Object.assign(new Error('Unavailable'), {
-      type: 'http_error',
-      body: { message: 'Unavailable' },
+  [
+    ['create', 'post', [userId, person]],
+    ['getResPersons', 'get', [userId]],
+    ['getResPersonDetails', 'get', [userId, responsiblePersonId]],
+    ['updateResPerson', 'put', [userId, responsiblePersonId, person]],
+    ['deleteResponsiblePerson', 'delete', [userId, responsiblePersonId]],
+  ].forEach(([method, verb, args]) => {
+    it(`returns the client response unchanged from ${method}`, async () => {
+      const response = { person };
+      client[verb].resolves(response);
+
+      expect(await api[method](...args)).to.equal(response);
     });
-    getStub.rejects(error);
-    expect(await resPersonApi.getResPersonDetails(userId, responsiblePersonId)).to.equal(JSON.stringify(error.body));
+
+    ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+      it(`propagates ${type} failures unchanged from ${method}`, async () => {
+        const failure = Object.assign(new Error('Request failed'), {
+          type,
+          status: 400,
+          body: { message: 'Invalid responsible person' },
+        });
+        client[verb].rejects(failure);
+
+        try {
+          await api[method](...args);
+          expect.fail('Expected the client error to be propagated');
+        } catch (error) {
+          expect(error).to.equal(failure);
+        }
+      });
+    });
   });
 });
