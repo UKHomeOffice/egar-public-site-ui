@@ -3,7 +3,7 @@ const logger = require('../../../../common/utils/logger')(__filename);
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
-const personApi = require('../../../../common/services/data-access/personApi');
+const dataAccessApi = require('../../../../common/services/dataAccessApi');
 const transformer = require('../../../../common/utils/transformers');
 
 module.exports = (req, res) => {
@@ -24,10 +24,9 @@ module.exports = (req, res) => {
     return;
   }
 
-  personApi
+  return dataAccessApi.personApi
     .getPeople(cookie.getUserDbId(), 'individual')
-    .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
+    .then((parsedResponse) => {
       person = parsedResponse.find((element) => element.personId === personId);
       delete req.session.addPersonId;
       person = transformer.transformPerson(person);

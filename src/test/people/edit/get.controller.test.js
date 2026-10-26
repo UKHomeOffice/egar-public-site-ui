@@ -11,7 +11,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
-const personApi = require('../../../common/services/data-access/personApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/people/edit/get.controller');
 
@@ -57,7 +57,7 @@ describe('Person Edit Get Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(personApiStub).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
       expect(res.render).to.not.have.been.called;
@@ -72,7 +72,7 @@ describe('Person Edit Get Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(personApiStub).to.have.been.calledWith('343', 'EDIT-PERSON-ID');
       expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
       expect(res.render).to.not.have.been.called;
@@ -83,17 +83,15 @@ describe('Person Edit Get Controller', () => {
     req.session.editPersonId = 'EDIT-PERSON-ID';
     cookie = new CookieModel(req);
 
-    personApiStub.resolves(
-      JSON.stringify({
-        message: 'Person id not found',
-      })
-    );
+    personApiStub.resolves({
+      message: 'Person id not found',
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(personApiStub).to.have.been.calledWith('343', 'EDIT-PERSON-ID');
       expect(res.redirect).to.not.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/people/edit/index', {
@@ -110,7 +108,7 @@ describe('Person Edit Get Controller', () => {
     req.session.editPersonId = 'EDIT-PERSON-ID';
     cookie = new CookieModel(req);
 
-    personApiStub.resolves(JSON.stringify(apiResponse));
+    personApiStub.resolves(apiResponse);
 
     await controller(req, res);
 
@@ -123,6 +121,34 @@ describe('Person Edit Get Controller', () => {
       documenttype,
       genderchoice,
       person: apiResponse,
+    });
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`handles a ${type} without storing error data as the edited person`, async () => {
+      req.session.editPersonId = 'EDIT-PERSON-ID';
+      const previousPerson = new CookieModel(req).getEditPerson();
+      personApiStub.rejects(
+        Object.assign(new Error('Request failed'), { type, status: 404, body: { message: 'Person not found' } })
+      );
+
+      await controller(req, res);
+
+      expect(personApiStub).to.have.been.calledOnceWithExactly('343', 'EDIT-PERSON-ID');
+      expect(new CookieModel(req).getEditPerson()).to.equal(previousPerson);
+      if (type === 'http_error') {
+        expect(res.render).to.have.been.calledOnceWithExactly('app/people/edit/index', {
+          cookie: new CookieModel(req),
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [{ message: 'Failed to get person information' }],
+        });
+        expect(res.redirect).not.to.have.been.called;
+      } else {
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
+        expect(res.render).not.to.have.been.called;
+      }
     });
   });
 });

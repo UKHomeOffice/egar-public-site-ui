@@ -1,5 +1,5 @@
 const logger = require('../../common/utils/logger')(__filename);
-const personApi = require('../../common/services/data-access/personApi');
+const dataAccessApi = require('../../common/services/dataAccessApi');
 const CookieModel = require('../../common/models/Cookie.class');
 const { Manifest } = require('../../common/models/Manifest.class');
 
@@ -8,8 +8,7 @@ module.exports = async (req, res) => {
   const errMSg = { message: 'Failed to get saved people' };
 
   try {
-    const response = await personApi.getPeople(cookie.getUserDbId(), 'individual');
-    const people = JSON.parse(response);
+    const people = await dataAccessApi.personApi.getPeople(cookie.getUserDbId(), 'individual');
     const manifest = new Manifest(JSON.stringify({ items: people }));
 
     if (people.message) {

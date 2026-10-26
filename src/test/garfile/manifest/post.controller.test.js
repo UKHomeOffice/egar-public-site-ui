@@ -9,7 +9,7 @@ const { garPeople, invalidPassengersAndCrew } = require('../../fixtures');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garApi = require('../../../common/services/data-access/garApi');
-const personApi = require('../../../common/services/data-access/personApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 const manifestUtil = require('../../../app/garfile/manifest/bulkAdd');
 
 const controller = require('../../../app/garfile/manifest/post.controller');
@@ -54,7 +54,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(garApi.getPeople).to.not.have.been.called;
@@ -73,7 +73,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(req.session.editPersonId).to.eq('123456');
@@ -96,7 +96,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345');
@@ -116,7 +116,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345');
@@ -137,7 +137,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(manifestUtil.getDetailsByIds).to.have.been.calledWith('ABCDEFG', 'USER-12345');
@@ -158,7 +158,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(garApi.getPeople).to.not.have.been.called;
@@ -178,7 +178,7 @@ describe('Manifest Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(garApi.getPeople).to.not.have.been.called;
@@ -197,13 +197,33 @@ describe('Manifest Post Controller', () => {
     const callController = async () => {
       await controller(req, res);
     };
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(manifestUtil.getgarPeopleIds).to.have.been.called;
         expect(personApi.create).to.have.been.called;
         expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
       });
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`does not set a success message when saving manifest people fails with a ${type}`, async () => {
+      req.body.buttonClicked = 'Add to PEOPLE';
+      req.body.garPeopleId = ['1234'];
+      sinon.stub(manifestUtil, 'getgarPeopleIds').resolves(garPeople());
+      const createStub = sinon
+        .stub(personApi, 'create')
+        .rejects(
+          Object.assign(new Error('Request failed'), { type, status: 400, body: { message: 'Invalid person' } })
+        );
+
+      await controller(req, res);
+
+      expect(createStub).to.have.been.calledOnce;
+      expect(createStub.firstCall.args[0]).to.equal('USER-12345');
+      expect(req.session.successMsg).to.be.undefined;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
+    });
   });
 
   it('should redirect with errors if buttonClicked is Continue and gar api rejects', async () => {

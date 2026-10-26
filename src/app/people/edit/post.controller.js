@@ -6,7 +6,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
-const personApi = require('../../../common/services/data-access/personApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -29,22 +29,21 @@ module.exports = (req, res) => {
   cookie.updateEditPerson(person);
 
   // Validate chains
-  validator
+  return validator
     .validateChains(validations.validations(req))
     .then(() => {
       // call the API to update the data base and then
-      personApi
+      return dataAccessApi.personApi
         .update(cookie.getUserDbId(), cookie.getEditPerson().personId, person)
         .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+          if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
             // API returned error
             res.render('app/people/edit/index', {
               cookie,
               persontype,
               documenttype,
               genderchoice,
-              errors: [parsedResponse],
+              errors: [apiResponse],
             });
           } else {
             // Successful
@@ -53,6 +52,15 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('Failed to update saved person', { errorMessage: err?.message, stack: err?.stack });
+          if (err?.type === 'http_error' && err.body && typeof err.body.message === 'string') {
+            return res.render('app/people/edit/index', {
+              cookie,
+              persontype,
+              documenttype,
+              genderchoice,
+              errors: [err.body],
+            });
+          }
           res.render('app/people/edit/index', {
             cookie,
             req,

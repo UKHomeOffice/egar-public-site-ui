@@ -12,7 +12,7 @@ const documenttype = require('../../../common/seeddata/egar_saved_people_travel_
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const personApi = require('../../../common/services/data-access/personApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/people/edit/post.controller');
 
@@ -91,7 +91,7 @@ describe('Person Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.not.have.been.called;
@@ -123,7 +123,7 @@ describe('Person Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.have.been.calledWith('9001', 'EDIT-PERSON-ID-1', person);
@@ -143,17 +143,15 @@ describe('Person Edit Post Controller', () => {
     const cookie = new CookieModel(req);
     cookie.updateEditPerson(person);
 
-    personApiStub.resolves(
-      JSON.stringify({
-        message: 'GAR not found',
-      })
-    );
+    personApiStub.resolves({
+      message: 'GAR not found',
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.have.been.calledWith('9001', 'EDIT-PERSON-ID-1', person);
@@ -169,19 +167,39 @@ describe('Person Edit Post Controller', () => {
   });
 
   it('should redirect on success', () => {
-    personApiStub.resolves(JSON.stringify({}));
+    personApiStub.resolves({});
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.have.been.calledWith('9001', 'EDIT-PERSON-ID-1', person);
         expect(res.redirect).to.have.been.calledWith('/people');
         expect(res.render).to.not.have.been.called;
       });
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`renders an error without redirecting on a ${type}`, async () => {
+      const body = { message: 'Invalid person', identifier: 'lastName' };
+      personApiStub.rejects(Object.assign(new Error('Request failed'), { type, status: 400, body }));
+
+      await controller(req, res);
+
+      expect(personApiStub).to.have.been.calledOnceWithExactly('9001', 'EDIT-PERSON-ID-1', person);
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/people/edit/index', {
+        ...(type === 'http_error' ? {} : { req }),
+        cookie: new CookieModel(req),
+        persontype,
+        documenttype,
+        genderchoice,
+        errors: [type === 'http_error' ? body : { message: 'An error occurred. Please try again' }],
+      });
+    });
   });
   it('should render with validation messages if "Other" document type is selected and special characters, apostrophes or numbers are present in the given names', () => {
     // refers to "GivenName" in the people details form
@@ -195,7 +213,7 @@ describe('Person Edit Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.not.have.been.called;

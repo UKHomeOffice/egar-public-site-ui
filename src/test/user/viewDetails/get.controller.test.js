@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/data-access/personApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 
 const settings = require('../../../common/config/index');
 const configMock = {
@@ -46,15 +46,31 @@ describe('User View Details Get Controller', () => {
     sinon.restore();
   });
 
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`renders the fetch error on a ${type}`, async () => {
+      personApiStub.rejects(
+        Object.assign(new Error('Request failed'), { type, status: 503, body: { message: 'Unavailable' } })
+      );
+
+      await controller(req, res);
+
+      expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
+        cookie: new CookieModel(req),
+        errors: [{ message: 'There was a problem fetching data' }],
+        ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
+      });
+    });
+  });
+
   it('should redirect with errors if api rejects', () => {
     const cookie = new CookieModel(req);
-    personApiStub.resolves();
+    personApiStub.rejects(new Error('Unavailable'));
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
@@ -69,16 +85,14 @@ describe('User View Details Get Controller', () => {
   describe('api returns ok', () => {
     let cookie;
 
-    const personApiResponse = {
-      items: [
-        { id: 'PERSON-1', firstName: 'Jessica' },
-        { id: 'PERSON-2', firstName: 'Trish' },
-      ],
-    };
+    const personApiResponse = [
+      { id: 'PERSON-1', firstName: 'Jessica' },
+      { id: 'PERSON-2', firstName: 'Trish' },
+    ];
 
     beforeEach(() => {
       cookie = new CookieModel(req);
-      personApiStub.resolves(JSON.stringify(personApiResponse));
+      personApiStub.resolves(personApiResponse);
     });
 
     it('should display error message if set', () => {
@@ -88,17 +102,12 @@ describe('User View Details Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
         expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
           cookie,
-          savedPeople: {
-            items: [
-              { id: 'PERSON-1', firstName: 'Jessica' },
-              { id: 'PERSON-2', firstName: 'Trish' },
-            ],
-          },
+          savedPeople: personApiResponse,
           errors: [{ message: 'Example error message' }],
           ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
         });
@@ -113,19 +122,14 @@ describe('User View Details Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
         expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
           cookie,
-          savedPeople: {
-            items: [
-              { id: 'PERSON-1', firstName: 'Jessica' },
-              { id: 'PERSON-2', firstName: 'Trish' },
-            ],
-          },
+          savedPeople: personApiResponse,
           successHeader: 'Successful header',
           successMsg: 'Example success message',
           ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
@@ -138,19 +142,14 @@ describe('User View Details Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(req.session.successHeader).to.be.undefined;
         expect(req.session.successMsg).to.be.undefined;
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID-1', 'individual');
         expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
           cookie,
-          savedPeople: {
-            items: [
-              { id: 'PERSON-1', firstName: 'Jessica' },
-              { id: 'PERSON-2', firstName: 'Trish' },
-            ],
-          },
+          savedPeople: personApiResponse,
           ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
         });
       });

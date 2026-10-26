@@ -6,7 +6,6 @@ const sinonChai = require('sinon-chai');
 require('./global.test');
 chai.use(sinonChai);
 const personApi = require('../common/services/data-access/personApi');
-const dataAccessApi = require('../common/services/dataAccessApi');
 const { HttpClient } = require('../common/services/httpClient');
 
 describe('PersonApi', () => {
@@ -100,25 +99,37 @@ describe('PersonApi', () => {
     expect(client.delete).to.have.been.calledOnceWithExactly('/user/user-1/people/person-1');
   });
 
-  it('preserves the legacy string response and maps HTTP failures to their response body', async () => {
-    const getStub = sinon.stub(dataAccessApi.personApi, 'getDetails').resolves({ ok: true, personId });
-    expect(await personApi.getDetails(userId, personId)).to.equal(JSON.stringify({ personId }));
-    expect(getStub).to.have.been.calledOnceWithExactly(userId, personId);
-
-    const error = Object.assign(new Error('Not found'), { type: 'http_error', body: { message: 'Not found' } });
-    getStub.rejects(error);
-    expect(await personApi.getDetails(userId, personId)).to.equal(JSON.stringify(error.body));
+  it('exports only the class for construction by dataAccessApi', () => {
+    expect(Object.keys(personApi)).to.deep.equal(['PersonApi']);
   });
 
-  it('propagates network errors from the configured client', async () => {
-    const networkError = new Error('offline');
-    sinon.stub(dataAccessApi.personApi, 'getDetails').rejects(networkError);
+  [
+    ['create', 'post', [userId, { people: [person] }]],
+    ['getDetails', 'get', [userId, personId]],
+    ['getPeople', 'get', [userId, 'individual']],
+    ['update', 'put', [userId, personId, person]],
+    ['deletePerson', 'delete', [userId, personId]],
+  ].forEach(([method, verb, args]) => {
+    it(`returns the client response unchanged from ${method}`, async () => {
+      expect(await api[method](...args)).to.equal(response);
+    });
 
-    try {
-      await personApi.getDetails(userId, personId);
-      expect.fail('Expected the network error to be propagated');
-    } catch (error) {
-      expect(error).to.equal(networkError);
-    }
+    ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+      it(`propagates ${type} failures unchanged from ${method}`, async () => {
+        const failure = Object.assign(new Error('Request failed'), {
+          type,
+          status: 400,
+          body: { message: 'Invalid person' },
+        });
+        client[verb].rejects(failure);
+
+        try {
+          await api[method](...args);
+          expect.fail('Expected the client error to be propagated');
+        } catch (error) {
+          expect(error).to.equal(failure);
+        }
+      });
+    });
   });
 });

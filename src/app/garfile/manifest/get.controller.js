@@ -1,7 +1,6 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { Manifest } = require('../../../common/models/Manifest.class');
-const personApi = require('../../../common/services/data-access/personApi');
 const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 
@@ -51,10 +50,9 @@ module.exports = async (req, res) => {
   const garId = res.locals.gar.garId;
 
   try {
-    const savedPeopleJson = await personApi.getPeople(userId, 'individual');
+    const initialSavedPeople = await dataAccessApi.personApi.getPeople(userId, 'individual');
     const garpeopleJson = await dataAccessApi.garApi.getPeople(garId);
     const garfileJson = await garApi.get(garId);
-    const initialSavedPeople = JSON.parse(savedPeopleJson);
     const garfile = await JSON.parse(garfileJson);
     const savedPeopleManifest = new Manifest(JSON.stringify({ items: initialSavedPeople }));
 

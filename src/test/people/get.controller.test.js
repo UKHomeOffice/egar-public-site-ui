@@ -6,7 +6,7 @@ const { savedPeople } = require('../fixtures');
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const personApi = require('../../common/services/data-access/personApi');
+const { personApi } = require('../../common/services/dataAccessApi');
 
 const controller = require('../../app/people/get.controller');
 
@@ -39,6 +39,21 @@ describe('People Get Controller', () => {
     clock.restore();
   });
 
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`renders a saved-people error on a ${type}`, async () => {
+      sinon
+        .stub(personApi, 'getPeople')
+        .rejects(Object.assign(new Error('Request failed'), { type, status: 503, body: { message: 'Unavailable' } }));
+
+      await controller(req, res);
+
+      expect(res.render).to.have.been.calledOnceWithExactly('app/people/index', {
+        cookie: new CookieModel(req),
+        errors: [{ message: 'Failed to get saved people' }],
+      });
+    });
+  });
+
   it('should render with error if api rejects', () => {
     const cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').rejects('garApi.getPeople Example Reject');
@@ -47,7 +62,7 @@ describe('People Get Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
       expect(res.render).to.have.been.calledWith('app/people/index', {
         cookie,
@@ -58,17 +73,15 @@ describe('People Get Controller', () => {
 
   it('should render the message if api returns one', () => {
     const cookie = new CookieModel(req);
-    sinon.stub(personApi, 'getPeople').resolves(
-      JSON.stringify({
-        message: 'User not found',
-      })
-    );
+    sinon.stub(personApi, 'getPeople').resolves({
+      message: 'User not found',
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
       expect(res.render).to.have.been.calledWith('app/people/index', {
         cookie,
@@ -83,13 +96,13 @@ describe('People Get Controller', () => {
     it('should include error messages if set in the session', () => {
       req.session.errMsg = { message: 'Example Error Message' };
       const cookie = new CookieModel(req);
-      sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(apiResponse));
+      sinon.stub(personApi, 'getPeople').resolves(apiResponse);
 
       const callController = async () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(req.session.errMsg).to.be.undefined;
         expect(personApi.getPeople).to.have.been.calledWith('USER-DB-ID-1', 'individual');
         expect(res.render).to.have.been.calledWith('app/people/index', {
@@ -104,7 +117,7 @@ describe('People Get Controller', () => {
       req.session.successMsg = 'Example Success Message';
       req.session.successHeader = 'Successful Header';
       const cookie = new CookieModel(req);
-      sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(apiResponse));
+      sinon.stub(personApi, 'getPeople').resolves(apiResponse);
 
       await controller(req, res);
 
@@ -121,7 +134,7 @@ describe('People Get Controller', () => {
 
     it('should render the page as appropriate', async () => {
       const cookie = new CookieModel(req);
-      sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(apiResponse));
+      sinon.stub(personApi, 'getPeople').resolves(apiResponse);
 
       await controller(req, res);
 

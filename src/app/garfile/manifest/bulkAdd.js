@@ -1,17 +1,14 @@
-const personApi = require('../../../common/services/data-access/personApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const garApi = require('../../../common/services/data-access/garApi');
 
 function getDetailsByIds(ids, userId) {
   return new Promise((resolve, reject) => {
-    personApi
+    dataAccessApi.personApi
       .getPeople(userId, 'individual')
       .then((peopleResponse) => {
-        let people = JSON.parse(peopleResponse);
-        people = people.filter((person) => ids.includes(person.personId));
-        people.forEach((person) => {
-          const element = person;
-          element.peopleType = person.peopleType.name;
-        });
+        const people = peopleResponse
+          .filter((person) => ids.includes(person.personId))
+          .map((person) => ({ ...person, peopleType: person.peopleType.name }));
         resolve(people);
       })
       .catch((err) => {

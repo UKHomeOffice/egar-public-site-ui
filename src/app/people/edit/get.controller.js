@@ -3,7 +3,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const persontype = require('../../../common/seeddata/egar_type_of_saved_person');
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
-const personApi = require('../../../common/services/data-access/personApi');
+const dataAccessApi = require('../../../common/services/dataAccessApi');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
@@ -18,11 +18,9 @@ module.exports = async (req, res) => {
     return;
   }
 
-  await personApi
+  return dataAccessApi.personApi
     .getDetails(cookie.getUserDbId(), id)
-    .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-
+    .then((parsedResponse) => {
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
         return res.render('app/people/edit/index', {
           cookie,
@@ -36,7 +34,7 @@ module.exports = async (req, res) => {
       const requestToValidate = Manifest.turnPersonToRequest(parsedResponse);
       cookie.setEditPerson(parsedResponse);
 
-      validator
+      return validator
         .validateChains(validations.validations(requestToValidate))
         .then(() => {
           return res.render('app/people/edit/index', {
@@ -62,6 +60,15 @@ module.exports = async (req, res) => {
     })
     .catch((err) => {
       logger.error('Failed to get saved person details', { errorMessage: err?.message, stack: err?.stack });
+      if (err?.type === 'http_error') {
+        return res.render('app/people/edit/index', {
+          cookie,
+          persontype,
+          documenttype,
+          genderchoice,
+          errors: [{ message: 'Failed to get person information' }],
+        });
+      }
       res.redirect('/people');
     });
 };
