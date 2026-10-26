@@ -1,7 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const garApi = require('../../../common/services/data-access/garApi');
 
 module.exports = (req, res) => {
   // Clear existing editcraft
@@ -11,10 +10,9 @@ module.exports = (req, res) => {
   const userRole = cookie.getUserRole();
   const userId = cookie.getUserDbId();
 
-  return garApi
+  return dataAccessApi.garApi
     .get(res?.locals?.gar?.garId)
-    .then((garApiResponse) => {
-      const gar = JSON.parse(garApiResponse);
+    .then((gar) => {
       if (
         (gar.registration !== null || gar.registration !== 'Undefined') &&
         req.headers.referer.indexOf('garfile/craft') < 0

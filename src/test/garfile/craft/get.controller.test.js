@@ -6,7 +6,6 @@ const { expect } = chai;
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/garfile/craft/get.controller');
 
@@ -30,7 +29,7 @@ describe('GAR Craft Get Controller', () => {
     };
     res = { render: sinon.spy(), locals: { gar: { garId: 'gar-1' } } };
     cookie = new CookieModel(req);
-    garStub = sinon.stub(garApi, 'get').resolves(JSON.stringify({}));
+    garStub = sinon.stub(dataAccessApi.garApi, 'get').resolves({});
     individualStub = sinon.stub(dataAccessApi.craftApi, 'getCrafts');
     organisationStub = sinon.stub(dataAccessApi.craftApi, 'getOrgCrafts');
   });
@@ -80,7 +79,7 @@ describe('GAR Craft Get Controller', () => {
       });
 
       it('leaves the current craft unchanged when returning from the craft page', async () => {
-        garStub.resolves(JSON.stringify({ registration: null }));
+        garStub.resolves({ registration: null });
         craftStub.resolves({ items: [] });
 
         await controller(req, res);
@@ -97,7 +96,7 @@ describe('GAR Craft Get Controller', () => {
         };
         req.headers.referer = 'garfile/anythingelse';
         req.session.gar.craft = {};
-        garStub.resolves(JSON.stringify(currentCraft));
+        garStub.resolves(currentCraft);
         craftStub.resolves(savedCrafts);
 
         await controller(req, res);
