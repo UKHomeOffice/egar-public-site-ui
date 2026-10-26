@@ -6,7 +6,7 @@ const config = require('../../../common/config/index');
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
 const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
-const verification = require('../../../common/services/data-access/verificationApi');
+const { verificationApi: verification } = require('../../../common/services/dataAccessApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const sendEmail = require('../../../common/services/sendEmail');
 
@@ -107,6 +107,54 @@ FnBdx5XR9zLe40LX3+cbEtw=
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  describe('invitation checks before registration', () => {
+    beforeEach(() => {
+      req.query = { code: '123', state: 'valid_state' };
+      req.cookies = { state: 'valid_state', nonce: 'valid_nonce' };
+      userSearchStub.resolves({ message: 'No results found' });
+    });
+
+    [
+      ['expired', 'http_error', 400, 'Token expired', 'invite-expired'],
+      ['used', 'http_error', 400, 'Token already used', 'invite-expired'],
+      ['invalid', 'http_error', 400, 'Invalid token', 'login-error'],
+      ['unavailable', 'http_error', 503, 'Token expired', 'login-error'],
+      ['offline', 'network_error', undefined, undefined, 'login-error'],
+    ].forEach(([scenario, type, status, message, errorPage]) => {
+      it(`logs out with ${errorPage} when the invitation is ${scenario}`, async () => {
+        getSetInviteTokenStub.rejects(
+          Object.assign(new Error('Request failed'), {
+            type,
+            status,
+            body: { message },
+          })
+        );
+
+        await controller(req, res);
+
+        expect(getSetInviteTokenStub).to.have.been.calledOnceWithExactly('user@email.com');
+        expect(res.cookie).to.have.been.calledWith('errorPage', errorPage);
+        const query = new URLSearchParams({
+          id_token_hint: 'mock_id_token',
+          post_logout_redirect_uri: config.ONE_LOGIN_LOGOUT_URL,
+          state: 'valid_state',
+        });
+        expect(res.redirect).to.have.been.calledOnceWithExactly(`www.test_one_login.com/logout?${query}`);
+        expect(req.session).not.to.have.property('id_token');
+        expect(req.session).not.to.have.property('access_token');
+      });
+    });
+
+    it('allows individual registration when no invitation exists', async () => {
+      getSetInviteTokenStub.resolves({ message: 'Individual user registration request' });
+
+      await controller(req, res);
+
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/onelogin/register');
+      expect(req.session.access_token).to.equal('mock_access_token');
+    });
   });
 
   describe('data-access failures during authentication', () => {

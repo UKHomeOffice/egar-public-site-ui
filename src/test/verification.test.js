@@ -1,8 +1,8 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
+require('chai').use(require('sinon-chai'));
 
 require('./global.test');
-const dataAccessApi = require('../common/services/dataAccessApi');
 const verificationApi = require('../common/services/data-access/verificationApi');
 
 describe('VerificationApi', () => {
@@ -20,41 +20,42 @@ describe('VerificationApi', () => {
   afterEach(() => sinon.restore());
 
   it('verifies a user with the token ID', async () => {
-    await api.verifyUser('token-1');
-    expect(client.put).to.have.been.calledWithExactly('/user/verify', { tokenId: 'token-1' });
+    expect(await api.verifyUser('token-1')).to.deep.equal({ verified: true });
+    expect(client.put).to.have.been.calledOnceWithExactly('/user/verify', { tokenId: 'token-1' });
   });
 
   it('looks up invite tokens with the expected email, service, and token filters', async () => {
-    await api.getUserInviteToken('invitee@example.com');
+    expect(await api.getUserInviteToken('invitee@example.com')).to.deep.equal({ tokenId: 'token-1' });
     expect(client.get).to.have.been.calledWithExactly('/user/verify', {
       query: { invitee_email: 'invitee@example.com', service: 'sgar' },
     });
 
-    await api.getUserInviteTokenByTokenId('token-1');
+    expect(await api.getUserInviteTokenByTokenId('token-1')).to.deep.equal({ tokenId: 'token-1' });
     expect(client.get.secondCall.args).to.deep.equal(['/user/verify', { query: { token_id: 'token-1' } }]);
   });
 
-  it('returns successful verification and invite responses in their established shapes', async () => {
-    sinon.stub(dataAccessApi.verificationApi, 'verifyUser').resolves({ ok: true, verified: true });
-    sinon.stub(dataAccessApi.verificationApi, 'getUserInviteToken').resolves({ ok: true, tokenId: 'token-1' });
-
-    expect(await verificationApi.verifyUser('token-1')).to.equal('{"verified":true}');
-    expect(await verificationApi.getUserInviteToken('invitee@example.com')).to.deep.equal({ tokenId: 'token-1' });
+  it('exports only the class for construction by dataAccessApi', () => {
+    expect(Object.keys(verificationApi)).to.deep.equal(['VerificationApi']);
   });
 
-  it('returns HTTP failure bodies but swallows network failures', async () => {
-    const httpError = Object.assign(new Error('Not found'), {
-      type: 'http_error',
-      status: 404,
-      body: { message: 'Invite not found' },
+  [
+    ['verifyUser', 'put'],
+    ['getUserInviteToken', 'get'],
+    ['getUserInviteTokenByTokenId', 'get'],
+  ].forEach(([method, verb]) => {
+    it(`propagates client rejections unchanged from ${method}`, async () => {
+      const error = Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'Token expired' },
+      });
+      client[verb].rejects(error);
+      try {
+        await api[method]('token-or-email');
+        expect.fail('Expected request to reject');
+      } catch (actual) {
+        expect(actual).to.equal(error);
+      }
     });
-    sinon.stub(dataAccessApi.verificationApi, 'getUserInviteTokenByTokenId').rejects(httpError);
-    expect(await verificationApi.getUserInviteTokenByTokenId('missing-token')).to.deep.equal({
-      message: 'Invite not found',
-    });
-
-    const networkError = new Error('offline');
-    dataAccessApi.verificationApi.getUserInviteTokenByTokenId.rejects(networkError);
-    expect(await verificationApi.getUserInviteTokenByTokenId('missing-token')).to.be.undefined;
   });
 });

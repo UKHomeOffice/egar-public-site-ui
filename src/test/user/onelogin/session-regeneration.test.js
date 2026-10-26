@@ -73,9 +73,7 @@ describe('To Regenerate Session when User is Signup on OneLogin', () => {
     const controller = proxyquire('../../../app/user/onelogin/post.controller', {
       '../../../common/services/dataAccessApi': {
         userManageApi: { createUser: createUserStub },
-      },
-      '../../../common/services/data-access/verificationApi': {
-        getUserInviteToken: getUserInviteTokenStub,
+        verificationApi: { getUserInviteToken: getUserInviteTokenStub },
       },
       '../../../common/services/sendEmail': {
         send: sendEmailStub,
@@ -116,9 +114,7 @@ describe('To Regenerate Session when User is Signup on OneLogin', () => {
     const controller = proxyquire('../../../app/user/onelogin/post.controller', {
       '../../../common/services/dataAccessApi': {
         userManageApi: { createUser: createUserStub },
-      },
-      '../../../common/services/data-access/verificationApi': {
-        getUserInviteToken: getUserInviteTokenStub,
+        verificationApi: { getUserInviteToken: getUserInviteTokenStub },
       },
       '../../../common/services/sendEmail': {
         send: sendEmailStub,

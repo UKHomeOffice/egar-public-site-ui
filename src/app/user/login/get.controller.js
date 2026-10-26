@@ -5,7 +5,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const { NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, HTTPS } = require('../../../common/config');
 const sendEmail = require('../../../common/services/sendEmail');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const verifyUserService = require('../../../common/services/data-access/verificationApi');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { getOneLoginLogoutUrl } = require('../../../common/utils/oneLoginAuth');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
@@ -248,7 +247,7 @@ module.exports = async (req, res) => {
 
 async function checkUserInvite(req, res, email) {
   try {
-    const apiResponse = await verifyUserService.getUserInviteToken(email);
+    const apiResponse = await dataAccessApi.verificationApi.getUserInviteToken(email);
     if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
       logger.error('Invite link to register expired or already used.');
       return redirectErrorPage(req, res, 'invite-expired');
@@ -256,6 +255,14 @@ async function checkUserInvite(req, res, email) {
 
     return ROUTES.REGISTER;
   } catch (error) {
+    if (
+      error?.type === 'http_error' &&
+      error.status === 400 &&
+      ['Token expired', 'Token already used'].includes(error.body?.message)
+    ) {
+      logger.warn('Login invitation token rejected', { reason: error.body.message });
+      return redirectErrorPage(req, res, 'invite-expired');
+    }
     logger.error('Failed to register invite link', { errorMessage: error?.message, stack: error?.stack });
     return redirectErrorPage(req, res, 'login-error');
   }

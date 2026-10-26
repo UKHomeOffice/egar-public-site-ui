@@ -9,7 +9,7 @@ const tokenService = require('../../../common/services/create-token');
 
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const controller = require('../../../app/verify/organisationinvite/get.controller');
-const verifyUserService = require('../../../common/services/data-access/verificationApi');
+const { verificationApi: verifyUserService } = require('../../../common/services/dataAccessApi');
 
 describe('Verify Organisation Invite Get Controller', () => {
   let req;
@@ -33,6 +33,7 @@ describe('Verify Organisation Invite Get Controller', () => {
       redirect: sinon.stub(),
     };
     sinon.stub(tokenService, 'generateHash').returns('HashedToken123');
+    sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns(oneLoginAuthUrl);
     verifyUserServiceStub = sinon.stub(verifyUserService, 'getUserInviteTokenByTokenId');
   });
 
@@ -41,19 +42,49 @@ describe('Verify Organisation Invite Get Controller', () => {
   });
 
   it('should clear the cookie and set a hashed token before render', async () => {
-    const cookie = new CookieModel(req);
-    cookie.reset();
-    cookie.initialise();
-    cookie.setInviteUserToken('HashedToken123');
-    sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns('https://onelogin?code=123&state=state');
-    verifyUserServiceStub.resolves('Token is valid');
+    req.session.u = { dbId: 'old-user' };
+    verifyUserServiceStub.resolves({ tokenId: 'HashedToken123' });
     await controller(req, res);
 
-    // CookieModel instance created, can that be asserted
     expect(tokenService.generateHash).to.have.been.calledOnceWithExactly('Example Incoming Unhashed Token');
-    expect(cookie.getInviteUserToken()).to.eq('HashedToken123');
+    expect(verifyUserServiceStub).to.have.been.calledOnceWithExactly('HashedToken123');
+    expect(new CookieModel(req).getInviteUserToken()).to.eq('HashedToken123');
+    expect(new CookieModel(req).getUserDbId()).not.to.exist;
+    expect(res.redirect).not.to.have.been.called;
     expect(res.render).to.have.been.calledOnceWithExactly('app/verify/organisationinvite/index', {
       oneLoginAuthUrl,
+    });
+  });
+
+  ['Token expired', 'Token already used'].forEach((message) => {
+    it(`redirects to the expired-invite page for HTTP 400 ${message}`, async () => {
+      verifyUserServiceStub.rejects(
+        Object.assign(new Error('Bad Request'), {
+          type: 'http_error',
+          status: 400,
+          body: { message },
+        })
+      );
+
+      await controller(req, res);
+
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/error/inviteExpiredError');
+      expect(res.render).not.to.have.been.called;
+    });
+  });
+
+  [
+    ['http_error', 400, { message: 'No token found for user' }],
+    ['http_error', 503, { message: 'Token expired' }],
+    ['network_error', undefined, undefined],
+  ].forEach(([type, status, body]) => {
+    it(`redirects to the error page on ${type} ${status || ''}`, async () => {
+      verifyUserServiceStub.rejects(Object.assign(new Error('Request failed'), { type, status, body }));
+
+      await controller(req, res);
+
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/error/404');
+      expect(res.render).not.to.have.been.called;
     });
   });
 });

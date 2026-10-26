@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
-const verifyUserService = require('../../../common/services/data-access/verificationApi');
+const { verificationApi: verifyUserService } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   // Start by clearing cookies and initialising
@@ -14,7 +14,7 @@ module.exports = (req, res) => {
   const hashedToken = tokenService.generateHash(token);
 
   logger.debug('Calling verify user endpoint');
-  verifyUserService
+  return verifyUserService
     .verifyUser(hashedToken)
     .then((response) => {
       logger.debug(response);

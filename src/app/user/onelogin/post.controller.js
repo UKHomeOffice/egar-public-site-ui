@@ -8,7 +8,7 @@ const validator = require('../../../common/utils/validator');
 const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
 const sendEmail = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
-const verificationApi = require('../../../common/services/data-access/verificationApi');
+const { verificationApi } = require('../../../common/services/dataAccessApi');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
 const { NewRegistrationSuccess } = require('../../../common/services/metrics');
 

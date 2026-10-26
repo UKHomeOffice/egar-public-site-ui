@@ -17,7 +17,7 @@ const {
 
 // Import controller
 const postController = require('../../../app/user/onelogin/post.controller');
-const getUserInviteToken = require('../../../common/services/data-access/verificationApi');
+const { verificationApi: getUserInviteToken } = require('../../../common/services/dataAccessApi');
 
 describe('User OneLogin Post Controller', () => {
   let req;
@@ -216,6 +216,54 @@ describe('User OneLogin Post Controller', () => {
         expect(sendEmail.send).not.to.have.been.called;
         expect(res.redirect).to.have.been.calledOnceWithExactly('error/404');
       });
+    });
+
+    it('does not create or authenticate a user when invitation verification rejects', async () => {
+      getUserInviteTokenStub.rejects(
+        Object.assign(new Error('Bad Request'), {
+          type: 'http_error',
+          status: 400,
+          body: { message: 'Token expired' },
+        })
+      );
+
+      await postController(req, res);
+
+      expect(getUserInviteTokenStub).to.have.been.calledOnceWithExactly('john.doe@example.com');
+      expect(createUserStub).not.to.have.been.called;
+      expect(sendEmail.send).not.to.have.been.called;
+      expect(req.session.regenerate).not.to.have.been.called;
+      expect(req.session.save).not.to.have.been.called;
+      expect(req.session.step).to.equal(PHASE_CONFIRM_NAME);
+      expect(res.redirect).to.have.been.calledOnceWithExactly('error/404');
+    });
+
+    it('retains the created account but does not advance registration when the welcome email rejects', async () => {
+      createUserStub.resolves({
+        userId: 'created-user',
+        state: 'verified',
+        role: { name: 'Individual' },
+      });
+      sendEmail.send.rejects(new Error('Notify returned 403'));
+
+      await postController(req, res);
+
+      expect(createUserStub).to.have.been.calledOnceWithExactly(
+        'john.doe@example.com',
+        'John',
+        'Doe',
+        'onelogin_sub_id',
+        'verified',
+        '123'
+      );
+      expect(sendEmail.send).to.have.been.calledOnce;
+      sinon.assert.callOrder(createUserStub, req.session.regenerate, sendEmail.send, res.redirect);
+      expect(req.session.u.dbId).to.equal('created-user');
+      expect(req.session.u.vr).to.equal(true);
+      expect(req.session.step).to.equal(PHASE_CONFIRM_NAME);
+      expect(req.session.save).not.to.have.been.called;
+      expect(res.render).not.to.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('error/404');
     });
 
     it('should handle error if nameConfirmDeclaration is not checked', async () => {
