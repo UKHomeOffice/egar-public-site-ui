@@ -20,12 +20,7 @@ module.exports = async (req, res) => {
   logger.info('Set hashedToken');
 
   try {
-    const apiResponse = await verifyUserService.getUserInviteTokenByTokenId(hashedToken);
-
-    if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
-      return res.redirect('/error/inviteExpiredError');
-    }
-
+    await verifyUserService.getUserInviteTokenByTokenId(hashedToken);
     return res.render('app/verify/organisationinvite/index', { oneLoginAuthUrl });
   } catch (error) {
     if (

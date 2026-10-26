@@ -79,7 +79,12 @@ describe('Verify Organisation Invite Get Controller', () => {
     ['network_error', undefined, undefined],
   ].forEach(([type, status, body]) => {
     it(`redirects to the error page on ${type} ${status || ''}`, async () => {
-      verifyUserServiceStub.rejects(Object.assign(new Error('Request failed'), { type, status, body }));
+      verifyUserServiceStub.rejects(
+        Object.assign(new Error('Request failed'), {
+          type,
+          ...(type === 'http_error' ? { status, body } : {}),
+        })
+      );
 
       await controller(req, res);
 

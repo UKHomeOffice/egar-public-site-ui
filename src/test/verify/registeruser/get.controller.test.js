@@ -50,8 +50,7 @@ describe('Verify Register User Get Controller', () => {
       sinon.stub(verifyUserService, 'verifyUser').rejects(
         Object.assign(new Error('Verification failed'), {
           type,
-          status: 400,
-          body: { message: 'Token is invalid' },
+          ...(type === 'http_error' ? { status: 400, body: { message: 'Token is invalid' } } : {}),
         })
       );
       const cookie = new CookieModel(req);

@@ -238,7 +238,7 @@ describe('User OneLogin Post Controller', () => {
       expect(res.redirect).to.have.been.calledOnceWithExactly('error/404');
     });
 
-    it('retains the created account but does not advance registration when the welcome email rejects', async () => {
+    it('retains the created user in the session but does not advance registration when the welcome email rejects', async () => {
       createUserStub.resolves({
         userId: 'created-user',
         state: 'verified',

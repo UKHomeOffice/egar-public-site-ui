@@ -247,12 +247,7 @@ module.exports = async (req, res) => {
 
 async function checkUserInvite(req, res, email) {
   try {
-    const apiResponse = await dataAccessApi.verificationApi.getUserInviteToken(email);
-    if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
-      logger.error('Invite link to register expired or already used.');
-      return redirectErrorPage(req, res, 'invite-expired');
-    }
-
+    await dataAccessApi.verificationApi.getUserInviteToken(email);
     return ROUTES.REGISTER;
   } catch (error) {
     if (
@@ -260,7 +255,7 @@ async function checkUserInvite(req, res, email) {
       error.status === 400 &&
       ['Token expired', 'Token already used'].includes(error.body?.message)
     ) {
-      logger.warn('Login invitation token rejected', { reason: error.body.message });
+      logger.error('Login invitation token rejected', { reason: error.body.message });
       return redirectErrorPage(req, res, 'invite-expired');
     }
     logger.error('Failed to register invite link', { errorMessage: error?.message, stack: error?.stack });

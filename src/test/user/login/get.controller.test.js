@@ -127,8 +127,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
         getSetInviteTokenStub.rejects(
           Object.assign(new Error('Request failed'), {
             type,
-            status,
-            body: { message },
+            ...(type === 'http_error' ? { status, body: { message } } : {}),
           })
         );
 
