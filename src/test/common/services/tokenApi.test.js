@@ -5,7 +5,6 @@ chai.use(require('sinon-chai'));
 
 require('../../global.test');
 const config = require('../../../common/config/index');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
 const tokenApi = require('../../../common/services/data-access/tokenApi');
 const genToken = require('../../../common/services/create-token');
 
@@ -24,13 +23,13 @@ describe('TokenApi', () => {
   afterEach(() => sinon.restore());
 
   it('sets and updates user tokens', async () => {
-    await api.setToken('token-1', 'user-1');
+    expect(await api.setToken('token-1', 'user-1')).to.deep.equal({ created: true });
     expect(client.post).to.have.been.calledWithExactly('/user/settoken', {
       tokenId: 'token-1',
       userId: 'user-1',
     });
 
-    await api.updateToken('token-2', 'user-1');
+    expect(await api.updateToken('token-2', 'user-1')).to.deep.equal({ updated: true });
     expect(client.put).to.have.been.calledWithExactly('/user/settoken', {
       tokenId: 'token-2',
       userId: 'user-1',
@@ -38,43 +37,29 @@ describe('TokenApi', () => {
   });
 
   it('preserves optional invitee email in organisation invite tokens', async () => {
-    await api.setInviteUserToken('token-1', 'inviter-1', 'org-1', 'Owner', 'invitee@example.com');
+    expect(await api.setInviteUserToken('token-1', 'inviter-1', 'org-1', 'Admin', 'invitee@example.com')).to.deep.equal(
+      { created: true }
+    );
     expect(client.post.firstCall.args[0]).to.equal('/user/settoken');
     expect(client.post.firstCall.args[1]).to.deep.equal({
       tokenId: 'token-1',
       inviterId: 'inviter-1',
       organisationId: 'org-1',
-      roleName: 'Owner',
+      roleName: 'Admin',
       inviteeEmail: 'invitee@example.com',
     });
   });
 
-  it('preserves the token response shape and propagates network failures', async () => {
-    sinon.stub(dataAccessApi.tokenApi, 'setToken').resolves({ ok: true, created: true });
-    expect(await tokenApi.setToken('token-1', 'user-1')).to.equal('{"created":true}');
-
-    const error = Object.assign(new Error('Conflict'), {
-      type: 'http_error',
-      status: 409,
-      body: { message: 'Token already exists' },
-    });
-    dataAccessApi.tokenApi.setToken.rejects(error);
-    expect(await tokenApi.setToken('token-1', 'user-1')).to.equal('{"message":"Token already exists"}');
-
-    const networkError = new Error('offline');
-    dataAccessApi.tokenApi.setToken.rejects(networkError);
-    try {
-      await tokenApi.setToken('token-1', 'user-1');
-      expect.fail('Expected network failure to reject');
-    } catch (actual) {
-      expect(actual).to.equal(networkError);
-    }
+  it('exports only the class for construction by dataAccessApi', () => {
+    expect(Object.keys(tokenApi)).to.deep.equal(['TokenApi']);
   });
 });
 
 describe('Generate Hash', () => {
+  afterEach(() => sinon.restore());
+
   it('should successfully generate a hash', () => {
-    config.NOTIFY_TOKEN_SECRET = 'example';
+    sinon.stub(config, 'NOTIFY_TOKEN_SECRET').value('example');
     const token = 'randominput'.toString();
     const output = genToken.generateHash(token);
 
