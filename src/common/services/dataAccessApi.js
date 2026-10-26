@@ -11,7 +11,6 @@ const personApi = require('./data-access/personApi');
 const craftApi = require('./data-access/craftApi');
 const resPersonApi = require('./data-access/resPersonApi');
 const userManageApi = require('./data-access/userManageApi');
-const createUserApi = require('./data-access/createUserApi');
 const tokenApi = require('./data-access/tokenApi');
 const verificationApi = require('./data-access/verificationApi');
 
@@ -24,7 +23,6 @@ module.exports = {
   craftApi: new craftApi.CraftApi(client),
   resPersonApi: new resPersonApi.ResPersonApi(client),
   userManageApi: new userManageApi.UserManageApi(client),
-  createUserApi: new createUserApi.CreateUserApi(client),
   tokenApi: new tokenApi.TokenApi(client),
   verificationApi: new verificationApi.VerificationApi(client),
 };
