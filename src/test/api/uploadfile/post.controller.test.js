@@ -4,9 +4,8 @@ chai.use(require('sinon-chai'));
 const { expect } = chai;
 
 require('../../global.test');
-const { garApi } = require('../../../common/services/dataAccessApi');
+const { garApi, fileUploadApi } = require('../../../common/services/dataAccessApi');
 const clamAVService = require('../../../common/services/clamAVService');
-const fileUploadApi = require('../../../common/services/data-access/fileUploadApi');
 const controller = require('../../../app/api/uploadfile/post.controller');
 
 describe('API upload file post controller', () => {
@@ -29,7 +28,7 @@ describe('API upload file post controller', () => {
     lookup = sinon.stub(garApi, 'getSupportingDocs').resolves({ items: [] });
     remove = sinon.stub(garApi, 'deleteGarSupportingDoc').resolves({});
     scan = sinon.stub(clamAVService, 'scanFile').resolves(true);
-    upload = sinon.stub(fileUploadApi, 'postFile').resolves(JSON.stringify({}));
+    upload = sinon.stub(fileUploadApi, 'postFile').resolves({});
   });
 
   afterEach(() => sinon.restore());
@@ -150,10 +149,29 @@ describe('API upload file post controller', () => {
     expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
   });
 
-  it('stores an error message from the unchanged file-upload string boundary', async () => {
-    upload.resolves(JSON.stringify({ message: 'GAR not found' }));
+  it('stores a decoded error message from the file-upload service', async () => {
+    upload.resolves({ message: 'GAR not found' });
     await controller(req, res);
     expect(req.session.errMsg).to.deep.equal({ message: 'GAR not found' });
     expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
+  });
+
+  it('preserves the backend message when an HTTP upload request is rejected', async () => {
+    upload.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'GAR not found' },
+      })
+    );
+    await controller(req, res);
+    expect(req.session.errMsg).to.deep.equal({ message: 'GAR not found' });
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
+  });
+
+  it('accepts a successful upload with no response body', async () => {
+    upload.resolves(null);
+    await controller(req, res);
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
   });
 });

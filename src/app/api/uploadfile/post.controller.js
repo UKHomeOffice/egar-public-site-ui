@@ -1,10 +1,9 @@
 const fileType = require('file-type');
 
 const logger = require('../../../common/utils/logger')(__filename);
-const { garApi } = require('../../../common/services/dataAccessApi');
+const { garApi, fileUploadApi } = require('../../../common/services/dataAccessApi');
 const transformers = require('../../../common/utils/transformers');
 const clamAVService = require('../../../common/services/clamAVService');
-const uploadFile = require('../../../common/services/data-access/fileUploadApi');
 const config = require('../../../common/config/index');
 const { isValidFileMime } = require('../../../common/utils/validator');
 
@@ -134,12 +133,11 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const response = await uploadFile.postFile(garId, req.file);
-    const parsedResponse = JSON.parse(response);
-    if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+    const response = await fileUploadApi.postFile(garId, req.file);
+    if (response && Object.prototype.hasOwnProperty.call(response, 'message')) {
       logger.debug('Api returned message key');
-      logger.debug(JSON.stringify(parsedResponse));
-      req.session.errMsg = parsedResponse;
+      logger.debug(JSON.stringify(response));
+      req.session.errMsg = response;
       res.redirect('/garfile/supportingdocuments?query=e');
       return;
     }
@@ -149,6 +147,10 @@ module.exports = async (req, res) => {
   } catch (err) {
     logger.error('Error occurred during supporting document upload');
     logger.error(err);
+
+    if (err?.type === 'http_error' && err.body && Object.prototype.hasOwnProperty.call(err.body, 'message')) {
+      req.session.errMsg = err.body;
+    }
 
     if (err === 'garApi.getSupportingDocs Example Reject') {
       res.redirect('/garfile/supportingdocuments?query=e');

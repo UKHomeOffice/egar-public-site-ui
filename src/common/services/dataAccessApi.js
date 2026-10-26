@@ -13,6 +13,7 @@ const resPersonApi = require('./data-access/resPersonApi');
 const userManageApi = require('./data-access/userManageApi');
 const tokenApi = require('./data-access/tokenApi');
 const verificationApi = require('./data-access/verificationApi');
+const fileUploadApi = require('./data-access/fileUploadApi');
 
 const client = new HttpClient({ baseUrl: BASE_URL });
 
@@ -25,4 +26,5 @@ module.exports = {
   userManageApi: new userManageApi.UserManageApi(client),
   tokenApi: new tokenApi.TokenApi(client),
   verificationApi: new verificationApi.VerificationApi(client),
+  fileUploadApi: new fileUploadApi.FileUploadApi(client),
 };
