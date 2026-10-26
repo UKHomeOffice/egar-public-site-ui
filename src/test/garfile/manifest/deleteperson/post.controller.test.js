@@ -1,127 +1,85 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../../global.test');
-const CookieModel = require('../../../../common/models/Cookie.class');
-const garApi = require('../../../../common/services/data-access/garApi');
-
+const { garApi } = require('../../../../common/services/dataAccessApi');
 const controller = require('../../../../app/garfile/manifest/deleteperson/post.controller');
 
-describe('Person Delete Get Controller', () => {
+describe('Manifest Delete Person Post Controller', () => {
   let req;
   let res;
-  let garApiStub;
-  let apiResponse;
+  let remove;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
-    apiResponse = {
-      firstName: 'Julian',
-      lastName: 'Bashir',
-    };
-
-    req = {
-      body: {},
-      session: {
-        gar: { id: '9001' },
-      },
-    };
-
-    res = {
-      redirect: sinon.spy(),
-    };
-
-    garApiStub = sinon.stub(garApi, 'deleteGarPeople');
+    req = { body: {}, session: { gar: { id: 'stale-session-id' } } };
+    res = { redirect: sinon.spy(), locals: { gar: { garId: '9001' } } };
+    remove = sinon.stub(garApi, 'deleteGarPeople').resolves({});
   });
 
-  afterEach(() => {
-    sinon.restore();
+  afterEach(() => sinon.restore());
+
+  it('redirects without deleting when no person is selected', async () => {
+    await controller(req, res);
+    expect(remove).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
   });
 
-  it('should redirect back if no deletePersonId', () => {
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(req.body.garPeopleId).to.be.undefined;
-      expect(garApiStub).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
-    });
+  it('rejects a non-array, non-string selection without deleting', async () => {
+    req.body.garPeopleId = 123;
+    await controller(req, res);
+    expect(remove).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
   });
 
-  it('should redirect back if api rejects', () => {
+  it('deletes a single selected person against the ownership-verified GAR', async () => {
     req.body.garPeopleId = 'DELETE-PERSON-ID';
-    garApiStub.rejects('personApi.getDetails Example Reject');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiStub).to.have.been.calledWith('9001', ['DELETE-PERSON-ID']);
-      expect(req.session.errMsg).to.eql({ message: 'Failed to delete GAR person. Try again' });
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
-    });
+    await controller(req, res);
+    expect(remove).to.have.been.calledOnceWithExactly('9001', ['DELETE-PERSON-ID']);
+    expect(req.session.errMsg).to.be.undefined;
+    expect(req.session.successMsg).to.equal('Person removed from GAR');
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
   });
 
-  it('should redirect with error messages if api returns one', () => {
-    req.body.garPeopleId = 'DELETE-PERSON-ID';
-    cookie = new CookieModel(req);
+  it('deletes multiple selected people', async () => {
+    req.body.garPeopleId = ['PERSON-1', 'PERSON-2'];
+    await controller(req, res);
+    expect(remove).to.have.been.calledOnceWithExactly('9001', ['PERSON-1', 'PERSON-2']);
+    expect(req.session.successMsg).to.equal('Person removed from GAR');
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
+  });
 
-    garApiStub.resolves(
-      JSON.stringify({
-        message: 'Person id not found',
+  it('sets a generic error rather than success when deletion fails', async () => {
+    req.body.garPeopleId = 'PERSON-1';
+    remove.rejects(new Error('Connection unavailable'));
+    await controller(req, res);
+    expect(req.session.errMsg).to.deep.equal({ message: 'Failed to delete GAR person. Try again' });
+    expect(req.session.successMsg).to.be.undefined;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
+  });
+
+  it('preserves a backend HTTP error rather than setting success', async () => {
+    req.body.garPeopleId = 'PERSON-1';
+    remove.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'Person id not found' },
       })
     );
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiStub).to.have.been.calledWith('9001', ['DELETE-PERSON-ID']);
-      expect(req.session.errMsg).to.eql({ message: 'Person id not found' });
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
-    });
+    await controller(req, res);
+    expect(req.session.errMsg).to.deep.equal({ message: 'Person id not found' });
+    expect(req.session.successMsg).to.be.undefined;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
   });
 
-  it('should redirect to people with success message if ok', () => {
-    req.body.garPeopleId = 'DELETE-PERSON-ID';
-    cookie = new CookieModel(req);
-
-    garApiStub.resolves(JSON.stringify(apiResponse));
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiStub).to.have.been.calledWith('9001', ['DELETE-PERSON-ID']);
-      expect(req.session.successMsg).to.eq('Person removed from GAR');
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
-    });
-  });
-
-  it('Deleting multiple is possible with multiple ids', () => {
-    req.body.garPeopleId = ['DELETE-PERSON-ID', 'ANOTHER_DELETE_PERSON_ID'];
-    cookie = new CookieModel(req);
-
-    garApiStub.resolves(JSON.stringify(apiResponse));
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiStub).to.have.been.calledWith('9001', ['DELETE-PERSON-ID', 'ANOTHER_DELETE_PERSON_ID']);
-      expect(req.session.successMsg).to.eq('Person removed from GAR');
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
-    });
+  it('preserves a decoded error message rather than setting success', async () => {
+    req.body.garPeopleId = 'PERSON-1';
+    remove.resolves({ message: 'Person id not found' });
+    await controller(req, res);
+    expect(req.session.errMsg).to.deep.equal({ message: 'Person id not found' });
+    expect(req.session.successMsg).to.be.undefined;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
   });
 });

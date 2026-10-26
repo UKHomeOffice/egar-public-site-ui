@@ -9,7 +9,6 @@ const { savedPeople, garPeople, flaggedSavedPeople } = require('../../fixtures')
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const { personApi } = require('../../../common/services/dataAccessApi');
-const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/garfile/manifest/get.controller');
@@ -44,7 +43,7 @@ describe('Manifest Get Controller', () => {
       render: sinon.spy(),
       locals: { gar: { garId: '9001' } },
     };
-    sinon.stub(garApi, 'get').resolves(true);
+    sinon.stub(dataAccessApi.garApi, 'get').resolves({ isMilitaryFlight: true });
   });
 
   afterEach(() => {
@@ -120,6 +119,7 @@ describe('Manifest Get Controller', () => {
       expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
       expect(garApiStub).to.have.been.calledWith('9001');
       expect(req.session.errMsg).to.be.undefined;
+      expect(cookie.getIsMilitaryFlight()).to.equal(true);
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie,
         savedPeople: flaggedSavedPeople(),

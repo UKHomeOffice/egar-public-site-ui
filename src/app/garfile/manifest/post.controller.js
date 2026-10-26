@@ -1,7 +1,6 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { Manifest } = require('../../../common/models/Manifest.class');
-const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const manifestUtil = require('./bulkAdd');
 
@@ -20,7 +19,7 @@ module.exports = async (req, res) => {
     return manifestUtil
       .getDetailsByIds(req.body.personId, cookie.getUserDbId())
       .then((selectedPeople) => {
-        return garApi
+        return dataAccessApi.garApi
           .patch(res?.locals?.gar?.garId, 'Draft', { people: selectedPeople })
           .then(() => {
             res.redirect('/garfile/manifest');
@@ -98,7 +97,7 @@ module.exports = async (req, res) => {
     cookie.setIsMilitaryFlight(isMilitaryFlight);
 
     try {
-      await garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { isMilitaryFlight });
+      await dataAccessApi.garApi.patch(res.locals.gar.garId, cookie.getGarStatus(), { isMilitaryFlight });
     } catch (err) {
       logger.error('Failed to update GAR', {
         garId: cookie.getGarId(),
@@ -117,7 +116,7 @@ module.exports = async (req, res) => {
     let apiResponse;
 
     try {
-      apiResponse = await garApi.getPeople(cookie.getGarId());
+      apiResponse = await dataAccessApi.garApi.getPeople(res.locals.gar.garId);
     } catch (err) {
       logger.error('Failed to get manifest', {
         garId: cookie.getGarId(),

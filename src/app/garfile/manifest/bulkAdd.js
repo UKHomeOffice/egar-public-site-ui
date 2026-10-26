@@ -1,5 +1,4 @@
 const dataAccessApi = require('../../../common/services/dataAccessApi');
-const garApi = require('../../../common/services/data-access/garApi');
 
 function getDetailsByIds(ids, userId) {
   return new Promise((resolve, reject) => {
@@ -18,22 +17,10 @@ function getDetailsByIds(ids, userId) {
 }
 
 function getgarPeopleIds(garPeopleId, garId) {
-  return new Promise((resolve, reject) => {
-    garApi
-      .getPeople(garId)
-      .then((peopleResponse) => {
-        let garPeople = JSON.parse(peopleResponse);
-        garPeople = garPeople.items;
-        garPeople = garPeople.filter((person) => garPeopleId.includes(person.garPeopleId));
-        garPeople.forEach((person) => {
-          const element = person;
-          element.peopleType = person.peopleType.name;
-        });
-        resolve(garPeople);
-      })
-      .catch((err) => {
-        reject(err);
-      });
+  return dataAccessApi.garApi.getPeople(garId).then((peopleResponse) => {
+    return peopleResponse.items
+      .filter((person) => garPeopleId.includes(person.garPeopleId))
+      .map((person) => ({ ...person, peopleType: person.peopleType.name }));
   });
 }
 

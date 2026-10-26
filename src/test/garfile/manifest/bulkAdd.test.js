@@ -4,9 +4,9 @@ const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
 require('../../global.test');
-const { personApi } = require('../../../common/services/dataAccessApi');
+const { personApi, garApi } = require('../../../common/services/dataAccessApi');
 
-const { getDetailsByIds } = require('../../../app/garfile/manifest/bulkAdd');
+const { getDetailsByIds, getgarPeopleIds } = require('../../../app/garfile/manifest/bulkAdd');
 
 describe('bulkAdd class', () => {
   beforeEach(() => {
@@ -15,6 +15,40 @@ describe('bulkAdd class', () => {
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  it('selects and flattens manifest people without mutating the decoded response', async () => {
+    const people = [
+      { garPeopleId: 'GAR-PERSON-1', peopleType: { name: 'Captain' } },
+      { garPeopleId: 'GAR-PERSON-2', peopleType: { name: 'Crew' } },
+      { garPeopleId: 'GAR-PERSON-3', peopleType: { name: 'Passenger' } },
+    ];
+    const lookup = sinon.stub(garApi, 'getPeople').resolves({ items: people });
+
+    const result = await getgarPeopleIds(['GAR-PERSON-1', 'GAR-PERSON-3'], 'GAR-1');
+
+    expect(lookup).to.have.been.calledOnceWithExactly('GAR-1');
+    expect(result).to.deep.equal([
+      { garPeopleId: 'GAR-PERSON-1', peopleType: 'Captain' },
+      { garPeopleId: 'GAR-PERSON-3', peopleType: 'Passenger' },
+    ]);
+    expect(people.map((person) => person.peopleType)).to.deep.equal([
+      { name: 'Captain' },
+      { name: 'Crew' },
+      { name: 'Passenger' },
+    ]);
+  });
+
+  it('rejects rather than returning manifest people when the lookup fails', async () => {
+    const failure = new Error('Manifest unavailable');
+    sinon.stub(garApi, 'getPeople').rejects(failure);
+    let caught;
+    try {
+      await getgarPeopleIds(['GAR-PERSON-1'], 'GAR-1');
+    } catch (err) {
+      caught = err;
+    }
+    expect(caught).to.equal(failure);
   });
 
   it('should return nothing if required ids do not match', async () => {

@@ -1,7 +1,6 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { Manifest } = require('../../../common/models/Manifest.class');
-const garApi = require('../../../common/services/data-access/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 function flagDuplicatesInSavedPeople(savedPeople, garPeople) {
@@ -51,13 +50,10 @@ module.exports = async (req, res) => {
 
   try {
     const initialSavedPeople = await dataAccessApi.personApi.getPeople(userId, 'individual');
-    const garpeopleJson = await dataAccessApi.garApi.getPeople(garId);
-    const garfileJson = await garApi.get(garId);
-    const garfile = await JSON.parse(garfileJson);
-    const savedPeopleManifest = new Manifest(JSON.stringify({ items: initialSavedPeople }));
-
-    const garpeople = garpeopleJson;
-    const garPeopleManifest = new Manifest(garpeopleJson);
+    const garpeople = await dataAccessApi.garApi.getPeople(garId);
+    const garfile = await dataAccessApi.garApi.get(garId);
+    const savedPeopleManifest = new Manifest({ items: initialSavedPeople });
+    const garPeopleManifest = new Manifest(garpeople);
 
     cookie.setIsMilitaryFlight(garfile.isMilitaryFlight);
 

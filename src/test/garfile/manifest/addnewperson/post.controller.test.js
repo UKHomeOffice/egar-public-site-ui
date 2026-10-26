@@ -1,7 +1,7 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../../global.test');
 const CookieModel = require('../../../../common/models/Cookie.class');
@@ -10,19 +10,16 @@ const documenttype = require('../../../../common/seeddata/egar_saved_people_trav
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
 const validator = require('../../../../common/utils/validator');
 const ValidationRule = require('../../../../common/models/ValidationRule.class');
-const garApi = require('../../../../common/services/data-access/garApi');
-
+const { garApi } = require('../../../../common/services/dataAccessApi');
 const controller = require('../../../../app/garfile/manifest/addnewperson/post.controller');
 
 describe('GAR Manifest Add Person Post Controller', () => {
   let req;
   let res;
   let person;
-  let garApiStub;
+  let patch;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
     req = {
       body: {
         firstName: 'Benjamin',
@@ -40,143 +37,82 @@ describe('GAR Manifest Add Person Post Controller', () => {
         expiryYear: '2150',
         expiryMonth: '05',
         expiryDay: '04',
-        garPeopleId: '9002',
       },
-      session: {
-        gar: { id: 'GAR-ID-1' },
-      },
+      session: { gar: { id: 'stale-session-id' } },
     };
-
     res = {
       redirect: sinon.spy(),
       render: sinon.spy(),
-      locals: {},
+      locals: { gar: { garId: 'GAR-ID-1' } },
     };
-
     person = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      gender: req.body.gender,
+      firstName: 'Benjamin',
+      lastName: 'Sisko',
+      gender: 'Male',
       dateOfBirth: '1937-06-07',
-      placeOfBirth: req.body.birthplace,
-      nationality: 'USA', // Check it upper cases it
-      peopleType: req.body.personType,
-      documentNumber: req.body.travelDocumentNumber,
-      documentType: req.body.travelDocumentType,
-      issuingState: 'USA', // Check it upper cases it
+      placeOfBirth: 'New Orleans',
+      nationality: 'USA',
+      peopleType: 'Captain',
+      documentNumber: '1234567890',
+      documentType: 'Passport',
+      issuingState: 'USA',
       documentExpiryDate: '2150-05-04',
       documentDesc: undefined,
     };
-
-    garApiStub = sinon.stub(garApi, 'patch');
+    patch = sinon.stub(garApi, 'patch').resolves({});
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should render with errors if surname is empty', () => {
+  function expectErrors(errors) {
+    expect(res.redirect).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/addnewperson/index', {
+      req,
+      cookie: new CookieModel(req),
+      person,
+      persontype,
+      documenttype,
+      genderchoice,
+      errors,
+    });
+  }
+
+  it('renders validation errors without adding a person', async () => {
     req.body.lastName = '';
     person.lastName = '';
-    const cookie = new CookieModel(req);
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiStub).to.not.have.been.called;
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/addnewperson/index', {
-          req,
-          cookie,
-          person,
-          persontype,
-          documenttype,
-          genderchoice,
-          errors: [
-            new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
-          ],
-        });
-      });
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors([new ValidationRule(validator.isNotEmpty, 'lastName', '', 'Enter the surname of the person')]);
   });
 
-  it('should redirect back if api rejects', () => {
-    const cookie = new CookieModel(req);
-    garApiStub.rejects('garApi.patch Example Reject');
-    res.locals.gar = { garId: 'GAR-ID-1' };
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then()
-      .then(() => {
-        expect(garApiStub).to.have.been.calledWith('GAR-ID-1', 'Draft', { people: [person] });
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/addnewperson/index', {
-          req,
-          cookie,
-          person,
-          persontype,
-          documenttype,
-          genderchoice,
-          errors: [{ message: 'Error adding a new person. Try again later' }],
-        });
-      });
+  it('renders a generic error if adding the person fails', async () => {
+    patch.rejects(new Error('Connection unavailable'));
+    await controller(req, res);
+    expectErrors([{ message: 'Error adding a new person. Try again later' }]);
   });
 
-  it('should render message if api returns one', () => {
-    const cookie = new CookieModel(req);
-    res.locals.gar = { garId: 'GAR-ID-1' };
-
-    garApiStub.resolves(
-      JSON.stringify({
-        message: 'GAR not found',
+  it('preserves the message on an HTTP rejection', async () => {
+    patch.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'GAR not found' },
       })
     );
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiStub).to.have.been.calledOnceWithExactly('GAR-ID-1', 'Draft', {
-        people: [person],
-      });
-      expect(res.redirect).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/addnewperson/index', {
-        req,
-        cookie,
-        person,
-        persontype,
-        documenttype,
-        genderchoice,
-        errors: [{ message: 'GAR not found' }],
-      });
-    });
+    await controller(req, res);
+    expectErrors([{ message: 'GAR not found' }]);
   });
 
-  it('should redirect on success', () => {
-    garApiStub.resolves(JSON.stringify({}));
-    res.locals.gar = { garId: 'GAR-ID-1' };
+  it('renders a decoded API error rather than continuing', async () => {
+    patch.resolves({ message: 'GAR not found' });
+    await controller(req, res);
+    expectErrors([{ message: 'GAR not found' }]);
+  });
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiStub).to.have.been.calledOnceWithExactly('GAR-ID-1', 'Draft', {
-          people: [person],
-        });
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
-        expect(res.render).to.not.have.been.called;
-      });
+  it('adds the normalized person to the verified GAR and returns to the manifest', async () => {
+    await controller(req, res);
+    expect(patch).to.have.been.calledOnceWithExactly('GAR-ID-1', 'Draft', { people: [person] });
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
   });
 });
