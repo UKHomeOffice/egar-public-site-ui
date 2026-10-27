@@ -152,21 +152,6 @@ module.exports = async (req, res) => {
       req.session.errMsg = err.body;
     }
 
-    if (err === 'garApi.getSupportingDocs Example Reject') {
-      res.redirect('/garfile/supportingdocuments?query=e');
-      return;
-    }
-
-    if (typeof err === 'string' && err.includes('scanFile')) {
-      res.redirect('/garfile/supportingdocuments?query=e');
-      return;
-    }
-
-    if (typeof err === 'string' && err.includes('postFile')) {
-      res.redirect('/garfile/supportingdocuments?query=e');
-      return;
-    }
-
     res.redirect('/garfile/supportingdocuments?query=e');
   }
 };

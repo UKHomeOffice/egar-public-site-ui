@@ -59,6 +59,36 @@ describe('GAR view get controller', () => {
     clock.restore();
   });
 
+  it('renders an error when the initial GAR lookup fails', async () => {
+    garApiGetStub.rejects(new Error('Unavailable'));
+
+    await controller(req, res);
+
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      errors: [{ message: 'Failed to get GAR information' }],
+    });
+  });
+
+  it('retains the page context when the response-code lookup fails', async () => {
+    const cookie = new CookieModel(req);
+    garApiGetStub.resolves({ status: { name: 'Draft' } });
+    garApiGetPeopleStub.onFirstCall().resolves({ items: [] });
+    garApiGetPeopleStub.onSecondCall().rejects(new Error('Unavailable'));
+    garApiGetSupportingDocsStub.resolves({ items: [] });
+    getGarCheckinProgressStub.resolves('Complete');
+
+    await controller(req, res);
+
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      cookie,
+      manifestFields,
+      garfile: {},
+      garpeople: {},
+      garsupportingdocs: {},
+      errors: [{ message: 'Failed to get GAR information' }],
+    });
+  });
+
   describe('checkGARUser', () => {
     it('should render page if Draft', async () => {
       const cookie = new CookieModel(req);

@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
 
   try {
     const people = await personApi.getPeople(cookie.getUserDbId(), 'individual');
-    const manifest = new Manifest(JSON.stringify({ items: people }));
+    const manifest = new Manifest({ items: people });
 
     if (people.message) {
       logger.warn('Failed to get saved people', { errorMessage: people.message });
