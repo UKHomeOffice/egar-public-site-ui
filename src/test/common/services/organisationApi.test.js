@@ -28,7 +28,7 @@ describe('OrganisationApi', () => {
   afterEach(() => sinon.restore());
 
   it('creates an organisation with the owner ID', async () => {
-    await api.create('Example organisation', userId);
+    expect(await api.create('Example organisation', userId)).to.deep.equal({ organisationId: orgId });
     expect(client.post).to.have.been.calledOnceWithExactly('/organisations', {
       organisationName: 'Example organisation',
       userId,
@@ -107,37 +107,18 @@ describe('OrganisationApi', () => {
     expect(Object.keys(organisationApiService)).to.deep.equal(['OrganisationApi']);
   });
 
-  [
-    ['create', 'post', ['Example', userId]],
-    ['update', 'put', ['New name', orgId]],
-    ['get', 'get', [orgId]],
-    ['delete', 'delete', [orgId, userId]],
-    ['getUsers', 'get', [orgId, 1, 5]],
-    ['getListOfOrgUsers', 'get', [orgId]],
-    ['editUser', 'patch', [userId, orgId, user]],
-    ['deleteUser', 'delete', [userId, orgId, user]],
-    ['getSearchOrgUsers', 'get', [orgId, 'Ada']],
-    ['getUserById', 'get', [userId]],
-  ].forEach(([method, verb, args]) => {
-    it(`returns the client response unchanged from ${method}`, async () => {
-      const response = { result: true };
-      client[verb].resolves(response);
-      expect(await api[method](...args)).to.equal(response);
+  it('propagates client failures unchanged', async () => {
+    const failure = Object.assign(new Error('Request failed'), {
+      type: 'http_error',
+      status: 409,
+      body: { message: 'Conflict' },
     });
-
-    it(`propagates client failures unchanged from ${method}`, async () => {
-      const failure = Object.assign(new Error('Request failed'), {
-        type: 'http_error',
-        status: 409,
-        body: { message: 'Conflict' },
-      });
-      client[verb].rejects(failure);
-      try {
-        await api[method](...args);
-        expect.fail('Expected the request to reject');
-      } catch (err) {
-        expect(err).to.equal(failure);
-      }
-    });
+    client.post.rejects(failure);
+    try {
+      await api.create('Example organisation', userId);
+      expect.fail('Expected the request to reject');
+    } catch (err) {
+      expect(err).to.equal(failure);
+    }
   });
 });

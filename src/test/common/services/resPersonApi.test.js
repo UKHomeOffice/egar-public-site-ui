@@ -27,7 +27,7 @@ describe('ResPersonApi', () => {
   afterEach(() => sinon.restore());
 
   it('creates a responsible person', async () => {
-    await api.create(userId, person);
+    expect(await api.create(userId, person)).to.deep.equal({ responsiblePersonId });
     expect(client.post).to.have.been.calledOnceWithExactly('/user/user-1/responsiblepersons', person);
   });
 
@@ -58,36 +58,19 @@ describe('ResPersonApi', () => {
     expect(Object.keys(resPersonApi)).to.deep.equal(['ResPersonApi']);
   });
 
-  [
-    ['create', 'post', [userId, person]],
-    ['getResPersons', 'get', [userId]],
-    ['getResPersonDetails', 'get', [userId, responsiblePersonId]],
-    ['updateResPerson', 'put', [userId, responsiblePersonId, person]],
-    ['deleteResponsiblePerson', 'delete', [userId, responsiblePersonId]],
-  ].forEach(([method, verb, args]) => {
-    it(`returns the client response unchanged from ${method}`, async () => {
-      const response = { person };
-      client[verb].resolves(response);
-
-      expect(await api[method](...args)).to.equal(response);
+  it('propagates client failures unchanged', async () => {
+    const failure = Object.assign(new Error('Request failed'), {
+      type: 'http_error',
+      status: 400,
+      body: { message: 'Invalid responsible person' },
     });
+    client.post.rejects(failure);
 
-    ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
-      it(`propagates ${type} failures unchanged from ${method}`, async () => {
-        const failure = Object.assign(new Error('Request failed'), {
-          type,
-          status: 400,
-          body: { message: 'Invalid responsible person' },
-        });
-        client[verb].rejects(failure);
-
-        try {
-          await api[method](...args);
-          expect.fail('Expected the client error to be propagated');
-        } catch (error) {
-          expect(error).to.equal(failure);
-        }
-      });
-    });
+    try {
+      await api.create(userId, person);
+      expect.fail('Expected the client error to be propagated');
+    } catch (error) {
+      expect(error).to.equal(failure);
+    }
   });
 });

@@ -67,31 +67,24 @@ describe('GAR Review Get Controller', () => {
     sinon.restore();
   });
 
-  it('should do nothing if retrieving a gar causes an issue', () => {
+  it('renders an error if retrieving a GAR fails', async () => {
     const cookie = new CookieModel(req);
     garApiGetStub.resolves();
     garApiGetPeopleStub.resolves();
     garApiGetSupportingDocsStub.rejects('garApi.getSupportingDocs Example Reject');
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(cookie.getGarId()).to.eq('ABCDE');
-        expect(garApiGetStub).to.have.been.calledWith(cookie.getGarId());
-        expect(garApiGetPeopleStub).to.have.been.calledWith(cookie.getGarId());
-        expect(garApiGetSupportingDocsStub).to.have.been.calledWith(cookie.getGarId());
-        expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
-          cookie,
-          errors: [{ message: 'There was an error retrieving the GAR. Try again later' }],
-        });
-      });
+    await controller(req, res);
+    expect(cookie.getGarId()).to.eq('ABCDE');
+    expect(garApiGetStub).to.have.been.calledWith(cookie.getGarId());
+    expect(garApiGetPeopleStub).to.have.been.calledWith(cookie.getGarId());
+    expect(garApiGetSupportingDocsStub).to.have.been.calledWith(cookie.getGarId());
+    expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
+      cookie,
+      errors: [{ message: 'There was an error retrieving the GAR. Try again later' }],
+    });
   });
 
-  it('should return error messages on validation', () => {
+  it('should return error messages on validation', async () => {
     const cookie = new CookieModel(req);
     garApiGetStub.resolves({
       status: {
@@ -104,66 +97,58 @@ describe('GAR Review Get Controller', () => {
     });
     garApiGetSupportingDocsStub.resolves({});
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then()
-      .then(() => {
-        expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
-          cookie,
-          manifestFields,
-          garfile: {
-            status: {
-              name: 'draft',
-            },
+    await controller(req, res);
+    expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
+      cookie,
+      manifestFields,
+      garfile: {
+        status: {
+          name: 'draft',
+        },
+      },
+      garpeople: {
+        items: [],
+      },
+      garsupportingdocs: {},
+      showChangeLinks: true,
+      isJourneyUkInbound: true,
+      errors: [
+        new ValidationRule(
+          validator.isValidDepAndArrDate,
+          'departure',
+          {
+            arrivalDate: undefined,
+            arrivalTime: undefined,
+            departureDate: undefined,
+            departureTime: undefined,
           },
-          garpeople: {
-            items: [],
-          },
-          garsupportingdocs: {},
-          showChangeLinks: true,
-          isJourneyUkInbound: true,
-          errors: [
-            new ValidationRule(
-              validator.isValidDepAndArrDate,
-              'departure',
-              {
-                arrivalDate: undefined,
-                arrivalTime: undefined,
-                departureDate: undefined,
-                departureTime: undefined,
-              },
-              'Arrival time must be after departure time'
-            ),
-            new ValidationRule(validator.notEmpty, 'aircraft', undefined, 'Aircraft registration must be completed'),
-            new ValidationRule(
-              validator.notEmpty,
-              'responsiblePerson',
-              undefined,
-              'Responsible person details must be completed'
-            ),
-            new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
-            new ValidationRule(
-              validator.notEmpty,
-              'intentionValue',
-              undefined,
-              'Customs Declaration question not answered'
-            ),
-            new ValidationRule(
-              validator.valuetrue,
-              'manifest',
-              '',
-              "There must be at least one captain or crew member on the voyage. If this is a military flight, this error can be bypassed in the manifest's military flight section."
-            ),
-          ],
-        });
-      });
+          'Arrival time must be after departure time'
+        ),
+        new ValidationRule(validator.notEmpty, 'aircraft', undefined, 'Aircraft registration must be completed'),
+        new ValidationRule(
+          validator.notEmpty,
+          'responsiblePerson',
+          undefined,
+          'Responsible person details must be completed'
+        ),
+        new ValidationRule(validator.notEmpty, 'customs', undefined, 'Visit Reason question not answered'),
+        new ValidationRule(
+          validator.notEmpty,
+          'intentionValue',
+          undefined,
+          'Customs Declaration question not answered'
+        ),
+        new ValidationRule(
+          validator.valuetrue,
+          'manifest',
+          '',
+          "There must be at least one captain or crew member on the voyage. If this is a military flight, this error can be bypassed in the manifest's military flight section."
+        ),
+      ],
+    });
   });
 
-  it('should render the page but log out a message if API returns one', () => {
+  it('renders the page when supporting documents contain an API message', async () => {
     const cookie = new CookieModel(req);
     garApiGetStub.resolves({
       registration: 'Z-AFTC',
@@ -187,44 +172,36 @@ describe('GAR Review Get Controller', () => {
       message: 'GAR not found',
     });
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then()
-      .then(() => {
-        expect(res.render).to.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
-          cookie,
-          manifestFields,
-          garfile: {
-            arrivalDate: '2012-12-14',
-            arrivalTime: '16:04:00',
-            departureDate: '2012-12-13',
-            departureTime: '15:03:00',
-            freeCirculation: 'No',
-            intentionValue: 'Yes',
-            prohibitedGoods: 'No',
-            registration: 'Z-AFTC',
-            responsibleGivenName: 'James',
-            status: { name: 'draft' },
-            visitReason: 'No',
-          },
-          garpeople: {
-            items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
-          },
-          garsupportingdocs: {
-            message: 'GAR not found',
-          },
-          showChangeLinks: true,
-          isJourneyUkInbound: true,
-        });
-      });
+    await controller(req, res);
+    expect(res.render).to.have.been.called;
+    expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
+      cookie,
+      manifestFields,
+      garfile: {
+        arrivalDate: '2012-12-14',
+        arrivalTime: '16:04:00',
+        departureDate: '2012-12-13',
+        departureTime: '15:03:00',
+        freeCirculation: 'No',
+        intentionValue: 'Yes',
+        prohibitedGoods: 'No',
+        registration: 'Z-AFTC',
+        responsibleGivenName: 'James',
+        status: { name: 'draft' },
+        visitReason: 'No',
+      },
+      garpeople: {
+        items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
+      },
+      garsupportingdocs: {
+        message: 'GAR not found',
+      },
+      showChangeLinks: true,
+      isJourneyUkInbound: true,
+    });
   });
 
-  it('should render the page as appropriate', () => {
+  it('should render the page as appropriate', async () => {
     const cookie = new CookieModel(req);
     garApiGetStub.resolves({
       registration: 'Z-AFTC',
@@ -246,38 +223,30 @@ describe('GAR Review Get Controller', () => {
     });
     garApiGetSupportingDocsStub.resolves({});
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then()
-      .then(() => {
-        expect(res.render).to.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
-          cookie,
-          manifestFields,
-          garfile: {
-            arrivalDate: '2012-12-14',
-            arrivalTime: '08:17:00',
-            departureDate: '2012-12-13',
-            departureTime: '15:04:00',
-            freeCirculation: 'No',
-            intentionValue: 'Yes',
-            prohibitedGoods: 'No',
-            registration: 'Z-AFTC',
-            responsibleGivenName: 'James',
-            status: { name: 'draft' },
-            visitReason: 'No',
-          },
-          garpeople: {
-            items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
-          },
-          garsupportingdocs: {},
-          showChangeLinks: true,
-          isJourneyUkInbound: true,
-        });
-      });
+    await controller(req, res);
+    expect(res.render).to.have.been.called;
+    expect(res.render).to.have.been.calledWith('app/garfile/review/index', {
+      cookie,
+      manifestFields,
+      garfile: {
+        arrivalDate: '2012-12-14',
+        arrivalTime: '08:17:00',
+        departureDate: '2012-12-13',
+        departureTime: '15:04:00',
+        freeCirculation: 'No',
+        intentionValue: 'Yes',
+        prohibitedGoods: 'No',
+        registration: 'Z-AFTC',
+        responsibleGivenName: 'James',
+        status: { name: 'draft' },
+        visitReason: 'No',
+      },
+      garpeople: {
+        items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
+      },
+      garsupportingdocs: {},
+      showChangeLinks: true,
+      isJourneyUkInbound: true,
+    });
   });
 });

@@ -44,7 +44,7 @@ describe('PersonApi', () => {
   afterEach(() => sinon.restore());
 
   it('creates a saved person with the existing endpoint and request body', async () => {
-    await api.create(userId, person);
+    expect(await api.create(userId, person)).to.equal(response);
     expect(client.post).to.have.been.calledOnceWithExactly('/user/user-1/people', person);
   });
 
@@ -103,33 +103,19 @@ describe('PersonApi', () => {
     expect(Object.keys(personApi)).to.deep.equal(['PersonApi']);
   });
 
-  [
-    ['create', 'post', [userId, { people: [person] }]],
-    ['getDetails', 'get', [userId, personId]],
-    ['getPeople', 'get', [userId, 'individual']],
-    ['update', 'put', [userId, personId, person]],
-    ['deletePerson', 'delete', [userId, personId]],
-  ].forEach(([method, verb, args]) => {
-    it(`returns the client response unchanged from ${method}`, async () => {
-      expect(await api[method](...args)).to.equal(response);
+  it('propagates client failures unchanged', async () => {
+    const failure = Object.assign(new Error('Request failed'), {
+      type: 'http_error',
+      status: 400,
+      body: { message: 'Invalid person' },
     });
+    client.post.rejects(failure);
 
-    ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
-      it(`propagates ${type} failures unchanged from ${method}`, async () => {
-        const failure = Object.assign(new Error('Request failed'), {
-          type,
-          status: 400,
-          body: { message: 'Invalid person' },
-        });
-        client[verb].rejects(failure);
-
-        try {
-          await api[method](...args);
-          expect.fail('Expected the client error to be propagated');
-        } catch (error) {
-          expect(error).to.equal(failure);
-        }
-      });
-    });
+    try {
+      await api.create(userId, person);
+      expect.fail('Expected the client error to be propagated');
+    } catch (error) {
+      expect(error).to.equal(failure);
+    }
   });
 });

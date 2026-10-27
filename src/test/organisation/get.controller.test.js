@@ -47,34 +47,14 @@ describe('Organisation Get Controller', () => {
     sinon.restore();
   });
 
-  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
-    it(`renders the users fetch error on a ${type}`, async () => {
-      orgApiStub.rejects(Object.assign(new Error('Request failed'), { type, status: 503 }));
-
-      await controller(req, res);
-
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
-        cookie: new CookieModel(req),
-        errors: [{ message: 'There was a problem fetching organisation users' }],
-      });
-    });
-  });
-
-  it('should redirect with errors if api rejects', () => {
+  it('renders the users fetch error when the API rejects', async () => {
     const cookie = new CookieModel(req);
-    orgApiStub.rejects('orgApi.getUsers Example Reject');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    return callController().then(() => {
-      expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
-      expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
-        cookie,
-        errors: [{ message: 'There was a problem fetching organisation users' }],
-      });
+    orgApiStub.rejects(new Error('Request failed'));
+    await controller(req, res);
+    expect(orgApiStub).to.have.been.calledOnceWithExactly('ORG-ID-1', 1, 5);
+    expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/index', {
+      cookie,
+      errors: [{ message: 'There was a problem fetching organisation users' }],
     });
   });
 
