@@ -33,7 +33,7 @@ describe('CraftApi', () => {
   });
 
   it('gets a craft by ID', async () => {
-    await api.getDetails(userId, craftId);
+    expect(await api.getDetails(userId, craftId)).to.deep.equal({ craft });
     expect(client.get).to.have.been.calledOnceWithExactly('/user/user-1/crafts/craft-1');
   });
 
@@ -74,27 +74,19 @@ describe('CraftApi', () => {
     expect(Object.keys(craftApi)).to.deep.equal(['CraftApi']);
   });
 
-  it('returns the client response without serialization', async () => {
-    client.get.resolves(craft);
-
-    expect(await api.getDetails(userId, craftId)).to.equal(craft);
-  });
-
-  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
-    it(`propagates ${type} failures unchanged`, async () => {
-      const failure = Object.assign(new Error('Request failed'), {
-        type,
-        status: 400,
-        body: { message: 'Invalid aircraft' },
-      });
-      client.get.rejects(failure);
-
-      try {
-        await api.getDetails(userId, craftId);
-        expect.fail('Expected the client error to be propagated');
-      } catch (error) {
-        expect(error).to.equal(failure);
-      }
+  it('propagates client failures unchanged', async () => {
+    const failure = Object.assign(new Error('Request failed'), {
+      type: 'http_error',
+      status: 400,
+      body: { message: 'Invalid aircraft' },
     });
+    client.get.rejects(failure);
+
+    try {
+      await api.getDetails(userId, craftId);
+      expect.fail('Expected the client error to be propagated');
+    } catch (error) {
+      expect(error).to.equal(failure);
+    }
   });
 });

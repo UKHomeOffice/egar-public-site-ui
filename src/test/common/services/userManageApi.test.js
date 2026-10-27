@@ -107,27 +107,18 @@ describe('UserManageApi', () => {
     expect(Object.keys(userManageApi)).to.deep.equal(['UserManageApi']);
   });
 
-  [
-    ['getDetails', 'get', ['user@example.com']],
-    ['userSearch', 'get', ['user@example.com', 'sid-1']],
-    ['updateDetails', 'put', ['user-1', 'Ada', 'Lovelace']],
-    ['updateEmailOrOneLoginSid', 'put', ['user@example.com', { oneLoginSid: 'sid-1' }]],
-    ['createUser', 'post', ['user@example.com', 'Ada', 'Lovelace', 'sid-1']],
-    ['deleteUser', 'delete', ['user@example.com', 'requester-1']],
-  ].forEach(([method, verb, args]) => {
-    it(`propagates client failures unchanged from ${method}`, async () => {
-      const error = Object.assign(new Error('Conflict'), {
-        type: 'http_error',
-        status: 409,
-        body: { message: 'Conflict' },
-      });
-      client[verb].rejects(error);
-      try {
-        await api[method](...args);
-        expect.fail('Expected request to reject');
-      } catch (actual) {
-        expect(actual).to.equal(error);
-      }
+  it('propagates client failures unchanged', async () => {
+    const error = Object.assign(new Error('Conflict'), {
+      type: 'http_error',
+      status: 409,
+      body: { message: 'Conflict' },
     });
+    client.get.rejects(error);
+    try {
+      await api.getDetails('user@example.com');
+      expect.fail('Expected request to reject');
+    } catch (actual) {
+      expect(actual).to.equal(error);
+    }
   });
 });

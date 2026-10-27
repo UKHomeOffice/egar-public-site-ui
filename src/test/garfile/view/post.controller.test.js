@@ -59,185 +59,140 @@ describe('GAR view post controller', () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
-    garApiGetStub.resolves(new Promise((resolve) => resolve({ message: 'GAR does not exist' })));
+    garApiGetStub.resolves({ message: 'GAR does not exist' });
     garApiGetPeopleStub.resolves({ message: 'GAR does not exist' });
-    garApiGetSupportingDocsStub.resolves(new Promise((resolve) => resolve({ message: 'GAR does not exist' })));
+    garApiGetSupportingDocsStub.resolves({ message: 'GAR does not exist' });
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(res.redirect).to.have.been.calledWithExactly('/home');
-        expect(res.render).to.not.have.been.called;
-      });
+    expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
+    expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(res.redirect).to.have.been.calledWithExactly('/home');
+    expect(res.render).to.not.have.been.called;
   });
 
-  it('should render with an error if one of the api calls rejects', () => {
+  it('should render with an error if one of the api calls rejects', async () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
     garApiGetStub.resolves({});
     garApiGetPeopleStub.resolves({});
     garApiGetSupportingDocsStub.rejects('garApi.getSupportingDocs Example Reject');
-    const callController = async () => {
-      await controller(req, res);
-    };
 
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
-          cookie,
-          manifestFields,
-          garfile: {},
-          garpeople: {},
-          garsupportingdocs: {},
-          numberOf0TResponseCodes: 0,
-          errors: [{ message: 'Failed to get GAR information' }],
-        });
-      });
+    await controller(req, res);
+
+    expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
+    expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      cookie,
+      manifestFields,
+      garfile: {},
+      garpeople: {},
+      garsupportingdocs: {},
+      numberOf0TResponseCodes: 0,
+      errors: [{ message: 'Failed to get GAR information' }],
+    });
   });
 
-  it('should use the session cookie gar id if not in the body', () => {
+  it('should use the session cookie gar id if not in the body', async () => {
     delete req.body.garId;
     req.session.gar = { id: 'GAR-ID-EXAMPLE-2' };
     const cookie = new CookieModel(req);
-    // cookie.setGarId('GAR-ID-EXAMPLE-2');
-    // cookie.setOrganisationId('ORG-123');
 
-    garApiGetStub.resolves(
-      new Promise((resolve) =>
-        resolve({
-          garId: 'GAR-ID-EXAMPLE-2',
-          status: { name: 'Draft' },
-          userId: 'USER-123',
-        })
-      )
-    );
-    garApiGetPeopleStub.resolves(
-      new Promise((resolve) =>
-        resolve({
-          items: [
-            { id: 'PERSON-1', firstName: 'Simona' },
-            { id: 'PERSON-2', firstName: 'Serena' },
-          ],
-        })
-      )
-    );
-    garApiGetSupportingDocsStub.resolves(
-      new Promise((resolve) =>
-        resolve({
-          items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-        })
-      )
-    );
-    getDurationBeforeDepartureStub.returns(125);
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2', true);
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2');
-        expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
-          cookie,
-          manifestFields,
-          garfile: { garId: 'GAR-ID-EXAMPLE-2', status: { name: 'Draft' } },
-          isAbleToCancelGar: true,
-          garpeople: {
-            items: [
-              { id: 'PERSON-1', firstName: 'Simona' },
-              { id: 'PERSON-2', firstName: 'Serena' },
-            ],
-          },
-          garsupportingdocs: {
-            items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-          },
-          showChangeLinks: true,
-          isJourneyUKInbound: true,
-          durationInDeparture: 125,
-          numberOf0TResponseCodes: 0,
-          isResubmitted: false,
-        });
-      });
-  });
-
-  it('should render page if Draft', () => {
-    const cookie = new CookieModel(req);
-    cookie.setGarId('GAR-ID-EXAMPLE-1');
-
-    garApiGetStub.resolves(
-      new Promise((resolve) =>
-        resolve({
-          garId: 'GAR-ID-EXAMPLE-1',
-          status: { name: 'Draft' },
-          userId: 'USER-123',
-        })
-      )
-    );
+    garApiGetStub.resolves({
+      garId: 'GAR-ID-EXAMPLE-2',
+      status: { name: 'Draft' },
+      userId: 'USER-123',
+    });
     garApiGetPeopleStub.resolves({
       items: [
         { id: 'PERSON-1', firstName: 'Simona' },
         { id: 'PERSON-2', firstName: 'Serena' },
       ],
     });
-    garApiGetSupportingDocsStub.resolves(
-      new Promise((resolve) =>
-        resolve({
-          items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-        })
-      )
-    );
+    garApiGetSupportingDocsStub.resolves({
+      items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+    });
+    getDurationBeforeDepartureStub.returns(125);
+
+    await controller(req, res);
+
+    expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2', true);
+    expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2');
+    expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-2');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      cookie,
+      manifestFields,
+      garfile: { garId: 'GAR-ID-EXAMPLE-2', status: { name: 'Draft' } },
+      isAbleToCancelGar: true,
+      garpeople: {
+        items: [
+          { id: 'PERSON-1', firstName: 'Simona' },
+          { id: 'PERSON-2', firstName: 'Serena' },
+        ],
+      },
+      garsupportingdocs: {
+        items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+      },
+      showChangeLinks: true,
+      isJourneyUKInbound: true,
+      durationInDeparture: 125,
+      numberOf0TResponseCodes: 0,
+      isResubmitted: false,
+    });
+  });
+
+  it('should render page if Draft', async () => {
+    const cookie = new CookieModel(req);
+    cookie.setGarId('GAR-ID-EXAMPLE-1');
+
+    garApiGetStub.resolves({
+      garId: 'GAR-ID-EXAMPLE-1',
+      status: { name: 'Draft' },
+      userId: 'USER-123',
+    });
+    garApiGetPeopleStub.resolves({
+      items: [
+        { id: 'PERSON-1', firstName: 'Simona' },
+        { id: 'PERSON-2', firstName: 'Serena' },
+      ],
+    });
+    garApiGetSupportingDocsStub.resolves({
+      items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+    });
 
     getDurationBeforeDepartureStub.returns(125);
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
-          cookie,
-          manifestFields,
-          garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Draft' } },
-          isAbleToCancelGar: true,
-          garpeople: {
-            items: [
-              { id: 'PERSON-1', firstName: 'Simona' },
-              { id: 'PERSON-2', firstName: 'Serena' },
-            ],
-          },
-          garsupportingdocs: {
-            items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-          },
-          showChangeLinks: true,
-          isJourneyUKInbound: true,
-          durationInDeparture: 125,
-          numberOf0TResponseCodes: 0,
-          isResubmitted: false,
-        });
-      });
+    expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
+    expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      cookie,
+      manifestFields,
+      garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Draft' } },
+      isAbleToCancelGar: true,
+      garpeople: {
+        items: [
+          { id: 'PERSON-1', firstName: 'Simona' },
+          { id: 'PERSON-2', firstName: 'Serena' },
+        ],
+      },
+      garsupportingdocs: {
+        items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+      },
+      showChangeLinks: true,
+      isJourneyUKInbound: true,
+      durationInDeparture: 125,
+      numberOf0TResponseCodes: 0,
+      isResubmitted: false,
+    });
   });
 
-  it('should render submitted page if Cancelled', () => {
+  it('should render submitted page if Cancelled', async () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
@@ -258,40 +213,34 @@ describe('GAR view post controller', () => {
 
     getDurationBeforeDepartureStub.returns(125);
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
-          cookie,
-          manifestFields,
-          showChangeLinks: false,
-          isJourneyUKInbound: true,
-          isAbleToCancelGar: true,
-          garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Cancelled' } },
-          garpeople: {
-            items: [
-              { id: 'PERSON-1', firstName: 'Simona' },
-              { id: 'PERSON-2', firstName: 'Serena' },
-            ],
-          },
-          garsupportingdocs: {
-            items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-          },
-          numberOf0TResponseCodes: 0,
-          durationInDeparture: 125,
-          isResubmitted: false,
-        });
-      });
+    expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
+    expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      cookie,
+      manifestFields,
+      showChangeLinks: false,
+      isJourneyUKInbound: true,
+      isAbleToCancelGar: true,
+      garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Cancelled' } },
+      garpeople: {
+        items: [
+          { id: 'PERSON-1', firstName: 'Simona' },
+          { id: 'PERSON-2', firstName: 'Serena' },
+        ],
+      },
+      garsupportingdocs: {
+        items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+      },
+      numberOf0TResponseCodes: 0,
+      durationInDeparture: 125,
+      isResubmitted: false,
+    });
   });
 
-  it('should render submitted page if Submitted, matching org ids', () => {
+  it('should render submitted page if Submitted, matching org ids', async () => {
     req.session.org = { i: 'ORG-123' };
     const cookie = new CookieModel(req);
     cookie.setGarId('GAR-ID-EXAMPLE-1');
@@ -312,40 +261,34 @@ describe('GAR view post controller', () => {
     });
     getDurationBeforeDepartureStub.returns(125);
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
-          cookie,
-          manifestFields,
-          showChangeLinks: false,
-          isJourneyUKInbound: false,
-          isAbleToCancelGar: true,
-          garfile: outboundGar(),
-          garpeople: {
-            items: [
-              { id: 'PERSON-1', firstName: 'Simona' },
-              { id: 'PERSON-2', firstName: 'Serena' },
-            ],
-          },
-          garsupportingdocs: {
-            items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-          },
-          durationInDeparture: 125,
-          numberOf0TResponseCodes: 0,
-          isResubmitted: false,
-        });
-      });
+    expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
+    expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      cookie,
+      manifestFields,
+      showChangeLinks: false,
+      isJourneyUKInbound: false,
+      isAbleToCancelGar: true,
+      garfile: outboundGar(),
+      garpeople: {
+        items: [
+          { id: 'PERSON-1', firstName: 'Simona' },
+          { id: 'PERSON-2', firstName: 'Serena' },
+        ],
+      },
+      garsupportingdocs: {
+        items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+      },
+      durationInDeparture: 125,
+      numberOf0TResponseCodes: 0,
+      isResubmitted: false,
+    });
   });
 
-  it('should render submitted page if Submitted', () => {
+  it('should render submitted page if Submitted', async () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('GAR-ID-EXAMPLE-1');
 
@@ -364,40 +307,34 @@ describe('GAR view post controller', () => {
     });
     getDurationBeforeDepartureStub.returns(125);
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
-          cookie,
-          manifestFields,
-          showChangeLinks: false,
-          isJourneyUKInbound: false,
-          isAbleToCancelGar: true,
-          garfile: outboundGar(),
-          garpeople: {
-            items: [
-              { id: 'PERSON-1', firstName: 'Simona' },
-              { id: 'PERSON-2', firstName: 'Serena' },
-            ],
-          },
-          garsupportingdocs: {
-            items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-          },
-          numberOf0TResponseCodes: 0,
-          durationInDeparture: 125,
-          isResubmitted: false,
-        });
-      });
+    expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
+    expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      cookie,
+      manifestFields,
+      showChangeLinks: false,
+      isJourneyUKInbound: false,
+      isAbleToCancelGar: true,
+      garfile: outboundGar(),
+      garpeople: {
+        items: [
+          { id: 'PERSON-1', firstName: 'Simona' },
+          { id: 'PERSON-2', firstName: 'Serena' },
+        ],
+      },
+      garsupportingdocs: {
+        items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+      },
+      numberOf0TResponseCodes: 0,
+      durationInDeparture: 125,
+      isResubmitted: false,
+    });
   });
 
-  it('Should return isAbleToSubmitGar as false value is 2 weeks old than cbp submission date', () => {
+  it('disables cancellation for a departure more than two weeks ago', async () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('GAR-ID-EXAMPLE-1');
     const userOldSubmissionGar = outboundGar();
@@ -405,61 +342,47 @@ describe('GAR view post controller', () => {
     userOldSubmissionGar.departureDate = '2023-03-20';
     userOldSubmissionGar.departureTime = '10:55:26';
 
-    garApiGetStub.resolves(new Promise((resolve) => resolve(userOldSubmissionGar)));
-    garApiGetPeopleStub.resolves(
-      new Promise((resolve) =>
-        resolve({
-          items: [
-            { id: 'PERSON-1', firstName: 'Simona' },
-            { id: 'PERSON-2', firstName: 'Serena' },
-          ],
-        })
-      )
-    );
+    garApiGetStub.resolves(userOldSubmissionGar);
+    garApiGetPeopleStub.resolves({
+      items: [
+        { id: 'PERSON-1', firstName: 'Simona' },
+        { id: 'PERSON-2', firstName: 'Serena' },
+      ],
+    });
 
-    garApiGetSupportingDocsStub.resolves(
-      new Promise((resolve) =>
-        resolve({
-          items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-        })
-      )
-    );
+    garApiGetSupportingDocsStub.resolves({
+      items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+    });
     getDurationBeforeDepartureStub.returns(125);
-
-    const callController = async () => {
-      await controller(req, res);
-    };
 
     let resultantOutboundGar = outboundGar();
     resultantOutboundGar.departureDate = '2023-03-20';
     resultantOutboundGar.departureTime = '10:55:26';
 
-    callController()
-      .then()
-      .then(() => {
-        expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
-        expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
-          cookie,
-          manifestFields,
-          showChangeLinks: false,
-          isJourneyUKInbound: false,
-          isAbleToCancelGar: false,
-          garfile: resultantOutboundGar,
-          garpeople: {
-            items: [
-              { id: 'PERSON-1', firstName: 'Simona' },
-              { id: 'PERSON-2', firstName: 'Serena' },
-            ],
-          },
-          garsupportingdocs: {
-            items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-          },
-          numberOf0TResponseCodes: 0,
-          durationInDeparture: 125,
-          isResubmitted: false,
-        });
-      });
+    await controller(req, res);
+
+    expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1', true);
+    expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      cookie,
+      manifestFields,
+      showChangeLinks: false,
+      isJourneyUKInbound: false,
+      isAbleToCancelGar: false,
+      garfile: resultantOutboundGar,
+      garpeople: {
+        items: [
+          { id: 'PERSON-1', firstName: 'Simona' },
+          { id: 'PERSON-2', firstName: 'Serena' },
+        ],
+      },
+      garsupportingdocs: {
+        items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+      },
+      numberOf0TResponseCodes: 0,
+      durationInDeparture: 125,
+      isResubmitted: false,
+    });
   });
 });

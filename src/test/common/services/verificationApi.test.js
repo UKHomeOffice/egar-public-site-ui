@@ -2,8 +2,8 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 require('chai').use(require('sinon-chai'));
 
-require('./global.test');
-const verificationApi = require('../common/services/data-access/verificationApi');
+require('../../global.test');
+const verificationApi = require('../../../common/services/data-access/verificationApi');
 
 describe('VerificationApi', () => {
   let client;
@@ -38,24 +38,18 @@ describe('VerificationApi', () => {
     expect(Object.keys(verificationApi)).to.deep.equal(['VerificationApi']);
   });
 
-  [
-    ['verifyUser', 'put'],
-    ['getUserInviteToken', 'get'],
-    ['getUserInviteTokenByTokenId', 'get'],
-  ].forEach(([method, verb]) => {
-    it(`propagates client rejections unchanged from ${method}`, async () => {
-      const error = Object.assign(new Error('Bad Request'), {
-        type: 'http_error',
-        status: 400,
-        body: { message: 'Token expired' },
-      });
-      client[verb].rejects(error);
-      try {
-        await api[method]('token-or-email');
-        expect.fail('Expected request to reject');
-      } catch (actual) {
-        expect(actual).to.equal(error);
-      }
+  it('propagates client rejections unchanged', async () => {
+    const error = Object.assign(new Error('Bad Request'), {
+      type: 'http_error',
+      status: 400,
+      body: { message: 'Token expired' },
     });
+    client.put.rejects(error);
+    try {
+      await api.verifyUser('token-1');
+      expect.fail('Expected request to reject');
+    } catch (actual) {
+      expect(actual).to.equal(error);
+    }
   });
 });

@@ -3,10 +3,10 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
-require('./global.test');
+require('../../global.test');
 chai.use(sinonChai);
-const personApi = require('../common/services/data-access/personApi');
-const { HttpClient } = require('../common/services/httpClient');
+const personApi = require('../../../common/services/data-access/personApi');
+const { HttpClient } = require('../../../common/services/httpClient');
 
 describe('PersonApi', () => {
   const userId = 'user-1';
