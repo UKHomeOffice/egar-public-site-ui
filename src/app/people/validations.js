@@ -8,8 +8,35 @@ module.exports.validations = (req) => {
   const docTypeOther = req.body.travelDocumentType;
 
   const peopleValidationRules = [
-    [new ValidationRule(validator.bornAfter1900, 'dobDate', dobObj, 'Enter a real date of birth')],
-    [new ValidationRule(validator.realDateInFuture, 'expiryDate', expiryDateObj, 'Enter a real document expiry date')],
+    [new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select who you are adding')],
+    [
+      new ValidationRule(
+        validator.notEmpty,
+        'travelDocumentType',
+        req.body.travelDocumentType,
+        'Select the travel document type'
+      ),
+    ],
+    [
+      new ValidationRule(
+        validator.notEmpty,
+        'travelDocumentNumber',
+        req.body.travelDocumentNumber,
+        'Enter the document number'
+      ),
+      new ValidationRule(
+        validator.isValidStringLength,
+        'travelDocumentNumber',
+        req.body.travelDocumentNumber,
+        `Document number must be ${MAX_STRING_LENGTH} characters or less`
+      ),
+      new ValidationRule(
+        validator.isAlphanumeric,
+        'travelDocumentNumber',
+        req.body.travelDocumentNumber,
+        `Document number must be alphanumeric only.`
+      ),
+    ],
     [
       new ValidationRule(validator.isNotEmpty, 'firstName', req.body.firstName, 'Enter the given names of the person'),
       new ValidationRule(
@@ -42,6 +69,23 @@ module.exports.validations = (req) => {
       ),
       new ValidationRule(validator.notEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
     ],
+    [new ValidationRule(validator.bornAfter1900, 'dobDate', dobObj, 'Enter a real date of birth')],
+    [
+      new ValidationRule(
+        validator.isValidBirthPlaceName,
+        'birthplace',
+        req.body.birthplace,
+        'Place of birth must only include English alphabet letters (A to Z), spaces and hyphens (-)'
+      ),
+      new ValidationRule(
+        validator.isValidStringLength,
+        'birthplace',
+        req.body.birthplace,
+        `Place of birth must be ${MAX_STRING_LENGTH} characters or less`
+      ),
+      new ValidationRule(validator.notOnlySymbols, 'birthplace', req.body.birthplace, `Enter a valid place of birth.`),
+    ],
+    [new ValidationRule(validator.notEmpty, 'gender', req.body.gender, 'Select the sex of the person')],
     [
       new ValidationRule(
         validator.notEmpty,
@@ -58,57 +102,13 @@ module.exports.validations = (req) => {
     ],
     [
       new ValidationRule(
-        validator.isValidBirthPlaceName,
-        'birthplace',
-        req.body.birthplace,
-        'Place of birth must only include English alphabet letters (A to Z), spaces and hyphens (-)'
-      ),
-      new ValidationRule(
-        validator.isValidStringLength,
-        'birthplace',
-        req.body.birthplace,
-        `Place of birth must be ${MAX_STRING_LENGTH} characters or less`
-      ),
-      new ValidationRule(validator.notOnlySymbols, 'birthplace', req.body.birthplace, `Enter a valid place of birth.`),
-    ],
-    [new ValidationRule(validator.notEmpty, 'personType', req.body.personType, 'Select who you are adding')],
-    [new ValidationRule(validator.notEmpty, 'gender', req.body.gender, 'Select the sex of the person')],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        'travelDocumentNumber',
-        req.body.travelDocumentNumber,
-        'Enter the document number'
-      ),
-      new ValidationRule(
-        validator.isValidStringLength,
-        'travelDocumentNumber',
-        req.body.travelDocumentNumber,
-        `Document number must be ${MAX_STRING_LENGTH} characters or less`
-      ),
-      new ValidationRule(
-        validator.isAlphanumeric,
-        'travelDocumentNumber',
-        req.body.travelDocumentNumber,
-        `Document number must be alphanumeric only.`
-      ),
-    ],
-    [
-      new ValidationRule(
-        validator.notEmpty,
-        'travelDocumentType',
-        req.body.travelDocumentType,
-        'Select the travel document type'
-      ),
-    ],
-    [
-      new ValidationRule(
         validator.notEmpty,
         'issuingState',
         req.body.issuingState,
         'Enter the issuing state for the document'
       ),
     ],
+    [new ValidationRule(validator.realDateInFuture, 'expiryDate', expiryDateObj, 'Enter a real document expiry date')],
   ];
 
   if (docTypeOther === 'Other') {
