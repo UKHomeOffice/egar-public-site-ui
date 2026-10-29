@@ -2,7 +2,7 @@
   { "id": "1", "documenttype": "Passport" },
   {
     "id": "2",
-    "documenttype": "National Identity Card",
+    "documenttype": "National identity card",
     "description": "A national identity card can only be used to travel to the UK in some situations"
   },
   { "id": "3", "documenttype": "Other" }
