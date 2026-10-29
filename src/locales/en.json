@@ -199,7 +199,7 @@
   "caption_travel_document_details": "Provide the details of the person's travel document that you want to add. Details should be as displayed on the travel document.",
   "field_travel_document_number": "Document number",
   "field_document_expiry_date": "Document expiry date",
-  "field_document_expiry_date_hint": "For example, 31 7 2032",
+  "field_document_expiry_date_hint": "For example, 21 3 2034",
   "field_issuing_state": "Issuing state",
   "field_issuing_state_hint": "Use the English spelling of the country of issue or 3 letter country code. For example, United Kingdom or GBR",
   "field_travel_document_type": "Travel document type",
