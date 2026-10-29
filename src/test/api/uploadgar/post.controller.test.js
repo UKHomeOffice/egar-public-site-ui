@@ -512,7 +512,7 @@ describe('API upload GAR post controller', () => {
             validator.isValidDocumentType,
             '',
             'Cipher',
-            'Enter a valid document type for crew member James Kirk, it should be "Passport", "National Identity Card", "Other", not "Cipher"'
+            'Enter a valid document type for crew member James Kirk, it should be "Passport", "National identity card", "Other", not "Cipher"'
           ),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
