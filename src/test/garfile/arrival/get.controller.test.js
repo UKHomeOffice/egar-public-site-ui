@@ -9,7 +9,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const controller = require('../../../app/garfile/arrival/get.controller');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 
 describe('Arrival Get Controller', () => {
   let req;
@@ -39,7 +39,7 @@ describe('Arrival Get Controller', () => {
   it('should display a message if gar api rejects', async () => {
     const cookie = new CookieModel(req);
     res.locals.gar = { garId: '12345' };
-    sinon.stub(dataAccessApi.garApi, 'get').rejects('garApi.get Example Reject');
+    sinon.stub(garApi, 'get').rejects('garApi.get Example Reject');
 
     const callController = async () => {
       await controller(req, res);
@@ -64,7 +64,7 @@ describe('Arrival Get Controller', () => {
     const cookie = new CookieModel(req);
     cookie.setGarId('12345');
     cookie.setGarArrivalVoyage(apiResponse);
-    sinon.stub(dataAccessApi.garApi, 'get').resolves(apiResponse);
+    sinon.stub(garApi, 'get').resolves(apiResponse);
 
     res.locals.gar = { garId: cookie.getGarId() };
 
@@ -73,7 +73,7 @@ describe('Arrival Get Controller', () => {
     };
 
     callController().then(() => {
-      expect(dataAccessApi.garApi.get).to.have.been.calledWith('12345');
+      expect(garApi.get).to.have.been.calledWith('12345');
       expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', { cookie });
     });
   });

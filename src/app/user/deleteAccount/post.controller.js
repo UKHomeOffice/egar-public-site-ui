@@ -14,14 +14,16 @@ const postController = async (req, res) => {
 
     res.locals.text = deleteAccountOptions.text();
     const apiResponse = await deleteAccountOptions.deleteAccount();
-    const parsedResponse = JSON.parse(apiResponse);
 
-    if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-      return res.render('app/user/deleteAccount/index', { cookie, errors: [parsedResponse] });
+    if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
+      return res.render('app/user/deleteAccount/index', { cookie, errors: [apiResponse] });
     }
   } catch (err) {
     logger.error('Failed to delete user account', { errorMessage: err?.message, stack: err?.stack });
-    return res.render('app/user/deleteAccount/index', { cookie, errors: [errObj] });
+    return res.render('app/user/deleteAccount/index', {
+      cookie,
+      errors: [err?.type === 'http_error' && err.body && typeof err.body.message === 'string' ? err.body : errObj],
+    });
   }
 
   try {

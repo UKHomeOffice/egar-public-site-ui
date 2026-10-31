@@ -1,8 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
-const craftApi = require('../../../common/services/craftApi');
+const { craftApi, garApi } = require('../../../common/services/dataAccessApi');
 const validationList = require('./validations');
 const pagination = require('../../../common/utils/pagination');
 
@@ -18,10 +17,9 @@ module.exports = (req, res) => {
   }
 
   if (req.body.addCraft && buttonClicked === 'Add to GAR') {
-    craftApi
+    return craftApi
       .getDetails(userId, req.body.addCraft)
-      .then((apiResponse) => {
-        const craft = JSON.parse(apiResponse);
+      .then((craft) => {
         // Overwrite GAR craft info if a user has clicked on a craft
         cookie.setGarCraft(craft.registration, craft.craftType, craft.craftBase);
         req.session.save(() => res.redirect('/garfile/craft'));
@@ -48,21 +46,20 @@ module.exports = (req, res) => {
     cookie.setGarCraft(craftObj.registration, craftObj.craftType, craftObj.craftBase, craftObj.portChoice);
     const validations = validationList.validations(craftObj);
 
-    validator
+    return validator
       .validateChains(validations)
       .then(() => {
-        garApi
+        return garApi
           .patch(res.locals.gar.garId, cookie.getGarStatus(), {
             registration: craftObj.registration,
             craftType: craftObj.craftType,
             craftBase: craftObj.craftBase,
           })
           .then((apiResponse) => {
-            const parsedResponse = JSON.parse(apiResponse);
-            if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+            if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
               // API returned error
-              logger.error(`Patch GAR API returned: ${apiResponse}`);
-              res.render('app/garfile/craft/index', { cookie, errors: [parsedResponse] });
+              logger.error('Patch GAR API returned an error', { garId: res.locals.gar.garId });
+              res.render('app/garfile/craft/index', { cookie, errors: [apiResponse] });
               return;
             }
             // Successful
@@ -81,7 +78,11 @@ module.exports = (req, res) => {
             });
             res.render('app/garfile/craft/index', {
               cookie,
-              errors: [{ message: 'Failed to add aircraft to GAR' }],
+              errors: [
+                err?.type === 'http_error' && typeof err.body?.message === 'string'
+                  ? err.body
+                  : { message: 'Failed to add aircraft to GAR' },
+              ],
             });
           });
       })

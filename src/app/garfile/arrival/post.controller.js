@@ -1,24 +1,22 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const airportValidation = require('../../../common/utils/airportValidation');
 
 const performAPICall = (cookie, buttonClicked, res) => {
-  garApi
+  return garApi
     .patch(res.locals.gar.garId, cookie.getGarStatus(), {
       ...cookie.getGarArrivalVoyage(),
       isInbound: cookie.getIsInbound(),
     })
     .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+      if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
         // API returned error
-        logger.debug(`Api returned: ${parsedResponse}`);
         res.render('app/garfile/arrival/index', {
           cookie,
-          errors: [parsedResponse],
+          errors: [apiResponse],
         });
         return;
       }
@@ -39,9 +37,9 @@ const performAPICall = (cookie, buttonClicked, res) => {
       res.render('app/garfile/arrival/index', {
         cookie,
         errors: [
-          {
-            message: 'Failed to add to GAR',
-          },
+          err?.type === 'http_error' && typeof err.body?.message === 'string'
+            ? err.body
+            : { message: 'Failed to add to GAR' },
         ],
       });
     });
@@ -130,8 +128,7 @@ module.exports = async (req, res) => {
 
   const validations = buildValidations(voyage);
 
-  const gar = await garApi.get(res.locals.gar.garId);
-  const departurePort = JSON.parse(gar).departurePort;
+  const { departurePort } = res.locals.gar;
   validations.push([
     new ValidationRule(
       validator.notSameValues,
@@ -155,10 +152,10 @@ module.exports = async (req, res) => {
   const isInbound = airportValidation.isJourneyUKInbound(departurePort, voyage.arrivalPort);
   cookie.setIsInbound(isInbound);
 
-  validator
+  return validator
     .validateChains(validations)
     .then(() => {
-      performAPICall(cookie, buttonClicked, res);
+      return performAPICall(cookie, buttonClicked, res);
     })
     .catch((err) => {
       logger.warn('GAR arrival validation failed', { garId: cookie.getGarId() });

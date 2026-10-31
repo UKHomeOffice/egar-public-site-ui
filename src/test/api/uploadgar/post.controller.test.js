@@ -8,8 +8,7 @@ const XLSX = require('xlsx');
 require('../../global.test');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const createGarApi = require('../../../common/services/createGarApi.js');
-const garApi = require('../../../common/services/garApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const clamAVService = require('../../../common/services/clamAVService');
 
 const path = require('path');
@@ -168,6 +167,60 @@ describe('API upload GAR post controller', () => {
       expect(req.session.failureMsg).to.eq('Incorrect xls or xlsx file');
       expect(req.session.failureIdentifier).to.eq('file');
       expect(res.redirect).to.have.been.calledWith('garfile/garupload');
+    });
+  });
+
+  describe('workbook virus scanning', () => {
+    [
+      ['clean', 'ok : true'], // Confirmed clean: allow the workbook import.
+      ['infected', 'ok : false'], // Virus detected: block the workbook import.
+      ['unexpected', 'unrecognised scan response'], // No confirmed clean result: block the workbook import.
+      ['failed', null], // Simulate a rejected scanner request below: block the workbook import.
+    ].forEach(([outcome, response]) => {
+      it(`scans the original workbook and ${outcome === 'clean' ? 'imports' : 'blocks'} it when the scan is ${outcome}`, async () => {
+        const workbook = getValidWorkbook();
+        const worksheet = workbook.Sheets.Valid1;
+        // Add cell types, raw values, and a sheet range so the fixture can round-trip through a real XLS file.
+        Object.values(worksheet).forEach((cell) => {
+          cell.t = 's';
+          if (cell.v === undefined) {
+            cell.v = cell.w;
+          }
+        });
+        worksheet['!ref'] = 'A1:L40';
+        req.file.buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xls' });
+        const client = { post: sinon.stub() };
+        if (outcome === 'failed') {
+          client.post.rejects(new Error('Scanner unavailable'));
+        } else {
+          client.post.resolves(response);
+        }
+        // Keep the real controller-to-scanner boundary; only the scanner's HTTP transport is stubbed.
+        const scanner = new clamAVService.ClamAVService(client);
+        clamAVServiceStub.callsFake((file) => scanner.scanFile(file));
+        const createGarStub = sinon.stub(garApi, 'createGar').resolves({ garId: 'SCANNED-GAR' });
+        const patchStub = sinon.stub(garApi, 'patch').resolves();
+        await controller(req, res);
+
+        expect(client.post).to.have.been.calledOnce;
+        const [endpoint, formData] = client.post.firstCall.args;
+        const scannedFile = formData.get('file');
+        expect(endpoint).to.equal('/scan');
+        expect(formData.get('name')).to.equal(req.file.originalname);
+        expect(scannedFile.name).to.equal(req.file.originalname);
+        // The old multipart argument shape scanned the string "undefined" instead of these workbook bytes.
+        expect(Buffer.from(await scannedFile.arrayBuffer())).to.deep.equal(req.file.buffer);
+        if (outcome === 'clean') {
+          expect(req.session.failureMsg).to.be.undefined;
+          expect(createGarStub).to.have.been.calledOnceWithExactly('khan@augmented.com');
+          expect(patchStub).to.have.been.calledThrice;
+          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/review?from=uploadGar');
+        } else {
+          expect(createGarStub).to.not.have.been.called;
+          expect(patchStub).to.not.have.been.called;
+          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/garupload?query=v');
+        }
+      });
     });
   });
 
@@ -358,7 +411,7 @@ describe('API upload GAR post controller', () => {
     });
     sinon.stub(XLSX, 'read').returns(data);
     clamAVServiceStub.resolves(true);
-    const createGarStub = sinon.stub(createGarApi, 'createGar');
+    const createGarStub = sinon.stub(garApi, 'createGar');
     const patchStub = sinon.stub(garApi, 'patch');
     sinon.spy(req.session, 'save');
 
@@ -374,121 +427,123 @@ describe('API upload GAR post controller', () => {
   });
 
   describe('api calls', () => {
-    it('should return when createGarApi rejects', async () => {
+    it('redirects without updating a GAR when creation rejects', async () => {
       const data = getValidWorkbook();
 
-      sinon.stub(createGarApi, 'createGar').rejects('createGarApi.createGar Example Reject');
-      sinon.stub(garApi);
+      sinon.stub(garApi, 'createGar').rejects(new Error('Creation unavailable'));
+      const patchStub = sinon.stub(garApi, 'patch');
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
       clamAVServiceStub.resolves(true);
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      return await callController()
-        .then()
-        .then(() => {
-          expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
-          expect(req.session.save).to.not.have.been.called;
-          expect(req.session.failureMsg).to.eq('Failed to create GAR. Try again');
-          expect(req.session.failureIdentifier).to.eq('file');
-          expect(res.redirect).to.have.been.calledWith('garfile/garupload');
-        });
+      expect(garApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
+      expect(patchStub).not.to.have.been.called;
+      expect(req.session.save).to.not.have.been.called;
+      expect(req.session.failureMsg).to.eq('Failed to create GAR. Try again');
+      expect(req.session.failureIdentifier).to.eq('file');
+      expect(res.redirect).to.have.been.calledOnceWithExactly('garfile/garupload');
+    });
+
+    it('preserves the creation-failure journey for an HTTP rejection without updating a GAR', async () => {
+      sinon.stub(XLSX, 'read').returns(getValidWorkbook());
+      clamAVServiceStub.resolves(true);
+      sinon.stub(garApi, 'createGar').rejects(
+        Object.assign(new Error('Bad Request'), {
+          type: 'http_error',
+          status: 400,
+          body: { message: 'User cannot create GAR' },
+        })
+      );
+      const patchStub = sinon.stub(garApi, 'patch');
+      sinon.spy(req.session, 'save');
+
+      await controller(req, res);
+
+      expect(patchStub).not.to.have.been.called;
+      expect(req.session.gar.id).not.to.exist;
+      expect(req.session.failureMsg).to.equal('Failed to create GAR');
+      expect(req.session.save).to.have.been.calledOnce;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('garfile/garupload');
     });
 
     it('should return with an error when api returns a message', async () => {
       const data = getValidWorkbook();
 
-      sinon.stub(createGarApi, 'createGar').resolves(
-        JSON.stringify({
-          message: 'User does not exist',
-        })
-      );
+      sinon.stub(garApi, 'createGar').resolves({
+        message: 'User does not exist',
+      });
       sinon.stub(garApi, 'patch');
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
       clamAVServiceStub.resolves(true);
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      await callController().then(() => {
-        expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
-        expect(garApi.patch).to.not.have.been.called;
-        expect(req.session.save).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('garfile/garupload');
-      });
+      expect(garApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
+      expect(garApi.patch).to.not.have.been.called;
+      expect(req.session.save).to.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('garfile/garupload');
     });
 
     // TODO: Error message informs the GAR could not be updated, but one was created anyways?
     // TODO: There are three calls to update the GAR, but payload could be combined into one? Maybe?
-    it('should mention when on of the update steps rejects', async () => {
+    it('reports an update failure rather than success when an import update rejects', async () => {
       const data = getValidWorkbook();
 
-      sinon.stub(createGarApi, 'createGar').resolves(
-        JSON.stringify({
-          garId: 'ABCD-1234',
-        })
-      );
+      sinon.stub(garApi, 'createGar').resolves({
+        garId: 'ABCD-1234',
+      });
       const garApiPatch = sinon.stub(garApi, 'patch').onCall(0).resolves();
       garApiPatch.onCall(1).resolves();
-      garApiPatch.onCall(2).rejects('garApi.patch for voyageUpdate Example Reject');
+      garApiPatch.onCall(2).rejects(
+        Object.assign(new Error('Bad Request'), {
+          type: 'http_error',
+          status: 400,
+          body: { message: 'Voyage update rejected' },
+        })
+      );
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
       clamAVServiceStub.resolves(true);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      // Promise.all for three Promises...
-      await callController()
-        .then()
-        .then()
-        .then()
-        .then(() => {
-          expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
-          expect(garApi.patch).to.have.been.calledWith('ABCD-1234');
-          expect(req.session.failureMsg).to.eq('Failed to update GAR. Try again');
-          expect(req.session.failureIdentifier).to.eq('file');
-          expect(req.session.save).to.not.have.been.called;
-          expect(res.redirect).to.have.been.calledWith('garfile/garupload');
-        });
+      await controller(req, res);
+      expect(garApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
+      expect(garApi.patch).to.have.been.calledWith('ABCD-1234');
+      expect(req.session.failureMsg).to.eq('Failed to update GAR. Try again');
+      expect(req.session.failureIdentifier).to.eq('file');
+      expect(req.session.save).to.not.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('garfile/garupload');
     });
 
-    // TODO: Should it just go to the departure page?
-    // TODO: Should there be some success message?
-    it('should go to the departure screen on success', () => {
+    it('stores the created draft and redirects to review after all import updates finish', async () => {
       const data = getValidWorkbook();
 
-      sinon.stub(createGarApi, 'createGar').resolves(
-        JSON.stringify({
-          garId: 'ABCD-1234',
-        })
-      );
+      sinon.stub(garApi, 'createGar').resolves({
+        garId: 'ABCD-1234',
+      });
       const garApiPatch = sinon.stub(garApi, 'patch').resolves();
       sinon.spy(req.session, 'save');
       sinon.stub(XLSX, 'read').returns(data);
       clamAVServiceStub.resolves(true);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      // Promise.all for three Promises...
-      return callController()
-        .then()
-        .then()
-        .then()
-        .then(() => {
-          expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
-          expect(garApiPatch).to.have.been.calledWith('ABCD-1234');
-          expect(req.session.failureMsg).to.be.undefined;
-          expect(req.session.failureIdentifier).to.be.undefined;
-          expect(req.session.save).to.have.been.called;
-          expect(res.redirect).to.have.been.calledWith('/garfile/review?from=uploadGar');
-        });
+      await controller(req, res);
+      expect(garApi.createGar).to.have.been.calledOnceWithExactly('khan@augmented.com');
+      expect(garApiPatch).to.have.been.calledWith('ABCD-1234');
+      expect(garApiPatch).to.have.been.calledThrice;
+      garApiPatch.getCalls().forEach((call) => {
+        expect(call.args.slice(0, 2)).to.deep.equal(['ABCD-1234', 'Draft']);
+      });
+      expect(garApiPatch.firstCall.args[2].people).not.to.be.empty;
+      expect(garApiPatch.firstCall.args[2].people.every((person) => person.peopleType === 'Crew')).to.equal(true);
+      expect(garApiPatch.secondCall.args[2].people).not.to.be.empty;
+      expect(garApiPatch.secondCall.args[2].people.every((person) => person.peopleType === 'Passenger')).to.equal(true);
+      expect(garApiPatch.thirdCall.args[2]).to.include.keys('departurePort', 'arrivalPort', 'isInbound');
+      expect(req.session.gar.id).to.equal('ABCD-1234');
+      expect(req.session.gar.status).to.equal('Draft');
+      expect(req.session.failureMsg).to.be.undefined;
+      expect(req.session.failureIdentifier).to.be.undefined;
+      expect(req.session.save).to.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/review?from=uploadGar');
     });
 
     it('Phoney document type shoudl be disallowed', async () => {

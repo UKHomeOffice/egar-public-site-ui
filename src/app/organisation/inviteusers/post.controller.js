@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
-const userApi = require('../../../common/services/userManageApi');
+const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 module.exports = (req, res) => {
@@ -9,13 +9,13 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
 
   // Validate chains
-  validator
+  return validator
     .validateChains(validations.validations(req))
     .then(() => {
       cookie.setInviteUserFirstName(fname);
       cookie.setInviteUserLastName(lname);
       cookie.setInviteUserEmail(email);
-      userApi
+      return userApi
         .getDetails(email)
         .then((apiResponse) => {
           if (apiResponse.message === 'User not registered') {
@@ -27,6 +27,9 @@ module.exports = (req, res) => {
           }
         })
         .catch((err) => {
+          if (err?.type === 'http_error' && err.status === 400 && err.body?.message === 'User not registered') {
+            return res.redirect('/organisation/assignrole');
+          }
           logger.error('Failed to get user details', { errorMessage: err?.message, stack: err?.stack });
           return res.redirect('/organisation/inviteuser');
         });

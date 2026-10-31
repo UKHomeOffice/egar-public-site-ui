@@ -7,15 +7,15 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const orgApi = require('../../../common/services/organisationApi');
+const { organisationApi: orgApi } = require('../../../common/services/dataAccessApi');
 let roles = require('../../../common/seeddata/egar_user_roles.json');
 
 const controller = require('../../../app/organisation/editusers/post.controller');
-let { cookie } = require('request');
 
 describe('Organisation Edit Users Post Controller', () => {
   let req;
   let res;
+  let cookie;
   let orgApiStub;
   let sessionSaveStub;
   const nonAdminRoles = [
@@ -61,6 +61,26 @@ describe('Organisation Edit Users Post Controller', () => {
     sinon.restore();
   });
 
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`saves the appropriate error and redirects on a ${type}`, async () => {
+      orgApiStub.rejects(
+        Object.assign(new Error('Request failed'), { type, status: 403, body: { message: 'Forbidden' } })
+      );
+
+      await controller(req, res);
+
+      expect(req.session.errMsg).to.deep.equal({
+        message:
+          type === 'http_error'
+            ? 'You do not have the permissions to edit this user or perform this action'
+            : 'Failed to update user details. Try again',
+      });
+      expect(sessionSaveStub).to.have.been.calledOnce;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation');
+      expect(res.render).not.to.have.been.called;
+    });
+  });
+
   describe('validations', () => {
     it('should render messages when strings empty', () => {
       req.body.firstName = '';
@@ -73,7 +93,7 @@ describe('Organisation Edit Users Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(orgApiStub).to.not.have.been.called;
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.redirect).to.not.have.been.called;
@@ -106,7 +126,7 @@ describe('Organisation Edit Users Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(orgApiStub).to.not.have.been.called;
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.redirect).to.not.have.been.called;
@@ -139,7 +159,7 @@ describe('Organisation Edit Users Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(orgApiStub).to.not.have.been.called;
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.redirect).to.not.have.been.called;
@@ -175,7 +195,7 @@ describe('Organisation Edit Users Post Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(orgApiStub).to.not.have.been.called;
         expect(sessionSaveStub).to.not.have.been.called;
         expect(res.redirect).to.not.have.been.called;
@@ -214,7 +234,7 @@ describe('Organisation Edit Users Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(orgApiStub).to.have.been.calledOnceWithExactly('BADDIE-1', 'FIRST-ORDER-ID', {
@@ -231,17 +251,15 @@ describe('Organisation Edit Users Post Controller', () => {
   });
 
   it('should redirect with message if api returns message', () => {
-    orgApiStub.resolves(
-      JSON.stringify({
-        message: 'User ID not found',
-      })
-    );
+    orgApiStub.resolves({
+      message: 'User ID not found',
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(orgApiStub).to.have.been.calledOnceWithExactly('BADDIE-1', 'FIRST-ORDER-ID', {
@@ -260,13 +278,13 @@ describe('Organisation Edit Users Post Controller', () => {
   });
 
   it('should redirect with no message if api ok', () => {
-    orgApiStub.resolves(JSON.stringify({}));
+    orgApiStub.resolves({});
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(orgApiStub).to.have.been.calledOnceWithExactly('BADDIE-1', 'FIRST-ORDER-ID', {

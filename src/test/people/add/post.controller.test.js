@@ -12,7 +12,7 @@ const documenttype = require('../../../common/seeddata/egar_saved_people_travel_
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const personApi = require('../../../common/services/personApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/people/add/post.controller');
 
@@ -89,7 +89,7 @@ describe('Person Add Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.not.have.been.called;
@@ -116,7 +116,7 @@ describe('Person Add Post Controller', () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.have.been.calledWith('90210', { people: [person] });
@@ -135,17 +135,15 @@ describe('Person Add Post Controller', () => {
     const cookie = new CookieModel(req);
     cookie.updateEditPerson(person);
 
-    personApiStub.resolves(
-      JSON.stringify({
-        message: 'GAR not found',
-      })
-    );
+    personApiStub.resolves({
+      message: 'GAR not found',
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.have.been.calledWith('90210', { people: [person] });
@@ -161,18 +159,39 @@ describe('Person Add Post Controller', () => {
   });
 
   it('should redirect on success', () => {
-    personApiStub.resolves(JSON.stringify({}));
+    personApiStub.resolves({});
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(personApiStub).to.have.been.calledWith('90210', { people: [person] });
         expect(res.redirect).to.have.been.calledWith('/people');
         expect(res.render).to.not.have.been.called;
       });
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`renders an error without redirecting on a ${type}`, async () => {
+      const body = { message: 'Invalid person', identifier: 'lastName' };
+      personApiStub.rejects(Object.assign(new Error('Request failed'), { type, status: 400, body }));
+
+      await controller(req, res);
+
+      expect(personApiStub).to.have.been.calledOnceWithExactly('90210', { people: [person] });
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/people/add/index', {
+        cookie: new CookieModel(req),
+        persontype,
+        documenttype,
+        genderchoice,
+        errors: [
+          type === 'http_error' ? body : { message: 'There was a problem creating the person. Please try again' },
+        ],
+      });
+    });
   });
 });

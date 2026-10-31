@@ -6,8 +6,8 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const garApi = require('../../../common/services/garApi');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const utils = require('../../../common/utils/utils');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/garfile/view/get.controller');
 const { outboundGar } = require('../../fixtures');
 
@@ -47,11 +47,11 @@ describe('GAR view get controller', () => {
       render: sinon.spy(),
     };
 
-    garApiGetStub = sinon.stub(dataAccessApi.garApi, 'get');
-    garApiGetPeopleStub = sinon.stub(dataAccessApi.garApi, 'getPeople');
-    garApiGetSupportingDocsStub = sinon.stub(dataAccessApi.garApi, 'getSupportingDocs');
-    getGarCheckinProgressStub = sinon.stub(dataAccessApi.garApi, 'getGarCheckinProgress');
-    getDurationBeforeDepartureStub = sinon.stub(garApi, 'getDurationBeforeDeparture');
+    garApiGetStub = sinon.stub(garApi, 'get');
+    garApiGetPeopleStub = sinon.stub(garApi, 'getPeople');
+    garApiGetSupportingDocsStub = sinon.stub(garApi, 'getSupportingDocs');
+    getGarCheckinProgressStub = sinon.stub(garApi, 'getGarCheckinProgress');
+    getDurationBeforeDepartureStub = sinon.stub(utils, 'getDurationBeforeDeparture');
   });
 
   afterEach(() => {
@@ -59,8 +59,38 @@ describe('GAR view get controller', () => {
     clock.restore();
   });
 
+  it('renders an error when the initial GAR lookup fails', async () => {
+    garApiGetStub.rejects(new Error('Unavailable'));
+
+    await controller(req, res);
+
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      errors: [{ message: 'Failed to get GAR information' }],
+    });
+  });
+
+  it('retains the page context when the response-code lookup fails', async () => {
+    const cookie = new CookieModel(req);
+    garApiGetStub.resolves({ status: { name: 'Draft' } });
+    garApiGetPeopleStub.onFirstCall().resolves({ items: [] });
+    garApiGetPeopleStub.onSecondCall().rejects(new Error('Unavailable'));
+    garApiGetSupportingDocsStub.resolves({ items: [] });
+    getGarCheckinProgressStub.resolves('Complete');
+
+    await controller(req, res);
+
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+      cookie,
+      manifestFields,
+      garfile: {},
+      garpeople: {},
+      garsupportingdocs: {},
+      errors: [{ message: 'Failed to get GAR information' }],
+    });
+  });
+
   describe('checkGARUser', () => {
-    it('should render page if Draft', () => {
+    it('should render page if Draft', async () => {
       const cookie = new CookieModel(req);
 
       req.session.successHeader = 'Success';
@@ -68,80 +98,56 @@ describe('GAR view get controller', () => {
 
       cookie.setGarId('GAR-ID-EXAMPLE-1');
 
-      garApiGetStub.resolves(
-        new Promise((resolve) =>
-          resolve({
-            garId: 'GAR-ID-EXAMPLE-1-API',
-            status: { name: 'Draft' },
-            userId: 'USER-123',
-          })
-        )
-      );
-      garApiGetPeopleStub.resolves(
-        new Promise((resolve) =>
-          resolve({
-            items: [
-              { id: 'PERSON-1', firstName: 'Simona' },
-              { id: 'PERSON-2', firstName: 'Serena' },
-            ],
-          })
-        )
-      );
+      garApiGetStub.resolves({
+        garId: 'GAR-ID-EXAMPLE-1-API',
+        status: { name: 'Draft' },
+        userId: 'USER-123',
+      });
+      garApiGetPeopleStub.resolves({
+        items: [
+          { id: 'PERSON-1', firstName: 'Simona' },
+          { id: 'PERSON-2', firstName: 'Serena' },
+        ],
+      });
 
-      garApiGetSupportingDocsStub.resolves(
-        new Promise((resolve) =>
-          resolve({
-            items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-          })
-        )
-      );
+      garApiGetSupportingDocsStub.resolves({
+        items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+      });
 
-      getGarCheckinProgressStub.resolves(
-        new Promise((resolve) =>
-          resolve({
-            progress: { progress: 'Complete' },
-          })
-        )
-      );
+      getGarCheckinProgressStub.resolves('Complete');
 
       getDurationBeforeDepartureStub.returns(125);
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+      await controller(req, res);
 
-      callController()
-        .then()
-        .then(() => {
-          expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-          expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-          expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
-            cookie,
-            manifestFields,
-            garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' } },
-            isAbleToCancelGar: true,
-            successHeader: 'Success',
-            successMsg: 'Success Message',
-            garpeople: {
-              items: [
-                { id: 'PERSON-1', firstName: 'Simona' },
-                { id: 'PERSON-2', firstName: 'Serena' },
-              ],
-            },
-            garsupportingdocs: {
-              items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-            },
-            showChangeLinks: true,
-            isJourneyUKInbound: true,
-            resubmitted: 'no',
-            durationInDeparture: 125,
-            numberOf0TResponseCodes: 2,
-            isResubmitted: false,
-          });
-        });
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+        cookie,
+        manifestFields,
+        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' } },
+        isAbleToCancelGar: true,
+        successHeader: 'Success',
+        successMsg: 'Success Message',
+        garpeople: {
+          items: [
+            { id: 'PERSON-1', firstName: 'Simona' },
+            { id: 'PERSON-2', firstName: 'Serena' },
+          ],
+        },
+        garsupportingdocs: {
+          items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+        },
+        showChangeLinks: true,
+        isJourneyUKInbound: true,
+        resubmitted: 'no',
+        durationInDeparture: 125,
+        numberOf0TResponseCodes: 2,
+        isResubmitted: false,
+      });
     });
 
-    it('Should return isAbleToSubmitGar as false value is 2 weeks old than departure datetime', () => {
+    it('disables cancellation for a departure more than two weeks ago', async () => {
       const cookie = new CookieModel(req);
       cookie.setGarId('GAR-ID-EXAMPLE-1');
       const userOldSubmissionGar = outboundGar();
@@ -149,72 +155,51 @@ describe('GAR view get controller', () => {
       userOldSubmissionGar.departureDate = '20 March 2023';
       userOldSubmissionGar.departureTime = '10:55:26';
 
-      garApiGetStub.resolves(new Promise((resolve) => resolve(userOldSubmissionGar)));
-      garApiGetPeopleStub.resolves(
-        new Promise((resolve) =>
-          resolve({
-            items: [
-              { id: 'PERSON-1', firstName: 'Simona' },
-              { id: 'PERSON-2', firstName: 'Serena' },
-            ],
-          })
-        )
-      );
-      garApiGetSupportingDocsStub.resolves(
-        new Promise((resolve) =>
-          resolve({
-            items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-          })
-        )
-      );
+      garApiGetStub.resolves(userOldSubmissionGar);
+      garApiGetPeopleStub.resolves({
+        items: [
+          { id: 'PERSON-1', firstName: 'Simona' },
+          { id: 'PERSON-2', firstName: 'Serena' },
+        ],
+      });
+      garApiGetSupportingDocsStub.resolves({
+        items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+      });
 
-      getGarCheckinProgressStub.resolves(
-        new Promise((resolve) =>
-          resolve({
-            progress: { progress: 'Complete' },
-          })
-        )
-      );
+      getGarCheckinProgressStub.resolves('Complete');
       getDurationBeforeDepartureStub.returns(125);
-
-      const callController = async () => {
-        await controller(req, res);
-      };
 
       let resultantOutboundGar = outboundGar();
       resultantOutboundGar.departureDate = '20 March 2023';
       resultantOutboundGar.departureTime = '10:55:26';
 
-      callController()
-        .then()
-        .then(() => {
-          expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-          //expect(garApiGetPeopleStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-          expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
-          expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
-            cookie,
-            manifestFields,
-            showChangeLinks: false,
-            isJourneyUKInbound: false,
-            isAbleToCancelGar: false,
-            garfile: resultantOutboundGar,
-            successMsg: undefined,
-            successHeader: undefined,
-            garpeople: {
-              items: [
-                { id: 'PERSON-1', firstName: 'Simona' },
-                { id: 'PERSON-2', firstName: 'Serena' },
-              ],
-            },
-            garsupportingdocs: {
-              items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
-            },
-            resubmitted: 'no',
-            durationInDeparture: 125,
-            numberOf0TResponseCodes: 2,
-            isResubmitted: false,
-          });
-        });
+      await controller(req, res);
+
+      expect(garApiGetStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(garApiGetSupportingDocsStub).to.have.been.calledOnceWithExactly('GAR-ID-EXAMPLE-1');
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
+        cookie,
+        manifestFields,
+        showChangeLinks: false,
+        isJourneyUKInbound: false,
+        isAbleToCancelGar: false,
+        garfile: resultantOutboundGar,
+        successMsg: undefined,
+        successHeader: undefined,
+        garpeople: {
+          items: [
+            { id: 'PERSON-1', firstName: 'Simona' },
+            { id: 'PERSON-2', firstName: 'Serena' },
+          ],
+        },
+        garsupportingdocs: {
+          items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
+        },
+        resubmitted: 'no',
+        durationInDeparture: 125,
+        numberOf0TResponseCodes: 2,
+        isResubmitted: false,
+      });
     });
   });
 });

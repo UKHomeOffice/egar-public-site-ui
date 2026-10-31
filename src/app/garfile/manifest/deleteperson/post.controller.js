@@ -1,6 +1,6 @@
 const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
-const garApi = require('../../../../common/services/garApi');
+const { garApi } = require('../../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -23,13 +23,12 @@ module.exports = (req, res) => {
 
   logger.info(`User: ${userId} Removing ${garpeopleIdsToDelete} from manifest`);
 
-  garApi
-    .deleteGarPeople(cookie.getGarId(), garpeopleIdsToDelete)
+  return garApi
+    .deleteGarPeople(res.locals.gar.garId, garpeopleIdsToDelete)
     .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        logger.debug(`User: ${userId} Api returned: ${parsedResponse.message}`);
-        req.session.errMsg = parsedResponse;
+      if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
+        logger.debug('GAR person deletion rejected', { userId, garId: res.locals.gar.garId });
+        req.session.errMsg = apiResponse;
         return res.redirect('/garfile/manifest');
       }
       req.session.successMsg = 'Person removed from GAR';
@@ -37,7 +36,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error('Failed to delete GAR person', { userId, errorMessage: err?.message, stack: err?.stack });
-      req.session.errMsg = deleteErr;
+      req.session.errMsg = err?.type === 'http_error' && typeof err.body?.message === 'string' ? err.body : deleteErr;
       return res.redirect('/garfile/manifest');
     });
 };

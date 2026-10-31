@@ -1,7 +1,6 @@
 const i18n = require('i18n');
 const emailService = require('../../../common/services/sendEmail');
-const userApi = require('../../../common/services/userManageApi');
-const organisationApi = require('../../../common/services/organisationApi');
+const { userManageApi, organisationApi } = require('../../../common/services/dataAccessApi');
 
 const settings = require('../../../common/config/index');
 
@@ -27,7 +26,7 @@ const defaultText = () => ({
 });
 
 const defaultDeletion = async (cookie) => ({
-  deleteAccount: async () => await userApi.deleteUser(cookie.getUserEmail()),
+  deleteAccount: async () => await userManageApi.deleteUser(cookie.getUserEmail()),
   notifyUser: async () => {
     const templateId = settings.NOTIFY_ONELOGIN_ACCOUNT_DELETE_TEMPLATE_ID;
     await emailService.send(templateId, cookie.getUserEmail(), {
@@ -46,7 +45,7 @@ const deleteAccount = {
     const requesterId = cookie.getUserDbId();
     const orgId = cookie.getOrganisationId();
     const orgUsersRes = await organisationApi.getListOfOrgUsers(orgId);
-    const orgUsers = JSON.parse(orgUsersRes).items;
+    const orgUsers = orgUsersRes.items;
     const deletionType = adminDeletionType(orgUsers);
 
     return {
@@ -56,12 +55,12 @@ const deleteAccount = {
             return organisationApi.delete(orgId, requesterId);
 
           case 'DO_NOT_DELETE_ADMIN':
-            return JSON.stringify({
+            return {
               message: i18n.__('delete_admin_account_caption'),
-            });
+            };
 
           case 'DELETE_ADMIN':
-            return userApi.deleteUser(cookie.getUserEmail(), requesterId);
+            return userManageApi.deleteUser(cookie.getUserEmail(), requesterId);
 
           default:
             throw new Error('Invalid Deletion type provided');

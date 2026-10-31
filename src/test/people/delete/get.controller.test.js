@@ -7,7 +7,7 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/personApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/people/delete/get.controller');
 
@@ -50,7 +50,7 @@ describe('Person Delete Get Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(personApiStub).to.not.have.been.called;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
     });
@@ -64,7 +64,7 @@ describe('Person Delete Get Controller', () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(personApiStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
       expect(req.session.errMsg).to.eql({ message: 'Failed to delete person. Try again' });
       expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
@@ -75,17 +75,15 @@ describe('Person Delete Get Controller', () => {
     req.session.deletePersonId = 'DELETE-PERSON-ID';
     cookie = new CookieModel(req);
 
-    personApiStub.resolves(
-      JSON.stringify({
-        message: 'Person id not found',
-      })
-    );
+    personApiStub.resolves({
+      message: 'Person id not found',
+    });
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(personApiStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
       expect(req.session.errMsg).to.eql({ message: 'Failed to delete person. Try again' });
       expect(sessionSaveStub).to.have.been.called;
@@ -97,17 +95,34 @@ describe('Person Delete Get Controller', () => {
     req.session.deletePersonId = 'DELETE-PERSON-ID';
     cookie = new CookieModel(req);
 
-    personApiStub.resolves(JSON.stringify(apiResponse));
+    personApiStub.resolves(apiResponse);
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController().then(() => {
+    return callController().then(() => {
       expect(personApiStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
       expect(req.session.successHeader).to.eq('Success');
       expect(req.session.successMsg).to.eq('Person deleted');
       expect(sessionSaveStub).to.have.been.called;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
+    });
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`saves a deletion error without a success message on a ${type}`, async () => {
+      req.session.deletePersonId = 'DELETE-PERSON-ID';
+      personApiStub.rejects(
+        Object.assign(new Error('Request failed'), { type, status: 503, body: { message: 'Unavailable' } })
+      );
+
+      await controller(req, res);
+
+      expect(req.session.errMsg).to.deep.equal({ message: 'Failed to delete person. Try again' });
+      expect(req.session.successHeader).to.be.undefined;
+      expect(req.session.successMsg).to.be.undefined;
+      expect(sessionSaveStub).to.have.been.calledOnce;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
     });
   });

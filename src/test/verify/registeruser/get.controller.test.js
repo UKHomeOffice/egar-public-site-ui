@@ -6,7 +6,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
-const verifyUserService = require('../../../common/services/verificationApi');
+const { verificationApi: verifyUserService } = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/verify/registeruser/get.controller');
 
@@ -36,28 +36,31 @@ describe('Verify Register User Get Controller', () => {
   });
 
   it('should render the register user page when user service resolves', async () => {
-    sinon.stub(verifyUserService, 'verifyUser').resolves('Example Resolve');
+    sinon.stub(verifyUserService, 'verifyUser').resolves({ tokenId: 'Token123' });
     const cookie = new CookieModel(req);
     await controller(req, res);
 
-    // CookieModel instance created, can that be asserted
-    expect(tokenService.generateHash).to.have.been.called;
-    expect(verifyUserService.verifyUser).to.have.been.calledWith('Token123');
-    expect(res.render).to.have.been.calledWith('app/verify/registeruser/index', { cookie });
+    expect(tokenService.generateHash).to.have.been.calledOnceWithExactly('Example Token');
+    expect(verifyUserService.verifyUser).to.have.been.calledOnceWithExactly('Token123');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/verify/registeruser/index', { cookie });
   });
 
-  it('should render the register user page with error message when user service rejects', async () => {
-    sinon.stub(verifyUserService, 'verifyUser').rejects('Example Reject');
-    const cookie = new CookieModel(req);
-    try {
+  ['http_error', 'network_error'].forEach((type) => {
+    it(`renders the verification error on a ${type}`, async () => {
+      sinon.stub(verifyUserService, 'verifyUser').rejects(
+        Object.assign(new Error('Verification failed'), {
+          type,
+          ...(type === 'http_error' ? { status: 400, body: { message: 'Token is invalid' } } : {}),
+        })
+      );
+      const cookie = new CookieModel(req);
       await controller(req, res);
-    } catch {
-      expect(tokenService.generateHash).to.have.been.called;
-      expect(verifyUserService.verifyUser).to.have.been.calledWith('Token123');
-      expect(res.render).to.have.been.calledWith('app/verify/registeruser/index', {
+
+      expect(verifyUserService.verifyUser).to.have.been.calledOnceWithExactly('Token123');
+      expect(res.render).to.have.been.calledOnceWithExactly('app/verify/registeruser/index', {
         cookie,
         message: 'There was an issue verifying your account. Please try again later.',
       });
-    }
+    });
   });
 });

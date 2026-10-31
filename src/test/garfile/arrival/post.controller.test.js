@@ -1,45 +1,22 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-
+require('chai').use(require('sinon-chai'));
 require('../../global.test');
-const garApi = require('../../../common/services/garApi');
+
+const { garApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-
 const controller = require('../../../app/garfile/arrival/post.controller');
-
-const i18n = require('i18n');
-const path = require('path');
-
-i18n.configure({
-  locales: ['en'],
-  directory: path.join(__dirname, '../../../locales'),
-  objectNotation: true,
-  defaultLocale: 'en',
-  register: global,
-});
 
 describe('Arrival Post Controller', () => {
   let req;
   let res;
-  let clock;
+  let patch;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
-    clock = sinon.useFakeTimers({
-      now: new Date('2022-05-11 GMT'),
-      shouldAdvanceTime: false,
-      toFake: ['Date'],
-    });
-
+    sinon.useFakeTimers({ now: new Date('2022-05-11T00:00:00Z'), toFake: ['Date'] });
     req = {
       body: {
         portChoice: 'No',
-        arrivalPort: 'LHR',
         arrivalLat: '45.100000',
         arrivalLong: '12.100000',
         arrivalDay: '30',
@@ -47,307 +24,141 @@ describe('Arrival Post Controller', () => {
         arrivalYear: '2022',
         arrivalHour: '15',
         arrivalMinute: '00',
+        buttonClicked: 'Save and continue',
       },
-      session: {
-        gar: {
-          id: 'ABCDEFGH',
-          voyageArrival: {},
-          status: 'Draft',
-        },
-      },
+      session: { gar: { id: 'ABCDEFGH', status: 'Draft', voyageArrival: {} } },
     };
-
     res = {
       redirect: sinon.spy(),
       render: sinon.spy(),
-      locals: {},
+      locals: { gar: { garId: 'ABCDEFGH', departurePort: 'BFS' } },
     };
+    patch = sinon.stub(garApi, 'patch').resolves({});
   });
 
-  afterEach(() => {
-    sinon.restore();
-    clock.restore();
+  afterEach(() => sinon.restore());
+
+  function expectErrors(messages) {
+    expect(res.redirect).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnce;
+    expect(res.render.firstCall.args[0]).to.equal('app/garfile/arrival/index');
+    expect(res.render.firstCall.args[1].cookie).to.deep.equal(new CookieModel(req));
+    expect(res.render.firstCall.args[1].errors.map((error) => error.message)).to.deep.equal(messages);
+  }
+
+  it('requires a port choice without updating the GAR', async () => {
+    delete req.body.portChoice;
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors(['Select whether the port code is known']);
   });
 
-  describe('validation chains', () => {
-    let apiResponse;
-
-    beforeEach(() => {
-      apiResponse = JSON.stringify({
-        arrivalDate: '2012-30-05',
-        arrivalTime: '15:00',
-        arrivalPort: 'LHR',
-        arrivalLong: '',
-        arrivalLat: '',
-        departurePort: 'BFS',
-      });
-    });
-
-    it('should fail validation if no port choice selected', async () => {
-      delete req.body.portChoice;
-
-      const cookie = new CookieModel(req);
-
-      sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch');
-      res.locals.gar = { garId: apiResponse['garId'] };
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApi.get).to.have.been.called;
-        expect(garApi.patch).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/arrival/index', {
-          cookie,
-          errors: [
-            new ValidationRule(validator.notEmpty, 'portChoice', undefined, 'Select whether the port code is known'),
-          ],
-        });
-      });
-    });
-
-    it('should fail for empty port code', () => {
-      req.body.portChoice = 'Yes';
-      req.body.arrivalPort = '';
-      const cookie = new CookieModel(req);
-
-      sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch');
-      res.locals.gar = { garId: 'ABCDEFGH' };
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [
-            new ValidationRule(validator.notEmpty, 'arrivalPort', '', 'The arrival airport code must be entered'),
-          ],
-        });
-      });
-    });
-
-    it('should fail if arrival date too far in the future', () => {
-      req.body.arrivalYear = '2024';
-      const cookie = new CookieModel(req);
-
-      sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch');
-      res.locals.gar = { garId: 'ABCDEFGH' };
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [
-            new ValidationRule(
-              validator.dateNotMoreThanMonthInFuture,
-              'arrivalDate',
-              { d: '30', m: '5', y: '2024' },
-              'Arrival date must be in the future and within a month from now'
-            ),
-          ],
-        });
-      });
-    });
-
-    it('should fail if arrival date in the past', () => {
-      req.body.arrivalYear = '2010';
-      const cookie = new CookieModel(req);
-
-      sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch');
-      res.locals.gar = { garId: 'ABCDEFGH' };
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [
-            new ValidationRule(
-              validator.currentOrPastDate,
-              'arrivalDate',
-              { d: '30', m: '5', y: '2010' },
-              'Arrival date must be in the future and within a month from now'
-            ),
-          ],
-        });
-      });
-    });
-
-    describe('port codes and co-ordinates', () => {
-      it('should fail if port is ZZZZ and no longitude or latitude', () => {
-        req.body.arrivalPort = 'ZZZZ';
-        delete req.body.arrivalLong;
-        delete req.body.arrivalLat;
-        const cookie = new CookieModel(req);
-
-        sinon.stub(garApi, 'get').resolves(apiResponse);
-        sinon.stub(garApi, 'patch');
-        res.locals.gar = { garId: 'ABCDEFGH' };
-
-        const callController = async () => {
-          await controller(req, res);
-        };
-
-        callController().then(() => {
-          expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-          expect(garApi.patch).to.not.have.been.called;
-          expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-            cookie,
-            errors: [
-              new ValidationRule(
-                validator.latitude,
-                'arrivalLat',
-                undefined,
-                'Value entered is incorrect. Enter latitude to 6 decimal places'
-              ),
-              new ValidationRule(
-                validator.longitude,
-                'arrivalLong',
-                undefined,
-                'Value entered is incorrect. Enter longitude to 6 decimal places'
-              ),
-            ],
-          });
-        });
-      });
-    });
+  it('requires a code when the port is known', async () => {
+    req.body.portChoice = 'Yes';
+    req.body.arrivalPort = '';
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors(['The arrival airport code must be entered']);
   });
 
-  describe('performAPICall', () => {
-    let apiResponse;
+  it('rejects an arrival date more than a month away', async () => {
+    req.body.arrivalYear = '2024';
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors(['Arrival date must be in the future and within a month from now']);
+  });
 
-    beforeEach(() => {
-      apiResponse = JSON.stringify({
-        arrivalDate: '2012-30-05',
-        arrivalTime: '15:00',
-        arrivalPort: 'LHR',
-        arrivalLong: '',
-        arrivalLat: '',
-      });
+  it('rejects a past arrival date', async () => {
+    req.body.arrivalYear = '2010';
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors(['Arrival date must be in the future and within a month from now']);
+  });
+
+  it('requires coordinates when the port is unknown', async () => {
+    delete req.body.arrivalLat;
+    delete req.body.arrivalLong;
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors([
+      'Value entered is incorrect. Enter latitude to 6 decimal places',
+      'Value entered is incorrect. Enter longitude to 6 decimal places',
+    ]);
+  });
+
+  it('rejects the departure port using the ownership-verified GAR', async () => {
+    req.body.portChoice = 'Yes';
+    req.body.arrivalPort = 'BFS';
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors(['Arrival port must be different to departure port']);
+  });
+
+  it('requires a UK port when both ports are known', async () => {
+    res.locals.gar.departurePort = 'LFAT';
+    req.body.portChoice = 'Yes';
+    req.body.arrivalPort = 'LFPG';
+    await controller(req, res);
+    expect(patch).not.to.have.been.called;
+    expectErrors(['Either the Arrival or Departure port must be a UK port']);
+  });
+
+  it('saves coordinates and outbound direction, then continues to craft using the verified GAR ID', async () => {
+    req.session.gar.id = 'stale-session-id';
+    await controller(req, res);
+    expect(patch).to.have.been.calledOnceWithExactly('ABCDEFGH', 'Draft', {
+      arrivalDate: '2022-5-30',
+      arrivalTime: '15:00',
+      arrivalPort: '45.100000 12.100000',
+      arrivalLat: '45.100000',
+      arrivalLong: '12.100000',
+      arrivalPortChoice: 'No',
+      arrivalPortDesc: undefined,
+      isInbound: false,
     });
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/craft');
+  });
 
-    it('should return an error message if api rejects', () => {
-      const cookie = new CookieModel(req);
-      sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch').rejects('garApi.patch Example Reject', () => {
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [
-            {
-              message: 'Failed to add to GAR',
-            },
-          ],
-        });
-      });
-      res.locals.gar = { garId: 'ABCDEFGH' };
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), {
-          ...cookie.getGarArrivalVoyage(),
-          isInbound: cookie.getIsInbound(),
-        });
-      });
+  it('clears coordinates and saves inbound direction, then returns to the GAR view', async () => {
+    res.locals.gar.departurePort = 'LFAT';
+    req.body.portChoice = 'Yes';
+    req.body.arrivalPort = 'BFS';
+    req.body.buttonClicked = 'Save';
+    await controller(req, res);
+    expect(patch).to.have.been.calledOnce;
+    expect(patch.firstCall.args[2]).to.include({
+      arrivalPort: 'BFS',
+      arrivalLat: '',
+      arrivalLong: '',
+      arrivalPortChoice: 'Yes',
+      isInbound: true,
     });
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
+  });
 
-    it('should return the error message if one is returned from api', () => {
-      const cookie = new CookieModel(req);
-      sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch').resolves(
-        JSON.stringify({
-          message: 'GAR does not exist',
-        })
-      );
+  it('renders a message returned by the API instead of continuing', async () => {
+    patch.resolves({ message: 'GAR does not exist' });
+    await controller(req, res);
+    expectErrors(['GAR does not exist']);
+  });
 
-      res.locals.gar = { garId: 'ABCDEFGH' };
+  it('preserves the backend message on an HTTP rejection', async () => {
+    patch.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'GAR does not exist' },
+      })
+    );
+    await controller(req, res);
+    expectErrors(['GAR does not exist']);
+  });
 
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), {
-          ...cookie.getGarArrivalVoyage(),
-          isInbound: cookie.getIsInbound(),
-        });
-        expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
-          cookie,
-          errors: [
-            {
-              message: 'GAR does not exist',
-            },
-          ],
-        });
-      });
-    });
-
-    // TODO:
-    // Save and Continue currently goes to the next page, but it
-    // should probably go to the craft page if going through the flow,
-    // but back to the GAR view if going into specific sections.
-    it('should go to the home page if no buttonClicked property', () => {
-      const cookie = new CookieModel(req);
-      sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch').resolves(JSON.stringify({}));
-      res.locals.gar = { garId: 'ABCDEFGH' };
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(req.body.buttonClicked).to.be.undefined;
-        expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), {
-          ...cookie.getGarArrivalVoyage(),
-          isInbound: cookie.getIsInbound(),
-        });
-        expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
-      });
-    });
-
-    it('should go to craft page if buttonClicked property is set', () => {
-      req.body.buttonClicked = 'Save and continue';
-      const cookie = new CookieModel(req);
-      sinon.stub(garApi, 'get').resolves(apiResponse);
-      sinon.stub(garApi, 'patch').resolves(JSON.stringify({}));
-      res.locals.gar = { garId: 'ABCDEFGH' };
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), {
-          ...cookie.getGarArrivalVoyage(),
-          isInbound: cookie.getIsInbound(),
-        });
-        expect(res.redirect).to.have.been.calledWith('/garfile/craft');
-      });
-    });
+  it('renders a generic error when saving fails without an HTTP message', async () => {
+    patch.rejects(new Error('Connection unavailable'));
+    await controller(req, res);
+    expectErrors(['Failed to add to GAR']);
   });
 });

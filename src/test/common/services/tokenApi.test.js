@@ -1,123 +1,65 @@
-const { expect } = require('chai');
+const sinon = require('sinon');
 const chai = require('chai');
-const nock = require('nock');
+const { expect } = chai;
+chai.use(require('sinon-chai'));
 
 require('../../global.test');
-
-const endpoints = require('../../../common/config/endpoints');
-const tokenApi = require('../../../common/services/tokenApi');
-const genToken = require('../../../common/services/create-token');
 const config = require('../../../common/config/index');
+const tokenApi = require('../../../common/services/data-access/tokenApi');
+const genToken = require('../../../common/services/create-token');
 
-describe('TokenService', () => {
-  const url = '/user/settoken';
-  const tokenId = '1ebc7b27-ae9f-4962-8bc4-434cdbc6c7ec';
-  const newTokenId = '1be8ed60-fd12-400b-9dc1-350447272199';
-  const userId = 'a066ca4e-9d08-49e4-8fcc-881daf9f1099';
-  const orgId = 'a066ca4e-9d08-49e4-8888-881daf9f1099';
-  const roleName = 'Owner';
-  const BASE_URL = endpoints.baseUrl();
+describe('TokenApi', () => {
+  let client;
+  let api;
 
   beforeEach(() => {
-    nock(BASE_URL).post(url, { tokenId, userId }).reply(201, {});
-
-    nock(BASE_URL).put(url, { tokenId: newTokenId, userId }).reply(201, {});
-
-    nock(BASE_URL)
-      .post(url, {
-        tokenId,
-        inviterId: userId,
-        organisationId: orgId,
-        roleName,
-      })
-      .reply(201, {});
+    client = {
+      post: sinon.stub().resolves({ created: true }),
+      put: sinon.stub().resolves({ updated: true }),
+    };
+    api = new tokenApi.TokenApi(client);
   });
 
-  it('Should successfully call the settoken API', (done) => {
-    tokenApi.setToken(tokenId, userId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
+  afterEach(() => sinon.restore());
+
+  it('sets and updates user tokens', async () => {
+    expect(await api.setToken('token-1', 'user-1')).to.deep.equal({ created: true });
+    expect(client.post).to.have.been.calledWithExactly('/user/settoken', {
+      tokenId: 'token-1',
+      userId: 'user-1',
+    });
+
+    expect(await api.updateToken('token-2', 'user-1')).to.deep.equal({ updated: true });
+    expect(client.put).to.have.been.calledWithExactly('/user/settoken', {
+      tokenId: 'token-2',
+      userId: 'user-1',
     });
   });
 
-  it('should throw an error when calling the settoken API', () => {
-    nock.cleanAll();
-    nock(BASE_URL).post(url, { tokenId, userId }).replyWithError({ message: 'Example setToken error', code: 404 });
-
-    tokenApi
-      .setToken(tokenId, userId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example setToken error');
-      });
-  });
-
-  it('should allow the updating of a tokenId', (done) => {
-    tokenApi.updateToken(newTokenId, userId).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
+  it('preserves optional invitee email in organisation invite tokens', async () => {
+    expect(await api.setInviteUserToken('token-1', 'inviter-1', 'org-1', 'Admin', 'invitee@example.com')).to.deep.equal(
+      { created: true }
+    );
+    expect(client.post.firstCall.args[0]).to.equal('/user/settoken');
+    expect(client.post.firstCall.args[1]).to.deep.equal({
+      tokenId: 'token-1',
+      inviterId: 'inviter-1',
+      organisationId: 'org-1',
+      roleName: 'Admin',
+      inviteeEmail: 'invitee@example.com',
     });
   });
 
-  it('should throw an error when updating a tokenId', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .put(url, { tokenId: newTokenId, userId })
-      .replyWithError({ message: 'Example updateToken error', code: 404 });
-
-    tokenApi
-      .updateToken(newTokenId, userId)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example updateToken error');
-      });
-  });
-
-  it('should successfully set the token of an invited org user', (done) => {
-    tokenApi.setInviteUserToken(tokenId, userId, orgId, roleName).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
-    });
-  });
-
-  it('should throw an error when setting the token of an invited org user', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .post(url, {
-        tokenId,
-        inviterId: userId,
-        organisationId: orgId,
-        roleName,
-      })
-      .replyWithError({
-        message: 'Example setInviteUserToken error',
-        code: 404,
-      });
-
-    tokenApi
-      .setInviteUserToken(tokenId, userId, orgId, roleName)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example setInviteUserToken error');
-      });
+  it('exports only the class for construction by dataAccessApi', () => {
+    expect(Object.keys(tokenApi)).to.deep.equal(['TokenApi']);
   });
 });
 
 describe('Generate Hash', () => {
+  afterEach(() => sinon.restore());
+
   it('should successfully generate a hash', () => {
-    config.NOTIFY_TOKEN_SECRET = 'example';
+    sinon.stub(config, 'NOTIFY_TOKEN_SECRET').value('example');
     const token = 'randominput'.toString();
     const output = genToken.generateHash(token);
 

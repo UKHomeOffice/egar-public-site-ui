@@ -1,5 +1,5 @@
 const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/personApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const createArrayCsvStringifier = require('csv-writer').createArrayCsvStringifier;
 
@@ -33,23 +33,30 @@ module.exports = (req, res) => {
   const userId = cookie.getUserDbId();
   logger.debug(`In people export get controller, user ${userId} is exporting data.`);
 
-  personApi.getPeople(userId, 'individual').then((values) => {
-    const people = JSON.parse(values).map((person) => {
-      return [
-        person.personId,
-        person.firstName,
-        person.lastName,
-        person.gender,
-        person.dateOfBirth,
-        person.nationality,
-        person.documentType,
-        person.documentNumber,
-        person.documentExpiryDate,
-        person.issuingState,
-        person.peopleType.name,
-      ];
-    });
+  return personApi
+    .getPeople(userId, 'individual')
+    .then((values) => {
+      const people = values.map((person) => {
+        return [
+          person.personId,
+          person.firstName,
+          person.lastName,
+          person.gender,
+          person.dateOfBirth,
+          person.nationality,
+          person.documentType,
+          person.documentNumber,
+          person.documentExpiryDate,
+          person.issuingState,
+          person.peopleType.name,
+        ];
+      });
 
-    writePeopleAsCSVtoResponse(res, people);
-  });
+      writePeopleAsCSVtoResponse(res, people);
+    })
+    .catch((err) => {
+      logger.error('Failed to export saved people', { errorMessage: err?.message, stack: err?.stack });
+      req.session.errMsg = { message: 'Failed to export saved people. Try again' };
+      return req.session.save(() => res.redirect('/people'));
+    });
 };

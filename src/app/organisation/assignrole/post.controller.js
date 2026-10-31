@@ -5,7 +5,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenservice = require('../../../common/services/create-token');
 const emailService = require('../../../common/services/sendEmail');
-const tokenApi = require('../../../common/services/tokenApi');
+const { tokenApi } = require('../../../common/services/dataAccessApi');
 const config = require('../../../common/config/index');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { ROLE_PERMISSION_ERROR_MSG } = require('../constants');
@@ -44,19 +44,18 @@ module.exports = (req, res) => {
   const roleChain = [new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Select a role')];
 
   // Validate chains
-  validator
+  return validator
     .validateChains([roleChain])
     .then(() => {
-      tokenApi
+      return tokenApi
         .setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId, inviteeEmail)
         .then((apiResponse) => {
-          const apiResponseObj = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(apiResponseObj, 'message')) {
+          if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
             // API call unsuccessful
             res.render('app/organisation/assignrole/index', {
               cookie,
               roles,
-              errors: [apiResponseObj],
+              errors: [apiResponse],
             });
             return;
           }
@@ -64,7 +63,7 @@ module.exports = (req, res) => {
 
           const notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
 
-          emailService
+          return emailService
             .send(notifyTemplate, inviteeEmail, {
               firstname: firstName,
               lastname: lastName,
@@ -87,7 +86,8 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('Failed to set invite token', { errorMessage: err?.message, stack: err?.stack });
-          res.render('app/organisation/assignrole/index', { cookie, roles, errors: [err] });
+          const error = err?.type === 'http_error' && err.body && typeof err.body.message === 'string' ? err.body : err;
+          res.render('app/organisation/assignrole/index', { cookie, roles, errors: [error] });
         });
     })
     .catch((err) => {

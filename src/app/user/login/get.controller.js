@@ -1,12 +1,10 @@
 const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, HTTPS } = require('../../../common/config');
 const sendEmail = require('../../../common/services/sendEmail');
-const organisationApi = require('../../../common/services/organisationApi');
-const verifyUserService = require('../../../common/services/verificationApi');
+const { organisationApi, userManageApi, verificationApi } = require('../../../common/services/dataAccessApi');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { getOneLoginLogoutUrl } = require('../../../common/utils/oneLoginAuth');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
@@ -41,9 +39,7 @@ const sendAdminUpdateEmail = (userObj, accountUrl) => {
     return new Promise((resolve, _reject) => resolve(userObj));
   }
 
-  return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((users) => {
-    const userList = JSON.parse(users);
-
+  return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((userList) => {
     userList.items.forEach((user) => {
       try {
         sendEmail.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
@@ -69,7 +65,7 @@ const sendAdminUpdateEmail = (userObj, accountUrl) => {
  */
 const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
   const { email, sub: oneLoginSid } = userInfo;
-  return userApi
+  return userManageApi
     .userSearch(email, oneLoginSid)
     .then(async (userData) => {
       if (!userData?.userId) {
@@ -92,23 +88,16 @@ const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
 
         case oneLoginSidMatches && !emailMatches:
           // sid matches but email does not.
-          return new Promise((resolve, reject) =>
-            userApi
-              .updateEmailOrOneLoginSid(userData.email, { email })
-              .then(() => {
-                userData.email = email;
-                sendAdminUpdateEmail(userData, accountUrl).then(() => resolve(userData));
-              })
-              .catch((err) => reject(err))
-          );
+          return userManageApi.updateEmailOrOneLoginSid(userData.email, { email }).then(() => {
+            userData.email = email;
+            return sendAdminUpdateEmail(userData, accountUrl).then(() => userData);
+          });
         case emailMatches && userData.oneLoginSid === null:
           // user email exists, but onelogin is null or does not match - action, update SID
-          return new Promise((resolve, _reject) =>
-            userApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then((_e) => {
-              userData.oneLoginSid = oneLoginSid;
-              return resolve(userData);
-            })
-          );
+          return userManageApi.updateEmailOrOneLoginSid(userData.email, { oneLoginSid }).then(() => {
+            userData.oneLoginSid = oneLoginSid;
+            return userData;
+          });
         case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
           logger.error('Login error: User SID does not match but email matches.');
@@ -123,7 +112,7 @@ const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
         return userData;
       }
 
-      return userApi.getDetails(email).then((details) => {
+      return userManageApi.getDetails(email).then((details) => {
         const { organisation } = details || {};
         const cookie = new CookieModel(req);
 
@@ -256,14 +245,17 @@ module.exports = async (req, res) => {
 
 async function checkUserInvite(req, res, email) {
   try {
-    const apiResponse = await verifyUserService.getUserInviteToken(email);
-    if (apiResponse['message'] === 'Token expired' || apiResponse['message'] === 'Token already used') {
-      logger.error('Invite link to register expired or already used.');
-      return redirectErrorPage(req, res, 'invite-expired');
-    }
-
+    await verificationApi.getUserInviteToken(email);
     return ROUTES.REGISTER;
   } catch (error) {
+    if (
+      error?.type === 'http_error' &&
+      error.status === 400 &&
+      ['Token expired', 'Token already used'].includes(error.body?.message)
+    ) {
+      logger.error('Login invitation token rejected', { reason: error.body.message });
+      return redirectErrorPage(req, res, 'invite-expired');
+    }
     logger.error('Failed to register invite link', { errorMessage: error?.message, stack: error?.stack });
     return redirectErrorPage(req, res, 'login-error');
   }

@@ -3,7 +3,7 @@ const _ = require('lodash');
 const logger = require('../../../../common/utils/logger')(__filename);
 const validator = require('../../../../common/utils/validator');
 const CookieModel = require('../../../../common/models/Cookie.class');
-const garApi = require('../../../../common/services/garApi');
+const { garApi } = require('../../../../common/services/dataAccessApi');
 const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
@@ -33,14 +33,13 @@ module.exports = (req, res) => {
 
   const errMsg = { message: 'Failed to update GAR person. Try again' };
 
-  validator
+  return validator
     .validateChains(validations.validations(req))
     .then(() => {
-      garApi
+      return garApi
         .updateGarPerson(res?.locals?.gar?.garId, person)
         .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+          if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
             return res.render('app/garfile/manifest/editperson/index', {
               req,
               cookie,
@@ -48,7 +47,7 @@ module.exports = (req, res) => {
               persontype,
               documenttype,
               genderchoice,
-              errors: [parsedResponse],
+              errors: [apiResponse],
             });
           }
           return res.redirect('/garfile/manifest');
@@ -66,7 +65,7 @@ module.exports = (req, res) => {
             persontype,
             documenttype,
             genderchoice,
-            errors: [errMsg],
+            errors: [err?.type === 'http_error' && typeof err.body?.message === 'string' ? err.body : errMsg],
           });
         });
     })

@@ -1,163 +1,105 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
 
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const userApi = require('../../../common/services/userManageApi');
-
+const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/user/manageuserdetail/post.controller');
 
 describe('Manage User Detail Post Controller', () => {
   let req;
   let res;
+  let updateStub;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
     req = {
-      body: {
-        firstname: 'Kylo',
-        lastname: 'Ren',
-      },
+      body: { firstname: 'Kylo Changed', lastname: 'Ren' },
       session: {
-        u: {
-          e: 'kylo.ren@firstorder.emp',
-          rl: 'Admin',
-          fn: 'Kylo',
-          ln: 'Ren',
-        },
-        redirect: sinon.stub(),
-        save: sinon.stub(),
+        u: { e: 'kylo.ren@example.com', rl: 'Admin', fn: 'Kylo', ln: 'Ren' },
+        save: sinon.stub().callsArg(0),
       },
     };
-    res = {
-      redirect: sinon.stub(),
-      render: sinon.stub(),
-    };
+    res = { redirect: sinon.spy(), render: sinon.spy() };
+    updateStub = sinon.stub(userApi, 'updateDetails').resolves({});
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should return validation error on empty first name', () => {
-    req.body.firstname = '';
+  [
+    ['firstname', '', 'Enter your given names'],
+    ['firstname', undefined, 'Enter your given names'],
+    ['lastname', '', 'Enter your family name'],
+  ].forEach(([field, value, message]) => {
+    it(`renders validation errors for ${field}=${String(value)} without calling the API`, async () => {
+      req.body[field] = value;
 
-    const cookie = new CookieModel(req);
-    cookie.getUserFirstName();
-
-    const callController = async () => {
       await controller(req, res);
-    };
 
-    callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-        cookie,
-        errors: [new ValidationRule(validator.isNotEmpty, 'firstname', '', 'Enter your given names')],
-      });
-    });
-
-    delete req.body.firstname;
-
-    callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-        cookie,
-        errors: [new ValidationRule(validator.isNotEmpty, 'firstname', undefined, 'Enter your given names')],
+      expect(updateStub).not.to.have.been.called;
+      expect(req.session.save).not.to.have.been.called;
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/manageuserdetail/index', {
+        cookie: new CookieModel(req),
+        errors: [new ValidationRule(validator.isNotEmpty, field, value, message)],
       });
     });
   });
 
-  it('should return validation error on empty last name', () => {
-    req.body.lastname = '';
-    req.body.firstname = 'Kylo';
+  it('redirects without updating when trimmed names are unchanged', async () => {
+    req.body = { firstname: ' Kylo ', lastname: ' Ren ' };
 
-    const cookie = new CookieModel(req);
+    await controller(req, res);
 
-    const callController = async () => {
+    expect(updateStub).not.to.have.been.called;
+    expect(req.session.save).not.to.have.been.called;
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/user/details');
+  });
+
+  it('stores trimmed names and saves a success message before redirecting', async () => {
+    req.body.firstname = ' Kylo Changed ';
+
+    await controller(req, res);
+
+    expect(updateStub).to.have.been.calledOnceWithExactly('kylo.ren@example.com', 'Kylo Changed', 'Ren');
+    expect(req.session.u.fn).to.equal('Kylo Changed');
+    expect(req.session.u.ln).to.equal('Ren');
+    expect(req.session.successHeader).to.equal('Success');
+    expect(req.session.successMsg).to.equal('You have changed your name');
+    expect(req.session.save).to.have.been.calledOnce;
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/user/details');
+    sinon.assert.callOrder(updateStub, req.session.save, res.redirect);
+  });
+
+  [
+    ['message response', null, { message: 'Person does not exist' }],
+    ['http_error', 400, { message: 'Person does not exist' }],
+    ['network_error', null, null],
+  ].forEach(([type, status, body]) => {
+    it(`renders the appropriate error without changing names on a ${type}`, async () => {
+      if (type === 'message response') {
+        updateStub.resolves(body);
+      } else {
+        updateStub.rejects(Object.assign(new Error('Request failed'), { type, status, body }));
+      }
+
       await controller(req, res);
-    };
 
-    callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-        cookie,
-        errors: [new ValidationRule(validator.isNotEmpty, 'lastname', '', 'Enter your family name')],
+      expect(req.session.u.fn).to.equal('Kylo');
+      expect(req.session.u.ln).to.equal('Ren');
+      expect(req.session.successMsg).to.be.undefined;
+      expect(req.session.successHeader).to.be.undefined;
+      expect(req.session.save).not.to.have.been.called;
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/user/manageuserdetail/index', {
+        cookie: new CookieModel(req),
+        errors: [body || { message: 'Failed to update. Try again' }],
       });
     });
-  });
-
-  it('should return an error if the user api rejects', () => {
-    sinon.stub(userApi, 'updateDetails').rejects('userApi.updateDetails Example Reject');
-    const cookie = new CookieModel(req);
-    req.body.firstname = 'Kylo Changed';
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-          cookie,
-          errors: [{ message: 'Failed to update. Try again' }],
-        });
-      });
-  });
-
-  it('should return the response if the api returns an error message', () => {
-    sinon.stub(userApi, 'updateDetails').resolves(
-      JSON.stringify({
-        message: 'Person does not exist',
-      })
-    );
-    req.body.firstname = 'Kylo Changed';
-    const cookie = new CookieModel(req);
-
-    cookie.setUserFirstName('Kylo');
-    cookie.setUserLastName('Ren');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(userApi.updateDetails).to.have.been.calledWith('kylo.ren@firstorder.emp', 'Kylo Changed', 'Ren');
-        expect(res.render).to.have.been.calledWith('app/user/manageuserdetail/index', {
-          cookie,
-          errors: [{ message: 'Person does not exist' }],
-        });
-      });
-  });
-
-  it('should update the cookie if the api returns ok', () => {
-    sinon.stub(userApi, 'updateDetails').resolves(
-      JSON.stringify({
-        firstName: 'Kylo Changed',
-        lastName: 'Ren',
-      })
-    );
-
-    req.body.firstname = 'Kylo Changed';
-
-    const cookie = new CookieModel(req);
-    cookie.setUserFirstName('Kylo');
-    cookie.setUserLastName('Ren');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(userApi.updateDetails).to.have.been.calledWith('kylo.ren@firstorder.emp', 'Kylo Changed', 'Ren');
-        expect(req.session.save).to.have.been.called;
-      });
   });
 });

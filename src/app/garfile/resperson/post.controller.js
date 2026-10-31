@@ -4,8 +4,7 @@ const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_
 const utils = require('../../../common/utils/utils');
 const validator = require('../../../common/utils/validator');
 const validations = require('../../resperson/validations');
-const resPersonApi = require('../../../common/services/resPersonApi');
-const garApi = require('../../../common/services/garApi');
+const { resPersonApi, garApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -32,20 +31,32 @@ module.exports = async (req, res) => {
     }
   } else {
     const responsiblePerson = utils.getResponsiblePersonFromReq(req);
-    const resPersonsResponse = await resPersonApi.getResPersons(cookie.getUserDbId());
-    const responsiblePersons = await JSON.parse(resPersonsResponse);
-    validator
+    let responsiblePersons;
+    try {
+      responsiblePersons = await resPersonApi.getResPersons(cookie.getUserDbId());
+    } catch (err) {
+      logger.error('Failed to get saved responsible persons', {
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
+      return res.render('app/garfile/resperson/index', {
+        cookie,
+        responsiblePerson,
+        fixedBasedOperatorOptions,
+        errors: [{ message: 'Failed to get saved responsible persons' }],
+      });
+    }
+    return validator
       .validateChains(validations.validations(req))
       .then(() => {
-        garApi
+        return garApi
           .patch(res.locals.gar.garId, cookie.getGarStatus(), responsiblePerson)
           .then((apiResponse) => {
-            const parsedResponse = JSON.parse(apiResponse);
-            if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+            if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
               res.render('app/garfile/resperson/index', {
                 cookie,
                 fixedBasedOperatorOptions,
-                errors: [parsedResponse],
+                errors: [apiResponse],
               });
               return;
             }
@@ -68,7 +79,11 @@ module.exports = async (req, res) => {
               responsiblePerson,
               responsiblePersons,
               fixedBasedOperatorOptions,
-              errors: [{ message: 'Failed to add to GAR' }],
+              errors: [
+                err?.type === 'http_error' && typeof err.body?.message === 'string'
+                  ? err.body
+                  : { message: 'Failed to add to GAR' },
+              ],
             });
           });
       })

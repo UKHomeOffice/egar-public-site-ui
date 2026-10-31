@@ -3,7 +3,7 @@ const _ = require('lodash');
 const logger = require('../../../../common/utils/logger')(__filename);
 const validator = require('../../../../common/utils/validator');
 const CookieModel = require('../../../../common/models/Cookie.class');
-const garApi = require('../../../../common/services/garApi');
+const { garApi } = require('../../../../common/services/dataAccessApi');
 const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
@@ -30,14 +30,13 @@ module.exports = (req, res) => {
     documentExpiryDate: expiryDate,
   };
 
-  validator
+  return validator
     .validateChains(validations.validations(req))
     .then(() => {
-      garApi
+      return garApi
         .patch(res.locals.gar.garId, 'Draft', { people: [person] })
         .then((garResponse) => {
-          const parsedResponse = JSON.parse(garResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+          if (Object.prototype.hasOwnProperty.call(garResponse, 'message')) {
             res.render('app/garfile/manifest/addnewperson/index', {
               req,
               cookie,
@@ -45,7 +44,7 @@ module.exports = (req, res) => {
               persontype,
               documenttype,
               genderchoice,
-              errors: [parsedResponse],
+              errors: [garResponse],
             });
           } else {
             res.redirect('/garfile/manifest');
@@ -64,7 +63,11 @@ module.exports = (req, res) => {
             persontype,
             documenttype,
             genderchoice,
-            errors: [{ message: 'Error adding a new person. Try again later' }],
+            errors: [
+              err?.type === 'http_error' && typeof err.body?.message === 'string'
+                ? err.body
+                : { message: 'Error adding a new person. Try again later' },
+            ],
           });
         });
     })

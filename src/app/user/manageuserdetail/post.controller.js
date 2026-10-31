@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const userApi = require('../../../common/services/userManageApi');
+const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
 const { MAX_STRING_LENGTH } = require('../../../common/config/index');
 const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
 
@@ -64,7 +64,7 @@ module.exports = (req, res) => {
     new ValidationRule(validator.notEmpty, 'lastname', lastName, 'Enter your family name'),
   ];
 
-  validator
+  return validator
     .validateChains([firstNameChain, lnameChain])
     .then(() => {
       if (firstName?.trim() === cookie.getUserFirstName() && lastName?.trim() === cookie.getUserLastName()) {
@@ -72,14 +72,13 @@ module.exports = (req, res) => {
         return res.redirect('/user/details');
       }
 
-      userApi
+      return userApi
         .updateDetails(cookie.getUserEmail(), firstName, lastName)
         .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+          if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
             return res.render('app/user/manageuserdetail/index', {
               cookie,
-              errors: [parsedResponse],
+              errors: [apiResponse],
             });
           }
           cookie.setUserFirstName(firstName);
@@ -97,7 +96,11 @@ module.exports = (req, res) => {
           logger.error('Failed to update user details', { errorMessage: err?.message, stack: err?.stack });
           res.render('app/user/manageuserdetail/index', {
             cookie,
-            errors: [{ message: 'Failed to update. Try again' }],
+            errors: [
+              err?.type === 'http_error' && err.body && typeof err.body.message === 'string'
+                ? err.body
+                : { message: 'Failed to update. Try again' },
+            ],
           });
         });
     })

@@ -1,12 +1,12 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   logger.debug('In garfile/print manifest get controller');
-  const garId = cookie.getGarId();
+  const garId = res.locals.gar.garId;
 
   const garPeople = garApi.getPeople(garId);
   const garDetails = garApi.get(garId, true);
@@ -20,11 +20,14 @@ module.exports = (req, res) => {
     garsupportingdocs: {},
   };
 
-  Promise.all([garDetails, garPeople, garDocs])
+  return Promise.all([garDetails, garPeople, garDocs])
     .then((responseValues) => {
-      const parsedGar = JSON.parse(responseValues[0]);
-      const parsedPeople = JSON.parse(responseValues[1]);
-      const supportingDocuments = JSON.parse(responseValues[2]);
+      if (responseValues.some((response) => response?.statusCode >= 400)) {
+        throw new Error('Printable manifest lookup failed');
+      }
+      const parsedGar = { ...responseValues[0] };
+      const parsedPeople = responseValues[1];
+      const supportingDocuments = responseValues[2];
 
       cookie.setGarStatus(parsedGar.status.name);
       logger.info(`Retrieved GAR id: ${parsedGar.garId}`);
