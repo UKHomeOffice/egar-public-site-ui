@@ -1,8 +1,6 @@
-const config = require('../config');
+const { API_BASE, API_VERSION } = require('../config');
 const { URL } = require('url');
 
-const { API_BASE } = config;
-const { API_VERSION } = config;
 const BASE_URL = new URL(API_VERSION, API_BASE).href;
 const { HttpClient } = require('./httpClient');
 const garApi = require('./data-access/garApi');
