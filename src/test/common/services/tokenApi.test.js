@@ -6,7 +6,7 @@ chai.use(require('sinon-chai'));
 require('../../global.test');
 const config = require('../../../common/config/index');
 const tokenApi = require('../../../common/services/data-access/tokenApi');
-const genToken = require('../../../common/services/create-token');
+const tokenService = require('../../../common/services/create-token');
 
 describe('TokenApi', () => {
   let client;
@@ -61,7 +61,7 @@ describe('Generate Hash', () => {
   it('should successfully generate a hash', () => {
     sinon.stub(config, 'NOTIFY_TOKEN_SECRET').value('example');
     const token = 'randominput'.toString();
-    const output = genToken.generateHash(token);
+    const output = tokenService.generateHash(token);
 
     expect(output).not.to.equal(token);
     expect(output.length).to.eq(64);

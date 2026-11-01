@@ -2,7 +2,7 @@ const i18n = require('i18n');
 const emailService = require('../../../common/services/sendEmail');
 const { userManageApi, organisationApi } = require('../../../common/services/dataAccessApi');
 
-const settings = require('../../../common/config/index');
+const config = require('../../../common/config/index');
 
 const adminDeletionType = (orgUsers) => {
   const LAST_ADMIN_IN_ORGANISATION = 1;
@@ -28,7 +28,7 @@ const defaultText = () => ({
 const defaultDeletion = async (cookie) => ({
   deleteAccount: async () => await userManageApi.deleteUser(cookie.getUserEmail()),
   notifyUser: async () => {
-    const templateId = settings.NOTIFY_ONELOGIN_ACCOUNT_DELETE_TEMPLATE_ID;
+    const templateId = config.NOTIFY_ONELOGIN_ACCOUNT_DELETE_TEMPLATE_ID;
     await emailService.send(templateId, cookie.getUserEmail(), {
       firstName: cookie.getUserFirstName(),
       lastName: cookie.getUserLastName(),
@@ -69,7 +69,7 @@ const deleteAccount = {
       notifyUser: async () => {
         switch (deletionType) {
           case 'DELETE_ORGANISATION':
-            return await emailService.send(settings.NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID, cookie.getUserEmail(), {
+            return await emailService.send(config.NOTIFY_ORGANISATION_DELETE_TEMPLATE_ID, cookie.getUserEmail(), {
               firstName: cookie.getUserFirstName(),
               orgName: cookie.getOrganisationName(),
             });
@@ -78,7 +78,7 @@ const deleteAccount = {
             throw new Error('Email should not be sent if admin is not deleted');
 
           case 'DELETE_ADMIN':
-            return await emailService.send(settings.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID, cookie.getUserEmail(), {
+            return await emailService.send(config.NOTIFY_ACCOUNT_DELETE_TEMPLATE_ID, cookie.getUserEmail(), {
               firstName: cookie.getUserFirstName(),
               lastName: cookie.getUserLastName(),
             });

@@ -6,7 +6,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
-const sendEmail = require('../../../common/services/sendEmail');
+const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 const { verificationApi } = require('../../../common/services/dataAccessApi');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
@@ -146,7 +146,7 @@ async function handleConfirmNameSubmission(req, _res) {
   cookie.setOrganisationId(organisation?.organisationId);
 
   try {
-    await sendEmail.send(config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID, email, {
+    await emailService.send(config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID, email, {
       user: `${firstName}`,
     });
   } catch (error) {

@@ -3,7 +3,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const tokenservice = require('../../../common/services/create-token');
+const tokenService = require('../../../common/services/create-token');
 const emailService = require('../../../common/services/sendEmail');
 const { tokenApi } = require('../../../common/services/dataAccessApi');
 const config = require('../../../common/config/index');
@@ -30,7 +30,7 @@ module.exports = (req, res) => {
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
   const token = nanoid(alphabet, 13);
-  const hashToken = tokenservice.generateHash(token);
+  const hashToken = tokenService.generateHash(token);
   const inviterName = cookie.getUserFirstName();
   const firstName = cookie.getInviteUserFirstName();
   const lastName = cookie.getInviteUserLastName();

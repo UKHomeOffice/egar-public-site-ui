@@ -7,9 +7,9 @@ require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
 const { organisationApi } = require('../../common/services/dataAccessApi');
 
-const settings = require('../../common/config/index');
+const config = require('../../common/config/index');
 const configMock = {
-  ...settings,
+  ...config,
 };
 const controller = require('../../app/organisation/get.controller', {
   '../../common/config/index': configMock,

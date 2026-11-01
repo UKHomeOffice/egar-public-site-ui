@@ -7,9 +7,9 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const { personApi } = require('../../../common/services/dataAccessApi');
 
-const settings = require('../../../common/config/index');
+const config = require('../../../common/config/index');
 const configMock = {
-  ...settings,
+  ...config,
 };
 
 const controller = require('../../../app/user/viewDetails/get.controller', {
@@ -55,7 +55,7 @@ describe('User View Details Get Controller', () => {
     expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
       cookie,
       errors: [{ message: 'There was a problem fetching data' }],
-      ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
+      ONE_LOGIN_ACCOUNT_URL: config.ONE_LOGIN_ACCOUNT_URL,
     });
   });
 
@@ -86,7 +86,7 @@ describe('User View Details Get Controller', () => {
           cookie,
           savedPeople: personApiResponse,
           errors: [{ message: 'Example error message' }],
-          ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
+          ONE_LOGIN_ACCOUNT_URL: config.ONE_LOGIN_ACCOUNT_URL,
         });
       });
     });
@@ -109,7 +109,7 @@ describe('User View Details Get Controller', () => {
           savedPeople: personApiResponse,
           successHeader: 'Successful header',
           successMsg: 'Example success message',
-          ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
+          ONE_LOGIN_ACCOUNT_URL: config.ONE_LOGIN_ACCOUNT_URL,
         });
       });
     });
@@ -127,7 +127,7 @@ describe('User View Details Get Controller', () => {
         expect(res.render).to.have.been.calledOnceWithExactly(indexPage, {
           cookie,
           savedPeople: personApiResponse,
-          ONE_LOGIN_ACCOUNT_URL: settings.ONE_LOGIN_ACCOUNT_URL,
+          ONE_LOGIN_ACCOUNT_URL: config.ONE_LOGIN_ACCOUNT_URL,
         });
       });
     });

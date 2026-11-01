@@ -8,7 +8,7 @@ const oneLoginApi = require('../../../common/services/oneLoginApi');
 const { userManageApi, organisationApi } = require('../../../common/services/dataAccessApi');
 const { verificationApi } = require('../../../common/services/dataAccessApi');
 
-const sendEmail = require('../../../common/services/sendEmail');
+const emailService = require('../../../common/services/sendEmail');
 
 require('../../global.test');
 
@@ -250,7 +250,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
       adminsStub = sinon.stub(organisationApi, 'getListOfOrgUsers').resolves({
         items: [{ email: 'admin@example.com', firstName: 'Test', lastName: 'Admin' }],
       });
-      emailStub = sinon.stub(sendEmail, 'send').resolves();
+      emailStub = sinon.stub(emailService, 'send').resolves();
     });
 
     it('uses the object response to notify admins and completes login', async () => {

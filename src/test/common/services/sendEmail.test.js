@@ -10,7 +10,7 @@ require('../../global.test');
 const notify = require('notifications-node-client');
 const config = require('../../../common/config/index');
 
-const service = require('../../../common/services/sendEmail');
+const emailService = require('../../../common/services/sendEmail');
 
 describe('Send Email Service', () => {
   let notifyStub;
@@ -43,7 +43,7 @@ describe('Send Email Service', () => {
   it('should reject on API reject', () => {
     notifyStub.rejects(new Error('Example Error from API'));
 
-    service
+    emailService
       .send('template_id', 'a@b.com', { firstName: 'a' })
       .then(() => {
         chai.assert.fail('Should not reach here');
@@ -59,7 +59,7 @@ describe('Send Email Service', () => {
   it('should resolve on API resolve', () => {
     notifyStub.resolves('Success');
 
-    service
+    emailService
       .send('template_id_2', 'b@c.com', { firstName: 'b' })
       .then((result) => {
         expect(notifyStub).to.have.been.calledOnceWithExactly('template_id_2', 'b@c.com', {

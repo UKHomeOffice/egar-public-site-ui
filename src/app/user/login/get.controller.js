@@ -1,9 +1,9 @@
-const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
+const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, BASE_URL, HTTPS } = require('../../../common/config');
-const sendEmail = require('../../../common/services/sendEmail');
+const emailService = require('../../../common/services/sendEmail');
 const { organisationApi, userManageApi, verificationApi } = require('../../../common/services/dataAccessApi');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { getOneLoginLogoutUrl } = require('../../../common/utils/oneLoginAuth');
@@ -42,7 +42,7 @@ const sendAdminUpdateEmail = (userObj, accountUrl) => {
   return organisationApi.getListOfOrgUsers(userObj.organisation.organisationId, 'Admin').then((userList) => {
     userList.items.forEach((user) => {
       try {
-        sendEmail.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
+        emailService.send(NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID, user.email, {
           firstName: userObj.firstName,
           lastName: userObj.lastName,
           accountUrl,
@@ -158,7 +158,7 @@ module.exports = async (req, res) => {
 
   if (!code) {
     return res.render('app/user/login/index', {
-      oneLoginAuthUrl: oneLoginUtil.getOneLoginAuthUrl(req, res),
+      oneLoginAuthUrl: oneLoginUtils.getOneLoginAuthUrl(req, res),
     });
   }
 
@@ -167,7 +167,7 @@ module.exports = async (req, res) => {
   }
 
   return oneLoginApi
-    .sendOneLoginTokenRequest(req, code, oneLoginUtil)
+    .sendOneLoginTokenRequest(req, code, oneLoginUtils)
     .then(({ access_token, id_token }) => {
       if (!id_token) {
         // If for some reason, One Login service does not return a valid id_token, something is wrong with service.
@@ -178,7 +178,7 @@ module.exports = async (req, res) => {
       req.session.id_token = id_token;
 
       return new Promise((resolve) => {
-        oneLoginUtil.verifyJwt(id_token, req.cookies.nonce, resolve);
+        oneLoginUtils.verifyJwt(id_token, req.cookies.nonce, resolve);
       })
         .then((isValid) => {
           if (!isValid) {

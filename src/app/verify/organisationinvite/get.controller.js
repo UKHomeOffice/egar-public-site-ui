@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
-const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
+const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const { verificationApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = async (req, res) => {
@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
   const token = req.query.query;
   const hashedToken = tokenService.generateHash(token);
 
-  const oneLoginAuthUrl = oneLoginUtil.getOneLoginAuthUrl(req, res);
+  const oneLoginAuthUrl = oneLoginUtils.getOneLoginAuthUrl(req, res);
 
   cookie.setInviteUserToken(hashedToken);
   logger.info('Set hashedToken');

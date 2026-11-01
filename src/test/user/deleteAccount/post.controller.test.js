@@ -7,7 +7,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const { userManageApi, organisationApi } = require('../../../common/services/dataAccessApi');
-const sendEmail = require('../../../common/services/sendEmail');
+const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 
 const { adminDeletionType, deleteAccount } = require('../../../app/user/deleteAccount/utils');
@@ -68,7 +68,7 @@ describe('Individual and organisation-member account deletion through dataAccess
     };
     res = { render: sinon.spy(), redirect: sinon.spy(), locals: {} };
     removeStub = sinon.stub(userManageApi, 'deleteUser').resolves({});
-    notifyStub = sinon.stub(sendEmail, 'send').resolves();
+    notifyStub = sinon.stub(emailService, 'send').resolves();
   });
 
   afterEach(() => sinon.restore());
@@ -172,7 +172,7 @@ describe('User Delete Account Post Controller', () => {
       });
       deleteStub = sinon.stub(organisationApi, 'delete').resolves({});
       deleteUserStub = sinon.stub(userManageApi, 'deleteUser').resolves({});
-      notifyStub = sinon.stub(sendEmail, 'send').resolves();
+      notifyStub = sinon.stub(emailService, 'send').resolves();
       destroyStub = sinon.stub(req.session, 'destroy').callsArg(0);
     });
 
