@@ -928,7 +928,7 @@ describe('Validator', () => {
 
     it('Should return a valid document type from a given document type', () => {
       expect(validator.isValidDocumentType('Passport')).to.eql(true);
-      expect(validator.isValidDocumentType('National Identity Card')).to.eql(true);
+      expect(validator.isValidDocumentType('National identity card')).to.eql(true);
       expect(validator.isValidDocumentType('Other')).to.eql(true);
 
       expect(validator.isValidDocumentType('Banana')).to.eql(false);
@@ -942,11 +942,11 @@ describe('Validator', () => {
     it('Should return a valid document type from a given document type', () => {
       expect(validator.isOtherDocumentWithDocumentDesc(['Other', 'UN documents'])).to.eql(true);
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', undefined])).to.eql(true);
-      expect(validator.isOtherDocumentWithDocumentDesc(['National Identity Card', null])).to.eql(true);
+      expect(validator.isOtherDocumentWithDocumentDesc(['National identity card', null])).to.eql(true);
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', ''])).to.eql(true);
 
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', 'Apple'])).to.eql(false);
-      expect(validator.isOtherDocumentWithDocumentDesc(['National Identity Card', 'Pineapple'])).to.eql(false);
+      expect(validator.isOtherDocumentWithDocumentDesc(['National identity card', 'Pineapple'])).to.eql(false);
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', {}])).to.eql(false);
       expect(validator.isOtherDocumentWithDocumentDesc()).to.eql(false);
     });
