@@ -9,13 +9,13 @@ const tokenService = require('../../../common/services/create-token');
 
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const controller = require('../../../app/verify/organisationinvite/get.controller');
-const { verificationApi: verifyUserService } = require('../../../common/services/dataAccessApi');
+const { verificationApi } = require('../../../common/services/dataAccessApi');
 
 describe('Verify Organisation Invite Get Controller', () => {
   let req;
   let res;
   const oneLoginAuthUrl = 'https://onelogin?code=123&state=state';
-  let verifyUserServiceStub;
+  let verificationApiStub;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -34,7 +34,7 @@ describe('Verify Organisation Invite Get Controller', () => {
     };
     sinon.stub(tokenService, 'generateHash').returns('HashedToken123');
     sinon.stub(oneLoginUtils, 'getOneLoginAuthUrl').returns(oneLoginAuthUrl);
-    verifyUserServiceStub = sinon.stub(verifyUserService, 'getUserInviteTokenByTokenId');
+    verificationApiStub = sinon.stub(verificationApi, 'getUserInviteTokenByTokenId');
   });
 
   afterEach(() => {
@@ -43,11 +43,11 @@ describe('Verify Organisation Invite Get Controller', () => {
 
   it('should clear the cookie and set a hashed token before render', async () => {
     req.session.u = { dbId: 'old-user' };
-    verifyUserServiceStub.resolves({ tokenId: 'HashedToken123' });
+    verificationApiStub.resolves({ tokenId: 'HashedToken123' });
     await controller(req, res);
 
     expect(tokenService.generateHash).to.have.been.calledOnceWithExactly('Example Incoming Unhashed Token');
-    expect(verifyUserServiceStub).to.have.been.calledOnceWithExactly('HashedToken123');
+    expect(verificationApiStub).to.have.been.calledOnceWithExactly('HashedToken123');
     expect(new CookieModel(req).getInviteUserToken()).to.eq('HashedToken123');
     expect(new CookieModel(req).getUserDbId()).not.to.exist;
     expect(res.redirect).not.to.have.been.called;
@@ -58,7 +58,7 @@ describe('Verify Organisation Invite Get Controller', () => {
 
   ['Token expired', 'Token already used'].forEach((message) => {
     it(`redirects to the expired-invite page for HTTP 400 ${message}`, async () => {
-      verifyUserServiceStub.rejects(
+      verificationApiStub.rejects(
         Object.assign(new Error('Bad Request'), {
           type: 'http_error',
           status: 400,
@@ -79,7 +79,7 @@ describe('Verify Organisation Invite Get Controller', () => {
     ['network_error', undefined, undefined],
   ].forEach(([type, status, body]) => {
     it(`redirects to the error page on ${type} ${status || ''}`, async () => {
-      verifyUserServiceStub.rejects(
+      verificationApiStub.rejects(
         Object.assign(new Error('Request failed'), {
           type,
           ...(type === 'http_error' ? { status, body } : {}),

@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
 const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
-const { verificationApi: verifyUserService } = require('../../../common/services/dataAccessApi');
+const { verificationApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = async (req, res) => {
   // Start by clearing cookies and initialising
@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
   logger.info('Set hashedToken');
 
   try {
-    await verifyUserService.getUserInviteTokenByTokenId(hashedToken);
+    await verificationApi.getUserInviteTokenByTokenId(hashedToken);
     return res.render('app/verify/organisationinvite/index', { oneLoginAuthUrl });
   } catch (error) {
     if (
