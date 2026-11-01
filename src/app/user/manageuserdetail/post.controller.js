@@ -2,7 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
+const { userManageApi } = require('../../../common/services/dataAccessApi');
 const { MAX_STRING_LENGTH } = require('../../../common/config/index');
 const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
 
@@ -72,7 +72,7 @@ module.exports = (req, res) => {
         return res.redirect('/user/details');
       }
 
-      return userApi
+      return userManageApi
         .updateDetails(cookie.getUserEmail(), firstName, lastName)
         .then((apiResponse) => {
           if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {

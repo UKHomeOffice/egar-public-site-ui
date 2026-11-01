@@ -7,7 +7,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const { organisationApi: orgApi } = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 let roles = require('../../../common/seeddata/egar_user_roles.json');
 
 const controller = require('../../../app/organisation/editusers/post.controller');
@@ -53,7 +53,7 @@ describe('Organisation Edit Users Post Controller', () => {
       render: sinon.stub(),
     };
 
-    orgApiStub = sinon.stub(orgApi, 'editUser');
+    orgApiStub = sinon.stub(organisationApi, 'editUser');
     sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 

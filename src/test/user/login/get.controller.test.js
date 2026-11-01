@@ -5,8 +5,8 @@ const sinonChai = require('sinon-chai');
 const config = require('../../../common/config/index');
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const { userManageApi: userApi, organisationApi } = require('../../../common/services/dataAccessApi');
-const { verificationApi: verification } = require('../../../common/services/dataAccessApi');
+const { userManageApi, organisationApi } = require('../../../common/services/dataAccessApi');
+const { verificationApi } = require('../../../common/services/dataAccessApi');
 
 const sendEmail = require('../../../common/services/sendEmail');
 
@@ -47,7 +47,7 @@ describe('User Login Get Controller', () => {
       set: sinon.spy(),
     };
 
-    getSetInviteTokenStub = sinon.stub(verification, 'getUserInviteToken').resolves({ tokenId: '123' });
+    getSetInviteTokenStub = sinon.stub(verificationApi, 'getUserInviteToken').resolves({ tokenId: '123' });
 
     oneLoginUrlStub = sinon
       .stub(oneLoginUtils, 'getOneLoginAuthUrl')
@@ -65,9 +65,9 @@ describe('User Login Get Controller', () => {
       sub: 'onelogin_sid',
     });
 
-    userSearchStub = sinon.stub(userApi, 'userSearch');
-    updateEmailOrOneLoginSidStub = sinon.stub(userApi, 'updateEmailOrOneLoginSid');
-    getDetailsStub = sinon.stub(userApi, 'getDetails');
+    userSearchStub = sinon.stub(userManageApi, 'userSearch');
+    updateEmailOrOneLoginSidStub = sinon.stub(userManageApi, 'updateEmailOrOneLoginSid');
+    getDetailsStub = sinon.stub(userManageApi, 'getDetails');
     oneLoginJwtVerifyStub = sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
       callback(true); // Simulate successful JWT verification
     });
@@ -544,7 +544,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
     expect(res.redirect.firstCall.args[0]).to.contain('/logout');
   });
 
-  it('should redirect to /onelogin/register if user cannot be found from userApi.search', async () => {
+  it('should redirect to /onelogin/register if user cannot be found from userManageApi.userSearch', async () => {
     // Setup
     req.query = {
       code: '123',
@@ -572,7 +572,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
       access_token: 'mock_access_token',
       id_token: 'mock_id_token',
     });
-    getSetInviteTokenStub = sinon.stub(verification, 'getUserInviteToken').resolves({ tokenId: '123' });
+    getSetInviteTokenStub = sinon.stub(verificationApi, 'getUserInviteToken').resolves({ tokenId: '123' });
 
     // Mock user info from OneLogin with email_verified set to true
     getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin').resolves({
@@ -581,8 +581,8 @@ FnBdx5XR9zLe40LX3+cbEtw=
       sub: 'onelogin_sid',
     });
 
-    // Mock userApi.userSearch to return a result indicating no user was found
-    userSearchStub = sinon.stub(userApi, 'userSearch').resolves({
+    // Mock userManageApi.userSearch to return a result indicating no user was found
+    userSearchStub = sinon.stub(userManageApi, 'userSearch').resolves({
       userId: null, // No user ID indicates user not found
       state: null,
       oneLoginSid: null,

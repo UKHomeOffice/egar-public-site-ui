@@ -1,7 +1,7 @@
 const { WORKFLOW_STEPS, PHASE_GIVEN_NAME, PHASE_CONFIRM_NAME, PHASE_REGISTRATION_COMPLETE } = require('./constants');
 const CookieModel = require('../../../common/models/Cookie.class');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
+const { userManageApi } = require('../../../common/services/dataAccessApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
@@ -105,7 +105,7 @@ async function handleConfirmNameSubmission(req, _res) {
   try {
     const { tokenId } = await verificationApi.getUserInviteToken(email);
 
-    resp = await userApi.createUser(email, firstName, lastName, sub, 'verified', tokenId);
+    resp = await userManageApi.createUser(email, firstName, lastName, sub, 'verified', tokenId);
   } catch (error) {
     logger.error('Failed to create user', { errorMessage: error?.message, stack: error?.stack });
     return [Outcome.ERROR, error.message || 'Error creating user', null];

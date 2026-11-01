@@ -6,7 +6,7 @@ const { expect } = chai;
 
 require('../../global.test');
 
-const { userManageApi: userApi, organisationApi } = require('../../../common/services/dataAccessApi');
+const { userManageApi, organisationApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/organisation/delete/get.controller');
 
 describe('Organisation Delete User Get Controller', () => {
@@ -27,7 +27,7 @@ describe('Organisation Delete User Get Controller', () => {
       },
     };
     res = { redirect: sinon.spy() };
-    getStub = sinon.stub(userApi, 'getDetails').resolves(user);
+    getStub = sinon.stub(userManageApi, 'getDetails').resolves(user);
     deleteStub = sinon.stub(organisationApi, 'deleteUser').resolves({});
     saveStub = sinon.stub(req.session, 'save').callsArg(0);
   });

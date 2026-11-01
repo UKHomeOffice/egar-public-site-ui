@@ -7,7 +7,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
+const { userManageApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/organisation/inviteusers/post.controller');
 
 describe('Organisation Invite User Post Controller', () => {
@@ -34,7 +34,7 @@ describe('Organisation Invite User Post Controller', () => {
       redirect: sinon.spy(),
     };
 
-    getDetailsStub = sinon.stub(userApi, 'getDetails');
+    getDetailsStub = sinon.stub(userManageApi, 'getDetails');
   });
 
   afterEach(() => {

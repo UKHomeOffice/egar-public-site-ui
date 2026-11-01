@@ -1,7 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const validations = require('./validations');
-const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
+const { userManageApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 module.exports = (req, res) => {
@@ -15,7 +15,7 @@ module.exports = (req, res) => {
       cookie.setInviteUserFirstName(fname);
       cookie.setInviteUserLastName(lname);
       cookie.setInviteUserEmail(email);
-      return userApi
+      return userManageApi
         .getDetails(email)
         .then((apiResponse) => {
           if (apiResponse.message === 'User not registered') {

@@ -6,7 +6,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
+const { userManageApi } = require('../../../common/services/dataAccessApi');
 const sendEmail = require('../../../common/services/sendEmail');
 const validator = require('../../../common/utils/validator');
 const {
@@ -17,7 +17,7 @@ const {
 
 // Import controller
 const postController = require('../../../app/user/onelogin/post.controller');
-const { verificationApi: getUserInviteToken } = require('../../../common/services/dataAccessApi');
+const { verificationApi } = require('../../../common/services/dataAccessApi');
 
 describe('User OneLogin Post Controller', () => {
   let req;
@@ -50,8 +50,8 @@ describe('User OneLogin Post Controller', () => {
 
     validateChainsStub = sinon.stub(validator, 'validateChains');
     getUserInfoStub = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin');
-    createUserStub = sinon.stub(userApi, 'createUser');
-    getUserInviteTokenStub = sinon.stub(getUserInviteToken, 'getUserInviteToken');
+    createUserStub = sinon.stub(userManageApi, 'createUser');
+    getUserInviteTokenStub = sinon.stub(verificationApi, 'getUserInviteToken');
     sinon.stub(sendEmail, 'send').resolves({});
   });
 

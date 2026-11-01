@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const { organisationApi: orgApi } = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/organisation/searchusers/get.controller');
 
 describe('Organisation Search Users Get Controller', () => {
@@ -27,7 +27,7 @@ describe('Organisation Search Users Get Controller', () => {
       render: sinon.spy(),
     };
 
-    orgApiStub = sinon.stub(orgApi, 'getSearchOrgUsers');
+    orgApiStub = sinon.stub(organisationApi, 'getSearchOrgUsers');
   });
 
   afterEach(() => {

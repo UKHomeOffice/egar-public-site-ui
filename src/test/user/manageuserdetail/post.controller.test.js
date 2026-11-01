@@ -7,7 +7,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
+const { userManageApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/user/manageuserdetail/post.controller');
 
 describe('Manage User Detail Post Controller', () => {
@@ -24,7 +24,7 @@ describe('Manage User Detail Post Controller', () => {
       },
     };
     res = { redirect: sinon.spy(), render: sinon.spy() };
-    updateStub = sinon.stub(userApi, 'updateDetails').resolves({});
+    updateStub = sinon.stub(userManageApi, 'updateDetails').resolves({});
   });
 
   afterEach(() => sinon.restore());

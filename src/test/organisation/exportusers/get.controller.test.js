@@ -6,7 +6,7 @@ const sinonChai = require('sinon-chai');
 require('../../global.test');
 
 const controller = require('../../../app/organisation/exportusers/get.controller');
-const { organisationApi: orgApi } = require('../../../common/services/dataAccessApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 
 describe('Organisation Export User Controller', () => {
   let req;
@@ -44,7 +44,7 @@ describe('Organisation Export User Controller', () => {
       end: sinon.spy(),
     };
 
-    orgApiStub = sinon.stub(orgApi, 'getUsers');
+    orgApiStub = sinon.stub(organisationApi, 'getUsers');
   });
 
   afterEach(() => {

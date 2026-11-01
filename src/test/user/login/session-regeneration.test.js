@@ -7,7 +7,7 @@ const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils
 const config = require('../../../common/config/index');
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const { userManageApi: userApi } = require('../../../common/services/dataAccessApi');
+const { userManageApi } = require('../../../common/services/dataAccessApi');
 
 require('../../global.test');
 
@@ -103,7 +103,7 @@ describe('Login Session Regeneration', () => {
       sub: 'onelogin_sid',
     });
 
-    sinon.stub(userApi, 'userSearch').resolves({
+    sinon.stub(userManageApi, 'userSearch').resolves({
       userId: 'USER-DB-ID-1',
       state: 'verified',
       oneLoginSid: 'onelogin_sid',
@@ -113,7 +113,7 @@ describe('Login Session Regeneration', () => {
       role: { name: 'Individual' },
     });
 
-    sinon.stub(userApi, 'getDetails').resolves({
+    sinon.stub(userManageApi, 'getDetails').resolves({
       organisation: { organisationId: 'ORG-1', organisationName: 'Org Name' },
     });
 
@@ -142,7 +142,7 @@ describe('Login Session Regeneration', () => {
     req.session.redirectUrl = '';
     const res = createLoginResponse();
 
-    const userSearchStub = sinon.stub(userApi, 'userSearch');
+    const userSearchStub = sinon.stub(userManageApi, 'userSearch');
 
     sinon.stub(oneLoginApi, 'sendOneLoginTokenRequest').resolves({
       access_token: 'mock_access_token',
