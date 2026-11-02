@@ -89,7 +89,7 @@ describe('API upload GAR post controller', () => {
         case 'validator_api_uploadgar_people_type_passenger':
           return 'passenger';
         case 'validator_api_uploadgar_duplicate_row':
-          return `The file has ${params.count} entries for people with the same document details.`;
+          return `The file has ${params.count} entries for people with the same document details`;
         default:
           return 'Unexpected Key';
       }
@@ -251,7 +251,7 @@ describe('API upload GAR post controller', () => {
             Boolean,
             'file',
             false,
-            'The file has 2 entries for people with the same document details.'
+            'The file has 2 entries for people with the same document details'
           ),
         ]);
       });
@@ -272,7 +272,7 @@ describe('API upload GAR post controller', () => {
             Boolean,
             'file',
             false,
-            'The file has 2 entries for people with the same document details.'
+            'The file has 2 entries for people with the same document details'
           ),
         ]);
       });
@@ -367,7 +367,7 @@ describe('API upload GAR post controller', () => {
     expect(createGarStub).to.not.have.been.called;
     expect(patchStub).to.not.have.been.called;
     expect(req.session.failureMsg).to.contain.deep.members([
-      new ValidationRule(Boolean, 'file', false, 'The file has 2 entries for people with the same document details.'),
+      new ValidationRule(Boolean, 'file', false, 'The file has 2 entries for people with the same document details'),
     ]);
     expect(req.session.save).to.have.been.calledOnce;
     expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/garupload');

@@ -41,7 +41,7 @@ describe('Upload GAR duplicate rows', () => {
       expect.fail('Expected duplicate row validation to reject');
     } catch (errors) {
       expect(errors).to.deep.equal(rules);
-      expect(errors[0].message).to.equal('The file has 2 entries for people with the same document details.');
+      expect(errors[0].message).to.equal('The file has 2 entries for people with the same document details');
     }
   });
 
@@ -49,7 +49,7 @@ describe('Upload GAR duplicate rows', () => {
     const rules = duplicateRules([person, { ...person }, { ...person }], []);
     expect(rules.map((rule) => rule.value)).to.deep.equal([false]);
     expect(rules.map((rule) => rule.message)).to.deep.equal([
-      'The file has 3 entries for people with the same document details.',
+      'The file has 3 entries for people with the same document details',
     ]);
   });
 
@@ -58,7 +58,7 @@ describe('Upload GAR duplicate rows', () => {
     const rules = duplicateRules([person, { ...person }, otherPerson, { ...otherPerson }, { ...otherPerson }], []);
 
     expect(rules).to.have.lengthOf(1);
-    expect(rules[0].message).to.equal('The file has 5 entries for people with the same document details.');
+    expect(rules[0].message).to.equal('The file has 5 entries for people with the same document details');
     expect(rules[0].value).to.equal(false);
   });
 
@@ -79,7 +79,7 @@ describe('Upload GAR duplicate rows', () => {
     const rules = duplicateRules([], [passenger, { ...passenger }]);
     expect(rules).to.have.lengthOf(1);
     expect(rules[0].value).to.equal(false);
-    expect(rules[0].message).to.equal('The file has 2 entries for people with the same document details.');
+    expect(rules[0].message).to.equal('The file has 2 entries for people with the same document details');
   });
 
   it('accepts rows with the same name but different details', async () => {
