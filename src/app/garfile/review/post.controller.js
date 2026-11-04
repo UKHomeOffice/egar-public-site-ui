@@ -12,6 +12,7 @@ const performAPICall = async (garId, cookie, req, res) => {
   try {
     const apiResponse = await garApi.patch(garId, 'Submitted', {});
     logger.debug('Received response from API');
+
     const parsedResponse = JSON.parse(apiResponse);
 
     if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -76,7 +77,7 @@ const buildValidations = async (garfile, garpeople, manifest) => {
 
   if (!isManifestValid) {
     const validateFailMsg = 'Resolve manifest errors before submitting';
-    validations.push([new ValidationRule(validator.valuetrue, 'resolveError', '', validateFailMsg)]);
+    validations.push([new ValidationRule(validator.valuetrue, 'manifest', '', validateFailMsg)]);
   }
 
   if (!garfile.isMilitaryFlight && !manifest.validateCaptainCrew()) {

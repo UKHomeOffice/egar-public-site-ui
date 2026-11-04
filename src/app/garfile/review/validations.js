@@ -1,7 +1,6 @@
 const i18n = require('i18n');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
-
 const validateManifestMsg = 'An invalid manifest was provided to the server';
 const registrationMsg = 'Aircraft registration must be completed';
 const responsibleMsg = 'Responsible person details must be completed';
@@ -15,6 +14,7 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
     arrivalDate,
     arrivalTime,
     registration,
+    craftType,
     responsibleGivenName,
     visitReason,
     intentionValue,
@@ -26,6 +26,7 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
     arrivalTime,
   };
   const validationArr = [];
+
   garpeople.items.forEach((crew) => {
     const crewLabel = i18n.__('validator_api_uploadgar_people_type_crew');
     const passengerLabel = i18n.__('validator_api_uploadgar_people_type_passenger');
@@ -35,6 +36,15 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
       firstName: crew.firstName,
       lastName: crew.lastName,
     });
+
+    validationArr.push([
+      new ValidationRule(
+        validator.isAlpha,
+        crew.garPeopleId,
+        crew.placeOfBirth,
+        `Place of birth must only include English alphabet letters (A-Z), spaces and hyphens.`
+      ),
+    ]);
     validationArr.push([
       new ValidationRule(
         validator.isAlpha,
@@ -57,6 +67,22 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
     new ValidationRule(validator.isValidDepAndArrDate, 'departure', voyageDateTimeObj, voyageDateMsg),
   ]);
   validationArr.push([new ValidationRule(validator.notEmpty, 'aircraft', registration, registrationMsg)]);
+  validationArr.push([
+    new ValidationRule(
+      validator.isValidAircraftCharacters,
+      'registration',
+      registration,
+      `Aircraft registration must only include English alphabet letters (A to Z), numbers and hyphens (-)`
+    ),
+  ]);
+  validationArr.push([
+    new ValidationRule(
+      validator.isValidAircraftType,
+      'craftType',
+      craftType,
+      `Aircraft type must only include English alphabet letters (A to Z), numbers, spaces and hyphens (-)`
+    ),
+  ]);
   validationArr.push([new ValidationRule(validator.notEmpty, 'manifest', garpeople.items, validateManifestMsg)]);
   if (!frmUpload) {
     validationArr.push([
@@ -69,5 +95,6 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
   if (!frmUpload) {
     validationArr.push([new ValidationRule(validator.notEmpty, 'intentionValue', intentionValue, customsMsg)]);
   }
+
   return validationArr;
 };

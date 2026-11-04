@@ -1,4 +1,14 @@
 <div id="aircraft"></div>
+{% set errorRegistrationRowClass = "" %}
+{% set errorCraftTypeRowClass = "" %}
+{% for error in errors %}
+  {% if error.identifier == "registration" %}
+    {% set errorRegistrationRowClass = "govuk-form-group--error" %}
+  {% endif %}
+  {% if error.identifier == "craftType" %}
+    {% set errorCraftTypeRowClass = "govuk-form-group--error" %}
+  {% endif %}
+{% endfor %}
 {{ govukSummaryList({
   card: {
     title: {
@@ -15,8 +25,9 @@
     }
   },
   rows: [
-    { key: { html: __('field_aircraft_registration') }, value: { text: garfile.registration or '' } },
-    { key: { html: __('field_aircraft_type') }, value: { text: garfile.craftType or '' } },
-    { key: { html: __('field_aircraft_base') }, value: { text: codeToAirfield(garfile.craftBase).label or '' } }
-  ]
+    { key: { html: '<span class="' + errorRegistrationRowClass + '" id="registration">' + __('field_aircraft_registration') + '</span>' }, value: { text: garfile.registration or '' } },
+    { key: { html: '<span class="' + errorCraftTypeRowClass + '"
+      id="craftType">' + __('field_aircraft_type') + '</span>' }, value: { text: garfile.craftType or '' } },
+      { key: { html: __('field_aircraft_base')}, value: { text: codeToAirfield(garfile.craftBase).label or '' } }
+    ]
 }) }}

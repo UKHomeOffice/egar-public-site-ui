@@ -281,7 +281,7 @@ describe('GAR Review Post Controller', () => {
             departDateObj,
             __('field_departure_real_date_validation')
           ),
-          new ValidationRule(validator.valuetrue, 'resolveError', '', 'Resolve manifest errors before submitting'),
+          new ValidationRule(validator.valuetrue, 'manifest', '', 'Resolve manifest errors before submitting'),
           new ValidationRule(
             validator.valuetrue,
             'manifest',
