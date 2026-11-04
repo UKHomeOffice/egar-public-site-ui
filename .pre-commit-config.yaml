@@ -7,7 +7,7 @@ repos:
             -   id: trailing-whitespace
             -   id: end-of-file-fixer
             -   id: check-yaml
-                exclude: "ops/*"
+                exclude: "ops"
             -   id: check-added-large-files
     -   repo: local
         hooks:
@@ -16,4 +16,3 @@ repos:
                 entry: just precommit
                 pass_filenames: false
                 language: system
-
