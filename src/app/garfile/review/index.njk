@@ -21,7 +21,7 @@
       {% include "common/templates/includes/blue-banner.njk" %}
       {% include "check-your-answers.njk" %}
 
-      {% if isJourneyUkInbound %}
+      {% if cookie.getIsInbound() %}
         <form id="submitGarForm" action="/garfile/review" method="post">
           <input id="review-submit"
                  type="submit"
