@@ -793,7 +793,7 @@ function isValidAirportCode(airportCode) {
 }
 
 function isValidBirthPlaceName(input) {
-  const alphaRegex = /^[A-Za-z0-9\s\-\d]+$/;
+  const alphaRegex = /^[A-Za-z\s\-\d]+$/;
   if (!isEmpty(input)) {
     return alphaRegex.test(input);
   }
