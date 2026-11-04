@@ -39,10 +39,10 @@ module.exports.validations = (garfile, garpeople, frmUpload = false) => {
 
     validationArr.push([
       new ValidationRule(
-        validator.isAlpha,
+        validator.isValidBirthPlaceName,
         crew.garPeopleId,
         crew.placeOfBirth,
-        `Place of birth must only include English alphabet letters (A-Z), spaces and hyphens.`
+        `Place of birth must only include English alphabet letters (A-Z), spaces and hyphens (-)`
       ),
     ]);
     validationArr.push([
