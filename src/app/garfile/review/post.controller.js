@@ -133,6 +133,7 @@ module.exports = async (req, res) => {
       req.session.save(() => res.redirect('/garfile/review'));
       return;
     }
+    cookie.setIsInbound(garfile.isInbound);
 
     renderObj = {
       cookie,
@@ -197,7 +198,6 @@ module.exports = async (req, res) => {
       logger.info('Submitted GAR people to AMG check-in', { garId });
       res.redirect(`/garfile/amg/checkin?resubmitted=${resubmit0TLink}${initialSubmit}`);
     } else {
-      cookie.setIsInbound(garfile.isInbound);
       performAPICall(garId, cookie, req, res);
     }
   }

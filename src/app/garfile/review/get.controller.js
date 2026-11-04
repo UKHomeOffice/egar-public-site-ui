@@ -30,8 +30,7 @@ module.exports = (req, res) => {
       const garsupportingdocs = apiResponse[2];
       validator.handleResponseError(garsupportingdocs);
 
-      const isJourneyUkInbound = airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort);
-
+      cookie.setIsInbound(garfile.isInbound);
       const validations = validationList.validations(garfile, garpeople, frmUpload);
 
       if (!garfile.isMilitaryFlight && !manifest.validateCaptainCrew()) {
@@ -46,7 +45,6 @@ module.exports = (req, res) => {
         garpeople,
         garsupportingdocs,
         showChangeLinks: true,
-        isJourneyUkInbound,
       };
 
       validator
