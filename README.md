@@ -80,6 +80,7 @@ and linting rules.
 1. Python
 2. Pre-commit - https://pre-commit.com
 3. Just - https://just.systems/man/en/quick-start.html
+4. djLint - follow the [review-tool installation instructions](docs/setup.md#install-review-tools).
 
 Once all is in place, run the command `pre-commit install`. This installs the hook into your repository. Any changes now will trigger the hooks defined
 in the `.pre-commit-config.yaml` file.
