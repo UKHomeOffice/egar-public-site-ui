@@ -90,6 +90,7 @@ describe('GAR Review Get Controller', () => {
       status: {
         name: 'draft',
       },
+      isInbound: true,
     });
 
     garApiGetPeopleStub.resolves({
@@ -105,13 +106,13 @@ describe('GAR Review Get Controller', () => {
         status: {
           name: 'draft',
         },
+        isInbound: true,
       },
       garpeople: {
         items: [],
       },
       garsupportingdocs: {},
       showChangeLinks: true,
-      isJourneyUkInbound: true,
       errors: [
         new ValidationRule(
           validator.isValidDepAndArrDate,
@@ -146,6 +147,7 @@ describe('GAR Review Get Controller', () => {
         ),
       ],
     });
+    expect(cookie.getIsInbound()).to.equal(true);
   });
 
   it('renders the page when supporting documents contain an API message', async () => {
@@ -197,7 +199,6 @@ describe('GAR Review Get Controller', () => {
         message: 'GAR not found',
       },
       showChangeLinks: true,
-      isJourneyUkInbound: true,
     });
   });
 
@@ -246,7 +247,6 @@ describe('GAR Review Get Controller', () => {
       },
       garsupportingdocs: {},
       showChangeLinks: true,
-      isJourneyUkInbound: true,
     });
   });
 });

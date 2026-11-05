@@ -87,10 +87,8 @@ describe('API upload GAR post controller', () => {
           return 'crew member';
         case 'validator_api_uploadgar_people_type_passenger':
           return 'passenger';
-        case 'validator_api_uploadgar_duplicate_document_number':
-          return 'The file contains duplicate travel document numbers.';
         case 'validator_api_uploadgar_duplicate_row':
-          return `Duplicate row found for ${params.name}. Remove the duplicate row from the Excel template and upload it again.`;
+          return `The file has ${params.count} entries for people with the same document details`;
         default:
           return 'Unexpected Key';
       }
@@ -273,7 +271,6 @@ describe('API upload GAR post controller', () => {
             'NATIONALITY',
             'Enter a valid nationality for crew member James Kirk. Must be a ISO 3166 country code'
           ),
-          new ValidationRule(Boolean, 'file', false, 'The file contains duplicate travel document numbers.'),
           new ValidationRule(
             validator.validISOCountryLength,
             '',
@@ -303,7 +300,12 @@ describe('API upload GAR post controller', () => {
       await callController().then(() => {
         expect(req.session.save).to.have.been.called;
         expect(req.session.failureMsg).to.contain.deep.members([
-          new ValidationRule(Boolean, 'file', false, 'The file contains duplicate travel document numbers.'),
+          new ValidationRule(
+            Boolean,
+            'file',
+            false,
+            'The file has 2 entries for people with the same document details'
+          ),
         ]);
       });
     });
@@ -323,7 +325,7 @@ describe('API upload GAR post controller', () => {
             Boolean,
             'file',
             false,
-            'Duplicate row found for crew member James Kirk. Remove the duplicate row from the Excel template and upload it again.'
+            'The file has 2 entries for people with the same document details'
           ),
         ]);
       });
@@ -418,14 +420,7 @@ describe('API upload GAR post controller', () => {
     expect(createGarStub).to.not.have.been.called;
     expect(patchStub).to.not.have.been.called;
     expect(req.session.failureMsg).to.contain.deep.members([
-      new ValidationRule(Boolean, 'file', false, 'The file contains duplicate travel document numbers.'),
-      new ValidationRule(
-        Boolean,
-        'file',
-        false,
-        'Duplicate row found for crew member James Kirk. Remove the duplicate row from the Excel template and upload it again.'
-      ),
-      new ValidationRule(Boolean, 'file', false, 'The file contains duplicate travel document numbers.'),
+      new ValidationRule(Boolean, 'file', false, 'The file has 2 entries for people with the same document details'),
     ]);
     expect(req.session.save).to.have.been.calledOnce;
     expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/garupload');
@@ -572,7 +567,7 @@ describe('API upload GAR post controller', () => {
             validator.isValidDocumentType,
             '',
             'Cipher',
-            'Enter a valid document type for crew member James Kirk, it should be "Passport", "National Identity Card", "Other", not "Cipher"'
+            'Enter a valid document type for crew member James Kirk, it should be "Passport", "National identity card", "Other", not "Cipher"'
           ),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');

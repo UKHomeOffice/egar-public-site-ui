@@ -3,7 +3,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const { garApi } = require('../../../common/services/dataAccessApi');
 const validator = require('../../../common/utils/validator');
-const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
@@ -24,11 +23,9 @@ module.exports = async (req, res) => {
     const manifest = new Manifest(garpeople);
 
     validator.handleResponseError(garpeople);
-
     validator.handleResponseError(garsupportingdocs);
 
-    const isJourneyUkInbound = airportValidation.isJourneyUKInbound(garfile.departurePort, garfile.arrivalPort);
-
+    cookie.setIsInbound(garfile.isInbound);
     const validations = validationList.validations(garfile, garpeople, frmUpload);
 
     if (!garfile.isMilitaryFlight && !manifest.validateCaptainCrew()) {
@@ -43,7 +40,6 @@ module.exports = async (req, res) => {
       garpeople,
       garsupportingdocs,
       showChangeLinks: true,
-      isJourneyUkInbound,
     };
 
     try {
