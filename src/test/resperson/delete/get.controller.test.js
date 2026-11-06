@@ -1,91 +1,70 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
+const chai = require('chai');
 
-const resPersonApi = require('../../../common/services/resPersonApi');
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
+require('../../global.test');
+const { resPersonApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/resperson/delete/get.controller');
 
 describe('Responsible Person Delete Get Controller', () => {
   let req;
   let res;
-  let deleteResPersonStub;
-  let sessionSaveStub;
+  let deleteStub;
+  let saveStub;
 
   beforeEach(() => {
     req = {
-      query: {
-        deleteResponsiblePerson: 'DELETE-PERSON-ID',
-      },
-      session: {
-        u: { dbId: '343' },
-        save: (callback) => callback(),
-      },
+      query: { deleteResponsiblePerson: 'person-1' },
+      session: { u: { dbId: 'user-1' }, save: (callback) => callback() },
     };
-
-    res = {
-      redirect: sinon.spy(),
-    };
-
-    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
-    deleteResPersonStub = sinon.stub(resPersonApi, 'deleteResponsiblePerson');
+    res = { redirect: sinon.spy() };
+    saveStub = sinon.stub(req.session, 'save').callsArg(0);
+    deleteStub = sinon.stub(resPersonApi, 'deleteResponsiblePerson');
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should redirect if responsiblePersonId is undefined', async () => {
+  it('redirects without calling the API if no ID is supplied', async () => {
     delete req.query.deleteResponsiblePerson;
 
     await controller(req, res);
 
-    expect(deleteResPersonStub).to.not.have.been.called;
-    expect(res.redirect).to.have.been.calledWith('/resperson');
-  });
-
-  it('should render the page with error if the resPerson api resolves', async () => {
-    deleteResPersonStub.resolves(
-      JSON.stringify({
-        message: 'responsible person not found',
-      })
-    );
-
-    await controller(req, res);
-
-    expect(deleteResPersonStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
-    expect(req.session.errMsg).to.eql({
-      message: 'Failed to delete responsible person. Try again',
-    });
-    expect(sessionSaveStub).to.have.been.calledOnce;
+    expect(deleteStub).not.to.have.been.called;
+    expect(saveStub).not.to.have.been.called;
     expect(res.redirect).to.have.been.calledOnceWithExactly('/resperson');
   });
 
-  it('should render the page with success message on successful deletion of responsible person', async () => {
-    deleteResPersonStub.resolves(JSON.stringify({}));
+  it('saves the success message and redirects after deletion', async () => {
+    deleteStub.resolves({});
 
     await controller(req, res);
 
-    expect(deleteResPersonStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
+    expect(deleteStub).to.have.been.calledOnceWithExactly('user-1', 'person-1');
     expect(req.session.errMsg).to.be.undefined;
-    expect(req.session.successHeader).to.eq('Success');
-    expect(req.session.successMsg).to.eq('Responsible is person deleted');
-    expect(sessionSaveStub).to.have.been.calledOnce;
+    expect(req.session.successHeader).to.equal('Success');
+    expect(req.session.successMsg).to.equal('Responsible is person deleted');
+    expect(saveStub).to.have.been.calledOnce;
     expect(res.redirect).to.have.been.calledOnceWithExactly('/resperson');
   });
 
-  it('should render the page with error if the resPerson API rejects', async () => {
-    deleteResPersonStub.rejects('getResPerson Example Reject');
+  ['message response', 'http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`saves an error and redirects without a success message on a ${type}`, async () => {
+      const body = { message: 'Person not found' };
+      if (type === 'message response') {
+        deleteStub.resolves(body);
+      } else {
+        deleteStub.rejects(Object.assign(new Error('Request failed'), { type, status: 404, body }));
+      }
 
-    const callController = async () => {
       await controller(req, res);
-    };
 
-    callController().then(() => {
-      expect(deleteResPersonStub).to.have.been.calledWith('343', 'DELETE-PERSON-ID');
-      expect(req.session.errMsg).to.eql({
-        message: 'Failed to delete responsible person. Try again',
-      });
-      expect(sessionSaveStub).to.have.been.calledOnce;
+      expect(deleteStub).to.have.been.calledOnceWithExactly('user-1', 'person-1');
+      expect(req.session.errMsg).to.deep.equal({ message: 'Failed to delete responsible person. Try again' });
+      expect(req.session.successHeader).to.be.undefined;
+      expect(req.session.successMsg).to.be.undefined;
+      expect(saveStub).to.have.been.calledOnce;
       expect(res.redirect).to.have.been.calledOnceWithExactly('/resperson');
     });
   });

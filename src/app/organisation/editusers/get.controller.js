@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const orgApi = require('../../../common/services/organisationApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
 const { getRolesForAssigning } = require('../../../common/utils/utils');
 
 module.exports = (req, res) => {
@@ -14,13 +14,10 @@ module.exports = (req, res) => {
 
   const roles = getRolesForAssigning(cookie.getUserRole());
 
-  orgApi
+  return organisationApi
     .getUserById(userId)
     .then((apiResponse) => {
-      const orgUser = JSON.parse(apiResponse);
-      if (orgUser !== undefined) {
-        orgUser.role = orgUser.role.name;
-      }
+      const orgUser = apiResponse === undefined ? undefined : { ...apiResponse, role: apiResponse.role.name };
       return res.render('app/organisation/editusers/index', { cookie, orgUser, roles });
     })
     .catch((err) => {

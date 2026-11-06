@@ -1,11 +1,9 @@
 const fileType = require('file-type');
-const stream = require('stream');
 
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
+const { garApi, fileUploadApi } = require('../../../common/services/dataAccessApi');
 const transformers = require('../../../common/utils/transformers');
 const clamAVService = require('../../../common/services/clamAVService');
-const uploadFile = require('../../../common/services/fileUploadApi');
 const config = require('../../../common/config/index');
 const { isValidFileMime } = require('../../../common/utils/validator');
 
@@ -26,17 +24,16 @@ const exceedFileNumSizeLimit = (fileSize, garId) => {
       .getSupportingDocs(garId)
       .then((gars) => {
         let total = 0;
-        const parsedGars = JSON.parse(gars);
-        if (parsedGars.items.length >= MAX_NUM) {
+        if (gars.items.length >= MAX_NUM) {
           logger.warn('Number of supporting documents exceeds the maximum allowed', {
             garId,
             maxNumFiles: MAX_NUM,
-            existingNumFiles: parsedGars.items.length,
+            existingNumFiles: gars.items.length,
           });
           resolve('EXCEEDS_MAX_NUMBER');
         }
         // Get total size from gars.items.size
-        parsedGars.items.forEach((gar) => {
+        gars.items.forEach((gar) => {
           total += transformers.strToBytes(gar.size);
         });
         logger.debug('Computed total supporting document size', {
@@ -73,8 +70,7 @@ const handleDeleteDocument = async (req, res, garId) => {
 
   try {
     const apiResponse = await garApi.deleteGarSupportingDoc(garId, req.body.deleteDocId);
-    const parsedResponse = JSON.parse(apiResponse);
-    if (parsedResponse.message) {
+    if (apiResponse.message) {
       res.redirect('/garfile/supportingdocuments?query=deletefailed');
       return true;
     }
@@ -130,38 +126,18 @@ module.exports = async (req, res) => {
     }
     logger.info('Valid mimetype, proceeding');
 
-    logger.debug('About to create a Stream of the file buffer');
-    const readStream = new stream.Readable();
-    readStream.push(req.file.buffer);
-    readStream.push(null);
-    logger.debug('Stream created, about to send to AV scan endpoint');
-
-    const uriString = `${process.env.CLAMAV_BASE}:${process.env.CLAMAV_PORT}/scan`;
-    logger.debug(`uri: ${uriString}`);
-
-    const formData = {
-      name: req.file.originalname,
-      file: {
-        value: req.file.buffer, // Upload the file in the multi-part post
-        options: {
-          filename: req.file.originalname,
-        },
-      },
-    };
-
-    const clamavResp = await clamAVService.scanFile(formData);
+    const clamavResp = await clamAVService.scanFile(req.file);
     logger.debug('User is authorized to upload supporting documents');
     if (!clamavResp) {
       res.redirect('/garfile/supportingdocuments?query=v');
       return;
     }
 
-    const response = await uploadFile.postFile(garId, req.file);
-    const parsedResponse = JSON.parse(response);
-    if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+    const response = await fileUploadApi.postFile(garId, req.file);
+    if (response && Object.prototype.hasOwnProperty.call(response, 'message')) {
       logger.debug('Api returned message key');
-      logger.debug(JSON.stringify(parsedResponse));
-      req.session.errMsg = parsedResponse;
+      logger.debug(JSON.stringify(response));
+      req.session.errMsg = response;
       res.redirect('/garfile/supportingdocuments?query=e');
       return;
     }
@@ -172,19 +148,8 @@ module.exports = async (req, res) => {
     logger.error('Error occurred during supporting document upload');
     logger.error(err);
 
-    if (err === 'garApi.getSupportingDocs Example Reject') {
-      res.redirect('/garfile/supportingdocuments?query=e');
-      return;
-    }
-
-    if (typeof err === 'string' && err.includes('scanFile')) {
-      res.redirect('/garfile/supportingdocuments?query=e');
-      return;
-    }
-
-    if (typeof err === 'string' && err.includes('postFile')) {
-      res.redirect('/garfile/supportingdocuments?query=e');
-      return;
+    if (err?.type === 'http_error' && err.body && Object.prototype.hasOwnProperty.call(err.body, 'message')) {
+      req.session.errMsg = err.body;
     }
 
     res.redirect('/garfile/supportingdocuments?query=e');

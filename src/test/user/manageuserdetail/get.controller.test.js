@@ -5,9 +5,9 @@ const sinonChai = require('sinon-chai');
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const settings = require('../../../common/config/index');
+const config = require('../../../common/config/index');
 const configMock = {
-  ...settings,
+  ...config,
 };
 
 const controller = require('../../../app/user/manageuserdetail/get.controller', {

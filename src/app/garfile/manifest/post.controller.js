@@ -1,8 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { Manifest } = require('../../../common/models/Manifest.class');
-const garApi = require('../../../common/services/garApi');
-const personApi = require('../../../common/services/personApi');
+const { garApi, personApi } = require('../../../common/services/dataAccessApi');
 const manifestUtil = require('./bulkAdd');
 
 module.exports = async (req, res) => {
@@ -17,10 +16,10 @@ module.exports = async (req, res) => {
     req.session.save(() => res.redirect('/garfile/manifest/editperson'));
   } else if (req.body.personId && buttonClicked === 'Add to GAR') {
     logger.debug('Found people to add to manifest');
-    manifestUtil
+    return manifestUtil
       .getDetailsByIds(req.body.personId, cookie.getUserDbId())
       .then((selectedPeople) => {
-        garApi
+        return garApi
           .patch(res?.locals?.gar?.garId, 'Draft', { people: selectedPeople })
           .then(() => {
             res.redirect('/garfile/manifest');
@@ -57,7 +56,7 @@ module.exports = async (req, res) => {
 
     const addPeopleToGarIds = typeof req.body.garPeopleId === 'string' ? [req.body.garPeopleId] : req.body.garPeopleId;
 
-    manifestUtil
+    return manifestUtil
       .getgarPeopleIds(addPeopleToGarIds, res.locals.gar.garId)
       .then((selectedPeople) => {
         const people = selectedPeople.map(function (element) {
@@ -76,7 +75,7 @@ module.exports = async (req, res) => {
             peopleType: element.peopleType,
           };
         });
-        personApi
+        return personApi
           .create(cookie.getUserDbId(), { people })
           .then(() => {
             req.session.successMsg = 'Person successfully added to people!';
@@ -98,7 +97,7 @@ module.exports = async (req, res) => {
     cookie.setIsMilitaryFlight(isMilitaryFlight);
 
     try {
-      await garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { isMilitaryFlight });
+      await garApi.patch(res.locals.gar.garId, cookie.getGarStatus(), { isMilitaryFlight });
     } catch (err) {
       logger.error('Failed to update GAR', {
         garId: cookie.getGarId(),
@@ -117,7 +116,7 @@ module.exports = async (req, res) => {
     let apiResponse;
 
     try {
-      apiResponse = await garApi.getPeople(cookie.getGarId());
+      apiResponse = await garApi.getPeople(res.locals.gar.garId);
     } catch (err) {
       logger.error('Failed to get manifest', {
         garId: cookie.getGarId(),

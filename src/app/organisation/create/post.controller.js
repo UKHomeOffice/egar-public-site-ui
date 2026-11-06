@@ -2,7 +2,8 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const orgApi = require('../../../common/services/organisationApi');
+const { organisationApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const orgname = req.body.orgName;
@@ -12,15 +13,14 @@ module.exports = (req, res) => {
   cookie.setOrganisationName(orgname);
 
   // Validate chains
-  validator
+  return validator
     .validateChains(validations.validations(req))
     .then(() => {
       // API should return OrgId
       logger.debug('Calling create org api endpoint');
-      orgApi
+      return organisationApi
         .create(orgname, cookie.getUserDbId())
-        .then((apiResponse) => {
-          const responseObj = JSON.parse(apiResponse);
+        .then((responseObj) => {
           if (Object.prototype.hasOwnProperty.call(responseObj, 'message')) {
             const error = [{ message: responseObj.message }];
             res.render('app/organisation/create/index', { cookie, errors: error });
@@ -38,7 +38,8 @@ module.exports = (req, res) => {
             errorMessage: err?.message,
             stack: err?.stack,
           });
-          res.render('app/organisation/create/index', { cookie, errors: [err] });
+          const error = getApiErrorBody(err) ?? err;
+          res.render('app/organisation/create/index', { cookie, errors: [error] });
         });
     })
     .catch((err) => {

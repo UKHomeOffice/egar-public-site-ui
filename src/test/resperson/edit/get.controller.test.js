@@ -1,113 +1,71 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
 
+chai.use(require('sinon-chai'));
+const { expect } = chai;
+
+require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const resPersonApi = require('../../../common/services/resPersonApi');
+const { resPersonApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/resperson/edit/get.controller');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
-const utils = require('../../../common/utils/utils');
-
-chai.use(sinonChai);
 
 describe('Responsible Person Edit Get Controller', () => {
   let req;
   let res;
-  let getResPersonStub;
-  let sessionSaveStub;
-  let responsiblePerson;
+  let getStub;
+  let saveStub;
 
   beforeEach(() => {
     req = {
-      query: {
-        editResponsiblePerson: 'EDIT-ID',
-      },
-      session: {
-        u: { dbId: '343' },
-        save: (callback) => callback(),
-      },
+      query: { editResponsiblePerson: 'person-1' },
+      session: { u: { dbId: 'user-1' }, save: (callback) => callback() },
     };
-    res = {
-      redirect: sinon.spy(),
-      render: sinon.spy(),
-    };
-    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
-    getResPersonStub = sinon.stub(resPersonApi, 'getResPersonDetails');
-  });
-  req = {
-    body: {
-      responsibleGivenName: 'Benjamin',
-      responsibleSurname: 'Sisko',
-      responsibleContactNo: '07878787878',
-      responsibleEmail: 'testmail@test.com',
-      responsibleAddressLine1: 'Add Line 1',
-      responsibleAddressLine2: 'Add Line 2',
-      responsibleTown: 'London',
-      responsibleCountry: 'USA',
-      responsiblePostcode: 'HN77NH',
-      fixedBasedOperator: 'Captain',
-    },
-  };
-  responsiblePerson = utils.getResponsiblePersonFromReq(req);
-
-  afterEach(() => {
-    sinon.restore();
+    res = { redirect: sinon.spy(), render: sinon.spy() };
+    saveStub = sinon.stub(req.session, 'save').callsArg(0);
+    getStub = sinon.stub(resPersonApi, 'getResPersonDetails');
   });
 
-  it('edit should redirect if responsiblePersonId is undefined', async () => {
+  afterEach(() => sinon.restore());
+
+  it('redirects without calling the API if no ID is supplied', async () => {
     delete req.query.editResponsiblePerson;
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController()
-      .then()
-      .then(() => {
-        expect(getResPersonStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/resperson');
-      });
+    expect(getStub).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/resperson');
   });
 
-  it('should redirect with error if resPersonAPI rejects', async () => {
-    req.session.editResponsiblePersonId = 'EDIT-ID';
+  it('renders the responsible-person object and stores the editing ID', async () => {
+    const responsiblePerson = { responsiblePersonId: 'person-1', responsibleGivenName: 'Benjamin' };
+    getStub.resolves(responsiblePerson);
 
-    getResPersonStub.rejects('getResPersonDetails Example Reject');
+    await controller(req, res);
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(getResPersonStub).to.have.been.calledWith('343', 'EDIT-ID');
-        expect(req.session.errMsg).to.eql({ message: 'Failed to get responsible person details' });
-        expect(sessionSaveStub).to.have.been.calledOnce;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/resperson');
-      });
+    expect(getStub).to.have.been.calledOnceWithExactly('user-1', 'person-1');
+    expect(req.session.editResponsiblePersonId).to.equal('person-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/resperson/edit/index', {
+      cookie: new CookieModel(req),
+      responsiblePerson,
+      fixedBasedOperatorOptions,
+    });
+    expect(res.redirect).not.to.have.been.called;
   });
 
-  it('should render index page when api resolve responsible person', async () => {
-    req.session.editResponsiblePersonId = 'EDIT-ID';
-    const cookie = new CookieModel(req);
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`saves an error and redirects on a ${type}`, async () => {
+      getStub.rejects(
+        Object.assign(new Error('Request failed'), { type, status: 404, body: { message: 'Person not found' } })
+      );
 
-    getResPersonStub.resolves(JSON.stringify(responsiblePerson));
-
-    const callController = async () => {
       await controller(req, res);
-    };
 
-    callController()
-      .then()
-      .then(() => {
-        expect(getResPersonStub).to.have.been.calledWith('343', 'EDIT-ID');
-        expect(res.render).to.have.been.calledWith('app/resperson/edit/index', {
-          cookie,
-          responsiblePerson,
-          fixedBasedOperatorOptions,
-        });
-      });
+      expect(getStub).to.have.been.calledOnceWithExactly('user-1', 'person-1');
+      expect(req.session.errMsg).to.deep.equal({ message: 'Failed to get responsible person details' });
+      expect(saveStub).to.have.been.calledOnce;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/resperson');
+      expect(res.render).not.to.have.been.called;
+    });
   });
 });

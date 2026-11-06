@@ -5,7 +5,8 @@ const validations = require('../validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const utils = require('../../../common/utils/utils');
-const resPersonApi = require('../../../common/services/resPersonApi');
+const { resPersonApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -14,19 +15,18 @@ module.exports = (req, res) => {
 
   const responsiblePerson = utils.getResponsiblePersonFromReq(req);
   const resPersonId = req.session.editResponsiblePersonId;
-  validator
+  return validator
     .validateChains(validations.validations(req))
     .then(() => {
-      resPersonApi
+      return resPersonApi
         .updateResPerson(cookie.getUserDbId(), resPersonId, responsiblePerson)
         .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+          if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
             res.render('app/resperson/edit/index', {
               cookie,
               responsiblePerson,
               fixedBasedOperatorOptions,
-              errors: [parsedResponse],
+              errors: [apiResponse],
             });
           } else {
             res.redirect('/resperson');
@@ -38,7 +38,11 @@ module.exports = (req, res) => {
             cookie,
             responsiblePerson,
             fixedBasedOperatorOptions,
-            errors: [{ message: 'There was a problem updating responsible person. Please try again' }],
+            errors: [
+              getApiErrorBody(err) || {
+                message: 'There was a problem updating responsible person. Please try again',
+              },
+            ],
           });
         });
     })

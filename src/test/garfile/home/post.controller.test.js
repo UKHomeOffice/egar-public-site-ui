@@ -1,155 +1,98 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
 
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
-const createGarApi = require('../../../common/services/createGarApi.js');
-
+const { garApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/garfile/home/post.controller');
 
-describe('GAR Customs Post Controller', () => {
+describe('GAR Creation Post Controller', () => {
   let req;
   let res;
-  let createGarApiStub;
-  let sessionSaveStub;
+  let createStub;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
     req = {
-      body: {},
-      session: {
-        u: { dbId: 'ExampleUser1' },
-        save: (callback) => callback(),
-      },
+      body: { garoption: '0' },
+      session: { u: { dbId: 'user-1' }, save: sinon.stub().callsArg(0) },
     };
-
-    res = {
-      redirect: sinon.spy(),
-      render: sinon.spy(),
-    };
-
-    createGarApiStub = sinon.stub(createGarApi, 'createGar');
-    sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
+    res = { redirect: sinon.spy(), render: sinon.spy() };
+    createStub = sinon.stub(garApi, 'createGar').resolves({ garId: 'new-gar' });
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should error on validation', () => {
-    const cookie = new CookieModel(req);
-    const callController = async () => {
-      await controller(req, res);
-    };
+  it('renders validation errors without creating a GAR when no option is selected', async () => {
+    delete req.body.garoption;
 
-    callController().then(() => {
-      expect(createGarApiStub).to.not.have.been.called;
-      expect(sessionSaveStub).to.not.have.been.called;
-      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
-        cookie,
-        garoptions,
-        errors: [
-          new ValidationRule(validator.notEmpty, 'garoption', undefined, 'Select how you would like to create a GAR'),
-        ],
-      });
+    await controller(req, res);
+
+    expect(createStub).not.to.have.been.called;
+    expect(req.session.save).not.to.have.been.called;
+    expect(res.redirect).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
+      cookie: new CookieModel(req),
+      garoptions,
+      errors: [
+        new ValidationRule(validator.notEmpty, 'garoption', undefined, 'Select how you would like to create a GAR'),
+      ],
     });
   });
 
-  it('should redirect to garupload if option is selected', () => {
+  it('redirects to Excel upload without creating a GAR when upload is selected', async () => {
     req.body.garoption = '1';
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController().then(() => {
-      expect(createGarApiStub).to.not.have.been.called;
-      expect(sessionSaveStub).to.not.have.been.called;
-      expect(res.render).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/garupload');
+    expect(createStub).not.to.have.been.called;
+    expect(req.session.save).not.to.have.been.called;
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/garupload');
+  });
+
+  it('stores the created GAR ID and Draft status before saving and redirecting to departure', async () => {
+    await controller(req, res);
+
+    expect(createStub).to.have.been.calledOnceWithExactly('user-1');
+    const cookie = new CookieModel(req);
+    expect(cookie.getGarId()).to.equal('new-gar');
+    expect(cookie.getGarStatus()).to.equal('Draft');
+    expect(req.session.save).to.have.been.calledOnce;
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/departure');
+    sinon.assert.callOrder(createStub, req.session.save, res.redirect);
+  });
+
+  [
+    ['message response', { message: 'User cannot create GAR' }],
+    ['http_error', { message: 'User cannot create GAR' }],
+    ['network_error', null],
+  ].forEach(([type, body]) => {
+    it(`renders a creation error without setting a GAR or redirecting on a ${type}`, async () => {
+      if (type === 'message response') createStub.resolves(body);
+      else
+        createStub.rejects(
+          Object.assign(new Error('Request failed'), {
+            type,
+            ...(type === 'http_error' ? { status: 400, body } : {}),
+          })
+        );
+
+      await controller(req, res);
+
+      expect(new CookieModel(req).getGarId()).not.to.exist;
+      expect(req.session.save).not.to.have.been.called;
+      expect(res.redirect).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
+        cookie: new CookieModel(req),
+        garoptions,
+        errors: [body || { message: 'Failed to create GAR. Try again' }],
+      });
     });
-  });
-
-  it('should return an error message if api rejects', () => {
-    cookie = new CookieModel(req);
-    req.body.garoption = '0';
-    createGarApiStub.rejects('createGarApi.createGar Example Reject');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    // TODO: Return the error message?
-    callController()
-      .then()
-      .then(() => {
-        expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
-        expect(sessionSaveStub).to.not.have.been.called;
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
-          cookie,
-          garoptions,
-        });
-      });
-  });
-
-  it('should return an error message if api rejects', () => {
-    // Back end does not really return any other outcome, contrived example
-    cookie = new CookieModel(req);
-    req.body.garoption = '0';
-    createGarApiStub.resolves(
-      JSON.stringify({
-        message: 'Example contrived error message',
-      })
-    );
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
-        expect(sessionSaveStub).to.not.have.been.called;
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/home/index', {
-          cookie,
-          garoptions,
-          errors: [{ message: 'Example contrived error message' }],
-        });
-      });
-  });
-
-  it('should redirect to departure page on success', () => {
-    cookie = new CookieModel(req);
-    req.body.garoption = '0';
-    createGarApiStub.resolves(
-      JSON.stringify({
-        garId: 'NEWLY-CREATED-ID',
-      })
-    );
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    // TODO: Assert that cookie now has status = Draft and garId of the returned response
-    callController()
-      .then()
-      .then(() => {
-        expect(createGarApiStub).to.have.been.calledOnceWithExactly('ExampleUser1');
-        expect(res.render).to.not.have.been.called;
-        expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/departure');
-      });
   });
 });

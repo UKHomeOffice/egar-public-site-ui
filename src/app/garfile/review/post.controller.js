@@ -1,5 +1,5 @@
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const { Manifest } = require('../../../common/models/Manifest.class');
@@ -7,15 +7,13 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 const performAPICall = async (garId, cookie, req, res) => {
   try {
     const apiResponse = await garApi.patch(garId, 'Submitted', {});
     logger.debug('Received response from API');
-
-    const parsedResponse = JSON.parse(apiResponse);
-
-    if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+    if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
       // API has returned an error so return a message for the user
       const submitError = {
         message: 'An error has occurred. Try again later',
@@ -23,7 +21,6 @@ const performAPICall = async (garId, cookie, req, res) => {
       };
       req.session.submiterrormessage.push(submitError);
       logger.error('API returned an unexpected response');
-      logger.error(parsedResponse.message);
       req.session.save(() => res.redirect('/garfile/review'));
       return;
     }
@@ -37,6 +34,13 @@ const performAPICall = async (garId, cookie, req, res) => {
     });
   } catch (err) {
     logger.error('Failed to update GAR', { garId, errorMessage: err?.message, stack: err?.stack });
+    if (getApiErrorBody(err)) {
+      req.session.submiterrormessage.push({
+        message: 'An error has occurred. Try again later',
+        identifier: '',
+      });
+      return req.session.save(() => res.redirect('/garfile/review'));
+    }
     res.render('app/garfile/submit/failure/index', {
       cookie,
     });
@@ -90,7 +94,7 @@ const buildValidations = async (garfile, garpeople, manifest) => {
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
-  const garId = cookie.getGarId();
+  const garId = res.locals.gar.garId;
   const resubmit = req.body.resubmitFor0T;
 
   const resubmit0TLink = req.body.resubmitFor0TLink ? req.body.resubmitFor0TLink : 'no';
@@ -111,16 +115,19 @@ module.exports = async (req, res) => {
       garApi.getSupportingDocs(garId),
     ]);
 
-    garfile = JSON.parse(responseValues[0]);
+    if (responseValues.some((response) => response?.statusCode >= 400)) {
+      throw new Error('GAR review lookup failed');
+    }
+    garfile = responseValues[0];
     validator.handleResponseError(garfile);
 
-    garpeople = JSON.parse(responseValues[1]);
+    garpeople = responseValues[1];
 
     const manifest = new Manifest(responseValues[1]);
     validator.handleResponseError(garpeople);
     statuscheck = Boolean(req.body.statuscheck);
 
-    const garsupportingdocs = JSON.parse(responseValues[2]);
+    const garsupportingdocs = responseValues[2];
     validator.handleResponseError(garsupportingdocs);
 
     validations = await buildValidations(garfile, garpeople, manifest);
@@ -199,7 +206,7 @@ module.exports = async (req, res) => {
       logger.info('Submitted GAR people to AMG check-in', { garId });
       res.redirect(`/garfile/amg/checkin?resubmitted=${resubmit0TLink}${initialSubmit}`);
     } else {
-      performAPICall(garId, cookie, req, res);
+      return performAPICall(garId, cookie, req, res);
     }
   }
 };

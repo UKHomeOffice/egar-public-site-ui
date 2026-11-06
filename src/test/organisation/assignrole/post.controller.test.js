@@ -1,220 +1,141 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
 
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const validator = require('../../../common/utils/validator');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
+const { tokenApi } = require('../../../common/services/dataAccessApi');
 const tokenService = require('../../../common/services/create-token');
-const tokenApi = require('../../../common/services/tokenApi');
 const emailService = require('../../../common/services/sendEmail');
-const config = require('../../../common/config/index');
-let roles = require('../../../common/seeddata/egar_user_roles.json');
-
+const config = require('../../../common/config');
+const roles = require('../../../common/seeddata/egar_user_roles.json');
+const { getRolesForAssigning } = require('../../../common/utils/utils');
+const ValidationRule = require('../../../common/models/ValidationRule.class');
+const validator = require('../../../common/utils/validator');
+const { ROLE_PERMISSION_ERROR_MSG } = require('../../../app/organisation/constants');
 const controller = require('../../../app/organisation/assignrole/post.controller');
-let { cookie } = require('request');
 
 describe('Organisation Assign Role Post Controller', () => {
   let req;
   let res;
-  let tokenServiceStub;
-  let tokenApiStub;
-  let emailServiceStub;
-  const TEMPLATE_ID = 'NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID';
-  const indexPage = 'onelogin_page';
+  let tokenStub;
+  let hashStub;
+  let emailStub;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
     req = {
-      body: {
-        role: 'Admin',
-      },
+      body: { role: 'Admin' },
       session: {
-        u: { dbId: 'USER-DB-ID-1', fn: 'Sheev' },
-        org: { i: 'ORG-ID-1', name: 'Sith' },
-        inv: { e: 'persontoinvite@random.com', fn: 'Anakin', ln: 'Test', rl: 'User' },
+        u: { dbId: 'user-1', fn: 'Test', rl: 'Admin' },
+        org: { i: 'org-1', name: 'Test organisation' },
+        inv: { e: 'Invitee@Example.com', fn: 'Alex', ln: 'Test' },
       },
-      get: sinon.stub().withArgs('Authorization').returns('Bearer token'),
+      get: sinon.stub(),
     };
-    res = {
-      redirect: sinon.stub(),
-      render: sinon.stub(),
-    };
-
-    tokenServiceStub = sinon.stub(tokenService, 'generateHash').returns('ExampleGeneratedHash');
-    tokenApiStub = sinon.stub(tokenApi, 'setInviteUserToken');
-    emailServiceStub = sinon.stub(emailService, 'send');
+    res = { render: sinon.spy(), redirect: sinon.spy() };
+    hashStub = sinon.stub(tokenService, 'generateHash').returns('hashed-token');
+    tokenStub = sinon.stub(tokenApi, 'setInviteUserToken').resolves({ tokenSet: true });
+    emailStub = sinon.stub(emailService, 'send').resolves();
+    sinon.stub(config, 'BASE_URL').value('https://app.example.test');
+    sinon.stub(config, 'NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID').value('invite-template');
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should render message when role empty', () => {
+  it('renders validation errors without creating a token or sending email when no role is selected', async () => {
     req.body.role = '';
-    cookie = new CookieModel(req);
-    cookie.setUserRole('Admin');
 
-    const callController = async () => {
+    await controller(req, res);
+
+    expect(tokenStub).not.to.have.been.called;
+    expect(emailStub).not.to.have.been.called;
+    expect(res.redirect).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
+      cookie: new CookieModel(req),
+      roles,
+      errors: [new ValidationRule(validator.notEmpty, 'role', '', 'Select a role')],
+    });
+  });
+
+  it('rejects a manager assigning the Admin role before creating a token', async () => {
+    req.session.u.rl = 'Manager';
+
+    await controller(req, res);
+
+    expect(tokenStub).not.to.have.been.called;
+    expect(emailStub).not.to.have.been.called;
+    expect(res.redirect).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
+      cookie: new CookieModel(req),
+      roles: getRolesForAssigning('Manager'),
+      errors: [new ValidationRule(null, 'role', 'Admin', ROLE_PERMISSION_ERROR_MSG)],
+    });
+  });
+
+  it('creates the hashed invitation token before emailing the raw token and redirecting', async () => {
+    await controller(req, res);
+
+    const rawToken = hashStub.firstCall.args[0];
+    expect(rawToken).to.match(/^[23456789abcdefghjkmnpqrstuvwxyz-]{13}$/);
+    expect(hashStub).to.have.been.calledOnce;
+    expect(tokenStub).to.have.been.calledOnceWithExactly(
+      'hashed-token',
+      'user-1',
+      'org-1',
+      'Admin',
+      'invitee@example.com'
+    );
+    expect(emailStub).to.have.been.calledOnceWithExactly('invite-template', 'invitee@example.com', {
+      firstname: 'Alex',
+      lastname: 'Test',
+      user: 'Test',
+      org_name: 'Test organisation',
+      base_url: 'https://app.example.test',
+      token: rawToken,
+    });
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/invite/success');
+    expect(res.render).not.to.have.been.called;
+    sinon.assert.callOrder(tokenStub, emailStub, res.redirect);
+  });
+
+  [
+    ['message response', { message: 'Inviter not found' }],
+    ['http_error', { message: 'Inviter not found' }],
+    ['network_error', null],
+  ].forEach(([type, body]) => {
+    it(`does not send email or report success after a token ${type}`, async () => {
+      const failure = Object.assign(new Error('Request failed'), {
+        type,
+        ...(type === 'http_error' ? { status: 400, body } : {}),
+      });
+      if (type === 'message response') tokenStub.resolves(body);
+      else tokenStub.rejects(failure);
+
       await controller(req, res);
-    };
 
-    callController().then(() => {
-      expect(req.session.inv.rl).to.eq('');
-      expect(tokenApiStub).to.not.have.been.called;
-      expect(emailServiceStub).to.not.have.been.called;
-      expect(res.redirect).to.not.have.been.called;
+      expect(emailStub).not.to.have.been.called;
+      expect(res.redirect).not.to.have.been.called;
       expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
-        cookie,
+        cookie: new CookieModel(req),
         roles,
-        errors: [new ValidationRule(validator.notEmpty, 'role', '', 'Select a role')],
+        errors: [body || failure],
       });
     });
   });
 
-  it('should render with error messages if api rejects', () => {
-    tokenApiStub.rejects({ message: 'tokenApi.generateHash Example Reject' });
-    cookie = new CookieModel(req);
-    cookie.setInviteUserEmail('inviteemail@mail.com');
-    cookie.setUserRole('Admin');
+  it('renders the email error without reporting success when Notify rejects', async () => {
+    emailStub.rejects(new Error('Notify returned 403'));
 
-    const callController = async () => {
-      await controller(req, res);
-    };
+    await controller(req, res);
 
-    callController()
-      .then()
-      .then(() => {
-        expect(req.session.inv.rl).to.eq('Admin');
-        expect(tokenApiStub).to.have.been.calledOnceWithExactly(
-          'ExampleGeneratedHash',
-          'USER-DB-ID-1',
-          'ORG-ID-1',
-          'Admin',
-          cookie.getInviteUserEmail()
-        );
-        expect(emailServiceStub).to.not.have.been.called;
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
-          cookie,
-          roles,
-          errors: [{ message: 'tokenApi.generateHash Example Reject' }],
-        });
-      });
-  });
-
-  // Message
-  it('should render with error messages if api returns one', () => {
-    tokenApiStub.resolves(JSON.stringify({ message: 'User ID not found' }));
-    cookie = new CookieModel(req);
-    cookie.setUserRole('Admin');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(req.session.inv.rl).to.eq('Admin');
-        expect(tokenApiStub).to.have.been.calledOnceWithExactly(
-          'ExampleGeneratedHash',
-          'USER-DB-ID-1',
-          'ORG-ID-1',
-          'Admin',
-          cookie.getInviteUserEmail()
-        );
-        expect(emailServiceStub).to.not.have.been.called;
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
-          cookie,
-          roles,
-          errors: [{ message: 'User ID not found' }],
-        });
-      });
-  });
-
-  it('should render with error messages if email api rejects', () => {
-    sinon.stub(config, TEMPLATE_ID).value(indexPage);
-    sinon.stub(config, 'BASE_URL').value('http://www.somewhere.com');
-
-    tokenApiStub.resolves(JSON.stringify({}));
-    emailServiceStub.rejects({ message: 'emailService.send Example Reject' });
-    cookie = new CookieModel(req);
-    cookie.setUserRole('Admin');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then()
-      .then(() => {
-        const generatedToken = tokenServiceStub.getCall(0).args[0];
-        expect(req.session.inv.rl).to.eq('Admin');
-        expect(tokenApiStub).to.have.been.calledOnceWithExactly(
-          'ExampleGeneratedHash',
-          'USER-DB-ID-1',
-          'ORG-ID-1',
-          'Admin',
-          cookie.getInviteUserEmail()
-        );
-        expect(emailServiceStub).to.have.been.calledOnceWithExactly(indexPage, 'persontoinvite@random.com', {
-          firstname: 'Anakin',
-          lastname: 'Test',
-          user: 'Sheev',
-          org_name: 'Sith',
-          base_url: 'http://www.somewhere.com',
-          token: generatedToken,
-        });
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
-          cookie,
-          roles,
-          errors: [{ message: 'Could not send an invitation email, try again later.' }],
-        });
-      });
-  });
-
-  it('should redirect if email api ok', () => {
-    sinon.stub(config, TEMPLATE_ID).value(indexPage);
-    sinon.stub(config, 'BASE_URL').value('http://www.somewhere.com');
-    tokenApiStub.resolves(JSON.stringify({ tokenSet: true }));
-    emailServiceStub.resolves();
-    cookie = new CookieModel(req);
-    cookie.setUserRole('Admin');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then()
-      .then(() => {
-        const generatedToken = tokenServiceStub.getCall(0).args[0];
-        expect(req.session.inv.rl).to.eq('Admin');
-        expect(tokenApiStub).to.have.been.calledOnceWithExactly(
-          'ExampleGeneratedHash',
-          'USER-DB-ID-1',
-          'ORG-ID-1',
-          'Admin',
-          cookie.getInviteUserEmail()
-        );
-        expect(emailServiceStub).to.have.been.calledOnceWithExactly(indexPage, 'persontoinvite@random.com', {
-          firstname: 'Anakin',
-          lastname: 'Test',
-          user: 'Sheev',
-          org_name: 'Sith',
-          base_url: 'http://www.somewhere.com',
-          token: generatedToken,
-        });
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/organisation/invite/success');
-        expect(res.render).to.not.have.been.called;
-      });
+    expect(tokenStub).to.have.been.calledOnce;
+    expect(emailStub).to.have.been.calledOnce;
+    expect(res.redirect).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/organisation/assignrole/index', {
+      cookie: new CookieModel(req),
+      roles,
+      errors: [{ message: 'Could not send an invitation email, try again later.' }],
+    });
   });
 });

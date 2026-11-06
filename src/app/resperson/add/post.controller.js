@@ -5,7 +5,8 @@ const validator = require('../../../common/utils/validator');
 const validations = require('../validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
-const resPersonApi = require('../../../common/services/resPersonApi');
+const { resPersonApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 const utils = require('../../../common/utils/utils');
 
 module.exports = (req, res) => {
@@ -13,18 +14,17 @@ module.exports = (req, res) => {
   req.body.fixedBasedOperatorAnswer = _.trim(req.body.fixedBasedOperatorAnswer);
   const responsiblePerson = utils.getResponsiblePersonFromReq(req);
 
-  validator
+  return validator
     .validateChains(validations.validations(req))
     .then(() => {
-      resPersonApi
+      return resPersonApi
         .create(cookie.getUserDbId(), responsiblePerson)
         .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+          if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
             res.render('app/resperson/add/index', {
               cookie,
               fixedBasedOperatorOptions,
-              errors: [parsedResponse],
+              errors: [apiResponse],
               responsiblePerson,
             });
           } else {
@@ -33,6 +33,15 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('Failed to add responsible person', { errorMessage: err?.message, stack: err?.stack });
+          const apiErrorBody = getApiErrorBody(err);
+          if (apiErrorBody) {
+            return res.render('app/resperson/add/index', {
+              cookie,
+              fixedBasedOperatorOptions,
+              errors: [apiErrorBody],
+              responsiblePerson,
+            });
+          }
           res.render('app/resperson/add/index', {
             cookie,
             fixedBasedOperatorOptions,

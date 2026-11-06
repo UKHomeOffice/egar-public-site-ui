@@ -5,9 +5,9 @@ const { garPeople } = require('../../fixtures');
 require('../../global.test');
 const { Manifest } = require('../../../common/models/Manifest.class');
 
-const apiResponse = JSON.stringify({
+const apiResponse = {
   items: garPeople(),
-});
+};
 
 describe('ManifestModel', () => {
   const APRIL = 3;
@@ -26,20 +26,6 @@ describe('ManifestModel', () => {
     expect(manifest.manifest).to.have.length(1);
   });
 
-  it('Should not generate a manifest for invalid data', () => {
-    const response = JSON.stringify({ message: 'GAR does not exist' });
-    expect(new Manifest(response)).to.throw;
-  });
-
-  it('Should not generate a manifest for non JSON data', () => {
-    try {
-      const manifest = new Manifest('This will not work');
-      expect(manifest).to.be.undefined;
-    } catch (err) {
-      expect(err.message).to.contain(`Unexpected token 'T', "This will not work" is not valid JSON`);
-    }
-  });
-
   it('Should validate a valid manifest', async () => {
     const manifest = new Manifest(apiResponse);
     expect(await manifest.validate()).to.be.true;
@@ -51,15 +37,15 @@ describe('ManifestModel', () => {
   });
 
   it('Should return true for captain crew for a single crew manifest', () => {
-    const singleCrew = JSON.stringify({
+    const singleCrew = {
       items: garPeople(),
-    });
+    };
     const manifest = new Manifest(singleCrew);
     expect(manifest.validateCaptainCrew()).to.be.true;
   });
 
   it('Should return false for captain crew for a single passenger manifest', () => {
-    const singlePassenger = JSON.stringify({
+    const singlePassenger = {
       items: [
         {
           dateOfBirth: '1994-06-22',
@@ -78,53 +64,53 @@ describe('ManifestModel', () => {
           placeOfBirth: 'PTA',
         },
       ],
-    });
+    };
     const manifest = new Manifest(singlePassenger);
     expect(manifest.validateCaptainCrew()).to.be.false;
   });
 
   it('Should return false for captain crew for no manifest', () => {
-    const emptyManifest = JSON.stringify({
+    const emptyManifest = {
       items: [],
-    });
+    };
     const manifest = new Manifest(emptyManifest);
     expect(manifest.validateCaptainCrew()).to.be.false;
   });
 
   it('Should not validate a manifest with missing data', async () => {
-    const response = JSON.stringify({ items: [{ firstName: null, lastName: '' }] });
+    const response = { items: [{ firstName: null, lastName: '' }] };
     const manifest = new Manifest(response);
     expect(await manifest.validate()).to.be.false;
   });
 
   it('Should not validate a manifest with a null date', async () => {
-    const response = JSON.stringify({ items: [{ dateOfBirth: null }] });
+    const response = { items: [{ dateOfBirth: null }] };
     const manifest = new Manifest(response);
     expect(await manifest.validate()).to.be.false;
   });
 
   it('Should not validate a manifest with an invalid date', async () => {
-    const response = JSON.stringify({ items: [{ dateOfBirth: '94-06-22' }] });
+    const response = { items: [{ dateOfBirth: '94-06-22' }] };
     const manifest = new Manifest(response);
     expect(await manifest.validate()).to.be.false;
   });
 
   it('Should generate an array of validation errors', async () => {
-    const response = JSON.stringify({ items: [{ firstName: null }] });
+    const response = { items: [{ firstName: null }] };
     const manifest = new Manifest(response);
     await manifest.validate();
     expect(manifest.genErrValidations()).to.have.length(1);
   });
 
   it('Should generate a single error if two fields are missing', async () => {
-    const response = JSON.stringify({ items: [{ firstName: null, lastName: '' }] });
+    const response = { items: [{ firstName: null, lastName: '' }] };
     const manifest = new Manifest(response);
     await manifest.validate();
     expect(manifest.genErrValidations()).to.have.length(1);
   });
 
   it('Should return false if place of Birth is not present for a passenger', async () => {
-    const singlePassenger = JSON.stringify({
+    const singlePassenger = {
       items: [
         {
           dateOfBirth: '1994-06-22',
@@ -143,13 +129,13 @@ describe('ManifestModel', () => {
           placeOfBirth: '',
         },
       ],
-    });
+    };
     const manifest = new Manifest(singlePassenger);
     expect(await manifest.validate()).to.be.false;
   });
 
   it('Should return true if place of Birth is not present for a crew', () => {
-    const singleCrew = JSON.stringify({
+    const singleCrew = {
       items: [
         {
           dateOfBirth: '1994-06-22',
@@ -168,7 +154,7 @@ describe('ManifestModel', () => {
           placeOfBirth: '',
         },
       ],
-    });
+    };
     const manifest = new Manifest(singleCrew);
     expect(manifest.validateCaptainCrew()).to.be.true;
   });

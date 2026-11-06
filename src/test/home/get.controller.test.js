@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const dataAccessApi = require('../../common/services/dataAccessApi');
+const { garApi } = require('../../common/services/dataAccessApi');
 
 const controller = require('../../app/home/get.controller');
 
@@ -31,7 +31,7 @@ describe('Home Get Controller', () => {
       render: sinon.spy(),
     };
 
-    garApiStub = sinon.stub(dataAccessApi.garApi, 'getGars');
+    garApiStub = sinon.stub(garApi, 'getGars');
   });
 
   afterEach(() => {

@@ -1,9 +1,7 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../../global.test');
 const CookieModel = require('../../../../common/models/Cookie.class');
@@ -12,23 +10,16 @@ const documenttype = require('../../../../common/seeddata/egar_saved_people_trav
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
 const validator = require('../../../../common/utils/validator');
 const ValidationRule = require('../../../../common/models/ValidationRule.class');
-const garApi = require('../../../../common/services/garApi');
-
+const { garApi } = require('../../../../common/services/dataAccessApi');
 const controller = require('../../../../app/garfile/manifest/editperson/post.controller');
 
 describe('Manifest Edit Person Post Controller', () => {
   let req;
   let res;
   let person;
+  let update;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
-    apiResponse = {
-      items: [{ garPeopleId: 1 }, { garPeopleId: 2 }],
-    };
-
-    // TODO: Why the inconsistencies with field names
     req = {
       body: {
         firstName: 'Benjamin',
@@ -48,135 +39,82 @@ describe('Manifest Edit Person Post Controller', () => {
         expiryDay: '04',
         garPeopleId: '9002',
       },
-      session: {
-        gar: { id: '9001' },
-      },
+      session: { gar: { id: 'stale-session-id' } },
     };
-
     res = {
       redirect: sinon.spy(),
       render: sinon.spy(),
       locals: { gar: { garId: '9001' } },
     };
-
     person = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      gender: req.body.gender,
+      firstName: 'Benjamin',
+      lastName: 'Sisko',
+      gender: 'Male',
       dateOfBirth: '1937-06-07',
-      placeOfBirth: req.body.birthplace,
-      nationality: 'USA', // Check it upper cases it
-      peopleType: req.body.personType,
-      documentNumber: req.body.travelDocumentNumber,
-      documentType: req.body.travelDocumentType,
-      issuingState: 'USA', // Check it upper cases it
+      placeOfBirth: 'New Orleans',
+      nationality: 'USA',
+      peopleType: 'Captain',
+      documentNumber: '1234567890',
+      documentType: 'Passport',
+      issuingState: 'USA',
       documentExpiryDate: '2150-05-04',
-      garPeopleId: req.body.garPeopleId,
       documentDesc: undefined,
+      garPeopleId: '9002',
     };
+    update = sinon.stub(garApi, 'updateGarPerson').resolves({});
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should render with errors if surname is empty', () => {
+  function expectErrors(errors) {
+    expect(res.redirect).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/editperson/index', {
+      req,
+      cookie: new CookieModel(req),
+      person,
+      persontype,
+      documenttype,
+      genderchoice,
+      errors,
+    });
+  }
+
+  it('renders validation errors without updating the person', async () => {
     req.body.lastName = '';
-    person.lastName = ''; // expected
-    const cookie = new CookieModel(req);
-    sinon.stub(garApi, 'updateGarPerson');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(garApi.updateGarPerson).to.not.have.been.called;
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index', {
-          req,
-          cookie,
-          person,
-          persontype,
-          documenttype,
-          genderchoice,
-          errors: [
-            new ValidationRule(validator.isNotEmpty, 'lastName', req.body.lastName, 'Enter the surname of the person'),
-          ],
-        });
-      });
+    person.lastName = '';
+    await controller(req, res);
+    expect(update).not.to.have.been.called;
+    expectErrors([new ValidationRule(validator.isNotEmpty, 'lastName', '', 'Enter the surname of the person')]);
   });
 
-  // render when gar api rejects
-  it('should render with messages if gar api rejects', () => {
-    const cookie = new CookieModel(req);
-    sinon.stub(garApi, 'updateGarPerson').rejects('garApi.updateGarPerson Example Reject');
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(garApi.updateGarPerson).to.have.been.calledWith('9001', person);
-        expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index', {
-          req,
-          cookie,
-          person,
-          persontype,
-          documenttype,
-          genderchoice,
-          errors: [{ message: 'Failed to update GAR person. Try again' }],
-        });
-      });
+  it('renders a generic error if updating the person fails', async () => {
+    update.rejects(new Error('Connection unavailable'));
+    await controller(req, res);
+    expectErrors([{ message: 'Failed to update GAR person. Try again' }]);
   });
 
-  // render when gar api returns error message
-  it('should render message if api returns one', () => {
-    const cookie = new CookieModel(req);
-    sinon.stub(garApi, 'updateGarPerson').resolves(
-      JSON.stringify({
-        message: 'GAR not found',
+  it('preserves the message on an HTTP rejection', async () => {
+    update.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'GAR not found' },
       })
     );
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(garApi.updateGarPerson).to.have.been.calledWith('9001', person);
-        expect(res.redirect).to.not.have.been.called;
-        expect(res.render).to.have.been.calledWith('app/garfile/manifest/editperson/index', {
-          req,
-          cookie,
-          person,
-          persontype,
-          documenttype,
-          genderchoice,
-          errors: [{ message: 'GAR not found' }],
-        });
-      });
+    await controller(req, res);
+    expectErrors([{ message: 'GAR not found' }]);
   });
 
-  it('should redirect on success', () => {
-    sinon.stub(garApi, 'updateGarPerson').resolves(JSON.stringify({}));
+  it('renders a decoded API error rather than continuing', async () => {
+    update.resolves({ message: 'GAR not found' });
+    await controller(req, res);
+    expectErrors([{ message: 'GAR not found' }]);
+  });
 
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(garApi.updateGarPerson).to.have.been.calledWith('9001', person);
-        expect(res.redirect).to.have.been.calledWith('/garfile/manifest');
-        expect(res.render).to.not.have.been.called;
-      });
+  it('updates the normalized person in the verified GAR and returns to the manifest', async () => {
+    await controller(req, res);
+    expect(update).to.have.been.calledOnceWithExactly('9001', person);
+    expect(res.render).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/manifest');
   });
 });

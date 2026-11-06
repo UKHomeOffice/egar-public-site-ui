@@ -3,7 +3,8 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
-const createGarApi = require('../../../common/services/createGarApi.js');
+const { garApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const garStatus = 'Draft';
@@ -20,7 +21,7 @@ module.exports = (req, res) => {
   ];
 
   // Validate chains
-  validator
+  return validator
     .validateChains([garChain])
     .then(() => {
       if (req.body.garoption === '1') {
@@ -28,21 +29,20 @@ module.exports = (req, res) => {
         return;
       }
 
-      createGarApi
+      return garApi
         .createGar(cookie.getUserDbId())
         .then((apiResponse) => {
-          const parsedResponse = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+          if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
             // API returned error
             res.render('app/garfile/home/index', {
               cookie,
               garoptions,
-              errors: [parsedResponse],
+              errors: [apiResponse],
             });
             return;
           }
           // Success
-          cookie.setGarId(parsedResponse.garId);
+          cookie.setGarId(apiResponse.garId);
           cookie.setGarStatus(garStatus);
           req.session.save(() => {
             res.redirect('/garfile/departure');
@@ -57,6 +57,7 @@ module.exports = (req, res) => {
           res.render('app/garfile/home/index', {
             cookie,
             garoptions,
+            errors: [getApiErrorBody(err) || { message: 'Failed to create GAR. Try again' }],
           });
         });
     })

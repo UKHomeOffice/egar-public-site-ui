@@ -1,6 +1,6 @@
 const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
-const dataAccessApi = require('../../common/services/dataAccessApi');
+const { garApi } = require('../../common/services/dataAccessApi');
 
 const PAGE_ONE = 1;
 const PER_PAGE = 10;
@@ -33,9 +33,9 @@ module.exports = async (req, res) => {
 
   try {
     const [draftGars, submittedGars, cancelledGars] = await Promise.all([
-      dataAccessApi.garApi.getGars(userId, role, draftPageObj, orgId),
-      dataAccessApi.garApi.getGars(userId, role, submittedPageObj, orgId),
-      dataAccessApi.garApi.getGars(userId, role, cancelledPageObj, orgId),
+      garApi.getGars(userId, role, draftPageObj, orgId),
+      garApi.getGars(userId, role, submittedPageObj, orgId),
+      garApi.getGars(userId, role, cancelledPageObj, orgId),
     ]);
 
     res.render('app/home/index', {

@@ -1,14 +1,14 @@
 const { WORKFLOW_STEPS, PHASE_GIVEN_NAME, PHASE_CONFIRM_NAME, PHASE_REGISTRATION_COMPLETE } = require('./constants');
 const CookieModel = require('../../../common/models/Cookie.class');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
+const { userManageApi } = require('../../../common/services/dataAccessApi');
 const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
-const sendEmail = require('../../../common/services/sendEmail');
+const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
-const verificationApi = require('../../../common/services/verificationApi');
+const { verificationApi } = require('../../../common/services/dataAccessApi');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
 const { NewRegistrationSuccess } = require('../../../common/services/metrics');
 
@@ -105,7 +105,7 @@ async function handleConfirmNameSubmission(req, _res) {
   try {
     const { tokenId } = await verificationApi.getUserInviteToken(email);
 
-    resp = await userApi.createUser(email, firstName, lastName, sub, 'verified', tokenId);
+    resp = await userManageApi.createUser(email, firstName, lastName, sub, 'verified', tokenId);
   } catch (error) {
     logger.error('Failed to create user', { errorMessage: error?.message, stack: error?.stack });
     return [Outcome.ERROR, error.message || 'Error creating user', null];
@@ -146,7 +146,7 @@ async function handleConfirmNameSubmission(req, _res) {
   cookie.setOrganisationId(organisation?.organisationId);
 
   try {
-    await sendEmail.send(config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID, email, {
+    await emailService.send(config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID, email, {
       user: `${firstName}`,
     });
   } catch (error) {

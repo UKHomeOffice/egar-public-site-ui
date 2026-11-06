@@ -1,5 +1,5 @@
 const CookieModel = require('../../common/models/Cookie.class');
-const orgApi = require('../../common/services/organisationApi');
+const { organisationApi } = require('../../common/services/dataAccessApi');
 const logger = require('../../common/utils/logger')(__filename);
 const { permissionLevels } = require('../../common/utils/permissionLevels');
 const NUM_OF_USERS = 5;
@@ -10,15 +10,15 @@ module.exports = (req, res) => {
 
   const currentPage = Number(req.query.page) || 1;
 
-  orgApi
+  return organisationApi
     .getUsers(cookie.getOrganisationId(), currentPage, NUM_OF_USERS)
     .then((values) => {
-      const orgUsers = JSON.parse(values).items.map((orgUser) => {
+      const orgUsers = values.items.map((orgUser) => {
         const isEditable = userPermissions > permissionLevels[orgUser.role.name];
         return { ...orgUser, isEditable };
       });
 
-      const paginationData = JSON.parse(values)._meta;
+      const paginationData = values._meta;
       cookie.setOrganisationUsers(orgUsers);
 
       if (req.session.errMsg) {

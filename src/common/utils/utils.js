@@ -15,6 +15,14 @@ function trimToDecimalPlaces(input, places) {
   return parts.join('.');
 }
 
+function getDurationBeforeDeparture(departureDate, departureTime) {
+  const departureDateTimeString = `${departureDate} ${departureTime}`;
+  const departureDateTime = new Date(departureDateTimeString);
+  const currentDateTimeISO = new Date().toISOString();
+  const currentDateTime = new Date(currentDateTimeISO);
+  return Math.round((departureDateTime - currentDateTime) / 1000 / 60);
+}
+
 const documentTypes = documenttype
   .map((documentType) => documentType.documenttype)
   .filter((documentType) => Boolean(documentType));
@@ -67,6 +75,7 @@ const canSkipCsrfGeneration = (req) => {
 
 module.exports = {
   trimToDecimalPlaces,
+  getDurationBeforeDeparture,
   documentTypes,
   getResponsiblePersonFromReq,
   getResponsiblePersonFromGar,

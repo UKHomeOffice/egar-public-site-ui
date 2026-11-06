@@ -1,17 +1,17 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const config = require('../../../common/config/index');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const max_num_files = config.MAX_NUM_FILES;
-  garApi
+  return garApi
     .getSupportingDocs(res.locals.gar.garId)
     .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
-        const error = [{ message: parsedResponse.message }];
+      const response = apiResponse.statusCode >= 400 ? apiResponse.body : apiResponse;
+      if (typeof response?.message === 'string') {
+        const error = [{ message: response.message }];
         res.render('app/garfile/supportingdocuments/index', {
           cookie,
           max_num_files,
@@ -20,7 +20,10 @@ module.exports = (req, res) => {
         return;
       }
       // No error, check the query.query parameter
-      const supportingDoc = JSON.parse(apiResponse);
+      if (apiResponse.statusCode >= 400) {
+        throw new Error('Failed to retrieve supporting documents');
+      }
+      const supportingDoc = apiResponse;
 
       // Bare minimum to send with the render call
       const context = { cookie, supportingDoc, max_num_files };

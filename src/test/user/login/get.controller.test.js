@@ -5,8 +5,10 @@ const sinonChai = require('sinon-chai');
 const config = require('../../../common/config/index');
 const oneLoginUtils = require('../../../common/utils/oneLoginAuth');
 const oneLoginApi = require('../../../common/services/oneLoginApi');
-const userApi = require('../../../common/services/userManageApi');
-const verification = require('../../../common/services/verificationApi');
+const { userManageApi, organisationApi } = require('../../../common/services/dataAccessApi');
+const { verificationApi } = require('../../../common/services/dataAccessApi');
+
+const emailService = require('../../../common/services/sendEmail');
 
 require('../../global.test');
 
@@ -40,12 +42,12 @@ describe('User Login Get Controller', () => {
     res = {
       redirect: sinon.spy(),
       render: sinon.spy(),
-      cookie: () => true,
+      cookie: sinon.spy(),
       clearCookie: sinon.spy(),
       set: sinon.spy(),
     };
 
-    getSetInviteTokenStub = sinon.stub(verification, 'getUserInviteToken').resolves({ tokenId: '123' });
+    getSetInviteTokenStub = sinon.stub(verificationApi, 'getUserInviteToken').resolves({ tokenId: '123' });
 
     oneLoginUrlStub = sinon
       .stub(oneLoginUtils, 'getOneLoginAuthUrl')
@@ -63,9 +65,9 @@ describe('User Login Get Controller', () => {
       sub: 'onelogin_sid',
     });
 
-    userSearchStub = sinon.stub(userApi, 'userSearch');
-    updateEmailOrOneLoginSidStub = sinon.stub(userApi, 'updateEmailOrOneLoginSid');
-    getDetailsStub = sinon.stub(userApi, 'getDetails');
+    userSearchStub = sinon.stub(userManageApi, 'userSearch');
+    updateEmailOrOneLoginSidStub = sinon.stub(userManageApi, 'updateEmailOrOneLoginSid');
+    getDetailsStub = sinon.stub(userManageApi, 'getDetails');
     oneLoginJwtVerifyStub = sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
       callback(true); // Simulate successful JWT verification
     });
@@ -105,6 +107,191 @@ FnBdx5XR9zLe40LX3+cbEtw=
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  describe('invitation checks before registration', () => {
+    beforeEach(() => {
+      req.query = { code: '123', state: 'valid_state' };
+      req.cookies = { state: 'valid_state', nonce: 'valid_nonce' };
+      userSearchStub.resolves({ message: 'No results found' });
+    });
+
+    [
+      ['expired', 'http_error', 400, 'Token expired', 'invite-expired'],
+      ['used', 'http_error', 400, 'Token already used', 'invite-expired'],
+      ['invalid', 'http_error', 400, 'Invalid token', 'login-error'],
+      ['unavailable', 'http_error', 503, 'Token expired', 'login-error'],
+      ['offline', 'network_error', undefined, undefined, 'login-error'],
+    ].forEach(([scenario, type, status, message, errorPage]) => {
+      it(`logs out with ${errorPage} when the invitation is ${scenario}`, async () => {
+        getSetInviteTokenStub.rejects(
+          Object.assign(new Error('Request failed'), {
+            type,
+            ...(type === 'http_error' ? { status, body: { message } } : {}),
+          })
+        );
+
+        await controller(req, res);
+
+        expect(getSetInviteTokenStub).to.have.been.calledOnceWithExactly('user@email.com');
+        expect(res.cookie).to.have.been.calledWith('errorPage', errorPage);
+        const query = new URLSearchParams({
+          id_token_hint: 'mock_id_token',
+          post_logout_redirect_uri: config.ONE_LOGIN_LOGOUT_URL,
+          state: 'valid_state',
+        });
+        expect(res.redirect).to.have.been.calledOnceWithExactly(`www.test_one_login.com/logout?${query}`);
+        expect(req.session).not.to.have.property('id_token');
+        expect(req.session).not.to.have.property('access_token');
+      });
+    });
+
+    it('allows individual registration when no invitation exists', async () => {
+      getSetInviteTokenStub.resolves({ message: 'Individual user registration request' });
+
+      await controller(req, res);
+
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/onelogin/register');
+      expect(req.session.access_token).to.equal('mock_access_token');
+    });
+  });
+
+  describe('data-access failures during authentication', () => {
+    beforeEach(() => {
+      req.query = { code: '123', state: 'valid_state' };
+      req.cookies = { state: 'valid_state', nonce: 'valid_nonce' };
+      userSearchStub.resolves({
+        userId: 'user-1',
+        state: 'verified',
+        oneLoginSid: 'onelogin_sid',
+        email: 'user@email.com',
+        firstName: 'Test',
+        lastName: 'User',
+        role: { name: 'Individual' },
+      });
+      getDetailsStub.resolves({});
+      updateEmailOrOneLoginSidStub.resolves({});
+    });
+
+    [
+      ['search', 'http_error'],
+      ['details', 'http_error'],
+      ['email update', 'http_error'],
+      ['SID update', 'http_error'],
+      ['SID update', 'network_error'],
+    ].forEach(([operation, type]) => {
+      it(`clears authentication and logs out on a ${operation} ${type}`, async () => {
+        if (operation === 'email update') {
+          userSearchStub.resolves({
+            userId: 'user-1',
+            state: 'verified',
+            oneLoginSid: 'onelogin_sid',
+            email: 'old@example.com',
+          });
+        } else if (operation === 'SID update') {
+          userSearchStub.resolves({
+            userId: 'user-1',
+            state: 'verified',
+            oneLoginSid: null,
+            email: 'user@email.com',
+          });
+        }
+        const failingStub =
+          operation === 'search'
+            ? userSearchStub
+            : operation === 'details'
+              ? getDetailsStub
+              : updateEmailOrOneLoginSidStub;
+        failingStub.rejects(
+          Object.assign(new Error('Request failed'), {
+            type,
+            status: 400,
+            body: { message: 'User not registered' },
+          })
+        );
+
+        await controller(req, res);
+
+        expect(failingStub).to.have.been.calledOnce;
+        if (operation !== 'details') expect(getDetailsStub).not.to.have.been.called;
+        expect(req.session.u?.dbId).not.to.exist;
+        expect(req.session).not.to.have.property('id_token');
+        expect(req.session).not.to.have.property('access_token');
+        expect(res.cookie).to.have.been.calledWith('errorPage', 'service-error');
+        const logoutQuery = new URLSearchParams({
+          id_token_hint: 'mock_id_token',
+          post_logout_redirect_uri: config.ONE_LOGIN_LOGOUT_URL,
+          state: 'valid_state',
+        });
+        expect(res.redirect).to.have.been.calledOnceWithExactly(`www.test_one_login.com/logout?${logoutQuery}`);
+      });
+    });
+  });
+
+  describe('notifying organisation admins when the One Login email changes', () => {
+    let adminsStub;
+    let emailStub;
+
+    beforeEach(() => {
+      req.query = { code: '123', state: 'valid_state' };
+      req.cookies = { state: 'valid_state', nonce: 'valid_nonce' };
+      userSearchStub.resolves({
+        userId: 'user-1',
+        state: 'verified',
+        oneLoginSid: 'onelogin_sid',
+        email: 'old@example.com',
+        firstName: 'Test',
+        lastName: 'User',
+        role: { name: 'User' },
+        organisation: { organisationId: 'org-1', organisationName: 'Test organisation' },
+      });
+      updateEmailOrOneLoginSidStub.resolves({});
+      getDetailsStub.resolves({ organisation: { organisationId: 'org-1', organisationName: 'Test organisation' } });
+      adminsStub = sinon.stub(organisationApi, 'getListOfOrgUsers').resolves({
+        items: [{ email: 'admin@example.com', firstName: 'Test', lastName: 'Admin' }],
+      });
+      emailStub = sinon.stub(emailService, 'send').resolves();
+    });
+
+    it('uses the object response to notify admins and completes login', async () => {
+      await controller(req, res);
+
+      expect(adminsStub).to.have.been.calledOnceWithExactly('org-1', 'Admin');
+      expect(emailStub).to.have.been.calledOnce;
+      expect(emailStub.firstCall.args[1]).to.equal('admin@example.com');
+      expect(emailStub.firstCall.args[2]).to.include({
+        firstName: 'Test',
+        lastName: 'User',
+        adminFirstName: 'Test',
+        adminLastName: 'Admin',
+        organisationName: 'Test organisation',
+      });
+      expect(updateEmailOrOneLoginSidStub).to.have.been.calledOnceWithExactly('old@example.com', {
+        email: 'user@email.com',
+      });
+      expect(emailStub).to.have.been.calledWith(config.NOTIFY_ADMIN_ABOUT_USER_EMAIL_CHANGE_TEMPLATE_ID);
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/home');
+    });
+
+    ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+      it(`finishes through the login failure path instead of hanging on an admin lookup ${type}`, async () => {
+        adminsStub.rejects(Object.assign(new Error('Request failed'), { type, status: 503 }));
+
+        await controller(req, res);
+
+        expect(emailStub).not.to.have.been.called;
+        expect(getDetailsStub).not.to.have.been.called;
+        const logoutQuery = new URLSearchParams({
+          id_token_hint: 'mock_id_token',
+          post_logout_redirect_uri: config.ONE_LOGIN_LOGOUT_URL,
+          state: 'valid_state',
+        });
+        expect(res.redirect).to.have.been.calledOnceWithExactly(`www.test_one_login.com/logout?${logoutQuery}`);
+        expect(res.cookie).to.have.been.calledWith('errorPage', 'service-error');
+        expect(req.session).not.to.have.property('id_token');
+        expect(req.session).not.to.have.property('access_token');
+      });
+    });
   });
 
   it('should render if referer but no user object in session', async () => {
@@ -357,7 +544,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
     expect(res.redirect.firstCall.args[0]).to.contain('/logout');
   });
 
-  it('should redirect to /onelogin/register if user cannot be found from userApi.search', async () => {
+  it('should redirect to /onelogin/register if user cannot be found from userManageApi.userSearch', async () => {
     // Setup
     req.query = {
       code: '123',
@@ -385,7 +572,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
       access_token: 'mock_access_token',
       id_token: 'mock_id_token',
     });
-    getSetInviteTokenStub = sinon.stub(verification, 'getUserInviteToken').resolves({ tokenId: '123' });
+    getSetInviteTokenStub = sinon.stub(verificationApi, 'getUserInviteToken').resolves({ tokenId: '123' });
 
     // Mock user info from OneLogin with email_verified set to true
     getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin').resolves({
@@ -394,8 +581,8 @@ FnBdx5XR9zLe40LX3+cbEtw=
       sub: 'onelogin_sid',
     });
 
-    // Mock userApi.userSearch to return a result indicating no user was found
-    userSearchStub = sinon.stub(userApi, 'userSearch').resolves({
+    // Mock userManageApi.userSearch to return a result indicating no user was found
+    userSearchStub = sinon.stub(userManageApi, 'userSearch').resolves({
       userId: null, // No user ID indicates user not found
       state: null,
       oneLoginSid: null,

@@ -1,7 +1,8 @@
 const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
 const manifestFields = require('../../../../common/seeddata/gar_manifest_fields.json');
-const garApi = require('../../../../common/services/garApi');
+const { garApi } = require('../../../../common/services/dataAccessApi');
+const { getDurationBeforeDeparture } = require('../../../../common/utils/utils');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -12,23 +13,27 @@ module.exports = async (req, res) => {
   const currentPage = req.query.page ? req.query.page : 1;
 
   try {
-    const { progress } = JSON.parse(await garApi.getGarCheckinProgress(garId));
+    const progress = await garApi.getGarCheckinProgress(garId);
+    if (progress?.statusCode >= 400) {
+      throw new Error('GAR check-in progress lookup failed');
+    }
     if ('poll' in req.query) {
       logger.info(`User GAR ${garId}: Checkin progress status is ${progress}`);
       res.json(progress);
       return;
     }
-    Promise.all([garApi.get(garId), garApi.getPeople(garId, currentPage), garApi.getSupportingDocs(garId)])
+    return Promise.all([garApi.get(garId), garApi.getPeople(garId, currentPage), garApi.getSupportingDocs(garId)])
       .then(async (apiResponse) => {
-        const garfile = JSON.parse(apiResponse[0]);
-        const garpeople = JSON.parse(apiResponse[1]);
-        const garsupportingdocs = JSON.parse(apiResponse[2]);
+        if (apiResponse.some((response) => response?.statusCode >= 400)) {
+          throw new Error('GAR check-in lookup failed');
+        }
+        const [garfile, garpeople, garsupportingdocs] = apiResponse;
 
         const statusCheckComplete = garpeople.items.every((x) => x.amgCheckinStatus.name === 'Complete');
 
-        const durationInDeparture = garApi.getDurationBeforeDeparture(garfile.departureDate, garfile.departureTime);
-        const numberOf0TResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0T')).items.length;
-        const numberOf0BResponseCodes = JSON.parse(await garApi.getPeople(garId, '', '0B')).items.length;
+        const durationInDeparture = getDurationBeforeDeparture(garfile.departureDate, garfile.departureTime);
+        const numberOf0TResponseCodes = (await garApi.getPeople(garId, '', '0T')).items.length;
+        const numberOf0BResponseCodes = (await garApi.getPeople(garId, '', '0B')).items.length;
         const showImportantBanner = resubmitted === 'no' && numberOf0TResponseCodes > 0 && durationInDeparture > 125;
 
         const renderObj = {

@@ -3,7 +3,7 @@ const _ = require('lodash');
 const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const craftApi = require('../../../common/services/craftApi');
+const { craftApi } = require('../../../common/services/dataAccessApi');
 const craftValidations = require('../../../app/garfile/craft/validations');
 
 module.exports = (req, res) => {
@@ -35,30 +35,24 @@ module.exports = (req, res) => {
   const validationChain = craftValidations.validations(craftObj);
 
   // Validate chains
-  validator
+  return validator
     .validateChains(validationChain)
     .then(() => {
       // call the API to update craft
-      craftApi
+      return craftApi
         .update(registration, craftType, craftBase, cookie.getUserDbId(), craftId)
         .then((apiResponse) => {
-          try {
-            const parsedResponse = JSON.parse(apiResponse);
-            if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+          if (apiResponse && typeof apiResponse === 'object') {
+            if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
               // API returned failure
-              res.render('app/aircraft/edit/index', { cookie, errors: [parsedResponse] });
+              return res.render('app/aircraft/edit/index', { cookie, errors: [apiResponse] });
             } else {
               // API returned successful
-              res.redirect('/aircraft');
+              return res.redirect('/aircraft');
             }
-          } catch {
-            logger.error('Error parsing response updating aircraft, may not be JSON');
-            let errMsg = { message: 'There was a problem saving the aircraft. Try again later' };
-            if (_.toString(apiResponse).includes('DETAIL:  Key (registration)')) {
-              errMsg = { message: 'Craft already exists' };
-            }
-            res.render('app/aircraft/edit/index', { cookie, errors: [errMsg] });
           }
+          logger.error('Unexpected response updating aircraft');
+          return renderApiError(apiResponse);
         })
         .catch((err) => {
           logger.error('Failed to update aircraft', {
@@ -66,7 +60,10 @@ module.exports = (req, res) => {
             errorMessage: err?.message,
             stack: err?.stack,
           });
-          res.render('app/aircraft/edit/index', {
+          if (err?.type === 'http_error') {
+            return renderApiError(err.body);
+          }
+          return res.render('app/aircraft/edit/index', {
             cookie,
             errors: [{ message: 'An error has occurred. Try again later' }],
           });
@@ -76,4 +73,14 @@ module.exports = (req, res) => {
       logger.info('Edit SavedCraft postcontroller - There was a problem with editing the saved craft');
       res.render('app/aircraft/edit/index', { cookie, errors: err });
     });
+
+  function renderApiError(body) {
+    if (body && typeof body === 'object' && Object.prototype.hasOwnProperty.call(body, 'message')) {
+      return res.render('app/aircraft/edit/index', { cookie, errors: [body] });
+    }
+    const message = _.toString(body).includes('DETAIL:  Key (registration)')
+      ? 'Craft already exists'
+      : 'There was a problem saving the aircraft. Try again later';
+    return res.render('app/aircraft/edit/index', { cookie, errors: [{ message }] });
+  }
 };

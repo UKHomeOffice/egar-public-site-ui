@@ -1,4 +1,4 @@
-const dataAccessApi = require('../services/dataAccessApi');
+const { garApi } = require('../services/dataAccessApi');
 const logger = require('./logger')(__filename);
 
 /**
@@ -48,7 +48,7 @@ const hasGarOwnership = async (cookie, garId) => {
   if (!garId) return { ok: false, gar: null };
 
   try {
-    const gar = await dataAccessApi.garApi.get(garId);
+    const gar = await garApi.get(garId);
     const ok = checkGARUser(gar, cookie.getUserDbId(), cookie.getOrganisationId());
     return { ok, gar };
   } catch (err) {

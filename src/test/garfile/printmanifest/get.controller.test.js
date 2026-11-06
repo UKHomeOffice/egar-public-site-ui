@@ -1,103 +1,92 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
+
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../global.test');
-
+const CookieModel = require('../../../common/models/Cookie.class');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
+const controller = require('../../../app/garfile/printmanifest/get.controller');
 
 describe('GAR Print Manifest Get Controller', () => {
-  let req, res, cookieInstance, garApiStub, controller;
-
-  const flush = () => new Promise((resolve) => setImmediate(resolve));
-  const buildGar = (statusName) => ({
-    garId: 'gar-1',
-    userId: 'user-1',
-    organisationId: 'org-1',
-    status: { name: statusName },
-  });
+  let req;
+  let res;
+  let gar;
+  let get;
+  let getPeople;
+  let getDocs;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
-    req = { session: {} };
-    res = { render: sinon.spy() };
-
-    cookieInstance = {
-      getGarId: sinon.stub().returns('gar-1'),
-      setGarStatus: sinon.spy(),
+    req = { session: { gar: { id: 'session-gar', status: 'Draft' } } };
+    res = { render: sinon.spy(), locals: { gar: { garId: 'gar-1' } } };
+    gar = {
+      garId: 'gar-1',
+      userId: 'user-1',
+      organisationId: 'org-1',
+      status: { name: 'Draft' },
     };
-    garApiStub = {
-      get: sinon.stub(),
-      getPeople: sinon.stub().resolves(JSON.stringify({ items: [{ id: 'pesron-1' }] })),
-      getSupportingDocs: sinon.stub().resolves(JSON.stringify({ items: [{ id: 'document-1' }] })),
-    };
-
-    controller = proxyquire('../../../app/garfile/printmanifest/get.controller', {
-      '../../../common/models/Cookie.class': sinon.stub().returns(cookieInstance),
-      '../../../common/services/garApi': garApiStub,
-    });
+    get = sinon.stub(garApi, 'get').resolves(gar);
+    getPeople = sinon.stub(garApi, 'getPeople').resolves({ items: [{ garPeopleId: 'person-1' }] });
+    getDocs = sinon.stub(garApi, 'getSupportingDocs').resolves({ items: [{ supportingDocumentId: 'document-1' }] });
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should render the manifest with change links for a draft GAR and strip owner ids', async () => {
-    garApiStub.get.resolves(JSON.stringify(buildGar('Draft')));
-
-    controller(req, res);
-    await flush();
-
-    expect(garApiStub.get).to.have.been.calledWith('gar-1', true);
-    expect(garApiStub.getPeople).to.have.been.calledWith('gar-1');
-    expect(garApiStub.getSupportingDocs).to.have.been.calledWith('gar-1');
-    expect(cookieInstance.setGarStatus).to.have.been.calledWith('Draft');
-    expect(res.render).to.have.been.calledOnceWith('app/garfile/printmanifest/index', {
-      cookie: cookieInstance,
-      manifestFields,
-      garfile: { garId: 'gar-1', status: { name: 'Draft' } },
-      garpeople: { items: [{ id: 'pesron-1' }] },
-      garsupportingdocs: { items: [{ id: 'document-1' }] },
-      showChangeLinks: true,
-    });
-  });
-
-  ['Submitted', 'Cancelled'].forEach((status) => {
-    it(`should hide change links for a ${status} GAR`, async () => {
-      garApiStub.get.resolves(JSON.stringify(buildGar(status)));
-
-      controller(req, res);
-      await flush();
-
-      expect(res.render.firstCall.args[1].showChangeLinks).to.be.false;
-    });
-  });
-
-  it('should render an error when the GAR cannot be retrieved', async () => {
-    garApiStub.get.rejects(new Error('error'));
-
-    controller(req, res);
-    await flush();
-
-    expect(res.render).to.have.been.calledOnceWith('app/garfile/printmanifest/index', {
-      cookie: cookieInstance,
+  function expectRetrievalError() {
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/printmanifest/index', {
+      cookie: new CookieModel(req),
       manifestFields,
       garfile: {},
       garpeople: {},
       garsupportingdocs: {},
       errors: [{ message: 'Failed to get GAR information' }],
     });
+  }
+
+  it('renders decoded draft data using the verified GAR ID without mutating the response', async () => {
+    await controller(req, res);
+
+    expect(get).to.have.been.calledOnceWithExactly('gar-1', true);
+    expect(getPeople).to.have.been.calledOnceWithExactly('gar-1');
+    expect(getDocs).to.have.been.calledOnceWithExactly('gar-1');
+    expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/printmanifest/index', {
+      cookie: new CookieModel(req),
+      manifestFields,
+      garfile: { garId: 'gar-1', status: { name: 'Draft' } },
+      garpeople: { items: [{ garPeopleId: 'person-1' }] },
+      garsupportingdocs: { items: [{ supportingDocumentId: 'document-1' }] },
+      showChangeLinks: true,
+    });
+    expect(gar).to.include({ userId: 'user-1', organisationId: 'org-1' });
   });
 
-  it('should render an error when the response is not valid JSON', async () => {
-    garApiStub.get.resolves('not json');
+  ['Submitted', 'Cancelled'].forEach((status) => {
+    it(`hides change links and updates session status for a ${status} GAR`, async () => {
+      gar.status.name = status;
 
-    controller(req, res);
-    await flush();
+      await controller(req, res);
 
-    expect(res.render.firstCall.args[1].errors).to.deep.eq([{ message: 'Failed to get GAR information' }]);
+      expect(req.session.gar.status).to.equal(status);
+      expect(res.render).to.have.been.calledOnce;
+      expect(res.render.firstCall.args[1].showChangeLinks).to.equal(false);
+    });
+  });
+
+  it('renders the retrieval error when an API request rejects', async () => {
+    get.rejects(new Error('Connection unavailable'));
+
+    await controller(req, res);
+
+    expectRetrievalError();
+  });
+
+  it('renders the retrieval error instead of a partial manifest on an HTTP read envelope', async () => {
+    getDocs.resolves({ statusCode: 503, body: { message: 'Unavailable' } });
+
+    await controller(req, res);
+
+    expectRetrievalError();
   });
 });

@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
 const CookieModel = require('../../../common/models/Cookie.class');
 
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 
 require('../../global.test');
 const { hasGarOwnership } = require('../../../common/utils/garOwnership');
@@ -58,7 +58,7 @@ describe('middleware/garOwnership', () => {
       },
     });
 
-    garApiStub = sinon.stub(dataAccessApi.garApi, 'get');
+    garApiStub = sinon.stub(garApi, 'get');
   });
 
   afterEach(() => {

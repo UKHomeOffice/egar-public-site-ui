@@ -2,8 +2,8 @@ const i18n = require('i18n');
 const XLSX = require('xlsx');
 
 const logger = require('../../../common/utils/logger')(__filename);
-const garApi = require('../../../common/services/garApi');
-const createGarApi = require('../../../common/services/createGarApi.js');
+const { garApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const { validations } = require('./validations');
@@ -114,16 +114,6 @@ module.exports = async (req, res) => {
   }
   logger.debug('Determined file to be Excel, beginning to read');
 
-  const formData = {
-    name: req.file.originalname,
-    file: {
-      value: req.file.buffer,
-      options: {
-        filename: req.file.originalname,
-      },
-    },
-  };
-
   try {
     const cookie = new CookieModel(req);
 
@@ -132,7 +122,7 @@ module.exports = async (req, res) => {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
 
-    if (!(await clamAVService.scanFile(formData))) {
+    if (!(await clamAVService.scanFile(req.file))) {
       logger.warn('File rejected because ClamAV detected a virus');
       res.redirect('/garfile/garupload?query=v');
       return;
@@ -165,17 +155,16 @@ module.exports = async (req, res) => {
       .validateChains(validations(voyageParser.parse(), crew, passengers))
       .then(() => {
         logger.debug('Uploaded Excel sheet is valid; creating GAR via API');
-        createGarApi
+        return garApi
           .createGar(cookie.getUserDbId())
           .then((apiResponse) => {
-            const parsedResponse = JSON.parse(apiResponse);
-            if (parsedResponse.message) {
+            if (apiResponse.message) {
               req.session.failureMsg = 'Failed to create GAR';
               req.session.save(() => res.redirect('garfile/garupload'));
               return;
             }
             logger.info('Created new GAR');
-            const { garId } = parsedResponse;
+            const { garId } = apiResponse;
             cookie.setGarId(garId);
             cookie.setGarStatus('Draft');
 
@@ -192,7 +181,7 @@ module.exports = async (req, res) => {
 
             const voyageUpdate = garApi.patch(garId, 'Draft', voyageParsed);
 
-            Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
+            return Promise.all([crewUpdate, passengerUpdate, voyageUpdate])
               .then(() => {
                 logger.info('Updated GAR with Excel data');
                 req.session.save(() => res.redirect('/garfile/review?from=uploadGar'));
@@ -210,6 +199,10 @@ module.exports = async (req, res) => {
           })
           .catch((err) => {
             logger.error('Failed to create GAR from Excel data', { errorMessage: err?.message, stack: err?.stack });
+            if (getApiErrorBody(err)) {
+              req.session.failureMsg = 'Failed to create GAR';
+              return req.session.save(() => res.redirect('garfile/garupload'));
+            }
             req.session.failureMsg = 'Failed to create GAR. Try again';
             req.session.failureIdentifier = 'file';
             res.redirect('garfile/garupload');
