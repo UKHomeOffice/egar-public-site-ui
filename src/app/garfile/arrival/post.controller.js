@@ -2,6 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const { garApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const airportValidation = require('../../../common/utils/airportValidation');
 
@@ -36,11 +37,7 @@ const performAPICall = (cookie, buttonClicked, res) => {
       });
       res.render('app/garfile/arrival/index', {
         cookie,
-        errors: [
-          err?.type === 'http_error' && typeof err.body?.message === 'string'
-            ? err.body
-            : { message: 'Failed to add to GAR' },
-        ],
+        errors: [getApiErrorBody(err) || { message: 'Failed to add to GAR' }],
       });
     });
 };

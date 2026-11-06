@@ -4,6 +4,7 @@ const logger = require('../../../../common/utils/logger')(__filename);
 const validator = require('../../../../common/utils/validator');
 const CookieModel = require('../../../../common/models/Cookie.class');
 const { garApi } = require('../../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../../common/utils/apiError');
 const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
 const genderchoice = require('../../../../common/seeddata/egar_gender_choice.json');
@@ -63,11 +64,7 @@ module.exports = (req, res) => {
             persontype,
             documenttype,
             genderchoice,
-            errors: [
-              err?.type === 'http_error' && typeof err.body?.message === 'string'
-                ? err.body
-                : { message: 'Error adding a new person. Try again later' },
-            ],
+            errors: [getApiErrorBody(err) || { message: 'Error adding a new person. Try again later' }],
           });
         });
     })

@@ -6,6 +6,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const utils = require('../../../common/utils/utils');
 const { resPersonApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -38,9 +39,9 @@ module.exports = (req, res) => {
             responsiblePerson,
             fixedBasedOperatorOptions,
             errors: [
-              err?.type === 'http_error' && err.body && typeof err.body.message === 'string'
-                ? err.body
-                : { message: 'There was a problem updating responsible person. Please try again' },
+              getApiErrorBody(err) || {
+                message: 'There was a problem updating responsible person. Please try again',
+              },
             ],
           });
         });

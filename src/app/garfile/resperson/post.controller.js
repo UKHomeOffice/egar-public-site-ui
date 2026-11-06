@@ -5,6 +5,7 @@ const utils = require('../../../common/utils/utils');
 const validator = require('../../../common/utils/validator');
 const validations = require('../../resperson/validations');
 const { resPersonApi, garApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -79,11 +80,7 @@ module.exports = async (req, res) => {
               responsiblePerson,
               responsiblePersons,
               fixedBasedOperatorOptions,
-              errors: [
-                err?.type === 'http_error' && typeof err.body?.message === 'string'
-                  ? err.body
-                  : { message: 'Failed to add to GAR' },
-              ],
+              errors: [getApiErrorBody(err) || { message: 'Failed to add to GAR' }],
             });
           });
       })

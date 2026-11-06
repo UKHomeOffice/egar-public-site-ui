@@ -7,6 +7,7 @@ const persontype = require('../../../common/seeddata/egar_type_of_saved_person')
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
 const { personApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -55,11 +56,7 @@ module.exports = (req, res) => {
             persontype,
             documenttype,
             genderchoice,
-            errors: [
-              err?.type === 'http_error' && err.body && typeof err.body.message === 'string'
-                ? err.body
-                : { message: 'There was a problem creating the person. Please try again' },
-            ],
+            errors: [getApiErrorBody(err) || { message: 'There was a problem creating the person. Please try again' }],
           });
         });
     })

@@ -4,6 +4,7 @@ const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const garoptions = require('../../../common/seeddata/egar_create_gar_options.json');
 const { garApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const garStatus = 'Draft';
@@ -56,11 +57,7 @@ module.exports = (req, res) => {
           res.render('app/garfile/home/index', {
             cookie,
             garoptions,
-            errors: [
-              err?.type === 'http_error' && typeof err.body?.message === 'string'
-                ? err.body
-                : { message: 'Failed to create GAR. Try again' },
-            ],
+            errors: [getApiErrorBody(err) || { message: 'Failed to create GAR. Try again' }],
           });
         });
     })

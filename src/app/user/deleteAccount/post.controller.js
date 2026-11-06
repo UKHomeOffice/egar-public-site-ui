@@ -1,6 +1,7 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
 const { deleteAccount } = require('./utils');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 const postController = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -22,7 +23,7 @@ const postController = async (req, res) => {
     logger.error('Failed to delete user account', { errorMessage: err?.message, stack: err?.stack });
     return res.render('app/user/deleteAccount/index', {
       cookie,
-      errors: [err?.type === 'http_error' && err.body && typeof err.body.message === 'string' ? err.body : errObj],
+      errors: [getApiErrorBody(err) || errObj],
     });
   }
 

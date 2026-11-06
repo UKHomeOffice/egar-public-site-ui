@@ -7,6 +7,7 @@ const persontype = require('../../../common/seeddata/egar_type_of_saved_person')
 const documenttype = require('../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const genderchoice = require('../../../common/seeddata/egar_gender_choice.json');
 const { personApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -52,13 +53,14 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('Failed to update saved person', { errorMessage: err?.message, stack: err?.stack });
-          if (err?.type === 'http_error' && err.body && typeof err.body.message === 'string') {
+          const apiErrorBody = getApiErrorBody(err);
+          if (apiErrorBody) {
             return res.render('app/people/edit/index', {
               cookie,
               persontype,
               documenttype,
               genderchoice,
-              errors: [err.body],
+              errors: [apiErrorBody],
             });
           }
           res.render('app/people/edit/index', {

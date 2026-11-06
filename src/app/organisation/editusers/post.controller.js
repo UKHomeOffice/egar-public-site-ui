@@ -6,6 +6,7 @@ const { organisationApi } = require('../../../common/services/dataAccessApi');
 const { getRolesForAssigning } = require('../../../common/utils/utils');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { ROLE_PERMISSION_ERROR_MSG } = require('../constants');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -48,10 +49,9 @@ module.exports = (req, res) => {
         .catch((err) => {
           logger.error('Failed to update org user details', { errorMessage: err?.message, stack: err?.stack });
           req.session.errMsg = {
-            message:
-              err?.type === 'http_error' && err.body && typeof err.body.message === 'string'
-                ? 'You do not have the permissions to edit this user or perform this action'
-                : 'Failed to update user details. Try again',
+            message: getApiErrorBody(err)
+              ? 'You do not have the permissions to edit this user or perform this action'
+              : 'Failed to update user details. Try again',
           };
           return req.session.save(() => res.redirect('/organisation'));
         });

@@ -1,6 +1,7 @@
 const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
 const { garApi } = require('../../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -36,7 +37,7 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error('Failed to delete GAR person', { userId, errorMessage: err?.message, stack: err?.stack });
-      req.session.errMsg = err?.type === 'http_error' && typeof err.body?.message === 'string' ? err.body : deleteErr;
+      req.session.errMsg = getApiErrorBody(err) || deleteErr;
       return res.redirect('/garfile/manifest');
     });
 };

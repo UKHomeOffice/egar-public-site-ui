@@ -4,6 +4,7 @@ const validations = require('./validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const { garApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 const prohibitedGoodsOptions = require('../../../common/seeddata/egar_prohibited_goods_options.json');
 const baggageOptions = require('../../../common/seeddata/egar_baggage_options.json');
 const reasonForVisitOptions = require('../../../common/seeddata/egar_visit_reason_options.json');
@@ -72,11 +73,7 @@ module.exports = (req, res) => {
             errorMessage: err?.message,
             stack: err?.stack,
           });
-          context.errors = [
-            err?.type === 'http_error' && typeof err.body?.message === 'string'
-              ? err.body
-              : { message: 'Failed to save customs information. Try again' },
-          ];
+          context.errors = [getApiErrorBody(err) || { message: 'Failed to save customs information. Try again' }];
           res.render('app/garfile/customs/index', context);
         });
     })

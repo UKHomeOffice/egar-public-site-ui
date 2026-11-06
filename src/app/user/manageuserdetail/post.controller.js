@@ -5,6 +5,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const { userManageApi } = require('../../../common/services/dataAccessApi');
 const { MAX_STRING_LENGTH } = require('../../../common/config/index');
 const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const firstName = req.body.firstname?.trim();
@@ -96,11 +97,7 @@ module.exports = (req, res) => {
           logger.error('Failed to update user details', { errorMessage: err?.message, stack: err?.stack });
           res.render('app/user/manageuserdetail/index', {
             cookie,
-            errors: [
-              err?.type === 'http_error' && err.body && typeof err.body.message === 'string'
-                ? err.body
-                : { message: 'Failed to update. Try again' },
-            ],
+            errors: [getApiErrorBody(err) || { message: 'Failed to update. Try again' }],
           });
         });
     })

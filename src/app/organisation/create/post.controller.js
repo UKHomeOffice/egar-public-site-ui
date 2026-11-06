@@ -3,6 +3,7 @@ const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const { organisationApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 module.exports = (req, res) => {
   const orgname = req.body.orgName;
@@ -37,10 +38,7 @@ module.exports = (req, res) => {
             errorMessage: err?.message,
             stack: err?.stack,
           });
-          const error =
-            err?.type === 'http_error' && err.body && typeof err.body.message === 'string'
-              ? { message: err.body.message }
-              : err;
+          const error = getApiErrorBody(err) ?? err;
           res.render('app/organisation/create/index', { cookie, errors: [error] });
         });
     })

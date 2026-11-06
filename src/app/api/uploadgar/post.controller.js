@@ -3,6 +3,7 @@ const XLSX = require('xlsx');
 
 const logger = require('../../../common/utils/logger')(__filename);
 const { garApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 const CookieModel = require('../../../common/models/Cookie.class');
 const validator = require('../../../common/utils/validator');
 const { validations } = require('./validations');
@@ -198,7 +199,7 @@ module.exports = async (req, res) => {
           })
           .catch((err) => {
             logger.error('Failed to create GAR from Excel data', { errorMessage: err?.message, stack: err?.stack });
-            if (err?.type === 'http_error' && typeof err.body?.message === 'string') {
+            if (getApiErrorBody(err)) {
               req.session.failureMsg = 'Failed to create GAR';
               return req.session.save(() => res.redirect('garfile/garupload'));
             }

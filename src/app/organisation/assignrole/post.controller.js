@@ -6,6 +6,7 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const tokenService = require('../../../common/services/create-token');
 const emailService = require('../../../common/services/sendEmail');
 const { tokenApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 const config = require('../../../common/config/index');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { ROLE_PERMISSION_ERROR_MSG } = require('../constants');
@@ -86,7 +87,7 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('Failed to set invite token', { errorMessage: err?.message, stack: err?.stack });
-          const error = err?.type === 'http_error' && err.body && typeof err.body.message === 'string' ? err.body : err;
+          const error = getApiErrorBody(err) || err;
           res.render('app/organisation/assignrole/index', { cookie, roles, errors: [error] });
         });
     })

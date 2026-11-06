@@ -2,6 +2,7 @@ const logger = require('../../../common/utils/logger')(__filename);
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const { craftApi, garApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 const validationList = require('./validations');
 const pagination = require('../../../common/utils/pagination');
 
@@ -78,11 +79,7 @@ module.exports = (req, res) => {
             });
             res.render('app/garfile/craft/index', {
               cookie,
-              errors: [
-                err?.type === 'http_error' && typeof err.body?.message === 'string'
-                  ? err.body
-                  : { message: 'Failed to add aircraft to GAR' },
-              ],
+              errors: [getApiErrorBody(err) || { message: 'Failed to add aircraft to GAR' }],
             });
           });
       })

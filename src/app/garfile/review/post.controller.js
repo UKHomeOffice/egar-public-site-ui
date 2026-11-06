@@ -7,6 +7,7 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 
 const performAPICall = async (garId, cookie, req, res) => {
   try {
@@ -33,7 +34,7 @@ const performAPICall = async (garId, cookie, req, res) => {
     });
   } catch (err) {
     logger.error('Failed to update GAR', { garId, errorMessage: err?.message, stack: err?.stack });
-    if (err?.type === 'http_error' && typeof err.body?.message === 'string') {
+    if (getApiErrorBody(err)) {
       req.session.submiterrormessage.push({
         message: 'An error has occurred. Try again later',
         identifier: '',

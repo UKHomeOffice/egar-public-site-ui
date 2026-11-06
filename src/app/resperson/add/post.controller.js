@@ -6,6 +6,7 @@ const validations = require('../validations');
 const CookieModel = require('../../../common/models/Cookie.class');
 const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_operator_options.json');
 const { resPersonApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 const utils = require('../../../common/utils/utils');
 
 module.exports = (req, res) => {
@@ -32,11 +33,12 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('Failed to add responsible person', { errorMessage: err?.message, stack: err?.stack });
-          if (err?.type === 'http_error' && err.body && typeof err.body.message === 'string') {
+          const apiErrorBody = getApiErrorBody(err);
+          if (apiErrorBody) {
             return res.render('app/resperson/add/index', {
               cookie,
               fixedBasedOperatorOptions,
-              errors: [err.body],
+              errors: [apiErrorBody],
               responsiblePerson,
             });
           }
