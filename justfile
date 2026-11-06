@@ -90,3 +90,5 @@ verify: check check-code-format
 review-all:
     -just review-hygiene
     -just review-security
+
+precommit: fix-code lint-code check-unused-code lint-templates
