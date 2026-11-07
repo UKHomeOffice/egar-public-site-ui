@@ -113,7 +113,7 @@ just check-template-format
 
 ## Cloud-agent verification
 
-Cloud agents start in a fresh Linux runner; tools installed on a developer's computer are not available there. The implementation workflow reads `.node-version`, installs that Node.js version and `just`, then runs `just setup-agent` before the agent starts. `.node-version` is 24.21.0, matching the Dockerfile and Drone CI images.
+Automated runners can use [the project setup action](../.github/actions/setup-agent/action.yml) to prepare the environment for verification. It installs the Node.js version in `.node-version`, installs `just`, and runs `just setup-agent`, so CI and other automation can share the same runtime and dependencies. `.node-version` is 24.21.0, matching the Dockerfile and Drone CI images.
 
 After making changes, the agent runs the verification gate from the repository root:
 
