@@ -51,6 +51,7 @@ Follow [`docs/setup.md`](docs/setup.md) when preparing a checkout, configuring `
 For focused iteration without coverage, use `just run-tests-target test/garfile/review/post.controller.test.js`. Paths are relative to `src/`; multiple files and Mocha options such as `--grep 'review'` are supported. The shared test bootstrap is retained, and matching no tests fails. Run the full gates before handoff.
 
 Run `just check` for every code change. Run `just verify` before handoff; it also checks formatting of non-JavaScript files, matching CI.
+On a fresh cloud-agent runner, follow [Cloud-agent verification](docs/setup.md#cloud-agent-verification) first.
 
 | Command | Purpose | Expected status |
 |---|---|---|

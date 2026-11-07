@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Node.js 24; the exact CI version is defined in `.drone.yml`.
+- The Node.js version in `.node-version` (currently 24.21.0; also used by Docker and Drone CI).
 - The sibling `data-access-api` repository, because `docker-compose.yml` builds it from `../data-access-api`.
 - [`just`](https://github.com/casey/just) for the documented development commands:
 
@@ -14,7 +14,7 @@
 
 ## Install the runtime
 
-Install Node.js 24 using the team's existing runtime-management approach. Confirm the active version before installing dependencies:
+Install the Node.js version in `.node-version` using the team's existing runtime-management approach. Confirm the active version before installing dependencies:
 
 ```sh
 node --version
@@ -23,13 +23,13 @@ npm --version
 
 ## Install project dependencies
 
+From the repository root:
+
 ```sh
-cd src
-npm ci
-cd ..
+just setup-agent
 ```
 
-This installs the project-managed tools, including ESLint, Prettier, Knip, Mocha, and c8.
+This runs `npm ci` in `src/` and installs the project-managed tools from `src/package-lock.json`, including ESLint, Prettier, Knip, Mocha, and c8.
 
 ## Configure the environment
 
@@ -102,6 +102,7 @@ Browser debugging is optional and complements automated tests; it is not part of
 
 ```sh
 just --list
+just setup-agent
 just check
 just verify
 just lint-templates
@@ -109,3 +110,15 @@ just check-template-format
 ```
 
 `just check` is the normal code gate. `just verify` also checks formatting of non-JavaScript files, matching CI. The template commands are required when changing Nunjucks files. Run `just review-all` when the broader review tools are installed; its findings may require interpretation.
+
+## Cloud-agent verification
+
+Cloud agents start in a fresh Linux runner; tools installed on a developer's computer are not available there. The implementation workflow reads `.node-version`, installs that Node.js version and `just`, then runs `just setup-agent` before the agent starts. `.node-version` is 24.21.0, matching the Dockerfile and Drone CI images.
+
+After making changes, the agent runs the verification gate from the repository root:
+
+```sh
+just verify
+```
+
+`just setup-agent` installs the locked npm dependencies. `just verify` runs JavaScript linting, the unit tests, and Prettier checks. The test bootstrap supplies a test-only Notify key; Drone also sets `NOTIFY_API_KEY=dummy`. Do not provide production credentials for unit-test verification.
