@@ -10,14 +10,14 @@ platform:
 steps:
   - name: install-dependencies
     pull: if-not-exists
-    image: node:24.19-alpine3.23
+    image: node:24.21-alpine3.23
     commands:
       - cd src
       - npm ci
 
   - name: run-tests
     pull: if-not-exists
-    image: node:24.19-alpine3.23
+    image: node:24.21-alpine3.23
     commands:
       - export NOTIFY_API_KEY=dummy
       - cd src
@@ -27,7 +27,7 @@ steps:
 
   - name: check-code
     pull: if-not-exists
-    image: node:24.19-alpine3.23
+    image: node:24.21-alpine3.23
     commands:
       - cd src
       - npm run check
@@ -36,7 +36,7 @@ steps:
 
   - name: check-templates
     pull: if-not-exists
-    image: node:24.19-alpine3.23
+    image: node:24.21-alpine3.23
     commands:
       - apk add --no-cache py3-pip
       - pip install --break-system-packages --no-cache-dir djlint==1.46.1
@@ -46,7 +46,7 @@ steps:
 
   - name: check-unused-code
     pull: if-not-exists
-    image: node:24.19-alpine3.23
+    image: node:24.21-alpine3.23
     commands:
       - cd src
       - npx --no-install knip
