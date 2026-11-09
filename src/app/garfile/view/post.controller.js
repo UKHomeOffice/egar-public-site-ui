@@ -1,5 +1,4 @@
 const logger = require('../../../common/utils/logger')(__filename);
-const airportValidation = require('../../../common/utils/airportValidation');
 const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const garApi = require('../../../common/services/garApi');
@@ -44,7 +43,7 @@ module.exports = async (req, res) => {
 
     numberOf0TResponseCodes = (parsedPeople.items || []).filter((x) => x.amgCheckinResponseCode === '0T').length;
     const durationInDeparture = garApi.getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
-
+    const passengerChecks = (parsedPeople.items || []).filter((x) => x.amgCheckinResponseCode !== null);
     cookie.setCbpId(parsedGar.cbpId);
     cookie.setGarStatus(parsedGar.status.name);
     logger.debug(`Retrieved GAR ID: ${parsedGar.garId}`);
@@ -61,7 +60,8 @@ module.exports = async (req, res) => {
       garpeople: parsedPeople,
       garsupportingdocs: supportingDocuments,
       showChangeLinks: true,
-      isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort),
+      isJourneyUKInbound:
+        parsedGar.isInbound && (parsedPeople.items || []).filter((x) => x.amgCheckinResponseCode !== null).length > 0,
       numberOf0TResponseCodes,
       durationInDeparture,
       isResubmitted,

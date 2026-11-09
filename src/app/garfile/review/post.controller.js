@@ -143,6 +143,8 @@ module.exports = async (req, res) => {
       garpeople,
       garsupportingdocs,
       showChangeLinks: true,
+      isJourneyUKInbound:
+        garfile.isInbound && (garpeople.items || []).filter((x) => x.amgCheckinResponseCode !== null).length > 0,
     };
   } catch (err) {
     logger.error('Failed to retrieve GAR for review', { garId, errorMessage: err?.message, stack: err?.stack });

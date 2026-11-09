@@ -3,7 +3,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const validator = require('../../../common/utils/validator');
-const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
@@ -45,6 +44,8 @@ module.exports = (req, res) => {
         garpeople,
         garsupportingdocs,
         showChangeLinks: true,
+        isJourneyUKInbound:
+          garfile.isInbound && (garpeople.items || []).filter((x) => x.amgCheckinResponseCode !== null).length > 0,
       };
 
       validator

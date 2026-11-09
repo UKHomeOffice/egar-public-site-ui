@@ -120,6 +120,7 @@ describe('GAR view post controller', () => {
           garId: 'GAR-ID-EXAMPLE-2',
           status: { name: 'Draft' },
           userId: 'USER-123',
+          isInbound: true,
         })
       )
     );
@@ -155,7 +156,7 @@ describe('GAR view post controller', () => {
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
           cookie,
           manifestFields,
-          garfile: { garId: 'GAR-ID-EXAMPLE-2', status: { name: 'Draft' } },
+          garfile: { garId: 'GAR-ID-EXAMPLE-2', status: { name: 'Draft' }, isInbound: true },
           isAbleToCancelGar: true,
           garpeople: {
             items: [
@@ -185,6 +186,7 @@ describe('GAR view post controller', () => {
           garId: 'GAR-ID-EXAMPLE-1',
           status: { name: 'Draft' },
           userId: 'USER-123',
+          isInbound: true,
         })
       )
     );
@@ -217,7 +219,7 @@ describe('GAR view post controller', () => {
         expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
           cookie,
           manifestFields,
-          garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Draft' } },
+          garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Draft' }, isInbound: true },
           isAbleToCancelGar: true,
           garpeople: {
             items: [
@@ -245,6 +247,7 @@ describe('GAR view post controller', () => {
       garId: 'GAR-ID-EXAMPLE-1',
       status: { name: 'Cancelled' },
       userId: 'USER-123',
+      isInbound: true,
     });
     garApiGetPeopleStub.resolves({
       items: [
@@ -274,7 +277,7 @@ describe('GAR view post controller', () => {
           showChangeLinks: false,
           isJourneyUKInbound: true,
           isAbleToCancelGar: true,
-          garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Cancelled' } },
+          garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Cancelled' }, isInbound: true },
           garpeople: {
             items: [
               { id: 'PERSON-1', firstName: 'Simona' },
