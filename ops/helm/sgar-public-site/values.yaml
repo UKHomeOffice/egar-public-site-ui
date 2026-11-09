@@ -1,0 +1,43 @@
+app:
+  name: sgar-public-site
+  replicas: 1
+  revisionHistoryLimit: 10
+  downscaler:
+    enabled: true
+    uptime: "Mon-Fri 06:00-20:00 Europe/London"
+
+image:
+  repository: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/sgar/sgar-public-site-ui
+  tag: latest
+  pullPolicy: IfNotPresent
+
+proxy:
+  image:
+    repository: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/shared/acp-nginx-proxy-rocky
+    tag: 0.0.3
+    pullPolicy: IfNotPresent
+
+service:
+  name: sgar-public-site-svc
+  type: ClusterIP
+  port: 10443
+  targetPort: 10443
+
+ingress:
+  internal:
+    enabled: true
+    host: internal.example.com
+    className: nginx-internal
+    tlsSecretName: public-site-internal-tls
+  external:
+    enabled: true
+    host: external.example.com
+    className: nginx-external
+    tlsSecretName: public-site-external-tls
+  poise:
+    enabled: false
+    whitelistSourceRange: ""
+
+certificates:
+  issuerName: letsencrypt-prod
+  issuerKind: ClusterIssuer

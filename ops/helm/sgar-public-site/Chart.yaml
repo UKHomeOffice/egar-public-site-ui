@@ -1,0 +1,6 @@
+apiVersion: v2
+name: sgar-public-site
+description: A Helm chart for deploying the sGAR public site UI
+type: application
+version: 0.1.0
+appVersion: "latest"

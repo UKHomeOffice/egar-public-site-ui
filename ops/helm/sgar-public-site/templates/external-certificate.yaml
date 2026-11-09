@@ -1,0 +1,14 @@
+{{- if or .Values.ingress.external.enabled .Values.ingress.poise.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: public-site-external-tls
+spec:
+  commonName: {{ .Values.ingress.external.host | quote }}
+  dnsNames:
+    - {{ .Values.ingress.external.host | quote }}
+  issuerRef:
+    kind: {{ .Values.certificates.issuerKind }}
+    name: {{ .Values.certificates.issuerName }}
+  secretName: {{ .Values.ingress.external.tlsSecretName }}
+{{- end }}

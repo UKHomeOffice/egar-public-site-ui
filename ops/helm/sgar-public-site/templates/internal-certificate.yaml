@@ -1,0 +1,16 @@
+{{- if .Values.ingress.internal.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: public-site-internal-tls
+  labels:
+    cert-manager.io/solver: route53
+spec:
+  secretName: {{ .Values.ingress.internal.tlsSecretName }}
+  issuerRef:
+    name: {{ .Values.certificates.issuerName }}
+    kind: {{ .Values.certificates.issuerKind }}
+  commonName: {{ .Values.ingress.internal.host | quote }}
+  dnsNames:
+    - {{ .Values.ingress.internal.host | quote }}
+{{- end }}

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "public-site.serviceName" . }}
+  labels:
+    name: {{ include "public-site.serviceName" . }}
+spec:
+  selector:
+    name: {{ include "public-site.serviceName" . }}
+  type: {{ .Values.service.type }}
+  ports:
+    - name: public-prxy-prt
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
