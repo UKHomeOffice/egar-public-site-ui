@@ -65,6 +65,10 @@ const canSkipCsrfGeneration = (req) => {
   return pattern.test(req.path);
 };
 
+const hasGARSubmittedForPassengerChecks = (parsedPeople) => {
+  return (parsedPeople.items || []).filter((x) => x.amgCheckinResponseCode !== null).length > 0;
+};
+
 module.exports = {
   trimToDecimalPlaces,
   documentTypes,
@@ -73,4 +77,5 @@ module.exports = {
   nanoid,
   getRolesForAssigning,
   canSkipCsrfGeneration,
+  hasGARSubmittedForPassengerChecks,
 };

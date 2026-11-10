@@ -137,7 +137,7 @@ describe('GAR view get controller', () => {
             durationInDeparture: 125,
             numberOf0TResponseCodes: 2,
             isResubmitted: false,
-            isJourneyUKInbound: true,
+            isJourneyUKInboundWithPassengerChecks: true,
           });
         });
     });
@@ -196,7 +196,7 @@ describe('GAR view get controller', () => {
             cookie,
             manifestFields,
             showChangeLinks: false,
-            isJourneyUKInbound: false,
+            isJourneyUKInboundWithPassengerChecks: false,
             isAbleToCancelGar: false,
             garfile: resultantOutboundGar,
             successMsg: undefined,

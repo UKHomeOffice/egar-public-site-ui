@@ -4,6 +4,7 @@ const manifestFields = require('../../../common/seeddata/gar_manifest_fields.jso
 const garApi = require('../../../common/services/garApi');
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
+const { hasGARSubmittedForPassengerChecks } = require('../../../common/utils/utils');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -60,8 +61,7 @@ module.exports = async (req, res) => {
       garpeople: parsedPeople,
       garsupportingdocs: supportingDocuments,
       showChangeLinks: true,
-      isJourneyUKInbound:
-        parsedGar.isInbound && (parsedPeople.items || []).filter((x) => x.amgCheckinResponseCode !== null).length > 0,
+      isJourneyUKInboundWithPassengerChecks: parsedGar.isInbound && hasGARSubmittedForPassengerChecks(parsedPeople),
       numberOf0TResponseCodes,
       durationInDeparture,
       isResubmitted,

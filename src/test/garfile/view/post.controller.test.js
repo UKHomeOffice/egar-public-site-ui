@@ -168,7 +168,7 @@ describe('GAR view post controller', () => {
             items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
           },
           showChangeLinks: true,
-          isJourneyUKInbound: true,
+          isJourneyUKInboundWithPassengerChecks: true,
           durationInDeparture: 125,
           numberOf0TResponseCodes: 0,
           isResubmitted: false,
@@ -231,7 +231,7 @@ describe('GAR view post controller', () => {
             items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
           },
           showChangeLinks: true,
-          isJourneyUKInbound: true,
+          isJourneyUKInboundWithPassengerChecks: true,
           durationInDeparture: 125,
           numberOf0TResponseCodes: 0,
           isResubmitted: false,
@@ -275,7 +275,7 @@ describe('GAR view post controller', () => {
           cookie,
           manifestFields,
           showChangeLinks: false,
-          isJourneyUKInbound: true,
+          isJourneyUKInboundWithPassengerChecks: true,
           isAbleToCancelGar: true,
           garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Cancelled' }, isInbound: true },
           garpeople: {
@@ -329,7 +329,7 @@ describe('GAR view post controller', () => {
           cookie,
           manifestFields,
           showChangeLinks: false,
-          isJourneyUKInbound: false,
+          isJourneyUKInboundWithPassengerChecks: false,
           isAbleToCancelGar: true,
           garfile: outboundGar(),
           garpeople: {
@@ -381,7 +381,7 @@ describe('GAR view post controller', () => {
           cookie,
           manifestFields,
           showChangeLinks: false,
-          isJourneyUKInbound: false,
+          isJourneyUKInboundWithPassengerChecks: false,
           isAbleToCancelGar: true,
           garfile: outboundGar(),
           garpeople: {
@@ -447,7 +447,7 @@ describe('GAR view post controller', () => {
           cookie,
           manifestFields,
           showChangeLinks: false,
-          isJourneyUKInbound: false,
+          isJourneyUKInboundWithPassengerChecks: false,
           isAbleToCancelGar: false,
           garfile: resultantOutboundGar,
           garpeople: {
