@@ -1,7 +1,7 @@
 {% extends "base-template.njk" %}
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
-
+{% import "common/templates/includes/template-change-banner.njk" as banners %}
 {% set active = "/home" %}
 {% set statusName = statusTab| lower %}
 
@@ -64,18 +64,21 @@
 
 {% block content %}
   <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">{{ banners.notificationBannerTemplateUpdate() }}</div>
+  </div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">{{ __('title') }}</h1>
       <p class="govuk-body-m">
         {{ __('create_gar_caption_1') }}
         <a class="govuk-link"
-           href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Apr_2024_v6.6_SDS_.xlsx">
+           href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Nov_2026_v7.0_SDS.xlsx">
           <span class="govuk-visually-hidden">{{ __('heading_create_gar') }} </span>{{ __('create_gar_caption_link') }}</a>{{ __('create_gar_caption_2') }}
         </p>
         <p class="govuk-body-m">GARs must be submitted no earlier than 48 hours and no later than 2 hours before the expected time of departure.</p>
-        <div class="govuk-!-margin-bottom-5"><a id="start_now"
-   class="govuk-button"
-   href="/garfile/home">Create a GAR</a></div>
+        <div class="govuk-!-margin-bottom-5">
+          <a id="start_now" class="govuk-button" href="/garfile/home">Create a GAR</a>
+        </div>
       </div>
     </div>
     {{ m.section_break() }}
