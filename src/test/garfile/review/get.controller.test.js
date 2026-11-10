@@ -125,6 +125,7 @@ describe('GAR Review Get Controller', () => {
           },
           garsupportingdocs: {},
           showChangeLinks: true,
+          isJourneyUKInboundWithPassengerChecks: undefined,
           errors: [
             new ValidationRule(
               validator.isValidDepAndArrDate,
@@ -178,6 +179,7 @@ describe('GAR Review Get Controller', () => {
       freeCirculation: 'No',
       visitReason: 'No',
       intentionValue: 'Yes',
+      isInbound: false,
     });
     garApiGetPeopleStub.resolves({
       items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
@@ -210,6 +212,7 @@ describe('GAR Review Get Controller', () => {
             responsibleGivenName: 'James',
             status: { name: 'draft' },
             visitReason: 'No',
+            isInbound: false,
           },
           garpeople: {
             items: [{ peopleType: { name: 'Captain' }, firstName: 'James', lastName: 'Kirk' }],
@@ -218,6 +221,7 @@ describe('GAR Review Get Controller', () => {
             message: 'GAR not found',
           },
           showChangeLinks: true,
+          isJourneyUKInboundWithPassengerChecks: false,
         });
       });
   });
@@ -274,6 +278,7 @@ describe('GAR Review Get Controller', () => {
           },
           garsupportingdocs: {},
           showChangeLinks: true,
+          isJourneyUKInboundWithPassengerChecks: undefined,
         });
       });
   });

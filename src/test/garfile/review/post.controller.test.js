@@ -164,6 +164,7 @@ describe('GAR Review Post Controller', () => {
         },
         garsupportingdocs: {},
         showChangeLinks: true,
+        isJourneyUKInboundWithPassengerChecks: undefined,
         errors: [
           new ValidationRule(
             validator.isValidDepAndArrDate,
@@ -249,6 +250,7 @@ describe('GAR Review Post Controller', () => {
         },
         garsupportingdocs: {},
         showChangeLinks: true,
+        isJourneyUKInboundWithPassengerChecks: undefined,
         errors: [
           new ValidationRule(
             validator.isValidDepAndArrDate,
