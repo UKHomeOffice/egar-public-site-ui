@@ -44,7 +44,6 @@ module.exports = async (req, res) => {
 
     numberOf0TResponseCodes = (parsedPeople.items || []).filter((x) => x.amgCheckinResponseCode === '0T').length;
     const durationInDeparture = garApi.getDurationBeforeDeparture(parsedGar.departureDate, parsedGar.departureTime);
-    const passengerChecks = (parsedPeople.items || []).filter((x) => x.amgCheckinResponseCode !== null);
     cookie.setCbpId(parsedGar.cbpId);
     cookie.setGarStatus(parsedGar.status.name);
     logger.debug(`Retrieved GAR ID: ${parsedGar.garId}`);
