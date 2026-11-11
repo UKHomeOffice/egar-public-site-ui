@@ -1,6 +1,7 @@
 const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
 const dataAccessApi = require('../../common/services/dataAccessApi');
+const { GAR_TEMPLATE_FILE } = require('../../common/config');
 
 const PAGE_ONE = 1;
 const PER_PAGE = 10;
@@ -46,6 +47,7 @@ module.exports = async (req, res) => {
       draftGars,
       submittedGars,
       cancelledGars,
+      GAR_TEMPLATE_FILE,
     });
   } catch (error) {
     logger.error('Failed to get GARS from API', { errorMessage: error?.message, stack: error?.stack });

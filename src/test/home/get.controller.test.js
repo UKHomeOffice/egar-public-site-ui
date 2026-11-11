@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-
+const { GAR_TEMPLATE_FILE } = require('../../common/config');
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
 const dataAccessApi = require('../../common/services/dataAccessApi');
@@ -103,6 +103,7 @@ describe('Home Get Controller', () => {
           draftGars: draftGarsApiResponse,
           submittedGars: submittedGarsApiResponse,
           cancelledGars: cacelledGarsApiResponse,
+          GAR_TEMPLATE_FILE: GAR_TEMPLATE_FILE,
         });
       });
   });

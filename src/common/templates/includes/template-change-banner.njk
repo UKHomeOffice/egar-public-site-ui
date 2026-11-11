@@ -1,7 +1,6 @@
 {% from "dist/govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "src/common/config/index.js" import GAR_TEMPLATE_FILE %}
 
-{% macro notificationBannerTemplateUpdate() %}
+{% macro notificationBannerTemplateUpdate(GAR_TEMPLATE_FILE) %}
   {% call govukNotificationBanner() %}
     <p class="govuk-notification-banner__heading">The General Aviation Report template has been updated</p>
 
