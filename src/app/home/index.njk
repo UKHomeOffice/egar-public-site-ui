@@ -2,6 +2,8 @@
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
 {% import "common/templates/includes/template-change-banner.njk" as banners %}
+{% from "src/common/config/index.js" import GAR_TEMPLATE_FILE %}
+
 {% set active = "/home" %}
 {% set statusName = statusTab| lower %}
 
@@ -71,8 +73,7 @@
       <h1 class="govuk-heading-xl">{{ __('title') }}</h1>
       <p class="govuk-body-m">
         {{ __('create_gar_caption_1') }}
-        <a class="govuk-link"
-           href="https://assets.publishing.service.gov.uk/media/660fba8263b7f8001fde18e2/GAR_Template_Nov_2026_v7.0_SDS.xlsx">
+        <a class="govuk-link" href="{{ GAR_TEMPLATE_FILE }}">
           <span class="govuk-visually-hidden">{{ __('heading_create_gar') }} </span>{{ __('create_gar_caption_link') }}</a>{{ __('create_gar_caption_2') }}
         </p>
         <p class="govuk-body-m">GARs must be submitted no earlier than 48 hours and no later than 2 hours before the expected time of departure.</p>
