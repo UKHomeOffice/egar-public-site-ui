@@ -191,7 +191,7 @@
   "field_date_month": "Month",
   "field_date_year": "Year",
   "field_gender": "Sex",
-  "field_gender_hint": "As shown on their travel document",
+  "field_gender_hint": "This is the sex that is on the passport, travel document or identity document",
   "field_person_type": "Who are you adding?",
   "field_person_type_short": "Type",
   "field_person_type_hint": "For example Captain, Crew or Passenger. First Officer / Co-Pilot should be identified as Crew.",
