@@ -4,6 +4,10 @@ set dotenv-filename := ".env.dev"
 default:
     @just --list
 
+# Install locked project dependencies for a clean agent checkout.
+setup-agent:
+    cd src && npm ci
+
 # Lint JavaScript and enforce Prettier formatting.
 lint-code:
     cd src && npx eslint . --ext .js
