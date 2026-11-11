@@ -2,7 +2,6 @@
 {% import "common/templates/includes/macros.njk" as m %}
 {% import "common/templates/includes/pagination.njk" as pagination %}
 {% import "common/templates/includes/template-change-banner.njk" as banners %}
-{% from "src/common/config/index.js" import GAR_TEMPLATE_FILE %}
 
 {% set active = "/home" %}
 {% set statusName = statusTab| lower %}
@@ -66,7 +65,7 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">{{ banners.notificationBannerTemplateUpdate() }}</div>
+    <div class="govuk-grid-column-two-thirds">{{ banners.notificationBannerTemplateUpdate(GAR_TEMPLATE_FILE) }}</div>
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
