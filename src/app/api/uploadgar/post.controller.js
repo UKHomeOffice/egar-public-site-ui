@@ -83,7 +83,7 @@ const manifestMap = {
   firstName: { location: 'F' },
   gender: {
     location: 'G',
-    transform: [transformers.upperCamelCase, transformers.unknownToUnspecified],
+    transform: [transformers.unknownToUnspecified],
   },
   dateOfBirth: { location: 'H', transform: [transformers.trimWhitespace] },
   placeOfBirth: { location: 'I' },
