@@ -17,7 +17,7 @@ steps:
 
   - name: run-tests
     pull: if-not-exists
-    image: node:24.19-alpine3.23
+    image: node:24.22.1-alpine3.24
     commands:
       - export NOTIFY_API_KEY=dummy
       - cd src
@@ -27,7 +27,7 @@ steps:
 
   - name: check-code
     pull: if-not-exists
-    image: node:24.19-alpine3.23
+    image: node:24.22.1-alpine3.24
     commands:
       - cd src
       - npm run check
