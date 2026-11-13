@@ -154,13 +154,13 @@ module.exports.validations = (req) => {
         validator.notEmpty,
         'responsiblePostcode',
         responsiblePostcode,
-        'Enter a postcode for the responsible person.'
+        'Enter a postcode, area code or ZIP code for the responsible person'
       ),
       new ValidationRule(
         validator.validTextLength,
         'responsiblePostcode',
         { value: responsiblePostcode, maxLength: MAX_POSTCODE_LENGTH },
-        `Postcode must be ${MAX_POSTCODE_LENGTH} characters or less`
+        `Postcode, area code or ZIP code must be 13 characters or less`
       ),
       new ValidationRule(
         validator.isPostCodeValidCharacters,

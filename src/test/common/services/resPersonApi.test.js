@@ -58,7 +58,7 @@ describe('Responsible Person API Service', () => {
     it('should do nothing if request throws error', async () => {
       const requestStub = sinon.stub().throws('request.post Throw Error');
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { post: requestStub },
+        '../utils/requestWithCorrelationId': { post: requestStub },
       });
 
       await proxiedService
@@ -76,7 +76,7 @@ describe('Responsible Person API Service', () => {
     it('should reject if error present', async () => {
       const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { post: requestStub },
+        '../utils/requestWithCorrelationId': { post: requestStub },
       });
 
       const result = await proxiedService
@@ -98,7 +98,7 @@ describe('Responsible Person API Service', () => {
       };
       const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { post: requestStub },
+        '../utils/requestWithCorrelationId': { post: requestStub },
       });
 
       const result = await proxiedService.create('USER-ID-1', responsible_person);
@@ -116,7 +116,7 @@ describe('Responsible Person API Service', () => {
     it('should do nothing if request throws error', async () => {
       const requestStub = sinon.stub().throws('request.get Throw Error');
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { get: requestStub },
+        '../utils/requestWithCorrelationId': { get: requestStub },
       });
 
       await proxiedService
@@ -133,7 +133,7 @@ describe('Responsible Person API Service', () => {
     it('should reject if error present', async () => {
       const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { get: requestStub },
+        '../utils/requestWithCorrelationId': { get: requestStub },
       });
 
       const result = await proxiedService
@@ -154,7 +154,7 @@ describe('Responsible Person API Service', () => {
       };
       const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { get: requestStub },
+        '../utils/requestWithCorrelationId': { get: requestStub },
       });
 
       const result = await proxiedService.getResPersons('USER-ID-1');
@@ -171,7 +171,7 @@ describe('Responsible Person API Service', () => {
     it('should do nothing if request throws error', async () => {
       const requestStub = sinon.stub().throws('request.get Throw Error');
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { get: requestStub },
+        '../utils/requestWithCorrelationId': { get: requestStub },
       });
 
       await proxiedService
@@ -188,7 +188,7 @@ describe('Responsible Person API Service', () => {
     it('should reject if error present', async () => {
       const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { get: requestStub },
+        '../utils/requestWithCorrelationId': { get: requestStub },
       });
 
       const result = await proxiedService
@@ -209,7 +209,7 @@ describe('Responsible Person API Service', () => {
       };
       const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { get: requestStub },
+        '../utils/requestWithCorrelationId': { get: requestStub },
       });
 
       const result = await proxiedService.getResPersonDetails('USER-ID-1', 'RES-PERSON-1');
@@ -226,7 +226,7 @@ describe('Responsible Person API Service', () => {
     it('resPersonApi updateResPerson should do nothing if request throws error', async () => {
       const requestStub = sinon.stub().throws('request.post Throw Error');
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { put: requestStub },
+        '../utils/requestWithCorrelationId': { put: requestStub },
       });
 
       await proxiedService
@@ -244,7 +244,7 @@ describe('Responsible Person API Service', () => {
     it('resPersonApi updateResPerson should reject if error present', async () => {
       const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { put: requestStub },
+        '../utils/requestWithCorrelationId': { put: requestStub },
       });
 
       const result = await proxiedService
@@ -266,7 +266,7 @@ describe('Responsible Person API Service', () => {
       };
       const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { put: requestStub },
+        '../utils/requestWithCorrelationId': { put: requestStub },
       });
 
       const result = await proxiedService.updateResPerson('USER-ID-1', 'RES-PERSON-1', responsible_person);
@@ -284,7 +284,7 @@ describe('Responsible Person API Service', () => {
     it('resPersonApi deleteResponsiblePerson should do nothing if request throws error', async () => {
       const requestStub = sinon.stub().throws('request.delete Throw Error');
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { delete: requestStub },
+        '../utils/requestWithCorrelationId': { delete: requestStub },
       });
 
       await proxiedService
@@ -301,7 +301,7 @@ describe('Responsible Person API Service', () => {
     it('resPersonApi deleteResponsiblePerson should reject if error present', async () => {
       const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { delete: requestStub },
+        '../utils/requestWithCorrelationId': { delete: requestStub },
       });
 
       const result = await proxiedService
@@ -320,7 +320,7 @@ describe('Responsible Person API Service', () => {
       const apiResponse = {};
       const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
       const proxiedService = proxyquire('../../../common/services/resPersonApi', {
-        request: { delete: requestStub },
+        '../utils/requestWithCorrelationId': { delete: requestStub },
       });
 
       const result = await proxiedService.deleteResponsiblePerson('USER-ID-1', 'RES-PERSON-1');

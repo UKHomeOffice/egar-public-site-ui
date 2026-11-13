@@ -9,7 +9,7 @@ const { PHASE_GIVEN_NAME, PHASE_CONFIRM_NAME } = require('../../../app/user/onel
 // Import controllers
 const getController = require('../../../app/user/onelogin/get.controller');
 
-describe.skip('User OneLogin Get Controller', () => {
+describe('User OneLogin Get Controller', () => {
   describe('GET Controller Tests', () => {
     let req;
     let res;
@@ -44,6 +44,7 @@ describe.skip('User OneLogin Get Controller', () => {
         id_token: 'valid_id_token',
       };
       req.session.access_token = 'valid_access_token';
+      req.session.id_token = 'valid_id_token';
       req.headers = {
         referer: 'https://localhost:3000/',
       };
@@ -63,8 +64,9 @@ describe.skip('User OneLogin Get Controller', () => {
         state: 'valid_state',
         nonce: 'valid_nonce',
         id_token: 'valid_id_token',
-        access_token: 'valid_access_token',
       };
+      req.session.access_token = 'valid_access_token';
+      req.session.id_token = 'valid_id_token';
       req.headers = {
         referer: 'https://localhost:3000/',
       };
@@ -72,7 +74,6 @@ describe.skip('User OneLogin Get Controller', () => {
       await getController(req, res);
 
       expect(req.session.step).to.equal(PHASE_GIVEN_NAME);
-      expect(req.session.save).to.have.been.called;
       expect(res.render).to.have.been.calledWith('app/user/onelogin/index', {
         step: `app/user/onelogin/partials/${PHASE_GIVEN_NAME}.njk`,
       });
@@ -88,8 +89,9 @@ describe.skip('User OneLogin Get Controller', () => {
         state: 'valid_state',
         nonce: 'valid_nonce',
         id_token: 'valid_id_token',
-        access_token: 'valid_access_token',
       };
+      req.session.access_token = 'valid_access_token';
+      req.session.id_token = 'valid_id_token';
       req.headers = {
         referer: 'https://localhost:3000/',
       };
@@ -97,7 +99,6 @@ describe.skip('User OneLogin Get Controller', () => {
       await getController(req, res);
 
       expect(req.session.step).to.equal(PHASE_CONFIRM_NAME);
-      expect(req.session.save).to.have.been.called;
       expect(res.render).to.have.been.calledWith('app/user/onelogin/index', {
         step: `app/user/onelogin/partials/${PHASE_CONFIRM_NAME}.njk`,
         firstName: 'John',

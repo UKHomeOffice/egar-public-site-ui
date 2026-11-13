@@ -3,7 +3,6 @@ const i18n = require('i18n');
 const validator = require('../../../common/utils/validator');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { MAX_STRING_LENGTH, MAX_REGISTRATION_LENGTH } = require('../../../common/config/index');
-const logger = require('../../../common/utils/logger')(__filename);
 
 /**
  * Create a list of Validation Rules for Aircraft page
@@ -12,28 +11,50 @@ const logger = require('../../../common/utils/logger')(__filename);
  * @return {Array} Array of ValidationsRules
  */
 const validations = (craftObj) => {
-  logger.info('CraftObj: ' + JSON.stringify(craftObj));
-
   const { registration, craftType, craftBasePort, craftBaseLat, craftBaseLong, portChoice } = craftObj;
 
   const validationsArray = [
     [
-      new ValidationRule(validator.notEmpty, 'registration', registration, i18n.__('validation_aircraft_registration')),
+      new ValidationRule(
+        validator.isNotEmpty,
+        'registration',
+        registration,
+        i18n.__('validation_aircraft_registration')
+      ),
       new ValidationRule(
         validator.isValidRegistrationLength,
         'registration',
         registration,
         `Registration must be ${MAX_REGISTRATION_LENGTH} characters or less`
       ),
+      new ValidationRule(
+        validator.isValidAircraftCharacters,
+        'registration',
+        registration,
+        `Aircraft registration must only include English alphabet letters (A to Z), numbers and hyphens (-)`
+      ),
+      new ValidationRule(
+        validator.notOnlySymbols,
+        'registration',
+        registration,
+        `Enter a valid aircraft registration.`
+      ),
     ],
     [
-      new ValidationRule(validator.notEmpty, 'craftType', craftType, i18n.__('validation_aircraft_type')),
+      new ValidationRule(validator.isNotEmpty, 'craftType', craftType, i18n.__('validation_aircraft_type')),
       new ValidationRule(
         validator.isValidStringLength,
         'craftType',
         craftType,
         `Aircraft type must be ${MAX_STRING_LENGTH} characters or less`
       ),
+      new ValidationRule(
+        validator.isValidAircraftType,
+        'craftType',
+        craftType,
+        `Aircraft type must only include English alphabet letters (A to Z), numbers, spaces and hyphens (-)`
+      ),
+      new ValidationRule(validator.notOnlySymbols, 'craftType', craftType, `Enter a valid aircraft type.`),
     ],
   ];
 

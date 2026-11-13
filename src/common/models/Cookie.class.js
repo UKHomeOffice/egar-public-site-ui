@@ -1,4 +1,3 @@
-const logger = require('../utils/logger')(__filename);
 const { isValidAirportCode } = require('../utils/validator');
 const { trimToDecimalPlaces } = require('../utils/utils');
 
@@ -133,8 +132,7 @@ class Cookie {
           fixedBasedOperatorAnswer: null,
         },
         isMilitaryFlight: null,
-        // NMSW-4932 disabled until v14.2.0 release
-        // isInbound: null,
+        isInbound: null,
         prohibitedGoods: null,
         goodsDeclaration: null,
         continentalShelf: null,
@@ -210,14 +208,13 @@ class Cookie {
     this.session.gar.isMilitaryFlight = isMilitaryFlight;
   }
 
-  // NMSW-4932 disabled until v14.2.0 release
-  // getIsInbound() {
-  //   return this.session.gar.isInbound;
-  // }
+  getIsInbound() {
+    return this.session.gar.isInbound;
+  }
 
-  // setIsInbound(isInbound) {
-  //   this.session.gar.isInbound = isInbound;
-  // }
+  setIsInbound(isInbound) {
+    this.session.gar.isInbound = isInbound;
+  }
 
   setGarCraft(registration, craftType, craftBase, portChoice) {
     this.session.gar.craft.registration = registration;
@@ -817,7 +814,7 @@ class Cookie {
   }
 
   dateSlice(dateType, date) {
-    let dateValue = '';
+    let dateValue;
     switch (dateType.toLowerCase()) {
       case 'day':
         dateValue = date == null ? '' : date.split('-')[2];
@@ -837,8 +834,24 @@ class Cookie {
     return dateValue;
   }
 
+  setAttributes(key, value) {
+    this.session[key] = value;
+  }
+
+  getAttributes(key) {
+    return this.session[key];
+  }
+
+  getSessionRemainingTimeInSeconds() {
+    const expiryDate = this.session.cookie.expires;
+    const expiryTime = new Date(expiryDate).getTime();
+    const remainingSeconds = Math.floor((expiryTime - Date.now()) / 1000);
+
+    return Math.max(0, remainingSeconds);
+  }
+
   timeSlice(timeType, time) {
-    let timeValue = '';
+    let timeValue;
     switch (timeType.toLowerCase()) {
       case 'hour':
         timeValue = time == null ? '' : time.split(':')[0];

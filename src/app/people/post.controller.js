@@ -1,7 +1,4 @@
-const logger = require('../../common/utils/logger')(__filename);
-
 module.exports = (req, res) => {
-  logger.debug('In people post controller');
   if (req.body.deletePerson) {
     req.session.deletePersonId = req.body.deletePerson;
     req.session.save(() => res.redirect('/people/delete'));

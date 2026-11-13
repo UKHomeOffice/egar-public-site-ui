@@ -1,4 +1,4 @@
-const request = require('request');
+const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
@@ -26,7 +26,7 @@ module.exports = {
         }
       );
     }).catch((err) => {
-      logger.error(err);
+      logger.error('Failed to create GAR', { userId, errorMessage: err?.message, stack: err?.stack });
     });
   },
 };

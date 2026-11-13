@@ -1,4 +1,3 @@
-const logger = require('../../common/utils/logger')(__filename);
 const noCache = require('../utils/no-cache');
 const { canSkipCsrfGeneration } = require('../utils/utils');
 const _ = require('lodash');

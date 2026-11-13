@@ -48,8 +48,7 @@ module.exports = (req, res) => {
       res.render('app/garfile/printmanifest/index', renderContext);
     })
     .catch((err) => {
-      logger.error('Failed to get GAR information');
-      logger.error(err);
+      logger.error('Failed to get GAR information', { garId, errorMessage: err?.message, stack: err?.stack });
       renderContext.errors = [{ message: 'Failed to get GAR information' }];
       res.render('app/garfile/printmanifest/index', renderContext);
     });

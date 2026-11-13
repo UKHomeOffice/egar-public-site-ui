@@ -1,6 +1,5 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const orgApi = require('../../../common/services/organisationApi');
-const logger = require('../../../common/utils/logger')(__filename);
 const createArrayCsvStringifier = require('csv-writer').createArrayCsvStringifier;
 
 const writeUsersAsCSVtoResponse = (res, orgUsers, orgName) => {
@@ -20,7 +19,6 @@ const writeUsersAsCSVtoResponse = (res, orgUsers, orgName) => {
 };
 
 module.exports = (req, res) => {
-  logger.debug('In organisation export users get controller');
   const cookie = new CookieModel(req);
 
   // to retrieve all rows, the 1st to the last row from the users table

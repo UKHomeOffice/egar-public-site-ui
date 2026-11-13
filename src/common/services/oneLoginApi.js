@@ -1,6 +1,6 @@
 const logger = require('../utils/logger')(__filename);
 const config = require('../config/index');
-const request = require('request');
+const request = require('../utils/requestWithCorrelationId');
 const qs = require('querystring');
 
 /**
@@ -21,12 +21,10 @@ const parseUrlForNonProd = (req, url) => {
 
   if (currentAddress?.match(notInternalRegex) && url.match(internalRegex)) {
     returnUrl = url.replace('.internal.egar-notprod', '.egar-notprod');
-    logger.info(`We would change URL: '${url}' to '${returnUrl}'`);
   } else if (currentAddress?.match(internalRegex) && url.match(notInternalRegex)) {
     returnUrl = url.replace('.egar-notprod', '.internal.egar-notprod');
-    logger.info(`We would change URL: '${url}' to '${returnUrl}'`);
   }
-  logger.info(`return URL ${returnUrl}`);
+  logger.debug('Resolved OneLogin URL', { returnUrl });
   return returnUrl;
 };
 
@@ -70,11 +68,10 @@ module.exports = {
         },
         (error, _response, body) => {
           if (error) {
-            logger.error('Failed to call get one login API endpoint');
+            logger.error('Failed to call OneLogin token API endpoint');
             reject(JSON.parse(error));
             return;
           }
-          logger.debug('Successfully called one login API endpoint');
           resolve(JSON.parse(body));
         }
       );
@@ -88,7 +85,7 @@ module.exports = {
    */
   getUserInfoFromOneLogin(access_token) {
     return new Promise((resolve, reject) => {
-      logger.info('Sending request to fetch userinfo from one Login');
+      logger.debug('Sending request to fetch OneLogin userinfo');
       const url = `${config.ONE_LOGIN_INTEGRATION_URL}/userinfo`;
       request.get(
         {
@@ -99,12 +96,13 @@ module.exports = {
         },
         (error, _response, body) => {
           if (error) {
-            logger.error('Failed to fetch userinfo from oneLogin');
-            logger.error(`${error}`);
+            logger.error('Failed to fetch OneLogin userinfo', {
+              errorMessage: error?.message,
+              stack: error?.stack,
+            });
             reject(error);
             return;
           }
-          logger.info(`Successfully called oneLogin user info API`);
           resolve(JSON.parse(body));
         }
       );

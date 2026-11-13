@@ -1,23 +1,8 @@
 ## Submit a GAR (sGAR)
 
-## Prerequisites
-- Clone the `data-access-api`repo in the same parent folder and set up environment variables as explained in the `data-access-api` README.md.
+## Development setup
 
-## Requirements
-- docker and docker compose.
-- create a `.env.dev` file and input environment variables - ask a developer in the SGAR team for them.
-
-## Run the application
-
-1. Run the following:
-```sh
-docker compose up -d --build
-```
-
-This should build both the `data-access-api` and `egar-public-site-ui`.
-
-- The frontend will now be running on port 3000.
-- To see changes on the frontend, reload the page.
+See [the development setup guide](docs/setup.md) for prerequisites, environment configuration, project dependencies, local startup, tooling installation, and verification.
 
 ## Generate airport codes data (airport_codes.json)
 
@@ -42,19 +27,9 @@ Notes:
 |Kautokeino Air Base| ENKA                                          | QKX                                          |                                             | FALSE                                  | FALSE                            | FALSE                       | Kautokeino Air Base (QKX / ENKA) | ICAO/IATA aircodes|
  |Bedwell Hey Farm Ely Rd| | | E201| FALSE| TRUE| TRUE| Bedwell Hey Farm Ely Rd| Not IATA/ICAO airfield|
 
-## Unit tests
-
-Run the below to access the node container, which will have all the installed dependencies, so you can run the npm test script.
-```sh
-docker exec  -it node sh
-
-# Now run the test script
-npm run test
-```
-
 ## Access the database
 
-Run the following to access the database so you can run SQL commands. 
+Run the following to access the database so you can run SQL commands.
 ```sh
 docker exec -it database sh
 
@@ -90,8 +65,22 @@ In general you don't need to run `gateway-api` and `data-integr-cbp`, unless:
 
 ## Managing Token Generation Exclusion
 
-In order to prevent unnecessary generation of token, we added an exclusion list. This list holds the path patterns for routes 
+In order to prevent unnecessary generation of token, we added an exclusion list. This list holds the path patterns for routes
 that don't use CSRF tokens. This was introduced as part of the ticket [sGAR: CSRF
 ](https://jira.bics-collaboration.homeoffice.gov.uk/browse/NMSW-3970).
 
 The list is maintained in this file `src/common/config/csrfExclusionList.js`
+
+## Code quality
+
+To improve and maintain the code structure and standard, adding git hooks ensures that every code pushed adheres to the same formating
+and linting rules.
+
+**Install the following**
+1. Python
+2. Pre-commit - https://pre-commit.com
+3. Just - https://just.systems/man/en/quick-start.html
+4. djLint - follow the [review-tool installation instructions](docs/setup.md#install-review-tools).
+
+Once all is in place, run the command `pre-commit install`. This installs the hook into your repository. Any changes now will trigger the hooks defined
+in the `.pre-commit-config.yaml` file.

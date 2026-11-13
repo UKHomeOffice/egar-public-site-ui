@@ -1,4 +1,4 @@
-const request = require('request');
+const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 const autocompleteUtil = require('../utils/autocomplete');
@@ -28,7 +28,6 @@ class GarApi {
     try {
       const gar = await this.client.get(`/gar/${garId}`, { query: { cbp_id: isCbpId } });
       gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCountry);
-      logger.debug('Successfully called GAR get endpoint');
       return gar;
     } catch (err) {
       logger.error('Failed to call GAR get API endpoint');
@@ -71,8 +70,6 @@ class GarApi {
       const restOfPassengers = resp.items.filter(
         (garperson) => garperson.amgCheckinResponseCode !== travelPermissionCodes['NO_BOARD']
       );
-
-      logger.debug('Successfully called GAR people endpoint222');
 
       return {
         ...resp,
@@ -121,6 +118,24 @@ class GarApi {
       return responseErrorMessage;
     }
   }
+
+  async getGars(userId, userType, pages, orgId = null) {
+    const endpoint = userType === 'Individual' ? `/user/${userId}/gars` : `/user/${userId}/organisation/${orgId}/gars`;
+
+    try {
+      return await this.client.get(endpoint, {
+        query: {
+          status: pages.status,
+          page: pages.page,
+          per_page: pages.perPage,
+        },
+      });
+    } catch (err) {
+      const responseErrorMessage = getResponseErrorMessage(err);
+      logger.error(`${userId} garApi.getGars request was not successful : ${responseErrorMessage}`);
+      return responseErrorMessage;
+    }
+  }
 }
 
 module.exports.GarApi = GarApi;
@@ -159,7 +174,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called GAR patch endpoint');
           resolve(body);
         }
       );
@@ -195,7 +209,6 @@ module.exports = {
           let gar = JSON.parse(body);
           gar.responsibleCountryLabel = autocompleteUtil.getCountryFromCode(gar.responsibleCountry);
 
-          logger.debug('Successfully called GAR get endpoint');
           resolve(JSON.stringify(gar));
         }
       );
@@ -247,7 +260,6 @@ module.exports = {
             (garperson) => garperson.amgCheckinResponseCode !== travelPermissionCodes['NO_BOARD']
           );
 
-          logger.debug('Successfully called GAR people endpoint');
           resolve(
             JSON.stringify({
               ...garpeople,
@@ -292,7 +304,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called get GARs endpoint');
           resolve(body);
         }
       );
@@ -326,7 +337,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called supporting documents endpoint');
           resolve(body);
         }
       );
@@ -356,7 +366,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called delete gar supporting document endpoint');
           resolve(body);
         }
       );
@@ -390,7 +399,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called passenger checkin endpoint');
           resolve(body);
         }
       );
@@ -427,7 +435,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called passenger exception endpoint');
           resolve(body);
         }
       );
@@ -466,7 +473,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called update garperson endpoint');
           resolve(body);
         }
       );
@@ -507,7 +513,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called update garperson endpoint');
           resolve(body);
         }
       );
@@ -535,7 +540,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called progress endpoint');
           resolve(body);
         }
       );
@@ -574,7 +578,6 @@ module.exports = {
             return;
           }
 
-          logger.debug('Successfully called get GARs endpoint');
           resolve(JSON.parse(body));
         }
       );

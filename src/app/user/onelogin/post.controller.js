@@ -8,8 +8,9 @@ const validator = require('../../../common/utils/validator');
 const { USER_GIVEN_NAME_CHARACTER_COUNT, USER_SURNAME_CHARACTER_COUNT } = require('../../../common/config');
 const sendEmail = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
-const { getUserInviteToken } = require('../../../common/services/verificationApi');
+const verificationApi = require('../../../common/services/verificationApi');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
+const { NewRegistrationSuccess } = require('../../../common/services/metrics');
 
 const Outcome = {
   SUCCESS: 'success',
@@ -62,7 +63,7 @@ async function handleGivenNameSubmission(req, _res) {
     new ValidationRule(validator.notEmpty, 'userLname', lastName, 'Enter your family name'),
   ];
 
-  let errors = [];
+  let errors;
 
   try {
     await validator.validateChains([fnameChain, lnameChain]);
@@ -78,12 +79,11 @@ async function handleGivenNameSubmission(req, _res) {
         sub,
       };
 
-      logger.info('Validating user Given Names submission');
+      logger.debug('Validating user given names submission');
 
       return [Outcome.SUCCESS, step_data, null];
     } catch (apiError) {
-      logger.error('API error when getting user info');
-      logger.error(apiError);
+      logger.error('Failed to get user info from API', { errorMessage: apiError?.message, stack: apiError?.stack });
       return [Outcome.ERROR, apiError.message || 'API error', null];
     }
   } catch (validationError) {
@@ -96,24 +96,23 @@ async function handleGivenNameSubmission(req, _res) {
 
 async function handleConfirmNameSubmission(req, _res) {
   if (!req.body.nameConfirmDeclaration) {
-    logger.info('Declaration not checked in name confirmation');
+    logger.warn('Declaration was not checked in name confirmation');
     return [Outcome.DECLARATION_NOT_CHECKED, 'Declaration not checked', '/onelogin/register'];
   }
   const { email, firstName, lastName, sub } = req.session.step_data;
-  let resp = {};
+  let resp;
 
   try {
-    const { tokenId } = await getUserInviteToken(email);
+    const { tokenId } = await verificationApi.getUserInviteToken(email);
 
     resp = await userApi.createUser(email, firstName, lastName, sub, 'verified', tokenId);
   } catch (error) {
-    logger.error('Exception when creating user');
-    logger.error(error);
+    logger.error('Failed to create user', { errorMessage: error?.message, stack: error?.stack });
     return [Outcome.ERROR, error.message || 'Error creating user', null];
   }
 
   if (resp.message) {
-    logger.error('Error creating user');
+    logger.error('Failed to create user');
     logger.error(resp.message);
     return [Outcome.ERROR, resp.message, null];
   }
@@ -151,8 +150,11 @@ async function handleConfirmNameSubmission(req, _res) {
       user: `${firstName}`,
     });
   } catch (error) {
-    logger.error('Exception when creating user');
-    logger.error(error);
+    logger.error('Failed to send welcome email', {
+      userId,
+      errorMessage: error?.message,
+      stack: error?.stack,
+    });
     return [Outcome.ERROR, error.message || 'Error creating user', null];
   }
 
@@ -163,6 +165,7 @@ function handleCompleteSubmission(req) {
   delete req.session.access_token;
   delete req.session.step;
   delete req.session.step_data;
+  NewRegistrationSuccess();
   return [Outcome.SUCCESS, null, '/home'];
 }
 
@@ -208,10 +211,10 @@ module.exports = async (req, res) => {
         ...data,
       });
     case Outcome.DECLARATION_NOT_CHECKED:
-      logger.info('Declaration not checked in confirmation flow');
+      logger.warn('Declaration was not checked in confirmation flow');
       return res.redirect('/onelogin/register');
     case Outcome.ERROR:
-      logger.error('Error in onelogin flow: ' + data);
+      logger.error('OneLogin flow error', { errorMessage: data });
       return res.redirect('error/404');
   }
 

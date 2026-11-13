@@ -19,7 +19,7 @@ const checkGARUser = (parsedGar, userId, organisationId) => {
 
     // if a gar has an org, then we can just check if the user and gar from the same Organisation
     if (!isSameOrganisation) {
-      logger.info('GAR Organisation does not match the organisation ID of user');
+      logger.warn('GAR Organisation does not match the organisation ID of user');
       return false;
     }
   }
@@ -52,8 +52,7 @@ const hasGarOwnership = async (cookie, garId) => {
     const ok = checkGARUser(gar, cookie.getUserDbId(), cookie.getOrganisationId());
     return { ok, gar };
   } catch (err) {
-    logger.error(`Failed to verify GAR ownership for ${garId}`);
-    logger.error(err);
+    logger.error('Failed to verify GAR ownership', { garId, errorMessage: err?.message, stack: err?.stack });
     return { ok: false, gar: null };
   }
 };

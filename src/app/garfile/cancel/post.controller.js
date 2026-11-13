@@ -5,13 +5,13 @@ const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 
 module.exports = async (req, res) => {
-  logger.debug('In garfile / cancel post controller');
   const cookie = new CookieModel(req);
   const garId = res.locals.gar.garId;
 
   try {
     await garApi.submitGARForException(garId);
     await garApi.patch(cookie.getGarId(), 'Cancelled', {});
+    logger.info('Cancelled GAR', { garId });
 
     if (!cookie.getCbpId()) {
       req.session.successMsg = 'The GAR has been successfully cancelled';
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
       return;
     }
   } catch (err) {
-    logger.error(err);
+    logger.error('Failed to cancel GAR', { garId, errorMessage: err?.message, stack: err?.stack });
     res.render('app/garfile/cancel/index', {
       cookie,
       errors: [{ identifier: '', message: 'Failed to cancel GAR' }],

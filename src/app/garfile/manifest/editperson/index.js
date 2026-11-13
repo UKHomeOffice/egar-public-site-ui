@@ -5,7 +5,6 @@ const express = require('express');
 const flagpole = require('../../../../common/middleware/flagpole');
 const usercheck = require('../../../../common/middleware/usercheck');
 const csrfcheck = require('../../../../common/middleware/csrfcheck');
-const parseForm = require('../../../../common/middleware/parseForm');
 
 // Local dependencies
 const postController = require('./post.controller');
@@ -23,7 +22,7 @@ const ownershipCheck = garCheckMiddleware;
 
 // Routing
 router.get(paths.index, flagpole, usercheck, csrfcheck, ownershipCheck, getController);
-router.post(paths.index, flagpole, usercheck, parseForm, csrfcheck, ownershipCheck, postController);
+router.post(paths.index, flagpole, usercheck, csrfcheck, ownershipCheck, postController);
 
 // Export
 module.exports = {

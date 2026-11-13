@@ -1,12 +1,12 @@
 const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
-const garApi = require('../../common/services/garApi');
+const dataAccessApi = require('../../common/services/dataAccessApi');
+const { GAR_TEMPLATE_FILE } = require('../../common/config');
 
 const PAGE_ONE = 1;
 const PER_PAGE = 10;
 
 module.exports = async (req, res) => {
-  logger.debug('In home  get controller');
   const cookie = new CookieModel(req);
 
   const userId = cookie.getUserDbId();
@@ -34,9 +34,9 @@ module.exports = async (req, res) => {
 
   try {
     const [draftGars, submittedGars, cancelledGars] = await Promise.all([
-      garApi.getGars(userId, role, draftPageObj, orgId),
-      garApi.getGars(userId, role, submittedPageObj, orgId),
-      garApi.getGars(userId, role, cancelledPageObj, orgId),
+      dataAccessApi.garApi.getGars(userId, role, draftPageObj, orgId),
+      dataAccessApi.garApi.getGars(userId, role, submittedPageObj, orgId),
+      dataAccessApi.garApi.getGars(userId, role, cancelledPageObj, orgId),
     ]);
 
     res.render('app/home/index', {
@@ -44,13 +44,13 @@ module.exports = async (req, res) => {
       successMsg,
       successHeader,
       statusTab,
-      draftGars: JSON.parse(draftGars),
-      submittedGars: JSON.parse(submittedGars),
-      cancelledGars: JSON.parse(cancelledGars),
+      draftGars,
+      submittedGars,
+      cancelledGars,
+      GAR_TEMPLATE_FILE,
     });
   } catch (error) {
-    logger.error('Failed to get GARS from API');
-    logger.error(error);
+    logger.error('Failed to get GARS from API', { errorMessage: error?.message, stack: error?.stack });
     res.render('app/home/index', {
       cookie,
       successMsg,

@@ -3,7 +3,6 @@ const logger = require('../../../common/utils/logger')(__filename);
 const dataAccessApi = require('../../../common/services/dataAccessApi');
 
 module.exports = async (req, res) => {
-  logger.debug('In garfile/arrival get controller');
   const cookie = new CookieModel(req);
 
   try {
@@ -13,8 +12,11 @@ module.exports = async (req, res) => {
       cookie,
     });
   } catch (err) {
-    logger.error('Failed to get GAR details');
-    logger.error(err);
+    logger.error('Failed to get GAR details', {
+      garId: res?.locals?.gar?.garId,
+      errorMessage: err?.message,
+      stack: err?.stack,
+    });
     res.render('app/garfile/arrival/index', {
       cookie,
       errors: [

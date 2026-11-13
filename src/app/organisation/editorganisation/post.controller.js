@@ -1,5 +1,5 @@
 const logger = require('../../../common/utils/logger')(__filename);
-const ValidationRule = require('../../../common/models/ValidationRule.class');
+const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
 const organisationApi = require('../../../common/services/organisationApi');
@@ -10,14 +10,9 @@ module.exports = (req, res) => {
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
 
-  // Define a validation chain for user registeration fields
-  const orgNameChain = [
-    new ValidationRule(validator.notEmpty, 'orgName', orgName, 'Enter the name of the organisation'),
-  ];
-
   // Validate chains
   validator
-    .validateChains([orgNameChain])
+    .validateChains(validations.validations(req))
     .then(() => {
       // API should return OrgId
       organisationApi
@@ -32,13 +27,16 @@ module.exports = (req, res) => {
           });
         })
         .catch((err) => {
-          logger.error('There was a problem updating the organisation');
-          logger.error(err);
+          logger.error('Failed to update organisation', {
+            organisationId: cookie.getOrganisationId(),
+            errorMessage: err?.message,
+            stack: err?.stack,
+          });
           res.render('app/organisation/editorganisation/index', { cookie, orgName, errors: [err] });
         });
     })
     .catch((err) => {
-      logger.info('Validation error when editing the organisation');
+      logger.warn('Organisation validation failed', { organisationId: cookie.getOrganisationId() });
       res.render('app/organisation/editorganisation/index', { cookie, orgName, errors: err });
     });
 };

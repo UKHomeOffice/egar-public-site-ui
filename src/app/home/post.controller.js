@@ -1,8 +1,7 @@
-const logger = require('../../common/utils/logger')(__filename);
 const CookieModel = require('../../common/models/Cookie.class');
+const { GAR_TEMPLATE_FILE } = require('../../common/config');
 
 module.exports = (req, res) => {
-  logger.debug('In register / reguser post controller');
   const cookie = new CookieModel(req);
-  res.render('app/garfile/home/index', { cookie });
+  res.render('app/garfile/home/index', { cookie, GAR_TEMPLATE_FILE });
 };

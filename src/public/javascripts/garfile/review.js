@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const fortyEightHourWarningTexts = Array.from(document.getElementsByClassName('fortyEightHourWarningText'));
 
   const departureDate = document.getElementById('departureDate');
+  const departureTime = document.getElementById('departureTime');
 
   let departureFormSubmitter = undefined;
 

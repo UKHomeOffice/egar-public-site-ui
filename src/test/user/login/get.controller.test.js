@@ -12,7 +12,7 @@ require('../../global.test');
 
 const controller = require('../../../app/user/login/get.controller');
 
-describe.skip('User Login Get Controller', () => {
+describe('User Login Get Controller', () => {
   let req;
   let res;
   let oneLoginUrlStub;
@@ -20,7 +20,7 @@ describe.skip('User Login Get Controller', () => {
   let sendOneLoginTokenRequestStub;
   let getUserInfoFromOneLogin;
   let userSearchStub;
-  let updateUserData;
+  let updateEmailOrOneLoginSidStub;
   let getDetailsStub;
   let getSetInviteTokenStub;
 
@@ -29,9 +29,11 @@ describe.skip('User Login Get Controller', () => {
 
     req = {
       headers: {},
+      get: sinon.stub().callsFake((headerName) => req.headers[headerName.toLowerCase()]),
       session: {
         reload: sinon.spy(),
         save: sinon.spy(),
+        regenerate: sinon.stub().callsFake((cb) => cb && cb(null)),
       },
     };
 
@@ -39,9 +41,11 @@ describe.skip('User Login Get Controller', () => {
       redirect: sinon.spy(),
       render: sinon.spy(),
       cookie: () => true,
+      clearCookie: sinon.spy(),
+      set: sinon.spy(),
     };
 
-    getSetInviteTokenStub = sinon.stub(verification, 'getUserInviteToken');
+    getSetInviteTokenStub = sinon.stub(verification, 'getUserInviteToken').resolves({ tokenId: '123' });
 
     oneLoginUrlStub = sinon
       .stub(oneLoginUtils, 'getOneLoginAuthUrl')
@@ -60,7 +64,7 @@ describe.skip('User Login Get Controller', () => {
     });
 
     userSearchStub = sinon.stub(userApi, 'userSearch');
-    updateUserData = sinon.stub(userApi, 'updateDetails');
+    updateEmailOrOneLoginSidStub = sinon.stub(userApi, 'updateEmailOrOneLoginSid');
     getDetailsStub = sinon.stub(userApi, 'getDetails');
     oneLoginJwtVerifyStub = sinon.stub(oneLoginUtils, 'verifyJwt').callsFake((idToken, nonce, callback) => {
       callback(true); // Simulate successful JWT verification
@@ -163,7 +167,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
     userSearchStub.resolves({
       userId: 'test_user_id',
       state: 'verified',
-      oneLoginSid: null, // This will trigger the updateDetails call
+      oneLoginSid: null, // This will trigger the SID update call
       email: 'test@example.com',
       firstName: 'Test',
       lastName: 'User',
@@ -180,12 +184,12 @@ FnBdx5XR9zLe40LX3+cbEtw=
       role: { name: 'Individual' },
     });
 
-    updateUserData.returns(Promise.resolve({ userId: 'userid', redirect: '/home' }));
+    updateEmailOrOneLoginSidStub.resolves({});
 
     // Execute
     await controller(req, res);
 
-    expect(updateUserData).to.have.been.calledWith('test@example.com', 'Test', 'User', 'onelogin_sid', 'verified');
+    expect(updateEmailOrOneLoginSidStub).to.have.been.calledWith('test@example.com', { oneLoginSid: 'onelogin_sid' });
 
     expect(res.redirect).to.have.been.calledOnceWith('/home');
     expect(res.render).to.not.have.been.called;
@@ -220,9 +224,11 @@ FnBdx5XR9zLe40LX3+cbEtw=
     // const cookie = new CookieModel(req);
     await controller(req, res);
 
-    expect(sendOneLoginTokenRequestStub).to.have.been.calledOnceWith('123');
+    expect(sendOneLoginTokenRequestStub).to.have.been.calledOnce;
+    expect(sendOneLoginTokenRequestStub.firstCall.args[1]).to.equal('123');
 
-    expect(res.redirect).to.have.been.calledWith('/error/404');
+    expect(res.redirect).to.have.been.calledOnce;
+    expect(res.redirect.firstCall.args[0]).to.contain('/logout');
   });
 
   it('should redirect if there is a referrer and dbId, role and verified set in the cookie', async () => {
@@ -244,8 +250,8 @@ FnBdx5XR9zLe40LX3+cbEtw=
 
     await controller(req, res);
 
-    // Verify that oneLoginUtils.getOneLoginAuthUrl was called with res
-    expect(oneLoginUrlStub).to.have.been.calledOnceWith(res);
+    // Verify that oneLoginUtils.getOneLoginAuthUrl was called with req + res
+    expect(oneLoginUrlStub).to.have.been.calledOnceWith(req, res);
 
     // Verify that the render method was called with the correct arguments
     expect(res.render).to.have.been.calledOnceWith(
@@ -271,8 +277,9 @@ FnBdx5XR9zLe40LX3+cbEtw=
     // Execute controller
     await controller(req, res);
 
-    // Verify redirect to error page
-    expect(res.redirect).to.have.been.calledOnceWith('/error/404');
+    // State mismatch happens before token exchange, so there is no id_token for One Login logout.
+    expect(res.redirect).to.have.been.calledOnce;
+    expect(res.redirect.firstCall.args[0]).to.equal('/error/404');
     expect(res.render).to.not.have.been.called;
   });
 
@@ -302,10 +309,8 @@ FnBdx5XR9zLe40LX3+cbEtw=
     // Execute controller
     await controller(req, res);
 
-    // Verify that the login page is rendered
-    expect(res.render).to.have.been.calledWith('app/user/login/index', {
-      oneLoginAuthUrl: 'https://onelogin_url?code=123&state=valid_state',
-    });
+    expect(res.redirect).to.have.been.called;
+    expect(res.redirect.firstCall.args[0]).to.contain('/logout');
   });
 
   it('should render login page if user email is not verified in OneLogin', async () => {
@@ -348,7 +353,8 @@ FnBdx5XR9zLe40LX3+cbEtw=
     await controller(req, res);
 
     // Verify that the login page is rendered
-    expect(res.redirect).to.have.been.calledWith('/error/404');
+    expect(res.redirect).to.have.been.called;
+    expect(res.redirect.firstCall.args[0]).to.contain('/logout');
   });
 
   it('should redirect to /onelogin/register if user cannot be found from userApi.search', async () => {
@@ -379,6 +385,7 @@ FnBdx5XR9zLe40LX3+cbEtw=
       access_token: 'mock_access_token',
       id_token: 'mock_id_token',
     });
+    getSetInviteTokenStub = sinon.stub(verification, 'getUserInviteToken').resolves({ tokenId: '123' });
 
     // Mock user info from OneLogin with email_verified set to true
     getUserInfoFromOneLogin = sinon.stub(oneLoginApi, 'getUserInfoFromOneLogin').resolves({

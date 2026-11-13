@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('travelDocumentType').addEventListener('change', checkDocumentType);
+  checkDocumentType();
   document.getElementById('save-and-exit').addEventListener('click', (event) => {
     sendAnalytics(event, 'Saved People Edit - Save', 'click');
   });

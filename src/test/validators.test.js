@@ -260,7 +260,7 @@ describe('Validator', () => {
     expect(validator.validGender('')).to.be.false;
     expect(validator.validGender(undefined)).to.be.false;
     expect(validator.validGender('Other')).to.be.false;
-    expect(validator.validGender('Unspecified')).to.be.true;
+    expect(validator.validGender('X or unspecified')).to.be.true;
   });
 
   it('Should validate a chain of rules', () => {
@@ -927,7 +927,7 @@ describe('Validator', () => {
 
     it('Should return a valid document type from a given document type', () => {
       expect(validator.isValidDocumentType('Passport')).to.eql(true);
-      expect(validator.isValidDocumentType('Identity Card')).to.eql(true);
+      expect(validator.isValidDocumentType('National identity card')).to.eql(true);
       expect(validator.isValidDocumentType('Other')).to.eql(true);
 
       expect(validator.isValidDocumentType('Banana')).to.eql(false);
@@ -941,11 +941,11 @@ describe('Validator', () => {
     it('Should return a valid document type from a given document type', () => {
       expect(validator.isOtherDocumentWithDocumentDesc(['Other', 'UN documents'])).to.eql(true);
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', undefined])).to.eql(true);
-      expect(validator.isOtherDocumentWithDocumentDesc(['Identity Card', null])).to.eql(true);
+      expect(validator.isOtherDocumentWithDocumentDesc(['National identity card', null])).to.eql(true);
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', ''])).to.eql(true);
 
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', 'Apple'])).to.eql(false);
-      expect(validator.isOtherDocumentWithDocumentDesc(['Identity Card', 'Pineapple'])).to.eql(false);
+      expect(validator.isOtherDocumentWithDocumentDesc(['National identity card', 'Pineapple'])).to.eql(false);
       expect(validator.isOtherDocumentWithDocumentDesc(['Passport', {}])).to.eql(false);
       expect(validator.isOtherDocumentWithDocumentDesc()).to.eql(false);
     });
@@ -999,6 +999,25 @@ describe('Validator', () => {
       expect(blankObject).to.throw(
         'lastDepartureDateString: "[object Object]", type: "object", is not null or a valid string'
       );
+    });
+  });
+
+  describe('organisation name validations', () => {
+    it('should return false if organisation name is too long', () => {
+      const longOrganisationName = 'A'.repeat(121); //Maximum length exceeded for organisation name validation
+      expect(validator.isValidOrganisationNameLength(longOrganisationName)).to.eql(false);
+    });
+    it('should return true if organisation name is within the valid length', () => {
+      const validOrganisationName = 'A'.repeat(120); // Maximum length for organisation name validation
+      expect(validator.isValidOrganisationNameLength(validOrganisationName)).to.eql(true);
+    });
+    it('should return false if organisation name is invalid', () => {
+      const invalidOrganisationName = 'TestOrganisation$£%%$£';
+      expect(validator.isValidOrganisationName(invalidOrganisationName)).to.eql(false);
+    });
+    it('should return true if organisation name is valid', () => {
+      const validOrganisationName = 'TestOrganisation';
+      expect(validator.isValidOrganisationName(validOrganisationName)).to.eql(true);
     });
   });
 });

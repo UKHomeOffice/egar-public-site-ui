@@ -1,4 +1,4 @@
-const request = require('request');
+const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
@@ -34,7 +34,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called person creation endpoint');
           resolve(body);
         }
       );
@@ -61,7 +60,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get person details API endpoint');
           resolve(body);
         }
       );
@@ -91,7 +89,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get person details API endpoint');
           resolve(body);
         }
       );
@@ -145,7 +142,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called update person endpoint');
           resolve(body);
         }
       );
@@ -172,7 +168,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called delete person endpoint');
           resolve(body);
         }
       );

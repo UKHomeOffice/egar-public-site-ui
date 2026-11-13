@@ -1,4 +1,4 @@
-const request = require('request');
+const request = require('../utils/requestWithCorrelationId');
 const logger = require('../../common/utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
@@ -28,7 +28,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called create organisation API');
           resolve(body);
         }
       );
@@ -63,7 +62,6 @@ module.exports = {
             reject(JSON.parse(body));
             return;
           }
-          logger.debug('Successfully called update organisation API');
           resolve(body);
         }
       );
@@ -90,7 +88,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get organisation details API');
           resolve(body);
         }
       );
@@ -120,7 +117,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called delete organisation details API');
           resolve(body);
         }
       );
@@ -148,7 +144,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get organisation users API endpoint');
           resolve(body);
         }
       );
@@ -180,7 +175,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get list organisation users API endpoint');
           resolve(body);
         }
       );
@@ -211,7 +205,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called edit organisation users API endpoint');
           resolve(body);
         }
       );
@@ -234,7 +227,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called delete user/person endpoint');
           resolve(body);
         }
       );
@@ -260,7 +252,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get search organisation users API endpoint');
           resolve(body);
         }
       );
@@ -285,7 +276,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get search organisation users API endpoint');
           resolve(body);
         }
       );

@@ -1,4 +1,4 @@
-const request = require('request');
+const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
@@ -30,7 +30,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called craft creation endpoint');
           resolve(body);
         }
       );
@@ -56,7 +55,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get craft details API endpoint');
           resolve(body);
         }
       );
@@ -81,7 +79,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get crafts API endpoint');
           resolve(body);
         }
       );
@@ -110,7 +107,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get org crafts API endpoint');
           resolve(body);
         }
       );
@@ -144,7 +140,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called update craft API');
           resolve(body);
         }
       );
@@ -174,7 +169,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called delete crafts API endpoint');
           resolve(body);
         }
       );
@@ -205,7 +199,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called delete org crafts endpoint');
           resolve(body);
         }
       );

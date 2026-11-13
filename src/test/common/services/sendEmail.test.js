@@ -14,6 +14,7 @@ const service = require('../../../common/services/sendEmail');
 
 describe('Send Email Service', () => {
   let notifyStub;
+  const originalNodeEnv = process.env.NODE_ENV;
 
   beforeEach(() => {
     chai.use(sinonChai);
@@ -23,6 +24,7 @@ describe('Send Email Service', () => {
 
   afterEach(() => {
     sinon.restore();
+    process.env.NODE_ENV = originalNodeEnv;
   });
 
   // For the sake of code coverage, have this rewire the logger for production...

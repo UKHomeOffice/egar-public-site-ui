@@ -4,8 +4,6 @@ const tokenService = require('../../../common/services/create-token');
 const verifyUserService = require('../../../common/services/verificationApi');
 
 module.exports = (req, res) => {
-  logger.debug('In verify / registeruser get controller');
-
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
   cookie.reset();
@@ -23,8 +21,7 @@ module.exports = (req, res) => {
       res.render('app/verify/registeruser/index', { cookie });
     })
     .catch((err) => {
-      logger.debug('Failed to verify token');
-      logger.error(err);
+      logger.error('Failed to verify token', { errorMessage: err?.message, stack: err?.stack });
       res.render('app/verify/registeruser/index', {
         cookie,
         message: 'There was an issue verifying your account. Please try again later.',

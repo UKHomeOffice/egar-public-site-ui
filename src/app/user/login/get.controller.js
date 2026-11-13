@@ -10,6 +10,7 @@ const verifyUserService = require('../../../common/services/verificationApi');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { getOneLoginLogoutUrl } = require('../../../common/utils/oneLoginAuth');
 const { sessionRegenerateForAuthenticatedUser } = require('../../../common/utils/session_generator');
+const { CountLoginSuccess } = require('../../../common/services/metrics');
 
 // Constants
 const ROUTES = {
@@ -54,8 +55,7 @@ const sendAdminUpdateEmail = (userObj, accountUrl) => {
           organisationName: userObj.organisation.organisationName,
         });
       } catch (error) {
-        logger.error('Exception when sending email to admin');
-        logger.error(error);
+        logger.error('Failed to send email to admin', { errorMessage: error?.message, stack: error?.stack });
       }
     });
   });
@@ -111,7 +111,7 @@ const handleUserAuthentication = (req, res, userInfo, accountUrl) => {
           );
         case !oneLoginSidMatches && emailMatches && userData.oneLoginSid !== null:
           // condition: User had SID in our DB that doesn't match the one from ONELOGIN. Email matches however.
-          logger.error('login error: User SID does not match but email matches.');
+          logger.error('Login error: User SID does not match but email matches.');
           return { redirect: redirectErrorPage(req, res, 'login-error') };
         default:
           logger.error('User Id not found or email not verified during onelogin flow.');
@@ -231,6 +231,7 @@ module.exports = async (req, res) => {
               if (redirect === ROUTES.REGISTER) {
                 req.session.access_token = access_token;
               }
+              CountLoginSuccess();
               return redirect;
             })
             .then(async (redirect) => {
@@ -247,7 +248,7 @@ module.exports = async (req, res) => {
     })
     .catch((error) => {
       if (error) {
-        logger.error(`Login process failed ${error}`);
+        logger.error('Failed login process', { errorMessage: error?.message, stack: error?.stack });
       }
       return res.redirect(redirectErrorPage(req, res, 'service-error'));
     });
@@ -263,7 +264,7 @@ async function checkUserInvite(req, res, email) {
 
     return ROUTES.REGISTER;
   } catch (error) {
-    logger.error(`Invite link to register failed ${error}`);
+    logger.error('Failed to register invite link', { errorMessage: error?.message, stack: error?.stack });
     return redirectErrorPage(req, res, 'login-error');
   }
 }

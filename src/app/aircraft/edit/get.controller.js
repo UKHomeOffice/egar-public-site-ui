@@ -3,7 +3,6 @@ const logger = require('../../../common/utils/logger')(__filename);
 const craftApi = require('../../../common/services/craftApi');
 
 module.exports = (req, res) => {
-  logger.debug('In user craft edit get controller');
   const cookie = new CookieModel(req);
   const craftId = req.session.editCraftId;
   if (craftId === undefined) {
@@ -19,7 +18,7 @@ module.exports = (req, res) => {
       return res.render('app/aircraft/edit/index', { cookie });
     })
     .catch((err) => {
-      logger.error(err);
+      logger.error('Failed to get craft details', { craftId, errorMessage: err?.message, stack: err?.stack });
       return res.redirect('/aircraft');
     });
 };

@@ -88,6 +88,8 @@ describe('API upload GAR post controller', () => {
           return 'crew member';
         case 'validator_api_uploadgar_people_type_passenger':
           return 'passenger';
+        case 'validator_api_uploadgar_duplicate_row':
+          return `The file has ${params.count} entries for people with the same document details`;
         default:
           return 'Unexpected Key';
       }
@@ -185,11 +187,10 @@ describe('API upload GAR post controller', () => {
       sinon.stub(XLSX, 'read').returns(data);
       clamAVServiceStub.resolves(true);
       await controller(req, res);
-
       expect(req.session.save).to.have.been.called;
-      expect(req.session.failureMsg).to.eql([
-        new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk'),
-      ]);
+      expect(req.session.failureMsg[0]).to.eql(
+        new ValidationRule(validator.validGender, '', 'Gender', 'Enter a valid sex for crew member James Kirk')
+      );
       expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
     });
 
@@ -203,7 +204,7 @@ describe('API upload GAR post controller', () => {
 
       await callController().then(() => {
         expect(req.session.save).to.have.been.called;
-        expect(req.session.failureMsg).to.eql([
+        expect(req.session.failureMsg).to.contain.deep.members([
           new ValidationRule(
             validator.validISOCountryLength,
             '',
@@ -235,6 +236,48 @@ describe('API upload GAR post controller', () => {
       });
     });
 
+    it('should return error if duplicate travel document numbers', async () => {
+      sinon.spy(req.session, 'save');
+      sinon.stub(XLSX, 'read').returns(getInvalidWorkbook());
+      clamAVServiceStub.resolves(true);
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      await callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.contain.deep.members([
+          new ValidationRule(
+            Boolean,
+            'file',
+            false,
+            'The file has 2 entries for people with the same document details'
+          ),
+        ]);
+      });
+    });
+
+    it('should return error if duplicate row', async () => {
+      sinon.spy(req.session, 'save');
+      sinon.stub(XLSX, 'read').returns(getInvalidWorkbook());
+      clamAVServiceStub.resolves(true);
+      const callController = async () => {
+        await controller(req, res);
+      };
+
+      await callController().then(() => {
+        expect(req.session.save).to.have.been.called;
+        expect(req.session.failureMsg).to.contain.deep.members([
+          new ValidationRule(
+            Boolean,
+            'file',
+            false,
+            'The file has 2 entries for people with the same document details'
+          ),
+        ]);
+      });
+    });
+
     it('should return error if arrival date too far in advance', async () => {
       // Stub session.save to execute callback immediately
       sinon.stub(req.session, 'save').callsFake((callback) => {
@@ -250,14 +293,14 @@ describe('API upload GAR post controller', () => {
       await controller(req, res);
 
       expect(req.session.save).to.have.been.called;
-      expect(req.session.failureMsg).to.eql([
+      expect(req.session.failureMsg[0]).to.eql(
         new ValidationRule(
           validator.dateNotMoreThanMonthInFuture,
           '',
           '2022-07-30',
           'Arrival date must be in the future and within a month from now'
-        ),
-      ]);
+        )
+      );
       expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
     });
 
@@ -274,7 +317,7 @@ describe('API upload GAR post controller', () => {
 
       await callController().then(() => {
         expect(req.session.save).to.have.been.called;
-        expect(req.session.failureMsg).to.eql([
+        expect(req.session.failureMsg).to.contain.deep.members([
           new ValidationRule(validator.isValidAirportCode, '', null, 'Arrival port should be an ICAO or IATA code'),
           new ValidationRule(validator.notEmpty, '', null, 'Enter a value for the arrival port'),
         ]);
@@ -294,21 +337,44 @@ describe('API upload GAR post controller', () => {
 
       await callController().then(() => {
         expect(req.session.save).to.have.been.called;
-        expect(req.session.failureMsg).to.eql([
+        expect(req.session.failureMsg[0]).to.eql(
           new ValidationRule(
             validator.dateNotInPast,
             '',
             '2010-07-30',
             'Arrival date must be in the future and within a month from now'
-          ),
-        ]);
+          )
+        );
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');
       });
     });
   });
 
+  it('rejects duplicate Excel rows before creating a GAR', async () => {
+    const data = getValidWorkbook();
+    const worksheet = data.Sheets.Valid1;
+    'ABCDEFGHIJK'.split('').forEach((column) => {
+      worksheet[`${column}10`] = { ...worksheet[`${column}9`] };
+    });
+    sinon.stub(XLSX, 'read').returns(data);
+    clamAVServiceStub.resolves(true);
+    const createGarStub = sinon.stub(createGarApi, 'createGar');
+    const patchStub = sinon.stub(garApi, 'patch');
+    sinon.spy(req.session, 'save');
+
+    await controller(req, res);
+
+    expect(createGarStub).to.not.have.been.called;
+    expect(patchStub).to.not.have.been.called;
+    expect(req.session.failureMsg).to.contain.deep.members([
+      new ValidationRule(Boolean, 'file', false, 'The file has 2 entries for people with the same document details'),
+    ]);
+    expect(req.session.save).to.have.been.calledOnce;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/garupload');
+  });
+
   describe('api calls', () => {
-    it('should return when createGarApi rejects', () => {
+    it('should return when createGarApi rejects', async () => {
       const data = getValidWorkbook();
 
       sinon.stub(createGarApi, 'createGar').rejects('createGarApi.createGar Example Reject');
@@ -320,7 +386,7 @@ describe('API upload GAR post controller', () => {
         await controller(req, res);
       };
 
-      callController()
+      return await callController()
         .then()
         .then(() => {
           expect(createGarApi.createGar).to.have.been.calledWith('khan@augmented.com');
@@ -411,7 +477,7 @@ describe('API upload GAR post controller', () => {
       };
 
       // Promise.all for three Promises...
-      callController()
+      return callController()
         .then()
         .then()
         .then()
@@ -446,7 +512,7 @@ describe('API upload GAR post controller', () => {
             validator.isValidDocumentType,
             '',
             'Cipher',
-            'Enter a valid document type for crew member James Kirk, it should be "Identity Card", "Passport", "Other", not "Cipher"'
+            'Enter a valid document type for crew member James Kirk, it should be "Passport", "National identity card", "Other", not "Cipher"'
           ),
         ]);
         expect(res.redirect).to.have.been.calledWith('/garfile/garupload');

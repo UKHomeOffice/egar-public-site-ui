@@ -26,9 +26,6 @@ module.exports = (req, res) => {
     documentDesc: req.body.travelDocumentOther,
   };
 
-  logger.info(person.documentType);
-  logger.info(person.documentDesc);
-
   cookie.updateEditPerson(person);
 
   // Validate chains
@@ -55,8 +52,7 @@ module.exports = (req, res) => {
           }
         })
         .catch((err) => {
-          logger.error('There was a problem with calling the API');
-          logger.error(err);
+          logger.error('Failed to update saved person', { errorMessage: err?.message, stack: err?.stack });
           res.render('app/people/edit/index', {
             cookie,
             req,
@@ -68,8 +64,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.error('There was a problem with adding person to saved people');
-      logger.error(JSON.stringify(err));
+      logger.error('Failed to add person to saved people');
       res.render('app/people/edit/index', {
         cookie,
         req,

@@ -33,8 +33,7 @@ module.exports = (req, res) => {
           }
         })
         .catch((err) => {
-          logger.error('There was a problem adding person to saved people');
-          logger.error(err);
+          logger.error('Failed to update responsible person', { errorMessage: err?.message, stack: err?.stack });
           res.render('app/resperson/edit/index', {
             cookie,
             responsiblePerson,
@@ -44,8 +43,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.info('Validation errors creating a new responsible person');
-      logger.debug(JSON.stringify(err));
+      logger.warn('Responsible person validation failed', { responsiblePersonId: resPersonId });
       res.render('app/resperson/edit/index', {
         cookie,
         req,

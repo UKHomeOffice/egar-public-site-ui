@@ -4,8 +4,6 @@ const manifestFields = require('../../../../common/seeddata/gar_manifest_fields.
 const garApi = require('../../../../common/services/garApi');
 
 module.exports = async (req, res) => {
-  logger.debug('In garfile / amg get controller');
-
   const cookie = new CookieModel(req);
   const garId = res.locals.gar.garId;
   const resubmitted = req.query.resubmitted || 'no';
@@ -58,16 +56,22 @@ module.exports = async (req, res) => {
         res.render(template, renderObj);
       })
       .catch((err) => {
-        logger.error('Error retrieving GAR for amg');
-        logger.error(err);
+        logger.error('Failed to retrieve GAR for AMG check-in', {
+          garId,
+          errorMessage: err?.message,
+          stack: err?.stack,
+        });
         res.render('app/garfile/amg/checkin/index', {
           cookie,
           errors: [{ message: 'There was an error retrieving the GAR. Try again later' }],
         });
       });
   } catch (err) {
-    logger.error('Error retrieving GAR for amg');
-    logger.error(err);
+    logger.error('Failed to retrieve GAR for AMG check-in', {
+      garId,
+      errorMessage: err?.message,
+      stack: err?.stack,
+    });
     res.render('app/garfile/amg/checkin/index', {
       cookie,
       errors: [{ message: 'There was an error retrieving the GAR. Try again later' }],

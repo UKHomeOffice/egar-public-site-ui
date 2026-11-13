@@ -6,8 +6,6 @@ const garoptions = require('../../../common/seeddata/egar_create_gar_options.jso
 const createGarApi = require('../../../common/services/createGarApi.js');
 
 module.exports = (req, res) => {
-  logger.debug('In garfile / home post controller');
-
   const garStatus = 'Draft';
   const cookie = new CookieModel(req);
 
@@ -51,8 +49,11 @@ module.exports = (req, res) => {
           });
         })
         .catch((err) => {
-          logger.error('Failed to create GAR');
-          logger.error(err);
+          logger.error('Failed to create GAR', {
+            userId: cookie.getUserDbId(),
+            errorMessage: err?.message,
+            stack: err?.stack,
+          });
           res.render('app/garfile/home/index', {
             cookie,
             garoptions,
@@ -60,8 +61,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.info('Gar creation validation failed');
-      logger.debug(err);
+      logger.warn('GAR creation validation failed', { userId: cookie.getUserDbId() });
       res.render('app/garfile/home/index', {
         cookie,
         garoptions,

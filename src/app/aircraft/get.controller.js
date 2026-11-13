@@ -3,8 +3,6 @@ const logger = require('../../common/utils/logger')(__filename);
 const craftApi = require('../../common/services/craftApi');
 
 module.exports = (req, res) => {
-  logger.debug('In user aircraft get controller');
-
   const cookie = new CookieModel(req);
   const currentPage = Number(req.query.page) || 1;
 
@@ -49,8 +47,7 @@ module.exports = (req, res) => {
       });
     })
     .catch((err) => {
-      logger.error('There was an error fetching craft data for an individual');
-      logger.error(err);
+      logger.error('Failed to fetch craft data', { errorMessage: err?.message, stack: err?.stack });
       res.render('app/aircraft/index', {
         cookie,
         errors: [{ message: 'There was a problem fetching data' }],

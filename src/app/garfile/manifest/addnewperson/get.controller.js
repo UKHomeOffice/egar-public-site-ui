@@ -8,7 +8,6 @@ const transformer = require('../../../../common/utils/transformers');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
-  logger.debug('In garfile / manifest / addperson post controller');
 
   const personId = req.session.addPersonId;
   let person = {};
@@ -42,8 +41,11 @@ module.exports = (req, res) => {
       });
     })
     .catch((err) => {
-      logger.error('Failed to get person details');
-      logger.error(err);
+      logger.error('Failed to get person details', {
+        personId,
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
       return res.redirect('/garfile/manifest');
     });
 };

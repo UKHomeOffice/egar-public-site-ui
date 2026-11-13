@@ -38,7 +38,6 @@ describe('garfile/manifest/deleteperson route', () => {
       '../../common/middleware/flagpole': passThrough,
       '../../common/middleware/usercheck': passThrough,
       '../../common/middleware/csrfcheck': passThrough,
-      '../../common/middleware/parseForm': passThrough,
       '../middleware/pageAccess': passThrough,
       '../middleware/garOwnership': garAccessCheck,
     });

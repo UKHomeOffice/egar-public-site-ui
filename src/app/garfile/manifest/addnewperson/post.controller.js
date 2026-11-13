@@ -10,8 +10,6 @@ const genderchoice = require('../../../../common/seeddata/egar_gender_choice.jso
 const validations = require('../../../people/validations');
 
 module.exports = (req, res) => {
-  logger.debug('In Manifest/Add new Person post controller');
-
   const cookie = new CookieModel(req);
 
   const birthdate = `${req.body.dobYear}-${req.body.dobMonth}-${req.body.dobDay}`;
@@ -54,8 +52,11 @@ module.exports = (req, res) => {
           }
         })
         .catch((err) => {
-          logger.error('Unexpected error from GAR API when adding new person to the manifest');
-          logger.error(err);
+          logger.error('Failed to add person to GAR manifest', {
+            garId: cookie.getGarId(),
+            errorMessage: err?.message,
+            stack: err?.stack,
+          });
           res.render('app/garfile/manifest/addnewperson/index', {
             req,
             cookie,
@@ -68,8 +69,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.info('There was a problem adding person to saved people');
-      logger.debug(JSON.stringify(err));
+      logger.error('Failed to add person to saved people', { errorMessage: err?.message });
       res.render('app/garfile/manifest/addnewperson/index', {
         req,
         cookie,

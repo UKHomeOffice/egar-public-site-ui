@@ -9,7 +9,6 @@ const intentionValueOptions = require('../../../common/seeddata/egar_intention_v
 const continentalShelfOptions = require('../../../common/seeddata/egar_continental_shelf_options.json');
 
 module.exports = (req, res) => {
-  logger.info('In get controller for prohibited goods');
   const cookie = new CookieModel(req);
 
   const garId = res.locals.gar.garId;

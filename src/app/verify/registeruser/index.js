@@ -3,7 +3,6 @@ const express = require('express');
 
 // Middleware
 const flagpole = require('../../../common/middleware/flagpole');
-const csrfcheck = require('../../../common/middleware/csrfcheck');
 
 // Local dependencies
 const getController = require('./get.controller');

@@ -2,10 +2,10 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-
+const { GAR_TEMPLATE_FILE } = require('../../common/config');
 require('../global.test');
 const CookieModel = require('../../common/models/Cookie.class');
-const garApi = require('../../common/services/garApi');
+const dataAccessApi = require('../../common/services/dataAccessApi');
 
 const controller = require('../../app/home/get.controller');
 
@@ -31,7 +31,7 @@ describe('Home Get Controller', () => {
       render: sinon.spy(),
     };
 
-    garApiStub = sinon.stub(garApi, 'getGars');
+    garApiStub = sinon.stub(dataAccessApi.garApi, 'getGars');
   });
 
   afterEach(() => {
@@ -82,9 +82,9 @@ describe('Home Get Controller', () => {
     req.session.successHeader = 'Windows XP';
     req.session.successMsg = 'Task failed successfully.';
 
-    garApiStub.onCall(0).resolves(JSON.stringify(draftGarsApiResponse));
-    garApiStub.onCall(1).resolves(JSON.stringify(submittedGarsApiResponse));
-    garApiStub.onCall(2).resolves(JSON.stringify(cacelledGarsApiResponse));
+    garApiStub.onCall(0).resolves(draftGarsApiResponse);
+    garApiStub.onCall(1).resolves(submittedGarsApiResponse);
+    garApiStub.onCall(2).resolves(cacelledGarsApiResponse);
 
     const cookie = new CookieModel(req);
 
@@ -103,6 +103,7 @@ describe('Home Get Controller', () => {
           draftGars: draftGarsApiResponse,
           submittedGars: submittedGarsApiResponse,
           cancelledGars: cacelledGarsApiResponse,
+          GAR_TEMPLATE_FILE: GAR_TEMPLATE_FILE,
         });
       });
   });

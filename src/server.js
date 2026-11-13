@@ -5,10 +5,7 @@ const session = require('express-session');
 const favicon = require('serve-favicon');
 
 // Npm dependencies
-const bodyParser = require('body-parser');
 const i18n = require('i18n');
-const loggingMiddleware = require('morgan');
-const { token } = require('morgan');
 const argv = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
 const nunjucks = require('nunjucks');
@@ -17,17 +14,20 @@ const cookieParser = require('cookie-parser');
 const { v4: uuid } = require('uuid');
 const csrf = require('csurf');
 const PgSession = require('connect-pg-simple')(session);
+const { correlationIdMiddleware, getCorrelationId } = require('./common/utils/correlationContext');
 
 // Local dependencies
 const logger = require('./common/utils/logger')(__filename);
 const config = require('./common/config/index');
 const availability = require('./common/config/availability');
 const router = require('./app/router');
+const requestLoggingMiddleware = require('./common/utils/requestLogging');
 const autocompleteUtil = require('./common/utils/autocomplete');
 const nunjucksFilters = require('./common/utils/templateFilters.js');
 const travelPermissionCodes = require('./common/utils/travel_permission_codes.json');
 const { IS_HTTPS_SERVER, SAME_SITE_VALUE } = require('./common/config');
 const airports = require('./common/utils/airports');
+const canonicaliseInput = require('./common/middleware/canonicaliseInput');
 
 // Global constants
 const PORT = process.env.PORT || 3000;
@@ -38,7 +38,30 @@ const BASE_URL = process.env.BASE_URL || '';
 // Set Cookie secure flag depending on environment variable
 let secureFlag = process.env.COOKIE_SECURE_FLAG === 'true';
 
-logger.debug('Secure Flag for Cookie set to: ' + secureFlag);
+logger.debug('Secure flag for cookie set', { secureFlag });
+
+const STATIC_ASSET_PREFIXES = [
+  '/assets/',
+  '/images/',
+  '/public/',
+  '/stylesheets/',
+  '/javascripts/',
+  '/.well-known/', // Chrome/devtools probe and similar browser discovery requests
+];
+
+const STATIC_OR_PROBE_EXTENSION = /\.(map|css|js|png|svg|ico|woff2?|json)$/i;
+
+function getRequestPath(req) {
+  return req.path || req.originalUrl || req.url || '';
+}
+
+function isStaticOrProbeRequest(req) {
+  const requestPath = getRequestPath(req);
+  return (
+    STATIC_ASSET_PREFIXES.some((prefix) => requestPath.startsWith(prefix)) ||
+    STATIC_OR_PROBE_EXTENSION.test(requestPath)
+  );
+}
 
 // Define app views
 const APP_VIEWS = [
@@ -60,6 +83,7 @@ function initialisExpressSession(app) {
       store: new PgSession({
         conString: config.PUBLIC_SITE_DB_CONNSTR,
         ttl: 60 * 60,
+        createTableIfMissing: true,
       }),
       secret: config.SESSION_ENCODE_SECRET,
       resave: false,
@@ -68,22 +92,16 @@ function initialisExpressSession(app) {
         secure: secureFlag,
         httpOnly: IS_HTTPS_SERVER,
         sameSite: SAME_SITE_VALUE,
-        maxAge: 60 * 60 * 1000,
+        maxAge: 60 * 60 * 1000, // will be removed
       },
     })
   );
-  logger.info('Set express session');
-}
-
-function setupLoggingContext() {
-  token('session-id', (req) => req.sessionID || '');
 }
 
 function initialiseGlobalMiddleware(app) {
-  logger.info('Initalising global middleware');
+  app.use(correlationIdMiddleware);
 
   if (availability.ENABLE_UNAVAILABLE_PAGE.toLowerCase() === 'true') {
-    logger.info('Enabling service unavailable middleware');
     const validRoutes = ['unavailable', 'public', 'javascripts', 'stylesheets'];
     app.use((req, res, next) => {
       if (!validRoutes.some((el) => req.url.includes(el))) {
@@ -98,22 +116,38 @@ function initialiseGlobalMiddleware(app) {
     favicon(path.join(__dirname, 'node_modules', 'govuk-frontend', 'dist', 'govuk', 'assets', 'images', 'favicon.ico'))
   );
   app.use(compression());
+  app.use((req, res, next) => {
+    if (isStaticOrProbeRequest(req)) {
+      next();
+      return;
+    }
+
+    const startTimeMs = Date.now();
+    res.on('finish', () => {
+      logger.info('HTTP request complete', {
+        method: req.method,
+        url: getRequestPath(req),
+        statusCode: res.statusCode,
+        durationMs: Date.now() - startTimeMs,
+        sessionId: req.sessionID || null,
+        correlationId: req.correlationId || getCorrelationId() || null,
+      });
+    });
+    next();
+  });
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
-    app.use(
-      /\/((?!images|public|stylesheets|javascripts).)*/,
-      loggingMiddleware(
-        ':remote-addr - :remote-user [:date[clf]] ":session-id :method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'
-      )
-    );
+    app.use(requestLoggingMiddleware);
   }
-  app.use(bodyParser.json());
+  app.use(express.json());
   app.use(
-    bodyParser.urlencoded({
-      extended: true,
+    express.urlencoded({
+      extended: false,
+      parameterLimit: 300,
+      limit: '50kb',
     })
   );
-
+  app.use(canonicaliseInput);
   app.use(
     csrf({
       cookie: {
@@ -137,8 +171,6 @@ function initialiseGlobalMiddleware(app) {
       },
     })
   );
-
-  logger.info('Set global middleware');
 }
 
 function initialiseI18n(app) {
@@ -149,14 +181,11 @@ function initialiseI18n(app) {
     defaultLocale: 'en',
     register: global,
   });
-  logger.info('Initialised i18n');
   app.use(i18n.init);
-  logger.info('Set i18n');
 }
 
 function initialiseProxy(app) {
   app.enable('trust proxy');
-  logger.info('Proxy Enabled');
 }
 
 function initialiseTemplateEngine(app) {
@@ -171,7 +200,6 @@ function initialiseTemplateEngine(app) {
     watch: false, // Reload templates when they are changed (server-side). To use watch, make sure optional dependency chokidar is installed
     noCache: NODE_ENV !== 'production', // Never use a cache and recompile templates each time (server-side)
   };
-  logger.info('Set template engine');
 
   // Initialise nunjucks environment
   const nunjucksEnvironment = nunjucks.configure(APP_VIEWS, nunjucksConfiguration);
@@ -180,7 +208,6 @@ function initialiseTemplateEngine(app) {
 
   // Set view engine
   app.set('view engine', 'njk');
-  logger.info('Set view engine');
 
   nunjucksEnvironment.addGlobal('govukRebrand', true);
   nunjucksEnvironment.addGlobal('g4_id', G4_ID);
@@ -189,6 +216,7 @@ function initialiseTemplateEngine(app) {
   nunjucksEnvironment.addFilter('uncamelCase', nunjucksFilters.uncamelCase);
   nunjucksEnvironment.addFilter('containsError', nunjucksFilters.containsError);
   nunjucksEnvironment.addFilter('expiryDate', nunjucksFilters.expiryDate);
+  nunjucksEnvironment.addFilter('formatGdsDate', nunjucksFilters.formatGdsDate);
 
   // Country list added to the nunjucks global environment, up for debate whether this is the best place
   nunjucksEnvironment.addGlobal('nationalityList', autocompleteUtil.nationalityList);
@@ -218,7 +246,6 @@ function initialiseTemplateEngine(app) {
   );
 
   nunjucksEnvironment.addGlobal('expiryDate', new Date().toISOString().replace(/T.*/, '').split('-').join('-'));
-  logger.info('Set global settings for nunjucks');
 }
 
 function initialisePublic(app) {
@@ -227,20 +254,28 @@ function initialisePublic(app) {
   app.use('/assets', express.static(path.join(__dirname, '/common/assets/')));
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/stylesheets/')));
   app.use('/javascripts', express.static(path.join(__dirname, '/public/javascripts/')));
-  logger.info('Initialised public assets');
 }
 
 function initialiseRoutes(app) {
-  logger.info('Initialised router');
   router.bind(app);
-  logger.info('Initialised routes');
 }
 
 function initialiseErrorHandling(app) {
   app.use((req, res) => {
-    res.redirect('/error/404');
+    if (isStaticOrProbeRequest(req)) {
+      return res.sendStatus(404);
+    }
+
+    if (req.accepts('html')) {
+      logger.info('404 fallback for request', {
+        method: req.method,
+        url: getRequestPath(req),
+      });
+      return res.status(404).render('app/error/404');
+    }
+
+    return res.sendStatus(404);
   });
-  logger.info('Initialised error handling');
 }
 
 /**
@@ -255,7 +290,6 @@ function initialise() {
 
   async function prepDb() {
     try {
-      setupLoggingContext();
       initialisExpressSession(unconfiguredApp);
       initialiseProxy(unconfiguredApp);
       initialiseI18n(unconfiguredApp);
@@ -264,10 +298,9 @@ function initialise() {
       initialiseRoutes(unconfiguredApp);
       initialisePublic(unconfiguredApp);
       initialiseErrorHandling(unconfiguredApp);
-      logger.info('Initialised app: ');
     } catch (e) {
-      logger.error('Prepping the database failed.');
-      logger.error(e);
+      logger.error('Failed to prepare database');
+      logger.debug(e);
     }
   }
   prepDb();
@@ -278,7 +311,6 @@ function initialise() {
 function listen() {
   const app = initialise();
   app.listen(PORT);
-  logger.info('App initialised');
   logger.info(`Listening on port ${PORT}`);
 }
 

@@ -8,7 +8,6 @@ const ValidationRule = require('../../../common/models/ValidationRule.class');
 const { ROLE_PERMISSION_ERROR_MSG } = require('../constants');
 
 module.exports = (req, res) => {
-  logger.debug('In organisation / editusers post controller');
   const cookie = new CookieModel(req);
 
   const orgUser = {
@@ -48,14 +47,13 @@ module.exports = (req, res) => {
           return req.session.save(() => res.redirect('/organisation'));
         })
         .catch((err) => {
-          logger.error('Failed to update org user details');
-          logger.error(err);
+          logger.error('Failed to update org user details', { errorMessage: err?.message, stack: err?.stack });
           req.session.errMsg = { message: 'Failed to update user details. Try again' };
           return req.session.save(() => res.redirect('/organisation'));
         });
     })
     .catch((err) => {
-      logger.info('Failed validations editing an organisation user');
+      logger.warn('Org user validation failed', { userId: orgUser.userId });
       res.render('app/organisation/editusers/index', {
         cookie,
         orgUser,

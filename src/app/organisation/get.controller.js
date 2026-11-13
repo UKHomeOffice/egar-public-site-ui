@@ -5,7 +5,6 @@ const { permissionLevels } = require('../../common/utils/permissionLevels');
 const NUM_OF_USERS = 5;
 
 module.exports = (req, res) => {
-  logger.debug('In organisation get controller');
   const cookie = new CookieModel(req);
   const userPermissions = permissionLevels[cookie.getUserRole()];
 
@@ -55,8 +54,7 @@ module.exports = (req, res) => {
       });
     })
     .catch((err) => {
-      logger.error('There was an error fetching users for the organisation');
-      logger.error(err);
+      logger.error('Failed to fetch organisation users', { errorMessage: err?.message, stack: err?.stack });
       res.render('app/organisation/index', {
         cookie,
         errors: [{ message: 'There was a problem fetching organisation users' }],

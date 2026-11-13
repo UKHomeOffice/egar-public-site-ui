@@ -1,6 +1,10 @@
-const logger = require('../../common/utils/logger')(__filename);
+const CookieModel = require('../../common/models/Cookie.class');
 
-module.exports = (_req, res) => {
-  logger.debug('In accessibility get controller');
-  res.render('app/accessibility/index');
+module.exports = (req, res) => {
+  const cookie = new CookieModel(req);
+
+  res.render('app/accessibility/index', {
+    cookie,
+    isLoggedIn: Boolean(cookie.getUserDbId()),
+  });
 };

@@ -1,5 +1,4 @@
 const _ = require('lodash');
-
 const logger = require('../../../common/utils/logger')(__filename);
 const validations = require('./validations');
 const validator = require('../../../common/utils/validator');
@@ -48,8 +47,6 @@ module.exports = (req, res) => {
     gar: customs,
   };
 
-  logger.debug(req.body.prohibitedGoods);
-
   const { buttonClicked } = req.body;
 
   validator
@@ -71,8 +68,11 @@ module.exports = (req, res) => {
           }
         })
         .catch((err) => {
-          logger.error('API failed to update GAR');
-          logger.error(err);
+          logger.error('Failed to update GAR', {
+            garId: cookie.getGarId(),
+            errorMessage: err?.message,
+            stack: err?.stack,
+          });
           context.errors = [{ message: 'Failed to save customs information. Try again' }];
           res.render('app/garfile/customs/index', context);
         });
@@ -80,7 +80,6 @@ module.exports = (req, res) => {
     .catch((validationErrs) => {
       logger.debug('Failed validations submitting declarations');
       context.errors = validationErrs;
-      logger.info(JSON.stringify(validationErrs));
       res.render('app/garfile/customs/index', context);
     });
 };

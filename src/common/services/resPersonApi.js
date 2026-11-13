@@ -1,4 +1,4 @@
-const request = require('request');
+const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
@@ -17,7 +17,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called responsible person creation endpoint');
           resolve(body);
         }
       );
@@ -38,7 +37,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get responsible details API endpoint');
           resolve(body);
         }
       );
@@ -58,7 +56,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get person details API endpoint');
           resolve(body);
         }
       );
@@ -75,12 +72,13 @@ module.exports = {
         },
         (error, _response, body) => {
           if (error) {
-            logger.error('Failed to call update person details endpoint');
-            logger.error(error);
+            logger.error('Failed to call update person details endpoint', {
+              errorMessage: error?.message,
+              stack: error?.stack,
+            });
             reject(error);
             return;
           }
-          logger.debug('Successfully called update person details API endpoint');
           resolve(body);
         }
       );
@@ -100,7 +98,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called delete responsible person endpoint');
           resolve(body);
         }
       );

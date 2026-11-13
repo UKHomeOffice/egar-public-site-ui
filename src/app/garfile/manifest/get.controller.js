@@ -46,7 +46,6 @@ function isAllPeopleUnableToAdd(savedPeople) {
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
-  logger.debug('In garfile / manifest get controller');
 
   const userId = cookie.getUserDbId();
   const garId = res.locals.gar.garId;
@@ -100,7 +99,7 @@ module.exports = async (req, res) => {
     }
 
     if (!isValidGarPeople || !isValidSavedPeople) {
-      logger.info('Manifest validation failed, redirecting with error msg');
+      logger.warn('Manifest validation failed', { garId });
       const invalidGarPeople = garPeopleManifest.genErrValidations();
 
       return res.render('app/garfile/manifest/index', {
@@ -135,8 +134,7 @@ module.exports = async (req, res) => {
     });
   } catch (err) {
     // Get savedpeople / manifest failed
-    logger.error('Failed to add person to GAR');
-    logger.error(err);
+    logger.error('Failed to get manifest data', { errorMessage: err?.message, stack: err?.stack });
     res.render('app/garfile/manifest/index', {
       cookie,
       errors: [{ message: 'Failed to get manifest data' }],

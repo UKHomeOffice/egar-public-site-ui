@@ -26,9 +26,18 @@ class HttpClient {
 
     const options = {
       method,
-      headers: { ...this.defaultHeaders, ...headers },
+      headers: {
+        ...this.defaultHeaders,
+        ...headers,
+      },
       signal: controller.signal,
     };
+
+    const { getCorrelationId } = require('../utils/correlationContext');
+    const correlationId = getCorrelationId();
+    if (correlationId) {
+      options.headers['X-Correlation-ID'] = correlationId;
+    }
 
     if (body !== undefined) {
       options.body = JSON.stringify(body);

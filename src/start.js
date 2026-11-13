@@ -12,9 +12,13 @@ let pid;
  * Start master process
  */
 function startMaster() {
-  logger.info(`Master started. PID: ${process.pid}`);
+  logger.info('Master started', {
+    pid: process.pid,
+  });
   process.on('SIGINT', () => {
-    logger.info('Master exiting');
+    logger.info('Master exiting', {
+      pid: process.pid,
+    });
     process.exit();
   });
 }
@@ -25,10 +29,16 @@ function startMaster() {
  */
 function startWorker(workerId) {
   server.start();
-  logger.info(`Started worker ${workerId}, PID: ${process.pid}`);
-  logger.info(`Started worker ${workerId}, PID: ${process.title}`);
+  logger.info('Started worker', {
+    workerId,
+    pid: process.pid,
+    processTitle: process.title,
+  });
   process.on('SIGINT', () => {
-    logger.info(`Worker ${workerId} exiting...`);
+    logger.info('Worker exiting', {
+      workerId,
+      pid: process.pid,
+    });
     process.exit();
   });
 }
@@ -49,11 +59,14 @@ function start() {
  * Make sure all child processes are cleaned up
  */
 function onInterrupt() {
-  logger.info('Ensuring all child processes are cleaned up');
+  logger.info('Ensuring all child processes are cleaned up', {
+    pid: process.pid,
+  });
   pid = fs.readFileSync(pidFile, fileOptions);
-  fs.unlink(pidFile);
-  logger.info('Cleaning up child processed');
-  logger.info(`closing process:${pid}`);
+  fs.unlinkSync(pidFile);
+  logger.info('Cleaning up child process', {
+    childPid: pid,
+  });
   process.kill(pid, 'SIGTERM');
   process.exit();
 }

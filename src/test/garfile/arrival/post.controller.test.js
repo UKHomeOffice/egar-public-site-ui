@@ -265,7 +265,10 @@ describe('Arrival Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
+        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), {
+          ...cookie.getGarArrivalVoyage(),
+          isInbound: cookie.getIsInbound(),
+        });
       });
     });
 
@@ -286,7 +289,10 @@ describe('Arrival Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
+        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), {
+          ...cookie.getGarArrivalVoyage(),
+          isInbound: cookie.getIsInbound(),
+        });
         expect(res.render).to.have.been.calledWith('app/garfile/arrival/index', {
           cookie,
           errors: [
@@ -315,7 +321,10 @@ describe('Arrival Post Controller', () => {
       callController().then(() => {
         expect(req.body.buttonClicked).to.be.undefined;
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
+        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), {
+          ...cookie.getGarArrivalVoyage(),
+          isInbound: cookie.getIsInbound(),
+        });
         expect(res.redirect).to.have.been.calledOnceWithExactly(307, '/garfile/view');
       });
     });
@@ -333,7 +342,10 @@ describe('Arrival Post Controller', () => {
 
       callController().then(() => {
         expect(garApi.get).to.have.been.calledWith('ABCDEFGH');
-        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), cookie.getGarArrivalVoyage());
+        expect(garApi.patch).to.have.been.calledWith('ABCDEFGH', cookie.getGarStatus(), {
+          ...cookie.getGarArrivalVoyage(),
+          isInbound: cookie.getIsInbound(),
+        });
         expect(res.redirect).to.have.been.calledWith('/garfile/craft');
       });
     });

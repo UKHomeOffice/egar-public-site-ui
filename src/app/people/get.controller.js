@@ -4,7 +4,6 @@ const CookieModel = require('../../common/models/Cookie.class');
 const { Manifest } = require('../../common/models/Manifest.class');
 
 module.exports = async (req, res) => {
-  logger.debug('In people get controller');
   const cookie = new CookieModel(req);
   const errMSg = { message: 'Failed to get saved people' };
 
@@ -14,8 +13,7 @@ module.exports = async (req, res) => {
     const manifest = new Manifest(JSON.stringify({ items: people }));
 
     if (people.message) {
-      logger.info('Failed to get saved people');
-      logger.info(people.message);
+      logger.warn('Failed to get saved people', { errorMessage: people.message });
       return res.render('app/people/index', { cookie, errors: [errMSg] });
     }
     if (req.session.errMsg) {
@@ -28,7 +26,7 @@ module.exports = async (req, res) => {
 
     if (!isValidPeople) {
       logger.error(`User ${cookie.getUserDbId()} users are invalid`);
-      logger.info('Manifest validation failed, redirecting with error msg');
+      logger.warn('Manifest validation failed', { userId: cookie.getUserDbId() });
 
       return res.render('app/people/index', {
         cookie,
@@ -51,9 +49,8 @@ module.exports = async (req, res) => {
       });
     }
     return res.render('app/people/index', { cookie, people });
-  } catch (err) {
-    logger.info('Failed to get saved people');
-    logger.info(err);
+  } catch {
+    logger.warn('Failed to get saved people');
     return res.render('app/people/index', { cookie, errors: [errMSg] });
   }
 };

@@ -61,8 +61,11 @@ module.exports = (req, res) => {
           }
         })
         .catch((err) => {
-          logger.error('Unexpected error updating aircraft');
-          logger.error(err);
+          logger.error('Failed to update aircraft', {
+            craftId,
+            errorMessage: err?.message,
+            stack: err?.stack,
+          });
           res.render('app/aircraft/edit/index', {
             cookie,
             errors: [{ message: 'An error has occurred. Try again later' }],
@@ -71,7 +74,6 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.info('Edit SavedCraft postcontroller - There was a problem with editing the saved craft');
-      logger.info(JSON.stringify(err));
       res.render('app/aircraft/edit/index', { cookie, errors: err });
     });
 };

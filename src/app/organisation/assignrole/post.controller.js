@@ -77,8 +77,7 @@ module.exports = (req, res) => {
               res.redirect('/organisation/invite/success');
             })
             .catch((err) => {
-              logger.error('Govnotify failed to send an email');
-              logger.error(err);
+              logger.error('Failed to send invitation email', { errorMessage: err?.message, stack: err?.stack });
               res.render('app/organisation/assignrole/index', {
                 cookie,
                 roles,
@@ -87,13 +86,12 @@ module.exports = (req, res) => {
             });
         })
         .catch((err) => {
-          logger.error('Error setting the invite token');
-          logger.error(err);
+          logger.error('Failed to set invite token', { errorMessage: err?.message, stack: err?.stack });
           res.render('app/organisation/assignrole/index', { cookie, roles, errors: [err] });
         });
     })
     .catch((err) => {
-      logger.info('Assign Role post controller - There was a problem with assigning the role');
+      logger.warn('Failed to assign role');
       res.render('app/organisation/assignrole/index', { cookie, roles, errors: err });
     });
 };

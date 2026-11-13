@@ -4,8 +4,6 @@ const craftApi = require('../../../common/services/craftApi');
 const garApi = require('../../../common/services/garApi');
 
 module.exports = (req, res) => {
-  logger.debug('In garfile/craft get controller');
-
   // Clear existing editcraft
   const cookie = new CookieModel(req);
   const currentPage = Number(req.query.page) || 1;
@@ -44,8 +42,11 @@ module.exports = (req, res) => {
           res.render('app/garfile/craft/index', { cookie });
         })
         .catch((err) => {
-          logger.error('Failed to get Saved Crafts from API');
-          logger.error(err);
+          logger.error('Failed to get saved crafts', {
+            userId,
+            errorMessage: err?.message,
+            stack: err?.stack,
+          });
           res.render('app/garfile/craft/index', {
             cookie,
             errors: [{ message: 'There was a problem getting aircraft information' }],
@@ -53,8 +54,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.error('Failed to get GAR from API');
-      logger.error(err);
+      logger.error('Failed to get GAR from API', { errorMessage: err?.message, stack: err?.stack });
       res.render('app/garfile/craft/index', {
         cookie,
         errors: [{ message: 'There was a problem getting GAR information' }],

@@ -10,8 +10,12 @@ const config = require('../../../common/config/index');
 const { isValidFileMime } = require('../../../common/utils/validator');
 
 const exceedFileNumSizeLimit = (fileSize, garId) => {
-  logger.debug(`Entering exceed file number & size limit function, max size ${config.SUPPORTING_DOCS_MAX_SIZE} bytes,
-    max number:${config.MAX_NUM_FILES}`);
+  logger.debug('Checking supporting document limits', {
+    garId,
+    maxSizeBytes: config.SUPPORTING_DOCS_MAX_SIZE,
+    maxNumFiles: config.MAX_NUM_FILES,
+    uploadSizeBytes: fileSize,
+  });
   return new Promise((resolve, reject) => {
     // Get supporting docs and add file size
     //check max number of files not more than 10.
@@ -24,23 +28,38 @@ const exceedFileNumSizeLimit = (fileSize, garId) => {
         let total = 0;
         const parsedGars = JSON.parse(gars);
         if (parsedGars.items.length >= MAX_NUM) {
-          logger.info(`Number of supporting docs exceeds the limit: ${MAX_NUM}, gar:${garId}`);
+          logger.warn('Number of supporting documents exceeds the maximum allowed', {
+            garId,
+            maxNumFiles: MAX_NUM,
+            existingNumFiles: parsedGars.items.length,
+          });
           resolve('EXCEEDS_MAX_NUMBER');
         }
         // Get total size from gars.items.size
         parsedGars.items.forEach((gar) => {
           total += transformers.strToBytes(gar.size);
         });
-        logger.info(`Total size of supporting documents for gar:${garId}`);
+        logger.debug('Computed total supporting document size', {
+          garId,
+          existingTotalBytes: total,
+          uploadSizeBytes: fileSize,
+        });
         if (fileSize + total > MAX_SIZE) {
-          logger.info(`Total size of supporting documents exceeds max size GAR: ${fileSize + total} bytes`);
+          logger.warn('Total supporting document size exceeds the maximum allowed', {
+            garId,
+            maxSizeBytes: MAX_SIZE,
+            attemptedTotalBytes: fileSize + total,
+          });
           resolve('EXCEEDS_MAX_SIZE');
         }
         resolve('SUCCESS');
       })
       .catch((err) => {
-        logger.error('Unknown error whilst determining GAR supporting documents file sizes');
-        logger.error(err);
+        logger.error('Failed to determine supporting document file sizes', {
+          garId,
+          errorMessage: err?.message,
+          stack: err?.stack,
+        });
         reject(err);
       });
   });

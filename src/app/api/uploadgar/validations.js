@@ -206,6 +206,21 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
     }
   });
   const manifest = crewArr.concat(passengersArr);
+
+  const getRowKey = (crew) =>
+    JSON.stringify(
+      Object.keys(crew)
+        .filter((key) => key !== 'peopleType' && crew[key] !== undefined)
+        .sort()
+        .map((key) => {
+          return {
+            [key]: crew[key],
+          };
+        })
+    );
+
+  const rowCounts = new Map();
+
   manifest.forEach((crew) => {
     const crewLabel = i18n.__('validator_api_uploadgar_people_type_crew');
     const passengerLabel = i18n.__('validator_api_uploadgar_people_type_passenger');
@@ -215,6 +230,9 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       firstName: crew.firstName,
       lastName: crew.lastName,
     });
+
+    const rowKey = getRowKey(crew);
+    rowCounts.set(rowKey, (rowCounts.get(rowKey) ?? 0) + 1);
 
     validationArr.push([
       new ValidationRule(
@@ -398,5 +416,21 @@ module.exports.validations = (voyageObj, crewArr, passengersArr) => {
       }
     });
   });
+
+  const duplicateRowCount = [...rowCounts.values()].reduce((total, count) => total + (count > 1 ? count : 0), 0);
+
+  if (manifest.length > 0) {
+    validationArr.push([
+      new ValidationRule(
+        Boolean,
+        'file',
+        duplicateRowCount === 0,
+        i18n.__('validator_api_uploadgar_duplicate_row', {
+          count: duplicateRowCount,
+        })
+      ),
+    ]);
+  }
+
   return validationArr;
 };

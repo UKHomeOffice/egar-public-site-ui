@@ -13,7 +13,7 @@ export default defineConfig([
       'public/javascripts/paginator.js',
       'public/javascripts/service-header.js',
       'public/javascripts/init-service-header.js',
-      'public/javascripts/common.js',
+      'public/javascripts/dialog-polyfill.js',
     ],
     plugins: {
       js,
@@ -29,6 +29,7 @@ export default defineConfig([
       'unicorn/prefer-module': 'off', // allow require()
       'unicorn/prevent-abbreviations': 'off', // optional
       'no-unused-vars': ['error', { vars: 'local' }],
+      'no-console': 'error', // use the Winston logger wrapper instead of console.*
     },
     languageOptions: {
       globals: {
@@ -43,10 +44,15 @@ export default defineConfig([
         ...globals.browser, // window, document, etc.
         $: 'readonly', // jQuery global
         jQuery: 'readonly',
+        dialogPolyfill: 'readonly',
+        autoTab: 'readonly',
+        sanitiseDateOrTime: 'readonly',
+        isTwoHoursPriorDeparture: 'readonly',
+        dateNotMoreThanTwoDaysInFuture: 'readonly',
       },
     },
     rules: {
-      'no-unused-vars': ['warn', { args: 'none' }],
+      'no-unused-vars': ['error', { args: 'none' }],
       'no-undef': 'off',
       'no-console': 'off',
       'no-alert': 'off',

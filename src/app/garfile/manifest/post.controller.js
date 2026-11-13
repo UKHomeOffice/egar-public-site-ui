@@ -9,8 +9,6 @@ module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
   const { buttonClicked } = req.body;
 
-  logger.debug('In garfile / manifest post controller');
-
   if (req.body.editSavedPerson) {
     req.session.editPersonId = req.body.editSavedPerson;
     req.session.save(() => res.redirect('/people/edit'));
@@ -28,9 +26,9 @@ module.exports = async (req, res) => {
             res.redirect('/garfile/manifest');
           })
           .catch((err) => {
-            logger.error(err);
             logger.error(
-              `user_id: ${cookie.getUserDbId()}, gar_id: ${cookie.getGarId()} > Failed to patch GAR with updated manifest`
+              `Failed to patch GAR with updated manifest userId=${cookie.getUserDbId()} garId=${cookie.getGarId()}`,
+              { errorMessage: err?.message, stack: err?.stack }
             );
             req.session.manifestErr = [
               {
@@ -42,9 +40,10 @@ module.exports = async (req, res) => {
           });
       })
       .catch(() => {
-        logger.error(
-          `user_id: ${cookie.getUserDbId()}, gar_id: ${res.locals.gar.garId} > Failed to retrieve manifest ids`
-        );
+        logger.error('Failed to retrieve manifest IDs', {
+          userId: cookie.getUserDbId(),
+          garId: res.locals.gar.garId,
+        });
         req.session.manifestErr = [
           {
             message: 'Failed to patch GAR with updated manifest',
@@ -84,12 +83,12 @@ module.exports = async (req, res) => {
             res.redirect('/garfile/manifest');
           })
           .catch(() => {
-            logger.info('Failed to create People with updated manifest');
+            logger.warn('Failed to create people with updated manifest');
             res.redirect('/garfile/manifest');
           });
       })
       .catch(() => {
-        logger.info('Failed to retrieve manifest ids');
+        logger.warn('Failed to retrieve manifest IDs');
         res.redirect('/garfile/manifest');
       });
   } else if (req.body.buttonClicked === 'Save and Exit') {
@@ -101,8 +100,11 @@ module.exports = async (req, res) => {
     try {
       await garApi.patch(cookie.getGarId(), cookie.getGarStatus(), { isMilitaryFlight });
     } catch (err) {
-      logger.error('Failed to update GAR');
-      logger.error(err);
+      logger.error('Failed to update GAR', {
+        garId: cookie.getGarId(),
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
       req.session.manifestErr = [
         {
           message: 'Failed to update GAR',
@@ -117,8 +119,11 @@ module.exports = async (req, res) => {
     try {
       apiResponse = await garApi.getPeople(cookie.getGarId());
     } catch (err) {
-      logger.error('Failed to get manifest');
-      logger.error(err);
+      logger.error('Failed to get manifest', {
+        garId: cookie.getGarId(),
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
       req.session.manifestErr = [
         {
           message: 'Failed to get manifest',
@@ -132,7 +137,7 @@ module.exports = async (req, res) => {
       const manifest = new Manifest(apiResponse);
 
       if (!isMilitaryFlight && !manifest.validateCaptainCrew()) {
-        logger.error(`user ${cookie.getUserDbId()}, gar ${cookie.getGarId()}: Manifest validation no crew`);
+        logger.error(`User ${cookie.getUserDbId()}, GAR ${cookie.getGarId()}: Manifest validation no crew`);
         req.session.manifestInvalidPeople = [];
         req.session.manifestErr = [
           {
@@ -149,12 +154,12 @@ module.exports = async (req, res) => {
         return res.redirect('/garfile/resperson');
       }
 
-      logger.info('Manifest validation failed, redirecting with error msg');
+      logger.warn('Manifest validation failed', { garId: cookie.getGarId() });
       req.session.manifestErr = manifest.genErrValidations();
       req.session.manifestInvalidPeople = manifest.invalidPeople;
       return res.redirect('/garfile/manifest');
     } catch (err) {
-      logger.error(`user ${cookie.getUserDbId()}, gar ${cookie.getGarId()} > ${JSON.stringify(err)}`);
+      logger.error(`User ${cookie.getUserDbId()}, GAR ${cookie.getGarId()} > ${JSON.stringify(err)}`);
       req.session.manifestErr = [
         {
           message: 'Failed to submit manifest',

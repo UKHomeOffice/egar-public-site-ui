@@ -86,9 +86,16 @@ const deleteUser = require('./organisation/delete');
 const exportusers = require('./organisation/exportusers');
 const searchUsers = require('./organisation/searchusers');
 
+// serviceTimeout
+const serviceTimeout = require('./servicetimeout');
+
+// metrics
+const metrics = require('./metrics');
+
 // Export
 module.exports.bind = (app) => {
   app.use(healthcheck.router);
+  app.use(metrics.router);
   app.use(index.router);
   app.use(welcome.router);
   app.use(usersignin.router);
@@ -155,4 +162,5 @@ module.exports.bind = (app) => {
   app.use(respersonDetail.router);
   app.use(amgcheckin.router);
   app.use(oneloginRegister.router);
+  app.use(serviceTimeout.router);
 };

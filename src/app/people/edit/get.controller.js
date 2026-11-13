@@ -9,7 +9,6 @@ const validations = require('../validations');
 const validator = require('../../../common/utils/validator');
 
 module.exports = async (req, res) => {
-  logger.debug('In people / edit get controller');
   const cookie = new CookieModel(req);
 
   const id = req.session.editPersonId;
@@ -49,7 +48,7 @@ module.exports = async (req, res) => {
           });
         })
         .catch((err) => {
-          logger.error(`gar id (${cookie.getGarId()}): ${JSON.stringify(err)}`);
+          logger.error(`GAR id (${cookie.getGarId()}): ${JSON.stringify(err)}`);
           return res.render('app/people/edit/index', {
             req,
             cookie,
@@ -62,8 +61,7 @@ module.exports = async (req, res) => {
         });
     })
     .catch((err) => {
-      logger.error('Failed to get saved person details');
-      logger.error(err);
+      logger.error('Failed to get saved person details', { errorMessage: err?.message, stack: err?.stack });
       res.redirect('/people');
     });
 };

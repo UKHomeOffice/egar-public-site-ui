@@ -53,4 +53,16 @@ describe('Template Filters Utility', () => {
       expect(templateFilters.containsError(exampleArray, 'surname')).to.be.ok;
     });
   });
+
+  describe('formatGdsDate', () => {
+    it('formats dates with a short or long month name', () => {
+      expect(templateFilters.formatGdsDate('2026-12-11', 'short')).to.equal('11 Dec 2026');
+      expect(templateFilters.formatGdsDate('2026-12-11', 'long')).to.equal('11 December 2026');
+    });
+
+    it('returns invalid or missing dates unchanged', () => {
+      expect(templateFilters.formatGdsDate('not-a-date')).to.equal('not-a-date');
+      expect(templateFilters.formatGdsDate(null)).to.equal(null);
+    });
+  });
 });

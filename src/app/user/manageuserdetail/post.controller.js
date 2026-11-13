@@ -88,15 +88,13 @@ module.exports = (req, res) => {
           req.session.successHeader = 'Success';
           req.session.save((err) => {
             if (err) {
-              logger.error('Failed to save session');
-              logger.error(err);
+              logger.error('Failed to save session', { errorMessage: err?.message, stack: err?.stack });
             }
             return res.redirect('/user/details');
           });
         })
         .catch((err) => {
-          logger.error('Failed to update user details');
-          logger.error(err);
+          logger.error('Failed to update user details', { errorMessage: err?.message, stack: err?.stack });
           res.render('app/user/manageuserdetail/index', {
             cookie,
             errors: [{ message: 'Failed to update. Try again' }],
@@ -105,7 +103,6 @@ module.exports = (req, res) => {
     })
     .catch((err) => {
       logger.error('User manage details validation failed');
-      logger.debug(JSON.stringify(err));
       res.render('app/user/manageuserdetail/index', { cookie, errors: err });
     });
 };

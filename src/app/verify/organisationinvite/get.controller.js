@@ -5,8 +5,6 @@ const oneLoginUtil = require('../../../common/utils/oneLoginAuth');
 const verifyUserService = require('../../../common/services/verificationApi');
 
 module.exports = async (req, res) => {
-  logger.debug('In verify / invite get controller');
-
   // Start by clearing cookies and initialising
   const cookie = new CookieModel(req);
   cookie.reset();
@@ -30,7 +28,7 @@ module.exports = async (req, res) => {
 
     return res.render('app/verify/organisationinvite/index', { oneLoginAuthUrl });
   } catch (error) {
-    logger.error(`Invite link to register failed ${error}`);
+    logger.error('Failed to register invite link', { errorMessage: error?.message, stack: error?.stack });
     return res.redirect('/error/404');
   }
 };

@@ -42,7 +42,7 @@ const getOneLoginAuthUrl = (req, res) => {
     const query = new URLSearchParams(options);
     return `${oneLoginAuthUrl}?${query}`;
   } catch (error) {
-    logger.error('Failed to create autherize url');
+    logger.error('Failed to create authorize URL');
     throw error;
   }
 };
@@ -54,7 +54,7 @@ const getOneLoginAuthUrl = (req, res) => {
  */
 const getOneLoginLogoutUrl = (req, id_token, state) => {
   try {
-    logger.info('create a logout url for one Login');
+    logger.debug('Building OneLogin logout URL');
     const url = `${config.ONE_LOGIN_INTEGRATION_URL}/logout`;
     const options = {
       id_token_hint: id_token,
@@ -64,7 +64,7 @@ const getOneLoginLogoutUrl = (req, id_token, state) => {
     const query = new URLSearchParams(options);
     return `${url}?${query}`;
   } catch (error) {
-    logger.error('Failed to create oneLogin user logout');
+    logger.error('Failed to create OneLogin logout URL');
     throw error;
   }
 };
@@ -105,14 +105,14 @@ const verifyJwt = (idToken, nonce, callback) => {
         if (!err && decoded !== null && decodedToken.vot === decoded.vot && decodedToken.sub === decoded.sub) {
           valid = true;
         } else {
-          logger.error(`Invalid token:${err}`);
+          logger.error('Failed to verify JWT token', { errorMessage: err?.message, stack: err?.stack });
           valid = false;
         }
         callback(valid);
       }
     );
   } catch (error) {
-    logger.error(`Failed to verify oneLogin token: ${error}`);
+    logger.error('Failed to verify OneLogin token', { errorMessage: error?.message, stack: error?.stack });
     //TODO implement metrics
     // CountLoginError();
     throw error;

@@ -29,7 +29,7 @@ describe('Craft API Service', () => {
     it('should do nothing if request throws error', async () => {
       const requestStub = sinon.stub().throws('request.post Throw Error');
       const proxiedService = proxyquire('../../../common/services/craftApi', {
-        request: { post: requestStub },
+        '../utils/requestWithCorrelationId': { post: requestStub },
       });
 
       await proxiedService
@@ -47,7 +47,7 @@ describe('Craft API Service', () => {
     it('should reject if error present', async () => {
       const requestStub = sinon.stub().yields(new Error('Example Error'), null, null);
       const proxiedService = proxyquire('../../../common/services/craftApi', {
-        request: { post: requestStub },
+        '../utils/requestWithCorrelationId': { post: requestStub },
       });
 
       const result = await proxiedService
@@ -69,7 +69,7 @@ describe('Craft API Service', () => {
       };
       const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
       const proxiedService = proxyquire('../../../common/services/craftApi', {
-        request: { post: requestStub },
+        '../utils/requestWithCorrelationId': { post: requestStub },
       });
 
       const result = await proxiedService.create('RIP-AFTC', 'A380', 'LHR', 'USER-ID-1');

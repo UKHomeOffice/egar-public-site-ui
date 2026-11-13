@@ -6,7 +6,6 @@ const fixedBasedOperatorOptions = require('../../../common/seeddata/fixed_based_
 const utils = require('../../../common/utils/utils');
 
 module.exports = async (req, res) => {
-  logger.debug('In garfile/responsible person get controller');
   const cookie = new CookieModel(req);
   const garId = res.locals.gar.garId;
   const context = {
@@ -38,8 +37,7 @@ module.exports = async (req, res) => {
       });
     }
   } catch (err) {
-    logger.error('API failed to retrieve GAR');
-    logger.error(err);
+    logger.error('Failed to retrieve GAR', { garId, errorMessage: err?.message, stack: err?.stack });
     const payload = {
       ...context,
       errors: [

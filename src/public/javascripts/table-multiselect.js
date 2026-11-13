@@ -15,17 +15,21 @@ $('.jsCheckboxAll').change(function () {
 
 //".jsCheckbox" change
 $('.jsCheckbox').change(function () {
+  const currentTable = $(this).parents('table');
+  const currentTableCheckboxes = currentTable.find('.jsCheckbox');
+  const currentTableSelectAll = currentTable.find('.jsCheckboxAll');
+
   $(this).parents('tr').toggleClass('checked');
 
   //uncheck "select all", if one of the listed checkbox item is unchecked
   if (false == $(this).prop('checked')) {
     //change "select all" checked status to false
-    $('.jsCheckboxAll').prop('checked', false);
+    currentTableSelectAll.prop('checked', false);
   }
 
   //check "select all" if all checkbox items are checked
-  if ($('.jsCheckbox:checked').length == $('.jsCheckbox').length) {
-    $('.jsCheckboxAll').prop('checked', true);
+  if (currentTableCheckboxes.filter(':checked').length == currentTableCheckboxes.length) {
+    currentTableSelectAll.prop('checked', true);
   }
 });
 

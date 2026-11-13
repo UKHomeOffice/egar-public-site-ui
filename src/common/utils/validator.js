@@ -11,6 +11,7 @@ const {
   USER_FIRST_NAME_CHARACTER_COUNT,
   USER_SURNAME_CHARACTER_COUNT,
   MAX_ALLOWED_CANCELLATION_TIME_TO_CBP,
+  MAX_ORGANISATION_NAME_LENGTH,
 } = require('../config/index');
 const logger = require('../../common/utils/logger')(__filename);
 const airports = require('../../common/utils/airports');
@@ -106,6 +107,10 @@ function isEmpty(value) {
  */
 function isNotEmpty(value) {
   return isEmpty(value) === false;
+}
+
+function notOnlySymbols(value) {
+  return hasOnlySymbols(value) === false;
 }
 
 /**
@@ -385,7 +390,7 @@ function getDateFromDynamicInput(input) {
     }
   } else {
     //we've got something but we don't  know what it is. this is likely a calling error rather than data error.
-    logger.error('Unrecognised date input:' + input);
+    logger.error('Unrecognised date input', { input });
     providedDate = null;
   }
 
@@ -689,6 +694,23 @@ function isValidEmailLength(value) {
 }
 
 /**
+ * Check if the organisation name length is within the limit.
+ * @param {String} value
+ * @return {Bool}
+ */
+function isValidOrganisationNameLength(value) {
+  return value.length <= MAX_ORGANISATION_NAME_LENGTH;
+}
+
+function isValidOrganisationName(input) {
+  const alphaRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ,;!/.''()@&-]+$/;
+  if (!isEmpty(input)) {
+    return alphaRegex.test(input);
+  }
+  return true;
+}
+
+/**
  * Parse datetime string to moment object
  * @param {String} dateTimeStr 'yyyy-MM-dd HH:mm:ss'
  * @param {String} dateTimeFormat defines the moment format default: 'YYYY-MM-DD HH:mm:ss'
@@ -743,6 +765,16 @@ function isPostCodeValidCharacters(input) {
   return isEmpty(input) || addressRegex.test(input);
 }
 
+function isValidAircraftCharacters(input) {
+  const validCharactersRegex = /^[A-Za-z0-9\-\d]+$/;
+  return validCharactersRegex.test(input);
+}
+
+function isValidAircraftType(input) {
+  const validCharactersRegex = /^[A-Za-z0-9\s\-\d]+$/;
+  return validCharactersRegex.test(input);
+}
+
 function preventZ(value) {
   value = value || '';
   if (value.toLowerCase() === 'zzzz' || value.toLowerCase() === 'yyyy') {
@@ -758,6 +790,14 @@ function preventZ(value) {
  */
 function isValidAirportCode(airportCode) {
   return airports.findByCode(airportCode) !== null;
+}
+
+function isValidBirthPlaceName(input) {
+  const alphaRegex = /^[A-Za-z\s\-\d]+$/;
+  if (!isEmpty(input)) {
+    return alphaRegex.test(input);
+  }
+  return true;
 }
 
 module.exports = {
@@ -822,4 +862,10 @@ module.exports = {
   isOtherDocumentWithDocumentDesc,
   isAbleToCancelGar,
   nameHasNoNumbers,
+  isValidOrganisationNameLength,
+  isValidOrganisationName,
+  isValidAircraftCharacters,
+  isValidBirthPlaceName,
+  isValidAircraftType,
+  notOnlySymbols,
 };

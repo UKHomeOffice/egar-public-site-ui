@@ -1,6 +1,5 @@
 const logger = require('../../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../../common/models/Cookie.class');
-const garApi = require('../../../../common/services/garApi');
 const dataAccessApi = require('../../../../common/services/dataAccessApi');
 const documenttype = require('../../../../common/seeddata/egar_saved_people_travel_document_type.json');
 const persontype = require('../../../../common/seeddata/egar_type_of_saved_person');
@@ -11,7 +10,6 @@ const validator = require('../../../../common/utils/validator');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
-  logger.debug('In garfile / manifest / edit person get controller');
   const personId = req.session.editPersonId;
 
   if (personId === undefined) {
@@ -38,7 +36,7 @@ module.exports = async (req, res) => {
         });
       })
       .catch((err) => {
-        logger.error(`gar id (${cookie.getGarId()}): ${err}`);
+        logger.error('Validation failed for GAR person', { garId: cookie.getGarId() });
         return res.render('app/garfile/manifest/editperson/index', {
           req,
           cookie,
@@ -50,8 +48,11 @@ module.exports = async (req, res) => {
         });
       });
   } catch (err) {
-    logger.error('Failed to get garperson details');
-    logger.error(err);
+    logger.error('Failed to get GAR person details', {
+      personId,
+      errorMessage: err?.message,
+      stack: err?.stack,
+    });
     return res.redirect('/garfile/manifest');
   }
 };

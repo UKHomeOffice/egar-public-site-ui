@@ -24,7 +24,7 @@ describe('Create GAR API Service', () => {
   it('should do nothing if request throws error', async () => {
     const requestStub = sinon.stub().throws('request.post Throw Error');
     const proxiedService = proxyquire('../../../common/services/createGarApi', {
-      request: { post: requestStub },
+      '../utils/requestWithCorrelationId': { post: requestStub },
     });
 
     await proxiedService.createGar('USER-ID-1');
@@ -38,7 +38,7 @@ describe('Create GAR API Service', () => {
   it('should reject if error present', async () => {
     const requestStub = sinon.stub().yields('Example Error', null, null);
     const proxiedService = proxyquire('../../../common/services/createGarApi', {
-      request: { post: requestStub },
+      '../utils/requestWithCorrelationId': { post: requestStub },
     });
 
     const result = await proxiedService.createGar('USER-ID-1');
@@ -56,7 +56,7 @@ describe('Create GAR API Service', () => {
     };
     const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
     const proxiedService = proxyquire('../../../common/services/createGarApi', {
-      request: { post: requestStub },
+      '../utils/requestWithCorrelationId': { post: requestStub },
     });
 
     const result = await proxiedService.createGar('USER-ID-1');

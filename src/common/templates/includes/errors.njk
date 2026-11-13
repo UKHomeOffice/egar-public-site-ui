@@ -1,14 +1,24 @@
 {% if errors %}
   <div class="grid-row">
     <div class="column-full">
-      <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
-        <h2 class="govuk-error-summary__title" id="error-summary-title">
-          {{__('form_error_summary_title')}}
-        </h2>
+      <div class="govuk-error-summary"
+           aria-labelledby="error-summary-title"
+           role="alert"
+           tabindex="-1"
+           data-module="govuk-error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">{{ __("form_error_summary_title") }}</h2>
         <div class="govuk-error-summary__body">
           <ul class="govuk-list govuk-error-summary__list">
+            {% set errorcount = 0 %}
             {% for error in errors %}
-              <li><a href="#{{error.identifier}}">{{error.message}}</a></li>
+              {% if error.message.includes("Place of birth") %}
+                {% if errorcount == 0 %}
+                  <li><a href="#manifest">{{ error.message }}</a></li>
+                {% endif %}
+                {% set errorcount = errorcount + 1 %}
+              {% else %}
+                <li><a href="#{{ error.identifier }}">{{ error.message }}</a></li>
+              {% endif %}
             {% endfor %}
           </ul>
         </div>

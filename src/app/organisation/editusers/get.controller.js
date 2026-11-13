@@ -7,8 +7,6 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const userId = req.session.editUserId;
 
-  logger.debug('In organisation / editusers get controller');
-
   if (userId === undefined) {
     res.redirect('/organisation');
     return;
@@ -26,7 +24,11 @@ module.exports = (req, res) => {
       return res.render('app/organisation/editusers/index', { cookie, orgUser, roles });
     })
     .catch((err) => {
-      logger.error(err);
+      logger.error('Failed to find org user details', {
+        userId,
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
       req.session.errMsg = { message: 'Failed to find user details. Try again' };
       return res.redirect('/organisation');
     });

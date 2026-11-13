@@ -1,8 +1,6 @@
-const logger = require('../../../../common/utils/logger')(__filename);
 const pagination = require('../../../../common/utils/pagination');
 
 module.exports = (req, res) => {
-  logger.debug('In amg/checkin post controller');
   const resubmitted = req.body.resubmitted;
   const pageUrl = `/garfile/amg/checkin?resubmitted=${resubmitted}`;
   if (req.body.nextPage) {

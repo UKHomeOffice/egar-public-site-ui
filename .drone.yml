@@ -8,22 +8,57 @@ platform:
   arch: amd64
 
 steps:
-  - name: unit-test
+  - name: install-dependencies
+    pull: if-not-exists
+    image: node:24.22.1-alpine3.24
+    commands:
+      - cd src
+      - npm ci
+
+  - name: run-tests
     pull: if-not-exists
     image: node:24.22.1-alpine3.24
     commands:
       - export NOTIFY_API_KEY=dummy
       - cd src
-      - npm install
       - npm run test-drone
+    depends_on:
+      - install-dependencies
 
-  - name: linting-formatting
+  - name: check-code
     pull: if-not-exists
     image: node:24.22.1-alpine3.24
     commands:
       - cd src
-      - npm install
       - npm run check
+    depends_on:
+      - install-dependencies
+
+  - name: check-templates
+    pull: if-not-exists
+    image: node:24.22.1-alpine3.24
+    commands:
+      - apk add --no-cache py3-pip
+      - pip install --break-system-packages --no-cache-dir djlint==1.46.1
+      - cd src
+      - djlint . --lint
+      - djlint . --check --no-function-formatting
+
+  - name: check-unused-code
+    pull: if-not-exists
+    image: node:24.22.1-alpine3.24
+    commands:
+      - cd src
+      - npx --no-install knip
+    depends_on:
+      - install-dependencies
+
+  - name: lint-dockerfile
+    pull: if-not-exists
+    image: hadolint/hadolint:v2.15.1-alpine
+    commands:
+      - hadolint Dockerfile
+    failure: ignore
 
   - name: build
     pull: if-not-exists
@@ -31,8 +66,10 @@ steps:
     commands:
       - source ./ops/image_build.sh
     depends_on:
-      - linting-formatting
-      - unit-test
+      - check-code
+      - check-templates
+      - run-tests
+      - check-unused-code
 
   - name: publish-to-ecr
     image: plugins/ecr
@@ -132,6 +169,9 @@ steps:
         from_secret: DEV_KUBE_TOKEN
       DEV_URL_SERVICE:
         from_secret: DEV_URL_SERVICE
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
+
 trigger:
   event:
     - push
@@ -210,6 +250,8 @@ steps:
         from_secret: SIT_KUBE_SERVER
       SIT_KUBE_TOKEN:
         from_secret: SIT_KUBE_TOKEN
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
 trigger:
   branch:
     - main
@@ -256,6 +298,8 @@ steps:
         from_secret: STAGING_KUBE_SERVER
       STAGING_KUBE_TOKEN:
         from_secret: STAGING_KUBE_TOKEN
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
 trigger:
   event:
     - tag
@@ -291,6 +335,8 @@ steps:
         from_secret: PRODUCTION_KUBE_SERVER
       PRODUCTION_KUBE_TOKEN:
         from_secret: PRODUCTION_KUBE_TOKEN
+      POISE_CIDR_RANGE:
+        from_secret: POISE_CIDR_RANGE
 
 trigger:
   event:

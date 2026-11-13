@@ -4,7 +4,6 @@ const personApi = require('../../../common/services/personApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
-  logger.debug('In people / delete get controller');
 
   const errMsg = { message: 'Failed to delete person. Try again' };
   const personId = req.session.deletePersonId;
@@ -27,7 +26,7 @@ module.exports = (req, res) => {
       return req.session.save(() => res.redirect('/people'));
     })
     .catch((err) => {
-      logger.error(err);
+      logger.error('Failed to delete person', { personId, errorMessage: err?.message, stack: err?.stack });
       req.session.errMsg = errMsg;
       return req.session.save(() => res.redirect('/people'));
     });

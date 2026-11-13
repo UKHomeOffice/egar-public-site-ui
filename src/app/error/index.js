@@ -29,5 +29,10 @@ router.get('/error/loginError', (_req, res) => {
   res.render('app/error/loginError');
 });
 
+router.get('/error/500', (_req, res) => {
+  res.status(500);
+  res.render('app/error/500');
+});
+
 // Export
 module.exports = { router };

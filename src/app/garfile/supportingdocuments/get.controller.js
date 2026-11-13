@@ -6,7 +6,6 @@ const config = require('../../../common/config/index');
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const max_num_files = config.MAX_NUM_FILES;
-  logger.debug('In garfile / supporting documents get controller');
   garApi
     .getSupportingDocs(res.locals.gar.garId)
     .then((apiResponse) => {
@@ -65,8 +64,11 @@ module.exports = (req, res) => {
       res.render('app/garfile/supportingdocuments/index', context);
     })
     .catch((err) => {
-      logger.error('Failed to get GAR supportingdocuments details');
-      logger.error(err);
+      logger.error('Failed to get GAR supporting documents', {
+        garId: cookie.getGarId(),
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
       res.render('app/garfile/supportingdocuments/index', {
         cookie,
         max_num_files,

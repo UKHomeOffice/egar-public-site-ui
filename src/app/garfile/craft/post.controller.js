@@ -7,8 +7,6 @@ const validationList = require('./validations');
 const pagination = require('../../../common/utils/pagination');
 
 module.exports = (req, res) => {
-  logger.debug('In garfile / craft post controller');
-
   const { buttonClicked } = req.body;
   const cookie = new CookieModel(req);
   const userId = cookie.getUserDbId();
@@ -29,7 +27,7 @@ module.exports = (req, res) => {
         req.session.save(() => res.redirect('/garfile/craft'));
       })
       .catch((err) => {
-        logger.error(err);
+        logger.error('Failed to add craft to GAR', { userId, errorMessage: err?.message, stack: err?.stack });
         res.redirect('/garfile/craft');
       });
   } else {
@@ -76,8 +74,11 @@ module.exports = (req, res) => {
             }
           })
           .catch((err) => {
-            logger.error('Api failed to update GAR');
-            logger.error(err);
+            logger.error('Failed to update GAR', {
+              garId: cookie.getGarId(),
+              errorMessage: err?.message,
+              stack: err?.stack,
+            });
             res.render('app/garfile/craft/index', {
               cookie,
               errors: [{ message: 'Failed to add aircraft to GAR' }],
@@ -85,8 +86,7 @@ module.exports = (req, res) => {
           });
       })
       .catch((err) => {
-        logger.info('GAR aircraft validation failed');
-        logger.debug(err);
+        logger.warn('GAR aircraft validation failed', { garId: cookie.getGarId() });
         res.render('app/garfile/craft/index', { cookie, errors: err });
       });
   }

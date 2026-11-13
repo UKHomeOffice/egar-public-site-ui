@@ -7,7 +7,10 @@ const airportValidation = require('../../../common/utils/airportValidation');
 
 const performAPICall = (cookie, buttonClicked, res) => {
   garApi
-    .patch(res.locals.gar.garId, cookie.getGarStatus(), cookie.getGarArrivalVoyage())
+    .patch(res.locals.gar.garId, cookie.getGarStatus(), {
+      ...cookie.getGarArrivalVoyage(),
+      isInbound: cookie.getIsInbound(),
+    })
     .then((apiResponse) => {
       const parsedResponse = JSON.parse(apiResponse);
       if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
@@ -28,8 +31,11 @@ const performAPICall = (cookie, buttonClicked, res) => {
       }
     })
     .catch((err) => {
-      logger.error('Api failed to update GAR');
-      logger.error(err);
+      logger.error('Failed to update GAR', {
+        garId: cookie.getGarId(),
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
       res.render('app/garfile/arrival/index', {
         cookie,
         errors: [
@@ -103,8 +109,6 @@ const buildValidations = (voyage) => {
 };
 
 module.exports = async (req, res) => {
-  logger.debug('In garfile / arrival post controller');
-
   const cookie = new CookieModel(req);
   const { buttonClicked } = req.body;
 
@@ -128,9 +132,6 @@ module.exports = async (req, res) => {
 
   const gar = await garApi.get(res.locals.gar.garId);
   const departurePort = JSON.parse(gar).departurePort;
-  // NMSW-4932 disabled until v14.2.0 release
-  // cookie.setIsInbound(airportValidation.isJourneyUKInbound(departurePort, voyage.arrivalPort));
-
   validations.push([
     new ValidationRule(
       validator.notSameValues,
@@ -151,14 +152,16 @@ module.exports = async (req, res) => {
     ]);
   }
 
+  const isInbound = airportValidation.isJourneyUKInbound(departurePort, voyage.arrivalPort);
+  cookie.setIsInbound(isInbound);
+
   validator
     .validateChains(validations)
     .then(() => {
       performAPICall(cookie, buttonClicked, res);
     })
     .catch((err) => {
-      logger.info('GAR arrival validation failed');
-      logger.debug(JSON.stringify(err));
+      logger.warn('GAR arrival validation failed', { garId: cookie.getGarId() });
       res.render('app/garfile/arrival/index', {
         cookie,
         errors: err,

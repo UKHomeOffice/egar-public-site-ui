@@ -3,7 +3,6 @@ const logger = require('../../../common/utils/logger')(__filename);
 const garApi = require('../../../common/services/garApi');
 
 module.exports = (req, res) => {
-  logger.debug('In garfile/departure get controller');
   const cookie = new CookieModel(req);
 
   garApi
@@ -15,8 +14,11 @@ module.exports = (req, res) => {
       return res.render('app/garfile/departure/index', { cookie });
     })
     .catch((err) => {
-      logger.error('Failed to get GAR details');
-      logger.error(err);
+      logger.error('Failed to get GAR details', {
+        garId: res.locals.gar.garId,
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
       res.render('app/garfile/departure/index', {
         cookie,
         errors: [

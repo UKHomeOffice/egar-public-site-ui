@@ -1,6 +1,5 @@
 const personApi = require('../../../common/services/personApi');
 const garApi = require('../../../common/services/garApi');
-const logger = require('../../../common/utils/logger')(__filename);
 
 function getDetailsByIds(ids, userId) {
   return new Promise((resolve, reject) => {
@@ -16,7 +15,6 @@ function getDetailsByIds(ids, userId) {
         resolve(people);
       })
       .catch((err) => {
-        logger.info(err);
         reject(err);
       });
   });
@@ -37,7 +35,6 @@ function getgarPeopleIds(garPeopleId, garId) {
         resolve(garPeople);
       })
       .catch((err) => {
-        logger.info(err);
         reject(err);
       });
   });

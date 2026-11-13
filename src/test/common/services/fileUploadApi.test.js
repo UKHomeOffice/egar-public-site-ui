@@ -28,7 +28,7 @@ describe('File Upload API Service', () => {
   it('should do nothing if request throws error', async () => {
     const requestStub = sinon.stub().throws('request.post Throw Error');
     const proxiedService = proxyquire('../../../common/services/fileUploadApi', {
-      request: { post: requestStub },
+      '../utils/requestWithCorrelationId': { post: requestStub },
     });
 
     await proxiedService.postFile('GAR-ID-1', file);
@@ -48,7 +48,7 @@ describe('File Upload API Service', () => {
   it('should reject if error present', async () => {
     const requestStub = sinon.stub().yields('Example Error', null, null);
     const proxiedService = proxyquire('../../../common/services/fileUploadApi', {
-      request: { post: requestStub },
+      '../utils/requestWithCorrelationId': { post: requestStub },
     });
 
     const result = await proxiedService.postFile('GAR-ID-1', file);
@@ -73,7 +73,7 @@ describe('File Upload API Service', () => {
 
     const requestStub = sinon.stub().yields(null, apiResponse, JSON.stringify(apiResponse));
     const proxiedService = proxyquire('../../../common/services/fileUploadApi', {
-      request: { post: requestStub },
+      '../utils/requestWithCorrelationId': { post: requestStub },
     });
 
     const result = await proxiedService.postFile('GAR-ID-1', file);

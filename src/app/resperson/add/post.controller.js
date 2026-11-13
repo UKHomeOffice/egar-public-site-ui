@@ -32,8 +32,7 @@ module.exports = (req, res) => {
           }
         })
         .catch((err) => {
-          logger.error('There was a problem adding person to saved people');
-          logger.error(err);
+          logger.error('Failed to add responsible person', { errorMessage: err?.message, stack: err?.stack });
           res.render('app/resperson/add/index', {
             cookie,
             fixedBasedOperatorOptions,

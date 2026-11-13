@@ -1,4 +1,4 @@
-const request = require('request');
+const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
@@ -22,7 +22,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called get user details API endpoint');
           resolve(JSON.parse(body));
         }
       );
@@ -66,7 +65,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called edit user details API endpoint');
           resolve(body);
         }
       );
@@ -107,7 +105,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called update user details API endpoint');
           resolve(body);
         }
       );
@@ -127,7 +124,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called delete user details API endpoint');
           resolve(body);
         }
       );
@@ -146,7 +142,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.debug('Successfully called user search endpoint');
           resolve(JSON.parse(body));
         }
       );
@@ -178,12 +173,10 @@ module.exports = {
         },
         (error, _response, body) => {
           if (error) {
-            logger.error('Failed to call create user endpoint');
-            logger.error(error);
+            logger.error('Failed to call create user endpoint', { errorMessage: error?.message, stack: error?.stack });
             reject(error);
             return;
           }
-          logger.debug('Successfully called create user endpoint');
           resolve(JSON.parse(body));
         }
       );

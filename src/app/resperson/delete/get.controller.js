@@ -6,7 +6,6 @@ module.exports = (req, res) => {
   const cookie = new CookieModel(req);
   const errMsg = { message: 'Failed to delete responsible person. Try again' };
   const responsiblePersonId = req.query.deleteResponsiblePerson;
-  logger.debug('In responsible person / delete get controller');
 
   if (responsiblePersonId === undefined) {
     res.redirect('/resperson');
@@ -27,7 +26,11 @@ module.exports = (req, res) => {
       return req.session.save(() => res.redirect('/resperson'));
     })
     .catch((err) => {
-      logger.error(err);
+      logger.error('Failed to delete responsible person', {
+        responsiblePersonId,
+        errorMessage: err?.message,
+        stack: err?.stack,
+      });
       req.session.errMsg = errMsg;
       return req.session.save(() => res.redirect('/resperson'));
     });

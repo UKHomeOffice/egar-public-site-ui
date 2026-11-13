@@ -74,6 +74,7 @@ describe('GAR view get controller', () => {
             garId: 'GAR-ID-EXAMPLE-1-API',
             status: { name: 'Draft' },
             userId: 'USER-123',
+            isInbound: true,
           })
         )
       );
@@ -118,7 +119,7 @@ describe('GAR view get controller', () => {
           expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
             cookie,
             manifestFields,
-            garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' } },
+            garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, isInbound: true },
             isAbleToCancelGar: true,
             successHeader: 'Success',
             successMsg: 'Success Message',
@@ -132,11 +133,11 @@ describe('GAR view get controller', () => {
               items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
             },
             showChangeLinks: true,
-            isJourneyUKInbound: true,
             resubmitted: 'no',
             durationInDeparture: 125,
             numberOf0TResponseCodes: 2,
             isResubmitted: false,
+            isJourneyUKInboundWithPassengerChecks: true,
           });
         });
     });
@@ -146,7 +147,7 @@ describe('GAR view get controller', () => {
       cookie.setGarId('GAR-ID-EXAMPLE-1');
       const userOldSubmissionGar = outboundGar();
       userOldSubmissionGar.userId = 'USER-123';
-      userOldSubmissionGar.departureDate = '2023-03-20';
+      userOldSubmissionGar.departureDate = '20 March 2023';
       userOldSubmissionGar.departureTime = '10:55:26';
 
       garApiGetStub.resolves(new Promise((resolve) => resolve(userOldSubmissionGar)));
@@ -182,7 +183,7 @@ describe('GAR view get controller', () => {
       };
 
       let resultantOutboundGar = outboundGar();
-      resultantOutboundGar.departureDate = '2023-03-20';
+      resultantOutboundGar.departureDate = '20 March 2023';
       resultantOutboundGar.departureTime = '10:55:26';
 
       callController()
@@ -195,7 +196,7 @@ describe('GAR view get controller', () => {
             cookie,
             manifestFields,
             showChangeLinks: false,
-            isJourneyUKInbound: false,
+            isJourneyUKInboundWithPassengerChecks: false,
             isAbleToCancelGar: false,
             garfile: resultantOutboundGar,
             successMsg: undefined,

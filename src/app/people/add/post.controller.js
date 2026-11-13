@@ -26,9 +26,6 @@ module.exports = (req, res) => {
     documentDesc: req.body.travelDocumentOther,
   };
 
-  logger.info(person.documentType);
-  logger.info(person.documentDesc);
-
   // Validate chains
   validator
     .validateChains(validations.validations(req))
@@ -53,8 +50,7 @@ module.exports = (req, res) => {
           }
         })
         .catch((err) => {
-          logger.error('There was a problem adding person to saved people');
-          logger.error(err);
+          logger.error('Failed to add person to saved people', { errorMessage: err?.message, stack: err?.stack });
           res.render('app/people/add/index', {
             cookie,
             persontype,
@@ -65,8 +61,7 @@ module.exports = (req, res) => {
         });
     })
     .catch((err) => {
-      logger.info('Validation errors creating a new person');
-      logger.debug(JSON.stringify(err));
+      logger.warn('Person validation failed');
       res.render('app/people/add/index', {
         cookie,
         req,

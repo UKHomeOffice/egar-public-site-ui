@@ -1,4 +1,4 @@
-const request = require('request');
+const request = require('../utils/requestWithCorrelationId');
 const logger = require('../utils/logger')(__filename);
 const endpoints = require('../config/endpoints');
 
@@ -23,11 +23,9 @@ module.exports = {
         },
         (error, _response, body) => {
           if (error) {
-            logger.error('There was a problem calling the settoken API');
-            logger.error(error);
+            logger.error('Failed to call settoken API', { errorMessage: error?.message, stack: error?.stack });
             reject(error);
           }
-          logger.debug('Successfully called settoken API');
           resolve(body);
         }
       );
@@ -58,7 +56,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.info('Successfully called updateToken API');
           resolve(body);
         }
       );
@@ -100,7 +97,6 @@ module.exports = {
             reject(error);
             return;
           }
-          logger.info('Successfully called setInviteUserToken API');
           resolve(body);
         }
       );
