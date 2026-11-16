@@ -102,6 +102,7 @@ describe('GAR view get controller', () => {
         garId: 'GAR-ID-EXAMPLE-1-API',
         status: { name: 'Draft' },
         userId: 'USER-123',
+        isInbound: true,
       });
       garApiGetPeopleStub.resolves({
         items: [
@@ -125,7 +126,7 @@ describe('GAR view get controller', () => {
       expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
         cookie,
         manifestFields,
-        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' } },
+        garfile: { garId: 'GAR-ID-EXAMPLE-1-API', status: { name: 'Draft' }, isInbound: true },
         isAbleToCancelGar: true,
         successHeader: 'Success',
         successMsg: 'Success Message',
@@ -139,7 +140,7 @@ describe('GAR view get controller', () => {
           items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
         },
         showChangeLinks: true,
-        isJourneyUKInbound: true,
+        isJourneyUKInboundWithPassengerChecks: true,
         resubmitted: 'no',
         durationInDeparture: 125,
         numberOf0TResponseCodes: 2,
@@ -181,7 +182,7 @@ describe('GAR view get controller', () => {
         cookie,
         manifestFields,
         showChangeLinks: false,
-        isJourneyUKInbound: false,
+        isJourneyUKInboundWithPassengerChecks: false,
         isAbleToCancelGar: false,
         garfile: resultantOutboundGar,
         successMsg: undefined,

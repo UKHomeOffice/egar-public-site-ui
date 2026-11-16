@@ -1,0 +1,19 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+    -   repo: https://github.com/pre-commit/pre-commit-hooks
+        rev: v3.2.0
+        hooks:
+            -   id: trailing-whitespace
+            -   id: end-of-file-fixer
+            -   id: check-yaml
+                args: [--allow-multiple-documents]
+                exclude: "ops"
+            -   id: check-added-large-files
+    -   repo: local
+        hooks:
+            -   name: run_local_just_check
+                id: just_precommit
+                entry: just precommit
+                pass_filenames: false
+                language: system

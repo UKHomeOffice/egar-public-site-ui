@@ -324,6 +324,11 @@ spec:
                 secretKeyRef:
                   name: environment
                   key: HOMEPAGE_MESSAGE
+            - name: GAR_TEMPLATE_FILE
+              valueFrom:
+                secretKeyRef:
+                  name: environment
+                  key: GAR_TEMPLATE_FILE
             - name: ONE_LOGIN_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:

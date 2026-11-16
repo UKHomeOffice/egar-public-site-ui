@@ -6,6 +6,7 @@ const validator = require('../../../common/utils/validator');
 const validationList = require('./validations');
 const { Manifest } = require('../../../common/models/Manifest.class');
 const ValidationRule = require('../../../common/models/ValidationRule.class');
+const { hasGARSubmittedForPassengerChecks } = require('../../../common/utils/utils');
 
 module.exports = async (req, res) => {
   const cookie = new CookieModel(req);
@@ -40,6 +41,7 @@ module.exports = async (req, res) => {
       garpeople,
       garsupportingdocs,
       showChangeLinks: true,
+      isJourneyUKInboundWithPassengerChecks: garfile.isInbound && hasGARSubmittedForPassengerChecks(garpeople),
     };
 
     try {

@@ -61,13 +61,13 @@ function strToBytes(strSize) {
 
 /**
  * GAR excel sheet instructs users to use 'Unknown' as a gender type
- * external systems expect 'Unspecified' to be used.
- * Convert Unknown to Unspecified
+ * external systems expect 'X or unspecified' to be used.
+ * Convert Unknown to X or unspecified
  * @param {String} aGender a given gender
  * @returns {String}
  */
 function unknownToUnspecified(aGender) {
-  return aGender === 'Unknown' ? 'Unspecified' : aGender;
+  return aGender === 'Unknown' ? 'X or unspecified' : aGender;
 }
 
 function toUpper(aStr) {

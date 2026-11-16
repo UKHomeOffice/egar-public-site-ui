@@ -142,6 +142,7 @@ const outboundGar = () => {
     arrivalPort: 'LAX',
     departureDate: '2023-04-11',
     departureTime: '11:30:15',
+    isInbound: false,
   };
 };
 

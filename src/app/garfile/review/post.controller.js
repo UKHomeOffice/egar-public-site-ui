@@ -8,6 +8,7 @@ const validator = require('../../../common/utils/validator');
 const airportValidation = require('../../../common/utils/airportValidation');
 const validationList = require('./validations');
 const { getApiErrorBody } = require('../../../common/utils/apiError');
+const { hasGARSubmittedForPassengerChecks } = require('../../../common/utils/utils');
 
 const performAPICall = async (garId, cookie, req, res) => {
   try {
@@ -150,6 +151,7 @@ module.exports = async (req, res) => {
       garpeople,
       garsupportingdocs,
       showChangeLinks: true,
+      isJourneyUKInboundWithPassengerChecks: garfile.isInbound && hasGARSubmittedForPassengerChecks(garpeople),
     };
   } catch (err) {
     logger.error('Failed to retrieve GAR for review', { garId, errorMessage: err?.message, stack: err?.stack });

@@ -113,6 +113,7 @@ describe('GAR Review Get Controller', () => {
       },
       garsupportingdocs: {},
       showChangeLinks: true,
+      isJourneyUKInboundWithPassengerChecks: false,
       errors: [
         new ValidationRule(
           validator.isValidDepAndArrDate,
@@ -199,6 +200,7 @@ describe('GAR Review Get Controller', () => {
         message: 'GAR not found',
       },
       showChangeLinks: true,
+      isJourneyUKInboundWithPassengerChecks: undefined,
     });
   });
 
@@ -247,6 +249,20 @@ describe('GAR Review Get Controller', () => {
       },
       garsupportingdocs: {},
       showChangeLinks: true,
+      isJourneyUKInboundWithPassengerChecks: undefined,
     });
+  });
+
+  it('shows passenger checks only for inbound GARs with checked people', async () => {
+    garApiGetStub.resolves({ status: { name: 'draft' }, isInbound: true });
+    garApiGetSupportingDocsStub.resolves({});
+    garApiGetPeopleStub.resolves({ items: [{ amgCheckinResponseCode: '0A' }] });
+    await controller(req, res);
+    expect(res.render.firstCall.args[1].isJourneyUKInboundWithPassengerChecks).to.equal(true);
+
+    res.render.resetHistory();
+    garApiGetPeopleStub.resolves({ items: [{ amgCheckinResponseCode: null }] });
+    await controller(req, res);
+    expect(res.render.firstCall.args[1].isJourneyUKInboundWithPassengerChecks).to.equal(false);
   });
 });

@@ -105,6 +105,7 @@ describe('GAR view post controller', () => {
       garId: 'GAR-ID-EXAMPLE-2',
       status: { name: 'Draft' },
       userId: 'USER-123',
+      isInbound: true,
     });
     garApiGetPeopleStub.resolves({
       items: [
@@ -125,7 +126,7 @@ describe('GAR view post controller', () => {
     expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
       cookie,
       manifestFields,
-      garfile: { garId: 'GAR-ID-EXAMPLE-2', status: { name: 'Draft' } },
+      garfile: { garId: 'GAR-ID-EXAMPLE-2', status: { name: 'Draft' }, isInbound: true },
       isAbleToCancelGar: true,
       garpeople: {
         items: [
@@ -137,7 +138,7 @@ describe('GAR view post controller', () => {
         items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
       },
       showChangeLinks: true,
-      isJourneyUKInbound: true,
+      isJourneyUKInboundWithPassengerChecks: true,
       durationInDeparture: 125,
       numberOf0TResponseCodes: 0,
       isResubmitted: false,
@@ -152,6 +153,7 @@ describe('GAR view post controller', () => {
       garId: 'GAR-ID-EXAMPLE-1',
       status: { name: 'Draft' },
       userId: 'USER-123',
+      isInbound: true,
     });
     garApiGetPeopleStub.resolves({
       items: [
@@ -173,7 +175,7 @@ describe('GAR view post controller', () => {
     expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/view/index', {
       cookie,
       manifestFields,
-      garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Draft' } },
+      garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Draft' }, isInbound: true },
       isAbleToCancelGar: true,
       garpeople: {
         items: [
@@ -185,7 +187,7 @@ describe('GAR view post controller', () => {
         items: [{ name: 'EXAMPLE-DOC-1', size: '1MB' }],
       },
       showChangeLinks: true,
-      isJourneyUKInbound: true,
+      isJourneyUKInboundWithPassengerChecks: true,
       durationInDeparture: 125,
       numberOf0TResponseCodes: 0,
       isResubmitted: false,
@@ -200,6 +202,7 @@ describe('GAR view post controller', () => {
       garId: 'GAR-ID-EXAMPLE-1',
       status: { name: 'Cancelled' },
       userId: 'USER-123',
+      isInbound: true,
     });
     garApiGetPeopleStub.resolves({
       items: [
@@ -222,9 +225,9 @@ describe('GAR view post controller', () => {
       cookie,
       manifestFields,
       showChangeLinks: false,
-      isJourneyUKInbound: true,
+      isJourneyUKInboundWithPassengerChecks: true,
       isAbleToCancelGar: true,
-      garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Cancelled' } },
+      garfile: { garId: 'GAR-ID-EXAMPLE-1', status: { name: 'Cancelled' }, isInbound: true },
       garpeople: {
         items: [
           { id: 'PERSON-1', firstName: 'Simona' },
@@ -270,7 +273,7 @@ describe('GAR view post controller', () => {
       cookie,
       manifestFields,
       showChangeLinks: false,
-      isJourneyUKInbound: false,
+      isJourneyUKInboundWithPassengerChecks: false,
       isAbleToCancelGar: true,
       garfile: outboundGar(),
       garpeople: {
@@ -316,7 +319,7 @@ describe('GAR view post controller', () => {
       cookie,
       manifestFields,
       showChangeLinks: false,
-      isJourneyUKInbound: false,
+      isJourneyUKInboundWithPassengerChecks: false,
       isAbleToCancelGar: true,
       garfile: outboundGar(),
       garpeople: {
@@ -368,7 +371,7 @@ describe('GAR view post controller', () => {
       cookie,
       manifestFields,
       showChangeLinks: false,
-      isJourneyUKInbound: false,
+      isJourneyUKInboundWithPassengerChecks: false,
       isAbleToCancelGar: false,
       garfile: resultantOutboundGar,
       garpeople: {

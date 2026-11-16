@@ -45,7 +45,7 @@
           <th class="govuk-table__header" scope="col" valign="top">{{ __("field_gender") }}</th>
           <th class="govuk-table__header" scope="col" valign="top">{{ __("field_birth_place") }}</th>
           <th class="govuk-table__header" scope="col" valign="top">{{ __("field_person_type_short") }}</th>
-          {% if isJourneyUKInbound %}
+          {% if isJourneyUKInboundWithPassengerChecks %}
             <th class="govuk-table__header" scope="col" valign="top">{{ __("field_upt_response") }}</th>
           {% endif %}
         </tr>
@@ -67,7 +67,7 @@
               <td class="govuk-table__cell">{{ person.gender }}</td>
               <td class="govuk-table__cell">{{ person.placeOfBirth }}</td>
               <td class="govuk-table__cell">{{ person.peopleType.name }}</td>
-              {% if isJourneyUKInbound %}
+              {% if isJourneyUKInboundWithPassengerChecks %}
                 {% if person.amgCheckinResponseCode === "0B" %}
                   {% set statusColor = "no-record" %}
                 {% elif person.amgCheckinResponseCode === "0A" %}
@@ -91,7 +91,7 @@
             </tr>
             <tr class="govuk-table__row">
               <td class="govuk-table__cell"
-                  colspan="{{ 8 if isJourneyUKInbound else 7 }}">
+                  colspan="{{ 8 if isJourneyUKInboundWithPassengerChecks else 7 }}">
                 <div>
                   <details class="govuk-details" data-module="govuk-details">
                     <summary class="govuk-details__summary"

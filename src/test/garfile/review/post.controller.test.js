@@ -113,10 +113,20 @@ describe('GAR Review Post Controller', () => {
     expect(template).to.equal('app/garfile/review/index');
     expect(context.garfile).to.equal(gar);
     expect(context.garpeople).to.equal(people);
+    expect(context.isJourneyUKInboundWithPassengerChecks).to.equal(false);
     expect(context.errors).to.have.length(1);
     expect(context.errors[0]).to.include({
       identifier: 'aircraft',
       message: 'Aircraft registration must be completed',
+    });
+
+    it('includes passenger check visibility when rendering inbound validation errors', async () => {
+      gar.isInbound = true;
+      delete gar.registration;
+      people.items[0].amgCheckinResponseCode = '0A';
+      await controller(req, res);
+      expect(res.render.firstCall.args[1].isJourneyUKInboundWithPassengerChecks).to.equal(true);
+      expectNoSubmission();
     });
   });
 

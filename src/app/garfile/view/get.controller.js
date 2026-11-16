@@ -2,7 +2,6 @@ const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
 const utils = require('../../../common/utils/utils');
 const manifestFields = require('../../../common/seeddata/gar_manifest_fields.json');
-const airportValidation = require('../../../common/utils/airportValidation');
 const { isAbleToCancelGar } = require('../../../common/utils/validator');
 const { garApi } = require('../../../common/services/dataAccessApi');
 
@@ -63,7 +62,8 @@ module.exports = async (req, res) => {
       garsupportingdocs: supportingDocuments,
       successMsg,
       successHeader,
-      isJourneyUKInbound: airportValidation.isJourneyUKInbound(parsedGar.departurePort, parsedGar.arrivalPort),
+      isJourneyUKInboundWithPassengerChecks:
+        parsedGar.isInbound && utils.hasGARSubmittedForPassengerChecks(parsedPeople),
       resubmitted,
       durationInDeparture,
       numberOf0TResponseCodes,
