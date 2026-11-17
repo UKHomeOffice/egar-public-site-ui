@@ -55,7 +55,7 @@
           {% endif %}
             <td class="govuk-table__cell garPersonLastName">{{ person.lastName }}</td>
             <td class="govuk-table__cell garPersonFirstName">{{ person.firstName }}</td>
-            <td class="govuk-table__cell">{{ person.dateOfBirth }}</td>
+            <td class="govuk-table__cell">{{ person.dateOfBirth | formatGdsDate('short') }}</td>
             <td class="govuk-table__cell garPersonNationality">{{ person.nationality | upper }}</td>
             <td class="govuk-table__cell">{{ person.gender }}</td>
             <td class="govuk-table__cell">{{ person.placeOfBirth }}</td>
