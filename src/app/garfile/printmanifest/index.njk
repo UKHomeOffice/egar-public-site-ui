@@ -47,8 +47,8 @@
         <tbody class="govuk-table__body" id="printGAR">
           <tr class="govuk-table__row">
             <td class="govuk-table__cell" id="garID_title">{{ cookie.getGarId() }}</td>
-            <td class="govuk-table__cell">{{ garfile.departureDate | formatGdsDate('long') }}  {{ garfile.departureTime }}</td>
-            <td class="govuk-table__cell">{{ garfile.arrivalDate | formatGdsDate('long') }}  {{ garfile.arrivalTime }}</td>
+            <td class="govuk-table__cell">{{ garfile.departureDate | formatGdsDate('short') }}  {{ garfile.departureTime }}</td>
+            <td class="govuk-table__cell">{{ garfile.arrivalDate | formatGdsDate('short') }}  {{ garfile.arrivalTime }}</td>
 
           </tr>
         </tbody>
