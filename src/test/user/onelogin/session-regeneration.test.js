@@ -71,11 +71,9 @@ describe('To Regenerate Session when User is Signup on OneLogin', () => {
     const sendEmailStub = sinon.stub().resolves();
 
     const controller = proxyquire('../../../app/user/onelogin/post.controller', {
-      '../../../common/services/userManageApi': {
-        createUser: createUserStub,
-      },
-      '../../../common/services/verificationApi': {
-        getUserInviteToken: getUserInviteTokenStub,
+      '../../../common/services/dataAccessApi': {
+        userManageApi: { createUser: createUserStub },
+        verificationApi: { getUserInviteToken: getUserInviteTokenStub },
       },
       '../../../common/services/sendEmail': {
         send: sendEmailStub,
@@ -114,11 +112,9 @@ describe('To Regenerate Session when User is Signup on OneLogin', () => {
     const sendEmailStub = sinon.stub().resolves();
 
     const controller = proxyquire('../../../app/user/onelogin/post.controller', {
-      '../../../common/services/userManageApi': {
-        createUser: createUserStub,
-      },
-      '../../../common/services/verificationApi': {
-        getUserInviteToken: getUserInviteTokenStub,
+      '../../../common/services/dataAccessApi': {
+        userManageApi: { createUser: createUserStub },
+        verificationApi: { getUserInviteToken: getUserInviteTokenStub },
       },
       '../../../common/services/sendEmail': {
         send: sendEmailStub,

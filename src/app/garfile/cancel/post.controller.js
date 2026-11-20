@@ -1,6 +1,6 @@
 const logger = require('../../../common/utils/logger')(__filename);
 const CookieModel = require('../../../common/models/Cookie.class');
-const garApi = require('../../../common/services/garApi');
+const { garApi } = require('../../../common/services/dataAccessApi');
 const emailService = require('../../../common/services/sendEmail');
 const config = require('../../../common/config');
 
@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 
   try {
     await garApi.submitGARForException(garId);
-    await garApi.patch(cookie.getGarId(), 'Cancelled', {});
+    await garApi.patch(garId, 'Cancelled', {});
     logger.info('Cancelled GAR', { garId });
 
     if (!cookie.getCbpId()) {

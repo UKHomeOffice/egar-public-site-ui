@@ -1,454 +1,177 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../global.test');
-const garApi = require('../../../common/services/garApi');
+const { garApi, fileUploadApi } = require('../../../common/services/dataAccessApi');
 const clamAVService = require('../../../common/services/clamAVService');
-const fileUploadApi = require('../../../common/services/fileUploadApi');
-
 const controller = require('../../../app/api/uploadfile/post.controller');
 
 describe('API upload file post controller', () => {
   let req;
   let res;
-  let garApiGetDocsStub;
-  let garApiDeleteDocsStub;
-  let clamAVServiceStub;
-  let fileUploadApiStub;
+  let lookup;
+  let remove;
+  let scan;
+  let upload;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
+    const buffer = Buffer.alloc(10000);
+    buffer.write('%PDF');
     req = {
-      file: {
-        originalname: 'test-gar.pdf',
-        buffer: Buffer.alloc(10000),
-        size: 10000,
-      },
-      body: { garid: 'GAR-1', user: 'Example User Field' },
-      session: {
-        u: {
-          dbId: 'khan@augmented.com',
-        },
-        save: (callback) => callback(),
-      },
+      file: { originalname: 'test-gar.pdf', buffer, size: 10000 },
+      body: { garid: 'untrusted-gar' },
+      session: {},
     };
-    res = {
-      redirect: sinon.stub(),
-      render: sinon.stub(),
-      locals: { gar: { garId: 'GAR-1' } },
-    };
-
-    garApiGetDocsStub = sinon.stub(garApi, 'getSupportingDocs');
-    garApiDeleteDocsStub = sinon.stub(garApi, 'deleteGarSupportingDoc');
-    clamAVServiceStub = sinon.stub(clamAVService, 'scanFile');
-    fileUploadApiStub = sinon.stub(fileUploadApi, 'postFile');
+    res = { redirect: sinon.spy(), locals: { gar: { garId: 'GAR-1' } } };
+    lookup = sinon.stub(garApi, 'getSupportingDocs').resolves({ items: [] });
+    remove = sinon.stub(garApi, 'deleteGarSupportingDoc').resolves({});
+    scan = sinon.stub(clamAVService, 'scanFile').resolves(true);
+    upload = sinon.stub(fileUploadApi, 'postFile').resolves({});
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('return redirect if there no file sent', async () => {
+  function expectUploadStopped(query) {
+    expect(scan).not.to.have.been.called;
+    expect(upload).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly(`/garfile/supportingdocuments?query=${query}`);
+  }
+
+  it('rejects a missing file without looking up documents', async () => {
     delete req.file;
-
     await controller(req, res);
-
-    expect(garApiGetDocsStub).to.not.have.been.called;
-    expect(garApiDeleteDocsStub).to.not.have.been.called;
-    expect(clamAVServiceStub).to.not.have.been.called;
-    expect(fileUploadApiStub).to.not.have.been.called;
-    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=0');
+    expect(lookup).not.to.have.been.called;
+    expect(remove).not.to.have.been.called;
+    expectUploadStopped('0');
   });
 
-  describe('delete file request', () => {
-    it('should return error message if api rejects', () => {
-      req.body.deleteDocId = 'DOCUMENT-1';
-
-      garApiDeleteDocsStub.rejects('garApi.deleteGarSupportingDoc Example Reject');
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApiGetDocsStub).to.not.have.been.called;
-        expect(garApiDeleteDocsStub).to.have.been.calledOnceWithExactly('GAR-1', 'DOCUMENT-1');
-        expect(clamAVServiceStub).to.not.have.been.called;
-        expect(fileUploadApiStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=deletefailed');
-      });
-    });
-
-    it('should return error message if api returns a message', () => {
-      req.body.deleteDocId = 'DOCUMENT-1';
-
-      garApiDeleteDocsStub.resolves(
-        JSON.stringify({
-          message: 'Document not found',
-        })
-      );
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApiGetDocsStub).to.not.have.been.called;
-        expect(garApiDeleteDocsStub).to.have.been.calledOnceWithExactly('GAR-1', 'DOCUMENT-1');
-        expect(clamAVServiceStub).to.not.have.been.called;
-        expect(fileUploadApiStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=deletefailed');
-      });
-    });
-
-    it('should redirect if deleted ok', () => {
-      req.body.deleteDocId = 'DOCUMENT-1';
-
-      garApiDeleteDocsStub.resolves(JSON.stringify({}));
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApiGetDocsStub).to.not.have.been.called;
-        expect(garApiDeleteDocsStub).to.have.been.calledOnceWithExactly('GAR-1', 'DOCUMENT-1');
-        expect(clamAVServiceStub).to.not.have.been.called;
-        expect(fileUploadApiStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
-      });
-    });
+  it('deletes a document against the verified GAR without processing an upload', async () => {
+    req.body.deleteDocId = 'DOCUMENT-1';
+    await controller(req, res);
+    expect(remove).to.have.been.calledOnceWithExactly('GAR-1', 'DOCUMENT-1');
+    expect(lookup).not.to.have.been.called;
+    expect(scan).not.to.have.been.called;
+    expect(upload).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
   });
 
-  describe('exceed file limit failures', () => {
-    it('should redirect with error if api rejects', () => {
-      garApiGetDocsStub.rejects('garApi.getSupportingDocs Example Reject');
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController()
-        .then()
-        .then()
-        .then(() => {
-          expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-          expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.not.have.been.called;
-          expect(fileUploadApiStub).to.not.have.been.called;
-          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
-        });
-    });
-
-    it('should redirect with limit parameter if function returns true', () => {
-      req.file.size = 1000000;
-      garApiGetDocsStub.resolves(
-        JSON.stringify({
-          items: [
-            { fileName: 'FILE1.doc', size: '5.9MB' },
-            { fileName: 'FILE2.doc', size: '2MB' },
-          ],
-        })
-      );
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-        expect(garApiDeleteDocsStub).to.not.have.been.called;
-        expect(clamAVServiceStub).to.not.have.been.called;
-        expect(fileUploadApiStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=limit');
-      });
-    });
-
-    it('should redirect with number parameter if number of files more than 10', () => {
-      req.file.size = 1000000;
-
-      garApiGetDocsStub.resolves(
-        JSON.stringify({
-          items: [
-            { fileName: 'FILE1.doc', size: '1KB' },
-            { fileName: 'FILE2.doc', size: '1KB' },
-            { fileName: 'FILE3.doc', size: '1KB' },
-            { fileName: 'FILE4.doc', size: '1KB' },
-            { fileName: 'FILE5.doc', size: '1KB' },
-            { fileName: 'FILE6.doc', size: '1KB' },
-            { fileName: 'FILE7.doc', size: '1KB' },
-            { fileName: 'FILE8.doc', size: '1KB' },
-            { fileName: 'FILE9.doc', size: '1KB' },
-            { fileName: 'FILE10.doc', size: '1KB' },
-            { fileName: 'FILE11.doc', size: '1KB' },
-          ],
-        })
-      );
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-        expect(garApiDeleteDocsStub).to.not.have.been.called;
-        expect(clamAVServiceStub).to.not.have.been.called;
-        expect(fileUploadApiStub).to.not.have.been.called;
-        expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=number');
-      });
-    });
-  });
-
-  describe('valid files less than max number', () => {
-    it('should redirect without any parameter when number of files less than the max number', () => {
-      // Create form data for ClamAV
-      formData = {
-        name: req.file.originalname,
-        file: {
-          value: req.file.buffer, // Upload the  file in the multi-part post
-          options: {
-            filename: req.file.originalname,
-          },
-        },
-      };
-
-      // Set the first four bytes of the buffer to convince fileType library it is a PDF
-      req.file.buffer.writeUInt8(0x25, 0);
-      req.file.buffer.writeUInt8(0x50, 1);
-      req.file.buffer.writeUInt8(0x44, 2);
-      req.file.buffer.writeUInt8(0x46, 3);
-
-      garApiGetDocsStub.resolves(
-        JSON.stringify({
-          items: [
-            { fileName: 'FILE1.doc', size: '1K' },
-            { fileName: 'FILE1.doc', size: '1K' },
-            { fileName: 'FILE1.doc', size: '1K' },
-            { fileName: 'FILE1.doc', size: '1K' },
-            { fileName: 'FILE1.doc', size: '1K' },
-            { fileName: 'FILE1.doc', size: '1K' },
-            { fileName: 'FILE1.doc', size: '1K' },
-          ],
-        })
-      );
-      clamAVServiceStub.resolves(true);
-      fileUploadApiStub.resolves(JSON.stringify({}));
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController()
-        .then()
-        .then()
-        .then(() => {
-          expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-          expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
-          expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
-            originalname: 'test-gar.pdf',
-            buffer: req.file.buffer,
-            size: 10000,
-          });
-          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
-        });
-    });
-  });
-
-  it('should redirect with invalid parameter for unexpected file types', () => {
-    garApiGetDocsStub.resolves(
-      JSON.stringify({
-        items: [{ fileName: 'FILE1.doc', size: '2MB' }],
+  it('redirects to deletion failure when the backend rejects the deletion', async () => {
+    req.body.deleteDocId = 'DOCUMENT-1';
+    remove.rejects(
+      Object.assign(new Error('Not Found'), {
+        type: 'http_error',
+        status: 404,
+        body: { message: 'Document not found' },
       })
     );
-
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-      expect(garApiDeleteDocsStub).to.not.have.been.called;
-      expect(clamAVServiceStub).to.not.have.been.called;
-      expect(fileUploadApiStub).to.not.have.been.called;
-      expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=invalid');
-    });
+    await controller(req, res);
+    expect(remove).to.have.been.calledOnceWithExactly('GAR-1', 'DOCUMENT-1');
+    expect(lookup).not.to.have.been.called;
+    expectUploadStopped('deletefailed');
   });
 
-  describe('valid file, av service failures', () => {
-    let formData;
-
-    beforeEach(() => {
-      formData = {
-        name: req.file.originalname,
-        file: {
-          value: req.file.buffer, // Upload the  file in the multi-part post
-          options: {
-            filename: req.file.originalname,
-          },
-        },
-      };
-
-      // Set the first four bytes of the buffer to convince fileType library it is a PDF
-      req.file.buffer.writeUInt8(0x25, 0);
-      req.file.buffer.writeUInt8(0x50, 1);
-      req.file.buffer.writeUInt8(0x44, 2);
-      req.file.buffer.writeUInt8(0x46, 3);
-
-      // To allow the exceedFileLimit function to return false
-      garApiGetDocsStub.resolves(
-        JSON.stringify({
-          items: [{ fileName: 'FILE1.doc', size: '2MB' }],
-        })
-      );
-    });
-
-    it('should redirect with error if av service rejects', () => {
-      clamAVServiceStub.rejects('clamAVService.scanFile Example Reject');
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController()
-        .then()
-        .then()
-        .then(() => {
-          expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-          expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
-          expect(fileUploadApiStub).to.not.have.been.called;
-          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
-        });
-    });
-
-    it('should redirect with virus error if av service returns false', () => {
-      clamAVServiceStub.resolves(false);
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController()
-        .then()
-        .then()
-        .then(() => {
-          expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-          expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
-          expect(fileUploadApiStub).to.not.have.been.called;
-          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=v');
-        });
-    });
+  it('redirects to deletion failure for a decoded error message', async () => {
+    req.body.deleteDocId = 'DOCUMENT-1';
+    remove.resolves({ message: 'Document not found' });
+    await controller(req, res);
+    expectUploadStopped('deletefailed');
   });
 
-  describe('valid file, av service ok', () => {
-    let formData;
+  it('stops before scanning when the document lookup rejects', async () => {
+    lookup.rejects(new Error('Connection unavailable'));
+    await controller(req, res);
+    expect(lookup).to.have.been.calledOnceWithExactly('GAR-1');
+    expectUploadStopped('e');
+  });
 
-    beforeEach(() => {
-      formData = {
-        name: req.file.originalname,
-        file: {
-          value: req.file.buffer, // Upload the  file in the multi-part post
-          options: {
-            filename: req.file.originalname,
-          },
-        },
-      };
+  it('stops before scanning when the document lookup returns an HTTP error envelope', async () => {
+    lookup.resolves({ statusCode: 503, body: { message: 'Unavailable' } });
+    await controller(req, res);
+    expectUploadStopped('e');
+  });
 
-      // Set the first four bytes of the buffer to convince fileType library it is a PDF
-      req.file.buffer.writeUInt8(0x25, 0);
-      req.file.buffer.writeUInt8(0x50, 1);
-      req.file.buffer.writeUInt8(0x44, 2);
-      req.file.buffer.writeUInt8(0x46, 3);
-
-      // To allow the exceedFileLimit function to return false
-      garApiGetDocsStub.resolves(
-        JSON.stringify({
-          items: [{ fileName: 'FILE1.doc', size: '2MB' }],
-        })
-      );
-
-      clamAVServiceStub.resolves(true);
+  it('enforces the total size limit using decoded existing documents', async () => {
+    req.file.size = 1000000;
+    lookup.resolves({
+      items: [
+        { fileName: 'FILE1.pdf', size: '5.9MB' },
+        { fileName: 'FILE2.pdf', size: '2MB' },
+      ],
     });
+    await controller(req, res);
+    expectUploadStopped('limit');
+  });
 
-    it('should redirect if api rejects', () => {
-      fileUploadApiStub.rejects('fileUploadApi.postFile Example Reject');
+  it('rejects a ninth document when eight documents already exist', async () => {
+    lookup.resolves({ items: Array.from({ length: 8 }, () => ({ fileName: 'FILE.pdf', size: '1KB' })) });
+    await controller(req, res);
+    expectUploadStopped('number');
+  });
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+  it('scans and uploads an eighth document against the verified GAR', async () => {
+    lookup.resolves({ items: Array.from({ length: 7 }, () => ({ fileName: 'FILE.pdf', size: '1KB' })) });
+    await controller(req, res);
+    expect(lookup).to.have.been.calledOnceWithExactly('GAR-1');
+    expect(remove).not.to.have.been.called;
+    expect(scan).to.have.been.calledOnceWithExactly(req.file);
+    expect(upload).to.have.been.calledOnceWithExactly('GAR-1', req.file);
+    expect(scan).to.have.been.calledBefore(upload);
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
+  });
 
-      callController()
-        .then()
-        .then()
-        .then()
-        .then(() => {
-          expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-          expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
-          expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
-            originalname: 'test-gar.pdf',
-            buffer: req.file.buffer,
-            size: 10000,
-          });
-          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
-        });
-    });
+  it('rejects an unrecognised file type before scanning', async () => {
+    req.file.buffer.fill(0);
+    await controller(req, res);
+    expectUploadStopped('invalid');
+  });
 
-    it('should redirect with error parameter if api returns message', () => {
-      fileUploadApiStub.resolves(
-        JSON.stringify({
-          message: 'GAR not found',
-        })
-      );
+  it('does not upload when scanning fails', async () => {
+    scan.rejects(new Error('Scanner unavailable'));
+    await controller(req, res);
+    expect(scan).to.have.been.calledOnceWithExactly(req.file);
+    expect(upload).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
+  });
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+  it('does not upload a file rejected by the scanner', async () => {
+    scan.resolves(false);
+    await controller(req, res);
+    expect(upload).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=v');
+  });
 
-      callController()
-        .then()
-        .then()
-        .then(() => {
-          expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-          expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
-          expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
-            originalname: 'test-gar.pdf',
-            buffer: req.file.buffer,
-            size: 10000,
-          });
-          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
-        });
-    });
+  it('redirects to upload failure when the file-upload service rejects', async () => {
+    upload.rejects(new Error('Upload unavailable'));
+    await controller(req, res);
+    expect(upload).to.have.been.calledOnceWithExactly('GAR-1', req.file);
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
+  });
 
-    it('should redirect if successful', () => {
-      fileUploadApiStub.resolves(JSON.stringify({}));
+  it('stores a decoded error message from the file-upload service', async () => {
+    upload.resolves({ message: 'GAR not found' });
+    await controller(req, res);
+    expect(req.session.errMsg).to.deep.equal({ message: 'GAR not found' });
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
+  });
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+  it('preserves the backend message when an HTTP upload request is rejected', async () => {
+    upload.rejects(
+      Object.assign(new Error('Bad Request'), {
+        type: 'http_error',
+        status: 400,
+        body: { message: 'GAR not found' },
+      })
+    );
+    await controller(req, res);
+    expect(req.session.errMsg).to.deep.equal({ message: 'GAR not found' });
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments?query=e');
+  });
 
-      callController()
-        .then()
-        .then()
-        .then(() => {
-          expect(garApiGetDocsStub).to.have.been.calledOnceWithExactly('GAR-1');
-          expect(garApiDeleteDocsStub).to.not.have.been.called;
-          expect(clamAVServiceStub).to.have.been.calledOnceWithExactly(formData);
-          expect(fileUploadApiStub).to.have.been.calledOnceWithExactly('GAR-1', {
-            originalname: 'test-gar.pdf',
-            buffer: req.file.buffer,
-            size: 10000,
-          });
-          expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
-        });
-    });
+  it('accepts a successful upload with no response body', async () => {
+    upload.resolves(null);
+    await controller(req, res);
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/garfile/supportingdocuments');
   });
 });

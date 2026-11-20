@@ -1,7 +1,33 @@
 const logger = require('../utils/logger')(__filename);
 const config = require('../config/index');
-const request = require('../utils/requestWithCorrelationId');
-const qs = require('querystring');
+const { HttpClient } = require('./httpClient');
+
+const createOneLoginClient = () =>
+  new HttpClient({
+    baseUrl: config.ONE_LOGIN_INTEGRATION_URL,
+    redirect: 'error',
+  });
+
+const unwrapResponse = (response) => {
+  if (response && typeof response === 'object' && !Array.isArray(response) && 'ok' in response) {
+    const body = { ...response };
+    delete body.ok;
+    return body;
+  }
+  return response;
+};
+
+const sendRequest = async (request, errorMessage) => {
+  try {
+    return unwrapResponse(await request());
+  } catch (error) {
+    if (error?.type === 'http_error') {
+      return error.body;
+    }
+    logger.error(errorMessage, { errorMessage: error?.message, stack: error?.stack });
+    throw error;
+  }
+};
 
 /**
  * This function is meant to convert URLs in non prod such that if the user is making a request from an internal URL, then a internal URL will be returned.
@@ -35,47 +61,36 @@ module.exports = {
    * @param {String} organisationName
    * @returns {Promise} resolves with API response.
    */
-  sendOneLoginTokenRequest(req, code, oneLoginUtil) {
-    return new Promise((resolve, reject) => {
-      const oneLoginIntegrationUrl = config.ONE_LOGIN_INTEGRATION_URL;
-      const clientId = config.ONE_LOGIN_CLIENT_ID;
-      const jwtParams = {
-        aud: `${oneLoginIntegrationUrl}/token`,
-        iss: clientId,
-        sub: clientId,
-        exp: Math.floor(Date.now() / 1000) + 300,
-        jti: `${Math.floor(Math.random() * 999999999999999)}`,
-        iat: Math.floor(Date.now() / 1000),
-      };
+  async sendOneLoginTokenRequest(req, code, oneLoginUtil) {
+    const oneLoginIntegrationUrl = config.ONE_LOGIN_INTEGRATION_URL;
+    const clientId = config.ONE_LOGIN_CLIENT_ID;
+    const jwtParams = {
+      aud: `${oneLoginIntegrationUrl}/token`,
+      iss: clientId,
+      sub: clientId,
+      exp: Math.floor(Date.now() / 1000) + 300,
+      jti: `${Math.floor(Math.random() * 999999999999999)}`,
+      iat: Math.floor(Date.now() / 1000),
+    };
 
-      const jwt = oneLoginUtil.createJwt(jwtParams);
+    const jwt = oneLoginUtil.createJwt(jwtParams);
 
-      const params = {
-        grant_type: 'authorization_code',
-        code,
-
-        redirect_uri: parseUrlForNonProd(req, config.ONE_LOGIN_REDIRECT_URI),
-
-        client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-
-        client_assertion: jwt,
-      };
-      request.post(
-        {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          url: `${oneLoginIntegrationUrl}/token`,
-          body: qs.stringify(params),
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to call OneLogin token API endpoint');
-            reject(JSON.parse(error));
-            return;
-          }
-          resolve(JSON.parse(body));
-        }
-      );
+    const params = new URLSearchParams({
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: parseUrlForNonProd(req, config.ONE_LOGIN_REDIRECT_URI),
+      client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+      client_assertion: jwt,
     });
+
+    const client = createOneLoginClient();
+    return sendRequest(
+      () =>
+        client.post('/token', params.toString(), {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        }),
+      'Failed to call OneLogin token API endpoint'
+    );
   },
 
   /**
@@ -84,29 +99,15 @@ module.exports = {
    * @returns returns response body when resolved
    */
   getUserInfoFromOneLogin(access_token) {
-    return new Promise((resolve, reject) => {
-      logger.debug('Sending request to fetch OneLogin userinfo');
-      const url = `${config.ONE_LOGIN_INTEGRATION_URL}/userinfo`;
-      request.get(
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-          url,
-        },
-        (error, _response, body) => {
-          if (error) {
-            logger.error('Failed to fetch OneLogin userinfo', {
-              errorMessage: error?.message,
-              stack: error?.stack,
-            });
-            reject(error);
-            return;
-          }
-          resolve(JSON.parse(body));
-        }
-      );
-    });
+    logger.debug('Sending request to fetch OneLogin userinfo');
+    const client = createOneLoginClient();
+    return sendRequest(
+      () =>
+        client.get('/userinfo', {
+          headers: { Authorization: `Bearer ${access_token}` },
+        }),
+      'Failed to fetch OneLogin userinfo'
+    );
   },
 
   parseUrlForNonProd,

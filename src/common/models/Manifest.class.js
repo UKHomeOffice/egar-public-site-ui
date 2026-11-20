@@ -6,23 +6,12 @@ const validator = require('../../common/utils/validator');
 class Manifest {
   /**
    * Constructor for Manifest class
-   * @param {String} apiResponse JSON object from API response
+   * @param {Object} apiResponse Decoded API response containing people in items
    */
   constructor(apiResponse) {
-    this._apiResponse = apiResponse;
-    this._constructManifest();
+    this.manifest = apiResponse.items;
     this.invalidPeople = [];
     this.validationArr = [];
-  }
-
-  _constructManifest() {
-    try {
-      this.manifest =
-        typeof this._apiResponse == 'object' ? this._apiResponse.items : JSON.parse(this._apiResponse).items;
-    } catch (err) {
-      logger.error('Failed to parse GAR manifest', { errorMessage: err?.message, stack: err?.stack });
-      throw err;
-    }
   }
 
   static turnPersonToRequest(inputtedPerson) {

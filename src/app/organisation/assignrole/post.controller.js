@@ -3,9 +3,10 @@ const logger = require('../../../common/utils/logger')(__filename);
 const ValidationRule = require('../../../common/models/ValidationRule.class');
 const validator = require('../../../common/utils/validator');
 const CookieModel = require('../../../common/models/Cookie.class');
-const tokenservice = require('../../../common/services/create-token');
+const tokenService = require('../../../common/services/create-token');
 const emailService = require('../../../common/services/sendEmail');
-const tokenApi = require('../../../common/services/tokenApi');
+const { tokenApi } = require('../../../common/services/dataAccessApi');
+const { getApiErrorBody } = require('../../../common/utils/apiError');
 const config = require('../../../common/config/index');
 const { parseUrlForNonProd } = require('../../../common/services/oneLoginApi');
 const { ROLE_PERMISSION_ERROR_MSG } = require('../constants');
@@ -30,7 +31,7 @@ module.exports = (req, res) => {
   // Generate a token for the user
   const alphabet = '23456789abcdefghjkmnpqrstuvwxyz-';
   const token = nanoid(alphabet, 13);
-  const hashToken = tokenservice.generateHash(token);
+  const hashToken = tokenService.generateHash(token);
   const inviterName = cookie.getUserFirstName();
   const firstName = cookie.getInviteUserFirstName();
   const lastName = cookie.getInviteUserLastName();
@@ -44,19 +45,18 @@ module.exports = (req, res) => {
   const roleChain = [new ValidationRule(validator.notEmpty, 'role', req.body.role, 'Select a role')];
 
   // Validate chains
-  validator
+  return validator
     .validateChains([roleChain])
     .then(() => {
-      tokenApi
+      return tokenApi
         .setInviteUserToken(hashToken, inviterId, inviteOrgId, roleId, inviteeEmail)
         .then((apiResponse) => {
-          const apiResponseObj = JSON.parse(apiResponse);
-          if (Object.prototype.hasOwnProperty.call(apiResponseObj, 'message')) {
+          if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
             // API call unsuccessful
             res.render('app/organisation/assignrole/index', {
               cookie,
               roles,
-              errors: [apiResponseObj],
+              errors: [apiResponse],
             });
             return;
           }
@@ -64,7 +64,7 @@ module.exports = (req, res) => {
 
           const notifyTemplate = config.NOTIFY_ONE_LOGIN_INVITE_TEMPLATE_ID;
 
-          emailService
+          return emailService
             .send(notifyTemplate, inviteeEmail, {
               firstname: firstName,
               lastname: lastName,
@@ -87,7 +87,8 @@ module.exports = (req, res) => {
         })
         .catch((err) => {
           logger.error('Failed to set invite token', { errorMessage: err?.message, stack: err?.stack });
-          res.render('app/organisation/assignrole/index', { cookie, roles, errors: [err] });
+          const error = getApiErrorBody(err) || err;
+          res.render('app/organisation/assignrole/index', { cookie, roles, errors: [error] });
         });
     })
     .catch((err) => {
