@@ -1,178 +1,96 @@
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
+
+chai.use(require('sinon-chai'));
+const { expect } = chai;
 
 require('../../global.test');
-const craftApi = require('../../../common/services/craftApi');
-
+const { craftApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/aircraft/delete/get.controller');
 
 describe('Aircraft Delete Get Controller', () => {
   let req;
   let res;
-  let deleteCraftStub;
-  let deleteOrgCraftStub;
+  let individualStub;
+  let organisationStub;
+  let saveStub;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
     req = {
       session: {
-        deleteCraftId: 'G-ABCD',
+        deleteCraftId: 'craft-1',
+        u: { dbId: 'user-1' },
+        org: { i: 'organisation-1' },
         save: (callback) => callback(),
-        u: {
-          dbId: 'someone@somewhere.net',
-        },
-      },
-      cookie: {
-        u: {},
       },
     };
-    res = {
-      redirect: sinon.spy(),
-    };
-    deleteCraftStub = sinon.stub(craftApi, 'deleteCraft');
-    deleteOrgCraftStub = sinon.stub(craftApi, 'deleteOrgCraft');
+    res = { redirect: sinon.spy() };
+    individualStub = sinon.stub(craftApi, 'deleteCraft');
+    organisationStub = sinon.stub(craftApi, 'deleteOrgCraft');
+    saveStub = sinon.stub(req.session, 'save').callsArg(0);
   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
+  afterEach(() => sinon.restore());
 
-  it('should redirect if craftId is undefined', async () => {
+  it('redirects without calling the API if no ID is set', async () => {
     delete req.session.deleteCraftId;
 
     await controller(req, res);
 
-    expect(deleteCraftStub).to.not.have.been.called;
-    expect(deleteOrgCraftStub).to.not.have.been.called;
-    expect(res.redirect).to.have.been.calledWith('/aircraft');
+    expect(individualStub).not.to.have.been.called;
+    expect(organisationStub).not.to.have.been.called;
+    expect(saveStub).not.to.have.been.called;
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
   });
 
-  describe('individuals', () => {
-    beforeEach(() => {
-      req.session.u.rl = 'Admin';
-      req.session.org = {
-        i: 12345,
-      };
-    });
+  [
+    ['individuals', 'Individual'],
+    ['organisations', 'Admin'],
+  ].forEach(([description, role]) => {
+    describe(description, () => {
+      let deleteStub;
+      let unusedStub;
+      let args;
 
-    it('should redirect if with success message', () => {
-      deleteOrgCraftStub.resolves(JSON.stringify({}));
-      const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
+      beforeEach(() => {
+        req.session.u.rl = role;
+        deleteStub = role === 'Individual' ? individualStub : organisationStub;
+        unusedStub = role === 'Individual' ? organisationStub : individualStub;
+        args = role === 'Individual' ? ['user-1', 'craft-1'] : ['organisation-1', 'user-1', 'craft-1'];
+      });
 
-      const callController = async () => {
+      it('saves a success message and redirects after deletion', async () => {
+        deleteStub.resolves({});
+
         await controller(req, res);
-      };
 
-      callController().then(() => {
+        expect(deleteStub).to.have.been.calledOnceWithExactly(...args);
+        expect(unusedStub).not.to.have.been.called;
         expect(req.session.errMsg).to.be.undefined;
-        expect(req.session.successHeader).to.eq('Success');
-        expect(req.session.successMsg).to.eq('Your aircraft has been deleted');
-        expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
-        expect(deleteCraftStub).to.not.have.been.called;
-        expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+        expect(req.session.successHeader).to.equal('Success');
+        expect(req.session.successMsg).to.equal('Your aircraft has been deleted');
+        expect(saveStub).to.have.been.calledOnce;
+        expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
       });
-    });
 
-    it('should redirect if craft api responds with an error', () => {
-      deleteOrgCraftStub.resolves(
-        JSON.stringify({
-          message: 'Example error message',
-        })
-      );
-      const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
+      ['message response', 'http_error', 'network_error', 'timeout_error'].forEach((type) => {
+        it(`saves an error and redirects without a success message on a ${type}`, async () => {
+          if (type === 'message response') {
+            deleteStub.resolves({ message: 'Aircraft not found' });
+          } else {
+            deleteStub.rejects(Object.assign(new Error('Request failed'), { type, status: 503 }));
+          }
 
-      const callController = async () => {
-        await controller(req, res);
-      };
+          await controller(req, res);
 
-      callController().then(() => {
-        expect(req.session.errMsg).to.eql({ message: 'Failed to delete craft. Try again' });
-        expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
-        expect(deleteCraftStub).to.not.have.been.called;
-        expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
-      });
-    });
-
-    it('should redirect if craft api rejects', () => {
-      deleteOrgCraftStub.rejects('craftApi.deleteOrgCraft Example Reject');
-      const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(deleteOrgCraftStub).to.have.been.calledWith(12345, 'someone@somewhere.net', 'G-ABCD');
-        expect(deleteCraftStub).to.not.have.been.called;
-        expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
-      });
-    });
-  });
-
-  describe('organisations', () => {
-    beforeEach(() => {
-      req.session.u.rl = 'Individual';
-    });
-
-    it('should redirect with success message', () => {
-      deleteCraftStub.resolves(JSON.stringify({}));
-      const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(req.session.errMsg).to.be.undefined;
-        expect(req.session.successHeader).to.eq('Success');
-        expect(req.session.successMsg).to.eq('Your aircraft has been deleted');
-        expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
-        expect(deleteOrgCraftStub).to.not.have.been.called;
-        expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
-      });
-    });
-
-    it('should redirect if craft api responds with an error', () => {
-      deleteCraftStub.resolves(
-        JSON.stringify({
-          message: 'Example error message',
-        })
-      );
-      const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(req.session.errMsg).to.eql({ message: 'Failed to delete craft. Try again' });
-        expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
-        expect(deleteOrgCraftStub).to.not.have.been.called;
-        expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
-      });
-    });
-
-    it('should redirect if craft api rejects', () => {
-      deleteCraftStub.rejects('craftApi.deleteCraft Example Reject');
-      const sessionSaveStub = sinon.stub(req.session, 'save').callsArg(0);
-
-      const callController = async () => {
-        await controller(req, res);
-      };
-
-      callController().then(() => {
-        expect(deleteCraftStub).to.have.been.calledWith('someone@somewhere.net', 'G-ABCD');
-        expect(deleteOrgCraftStub).to.not.have.been.called;
-        expect(sessionSaveStub).to.have.been.called;
-        expect(res.redirect).to.have.been.calledWith('/aircraft');
+          expect(deleteStub).to.have.been.calledOnceWithExactly(...args);
+          expect(unusedStub).not.to.have.been.called;
+          expect(req.session.errMsg).to.deep.equal({ message: 'Failed to delete craft. Try again' });
+          expect(req.session.successHeader).to.be.undefined;
+          expect(req.session.successMsg).to.be.undefined;
+          expect(saveStub).to.have.been.calledOnce;
+          expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
+        });
       });
     });
   });

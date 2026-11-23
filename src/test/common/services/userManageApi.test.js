@@ -1,158 +1,124 @@
-const { expect } = require('chai');
+const sinon = require('sinon');
 const chai = require('chai');
-const nock = require('nock');
+const { expect } = chai;
+chai.use(require('sinon-chai'));
 
 require('../../global.test');
-const endpoints = require('../../../common/config/endpoints');
-const userApi = require('../../../common/services/userManageApi');
+const userManageApi = require('../../../common/services/data-access/userManageApi');
+const { HttpClient } = require('../../../common/services/httpClient');
 
-const BASE_URL = endpoints.baseUrl();
-
-describe('UserGetDetails', () => {
-  const email = 'hannibal@ateam.com';
-  const user = {
-    state: 'verified',
-    lastName: 'Smith',
-    userId: '0b17f70d-3984-40cd-a8eb-9bfbd32719e4',
-    firstName: 'John',
-    email: 'hannibal@ateam.com',
-  };
+describe('UserManageApi', () => {
+  let client;
+  let api;
 
   beforeEach(() => {
-    nock(BASE_URL).get(`/user/${email}`).reply(200, user);
+    client = {
+      get: sinon.stub().resolves({ userId: 'user-1' }),
+      put: sinon.stub().resolves({ updated: true }),
+      post: sinon.stub().resolves({ userId: 'user-1' }),
+      delete: sinon.stub().resolves({ deleted: true }),
+    };
+    api = new userManageApi.UserManageApi(client);
   });
 
-  it('Should successfully find a user', (done) => {
-    userApi.getDetails(email).then((response) => {
-      const responseObj = response;
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
-      expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
-      expect(responseObj.email).to.equal(email);
-      done();
+  afterEach(() => sinon.restore());
+
+  it('looks up and searches users using optional One Login filters', async () => {
+    expect(await api.getDetails('user@example.com')).to.deep.equal({ userId: 'user-1' });
+    expect(client.get).to.have.been.calledWithExactly('/user/user@example.com');
+
+    expect(await api.userSearch('user@example.com', 'sid-1')).to.deep.equal({ userId: 'user-1' });
+    expect(client.get).to.have.been.calledWithExactly('/user/search', {
+      query: { email: 'user@example.com', one_login_sid: 'sid-1' },
     });
   });
 
-  it('should throw an error', () => {
-    nock.cleanAll();
-    nock(BASE_URL).get(`/user/${email}`).replyWithError({ message: 'Example getDetails error', code: 404 });
+  it('omits the One Login filter when no SID is provided', async () => {
+    await api.userSearch('user@example.com');
 
-    userApi
-      .getDetails(email)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example getDetails error');
-      });
-  });
-});
-
-describe('UserEdit', () => {
-  const userId = 'a066ca4e-9d08-49e4-8888-881daf9f1099';
-  const firstName = 'Megumin';
-  const lastName = 'Surname';
-
-  beforeEach(() => {
-    nock(BASE_URL).put(`/user/${userId}`, { firstName, lastName }).reply(201, {});
-  });
-
-  it('should successfully update a users details', (done) => {
-    userApi.updateDetails(userId, firstName, lastName).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.be.empty;
-      done();
+    expect(client.get).to.have.been.calledOnceWithExactly('/user/search', {
+      query: { email: 'user@example.com' },
     });
   });
 
-  it('should throw an error', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .put(`/user/${userId}`, { firstName, lastName })
-      .replyWithError({ message: 'Example updateDetails error', code: 404 });
+  ['https://api.example.test', 'https://api.example.test/v1', 'https://api.example.test/nested/v1/'].forEach(
+    (baseUrl) => {
+      it(`resolves user searches against ${baseUrl} with encoded query parameters`, async () => {
+        const fetchStub = sinon.stub(global, 'fetch').resolves({ status: 204, ok: true });
+        const fetchApi = new userManageApi.UserManageApi(new HttpClient({ baseUrl }));
 
-    userApi
-      .updateDetails(userId, firstName, lastName)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example updateDetails error');
+        await fetchApi.userSearch('user+name@example.com', 'sid & 1');
+
+        expect(fetchStub.firstCall.args[0].href).to.equal(
+          `${baseUrl.replace(/\/$/, '')}/user/search?email=user%2Bname%40example.com&one_login_sid=sid+%26+1`
+        );
       });
+    }
+  );
+
+  it('preserves encoded identifiers when resolving paths against the configured base', async () => {
+    const fetchStub = sinon.stub(global, 'fetch').resolves({ status: 204, ok: true });
+    const fetchApi = new userManageApi.UserManageApi(new HttpClient({ baseUrl: 'https://api.example.test/v1' }));
+
+    await fetchApi.getDetails('user%2Bname%40example.com');
+
+    expect(fetchStub.firstCall.args[0].href).to.equal('https://api.example.test/v1/user/user%2Bname%40example.com');
   });
-});
 
-describe('DeleteUser', () => {
-  const email = 'someemail@server.com';
+  it('creates and updates users while preserving optional fields', async () => {
+    expect(await api.createUser('user@example.com', 'Ada', 'Lovelace', 'sid-1', 'verified', 'token-1')).to.deep.equal({
+      userId: 'user-1',
+    });
+    expect(client.post).to.have.been.calledWithExactly('/user/register', {
+      email: 'user@example.com',
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      oneLoginSid: 'sid-1',
+      state: 'verified',
+      tokenId: 'token-1',
+    });
 
-  beforeEach(() => {
-    nock(BASE_URL).delete(`/user/${email}`).reply(200, { message: 'User deleted' });
-  });
-
-  it('Should successfully delete a user', (done) => {
-    userApi.deleteUser(email).then((response) => {
-      const responseObj = JSON.parse(response);
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['message']);
-      done();
+    expect(await api.updateDetails('user-1', 'Ada', 'Lovelace', 'sid-1', 'verified')).to.deep.equal({ updated: true });
+    expect(client.put).to.have.been.calledWithExactly('/user/user-1', {
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      oneLoginSid: 'sid-1',
+      state: 'verified',
     });
   });
 
-  it('should throw an error', () => {
-    nock.cleanAll();
-    nock(BASE_URL).delete(`/user/${email}`).replyWithError({ message: 'Example deleteUser error', code: 404 });
+  it('updates email or One Login SID, and rejects empty updates', async () => {
+    expect(await api.updateEmailOrOneLoginSid('user-1', { email: 'new@example.com' })).to.deep.equal({ updated: true });
+    expect(client.put).to.have.been.calledWithExactly('/user/user-1', {
+      email: 'new@example.com',
+    });
 
-    userApi
-      .deleteUser(email)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example deleteUser error');
-      });
-  });
-});
-
-describe('SearchUser', () => {
-  const email = 'ba@ateam.com';
-  const user = {
-    state: 'verified',
-    lastName: 'Baracas',
-    userId: '0b17f70d-3984-40cd-a8eb-9bfbd32719e4',
-    firstName: 'Bosco',
-    email: 'ba@ateam.com',
-  };
-
-  beforeEach(() => {
-    nock(BASE_URL).get('/user/search').query({ email }).reply(200, user);
+    expect(() => api.updateEmailOrOneLoginSid('user-1', {})).to.throw('Provide updateEmail or oneLoginSid');
   });
 
-  it('Should successfully find a user', (done) => {
-    userApi.userSearch(email).then((response) => {
-      const responseObj = response;
-      expect(typeof responseObj).to.equal('object');
-      expect(responseObj).to.have.keys(['state', 'firstName', 'lastName', 'userId', 'email']);
-      expect(JSON.stringify(responseObj)).to.eq(JSON.stringify(user));
-      expect(responseObj.email).to.equal(email);
-      done();
+  it('deletes users with the requester ID', async () => {
+    expect(await api.deleteUser('user@example.com', 'requester-1')).to.deep.equal({ deleted: true });
+    expect(client.delete).to.have.been.calledWithExactly('/user/user@example.com', {
+      body: { requesterId: 'requester-1' },
     });
   });
 
-  it('should throw an error', () => {
-    nock.cleanAll();
-    nock(BASE_URL)
-      .get(`/user/search`)
-      .query({ email })
-      .replyWithError({ message: 'Example searchUser error', code: 404 });
+  it('exports only the class for construction by dataAccessApi', () => {
+    expect(Object.keys(userManageApi)).to.deep.equal(['UserManageApi']);
+  });
 
-    userApi
-      .userSearch(email)
-      .then(() => {
-        chai.assert.fail('Should not have returned without error');
-      })
-      .catch((err) => {
-        expect(err.message).to.equal('Example searchUser error');
-      });
+  it('propagates client failures unchanged', async () => {
+    const error = Object.assign(new Error('Conflict'), {
+      type: 'http_error',
+      status: 409,
+      body: { message: 'Conflict' },
+    });
+    client.get.rejects(error);
+    try {
+      await api.getDetails('user@example.com');
+      expect.fail('Expected request to reject');
+    } catch (actual) {
+      expect(actual).to.equal(error);
+    }
   });
 });

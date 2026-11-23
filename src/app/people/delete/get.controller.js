@@ -1,6 +1,6 @@
 const CookieModel = require('../../../common/models/Cookie.class');
 const logger = require('../../../common/utils/logger')(__filename);
-const personApi = require('../../../common/services/personApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 
 module.exports = (req, res) => {
   const cookie = new CookieModel(req);
@@ -13,11 +13,10 @@ module.exports = (req, res) => {
     return;
   }
 
-  personApi
+  return personApi
     .deletePerson(cookie.getUserDbId(), personId)
     .then((apiResponse) => {
-      const parsedResponse = JSON.parse(apiResponse);
-      if (Object.prototype.hasOwnProperty.call(parsedResponse, 'message')) {
+      if (Object.prototype.hasOwnProperty.call(apiResponse, 'message')) {
         req.session.errMsg = errMsg;
         return req.session.save(() => res.redirect('/people'));
       }

@@ -8,9 +8,7 @@ const { savedPeople, garPeople, flaggedSavedPeople } = require('../../fixtures')
 
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const personApi = require('../../../common/services/personApi');
-const garApi = require('../../../common/services/garApi');
-const dataAccessApi = require('../../../common/services/dataAccessApi');
+const { personApi, garApi } = require('../../../common/services/dataAccessApi');
 
 const controller = require('../../../app/garfile/manifest/get.controller');
 
@@ -44,7 +42,7 @@ describe('Manifest Get Controller', () => {
       render: sinon.spy(),
       locals: { gar: { garId: '9001' } },
     };
-    sinon.stub(garApi, 'get').resolves(true);
+    sinon.stub(garApi, 'get').resolves({ isMilitaryFlight: true });
   });
 
   afterEach(() => {
@@ -52,33 +50,46 @@ describe('Manifest Get Controller', () => {
     clock.restore();
   });
 
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`renders a manifest fetch error when saved people fail with a ${type}`, async () => {
+      sinon
+        .stub(personApi, 'getPeople')
+        .rejects(Object.assign(new Error('Request failed'), { type, status: 503, body: { message: 'Unavailable' } }));
+      const garPeopleStub = sinon.stub(garApi, 'getPeople');
+
+      await controller(req, res);
+
+      expect(garPeopleStub).not.to.have.been.called;
+      expect(res.render).to.have.been.calledOnceWithExactly('app/garfile/manifest/index', {
+        cookie: new CookieModel(req),
+        errors: [{ message: 'Failed to get manifest data' }],
+      });
+    });
+  });
+
   it('should return an error if person api rejects', async () => {
     cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').rejects('Some reason here');
-    sinon.stub(dataAccessApi.garApi, 'getPeople').resolves();
+    sinon.stub(garApi, 'getPeople').resolves();
 
     await controller(req, res);
 
-    callController()
-      .then()
-      .then(() => {
-        expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
-          cookie,
-          errors: [{ message: 'Failed to get manifest data' }],
-        });
-      });
+    expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
+      cookie,
+      errors: [{ message: 'Failed to get manifest data' }],
+    });
   });
 
   it('should return an error if gar api rejects', () => {
     cookie = new CookieModel(req);
     sinon.stub(personApi, 'getPeople').resolves();
-    sinon.stub(dataAccessApi.garApi, 'getPeople').rejects('garApi.getPeople Example Reject');
+    sinon.stub(garApi, 'getPeople').rejects('garApi.getPeople Example Reject');
 
     const callController = async () => {
       await controller(req, res);
     };
 
-    callController()
+    return callController()
       .then()
       .then(() => {
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
@@ -93,8 +104,8 @@ describe('Manifest Get Controller', () => {
     let garApiStub;
 
     beforeEach(() => {
-      personApiStub = sinon.stub(personApi, 'getPeople').resolves(JSON.stringify(savedPeople()));
-      garApiStub = sinon.stub(dataAccessApi.garApi, 'getPeople').resolves({
+      personApiStub = sinon.stub(personApi, 'getPeople').resolves(savedPeople());
+      garApiStub = sinon.stub(garApi, 'getPeople').resolves({
         items: garPeople(),
       });
     });
@@ -107,6 +118,7 @@ describe('Manifest Get Controller', () => {
       expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
       expect(garApiStub).to.have.been.calledWith('9001');
       expect(req.session.errMsg).to.be.undefined;
+      expect(cookie.getIsMilitaryFlight()).to.equal(true);
       expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {
         cookie,
         savedPeople: flaggedSavedPeople(),
@@ -128,7 +140,7 @@ describe('Manifest Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(req.session.errMsg).to.be.undefined;
@@ -174,7 +186,7 @@ describe('Manifest Get Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(personApiStub).to.have.been.calledWith('USER-12345', 'individual');
         expect(garApiStub).to.have.been.calledWith('9001');
         expect(res.render).to.have.been.calledWith('app/garfile/manifest/index', {

@@ -38,6 +38,13 @@ export default defineConfig([
     },
   },
   {
+    files: ['**/*.js'],
+    ignores: ['common/services/dataAccessApi.js', 'test/common/services/**/*.test.js'],
+    rules: {
+      'no-restricted-modules': ['error', { patterns: ['**/data-access/**'] }],
+    },
+  },
+  {
     files: ['public/javascripts/**/*.js'],
     languageOptions: {
       globals: {

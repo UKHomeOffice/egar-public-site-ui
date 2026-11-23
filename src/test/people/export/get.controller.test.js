@@ -9,7 +9,7 @@ require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
 
 const controller = require('../../../app/people/export/get.controller');
-const personApi = require('../../../common/services/personApi');
+const { personApi } = require('../../../common/services/dataAccessApi');
 
 describe('Organisation Export User Controller', () => {
   let req;
@@ -38,6 +38,7 @@ describe('Organisation Export User Controller', () => {
     };
 
     res = {
+      redirect: sinon.spy(),
       render: sinon.spy(),
       setHeader: sinon.spy(),
       write: sinon.spy(),
@@ -50,6 +51,24 @@ describe('Organisation Export User Controller', () => {
   afterEach(() => {
     clock.restore();
     sinon.restore();
+  });
+
+  ['http_error', 'network_error', 'timeout_error'].forEach((type) => {
+    it(`saves an export error and redirects without sending CSV on a ${type}`, async () => {
+      req.session.save = sinon.stub().callsArg(0);
+      personApiStub.rejects(
+        Object.assign(new Error('Request failed'), { type, status: 503, body: { message: 'Unavailable' } })
+      );
+
+      await controller(req, res);
+
+      expect(req.session.errMsg).to.deep.equal({ message: 'Failed to export saved people. Try again' });
+      expect(req.session.save).to.have.been.calledOnce;
+      expect(res.redirect).to.have.been.calledOnceWithExactly('/people');
+      expect(res.setHeader).not.to.have.been.called;
+      expect(res.write).not.to.have.been.called;
+      expect(res.end).not.to.have.been.called;
+    });
   });
 
   describe('api returns ok', () => {
@@ -87,7 +106,7 @@ describe('Organisation Export User Controller', () => {
     beforeEach(() => {
       cookie = new CookieModel(req);
       cookie.setOrganisationUsers(apiResponse);
-      personApiStub.resolves(JSON.stringify(apiResponse));
+      personApiStub.resolves(apiResponse);
     });
 
     it('should display success message if set', () => {
@@ -95,7 +114,7 @@ describe('Organisation Export User Controller', () => {
         await controller(req, res);
       };
 
-      callController().then(() => {
+      return callController().then(() => {
         expect(personApiStub).to.have.been.calledOnceWithExactly('USER-ID', 'individual');
         expect(res.setHeader).to.have.been.calledWith(
           'Content-disposition',

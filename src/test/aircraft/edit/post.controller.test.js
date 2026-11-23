@@ -1,161 +1,129 @@
-/* eslint-disable no-undef */
-
 const sinon = require('sinon');
-const { expect } = require('chai');
 const chai = require('chai');
-const sinonChai = require('sinon-chai');
 
-const i18n = require('i18n');
+chai.use(require('sinon-chai'));
+const { expect } = chai;
+
 require('../../global.test');
 const CookieModel = require('../../../common/models/Cookie.class');
-const ValidationRule = require('../../../common/models/ValidationRule.class');
-const validator = require('../../../common/utils/validator');
-const craftApi = require('../../../common/services/craftApi');
-
+const { craftApi } = require('../../../common/services/dataAccessApi');
 const controller = require('../../../app/aircraft/edit/post.controller');
 
 describe('Aircraft Edit Post Controller', () => {
   let req;
   let res;
+  let cookie;
+  let updateStub;
 
   beforeEach(() => {
-    chai.use(sinonChai);
-
     req = {
-      body: {
-        craftId: 'ABCDEFGH',
-        registration: 'G-ABCD',
-        craftType: 'Hondajet',
-        craftBasePort: 'LHR',
-      },
-      session: {},
+      body: { registration: 'G-ABCD', craftType: 'Hondajet', craftBasePort: 'LHR' },
+      session: { u: { dbId: 'user-1' } },
     };
-
-    res = {
-      redirect: sinon.spy(),
-      render: sinon.spy(),
-    };
-
-    sinon.stub(i18n, '__').callsFake((key) => {
-      switch (key) {
-        case 'validation_aircraft_registration':
-          return 'Enter a registration';
-        case 'validation_aircraft_type':
-          return 'Enter an aircraft type';
-        case 'validation_aircraft_base':
-          return 'Enter an aircraft home port / location';
-        default:
-          return 'Unexpected Key';
-      }
-    });
-  });
-
-  afterEach(() => {
-    sinon.restore();
-  });
-
-  it('should return error messages if validation errors', () => {
-    req.body.registration = '';
-    req.body.craftType = '';
-    req.body.craftBasePort = '';
-    const cookie = new CookieModel(req);
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
-        cookie,
-        errors: [
-          new ValidationRule(validator.isNotEmpty, 'registration', '', 'Enter a registration'),
-          new ValidationRule(validator.isNotEmpty, 'craftType', '', 'Enter an aircraft type'),
-          new ValidationRule(validator.notEmpty, 'craftBasePort', '', 'Enter an aircraft home port / location'),
-        ],
-      });
-    });
-  });
-
-  it('should return an error if message returned by API', () => {
     cookie = new CookieModel(req);
-    sinon.stub(craftApi, 'update').rejects('craftApi.update Example Reject');
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController()
-      .then()
-      .then(() => {
-        expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
-        expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
-          cookie,
-          errors: [{ message: 'An error has occurred. Try again later' }],
-        });
-      });
+    cookie.setEditCraft({ craftId: 'craft-1', registration: 'G-OLD', craftType: 'Old', craftBase: 'LHR' });
+    res = { redirect: sinon.spy(), render: sinon.spy() };
+    updateStub = sinon.stub(craftApi, 'update').resolves({});
   });
 
-  it('should return an error if message returned by API', () => {
-    cookie = new CookieModel(req);
-    sinon.stub(craftApi, 'update').resolves(
-      JSON.stringify({
-        message: 'Aircraft not found',
-      })
+  afterEach(() => sinon.restore());
+
+  it('renders local validation errors without updating the aircraft', async () => {
+    Object.assign(req.body, { registration: '', craftType: '', craftBasePort: '' });
+
+    await controller(req, res);
+
+    expect(updateStub).not.to.have.been.called;
+    expect(res.redirect).not.to.have.been.called;
+    expect(res.render).to.have.been.calledOnce;
+    const [template, context] = res.render.firstCall.args;
+    expect(template).to.equal('app/aircraft/edit/index');
+    expect(context.cookie).to.deep.equal(cookie);
+    expect(context.errors.map(({ identifier }) => identifier)).to.deep.equal([
+      'registration',
+      'craftType',
+      'craftBasePort',
+    ]);
+  });
+
+  it('updates the aircraft using the configured instance and redirects', async () => {
+    await controller(req, res);
+
+    expect(updateStub).to.have.been.calledOnceWithExactly('G-ABCD', 'Hondajet', 'LHR', 'user-1', 'craft-1');
+    expect(cookie.getEditCraft()).to.include({ registration: 'G-ABCD', craftType: 'Hondajet' });
+    expect(res.redirect).to.have.been.calledOnceWithExactly('/aircraft');
+    expect(res.render).not.to.have.been.called;
+  });
+
+  it('updates the aircraft with coordinates instead of a port', async () => {
+    Object.assign(req.body, { portChoice: 'No', craftBaseLat: '51.500000', craftBaseLong: '-0.100000' });
+    delete req.body.craftBasePort;
+
+    await controller(req, res);
+
+    expect(updateStub).to.have.been.calledOnceWithExactly(
+      'G-ABCD',
+      'Hondajet',
+      '51.500000 -0.100000',
+      'user-1',
+      'craft-1'
     );
-    const callController = async () => {
-      await controller(req, res);
-    };
-
-    callController().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
-      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
-        cookie,
-        errors: [{ message: 'Aircraft not found' }],
-      });
-    });
   });
 
-  // Back end needs indices corrected and this should then be obselete
-  it('should return an error if message returned by API is not JSON', () => {
-    cookie = new CookieModel(req);
-    sinon.stub(craftApi, 'update').resolves('<html><head></head><body></body></html>');
-    const callController = async () => {
-      await controller(req, res);
-    };
+  it('renders a message returned in a successful HTTP response', async () => {
+    updateStub.resolves({ message: 'Aircraft not found' });
 
-    callController().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
-      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
-        cookie,
-        errors: [{ message: 'There was a problem saving the aircraft. Try again later' }],
-      });
+    await controller(req, res);
+
+    expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/edit/index', {
+      cookie,
+      errors: [{ message: 'Aircraft not found' }],
     });
+    expect(res.redirect).not.to.have.been.called;
   });
 
-  // Back end needs indices corrected and this should then be obselete
-  it('should return an error if message returned by API is not JSON containing possible duplicate error', () => {
-    cookie = new CookieModel(req);
-    sinon.stub(craftApi, 'update').resolves('DETAIL:  Key (registration)');
-    const callController = async () => {
-      await controller(req, res);
-    };
+  it('preserves a backend validation error body from an HTTP rejection', async () => {
+    const body = { message: 'Registration is invalid', field: 'registration' };
+    updateStub.rejects(Object.assign(new Error('Bad request'), { type: 'http_error', status: 400, body }));
 
-    callController().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
-      expect(res.render).to.have.been.calledWith('app/aircraft/edit/index', {
-        cookie,
-        errors: [{ message: 'Craft already exists' }],
-      });
-    });
+    await controller(req, res);
+
+    expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/edit/index', { cookie, errors: [body] });
+    expect(res.redirect).not.to.have.been.called;
   });
 
-  it('should redirect if successful', () => {
-    sinon.stub(craftApi, 'update').resolves(JSON.stringify({}));
-    const callController = async () => {
-      await controller(req, res);
-    };
+  [
+    [
+      'unexpected text response',
+      'resolve',
+      '<html>Unavailable</html>',
+      'There was a problem saving the aircraft. Try again later',
+    ],
+    ['duplicate text response', 'resolve', 'DETAIL:  Key (registration)', 'Craft already exists'],
+    ['duplicate HTTP failure', 'http_error', 'DETAIL:  Key (registration)', 'Craft already exists'],
+    [
+      'server failure',
+      'http_error',
+      '<html>Unavailable</html>',
+      'There was a problem saving the aircraft. Try again later',
+    ],
+    ['network failure', 'network_error', undefined, 'An error has occurred. Try again later'],
+    ['timeout', 'timeout_error', undefined, 'An error has occurred. Try again later'],
+  ].forEach(([description, type, body, message]) => {
+    it(`renders an error without redirecting on a ${description}`, async () => {
+      if (type === 'resolve') {
+        updateStub.resolves(body);
+      } else {
+        updateStub.rejects(Object.assign(new Error('Request failed'), { type, status: 500, body }));
+      }
 
-    callController().then(() => {
-      expect(craftApi.update).to.have.been.calledWith('G-ABCD', 'Hondajet', 'LHR');
-      expect(res.redirect).to.have.been.calledWith('/aircraft');
+      await controller(req, res);
+
+      expect(res.render).to.have.been.calledOnceWithExactly('app/aircraft/edit/index', {
+        cookie,
+        errors: [{ message }],
+      });
+      expect(res.redirect).not.to.have.been.called;
     });
   });
 });

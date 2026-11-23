@@ -91,7 +91,7 @@ Browser debugging: for UI reproduction, failed browser requests, rendered access
 
 - The 0T resubmit branch in `app/garfile/review/post.controller.js` has no test coverage. Touching it requires careful targeted testing and review.
 - The upload limit is 7.5MB and is checked here, but it does not include generated CBP files or base64 expansion.
-- `request` remains a deprecated dependency while the callback-based services are migrated to `HttpClient`; correlation-ID injection exists in both paths.
+- All server-side HTTP integrations use the shared native Fetch `HttpClient`; correlation IDs are added by that client.
 - `knip` reports many CommonJS route/config exports that are used through property access; treat that category as a known baseline and inspect new findings.
 - `throng` currently runs one worker because `NODE_WORKER_COUNT` is not configured.
 - The first ESLint cleanup fixed real stale-tooling findings; preserve the explicit `@eslint/js` dependency and do not reintroduce placeholder assignments.

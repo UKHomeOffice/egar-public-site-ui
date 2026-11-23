@@ -3,12 +3,12 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
-const settings = require('../../../common/config/index');
+const config = require('../../../common/config/index');
 
 require('../../global.test');
 
 const configMock = {
-  ...settings,
+  ...config,
 };
 
 const controller = proxyquire('../../../app/user/detailschanged/get.controller', {
