@@ -34,12 +34,12 @@ Run the following to access the database so you can run SQL commands.
 docker exec -it database sh
 
 # Log into postgres with the following command
-psql -U user -d egar
+psql -U user -d sgar
 # RUN you sql commands after wards
 ```
 
 ## Mock clamav
-- To use the mock clamav container, you need to specific the following environment variables in the `.env.dev`:
+- To use the mock clamav container, you need to specify the following environment variables:
 ```sh
 CLAMAV_BASE=http://mock-clamav
 CLAMAV_PORT=8080

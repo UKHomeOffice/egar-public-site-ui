@@ -44,7 +44,7 @@ Supporting-document limits are enforced here, but the downstream CBP submission 
 
 ## Development setup
 
-Follow [`docs/setup.md`](docs/setup.md) when preparing a checkout, configuring `.env.dev`, installing project or review tools, or starting the local stack. It is the authoritative developer setup guide; `package.json` lives in `src/`, not at the repository root.
+Follow [`docs/setup.md`](docs/setup.md) when preparing a checkout, configuring `.env`, installing project or review tools, or starting the local stack. It is the authoritative developer setup guide; `package.json` lives in `src/`, not at the repository root.
 
 ## Quality gates
 

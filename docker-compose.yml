@@ -1,26 +1,109 @@
+name: sgar
+
 services:
   database:
     image: postgres:14
     container_name: database
-    env_file:
-      - .env.dev
+    environment:
+      LC_ALL:
+      POSTGRES_DB: sgar
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: test
     ports:
-      - "5432:5432"
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  localstack:
+    image: localstack/localstack:community-archive
+    ports:
+      - '127.0.0.1:4566:4566'
+      - '127.0.0.1:4510-4559:4510-4559'
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      DEFAULT_REGION: eu-west-2
+      SQS_ENDPOINT_STRATEGY: path
+    volumes:
+      - ./volume:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4566/_localstack/health']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  localstack-init:
+    image: localstack/localstack:community-archive
+    entrypoint: ['/bin/sh', '/init-localstack.sh']
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: eu-west-2
+    volumes:
+      - ./scripts/init-localstack.sh:/init-localstack.sh:ro
+    depends_on:
+      localstack:
+        condition: service_healthy
 
   api:
     build:
       dockerfile: Dockerfile
       context: ../data-access-api
       target: development
-    container_name: api
-    env_file:
-      - .env.dev
+    container_name: data-api
+    environment:
+      LC_ALL:
+      LOG_LEVEL:
+      DBHOST: database
+      DBPORT: '5432'
+      DBNAME: sgar
+      DBUSER: user
+      DBPASSWORD: test
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      S3_DOCUMENT_BUCKET_NAME:
+      S3_DOCUMENT_SSE_KMS_KEY_ID:
+      S3_DOCUMENT_AWS_ACCESS_KEY_ID:
+      S3_DOCUMENT_AWS_SECRET_ACCESS_KEY:
+      SQS_QUEUE_NAME:
+      SQS_QUEUE_AWS_ACCESS_KEY_ID:
+      SQS_QUEUE_AWS_SECRET_ACCESS_KEY:
+      AMG_SQS_QUEUE_NAME:
+      AMG_SQS_ACCESS_KEY:
+      AMG_SQS_SECRET_ACCESS_KEY:
+      FLASK_SKIP_DOTENV: '1'
+      FLASK_APP:
+      FLASK_ENV:
+      FLASK_DEBUG:
+      NOTIFY_API_KEY:
+      NOTIFY_GATEWAY_CHECKIN_ERROR_ID:
+      NOTIFY_GATEWAY_CONFIRMATION_ERROR_ID:
+      SQS_URL:
     depends_on:
-      - database
+      database:
+        condition: service_healthy
+      localstack-init:
+        condition: service_completed_successfully
     volumes:
-      - "../data-access-api:/code"
+      - '../data-access-api:/code'
     ports:
-      - "5000:5000"
+      - '5000:5000'
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - "import socket; socket.create_connection(('127.0.0.1', 5000), timeout=1).close()"
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
 
   mock_clamav:
     container_name: mock-clamav
@@ -28,24 +111,151 @@ services:
       context: ./mock_clamav
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - '8080:8080'
     volumes:
       - ./mock_clamav:/code
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import socket; socket.create_connection(('127.0.0.1', 8080), timeout=1).close()"
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   node:
     build:
       context: .
       target: development
-    container_name: node
-    command: sh -c 'sleep 5 && npm install nodemon && npm run dev'
+    container_name: sgar-ui
+    command: npm run dev
     ports:
-      - "3000:3000"
-      - "9229:9229"
-      - "9230:9230"
+      - '3000:3000'
+      - '9229:9229'
+      - '9230:9230'
     env_file:
-      - .env.dev
+      - .env
+    environment:
+      API_BASE: http://api:5000
+      CLAMAV_BASE: http://mock-clamav
+      CLAMAV_PORT: '8080'
+      PUBLIC_SITE_DBHOST: database
+      PUBLIC_SITE_DBPORT: '5432'
+      PUBLIC_SITE_DBNAME: sgar
+      PUBLIC_SITE_DBUSER: user
+      PUBLIC_SITE_DBPASSWORD: test
     depends_on:
-      - api
-      - database
+      api:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+      mock_clamav:
+        condition: service_healthy
     volumes:
       - ./src/:/public-site/
+
+  mock_cbp:
+    build:
+      context: ../data-integr-cbp/mock_cbp
+      dockerfile: Dockerfile
+    ports:
+      - '4000:4000'
+    volumes:
+      - ../data-integr-cbp/mock_cbp:/code
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import socket; socket.create_connection(('127.0.0.1', 4000), timeout=1).close()"
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  data-integr-cbp:
+    build:
+      context: ../data-integr-cbp
+      target: dev
+    platform: linux/amd64
+    command: python main.py
+    environment:
+      LC_ALL:
+      LOG_LEVEL:
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      API_BASE: http://api:5000
+      API_VERSION:
+      S3_DOCUMENT_BUCKET_NAME:
+      S3_DOCUMENT_SSE_KMS_KEY_ID:
+      S3_DOCUMENT_AWS_ACCESS_KEY_ID:
+      S3_DOCUMENT_AWS_SECRET_ACCESS_KEY:
+      SQS_QUEUE_NAME:
+      SQS_QUEUE_AWS_ACCESS_KEY_ID:
+      SQS_QUEUE_AWS_SECRET_ACCESS_KEY:
+      ENVIRONMENT:
+      BASE_URL:
+      NOTIFY_API_KEY:
+      NOTIFY_GAR_SUBMISSION_TEMPLATE_ID:
+      CBP_ENDPOINT:
+      CBP_USERNAME:
+      CBP_PASSWORD:
+    ports:
+      - '5678:5678'
+    volumes:
+      - ../data-integr-cbp:/code
+    depends_on:
+      api:
+        condition: service_healthy
+      localstack-init:
+        condition: service_completed_successfully
+      mock_cbp:
+        condition: service_healthy
+  amg-test-harness:
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/amg/amg-test-harness:1.0.93-1.1.137
+    pull_policy: never
+    ports:
+      - '9000:9000'
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:9000/actuator/health']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+
+  gateway-access-sqs:
+    build:
+      context: ../gateway-api
+      target: dev
+    volumes:
+      - ../gateway-api:/code/
+    ports:
+      - '8000:8000'
+    command: python main.py
+    environment:
+      LC_ALL:
+      LOG_LEVEL:
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      API_BASE: http://api:5000
+      API_VERSION:
+      AMG_SQS_QUEUE_NAME:
+      AMG_SQS_ACCESS_KEY:
+      AMG_SQS_SECRET_ACCESS_KEY:
+      SQS_URL:
+      AMG_BASE_URL:
+      TURN_OFF_EXPONENTIAL_DELAY:
+      PYTHON_DOTENV_DISABLED: '1'
+      X_API_KEY:
+      SGAR_CLIENT_PEM:
+      SGAR_CLIENT_KEY:
+    depends_on:
+      api:
+        condition: service_healthy
+      localstack-init:
+        condition: service_completed_successfully
+      amg-test-harness:
+        condition: service_healthy
+
+volumes:
+  postgres-data:

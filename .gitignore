@@ -4,6 +4,8 @@
 # Add any specific files/dirs here that need to be excluded for
 # this project.
 .env*
+!.env.example
+/volume/
 data
 username
 password

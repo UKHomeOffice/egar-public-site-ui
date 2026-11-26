@@ -71,4 +71,91 @@ describe('Send Email Service', () => {
         chai.assert.fail('Should not reach here');
       });
   });
+
+  it('logs safe Notify rejection reasons without exposing response data', async () => {
+    const logError = sinon.spy();
+    const service = rewire('../../../common/services/sendEmail');
+    service.__set__('logger', { error: logError });
+
+    const failure = new Error('Request failed for person@example.com with secret-value');
+    failure.response = {
+      status: 400,
+      data: {
+        errors: [
+          { error: 'BadRequestError', message: "Can't send to this recipient using a team-only API key" },
+          {
+            error: 'BadRequestError',
+            message: "Can't send to this recipient when service is in trial mode - see https://example.com",
+          },
+          { error: 'BadRequestError', message: 'Missing personalisation: person@example.com' },
+        ],
+        email: 'person@example.com',
+        token: 'secret-value',
+      },
+    };
+    notifyStub.rejects(failure);
+
+    try {
+      await service.send('template_id', 'person@example.com', { user: 'Person' });
+      expect.fail('Expected the Notify request to fail');
+    } catch (error) {
+      expect(error).to.equal(failure);
+    }
+
+    expect(logError).to.have.been.calledOnce;
+    expect(logError.firstCall.args[1]).to.include({
+      statusCode: 400,
+    });
+    expect(logError.firstCall.args[1].notifyErrorReasons).to.deep.equal([
+      'recipient_not_allowed_team_key',
+      'recipient_not_allowed_trial_mode',
+      'missing_personalisation',
+    ]);
+    expect(JSON.stringify(logError.firstCall.args)).not.to.include('person@example.com');
+    expect(JSON.stringify(logError.firstCall.args)).not.to.include('secret-value');
+  });
+
+  it('handles unknown Notify errors without logging raw details', async () => {
+    const logError = sinon.spy();
+    const service = rewire('../../../common/services/sendEmail');
+    service.__set__('logger', { error: logError });
+    const failure = new Error('person@example.com secret-value');
+    failure.response = {
+      status: 400,
+      data: { errors: [{ error: 'Unexpected person@example.com', message: 'secret-value' }] },
+    };
+    notifyStub.rejects(failure);
+
+    try {
+      await service.send('template_id', 'person@example.com', {});
+      expect.fail('Expected the Notify request to fail');
+    } catch (error) {
+      expect(error).to.equal(failure);
+    }
+
+    expect(logError.firstCall.args[1].notifyErrorReasons).to.deep.equal(['unknown_notify_error']);
+    expect(JSON.stringify(logError.firstCall.args)).not.to.include('person@example.com');
+    expect(JSON.stringify(logError.firstCall.args)).not.to.include('secret-value');
+  });
+
+  it('logs a safe network error code when Notify gives no response', async () => {
+    const logError = sinon.spy();
+    const service = rewire('../../../common/services/sendEmail');
+    service.__set__('logger', { error: logError });
+    const failure = new Error('person@example.com secret-value');
+    failure.code = 'ETIMEDOUT';
+    notifyStub.rejects(failure);
+
+    try {
+      await service.send('template_id', 'person@example.com', {});
+      expect.fail('Expected the Notify request to fail');
+    } catch (error) {
+      expect(error).to.equal(failure);
+    }
+
+    expect(logError.firstCall.args[1]).to.include({ errorCode: 'ETIMEDOUT' });
+    expect(logError.firstCall.args[1].notifyErrorReasons).to.deep.equal([]);
+    expect(JSON.stringify(logError.firstCall.args)).not.to.include('person@example.com');
+    expect(JSON.stringify(logError.firstCall.args)).not.to.include('secret-value');
+  });
 });
