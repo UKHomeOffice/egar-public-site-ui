@@ -76,8 +76,8 @@ module.exports = (req, res) => {
             .then(() => {
               res.redirect('/organisation/invite/success');
             })
-            .catch((err) => {
-              logger.error('Failed to send invitation email', { errorMessage: err?.message, stack: err?.stack });
+            .catch(() => {
+              logger.error('Failed to send invitation email');
               res.render('app/organisation/assignrole/index', {
                 cookie,
                 roles,
