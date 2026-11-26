@@ -19,18 +19,21 @@ services:
       timeout: 3s
       retries: 10
 
-  localstack:
-    image: localstack/localstack:community-archive
+  floci:
+    image: floci/floci:2.5.0-compat
     ports:
       - '127.0.0.1:4566:4566'
-      - '127.0.0.1:4510-4559:4510-4559'
     environment:
-      DOCKER_HOST: unix:///var/run/docker.sock
-      DEFAULT_REGION: eu-west-2
-      SQS_ENDPOINT_STRATEGY: path
+      FLOCI_HOSTNAME: floci
+      FLOCI_DEFAULT_REGION: eu-west-2
+      FLOCI_STORAGE_MODE: persistent
+      FLOCI_STORAGE_PERSISTENT_PATH: /app/data
     volumes:
-      - ./volume:/var/lib/localstack
-      - /var/run/docker.sock:/var/run/docker.sock
+      - floci-data:/app/data
+    networks:
+      default:
+        aliases:
+          - localstack
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:4566/_localstack/health']
       interval: 5s
@@ -38,17 +41,17 @@ services:
       retries: 10
       start_period: 10s
 
-  localstack-init:
-    image: localstack/localstack:community-archive
-    entrypoint: ['/bin/sh', '/init-localstack.sh']
+  floci-init:
+    image: floci/floci:2.5.0-compat
+    entrypoint: ['/bin/sh', '/init-floci.sh']
     environment:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       AWS_DEFAULT_REGION: eu-west-2
     volumes:
-      - ./scripts/init-localstack.sh:/init-localstack.sh:ro
+      - ./scripts/init-floci.sh:/init-floci.sh:ro
     depends_on:
-      localstack:
+      floci:
         condition: service_healthy
 
   api:
@@ -88,7 +91,7 @@ services:
     depends_on:
       database:
         condition: service_healthy
-      localstack-init:
+      floci-init:
         condition: service_completed_successfully
     volumes:
       - '../data-access-api:/code'
@@ -207,7 +210,7 @@ services:
     depends_on:
       api:
         condition: service_healthy
-      localstack-init:
+      floci-init:
         condition: service_completed_successfully
       mock_cbp:
         condition: service_healthy
@@ -242,7 +245,7 @@ services:
       AMG_SQS_QUEUE_NAME:
       AMG_SQS_ACCESS_KEY:
       AMG_SQS_SECRET_ACCESS_KEY:
-      SQS_URL:
+      SQS_URL: http://floci:4566
       AMG_BASE_URL:
       TURN_OFF_EXPONENTIAL_DELAY:
       PYTHON_DOTENV_DISABLED: '1'
@@ -252,10 +255,11 @@ services:
     depends_on:
       api:
         condition: service_healthy
-      localstack-init:
+      floci-init:
         condition: service_completed_successfully
       amg-test-harness:
         condition: service_healthy
 
 volumes:
   postgres-data:
+  floci-data:

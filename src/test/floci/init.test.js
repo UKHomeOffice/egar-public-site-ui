@@ -4,13 +4,13 @@ const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-describe('LocalStack initialization', function () {
+describe('Floci initialization', function () {
   this.timeout(10000);
   let directory;
   let log;
 
   beforeEach(() => {
-    directory = fs.mkdtempSync(path.join(os.tmpdir(), 'egar-localstack-test-'));
+    directory = fs.mkdtempSync(path.join(os.tmpdir(), 'egar-floci-test-'));
     log = path.join(directory, 'calls');
     fs.writeFileSync(
       path.join(directory, 'awslocal'),
@@ -31,7 +31,7 @@ esac
   });
 
   function run(overrides = {}) {
-    const result = spawnSync('sh', [path.resolve(__dirname, '../../../scripts/init-localstack.sh')], {
+    const result = spawnSync('sh', [path.resolve(__dirname, '../../../scripts/init-floci.sh')], {
       env: { ...process.env, PATH: `${directory}:${process.env.PATH}`, CALL_LOG: log, ...overrides },
       encoding: 'utf8',
     });
@@ -41,6 +41,12 @@ esac
   it('creates both buckets and all queues when buckets are absent', () => {
     const { result, calls } = run();
     expect(result.status).to.equal(0);
+    expect(
+      calls
+        .trim()
+        .split('\n')
+        .every((call) => call.startsWith('--endpoint-url http://floci:4566 '))
+    ).to.be.true;
     expect(calls).to.include('create-bucket --bucket dev-sgar-bucket');
     expect(calls).to.include('create-bucket --bucket dev-cdlz-bucket');
     expect(calls).to.include('create-queue --queue-name egar-dev-sqs');

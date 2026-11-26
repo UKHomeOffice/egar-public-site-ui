@@ -52,6 +52,10 @@ store. Compose overrides shell values for those container addresses, while shell
 variables take precedence over `.env` for Compose's other passed-through settings. Commands run
 directly on the host may need different addresses.
 
+For Floci, set the API's `SQS_URL` in `.env` to `http://floci:4566/000000000000`. Existing
+`.env` files using `http://localstack:4566/000000000000` continue to work through a network alias.
+Compose configures the gateway's SQS endpoint separately.
+
 Postgres only creates `POSTGRES_DB` when initializing a new volume. An existing volume using `egar`
 needs a separately created `sgar` database or a data migration before the stack can use it. When
 moving from the earlier anonymous volume, the new named volume starts with an empty database.
@@ -68,8 +72,8 @@ From the repository root:
 docker compose up -d --build
 ```
 
-The command starts the sGAR UI, the API, both queue consumers, Postgres, LocalStack, mock ClamAV,
-mock CBP and the AMG test harness. sGAR is available at `http://localhost:3000`. The LocalStack
+The command starts the sGAR UI, the API, both queue consumers, Postgres, Floci, mock ClamAV,
+mock CBP and the AMG test harness. sGAR is available at `http://localhost:3000`. The Floci
 initializer creates the two document buckets and three queues before the API and consumers start.
 The API runs its database migrations before the UI starts. Online APIS has a separate Compose setup
 in `ssar-public-site-ui`.
@@ -82,10 +86,11 @@ docker compose ps
 docker compose down
 ```
 
-Postgres uses a named volume that `down` retains; `down -v` deletes it. LocalStack data is stored in
-`./volume`; `down` does not remove it. One Login and Notify are external integrations: starting the
-stack does not validate those journeys. Use approved test credentials and obtain approval before
-exercising live integrations.
+Postgres and Floci use separate named volumes that `down` retains; `down -v` deletes both. Floci
+starts with empty local buckets and queues; it does not migrate data from the old LocalStack
+`./volume` directory. One Login and Notify are external integrations: starting the stack does not
+validate those journeys. Use approved test credentials and obtain approval before exercising live
+integrations.
 
 The production image installs application dependencies before removing npm/npx and npm's bundled
 libraries. It starts the service directly with Node and runs as the existing non-root user. The

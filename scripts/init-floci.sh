@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-endpoint="http://localstack:4566"
+endpoint="http://floci:4566"
 
 for bucket in dev-sgar-bucket dev-cdlz-bucket; do
   if ! awslocal --endpoint-url "$endpoint" s3api head-bucket --bucket "$bucket" 2>/dev/null; then
