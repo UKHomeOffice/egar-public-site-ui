@@ -34,8 +34,8 @@ const postController = async (req, res) => {
       res.redirect('/user/logout?action=user-deleted');
       return;
     }
-  } catch (err) {
-    logger.error('Failed to send account deletion email', { errorMessage: err?.message, stack: err?.stack });
+  } catch {
+    logger.error('Failed to send account deletion email');
   }
 
   req.session.destroy(() => {

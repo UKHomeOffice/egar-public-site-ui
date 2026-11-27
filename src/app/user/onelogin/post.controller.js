@@ -149,13 +149,8 @@ async function handleConfirmNameSubmission(req, _res) {
     await emailService.send(config.NOTIFY_ONELOGIN_NEW_USER_REGISTERED_EMAIL_TEMPLATE_ID, email, {
       user: `${firstName}`,
     });
-  } catch (error) {
-    logger.error('Failed to send welcome email', {
-      userId,
-      errorMessage: error?.message,
-      stack: error?.stack,
-    });
-    return [Outcome.ERROR, error.message || 'Error creating user', null];
+  } catch {
+    return [Outcome.ERROR, 'Failed to send welcome email', null];
   }
 
   return [Outcome.SUCCESS, {}, null];

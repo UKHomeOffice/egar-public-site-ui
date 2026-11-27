@@ -10,6 +10,44 @@ if (config.NOTIFY_API_KEY === null) {
 // Instantiate a new Notify client
 const notifyClient = new notify.NotifyClient(config.NOTIFY_API_KEY);
 
+const networkErrorCodes = new Set([
+  'ECONNABORTED',
+  'ECONNREFUSED',
+  'ECONNRESET',
+  'EAI_AGAIN',
+  'ENOTFOUND',
+  'ETIMEDOUT',
+]);
+
+const notifyErrorReason = (error) => {
+  const message = typeof error?.message === 'string' ? error.message : '';
+
+  if (/^can't send to this recipient using a team-only api key$/i.test(message)) {
+    return 'recipient_not_allowed_team_key';
+  }
+  if (/^can't send to this recipient when service is in trial mode(?:\s|$)/i.test(message)) {
+    return 'recipient_not_allowed_trial_mode';
+  }
+  if (/^missing personalisation:/i.test(message)) {
+    return 'missing_personalisation';
+  }
+
+  switch (error?.error) {
+    case 'AuthError':
+      return 'notify_auth_error';
+    case 'BadRequestError':
+      return 'notify_bad_request';
+    case 'ValidationError':
+      return 'notify_validation_error';
+    case 'RateLimitError':
+      return 'notify_rate_limited';
+    case 'TooManyRequestsError':
+      return 'notify_send_limit_exceeded';
+    default:
+      return 'unknown_notify_error';
+  }
+};
+
 module.exports = {
   /**
    *
@@ -23,9 +61,12 @@ module.exports = {
         .sendEmail(templateId, email, { personalisation })
         .then((response) => resolve(response))
         .catch((err) => {
+          const status = err?.response?.status;
+          const errors = err?.response?.data?.errors;
           logger.error(`Failed to send email templateId=${templateId}`, {
-            errorMessage: err?.message,
-            stack: err?.stack,
+            statusCode: Number.isInteger(status) && status >= 100 && status <= 599 ? status : undefined,
+            notifyErrorReasons: Array.isArray(errors) ? errors.slice(0, 10).map(notifyErrorReason) : [],
+            errorCode: networkErrorCodes.has(err?.code) ? err.code : undefined,
           });
           reject(err);
         });
