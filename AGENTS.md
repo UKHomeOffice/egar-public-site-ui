@@ -80,6 +80,8 @@ Browser debugging: for UI reproduction, failed browser requests, rendered access
 
 ## Change-specific validation
 
+- Nunjucks work, review or retrospective audit: follow [the prefer GOV.UK macros skill](.github/skills/prefer-govuk-macros/SKILL.md) to check component macros.
+- Nunjucks layout changes or redundant wrapper audits: follow [the Nunjucks layout skill](.github/skills/nunjucks-layout/SKILL.md).
 - `.js` changes: `just check`.
 - `.njk` changes: `just check-template-format` and `just lint-templates`; preserve GOV.UK macro arguments.
 - Authentication, configuration, upload, or external-integration changes: `just scan-filesystem` and `just scan-code`.
