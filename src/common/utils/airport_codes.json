@@ -3374,11 +3374,11 @@
     "label": "RNAS Culdrose (United Kingdom) (EGDR)"
   },
   {
-    "id": "EGDX",
-    "id2": "EGDX",
+    "id": "EGSY",
+    "id2": "EGSY",
     "british": true,
     "crownDependency": false,
-    "label": "MoD St. Athan (United Kingdom) (EGDX)"
+    "label": "MoD St. Athan (United Kingdom) (EGSY)"
   },
   {
     "id": "YEO",
@@ -56537,5 +56537,12 @@
     "british": true,
     "crownDependency": false,
     "label": "Compiegne Margny Airport (France) (XCP / LFAD)"
+  },
+  {
+    "id": "NMF",
+    "id2": "VRDA",
+    "british": false,
+    "crownDependency": false,
+    "label": "Maafaru International Airport (Maldives) (NMF / VRDA)"
   }
 ]

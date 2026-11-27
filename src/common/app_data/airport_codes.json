@@ -76522,6 +76522,18 @@
     "crownDependency": false
   },
   {
+    "id": "e296c5b5d6b3e193d07204b950c53a4735b9bf383b1c91687b525df980094aff",
+    "name": "Maafaru International Airport",
+    "label": "Maafaru International Airport (NMF / VRDA)",
+    "iata": "NMF",
+    "icao": "VRDA",
+    "otherCodes": null,
+    "value": "NMF",
+    "designated": false,
+    "british": false,
+    "crownDependency": false
+  },
+  {
     "id": "5125b3d932d14625af20123262bc1bc44708f1028000700bff1cfff083dac9d8",
     "name": "Namsang Airport",
     "label": "Namsang Airport (NMS / VYNS)",
