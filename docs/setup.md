@@ -31,9 +31,9 @@ npm --version
 (cd src && npm ci)
 ```
 
-The UI container uses the local `node_modules` directory and runs nodemon to reload changes. Run
-`npm install` locally in `src/` when adding or updating dependencies. Native dependencies installed
-on the host may not be compatible with the container's Linux environment.
+These dependencies are needed for running the project and its tools on the host. Run `npm install`
+locally in `src/` when adding or updating dependencies. The UI container uses a separate Docker
+volume for its Linux dependencies and runs nodemon to reload changes.
 
 ## Configure the environment
 
@@ -73,6 +73,32 @@ mock CBP and the AMG test harness. sGAR is available at `http://localhost:3000`.
 initializer creates the two document buckets and three queues before the API and consumers start.
 The API runs its database migrations before the UI starts. Online APIS has a separate Compose setup
 in `ssar-public-site-ui`.
+
+The initializer creates the configured AMG queue and a `-dlq` queue, but does not configure automatic
+redrive. Changing `AMG_SQS_QUEUE_NAME` or `SQS_QUEUE_NAME` creates separate queues; existing messages
+are not migrated. Changing `S3_DOCUMENT_BUCKET_NAME` creates a separate bucket without moving
+existing objects, so existing reports may reference documents in the previous bucket.
+
+If upgrading from the earlier Compose service names, first run:
+
+```sh
+docker compose down --remove-orphans
+```
+
+Then start the stack as above. This removes containers belonging to the `sgar` project, including
+orphaned containers, but retains named volumes. Restarting LocalStack may lose objects and queued
+messages. Update `SQS_URL`, `CBP_ENDPOINT` and `AMG_BASE_URL` in an existing `.env` to match
+`.env.example`, and replace any other references to previous service names with the new names.
+
+The `node-modules` volume is populated from the development image when first created. After changing
+dependencies, refresh the volume before restarting the UI; rebuilding the image alone does not
+update an existing volume:
+
+```sh
+docker compose stop sgar-ui
+docker compose run --rm --no-deps sgar-ui npm ci --include=dev
+docker compose up -d sgar-ui
+```
 
 Make sure other Compose projects are not already using these container names or ports. Inspect
 status and stop this project with:

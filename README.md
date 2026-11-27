@@ -31,7 +31,7 @@ Notes:
 
 Run the following to access the database so you can run SQL commands.
 ```sh
-docker exec -it database sh
+docker exec -it sgar-database sh
 
 # Log into postgres with the following command
 psql -U user -d sgar
@@ -41,7 +41,7 @@ psql -U user -d sgar
 ## Mock clamav
 - To use the mock clamav container, you need to specify the following environment variables:
 ```sh
-CLAMAV_BASE=http://mock-clamav
+CLAMAV_BASE=http://sgar-mock-clamav
 CLAMAV_PORT=8080
 ```
 

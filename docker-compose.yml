@@ -1,9 +1,9 @@
 name: sgar
 
 services:
-  database:
+  sgar-database:
     image: postgres:14
-    container_name: database
+    container_name: sgar-database
     environment:
       LC_ALL:
       POSTGRES_DB: sgar
@@ -19,8 +19,9 @@ services:
       timeout: 3s
       retries: 10
 
-  localstack:
+  sgar-localstack:
     image: localstack/localstack:community-archive
+    container_name: sgar-localstack
     ports:
       - '127.0.0.1:4566:4566'
       - '127.0.0.1:4510-4559:4510-4559'
@@ -38,29 +39,33 @@ services:
       retries: 10
       start_period: 10s
 
-  localstack-init:
+  sgar-localstack-init:
     image: localstack/localstack:community-archive
+    container_name: sgar-localstack-init
     entrypoint: ['/bin/sh', '/init-localstack.sh']
     environment:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       AWS_DEFAULT_REGION: eu-west-2
+      AMG_SQS_QUEUE_NAME:
+      S3_DOCUMENT_BUCKET_NAME:
+      SQS_QUEUE_NAME:
     volumes:
       - ./scripts/init-localstack.sh:/init-localstack.sh:ro
     depends_on:
-      localstack:
+      sgar-localstack:
         condition: service_healthy
 
-  api:
+  sgar-data-api:
     build:
       dockerfile: Dockerfile
       context: ../data-access-api
       target: development
-    container_name: data-api
+    container_name: sgar-data-api
     environment:
       LC_ALL:
       LOG_LEVEL:
-      DBHOST: database
+      DBHOST: sgar-database
       DBPORT: '5432'
       DBNAME: sgar
       DBUSER: user
@@ -86,9 +91,9 @@ services:
       NOTIFY_GATEWAY_CONFIRMATION_ERROR_ID:
       SQS_URL:
     depends_on:
-      database:
+      sgar-database:
         condition: service_healthy
-      localstack-init:
+      sgar-localstack-init:
         condition: service_completed_successfully
     volumes:
       - '../data-access-api:/code'
@@ -105,8 +110,8 @@ services:
       retries: 30
       start_period: 30s
 
-  mock_clamav:
-    container_name: mock-clamav
+  sgar-mock-clamav:
+    container_name: sgar-mock-clamav
     build:
       context: ./mock_clamav
       dockerfile: Dockerfile
@@ -124,7 +129,7 @@ services:
       timeout: 3s
       retries: 10
 
-  node:
+  sgar-ui:
     build:
       context: .
       target: development
@@ -137,25 +142,27 @@ services:
     env_file:
       - .env
     environment:
-      API_BASE: http://api:5000
-      CLAMAV_BASE: http://mock-clamav
+      API_BASE: http://sgar-data-api:5000
+      CLAMAV_BASE: http://sgar-mock-clamav
       CLAMAV_PORT: '8080'
-      PUBLIC_SITE_DBHOST: database
+      PUBLIC_SITE_DBHOST: sgar-database
       PUBLIC_SITE_DBPORT: '5432'
       PUBLIC_SITE_DBNAME: sgar
       PUBLIC_SITE_DBUSER: user
       PUBLIC_SITE_DBPASSWORD: test
     depends_on:
-      api:
+      sgar-data-api:
         condition: service_healthy
-      database:
+      sgar-database:
         condition: service_healthy
-      mock_clamav:
+      sgar-mock-clamav:
         condition: service_healthy
     volumes:
       - ./src/:/public-site/
+      - node-modules:/public-site/node_modules
 
-  mock_cbp:
+  sgar-mock-cbp:
+    container_name: sgar-mock-cbp
     build:
       context: ../data-integr-cbp/mock_cbp
       dockerfile: Dockerfile
@@ -173,7 +180,8 @@ services:
       timeout: 3s
       retries: 10
 
-  data-integr-cbp:
+  sgar-cbp-consumer:
+    container_name: sgar-cbp-consumer
     build:
       context: ../data-integr-cbp
       target: dev
@@ -184,7 +192,7 @@ services:
       LOG_LEVEL:
       AWS_ACCESS_KEY_ID:
       AWS_SECRET_ACCESS_KEY:
-      API_BASE: http://api:5000
+      API_BASE: http://sgar-data-api:5000
       API_VERSION:
       S3_DOCUMENT_BUCKET_NAME:
       S3_DOCUMENT_SSE_KMS_KEY_ID:
@@ -205,14 +213,15 @@ services:
     volumes:
       - ../data-integr-cbp:/code
     depends_on:
-      api:
+      sgar-data-api:
         condition: service_healthy
-      localstack-init:
+      sgar-localstack-init:
         condition: service_completed_successfully
-      mock_cbp:
+      sgar-mock-cbp:
         condition: service_healthy
-  amg-test-harness:
+  sgar-amg-test-harness:
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/amg/amg-test-harness:1.0.93-1.1.137
+    container_name: sgar-amg-test-harness
     pull_policy: never
     ports:
       - '9000:9000'
@@ -223,7 +232,8 @@ services:
       retries: 30
       start_period: 30s
 
-  gateway-access-sqs:
+  sgar-amg-consumer:
+    container_name: sgar-amg-consumer
     build:
       context: ../gateway-api
       target: dev
@@ -237,7 +247,7 @@ services:
       LOG_LEVEL:
       AWS_ACCESS_KEY_ID:
       AWS_SECRET_ACCESS_KEY:
-      API_BASE: http://api:5000
+      API_BASE: http://sgar-data-api:5000
       API_VERSION:
       AMG_SQS_QUEUE_NAME:
       AMG_SQS_ACCESS_KEY:
@@ -250,12 +260,13 @@ services:
       SGAR_CLIENT_PEM:
       SGAR_CLIENT_KEY:
     depends_on:
-      api:
+      sgar-data-api:
         condition: service_healthy
-      localstack-init:
+      sgar-localstack-init:
         condition: service_completed_successfully
-      amg-test-harness:
+      sgar-amg-test-harness:
         condition: service_healthy
 
 volumes:
   postgres-data:
+  node-modules:
